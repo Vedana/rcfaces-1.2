@@ -1,0 +1,22 @@
+/* 
+ * $Id$
+ */
+ 
+/**
+ * CardBox et Card
+ *
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+ 
+DIV.f_cardBox {
+	display: block;
+	position: relative;
+}
+ 
+DIV.f_cardBox_card {
+	position:absolute;
+	left: 0px;
+	top: 0px;
+	display: block;
+}

@@ -1,0 +1,22 @@
+/*
+ * $Id$
+ */
+ 
+/**
+ *	Hyperlink
+ */
+
+.f_hyperLink,
+.f_hyperLink_disabled {
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.f_hyperLink {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.f_hyperLink_disabled {
+	color: #A1A192;
+}

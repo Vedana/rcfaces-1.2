@@ -1,0 +1,19 @@
+/** ===========================================================================
+ * @component TextArea
+ * @lookid classic
+ */
+TEXTAREA.f_textArea {
+	margin: 0;
+}
+TEXTAREA.f_textArea_disabled {
+	border: 1px solid black;
+	margin: 1px;
+}
+TEXTAREA.f_textArea_readonly {
+	border: 1px solid black;
+	margin: 1px;
+}
+
+LABEL.f_textArea_required {
+	color: red;
+}

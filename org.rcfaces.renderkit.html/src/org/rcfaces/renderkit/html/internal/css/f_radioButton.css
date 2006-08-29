@@ -1,0 +1,30 @@
+/**
+ * Radio-Button
+ */
+ 
+SPAN.f_radioButton {
+ 	-moz-user-select: none;
+	user-select: none;
+}
+
+INPUT.f_radioButton_input {
+	vertical-align: middle;
+}
+
+
+LABEL.f_radioButton_text, 
+LABEL.f_radioButton_text_disabled {
+	vertical-align: middle;
+	display: inline;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+LABEL.f_radioButton_text {
+	cursor: pointer;
+	cursor: hand;
+}
+
+LABEL.f_radioButton_text_disabled {
+	color: #A1A192;
+}

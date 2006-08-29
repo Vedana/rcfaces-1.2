@@ -1,0 +1,537 @@
+/*
+ * $Id$
+ * 
+ * $Log$
+ * Revision 1.1  2006/08/29 16:14:28  oeuillot
+ * Renommage  en rcfaces
+ *
+ * Revision 1.8  2006/05/11 16:34:19  oeuillot
+ * Correction du calendar
+ * Ajout de DateChooser
+ * Ajout du moteur de filtre d'images
+ * Ajout de l'evt   loadListener pour le AsyncManager
+ *
+ * Revision 1.7  2006/03/02 15:31:56  oeuillot
+ * Ajout de ExpandBar
+ * Ajout des services
+ * Ajout de HiddenValue
+ * Ajout de SuggestTextEntry
+ * Ajout de f_bundle
+ * Ajout de f_md5
+ * Debut de f_xmlDigester
+ *
+ * Revision 1.6  2006/01/31 16:04:25  oeuillot
+ * Ajout :
+ * Decorator pour les listes, tree, menus, ...
+ * Ajax (filtres) pour les combo et liste
+ * Renomme interactiveRenderer par AsyncRender
+ * Ajout du composant Paragraph
+ *
+ * Revision 1.5  2005/12/22 11:48:08  oeuillot
+ * Ajout de :
+ * - JS:  calendar, locale, dataList, log
+ * - Evenement User
+ * - ClientData  multi-directionnel (+TAG)
+ *
+ * Revision 1.4  2005/11/17 10:04:56  oeuillot
+ * Support des BorderRenderers
+ * Gestion de camelia-config
+ * Ajout des stubs de Operation
+ * Refactoring de ICssWriter
+ *
+ * Revision 1.3  2005/11/08 12:16:28  oeuillot
+ * Ajout de  Preferences
+ * Stabilisation de imageXXXButton
+ * Ajout de la validation cot� client
+ * Ajout du hash MD5 pour les servlets
+ * Ajout des accelerateurs
+ *
+ * Revision 1.2  2005/03/07 10:47:03  oeuillot
+ * Systeme de Logging
+ * Debuggage
+ *
+ * Revision 1.1  2004/12/30 17:24:20  oeuillot
+ * Gestion des validateurs
+ * Debuggage des composants
+ *
+ */
+package org.rcfaces.renderkit.html.internal.util;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.faces.component.UIComponent;
+import javax.faces.event.FacesListener;
+
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IKeyDownEventCapability;
+import org.rcfaces.core.component.capability.IKeyPressEventCapability;
+import org.rcfaces.core.component.capability.IKeyUpEventCapability;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IMenuEventCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.component.capability.IResetEventCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISuggestionEventCapability;
+import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+
+/**
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+public final class ListenerTools {
+
+    private static final String REVISION = "$Revision$";
+
+    /**
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
+    public static final INameSpace JAVASCRIPT_NAME_SPACE = new INameSpace() {
+        private static final String REVISION = "$Revision$";
+
+        public String getSelectionEventName() {
+            return JavaScriptClasses.EVENT_SELECTION_CST;
+        }
+
+        public String getCheckEventName() {
+            return JavaScriptClasses.EVENT_CHECK_CST;
+        }
+
+        public String getMenuEventName() {
+            return JavaScriptClasses.EVENT_MENU_CST;
+        }
+
+        public String getValueChangeEventName() {
+            return JavaScriptClasses.EVENT_VALUE_CHANGE_CST;
+        }
+
+        public String getDoubleClickEventName() {
+            return JavaScriptClasses.EVENT_DBLCLICK_CST;
+        }
+
+        public String getBlurEventName() {
+            return JavaScriptClasses.EVENT_BLUR_CST;
+        }
+
+        public String getFocusEventName() {
+            return JavaScriptClasses.EVENT_FOCUS_CST;
+        }
+
+        public String getMouseOutEventName() {
+            return JavaScriptClasses.EVENT_MOUSEOUT_CST;
+        }
+
+        public String getMouseOverEventName() {
+            return JavaScriptClasses.EVENT_MOUSEOVER_CST;
+        }
+
+        public String getKeyDownEventName() {
+            return JavaScriptClasses.EVENT_KEYDOWN_CST;
+        }
+
+        public String getKeyUpEventName() {
+            return JavaScriptClasses.EVENT_KEYUP_CST;
+        }
+
+        public String getKeyPressEventName() {
+            return JavaScriptClasses.EVENT_KEYPRESS_CST;
+        }
+
+        public String getSuggestionEventName() {
+            return JavaScriptClasses.EVENT_SUGGESTION_CST;
+        }
+
+        public String getPropertyChangeEventName() {
+            return JavaScriptClasses.EVENT_PROPERTY_CHANGE_CST;
+        }
+
+        public String getResetEventName() {
+            return JavaScriptClasses.EVENT_RESET_CST;
+        }
+
+        public String getUserEventName() {
+            return JavaScriptClasses.EVENT_USER_CST;
+        }
+
+        public String getInitEventName() {
+            return JavaScriptClasses.EVENT_INIT_CST;
+        }
+
+        public String getLoadEventName() {
+            return JavaScriptClasses.EVENT_LOAD_CST;
+        }
+
+    };
+
+    /**
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
+    public static final INameSpace ATTRIBUTE_NAME_SPACE = new INameSpace() {
+        private static final String REVISION = "$Revision$";
+
+        public String getSelectionEventName() {
+            return JavaScriptClasses.EVENT_SELECTION_ATTRIBUTE;
+        }
+
+        public String getCheckEventName() {
+            return JavaScriptClasses.EVENT_CHECK_ATTRIBUTE;
+        }
+
+        public String getMenuEventName() {
+            return JavaScriptClasses.EVENT_MENU_ATTRIBUTE;
+        }
+
+        public String getValueChangeEventName() {
+            return JavaScriptClasses.EVENT_VALUE_CHANGE_ATTRIBUTE;
+        }
+
+        public String getDoubleClickEventName() {
+            return JavaScriptClasses.EVENT_DBLCLICK_ATTRIBUTE;
+        }
+
+        public String getBlurEventName() {
+            return JavaScriptClasses.EVENT_BLUR_ATTRIBUTE;
+        }
+
+        public String getFocusEventName() {
+            return JavaScriptClasses.EVENT_FOCUS_ATTRIBUTE;
+        }
+
+        public String getMouseOutEventName() {
+            return JavaScriptClasses.EVENT_MOUSEOUT_ATTRIBUTE;
+        }
+
+        public String getMouseOverEventName() {
+            return JavaScriptClasses.EVENT_MOUSEOVER_ATTRIBUTE;
+        }
+
+        public String getKeyDownEventName() {
+            return JavaScriptClasses.EVENT_KEYDOWN_ATTRIBUTE;
+        }
+
+        public String getKeyUpEventName() {
+            return JavaScriptClasses.EVENT_KEYUP_ATTRIBUTE;
+        }
+
+        public String getKeyPressEventName() {
+            return JavaScriptClasses.EVENT_KEYPRESS_ATTRIBUTE;
+        }
+
+        public String getSuggestionEventName() {
+            return JavaScriptClasses.EVENT_SUGGESTION_ATTRIBUTE;
+        }
+
+        public String getPropertyChangeEventName() {
+            return JavaScriptClasses.EVENT_PROPERTY_CHANGE_ATTRIBUTE;
+        }
+
+        public String getResetEventName() {
+            return JavaScriptClasses.EVENT_RESET_ATTRIBUTE;
+        }
+
+        public String getUserEventName() {
+            return JavaScriptClasses.EVENT_USER_ATTRIBUTE;
+        }
+
+        public String getInitEventName() {
+            return JavaScriptClasses.EVENT_INIT_ATTRIBUTE;
+        }
+
+        public String getLoadEventName() {
+            return JavaScriptClasses.EVENT_LOAD_ATTRIBUTE;
+        }
+
+    };
+
+    public static final Map getListenersByType(INameSpace nameSpace,
+            UIComponent component) {
+        Map map = null;
+
+        if (component instanceof ISelectionEventCapability) {
+            ISelectionEventCapability selectEventCapability = (ISelectionEventCapability) component;
+
+            FacesListener fls[] = selectEventCapability
+                    .listSelectionListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getSelectionEventName(), fls);
+            }
+        }
+
+        if (component instanceof ICheckEventCapability) {
+            ICheckEventCapability checkEventCapability = (ICheckEventCapability) component;
+
+            FacesListener fls[] = checkEventCapability.listCheckListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getCheckEventName(), fls);
+            }
+        }
+
+        if (component instanceof IValueChangeEventCapability) {
+            IValueChangeEventCapability changeEventCapability = (IValueChangeEventCapability) component;
+
+            FacesListener fls[] = changeEventCapability
+                    .listValueChangeListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getValueChangeEventName(), fls);
+            }
+        }
+
+        if (component instanceof IDoubleClickEventCapability) {
+            IDoubleClickEventCapability doubleClickEventCapability = (IDoubleClickEventCapability) component;
+
+            FacesListener fls[] = doubleClickEventCapability
+                    .listDoubleClickListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getDoubleClickEventName(), fls);
+            }
+        }
+
+        if (component instanceof IFocusBlurEventCapability) {
+            IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
+
+            FacesListener fls[] = focusBlurEventCapability.listBlurListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getBlurEventName(), fls);
+            }
+
+            fls = focusBlurEventCapability.listFocusListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getFocusEventName(), fls);
+            }
+        }
+
+        if (component instanceof IMouseEventCapability) {
+            IMouseEventCapability mouseEventCapability = (IMouseEventCapability) component;
+
+            FacesListener fls[] = mouseEventCapability.listMouseOutListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getMouseOutEventName(), fls);
+            }
+
+            fls = mouseEventCapability.listMouseOverListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getMouseOverEventName(), fls);
+            }
+        }
+
+        if (component instanceof IKeyDownEventCapability) {
+            IKeyDownEventCapability keyEventCapability = (IKeyDownEventCapability) component;
+
+            FacesListener fls[] = keyEventCapability.listKeyDownListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getKeyDownEventName(), fls);
+            }
+        }
+
+        if (component instanceof IKeyPressEventCapability) {
+            IKeyPressEventCapability keyEventCapability = (IKeyPressEventCapability) component;
+            FacesListener fls[] = keyEventCapability.listKeyPressListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getKeyPressEventName(), fls);
+            }
+        }
+
+        if (component instanceof IKeyUpEventCapability) {
+            IKeyUpEventCapability keyEventCapability = (IKeyUpEventCapability) component;
+            FacesListener fls[] = keyEventCapability.listKeyUpListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getKeyUpEventName(), fls);
+            }
+        }
+
+        if (component instanceof IResetEventCapability) {
+            IResetEventCapability resetEventCapability = (IResetEventCapability) component;
+
+            FacesListener fls[] = resetEventCapability.listResetListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getResetEventName(), fls);
+            }
+        }
+
+        if (component instanceof IMenuEventCapability) {
+            IMenuEventCapability menuEventCapability = (IMenuEventCapability) component;
+
+            FacesListener fls[] = menuEventCapability.listMenuListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getMenuEventName(), fls);
+            }
+        }
+
+        if (component instanceof IUserEventCapability) {
+            IUserEventCapability userEventCapability = (IUserEventCapability) component;
+
+            FacesListener fls[] = userEventCapability.listUserEventListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getUserEventName(), fls);
+            }
+        }
+
+        if (component instanceof IInitEventCapability) {
+            IInitEventCapability initEventCapability = (IInitEventCapability) component;
+
+            FacesListener fls[] = initEventCapability.listInitListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getInitEventName(), fls);
+            }
+        }
+
+        if (component instanceof IPropertyChangeEventCapability) {
+            IPropertyChangeEventCapability propertyChangeEventCapability = (IPropertyChangeEventCapability) component;
+
+            FacesListener fls[] = propertyChangeEventCapability
+                    .listPropertyChangeListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getPropertyChangeEventName(), fls);
+            }
+        }
+
+        if (component instanceof ISuggestionEventCapability) {
+            ISuggestionEventCapability suggestionEventCapability = (ISuggestionEventCapability) component;
+
+            FacesListener fls[] = suggestionEventCapability
+                    .listSuggestionListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getSuggestionEventName(), fls);
+            }
+        }
+
+        if (component instanceof ILoadEventCapability) {
+            ILoadEventCapability loadEventCapability = (ILoadEventCapability) component;
+
+            FacesListener fls[] = loadEventCapability.listLoadListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getLoadEventName(), fls);
+            }
+        }
+
+        if (map == null) {
+            return Collections.EMPTY_MAP;
+        }
+        return map;
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
+    public interface INameSpace {
+        String getBlurEventName();
+
+        String getCheckEventName();
+
+        String getDoubleClickEventName();
+
+        String getFocusEventName();
+
+        String getInitEventName();
+
+        String getKeyDownEventName();
+
+        String getKeyPressEventName();
+
+        String getKeyUpEventName();
+
+        String getLoadEventName();
+
+        String getMenuEventName();
+
+        String getMouseOutEventName();
+
+        String getMouseOverEventName();
+
+        String getSuggestionEventName();
+
+        String getPropertyChangeEventName();
+
+        String getResetEventName();
+
+        String getSelectionEventName();
+
+        String getUserEventName();
+
+        String getValueChangeEventName();
+    }
+
+}

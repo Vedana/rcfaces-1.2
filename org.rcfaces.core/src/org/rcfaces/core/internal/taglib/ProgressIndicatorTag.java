@@ -1,0 +1,55 @@
+package org.rcfaces.core.internal.taglib;
+
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.ProgressIndicatorComponent;
+
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
+
+public class ProgressIndicatorTag extends AbstractBasicTag {
+
+private static final Log LOG=LogFactory.getLog(ProgressIndicatorTag.class);
+	private String indeterminate;
+	public String getComponentType() {
+		return ProgressIndicatorComponent.COMPONENT_TYPE;
+	}
+
+	public final String getIndeterminate() {
+		return indeterminate;
+	}
+
+	public final void setIndeterminate(String indeterminate) {
+		this.indeterminate = indeterminate;
+	}
+
+	protected void setProperties(UIComponent uiComponent) {
+		super.setProperties(uiComponent);
+
+		if ((uiComponent instanceof ProgressIndicatorComponent)==false) {
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'ProgressIndicatorComponent'.");
+		}
+
+		ProgressIndicatorComponent component = (ProgressIndicatorComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
+
+		if (indeterminate != null) {
+			if (isValueReference(indeterminate)) {
+				ValueBinding vb = application.createValueBinding(indeterminate);
+				component.setIndeterminate(vb);
+			} else {
+				component.setIndeterminate(getBool(indeterminate));
+			}
+		}
+	}
+
+	public void release() {
+		indeterminate = null;
+
+		super.release();
+	}
+
+}

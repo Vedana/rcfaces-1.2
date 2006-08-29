@@ -1,0 +1,220 @@
+/* 
+ * $Id$
+ */
+ 
+/**
+ * Tabbed Pane
+ *
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+ 
+DIV.f_tabbedPane {
+	display: block;
+}
+ 
+TABLE.f_tabbedPane_title {
+	border: 0;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+TD.f_tabbedPane_titleRight, TD.f_tabbedPane_titleRight_selected {
+}
+
+TD.f_tabbedPane_titleRight,
+TD.f_tabbedPane_titleRight_selected,
+TD.f_tabbedPane_titleLeft,
+TD.f_tabbedPane_titleLeft_selected,
+TD.f_tabbedPane_titleNext,
+TD.f_tabbedPane_titleNext_sleft,
+TD.f_tabbedPane_titleNext_sright {
+	background: url(tabbedPane/xpT2.gif) repeat-y;
+}
+
+TD.f_tabbedPane_titleRight {
+	background-position: 0 0;
+}
+
+TD.f_tabbedPane_titleRight_selected {
+	background-position: -8px 0;
+}
+
+TD.f_tabbedPane_titleLeft {
+	background-position: -16px 0;
+}
+
+TD.f_tabbedPane_titleLeft_selected {
+	background-position: -24px 0;
+}
+
+TD.f_tabbedPane_titleNext {
+	background-position: -32px 0;
+}
+
+TD.f_tabbedPane_titleNext_sleft {
+	background-position: -40px 0;
+}
+
+TD.f_tabbedPane_titleNext_sright {
+	background-position: -48px 0;
+}
+
+
+TD.f_tabbedPane_ttitleText,
+TD.f_tabbedPane_ttitleText_over,
+TD.f_tabbedPane_ttitleText_selected,
+IMG.f_tabbedPane_ttitleLeft,
+IMG.f_tabbedPane_ttitleLeftA,
+IMG.f_tabbedPane_ttitleLeftH,
+IMG.f_tabbedPane_ttitleNextR,
+IMG.f_tabbedPane_ttitleNextHR,
+IMG.f_tabbedPane_ttitleRightA,
+IMG.f_tabbedPane_ttitleNextLH,
+IMG.f_tabbedPane_ttitleNextL,
+IMG.f_tabbedPane_ttitleNextHL,
+IMG.f_tabbedPane_ttitleNext,
+IMG.f_tabbedPane_ttitleRight,
+IMG.f_tabbedPane_ttitleRightH,
+IMG.f_tabbedPane_ttitleNextRH {
+	background:url(tabbedPane/xpMid2.gif) repeat-x;
+}
+
+
+TD.f_tabbedPane_ttitleText {
+	background-position: 0 0;
+}
+
+TD.f_tabbedPane_ttitleText_over {
+	background-position: 0 -16px;
+}
+
+TD.f_tabbedPane_ttitleText_selected {
+	background-position: 0 -8px; 
+}
+
+IMG.f_tabbedPane_ttitleLeft {
+	background-position: 0 -24px;
+}
+
+IMG.f_tabbedPane_ttitleLeftA {
+	background-position: 0 -32px; 
+}
+
+IMG.f_tabbedPane_ttitleLeftH {
+	background-position: 0 -40px;
+}
+
+IMG.f_tabbedPane_ttitleNextR {
+	background-position: 0 -48px;
+}
+
+IMG.f_tabbedPane_ttitleNextHR {
+	background-position: 0 -56px;
+}
+
+IMG.f_tabbedPane_ttitleRightA {
+	background-position: 0 -64px;
+}
+
+IMG.f_tabbedPane_ttitleNextLH {
+	background-position: 0 -72px;
+}
+
+IMG.f_tabbedPane_ttitleNextL {
+	background-position: 0 -80px;
+}
+
+IMG.f_tabbedPane_ttitleNextHL {
+	background-position: 0 -88px;
+}
+
+IMG.f_tabbedPane_ttitleNext {
+	background-position: 0 -96px;
+}
+
+IMG.f_tabbedPane_ttitleRight {
+	background-position: 0 -104px;
+}
+
+IMG.f_tabbedPane_ttitleRightH {
+	background-position: 0 -112px;
+}
+
+IMG.f_tabbedPane_ttitleNextRH {
+	background-position: 0 -120px;
+}
+
+TD.f_tabbedPane_ttitleRight_selected {
+	vertical-align: bottom;
+}
+
+TD.f_tabbedPane_titleText, 
+TD.f_tabbedPane_titleText_selected,
+TD.f_tabbedPane_titleText_disabled {
+	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	text-align:center;  
+	padding-left: 20px;  
+	padding-right: 20px;  
+	cursor: pointer; 
+	cursor: hand;
+	height: 18px;
+	background-color: white;
+}
+
+TD.f_tabbedPane_titleText A, 
+TD.f_tabbedPane_titleText_selected A,
+TD.f_tabbedPane_titleText_disabled A {
+	position: relative;
+	text-decoration: none;
+	color: black;
+	vertical-align: middle;
+}
+
+TD.f_tabbedPane_titleText_selected A {
+	top: -2px;
+}
+
+TD.f_tabbedPane_titleText_disabled A {
+	color: #AAA;
+	-moz-user-focus: ignore;
+}
+
+DIV.f_tabbedPane_tab {
+	position:absolute;
+	left: 0;
+	top: 0;
+	display: block;
+	font-family: Verdana;
+	font-size: 7pt;
+	border: 1px solid #919B9C;
+	background-color: white;
+}
+
+DIV.f_tabbedPane_tab_mask {
+	position:absolute;
+	left: 0;
+	top: -1px;
+	width: 100px;
+	height: 1px;
+	font-size: 1pt;
+	line-height: 1px;
+	border-top: 1px solid white;
+	padding: 0;
+	margin: 0;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+DIV.f_tabbedPane_content {
+	position: relative;
+	display: block;
+}
+
+/* Alignement eventuel des images des onglets */
+IMG.f_tabbedPane_titleIcon, 
+IMG.f_tabbedPane_titleIcon, 
+IMG.f_tabbedPane_titleIcon {
+	margin-right: 4px;
+	vertical-align: middle;
+}

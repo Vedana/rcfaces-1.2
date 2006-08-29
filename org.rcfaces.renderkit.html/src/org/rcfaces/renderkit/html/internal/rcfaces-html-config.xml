@@ -1,0 +1,762 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rcfaces-config>
+	<services>
+  		<render-kit> <!--  render-kit-id="HTML_BASE" -->
+			<service id="org.rcfaces.core.AsyncRender" class="org.rcfaces.renderkit.html.internal.service.AsyncRenderService">
+				<command id="asyncRender.request" />
+			</service>
+			
+			<service id="org.rcfaces.renderkit.html.DataGrid" class="org.rcfaces.renderkit.html.internal.service.DataGridService">
+				<command id="dataGrid.update" />
+			</service>
+
+			<service id="org.rcfaces.renderkit.html.DataList" class="org.rcfaces.renderkit.html.internal.service.DataListService">
+				<command id="dataList.update" />
+			</service>
+			
+			<service id="org.rcfaces.renderkit.html.Tree" class="org.rcfaces.renderkit.html.internal.service.TreeService">
+				<command id="tree.request" />
+			</service>
+		
+			<service id="org.rcfaces.renderkit.html.Items" class="org.rcfaces.renderkit.html.internal.service.ItemsService">
+				<command id="items.request" />
+			</service>
+			
+			<service id="org.rcfaces.renderkit.html.ClientService" class="org.rcfaces.renderkit.html.internal.service.ClientService">
+				<command id="client.newService" />
+				<command id="client.infoService" />
+				<command id="client.cancelService" />
+			</service>
+
+			
+			<service id="org.rcfaces.renderkit.html.Log" class="org.rcfaces.renderkit.html.internal.service.LogHtmlService">
+				<command id="log.append" />
+			</service>
+		</render-kit>
+	</services>
+
+	<borders>
+		<render-kit>
+			<border-renderer>
+				<border-id>none</border-id>
+				<renderer-class threadSafe="true">org.rcfaces.renderkit.html.internal.border.NoneBorderRenderer</renderer-class>
+			</border-renderer>			
+			<border-renderer>
+				<border-id>solid</border-id>
+				<renderer-class>org.rcfaces.renderkit.html.internal.border.SolidBorderRenderer</renderer-class>
+			</border-renderer>			
+			<border-renderer>
+				<border-id>relief</border-id>
+				<renderer-class>org.rcfaces.renderkit.html.internal.border.ReliefBorderRenderer</renderer-class>
+			</border-renderer>			
+			<border-renderer>
+				<border-id>flat</border-id>
+				<renderer-class>org.rcfaces.renderkit.html.internal.border.FlatBorderRenderer</renderer-class>
+			</border-renderer>			
+			<border-renderer>
+				<border-id>rounded</border-id>
+				<renderer-class>org.rcfaces.renderkit.html.internal.border.RoundedBorderRenderer</renderer-class>
+			</border-renderer>
+			<default-border>
+				<component-family>rcfaces</component-family>
+				<renderer-type>org.rcfaces.core.fieldSet</renderer-type>
+				<border-id>rounded</border-id>
+			</default-border>
+		</render-kit>
+	</borders>
+
+	<clientValidators>
+		<render-kit> <!-- render-kit-id="HTML_BASIC" -->
+
+<!--
+/**
+ * Contrôle de  validation  effectuant une saisie formatée en entrée et en
+ * sortie d'une date.
+ * La gestion d'erreur sur perte de focus est de type colorisation.
+ * La gestion d'erreur sur soumission de la vue est de type message.
+ *
+ * @param	date.input		Format d'entrée de format date Java
+ * @param	date.separator	Separateur
+ * @param	date.output		Format de sortie de format date Java
+ * @example	clientValidator="date"
+ */
+
+	<clientValidator id="xdate" package="xvalidators">
+		<parameter name="date.input" value="ddMMyyyy" />
+		<parameter name="date.separator" value="/" />
+		<parameter name="date.output" value="dd/MM/yyyy" />
+		<filter call="f_vb.Filter_date" />
+		<checker call="f_vx.Checker_date" />
+		<formatter call="f_vx.Formatter_date" />
+		<!- -
+			<onerror call="f_clientValidator.Error_msg_color" />
+			<oncheckerror call="f_clientValidator.Error_default" />
+			- ->
+		<stringAdapter formatterId="date" />
+		<description lang="fr">
+			Filtrage d'une date JJ/MM/AAAF.
+		</description>
+ 		<informations lang="fr">
+ 			<html>
+ 				<font color='darkgray'>Validateur :</font> <b>F.date</b><br/>
+				Contrôle de validation effectuant un filtrage pour ne conserver que les caractères autorisés par le format de la date.<br/>
+	 			<br/>
+	 			<font color='darkgray'>Voir formatteur :</font>	F.date
+	 			<font color='darkgray'>Exemple :</font>	clientValidator="date"
+	 		</html>
+		</informations>
+	</clientValidator>
+-->
+<!--
+/**
+ * Contrôle de  validation  effectuant une saisie formatée en entrée et en
+ * sortie d'une heure.
+ * La gestion d'erreur sur perte de focus est de type colorisation.
+ * La gestion d'erreur sur soumission de la vue est de type message.
+ *
+ * @param	time.input		Format d'entrée de format heure Java
+ * @param	time.separator	Separateur
+ * @param	time.output		Format de sortie de format heure Java
+ * @example	clientValidator="xhour"
+ */
+
+	<clientValidator id="xhour" package="xvalidators">
+		<parameter name="time.input" value="HHmmss" />
+		<parameter name="time.separator" value=":" />
+		<parameter name="time.output" value="HH:mm:ss" />
+		<filter call="f_vb.Filter_time" />
+		<checker call="f_vx.Checker_time" />
+		<formatter call="f_vx.Formatter_time" />
+		<!- -
+			<onerror call="f_clientValidator.Error_msg_color" />
+			<oncheckerror call="f_clientValidator.Error_default" />
+			- ->
+		<stringAdapter formatterId="hour" />
+	</clientValidator>
+-->
+<!--
+/**
+ * Contrôle de  validation  effectuant une saisie formatée en entrée et en
+ * sortie d'un nombre entier.
+ * La gestion d'erreur sur perte de focus est de type colorisation.
+ * La gestion d'erreur sur soumission de la vue est de type message.
+ *
+ * @param	number.input	Format d'entrée de format nombre Java
+ * @param	number.locale	Localisation au format Java
+ * @param	number.output	Format de sortie de format nombre Java
+ * @example	clientValidator="integer"
+ */
+
+	<clientValidator id="xinteger" package="xvalidators">
+		<parameter name="number.input" value="#;-#" />
+		<parameter name="number.locale" value="fr_FR" />
+		<parameter name="number.output" value="# ###;-# ###" />
+		<filter call="f_vb.Filter_integer" />
+		<checker call="f_vx.Checker_number" />
+		<formatter call="f_vx.Formatter_number" />
+		<!- -
+			<onerror call="f_clientValidator.Error_msg_color" />
+			<oncheckerror call="f_clientValidator.Error_default" />
+			- ->
+		<stringAdapter formatterId="integer" />
+	</clientValidator>
+-->
+<!--
+/**
+ * Contrôle de  validation  effectuant une saisie formatée en entrée et en
+ * sortie d'un nombre entier signé.
+ * La gestion d'erreur sur perte de focus est de type colorisation.
+ * La gestion d'erreur sur soumission de la vue est de type message.
+ *
+ * @param	number.input	Format d'entrée de format nombre Java
+ * @param	number.locale	Localisation au format Java
+ * @param	number.output	Format de sortie de format nombre Java
+ * @example	clientValidator="signed"
+ */
+
+	<clientValidator id="xsigned" package="xvalidators">
+		<parameter name="number.input" value="#;-#" />
+		<parameter name="number.locale" value="fr_FR" />
+		<parameter name="number.output" value="# ###;-# ###" />
+		<filter call="f_vb.Filter_signed" />
+		<checker call="f_vx.Checker_number" />
+		<formatter call="f_vx.Formatter_number" />
+		<!- -
+			<onerror call="f_clientValidator.Error_msg_color" />
+			<oncheckerror call="f_clientValidator.Error_default" />
+			- ->
+		<stringAdapter formatterId="integer" />
+	</clientValidator>
+-->
+<!--
+/**
+ * Contrôle de  validation  effectuant une saisie formatée en entrée et en
+ * sortie d'un nombre décimal.
+ * La gestion d'erreur sur perte de focus est de type colorisation.
+ * La gestion d'erreur sur soumission de la vue est de type message.
+ *
+ * @param	number.input	Format d'entrée de format nombre Java
+ * @param	number.locale	Localisation au format Java
+ * @param	number.output	Format de sortie de format nombre Java
+ * @example	clientValidator="number"
+ */
+
+	<clientValidator id="xnumber" package="xvalidators">
+		<parameter name="number.input" value="#,#;-#,#" />
+		<parameter name="number.locale" value="fr_FR" />
+		<parameter name="number.output" value="# ##0,00;-# ##0,00" />
+		<filter call="f_vb.Filter_number" />
+		<checker call="f_vx.Checker_number" />
+		<formatter call="f_vx.Formatter_number" />
+		<!- -
+			<onerror call="f_clientValidator.Error_msg_color" />
+			<oncheckerror call="f_clientValidator.Error_default" />
+			- ->
+		<stringAdapter formatterId="number" />
+	</clientValidator>
+-->
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères espace.
+ *
+ * @example	clientValidator="noblank"
+ */
+-->
+	<clientValidator id="noblank">
+		<filter call="f_vb.Filter_noblank" />
+		<description lang="fr">
+			Filtrage les espaces.
+		</description>
+ 		<informations lang="fr">
+ 			<html>
+ 				<font color='darkgray'>Validateur :</font> <b>F.noblank</b><br/>
+				Contrôle de validation effectuant un filtrage pour ne conserver que les caractères qui ne sont pas des espaces.<br/>
+	 			<br/>
+	 			<font color='darkgray'>Exemple :</font>	clientValidator="noblank"
+	 		</html>
+		</informations>
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères valides pour
+ * la saisie d'un nombre scientifique: [0-9\.\-eE]
+ *
+ * @example	clientValidator="scientific"
+ */
+-->
+	<clientValidator id="scientific">
+		<filter call="f_vb.Filter_scientific" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères valides pour
+ * la saisie d'un monétaire: [0-9\.\+\-]
+ *
+ * @example	clientValidator="money"
+ */
+-->
+	<clientValidator id="money">
+		<filter call="f_vb.Filter_money" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères valides pour
+ * la saisie d'un alphabétique: [a-zA-Z]
+ *
+ * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
+ * @example	clientValidator="code('@._')"
+ */
+-->
+	<clientValidator id="code">
+		<filter call="f_vb.Filter_code" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères valides pour
+ * la saisie d'un alphabétique: [a-zA-Z]
+ *
+ * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
+ * @example	clientValidator="alpha('@._')"
+ */
+-->
+	<clientValidator id="alpha">
+		<parameter name="alpha.otherChars" value="" />
+		<filter call="f_vb.Filter_alpha" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères valides pour
+ * la saisie d'un alphanumérique: [0-9a-zA-Z]
+ *
+ * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
+ * @example	clientValidator="alphanum('@._')"
+ */
+-->
+	<clientValidator id="alphanum">
+		<parameter name="alpha.otherChars" value="" />
+		<filter call="f_vb.Filter_alphanum" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères valides pour
+ * la saisie d'un nombre quelconque: [0-9]
+ * Ce filtrage peut accepter en supplément les caractères de type signe et
+ * séparateurs suivant paramétrage.
+ *
+ * @param	num.signed		Précise s'il s'agit d'un nombre signé (booléen)
+ * @param	num.decimal		Précise le nombre de décimales du nombre (entier)
+ * @param	num.negSign		Le caractère du signe négatif
+ * @param	num.decSign		Le caractère séparateur de décimales
+ * @param	num.sepSign		Le caractère séparateur de milliers
+ * @example	clientValidator="xnumber('true')"
+ */
+-->
+	<clientValidator id="number2">
+		<parameter name="num.signed" value="false" />
+		<parameter name="num.decimal" value="0" />
+		<parameter name="num.negSign" value="-" />
+		<parameter name="num.decSign" value=",." />
+		<parameter name="num.sepSign" value=" " />
+		<filter call="f_vb.Filter_num" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères valides pour
+ * la saisie d'un numéro de carte: [0-9\.]
+ *
+ * @example	clientValidator="card"
+ */
+-->
+	<clientValidator id="card">
+		<filter call="f_vb.Filter_card" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage des caractères valides pour
+ * la saisie d'un nom: [ a-zA-Z0-9\*\.\-]
+ *
+ * @example	clientValidator="name"
+ */
+-->
+	<clientValidator id="name">
+		<filter call="f_vb.Filter_name" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant une traduction des caractères accentués
+ * en leur équivalent générique.
+ *
+ * @example	clientValidator="removeaccent"
+ */
+-->
+	<clientValidator id="removeaccent">
+		<translator call="f_vb.Translator_removeaccent" />
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant une élimination des caractères blancs se
+ * trouvant en tête et en fin de champ.
+ *
+ * @example	clientValidator="skipBlank"
+ */
+-->
+	<clientValidator id="skipBlank">
+		<checker call="f_vb.Checker_trim" />
+	</clientValidator>
+
+
+
+<!-- ************************************************************************** -->
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage pour ne conserver que les
+ * caractères alphabétiques, les caractères accentués français en majuscules
+ * ou minuscules.
+ *
+ *
+ * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
+ * @see		CAMELIA.alpha
+ * @example	clientValidator="alpha_fr('@._')"
+ */
+-->
+	<clientValidator id="alpha_fr">
+		<parameter name="alpha.otherChars" value="" />
+		<filter call="f_vb.Filter_alpha_fr" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation effectuant le même filtrage que alpha_fr et traduisant
+ * les caractères alphabétiques et accentués saisis en caractères majuscules.
+ *
+ * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
+ * @see		F.alpha_fr
+ * @example	clientValidator="alpha_fr_upper('@._')"
+ */
+-->
+	<clientValidator id="alpha_fr_upper">
+		<parameter name="alpha.otherChars" value="" />
+		<filter call="f_vb.Filter_alpha_fr" />
+		<translator call="f_vb.Translator_uppercase" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation effectuant le même filtrage que alpha_fr et traduisant
+ * les caractères alphabétiques et accentués saisis en caractères minuscules.
+ *
+ * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
+ * @see		F.alpha_fr
+ * @example	clientValidator="alpha_fr_lower('@._')"
+ */
+-->
+	<clientValidator id="alpha_fr_lower">
+		<parameter name="alpha.otherChars" value="" />
+		<filter call="f_vb.Filter_alpha_fr" />
+		<translator call="f_vb.Translator_lowercase" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation effectuant un filtrage pour ne conserver que les 
+ * chiffres de 0 à 9.
+ *
+ * @see		CAMELIA.num
+ * @example	clientValidator="digit"
+ */
+-->
+	<clientValidator id="digit">
+		<filter call="f_vb.Filter_digit" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation  effectuant un filtrage pour ne conserver que les 
+ * chiffres de 0 à 9 et les caractères alphabétiques de a à z minuscules et
+ * majuscules.
+ *
+ * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
+ * @see		CAMELIA.alphanum
+ * @example	clientValidator="alpha_digit"
+ */
+-->
+	<clientValidator id="alpha_digit">
+		<parameter name="alpha.otherChars" value="" />
+		<filter call="f_vb.Filter_alphanum" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation  effectuant la traduction en majuscule de tous les
+ * caractères ayant un équivalent majuscule.
+ *
+ * @see		CAMELIA.uppercase
+ * @example	clientValidator="upper"
+ */
+-->
+	<clientValidator id="upper">
+		<translator call="f_vb.Translator_uppercase" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation  effectuant la traduction en minuscule de tous les
+ * caractères ayant un équivalent minuscule.
+ *
+ * @see		CAMELIA.lowercase
+ * @example	clientValidator="lower"
+ */
+-->
+	<clientValidator id="lower">
+		<translator call="f_vb.Translator_lowercase" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage pour ne conserver que les
+ * caractères acceptés par le DPS, i.e. dont le code ascii est compris entre
+ * 32 et 127 inclus.
+ *
+ * @example	clientValidator="dps"
+ */
+-->
+	<clientValidator id="dps">
+		<filter call="f_vb.Filter_dps" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de  validation  effectuant un filtrage pour  ne conserver que les
+ * chiffres de 0 à 9 ainsi que les caractères a,b,A et B. Les caractères sont
+ * traduit en majuscule. Une validation syntaxique est effectuée, la longueur
+ * de la saisie peut être 13 ou 15 caractères suivant l'utilisation de la clé
+ * associée. Les caractères A ou B ne peuvent apparaître qu'en 7ème position.
+ * Lorsque la clé est spécifiée, le numéro INSEE est validé avec l'algorithme
+ * suivant:
+ *
+ *		si (dept == "2A") alors dept = "19"
+ *  	sinon si (dept == "2B") alors dept = "18"
+ *		finsi
+ *		si (cle == 97 - (insee MOD 97)) alors "INSEE VALIDE" finsi
+ *
+ * En sortie de champ, le numéro INSEE est formaté avec un espace entre les
+ * blocs suivants:
+ *
+ *		S AA MM CD COM ORD CL
+ *
+ * @example	clientValidator="insee"
+ */
+-->
+	<clientValidator id="insee">
+		<filter call="f_vb.Filter_insee" />
+		<translator call="f_vb.Translator_uppercase" />
+		<checker call="f_vb.Checker_insee" />
+		<formatter call="f_vb.Formatter_insee" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation effectuant un filtrage pour ne conserver que les
+ * caractères  de  0 à 9  et  l'ensemble  des  séparateurs  spécifiés. Les
+ * séparateurs sont traduits dans le premier caractère séparateur spécifié
+ * par le paramètre "date.sepSign". Le  format  de la  saisie  est de type
+ * (j(j(mm(aa(aa))))) (0,1,2,4,6,8 chiffres) ou bien (j(j))/(m(m))/(aa(aa))
+ * Tout champ  vide est  complété par la date du jour. Lorsque l'année est
+ * spécifiée  sans le  siècle, on  applique un pivot  suivant l'algorithme
+ * qui suit:
+ *
+ *		si (annee <= pivot) alors annee += 1900
+ *		sinon annee += 2000
+ *		finsi
+ *
+ * La date est validée  syntaxiquement et  sémantiquement (contre exemple:
+ * 29/02/1991 date invalide).
+ * En sortie de champ, la date est affichée au format suivant:
+ *
+ *		JJ/MM/SSAA
+ *
+ * @param	date.sepSign	Liste des séparateurs autorisés
+ * @param	date.pivot		Valeur servant de pivot
+ * @see		CAMELIA.date
+ * @example	clientValidator="date('/-.','90')"
+ */
+-->
+	<clientValidator id="date">
+		<parameter name="date.sepSign" value="/-." />
+		<parameter name="date.pivot" value="90" />
+		<filter call="f_vb.Filter_dat" />
+		<translator call="f_vb.Translator_date" />
+		<checker call="f_vb.Checker_dat" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+
+<!--
+/**
+ * Contrôle de validation effectuant un filtrage pour ne conserver que les
+ * caractères  de  0 à 9  et  l'ensemble  des  séparateurs  spécifiés. Les
+ * séparateurs sont traduits dans le premier caractère séparateur spécifié
+ * par le paramètre "date.sepSign". Le  format  de la  saisie  est de type
+ * (m(m(aa(aa)))) (0,1,2,4,6 chiffres) ou bien (m(m))/(aa(aa))
+ * Tout champ  vide est  complété par la date du jour. Lorsque l'année est
+ * spécifiée  sans le  siècle, on  applique un pivot  suivant l'algorithme
+ * qui suit:
+ *
+ *		si (annee <= pivot) alors annee += 1900
+ *		sinon annee += 2000
+ *		finsi
+ *
+ * La date est validée  syntaxiquement et  sémantiquement (contre exemple:
+ * 13/1991 date invalide).
+ * En sortie de champ, la date est affichée au format suivant:
+ *
+ *		MM/SSAA
+ *
+ * @param	date.sepSign	Liste des séparateurs autorisés
+ * @param	date.pivot		Valeur servant de pivot
+ * @see		F.date
+ * @example	clientValidator="date_msa('/-.','90')"
+ */
+-->
+	<clientValidator id="date_msa">
+		<parameter name="date.sepSign" value="/-." />
+		<parameter name="date.pivot" value="90" />
+		<filter call="f_vb.Filter_dat" />
+		<translator call="f_vb.Translator_date" />
+		<checker call="f_vb.Checker_dat_msa" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation effectuant un filtrage pour ne conserver que les
+ * caractères  de  0 à 9  et  l'ensemble  des  séparateurs  spécifiés. Les
+ * séparateurs sont traduits dans le premier caractère séparateur spécifié
+ * par le paramètre "date.sepSign". Le  format  de la  saisie  est de type
+ * (j(j(mm(aa(aa)))) (0,1,2,4,6,8 chiffres) ou  (j(j))/(m(m))/(a(a(a(a))))
+ * Les champs vides ne sont pas complétés. Le jour peut prendre une valeur
+ * de 0 à 31 inclus. Le mois peut peut  prendre une valeur autre que celle
+ * comprise  entre 13 et 19  inclus. Le jour à 0, le mois à 0 ou supérieur
+ * à 12 indique  une date  spéciale. L'année  spécifiée  sur deux chiffres
+ * provoque l'application d'un pivot sur l'année courante. Lorsque la date
+ * est complète, on vérifie sa validité.
+ *
+ * En sortie de champ, la date est affichée au format suivant:
+ *
+ *		(JJ)/(MM)/(S(SA(A)))
+ *
+ * @param	date.sepSign	Liste des séparateurs autorisés
+ * @see		F.date
+ * @example	clientValidator="date_naiss('/-.')"
+ */
+-->
+	<clientValidator id="date_naiss">
+		<parameter name="date.sepSign" value="/-." />
+		<filter call="f_vb.Filter_dat" />
+		<translator call="f_vb.Translator_date" />
+		<checker call="f_vb.Checker_dat_nai" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation effectuant un filtrage pour ne conserver que les
+ * caractères  de  0 à 9  et  l'ensemble  des  séparateurs  spécifiés. Les
+ * séparateurs sont traduits dans le premier caractère séparateur spécifié
+ * par le paramètre "hour.sepSign". Le  format  de la  saisie  est de type
+ * (h(h(mm))) (0,1,2,4 chiffres) ou  (h(h)):(m(m)). Les champs  vides sont
+ * complétés automatiquement à 0. L'heure peut prendre une  valeur de  0 à
+ * 23 et les minutes de 0 à 59. En sortie de champ,l'heure est affichée au
+ * format suivant:
+ *
+ *		HH:MM
+ *
+ * @param	hour.sepSign	Liste des séparateurs autorisés
+ * @see		CAMELIA.hour
+ * @example	clientValidator="hour(':. ')"
+ */
+-->
+	<clientValidator id="hour">
+		<parameter name="hour.sepSign" value=":. " />
+		<filter call="f_vb.Filter_hour" />
+		<checker call="f_vb.Checker_hour" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+<!--
+/**
+ * Contrôle de validation effectuant un filtrage pour ne conserver que les
+ * caractères  de  0 à 9 et l'ensemble des caractères spécifiés et entrant
+ * dans la composition du nombre. Les séparateurs de décimal sont traduits
+ * dans le premier caractère séparateur spécifié par le paramètre spécifié
+ * "num.decSign". Le  format de la saisie est de type (-)(D*)(,)(D*).
+ * Quelle que soit l'occurence du signé  négatif, il est forcé en début de
+ * nombre. Les décimales supplémentaires sont tronquées.
+ *
+ * En sortie de champ, le nombre est affiché au format suivant:
+ *
+ *		(-)(D DDD)*((,)D*)
+ *
+ * @param	num.signed		Précise s'il s'agit d'un nombre signé (booléen)
+ * @param	num.decimal		Précise le nombre de décimales du nombre (entier)
+ * @param	num.negSign		Le caractère du signe négatif
+ * @param	num.decSign		Le caractère séparateur de décimales
+ * @param	num.sepSign		Le caractère séparateur de milliers
+ *
+ * @see		CAMELIA.number
+ * @example	clientValidator="number('true','2','-',',.',' ')"
+ */
+-->
+	<clientValidator id="number">
+		<parameter name="num.signed" value="false" />
+		<parameter name="num.decimal" value="0" />
+		<parameter name="num.negSign" value="-" />
+		<parameter name="num.decSign" value=",." />
+		<parameter name="num.sepSign" value=" " />
+		<filter call="f_vb.Filter_num" />
+		<translator call="f_vb.Translator_num" />
+		<checker call="f_vb.Checker_num" />
+		<formatter call="f_vb.Formatter_num" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+	<clientValidator id="ident">
+		<filter call="f_vb.Filter_alpha" />
+		<translator call="f_vb.Translator_uppercase" />
+	</clientValidator>
+
+	<clientValidator id="email">
+		<parameter name="alpha.otherChars" value="0123456789@.-_" />
+		<filter call="f_vb.Filter_alpha_fr" />
+		<translator call="f_vb.Translator_lowercase" />
+		<!--
+			<onerror call="f_clientValidator.Error_null" />
+			<oncheckerror call="f_clientValidator.Error_focus" />
+			-->
+	</clientValidator>
+
+		</render-kit>
+	</clientValidators>
+</rcfaces-config>

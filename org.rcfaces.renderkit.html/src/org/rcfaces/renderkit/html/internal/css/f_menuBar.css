@@ -1,0 +1,80 @@
+/* **********************************************************************
+ * Menu
+ */
+
+.f_menuBar {
+	display: block;
+	padding: 0 2px;
+	border: 1px solid #BBB;		
+	position: relative;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+INPUT.f_menuBar_binput {
+	width: 1px;
+	height: 1px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+	line-height: 0.1;
+	font-size: 1px;
+	-moz-user-select: none;
+	vertical-align: top;
+	outline-width: 0px;
+	// Non support par Mozilla de outline-width
+	-moz-outline-width: 0px;
+}
+
+.f_menuBar,
+.f_menuBar_bitem, 
+.f_menuBar_bitem_hover,
+.f_menuBar_bitem_disabled, 
+.f_menuBar_bitem_disabled_hover, 
+.f_menuBar_bitem_selected, 
+.f_menuBar_bitem_selected_hover {
+	text-decoration:none;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	-moz-user-select: none;
+}
+
+.f_menuBar_bitem, 
+.f_menuBar_bitem_hover,
+.f_menuBar_bitem_selected, 
+.f_menuBar_bitem_selected_hover {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.f_menuBar_bitem, 
+.f_menuBar_bitem_hover, 
+.f_menuBar_bitem_selected, 
+.f_menuBar_bitem_selected_hover, 
+.f_menuBar_bitem_disabled,
+.f_menuBar_bitem_disabled_hover {
+	color: #000;
+	border: 0;
+	background: transparent;
+	padding: 2px;
+	height: 21px;
+}
+
+button::-moz-focus-inner {
+	border: 0;
+}
+
+
+.f_menuBar_bitem_selected, 
+.f_menuBar_bitem_selected_hover,
+.f_menuBar_bitem_hover,
+.f_menuBar_bitem_disabled_hover {
+	background-color: #316AC5;
+	color: white;
+}
+
+.f_menuBar_bitem_disabled,
+.f_menuBar_bitem_disabled_hover {
+	color: #ACA899;
+}

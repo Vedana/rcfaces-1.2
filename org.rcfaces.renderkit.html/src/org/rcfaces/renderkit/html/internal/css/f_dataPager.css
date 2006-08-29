@@ -1,0 +1,34 @@
+/**
+ * DataGridPager
+ */
+
+.f_dataPager {
+	border: 1px dotted #999999;
+	background-color: #EEEEEE;
+	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif; 
+	font-size: 11px;
+	text-align: left;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+SPAN.f_dataPager_pgoto {
+	font-weight: bold;
+	color: black;
+}
+
+SPAN.f_dataPager_pfirst, 
+SPAN.f_dataPager_plast, 
+SPAN.f_dataPager_pprev, 
+SPAN.f_dataPager_pnext {
+	color: #AAA;
+}
+
+A.f_dataPager_pfirst, 
+A.f_dataPager_plast, 
+A.f_dataPager_pprev, 
+A.f_dataPager_pnext,
+A.f_dataPager_pgoto {
+	color: #666;
+	text-decoration: none;
+}

@@ -1,0 +1,141 @@
+/* 
+ * $Id$
+ */
+ 
+/**
+ * Tree - Un arbre
+ *
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+UL.f_tree {
+ 	border: 1px solid #7F9DB9;
+	position: relative;
+	margin: 0;
+	padding: 2px 1px 2px 1px;
+	list-style-type: none;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+//	overflow: auto;
+	vertical-align: middle;
+	-moz-box-sizing: border-box;
+	-moz-outline-style: none;
+	-moz-user-select: none;
+	user-select: none;
+	text-align: left;
+	background-color: white;
+}
+ 
+UL.f_tree_parent {
+	white-space: nowrap;
+	vertical-align: middle;
+	padding: 1px 0 1px 0;
+	margin: 0;
+	list-style-type: none;
+	line-height: 1.0;
+}
+
+LI.f_tree_parent {
+	padding: 0;
+	margin: 0;
+	line-height: 1.0;
+	list-style-type: none;
+	list-style-image: none;	
+	white-space: nowrap;
+}
+
+SPAN.f_tree_node,
+SPAN.f_tree_node_disabled,
+SPAN.f_tree_node_selected,
+SPAN.f_tree_node_selected_focus,
+SPAN.f_tree_node_hover,
+SPAN.f_tree_node_selected_hover,
+SPAN.f_tree_node_selected_focus_hover {
+	padding: 0;
+	margin: 0;
+}
+
+SPAN.f_tree_node_disabled .f_tree_label,
+SPAN.f_tree_node_disabled .f_tree_label_cursor {
+	color: #A1A192;
+	cursor: normal;
+}
+
+SPAN.f_tree_node_selected .f_tree_label,
+SPAN.f_tree_node_selected_hover .f_tree_label,
+SPAN.f_tree_node_selected .f_tree_label_cursor,
+SPAN.f_tree_node_selected_hover .f_tree_label_cursor {
+	color: #000;
+	background-color: #ECE9D8;
+}
+
+SPAN.f_tree_node_selected_focus .f_tree_label,
+SPAN.f_tree_node_selected_focus_hover .f_tree_label,
+SPAN.f_tree_node_selected_focus .f_tree_label_cursor,
+SPAN.f_tree_node_selected_focus_hover .f_tree_label_cursor {
+	color: HighlightText;
+	background-color: Highlight;
+}
+
+SPAN.f_tree_node_hover .f_tree_label,
+SPAN.f_tree_node_selected_hover .f_tree_label,
+SPAN.f_tree_node_selected_focus_hover .f_tree_label,
+SPAN.f_tree_node_hover .f_tree_label_cursor,
+SPAN.f_tree_node_selected_hover .f_tree_label_cursor,
+SPAN.f_tree_node_selected_focus_hover .f_tree_label_cursor {
+	text-decoration: underline;
+}
+
+SPAN.f_tree_node_hover .f_tree_label {
+	color: #008;
+}
+
+IMG.f_tree_command,
+IMG.f_tree_command_opened,
+IMG.f_tree_command_closed,
+IMG.f_tree_image {
+	margin: 0 2px 0 0;
+	cursor: pointer;
+	cursor: hand;
+	vertical-align: middle;
+}
+
+IMG.f_tree_command_opened {
+	background:url('tree/command.gif') no-repeat 0px 0px;
+}
+
+IMG.f_tree_command_closed {
+	background:url('tree/command.gif') no-repeat -16px 0px;
+}
+
+INPUT.f_tree_check {
+	vertical-align: middle;
+	padding: 0;
+	margin: 0 2px 0 0;
+	cursor: pointer;
+	cursor: hand;
+	-moz-user-focus: ignore;
+	width: 16px;
+	height: 16px;
+}
+
+LABEL.f_tree_label,
+LABEL.f_tree_label_cursor {
+	cursor: pointer;
+	cursor: hand;
+	padding: 2px 1px 2px 1px;
+	text-decoration: inherit;
+	white-space: nowrap;
+}
+
+LABEL.f_tree_label_cursor {
+	padding: 1px 0 1px 0;
+	border: 1px dotted black;
+}
+
+A.f_tree_focus {
+	position: absolute;
+	width: 0px;
+	height: 0px;
+	-moz-outline-width: 0px;
+}

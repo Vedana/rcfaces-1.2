@@ -1,0 +1,175 @@
+/* **********************************************************************
+ * Menu
+ */
+
+LI.f_menu_item, 
+LI.f_menu_item_hover, 
+LI.f_menu_item_disabled, 
+LI.f_menu_item_disabled_hover,
+LI.f_menu_item_selected, 
+LI.f_menu_item_selected_hover,
+LI.f_menu_item_popup {
+	text-decoration:none;
+	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	-moz-user-select: none;
+	overflow: hidden;
+}
+
+UL.f_menu_popup {
+	background-color: white;
+	border: 1px solid #8A867A;
+	position:absolute;
+	left: 0;
+	top: 0;
+	z-index:1000;
+	margin: 0;
+	padding: 1px;
+	list-style-type: none;
+	display: block;
+}
+
+LI.f_menu_item,
+LI.f_menu_item_hover,
+LI.f_menu_item_popup, 
+LI.f_menu_item_disabled,
+LI.f_menu_item_disabled_hover,
+LI.f_menu_item_selected,
+LI.f_menu_item_selected_hover {
+	padding: 0;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	cursor: hand;
+	height: 19px;
+	position: relative;
+}
+
+LI.f_menu_item, 
+LI.f_menu_item_popup, 
+LI.f_menu_item_disabled  {
+	padding: 1px 14px 1px 1px;
+	display: block;
+	color: #000;
+}
+
+LI.f_menu_item_hover, 
+LI.f_menu_item_selected, 
+LI.f_menu_item_selected_hover, 
+LI.f_menu_item_disabled_hover  {
+	padding: 0 13px 0 0;
+	border: 1px solid #316AC5;
+	display: block;
+	color: white;
+}
+
+LI.f_menu_item_disabled, 
+LI.f_menu_item_disabled_hover {
+	color: #ACA899;
+}
+
+LI.f_menu_item_disabled_hover {
+	background-color: #316AC5;
+}
+
+IMG.f_menu_item_image,
+IMG.f_menu_item_image_hover {
+	padding: 0;
+	border: 0;
+	width: 18px;
+	height: 18px;	
+	vertical-align: top;
+}
+
+IMG.f_menu_item_image_check,
+IMG.f_menu_item_image_check_hover,
+IMG.f_menu_item_image_check_disabled,
+IMG.f_menu_item_image_radio,
+IMG.f_menu_item_image_radio_hover,
+IMG.f_menu_item_image_radio_disabled {
+	background: url("menu/markers.gif") no-repeat 0 0;
+	padding: 0;
+	border: 0;
+	width: 18px;
+	height: 18px;
+	vertical-align: top;
+}
+
+IMG.f_menu_item_image_check_hover {
+	background-position: -18px 0;
+}
+
+IMG.f_menu_item_image_check_disabled {
+	background-position: -36px 0;
+}
+
+IMG.f_menu_item_image_radio {
+	background-position: -54px 0;
+}
+
+IMG.f_menu_item_image_radio_hover {
+	background-position: -72px 0;
+}
+
+IMG.f_menu_item_image_radio_disabled {
+	background-position: -90px 0;
+}
+
+LI.f_menu_item_hover {
+	background-color: #316AC5;
+}
+
+LI.f_menu_item_selected, 
+LI.f_menu_item_selected_hover {
+	background: #316AC5 url("menu/expand_selected.gif") no-repeat right;
+}
+
+LI.f_menu_item_popup {
+	background: url("menu/expand.gif") no-repeat right;
+}
+
+LI.f_menu_item_sep {
+	margin: 2px 4px 2px 4px;
+	vertical-align: middle;
+	height: 3px;
+	font-size: 1pt;
+	line-height: 0.1;
+	background: url("menu/separator.gif") repeat-x 50%;
+}
+
+UL.f_menu_popup .f_accessKey {
+	text-decoration: underline;
+}
+
+LABEL.f_menu_item_text {
+	vertical-align: middle;
+	height: 18px;
+	padding-left: 2px;
+	cursor: pointer;
+	cursor: hand;
+}
+
+LABEL.f_menu_item_accelV,
+LABEL.f_menu_item_accel {
+	vertical-align: middle;
+}
+
+LABEL.f_menu_item_accelV {
+	visibility: hidden;
+	margin: 0 8px 0 2px;
+}
+
+LABEL.f_menu_item_accel {
+	position: absolute;
+	display: block;
+	right: 14px;
+	top: 3px;
+	height: 16px;
+}
+
+LI.f_menu_item_hover LABEL.f_menu_item_accel , 
+LI.f_menu_item_selected LABEL.f_menu_item_accel , 
+LI.f_menu_item_selected_hover LABEL.f_menu_item_accel , 
+LI.f_menu_item_disabled_hover LABEL.f_menu_item_accel {
+	top: 2px;
+	right: 13px;
+}

@@ -1,0 +1,259 @@
+/**
+ * DataGrid
+ */
+
+DIV.f_dataGrid {
+	border: 1px solid #666666;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;	
+	line-height: 18px;
+	font-size: 1pt;
+	text-align: left;
+	-moz-user-select: none;
+	user-select: none;
+	background-color: white;
+ 	position: relative;
+}
+
+DIV.f_dataGrid_disabled {
+ 	border: 1px solid #BBB;		
+}
+
+TABLE.f_dataGrid_table, TABLE.f_dataGrid_table_disabled  {
+	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+ 	border-spacing: 0px;
+	empty-cells: show;
+ 	margin: 0;
+ 	padding: 0;
+ 	table-layout: fixed;
+ 	background-color: white;
+}
+
+TABLE.f_dataGrid_table TBODY, 
+TABLE.f_dataGrid_table_disabled TBODY {
+ 	background:#D9D9D9;
+}
+
+
+TABLE.f_dataGrid_fttitle {
+	empty-cells: show;
+	border-spacing: 0;
+	padding: 0;
+	margin: 0;
+	table-layout: fixed;
+	// C'est allucinant ... mais si il n'y a pas de taille par defaut !
+	// Il desactive tout seul le table-layout !
+	width: 100%;
+}
+
+TR.f_dataGrid_title {
+	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	margin: 0px;
+	background-color: white;
+}
+
+TH.f_dataGrid_tcell, 
+TH.f_dataGrid_tcell_over, 
+TH.f_dataGrid_tcell_disabled,
+TH.f_dataGrid_tcell_selected,
+TH.f_dataGrid_tcell_left, 
+TH.f_dataGrid_tcell_left_over, 
+TH.f_dataGrid_tcell_left_selected,
+TH.f_dataGrid_tcell_left_disabled {
+	font-weight: bold;
+	color: #000;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	padding: 2px 4px 2px 4px;
+	margin: 0px;
+	height: 20px;
+	overflow:hidden;
+	white-space:nowrap;
+	background: url('dataGrid/titleNormal.gif') repeat-x bottom #EBEADB;
+	cursor: normal;
+}
+
+TH.f_dataGrid_tcell, 
+TH.f_dataGrid_tcell_over, 
+TH.f_dataGrid_tcell_disabled {
+	border-left: 1px solid #D9D9D9;
+	padding-left: 3px;
+}
+
+TH.f_dataGrid_tcell_disabled,
+TH.f_dataGrid_tcell_left_disabled {
+ 	background-color: #BBB;
+	color: #9292B7;
+}
+
+TH.f_dataGrid_tcell_over,
+TH.f_dataGrid_tcell_left_over {
+	background: url('dataGrid/titleOver.gif') repeat-x bottom white;
+}
+
+TH.f_dataGrid_tcell_selected,
+TH.f_dataGrid_tcell_left_selected {
+	border: 1px solid #A5A597;
+	background-color: #DEDFD8;
+}
+
+IMG.f_dataGrid_timage {
+	margin-left: 4px;
+}
+ 
+DIV.f_dataGrid_stext {
+	position:relative;
+}
+
+DIV.f_dataGrid_ttext,
+DIV.f_dataGrid_ttext_ascending,
+DIV.f_dataGrid_ttext_descending {
+	color: #000;
+	text-overflow: ellipsis;
+	white-space:nowrap;
+	overflow: hidden;
+}
+
+DIV.f_dataGrid_ttext_ascending {
+	padding-right: 14px;
+	background: url('dataGrid/ascending.gif') no-repeat right center;
+}
+
+DIV.f_dataGrid_ttext_descending {
+	padding-right: 14px;
+	background: url('dataGrid/descending.gif') no-repeat right center;
+}
+
+TD#f_dataGrid_cell, 
+TD#f_dataGrid_cell_left, 
+TD#f_dataGrid_cell_cursor,
+TD#f_dataGrid_cell_left_cursor {
+	empty-cells: show;
+	padding: 1px 4px 1px 4px;
+	height: 20px;
+	vertical-align: middle;
+	overflow:hidden;
+	white-space:nowrap;
+}
+
+TD#f_dataGrid_cell {
+	border-left: 1px solid #D9D9D9;
+	padding-left: 3px;
+}
+
+TD#f_dataGrid_cell_cursor,
+TD#f_dataGrid_cell_left_cursor {
+	border: 1px dotted black;
+	padding: 0 0 0 3px;
+}
+
+.f_dataGrid_label {
+	white-space: nowrap;
+	text-overflow:ellipsis;
+	overflow: hidden;
+	white-space:nowrap;
+}
+
+TR.f_dataGrid_row_even, 
+TR.f_dataGrid_row_even_normal {
+	background-color: #EDF3FE;
+}
+
+TR.f_dataGrid_row_odd, 
+TR.f_dataGrid_row_odd_normal {
+	background-color: #ffffff;
+}
+
+TR.f_dataGrid_row_even_disabled {
+	background-color: #dedede;
+}
+
+TR.f_dataGrid_row_odd_disabled {
+	background-color: #e2e2e2;
+}
+
+TR.f_dataGrid_row_selected, 
+TR.f_dataGrid_row_selected {
+	color: #000;
+	background-color: #C0C0C0;
+}
+
+TR.f_dataGrid_row_selected_focus,
+TR.f_dataGrid_row_selected_focus {
+	color: HighlightText;
+	background-color: #3D80DF;	
+}
+
+TR.f_dataGrid_row_selected_focus TD.f_dataGrid_cell,
+TR.f_dataGrid_row_selected_focus TD.f_dataGrid_cell {
+	border-left-color: #346DBE;
+}
+
+TR.f_dataGrid_row_even_disabled_selected, 
+TR.f_dataGrid_row_odd_disabled_selected {
+	background-color: #a2a2a2;
+}
+
+TR.f_dataGrid_row_even_normal,
+TR.f_dataGrid_row_odd_normal,
+TR.f_dataGrid_row_selected_focus,
+TR.f_dataGrid_row_selected_focus,
+TR.f_dataGrid_row_selected,
+TR.f_dataGrid_row_selected {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.f_dataGrid_focus {
+	position: absolute;
+	width: 0;
+	height: 0;
+	top: 0px;
+	height: 0px;
+	-moz-outline-style: none;
+	-moz-outline-width: 0;
+	-moz-user-focus: normal;
+}
+
+INPUT.f_dataGrid_input {
+	cursor: pointer;
+	cursor: hand;
+	vertical-align: middle;
+	-moz-user-focus: ignore;
+}
+
+DIV.f_dataGrid_dataBody_scroll {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	overflow: auto;
+	overflow-y: auto;
+	overflow-x: auto;
+	-moz-outline-style: none;
+}
+DIV.f_dataGrid_dataTitle_scroll {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	overflow: hidden;
+	background: url('dataGrid/titleNormal.gif') repeat-x bottom #EBEADB;
+	-moz-outline-style: none;
+}
+
+IMG.f_dataGrid_imageCell {
+	margin: 0 2px 0 0;
+	vertical-align: middle;
+	height: auto;
+}
+
+DIV.f_dataGrid_colCursor {
+	//background-color: red;
+	position: absolute;
+	top: -2px;
+	right: -8px;
+	width: 8px;
+	height: 18px;
+	cursor: e-resize;
+//	xbackground: url('dataGrid/blank.gif') repeat;
+}

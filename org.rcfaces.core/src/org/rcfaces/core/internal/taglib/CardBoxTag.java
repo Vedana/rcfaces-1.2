@@ -1,0 +1,86 @@
+package org.rcfaces.core.internal.taglib;
+
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.CardBoxComponent;
+
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
+
+public class CardBoxTag extends AbstractInputTag {
+
+private static final Log LOG=LogFactory.getLog(CardBoxTag.class);
+	private String selectionListeners;
+	private String asyncRenderMode;
+	private String preference;
+	public String getComponentType() {
+		return CardBoxComponent.COMPONENT_TYPE;
+	}
+
+	public final String getSelectionListener() {
+		return selectionListeners;
+	}
+
+	public final void setSelectionListener(String selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
+
+	public final String getAsyncRenderMode() {
+		return asyncRenderMode;
+	}
+
+	public final void setAsyncRenderMode(String asyncRenderMode) {
+		this.asyncRenderMode = asyncRenderMode;
+	}
+
+	public final String getPreference() {
+		return preference;
+	}
+
+	public final void setPreference(String preference) {
+		this.preference = preference;
+	}
+
+	protected void setProperties(UIComponent uiComponent) {
+		super.setProperties(uiComponent);
+
+		if ((uiComponent instanceof CardBoxComponent)==false) {
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'CardBoxComponent'.");
+		}
+
+		CardBoxComponent component = (CardBoxComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
+
+		if (selectionListeners != null) {
+			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
+		if (asyncRenderMode != null) {
+			if (isValueReference(asyncRenderMode)) {
+				ValueBinding vb = application.createValueBinding(asyncRenderMode);
+
+				component.setAsyncRenderMode(vb);
+			} else {
+				component.setAsyncRenderMode(asyncRenderMode);
+			}
+		}
+
+		if (preference != null) {
+				ValueBinding vb = application.createValueBinding(preference);
+
+				component.setPreference(vb);
+		}
+	}
+
+	public void release() {
+		selectionListeners = null;
+		asyncRenderMode = null;
+		preference = null;
+
+		super.release();
+	}
+
+}

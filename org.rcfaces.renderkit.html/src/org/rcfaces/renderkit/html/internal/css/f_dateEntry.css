@@ -1,0 +1,23 @@
+/* ***************************************************************************
+ * 
+ * Date entry
+ */
+ 
+.f_dateEntry {
+	margin: 0;
+	border: 1px solid #7F9DB9;
+}
+
+.f_dateEntry INPUT {
+	border: 0;
+}
+
+.f_dateEntry_dd,
+.f_dateEntry_mm,
+.f_dateEntry_yy {
+	width: 16px;
+} 
+
+.f_dateEntry_yyyy {
+	width: 32px;
+}

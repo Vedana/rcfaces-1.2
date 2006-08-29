@@ -1,0 +1,17 @@
+/* ********************************************************************
+*
+*	Help Message Zone
+*
+*/
+
+.f_helpMessageZone {
+	font: 8pt Verdana, Arial, Helvetica, sans-serif;
+	vertical-align: top;
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
+	background-color: #FFFFCC;
+}
+
+.f_helpMessageZoneTitle {
+	font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+}

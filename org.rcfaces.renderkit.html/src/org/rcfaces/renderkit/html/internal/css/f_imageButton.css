@@ -1,0 +1,65 @@
+/* ***************************************************************************
+ * 
+ * ImageButton
+ */
+ 
+.f_imageButton_text,
+.f_imageButton, 
+.f_imageButton_hover, 
+.f_imageButton_pushed, 
+.f_imageButton_selected, 
+.f_imageButton_focus,
+.f_imageButton_selected_focus, 
+.f_imageButton_selected_hover, 
+.f_imageButton_disabled {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	-moz-user-select: none;
+	user-select: none;
+	color: black;
+	text-decoration: none;
+}
+
+.f_imageButton_image {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	user-select: none;
+	color: black;
+	text-decoration: none;
+}
+
+.f_imageButton, 
+.f_imageButton_hover, 
+.f_imageButton_pushed, 
+.f_imageButton_selected, 
+.f_imageButton_focus,
+.f_imageButton_selected_focus, 
+.f_imageButton_selected_hover {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.f_imageButton_disabled,
+.f_imageButton_disabled INPUT {
+	-moz-user-focus: ignore;
+	cursor: default;
+}
+
+.f_imageButton_disabled .f_imageButton_text {
+	color: #A1A192;
+}
+
+/*
+.f_imageButton_text {
+	border: 1px solid transparent;
+}
+
+.f_imageButton_focus .f_imageButton_text,
+.f_imageButton_selected_focus .f_imageButton_text {
+	border: 1px dotted black;
+}
+*/
+
+

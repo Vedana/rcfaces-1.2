@@ -1,0 +1,56 @@
+/* 
+ * $Id$
+ *
+ * $Log$
+ * Revision 1.1  2006/08/29 16:14:27  oeuillot
+ * Renommage  en rcfaces
+ *
+ * Revision 1.2  2005/10/05 14:34:20  oeuillot
+ * Version avec decode/validation/update des propriétés des composants
+ *
+ * Revision 1.1  2005/09/16 09:54:40  oeuillot
+ * Ajout de fonctionnalités AJAX
+ * Ajout du JavaScriptRenderContext
+ * Renomme les classes JavaScript
+ *
+ * Revision 1.5  2004/12/30 17:24:20  oeuillot
+ * Gestion des validateurs
+ * Debuggage des composants
+ *
+ * Revision 1.4  2004/09/29 20:49:39  oeuillot
+ * *** empty log message ***
+ *
+ * Revision 1.3  2004/09/24 14:01:36  oeuillot
+ * *** empty log message ***
+ *
+ */
+ 
+/**
+ * Attente ...
+ *
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+DIV.f_waiting {
+	text-align: left;
+	vertical-align: middle;
+	width: 100px;
+	height: 24px;
+	position: absolute;
+	display: none;
+	background: transparent url("waiting/waiting2.gif") no-repeat left center;
+	padding-left: 24px;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	font-weight: normal;
+	font-stretch: normal;
+	font-style: normal;
+	line-height: 24px;
+	z-index: 999;
+	overflow: hidden;
+}
+
+.f_waiting_error {
+	color: #B00;
+}
+

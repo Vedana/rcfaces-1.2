@@ -1,0 +1,20 @@
+/* ********************************************************************
+ *
+ *	CheckButton 3 états
+ */
+DIV.f_checkButton3States {
+	cursor: pointer;
+	cursor: hand;
+	display: inline;
+}
+
+INPUT.f_checkButton3States_input {
+	vertical-align: middle;
+}
+
+LABEL.f_checkButton3States_text {
+	vertical-align: middle;
+	cursor: pointer;
+	cursor: hand;
+	padding-left: 4px;
+}

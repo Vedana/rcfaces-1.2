@@ -1,0 +1,84 @@
+/*
+ * $Id$
+ * 
+ * $Log$
+ * Revision 1.1  2006/08/29 16:13:13  oeuillot
+ * Renommage  en rcfaces
+ *
+ * Revision 1.1  2005/11/08 12:16:28  oeuillot
+ * Ajout de  Preferences
+ * Stabilisation de imageXXXButton
+ * Ajout de la validation cot� client
+ * Ajout du hash MD5 pour les servlets
+ * Ajout des accelerateurs
+ *
+ */
+package org.rcfaces.core.preference;
+
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
+import org.rcfaces.core.component.CardBoxComponent;
+import org.rcfaces.core.component.CardComponent;
+import org.rcfaces.core.component.iterator.ICardIterator;
+
+
+/**
+ * 
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+public class CardBoxPreference extends AbstractComponentPreference {
+    private static final String REVISION = "$Revision$";
+
+    private String selectedCardId;
+
+    public void loadPreference(FacesContext facesContext, UIComponent component) {
+        if ((component instanceof CardBoxComponent) == false) {
+            throw new FacesException("Can not load cardBox preferences !");
+        }
+
+        CardBoxComponent cardBoxComponent = (CardBoxComponent) component;
+
+        if (selectedCardId != null) {
+            ICardIterator cardIterator = cardBoxComponent.listCards();
+            for (; cardIterator.hasNext();) {
+                CardComponent cardComponent = cardIterator.next();
+
+                if (selectedCardId.equals(cardComponent.getId()) == false) {
+                    continue;
+                }
+
+                cardBoxComponent.select(cardComponent);
+                break;
+            }
+        }
+    }
+
+    public void savePreference(FacesContext facesContext, UIComponent component) {
+        if ((component instanceof CardBoxComponent) == false) {
+            throw new FacesException("Can not save cardBox preferences !");
+        }
+
+        CardBoxComponent cardBoxComponent = (CardBoxComponent) component;
+
+        selectedCardId = null;
+        CardComponent cardComponent = cardBoxComponent
+                .getSelectedCard(facesContext);
+        if (cardComponent != null) {
+            selectedCardId = cardComponent.getId();
+        }
+    }
+
+    public Object saveState(FacesContext context) {
+        return new Object[] { selectedCardId };
+    }
+
+    public void restoreState(FacesContext context, Object state) {
+        Object p[] = (Object[]) state;
+
+        this.selectedCardId = (String) p[0];
+    }
+
+}

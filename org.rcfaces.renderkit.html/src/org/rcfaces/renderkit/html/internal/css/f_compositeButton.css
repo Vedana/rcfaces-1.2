@@ -1,0 +1,45 @@
+/* ***************************************************************************
+ * 
+ * CompositeButton
+ */
+ 
+.f_compositeButton, 
+.f_compositeButton_link,
+.f_compositeButton_hover, 
+.f_compositeButton_pushed, 
+.f_compositeButton_selected, 
+.f_compositeButton_focus,
+.f_compositeButton_selected_focus, 
+.f_compositeButton_selected_hover, 
+.f_compositeButton_disabled {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	-moz-user-select: none;
+	user-select: none;
+	color: black;
+	text-decoration: none;
+}
+
+.f_compositeButton, 
+.f_compositeButton_link,
+.f_compositeButton_hover, 
+.f_compositeButton_pushed, 
+.f_compositeButton_selected, 
+.f_compositeButton_focus,
+.f_compositeButton_selected_focus, 
+.f_compositeButton_selected_hover {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.f_compositeButton_disabled,
+.f_compositeButton_disabled .f_compositeButton_link {
+	-moz-user-focus: ignore;
+	cursor: default;
+}
+
+.f_compositeButton_link IMG {
+	border: 0px;
+}
+

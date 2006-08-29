@@ -1,0 +1,23 @@
+/**
+ * DataGrid
+ */
+
+.f_dataList {
+	border: 1px solid #666666;
+	margin: 0;
+	padding: 0;	
+	text-align: left;
+	vertical-align: top;
+	-moz-user-select: none;
+	user-select: none;
+ 	position: relative;
+}
+
+.f_dataList_disabled {
+ 	border: 1px solid #BBB;		
+}
+
+.f_dataList_cell {
+	text-align: left;
+	vertical-align: top;
+}

@@ -1,0 +1,17 @@
+/* **********************************************************************
+ * Message
+ */
+ 
+SPAN.f_message {
+	-moz-user-select: none;
+	user-select: none;
+}
+
+LABEL.f_message_summary {
+	color: red;
+	font-weight: bold;
+}
+
+LABEL.f_message_detail {
+	color: red;
+}

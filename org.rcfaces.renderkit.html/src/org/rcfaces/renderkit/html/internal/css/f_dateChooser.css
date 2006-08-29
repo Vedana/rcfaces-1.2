@@ -1,0 +1,84 @@
+/* ***************************************************************************
+ * 
+ * Date chooser
+ */
+ 
+.f_dateChooser, 
+.f_dateChooser_text,
+.f_dateChooser_hover, 
+.f_dateChooser_pushed, 
+.f_dateChooser_selected, 
+.f_dateChooser_focus,
+.f_dateChooser_selected_focus, 
+.f_dateChooser_selected_hover, 
+.f_dateChooser_disabled {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	-moz-user-select: none;
+	user-select: none;
+	color: black;
+	text-decoration: none;
+	position: relative;
+}
+
+.f_dateChooser_image {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	user-select: none;
+	color: black;
+	text-decoration: none;
+}
+
+.f_dateChooser, 
+.f_dateChooser_hover, 
+.f_dateChooser_pushed, 
+.f_dateChooser_selected, 
+.f_dateChooser_focus,
+.f_dateChooser_selected_focus, 
+.f_dateChooser_selected_hover {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.f_dateChooser_disabled,
+.f_dateChooser_disabled INPUT {
+	-moz-user-focus: ignore;
+	cursor: default;
+}
+
+.f_dateChooser_disabled .f_dateChooser_text {
+	color: #A1A192;
+}
+
+.f_dateChooser_marker {
+	background: url('imageCombo/popDown.gif') no-repeat 0 0;
+}
+
+.f_dateChooser_disabled .f_dateChooser_marker {
+	color: #A1A192;
+	background-position: -5px 0;
+}
+
+
+.f_dateChooser_popup {
+	background-color: white;
+	border: 1px solid #8A867A;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index:1000;
+	margin: 0;
+	padding: 0;
+	display: bloc;
+	visibility: hidden;
+	cursor: default;
+	width: 140px;
+}
+
+.f_dateChooser_popup .f_calendar_month {
+	width: 80px;
+}
+
+

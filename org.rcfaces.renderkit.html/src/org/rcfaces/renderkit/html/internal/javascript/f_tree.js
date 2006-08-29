@@ -1,0 +1,2381 @@
+/*
+ * $Id$
+ *
+ * $Log$
+ * Revision 1.1  2006/08/29 16:14:26  oeuillot
+ * Renommage  en rcfaces
+ *
+ */
+
+/**
+ * f_tree
+ *
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager
+ * @author olivier Oeuillot
+ * @version $REVISION: $
+ */
+ 
+var __static = {
+	
+	/**
+	 * @field private static final string
+	 */
+	_BLANK_NODE_IMAGE_URL: "blank.gif",
+	
+	/**
+	 * @field private static final string
+	 */
+	_NODE_MENU_ID: "#node",
+	
+	/**
+	 * @field private static final string
+	 */
+	_BODY_MENU_ID: "#body",
+
+	/**
+	 * @field private static final number
+	 */
+	_SEARCH_KEY_DELAY: 400,
+
+	/**
+	 * @field private static final number
+	 */
+	_COMMAND_IMAGE_WIDTH: 16,
+	
+	/**
+	 * @field private static final number
+	 */
+	_COMMAND_IMAGE_HEIGHT: 16,
+
+	_NodeLabel_mouseOver: function(evt) {
+		var li=this._node;
+		var tree=li._tree;
+		if (tree.f_getEventLocked(false)) {
+			return false;
+		}
+		
+		if (!evt) evt = window.event;
+			
+		li._over=true;
+		
+		tree._updateElementStyle(li);
+	},
+	_NodeLabel_mouseOut: function(evt) {
+		if (!evt) evt = window.event;
+
+		var li=this._node;
+		var tree=li._tree;
+
+		if (!li._over) {
+			return;
+		}
+		
+		li._over=false;
+		
+		tree._updateElementStyle(li);
+	},
+	_NodeLabel_dblClick: function(evt) {
+		var li=this._node;
+		var tree=li._tree;
+		if (tree.f_getEventLocked()) {
+			return false;
+		}
+		if (!evt) {
+			evt = window.event;
+		}
+	
+		var node=li._node;
+
+		tree.f_fireEvent(f_event.DBLCLICK, evt, node, node._value);
+
+		return f_core.CancelEvent(evt);
+	},
+	_NodeLabel_mouseDown: function(evt) {
+		var li=this._node;
+		var tree=li._tree;
+		if (tree.f_getEventLocked()) {
+			return false;
+		}
+		if (!evt) {
+			evt = window.event;
+		}
+
+		if (!tree._focus) {
+			tree.f_setFocus();
+		}
+		
+		var selection=fa_selectionManager.ComputeMouseSelection(evt);
+		
+		tree._moveCursor(li, true, evt, selection);
+					
+		if (f_core.IsPopupButton(evt)) {		
+			var menu=tree.f_getSubMenuById(f_tree._NODE_MENU_ID);
+			if (menu) {
+				menu.f_open(this, {
+					position: f_menu.MOUSE_POSITION
+					}, tree, evt);
+			}
+		}
+
+		return f_core.CancelEvent(evt);
+	},
+	_BodyMouseDown: function(evt) {
+		var tree=this;
+		
+		if (tree.f_getEventLocked()) {
+			return false;
+		}
+		if (!evt) evt = window.event;
+
+		if (tree.f_isDisabled()) {
+			return f_core.CancelEvent(evt);
+		}
+		
+		var sub=f_core.IsPopupButton(evt);
+		if (!sub) {
+			return f_core.CancelEvent(evt);
+		}
+		
+		var menuId=f_tree._BODY_MENU_ID;
+		
+		// S'il y a une seule selection, on bascule en popup de ligne !
+		if (tree._currentSelection.length>0) {
+			menuId=f_tree._NODE_MENU_ID;	
+		}
+		
+		var menu=tree.f_getSubMenuById(menuId);
+		if (menu) {
+			menu.f_open(this, {
+				position: f_menu.MOUSE_POSITION
+				}, tree, evt);
+		}
+			
+		return f_core.CancelEvent(evt);
+	},
+	_Command_mouseDown: function(evt) {
+		var li=this._node;
+		var tree=li._tree;
+		if (tree.f_getEventLocked()) {
+			return false;
+		}
+		if (!evt) {
+			evt = window.event;
+		}
+		
+		var node=li._node;
+
+		tree.f_setFocus();
+
+		if (tree._userExpandable) {
+			if (node._opened) {
+				tree._closeNode(node, evt, li);
+	
+			} else {
+				tree._openNode(node, evt, li);
+			}
+		}
+		
+		return f_core.CancelEvent(evt);
+	},
+	_Link_bodyOnfocus: function(evt) {
+		var tree=this._tree;
+		if (tree.f_getEventLocked(false)) {
+			return false;
+		}
+		if (!evt) evt = window.event;
+		
+		tree.f_setFocus();
+	},
+	_Link_onfocus: function(evt) {
+		var tree=this._tree;
+		if (tree.f_getEventLocked(false)) {
+			return false;
+		}
+		if (!evt) evt = window.event;
+
+		if (tree._focus) {
+			return true;
+		}
+		
+		tree._focus=true;
+		
+		if (tree._selectable) {
+			if (!tree._cursor) {
+				var currentSelection=tree._currentSelection;
+				if (currentSelection.length>0) {
+					tree._cursor=currentSelection[0];
+				}
+				
+				if (!tree._cursor) {
+					var li=f_core.GetFirstElementByTagName(tree, "LI");
+					if (li) {
+						tree._cursor=li;
+					}
+				}
+			}
+		
+			tree._updateSelectedNodes();
+		}
+
+		tree.f_onFocus(evt);
+
+		return true;		
+	},
+	_Link_onblur: function(evt) {
+		var tree=this._tree;
+
+		// On verouille pas l'accés !
+		//if (tree.f_getEventLocked(false)) {
+		// return false;
+		//}
+		
+		if (!evt) evt = window.event;
+
+		if (!tree._focus) {
+			return true;
+		}
+		
+		tree._focus=undefined;
+	
+		if (tree._selectable) {
+			tree._updateSelectedNodes();
+		}
+
+		if (tree._cfocus) {
+			tree._cfocus.style.top=tree.scrollTop+"px";
+		}
+
+		tree.f_onBlur(evt);
+
+		return true;
+	},
+	_Link_onkeydown: function(evt) {
+		var tree=this._tree;
+		if (tree.f_getEventLocked(true)) {
+			return false;
+		}
+		if (!evt) evt = window.event;
+
+		if (!tree._focus) {
+			return true;
+		}
+
+		return tree.f_onKeyDown(evt);
+	},
+	_Link_onkeyup: function(evt) {
+		var tree=this._tree;
+		if (tree.f_getEventLocked(false)) {
+			return false;
+		}
+		if (!evt) evt = window.event;
+
+		if (!tree._focus) {
+			return true;
+		}
+
+		return tree.f_onKeyUp(evt);
+	},
+	_Link_onkeypress: function(evt) {
+		var tree=this._tree;
+		if (tree.f_getEventLocked(false)) {
+			return false;
+		}
+		if (!evt) evt = window.event;
+
+		if (!tree._focus) {
+			return true;
+		}
+
+		return tree.f_onKeyPress(evt);
+	},
+	_NodeInput_mouseClick: function(evt) {
+		var li=this._node;
+		var tree=li._tree;
+		if (tree.f_getEventLocked()) {
+			return false;
+		}
+
+		if (!evt) evt = window.event;
+
+		evt.cancelBubble = true;
+
+		if (li!=tree._cursor) {
+			tree._moveCursor(li, true, evt);
+		}
+		
+		var checked;
+		if (this.type=="radio") {
+			checked=true;
+		} else {
+			checked=!tree._isElementChecked(li);
+		}
+	
+		tree._performElementCheck(li, true, evt, checked);
+		
+		if (f_core.IsGecko()) {
+			if (tree._isElementChecked(li)!=checked) {
+				return false;
+			}
+		}
+ 
+		return true;
+	},
+	_InitializeScrollbars: function(tree) {
+		var pos=tree._initialHorizontalScrollPosition;
+		if (pos) {
+			tree.scrollLeft=pos;
+		}
+		
+		pos=tree._initialVerticalScrollPosition;
+		if (pos) {
+			tree.scrollTop=pos;
+		}
+	}	
+}
+
+var __prototype = {
+	
+	f_tree: function() {
+		this.f_super(arguments);
+
+		var v_interactive=f_core.GetAttribute(this, "v:asyncRender");
+		if (v_interactive) {
+			this._interactive=true;
+		}
+
+		var v_hideRootExpandSign=f_core.GetAttribute(this, "v:hideRootExpandSign");
+		if (v_hideRootExpandSign) {
+			this._hideRootExpandSign=true;
+		}
+				
+		var v_userExpandable=f_core.GetAttribute(this, "v:userExpandable");
+		if (v_userExpandable) {
+			this._userExpandable=true;
+		}
+		
+		this._className=f_core.GetAttribute(this, "v:className");
+		if (!this._className) {
+			this._className=this.className;
+		}
+
+		if (f_core.GetAttribute(this, "v:images")) {
+			this._images=true;
+		}
+				
+		var hsp=f_core.GetAttribute(this, "v:hsp");
+		if (hsp) {
+			this._initialHorizontalScrollPosition=hsp;
+		}
+			
+		var vsp=f_core.GetAttribute(this, "v:vsp");
+		if (vsp) {
+			this._initialVerticalScrollPosition=vsp;
+		}
+		
+		var pld=f_core.GetAttribute(this, "v:preloadedLevelDepth");
+		if (pld) {
+			this._preloadedLevelDepth=parseInt(pld);
+		}
+		
+		var styleSheetBase=f_env.GetStyleSheetBase();
+
+		this._blankNodeImageURL=styleSheetBase+f_tree._BLANK_NODE_IMAGE_URL;
+		f_imageRepository.PrepareImage(this._blankNodeImageURL);
+		
+		if (f_core.IsInternetExplorer()) {
+			if (!this.tabIndex) {
+				this.tabIndex=0;
+			}
+			
+			this.hideFocus=true;
+			this.onfocus=f_tree._Link_onfocus;
+			this.onblur=f_tree._Link_onblur;
+			this.onkeydown=f_tree._Link_onkeydown;
+			this.onkeyup=f_tree._Link_onkeyup;
+			this.onkeypress=f_tree._Link_onkeypress;
+			this._tree=this;
+			
+		} else {
+			var focus=document.createElement("A");
+			this._cfocus=focus;
+
+			focus.className=this.className+"_focus";
+			focus.onfocus=f_tree._Link_onfocus;
+			focus.onblur=f_tree._Link_onblur;
+			focus.onkeydown=f_tree._Link_onkeydown;
+			focus.onkeypress=f_tree._Link_onkeypress;
+			focus.onkeyup=f_tree._Link_onkeyup;
+			focus.href=f_core.JAVASCRIPT_VOID;
+			focus._tree=this;
+			focus.f_link=this;
+	
+			// Gestion du focus lors du click dans le TREE !
+			this.onfocus=f_tree._Link_bodyOnfocus;
+			this.onblur=f_tree._Link_onblur;
+			this._tree=this;
+
+			var tabIndex=this.tabIndex;
+			if (tabIndex<0) {
+				tabIndex=0;
+			}
+			focus.tabIndex=0;
+			this.tabIndex=-1;
+
+			this.appendChild(focus);
+		}
+		
+		this.onmousedown=f_tree._BodyMouseDown;
+		this.onmouseup=f_core.CancelEventHandler;
+		this.onclick=f_core.CancelEventHandler;
+		
+		this.f_addEventListener(f_event.KEYDOWN, this._performKeyDown);
+	},
+	f_finalize: function() {
+//		this._preloadedLevelDepth=undefined;  // number
+//		this._userExpandable=undefined; // boolean
+//		this._images=undefined;  // boolean 
+//		this._className=undefined; // string
+		this._tree=undefined;
+//		this._hideRootExpandSign=undefined; // boolean
+		
+		this._cursor=undefined; // HtmlLIElement
+		
+//		this._lastKeyDate=undefined; // number
+//		this._lastKey=undefined; // char
+
+//		this._initialHorizontalScrollPosition=undefined; // string
+//		this._initialVerticalScrollPosition=undefined; // string
+
+//		this._focus=undefined;   // boolean
+		
+		this._nodes=undefined;  
+		this._container=undefined; // object
+// 		this._opened=undefined;  // boolean
+//		this._interactive=undefined; // boolean
+
+		if (this._cfocus) {
+			var cfocus=this._cfocus;
+			this._cfocus=undefined;
+			
+			cfocus.onfocus=null;
+			cfocus.onblur=null;
+			cfocus.onkeydown=null;
+			cfocus.onkeyup=null;
+			cfocus.onkeypress=null;
+			
+			cfocus._tree=undefined;
+			cfocus.f_link=undefined;
+		}
+
+		this.onfocus=null;
+		this.onblur=null;
+		this.onkeydown=null;
+		this.onkeypress=null;
+		this.onkeyup=null;
+		this.onmousedown=null;
+		this.onmouseup=null;
+		this.onclick=null;
+				
+//		this._blankNodeImageURL=undefined; // string
+
+//		this._defaultImageURL=undefined; // string
+//		this._defaultExpandedImageURL=undefined; // string
+//		this._defaultSelectedImageURL=undefined; // string
+//		this._defaultDisabledImageURL=undefined; // string
+		
+//		this._defaultLeafImageURL=undefined; // string
+//		this._defaultExpandedLeafImageURL=undefined; // string
+//		this._defaultSelectedLeafImageURL=undefined; // string
+//		this._defaultDisabledLeafImageURL=undefined; // string
+
+		var lis=this.getElementsByTagName("LI");
+		for(var i=0;i<lis.length;i++) {
+			var li=lis[i];
+			
+			if (li._menuBar) {
+			// @TODO  A Voir car cela survient !
+//				alert("???? li._menuBar ???");
+				continue;
+			}
+			
+			this._nodeFinalizer(li, false);
+		}
+
+//		this._collapsedValues=undefined;
+//		this._expandedValues=undefined;
+
+//		this._disabledValues=undefined;
+//		this._enabledValues=undefined;
+
+		var wns=this._waitingNodes;
+		if (wns) {
+			this._waitingNodes=undefined;
+			
+			for(var i=0;i<wns.length;i++) {
+				var wn=wns[i];
+				
+				wn._id=undefined;
+				wn._li=undefined;
+				wn._image=undefined;
+				wn._label=undefined;
+				
+				f_core.VerifyProperties(wn);
+			}
+		}
+
+		this.f_super(arguments);
+	},
+	_nodeFinalizer: function(li, deepFinalizer) {
+	
+		if (deepFinalizer) {
+			var ul=li._nodes;
+			if (ul) {
+				var children=ul.childNodes;				
+				for(var i=0;i<children;i++) {
+					var child=children[i];
+					
+					this._nodeFinalizer(child, true);
+				}
+			}
+		}		
+	
+		li._node=undefined;
+		li._nodes=undefined;
+//		li._depth=undefined; // number
+		li._tree=undefined;
+		// li.title=null;
+//		li._over=undefined; // boolean
+		
+		if (li._command) {
+			var command=li._command;
+			li._command=undefined;
+			
+			command._node=undefined;
+//			command._className=undefined; // string
+			command.onmousedown=null;
+			command.onmouseup=null;
+			command.onclick=null;
+			
+			f_core.VerifyProperties(command);			
+		}
+		
+		if (li._input) {
+			var input=li._input;
+			li._input=undefined;
+
+			input._node=undefined;
+			input.onclick=null;
+			input.tabIndex=null;
+			
+			f_core.VerifyProperties(input);			
+		}
+		
+		if (li._image) {
+			var image=li._image;
+			li._image=undefined;
+
+			image._node=undefined;
+			
+			f_core.VerifyProperties(image);			
+		}
+		
+		if (li._span) {
+			var span=li._span;
+			li._span=undefined;
+
+			span._node=undefined;
+			span.onmouseover=null;
+			span.onmouseout=null;
+			span.onmousedown=null;
+			span.onmouseup=null;
+			span.onclick=null;
+			span.ondblclick=null;
+		
+			f_core.VerifyProperties(span);			
+		}
+		
+		if (li._label) {
+			var label=li._label;
+			li._label=undefined;
+
+			label._node=undefined;
+
+			f_core.VerifyProperties(label);			
+		}
+
+		f_core.VerifyProperties(li);			
+	},
+	f_update: function() {
+		var nodes=this._nodes;
+		if (nodes) {
+			this._constructTree(this, nodes, 0);
+		}
+		
+		this.f_super(arguments);		
+			
+		if (!this.f_isVisible()) {
+			this.f_getClass().f_getClassLoader().addVisibleComponentListener(this);
+		}
+	},	
+	f_setDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.SELECTION:
+		case f_event.DBLCLICK:
+		case f_event.KEYDOWN:
+		case f_event.KEYPRESS:
+		case f_event.KEYUP:
+			return;
+		}
+
+		return this.f_super(arguments, type, target);
+	},
+	f_clearDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.SELECTION:
+		case f_event.DBLCLICK:
+		case f_event.KEYDOWN:
+		case f_event.KEYPRESS:
+		case f_event.KEYUP:
+			return;
+		}
+
+		return this.f_super(arguments, type, target);
+	},
+	f_documentComplete: function() {
+		this.f_super(arguments);
+
+		if (!this.f_isVisible()) {
+			return;
+		}
+		
+		this.f_performComponentVisible();
+	},
+
+	/* ***************************************************************************** */
+
+	/**
+	 * @method hidden
+	 */
+	f_performComponentVisible: function() {
+		f_tree._InitializeScrollbars(this);		
+
+		if (this._interactiveShow) {
+			// Appel si un onglet etait en Ajax et il charge la liste !
+			this.f_setFirst(this._first, this._currentCursor);			
+		}
+	},
+	
+	_constructTree: function(container, nodes, depth) {
+		for(var i=0;i<nodes.length;i++) {
+			var node=nodes[i];
+			
+			var li=document.createElement("LI");
+			li._node=node;
+			li._depth=depth;
+			li._tree=this;
+			li.className=this.className+"_parent";
+			if (node._tooltip) {
+				li.title=node._tooltip;
+			}
+			
+			var d=1;
+			if (this._userExpandable) {
+				if (depth>0 || !this._hideRootExpandSign) {
+					var command=document.createElement("IMG");
+					command.align="center";
+					command.width=f_tree._COMMAND_IMAGE_WIDTH;
+					command.height=f_tree._COMMAND_IMAGE_HEIGHT;
+					command.src=this._blankNodeImageURL;
+					command._node=li;
+		
+					li.appendChild(command);
+					li._command=command;
+									
+					command._className=this._className+"_command";					
+					command.onmousedown=f_tree._Command_mouseDown;
+					command.onmouseup=f_core.CancelEventHandler;
+					command.onclick=f_core.CancelEventHandler;
+					
+					this._updateCommandStyle(li);					
+				}
+				if (depth==0 || (depth<=1 && this._hideRootExpandSign)) {
+					d=0;
+				}
+			} else if (depth==0) {
+				d=0;
+			}	
+			
+			li.style.paddingLeft=(d*f_tree._COMMAND_IMAGE_WIDTH)+"px";
+			
+			if (this._checkable) {
+				var input=document.createElement("INPUT");
+				li._input=input;
+				input._node=li;
+				input.className=this._className+"_check";
+				input.tabIndex=-1;
+				input.onclick=f_tree._NodeInput_mouseClick;
+		
+				var nodeIdx=(this._nodeIdx)?(this._nodeIdx++):1;
+				this._nodeIdx=nodeIdx;
+			
+				input.id=container.id+fa_namingContainer.SeparatorChar+":"+nodeIdx;
+	
+				if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
+					input.type="radio";
+					input.value="CHECKED_"+nodeIdx;
+					input.name=this.id+fa_namingContainer.SeparatorChar+"radio";
+					
+				} else {
+					input.type="checkbox";
+					input.value="CHECKED";
+					input.name=input.id;
+				}
+
+				li.appendChild(input);
+			}
+
+			var span=document.createElement("SPAN");
+			li._span=span;
+			li.appendChild(span);
+			
+			span.onmouseover=f_tree._NodeLabel_mouseOver;
+			span.onmouseout=f_tree._NodeLabel_mouseOut;
+			span.onmousedown=f_tree._NodeLabel_mouseDown;
+			span.onmouseup=f_core.CancelEventHandler;
+			span.onclick=f_core.CancelEventHandler;
+			span.ondblclick=f_tree._NodeLabel_dblClick;
+			span._node=li;
+			
+			if (this._images) {
+				var image=document.createElement("IMG");
+				image.align="center";
+				image.className=this._className+"_image";
+				image._node=li;
+
+				span.appendChild(image);
+				li._image=image;
+			}
+			
+			var label=document.createElement("LABEL");
+
+			span.appendChild(label);
+			li._label=label;
+
+			label.className=this._className+"_label";
+			label._node=li;
+			
+			if (node._label) {
+				label.appendChild(document.createTextNode(node._label));
+			}
+			
+			if (this._selectable) {
+				this._updateElementSelection(li, li._node._selected);
+			}
+			if (this._checkable) {	
+				this._updateElementCheck(li, li._node._checked);
+			}
+			
+			this._updateElementStyle(li);
+			
+			if (node._container) {
+				// On peut etre un container sans posseder (encore) d'enfants.
+				
+				var ul=document.createElement("UL");
+				ul.style.display="none";
+				li.appendChild(ul);
+				
+				li._nodes=ul;
+				
+				ul.className=this.className+"_parent";
+			}
+			
+			if (node._nodes) {
+				// f_core.Debug("f_tree", "constructTree: children: opened="+node._opened+" userExp="+this._userExpandable+" depth="+depth);
+				
+				if (node._opened || !this._userExpandable) {
+					this._constructTree(li._nodes, node._nodes, depth+1);
+					
+					li._nodes.style.display="list-item";
+				}
+			}
+			
+			container.appendChild(li);
+		}
+	},
+	/**
+	 * Close a node.
+	 *
+	 * @method public
+	 * @param any value Value of the node, or the node object.
+	 * @param optional Event evt Javascript event
+	 * @return boolean <code>true</code> if success.
+	 */
+	f_closeNode: function(value, evt) {
+		var li=this._searchComponentByNodeOrValue(value);
+		
+		return this._closeNode(li._node, evt, li);
+	},
+	/**
+	 * @method protected
+	 * @param Object node TreeNode
+	 * @param optional Event evt Javascript event
+	 * @param hidden li 
+	 * @return boolean <code>true</code> if success.
+	 */
+	_closeNode: function(node, evt, li) {
+		if (!node._opened || !node._container) {
+			return false;
+		}
+		node._opened=false;
+
+		if (!this._collapsedValues) {
+			this._collapsedValues=new Array;
+		}
+
+		if (!this._expandedValues || !this._expandedValues.f_removeElement(node._value)) {
+			this._collapsedValues.f_addElement(node._value);
+		}
+		
+		var ul=li._nodes;
+	
+		ul.style.display="none";
+			
+		this._updateElementStyle(li);
+		this._updateCommandStyle(li);
+		
+		return true;
+	},
+	/**
+	 * Open a node.
+	 * 
+	 * @method public
+	 * @param any value Value of the node, or the node object
+	 * @param optional Event evt Javascript event
+	 * @return boolean <code>true</code> if success.
+	 */
+	f_openNode: function(value, evt) {
+		var li=this._searchComponentByNodeOrValue(value);
+		
+		return this._openNode(li._node, evt, li);
+	},
+	/**
+	 * @method protected
+	 * @param Object node 
+	 * @param optional Event evt Javascript event.
+	 * @param hidden li
+	 * @return boolean <code>true</code> if success ...
+	 */
+	_openNode: function(node, evt, li) {
+		if (!node._container) {
+			f_core.Info(f_tree, "Node is not a container !");
+			return false;
+		}
+		if (node._opened) {
+			f_core.Info(f_tree, "Node is already opened !");
+			return false;
+		}
+		node._opened=true;
+
+		if (!this._expandedValues) {
+			this._expandedValues=new Array;
+		}
+
+		if (!this._collapsedValues || !this._collapsedValues.f_removeElement(node._value)) {
+			this._expandedValues.f_addElement(node._value);
+		}
+
+		if (!li) {
+			li=this._searchComponentByNodeOrValue(node);
+		}
+
+		var ul=li._nodes;
+
+		if (node._interactive) {
+			// Noeuds à charger dynamiquement ....
+			node._interactive=undefined;
+			
+			if (!ul) {
+				ul=document.createElement("UL");
+				ul.className=this.className+"_parent";
+			
+				li.appendChild(ul);
+			
+				li._nodes=ul;
+			} else {
+				ul.style.display="list-item";
+			}
+							
+			var waitingNode=this._newWaitingNode();
+			ul.appendChild(waitingNode);
+	
+			if (!this._waitingNodes) {
+				this._waitingNodes=new Array;
+			}
+			waitingNode._id=this._waitingNodes.length;
+			waitingNode._li=li;
+
+			this._waitingNodes.push(waitingNode);
+		
+			this._callServer(waitingNode);
+		
+			return;
+		}
+		
+		if (!ul.hasChildNodes()) {
+			// Il faut créer les composants ...
+			
+			this._constructTree(ul, node._nodes, li._depth+1);
+		}		
+		
+		ul.style.display="list-item";
+
+		this._updateElementStyle(li);
+		this._updateCommandStyle(li);
+		
+		return true;
+	},
+	_reloadTree: function() {
+		var ul=this;
+	
+		var waitingNode=this._newWaitingNode();
+		ul.appendChild(waitingNode);
+
+		if (!this._waitingNodes) {
+			this._waitingNodes=new Array;
+		}
+		waitingNode._id=this._waitingNodes.length;
+		waitingNode._li=this;
+
+		this._waitingNodes.push(waitingNode);
+	
+		this._callServer(waitingNode);
+	
+		return;
+	},
+	_callServer: function(waitingNode) {
+		var error=false;
+		var params="";
+		
+		if  (waitingNode._li!=this) {
+			for(var c=waitingNode._li;;) {
+				var u=c.parentNode;
+				if (u.tagName!="UL") {
+					error=true;
+					break;
+				}
+				
+				var lis=u.childNodes;
+				var liIdx=0;
+				for(var i=0;i<lis.length;i++) {
+					var li=lis[i];
+					if (li.tagName!="LI") {
+						continue;
+					}
+					
+					if (li==c) {
+						if (params) {
+							params=","+params;
+						}
+						
+						params=liIdx+params;
+						liIdx=-1;
+						break;
+					}
+					
+					liIdx++;
+				}
+				if (liIdx>=0) {
+					error=true;
+					f_core.Error(f_tree, "LI not found ?");
+					break;
+				}
+				
+				c=u.parentNode;
+				if (c.tagName!="LI") {
+					break;
+				}
+			}
+			if (params.length==0) {
+				waitingNode.parentNode.removeChild(waitingNode);
+				return;
+			}
+		}
+		if (error) {
+			waitingNode.parentNode.removeChild(waitingNode);
+			return;
+		}
+		
+		var url=f_env.GetViewURI();
+		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var tree=this;
+
+		request.f_setListener({
+			/**
+			 * @method public
+			 */
+	 		onError: function(request, status, text) {
+				if (waitingNode._label) {
+					waitingNode._label.innerHTML="ERREUR !";
+					waitingNode._label.className="f_waiting_error";
+				}
+				if (waitingNode._image) {
+					waitingNode._image.src=f_waiting.GetWaitingErrorImageURL();
+				}
+				
+				f_tree.Info("f_tree", "Bad status: "+request.f_getStatus());
+	 		},
+			/**
+			 * @method public
+			 */
+	 		onProgress: function(request, content, length, contentType) {
+				if (waitingNode._label) {
+					f_core.SetTextNode(waitingNode._label, f_waiting.GetReceivingMessage());
+				}	 			
+	 		},
+			/**
+			 * @method public
+			 */
+	 		onLoad: function(request, content, contentType) {
+	 			var ret=null;
+				try {
+					ret=request.f_getResponse();
+					
+					//alert("ret="+ret);
+					eval(ret);
+
+				} catch(x) {				
+					f_core.Error(f_tree, "Evaluation exception : '"+ret+"'.", x);
+				}
+	
+				var event=new f_event(tree, f_event.CHANGE);
+				try {
+					tree.f_fireEvent(event);
+					
+				} finally {
+					f_classLoader.Destroy(event);
+				}
+	 		}			
+		});
+
+//		alert("Params="+params);
+
+		request.f_setRequestHeader("X-Camelia", "tree.request");
+		
+		var params = {
+			treeId: this.id,
+			waitingId: waitingNode._id,
+			node: params 
+		};
+		request.f_doFormRequest(params);
+		
+	},
+	_newWaitingNode: function() {
+		var li=document.createElement("LI");
+
+		li.className=this.className+"_parent";
+		
+		var command=document.createElement("IMG");
+		li.appendChild(command);
+
+		command.align="center";
+		command.width=f_tree._COMMAND_IMAGE_WIDTH;
+		command.height=f_tree._COMMAND_IMAGE_HEIGHT;
+		command.src=this._blankNodeImageURL;
+
+		var span=document.createElement("SPAN");
+		li.appendChild(span);
+		
+		var image=document.createElement("IMG");
+		span.appendChild(image);
+
+		image.align="center";
+		image.width=f_waiting.WAIT_IMAGE_WIDTH;
+		image.height=f_waiting.WAIT_IMAGE_HEIGHT;
+		image.src=f_waiting.GetWaitingImageURL();
+		image.className=this._className+"_image";
+		li._image=image;
+			
+		var label=document.createElement("LABEL");
+		span.appendChild(label);
+		li._label=label;
+
+		label.className=this._className+"_label";
+
+		var txt=f_waiting.GetLoadingMessage();
+		label.appendChild(document.createTextNode(txt));
+
+		return li;		
+	},
+	/**
+	 * Show a node.
+	 * 
+	 * @method public
+	 * @param any value Value of the node, or the node object
+	 * @return boolean <code>true</code> if the node was found.
+	 */
+	f_showNode: function(value) {
+		var item=this._searchComponentByNodeOrValue(value);
+		if (!item) {
+			return false;
+		}
+		
+		this._showElement(item);
+		
+		return true;
+	},
+	/**
+	 * @method private
+	 */
+	_showElement: function(item) {
+		f_core.Assert(item && item.tagName, "Item parameter must be a LI tag ! ("+item+")");
+		
+		//f_core.Debug("f_tree", "Show="+item._label.innerHTML);
+		if (item.offsetTop-this.scrollTop<0) {
+			this.scrollTop=item.offsetTop;
+			//	f_core.Debug("f_tree", "Show=UP");
+			return;
+		}	
+		
+		if (item.offsetTop+item._label.offsetHeight-this.scrollTop>this.clientHeight) {			
+			this.scrollTop=item.offsetTop+item.offsetHeight-this.clientHeight;
+
+			// f_core.Debug("f_tree", "Show=DOWN itemO="+item.offsetTop+" laH="+item._label.offsetHeight+", stop="+this.scrollTop+", ch="+this.clientHeight);
+			return;
+		}
+	},
+	_updateElementStyle: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "Invalid LI parameter ("+li+")");
+		
+		var node=li._node;
+		var className=this._className+"_node";
+	
+		if (node._disabled) {
+			className+="_disabled";
+		
+		} else {
+			if (node._selected) {
+				className+="_selected";
+				
+				if (this._focus) {
+					className+="_focus";
+				}
+			}
+			if (li._over) {
+				className+="_hover";
+			}
+		}
+	
+		var liImage=li._image;	
+		if (liImage) {
+			var imageURL=this._searchNodeImageURL(node);
+			
+			if (liImage.src!=imageURL) {
+				liImage.src=imageURL;
+			}
+		}
+		
+		var span=li._span;
+		if (span.className!=className) {
+			span.className=className;
+		}
+		
+		className=this._className+"_label";
+		if (this._cursor==li && this._focus) {
+			className+="_cursor";
+		}
+
+		var label=li._label;
+		if (label.className!=className) {
+			label.className=className;
+		}
+		
+		var input=li._input;
+		if (input) {
+			if (node._cheked!=input.checked) {
+				input.checked=node._checked;
+				
+				if (f_core.IsInternetExplorer()) {
+					// Il se peut que le composant ne soit jamais affiché 
+					// auquel cas il faut utiliser le defaultChecked !
+					input.defaultChecked=node._checked;
+				}
+			}
+			if (input.disabled!=node._disabled) {
+				input.disabled=node._disabled;
+			}
+		}
+	},
+	_updateCommandStyle: function(li) {
+		var command=li._command;
+		if (!command) {
+			return;
+		}
+
+		var node=li._node;
+		
+		if (node._container) {
+			if (!node._opened) {
+				command.className=command._className+"_opened";
+				return;
+			}
+
+			command.className=command._className+"_closed";
+			return;
+		}
+
+		command.className=command._className;
+	},
+	_searchNodeImageURL: function(node) {
+		var imageURL;
+		
+		if (node._disabled) {
+			imageURL=node._disabledImageURL;
+			if (imageURL) { 
+				return imageURL;
+			}
+		}
+		
+		if (node._opened) {
+			imageURL=node._expandedImageURL;
+			if (imageURL) { 
+				return imageURL;
+			}
+		}
+		
+		if (node._selected) {
+			imageURL=node._selectedImageURL;
+			if (imageURL) { 
+				return imageURL;
+			}
+		}
+		
+		if (node._imageURL) {	
+			return node._imageURL;
+		}
+
+		if (!node._container) {
+			if (node._disabled) {
+				imageURL=this._defaultDisabledLeafImageURL;
+				if (imageURL) { 
+					return imageURL;
+				}
+			}
+
+			if (node._opened) {
+				imageURL=this._defaultExpandedLeafImageURL;
+				if (imageURL) { 
+					return imageURL;
+				}
+			}
+			
+			if (node._selected) {
+				imageURL=this._defaultSelectedLeafImageURL;
+				if (imageURL) { 
+					return imageURL;
+				}
+			}
+			
+			if (this.f_leafImageURL) {	
+				return this._defaultLeafImageURL;
+			}
+		}
+
+		if (node._opened) {
+			imageURL=this._defaultExpandedImageURL;
+			if (imageURL) { 
+				return imageURL;
+			}
+		}
+		
+		if (node._selected) {
+			imageURL=this._defaultSelectedImageURL;
+			if (imageURL) { 
+				return imageURL;
+			}
+		}
+
+		if (this._defaultImageURL) {	
+			return this._defaultImageURL;
+		}
+		
+		return this._blankNodeImageURL;
+	},
+	_appendNode: function(parent, label, value, tooltip, disabled) {
+//		f_core.Assert(!parent || !parent.tagName, "Bad type of parent ! "+parent);
+	
+		var node=new Object;
+		
+		node._label=label;
+		if (value) {
+			node._value=value;
+		}
+		if (tooltip) {
+			node._tooltip=tooltip;
+		}
+		if (disabled) {
+			node._disabled=disabled;
+		}
+		
+		this._checkNodeAttributes(arguments, 5, node);
+
+		if (node._opened===undefined && !this._userExpandable) {
+			node._opened=true;
+		}
+		
+		if (!parent._nodes) {
+			parent._nodes=new Array;
+			parent._container=true;
+		}
+		
+		node._parentTreeNode=parent;
+		
+		parent._nodes.push(node);
+		
+		return node;
+	},
+	_checkNodeAttributes: function(args, atts, node) {
+		if (atts>=args.length) {
+			return;
+		}
+		
+		if (this._userExpandable) {
+			node._opened=(args[atts++])?true:false;
+			
+			if (atts>=args.length) {
+				return;
+			}
+		}
+
+		if (this._selectable && !this._selectionFullState) {
+			if (args[atts++]) {
+				node._selected=true;
+			}
+			
+			if (atts>=args.length) {
+				return;
+			}
+		}
+
+		if (this._checkable && !this._checkFullState) {
+			node._checked=(args[atts++])?true:false;
+			
+			if (atts>=args.length) {
+				return;
+			}
+		}
+		
+	},
+	_setImages: function() {
+		var atts=0;
+		var node=arguments[atts++];
+		
+		var imageURL=arguments[atts++];
+		if (imageURL) {
+			this.f_setNodeImageURL(node, imageURL);
+		}
+
+		if (atts>=arguments.length) {
+			return;
+		}
+
+		var expandedImageURL=arguments[atts++];
+		if (expandedImageURL) {
+			this.f_setExpandedNodeImageURL(node, expandedImageURL);
+		}
+
+		if (atts>=arguments.length) {
+			return;
+		}
+
+		var selectedImageURL=arguments[atts++];
+		if (selectedImageURL) {
+			this.f_setSelectedNodeImageURL(node, selectedImageURL);
+		}
+
+		if (atts>=arguments.length) {
+			return;
+		}
+
+		var disabledImageURL=arguments[atts++];
+		if (disabledImageURL) {
+			this.f_setDisabledNodeImageURL(node, disabledImageURL);
+		}
+	},
+	f_setNodeImageURL: function(node, imageURL) {
+		node._imageURL=imageURL;
+		if (imageURL) {
+			f_imageRepository.PrepareImage(imageURL);
+		}
+	},
+	f_setExpandedNodeImageURL: function(node, imageURL) {
+		node._expandedImageURL=imageURL;
+		if (imageURL) {
+			f_imageRepository.PrepareImage(imageURL);
+		}
+	},
+	f_setSelectedNodeImageURL: function(node, imageURL) {
+		node._selectedImageURL=imageURL;
+		if (imageURL) {
+			f_imageRepository.PrepareImage(imageURL);
+		}
+	},
+	f_setDisabledNodeImageURL: function(node, imageURL) {
+		node._disabledImageURL=imageURL;
+		if (imageURL) {
+			f_imageRepository.PrepareImage(imageURL);
+		}
+	},
+	_performKeyDown: function(cevt) {
+		var evt=cevt.f_getJsEvent();
+	
+		var cancel=false;
+		
+		var selection=fa_selectionManager.ComputeKeySelection(evt);
+		
+		var cardinality=this._selectionCardinality;
+		
+		var scroll=(cardinality==fa_cardinality.OPTIONAL_CARDINALITY || 
+						cardinality==fa_cardinality.ONE_CARDINALITY);
+		
+		var code=evt.keyCode;
+		switch(code) {
+		case f_key.VK_DOWN: // FLECHE VERS LE BAS
+			if (evt.ctrlKey && scroll) {
+				// Scroll la zone vers le bas sans bouger le curseur !
+			} else {
+				this._nextTreeNode(evt, selection);
+			}
+			cancel=true;
+			break;
+						
+		case f_key.VK_UP: // FLECHE VERS LE HAUT
+			if (evt.ctrlKey && scroll) {
+				// Scroll la zone vers le haut sans bouger le curseur !
+			} else {
+				this._previousTreeNode(evt, selection);
+			}
+			cancel=true;
+			break;
+			
+		case f_key.VK_PAGE_DOWN:
+			this._nextPageTreeNode(evt, selection);
+			cancel=true;
+			break;
+			
+		case f_key.VK_PAGE_UP:
+			this._previousPageTreeNode(evt, selection);
+			cancel=true;
+			break;
+			
+		case f_key.VK_HOME:
+			this._firstTreeNode(evt, selection);
+			cancel=true;
+			break;
+		
+		case f_key.VK_END: 
+			this._lastTreeNode(evt, selection);
+			cancel=true;
+			break;
+			
+		case f_key.VK_RIGHT:
+		case f_key.VK_ADD: // FLECHE VERS LA DROITE
+			this._openTreeNode(evt, selection);
+			cancel=true;
+			break;
+			
+		case f_key.VK_LEFT:
+		case f_key.VK_SUBTRACT: // FLECHE VERS LA GAUCHE
+			this._closeTreeNode(evt, selection);
+			cancel=true;
+			break;
+
+		case f_key.VK_MULTIPLY: // FLECHE VERS LA GAUCHE
+			this._expandAllTreeNode(evt);
+			cancel=true;
+			break;
+
+		case f_key.VK_SPACE:
+			if (this._checkable) {
+				this._performElementCheck(this._cursor, true, evt);
+				cancel=true;
+				break;
+			}
+				
+			// Continue comme une selection ....
+			
+		case f_key.VK_RETURN:
+		case f_key.VK_ENTER:
+						
+			if (this._cursor && this._selectable) {
+				this._performElementSelection(this._cursor, true, evt, selection);
+			}
+			cancel=true;
+			break;
+
+		case f_key.VK_CONTEXTMENU:
+			this._openContextMenu(evt);
+			cancel=true;
+			break;
+
+		default:
+			if (f_key.IsLetterOrDigit(code)) {
+				this._searchTreeNode(code, evt);
+				
+				// Dans tous les cas !
+				cancel=true;
+				
+			} else {
+				// Rien on laisse faire !			
+			}
+		}
+
+		if (cancel) {
+			return f_core.CancelEvent(evt);		
+		}
+		
+		return true;
+	},
+	_openContextMenu: function(evt) {
+		var cursorLi=this._cursor;
+		if (!cursorLi) {
+			return;
+		}
+		
+		var menu=this.f_getSubMenuById(f_tree._NODE_MENU_ID);
+		if (menu) {
+			menu.f_open(cursorLi._span, {
+				position: f_menu.MIDDLE_COMPONENT
+				}, this, evt);
+		}
+	},
+	_nextTreeNode: function(evt, selection) {	
+		var cursorLi=this._cursor;
+		if (!cursorLi) {
+			this._firstTreeNode(evt, selection);
+			return;
+		}
+		
+		var lis=this._listVisibleElements();
+		
+		var i=0;
+		for(;i<lis.length;i++) {
+			var l=lis[i];
+			
+			if (l!=cursorLi) {
+				continue;
+			}
+			
+			i++;
+			break;
+		}
+		
+		if (i>=lis.length) {
+			return;
+		}
+
+		this._moveCursor(lis[i], true, evt, selection);
+	},
+	_lastTreeNode: function(evt, selection) {
+		var lis=this._listVisibleElements();
+		if (!lis || lis.length<1) {
+			return;
+		}
+		
+		this._moveCursor(lis[lis.length-1], true, evt, selection);
+	},
+	_nextPageTreeNode: function(evt, selection) {		
+		var cursorLi=this._cursor;
+		if (!cursorLi) {
+			this._firstTreeNode(evt, selection);
+			return;
+		}
+
+		var lis=this._listVisibleElements();
+		
+		var parent=this;
+		
+		var i=0;
+		var last=null;
+		for(;i<lis.length;i++) {
+			var li=lis[i];
+			
+			if (li.offsetTop+li._span.offsetHeight/2-parent.scrollTop>parent.clientHeight) {
+				break;
+			}
+			
+			last=li;
+		}
+		
+		if (last==null) {
+			return;
+		}
+		
+		if (last==cursorLi) {
+			var next=i+Math.floor(parent.scrollHeight/last._span.offsetHeight);
+			if (next>=lis.length) {
+				next=lis.length-1;
+			}
+			
+			last=lis[next];
+			if (last==cursorLi) {
+				return;
+			}		
+		}
+
+		this._moveCursor(last, true, evt, selection);
+	},
+	_firstTreeNode: function(evt, selection) {		
+		var lis=this._listVisibleElements();
+		if (!lis || lis.length<1) {
+			return;
+		}
+
+		this._moveCursor(lis[0], true, evt, selection);
+	},
+	_previousTreeNode: function(evt, selection) {
+		var cursorLi=this._cursor;
+		if (!cursorLi) {
+			this._firstTreeNode(evt, selection);
+			return;
+		}
+
+		var lis=this._listVisibleElements();
+		
+		var i=0;
+		for(;i<lis.length;i++) {
+			var l=lis[i];
+			
+			if (l!=cursorLi) {
+				continue;
+			}
+			
+			i--;
+			break;
+		}		
+		
+		if (i<0) {
+			return;
+		}
+		
+		this._moveCursor(lis[i], true, evt, selection);
+	},
+	
+	_previousPageTreeNode: function(evt, selection) {		
+		var cursorLi=this._cursor;
+		if (!cursorLi) {
+			this._firstTreeNode(evt, selection);
+			return;
+		}
+		
+		var lis=this._listVisibleElements();
+		
+		var parent=this;
+		
+		var i=0;
+		var last=null;
+		for(;i<lis.length;i++) {
+			var li=lis[i];
+			
+			if (li.offsetTop+li._span.offsetHeight/2-parent.scrollTop>0) {
+				last=li;
+				// On le voit !
+				break;
+			}		
+		}
+		
+		if (last==null) {
+			return;
+		}
+		
+		if (last==cursorLi) {
+			var next=i-Math.floor(parent.scrollHeight/last._span.offsetHeight);
+			if (next<0) {
+				next=0;
+			}
+			
+			last=lis[next];
+			if (last==cursorLi) {
+				return;
+			}		
+		}
+
+		this._moveCursor(last, true, evt, selection);
+	},
+	_listVisibleElements: function(container, list) {
+		if (container===undefined) {
+			container=this;
+			list=new Array;
+		}
+		
+		var children=container.childNodes;
+		
+		for(var i=0;i<children.length;i++) {
+			var li=children[i];
+			var node=li._node;
+			
+			if (!node) {
+				continue;
+			}
+			
+			list.push(li);
+			
+			if (this._userExpandable && !node._opened) {
+				continue;
+			}
+			
+			var ul=li.getElementsByTagName("UL");
+			if (ul.length>0) {
+				this._listVisibleElements(ul[0], list);
+			}
+		}
+		
+		return list;		
+	},
+	_openTreeNode: function(evt, selection) {
+		var cursorLi=this._cursor;
+		if (!cursorLi) {
+			return;
+		}
+
+		var cursorNode=cursorLi._node;
+		
+		if (cursorNode._container && cursorNode._opened) {
+			var nodes=cursorNode._nodes;
+			if (!nodes && nodes.length<1) {
+				return;
+			}
+			
+			var childLi=this._searchComponentByNodeOrValue(nodes[0]);
+	
+			this._moveCursor(childLi, true, evt, selection);
+			return;
+		}
+		
+		this._showElement(cursorLi);
+		this.f_openNode(cursorLi._node, evt, cursorLi);
+	},
+	_closeTreeNode: function(evt, selection) {
+		var cursorLi=this._cursor;
+		if (!cursorLi) {
+			return;
+		}
+
+		var cursorNode=cursorLi._node;
+		
+		if (cursorNode._container && cursorNode._opened) {
+			this._closeNode(cursorNode, evt, cursorLi);
+			this._showElement(cursorLi);
+			return;
+		}
+
+		// Retourne au parent !
+		var parentNode=cursorNode._parentTreeNode;
+		if (!parentNode || parentNode==this) {
+			return;
+		}
+
+		var parentLi=this._searchComponentByNodeOrValue(parentNode);
+
+		this._moveCursor(parentLi, true, evt, selection);
+	},
+	_expandAllTreeNode: function(evt) {
+		var cursorLi=this._cursor;
+		if (!cursorLi) {
+			return;
+		}
+
+		var cursorNode=cursorLi._node;
+		if (!cursorNode._container) {
+			return;
+		}
+
+		this._showElement(cursorLi);
+
+		var listLI=new Array;
+		listLI.push(cursorLi);
+		
+		for(var i=0;i<listLI.length;i++) {
+			var li=listLI[i]
+			var node=li._node;
+			
+			if (!node._container) {
+				continue;
+			}
+			
+			if (!node._opened) {
+				this.f_openNode(node, evt);
+			}
+			
+			var ul=f_core.GetFirstElementByTagName(li, "UL");
+			if (!ul) {
+				continue;
+			}
+
+			this._listVisibleElements(ul, listLI);
+		}
+	},
+	_searchTreeNode: function(code, evt) {
+		var lis=this._listVisibleElements();
+		
+		var pos=0;
+
+		var cursorLi=this._cursor;
+		if (cursorLi) {
+			var i;
+			for(i=0;i<lis.length;i++) {
+				var l=lis[i];
+				if (l!=cursorLi) {
+					continue;
+				}
+				
+				i++;
+				break;
+			}
+			
+			if (i<lis.length) {
+				pos=i;
+			}
+		}
+		
+		var key=String.fromCharCode(code).toUpperCase();
+	
+		var now=new Date().getTime();
+		if (this._lastKeyDate!==undefined) {
+			var dt=now-this._lastKeyDate;
+			f_core.Debug("f_tree", "Delay key down "+dt+"ms");
+			if (dt<f_tree._SEARCH_KEY_DELAY) {
+				key=this._lastKey+key;
+			}
+		}
+		
+		this._lastKeyDate=now;
+		this._lastKey=key;
+		
+		var kl=key.length;
+		
+		for(;kl>0;kl--) {
+			for(var i=0;i<lis.length;i++) {
+				var li=lis[pos++];
+				if (pos>=lis.length) {
+					pos=0;
+				}
+				
+				var label=li._node._label;
+				
+				if (!label || label.length<1) {
+					continue;
+				}
+				
+				if (label.substring(0, kl).toUpperCase()!=key.substring(0, kl)) {
+					continue;
+				}
+				
+				this._moveCursor(li, true, evt);
+				return true;
+			}
+		}
+		
+		return false;
+	},
+	_updateSelectedNodes: function() {
+		var cursorLi=this._cursor;
+		
+		var currentSelection=this._currentSelection;
+		for(var i=0;i<currentSelection.length;i++) {
+			var li=currentSelection[i];
+			if (cursorLi==li) {
+				cursorLi=undefined;
+			}
+			
+			this._updateElementStyle(li);
+		}
+		
+		if (cursorLi) {
+			this._updateElementStyle(cursorLi);
+		}
+	},
+	f_setFocus: function() {
+		if (!f_core.ForceComponentVisibility(this)) {
+			return;
+		}
+
+		if (this._cfocus) {
+			this._cfocus.focus();
+			return;
+		}
+		
+		if (!this.focus) {
+			return;
+		}
+		
+		this.focus();
+	},
+	_searchComponentByNodeOrValue: function(nodeOrValue) {
+		f_core.Assert(nodeOrValue, "Value parameter is null !");
+
+		var lis=this.getElementsByTagName("LI");
+		for(var i=0;i<lis.length;i++) {
+			var li=lis[i];
+			
+			var n=li._node;
+			if (!n || (n!=nodeOrValue && n._value!=nodeOrValue)) {
+				continue;
+			}
+			
+			return li;
+		}
+		
+		throw new Error("Can not find node with value '"+nodeOrValue+"'.");
+	},
+	_setDefaultImages: function() {
+		var i=0;
+
+		this._images=true;
+
+		var url=arguments[i++];
+		if (url) this._defaultImageURL=url;
+
+		url=arguments[i++];
+		if (url) this._defaultExpandedImageURL=url;
+
+		url=arguments[i++];
+		if (url) this._defaultSelectedImageURL=url;
+
+		url=arguments[i++];
+		if (url) this._defaultDisabledImageURL=url;
+
+		url=arguments[i++];
+		if (url) this._defaultLeafImageURL=url;
+
+		url=arguments[i++];
+		if (url) this._defaultExpandedLeafImageURL=url;
+		
+		url=arguments[i++];
+		if (url) this._defaultSelectedLeafImageURL=url;		
+
+		url=arguments[i++];
+		if (url) this._defaultDisabledLeafImageURL=url;
+	},
+	/**
+	 * Select a node
+	 *
+	 * @method public
+	 * @param any value Value of the node.
+	 * @param optional boolean append Append mode.
+	 * @param optional boolean show Node must be show after the selection.
+	 * @param optional hidden Event jsEvent Javascript event associated to this action.
+	 * @return boolean <code>true</code> if success.
+	 */
+	f_select: function(value, append, show, jsEvent) {
+		var li=this._searchComponentByNodeOrValue(value);
+		
+		var selection=(append)?fa_selectionManager.APPEND_SELECTION:0;
+		
+		return this._performElementSelection(li, show, jsEvent, selection);
+	},
+	/**
+	 * Check a node.
+	 * 
+	 * @method public
+	 * @param any value Value of the node
+	 * @param optional boolean show Node must be show after the selection.
+	 * @param optional hidden Event jsEvent Javascript event associated to this action.
+	 * @return boolean <code>true</code> if success !
+	 */
+	f_check: function(value, show, jsEvent) {
+		var li=this._searchComponentByNodeOrValue(value);
+		
+		return this._performElementCheck(li, true, jsEvent, true);
+	},
+	/**
+	 * Uncheck a node.
+	 * 
+	 * @method public
+	 * @param any value Value of the node
+	 * @param optional hidden Event jsEvent Javascript event associated to this action.
+	 * @return boolean <code>true</code> if success !
+	 */
+	f_uncheck: function(value, jsEvent) {
+		var li=this._searchComponentByNodeOrValue(value);
+		
+		return this._performElementCheck(li, false, jsEvent, false);
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node, or the node object.
+	 * @return boolean
+	 */
+	f_getChecked: function(value) {
+		var li=this._searchComponentByNodeOrValue(value);
+
+		return this._isElementChecked(value);
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node, or the node object.
+	 * @return boolean
+	 */
+	f_isOpened: function(value) {
+		var li=this._searchComponentByNodeOrValue(value);
+
+		return (li._node._opened)?true:false;
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node, or the node object.
+	 * @return boolean
+	 */
+	f_isSelected: function(value) {
+		var li=this._searchComponentByNodeOrValue(value);
+
+		return this._isElementSelected(li);
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node, or the node object.
+	 * @return boolean
+	 */
+	f_isNodeDisabled: function(value) {
+		var li=this._searchComponentByNodeOrValue(value);
+
+		return this._isElementDisabled(li);
+	},
+	/**
+	 * Disable or enable a tree node.
+	 *
+	 * @method public
+	 * @param any value Value of the node, or the node object.
+	 * @param boolean disabled State to set.
+	 * @return void
+	 */
+	f_setNodeDisabled: function(value, disabled) {
+		var li=this._searchComponentByNodeOrValue(value);
+
+		disabled=(disabled!==false)?true:false;
+		li._node._disabled=disabled;
+		this._updateElementStyle(li);
+		
+		// C'est pas forcement la bonne value !
+		value=li._node._value;
+		
+		var disabledValues=this._disabledValues;
+		var enabledValues=this._enabledValues;
+		
+		if (disabled) {
+			if (enabledValues.f_removeElement(value)) {
+				return;
+			}
+			
+			disabledValues.push(value);
+			return;
+		}
+		
+		if (disabledValues.f_removeElement(value)) {
+			return;
+		}
+		
+		enabledValues.push(value);
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node, or the node object.
+	 * @return Object[] value of each children nodes.
+	 */
+	f_listChildrenValues: function(value) {
+		var parentNode;
+		if (value===undefined) {
+			parentNode=this;
+
+		} else {
+			parentNode=this._searchComponentByNodeOrValue(value);
+		}
+	
+		var ret=new Array;
+		var children=parentNode._nodes;
+		if (!children) {
+			return ret;
+		}
+		
+		for(var i=0;i<children.length;i++) {
+			var child=children[i];
+			
+			ret.push(child._value);
+		}
+		
+		return ret;
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node, or the node object.
+	 * @return string
+	 */
+	f_getNodeLabel: function(value) {
+		var li=this._searchComponentByNodeOrValue(value);
+
+		return li._node._label;
+	},
+	/**
+	 * @method public
+	 * @param Object node
+	 * @return string
+	 */
+	f_getNodeValue: function(node) {
+		f_core.Assert(node._parentTreeNode, "f_getNodeLabel: Node parameter is invalid !");
+
+		return node._value;
+	},
+	/**
+	 * Call a callback for each loaded node.
+	 *
+	 * @method public 
+	 * @param Function callBack Callback called for each node !
+	 * @return any
+	 */
+	f_forEachNode: function(callBack, parent) {
+		if (!parent) {
+			parent=this;
+		}
+		
+		var nodes=parent._nodes;
+		if (!nodes) {
+			return null;
+		}
+
+		for(var i=0;i<nodes.length;i++) {
+			var node=nodes[i];
+		
+			var ret=callBack.call(this, node);
+			if (ret) {
+				return ret;
+			}
+			
+			if (!node._nodes) {
+				continue;
+			}
+			
+			ret=this.f_forEachNode(callBack, node);
+			if (ret) {
+				return ret;
+			}				
+		}
+
+		return null;
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node.
+	 * @param hidden boolean throwException
+	 * @return Object found node.
+	 */
+	f_getNodeByValue: function(value, throwException) {
+		var ret=this.f_forEachNode(function(node) {
+			if (node._value==value) {
+				return node;
+			}
+			
+			return null;
+		});
+		if (ret) {
+			return ret;
+		}
+		
+		if (!throwException) {
+			return null;
+		}
+		
+		throw new Error("Can not find a node with value '"+value+"'.");
+	},
+	_a_updateDisabled: function() {
+		if (!this._componentUpdated) {
+			return;
+		}
+	},
+	_a_updateReadOnly: function() {
+	},
+	_setInteractiveParent: function(node) {
+		node._container=true;
+		node._interactive=true;
+	},
+	f_serialize: function() {		
+		if (this._userExpandable) {
+			if (this._expandedValues) {
+				this.f_setProperty(f_prop.EXPANDED_ITEMS, this._expandedValues, true);
+			}
+	
+			if (this._collapsedValues) {
+				this.f_setProperty(f_prop.COLLAPSED_ITEMS, this._collapsedValues, true);
+			}
+		}
+		
+		if (this._disabledValues) {
+			this.f_setProperty(f_prop.DISABLED_ITEMS, this._disabledValues, true);
+		}
+	
+		if (this._enabledValues) {
+			this.f_setProperty(f_prop.ENABLED_ITEMS, this._enabledValues, true);
+		}
+		
+		this.f_setProperty(f_prop.HORZSCROLLPOS, this.scrollLeft);
+		this.f_setProperty(f_prop.VERTSCROLLPOS, this.scrollTop);
+		
+		return this.f_super(arguments);
+	},
+	_getWaitingNode: function(waitingId) {
+		var waiting=this._waitingNodes[waitingId];
+		f_core.Assert(waiting, "Can not find waiting #"+waitingId);
+
+		var li=waiting._li;
+		if (li==this) {
+			return this;
+		}
+
+		return li._node;
+	},
+	_clearWaiting: function(waitingId) {
+		var waiting=this._waitingNodes[waitingId];
+		f_core.Assert(waiting, "Can not find waiting #"+waitingId);
+
+		f_core.Debug("f_tree", "_clearWaiting id='"+waitingId+"'.");
+
+		var li=waiting._li;
+		f_core.Assert(li, "Waiting node is already cleared !");
+		
+		waiting._li=undefined;
+		waiting._image=undefined;
+		waiting._label=undefined;
+		
+		waiting.parentNode.removeChild(waiting);
+
+		if (li==this) {			
+			f_core.Debug("f_tree", "_clearWaiting reconstruct tree.");
+
+			var nodes=this._nodes;
+			if (nodes) {
+				this._constructTree(this, nodes, 0);
+			}
+			
+			return;
+		}			
+
+		var node=li._node;
+		f_core.Debug("f_tree", "_clearWaiting construct node '"+node._value+"'.");
+	
+		if (node._nodes && node._opened) {
+			var ul=li._nodes;
+			
+			this._constructTree(ul, node._nodes, li._depth+1);
+			
+			ul.style.display="list-item";
+	
+			this._updateElementStyle(li);
+			this._updateCommandStyle(li);			
+		}
+	},
+	/**
+	 * @method public
+	 * @param optional any value Value of the node, or the node object.
+	 * @return void
+	 */
+	f_refreshContent: function(value) {
+		if (value===undefined) {		
+			var children=this._nodes;
+			
+			var ul=this;
+
+			var lis=ul.childNodes;
+			for(var i=0;i<lis.length;) {
+				var li=lis[i];
+				if (li.tagName!="LI") {
+					i++;
+					continue;
+				}
+				
+				ul.removeChild(li);
+			}
+			
+			this._nodes=new Array;
+			for(var i=0;i<children;i++) {
+				var child=children[i];
+				
+				this._nodeFinalizer(child, true);
+			}
+
+			this._reloadTree();
+			return;
+		}
+			
+		var li=this._searchComponentByNodeOrValue(value);
+		var node=li._node;
+	
+		var opened=this.f_isOpened(node);
+		if (opened) {
+			this._closeNode(node, null, li);
+		}
+				
+		f_core.Debug("f_tree", "Refreshed node open state="+opened);
+		
+		node._nodes=undefined;
+		this._setInteractiveParent(node);
+		
+		var ul=li._nodes;
+		if (ul) {
+			li._nodes=undefined;
+			
+			li.removeChild(ul);
+	
+			var children=ul.childNodes;
+			
+			for(var i=0;i<children;i++) {
+				var child=children[i];
+				
+				this._nodeFinalizer(child, true);
+			}
+		}
+				
+		if (opened) {
+			this._openNode(node, null, li);
+		}
+	},
+	_a_componentCaptureMenuEvent: function() {
+		return null;
+	},
+
+	_getElementValue: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree._getElementValue: Invalid element parameter ! ("+li+")");
+
+		return li._node._value;
+	},
+
+	_isElementDisabled: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree._isElementDisabled: Invalid element parameter ! ("+li+")");
+		
+		return li._node._disabled;
+	},
+
+	_isElementSelected: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree._isElementSelected: Invalid element parameter ! ("+li+")");
+		
+		return li._node._selected;
+	},
+	
+	_setElementSelected: function(li, selected) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree._setElementSelected: Invalid element parameter ! ("+li+")");
+		
+		li._node._selected=selected;
+	},
+
+	_isElementChecked: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree._isElementChecked: Invalid element parameter ! ("+li+")");
+		
+		return li._node._checked;
+	},
+	
+	_setElementChecked: function(li, checked) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree._setElementChecked: Invalid element parameter ! ("+li+")");
+		
+		li._node._checked=checked;
+	}
+	
+}
+ 
+var f_tree=new f_class("f_tree", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager);

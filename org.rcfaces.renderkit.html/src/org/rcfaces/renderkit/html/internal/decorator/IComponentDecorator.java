@@ -1,0 +1,48 @@
+/*
+ * $Id$
+ * 
+ * $Log$
+ * Revision 1.1  2006/08/29 16:14:28  oeuillot
+ * Renommage  en rcfaces
+ *
+ * Revision 1.2  2006/03/28 12:22:47  oeuillot
+ * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
+ * Ajout du hideRootNode
+ *
+ * Revision 1.1  2006/01/03 15:21:38  oeuillot
+ * Refonte du systeme de menuPopup !
+ *
+ */
+package org.rcfaces.renderkit.html.internal.decorator;
+
+import javax.faces.component.UIComponent;
+import javax.faces.render.Renderer;
+
+import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
+import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+
+
+/**
+ * 
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+public interface IComponentDecorator {
+
+    void addChildDecorator(IComponentDecorator decorator);
+
+    void encodeContainer(IHtmlWriter writer, Renderer renderer)
+            throws WriterException;
+
+    void encodeContainerEnd(IHtmlWriter writer, Renderer renderer)
+            throws WriterException;
+
+    void encodeJavaScript(IJavaScriptWriter jsWriter) throws WriterException;
+
+    void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData);
+
+}

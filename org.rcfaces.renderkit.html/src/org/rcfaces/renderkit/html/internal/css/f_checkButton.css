@@ -1,0 +1,28 @@
+/* ********************************************************************
+ *
+ *	CheckButton
+ */
+ 
+SPAN.f_checkButton {
+	-moz-user-select: none;
+	user-select: none;
+}
+ 
+INPUT.f_checkButton_input {
+	vertical-align: middle;
+}
+
+LABEL.f_checkButton_text, 
+LABEL.f_checkButton_text_disabled {
+	vertical-align: middle;
+	display: inline;
+}
+
+LABEL.f_checkButton_text {
+	cursor: pointer;
+	cursor: hand;
+}
+
+LABEL.f_checkButton_text_disabled {
+	color: #A1A192;
+}

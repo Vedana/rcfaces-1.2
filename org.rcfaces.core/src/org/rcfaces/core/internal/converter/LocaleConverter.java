@@ -1,0 +1,104 @@
+/*
+ * $Id$
+ * 
+ * $Log$
+ * Revision 1.1  2006/08/29 16:13:14  oeuillot
+ * Renommage  en rcfaces
+ *
+ * Revision 1.2  2006/08/28 16:03:56  oeuillot
+ * Version avant migation en org.rcfaces
+ *
+ * Revision 1.1  2006/05/11 16:34:19  oeuillot
+ * Correction du calendar
+ * Ajout de DateChooser
+ * Ajout du moteur de filtre d'images
+ * Ajout de l'evt   loadListener pour le AsyncManager
+ *
+ */
+package org.rcfaces.core.internal.converter;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+
+import org.rcfaces.core.internal.codec.StringAppender;
+
+
+/**
+ * 
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+public class LocaleConverter implements Converter {
+    private static final String REVISION = "$Revision$";
+
+    public static final Converter SINGLETON = new LocaleConverter();
+
+    private final Map localesByName;
+
+    public LocaleConverter() {
+        Locale ls[] = Locale.getAvailableLocales();
+
+        localesByName = new HashMap(ls.length);
+
+        for (int i = 0; i < ls.length; i++) {
+            Locale l = ls[i];
+
+            String key = getKey(l);
+            if (key == null) {
+                continue;
+            }
+
+            localesByName.put(key, l);
+        }
+    }
+
+    public Object getAsObject(FacesContext context, UIComponent component,
+            String value) {
+        if (value == null || value.length() < 1) {
+            return null;
+        }
+
+        return localesByName.get(value.toLowerCase());
+    }
+
+    public String getAsString(FacesContext context, UIComponent component,
+            Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        Locale locale = (Locale) value;
+
+        return getKey(locale);
+    }
+
+    private static String getKey(Locale locale) {
+        String lg = locale.getLanguage();
+        if (lg == null || lg.length() < 1) {
+            return null;
+        }
+
+        StringAppender sb = new StringAppender(24);
+        sb.append(lg.toLowerCase());
+
+        String cnt = locale.getCountry();
+        if (cnt != null && cnt.length() > 0) {
+            sb.append('_');
+            sb.append(cnt.toLowerCase());
+
+            String var = locale.getVariant();
+            if (var != null && var.length() > 0) {
+                sb.append('_');
+                sb.append(var.toLowerCase());
+            }
+        }
+
+        return sb.toString();
+    }
+
+}
