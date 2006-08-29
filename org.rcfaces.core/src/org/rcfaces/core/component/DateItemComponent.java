@@ -1,11 +1,10 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.internal.component.AbstractItemComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.internal.component.AbstractItemComponent;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 public class DateItemComponent extends AbstractItemComponent implements 
 	ITextCapability,

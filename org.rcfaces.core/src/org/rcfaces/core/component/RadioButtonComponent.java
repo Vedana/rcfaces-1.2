@@ -1,22 +1,21 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.RadioButtonComponent;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.component.RadioButtonComponent;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ISelectedCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.iterator.IRadioButtonIterator;
+import org.rcfaces.core.internal.tools.RadioButtonTools;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import org.rcfaces.core.internal.component.AbstractInputComponent;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectedCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.iterator.IRadioButtonIterator;
-import org.rcfaces.core.internal.component.AbstractInputComponent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
-import org.rcfaces.core.internal.tools.RadioButtonTools;
 
 public class RadioButtonComponent extends AbstractInputComponent implements 
 	ITextCapability,

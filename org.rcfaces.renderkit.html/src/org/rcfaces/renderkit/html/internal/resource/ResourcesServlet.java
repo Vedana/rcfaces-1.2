@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/08/29 18:12:09  oeuillot
+ * Refonte du systeme de packaging et de génération
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -24,7 +27,7 @@
  * Fusions des servlets de ressources Javascript/css
  *
  */
-package org.rcfaces.renderkit.html.internal.css;
+package org.rcfaces.renderkit.html.internal.resource;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -39,6 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 
 /**

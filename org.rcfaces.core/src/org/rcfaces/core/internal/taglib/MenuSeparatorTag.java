@@ -1,8 +1,8 @@
 package org.rcfaces.core.internal.taglib;
 
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.MenuSeparatorComponent;
+import org.apache.commons.logging.Log;
 
 public class MenuSeparatorTag extends AbstractSeparatorTag {
 

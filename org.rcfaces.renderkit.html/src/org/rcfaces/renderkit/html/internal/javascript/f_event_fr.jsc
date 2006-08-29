@@ -1,0 +1,2 @@
+var _P={LOCK_MESSAGE:"Une action est déjà en cours de traitement.\nVeuillez patienter !"}
+f_resourceBundle.Define(f_event,_P);

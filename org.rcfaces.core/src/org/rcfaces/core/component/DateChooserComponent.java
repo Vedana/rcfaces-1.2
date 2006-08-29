@@ -1,17 +1,15 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.internal.converter.DateConverter;
+import javax.faces.el.ValueBinding;
+import java.util.Date;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.component.AbstractCalendarComponent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.DateConverter;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-
-import java.util.Date;
 
 public class DateChooserComponent extends AbstractCalendarComponent implements 
 	IImageButtonFamilly,

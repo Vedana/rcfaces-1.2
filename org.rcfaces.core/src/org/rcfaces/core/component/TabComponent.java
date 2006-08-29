@@ -1,22 +1,21 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.CardComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.TabbedPaneComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.CardComponent;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.TabbedPaneComponent;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.IImageCapability;
 
 public class TabComponent extends CardComponent implements 
 	ITextCapability,
@@ -255,13 +254,6 @@ public class TabComponent extends CardComponent implements
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
-	public final IMenuIterator listMenus() {
-
-
-		return MenuTools.listMenus(this);
-		
-	}
-
 	public final IMenuComponent getMenu(String menuId) {
 
 
@@ -273,6 +265,13 @@ public class TabComponent extends CardComponent implements
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public final IMenuIterator listMenus() {
+
+
+		return MenuTools.listMenus(this);
 		
 	}
 

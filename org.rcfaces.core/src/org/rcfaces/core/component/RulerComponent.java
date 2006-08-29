@@ -1,20 +1,19 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import java.lang.String;
-import javax.faces.el.ValueBinding;
-
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.capability.IOrientationCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 
 public class RulerComponent extends CameliaBaseComponent implements 
 	IPositionCapability,

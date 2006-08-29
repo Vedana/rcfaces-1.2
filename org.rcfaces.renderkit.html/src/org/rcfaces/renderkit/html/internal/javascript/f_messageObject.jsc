@@ -1,0 +1,12 @@
+var _n={SEVERITY_INFO:0,SEVERITY_WARN:1,SEVERITY_ERROR:2,SEVERITY_FATAL:3}
+function f_messageObject(e,t,n){var r=this
+r._m1=e
+r._l2=t
+r._5a=n}
+f_messageObject.prototype.f_getSeverity=function(){return this._m1}
+f_messageObject.prototype.f_getSummary=function(){return this._l2}
+f_messageObject.prototype.f_getDetail=function(){var e=this
+if(e._5a)return e._5a
+return e._l2}
+f_messageObject.f_getName=function(){return"f_messageObject"}
+for(var p in _n)f_messageObject[p]=_n[p];;

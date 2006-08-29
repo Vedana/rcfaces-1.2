@@ -1,9 +1,8 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.TextEntryComponent;
 
 public class TextAreaComponent extends TextEntryComponent {
 

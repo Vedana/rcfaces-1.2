@@ -1,7 +1,7 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.AbstractMenuComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.component.AbstractMenuComponent;
 
 public class MenuBarComponent extends AbstractMenuComponent {
 

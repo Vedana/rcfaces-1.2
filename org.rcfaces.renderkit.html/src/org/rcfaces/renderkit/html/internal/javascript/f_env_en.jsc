@@ -1,0 +1,2 @@
+var _P={OPEN_WINDOW_ERROR_MESSAGE:"Your browser has blocked the opening of a popup."}
+f_resourceBundle.Define(f_env,_P);

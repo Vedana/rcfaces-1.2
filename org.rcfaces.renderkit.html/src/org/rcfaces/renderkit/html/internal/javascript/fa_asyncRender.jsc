@@ -1,0 +1,35 @@
+var _e={fa_asyncRender:function(){var t=this,e=f_core.I(t,"v:asyncRender")
+if(!e)return
+t._n1=!0},f_finalize:function(){var e
+this._on=e},_vg:{after:function(e,t){if(t)this.f_prepare(!1)}},f_prepare:function(e,t){var h="text/html",v="px",l,s=null,c=this,u=fa_asyncRender,o=f_core.Error,a=f_waiting,n,r,f,i
+if(!c._n1)return!0
+c._n1=l
+n=f_env.ie()
+r=f_httpRequest.f_newInstance(c,n,h)
+f=c
+if(!t){if(typeof(c._hn)=="function")t=c._hn()
+if(!t)t=f}if(!f.style.height||f.offsetHeight<24){f._v9=!0
+f.style.height=24+v}r.f_setListener({onInit:function(r){var g=f._on
+if(!g){g=a.Create(t)
+f._on=g}g.f_setText(a.GetLoadingMessage())
+g.f_show()},onError:function(r,g,d){f._gv=!1
+var p=f._on
+if(p)p.f_hide()},onProgress:function(r,g,d,p){var m=f._on
+if(m)m.f_setText(a.GetReceivingMessage())},onLoad:function(r,g,d){var p,m,y
+if(f._v9){f._v9=s
+if(f.style.height==24+v)f.style.height="auto"}p=f._on
+try{if(r.f_getStatus()!=200){o(u,"Bad Status ! ("+r.f_getStatusText()+")")
+return}m=r.f_getResponse()
+y=r.f_getResponseContentType()
+if(y.indexOf("text/javascript")>=0){eval(m)
+return}if(y.indexOf(h)>=0){if(p){p.f_hide()
+p.ci()
+p=s}window._T._1h(f,f,f.innerHTML+m)
+return}o(u,"Unknown content type: "+y)}finally{f._gv=!1
+if(p)p.f_hide()}}})
+c._gv=!0
+r.f_setRequestHeader("X-Camelia","asyncRender.request")
+i={id:c.id}
+r.f_doFormRequest(i)
+return!1}}
+var fa_asyncRender=new f_aspect("fa_asyncRender",null,_e);

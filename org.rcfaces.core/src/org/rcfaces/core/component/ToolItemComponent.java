@@ -1,12 +1,11 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.ToolFolderComponent;
-import org.rcfaces.core.component.UIImageItemComponent;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.UIImageItemComponent;
 
 public class ToolItemComponent extends UIImageItemComponent implements 
 	ISelectionEventCapability,

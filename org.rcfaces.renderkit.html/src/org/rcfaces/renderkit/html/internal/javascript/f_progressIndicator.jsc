@@ -1,0 +1,45 @@
+var _e={f_progressIndicator:function(){var n=this,e,t
+n.f_super(arguments)
+e=n.f_findComponent("progressBar")
+n._cc=e
+e.uv()
+e.f_setValue(-1)
+e.f_setMin(0)
+e.f_setMax(1000)
+t=n.f_findComponent("label")
+n._i=t
+t.uv()},f_finalize:function(){var r,n=this,e,t
+n._cc=n._i=r
+e=n._1o
+if(e){n._1o=r
+if(e.f_cancel)e.f_cancel()}t=n._9l
+if(t){n._9l=r
+window.clearTimeout(t)}n.f_super(arguments)},f_createProgressMonitor:function(){var r,n=this,e=n._1o,t
+if(e){n._1o=r
+if(!e.f_isCanceled())e.f_cancel()}t=f_progressIndicatorMonitor.f_newInstance(n)
+n._1o=t
+return t},f_getCurrentProgressMonitor:function(){return this._1o},f_setIndeterminate:function(e){var t=this._cc
+if(t)t.f_setIndeterminate(e)},f_getValue:function(){var e=this._cc
+if(!e)return 0
+return e.f_getValue()},eu:function(e,t,n,r){var c,u=this,f=!1,i,a,o
+if(e!==c&&e!=u._ni){u._ni=e
+f=!0}if(t!==c&&t!=u._4_){u._4_=t
+f=!0}if(n!==c&&n!=u._1d){u._1d=n
+f=!0}if(!f)return
+if(r){u._3l()
+return}i=new Date().getTime()
+if(!u._v3||(i-u._v3)>200){u._3l()
+return}a=u._9l
+if(a)return
+o=u
+u._9l=window.setTimeout(function(){o._3l()},200)},_3l:function(){var f,r=this,e,t,n
+r._v3=new Date().getTime()
+if(r._ni===f)return
+e=r._cc
+if(e)e.f_setValue(r._ni)
+t=r._i
+if(t){n=r._4_
+if(!n)n=" "
+if(n!=r._m6){r._m6=n
+t.f_setText(n)}}r._ni=f}}
+var f_progressIndicator=new f_class("f_progressIndicator",null,null,_e,G);

@@ -1,0 +1,15 @@
+function f_bundle(e){var o=this,a=arguments,t,n,r,f,i
+o._I=e
+t=[]
+n=[]
+o._8r=n
+for(r=1;r<a.length;r++){f=a[r]
+n.push(f)
+t.push(f.f_getName())}i=window._T
+o._T=i
+i._tc(o)}
+f_bundle.prototype.f_finalize=function(){var e
+this._T=this._8r=e}
+f_bundle.prototype.f_listClasses=function(){return this._8r}
+f_bundle.prototype.f_getName=function(){return this._I}
+f_bundle.f_getName=function(){return"f_bundle"};

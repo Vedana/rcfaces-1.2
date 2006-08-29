@@ -1,0 +1,4 @@
+var _e={f_getFocusStyleClass:function(){var t,e=this
+if(e._gu===t)e._gu=f_core.I(e,"v:focusStyleClass")
+return e._gu}}
+var fa_focusStyleClass=new f_aspect("fa_focusStyleClass",null,_e);

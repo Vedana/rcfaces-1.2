@@ -1,17 +1,16 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.AbstractDataComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.component.AbstractDataComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
 
 public class DataListComponent extends AbstractDataComponent implements 
 	IMenuCapability,
@@ -60,13 +59,6 @@ public class DataListComponent extends AbstractDataComponent implements
 			
 	}
 
-	public final IMenuIterator listMenus() {
-
-
-		return MenuTools.listMenus(this);
-		
-	}
-
 	public final IMenuComponent getMenu(String menuId) {
 
 
@@ -78,6 +70,13 @@ public class DataListComponent extends AbstractDataComponent implements
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public final IMenuIterator listMenus() {
+
+
+		return MenuTools.listMenus(this);
 		
 	}
 

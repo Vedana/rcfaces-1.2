@@ -1,0 +1,10 @@
+var _e={f_finalize:function(){var e
+this._9n=e},ro:function(e){var t=this
+if(!t._ee){e.call(t,t)
+return}if(t._9n);
+t._9n=e},it:function(){var r,n=this,e=n._9n
+if(!e)return!1
+n._9n=r
+try{e.call(n,n)}catch(t){f_core.error(fa_commands,"Call of callback: "+e+" throws exception.",t)
+return!1}return!0}}
+var fa_commands=new f_aspect("fa_commands",null,_e);

@@ -3,10 +3,9 @@ package org.rcfaces.core.internal.taglib;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.MenuItemComponent;
-
 import javax.faces.el.ValueBinding;
 import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.MenuItemComponent;
 import javax.faces.application.Application;
 
 public class MenuItemTag extends ExpandableItemTag {

@@ -3,9 +3,8 @@ package org.rcfaces.core.internal.taglib;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.component.AbstractMessageComponent;
-
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.component.AbstractMessageComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -34,10 +33,10 @@ private static final Log LOG=LogFactory.getLog(AbstractMessageTag.class);
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String showDetail;
-	private String forVal;
-	private String margins;
 	private String showSummary;
+	private String showDetail;
+	private String margins;
+	private String forVal;
 	public final String getHeight() {
 		return height;
 	}
@@ -214,20 +213,20 @@ private static final Log LOG=LogFactory.getLog(AbstractMessageTag.class);
 		this.initListeners = initListeners;
 	}
 
+	public final String getShowSummary() {
+		return showSummary;
+	}
+
+	public final void setShowSummary(String showSummary) {
+		this.showSummary = showSummary;
+	}
+
 	public final String getShowDetail() {
 		return showDetail;
 	}
 
 	public final void setShowDetail(String showDetail) {
 		this.showDetail = showDetail;
-	}
-
-	public final String getFor() {
-		return forVal;
-	}
-
-	public final void setFor(String forVal) {
-		this.forVal = forVal;
 	}
 
 	public final String getMargins() {
@@ -238,12 +237,12 @@ private static final Log LOG=LogFactory.getLog(AbstractMessageTag.class);
 		this.margins = margins;
 	}
 
-	public final String getShowSummary() {
-		return showSummary;
+	public final String getFor() {
+		return forVal;
 	}
 
-	public final void setShowSummary(String showSummary) {
-		this.showSummary = showSummary;
+	public final void setFor(String forVal) {
+		this.forVal = forVal;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -447,21 +446,21 @@ private static final Log LOG=LogFactory.getLog(AbstractMessageTag.class);
 			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
 		}
 
+		if (showSummary != null) {
+			if (isValueReference(showSummary)) {
+				ValueBinding vb = application.createValueBinding(showSummary);
+				component.setShowSummary(vb);
+			} else {
+				component.setShowSummary(getBool(showSummary));
+			}
+		}
+
 		if (showDetail != null) {
 			if (isValueReference(showDetail)) {
 				ValueBinding vb = application.createValueBinding(showDetail);
 				component.setShowDetail(vb);
 			} else {
 				component.setShowDetail(getBool(showDetail));
-			}
-		}
-
-		if (forVal != null) {
-			if (isValueReference(forVal)) {
-				ValueBinding vb = application.createValueBinding(forVal);
-				component.setFor(vb);
-			} else {
-				component.setFor(forVal);
 			}
 		}
 
@@ -472,12 +471,12 @@ private static final Log LOG=LogFactory.getLog(AbstractMessageTag.class);
 				component.setMargins(margins);
 		}
 
-		if (showSummary != null) {
-			if (isValueReference(showSummary)) {
-				ValueBinding vb = application.createValueBinding(showSummary);
-				component.setShowSummary(vb);
+		if (forVal != null) {
+			if (isValueReference(forVal)) {
+				ValueBinding vb = application.createValueBinding(forVal);
+				component.setFor(vb);
 			} else {
-				component.setShowSummary(getBool(showSummary));
+				component.setFor(forVal);
 			}
 		}
 	}
@@ -505,10 +504,10 @@ private static final Log LOG=LogFactory.getLog(AbstractMessageTag.class);
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		showDetail = null;
-		forVal = null;
-		margins = null;
 		showSummary = null;
+		showDetail = null;
+		margins = null;
+		forVal = null;
 
 		super.release();
 	}

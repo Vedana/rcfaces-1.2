@@ -1,8 +1,8 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.component.HelpButtonComponent;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.HelpButtonComponent;
 
 public class HelpButtonTag extends ImageButtonTag {
 

@@ -4,7 +4,6 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ProgressBarComponent;
-
 import javax.faces.el.ValueBinding;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;

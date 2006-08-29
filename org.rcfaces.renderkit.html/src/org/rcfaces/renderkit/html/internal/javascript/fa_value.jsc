@@ -1,0 +1,8 @@
+var _e={f_getValue:function(){var n,t=this,e
+if(t._p===n){e=f_core.I(t,"v:value")
+t._p=(typeof(e)=="string")?e:null}return t._p},f_setValue:function(e){var t=this
+if(t.f_getValue()==e)return
+t._p=e
+if(t._n_)t._n_(e)
+t.f_setProperty(P.oc,e)},_n_:f_class.fa}
+var fa_value=new f_aspect("fa_value",null,_e);

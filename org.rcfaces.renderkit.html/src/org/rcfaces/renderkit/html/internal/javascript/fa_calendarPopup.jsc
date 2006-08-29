@@ -1,0 +1,89 @@
+var _n={S:"#calendarPopup",O:function(e,t){var i,f=f_popup,n=e.f_getCalendarObject(),r
+if(!e._h)return
+e._h=i
+f.ru(e)
+f_key.es(fa_calendarPopup.S)
+r=e._ui
+if(!r)return
+if(!e._C){r.style.visibility="hidden"
+return}f.Ie_closePopup(r)
+e._ui=i
+n.fl()},x:function(e,t,n,r,f,i){var D="inherit",k="_popup",C="DIV",N="px",E,b=this,y=f_core,w=y.le,m=f_popup,a=e.f_getCalendarObject(),o,u,c,s,l,v,h,g,d,p
+if(e._h)return
+o=e._ui
+if(!o){u=null
+if(e._C){c=e.ownerDocument
+if(!o){o=m.nu(c)
+s=o.document
+s.body.innerHTML=""
+u=s.createElement(C)
+u.className=e._t+k
+u.style.visibility=D
+s.body.appendChild(u)
+u._9u=!0}}else{o=e.ownerDocument.createElement(C)
+o.className=e._t+k
+o.onclick=w
+o.onmousedown=w
+u=o
+l=e
+for(;;l=l.parentNode){v=l.tagName
+if(v=="INPUT"||v=="SPAN")continue
+break}l.appendChild(o)
+o._9u=!0}e._ui=o
+if(u){a.he(u)
+if(b._o4){a.f_setSelection(b._o4)
+b._o4=E}}else a.f_refreshComponent()}if(m.uo({exit:e._el,keyDown:function(T){return!0},keyUp:function(T){return!0},keyPress:function(T){return!0}},e,o)==!1){return}if(o){f_key.oo(fa_calendarPopup.S)
+if(e._C)m.Ie_openPopup(o,e,t,n,r,f);else{h=y.er(t)
+g=h.x+n
+d=h.y+r
+g+=1
+d+=1
+p={x:g,y:d}
+y.uc(o,p)
+o.style.left=p.x+N
+o.style.top=p.y+N
+if(f)o.style.width=f+N;else if(f!==!1)o.style.width="auto"
+o.style.visibility=D}}e._h=!0},B:function(e){var u=fa_calendarPopup,t,n,r,f,i,a
+if(e.f_getDetail()!=1)return!0
+t=e.f_getComponent()
+n=t.f_getTargetComponent()
+r=e.f_getValue()
+if(r&&r.length>0){r=r[0]
+if(r&&r.length>0)r=r[0]}f=e.f_getJsEvent()
+if(n._m7(r,f)===!1)return!1
+u.O(n,f)
+i=n._s8
+if(i){a=n.f_findComponent(i)
+if(a)try{u.K(a,r,n._de,t)}catch(o){f_core.Error(u,"Set date of component '"+a.id+"' throws exception.",o)}}return!0},K:function(e,t,n,r){if(e.f_setDate){e.f_setDate(t)
+return}var f=r.c_(t,n)
+if(e.f_setText){e.f_setText(f)
+return}if(e.tagName.toUpperCase()=="INPUT"){e.value=f
+return}f_core.ef(e,f)},W:function(e,t,n){if(e.f_getDate){return e.f_getDate()}var r
+if(e.f_getText){r=e.f_getText()}else if(e.tagName.toUpperCase()=="INPUT"){r=e.value}else{return null}if(!r)return null
+return n.gt(r,t)}}
+var _e={fa_calendarPopup:function(){var t=this,e=f_calendarObject.a_(t,4|8|16)
+t._s=e
+e.f_addEventListener("selection",fa_calendarPopup.B)
+e.hg()
+t._C=f_popup.at()},f_finalize:{after:function(){var r,n=this,e,t
+n._C=r
+e=n._s
+if(e){n._s=r
+f_classLoader.Destroy(e)}t=n._ui
+if(t){n._ui=t._9u=r
+if(t.nodeType){t.onclick=t.onmousedown=null}}}},_dr:function(e){var u=this,o=fa_calendarPopup,t=u._s8,n,r,i,a
+if(t){n=u.f_findComponent(t)
+if(n)try{r=o.W(n,u._de,u._s)
+if(r)u.f_setSelection(r)}catch(f){f_core.Error(o,"Get date of component '"+n.id+"' throws exception.",f)}}if(u.Q("menu",e.f_getJsEvent())===!1)return!1
+i=0
+a=u.offsetHeight
+o.x(u,u,0,u.offsetHeight,!1,!1)
+return!1},_dh:function(e,t,n,r){this._s.ev.apply(this._s,arguments)},f_getCalendarObject:function(){return this._s},_el:function(e){fa_calendarPopup.O(this,e)
+return!1},f_getSelection:function(){var n=this,e=n._s,t
+if(!e)return n._o4
+t=e.f_getSelection()
+if(!t||t.length<1)return null
+return t[0][0]},f_setSelection:function(e){var n=this,t=n._s
+if(!t){n._o4=e
+return}t.f_setSelection(e)}}
+var fa_calendarPopup=new f_aspect("fa_calendarPopup",_n,_e,fa_itemsWrapper,fa_selectionProvider);

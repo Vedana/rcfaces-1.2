@@ -1,0 +1,6 @@
+var _e={f_getValue:function(){return this.value},f_setValue:function(e){var r,n=this,t
+if(e===r)e=""
+t=n.value
+n.value=e
+if(n.fo)n.fo(P.oc,e,t)}}
+var f_hiddenValue=new f_class("f_hiddenValue",null,null,_e,f_eventTarget,fa_serializable,fa_clientData);

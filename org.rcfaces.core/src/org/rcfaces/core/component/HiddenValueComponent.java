@@ -1,23 +1,21 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 import java.lang.Object;
 import javax.faces.el.ValueBinding;
-
+import java.util.Collections;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.tools.ComponentTools;
-
-import java.util.Collections;
 
 public class HiddenValueComponent extends CameliaInputComponent implements 
 	IClientDataCapability,
@@ -136,17 +134,36 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final String[] listClientDataKeys() {
-
-
-			return listClientDataKeys(null);
-		
-	}
-
 	public final Map getClientDataMap() {
 
 
 		return getClientDataMap(null);
+		
+	}
+
+	public final int getClientDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+		 
+		 return dataMapAccessor.getDataCount();
+		
+	}
+
+	public final String getClientData(String name) {
+
+
+		 return getClientData(name, null);
+		
+	}
+
+	public final String[] listClientDataKeys() {
+
+
+			return listClientDataKeys(null);
 		
 	}
 
@@ -171,25 +188,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final String getClientData(String name) {
-
-
-		 return getClientData(name, null);
-		
-	}
-
-	public final int getClientDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-		 
-		 return dataMapAccessor.getDataCount();
-		
-	}
-
 	public final Object getServerData(String name) {
 
 
@@ -199,6 +197,18 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		 }
             
 		return dataMapAccessor.getData(name, null);
+		
+	}
+
+	public final Object removeServerData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+		 	return null;
+		}
+            
+		return dataMapAccessor.removeData(name, null);
 		
 	}
 
@@ -234,18 +244,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 
 			return listServerDataKeys(null);
-		
-	}
-
-	public final Object removeServerData(String name) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-		 	return null;
-		}
-            
-		return dataMapAccessor.removeData(name, null);
 		
 	}
 

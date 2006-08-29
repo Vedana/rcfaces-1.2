@@ -1,10 +1,9 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.component.AbstractGridComponent;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.component.AbstractGridComponent;
-
 import javax.faces.el.ValueBinding;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
@@ -41,10 +40,10 @@ private static final Log LOG=LogFactory.getLog(AbstractGridTag.class);
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String rows;
 	private String var;
-	private String first;
 	private String margins;
+	private String rows;
+	private String first;
 	private String value;
 	public final String getVisible() {
 		return visible;
@@ -278,14 +277,6 @@ private static final Log LOG=LogFactory.getLog(AbstractGridTag.class);
 		this.initListeners = initListeners;
 	}
 
-	public final String getRows() {
-		return rows;
-	}
-
-	public final void setRows(String rows) {
-		this.rows = rows;
-	}
-
 	public final String getVar() {
 		return var;
 	}
@@ -294,20 +285,28 @@ private static final Log LOG=LogFactory.getLog(AbstractGridTag.class);
 		this.var = var;
 	}
 
-	public final String getFirst() {
-		return first;
-	}
-
-	public final void setFirst(String first) {
-		this.first = first;
-	}
-
 	public final String getMargins() {
 		return margins;
 	}
 
 	public final void setMargins(String margins) {
 		this.margins = margins;
+	}
+
+	public final String getRows() {
+		return rows;
+	}
+
+	public final void setRows(String rows) {
+		this.rows = rows;
+	}
+
+	public final String getFirst() {
+		return first;
+	}
+
+	public final void setFirst(String first) {
+		this.first = first;
 	}
 
 	public final String getValue() {
@@ -553,21 +552,28 @@ private static final Log LOG=LogFactory.getLog(AbstractGridTag.class);
 			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (rows != null) {
-			if (isValueReference(rows)) {
-				ValueBinding vb = application.createValueBinding(rows);
-				component.setRows(vb);
-			} else {
-				component.setRows(getInt(rows));
-			}
-		}
-
 		if (var != null) {
 			if (isValueReference(var)) {
 				ValueBinding vb = application.createValueBinding(var);
 				component.setVar(vb);
 			} else {
 				component.setVar(var);
+			}
+		}
+
+		if (margins != null) {
+			if (isValueReference(margins)) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins);
+		}
+
+		if (rows != null) {
+			if (isValueReference(rows)) {
+				ValueBinding vb = application.createValueBinding(rows);
+				component.setRows(vb);
+			} else {
+				component.setRows(getInt(rows));
 			}
 		}
 
@@ -578,13 +584,6 @@ private static final Log LOG=LogFactory.getLog(AbstractGridTag.class);
 			} else {
 				component.setFirst(getInt(first));
 			}
-		}
-
-		if (margins != null) {
-			if (isValueReference(margins)) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins);
 		}
 
 		if (value != null) {
@@ -627,10 +626,10 @@ private static final Log LOG=LogFactory.getLog(AbstractGridTag.class);
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		rows = null;
 		var = null;
-		first = null;
 		margins = null;
+		rows = null;
+		first = null;
 		value = null;
 
 		super.release();

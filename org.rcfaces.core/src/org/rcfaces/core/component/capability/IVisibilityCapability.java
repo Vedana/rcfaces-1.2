@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/08/29 18:12:08  oeuillot
+ * Refonte du systeme de packaging et de génération
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -89,7 +92,6 @@ public interface IVisibilityCapability {
      * considered visible even though it may not actually be showing.
      * 
      * @return the receiver's visibility state
-     * @xxxsee #isVisible()
      */
     Boolean getVisible();
 

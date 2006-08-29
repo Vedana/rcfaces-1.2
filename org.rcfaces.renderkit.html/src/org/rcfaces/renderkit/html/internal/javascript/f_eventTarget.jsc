@@ -1,0 +1,37 @@
+var _n={S:{change:f_event.CHANGE,check:f_event.CHECK,blur:f_event.BLUR,dblClick:f_event.DBLCLICK,focus:f_event.FOCUS,init:f_event.INIT,keyUp:f_event.KEYUP,keyDown:f_event.KEYDOWN,keyPress:f_event.KEYPRESS,load:f_event.LOAD,menu:f_event.MENU,mouseDown:f_event.MOUSEDOWN,mouseOver:f_event.MOUSEOVER,mouseOut:f_event.MOUSEOUT,mouseUp:f_event.MOUSEUP,propertyChange:f_event.PROPERTY_CHANGE,suggestion:f_event.SUGGESTION,selection:f_event.SELECTION,user:f_event.USER},Initializer:function(){var n=null,t=f_event,e={}
+this.x=e
+e[t.BLUR]={_6t:"onblur",_n3:"av"}
+e[t.CHANGE]={_6t:"onchange",_n3:"me"}
+e[t.CHECK]=e[t.CLOSE]=n
+e[t.DBLCLICK]={_6t:"ondblclick",_n3:"ps"}
+e[t.FOCUS]={_6t:"onfocus",_n3:"lv"}
+e[t.INIT]=n
+e[t.KEYDOWN]={_6t:"onkeydown",_n3:"eh"}
+e[t.KEYPRESS]={_6t:"onkeypress",_n3:"vo"}
+e[t.KEYUP]={_6t:"onkeyup",_n3:"lc"}
+e[t.LOAD]=e[t.MENU]=n
+e[t.MOUSEDOWN]={_6t:"onmousedown",_n3:"go"}
+e[t.MOUSEOUT]={_6t:"onmouseout",_n3:"pl"}
+e[t.MOUSEOVER]={_6t:"onmouseover",_n3:"im"}
+e[t.MOUSEUP]={_6t:"onmouseup",_n3:"fd"}
+e["propertyChange"]=n
+e[t.SELECTION]={_6t:"onclick",_n3:"ia"}
+e[t.SUBMIT]=e[t.SUGGESTION]=e[t.USER]=n},O:function(e,t,n,r,f){var o,i,a
+if(!t)t=window.event
+i=(e.f_link)?e.f_link:e
+if(r&&i.V()){return!1}a=i.Q(n,t)
+if(f!==o){a=e._o0
+if(a===o){a=f
+if(t&&f===!1)f_core.M(t)}}return a}}
+var _e={f_eventTarget:function(){var e=this
+e.f_super(arguments)
+if(e.tagName)e.nh(f_eventTarget.S)},ms:function(e){return f_eventTarget.O(this,e,"check",!0,!1)},ia:function(e){return f_eventTarget.O(this,e,"selection",!0,!1)},lv:function(e){return f_eventTarget.O(this,e,"focus",!1)},av:function(e){return f_eventTarget.O(this,e,"blur",!1)},me:function(e){return f_eventTarget.O(this,e,"change",!0)},lc:function(e){return f_eventTarget.O(this,e,"keyup",!0)},eh:function(e){return f_eventTarget.O(this,e,"keydown",!0)},vo:function(e){return f_eventTarget.O(this,e,"keypress",!0)},im:function(e){return f_eventTarget.O(this,e,"mouseover",!1)},pl:function(e){return f_eventTarget.O(this,e,"mouseout",!1)},ps:function(e){return f_eventTarget.O(this,e,"dblclick",!0)},go:function(e){return f_eventTarget.O(this,e,"mousedown",!1)},fd:function(e){return f_eventTarget.O(this,e,"mouseup",!1)},mu:function(e){return f_eventTarget.O(this,e,f_event.PREPAGESUGGESTION,!1)},gp:function(e){return f_eventTarget.O(this,e,"propertyChange",!1)},hp:function(e){return f_eventTarget.O(this,e,"menu",!1)},ig:function(e){return f_eventTarget.O(this,e,"reset",!1)},op:function(e){return f_eventTarget.O(this,e,"user",!1)},td:function(){return this.Q("init")},fe:function(e,t){var r=this,n=f_eventTarget.x[e]
+if(n){t[n._6t]=r[n._n3]
+return}else if(n===null)return
+switch(e){case"reset":f_core.tp(r)
+return;}},lp:function(){return this.Q("init",null)},ft:function(e,t){var r=null,n=f_eventTarget.x[e]
+if(n){t[n._6t]=r
+return}else if(n===r)return
+switch(e){case"reset":f_core.dn(this)
+return;}}}
+var f_eventTarget=new f_class("f_eventTarget",null,_n,_e,f_object,fa_eventTarget);

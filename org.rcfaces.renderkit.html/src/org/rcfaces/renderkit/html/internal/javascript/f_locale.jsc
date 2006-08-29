@@ -1,0 +1,26 @@
+var _n={SHORT:0,MEDIUM:1,LONG:2,Get:function(){var e=f_locale
+if(!e.S)e.S=e.f_newInstance()
+return e.S},Finalizer:function(){var e
+f_locale.S=e}}
+var _e={f_locale:function(){var t=this,e
+t.f_super(arguments)
+e=f_resourceBundle.Get(f_locale)
+t._rp=e.f_get("MONTH_SHORT_NAMES")
+t._2p=e.f_get("MONTH_MED_NAMES")
+t._0m=e.f_get("MONTH_LONG_NAMES")
+t._p_=e.f_get("DAY_SHORT_NAMES")
+t._vp=e.f_get("DAY_MED_NAMES")
+t._vd=e.f_get("DAY_LONG_NAMES")
+t._n5=e.f_get("FIRST_DAY_OF_WEEK")
+t._7a=e.f_get("TWO_DIGIT_YEAR_START")
+t._p2=e.f_get("DATE_FORMATS")},f_getMonthName:function(e,t){var r=this,n=r._2p
+switch(t){case 2:n=r._0m
+break;case 0:n=r._rp
+break;}if(e<0||e>=n.length)return null
+return n[e]},f_getDayName:function(e,t){var r=this,n=r._vp
+switch(t){case 2:n=r._vd
+break;case 0:n=r._p_
+break;}if(e<0||e>=n.length)return null
+return n[e]},f_getFirstDayOfWeek:function(){return this._n5},f_getTwoDigitYearStart:function(){return this._7a},f_getDateFormat:function(e){var t=this._p2
+switch(e){case 2:return t[2];case 1:return t[1];}return t[0]}}
+var f_locale=new f_class("f_locale",null,_n,_e);

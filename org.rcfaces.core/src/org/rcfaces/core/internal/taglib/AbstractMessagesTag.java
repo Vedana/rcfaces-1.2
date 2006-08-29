@@ -4,7 +4,6 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.component.AbstractMessagesComponent;
-
 import javax.faces.el.ValueBinding;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
@@ -34,10 +33,10 @@ private static final Log LOG=LogFactory.getLog(AbstractMessagesTag.class);
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String showSummary;
-	private String showDetail;
-	private String margins;
 	private String globalOnly;
+	private String showSummary;
+	private String margins;
+	private String showDetail;
 	public final String getHeight() {
 		return height;
 	}
@@ -214,20 +213,20 @@ private static final Log LOG=LogFactory.getLog(AbstractMessagesTag.class);
 		this.initListeners = initListeners;
 	}
 
+	public final String getGlobalOnly() {
+		return globalOnly;
+	}
+
+	public final void setGlobalOnly(String globalOnly) {
+		this.globalOnly = globalOnly;
+	}
+
 	public final String getShowSummary() {
 		return showSummary;
 	}
 
 	public final void setShowSummary(String showSummary) {
 		this.showSummary = showSummary;
-	}
-
-	public final String getShowDetail() {
-		return showDetail;
-	}
-
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
 	}
 
 	public final String getMargins() {
@@ -238,12 +237,12 @@ private static final Log LOG=LogFactory.getLog(AbstractMessagesTag.class);
 		this.margins = margins;
 	}
 
-	public final String getGlobalOnly() {
-		return globalOnly;
+	public final String getShowDetail() {
+		return showDetail;
 	}
 
-	public final void setGlobalOnly(String globalOnly) {
-		this.globalOnly = globalOnly;
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -447,21 +446,21 @@ private static final Log LOG=LogFactory.getLog(AbstractMessagesTag.class);
 			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
 		}
 
+		if (globalOnly != null) {
+			if (isValueReference(globalOnly)) {
+				ValueBinding vb = application.createValueBinding(globalOnly);
+				component.setGlobalOnly(vb);
+			} else {
+				component.setGlobalOnly(getBool(globalOnly));
+			}
+		}
+
 		if (showSummary != null) {
 			if (isValueReference(showSummary)) {
 				ValueBinding vb = application.createValueBinding(showSummary);
 				component.setShowSummary(vb);
 			} else {
 				component.setShowSummary(getBool(showSummary));
-			}
-		}
-
-		if (showDetail != null) {
-			if (isValueReference(showDetail)) {
-				ValueBinding vb = application.createValueBinding(showDetail);
-				component.setShowDetail(vb);
-			} else {
-				component.setShowDetail(getBool(showDetail));
 			}
 		}
 
@@ -472,12 +471,12 @@ private static final Log LOG=LogFactory.getLog(AbstractMessagesTag.class);
 				component.setMargins(margins);
 		}
 
-		if (globalOnly != null) {
-			if (isValueReference(globalOnly)) {
-				ValueBinding vb = application.createValueBinding(globalOnly);
-				component.setGlobalOnly(vb);
+		if (showDetail != null) {
+			if (isValueReference(showDetail)) {
+				ValueBinding vb = application.createValueBinding(showDetail);
+				component.setShowDetail(vb);
 			} else {
-				component.setGlobalOnly(getBool(globalOnly));
+				component.setShowDetail(getBool(showDetail));
 			}
 		}
 	}
@@ -505,10 +504,10 @@ private static final Log LOG=LogFactory.getLog(AbstractMessagesTag.class);
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		showSummary = null;
-		showDetail = null;
-		margins = null;
 		globalOnly = null;
+		showSummary = null;
+		margins = null;
+		showDetail = null;
 
 		super.release();
 	}

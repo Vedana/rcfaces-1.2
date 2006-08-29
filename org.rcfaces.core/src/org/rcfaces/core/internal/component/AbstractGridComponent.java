@@ -1,40 +1,39 @@
 package org.rcfaces.core.internal.component;
 
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import java.lang.Object;
+import org.rcfaces.core.component.capability.IHelpCapability;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Collections;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import javax.faces.model.DataModel;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.tools.VisibilityTools;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IResetEventCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
 import java.lang.String;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.capability.IKeyEventCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.component.capability.IResetEventCapability;
-import org.rcfaces.core.component.capability.IServerDataCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.component.capability.IValueLockedCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.internal.tools.VisibilityTools;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.component.capability.IServerDataCapability;
 
 public abstract class AbstractGridComponent extends CameliaGridComponent implements 
 	IVisibilityCapability,
@@ -358,17 +357,36 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
 	}
 
-	public final String[] listClientDataKeys() {
-
-
-			return listClientDataKeys(null);
-		
-	}
-
 	public final Map getClientDataMap() {
 
 
 		return getClientDataMap(null);
+		
+	}
+
+	public final int getClientDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+		 
+		 return dataMapAccessor.getDataCount();
+		
+	}
+
+	public final String getClientData(String name) {
+
+
+		 return getClientData(name, null);
+		
+	}
+
+	public final String[] listClientDataKeys() {
+
+
+			return listClientDataKeys(null);
 		
 	}
 
@@ -390,25 +408,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		return (String)dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public final String getClientData(String name) {
-
-
-		 return getClientData(name, null);
-		
-	}
-
-	public final int getClientDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-		 
-		 return dataMapAccessor.getDataCount();
 		
 	}
 
@@ -684,6 +683,18 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
+	public final Object removeServerData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+		 	return null;
+		}
+            
+		return dataMapAccessor.removeData(name, null);
+		
+	}
+
 	public final Map getServerDataMap() {
 
 
@@ -719,18 +730,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
-	public final Object removeServerData(String name) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-		 	return null;
-		}
-            
-		return dataMapAccessor.removeData(name, null);
-		
-	}
-
 	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
 		addFacesListener(listener);
 	}
@@ -755,26 +754,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final int getRows() {
-		return getRows(null);
-	}
-
-	public final int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
-	}
-
-	public final void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
-	}
-
-	public final void setRows(ValueBinding rows) {
-		engine.setProperty(Properties.ROWS, rows);
-	}
-
-	public final boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
-	}
-
 	public final String getVar() {
 		return getVar(null);
 	}
@@ -795,6 +774,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 
 	public final boolean isVarSetted() {
 		return engine.isPropertySetted(Properties.VAR);
+	}
+
+	public final int getRows() {
+		return getRows(null);
+	}
+
+	public final int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	}
+
+	public final void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
+	}
+
+	public final void setRows(ValueBinding rows) {
+		engine.setProperty(Properties.ROWS, rows);
+	}
+
+	public final boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	public final int getFirst() {

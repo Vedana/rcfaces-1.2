@@ -1,0 +1,2 @@
+var _P={LOCK_MESSAGE:"An event is already processing.\nPlease wait !"}
+f_resourceBundle.Define(f_event,_P);

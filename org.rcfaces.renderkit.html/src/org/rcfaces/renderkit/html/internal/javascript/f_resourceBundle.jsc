@@ -1,0 +1,32 @@
+function f_resourceBundle(e){this._I=e}
+f_resourceBundle.prototype.f_get=function(e,t){var f=this,r=arguments,n
+if(r.length<2)return f.f_getParams(e)
+n=[]
+f_core.ti(n,r,1)
+return f.f_getParams(e,n)}
+f_resourceBundle.prototype.f_getParams=function(e,t,n){var l="??",s="'.",c,u=this,a=f_core,o=a.Error,i=f_resourceBundle,r=u._6a,f
+if(!r){if(n!==c)return n
+o(i,"No keys for resourceBundle '"+u._I+s)
+return l+e+l}f=r[e]
+if(f===c){if(n!==c)return n
+o(i,"Unknown key '"+e+"' for resourceBundle '"+u._I+s)
+return l+e+l}if(!t)return f
+return a.cu(f,t)}
+f_resourceBundle.prototype._sp=function(e){var t={},n
+this._6a=t
+for(n in e)t[n]=e[n];}
+f_resourceBundle.Get=function(e,t){var i=null,f=f_resourceBundle,n,r
+if((e instanceof f_class)||(e instanceof f_aspect)||typeof(e.f_getName)=="function")e=e.f_getName()
+if(!e)return i
+n=f.__2
+if(!n){n={}
+f.__2=n}r=n[e]
+if(r)return r
+if(!t){return i}r=new f(e)
+n[e]=r
+return r}
+f_resourceBundle.Define=function(e,t){var n=f_resourceBundle.Get(e,!0)
+n._sp(t)}
+f_resourceBundle.Finalizer=function(){var e
+f_resourceBundle.__2=e}
+f_resourceBundle.f_getName=function(){return"f_resourceBundle"};

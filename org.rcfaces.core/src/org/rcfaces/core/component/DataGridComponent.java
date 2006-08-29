@@ -1,34 +1,33 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.DataColumnComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IDataColumnIterator;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.AbstractGridComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.internal.component.AbstractGridComponent;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IPreferenceCapability;
+import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.component.DataColumnComponent;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class DataGridComponent extends AbstractGridComponent implements 
 	ISelectionEventCapability,
@@ -307,13 +306,6 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
-	public final IMenuIterator listMenus() {
-
-
-		return MenuTools.listMenus(this);
-		
-	}
-
 	public final IMenuComponent getMenu(String menuId) {
 
 
@@ -325,6 +317,13 @@ public class DataGridComponent extends AbstractGridComponent implements
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public final IMenuIterator listMenus() {
+
+
+		return MenuTools.listMenus(this);
 		
 	}
 

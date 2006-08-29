@@ -1,0 +1,3 @@
+var _n={UNKNOWN:-1}
+var _e={f_beginTask:function(e,t){},f_done:function(){},ut:function(e){},f_isCanceled:function(){return this._da},f_cancel:function(){this._da=!0},f_setTaskName:function(e){},f_subTask:function(e){},f_worked:function(e){this.ut(e)}}
+var f_progressMonitor=new f_class("f_progressMonitor",null,_n,_e,f_object);

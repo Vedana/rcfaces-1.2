@@ -1,13 +1,12 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 import javax.faces.el.ValueBinding;
-
 import org.rcfaces.core.component.ButtonComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 public class ImageButtonComponent extends ButtonComponent implements 
 	IImageButtonFamilly {

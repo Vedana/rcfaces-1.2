@@ -1,12 +1,11 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.internal.component.AbstractOutputComponent;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.internal.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 
 public class HelpMessageZoneComponent extends AbstractOutputComponent implements 
 	ITextCapability,

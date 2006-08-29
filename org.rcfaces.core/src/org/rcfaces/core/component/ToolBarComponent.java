@@ -1,18 +1,17 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.tools.ToolBarTools;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.iterator.IToolFolderIterator;
 import org.rcfaces.core.internal.component.AbstractInputComponent;
-import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.internal.tools.ToolBarTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class ToolBarComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,
@@ -66,13 +65,6 @@ public class ToolBarComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public final IMenuIterator listMenus() {
-
-
-		return MenuTools.listMenus(this);
-		
-	}
-
 	public final IMenuComponent getMenu(String menuId) {
 
 
@@ -84,6 +76,13 @@ public class ToolBarComponent extends AbstractInputComponent implements
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public final IMenuIterator listMenus() {
+
+
+		return MenuTools.listMenus(this);
 		
 	}
 
