@@ -1,2 +1,0 @@
-var _P={LOADING_MESSAGE:"Loading ...",RECEIVING_MESSAGE:"Receiving ..."}
-f_resourceBundle.Define(f_waiting,_P);

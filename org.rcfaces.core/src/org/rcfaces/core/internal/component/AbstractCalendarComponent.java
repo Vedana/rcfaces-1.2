@@ -1,20 +1,20 @@
 package org.rcfaces.core.internal.component;
 
-import org.rcfaces.core.internal.converter.WeekDaysConverter;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
 import java.util.Date;
-import org.rcfaces.core.internal.converter.TwoDigitYearConverter;
-import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
 import java.util.Locale;
-import org.rcfaces.core.internal.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.tools.CalendarTools;
-import org.rcfaces.core.internal.converter.DateConverter;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
+import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
+import org.rcfaces.core.internal.converter.DateConverter;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.TwoDigitYearConverter;
+import org.rcfaces.core.internal.converter.WeekDaysConverter;
+import org.rcfaces.core.internal.tools.CalendarTools;
 
 public abstract class AbstractCalendarComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,

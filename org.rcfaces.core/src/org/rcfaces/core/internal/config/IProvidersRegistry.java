@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -16,6 +19,7 @@
  */
 package org.rcfaces.core.internal.config;
 
+import org.apache.commons.digester.Digester;
 import org.rcfaces.core.provider.IProvider;
 
 /**
@@ -26,4 +30,6 @@ import org.rcfaces.core.provider.IProvider;
 public interface IProvidersRegistry {
 
     IProvider getProvider(String id);
+
+    Digester getConfigDigester();
 }

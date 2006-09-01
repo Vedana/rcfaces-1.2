@@ -49,7 +49,7 @@ var __static = {
 	/** 
 	 * @field private static final string	
 	 */
-	_BLANK_IMAGE_URL: "blank.gif",
+	_BLANK_IMAGE_URL: "/blank.gif",
 	
 	/** 
 	 * @field private static final string	

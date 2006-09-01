@@ -557,7 +557,7 @@ var __static = {
 	 */
 	_Inherit: function(obj) {
 		var cls=obj._kclass;
-		f_core.Assert(cls, "Class is NULL !");
+		f_core.Assert(cls, "f_class._Inherit: Class of object '"+obj+"' is null !");
 		
 		f_class.InitializeClass(cls)
 		

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -109,9 +112,10 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.codec.SourceFilter;
 import org.rcfaces.core.internal.util.CameliaVersion;
-import org.rcfaces.core.webapp.ExpirationDate;
-import org.rcfaces.core.webapp.ExpirationHttpServlet;
-import org.rcfaces.core.webapp.URIParameters;
+import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.webapp.ExpirationDate;
+import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.URIParameters;
 import org.rcfaces.renderkit.html.internal.HtmlModulesServlet;
 import org.rcfaces.renderkit.html.internal.IHtmlExternalContext;
 
@@ -126,7 +130,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private static final boolean BUILD_ID_VERSION_SUPPORT = true;
 
-    private static final String DEFAULT_STYLESHEET_URI = "rcfaces/";
+    private static final String DEFAULT_STYLESHEET_URI = "/rcfaces";
 
     private static final String BASE_DIRECTORY = StylesheetsServlet.class
             .getPackage().getName().replace('.', '/') + '/';
@@ -179,7 +183,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private final Map bufferedResponse = new HashMap();
 
-    private final String styleSheetURI;
+    private String styleSheetURI;
 
     private int count404Responses;
 
@@ -196,7 +200,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     private String repositoryVersion;
 
     public StylesheetsServlet() {
-        this(DEFAULT_STYLESHEET_URI);
     }
 
     public StylesheetsServlet(String styleSheetURI) {
@@ -209,6 +212,11 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
      */
     public void init(ServletConfig config) throws ServletException {
+
+        if (styleSheetURI == null) {
+            styleSheetURI = ServletTools.computeResourceURI(config
+                    .getServletContext(), DEFAULT_STYLESHEET_URI, getClass());
+        }
 
         super.init(config);
 
@@ -237,7 +245,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
             if (BUILD_ID_VERSION_SUPPORT) {
                 if (version != null) {
-                    uri += version + "/";
+                    uri += "/" + version;
                 }
             }
 

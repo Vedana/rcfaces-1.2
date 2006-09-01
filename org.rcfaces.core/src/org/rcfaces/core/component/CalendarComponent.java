@@ -1,11 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.ICalendarModeCapability;
-import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.converter.CalendarModeConverter;
-import org.rcfaces.core.internal.component.AbstractCalendarComponent;
+
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.ICalendarModeCapability;
+import org.rcfaces.core.internal.component.AbstractCalendarComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.CalendarModeConverter;
 
 public class CalendarComponent extends AbstractCalendarComponent implements 
 	IBorderCapability,

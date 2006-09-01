@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -29,7 +32,7 @@ import java.net.URL;
 import java.util.Locale;
 
 import org.rcfaces.core.internal.codec.StringAppender;
-import org.rcfaces.core.webapp.IRepository.IContent;
+import org.rcfaces.core.internal.webapp.IRepository.IContent;
 
 
 /**

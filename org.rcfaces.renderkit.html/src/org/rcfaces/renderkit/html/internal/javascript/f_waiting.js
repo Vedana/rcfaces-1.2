@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -34,12 +37,12 @@ var __static = {
 	/**
 	 * @field private static final string
 	 */
-	_WAITING_IMAGE_URL: "waiting/waiting2.gif",
+	_WAITING_IMAGE_URL: "/waiting/waiting2.gif",
 
 	/**
 	 * @field private static final string
 	 */
-	_WAITING_ERROR_IMAGE_URL: "waiting/error.gif",
+	_WAITING_ERROR_IMAGE_URL: "/waiting/error.gif",
 	
 	/**
 	 * @field hidden static final number

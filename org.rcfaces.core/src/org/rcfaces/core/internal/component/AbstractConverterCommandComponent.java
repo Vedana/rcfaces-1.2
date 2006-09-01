@@ -1,12 +1,8 @@
 package org.rcfaces.core.internal.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.component.IConvertValueHolder;
-import org.rcfaces.core.internal.component.AbstractCommandComponent;
 
 public abstract class AbstractConverterCommandComponent extends AbstractCommandComponent implements 
 	IConvertValueHolder {

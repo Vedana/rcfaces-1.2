@@ -21,7 +21,7 @@ var __static = {
 			menuBarItem._items=undefined;
 
 			for(var i=0;i<items.length;i++) {
-				fa_menuCore._DestroyMenuItem(items[i]);
+				fa_menuCore.DestroyMenuItem(items[i]);
 			}			
 		}
 

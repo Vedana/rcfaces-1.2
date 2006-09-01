@@ -6,7 +6,7 @@
  * f_event class extends Object
  *
  * @class public f_event extends Object
- * @author Joel Merlin & Olivier Oeuillot
+ * @author Olivier Oeuillot & Joel Merlin
  * @version $Revision$
  */
 
@@ -133,15 +133,22 @@ var __static = {
 	 */
 	_LOCK_MESSAGE: "Window has been locked.",
 
-	/**
+	/* C'est sur la WINDOW !!!!!!
 	 * @field private static boolean
-	 */
+	 *
 	_EvtLock: undefined,
-
-	/**
+	*/
+	
+	/* C'est sur la WINDOW !!!!
 	 * @field private static boolean
-	 */
+	 *
 	_EvtLockMode: true,
+	*/
+	
+	/**
+	 * @field private static f_event
+	 */
+	_Event: undefined,
 
 
 	// Class public constants
@@ -390,7 +397,7 @@ var __static = {
 		window._EvtLockMode = (set)?true:false;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @return boolean Returns <code>true</code> if lock is setted !
 	 */
 	GetEventLocked: function(showAlert, win) {

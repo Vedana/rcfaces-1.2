@@ -48,10 +48,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 							continue;
 						}
 	
-						var url=bundleName;
-						if (f_env._JsBaseURI) {
-							url=f_env._JsBaseURI+url;
-						}
+						var url=f_env.ComputeJavaScriptURI(bundleName);
 
 						f_core.Debug("f_asyncClassLoader", "Load script '"+bundleName+"' url='"+url+"'.");
 							

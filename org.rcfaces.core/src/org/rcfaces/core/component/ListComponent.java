@@ -1,10 +1,10 @@
 package org.rcfaces.core.component;
 
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IMultipleSelectCapability;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.ComboComponent;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 
 public class ListComponent extends ComboComponent implements 
 	IMultipleSelectCapability,

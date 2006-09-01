@@ -1,20 +1,20 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IBackgroundImageCapability;
-import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
-import org.rcfaces.core.component.capability.IMenuCapability;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.component.AbstractBasicComponent;
+
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.capability.IBackgroundImageCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.internal.component.IAsyncRenderComponent;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.AbstractBasicComponent;
+import org.rcfaces.core.internal.component.IAsyncRenderComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.internal.tools.MenuTools;
 
 public class BoxComponent extends AbstractBasicComponent implements 
 	IBackgroundImageCapability,

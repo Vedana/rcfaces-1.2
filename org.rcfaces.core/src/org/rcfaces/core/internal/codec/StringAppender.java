@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:29  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -40,7 +43,11 @@ public final class StringAppender {
     }
 
     public StringAppender(String str) {
-        this(str.length() + 16);
+        this(str, 16);
+    }
+
+    public StringAppender(String str, int length) {
+        this(str.length() + length);
         append(str);
     }
 

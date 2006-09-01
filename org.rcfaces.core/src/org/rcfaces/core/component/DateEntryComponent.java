@@ -1,21 +1,23 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
-import javax.faces.context.FacesContext;
-import java.util.HashMap;
-import javax.faces.el.ValueBinding;
-import java.util.Date;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IAutoTabCapability;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.manager.IValidationParameters;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.converter.DateConverter;
-import org.rcfaces.core.internal.component.AbstractCalendarComponent;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.AbstractCalendarComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.DateConverter;
+import org.rcfaces.core.internal.manager.IValidationParameters;
 
 public class DateEntryComponent extends AbstractCalendarComponent implements 
 	IRequiredCapability,
@@ -177,16 +179,26 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
 			return map;
 		}
 		
 		Map client=clientMapAccessor.getDataMap(facesContext);
 		if (client==null || client.isEmpty()) {
+		
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
 			return map;
 		}
 		
 		Map fmap=new HashMap(map);
 		if (map.keySet().removeAll(client.keySet())==false) {
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
 			return map;
 		}
 		
@@ -194,7 +206,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 			return Collections.EMPTY_MAP;
 		}
 		
-		if (Constants.LOCK_READ_ONLY_COLLECTIONS) {
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
 			fmap=Collections.unmodifiableMap(fmap);
 		}
 		

@@ -19,7 +19,7 @@ var __static = {
 	/**
 	 * @field private static final string
 	 */
-	_BLANK_IMAGE_URL: "blank.gif",
+	_BLANK_IMAGE_URL: "/blank.gif",
 
 	/**
 	 * @field private static final number
@@ -868,8 +868,38 @@ var __static = {
 	 */
 	_OnUnitKey: function(evt) {
 		var calendar=this._calendar;
-		
-		return f_calendarObject._FocusButton(calendar, this, evt, 1, 1, calendar._unitButtons);
+
+		if (calendar.f_getEventLocked()) {
+			return false;
+		}
+		if (!evt) {
+			evt = f_core.IeGetEvent(this);
+		}		
+
+		switch(evt.keyCode) {
+		case f_key.VK_RIGHT: // FLECHE VERS LA DROITE
+			var buttons=calendar._unitButtons;
+			if (buttons && buttons[1]) {
+				buttons[1].focus();
+			}
+			break;
+
+		case f_key.VK_LEFT: // FLECHE VERS LA GAUCHE
+			var buttons=calendar._unitButtons;
+			if (buttons && buttons[0]) {
+				buttons[0].focus();
+			}
+			break;
+			
+		case f_key.VK_ENTER:
+		case f_key.VK_RETURN:
+		case f_key.VK_SPACE:
+			var delta=this._date; // C'est -1 ou 1 dans ce cas de bouton "UNIT"
+			calendar._onUnitClick(evt, this, delta);
+			break;			
+		}
+
+		return f_core.CancelEvent(evt);
 	},
 	
 	/**
@@ -1138,7 +1168,7 @@ var __prototype = {
 			this._unitLabel=undefined; // TextNode
 			
 			// this._lastUnit=undefined; //  number
-			// this._lastUnitDate=undefined; // date
+			// this._lastUnitDate=undefined; // date			
  		}
 
 		var todayButton=this._todayButton;
@@ -1366,7 +1396,8 @@ var __prototype = {
 		this._todayButton=button;
 	},
 	_createUnitCursor: function(doc, component, className, blankImageURL) {
-		this._unitButtons=new Array();
+		var unitButtons=new Array();
+		this._unitButtons=unitButtons
 
 		var div=doc.createElement("DIV");
 		
@@ -1390,10 +1421,11 @@ var __prototype = {
 		link.className=className+"_prevUnit";
 		link.href=f_core.JAVASCRIPT_VOID;
 		td.appendChild(link);
-		this._unitButtons.push(link);
+		unitButtons.push(link);
 		link.onclick=f_calendarObject._OnPrevUnitClick;
 		link.onkeydown=f_calendarObject._OnUnitKey;
 		link._calendar=this;
+		link._date=-1;
 		
 		var prevUnitLabel=f_resourceBundle.Get(f_calendarObject).f_get("PREVIOUS_UNIT");
 		var name=doc.createTextNode(prevUnitLabel);
@@ -1432,10 +1464,11 @@ var __prototype = {
 		link.className=className+"_nextUnit";
 		link.href=f_core.JAVASCRIPT_VOID;
 		td.appendChild(link);
-		this._unitButtons.push(link);
+		unitButtons.push(link);
 		link.onclick=f_calendarObject._OnNextUnitClick;
 		link.onkeydown=f_calendarObject._OnUnitKey;
 		link._calendar=this;
+		link._date=1;
 				
 		var img=doc.createElement("IMG");
 		img.width=16;

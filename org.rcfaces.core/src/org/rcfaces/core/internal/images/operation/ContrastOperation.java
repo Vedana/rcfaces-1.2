@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -27,9 +30,5 @@ public class ContrastOperation extends ContrastBrithnessOperation {
 
     protected String getDefaultPropertyName() {
         return getScalePropertyName();
-    }
-
-    public String getName() {
-        return "Contrast operation";
     }
 }

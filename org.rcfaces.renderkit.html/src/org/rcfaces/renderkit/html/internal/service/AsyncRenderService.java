@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -75,7 +78,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
@@ -238,16 +241,20 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
      * @author Olivier Oeuillot
      * @version $Revision$
      */
-    private static final class InteractiveBuffer implements Externalizable {
+    public static final class InteractiveBuffer implements Externalizable {
 
         // Pour debug !
         private transient int id;
 
-        private transient final String content;
+        private String content;
 
-        private transient final byte gzipped[];
+        private byte gzipped[];
 
-        private transient final boolean useGzip;
+        private boolean useGzip;
+
+        public InteractiveBuffer() {
+            // Pour la déserialisation !
+        }
 
         public InteractiveBuffer(BodyContent bodyContent, boolean useGzip) {
             this.useGzip = useGzip;
@@ -285,13 +292,18 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 if (gzipped.length < length) {
                     content = null;
 
-                    LOG.info("Compression: original=" + length + " z="
-                            + gzipped.length + " ("
-                            + (gzipped.length * 100 / length) + " %)");
+                    if (LOG.isInfoEnabled()) {
+                        LOG.info("Compression: original=" + length + " z="
+                                + gzipped.length + " ("
+                                + (gzipped.length * 100 / length) + " %)");
+                    }
                 } else {
-                    LOG
-                            .info("Compression: bad performance, cancel compression ! ("
-                                    + (gzipped.length * 100 / length) + " %)");
+                    if (LOG.isInfoEnabled()) {
+                        LOG
+                                .info("Compression: bad performance, cancel compression ! ("
+                                        + (gzipped.length * 100 / length)
+                                        + " %)");
+                    }
                     gzipped = null;
                     content = bodyContent.getString();
                 }

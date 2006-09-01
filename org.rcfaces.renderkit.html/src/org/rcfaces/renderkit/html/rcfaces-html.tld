@@ -30,6 +30,10 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>invalidBrowserPageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>attributesLocale</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>

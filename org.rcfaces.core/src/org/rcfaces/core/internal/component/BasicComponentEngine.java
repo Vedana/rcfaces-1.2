@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -90,9 +93,6 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.internal.Constants;
-
 
 /**
  * @author Olivier Oeuillot
@@ -760,11 +760,11 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                 map.put(key, value);
             }
 
-            if (Constants.LOCK_READ_ONLY_COLLECTIONS) {
-                map = Collections.unmodifiableMap(map);
-            }
-
             return map;
         }
+    }
+
+    public IStateChildrenList createStateChildrenList() {
+        return new BasicStateChildrenList();
     }
 }

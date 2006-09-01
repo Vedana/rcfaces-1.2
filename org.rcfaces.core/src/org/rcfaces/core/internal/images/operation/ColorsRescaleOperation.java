@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -27,7 +30,6 @@ import java.util.Map;
 import javax.faces.FacesException;
 
 import org.rcfaces.core.image.AbstractBufferedIndexedImageOperation;
-
 
 /**
  * 
@@ -166,10 +168,6 @@ public class ColorsRescaleOperation extends
         }
 
         super.filter0(imageOperation, source, destination);
-    }
-
-    public String getName() {
-        return "Rescale operation";
     }
 
     public IndexColorModel filter(RasterOp imageOperation,

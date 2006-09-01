@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:29  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -93,10 +96,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.config.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.provider.IURLRewritingProvider;
-
 
 /**
  * @author Olivier Oeuillot
@@ -281,7 +284,7 @@ public abstract class AbstractCameliaRenderer extends Renderer {
     public static final String rewriteURL(
             IComponentRenderContext componentRenderContext, int type,
             String attributeName, String url, String rootURL) {
-        if (AbstractURLRewritingProvider.URL_REWRITING_SUPPORT == false) {
+        if (Constants.URL_REWRITING_SUPPORT == false) {
             return url;
         }
 

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -87,7 +90,7 @@ public class JavaScriptRepository extends AbstractRepository implements
 
     private static final IClass[] CLASS_EMPTY_ARRAY = new IClass[0];
 
-    private static final String JAVASCRIPT_BASE_URI = "org.rfaces.core.repository.JAVASCRIPT_BASE_URI";
+    private static final String JAVASCRIPT_BASE_URI_PROPERTY = "org.rfaces.core.repository.JAVASCRIPT_BASE_URI";
 
     private final Map classByName = new HashMap();
 
@@ -387,7 +390,7 @@ public class JavaScriptRepository extends AbstractRepository implements
 
     public String getBaseURI(IExternalContext externalContext) {
         Map request = externalContext.getExternalContext().getRequestMap();
-        String uri = (String) request.get(JAVASCRIPT_BASE_URI);
+        String uri = (String) request.get(JAVASCRIPT_BASE_URI_PROPERTY);
         if (uri != null) {
             return uri;
         }
@@ -395,11 +398,14 @@ public class JavaScriptRepository extends AbstractRepository implements
         uri = servletURI;
 
         if (repositoryVersion != null && repositoryVersion.length() > 0) {
-            uri += repositoryVersion + "/";
+            uri += "/" + repositoryVersion;
         }
 
-        request.put(JAVASCRIPT_BASE_URI, uri);
+        request.put(JAVASCRIPT_BASE_URI_PROPERTY, uri);
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Set Javascript repository URL to '" + uri + "'.");
+        }
         return uri;
     }
-
 }

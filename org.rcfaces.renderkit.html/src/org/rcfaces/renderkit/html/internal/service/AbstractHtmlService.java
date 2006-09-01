@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -40,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.service.AbstractService;
-import org.rcfaces.core.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
 

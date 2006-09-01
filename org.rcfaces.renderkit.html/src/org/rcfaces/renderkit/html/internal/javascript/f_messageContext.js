@@ -277,7 +277,7 @@ f_messageContext._UNKNOWN_COMPONENT_ID="?";
 
 
 /**
- * @field public static final
+ * @method public static final
  */
 f_messageContext.Get=function(component) {
 	f_core.Assert(component && component.nodeType, "f_messageContext.Get: Bad component parameter ! ("+component+")");
@@ -299,7 +299,7 @@ f_messageContext.Get=function(component) {
 }
 
 /**
- * @field public static final
+ * @method public static final
  */
 f_messageContext.f_getName=function() {
 	return "f_messageContext";

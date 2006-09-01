@@ -377,10 +377,7 @@ f_classLoader.prototype._loadBundle=function(doc, bundleName) {
 		return true;
 	}
 	
-	var url=bundleName;
-	if (f_env._JsBaseURI) {
-		url=f_env._JsBaseURI+url;
-	}
+	var url=f_env.ComputeJavaScriptURI(bundleName);
 
 	f_core.Info("f_classLoader", "Load '"+bundleName+"' located at url '"+url+"'.");
 
@@ -518,6 +515,7 @@ f_classLoader.prototype._vinit = function(obj, node) {
 	return o;
 },
 f_classLoader.prototype._init = function(obj, ignoreNotFound) {
+	f_core.Assert(obj, "f_classLoader._init: Obj parameter is invalid ("+obj+")");
 	
 	if (typeof(obj)=="string") {
 		var id=obj;

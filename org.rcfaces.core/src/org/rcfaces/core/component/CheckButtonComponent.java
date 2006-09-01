@@ -1,15 +1,16 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ISelectedCapability;
-import org.rcfaces.core.internal.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ITextCapability;
+
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectedCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.AbstractInputComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 
 public class CheckButtonComponent extends AbstractInputComponent implements 
 	ITextCapability,

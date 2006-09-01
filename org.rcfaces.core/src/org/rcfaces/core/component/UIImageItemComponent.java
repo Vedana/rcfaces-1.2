@@ -1,14 +1,14 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.component.AbstractItemComponent;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
+
+import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.component.AbstractItemComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
 
 public class UIImageItemComponent extends AbstractItemComponent implements 
 	IVisibilityCapability,

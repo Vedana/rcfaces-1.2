@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 18:12:09  oeuillot
- * Refonte du systeme de packaging et de génération
+ * Refonte du systeme de packaging et de gï¿½nï¿½ration
  *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
@@ -42,6 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 
@@ -55,11 +59,13 @@ public class ResourcesServlet extends HttpServlet {
 
     private static final Log LOG = LogFactory.getLog(ResourcesServlet.class);
 
-    private static final String DEFAULT_RESOURCES_URI = "rcfaces/";
+    private static final String DEFAULT_RESOURCES_URI = "/rcfaces";
 
     private Servlet javascriptServlet;
 
     private Servlet styleSheetServlet;
+
+    private String resourcesURI;
 
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -85,6 +91,9 @@ public class ResourcesServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
+        resourcesURI = ServletTools.computeResourceURI(config
+                .getServletContext(), DEFAULT_RESOURCES_URI, getClass());
+
         javascriptServlet = createJavaScriptServlet();
 
         javascriptServlet.init(new ResourcesServletConfig(config,
@@ -97,11 +106,11 @@ public class ResourcesServlet extends HttpServlet {
     }
 
     private Servlet createStyleSheetServlet() {
-        return new StylesheetsServlet(DEFAULT_RESOURCES_URI);
+        return new StylesheetsServlet(resourcesURI);
     }
 
     protected Servlet createJavaScriptServlet() {
-        return new JavaScriptRepositoryServlet(DEFAULT_RESOURCES_URI);
+        return new JavaScriptRepositoryServlet(resourcesURI);
     }
 
     /**

@@ -117,6 +117,11 @@ var f_core = {
 	Debug_Mode:	false,
 
 	/**
+	 * @field private static
+	 */
+	_AjaxParametersUpdater: undefined,
+	
+	/**
 	 * Throws a message if the expression is true.
 	 *
 	 * @method public static final

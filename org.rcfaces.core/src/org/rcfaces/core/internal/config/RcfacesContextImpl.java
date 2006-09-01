@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -52,10 +55,13 @@ import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -71,6 +77,7 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.images.ImageFiltersRepositoryImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
@@ -94,7 +101,8 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
 
     private static final Package[] KERNEL_CONFIG_FILENAMES = new Package[] {
             RcfacesContext.class.getPackage(),
-            RcfacesContextImpl.class.getPackage()
+            RcfacesContextImpl.class.getPackage(),
+            ImageFiltersRepositoryImpl.class.getPackage()
     // HtmlRenderKit.class.getPackage()
     };
 
@@ -242,6 +250,8 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
         LOG.debug("Declare configurations rules.");
         configureRules(digester);
 
+        List urls = new ArrayList(32);
+
         LOG.debug("Search configuration files ...");
         for (int i = 0; i < KERNEL_CONFIG_FILENAMES.length; i++) {
             Package pkg = KERNEL_CONFIG_FILENAMES[i];
@@ -249,16 +259,15 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
             String resourceName = pkg.getName().replace('.', '/') + '/'
                     + RCFACES_CONFIG_FILENAME;
 
-            InputStream inputStream = getClass().getClassLoader()
-                    .getResourceAsStream(resourceName);
+            URL url = getClass().getClassLoader().getResource(resourceName);
 
-            LOG.debug("Load configuration file '" + resourceName + "' => "
-                    + ((inputStream != null) ? "exists" : "ignore"));
-            if (inputStream == null) {
+            LOG.debug("Configuration file '" + resourceName + "' => "
+                    + ((url != null) ? "exists" : "ignore"));
+            if (url == null) {
                 continue;
             }
 
-            loadConfig(digester, inputStream, resourceName);
+            urls.add(url);
         }
 
         ClassLoader contextClassLoader = Thread.currentThread()
@@ -269,67 +278,91 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
             try {
                 enumeration = contextClassLoader
                         .getResources(RCFACES_RESOURCE_NAME);
+
             } catch (IOException e) {
                 LOG.error("Can not scan resources '" + RCFACES_RESOURCE_NAME
                         + "' into context classloader.");
             }
 
-            for (; enumeration.hasMoreElements();) {
-                URL url = (URL) enumeration.nextElement();
+            if (enumeration != null) {
+                for (; enumeration.hasMoreElements();) {
+                    URL url = (URL) enumeration.nextElement();
 
-                LOG.debug("Rcfaces resource in meta-inf detected : " + url);
+                    LOG.debug("Rcfaces resource in meta-inf detected : " + url);
 
-                InputStream inputStream;
-                try {
-                    inputStream = url.openStream();
-
-                } catch (IOException e) {
-                    LOG.error("Can not open url '" + url + "'.", e);
-                    continue;
+                    urls.add(url);
                 }
-
-                if (inputStream == null) {
-                    LOG.debug("Configuration file '" + url
-                            + "' does not exist.");
-                    continue;
-                }
-
-                loadConfig(digester, inputStream, url.toString());
             }
 
             String configFilenames = externalContext
                     .getInitParameter(CAMELIA_CONFIG_FILES_PARAMETER);
 
-            LOG.debug("Value of '" + CAMELIA_CONFIG_FILES_PARAMETER
-                    + "' property is '" + configFilenames + "'.");
-
             if (configFilenames != null) {
+                LOG.debug("Value for parameter '"
+                        + CAMELIA_CONFIG_FILES_PARAMETER + "' detected : '"
+                        + configFilenames + "'.");
+
                 StringTokenizer st = new StringTokenizer(configFilenames,
                         ",;\t \r\n");
 
                 for (; st.hasMoreTokens();) {
                     String filename = st.nextToken();
 
-                    InputStream inputStream = contextClassLoader
-                            .getResourceAsStream(filename);
+                    URL url = contextClassLoader.getResource(filename);
 
-                    if (inputStream == null) {
-                        inputStream = externalContext
-                                .getResourceAsStream(filename);
+                    if (url == null) {
+                        try {
+                            url = externalContext.getResource(filename);
+
+                        } catch (MalformedURLException ex) {
+                            LOG.error("Malformed url for filename '" + filename
+                                    + "'.", ex);
+                        }
                     }
 
-                    if (inputStream == null) {
+                    if (url == null) {
                         LOG.debug("Configuration file '" + filename
                                 + "' does not exist.");
                         continue;
                     }
 
-                    loadConfig(digester, inputStream, filename);
+                    urls.add(url);
                 }
             }
         }
 
+        loadConfigurations(digester, urls);
+
+        completeConfiguration(urls);
+
         LOG.info("Rcfaces config loaded.");
+    }
+
+    private void loadConfigurations(Digester digester, List urls) {
+
+        if (urls.isEmpty()) {
+            return;
+        }
+
+        for (Iterator it = urls.iterator(); it.hasNext();) {
+            URL url = (URL) it.next();
+
+            InputStream inputStream;
+            try {
+                inputStream = url.openStream();
+
+            } catch (IOException e) {
+                LOG.error("Can not open url '" + url + "'.", e);
+                continue;
+            }
+
+            if (inputStream == null) {
+                LOG.debug("Configuration file '" + url + "' does not exist.");
+                continue;
+            }
+
+            loadConfig(digester, inputStream, url.toString());
+        }
     }
 
     private void loadConfig(Digester digester, InputStream inputStream,
@@ -340,15 +373,18 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
         try {
             digester.parse(inputStream);
 
-        } catch (Exception e) {
-            LOG.error("Can not parse '" + resourceName + "'.", e);
+        } catch (Throwable th) {
+            LOG.error("Can not parse Rcfaces config file '" + resourceName
+                    + "'.", th);
+            return;
 
         } finally {
             try {
                 inputStream.close();
 
             } catch (IOException e) {
-                LOG.error("Can not close '" + resourceName + "'.", e);
+                LOG.error("Can not close Rcfaces config file '" + resourceName
+                        + "'.", e);
             }
         }
 
@@ -362,6 +398,20 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
         ((ProvidersRegistry) getProvidersRegistry()).configureRules(digester);
         ((BorderRenderersRegistryImpl) getBorderRenderersRegistry())
                 .configureRules(digester);
+    }
+
+    private void completeConfiguration(final List urls) {
+
+        IProvidersConfigurator providersConfigurator = new IProvidersConfigurator() {
+
+            public void parseConfiguration(Digester digester) {
+                loadConfigurations(digester, urls);
+            }
+
+        };
+
+        ((ProvidersRegistry) getProvidersRegistry())
+                .completeConfiguration(providersConfigurator);
     }
 
     protected void initializeConfigs(ExternalContext externalContext) {

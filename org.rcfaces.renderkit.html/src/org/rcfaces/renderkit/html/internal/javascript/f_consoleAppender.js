@@ -526,7 +526,7 @@ var __prototype = {
 			img.width=16;
 			img.height=16;
 			img.title="Permanently delete all entries";
-			img.src=f_env.GetStyleSheetBase()+"consoleAppender/delete.gif";
+			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/delete.gif";
 			this._clearButton=img;
 			
 			var img=doc.createElement("IMG");
@@ -537,7 +537,7 @@ var __prototype = {
 			img.width=16;
 			img.height=16;
 			img.title="Shows/hides all Errors";
-			img.src=f_env.GetStyleSheetBase()+"consoleAppender/error.gif";
+			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/error.gif";
 			this._errorButton=img;
 			
 			var img=doc.createElement("IMG");
@@ -548,7 +548,7 @@ var __prototype = {
 			img.width=16;
 			img.height=16;
 			img.title="Shows/hides all Warnings";
-			img.src=f_env.GetStyleSheetBase()+"consoleAppender/warning.gif";
+			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/warning.gif";
 			this._warningButton=img;
 			
 			var img=doc.createElement("IMG");
@@ -559,7 +559,7 @@ var __prototype = {
 			img.width=16;
 			img.height=16;
 			img.title="Shows/hides all Infos";
-			img.src=f_env.GetStyleSheetBase()+"consoleAppender/info.gif";
+			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/info.gif";
 			this._infoButton=img;
 			
 			var img=doc.createElement("IMG");
@@ -570,7 +570,7 @@ var __prototype = {
 			img.width=16;
 			img.height=16;
 			img.title="Shows/hides all Debugs";
-			img.src=f_env.GetStyleSheetBase()+"consoleAppender/debug.gif";
+			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/debug.gif";
 			this._debugButton=img;
 		}
 		
@@ -640,7 +640,7 @@ var __prototype = {
 			url="button.gif";
 		}
 		
-		this._button.src=f_env.GetStyleSheetBase()+"consoleAppender/"+url;
+		this._button.src=f_env.GetStyleSheetBase()+"/consoleAppender/"+url;
 	},
 	_updateSizes: function() {
 		var consoleStyle=this._console.style;

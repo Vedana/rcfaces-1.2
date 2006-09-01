@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:26  oeuillot
  * Renommage  en rcfaces
  *
@@ -18,12 +21,12 @@ var __static = {
 	/**
 	 * @field private static final string
 	 */
-	_IMAGE: "helpButton/helpButton.gif",
+	_IMAGE: "/helpButton/helpButton.gif",
 
 	/**
 	 * @field private static final string
 	 */
-	_HOVER: "helpButton/helpButtonHover.gif"
+	_HOVER: "/helpButton/helpButtonHover.gif"
 }
 
 var __prototype = {

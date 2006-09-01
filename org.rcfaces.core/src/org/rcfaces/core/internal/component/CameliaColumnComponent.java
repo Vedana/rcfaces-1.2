@@ -5,26 +5,18 @@ package org.rcfaces.core.internal.component;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
-
-import javax.faces.convert.Converter;
-import org.rcfaces.core.internal.component.IConvertValueHolder;
-
+import javax.faces.render.Renderer;
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.CameliaComponents;
-import org.rcfaces.core.internal.component.TemplatesEngine;
-import org.rcfaces.core.internal.component.IComponentEngine;
-import org.rcfaces.core.internal.component.IFactory;
-import org.rcfaces.core.internal.component.StateIdChildrenList;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
@@ -39,7 +31,7 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 
 	protected final transient IComponentEngine engine;
 
-	private transient StateIdChildrenList children;
+	private transient IStateChildrenList stateChildrenList;
 
 
 	protected CameliaColumnComponent() {
@@ -187,23 +179,31 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 	 * @see javax.faces.component.UIComponent#getChildren()
 	 */
 	public final List getChildren() {
+		if (Constants.STATE_CHILDREN_LIST_ENABLED==false) {
+			return super.getChildren();
+		}
+		
 		List list = super.getChildren();
 
-		if (children == null) {
-			children = new StateIdChildrenList();
+		if (stateChildrenList == null) {
+			stateChildrenList = engine.createStateChildrenList();
 		}
 
-		children.setChildren(list);
+		stateChildrenList.setChildren(list);
 
-		return children;
+		return stateChildrenList;
 	}
 
-	public final int getContainerStateId() {
-		if (children == null) {
+	public final int getChildrenListState() {
+		if (Constants.STATE_CHILDREN_LIST_ENABLED==false) {
+			throw new UnsupportedOperationException("STATE_CHILDREN_LIST_ENABLED=false");
+		}
+
+		if (stateChildrenList == null) {
 			return 0;
 		}
 
-		return children.getStateId();
+		return stateChildrenList.getState();
 	}
 
 	public final Object getTransientAttribute(String name) {
@@ -245,7 +245,7 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait référence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait rï¿½fï¿½rence qu'a des ActionEvent
 		if (e instanceof ActionEvent) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

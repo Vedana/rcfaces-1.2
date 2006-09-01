@@ -187,7 +187,7 @@ var __prototype = {
 			var data=this._clientDatas;
 			for(var name in modifiedData) {				
 				var type=modifiedData[name];
-				if (type==f_component._REMOVED_PROPERTY) {
+				if (type==fa_clientData._REMOVED_PROPERTY) {
 					v.push("R", name);
 					continue;
 				}

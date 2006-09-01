@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -28,6 +31,7 @@ import javax.faces.context.ExternalContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.codec.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractExternalContext;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
@@ -113,23 +117,35 @@ public class HtmlExternalContextImpl extends AbstractExternalContext implements
     }
 
     public final String getStyleSheetURI(String uri) {
+        String ret = null;
+        if (uri != null) {
+            StringAppender u = new StringAppender(styleSheetURI,
+                    uri.length() + 2);
 
-        String u = styleSheetURI;
+            if (uri != null && uri.length() > 0) {
+                if (uri.startsWith("/") == false) {
+                    u.append('/');
 
-        if (uri != null && uri.startsWith("/")) {
-            uri = uri.substring(1);
+                } else if (u.charAt(u.length() - 1) != '/') {
+                    u.append('/');
+                }
+                u.append(uri);
+            } else {
+                u.append('/');
+            }
+
+            ret = u.toString();
+        } else {
+            ret = styleSheetURI;
         }
-        if (uri != null && uri.length() > 0) {
-            u += uri;
+
+        ret = getBaseURI(ret);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Compute stylesheet uri '" + uri + "' => '" + ret + "'.");
         }
 
-        u = getBaseURI() + u;
-
-        if (ENCODE_URI) {
-            u = externalContext.encodeResourceURL(u);
-        }
-
-        return u;
+        return ret;
     }
 
     public final String getBaseURI() {
@@ -137,35 +153,59 @@ public class HtmlExternalContextImpl extends AbstractExternalContext implements
             return baseURI;
         }
 
-        baseURI = externalContext.getRequestContextPath();
+        String contextPath = externalContext.getRequestContextPath();
+        baseURI = contextPath;
 
-        if (baseURI.endsWith("/") == false) {
-            baseURI += "/";
+        if (baseURI.endsWith("/")) {
+            baseURI.substring(0, baseURI.length() - 1);
         }
 
         if (baseURI.equals(baseHREF)) {
             baseURI = "";
         }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Set baseURI to '" + baseURI + "' (contextPath='"
+                    + contextPath + "').");
+        }
+
         return baseURI;
     }
 
     public String getBaseURI(String uri) {
-        String u = getBaseURI();
+        String ret;
+        if (uri == null) {
+            ret = getBaseURI();
 
-        if (uri != null && uri.startsWith("/")) {
-            uri = uri.substring(1);
-        }
+        } else {
+            StringAppender u = new StringAppender(getBaseURI(),
+                    uri.length() + 2);
 
-        if (uri != null && uri.length() > 0) {
-            u += uri;
+            if (uri != null && uri.length() > 0) {
+                if (uri.charAt(0) != '/') {
+                    u.append('/');
+
+                } else if (u.charAt(u.length() - 1) == '/') {
+                    u.setLength(u.length() - 1);
+                }
+
+                u.append(uri);
+            } else {
+                u.append('/');
+            }
+
+            ret = u.toString();
         }
 
         if (ENCODE_URI) {
-            u = externalContext.encodeResourceURL(u);
+            ret = externalContext.encodeResourceURL(ret);
         }
 
-        return u;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Compute uri '" + uri + "' => '" + ret + "'.");
+        }
+
+        return ret;
     }
 
     public boolean isFlatIdentifierEnabled() {
@@ -216,8 +256,8 @@ public class HtmlExternalContextImpl extends AbstractExternalContext implements
 
     public void changeBaseHREF(String baseHREF) {
         if (baseHREF != null && baseHREF.length() > 0) {
-            if (baseHREF.endsWith("/") == false) {
-                baseHREF += "/";
+            if (baseHREF.endsWith("/")) {
+                baseHREF = baseHREF.substring(0, baseHREF.length() - 1);
             }
             if (baseHREF.startsWith("/") == false) {
                 baseHREF = "/" + baseHREF;

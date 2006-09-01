@@ -14,12 +14,12 @@ var __static = {
 	/**
 	 * @field private static final string
 	 */
-	_COLLAPSED_IMAGE_URL: "expandBar/arrow_collapsed.gif",
+	_COLLAPSED_IMAGE_URL: "/expandBar/arrow_collapsed.gif",
 
 	/**
 	 * @field private static final string
 	 */
-	_EXPANDED_IMAGE_URL: "expandBar/arrow_expanded.gif",
+	_EXPANDED_IMAGE_URL: "/expandBar/arrow_expanded.gif",
 
 	/**
 	 * @method private static

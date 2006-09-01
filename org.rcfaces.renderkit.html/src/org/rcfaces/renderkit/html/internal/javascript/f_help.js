@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -73,7 +76,7 @@ var __static = {
 	_Window: undefined,
 
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	SetHelpMessageZone: function(elt) {
 		if (!f_help._HelpZone && !elt) {
@@ -86,15 +89,15 @@ var __static = {
 		}
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	GetHelpMessageZone: function() {
 		return f_help._HelpZone;
 	},
 	/**
-	 * @method private static final
+	 * @method hidden static
 	 */
-	_Install: function() {
+	Install: function() {
 		if (f_help._Installed) {
 			return;
 		}	
@@ -168,10 +171,16 @@ var __static = {
 			var id = f_env.Get("WINHELP_ID", f_help._ID);
 			var w = f_env.Get("WINHELP_W", f_help._W);
 			var h = f_env.Get("WINHELP_H", f_help._H);
-			var x = f_env.Get("WINHELP_W", f_help._X);
-			var y = f_env.Get("WINHELP_W", f_help._Y);
+			var x = f_env.Get("WINHELP_X", f_help._X);
+			var y = f_env.Get("WINHELP_Y", f_help._Y);
 			var f = f_env.Get("WINHELP_FEATURES", f_help._F);
-			win = f_core._OpenWindow(url,id,f,x,y,w,h);
+			win = f_core.OpenWindow(window, { 
+				url: url,
+				target: id,
+				x: x,
+				y: y,
+				width: w,
+				height: h });
 			
 			f_help._Window = win;
 		}

@@ -1,11 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.AbstractInputComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class ComboComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,

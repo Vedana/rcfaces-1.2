@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -113,8 +116,8 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.log.LogService;
 import org.rcfaces.core.internal.tools.ContextTools;
-import org.rcfaces.core.webapp.IRepository;
-import org.rcfaces.core.webapp.IRepository.IFile;
+import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
@@ -592,6 +595,17 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
         int pred = 0;
 
+        String requestURI = AbstractJavaScriptRenderer.getRequestURL(
+                facesContext, facesContext.getViewRoot());
+        if (requestURI != null) {
+            for (; pred > 0; pred--) {
+                writer.write(',').writeNull();
+            }
+            writer.write(',').writeString(requestURI);
+        } else {
+            pred++;
+        }
+
         String jsBaseURI = repository.getBaseURI(externalContext);
         if (jsBaseURI != null) {
             jsBaseURI = renderExternalContext.getBaseURI(jsBaseURI);
@@ -606,23 +620,12 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         }
 
         String styleSheetURI = renderExternalContext.getStyleSheetURI(null);
-        if (styleSheetURI != null) {
+        if (styleSheetURI != null && styleSheetURI.equals(jsBaseURI) == false) {
             for (; pred > 0; pred--) {
                 writer.write(',').writeNull();
             }
 
             writer.write(',').writeString(styleSheetURI);
-        } else {
-            pred++;
-        }
-
-        String requestURI = AbstractJavaScriptRenderer.getRequestURL(
-                facesContext, facesContext.getViewRoot());
-        if (requestURI != null) {
-            for (; pred > 0; pred--) {
-                writer.write(',').writeNull();
-            }
-            writer.write(',').writeString(requestURI);
         } else {
             pred++;
         }

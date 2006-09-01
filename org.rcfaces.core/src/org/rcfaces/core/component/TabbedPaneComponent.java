@@ -1,14 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.CardBoxComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClosableCapability;
+import org.rcfaces.core.component.capability.ICloseEventCapability;
+import org.rcfaces.core.component.iterator.ITabIterator;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.TabbedPaneTools;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.IClosableCapability;
-import org.rcfaces.core.component.iterator.ITabIterator;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.TabComponent;
-import org.rcfaces.core.component.capability.ICloseEventCapability;
 
 public class TabbedPaneComponent extends CardBoxComponent implements 
 	ICloseEventCapability,

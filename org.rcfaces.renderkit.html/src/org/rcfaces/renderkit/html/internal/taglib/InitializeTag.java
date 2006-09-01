@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -135,14 +138,16 @@ import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.config.AbstractURLRewritingProvider;
+import org.rcfaces.core.internal.images.ImageFiltersRepository;
+import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
 import org.rcfaces.core.internal.renderkit.IExternalContext;
+import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.webapp.IRepository.IContext;
 import org.rcfaces.core.provider.IURLRewritingProvider;
-import org.rcfaces.core.webapp.ExpirationHttpServlet;
-import org.rcfaces.core.webapp.IRepository;
-import org.rcfaces.core.webapp.IRepository.IContext;
-import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderKit;
 import org.rcfaces.renderkit.html.internal.IHtmlExternalContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -164,15 +169,15 @@ public class InitializeTag extends
 
     private static final String META_DATA_INITIALIZED_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.META_DATA_INITIALIZED";
 
-    private static final String DISABLE_IE_IMAGE_BAR_ATTRIBUTE = Constants
+    private static final String DISABLE_IE_IMAGE_BAR_PARAMETER = Constants
             .getPackagePrefix()
             + ".DISABLE_IE_IMAGE_BAR";
 
-    private static final String DISABLED_COOKIES_PAGE_URL_PROPERTY = Constants
+    private static final String DISABLED_COOKIES_PAGE_URL_PARAMETER = Constants
             .getPackagePrefix()
             + ".DISABLED_COOKIES_PAGE_URL";
 
-    private static final String DISABLED_SCRIPT_PAGE_URL_PROPERTY = Constants
+    private static final String DISABLED_SCRIPT_PAGE_URL_PARAMETER = Constants
             .getPackagePrefix()
             + ".DISABLED_SCRIPT_PAGE_URL";
 
@@ -182,9 +187,17 @@ public class InitializeTag extends
 
     private static final String MULTI_WINDOW_FILENAME = "f_multiWindow.js";
 
-    public static final String MULTI_WINDOW_ATTRIBUTE = "org.rcfaces.core.MULTI_WINDOW_MODE";
+    public static final String MULTI_WINDOW_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".MULTI_WINDOW_MODE";
 
     private static final String NONE_IMAGE_URL = "none";
+
+    private static final String INVALID_BROWSER_PAGE_URL_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".INVALID_BROWSER_PAGE_URL";
+
+    private static boolean firstLog = true;
 
     private boolean symbolsInitialized = false;
 
@@ -204,11 +217,15 @@ public class InitializeTag extends
 
     private String disabledScriptPageURL;
 
+    private String invalidBrowserPageURL;
+
     private Map symbols = null;
 
     private String defaultDisabledCookiesPageURL;
 
     private String defaultDisabledScriptPageURL;
+
+    private String defaultInvalidBrowserPageURL;
 
     private IHtmlExternalContext htmlExternalContext;
 
@@ -230,6 +247,13 @@ public class InitializeTag extends
         }
         if ("false".equals(disabledScriptPageURL)) {
             disabledScriptPageURL = null;
+        }
+
+        if (invalidBrowserPageURL == null) {
+            invalidBrowserPageURL = defaultInvalidBrowserPageURL;
+        }
+        if ("false".equals(invalidBrowserPageURL)) {
+            invalidBrowserPageURL = null;
         }
 
         setScriptType(IHtmlRenderContext.JAVASCRIPT_TYPE);
@@ -320,11 +344,7 @@ public class InitializeTag extends
             }
 
             if (disabledScriptPageURL != null) {
-                writer.println("<NOSCRIPT>");
-                writer.print("<META http-equiv=\"Refresh\" content=\"0; URL=");
-                URLFormCodec.writeURL(writer, disabledScriptPageURL);
-                writer.println("\" />");
-                writer.println("</NOSCRIPT>");
+                writeDisabledScriptPageURL(facesContext, writer);
             }
 
             IRepository repository = JavaScriptRepositoryServlet
@@ -427,7 +447,7 @@ public class InitializeTag extends
         String original = favoriteImageURL;
         IURLRewritingProvider urlRewritingProvider = null;
         IURLRewritingProvider.ImageInformation favoriteImageOperation = null;
-        if (AbstractURLRewritingProvider.URL_REWRITING_SUPPORT) {
+        if (Constants.URL_REWRITING_SUPPORT) {
             urlRewritingProvider = AbstractURLRewritingProvider
                     .getInstance(facesContext.getExternalContext());
 
@@ -446,46 +466,54 @@ public class InitializeTag extends
             }
         }
 
-        String favoriteIco = null;
-        IURLRewritingProvider.ImageInformation favoriteIcoImageOperation = null;
+        String favoriteIcoImageURL = null;
+        IURLRewritingProvider.ImageInformation favoriteIcoImageInformation = null;
         if (urlRewritingProvider != null) {
-            favoriteIcoImageOperation = new IURLRewritingProvider.ImageInformation(
+            favoriteIcoImageInformation = new IURLRewritingProvider.ImageInformation(
                     favoriteImageOperation);
 
-            favoriteIco = urlRewritingProvider.computeURL(facesContext, null,
-                    IURLRewritingProvider.IMAGE_URL_TYPE, "favoriteImageURL",
+            favoriteIcoImageURL = urlRewritingProvider.computeURL(facesContext,
+                    null, IURLRewritingProvider.IMAGE_URL_TYPE,
+                    "favoriteImageURL",
                     // IURLRewritingProvider.URL_REWRITING_PROVIDER_ID
-                    favoriteImageURL, null, favoriteIcoImageOperation);
+                    IEFavoriteIconOperation.ID
+                            + ImageFiltersRepository.URL_REWRITING_SEPARATOR,
+                    original, favoriteIcoImageInformation);
         }
 
-        if (favoriteIco != null) {
+        if (favoriteIcoImageURL != null) {
             writer.print("<LINK rel=\"SHORTCUT ICON\"");
 
-            String favoriteIcoMimeType = favoriteIcoImageOperation
-                    .getMimeType();
-            if (favoriteIcoMimeType != null) {
-                writer.print(" type=\"");
-                writer.print(favoriteIcoMimeType);
-                writer.print('\"');
+            if (favoriteIcoImageInformation != null) {
+                String favoriteIcoMimeType = favoriteIcoImageInformation
+                        .getMimeType();
+                if (favoriteIcoMimeType != null) {
+                    writer.print(" type=\"");
+                    writer.print(favoriteIcoMimeType);
+                    writer.print('\"');
+                }
             }
 
             writer.print(" href=\"");
-            URLFormCodec.writeURL(writer, favoriteIco);
+            URLFormCodec.writeURL(writer, favoriteIcoImageURL);
             writer.println("\" />");
         }
 
-        writer.print("<LINK rel=\"ICON\"");
-        if (favoriteImageOperation != null) {
-            String favoriteMimeType = favoriteImageOperation.getMimeType();
-            if (favoriteMimeType != null) {
-                writer.print(" type=\"");
-                writer.print(favoriteMimeType);
-                writer.print('\"');
+        if (favoriteImageURL != null) {
+            writer.print("<LINK rel=\"ICON\"");
+            if (favoriteImageOperation != null) {
+                String favoriteMimeType = favoriteImageOperation.getMimeType();
+                if (favoriteMimeType != null) {
+                    writer.print(" type=\"");
+                    writer.print(favoriteMimeType);
+                    writer.print('\"');
+                }
             }
+            writer.print(" href=\"");
+            URLFormCodec.writeURL(writer, favoriteImageURL);
+            writer.println("\" />");
         }
-        writer.print(" href=\"");
-        URLFormCodec.writeURL(writer, favoriteImageURL);
-        writer.println("\" />");
+
     }
 
     private void writeTitle(JspWriter writer, FacesContext facesContext)
@@ -524,26 +552,35 @@ public class InitializeTag extends
         Map application = externalContext.getInitParameterMap();
 
         disableIEImageBar = "false".equals(application
-                .get(DISABLE_IE_IMAGE_BAR_ATTRIBUTE)) == false;
+                .get(DISABLE_IE_IMAGE_BAR_PARAMETER)) == false;
 
         defaultDisabledCookiesPageURL = (String) application
-                .get(DISABLED_COOKIES_PAGE_URL_PROPERTY);
+                .get(DISABLED_COOKIES_PAGE_URL_PARAMETER);
         if (defaultDisabledCookiesPageURL != null
                 && defaultDisabledCookiesPageURL.trim().length() < 1) {
             defaultDisabledCookiesPageURL = null;
         }
 
         defaultDisabledScriptPageURL = (String) application
-                .get(DISABLED_SCRIPT_PAGE_URL_PROPERTY);
+                .get(DISABLED_SCRIPT_PAGE_URL_PARAMETER);
         if (defaultDisabledScriptPageURL != null
                 && defaultDisabledScriptPageURL.trim().length() < 1) {
             defaultDisabledScriptPageURL = null;
         }
 
-        multiWindowScript = "true".equalsIgnoreCase((String) application
-                .get(MULTI_WINDOW_ATTRIBUTE));
+        defaultInvalidBrowserPageURL = (String) application
+                .get(INVALID_BROWSER_PAGE_URL_PARAMETER);
+        if (defaultInvalidBrowserPageURL != null
+                && defaultInvalidBrowserPageURL.trim().length() < 1) {
+            defaultInvalidBrowserPageURL = null;
+        }
 
-        if (LOG.isInfoEnabled()) {
+        multiWindowScript = "true".equalsIgnoreCase((String) application
+                .get(MULTI_WINDOW_PARAMETER));
+
+        if (firstLog && LOG.isInfoEnabled()) {
+            firstLog = false;
+
             if (htmlExternalContext.useMetaContentScriptType()) {
                 LOG.info("UseMetaContentScriptType is enabled for context.");
             }
@@ -632,9 +669,52 @@ public class InitializeTag extends
         writer.println("></SCRIPT>");
     }
 
+    private void writeDisabledScriptPageURL(FacesContext facesContext,
+            JspWriter writer) throws IOException {
+        String pageURL = disabledScriptPageURL;
+
+        if (UIComponentTag.isValueReference(pageURL)) {
+            Application application = facesContext.getApplication();
+
+            ValueBinding vb = application.createValueBinding(pageURL);
+
+            Object value = vb.getValue(facesContext);
+
+            if (value == null) {
+                return;
+            }
+
+            pageURL = String.valueOf(value);
+        }
+
+        writer.println("<NOSCRIPT>");
+        writer.print("<META http-equiv=\"Refresh\" content=\"0; URL=");
+        URLFormCodec.writeURL(writer, pageURL);
+        writer.println("\" />");
+        writer.println("</NOSCRIPT>");
+    }
+
     private void writeCookieTest(IJavaScriptWriter writer) throws IOException {
+        String pageURL = disabledCookiesPageURL;
+
+        if (UIComponentTag.isValueReference(pageURL)) {
+            FacesContext facesContext = writer.getFacesContext();
+
+            Application application = facesContext.getApplication();
+
+            ValueBinding vb = application.createValueBinding(pageURL);
+
+            Object value = vb.getValue(facesContext);
+
+            if (value == null) {
+                return;
+            }
+
+            pageURL = String.valueOf(value);
+        }
+
         writer.write("if (!navigator.cookieEnabled) document.location=");
-        writer.writeString(disabledCookiesPageURL);
+        writer.writeString(pageURL);
         writer.writeln(";");
     }
 
@@ -682,7 +762,7 @@ public class InitializeTag extends
             jsWriter.write("\\\"");
         }
         jsWriter.write(" src=\\\"");
-        String u = jsBaseURI + uri;
+        String u = jsBaseURI + "/" + uri;
         u = htmlExternalContext.getBaseURI(u);
         jsWriter.write(u);
         jsWriter.write("\\\"");
@@ -709,7 +789,7 @@ public class InitializeTag extends
                 }
                 jsWriter.write(" src=\\\"");
 
-                u = jsBaseURI + files[i].getURI(locale);
+                u = jsBaseURI + "/" + files[i].getURI(locale);
                 u = htmlExternalContext.getBaseURI(u);
 
                 jsWriter.write(u);
@@ -733,6 +813,10 @@ public class InitializeTag extends
     }
 
     public void release() {
+        invalidBrowserPageURL = null;
+        disabledCookiesPageURL = null;
+        disabledScriptPageURL = null;
+
         htmlExternalContext = null;
 
         base = null;
@@ -836,6 +920,14 @@ public class InitializeTag extends
     private void metaDataInitialized() {
         pageContext.getRequest().setAttribute(META_DATA_INITIALIZED_PROPERTY,
                 Boolean.TRUE);
+    }
+
+    public final String getInvalidBrowserPageURL() {
+        return invalidBrowserPageURL;
+    }
+
+    public final void setInvalidBrowserPageURL(String invalidBrowserPageURL) {
+        this.invalidBrowserPageURL = invalidBrowserPageURL;
     }
 
 }

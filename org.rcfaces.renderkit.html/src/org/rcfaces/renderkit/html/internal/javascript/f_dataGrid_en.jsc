@@ -1,2 +1,0 @@
-var _P={EVENT_LOCKED:"Loading data, please wait !"}
-f_resourceBundle.Define(f_dataGrid,_P);

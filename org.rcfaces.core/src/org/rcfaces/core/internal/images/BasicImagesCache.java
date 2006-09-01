@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -29,11 +32,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.images.ImageFiltersServlet.IBufferedImage;
-
 
 /**
  * 
@@ -47,7 +50,9 @@ public class BasicImagesCache implements IImagesCache {
 
     // Il faut un cache des erreurs .... et des autres !
 
-    private final Map caches = new HashMap(1024);
+    private final Map caches;
+
+    private final Map weakCache;
 
     private final int maxCacheSize;
 
@@ -56,13 +61,28 @@ public class BasicImagesCache implements IImagesCache {
     public BasicImagesCache(int maxCacheSize) {
         this.maxCacheSize = maxCacheSize;
 
+        caches = new HashMap(maxCacheSize + 2);
+
         LOG.debug("Set max cache size to " + maxCacheSize + ".");
+
+        if (Constants.IMAGES_CACHE_WEAK_MAP_ENABLED) {
+            weakCache = new WeakHashMap(maxCacheSize);
+            LOG.debug("Create a weak map initialized with size of "
+                    + maxCacheSize + ".");
+
+        } else {
+            weakCache = null;
+        }
+
     }
 
     public synchronized IBufferedImage searchInCache(String cmd, String url) {
         String key = computeKey(cmd, url);
 
         Cache cache = (Cache) caches.get(key);
+        if (cache == null && weakCache != null) {
+            cache = (Cache) weakCache.get(key);
+        }
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Search image cmd='" + cmd + "' url='" + url + "' => "
@@ -109,6 +129,10 @@ public class BasicImagesCache implements IImagesCache {
             Cache oldest = (Cache) cacheList.remove(cacheSize - 1);
 
             caches.remove(oldest.key);
+
+            if (weakCache != null) {
+                weakCache.put(oldest.key, oldest);
+            }
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Remove the oldest cached imageBuffered.");

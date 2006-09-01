@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -137,14 +140,15 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.codec.SourceFilter;
 import org.rcfaces.core.internal.codec.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
+import org.rcfaces.core.internal.util.AbstractRepository;
 import org.rcfaces.core.internal.util.CameliaVersion;
 import org.rcfaces.core.internal.util.Delay;
-import org.rcfaces.core.internal.util.AbstractRepository;
-import org.rcfaces.core.webapp.ExpirationDate;
-import org.rcfaces.core.webapp.IRepository;
-import org.rcfaces.core.webapp.RepositoryServlet;
-import org.rcfaces.core.webapp.IRepository.IContent;
-import org.rcfaces.core.webapp.IRepository.IFile;
+import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.webapp.ExpirationDate;
+import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.webapp.RepositoryServlet;
+import org.rcfaces.core.internal.webapp.IRepository.IContent;
+import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
@@ -173,16 +177,16 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
     private static final String PARAMETER_PREFIX = Constants.getPackagePrefix()
             + ".javascript";
 
-    private static final String REPOSITORY_DEV_MODE = PARAMETER_PREFIX
+    private static final String REPOSITORY_DEV_MODE_PARAMETER = PARAMETER_PREFIX
             + ".REPOSITORY_DEV_MODE";
 
     private static final String SYMBOLS_FILENAME = "/symbols";
 
     private static final String SYMBOLSC_FILENAME = "/symbolsc";
 
-    private static final String REPOSITORY_PROPERTY = "org.rcfaces.core.DependenciesRepository";
+    private static final String REPOSITORY_PROPERTY = "org.rcfaces.renderkit.html.javascript.DependenciesRepository";
 
-    private static final String CONTEXT_REPOSITORY_PROPERTY = "org.rcfaces.core.JavaScriptContextRepository";
+    private static final String CONTEXT_REPOSITORY_PROPERTY = "org.rcfaces.renderkit.html.javascript.ContextRepository";
 
     private static final String CAN_SKIP_SPACES_PARAMETER = Constants
             .getPackagePrefix()
@@ -212,7 +216,11 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
 
     private static final String DEFAULT_CHARSET = "UTF-8";
 
-    private final String mainRepositoryURI;
+    private static final String COMPILED_JS_SUFFIX_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".COMPILED_JS_SUFFIX";
+
+    private String mainRepositoryURI;
 
     private Locale defaultLocale;
 
@@ -242,7 +250,6 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
     private String compiledJsSuffix;
 
     public JavaScriptRepositoryServlet() {
-        this(MAIN_REPOSITORY_URI);
     }
 
     public JavaScriptRepositoryServlet(String mainRepositoryURI) {
@@ -253,17 +260,22 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         return PARAMETER_PREFIX;
     }
 
-    protected String getRepositoryDevModePropertyName() {
-        return REPOSITORY_DEV_MODE;
+    protected String getRepositoryDevModeParameterName() {
+        return REPOSITORY_DEV_MODE_PARAMETER;
     }
 
     public void init(ServletConfig config) throws ServletException {
 
         rcfacesVersion = CameliaVersion.getVersion();
 
+        if (mainRepositoryURI == null) {
+            mainRepositoryURI = ServletTools.computeResourceURI(config
+                    .getServletContext(), MAIN_REPOSITORY_URI, getClass());
+        }
+
         super.init(config);
 
-        compiledJsSuffix = getParameter("rcfaces.compiledJsSuffix");
+        compiledJsSuffix = getParameter(COMPILED_JS_SUFFIX_PARAMETER);
 
         String expires = getParameter(VERSIONED_EXPIRE_PARAMETER);
         if (expires != null) {
@@ -345,7 +357,7 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
             throws IOException {
         ServletContext servletContext = config.getServletContext();
 
-        if (BUILD_ID_VERSION_SUPPORT) {
+        if (org.rcfaces.core.internal.Constants.BUILD_ID_URL_SUPPORT) {
             if (rcfacesVersion == null) {
                 throw new FacesException(
                         "Can not enable \"Repository version\", rcfaces version is not detected !");

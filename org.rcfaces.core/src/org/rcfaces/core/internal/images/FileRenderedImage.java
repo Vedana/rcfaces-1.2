@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -42,7 +45,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLConnection;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -50,10 +52,10 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
 import org.rcfaces.core.internal.images.ImageFiltersServlet.IBufferedImage;
 import org.rcfaces.core.internal.util.CameliaVersion;
-import org.rcfaces.core.webapp.ExpirationHttpServlet;
-
+import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
 
 /**
  * 
@@ -90,8 +92,6 @@ class FileRenderedImage implements IBufferedImage {
 
     private boolean errored;
 
-    private URLConnection debugConnection;
-
     private String redirectedURL;
 
     public FileRenderedImage(String imageName) {
@@ -110,9 +110,9 @@ class FileRenderedImage implements IBufferedImage {
         this.redirectedURL = url;
     }
 
-    public void initialize(URLConnection urlConnection, String contentType,
-            RenderedImage renderedImage, ImageWriter imageWriter,
-            int destImageType) throws IOException {
+    public void initialize(IImageLoader imageDownloader,
+            String externalContentType, RenderedImage renderedImage,
+            ImageWriter imageWriter, int destImageType) throws IOException {
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("Initialize fileRenderedImage '" + imageName
@@ -120,7 +120,7 @@ class FileRenderedImage implements IBufferedImage {
                     + ((BufferedImage) renderedImage).getType() + ".");
         }
 
-        this.contentType = contentType;
+        this.contentType = externalContentType;
 
         try {
             file = File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX);
@@ -150,7 +150,7 @@ class FileRenderedImage implements IBufferedImage {
         }
 
         int size = 8000;
-        long originalSize = urlConnection.getContentLength();
+        long originalSize = imageDownloader.getContentLength();
         if (originalSize > 0 && originalSize < 8000) {
             size = (int) originalSize + 256;
         }
@@ -227,7 +227,7 @@ class FileRenderedImage implements IBufferedImage {
             fileOutputStream.close();
         }
 
-        lastModified = urlConnection.getLastModified();
+        lastModified = imageDownloader.getLastModified();
 
         LOG.debug("Store filtered image '" + imageName + "' into " + size
                 + " bytes. (disk location='" + file.getAbsolutePath() + "')");
@@ -407,11 +407,17 @@ class FileRenderedImage implements IBufferedImage {
 
     protected void finalize() throws Throwable {
         if (file != null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.error("Finalize filtred image, delete file='"
+                        + file.getAbsolutePath() + "'.");
+            }
+
             try {
                 file.delete();
 
             } catch (Throwable th) {
-                LOG.error("Can not finalize file '" + file + "'.", th);
+                LOG.error("Can not delete file '" + file.getAbsolutePath()
+                        + "'.", th);
             }
             file = null;
         }

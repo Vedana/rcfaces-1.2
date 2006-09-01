@@ -14,7 +14,7 @@ var __static = {
 	/**
 	 * @field private static final string
 	 */
-	_EMPTY_IMAGE_URL: "imageButton/blank.gif",
+	_EMPTY_IMAGE_URL: "/imageButton/blank.gif",
 
 	/**
 	 * @method private static final

@@ -1,9 +1,0 @@
-var _e={f_isSelected:function(){var n,t=this,e
-if(t._3e===n){e=f_core.I(t,"v:selected")
-t._3e=(e)?!0:!1}return t._3e},f_setSelected:function(e){var t=this
-if(e!==!1)e=!0
-if(t.f_isSelected()==e)return
-t._3e=e
-t.f_setProperty(P.ct,e)
-t._fm(e)}}
-var fa_selected=new f_aspect("fa_selected",null,_e);

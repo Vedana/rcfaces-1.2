@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:29  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -24,7 +27,6 @@ import org.rcfaces.core.component.ToolItemComponent;
 import org.rcfaces.core.component.iterator.IToolFolderIterator;
 import org.rcfaces.core.component.iterator.IToolItemIterator;
 import org.rcfaces.core.internal.util.ComponentIterators;
-
 
 /**
  * @author Olivier Oeuillot
@@ -58,6 +60,11 @@ public class ToolBarTools {
         return new ToolFolderListIterator(list);
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
     private static final class ToolItemListIterator extends
             ComponentIterators.ComponentListIterator implements
             IToolItemIterator {
@@ -76,6 +83,11 @@ public class ToolBarTools {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
     private static final class ToolFolderListIterator extends
             ComponentIterators.ComponentListIterator implements
             IToolFolderIterator {

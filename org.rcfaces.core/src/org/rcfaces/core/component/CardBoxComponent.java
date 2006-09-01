@@ -1,17 +1,16 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.iterator.ICardIterator;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.internal.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.CardComponent;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.CardBoxTools;
+
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.capability.IPreferenceCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.iterator.ICardIterator;
+import org.rcfaces.core.internal.component.AbstractInputComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.internal.tools.CardBoxTools;
 
 public class CardBoxComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,

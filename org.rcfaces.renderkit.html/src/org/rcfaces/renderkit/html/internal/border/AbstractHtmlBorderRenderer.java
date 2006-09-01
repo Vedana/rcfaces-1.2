@@ -41,7 +41,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected static final String BORDER_W = "_8";
 
-    protected static final String BORDER_BLANK_IMAGEURL = "borders/blank.gif";
+    protected static final String BORDER_BLANK_IMAGEURL = "border/blank.gif";
 
     protected static final String BORDER_BLANK_IMAGEURL_PROPERTY = "camelia.borderWriter.blank.imageURL";
 

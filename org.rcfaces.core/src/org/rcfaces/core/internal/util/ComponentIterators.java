@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -30,8 +33,8 @@ import java.util.NoSuchElementException;
 import javax.faces.component.UIComponent;
 
 import org.rcfaces.core.component.iterator.IComponentIterator;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.manager.IContainerManager;
-
 
 /**
  * @author Olivier Oeuillot
@@ -40,8 +43,6 @@ import org.rcfaces.core.internal.manager.IContainerManager;
 public class ComponentIterators {
     private static final String REVISION = "$Revision$";
 
-    private static final boolean USE_CACHED_LIST = true;
-
     public static final IComponentIterator EMPTY_COMPONENT_ITERATOR = new EmptyComponentIterator();
 
     public static final UIComponent[] EMPTY_COMPONENT_ARRAY = new UIComponent[0];
@@ -49,7 +50,8 @@ public class ComponentIterators {
     public static int indexOf(IContainerManager parent, UIComponent child,
             Class childClass) {
 
-        if (USE_CACHED_LIST) {
+        if (Constants.CACHED_ITERATOR_ENABLED
+                && Constants.STATE_CHILDREN_LIST_ENABLED) {
             UIComponent aos[] = CachedChildrenList.getArray(parent, childClass);
             for (int i = 0; i < aos.length; i++) {
                 if (child == aos[i] || child.equals(aos[i])) {
@@ -82,7 +84,8 @@ public class ComponentIterators {
 
     public static UIComponent componentAt(IContainerManager parent,
             Class childClass, int position) {
-        if (USE_CACHED_LIST) {
+        if (Constants.CACHED_ITERATOR_ENABLED
+                && Constants.STATE_CHILDREN_LIST_ENABLED) {
             UIComponent elements[] = CachedChildrenList.getArray(parent,
                     childClass);
             if (position < 0 || position >= elements.length) {
@@ -116,7 +119,8 @@ public class ComponentIterators {
     }
 
     public static int count(IContainerManager parent, Class childClass) {
-        if (USE_CACHED_LIST) {
+        if (Constants.CACHED_ITERATOR_ENABLED
+                && Constants.STATE_CHILDREN_LIST_ENABLED) {
             return CachedChildrenList.getCount(parent, childClass);
         }
 
@@ -154,7 +158,8 @@ public class ComponentIterators {
 
     public static List list(IContainerManager parent, Class childClass) {
 
-        if (USE_CACHED_LIST) {
+        if (Constants.CACHED_ITERATOR_ENABLED
+                && Constants.STATE_CHILDREN_LIST_ENABLED) {
             return CachedChildrenList.getList(parent, childClass);
         }
 
@@ -186,7 +191,12 @@ public class ComponentIterators {
         return rev;
     }
 
-    public static class EmptyComponentIterator implements IComponentIterator {
+    /**
+     * 
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
+    private static class EmptyComponentIterator implements IComponentIterator {
         private static final String REVISION = "$Revision$";
 
         /*
@@ -222,6 +232,11 @@ public class ComponentIterators {
 
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
     public static class ComponentListIterator implements IComponentIterator {
         private static final String REVISION = "$Revision$";
 
@@ -291,6 +306,11 @@ public class ComponentIterators {
 
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
     public static class ComponentArrayIterator implements IComponentIterator {
         private static final String REVISION = "$Revision$";
 

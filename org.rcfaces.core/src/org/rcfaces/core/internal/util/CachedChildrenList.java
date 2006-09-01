@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -77,7 +80,7 @@ public final class CachedChildrenList extends AbstractReleasable {
 	}
 
 	private int getContainerStateId(IContainerManager container) {
-		return container.getContainerStateId();
+		return container.getChildrenListState();
 	}
 
 	private void verifyList(IContainerManager container) {

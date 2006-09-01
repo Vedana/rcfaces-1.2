@@ -35,7 +35,7 @@ var __static = {
 	/** 
 	 * @field private static final string
 	 */
-	_BLANK_IMAGE_URL: "menu/blank.gif",
+	_BLANK_IMAGE_URL: "/menu/blank.gif",
 	
 	/** 
 	 * @field hidden static final number
@@ -48,9 +48,9 @@ var __static = {
 	_ItemIds: 0,
 	
 	/**
-	 * @method private static 
+	 * @method hidden static 
 	 */	
-	_DestroyMenuItem: function(menuItem) {
+	DestroyMenuItem: function(menuItem) {
 		menuItem._menuBar=undefined;
 		menuItem._parentItem=undefined;
 		// menuItem._disabled=undefined; // boolean
@@ -74,7 +74,7 @@ var __static = {
 			menuItem._items=undefined;
 
 			for(var i=0;i<items.length;i++) {
-				fa_menuCore._DestroyMenuItem(items[i]);
+				fa_menuCore.DestroyMenuItem(items[i]);
 			}			
 		}
 	
@@ -1568,7 +1568,7 @@ var __prototype = {
 	},
 	_a_destroyItems: function(items) {
 		for(var i=0;i<items.length;i++) {
-			fa_menuCore._DestroyMenuItem(items[i]);
+			fa_menuCore.DestroyMenuItem(items[i]);
 		}
 	},	
 	_a_getRadioScope: function() {

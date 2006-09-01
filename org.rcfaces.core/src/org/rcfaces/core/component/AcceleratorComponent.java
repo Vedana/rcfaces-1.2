@@ -1,10 +1,11 @@
 package org.rcfaces.core.component;
 
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IKeyPressEventCapability;
 import org.rcfaces.core.internal.component.CameliaCommandComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IKeyPressEventCapability;
-import org.rcfaces.core.component.capability.IImmediateCapability;
 
 public class AcceleratorComponent extends CameliaCommandComponent implements 
 	IKeyPressEventCapability,

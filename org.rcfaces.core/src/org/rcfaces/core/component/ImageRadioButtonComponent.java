@@ -1,11 +1,11 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
-import org.rcfaces.core.component.RadioButtonComponent;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 public class ImageRadioButtonComponent extends RadioButtonComponent implements 
 	IImageButtonFamilly {

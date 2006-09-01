@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -32,9 +35,6 @@ import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.HashMap;
@@ -58,10 +58,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.IIndexedImageOperation;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.codec.URLFormCodec;
-import org.rcfaces.core.webapp.ExpirationDate;
-import org.rcfaces.core.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
+import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.webapp.ExpirationDate;
+import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
 
 /**
  * 
@@ -77,8 +78,6 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
 
     private static final String URL_DECODER_CHARSET = "UTF-8";
 
-    private static final int MAX_IMAGE_CACHE_SIZE = 8;
-
     private static final String MAX_IMAGE_CACHE_SIZE_PARAMETER = Constants
             .getPackagePrefix()
             + ".images.MAX_IMAGES_CACHE_SIZE";
@@ -86,6 +85,12 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
     private static final String NO_CACHE_PARAMETER = Constants
             .getPackagePrefix()
             + ".NO_CACHE";
+
+    private static final String IMAGE_REPOSITORY_DEFAULT_URL = "/image-filters";
+
+    private static final String IMAGE_REPOSITORY_PROPERTY = "org.rcfaces.core.internal.images.IMAGE_REPOSITORY_PROPERTY";
+
+    private IImageLoaderFactory imageLoaderFactory;
 
     private ImageFiltersRepository imageOperationRepository;
 
@@ -138,16 +143,16 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
             return true;
         }
 
-        public void initialize(URLConnection urlConnection, String contentType,
-                RenderedImage renderedImage, ImageWriter imageWriter,
-                int imageType) {
+        public void initialize(IImageLoader imageDownloader,
+                String contentType, RenderedImage renderedImage,
+                ImageWriter imageWriter, int imageType) {
         }
 
         public String getRedirection() {
             return null;
         }
 
-        public void initializeRedirection(String url) throws IOException {
+        public void initializeRedirection(String url) {
         }
 
     };
@@ -161,21 +166,34 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
             LOG.info("Enable no cache mode.");
         }
 
-        int maxImageCacheSize = MAX_IMAGE_CACHE_SIZE;
+        int maxImageCacheSize = Constants.DEFAULT_MAX_IMAGE_CACHE_SIZE;
         String mics = getParameter(MAX_IMAGE_CACHE_SIZE_PARAMETER);
         if (mics != null) {
             maxImageCacheSize = Integer.parseInt(mics);
 
-            LOG.info("Set max image cache size to " + maxImageCacheSize);
+            LOG.info("Set max image cache size to " + maxImageCacheSize + ".");
+        } else {
+            LOG.info("Set max image cache size to default value ("
+                    + maxImageCacheSize + ").");
         }
 
+        String imageRepositoryURL = ServletTools.computeResourceURI(
+                getServletContext(), IMAGE_REPOSITORY_DEFAULT_URL,
+                ImageFiltersServlet.class);
+        LOG.info("Set image repository url to '" + imageRepositoryURL + "'.");
+
+        getServletContext().setAttribute(IMAGE_REPOSITORY_PROPERTY,
+                imageRepositoryURL);
+
         imagesCache = new BasicImagesCache(maxImageCacheSize);
+
+        imageLoaderFactory = Constants.getImageLoaderFactory();
     }
 
     protected void doHead(HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
 
-        // On gere le fonctionement en interne !
+        // On gere le fonctionement HEAD dans le traitement du GET !
         doGet(request, response);
     }
 
@@ -432,7 +450,7 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
             String cmd, String url, ServletRequest request,
             ServletResponse response) throws ServletException {
 
-        if (url.startsWith("WEB-INF")) {
+        if (url.indexOf("WEB-INF") >= 0 || url.indexOf("META-INF") >= 0) {
             throw new ServletException(
                     "Can not get image into WEB-INF folder ! (url='" + url
                             + "')");
@@ -448,34 +466,6 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
                         getServletContext(), request, response);
             }
         }
-
-        String contentType = imageOperationRepository.getContentType(url);
-        if (contentType == null) {
-            throw new ServletException("Invalid extension of image (url=" + url
-                    + ").");
-        }
-
-        if (imageOperationRepository.isValidContenType(contentType) == false) {
-            // Support du type d'image inconnu !
-
-            LOG
-                    .warn("Image format writer for content type '"
-                            + contentType
-                            + "' is not implemented ! (Please install JAI_IMAGEIO, https://jai-imageio.dev.java.net )");
-
-            try {
-                bufferedImage.initializeRedirection(url);
-
-            } catch (IOException e) {
-                throw new ServletException("Can not create filtered image '"
-                        + url + "'.", e);
-            }
-
-            return;
-        }
-
-        Iterator it = ImageIO.getImageWritersByMIMEType(contentType);
-        ImageWriter imageWriter = (ImageWriter) it.next();
 
         Map parameters = null;
         int idxParam = cmd.indexOf('(');
@@ -521,58 +511,89 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
                             + "'.");
         }
 
-        URL imageURL;
-        try {
-            imageURL = getServletContext().getResource("/" + url);
-
-        } catch (MalformedURLException ex) {
-            throw new ServletException("Bad url '" + url + "'.", ex);
+        String forceSuffix = imageOperation.getForceSuffix();
+        if (forceSuffix != null && url.endsWith(forceSuffix)) {
+            url = url.substring(0, url.length() - forceSuffix.length() - 1);
         }
 
-        if (imageURL == null) {
+        String sourceContentType = imageOperationRepository.getContentType(url);
+        if (sourceContentType == null) {
+            throw new ServletException("Invalid extension of image (url=" + url
+                    + ").");
+        }
+
+        if (imageOperationRepository.isValidContenType(sourceContentType) == false) {
+            // Support du type d'image inconnu !
+
+            LOG
+                    .warn("Image format writer for content type '"
+                            + sourceContentType
+                            + "' is not implemented ! (Please install JAI_IMAGEIO, https://jai-imageio.dev.java.net )");
+
+            try {
+                bufferedImage.initializeRedirection(url);
+
+            } catch (IOException e) {
+                throw new ServletException("Can not create filtered image '"
+                        + url + "'.", e);
+            }
+
+            return;
+        }
+
+        IImageLoader imageDownloader = getImageDownloader(url, request,
+                response);
+
+        String downloadedContentType = imageDownloader.getContentType();
+        if (sourceContentType.equalsIgnoreCase(downloadedContentType) == false) {
+            LOG.error("Different content types request='" + sourceContentType
+                    + "' loaded='" + downloadedContentType + "' for path '"
+                    + url + "'.");
+
+            bufferedImage.setErrored();
+            return;
+        }
+
+        InputStream inputStream = imageDownloader.openStream();
+
+        if (inputStream == null) {
             LOG.error("Can not get image specified by path '" + url + "'.");
 
             bufferedImage.setErrored();
             return;
         }
 
-        URLConnection urlConnection;
-        InputStream ins;
-
-        try {
-            urlConnection = imageURL.openConnection();
-            if (urlConnection == null) {
-                LOG.error("Can not get image specified by path '" + url + "'.");
-                bufferedImage.setErrored();
-                return;
-            }
-
-            ins = urlConnection.getInputStream();
-            if (ins == null) {
-                LOG.error("Can not get image specified by path '" + url + "'.");
-                bufferedImage.setErrored();
-                return;
-            }
-
-        } catch (IOException ex) {
-            throw new ServletException("Can not get content of image '"
-                    + imageURL + "'.", ex);
+        String internalContentType = sourceContentType;
+        if (imageOperation.getInternalContentType() != null) {
+            internalContentType = imageOperation.getInternalContentType();
         }
+
+        String externalContentType = sourceContentType;
+        if (imageOperation.getExternalContentType() != null) {
+            externalContentType = imageOperation.getExternalContentType();
+        }
+
+        if (externalContentType == null) {
+            externalContentType = internalContentType;
+        }
+
+        Iterator it = ImageIO.getImageWritersByMIMEType(internalContentType);
+        ImageWriter imageWriter = (ImageWriter) it.next();
 
         BufferedImage image;
         try {
-            it = ImageIO.getImageReadersByMIMEType(contentType);
+            it = ImageIO.getImageReadersByMIMEType(sourceContentType);
 
             if (it.hasNext() == false) {
                 throw new ServletException("Can not get codec to read image '"
-                        + imageURL + "'.");
+                        + url + "'.");
             }
 
             ImageReader imageReader = (ImageReader) it.next();
 
             try {
                 ImageInputStream imageInputStream = ImageIO
-                        .createImageInputStream(ins);
+                        .createImageInputStream(inputStream);
 
                 try {
                     ImageReadParam param = imageReader.getDefaultReadParam();
@@ -592,7 +613,7 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
 
         } finally {
             try {
-                ins.close();
+                inputStream.close();
 
             } catch (IOException e) {
                 LOG.error(e);
@@ -604,6 +625,10 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
             sourceImageType = BufferedImage.TYPE_BYTE_INDEXED;
         }
 
+        if ("image/bmp".equals(internalContentType)) {
+            // sourceImageType = BufferedImage.TYPE_4BYTE_ABGR;
+        }
+
         try {
             RenderedImage renderedImage = filter(image,
                     new IImageOperation[] { imageOperation },
@@ -611,7 +636,7 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
                             : parameters });
 
             try {
-                bufferedImage.initialize(urlConnection, contentType,
+                bufferedImage.initialize(imageDownloader, externalContentType,
                         renderedImage, imageWriter, sourceImageType);
 
             } catch (IOException e) {
@@ -622,6 +647,13 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
         } finally {
             imageWriter.dispose();
         }
+    }
+
+    private IImageLoader getImageDownloader(String url, ServletRequest request,
+            ServletResponse response) {
+        return imageLoaderFactory.loadImage(getServletContext(),
+                (HttpServletRequest) request, (HttpServletResponse) response,
+                url);
     }
 
     protected RenderedImage filter(BufferedImage image,
@@ -736,14 +768,18 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
         return image;
     }
 
+    static String getImagesRepositoryURI(Map context) {
+        return (String) context.get(IMAGE_REPOSITORY_PROPERTY);
+    }
+
     /**
      * 
      * @author Olivier Oeuillot
      * @version $Revision$
      */
-    public static interface IBufferedImage {
 
-        void initialize(URLConnection urlConnection, String contentType,
+    public static interface IBufferedImage {
+        void initialize(IImageLoader imageDownloader, String contentType,
                 RenderedImage renderedImage, ImageWriter imageWriter,
                 int imageType) throws IOException;
 

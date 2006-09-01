@@ -407,7 +407,7 @@ var __prototype = {
 			return;
 		}
 
-		f_help._Install();
+		f_help.Install();
 		this.f_addEventListener(f_event.FOCUS, f_help._OnFocus);
 		this.f_addEventListener(f_event.BLUR, f_help._OnBlur);
 	},

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -17,6 +20,9 @@
 if (f_core.IsGecko()) {
 	// le cas de Gecko, on peut utiliser windows.eval(x) .
 
+	/**
+	 * @method static hidden
+	 */
 	f_class._ChangeContext = function(win, mwMethod) {
 		if (typeof(mwMethod)=="function") {
 			mwMethod=mwMethod.toSource();
@@ -31,6 +37,10 @@ if (f_core.IsGecko()) {
 	}
 } else {
 	// Autre cas, on passe par une méthode de changement de context !
+
+	/**
+	 * @method static hidden
+	 */
 	f_class._ChangeContext = function(win, mwMethod) {
 		var changeContext=win._changeContext;
 		if (typeof(mwMethod)=="function") {
@@ -49,6 +59,9 @@ if (f_core.IsGecko()) {
  
 /* f_classLoader ***************************************************************************/
 
+/**
+ * @method static hidden
+ */
 f_classLoader.prototype._newWindow=function(clparent, changeContext) {
 	var win=this;
 	

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -27,7 +30,6 @@ import java.util.Map;
 
 import org.rcfaces.core.image.AbstractImageOperation;
 import org.rcfaces.core.image.IIndexedImageOperation;
-
 
 /**
  * 
@@ -61,7 +63,8 @@ public class GrayOperation extends AbstractImageOperation implements
         return true;
     }
 
-    public IndexColorModel filter(Map requestParameter, IndexColorModel source, BufferedImage sourceImage) {
+    public IndexColorModel filter(Map requestParameter, IndexColorModel source,
+            BufferedImage sourceImage) {
         int mapSize = source.getMapSize();
 
         int colorMap[] = new int[mapSize];
@@ -88,9 +91,5 @@ public class GrayOperation extends AbstractImageOperation implements
 
         return new IndexColorModel(8, colorMap.length, colorMap, 0, source
                 .hasAlpha(), source.getTransparentPixel(), DataBuffer.TYPE_BYTE);
-    }
-
-    public String getName() {
-        return "Gray operation";
     }
 }

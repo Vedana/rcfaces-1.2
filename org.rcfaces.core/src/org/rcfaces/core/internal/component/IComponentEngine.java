@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -56,7 +59,6 @@ import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.IReleasable;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
-
 
 /**
  * @author Olivier Oeuillot
@@ -124,5 +126,8 @@ public interface IComponentEngine extends IReleasable,
     IDataMapAccessor getDataMapAccessor(FacesContext context, String name,
             boolean modify);
 
-    double getDoubleProperty(String propertyName, double value, FacesContext facesContext);
+    double getDoubleProperty(String propertyName, double value,
+            FacesContext facesContext);
+
+    IStateChildrenList createStateChildrenList();
 }

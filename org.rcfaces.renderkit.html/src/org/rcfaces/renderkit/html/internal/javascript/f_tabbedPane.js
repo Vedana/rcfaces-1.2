@@ -13,14 +13,9 @@
 var __static = {
 
 	/**
-	 * @field private static boolean
-	 */
-	_IMAGES_INIALIZED: false,
-
-	/**
 	 * @field private static 
 	 */
-	_PREPARED_IMAGES: null,
+	_PreparedImages: undefined,
 
 	/**
 	 * @method private static
@@ -182,7 +177,7 @@ var __static = {
 	_PrepareImages: function() {
 		var styleSheetBase=f_env.GetStyleSheetBase();
 
-		f_tabbedPane._PREPARED_IMAGES=new Object;
+		f_tabbedPane._PreparedImages=new Object;
 
 		for(var i=0;i<arguments.length;i++) {
 			var filename=arguments[i];
@@ -190,18 +185,24 @@ var __static = {
 			var url=styleSheetBase+filename;
 			f_imageRepository.PrepareImage(url);
 			
-			f_tabbedPane._PREPARED_IMAGES[filename]=url;
+			f_tabbedPane._PreparedImages[filename]=url;
 		}
 	},
 	/**
 	 * @method private static
 	 */
 	_GetImageURL: function(filename) {
-		var url=f_tabbedPane._PREPARED_IMAGES[filename];
+		var url=f_tabbedPane._PreparedImages[filename];
 		
 		f_core.Assert(url, "Unknown filename '"+filename+"'.");
 		
 		return url;
+	},
+	Initializer: function() {
+		f_tabbedPane._PrepareImages(
+			"/blank.gif",
+			"/tabbedPane/xpMid2.gif", 
+			"/tabbedPane/xpT2.gif");
 	}
 }
 
@@ -209,15 +210,6 @@ var __prototype = {
 
 	f_tabbedPane: function() {
 		this.f_super(arguments);
-		
-		if (!f_tabbedPane._IMAGES_INIALIZED) {
-			f_tabbedPane._IMAGES_INIALIZED=true;
-			
-			f_tabbedPane._PrepareImages(
-				"blank.gif",
-				"tabbedPane/xpMid2.gif", 
-				"tabbedPane/xpT2.gif");
-		}
 		
 		this._tabIndex=f_core.GetAttribute(this, "v:tabIndex");
 	},
@@ -608,7 +600,7 @@ var __prototype = {
 		}
 		tab._disabled=disabled;
 		
-		var blankImage=f_tabbedPane._GetImageURL("blank.gif");
+		var blankImage=f_tabbedPane._GetImageURL("/blank.gif");
 		
 		tab._imageURL=imageURL;
 		if (tab._imageURL) {

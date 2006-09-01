@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:26  oeuillot
  * Renommage  en rcfaces
  *
@@ -20,7 +23,7 @@ var __static = {
 	/**
 	 * @field private static final string
 	 */
-	_BLANK_NODE_IMAGE_URL: "blank.gif",
+	_BLANK_NODE_IMAGE_URL: "/blank.gif",
 	
 	/**
 	 * @field private static final string

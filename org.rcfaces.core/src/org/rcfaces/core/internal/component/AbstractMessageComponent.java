@@ -1,34 +1,32 @@
 package org.rcfaces.core.internal.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import java.lang.Object;
-import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Collections;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.tools.VisibilityTools;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import java.lang.String;
 import java.util.Map;
+
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
-import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.internal.tools.VisibilityTools;
 
 public abstract class AbstractMessageComponent extends CameliaMessageComponent implements 
 	ISizeCapability,
@@ -58,7 +56,14 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 			return Collections.EMPTY_MAP;
 		}
             
-		return dataMapAccessor.getDataMap(facesContext);
+		Map map=dataMapAccessor.getDataMap(facesContext);
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+			if (map.isEmpty()) {
+				return Collections.EMPTY_MAP;
+			}
+			map=Collections.unmodifiableMap(map);
+		}
+		return map;
 		
 	}
 

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -34,6 +37,7 @@ package org.rcfaces.core.internal.config;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
@@ -46,7 +50,6 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.provider.IProvider;
 import org.xml.sax.Attributes;
-
 
 /**
  * 
@@ -61,6 +64,8 @@ public class ProvidersRegistry implements IProvidersRegistry {
     private static final Class[] PARENT_PROVIDER_PARAMETER_TYPES = new Class[] { IProvider.class };
 
     private final Map providersRepository = new HashMap(64);
+
+    private Digester digester;
 
     public ProvidersRegistry() {
     }
@@ -228,5 +233,28 @@ public class ProvidersRegistry implements IProvidersRegistry {
         public final void setId(String id) {
             this.id = id;
         }
+    }
+
+    public Digester getConfigDigester() {
+        return digester;
+    }
+
+    public void completeConfiguration(IProvidersConfigurator configurator) {
+        Digester digester = new Digester();
+
+        for (Iterator it = providersRepository.entrySet().iterator(); it
+                .hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            IProvider provider = (IProvider) entry.getValue();
+
+            provider.configureRules(digester);
+        }
+
+        if (digester.getRules().rules().isEmpty()) {
+            return;
+        }
+
+        configurator.parseConfiguration(digester);
     }
 }

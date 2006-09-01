@@ -1,30 +1,29 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import java.lang.Object;
-import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Collections;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IClientValidationCapability;
-import java.lang.String;
+import java.util.HashMap;
 import java.util.Map;
+
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.HashMap;
+
+import org.rcfaces.core.component.capability.IAutoTabCapability;
+import org.rcfaces.core.component.capability.IClientValidationCapability;
 import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.AbstractInputComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class TextEntryComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
@@ -185,16 +184,26 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
 			return map;
 		}
 		
 		Map client=clientMapAccessor.getDataMap(facesContext);
 		if (client==null || client.isEmpty()) {
+		
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
 			return map;
 		}
 		
 		Map fmap=new HashMap(map);
 		if (map.keySet().removeAll(client.keySet())==false) {
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
 			return map;
 		}
 		
@@ -202,7 +211,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 			return Collections.EMPTY_MAP;
 		}
 		
-		if (Constants.LOCK_READ_ONLY_COLLECTIONS) {
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
 			fmap=Collections.unmodifiableMap(fmap);
 		}
 		

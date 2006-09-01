@@ -1,9 +1,0 @@
-var _e={f_isCollapsed:function(){var n,t=this,e
-if(t._9c===n){e=f_core.I(t,"v:collapsed")
-t._9c=(e)?!0:!1}return t._9c},f_setCollapsed:function(e){var t=this
-if(e!==!1)e=!0
-if(t.f_isCollapsed()==e)return
-t._9c=e
-t._pd(e)
-t.f_setProperty("collapsed",t._9c)}}
-var fa_collapsed=new f_aspect("fa_collapsed",null,_e);

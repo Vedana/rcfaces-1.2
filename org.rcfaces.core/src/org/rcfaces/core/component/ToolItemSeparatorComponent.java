@@ -1,6 +1,5 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.component.AbstractSeparatorComponent;
 
 public class ToolItemSeparatorComponent extends AbstractSeparatorComponent {

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -106,8 +109,8 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.webapp.IRepository;
-import org.rcfaces.core.webapp.URIParameters;
+import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.webapp.URIParameters;
 import org.xml.sax.Attributes;
 
 /**
@@ -150,11 +153,11 @@ public abstract class AbstractRepository implements IRepository {
     public AbstractRepository(String servletURI, String repositoryVersion,
             String fileVersion) {
         if (servletURI.length() > 0) {
-            if (servletURI.startsWith("/")) {
-                servletURI = servletURI.substring(1);
+            if (servletURI.endsWith("/") && servletURI.length() > 1) {
+                servletURI = servletURI.substring(0, servletURI.length() - 1);
 
-            } else if (servletURI.endsWith("/") == false) {
-                servletURI += "/";
+            } else if (servletURI.startsWith("/") == false) {
+                servletURI = "/" + servletURI;
             }
         }
 
@@ -1135,13 +1138,17 @@ public abstract class AbstractRepository implements IRepository {
                         }
 
                         if (localizedContentLocation != null) {
-                            LOG.info("Localized version '" + locale
-                                    + "' found locale '" + foundLocale + "' ('"
-                                    + uri + "').");
+                            if (LOG.isInfoEnabled()) {
+                                LOG.info("Localized version '" + locale
+                                        + "' found locale '" + foundLocale
+                                        + "' ('" + uri + "').");
+                            }
 
                         } else {
-                            LOG.trace("Can not find localized version ("
-                                    + locale + ") of '" + uri + "'.");
+                            if (LOG.isTraceEnabled()) {
+                                LOG.trace("Can not find localized version ("
+                                        + locale + ") of '" + uri + "'.");
+                            }
                         }
                     }
                 }

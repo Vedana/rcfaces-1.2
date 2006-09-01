@@ -5,24 +5,53 @@
 /**
  * 
  *
- * @class public f_env extends f_object
+ * @class public f_env extends Object
  * @author Olivier Oeuillot & Joel Merlin
  * @version $Revision$
  */
+ 
+function f_env() {
+}
+
 var __static = {
 	/**
-	 * @field hidden static final string 
+	 * @field private static final string 
 	 */
-	STYLESHEET_BASE: "styleSheet.base",
+	_STYLESHEET_BASE: "styleSheet.base",
 	/**
-	 * @field hidden static final string 
+	 * @field private static final string 
 	 */
-	DEFAULT_STYLESHEET_BASE: "stylesheets",
+	_DEFAULT_STYLESHEET_BASE: "stylesheets",
 	
 	/**
-	 * @field hidden static final string 
+	 * @field private static final string 
 	 */
-	CANCEL_EXTERNAL_SUBMIT: "cancel.external.submit",
+	_CANCEL_EXTERNAL_SUBMIT: "cancel.external.submit",
+	
+	/**
+	 * @field private static string
+	 */
+	 _StyleSheetBase: undefined,
+	
+	/**
+	 * @field private static string
+	 */
+	_BaseURI: undefined,
+	
+	/**
+	 * @field private static string
+	 */
+	_JsBaseURI: undefined,
+	
+	/**
+	 * @field private static string
+	 */
+	_ViewURI: undefined,
+
+	/**
+	 * @field private static boolean
+	 */
+	_LockSubmitUntilPageComplete: undefined,
 	
 	/*
 	Initializer: function() {
@@ -95,6 +124,19 @@ var __static = {
 	GetBaseURI: function() {
 		return f_env._BaseURI;
 	},
+	
+	/**
+	 * @method hidden static final 
+	 */
+	ComputeJavaScriptURI: function(uri) {
+		f_core.Assert(typeof(uri)=="string", "f_env.ComputeJavaScriptURI: invalid uri parameter '"+uri+"'.");
+
+		var baseURI=f_env._JsBaseURI;
+		if (!baseURI) {
+			return uri;
+		}
+		return baseURI+"/"+uri;
+	},
 	/**
 	 * @method hidden static final 
 	 */
@@ -103,35 +145,38 @@ var __static = {
 			return f_env._StyleSheetBase;
 		}
 		
-		var sb=f_env.Get(f_env.STYLESHEET_BASE);
+		var sb=f_env.Get(f_env._STYLESHEET_BASE);
 		if (sb) {
 			f_env._StyleSheetBase=sb;
 			return sb;
 		}
 		
-		return f_env.DEFAULT_STYLESHEET_BASE;
+		return f_env._DEFAULT_STYLESHEET_BASE;
 	},
 	
 	/**
 	 * @method hidden static final
 	 */
-	SetBaseURI: function(baseURI, jsBaseURI, styleSheetBaseURI, viewURI) {
+	SetBaseURI: function(baseURI, viewURI, jsBaseURI, styleSheetBaseURI) {
 		f_env._BaseURI=baseURI;		
 		f_env._JsBaseURI=jsBaseURI;
+		if (!styleSheetBaseURI) {
+			styleSheetBaseURI=jsBaseURI;
+		}
 		f_env._StyleSheetBase=styleSheetBaseURI;
 		f_env._ViewURI=viewURI;
 		
-		f_core.Debug("f_env", "Set base URI to '"+baseURI+"'.");
+		f_core.Debug("f_env", "Set Page base URI to '"+baseURI+"'.");
+		f_core.Debug("f_env", "Set View base URI to '"+viewURI+"'.");
 		f_core.Debug("f_env", "Set Javascript base URI to '"+jsBaseURI+"'.");
 		f_core.Debug("f_env", "Set Css base URI to '"+styleSheetBaseURI+"'.");
-		f_core.Debug("f_env", "Set View base URI to '"+viewURI+"'.");
 	},
 	
 	/**
 	 * @method hidden static final
 	 */
 	GetCancelExternalSubmit: function() {
-		return f_env.Get(f_env.CANCEL_EXTERNAL_SUBMIT, false);
+		return f_env.Get(f_env._CANCEL_EXTERNAL_SUBMIT, false);
 	},
 	
 	/**
@@ -177,8 +222,13 @@ var __static = {
 		}
 			
 		return bundle.f_get("OPEN_WINDOW_ERROR_MESSAGE");
+	},
+	
+	f_getName: function() {
+		return "f_env";
 	}
 }
 
-var f_env=new f_class("f_env", null, __static);
-
+for(var p in __static) {
+	f_env[p]=__static[p];
+}

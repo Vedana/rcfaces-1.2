@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -23,10 +26,6 @@ public class ScaleOperation extends AbstractScaleOperation {
     private static final String REVISION = "$Revision$";
 
     private float scale;
-
-    public String getName() {
-        return "scale";
-    }
 
     public void configure(Map configuration) {
         super.configure(configuration);

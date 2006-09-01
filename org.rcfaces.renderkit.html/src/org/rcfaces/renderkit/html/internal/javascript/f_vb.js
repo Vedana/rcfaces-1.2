@@ -258,7 +258,7 @@ var __static = {
  */
   Translator_removeaccent: function(validator, keyCode, keyChar) {
 	var expr,code;
-	var mapper=f_clientValidator._ACCENTS_MAPPER;
+	var mapper=f_vb._ACCENTS_MAPPER;
 	for (var i=0; i<mapper.length;) {
 		expr = mapper[i++];
 		code = mapper[i++];

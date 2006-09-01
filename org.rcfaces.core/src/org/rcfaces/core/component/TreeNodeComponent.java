@@ -1,11 +1,11 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.internal.component.ExpandableItemComponent;
-import org.rcfaces.core.component.TreeComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.TreeTools;
 
 public class TreeNodeComponent extends ExpandableItemComponent implements 

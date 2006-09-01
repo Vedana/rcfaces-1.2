@@ -300,7 +300,7 @@ f_dateFormat.ResolveYear=function(year, month, date, twoDigitYearStart, locale) 
 		twoDigitYearStart=f_dateFormat.ParseStringDate(locale.f_getTwoDigitYearStart());
 
 		if (!twoDigitYearStart) {
-			twoDigitYearStart=new Date(f_calendarObject._DEFAULT_TWO_DIGIT_YEAR_START, 0, 1);
+			twoDigitYearStart=new Date(f_dateFormat._DEFAULT_TWO_DIGIT_YEAR_START, 0, 1);
 		}
 	}
 	

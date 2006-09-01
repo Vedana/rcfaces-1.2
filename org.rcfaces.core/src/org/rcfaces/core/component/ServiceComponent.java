@@ -1,22 +1,23 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import java.lang.Object;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IServiceEventCapability;
 import java.util.Collections;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.manager.IServerDataManager;
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.component.capability.IServiceEventCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.tools.ComponentTools;
 
 public class ServiceComponent extends CameliaBaseComponent implements 
 	IClientDataCapability,
@@ -101,7 +102,14 @@ public class ServiceComponent extends CameliaBaseComponent implements
 			return Collections.EMPTY_MAP;
 		}
             
-		return dataMapAccessor.getDataMap(facesContext);
+		Map map=dataMapAccessor.getDataMap(facesContext);
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+			if (map.isEmpty()) {
+				return Collections.EMPTY_MAP;
+			}
+			map=Collections.unmodifiableMap(map);
+		}
+		return map;
 		
 	}
 

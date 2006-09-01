@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -32,13 +35,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.commons.digester.Digester;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.config.IProvidersRegistry;
 import org.rcfaces.core.provider.AbstractProvider;
 import org.rcfaces.core.provider.IProvider;
 import org.rcfaces.core.provider.IURLRewritingProvider;
-
 
 /**
  * 
@@ -50,8 +53,6 @@ public abstract class ImageFiltersRepository extends AbstractProvider implements
     private static final String REVISION = "$Revision$";
 
     public static final String URL_REWRITING_SEPARATOR = "::";
-
-    private static final String IMAGE_OPERATION_REPOSITORY = "org.rcfaces.core.internal.IMAGE_FILTERS_REPOSITORY";
 
     public abstract IImageOperation getImageOperation(String operationId);
 
@@ -68,6 +69,9 @@ public abstract class ImageFiltersRepository extends AbstractProvider implements
          * 
          * applicationMap.put(IMAGE_OPERATION_REPOSITORY, this);
          */
+    }
+
+    public void configureRules(Digester digester) {
     }
 
     /*
@@ -94,6 +98,13 @@ public abstract class ImageFiltersRepository extends AbstractProvider implements
         int idx = url.indexOf(URL_REWRITING_SEPARATOR);
         if (idx < 0) {
             if (parent == null) {
+
+                if (imageInformation != null) {
+                    imageInformation.setOriginalImageURL(url);
+                    imageInformation.setRootImageURL(rootURL);
+
+                    imageInformation.setMimeType(getContentType(url));
+                }
                 return url;
             }
             return parent.computeURL(facesContext, component, type,

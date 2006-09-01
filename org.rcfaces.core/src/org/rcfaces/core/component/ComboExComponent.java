@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.ComboComponent;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
+
 import org.rcfaces.core.component.capability.IEditableCapability;
+import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 public class ComboExComponent extends ComboComponent implements 
 	IEditableCapability,

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:34  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -88,9 +91,9 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.config.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.core.provider.IURLRewritingProvider;
-import org.rcfaces.core.webapp.IRepository;
-import org.rcfaces.core.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.HtmlRenderKit;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;

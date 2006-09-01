@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:28  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -25,34 +28,29 @@
  */
 package org.rcfaces.core.internal.images;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.net.FileNameMap;
 import java.net.URLConnection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
 
+import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.codec.StringAppender;
 import org.rcfaces.core.internal.codec.URLFormCodec;
-import org.rcfaces.core.internal.images.operation.BrithnessOperation;
-import org.rcfaces.core.internal.images.operation.ContrastBrithnessOperation;
-import org.rcfaces.core.internal.images.operation.ContrastOperation;
-import org.rcfaces.core.internal.images.operation.DisableOperation;
-import org.rcfaces.core.internal.images.operation.GrayOperation;
-import org.rcfaces.core.internal.images.operation.HoverOperation;
-import org.rcfaces.core.internal.images.operation.ResizeOperation;
-import org.rcfaces.core.internal.images.operation.ScaleOperation;
-import org.rcfaces.core.internal.images.operation.SelectedOperation;
-import org.rcfaces.core.internal.images.operation.SetSizeOperation;
+import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.provider.IProvider;
-
+import org.xml.sax.Attributes;
 
 /**
  * 
@@ -65,46 +63,162 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
     private static final Log LOG = LogFactory
             .getLog(ImageFiltersRepositoryImpl.class);
 
-    private static final String URL_ENCODER_CHARSET = "UTF-8";
-
-    private static final String IMAGE_REPOSITORY_SERVLET_URL = "/image-filters";
-
     private final Map operationsById = new HashMap(32);
 
     private final Map validContentTypes = new HashMap(8);
 
-    private FileNameMap fileNameMap;
+    private final FileNameMap fileNameMap;
 
-    /*
-     * private static final Map CONTENT_TYPE_BY_EXTENSION = new HashMap(10); {
-     * CONTENT_TYPE_BY_EXTENSION.put("gif", "image/gif");
-     * CONTENT_TYPE_BY_EXTENSION.put("jpg", "image/jpeg");
-     * CONTENT_TYPE_BY_EXTENSION.put("jpeg", "image/jpg");
-     * CONTENT_TYPE_BY_EXTENSION.put("png", "image/png"); }
-     */
+    private String imageRepositoryURL;
 
     public ImageFiltersRepositoryImpl(IProvider provider) {
         super(provider);
 
         fileNameMap = URLConnection.getFileNameMap();
 
-        operationsById.put("disabled", new DisableOperation());
-        operationsById.put("gray", new GrayOperation());
-        operationsById.put("contrast", new ContrastOperation());
-        operationsById.put("brithness", new BrithnessOperation());
-        operationsById.put("colorRescale", new ContrastBrithnessOperation());
-        operationsById.put("hover", new HoverOperation());
-        operationsById.put("selected", new SelectedOperation());
-        operationsById.put("scale", new ScaleOperation());
-        operationsById.put("resize", new ResizeOperation());
-        operationsById.put("setSize", new SetSizeOperation());
-        // operationsById.put("icon", new IEIconOperation());
+        /*
+         * operationsById.put("disabled", new DisableOperation());
+         * operationsById.put("gray", new GrayOperation());
+         * operationsById.put("contrast", new ContrastOperation());
+         * operationsById.put("brithness", new BrithnessOperation());
+         * operationsById.put("colorRescale", new ContrastBrithnessOperation());
+         * operationsById.put("hover", new HoverOperation());
+         * operationsById.put("selected", new SelectedOperation());
+         * operationsById.put("scale", new ScaleOperation());
+         * operationsById.put("resize", new ResizeOperation());
+         * operationsById.put("setSize", new SetSizeOperation()); //
+         * operationsById.put("icon", new IEIconOperation());
+         * 
+         * for (Iterator it = operationsById.values().iterator(); it.hasNext();) {
+         * IImageOperation imageOperation = (IImageOperation) it.next();
+         * 
+         * imageOperation.configure(Collections.EMPTY_MAP); }
+         */
+    }
 
-        for (Iterator it = operationsById.values().iterator(); it.hasNext();) {
-            IImageOperation imageOperation = (IImageOperation) it.next();
+    public void configureRules(Digester digester) {
+        super.configureRules(digester);
 
-            imageOperation.configure(Collections.EMPTY_MAP);
+        digester.addRule("rcfaces-config/image-operations/operation",
+                new Rule() {
+                    private static final String REVISION = "$Revision$";
+
+                    public void begin(String namespace, String name,
+                            Attributes attributes) throws Exception {
+
+                        super.digester.push(new OperationBean());
+                    }
+
+                    public void end(String namespace, String name)
+                            throws Exception {
+                        OperationBean operationBean = (OperationBean) super.digester
+                                .pop();
+
+                        declareOperation(operationBean);
+                    }
+                });
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-id", "id");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-name",
+                "name");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-class",
+                "className");
+        digester
+                .addBeanPropertySetter(
+                        "rcfaces-config/image-operations/operation/operation-force-suffix",
+                        "forceSuffix");
+        digester
+                .addBeanPropertySetter(
+                        "rcfaces-config/image-operations/operation/operation-external-contentType",
+                        "externalContentType");
+        digester
+                .addBeanPropertySetter(
+                        "rcfaces-config/image-operations/operation/operation-internal-contentType",
+                        "internalContentType");
+    }
+
+    private void declareOperation(OperationBean operationBean) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Initialize imageOperation '" + operationBean.getId()
+                    + "', name='" + operationBean.getName() + "', classname='"
+                    + operationBean.getClassName() + "'.");
         }
+
+        Class clazz;
+        try {
+            clazz = ClassLocator.load(operationBean.getClassName(), null,
+                    FacesContext.getCurrentInstance());
+
+        } catch (ClassNotFoundException ex) {
+            throw new FacesException("Can not load class '"
+                    + operationBean.getClassName()
+                    + "' specified by imageOperation id='"
+                    + operationBean.getId() + "'.", ex);
+        }
+
+        if (IImageOperation.class.isAssignableFrom(clazz) == false) {
+            throw new FacesException("Class '" + operationBean.getClassName()
+                    + "' specified by imageOperation id='"
+                    + operationBean.getId()
+                    + "' must implement interface 'IImageOperation'.");
+        }
+
+        if ((clazz.getModifiers() & Modifier.ABSTRACT) > 0) {
+            throw new FacesException("Class '" + operationBean.getClassName()
+                    + "' specified by imageOperation id='"
+                    + operationBean.getId() + "' is abstract !");
+        }
+
+        Constructor constructor;
+
+        try {
+            constructor = clazz.getConstructor(null);
+
+        } catch (NoSuchMethodException ex) {
+            throw new FacesException(
+                    "Can not get constructor for imageOperation id='"
+                            + operationBean.getId() + "' class='"
+                            + operationBean.getClassName() + "'.", ex);
+        }
+
+        IImageOperation operation;
+        try {
+            operation = (IImageOperation) constructor.newInstance(null);
+
+        } catch (Throwable ex) {
+            throw new FacesException("Can not instanciate class '"
+                    + operationBean.getClassName()
+                    + "' specified by imageOperation id='"
+                    + operationBean.getId() + "' using constructor '"
+                    + constructor + "'.", ex);
+        }
+
+        if (operationBean.getName() != null) {
+            operation.setName(operationBean.getName());
+        }
+
+        if (operationBean.getExternalContentType() != null) {
+            operation.setExternalContentType(operationBean
+                    .getExternalContentType());
+        }
+
+        if (operationBean.getInternalContentType() != null) {
+            operation.setInternalContentType(operationBean
+                    .getInternalContentType());
+        }
+
+        if (operationBean.getForceSuffix() != null) {
+            operation.setForceSuffix(operationBean.getForceSuffix());
+        }
+
+        LOG.trace("addImageOperation(" + operationBean.getId() + ","
+                + operation + ")");
+
+        operation.configure(operationBean.getParameterMap());
+
+        operationsById.put(operationBean.getId(), operation);
     }
 
     public IImageOperation getImageOperation(String operationId) {
@@ -123,17 +237,42 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
     public String formatImageURL(FacesContext facesContext, String filter,
             String url, boolean mainURL, ImageInformation imageInformation) {
 
-        boolean addFilterServletPath = true;
-
-        String contentType = getContentType(url);
-
-        if (imageInformation != null) {
-            imageInformation.setMimeType(contentType);
+        String operationId = filter;
+        int pf = operationId.indexOf('(');
+        if (pf >= 0) {
+            operationId = operationId.substring(0, pf);
         }
 
-        if (isValidContenType(contentType) == false) {
-            LOG.info("Not supported content type '" + contentType
-                    + "' for url '" + url + "'.");
+        IImageOperation imageOperation = getImageOperation(operationId);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Image operation id='" + operationId + "' filter='"
+                    + filter + "' => " + imageOperation);
+        }
+
+        boolean addFilterServletPath = true;
+
+        String externalContentType = null;
+        String internalContentType = null;
+        if (imageOperation != null) {
+            externalContentType = imageOperation.getExternalContentType();
+            internalContentType = imageOperation.getInternalContentType();
+        }
+        if (externalContentType == null) {
+            externalContentType = getContentType(url);
+        }
+        if (internalContentType == null) {
+            internalContentType = externalContentType;
+        }
+
+        if (imageInformation != null) {
+            imageInformation.setMimeType(externalContentType);
+        }
+
+        if (isValidContenType(internalContentType) == false) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Not supported content type '" + internalContentType
+                        + "' for url '" + url + "'.");
+            }
 
             if (mainURL == false) {
                 return null;
@@ -148,7 +287,15 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
         sb.append(externalContext.getRequestContextPath());
 
         if (addFilterServletPath) {
-            sb.append(IMAGE_REPOSITORY_SERVLET_URL);
+            synchronized (this) {
+                if (imageRepositoryURL == null) {
+                    imageRepositoryURL = ImageFiltersServlet
+                            .getImagesRepositoryURI(externalContext
+                                    .getApplicationMap());
+                }
+            }
+
+            sb.append(imageRepositoryURL);
             sb.append('/');
 
             sb.append(filter);
@@ -164,6 +311,14 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
 
         sb.append('/');
         URLFormCodec.appendURL(sb, url);
+
+        if (imageOperation != null) {
+            String suffix = imageOperation.getForceSuffix();
+            if (suffix != null) {
+                sb.append('.');
+                sb.append(suffix);
+            }
+        }
 
         String ret = sb.toString();
 
@@ -199,5 +354,84 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
         }
 
         return valid.booleanValue();
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot
+     * @version $Revision$
+     */
+    public static final class OperationBean {
+        private static final String REVISION = "$Revision$";
+
+        private String name;
+
+        private String id;
+
+        private String className;
+
+        private String forceSuffix;
+
+        private String externalContentType;
+
+        private String internalContentType;
+
+        private Map parameters = new HashMap();
+
+        public String getClassName() {
+            return className;
+        }
+
+        public Map getParameterMap() {
+            return parameters;
+        }
+
+        public void setClassName(String className) {
+            this.className = className;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getExternalContentType() {
+            return externalContentType;
+        }
+
+        public void setExternalContentType(String forceContentType) {
+            this.externalContentType = forceContentType;
+        }
+
+        public String getInternalContentType() {
+            return internalContentType;
+        }
+
+        public void setInternalContentType(String forceContentType) {
+            this.internalContentType = forceContentType;
+        }
+
+        public String getForceSuffix() {
+            return forceSuffix;
+        }
+
+        public void setForceSuffix(String forceSuffix) {
+            this.forceSuffix = forceSuffix;
+        }
+
+        public void addParameter(String name, String value) {
+            parameters.put(name, value);
+        }
     }
 }

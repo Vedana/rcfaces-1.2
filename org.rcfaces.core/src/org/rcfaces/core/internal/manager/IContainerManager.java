@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/01 15:24:29  oeuillot
+ * Gestion des ICOs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -24,7 +27,7 @@ import java.util.List;
  * @version $Revision$
  */
 public interface IContainerManager {
-	int getContainerStateId();
+	int getChildrenListState();
 
 	int getChildCount();
 
