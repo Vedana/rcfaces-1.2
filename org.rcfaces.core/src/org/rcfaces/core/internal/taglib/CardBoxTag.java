@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class CardBoxTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(CardBoxTag.class);
+
+	private static final Log LOG=LogFactory.getLog(CardBoxTag.class);
+
 	private String selectionListeners;
 	private String asyncRenderMode;
 	private String preference;
@@ -43,6 +45,13 @@ private static final Log LOG=LogFactory.getLog(CardBoxTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (CardBoxComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  preference='"+preference+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof CardBoxComponent)==false) {

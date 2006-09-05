@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -35,64 +38,51 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.commons.digester.Digester;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.config.IProvidersRegistry;
-import org.rcfaces.core.provider.AbstractProvider;
+import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.provider.IProvider;
 import org.rcfaces.core.provider.IURLRewritingProvider;
+import org.rcfaces.core.provider.ImageURLRewritingInformation;
 
 /**
  * 
  * @author Olivier Oeuillot
  * @version $Revision$
  */
-public abstract class ImageFiltersRepository extends AbstractProvider implements
-        IURLRewritingProvider {
+public abstract class ImageOperationsURLRewritingProvider extends
+        AbstractURLRewritingProvider {
     private static final String REVISION = "$Revision$";
 
     public static final String URL_REWRITING_SEPARATOR = "::";
 
     public abstract IImageOperation getImageOperation(String operationId);
 
-    private final IURLRewritingProvider parent;
-
-    public ImageFiltersRepository(IProvider parent) {
-        this.parent = (IURLRewritingProvider) parent;
-
-        /*
-         * FacesContext facesContext = FacesContext.getCurrentInstance();
-         * 
-         * Map applicationMap = facesContext.getExternalContext()
-         * .getApplicationMap();
-         * 
-         * applicationMap.put(IMAGE_OPERATION_REPOSITORY, this);
-         */
+    public ImageOperationsURLRewritingProvider(IProvider parent) {
+        super(parent);
     }
 
-    public void configureRules(Digester digester) {
-    }
-
-    /*
-     * static ImageFiltersRepository getInstance(ServletContext servletContext) {
-     * return (ImageFiltersRepository) servletContext
-     * .getAttribute(IMAGE_OPERATION_REPOSITORY); }
-     */
     protected abstract String formatImageURL(FacesContext facesContext,
             String filter, String url, boolean mainURL,
-            ImageInformation imageInformation);
+            ImageURLRewritingInformation imageInformation);
 
     public final String computeURL(FacesContext facesContext,
             UIComponent component, int type, String attributeName, String url,
-            String rootURL, ImageInformation imageInformation) {
+            String rootURL, IURLRewritingInformation rewritingInformation) {
 
         if (type != IURLRewritingProvider.IMAGE_URL_TYPE) {
             if (parent == null) {
                 return url;
             }
+
             return parent.computeURL(facesContext, component, type,
-                    attributeName, url, rootURL, null);
+                    attributeName, url, rootURL, rewritingInformation);
+        }
+
+        ImageURLRewritingInformation imageInformation = null;
+        if (rewritingInformation instanceof ImageURLRewritingInformation) {
+            imageInformation = (ImageURLRewritingInformation) rewritingInformation;
         }
 
         int idx = url.indexOf(URL_REWRITING_SEPARATOR);
@@ -103,12 +93,13 @@ public abstract class ImageFiltersRepository extends AbstractProvider implements
                     imageInformation.setOriginalImageURL(url);
                     imageInformation.setRootImageURL(rootURL);
 
-                    imageInformation.setMimeType(getContentType(url));
+                    imageInformation.setContentType(getContentType(url));
                 }
                 return url;
             }
+
             return parent.computeURL(facesContext, component, type,
-                    attributeName, url, rootURL, null);
+                    attributeName, url, rootURL, rewritingInformation);
         }
 
         if (imageInformation != null) {
@@ -136,10 +127,15 @@ public abstract class ImageFiltersRepository extends AbstractProvider implements
         String ret = formatImageURL(facesContext, filter, url, mainURL,
                 imageInformation);
 
-        return ret;
+        if (parent == null) {
+            return ret;
+        }
+
+        return parent.computeURL(facesContext, component, type, attributeName,
+                ret, rootURL, rewritingInformation);
     }
 
-    public static ImageFiltersRepository getInstance(
+    public static ImageOperationsURLRewritingProvider getInstance(
             ServletContext servletContext, ServletRequest request,
             ServletResponse response) {
         RcfacesContext cameliaContext = RcfacesContext.getInstance(
@@ -148,7 +144,7 @@ public abstract class ImageFiltersRepository extends AbstractProvider implements
         IProvidersRegistry providersRegistry = cameliaContext
                 .getProvidersRegistry();
 
-        ImageFiltersRepository imageFiltersRepository = (ImageFiltersRepository) providersRegistry
+        ImageOperationsURLRewritingProvider imageFiltersRepository = (ImageOperationsURLRewritingProvider) providersRegistry
                 .getProvider(IURLRewritingProvider.URL_REWRITING_PROVIDER_ID);
 
         return imageFiltersRepository;

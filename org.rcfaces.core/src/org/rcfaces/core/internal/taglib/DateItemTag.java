@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class DateItemTag extends AbstractItemTag {
 
-private static final Log LOG=LogFactory.getLog(DateItemTag.class);
+
+	private static final Log LOG=LogFactory.getLog(DateItemTag.class);
+
 	private String text;
 	private String styleClass;
 	private String date;
@@ -43,6 +45,14 @@ private static final Log LOG=LogFactory.getLog(DateItemTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (DateItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  date='"+date+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof DateItemComponent)==false) {

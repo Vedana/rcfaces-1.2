@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -89,15 +92,15 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.config.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlRenderKit;
+import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
-import org.rcfaces.renderkit.html.internal.IHtmlExternalContext;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
@@ -124,7 +127,7 @@ public class JavaScriptTag extends BodyTagSupport {
 
     private String requiredClasses;
 
-    private IHtmlExternalContext htmlRenderContext;
+    private IHtmlProcessContext htmlRenderContext;
 
     public final String getSrc() {
         return src;
@@ -181,7 +184,7 @@ public class JavaScriptTag extends BodyTagSupport {
             throws IOException {
 
         IJavaScriptRepository repository = JavaScriptRepositoryServlet
-                .getRepository(pageContext.getServletContext());
+                .getRepository(facesContext);
         if (repository == null) {
             LOG.error("JavaScript repository is not created yet !");
             return false;
@@ -288,8 +291,8 @@ public class JavaScriptTag extends BodyTagSupport {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        htmlRenderContext = HtmlRenderKit.getExternalContext(facesContext
-                .getExternalContext());
+        htmlRenderContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext.getExternalContext());
 
         boolean opened = false;
         try {

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -48,8 +51,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.rcfaces.core.internal.config.RcfacesContextImpl;
 import org.rcfaces.core.internal.config.IProvidersRegistry;
+import org.rcfaces.core.internal.config.RcfacesContextImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;

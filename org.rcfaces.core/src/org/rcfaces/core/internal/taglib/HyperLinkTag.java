@@ -6,7 +6,9 @@ import org.rcfaces.core.component.HyperLinkComponent;
 
 public class HyperLinkTag extends ButtonTag {
 
-private static final Log LOG=LogFactory.getLog(HyperLinkTag.class);
+
+	private static final Log LOG=LogFactory.getLog(HyperLinkTag.class);
+
 	public String getComponentType() {
 		return HyperLinkComponent.COMPONENT_TYPE;
 	}

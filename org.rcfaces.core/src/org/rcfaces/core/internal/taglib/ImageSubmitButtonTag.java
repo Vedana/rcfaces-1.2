@@ -6,7 +6,9 @@ import org.rcfaces.core.component.ImageSubmitButtonComponent;
 
 public class ImageSubmitButtonTag extends ImageButtonTag {
 
-private static final Log LOG=LogFactory.getLog(ImageSubmitButtonTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ImageSubmitButtonTag.class);
+
 	public String getComponentType() {
 		return ImageSubmitButtonComponent.COMPONENT_TYPE;
 	}

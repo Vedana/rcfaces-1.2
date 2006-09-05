@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -11,7 +14,7 @@
  */
 package org.rcfaces.core.internal.images;
 
-import org.rcfaces.core.internal.images.ImageFiltersServlet.IBufferedImage;
+import org.rcfaces.core.internal.images.ImageOperationsServlet.IBufferedImage;
 
 /**
  * 

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -79,7 +82,6 @@ import org.rcfaces.core.internal.renderkit.AbstractRequestContext;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 
-
 /**
  * @author Olivier Oeuillot
  * @version $Revision$
@@ -112,7 +114,7 @@ class HtmlRequestContext extends AbstractRequestContext implements
 
     private String eventComponentId;
 
-    private IHtmlExternalContext externalContext;
+    private IHtmlProcessContext externalContext;
 
     /*
      * (non-Javadoc)
@@ -122,8 +124,8 @@ class HtmlRequestContext extends AbstractRequestContext implements
     public void setFacesContext(FacesContext facesContext) {
         super.setFacesContext(facesContext);
 
-        externalContext = HtmlRenderKit.getExternalContext(facesContext
-                .getExternalContext());
+        externalContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext.getExternalContext());
 
         parameters = facesContext.getExternalContext()
                 .getRequestParameterValuesMap();
@@ -193,8 +195,8 @@ class HtmlRequestContext extends AbstractRequestContext implements
         String values = (String) this.properties.get(componentId);
         if (values != null) {
             // Il faut transformer la valeur serialisÃ©e en Map
-            properties = HtmlTools.decodeParametersToMap(component,
-                    values, PROPERTY_SEPARATOR, Boolean.FALSE);
+            properties = HtmlTools.decodeParametersToMap(component, values,
+                    PROPERTY_SEPARATOR, Boolean.FALSE);
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Decode component data of '" + componentId + "' to "
@@ -387,7 +389,7 @@ class HtmlRequestContext extends AbstractRequestContext implements
         return componentData;
     }
 
-    public IHtmlExternalContext getExternalContext() {
+    public IHtmlProcessContext getExternalContext() {
         return externalContext;
     }
 

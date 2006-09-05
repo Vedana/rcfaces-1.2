@@ -6,7 +6,9 @@ import org.rcfaces.core.component.StyledTextComponent;
 
 public class StyledTextTag extends TextTag {
 
-private static final Log LOG=LogFactory.getLog(StyledTextTag.class);
+
+	private static final Log LOG=LogFactory.getLog(StyledTextTag.class);
+
 	public String getComponentType() {
 		return StyledTextComponent.COMPONENT_TYPE;
 	}

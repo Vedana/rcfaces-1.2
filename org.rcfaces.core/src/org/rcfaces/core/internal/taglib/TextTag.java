@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class TextTag extends AbstractOutputTag {
 
-private static final Log LOG=LogFactory.getLog(TextTag.class);
+
+	private static final Log LOG=LogFactory.getLog(TextTag.class);
+
 	private String text;
 	private String fontSize;
 	private String fontBold;
@@ -97,6 +99,20 @@ private static final Log LOG=LogFactory.getLog(TextTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (TextComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontBold='"+fontBold+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  fontItalic='"+fontItalic+"'");
+			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  forVal='"+forVal+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof TextComponent)==false) {

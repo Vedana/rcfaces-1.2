@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:13  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -111,7 +114,7 @@ import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -213,7 +216,7 @@ public class ItemsService extends AbstractHtmlService {
                 printWriter = response.getWriter();
 
             } else {
-                ExpirationHttpServlet
+                ParametredHttpServlet
                         .setGzipContentEncoding((HttpServletResponse) response);
 
                 OutputStream outputStream = response.getOutputStream();

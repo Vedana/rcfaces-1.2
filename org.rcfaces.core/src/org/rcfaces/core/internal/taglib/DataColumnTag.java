@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class DataColumnTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(DataColumnTag.class);
+
+	private static final Log LOG=LogFactory.getLog(DataColumnTag.class);
+
 	private String visible;
 	private String hiddenMode;
 	private String text;
@@ -215,6 +217,31 @@ private static final Log LOG=LogFactory.getLog(DataColumnTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (DataColumnComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  toolTipText='"+toolTipText+"'");
+			LOG.debug("  alignment='"+alignment+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  ascending='"+ascending+"'");
+			LOG.debug("  sortComparator='"+sortComparator+"'");
+			LOG.debug("  resizable='"+resizable+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  maxWidth='"+maxWidth+"'");
+			LOG.debug("  minWidth='"+minWidth+"'");
+			LOG.debug("  verticalAlign='"+verticalAlign+"'");
+			LOG.debug("  value='"+value+"'");
+			LOG.debug("  defaultCellImageURL='"+defaultCellImageURL+"'");
+			LOG.debug("  cellImageURL='"+cellImageURL+"'");
+			LOG.debug("  cellStyleClass='"+cellStyleClass+"'");
+			LOG.debug("  autoFilter='"+autoFilter+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof DataColumnComponent)==false) {

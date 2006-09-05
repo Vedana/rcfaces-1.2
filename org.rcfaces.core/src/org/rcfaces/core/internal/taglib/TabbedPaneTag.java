@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class TabbedPaneTag extends CardBoxTag {
 
-private static final Log LOG=LogFactory.getLog(TabbedPaneTag.class);
+
+	private static final Log LOG=LogFactory.getLog(TabbedPaneTag.class);
+
 	private String closeListeners;
 	private String closable;
 	public String getComponentType() {
@@ -34,6 +36,12 @@ private static final Log LOG=LogFactory.getLog(TabbedPaneTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (TabbedPaneComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  closable='"+closable+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof TabbedPaneComponent)==false) {

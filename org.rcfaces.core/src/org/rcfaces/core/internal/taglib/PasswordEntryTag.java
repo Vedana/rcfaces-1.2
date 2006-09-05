@@ -6,7 +6,9 @@ import org.apache.commons.logging.Log;
 
 public class PasswordEntryTag extends TextEntryTag {
 
-private static final Log LOG=LogFactory.getLog(PasswordEntryTag.class);
+
+	private static final Log LOG=LogFactory.getLog(PasswordEntryTag.class);
+
 	public String getComponentType() {
 		return PasswordEntryComponent.COMPONENT_TYPE;
 	}

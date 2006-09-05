@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class CalendarTag extends AbstractCalendarTag {
 
-private static final Log LOG=LogFactory.getLog(CalendarTag.class);
+
+	private static final Log LOG=LogFactory.getLog(CalendarTag.class);
+
 	private String border;
 	private String mode;
 	public String getComponentType() {
@@ -34,6 +36,13 @@ private static final Log LOG=LogFactory.getLog(CalendarTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (CalendarComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  mode='"+mode+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof CalendarComponent)==false) {

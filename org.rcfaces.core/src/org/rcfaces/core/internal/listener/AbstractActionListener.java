@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -65,7 +68,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
-import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 

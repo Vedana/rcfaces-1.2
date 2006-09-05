@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class TextAreaTag extends TextEntryTag {
 
-private static final Log LOG=LogFactory.getLog(TextAreaTag.class);
+
+	private static final Log LOG=LogFactory.getLog(TextAreaTag.class);
+
 	private String rowNumber;
 	public String getComponentType() {
 		return TextAreaComponent.COMPONENT_TYPE;
@@ -25,6 +27,12 @@ private static final Log LOG=LogFactory.getLog(TextAreaTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (TextAreaComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  rowNumber='"+rowNumber+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof TextAreaComponent)==false) {

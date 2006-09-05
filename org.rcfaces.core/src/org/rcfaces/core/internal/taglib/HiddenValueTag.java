@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class HiddenValueTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(HiddenValueTag.class);
+
+	private static final Log LOG=LogFactory.getLog(HiddenValueTag.class);
+
 	private String propertyChangeListeners;
 	private String immediate;
 	private String value;
@@ -52,6 +54,12 @@ private static final Log LOG=LogFactory.getLog(HiddenValueTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (HiddenValueComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  immediate='"+immediate+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof HiddenValueComponent)==false) {

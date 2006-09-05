@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class MenuRadioItemTag extends MenuCheckItemTag {
 
-private static final Log LOG=LogFactory.getLog(MenuRadioItemTag.class);
+
+	private static final Log LOG=LogFactory.getLog(MenuRadioItemTag.class);
+
 	private String groupName;
 	public String getComponentType() {
 		return MenuRadioItemComponent.COMPONENT_TYPE;
@@ -25,6 +27,12 @@ private static final Log LOG=LogFactory.getLog(MenuRadioItemTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (MenuRadioItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  groupName='"+groupName+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof MenuRadioItemComponent)==false) {

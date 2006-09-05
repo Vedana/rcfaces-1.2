@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -22,13 +25,13 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 
 /**
  * @author Olivier Oeuillot
  * @version $Revision$
  */
-public class HtmlModulesServlet extends ExpirationHttpServlet {
+public class HtmlModulesServlet extends ParametredHttpServlet {
     private static final String REVISION = "$Revision$";
 
     private static final String MODULES_PARAMETER = Constants

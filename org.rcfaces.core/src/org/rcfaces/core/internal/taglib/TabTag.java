@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class TabTag extends CardTag {
 
-private static final Log LOG=LogFactory.getLog(TabTag.class);
+
+	private static final Log LOG=LogFactory.getLog(TabTag.class);
+
 	private String text;
 	private String fontSize;
 	private String fontBold;
@@ -133,6 +135,24 @@ private static final Log LOG=LogFactory.getLog(TabTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (TabComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontBold='"+fontBold+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  fontItalic='"+fontItalic+"'");
+			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  disabled='"+disabled+"'");
+			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
+			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
+			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof TabComponent)==false) {

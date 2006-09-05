@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class RadioButtonTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(RadioButtonTag.class);
+
+	private static final Log LOG=LogFactory.getLog(RadioButtonTag.class);
+
 	private String text;
 	private String textPosition;
 	private String selectionListeners;
@@ -79,6 +81,17 @@ private static final Log LOG=LogFactory.getLog(RadioButtonTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (RadioButtonComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  selected='"+selected+"'");
+			LOG.debug("  groupName='"+groupName+"'");
+			LOG.debug("  required='"+required+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof RadioButtonComponent)==false) {

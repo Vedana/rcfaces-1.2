@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -36,7 +39,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 
 /**
  * 
@@ -431,7 +434,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
             }
 
             if (this.lastModified == 0
-                    && ExpirationHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
+                    && ParametredHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
 
                 this.lastModified = date;
             }
@@ -444,10 +447,10 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
             }
 
             if (lastModified == 0
-                    && ExpirationHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
+                    && ParametredHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
 
                 try {
-                    Date d = ExpirationHttpServlet.parseHttpDate(value);
+                    Date d = ParametredHttpServlet.parseHttpDate(value);
                     LOG.trace("Inclusion set Last-Modified property to " + d);
 
                     if (d != null) {

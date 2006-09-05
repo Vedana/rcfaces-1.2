@@ -25,7 +25,7 @@ var __static = {
 	 
 
 	/**
-	 * Prepare the image. (Preload it if necessary)
+	 * Prepare an image. (Preload it if necessary)
 	 *
 	 * @method public static final
 	 * @param string url

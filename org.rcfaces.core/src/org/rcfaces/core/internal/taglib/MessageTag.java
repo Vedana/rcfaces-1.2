@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class MessageTag extends AbstractMessageTag {
 
-private static final Log LOG=LogFactory.getLog(MessageTag.class);
+
+	private static final Log LOG=LogFactory.getLog(MessageTag.class);
+
 	private String infoStyleClass;
 	private String errorStyleClass;
 	private String warnStyleClass;
@@ -61,6 +63,16 @@ private static final Log LOG=LogFactory.getLog(MessageTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (MessageComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
+			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
+			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
+			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
+			LOG.debug("  bundleVar='"+bundleVar+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof MessageComponent)==false) {

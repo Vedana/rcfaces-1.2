@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class TextEntryTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(TextEntryTag.class);
+
+	private static final Log LOG=LogFactory.getLog(TextEntryTag.class);
+
 	private String required;
 	private String autoTab;
 	private String text;
@@ -142,6 +144,23 @@ private static final Log LOG=LogFactory.getLog(TextEntryTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (TextEntryComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  required='"+required+"'");
+			LOG.debug("  autoTab='"+autoTab+"'");
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  emptyMessage='"+emptyMessage+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  clientValidator='"+clientValidator+"'");
+			LOG.debug("  maxTextLength='"+maxTextLength+"'");
+			LOG.debug("  columnNumber='"+columnNumber+"'");
+			LOG.debug("  autoCompletion='"+autoCompletion+"'");
+			LOG.debug("  action='"+action+"'");
+			LOG.debug("  actionListeners='"+actionListeners+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof TextEntryComponent)==false) {

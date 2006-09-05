@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class DataListTag extends AbstractDataTag {
 
-private static final Log LOG=LogFactory.getLog(DataListTag.class);
+
+	private static final Log LOG=LogFactory.getLog(DataListTag.class);
+
 	private String border;
 	private String borderType;
 	private String verticalScrollPosition;
@@ -133,6 +135,24 @@ private static final Log LOG=LogFactory.getLog(DataListTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (DataListComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
+			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
+			LOG.debug("  rows='"+rows+"'");
+			LOG.debug("  first='"+first+"'");
+			LOG.debug("  value='"+value+"'");
+			LOG.debug("  var='"+var+"'");
+			LOG.debug("  rowCountVar='"+rowCountVar+"'");
+			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
+			LOG.debug("  columnNumber='"+columnNumber+"'");
+			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
+			LOG.debug("  columnStyleClass='"+columnStyleClass+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof DataListComponent)==false) {

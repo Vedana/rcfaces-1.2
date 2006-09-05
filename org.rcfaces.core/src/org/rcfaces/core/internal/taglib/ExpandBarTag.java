@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ExpandBarTag extends AbstractOutputTag {
 
-private static final Log LOG=LogFactory.getLog(ExpandBarTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ExpandBarTag.class);
+
 	private String asyncRenderMode;
 	private String fontSize;
 	private String fontBold;
@@ -196,6 +198,27 @@ private static final Log LOG=LogFactory.getLog(ExpandBarTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ExpandBarComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontBold='"+fontBold+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  fontItalic='"+fontItalic+"'");
+			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  disabled='"+disabled+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  collapsed='"+collapsed+"'");
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  tabIndex='"+tabIndex+"'");
+			LOG.debug("  groupName='"+groupName+"'");
+			LOG.debug("  collapseEffect='"+collapseEffect+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ExpandBarComponent)==false) {

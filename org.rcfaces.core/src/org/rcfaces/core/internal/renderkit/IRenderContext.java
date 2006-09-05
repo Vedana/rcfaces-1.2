@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -94,7 +97,7 @@ public interface IRenderContext {
 
     // Pas de FacesContext car en cas de traitement Ã  la Tiles ca marche plus !
 
-    IExternalContext getExternalContext();
+    IProcessContext getExternalContext();
 
     IScriptRenderContext getScriptRenderContext();
 

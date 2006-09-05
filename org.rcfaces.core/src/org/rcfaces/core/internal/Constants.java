@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -42,6 +45,8 @@ public class Constants {
     public static final boolean STATE_CHILDREN_LIST_ENABLED = true;
 
     public static final boolean BUILD_ID_URL_SUPPORT = true;
+
+    public static final boolean ENCODE_URI = false;
 
     private static final String CONSTANT_PREFIX;
     static {

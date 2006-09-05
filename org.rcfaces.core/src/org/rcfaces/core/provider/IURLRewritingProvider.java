@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -43,59 +46,18 @@ public interface IURLRewritingProvider extends IProvider {
 
     String computeURL(FacesContext facesContext, UIComponent component,
             int type, String attributeName, String attributeValue,
-            String rootURL, ImageInformation imageInformation);
+            String rootURL, IURLRewritingInformation rewritingInformation);
 
     /**
      * 
      * @author Olivier Oeuillot
      * @version $Revision$
      */
-    public class ImageInformation {
-        private static final String REVISION = "$Revision$";
+    public interface IURLRewritingInformation {
+        IURLRewritingInformation getParent();
 
-        private final ImageInformation parent;
+        String getRootURL();
 
-        private String originalImageURL;
-
-        private String rootImageURL;
-
-        private String mimeType;
-
-        public ImageInformation() {
-            this(null);
-        }
-
-        public ImageInformation(ImageInformation parent) {
-            this.parent = parent;
-        }
-
-        public ImageInformation getParent() {
-            return parent;
-        }
-
-        public String getOriginalImageURL() {
-            return originalImageURL;
-        }
-
-        public void setOriginalImageURL(String originalImageURL) {
-            this.originalImageURL = originalImageURL;
-        }
-
-        public String getMimeType() {
-            return mimeType;
-        }
-
-        public void setMimeType(String mimeType) {
-            this.mimeType = mimeType;
-        }
-
-        public String getRootImageURL() {
-            return rootImageURL;
-        }
-
-        public void setRootImageURL(String rootImageURL) {
-            this.rootImageURL = rootImageURL;
-        }
-
+        String getContentType();
     }
 }

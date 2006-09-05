@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class SelectImageItemTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(SelectImageItemTag.class);
+
+	private static final Log LOG=LogFactory.getLog(SelectImageItemTag.class);
+
 	private String imageURL;
 	private String itemValue;
 	private String itemDescription;
@@ -61,6 +63,16 @@ private static final Log LOG=LogFactory.getLog(SelectImageItemTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (SelectImageItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  itemValue='"+itemValue+"'");
+			LOG.debug("  itemDescription='"+itemDescription+"'");
+			LOG.debug("  itemLabel='"+itemLabel+"'");
+			LOG.debug("  itemDisabled='"+itemDisabled+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof SelectImageItemComponent)==false) {

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -39,10 +42,10 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.rcfaces.core.internal.config.AbstractURLRewritingProvider;
+import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.provider.IURLRewritingProvider;
-import org.rcfaces.renderkit.html.internal.HtmlRenderKit;
-import org.rcfaces.renderkit.html.internal.IHtmlExternalContext;
+import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
@@ -55,7 +58,7 @@ public class CssStyleTag extends BodyTagSupport {
 
     private String src;
 
-    private IHtmlExternalContext htmlRenderContext;
+    private IHtmlProcessContext htmlRenderContext;
 
     public final String getSrc() {
         return src;
@@ -78,8 +81,8 @@ public class CssStyleTag extends BodyTagSupport {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        htmlRenderContext = HtmlRenderKit.getExternalContext(facesContext
-                .getExternalContext());
+        htmlRenderContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext.getExternalContext());
 
         boolean useMetaContentStyleType = htmlRenderContext
                 .useMetaContentStyleType()

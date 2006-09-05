@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ProgressIndicatorTag extends AbstractBasicTag {
 
-private static final Log LOG=LogFactory.getLog(ProgressIndicatorTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ProgressIndicatorTag.class);
+
 	private String indeterminate;
 	public String getComponentType() {
 		return ProgressIndicatorComponent.COMPONENT_TYPE;
@@ -25,6 +27,12 @@ private static final Log LOG=LogFactory.getLog(ProgressIndicatorTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ProgressIndicatorComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  indeterminate='"+indeterminate+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ProgressIndicatorComponent)==false) {

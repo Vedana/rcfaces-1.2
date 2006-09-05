@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ImageTag extends AbstractOutputTag {
 
-private static final Log LOG=LogFactory.getLog(ImageTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ImageTag.class);
+
 	private String imageURL;
 	public String getComponentType() {
 		return ImageComponent.COMPONENT_TYPE;
@@ -25,6 +27,12 @@ private static final Log LOG=LogFactory.getLog(ImageTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ImageComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  imageURL='"+imageURL+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ImageComponent)==false) {

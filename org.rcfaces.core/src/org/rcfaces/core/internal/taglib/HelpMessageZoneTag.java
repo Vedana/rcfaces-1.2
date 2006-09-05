@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class HelpMessageZoneTag extends AbstractOutputTag {
 
-private static final Log LOG=LogFactory.getLog(HelpMessageZoneTag.class);
+
+	private static final Log LOG=LogFactory.getLog(HelpMessageZoneTag.class);
+
 	private String text;
 	private String fontSize;
 	private String fontBold;
@@ -79,6 +81,18 @@ private static final Log LOG=LogFactory.getLog(HelpMessageZoneTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (HelpMessageZoneComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontBold='"+fontBold+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  fontItalic='"+fontItalic+"'");
+			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  textAlignment='"+textAlignment+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof HelpMessageZoneComponent)==false) {

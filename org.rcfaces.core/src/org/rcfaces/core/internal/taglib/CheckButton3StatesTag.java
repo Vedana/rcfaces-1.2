@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class CheckButton3StatesTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(CheckButton3StatesTag.class);
+
+	private static final Log LOG=LogFactory.getLog(CheckButton3StatesTag.class);
+
 	private String text;
 	private String textPosition;
 	private String selectionListeners;
@@ -61,6 +63,15 @@ private static final Log LOG=LogFactory.getLog(CheckButton3StatesTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (CheckButton3StatesComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  selectedState='"+selectedState+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof CheckButton3StatesComponent)==false) {

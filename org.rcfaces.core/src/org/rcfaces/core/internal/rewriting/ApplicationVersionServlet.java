@@ -1,0 +1,140 @@
+/*
+ * $Id$
+ * 
+ * $Log$
+ * Revision 1.1  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
+ */
+package org.rcfaces.core.internal.rewriting;
+
+import java.io.IOException;
+import java.util.Map;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.util.Delay;
+import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.webapp.ExpirationDate;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
+
+/**
+ * 
+ * @author Olivier Oeuillot
+ * @version $Revision$
+ */
+public class ApplicationVersionServlet extends ExtendedHttpServlet {
+
+    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(ApplicationVersionServlet.class);
+
+    private static final String DEFAULT_APPLICATION_VERSION_URL = "/ap-v";
+
+    private static final String APPLICATION_VERSION_URL_PROPERTY = "org.rcfaces.core.internal.rewriting.APPLICATION_VERSION_URL_PROPERTY";
+
+    private static final String EXPIRE_PARAMETER = Constants.getPackagePrefix()
+            + ".EXPIRES";
+
+    private ExpirationDate expirationDate;
+
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        String applicationVersionURL = ServletTools.computeResourceURI(
+                getServletContext(), DEFAULT_APPLICATION_VERSION_URL,
+                getClass());
+        LOG.info("Set application version url to '" + applicationVersionURL
+                + "'.");
+
+        String expires = getParameter(EXPIRE_PARAMETER);
+        if (expires != null) {
+            expirationDate = ExpirationDate.parse(getServletName(),
+                    EXPIRE_PARAMETER, expires);
+        }
+
+        if (LOG.isInfoEnabled() && expirationDate != null) {
+            if (expirationDate.getExpiresDate() >= 0) {
+                LOG.info("Expire date setted to "
+                        + expirationDate.getExpiresDate() + "  for sevlet '"
+                        + getServletName() + "'.");
+            }
+
+            if (expirationDate.getExpiresDelay() >= 0) {
+                LOG.info("Expire delay setted to "
+                        + Delay.format(expirationDate.getExpiresDelay())
+                        + " for sevlet '" + getServletName() + "'.");
+
+            }
+        }
+
+        getServletContext().setAttribute(APPLICATION_VERSION_URL_PROPERTY,
+                applicationVersionURL);
+    }
+
+    static String getApplicationVersionURI(Map applicationMap) {
+        return (String) applicationMap.get(APPLICATION_VERSION_URL_PROPERTY);
+    }
+
+    protected void service(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+
+        String url = request.getRequestURI();
+
+        String contextPath = request.getContextPath();
+        if (contextPath != null) {
+            url = url.substring(contextPath.length());
+        }
+
+        String servletPath = request.getServletPath();
+        if (servletPath != null) {
+            url = url.substring(servletPath.length());
+        }
+
+        // Retire le nom de notre servlet
+        int idx = url.indexOf('/');
+        if (idx < 0) {
+            throw new ServletException("Can not understand URI '"
+                    + request.getRequestURI() + "'.");
+        }
+
+        url = url.substring(idx + 1);
+
+        idx = url.indexOf('/');
+        if (idx < 0) {
+            throw new ServletException("Can not understand URI '"
+                    + request.getRequestURI() + "'.");
+        }
+        String version = url.substring(0, idx);
+        url = url.substring(idx);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Forward url='" + url + "' version='" + version
+                    + "'  requested url='" + request.getRequestURI() + "'.");
+        }
+
+        RequestDispatcher requestDispatcher = getServletContext()
+                .getRequestDispatcher(url);
+        if (requestDispatcher == null) {
+            LOG.error("Can not get request dispatcher for url '" + url + "'.");
+
+            throw new ServletException(
+                    "Can not get request dispatcher for url '" + url + "'.");
+        }
+
+        if (expirationDate != null) {
+            expirationDate.sendExpires(response);
+        }
+
+        requestDispatcher.forward(request, response);
+    }
+
+}

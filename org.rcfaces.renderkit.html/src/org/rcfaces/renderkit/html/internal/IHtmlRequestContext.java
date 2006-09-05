@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -24,5 +27,5 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
  * @version $Revision$
  */
 public interface IHtmlRequestContext extends IRequestContext {
-    IHtmlExternalContext getExternalContext();
+    IHtmlProcessContext getExternalContext();
 }

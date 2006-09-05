@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -77,8 +80,9 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.images.ImageFiltersRepositoryImpl;
+import org.rcfaces.core.internal.images.ImageOperationsRepositoryImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
+import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.xml.sax.EntityResolver;
@@ -102,7 +106,8 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
     private static final Package[] KERNEL_CONFIG_FILENAMES = new Package[] {
             RcfacesContext.class.getPackage(),
             RcfacesContextImpl.class.getPackage(),
-            ImageFiltersRepositoryImpl.class.getPackage()
+            AbstractURLRewritingProvider.class.getPackage(),
+            ImageOperationsRepositoryImpl.class.getPackage()
     // HtmlRenderKit.class.getPackage()
     };
 

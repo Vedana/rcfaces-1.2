@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -32,7 +35,7 @@ import javax.faces.context.ExternalContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.codec.StringAppender;
-import org.rcfaces.core.internal.renderkit.AbstractExternalContext;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 
@@ -41,20 +44,13 @@ import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
  * @author Olivier Oeuillot
  * @version $Revision$
  */
-public class HtmlExternalContextImpl extends AbstractExternalContext implements
-        IHtmlExternalContext {
+public class HtmlProcessContextImpl extends AbstractProcessContext implements
+        IHtmlProcessContext {
 
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
-            .getLog(HtmlExternalContextImpl.class);
-
-    // On encode pas car c'est liÃ© au contexte utilisateur !
-    private static final boolean ENCODE_URI = false;
-
-    private String baseHREF;
-
-    private String baseURI;
+            .getLog(HtmlProcessContextImpl.class);
 
     private String styleSheetURI;
 
@@ -72,7 +68,7 @@ public class HtmlExternalContextImpl extends AbstractExternalContext implements
 
     private boolean profilerMode;
 
-    public HtmlExternalContextImpl(ExternalContext externalContext) {
+    public HtmlProcessContextImpl(ExternalContext externalContext) {
         super(externalContext);
 
         Map applicationMap = externalContext.getInitParameterMap();
@@ -101,7 +97,8 @@ public class HtmlExternalContextImpl extends AbstractExternalContext implements
 
         ICssConfig cssConfig = StylesheetsServlet.getConfig(this);
 
-        styleSheetURI = cssConfig.getDefaultStyleSheetURI();
+        styleSheetURI = externalContext.getRequestContextPath()
+                + cssConfig.getDefaultStyleSheetURI();
 
         if (LOG.isDebugEnabled()) {
             LOG
@@ -139,70 +136,8 @@ public class HtmlExternalContextImpl extends AbstractExternalContext implements
             ret = styleSheetURI;
         }
 
-        ret = getBaseURI(ret);
-
         if (LOG.isDebugEnabled()) {
             LOG.debug("Compute stylesheet uri '" + uri + "' => '" + ret + "'.");
-        }
-
-        return ret;
-    }
-
-    public final String getBaseURI() {
-        if (baseURI != null) {
-            return baseURI;
-        }
-
-        String contextPath = externalContext.getRequestContextPath();
-        baseURI = contextPath;
-
-        if (baseURI.endsWith("/")) {
-            baseURI.substring(0, baseURI.length() - 1);
-        }
-
-        if (baseURI.equals(baseHREF)) {
-            baseURI = "";
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Set baseURI to '" + baseURI + "' (contextPath='"
-                    + contextPath + "').");
-        }
-
-        return baseURI;
-    }
-
-    public String getBaseURI(String uri) {
-        String ret;
-        if (uri == null) {
-            ret = getBaseURI();
-
-        } else {
-            StringAppender u = new StringAppender(getBaseURI(),
-                    uri.length() + 2);
-
-            if (uri != null && uri.length() > 0) {
-                if (uri.charAt(0) != '/') {
-                    u.append('/');
-
-                } else if (u.charAt(u.length() - 1) == '/') {
-                    u.setLength(u.length() - 1);
-                }
-
-                u.append(uri);
-            } else {
-                u.append('/');
-            }
-
-            ret = u.toString();
-        }
-
-        if (ENCODE_URI) {
-            ret = externalContext.encodeResourceURL(ret);
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Compute uri '" + uri + "' => '" + ret + "'.");
         }
 
         return ret;
@@ -250,21 +185,17 @@ public class HtmlExternalContextImpl extends AbstractExternalContext implements
         return profilerMode;
     }
 
-    public String getBaseHREF() {
-        return baseHREF;
-    }
+    public static IHtmlProcessContext getHtmlProcessContext(
+            ExternalContext externalContext) {
 
-    public void changeBaseHREF(String baseHREF) {
-        if (baseHREF != null && baseHREF.length() > 0) {
-            if (baseHREF.endsWith("/")) {
-                baseHREF = baseHREF.substring(0, baseHREF.length() - 1);
-            }
-            if (baseHREF.startsWith("/") == false) {
-                baseHREF = "/" + baseHREF;
-            }
+        IHtmlProcessContext htmlProcessContext = (IHtmlProcessContext) getProcessContext(externalContext);
+        if (htmlProcessContext != null) {
+            return htmlProcessContext;
         }
 
-        this.baseHREF = baseHREF;
-        baseURI = null; // On recalcule !
+        htmlProcessContext = new HtmlProcessContextImpl(externalContext);
+        setExternalContext(htmlProcessContext);
+
+        return htmlProcessContext;
     }
 }

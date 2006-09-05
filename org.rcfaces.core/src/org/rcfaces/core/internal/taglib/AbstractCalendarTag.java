@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public abstract class AbstractCalendarTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(AbstractCalendarTag.class);
+
+	private static final Log LOG=LogFactory.getLog(AbstractCalendarTag.class);
+
 	private String selectionListeners;
 	private String readOnly;
 	private String attributesLocale;
@@ -84,6 +86,15 @@ private static final Log LOG=LogFactory.getLog(AbstractCalendarTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  attributesLocale='"+attributesLocale+"'");
+			LOG.debug("  clientDatesStrategy='"+clientDatesStrategy+"'");
+			LOG.debug("  twoDigitYearStart='"+twoDigitYearStart+"'");
+			LOG.debug("  minDate='"+minDate+"'");
+			LOG.debug("  maxDate='"+maxDate+"'");
+			LOG.debug("  disabledWeekDays='"+disabledWeekDays+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractCalendarComponent)==false) {

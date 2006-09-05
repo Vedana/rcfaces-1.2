@@ -28,7 +28,7 @@ var __static={
 				if (link.rel!="stylesheet") {
 					continue;
 				}
-				var idx=link.href.indexOf("camelia-faces.css");
+				var idx=link.href.indexOf("rcfaces.css");
 				if (idx<0) {
 					continue;
 				}

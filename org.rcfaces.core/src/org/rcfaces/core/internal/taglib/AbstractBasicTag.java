@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public abstract class AbstractBasicTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(AbstractBasicTag.class);
+
+	private static final Log LOG=LogFactory.getLog(AbstractBasicTag.class);
+
 	private String propertyChangeListeners;
 	private String userEventListeners;
 	private String y;
@@ -192,6 +194,26 @@ private static final Log LOG=LogFactory.getLog(AbstractBasicTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  y='"+y+"'");
+			LOG.debug("  x='"+x+"'");
+			LOG.debug("  height='"+height+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  marginRight='"+marginRight+"'");
+			LOG.debug("  marginLeft='"+marginLeft+"'");
+			LOG.debug("  marginTop='"+marginTop+"'");
+			LOG.debug("  marginBottom='"+marginBottom+"'");
+			LOG.debug("  helpMessage='"+helpMessage+"'");
+			LOG.debug("  helpURL='"+helpURL+"'");
+			LOG.debug("  toolTipText='"+toolTipText+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  margins='"+margins+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractBasicComponent)==false) {

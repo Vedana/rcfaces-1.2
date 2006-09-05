@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -97,7 +100,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.config.AbstractURLRewritingProvider;
+import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.provider.IURLRewritingProvider;
 

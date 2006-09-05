@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:13  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -114,10 +117,10 @@ import org.rcfaces.core.internal.codec.SourceFilter;
 import org.rcfaces.core.internal.util.CameliaVersion;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
-import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 import org.rcfaces.core.internal.webapp.URIParameters;
 import org.rcfaces.renderkit.html.internal.HtmlModulesServlet;
-import org.rcfaces.renderkit.html.internal.IHtmlExternalContext;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 
 /**
  * @author Olivier Oeuillot
@@ -256,9 +259,16 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         getRepository();
     }
 
-    public static ICssConfig getConfig(IHtmlExternalContext htmlExternalContext) {
-        return (ICssConfig) htmlExternalContext.getExternalContext()
-                .getApplicationMap().get(CSS_CONFIG_PROPERTY);
+    public static ICssConfig getConfig(IHtmlProcessContext htmlExternalContext) {
+        ICssConfig cssConfig = (ICssConfig) htmlExternalContext
+                .getExternalContext().getApplicationMap().get(
+                        CSS_CONFIG_PROPERTY);
+
+        if (cssConfig == null) {
+            throw new FacesException("No initialized stylesheet config !");
+        }
+
+        return cssConfig;
     }
 
     protected String getDefaultCharset() {
@@ -703,7 +713,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Set no cache for response.");
                 }
-                ExpirationHttpServlet.setNoCache(response);
+                ParametredHttpServlet.setNoCache(response);
 
             } else {
                 ExpirationDate expirationDate = getDefaultExpirationDate();

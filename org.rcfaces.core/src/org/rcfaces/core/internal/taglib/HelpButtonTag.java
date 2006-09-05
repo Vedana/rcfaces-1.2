@@ -6,7 +6,9 @@ import org.apache.commons.logging.Log;
 
 public class HelpButtonTag extends ImageButtonTag {
 
-private static final Log LOG=LogFactory.getLog(HelpButtonTag.class);
+
+	private static final Log LOG=LogFactory.getLog(HelpButtonTag.class);
+
 	public String getComponentType() {
 		return HelpButtonComponent.COMPONENT_TYPE;
 	}

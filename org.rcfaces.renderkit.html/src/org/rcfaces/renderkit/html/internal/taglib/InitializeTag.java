@@ -1,119 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/01 15:24:34  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.21  2006/08/28 16:03:55  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.20  2006/07/18 17:06:30  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.19  2006/06/28 17:48:28  oeuillot
- * Ajout de dateEntry
- * Ajout D'une constante g�n�rale de sp�cification de l'attributesLocale
- * Ajout d'un attribut <v:init attributesLocale='' />
- *
- * Revision 1.18  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.17  2006/04/27 13:49:47  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.16  2006/03/02 15:31:55  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.15  2006/02/06 16:47:04  oeuillot
- * Renomme le logger commons.log en LOG
- * Ajout du composant focusManager
- * Renomme vfc-all.xml en repository.xml
- * Ajout de la gestion de __Vversion et __Llocale
- *
- * Revision 1.14  2006/02/03 11:37:33  oeuillot
- * Calcule les classes pour le Javascript, plus les fichiers !
- *
- * Revision 1.13  2006/01/31 16:04:24  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.12  2005/12/22 11:48:06  oeuillot
- * Ajout de :
- * - JS:  calendar, locale, dataList, log
- * - Evenement User
- * - ClientData  multi-directionnel (+TAG)
- *
- * Revision 1.11  2005/11/08 12:16:27  oeuillot
- * Ajout de  Preferences
- * Stabilisation de imageXXXButton
- * Ajout de la validation cot� client
- * Ajout du hash MD5 pour les servlets
- * Ajout des accelerateurs
- *
- * Revision 1.10  2005/10/05 14:34:18  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.9  2005/09/16 09:54:41  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
- * Revision 1.8  2005/03/18 14:42:49  oeuillot
- * Support de la table des symbols pour le javascript compress�
- * Menu du style XP et pas Office !
- *
- * Revision 1.7  2005/03/07 10:47:02  oeuillot
- * Systeme de Logging
- * Debuggage
- *
- * Revision 1.6  2005/02/21 17:33:05  oeuillot
- * Reorganisation du JAVASCRIPT
- * Reorganisation des ImageXxxxButton
- * Reorganise le ComponentTools => Converters
- *
- * Revision 1.5  2005/02/18 14:46:06  oeuillot
- * Corrections importantes pour stabilisation
- * R�ecriture du noyau JAVASCRIPT pour ameliorer performances.
- * Ajout de IValueLockedCapability
- *
- * Revision 1.4  2004/12/30 17:24:19  oeuillot
- * Gestion des validateurs
- * Debuggage des composants
- *
- * Revision 1.3  2004/12/24 15:10:03  oeuillot
- * Refonte des tabbedPanes
- * Correction de problemes de value sur FieldSet nottament
- *
- * Revision 1.2  2004/11/19 18:01:30  oeuillot
- * Version debut novembre
- *
- * Revision 1.1  2004/09/24 14:01:34  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.renderkit.html.internal.taglib;
 
@@ -130,7 +16,6 @@ import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -140,22 +25,26 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.codec.URLFormCodec;
-import org.rcfaces.core.internal.config.AbstractURLRewritingProvider;
-import org.rcfaces.core.internal.images.ImageFiltersRepository;
+import org.rcfaces.core.internal.images.ImageOperationsURLRewritingProvider;
 import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
-import org.rcfaces.core.internal.renderkit.IExternalContext;
-import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 import org.rcfaces.core.internal.webapp.IRepository.IContext;
 import org.rcfaces.core.provider.IURLRewritingProvider;
-import org.rcfaces.renderkit.html.internal.HtmlRenderKit;
-import org.rcfaces.renderkit.html.internal.IHtmlExternalContext;
+import org.rcfaces.core.provider.ImageURLRewritingInformation;
+import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.codec.HTMLCodec;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
+import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
+import org.rcfaces.renderkit.html.internal.taglib.JavaScriptTag.JavaScriptWriterImpl;
 
 /**
  * @author Olivier Oeuillot
@@ -168,6 +57,8 @@ public class InitializeTag extends
     private static final Log LOG = LogFactory.getLog(InitializeTag.class);
 
     private static final String META_DATA_INITIALIZED_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.META_DATA_INITIALIZED";
+
+    private static final String INVALID_BROWSER_URL_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.INVALID_BROWSER_URL";
 
     private static final String DISABLE_IE_IMAGE_BAR_PARAMETER = Constants
             .getPackagePrefix()
@@ -207,6 +98,8 @@ public class InitializeTag extends
 
     private boolean disableCache = false;
 
+    private boolean renderBaseTag = true;
+
     private String base;
 
     private String favoriteImageURL;
@@ -227,7 +120,7 @@ public class InitializeTag extends
 
     private String defaultInvalidBrowserPageURL;
 
-    private IHtmlExternalContext htmlExternalContext;
+    private IHtmlProcessContext htmlProcessContext;
 
     public int doStartTag() throws JspException {
 
@@ -266,7 +159,7 @@ public class InitializeTag extends
                 disableCache(writer);
             }
 
-            if (htmlExternalContext.useMetaContentScriptType()) {
+            if (htmlProcessContext.useMetaContentScriptType()) {
                 writer
                         .print("<META http-equiv=\"Content-Script-Type\" content=\"");
                 writer.print(IHtmlRenderContext.JAVASCRIPT_TYPE);
@@ -275,7 +168,7 @@ public class InitializeTag extends
 
             }
 
-            if (htmlExternalContext.useMetaContentStyleType()) {
+            if (htmlProcessContext.useMetaContentStyleType()) {
                 writer
                         .print("<META http-equiv=\"Content-Style-Type\" content=\"");
                 writer.print(IHtmlRenderContext.CSS_TYPE);
@@ -291,32 +184,33 @@ public class InitializeTag extends
             }
 
             if (base != null) {
-                writer.print("<BASE href=\"");
+                if (renderBaseTag) {
+                    writer.print("<BASE href=\"");
+                }
 
                 if ("context".equals(base)) {
-                    HttpServletRequest hr = (HttpServletRequest) pageContext
-                            .getRequest();
                     String contextPath = facesContext.getExternalContext()
                             .getRequestContextPath();
 
-                    base = hr.getRequestURL().toString();
-                    int idx = base.indexOf(contextPath);
-                    if (idx >= 0) {
-                        base = base.substring(0, idx + contextPath.length());
-                    }
+                    contextPath += "/";
 
-                    htmlExternalContext.changeBaseHREF(contextPath);
+                    htmlProcessContext.changeBaseHREF(contextPath);
 
                 } else {
-                    htmlExternalContext.changeBaseHREF(base);
+                    htmlProcessContext.changeBaseHREF(base);
                 }
 
-                URLFormCodec.writeURL(writer, base);
-                if (base.endsWith("/") == false) {
-                    writer.print('/');
+                if (renderBaseTag) {
+                    URLFormCodec.writeURL(writer, base);
+                    if (base.endsWith("/") == false) {
+                        writer.print('/');
+                    }
+                    writer.println("\" />");
                 }
-                writer.println("\" />");
 
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Set BASE href='" + base + "'.");
+                }
             }
 
             if (favoriteImageURL == null) {
@@ -328,14 +222,14 @@ public class InitializeTag extends
             }
 
             ICssConfig cssConfig = StylesheetsServlet
-                    .getConfig(htmlExternalContext);
+                    .getConfig(htmlProcessContext);
             if (cssConfig != null) {
                 writer.print("<LINK rel=\"stylesheet\"");
-                if (htmlExternalContext.useMetaContentStyleType() == false) {
+                if (htmlProcessContext.useMetaContentStyleType() == false) {
                     writer.print(" type=\"text/css\"");
                 }
 
-                String styleSheetURI = htmlExternalContext
+                String styleSheetURI = htmlProcessContext
                         .getStyleSheetURI(cssConfig.getStyleSheetFileName());
 
                 writer.print(" href=\"");
@@ -348,34 +242,36 @@ public class InitializeTag extends
             }
 
             IRepository repository = JavaScriptRepositoryServlet
-                    .getRepository(servletContext);
-            if (repository != null) {
-                IRepository.ISet bootSet = repository.getBootSet();
+                    .getRepository(facesContext);
+            IRepository.ISet bootSet = repository.getBootSet();
 
-                if (bootSet != null) {
-                    IRepository.IContext repositoryContext = JavaScriptRepositoryServlet
-                            .getContextRepository(facesContext);
+            if (bootSet != null) {
+                IRepository.IContext repositoryContext = JavaScriptRepositoryServlet
+                        .getContextRepository(facesContext);
 
-                    if (repositoryContext.add(bootSet)) {
-                        // Il n'est pas connu du repository !
+                if (repositoryContext.add(bootSet)) {
+                    // Il n'est pas connu du repository !
 
-                        String cameliaScriptURI = bootSet
-                                .getURI(repositoryContext.getLocale());
+                    String cameliaScriptURI = bootSet.getURI(repositoryContext
+                            .getLocale());
 
-                        String jsBaseURI = repository
-                                .getBaseURI(htmlExternalContext);
+                    String jsBaseURI = repository
+                            .getBaseURI(htmlProcessContext);
 
-                        if (multiWindowScript) {
-                            writeScriptTag_multiWindow(facesContext, writer,
-                                    cameliaScriptURI, jsBaseURI, repository,
-                                    repositoryContext);
+                    if (multiWindowScript) {
+                        writeScriptTag_multiWindow(facesContext, writer,
+                                cameliaScriptURI, jsBaseURI, repository,
+                                repositoryContext);
 
-                        } else {
-                            writeScriptTag(facesContext, writer,
-                                    cameliaScriptURI, jsBaseURI);
-                        }
+                    } else {
+                        writeScriptTag(facesContext, writer, cameliaScriptURI,
+                                jsBaseURI);
                     }
                 }
+            }
+
+            if (invalidBrowserPageURL != null) {
+                initializeJavaScript(facesContext, writer, htmlProcessContext);
             }
 
             if (title != null) {
@@ -391,11 +287,44 @@ public class InitializeTag extends
         return ret;
     }
 
-    protected IExternalContext initializeExternalContext(
-            ExternalContext externalContext) {
-        htmlExternalContext = HtmlRenderKit.getExternalContext(externalContext);
+    private void initializeJavaScript(FacesContext facesContext,
+            JspWriter writer, IHtmlProcessContext processContext)
+            throws IOException {
 
-        return htmlExternalContext;
+        IJavaScriptRepository repository = JavaScriptRepositoryServlet
+                .getRepository(facesContext);
+        if (repository == null) {
+            LOG.error("JavaScript repository is not created yet !");
+            return;
+        }
+
+        Map symbols = JavaScriptRepositoryServlet.getSymbols(facesContext);
+
+        IJavaScriptWriter jsWriter = new JavaScriptWriterImpl(facesContext,
+                symbols, writer);
+
+        pageContext.getRequest().setAttribute(INVALID_BROWSER_URL_PROPERTY,
+                invalidBrowserPageURL);
+
+        writer.print("<SCRIPT");
+        if (htmlProcessContext.useMetaContentScriptType() == false) {
+            writer.write(" type=\"");
+            writer.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
+            writer.write('"');
+        }
+        writer.println(">");
+
+        JavaScriptRenderContext.initializeJavaScript(jsWriter, repository,
+                processContext);
+        writer.println("</SCRIPT>");
+    }
+
+    protected IProcessContext initializeExternalContext(
+            ExternalContext externalContext) {
+        htmlProcessContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(externalContext);
+
+        return htmlProcessContext;
     }
 
     private void disableCache(JspWriter writer) throws IOException {
@@ -404,7 +333,7 @@ public class InitializeTag extends
             ServletResponse servletResponse = pageContext.getResponse();
 
             if (servletResponse instanceof HttpServletResponse) {
-                ExpirationHttpServlet
+                ParametredHttpServlet
                         .setNoCache((HttpServletResponse) servletResponse);
             }
 
@@ -446,13 +375,13 @@ public class InitializeTag extends
 
         String original = favoriteImageURL;
         IURLRewritingProvider urlRewritingProvider = null;
-        IURLRewritingProvider.ImageInformation favoriteImageOperation = null;
+        ImageURLRewritingInformation favoriteImageOperation = null;
         if (Constants.URL_REWRITING_SUPPORT) {
             urlRewritingProvider = AbstractURLRewritingProvider
                     .getInstance(facesContext.getExternalContext());
 
             if (urlRewritingProvider != null) {
-                favoriteImageOperation = new IURLRewritingProvider.ImageInformation();
+                favoriteImageOperation = new ImageURLRewritingInformation();
 
                 favoriteImageURL = urlRewritingProvider.computeURL(
                         facesContext, null,
@@ -467,18 +396,21 @@ public class InitializeTag extends
         }
 
         String favoriteIcoImageURL = null;
-        IURLRewritingProvider.ImageInformation favoriteIcoImageInformation = null;
+        ImageURLRewritingInformation favoriteIcoImageInformation = null;
         if (urlRewritingProvider != null) {
-            favoriteIcoImageInformation = new IURLRewritingProvider.ImageInformation(
+            favoriteIcoImageInformation = new ImageURLRewritingInformation(
                     favoriteImageOperation);
 
-            favoriteIcoImageURL = urlRewritingProvider.computeURL(facesContext,
-                    null, IURLRewritingProvider.IMAGE_URL_TYPE,
-                    "favoriteImageURL",
-                    // IURLRewritingProvider.URL_REWRITING_PROVIDER_ID
-                    IEFavoriteIconOperation.ID
-                            + ImageFiltersRepository.URL_REWRITING_SEPARATOR,
-                    original, favoriteIcoImageInformation);
+            favoriteIcoImageURL = urlRewritingProvider
+                    .computeURL(
+                            facesContext,
+                            null,
+                            IURLRewritingProvider.IMAGE_URL_TYPE,
+                            "favoriteImageURL",
+                            // IURLRewritingProvider.URL_REWRITING_PROVIDER_ID
+                            IEFavoriteIconOperation.ID
+                                    + ImageOperationsURLRewritingProvider.URL_REWRITING_SEPARATOR,
+                            original, favoriteIcoImageInformation);
         }
 
         if (favoriteIcoImageURL != null) {
@@ -486,7 +418,7 @@ public class InitializeTag extends
 
             if (favoriteIcoImageInformation != null) {
                 String favoriteIcoMimeType = favoriteIcoImageInformation
-                        .getMimeType();
+                        .getContentType();
                 if (favoriteIcoMimeType != null) {
                     writer.print(" type=\"");
                     writer.print(favoriteIcoMimeType);
@@ -502,7 +434,8 @@ public class InitializeTag extends
         if (favoriteImageURL != null) {
             writer.print("<LINK rel=\"ICON\"");
             if (favoriteImageOperation != null) {
-                String favoriteMimeType = favoriteImageOperation.getMimeType();
+                String favoriteMimeType = favoriteImageOperation
+                        .getContentType();
                 if (favoriteMimeType != null) {
                     writer.print(" type=\"");
                     writer.print(favoriteMimeType);
@@ -581,11 +514,11 @@ public class InitializeTag extends
         if (firstLog && LOG.isInfoEnabled()) {
             firstLog = false;
 
-            if (htmlExternalContext.useMetaContentScriptType()) {
+            if (htmlProcessContext.useMetaContentScriptType()) {
                 LOG.info("UseMetaContentScriptType is enabled for context.");
             }
 
-            if (htmlExternalContext.useMetaContentStyleType()) {
+            if (htmlProcessContext.useMetaContentStyleType()) {
                 LOG.info("UseMetaContentStyleType is enabled for context.");
             }
 
@@ -601,11 +534,11 @@ public class InitializeTag extends
                 LOG.info("MULTI_WINDOW_ATTRIBUTE is enabled for context.");
             }
 
-            if (htmlExternalContext.getDebugMode()) {
+            if (htmlProcessContext.getDebugMode()) {
                 LOG.info("DEBUG_MODE is enabled for context.");
             }
 
-            if (htmlExternalContext.getProfilerMode()) {
+            if (htmlProcessContext.getProfilerMode()) {
                 LOG.info("PROFILER_MODE is enabled for context.");
             }
         }
@@ -618,7 +551,7 @@ public class InitializeTag extends
 
         if (disabledCookiesPageURL != null) {
             writer.print("<SCRIPT");
-            if (htmlExternalContext.useMetaContentScriptType() == false) {
+            if (htmlProcessContext.useMetaContentScriptType() == false) {
                 writer.write(" type=\"");
                 writer.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
                 writer.write('"');
@@ -631,7 +564,7 @@ public class InitializeTag extends
             }
 
             writer.write('>');
-            if (htmlExternalContext.useScriptCData()) {
+            if (htmlProcessContext.useScriptCData()) {
                 writer.write(IHtmlRenderContext.JAVASCRIPT_CDATA_BEGIN);
             }
             writer.println();
@@ -648,14 +581,13 @@ public class InitializeTag extends
         }
 
         writer.print("<SCRIPT");
-        if (htmlExternalContext.useMetaContentScriptType() == false) {
+        if (htmlProcessContext.useMetaContentScriptType() == false) {
             writer.write(" type=\"");
             writer.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
             writer.write('"');
         }
 
-        uri = jsBaseURI + uri;
-        uri = htmlExternalContext.getBaseURI(uri);
+        uri = jsBaseURI + "/" + uri;
         writer.write(" src=\"");
         URLFormCodec.writeURL(writer, uri);
         writer.write('\"');
@@ -726,13 +658,13 @@ public class InitializeTag extends
         String javascriptCharset = IHtmlRenderContext.JAVASCRIPT_CHARSET;
 
         writer.print("<SCRIPT");
-        if (htmlExternalContext.useMetaContentScriptType() == false) {
+        if (htmlProcessContext.useMetaContentScriptType() == false) {
             writer.write(" type=\"");
             writer.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
             writer.write('\"');
         }
         writer.write('>');
-        if (htmlExternalContext.useScriptCData()) {
+        if (htmlProcessContext.useScriptCData()) {
             writer.write(IHtmlRenderContext.JAVASCRIPT_CDATA_BEGIN);
         }
         writer.println();
@@ -756,14 +688,13 @@ public class InitializeTag extends
         jsWriter.writeSymbol("_newWindow");
         jsWriter.write(".call(window, cl, function(x){return eval(x)});");
         jsWriter.write(" else document.write(\"<SCRIPT");
-        if (htmlExternalContext.useMetaContentScriptType() == false) {
+        if (htmlProcessContext.useMetaContentScriptType() == false) {
             jsWriter.write(" type=\\\"");
             jsWriter.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
             jsWriter.write("\\\"");
         }
         jsWriter.write(" src=\\\"");
         String u = jsBaseURI + "/" + uri;
-        u = htmlExternalContext.getBaseURI(u);
         jsWriter.write(u);
         jsWriter.write("\\\"");
 
@@ -782,7 +713,7 @@ public class InitializeTag extends
             Locale locale = repositoryContext.getLocale();
             for (int i = 0; i < files.length; i++) {
                 jsWriter.write("<SCRIPT");
-                if (htmlExternalContext.useMetaContentScriptType() == false) {
+                if (htmlProcessContext.useMetaContentScriptType() == false) {
                     jsWriter.write(" type=\\\"");
                     jsWriter.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
                     jsWriter.write("\\\"");
@@ -790,7 +721,6 @@ public class InitializeTag extends
                 jsWriter.write(" src=\\\"");
 
                 u = jsBaseURI + "/" + files[i].getURI(locale);
-                u = htmlExternalContext.getBaseURI(u);
 
                 jsWriter.write(u);
                 jsWriter.write("\\\"");
@@ -804,7 +734,7 @@ public class InitializeTag extends
         }
 
         jsWriter.writeln("\");");
-        if (htmlExternalContext.useScriptCData()) {
+        if (htmlProcessContext.useScriptCData()) {
             writer.println(IHtmlRenderContext.JAVASCRIPT_CDATA_END);
         }
         jsWriter.end();
@@ -817,7 +747,7 @@ public class InitializeTag extends
         disabledCookiesPageURL = null;
         disabledScriptPageURL = null;
 
-        htmlExternalContext = null;
+        htmlProcessContext = null;
 
         base = null;
         symbols = null;
@@ -827,6 +757,8 @@ public class InitializeTag extends
         favoriteImageURL = null;
 
         disableCache = false;
+
+        renderBaseTag = true;
 
         super.release();
     }
@@ -930,4 +862,16 @@ public class InitializeTag extends
         this.invalidBrowserPageURL = invalidBrowserPageURL;
     }
 
+    public final boolean isRenderBaseTag() {
+        return renderBaseTag;
+    }
+
+    public final void setRenderBaseTag(boolean renderBaseTag) {
+        this.renderBaseTag = renderBaseTag;
+    }
+
+    public static final String getInvalidBrowserURL(FacesContext facesContext) {
+        return (String) facesContext.getExternalContext().getRequestMap().get(
+                INVALID_BROWSER_URL_PROPERTY);
+    }
 }

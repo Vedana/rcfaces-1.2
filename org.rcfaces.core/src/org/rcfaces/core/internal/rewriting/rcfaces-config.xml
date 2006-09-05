@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rcfaces-config>
+	<providers>
+  		<provider>
+  			<provider-id>org.rcfaces.core.URL_REWRITING_PROVIDER</provider-id>
+  			<provider-class>org.rcfaces.core.internal.rewriting.ApplicationVersionURLRewritingProvider</provider-class>
+  		</provider>
+  	</providers>
+
+</rcfaces-config>

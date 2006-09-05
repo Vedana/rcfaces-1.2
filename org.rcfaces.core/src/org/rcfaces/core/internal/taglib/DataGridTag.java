@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class DataGridTag extends AbstractGridTag {
 
-private static final Log LOG=LogFactory.getLog(DataGridTag.class);
+
+	private static final Log LOG=LogFactory.getLog(DataGridTag.class);
+
 	private String selectionListeners;
 	private String selectable;
 	private String selectionCardinality;
@@ -259,6 +261,35 @@ private static final Log LOG=LogFactory.getLog(DataGridTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (DataGridComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  selectable='"+selectable+"'");
+			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  checkable='"+checkable+"'");
+			LOG.debug("  checkCardinality='"+checkCardinality+"'");
+			LOG.debug("  required='"+required+"'");
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  disabled='"+disabled+"'");
+			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
+			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
+			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  preference='"+preference+"'");
+			LOG.debug("  headerVisible='"+headerVisible+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
+			LOG.debug("  checkedValues='"+checkedValues+"'");
+			LOG.debug("  sortedColumnIds='"+sortedColumnIds+"'");
+			LOG.debug("  columnsOrder='"+columnsOrder+"'");
+			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
+			LOG.debug("  rowCountVar='"+rowCountVar+"'");
+			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
+			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
+			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
+			LOG.debug("  action='"+action+"'");
+			LOG.debug("  actionListeners='"+actionListeners+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof DataGridComponent)==false) {

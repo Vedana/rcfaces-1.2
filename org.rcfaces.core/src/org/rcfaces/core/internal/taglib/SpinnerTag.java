@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class SpinnerTag extends TextEntryTag {
 
-private static final Log LOG=LogFactory.getLog(SpinnerTag.class);
+
+	private static final Log LOG=LogFactory.getLog(SpinnerTag.class);
+
 	private String minimum;
 	private String maximum;
 	public String getComponentType() {
@@ -34,6 +36,13 @@ private static final Log LOG=LogFactory.getLog(SpinnerTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (SpinnerComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  minimum='"+minimum+"'");
+			LOG.debug("  maximum='"+maximum+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof SpinnerComponent)==false) {

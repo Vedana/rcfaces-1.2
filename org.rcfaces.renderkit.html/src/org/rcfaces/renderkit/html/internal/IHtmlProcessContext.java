@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -21,14 +24,14 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import org.rcfaces.core.internal.renderkit.IExternalContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 
 /**
  * 
  * @author Olivier Oeuillot
  * @version $Revision$
  */
-public interface IHtmlExternalContext extends IExternalContext {
+public interface IHtmlProcessContext extends IProcessContext {
 
     String HTML_FLAT_IDENTIFIER_PARAMETER = Constants.getPackagePrefix()
             + ".FLAT_IDENTIFIER";
@@ -52,10 +55,6 @@ public interface IHtmlExternalContext extends IExternalContext {
     String PROFILER_MODE_APPLICATION_PARAMETER = Constants.getPackagePrefix()
             + ".client.PROFILER_MODE";
 
-    String getBaseURI();
-
-    String getBaseURI(String uri);
-
     boolean isFlatIdentifierEnabled();
 
     String getStyleSheetURI(String uri);
@@ -65,6 +64,4 @@ public interface IHtmlExternalContext extends IExternalContext {
     boolean useMetaContentStyleType();
 
     boolean useScriptCData();
-
-    void changeBaseHREF(String base);
 }

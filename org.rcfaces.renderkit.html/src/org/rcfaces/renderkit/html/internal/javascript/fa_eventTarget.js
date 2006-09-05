@@ -78,7 +78,7 @@ var __prototype = {
 	},
 	/**
 	 * 
-	 * @method protected
+	 * @method public
 	 */
 	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail) {
 		if (!fa_eventTarget._EventId) {

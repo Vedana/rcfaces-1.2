@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ToolBarTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(ToolBarTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ToolBarTag.class);
+
 	private String selectionListeners;
 	private String readOnly;
 	public String getComponentType() {
@@ -34,6 +36,12 @@ private static final Log LOG=LogFactory.getLog(ToolBarTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ToolBarComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  readOnly='"+readOnly+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ToolBarComponent)==false) {

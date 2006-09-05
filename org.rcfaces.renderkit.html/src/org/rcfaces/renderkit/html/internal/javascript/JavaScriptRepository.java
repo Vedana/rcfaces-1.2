@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:13  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -68,11 +71,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.faces.context.ExternalContext;
+
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.renderkit.IExternalContext;
+import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.util.AbstractRepository;
 import org.xml.sax.Attributes;
 
@@ -388,18 +394,25 @@ public class JavaScriptRepository extends AbstractRepository implements
         }
     }
 
-    public String getBaseURI(IExternalContext externalContext) {
-        Map request = externalContext.getExternalContext().getRequestMap();
+    public String getBaseURI(IProcessContext processContext) {
+        ExternalContext ext = processContext.getExternalContext();
+
+        Map request = ext.getRequestMap();
         String uri = (String) request.get(JAVASCRIPT_BASE_URI_PROPERTY);
         if (uri != null) {
             return uri;
         }
 
-        uri = servletURI;
+        StringAppender sa = new StringAppender(256);
+        sa.append(ext.getRequestContextPath());
+        sa.append(servletURI);
 
         if (repositoryVersion != null && repositoryVersion.length() > 0) {
-            uri += "/" + repositoryVersion;
+            sa.append('/');
+            sa.append(repositoryVersion);
         }
+
+        uri = sa.toString();
 
         request.put(JAVASCRIPT_BASE_URI_PROPERTY, uri);
 

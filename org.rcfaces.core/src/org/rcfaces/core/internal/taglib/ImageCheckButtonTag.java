@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ImageCheckButtonTag extends CheckButtonTag {
 
-private static final Log LOG=LogFactory.getLog(ImageCheckButtonTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ImageCheckButtonTag.class);
+
 	private String imageURL;
 	private String disabledImageURL;
 	private String hoverImageURL;
@@ -88,6 +90,19 @@ private static final Log LOG=LogFactory.getLog(ImageCheckButtonTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ImageCheckButtonComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
+			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
+			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
+			LOG.debug("  imageHeight='"+imageHeight+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ImageCheckButtonComponent)==false) {

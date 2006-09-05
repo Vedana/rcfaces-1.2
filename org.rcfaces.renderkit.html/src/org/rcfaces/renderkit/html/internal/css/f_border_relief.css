@@ -1,7 +1,7 @@
 .fb_relief_1, .fb_relief_2, .fb_relief_3,
 .fb_relief_8, .fb_relief_4,
 .fb_relief_7, .fb_relief_6, .fb_relief_5 {
-	background: url('borders/relief1.gif') no-repeat 0 0;
+	background: url('border/relief1.gif') no-repeat 0 0;
 	font-size: 1pt;
 	line-height: 1px;
 	-moz-user-select: none;
@@ -13,7 +13,7 @@
 }
 
 .fb_relief_2, .fb_relief_6 {
-	background: url('borders/relief2.gif') repeat-x;
+	background: url('border/relief2.gif') repeat-x;
 }
 
 .fb_relief_1 IMG,

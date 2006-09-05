@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class SuggestTextEntryTag extends TextEntryTag {
 
-private static final Log LOG=LogFactory.getLog(SuggestTextEntryTag.class);
+
+	private static final Log LOG=LogFactory.getLog(SuggestTextEntryTag.class);
+
 	private String filterProperties;
 	private String maxResultNumber;
 	private String suggestionListeners;
@@ -106,6 +108,19 @@ private static final Log LOG=LogFactory.getLog(SuggestTextEntryTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (SuggestTextEntryComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  maxResultNumber='"+maxResultNumber+"'");
+			LOG.debug("  suggestionDelayMs='"+suggestionDelayMs+"'");
+			LOG.debug("  suggestionMinChars='"+suggestionMinChars+"'");
+			LOG.debug("  caseSensitive='"+caseSensitive+"'");
+			LOG.debug("  forceProposal='"+forceProposal+"'");
+			LOG.debug("  suggestionValue='"+suggestionValue+"'");
+			LOG.debug("  suggestionConverter='"+suggestionConverter+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof SuggestTextEntryComponent)==false) {

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -126,7 +129,7 @@ import org.rcfaces.core.internal.webapp.IRepository.ISet;
  * @author Olivier Oeuillot
  * @version $Revision$
  */
-public abstract class RepositoryServlet extends ExpirationHttpServlet {
+public abstract class RepositoryServlet extends ParametredHttpServlet {
     private static final String REVISION = "$Revision$";
 
     private static final String SET_PREFIX = ".sets";

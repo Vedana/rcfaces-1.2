@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -658,10 +661,34 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         }
     }
 
-    public static IJavaScriptRepository getRepository(
+    /*
+    public static final IJavaScriptRepository getRepository(
             ServletContext servletContext) {
-        return (IJavaScriptRepository) servletContext
+        IJavaScriptRepository javaScriptRepository = (IJavaScriptRepository) servletContext
                 .getAttribute(REPOSITORY_PROPERTY);
+
+        if (javaScriptRepository == null) {
+            throw new FacesException(
+                    "Javascript repository is not initialized !");
+        }
+
+        return javaScriptRepository;
+    }
+    */
+
+    public static final IJavaScriptRepository getRepository(
+            FacesContext facesContext) {
+        Map map = facesContext.getExternalContext().getApplicationMap();
+
+        IJavaScriptRepository javaScriptRepository = (IJavaScriptRepository) map
+                .get(REPOSITORY_PROPERTY);
+
+        if (javaScriptRepository == null) {
+            throw new FacesException(
+                    "Javascript repository is not initialized !");
+        }
+
+        return javaScriptRepository;
     }
 
     public void writeBundles(StringAppender sb, IFile file, Locale locale) {
@@ -718,12 +745,6 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         }
 
         sb.append(");\n");
-    }
-
-    public static IJavaScriptRepository getRepository(FacesContext facesContext) {
-        Map map = facesContext.getExternalContext().getApplicationMap();
-
-        return (IJavaScriptRepository) map.get(REPOSITORY_PROPERTY);
     }
 
     public static IRepository.IContext getContextRepository(

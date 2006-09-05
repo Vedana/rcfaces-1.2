@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -17,17 +20,20 @@
  * Fusions des servlets de ressources Javascript/css
  *
  */
-package org.rcfaces.core.internal.config;
+package org.rcfaces.core.internal.rewriting;
 
 import java.util.Map;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.config.IProvidersRegistry;
+import org.rcfaces.core.provider.IProvider;
 import org.rcfaces.core.provider.IURLRewritingProvider;
 
 /**
@@ -37,6 +43,7 @@ import org.rcfaces.core.provider.IURLRewritingProvider;
  */
 public abstract class AbstractURLRewritingProvider implements
         IURLRewritingProvider {
+    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractURLRewritingProvider.class);
@@ -44,6 +51,17 @@ public abstract class AbstractURLRewritingProvider implements
     private static final String URL_REWRITING_SUPPORT_PARAMETER = Constants
             .getPackagePrefix()
             + ".URL_REWRITING_SUPPORT";
+
+    private static final String URL_REWRITING_SUPPORT_PROPERTY = "org.rcfaces.core.internal.config.URL_REWRITING_SUPPORT";
+
+    protected final IURLRewritingProvider parent;
+
+    protected AbstractURLRewritingProvider(IProvider parent) {
+        this.parent = (IURLRewritingProvider) parent;
+    }
+
+    public void configureRules(Digester digester) {
+    }
 
     public static final boolean isURLRewritingEnabled(
             ExternalContext externalContext) {
@@ -56,15 +74,28 @@ public abstract class AbstractURLRewritingProvider implements
                     .getExternalContext();
         }
 
-        Map applicationMap = externalContext.getInitParameterMap();
+        Map applicationMap = externalContext.getApplicationMap();
+        Boolean b = (Boolean) applicationMap
+                .get(URL_REWRITING_SUPPORT_PROPERTY);
+        if (b != null) {
+            return b.booleanValue();
+        }
 
-        boolean enable = "false".equalsIgnoreCase((String) applicationMap
+        Map initApplicationMap = externalContext.getInitParameterMap();
+
+        boolean enable = "false".equalsIgnoreCase((String) initApplicationMap
                 .get(URL_REWRITING_SUPPORT_PARAMETER)) == false;
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("URL rewriting support specified by parameter is "
-                    + enable);
+            LOG
+                    .debug("URL rewriting support (maybe specified by parameter '"
+                            + URL_REWRITING_SUPPORT_PARAMETER
+                            + "') is "
+                            + enable + ".");
         }
+
+        applicationMap.put(URL_REWRITING_SUPPORT_PROPERTY, Boolean
+                .valueOf(enable));
 
         return enable;
     }
@@ -91,8 +122,10 @@ public abstract class AbstractURLRewritingProvider implements
                 .getProvider(IURLRewritingProvider.URL_REWRITING_PROVIDER_ID);
 
         if (urlRewritingProvider == null) {
-            LOG.error("Can not find url rewritring provider. id="
-                    + IURLRewritingProvider.URL_REWRITING_PROVIDER_ID);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can not find url rewritring provider. id="
+                        + IURLRewritingProvider.URL_REWRITING_PROVIDER_ID);
+            }
 
             return null;
         }

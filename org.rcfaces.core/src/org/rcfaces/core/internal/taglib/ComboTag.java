@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ComboTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(ComboTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ComboTag.class);
+
 	private String selectionListeners;
 	private String required;
 	private String filterProperties;
@@ -43,6 +45,13 @@ private static final Log LOG=LogFactory.getLog(ComboTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ComboComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  required='"+required+"'");
+			LOG.debug("  filterProperties='"+filterProperties+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ComboComponent)==false) {

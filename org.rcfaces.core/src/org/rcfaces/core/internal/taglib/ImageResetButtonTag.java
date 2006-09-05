@@ -6,7 +6,9 @@ import org.rcfaces.core.component.ImageResetButtonComponent;
 
 public class ImageResetButtonTag extends ImageButtonTag {
 
-private static final Log LOG=LogFactory.getLog(ImageResetButtonTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ImageResetButtonTag.class);
+
 	public String getComponentType() {
 		return ImageResetButtonComponent.COMPONENT_TYPE;
 	}

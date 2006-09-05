@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -95,7 +98,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.AbstractReleasable;
-import org.rcfaces.core.internal.config.AbstractURLRewritingProvider;
+import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.provider.IURLRewritingProvider;
 
 

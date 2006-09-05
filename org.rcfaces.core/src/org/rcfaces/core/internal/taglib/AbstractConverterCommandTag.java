@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public abstract class AbstractConverterCommandTag extends AbstractCommandTag {
 
-private static final Log LOG=LogFactory.getLog(AbstractConverterCommandTag.class);
+
+	private static final Log LOG=LogFactory.getLog(AbstractConverterCommandTag.class);
+
 	private String converter;
 	public final String getConverter() {
 		return converter;
@@ -21,6 +23,9 @@ private static final Log LOG=LogFactory.getLog(AbstractConverterCommandTag.class
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  converter='"+converter+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractConverterCommandComponent)==false) {

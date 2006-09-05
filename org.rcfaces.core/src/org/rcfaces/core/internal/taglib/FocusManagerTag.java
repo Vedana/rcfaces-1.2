@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class FocusManagerTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(FocusManagerTag.class);
+
+	private static final Log LOG=LogFactory.getLog(FocusManagerTag.class);
+
 	private String focusId;
 	public String getComponentType() {
 		return FocusManagerComponent.COMPONENT_TYPE;
@@ -25,6 +27,12 @@ private static final Log LOG=LogFactory.getLog(FocusManagerTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (FocusManagerComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  focusId='"+focusId+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof FocusManagerComponent)==false) {

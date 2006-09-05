@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public abstract class AbstractInputTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(AbstractInputTag.class);
+
+	private static final Log LOG=LogFactory.getLog(AbstractInputTag.class);
+
 	private String height;
 	private String width;
 	private String visible;
@@ -381,6 +383,37 @@ private static final Log LOG=LogFactory.getLog(AbstractInputTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  height='"+height+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  helpMessage='"+helpMessage+"'");
+			LOG.debug("  helpURL='"+helpURL+"'");
+			LOG.debug("  toolTipText='"+toolTipText+"'");
+			LOG.debug("  disabled='"+disabled+"'");
+			LOG.debug("  valueLocked='"+valueLocked+"'");
+			LOG.debug("  tabIndex='"+tabIndex+"'");
+			LOG.debug("  y='"+y+"'");
+			LOG.debug("  x='"+x+"'");
+			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  marginRight='"+marginRight+"'");
+			LOG.debug("  marginLeft='"+marginLeft+"'");
+			LOG.debug("  marginTop='"+marginTop+"'");
+			LOG.debug("  marginBottom='"+marginBottom+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  immediate='"+immediate+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontBold='"+fontBold+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  fontItalic='"+fontItalic+"'");
+			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  margins='"+margins+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractInputComponent)==false) {

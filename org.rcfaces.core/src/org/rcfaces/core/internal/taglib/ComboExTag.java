@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ComboExTag extends ComboTag {
 
-private static final Log LOG=LogFactory.getLog(ComboExTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ComboExTag.class);
+
 	private String editable;
 	private String imageURL;
 	private String text;
@@ -88,6 +90,19 @@ private static final Log LOG=LogFactory.getLog(ComboExTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ComboExComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  editable='"+editable+"'");
+			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  maxTextLength='"+maxTextLength+"'");
+			LOG.debug("  columnNumber='"+columnNumber+"'");
+			LOG.debug("  autoCompletion='"+autoCompletion+"'");
+			LOG.debug("  popupRowNumber='"+popupRowNumber+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ComboExComponent)==false) {

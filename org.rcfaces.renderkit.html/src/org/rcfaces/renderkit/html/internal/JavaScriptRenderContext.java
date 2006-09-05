@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -122,6 +125,7 @@ import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 import org.rcfaces.renderkit.html.internal.service.LogHtmlService;
+import org.rcfaces.renderkit.html.internal.taglib.InitializeTag;
 
 /**
  * 
@@ -142,6 +146,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             .getPackagePrefix()
             + ".client.ENABLE_LOG";
 
+    private static final String JAVASCRIPT_INITIALIZED_PROPERTY = "org.rcfaces.renderkit.html.JAVASCRIPT_INITIALIZED";
+
     private static final boolean USE_VARIABLE_CACHE = true;
 
     public static final IFile[] FILE_EMPTY_ARRAY = new IFile[0];
@@ -150,14 +156,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
     private static final int COMPONENTS_INITIAL_SIZE = 16;
 
-    // private static final String JAVASCRIPT_INCLUDED =
-    // "camelia.javascript.installed";
-
     private static final String SCRIPT_VERIFY = "try { f_core; } catch(x) { alert(\"Vedana Faces Javascript Components are not initialized !\"); }";
 
-    private static final String JAVASCRIPT_INITIALIZED = "org.rcfaces.renderkit.html.JAVASCRIPT_INITIALIZED";
-
-    // private final IHtmlRenderContext htmlRenderContext;
     private final JavaScriptRenderContext parent;
 
     private final IJavaScriptRepository repository;
@@ -547,42 +547,49 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
     public static void initializeJavaScript(IJavaScriptWriter writer,
             IJavaScriptRepository repository,
-            IHtmlExternalContext renderExternalContext) throws WriterException {
+            IHtmlProcessContext renderExternalContext) throws WriterException {
 
         Map requestMap = renderExternalContext.getExternalContext()
                 .getRequestMap();
-        if (requestMap.containsKey(JAVASCRIPT_INITIALIZED)) {
+        if (requestMap.containsKey(JAVASCRIPT_INITIALIZED_PROPERTY)) {
             return;
         }
 
         LOG.debug("Initializing javascript.");
 
-        requestMap.put(JAVASCRIPT_INITIALIZED, Boolean.TRUE);
+        requestMap.put(JAVASCRIPT_INITIALIZED_PROPERTY, Boolean.TRUE);
 
         writer.writeln(SCRIPT_VERIFY);
 
         FacesContext facesContext = writer.getFacesContext();
 
-        IHtmlExternalContext externalContext = HtmlRenderKit
-                .getExternalContext(facesContext.getExternalContext());
+        IHtmlProcessContext processContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext.getExternalContext());
 
-        boolean debugMode = externalContext.getDebugMode();
+        boolean debugMode = processContext.getDebugMode();
         if (debugMode) {
             writer.writeCall("f_core", "SetDebugMode").writeln("true);");
         }
 
-        boolean profilerMode = externalContext.getProfilerMode();
+        boolean profilerMode = processContext.getProfilerMode();
         if (profilerMode) {
             writer.writeCall("f_core", "SetProfilerMode").writeln("true);");
         }
 
-        boolean flatIdentifier = externalContext.isFlatIdentifierEnabled();
+        String invalidBrowserURL = InitializeTag
+                .getInvalidBrowserURL(facesContext);
+        if (invalidBrowserURL != null) {
+            writer.writeCall("f_core", "VerifyBrowserCompatibility")
+                    .writeString(invalidBrowserURL).writeln(");");
+        }
+
+        boolean flatIdentifier = processContext.isFlatIdentifierEnabled();
         if (flatIdentifier) {
             writer.writeCall("fa_namingContainer", "SetSeparator").writeln(
                     "false);");
 
         } else {
-            char separator = externalContext.getNamingSeparatorChar();
+            char separator = processContext.getNamingSeparatorChar();
 
             if (separator != NamingContainer.SEPARATOR_CHAR) {
                 writer.writeCall("fa_namingContainer", "SetSeparator")
@@ -590,7 +597,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             }
         }
 
-        String baseURI = renderExternalContext.getBaseURI();
+        String baseURI = processContext.getExternalContext()
+                .getRequestContextPath();
         writer.writeCall("f_env", "SetBaseURI").writeString(baseURI);
 
         int pred = 0;
@@ -606,10 +614,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             pred++;
         }
 
-        String jsBaseURI = repository.getBaseURI(externalContext);
+        String jsBaseURI = repository.getBaseURI(processContext);
         if (jsBaseURI != null) {
-            jsBaseURI = renderExternalContext.getBaseURI(jsBaseURI);
-
             for (; pred > 0; pred--) {
                 writer.write(',').writeNull();
             }

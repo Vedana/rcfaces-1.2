@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public abstract class AbstractItemTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(AbstractItemTag.class);
+
+	private static final Log LOG=LogFactory.getLog(AbstractItemTag.class);
+
 	private String disabled;
 	private String itemValue;
 	private String itemLabel;
@@ -57,6 +59,13 @@ private static final Log LOG=LogFactory.getLog(AbstractItemTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  disabled='"+disabled+"'");
+			LOG.debug("  itemValue='"+itemValue+"'");
+			LOG.debug("  itemLabel='"+itemLabel+"'");
+			LOG.debug("  itemDescription='"+itemDescription+"'");
+			LOG.debug("  itemDisabled='"+itemDisabled+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractItemComponent)==false) {

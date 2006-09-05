@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -21,7 +24,7 @@ var __prototype = {
 	},
 	*/
 	/**
-	 * Retourne <code>true</code> if the component is disabled
+	 * Returns <code>true</code> if the component is disabled
 	 *
 	 * @method public
 	 * @return boolean

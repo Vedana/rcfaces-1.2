@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -22,7 +25,7 @@ import javax.faces.context.ExternalContext;
  * @author Olivier Oeuillot
  * @version $Revision$
  */
-public interface IExternalContext {
+public interface IProcessContext {
 
     char getNamingSeparatorChar();
 
@@ -34,4 +37,11 @@ public interface IExternalContext {
 
     Locale getUserLocale();
 
+    String getAbsolutePath(String uri, boolean containsContextPath);
+
+    String getRelativePath(String uri);
+
+    void changeBaseHREF(String base);
+
+    String getBaseHREF();
 }

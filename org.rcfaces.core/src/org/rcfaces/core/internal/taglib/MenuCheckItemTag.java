@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class MenuCheckItemTag extends MenuItemTag {
 
-private static final Log LOG=LogFactory.getLog(MenuCheckItemTag.class);
+
+	private static final Log LOG=LogFactory.getLog(MenuCheckItemTag.class);
+
 	private String checked;
 	public String getComponentType() {
 		return MenuCheckItemComponent.COMPONENT_TYPE;
@@ -25,6 +27,12 @@ private static final Log LOG=LogFactory.getLog(MenuCheckItemTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (MenuCheckItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  checked='"+checked+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof MenuCheckItemComponent)==false) {

@@ -6,7 +6,9 @@ import org.rcfaces.core.component.ToolItemSeparatorComponent;
 
 public class ToolItemSeparatorTag extends AbstractSeparatorTag {
 
-private static final Log LOG=LogFactory.getLog(ToolItemSeparatorTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ToolItemSeparatorTag.class);
+
 	public String getComponentType() {
 		return ToolItemSeparatorComponent.COMPONENT_TYPE;
 	}

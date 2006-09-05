@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ImageComboTag extends AbstractMenuTag {
 
-private static final Log LOG=LogFactory.getLog(ImageComboTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ImageComboTag.class);
+
 	private String imageURL;
 	private String disabledImageURL;
 	private String hoverImageURL;
@@ -115,6 +117,22 @@ private static final Log LOG=LogFactory.getLog(ImageComboTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ImageComboComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
+			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
+			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
+			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  popupRowNumber='"+popupRowNumber+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ImageComboComponent)==false) {

@@ -6,7 +6,9 @@ import org.apache.commons.logging.Log;
 
 public class ResetButtonTag extends ButtonTag {
 
-private static final Log LOG=LogFactory.getLog(ResetButtonTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ResetButtonTag.class);
+
 	public String getComponentType() {
 		return ResetButtonComponent.COMPONENT_TYPE;
 	}

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:13:12  oeuillot
  * Renommage  en rcfaces
  *
@@ -20,7 +23,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.renderkit.IExternalContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.tools.ContextTools;
 
 /**
@@ -38,7 +41,7 @@ public abstract class AbstractInitializeTag extends TagSupport {
 
     private String attributesLocale;
 
-    private IExternalContext externalContext;
+    private IProcessContext externalContext;
 
     public int doStartTag() throws JspException {
 
@@ -69,7 +72,7 @@ public abstract class AbstractInitializeTag extends TagSupport {
         return super.doStartTag();
     }
 
-    protected abstract IExternalContext initializeExternalContext(
+    protected abstract IProcessContext initializeExternalContext(
             ExternalContext externalContext);
 
     protected void initializeTag() {
@@ -91,7 +94,7 @@ public abstract class AbstractInitializeTag extends TagSupport {
         this.attributesLocale = attributesLocale;
     }
 
-    protected final IExternalContext getExternalContext() {
+    protected final IProcessContext getExternalContext() {
         return externalContext;
     }
 

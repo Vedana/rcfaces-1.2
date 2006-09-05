@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class DataPagerTag extends AbstractBasicTag {
 
-private static final Log LOG=LogFactory.getLog(DataPagerTag.class);
+
+	private static final Log LOG=LogFactory.getLog(DataPagerTag.class);
+
 	private String forVal;
 	public String getComponentType() {
 		return DataPagerComponent.COMPONENT_TYPE;
@@ -25,6 +27,12 @@ private static final Log LOG=LogFactory.getLog(DataPagerTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (DataPagerComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  forVal='"+forVal+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof DataPagerComponent)==false) {

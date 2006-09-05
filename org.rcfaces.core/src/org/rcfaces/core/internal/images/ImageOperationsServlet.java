@@ -1,30 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/01 15:24:28  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.1  2006/06/19 17:22:19  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.1  2006/05/11 16:34:19  oeuillot
- * Correction du calendar
- * Ajout de DateChooser
- * Ajout du moteur de filtre d'images
- * Ajout de l'evt   loadListener pour le AsyncManager
- *
  */
 package org.rcfaces.core.internal.images;
 
@@ -62,17 +37,18 @@ import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
-import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 
 /**
  * 
  * @author Olivier Oeuillot
  * @version $Revision$
  */
-public class ImageFiltersServlet extends ExpirationHttpServlet {
+public class ImageOperationsServlet extends ParametredHttpServlet {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(ImageFiltersServlet.class);
+    private static final Log LOG = LogFactory
+            .getLog(ImageOperationsServlet.class);
 
     private static final int MAX_BUFFER_SIZE = 8192;
 
@@ -92,7 +68,7 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
 
     private IImageLoaderFactory imageLoaderFactory;
 
-    private ImageFiltersRepository imageOperationRepository;
+    private ImageOperationsURLRewritingProvider imageOperationRepository;
 
     private IImagesCache imagesCache;
 
@@ -172,14 +148,14 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
             maxImageCacheSize = Integer.parseInt(mics);
 
             LOG.info("Set max image cache size to " + maxImageCacheSize + ".");
+
         } else {
             LOG.info("Set max image cache size to default value ("
                     + maxImageCacheSize + ").");
         }
 
         String imageRepositoryURL = ServletTools.computeResourceURI(
-                getServletContext(), IMAGE_REPOSITORY_DEFAULT_URL,
-                ImageFiltersServlet.class);
+                getServletContext(), IMAGE_REPOSITORY_DEFAULT_URL, getClass());
         LOG.info("Set image repository url to '" + imageRepositoryURL + "'.");
 
         getServletContext().setAttribute(IMAGE_REPOSITORY_PROPERTY,
@@ -298,7 +274,7 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Set no cache into response.");
             }
-            ExpirationHttpServlet.setNoCache(response);
+            ParametredHttpServlet.setNoCache(response);
 
             return;
         }
@@ -462,8 +438,8 @@ public class ImageFiltersServlet extends ExpirationHttpServlet {
 
         synchronized (this) {
             if (imageOperationRepository == null) {
-                imageOperationRepository = ImageFiltersRepository.getInstance(
-                        getServletContext(), request, response);
+                imageOperationRepository = ImageOperationsURLRewritingProvider
+                        .getInstance(getServletContext(), request, response);
             }
         }
 

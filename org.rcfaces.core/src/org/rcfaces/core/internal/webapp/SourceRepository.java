@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -400,11 +403,11 @@ public abstract class SourceRepository {
         }
 
         if (canUseETag) {
-            etag = ExpirationHttpServlet.computeETag(sourceBuffer);
+            etag = ParametredHttpServlet.computeETag(sourceBuffer);
         }
 
         if (canUseHash) {
-            hash = ExpirationHttpServlet.computeHash(sourceBuffer);
+            hash = ParametredHttpServlet.computeHash(sourceBuffer);
         }
 
         if (canUseGzip) {

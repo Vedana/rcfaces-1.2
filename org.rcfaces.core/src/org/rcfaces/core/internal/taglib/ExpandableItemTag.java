@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public abstract class ExpandableItemTag extends UIImageItemTag {
 
-private static final Log LOG=LogFactory.getLog(ExpandableItemTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ExpandableItemTag.class);
+
 	private String foregroundColor;
 	private String backgroundColor;
 	private String text;
@@ -48,6 +50,12 @@ private static final Log LOG=LogFactory.getLog(ExpandableItemTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  expandedImageURL='"+expandedImageURL+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ExpandableItemComponent)==false) {

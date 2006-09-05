@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -36,7 +39,7 @@ import java.util.WeakHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.images.ImageFiltersServlet.IBufferedImage;
+import org.rcfaces.core.internal.images.ImageOperationsServlet.IBufferedImage;
 
 /**
  * 

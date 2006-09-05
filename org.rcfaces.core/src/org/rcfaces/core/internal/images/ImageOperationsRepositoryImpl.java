@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/09/05 08:57:21  oeuillot
+ * DerniËres corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -48,8 +51,11 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.codec.StringAppender;
 import org.rcfaces.core.internal.codec.URLFormCodec;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.provider.IProvider;
+import org.rcfaces.core.provider.ImageURLRewritingInformation;
 import org.xml.sax.Attributes;
 
 /**
@@ -57,11 +63,12 @@ import org.xml.sax.Attributes;
  * @author Olivier Oeuillot
  * @version $Revision$
  */
-public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
+public class ImageOperationsRepositoryImpl extends
+        ImageOperationsURLRewritingProvider {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
-            .getLog(ImageFiltersRepositoryImpl.class);
+            .getLog(ImageOperationsRepositoryImpl.class);
 
     private final Map operationsById = new HashMap(32);
 
@@ -69,31 +76,17 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
 
     private final FileNameMap fileNameMap;
 
-    private String imageRepositoryURL;
+    private final String imageRepositoryURL;
 
-    public ImageFiltersRepositoryImpl(IProvider provider) {
+    public ImageOperationsRepositoryImpl(IProvider provider) {
         super(provider);
 
         fileNameMap = URLConnection.getFileNameMap();
 
-        /*
-         * operationsById.put("disabled", new DisableOperation());
-         * operationsById.put("gray", new GrayOperation());
-         * operationsById.put("contrast", new ContrastOperation());
-         * operationsById.put("brithness", new BrithnessOperation());
-         * operationsById.put("colorRescale", new ContrastBrithnessOperation());
-         * operationsById.put("hover", new HoverOperation());
-         * operationsById.put("selected", new SelectedOperation());
-         * operationsById.put("scale", new ScaleOperation());
-         * operationsById.put("resize", new ResizeOperation());
-         * operationsById.put("setSize", new SetSizeOperation()); //
-         * operationsById.put("icon", new IEIconOperation());
-         * 
-         * for (Iterator it = operationsById.values().iterator(); it.hasNext();) {
-         * IImageOperation imageOperation = (IImageOperation) it.next();
-         * 
-         * imageOperation.configure(Collections.EMPTY_MAP); }
-         */
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        imageRepositoryURL = ImageOperationsServlet
+                .getImagesRepositoryURI(facesContext.getExternalContext()
+                        .getApplicationMap());
     }
 
     public void configureRules(Digester digester) {
@@ -235,7 +228,8 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
     }
 
     public String formatImageURL(FacesContext facesContext, String filter,
-            String url, boolean mainURL, ImageInformation imageInformation) {
+            String url, boolean mainURL,
+            ImageURLRewritingInformation rewritingInformation) {
 
         String operationId = filter;
         int pf = operationId.indexOf('(');
@@ -264,8 +258,8 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
             internalContentType = externalContentType;
         }
 
-        if (imageInformation != null) {
-            imageInformation.setMimeType(externalContentType);
+        if (rewritingInformation != null) {
+            rewritingInformation.setContentType(externalContentType);
         }
 
         if (isValidContenType(internalContentType) == false) {
@@ -284,28 +278,40 @@ public class ImageFiltersRepositoryImpl extends ImageFiltersRepository {
         ExternalContext externalContext = facesContext.getExternalContext();
 
         StringAppender sb = new StringAppender(256);
-        sb.append(externalContext.getRequestContextPath());
+        String requestContextPath = externalContext.getRequestContextPath();
+        sb.append(requestContextPath);
 
         if (addFilterServletPath) {
-            synchronized (this) {
-                if (imageRepositoryURL == null) {
-                    imageRepositoryURL = ImageFiltersServlet
-                            .getImagesRepositoryURI(externalContext
-                                    .getApplicationMap());
-                }
-            }
-
             sb.append(imageRepositoryURL);
             sb.append('/');
 
             sb.append(filter);
         }
 
-        String servletPath = externalContext.getRequestServletPath();
-        if (servletPath != null) {
-            int idx = servletPath.lastIndexOf('/');
-            if (idx > 0) {
-                sb.append(servletPath.substring(0, idx));
+        // Traitement du base href ????
+        IProcessContext extContext = AbstractProcessContext
+                .getProcessContext(externalContext);
+        if (url.charAt(0) != '/') {
+            String baseHREF = extContext.getBaseHREF();
+            if (baseHREF == null || baseHREF.length() < 1) {
+                // On prend la servlet !
+
+                String servletPath = externalContext.getRequestServletPath();
+                if (servletPath != null) {
+                    int idx = servletPath.lastIndexOf('/');
+                    if (idx > 0) {
+                        sb.append(servletPath.substring(0, idx));
+                    }
+                }
+
+            } else {
+                if (baseHREF.indexOf("://") >= 0) {
+                    throw new FacesException("Base href '" + baseHREF
+                            + "' is not supported !");
+                }
+
+                // Le BASE HREF est positionn√© !
+                sb.append(baseHREF.substring(requestContextPath.length()));
             }
         }
 

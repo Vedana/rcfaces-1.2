@@ -1,7 +1,7 @@
 .fb_flat_1, .fb_flat_2, .fb_flat_3,
 .fb_flat_8, .fb_flat_4,
 .fb_flat_7, .fb_flat_6, .fb_flat_5 {
-	background: url('borders/flat1.gif') no-repeat 0 0;
+	background: url('border/flat1.gif') no-repeat 0 0;
 	font-size: 1pt;
 	line-height: 1px;
 	-moz-user-select: none;
@@ -13,7 +13,7 @@
 }
 
 .fb_flat_2, .fb_flat_6 {
-	background: url('borders/flat2.gif') repeat-x;
+	background: url('border/flat2.gif') repeat-x;
 }
 
 .fb_flat_1 IMG,

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -22,34 +25,14 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import java.util.Map;
 
-import javax.faces.context.ExternalContext;
 
 /**
- * Non implementÃ© pour l'instant !
+ * 
  * 
  * @author Olivier Oeuillot
  * @version $Revision$
  */
 public class HtmlRenderKit /* extends RenderKit */{
     private static final String REVISION = "$Revision$";
-
-    private static final String HTML_EXTERNAL_CONTEXT_PROPERTY = "org.rcfaces.renderkit.html.HTML_EXTERNAL_CONTEXT";
-
-    public static IHtmlExternalContext getExternalContext(
-            ExternalContext externalContext) {
-
-        Map requestMap = externalContext.getRequestMap();
-        IHtmlExternalContext htmlExternalContext = (IHtmlExternalContext) requestMap
-                .get(HTML_EXTERNAL_CONTEXT_PROPERTY);
-        if (htmlExternalContext != null) {
-            return htmlExternalContext;
-        }
-
-        htmlExternalContext = new HtmlExternalContextImpl(externalContext);
-        requestMap.put(HTML_EXTERNAL_CONTEXT_PROPERTY, htmlExternalContext);
-
-        return htmlExternalContext;
-    }
 }

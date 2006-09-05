@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class UIImageItemTag extends AbstractItemTag {
 
-private static final Log LOG=LogFactory.getLog(UIImageItemTag.class);
+
+	private static final Log LOG=LogFactory.getLog(UIImageItemTag.class);
+
 	private String visible;
 	private String hiddenMode;
 	private String toolTipText;
@@ -88,6 +90,19 @@ private static final Log LOG=LogFactory.getLog(UIImageItemTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (UIImageItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  toolTipText='"+toolTipText+"'");
+			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
+			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
+			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
+			LOG.debug("  rendered='"+rendered+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof UIImageItemComponent)==false) {

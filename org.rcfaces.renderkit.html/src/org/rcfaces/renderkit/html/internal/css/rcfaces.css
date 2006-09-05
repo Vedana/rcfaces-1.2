@@ -1,9 +1,9 @@
 /* Listes des imports CSS */
 @import url(f_core.css);					//module:core
-@import url(f_border_flat.css);					//module:borders
-@import url(f_border_relief.css);					//module:borders
-@import url(f_border_rounded.css);					//module:borders
-@import url(f_border_solid.css);					//module:borders
+@import url(f_border_flat.css);					//module:border
+@import url(f_border_relief.css);					//module:border
+@import url(f_border_rounded.css);					//module:border
+@import url(f_border_solid.css);					//module:border
 @import url(f_box.css);					//module:basic
 @import url(f_button.css);				//module:basic
 @import url(f_calendar.css); 				//module:calendar

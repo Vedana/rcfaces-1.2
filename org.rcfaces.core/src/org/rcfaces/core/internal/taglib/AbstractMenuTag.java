@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public abstract class AbstractMenuTag extends AbstractConverterCommandTag {
 
-private static final Log LOG=LogFactory.getLog(AbstractMenuTag.class);
+
+	private static final Log LOG=LogFactory.getLog(AbstractMenuTag.class);
+
 	private String selectionListeners;
 	private String checkListeners;
 	private String readOnly;
@@ -48,6 +50,10 @@ private static final Log LOG=LogFactory.getLog(AbstractMenuTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractMenuComponent)==false) {

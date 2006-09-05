@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class MenuItemTag extends ExpandableItemTag {
 
-private static final Log LOG=LogFactory.getLog(MenuItemTag.class);
+
+	private static final Log LOG=LogFactory.getLog(MenuItemTag.class);
+
 	private String accessKey;
 	private String acceleratorKey;
 	private String menuListeners;
@@ -52,6 +54,14 @@ private static final Log LOG=LogFactory.getLog(MenuItemTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (MenuItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  acceleratorKey='"+acceleratorKey+"'");
+			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof MenuItemComponent)==false) {

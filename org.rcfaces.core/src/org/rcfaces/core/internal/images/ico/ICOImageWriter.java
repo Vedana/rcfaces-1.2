@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -241,6 +244,8 @@ public class ICOImageWriter extends ImageWriter {
         int colors[] = new int[icm.getMapSize()];
         icm.getRGBs(colors);
 
+        int trans = icm.getTransparentPixel();
+
         for (int i = 0; i < 256; i++) {
             if (i >= colors.length) {
                 stream.writeInt(0);
@@ -252,6 +257,11 @@ public class ICOImageWriter extends ImageWriter {
             stream.writeByte(color & 0xff);
             stream.writeByte((color & 0xff00) >> 8);
             stream.writeByte((color & 0xff0000) >> 16);
+
+            if (false && i == trans) {
+                stream.writeByte(255);
+                continue;
+            }
             stream.writeByte(0);
         }
 
@@ -262,11 +272,14 @@ public class ICOImageWriter extends ImageWriter {
 
         int index = bdata.length - lineStride;
 
-        int trans = icm.getTransparentPixel();
-
         byte transparent[] = new byte[bytesPerRow];
         if (trans >= 0) {
             Arrays.fill(transparent, (byte) trans);
+        }
+
+        int storeWidth = bytesPerRow;
+        if (storeWidth > w) {
+            storeWidth = w;
         }
 
         for (int y = bytesPerRow; y > 0; y--) {
@@ -274,14 +287,10 @@ public class ICOImageWriter extends ImageWriter {
                 stream.write(transparent);
                 continue;
             }
-            int c = bytesPerRow;
-            if (c > w) {
-                c = w;
-            }
 
-            stream.write(bdata, index, c);
-            if (c < bytesPerRow) {
-                stream.write(transparent, 0, bytesPerRow - c);
+            stream.write(bdata, index, storeWidth);
+            if (storeWidth < bytesPerRow) {
+                stream.write(transparent, 0, bytesPerRow - storeWidth);
             }
             index -= lineStride;
         }
@@ -290,23 +299,21 @@ public class ICOImageWriter extends ImageWriter {
 
         Arrays.fill(transparent, (byte) 255);
 
+        int paddingSize = ((storeWidth + 31) / 32) * 32;
+
         if (trans >= 0) {
             index = bdata.length - lineStride;
+
             for (int y = bytesPerRow; y > 0; y--) {
                 if (y > h) {
-                    stream.write(transparent, 0, bytesPerRow / 8);
+                    stream.write(transparent, 0, paddingSize / 8);
                     continue;
-                }
-
-                int mask = 0;
-                int c = bytesPerRow;
-                if (c > w) {
-                    c = w;
                 }
 
                 int idx = index;
                 int x = 0;
-                for (x = 0; x < c; x++) {
+                int mask = 0;
+                for (x = 0; x < storeWidth; x++) {
                     if (x > 0 && (x % 8) == 0) {
                         stream.writeByte(mask);
                         mask = 0;
@@ -319,26 +326,25 @@ public class ICOImageWriter extends ImageWriter {
                     mask |= 1;
                 }
 
-                if (((c + 1) % 8) > 0) {
-                    int rest = 8 - (c % 8);
+                if ((x % 8) > 0) {
+                    int rest = 8 - (x % 8);
                     mask <<= rest;
 
-                    int m = (255) >> (8 - rest);
-                    mask |= m;
+                    mask |= (255 >> (x % 8));
 
                     x += rest;
                 }
                 stream.writeByte(mask);
 
-                if (x < bytesPerRow) {
-                    stream.write(transparent, 0, (bytesPerRow - x) / 8);
+                if (x < paddingSize) {
+                    stream.write(transparent, 0, (paddingSize - x) / 8);
                 }
 
                 index -= lineStride;
             }
         } else {
             for (int y = 0; y < bytesPerRow; y++) {
-                stream.write(transparent, 0, bytesPerRow / 8);
+                stream.write(transparent, 0, paddingSize / 8);
             }
         }
 

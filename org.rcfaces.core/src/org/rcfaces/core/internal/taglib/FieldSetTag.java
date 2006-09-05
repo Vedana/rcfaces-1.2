@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class FieldSetTag extends AbstractOutputTag {
 
-private static final Log LOG=LogFactory.getLog(FieldSetTag.class);
+
+	private static final Log LOG=LogFactory.getLog(FieldSetTag.class);
+
 	private String fontSize;
 	private String fontBold;
 	private String fontUnderline;
@@ -97,6 +99,20 @@ private static final Log LOG=LogFactory.getLog(FieldSetTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (FieldSetComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontBold='"+fontBold+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  fontItalic='"+fontItalic+"'");
+			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  imageURL='"+imageURL+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof FieldSetComponent)==false) {

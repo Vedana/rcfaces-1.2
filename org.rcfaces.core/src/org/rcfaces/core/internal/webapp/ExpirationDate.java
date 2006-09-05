@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -33,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.util.Delay;
-
 
 /**
  * 
@@ -125,7 +127,7 @@ public class ExpirationDate {
     public void sendExpires(HttpServletResponse response) {
 
         if (expiresDate > 0) {
-            response.setDateHeader(ExpirationHttpServlet.HTTP_EXPIRES,
+            response.setDateHeader(ParametredHttpServlet.HTTP_EXPIRES,
                     expiresDate);
 
             if (LOG.isTraceEnabled()) {
@@ -137,10 +139,10 @@ public class ExpirationDate {
 
         if (expiresDelay > 0) {
             long d = System.currentTimeMillis() + expiresDelay;
-            response.setDateHeader(ExpirationHttpServlet.HTTP_EXPIRES, d);
+            response.setDateHeader(ParametredHttpServlet.HTTP_EXPIRES, d);
 
             if (expiresMaxAge != null) {
-                response.setHeader(ExpirationHttpServlet.HTTP_CACHE_CONTROL,
+                response.setHeader(ParametredHttpServlet.HTTP_CACHE_CONTROL,
                         expiresMaxAge);
             }
 

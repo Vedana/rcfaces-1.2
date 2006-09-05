@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class TreeNodeTag extends ExpandableItemTag {
 
-private static final Log LOG=LogFactory.getLog(TreeNodeTag.class);
+
+	private static final Log LOG=LogFactory.getLog(TreeNodeTag.class);
+
 	private String groupName;
 	private String inputType;
 	public String getComponentType() {
@@ -34,6 +36,13 @@ private static final Log LOG=LogFactory.getLog(TreeNodeTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (TreeNodeComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  groupName='"+groupName+"'");
+			LOG.debug("  inputType='"+inputType+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof TreeNodeComponent)==false) {

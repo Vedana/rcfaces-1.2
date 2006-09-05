@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -58,7 +61,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.rcfaces.core.internal.renderkit.IExternalContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 
 /**
  * 
@@ -94,7 +97,7 @@ public interface IRepository extends Serializable {
 
     ISet declareSet(String name, String uri, String[] moduleNames);
 
-    String getBaseURI(IExternalContext context);
+    String getBaseURI(IProcessContext context);
 
     /**
      * 

@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class AcceleratorTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(AcceleratorTag.class);
+
+	private static final Log LOG=LogFactory.getLog(AcceleratorTag.class);
+
 	private String keyPressListeners;
 	private String forVal;
 	private String forItemValue;
@@ -88,6 +90,16 @@ private static final Log LOG=LogFactory.getLog(AcceleratorTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (AcceleratorComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  forVal='"+forVal+"'");
+			LOG.debug("  forItemValue='"+forItemValue+"'");
+			LOG.debug("  keyBinding='"+keyBinding+"'");
+			LOG.debug("  action='"+action+"'");
+			LOG.debug("  actionListeners='"+actionListeners+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AcceleratorComponent)==false) {

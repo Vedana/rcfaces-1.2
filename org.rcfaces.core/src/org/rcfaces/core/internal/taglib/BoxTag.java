@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class BoxTag extends AbstractBasicTag {
 
-private static final Log LOG=LogFactory.getLog(BoxTag.class);
+
+	private static final Log LOG=LogFactory.getLog(BoxTag.class);
+
 	private String backgroundImageURL;
 	private String backgroundImageVerticalPosition;
 	private String backgroundImageHorizontalPosition;
@@ -115,6 +117,18 @@ private static final Log LOG=LogFactory.getLog(BoxTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (BoxComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  backgroundImageURL='"+backgroundImageURL+"'");
+			LOG.debug("  backgroundImageVerticalPosition='"+backgroundImageVerticalPosition+"'");
+			LOG.debug("  backgroundImageHorizontalPosition='"+backgroundImageHorizontalPosition+"'");
+			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
+			LOG.debug("  backgroundImageHorizontalRepeat='"+backgroundImageHorizontalRepeat+"'");
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof BoxComponent)==false) {

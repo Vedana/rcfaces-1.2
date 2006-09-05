@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class CardTag extends AbstractOutputTag {
 
-private static final Log LOG=LogFactory.getLog(CardTag.class);
+
+	private static final Log LOG=LogFactory.getLog(CardTag.class);
+
 	private String loadListeners;
 	public String getComponentType() {
 		return CardComponent.COMPONENT_TYPE;
@@ -25,6 +27,11 @@ private static final Log LOG=LogFactory.getLog(CardTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (CardComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof CardComponent)==false) {

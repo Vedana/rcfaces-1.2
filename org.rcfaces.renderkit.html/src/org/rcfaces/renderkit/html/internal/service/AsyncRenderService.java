@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:13  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -78,7 +81,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
@@ -108,7 +111,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
     public void initialize(FacesContext facesContext) {
         useGzip = "true".equalsIgnoreCase(facesContext.getExternalContext()
-                .getInitParameter(ExpirationHttpServlet.USE_GZIP_PARAMETER));
+                .getInitParameter(ParametredHttpServlet.USE_GZIP_PARAMETER));
 
         interactiveRender = ("false".equalsIgnoreCase(facesContext
                 .getExternalContext().getInitParameter(
@@ -233,7 +236,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
         }
 
         // On verifie que le browser le supporte
-        return ExpirationHttpServlet.hasGzipSupport(facesContext);
+        return ParametredHttpServlet.hasGzipSupport(facesContext);
     }
 
     /**
@@ -329,7 +332,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
             boolean useGzip = this.useGzip;
             if (useGzip) {
-                useGzip = ExpirationHttpServlet.hasGzipSupport(facesContext);
+                useGzip = ParametredHttpServlet.hasGzipSupport(facesContext);
             }
 
             if (LOG.isTraceEnabled()) {
@@ -339,7 +342,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
             if (gzipped != null) {
                 if (useGzip) {
-                    ExpirationHttpServlet
+                    ParametredHttpServlet
                             .setGzipContentEncoding((HttpServletResponse) response);
 
                     OutputStream out = response.getOutputStream();

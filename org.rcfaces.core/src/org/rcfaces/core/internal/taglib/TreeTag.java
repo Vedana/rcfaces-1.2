@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class TreeTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(TreeTag.class);
+
+	private static final Log LOG=LogFactory.getLog(TreeTag.class);
+
 	private String doubleClickListeners;
 	private String required;
 	private String verticalScrollPosition;
@@ -277,6 +279,37 @@ private static final Log LOG=LogFactory.getLog(TreeTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (TreeComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  required='"+required+"'");
+			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
+			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  checkable='"+checkable+"'");
+			LOG.debug("  checkCardinality='"+checkCardinality+"'");
+			LOG.debug("  selectable='"+selectable+"'");
+			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  defaultImageURL='"+defaultImageURL+"'");
+			LOG.debug("  defaultSelectedImageURL='"+defaultSelectedImageURL+"'");
+			LOG.debug("  defaultExpandedImageURL='"+defaultExpandedImageURL+"'");
+			LOG.debug("  defaultDisabledImageURL='"+defaultDisabledImageURL+"'");
+			LOG.debug("  defaultLeafImageURL='"+defaultLeafImageURL+"'");
+			LOG.debug("  defaultSelectedLeafImageURL='"+defaultSelectedLeafImageURL+"'");
+			LOG.debug("  defaultExpandedLeafImageURL='"+defaultExpandedLeafImageURL+"'");
+			LOG.debug("  defaultDisabledLeafImageURL='"+defaultDisabledLeafImageURL+"'");
+			LOG.debug("  userExpandable='"+userExpandable+"'");
+			LOG.debug("  hideRootExpandSign='"+hideRootExpandSign+"'");
+			LOG.debug("  preloadedLevelDepth='"+preloadedLevelDepth+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
+			LOG.debug("  checkedValues='"+checkedValues+"'");
+			LOG.debug("  expansionValues='"+expansionValues+"'");
+			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
+			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
+			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof TreeComponent)==false) {

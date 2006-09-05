@@ -6,33 +6,30 @@ import org.rcfaces.core.internal.tools.ToolBarTools;
 
 public class ToolFolderComponent extends AbstractItemComponent {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.toolFolder";
+    public static final String COMPONENT_TYPE = "org.rcfaces.core.toolFolder";
 
+    public ToolFolderComponent() {
+        setRendererType(null);
+    }
 
-	public ToolFolderComponent() {
-		setRendererType(null);
-	}
+    public ToolFolderComponent(String componentId) {
+        this();
+        setId(componentId);
+    }
 
-	public ToolFolderComponent(String componentId) {
-		this();
-		setId(componentId);
-	}
+    public final IToolItemIterator listToolItems() {
 
-	public final IToolItemIterator listToolItems() {
+        return ToolBarTools.listToolItems(this);
 
+    }
 
-		return ToolBarTools.listToolItems(this);
-		
-	}
+    public final ToolBarComponent getToolBar() {
 
-	public final ToolBarComponent getToolBar() {
+        return (ToolBarComponent) getParent();
 
+    }
 
-		return (ToolBarComponent)getParent();
-		
-	}
-
-	public void release() {
-		super.release();
-	}
+    public void release() {
+        super.release();
+    }
 }

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/05 08:57:14  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -112,7 +115,7 @@ import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
-import org.rcfaces.core.internal.renderkit.IExternalContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -147,7 +150,7 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
 
     private boolean asyncRenderer = false;
 
-    private IHtmlExternalContext htmlExternalContext;
+    private IHtmlProcessContext htmlExternalContext;
 
     public void initialize(FacesContext facesContext) {
         super.initialize(facesContext);
@@ -163,8 +166,8 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
                     + asyncRenderer + ".");
         }
 
-        htmlExternalContext = HtmlRenderKit.getExternalContext(facesContext
-                .getExternalContext());
+        htmlExternalContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext.getExternalContext());
     }
 
     public IScriptRenderContext getScriptRenderContext() {
@@ -458,11 +461,11 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
         }
     }
 
-    public IHtmlExternalContext getHtmlExternalContext() {
+    public IHtmlProcessContext getHtmlExternalContext() {
         return htmlExternalContext;
     }
 
-    public IExternalContext getExternalContext() {
+    public IProcessContext getExternalContext() {
         return htmlExternalContext;
     }
 

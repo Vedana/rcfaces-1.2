@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class DateEntryTag extends AbstractCalendarTag {
 
-private static final Log LOG=LogFactory.getLog(DateEntryTag.class);
+
+	private static final Log LOG=LogFactory.getLog(DateEntryTag.class);
+
 	private String required;
 	private String autoTab;
 	private String valueChangeListeners;
@@ -106,6 +108,20 @@ private static final Log LOG=LogFactory.getLog(DateEntryTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (DateEntryComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  required='"+required+"'");
+			LOG.debug("  autoTab='"+autoTab+"'");
+			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  showCalendarOnFocus='"+showCalendarOnFocus+"'");
+			LOG.debug("  autoCompletion='"+autoCompletion+"'");
+			LOG.debug("  dateFormat='"+dateFormat+"'");
+			LOG.debug("  defaultDate='"+defaultDate+"'");
+			LOG.debug("  action='"+action+"'");
+			LOG.debug("  actionListeners='"+actionListeners+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof DateEntryComponent)==false) {

@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class CheckButtonTag extends AbstractInputTag {
 
-private static final Log LOG=LogFactory.getLog(CheckButtonTag.class);
+
+	private static final Log LOG=LogFactory.getLog(CheckButtonTag.class);
+
 	private String text;
 	private String textPosition;
 	private String selectionListeners;
@@ -61,6 +63,15 @@ private static final Log LOG=LogFactory.getLog(CheckButtonTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (CheckButtonComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  selected='"+selected+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof CheckButtonComponent)==false) {

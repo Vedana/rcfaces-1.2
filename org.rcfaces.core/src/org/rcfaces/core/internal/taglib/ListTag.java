@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ListTag extends ComboTag {
 
-private static final Log LOG=LogFactory.getLog(ListTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ListTag.class);
+
 	private String multipleSelect;
 	private String doubleClickListeners;
 	private String rowNumber;
@@ -43,6 +45,13 @@ private static final Log LOG=LogFactory.getLog(ListTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ListComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  multipleSelect='"+multipleSelect+"'");
+			LOG.debug("  rowNumber='"+rowNumber+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ListComponent)==false) {

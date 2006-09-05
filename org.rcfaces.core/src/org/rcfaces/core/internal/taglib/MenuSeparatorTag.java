@@ -6,7 +6,9 @@ import org.apache.commons.logging.Log;
 
 public class MenuSeparatorTag extends AbstractSeparatorTag {
 
-private static final Log LOG=LogFactory.getLog(MenuSeparatorTag.class);
+
+	private static final Log LOG=LogFactory.getLog(MenuSeparatorTag.class);
+
 	public String getComponentType() {
 		return MenuSeparatorComponent.COMPONENT_TYPE;
 	}

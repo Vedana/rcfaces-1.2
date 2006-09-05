@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class MenuTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(MenuTag.class);
+
+	private static final Log LOG=LogFactory.getLog(MenuTag.class);
+
 	private String menuListeners;
 	private String selectionListeners;
 	private String checkListeners;
@@ -97,6 +99,16 @@ private static final Log LOG=LogFactory.getLog(MenuTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (MenuComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  selectionValues='"+selectionValues+"'");
+			LOG.debug("  checkValues='"+checkValues+"'");
+			LOG.debug("  menuId='"+menuId+"'");
+			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
+			LOG.debug("  converter='"+converter+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof MenuComponent)==false) {

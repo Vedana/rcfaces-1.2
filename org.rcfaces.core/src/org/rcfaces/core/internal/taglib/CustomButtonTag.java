@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class CustomButtonTag extends AbstractCommandTag {
 
-private static final Log LOG=LogFactory.getLog(CustomButtonTag.class);
+
+	private static final Log LOG=LogFactory.getLog(CustomButtonTag.class);
+
 	private String borderType;
 	private String border;
 	private String selectionListeners;
@@ -79,6 +81,16 @@ private static final Log LOG=LogFactory.getLog(CustomButtonTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (CustomButtonComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  action='"+action+"'");
+			LOG.debug("  actionListeners='"+actionListeners+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof CustomButtonComponent)==false) {

@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public abstract class AbstractSeparatorTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(AbstractSeparatorTag.class);
+
+	private static final Log LOG=LogFactory.getLog(AbstractSeparatorTag.class);
+
 	private String visible;
 	private String hiddenMode;
 	public final String getVisible() {
@@ -30,6 +32,10 @@ private static final Log LOG=LogFactory.getLog(AbstractSeparatorTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractSeparatorComponent)==false) {

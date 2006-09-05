@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class LineBreakTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(LineBreakTag.class);
+
+	private static final Log LOG=LogFactory.getLog(LineBreakTag.class);
+
 	private String styleClass;
 	private String visible;
 	private String hiddenMode;
@@ -52,6 +54,15 @@ private static final Log LOG=LogFactory.getLog(LineBreakTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (LineBreakComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  rendered='"+rendered+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof LineBreakComponent)==false) {

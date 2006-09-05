@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ProgressBarTag extends AbstractOutputTag {
 
-private static final Log LOG=LogFactory.getLog(ProgressBarTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ProgressBarTag.class);
+
 	private String minimum;
 	private String maximum;
 	private String indeterminate;
@@ -43,6 +45,14 @@ private static final Log LOG=LogFactory.getLog(ProgressBarTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ProgressBarComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  minimum='"+minimum+"'");
+			LOG.debug("  maximum='"+maximum+"'");
+			LOG.debug("  indeterminate='"+indeterminate+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ProgressBarComponent)==false) {

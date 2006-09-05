@@ -10,7 +10,9 @@ import javax.faces.application.Application;
 
 public class ServiceTag extends CameliaTag {
 
-private static final Log LOG=LogFactory.getLog(ServiceTag.class);
+
+	private static final Log LOG=LogFactory.getLog(ServiceTag.class);
+
 	private String propertyChangeListeners;
 	private String serviceEventListeners;
 	private String filterProperties;
@@ -52,6 +54,13 @@ private static final Log LOG=LogFactory.getLog(ServiceTag.class);
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ServiceComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  serviceId='"+serviceId+"'");
+		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ServiceComponent)==false) {

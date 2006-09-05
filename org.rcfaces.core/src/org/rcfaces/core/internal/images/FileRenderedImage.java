@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/05 08:57:21  oeuillot
+ * Dernières corrections pour la migration Rcfaces
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -53,9 +56,9 @@ import javax.imageio.stream.ImageOutputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
-import org.rcfaces.core.internal.images.ImageFiltersServlet.IBufferedImage;
+import org.rcfaces.core.internal.images.ImageOperationsServlet.IBufferedImage;
 import org.rcfaces.core.internal.util.CameliaVersion;
-import org.rcfaces.core.internal.webapp.ExpirationHttpServlet;
+import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 
 /**
  * 
@@ -208,8 +211,8 @@ class FileRenderedImage implements IBufferedImage {
 
         byte buffer[] = bous.toByteArray();
 
-        hash = ExpirationHttpServlet.computeHash(buffer);
-        etag = ExpirationHttpServlet.computeETag(buffer);
+        hash = ParametredHttpServlet.computeHash(buffer);
+        etag = ParametredHttpServlet.computeETag(buffer);
         this.size = buffer.length;
 
         FileOutputStream fileOutputStream = new FileOutputStream(file);

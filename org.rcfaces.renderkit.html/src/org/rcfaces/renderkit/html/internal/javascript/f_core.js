@@ -3085,7 +3085,18 @@ var f_core = {
 		
 		return dest;
 	},
-	
+	/** 
+	 * @method hidden static
+	 * @param String url
+	 * @return void
+	 */
+	VerifyBrowserCompatibility: function(url) {
+		if (f_core.IsGecko() || f_core.IsInternetExplorer()) {
+			return;
+		}
+		
+		document.location=url;
+	},
 	/**
 	 * @method public static final
 	 * @return string
