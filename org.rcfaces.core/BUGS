@@ -1,5 +1,9 @@
-BUG 0001: (Olivier)
-C'est un Exemple
+BUG 0001: (Fred)
+DataGrid : différence d'affichage IE-Moz
+Si on definit une hauteur en lignes visibles, lors de l'affichage de la dernière page, la taille du composant est :
+- sous IE : la même (nb de lignes visibles spécifié
+- sous Moz : réduite au nombre de lignes réellement affichées
 
-BUG 0002: (Olivier)
-Deuxième exemple
+BUG 0002: (Fred)
+Calendar : la sélection initiale (value) n'est pas affichée en mode "periods"
+Elle est correctement affichée en mode "date"
