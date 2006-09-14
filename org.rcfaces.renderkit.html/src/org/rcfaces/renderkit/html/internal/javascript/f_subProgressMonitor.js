@@ -7,7 +7,7 @@
  *
  * @class f_subProgressMonitor extends f_progressMonitor
  * @author Eclipse team & Olivier Oeuillot
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
  
 var __static = {

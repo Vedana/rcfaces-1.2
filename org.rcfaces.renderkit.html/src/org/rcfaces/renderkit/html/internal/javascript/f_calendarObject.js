@@ -5,8 +5,8 @@
 /**
  * 
  * @class public f_calendarObject extends f_object, fa_eventTarget, fa_items, fa_selectionProvider, fa_commands
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static = {

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -65,12 +68,18 @@ import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(BasicPropertiesAccessor.class);
 
     private static final Set PRIMITIVE_CLASSES = new HashSet(8);
     static {
@@ -271,6 +280,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
             Object value = datas[i++];
             if (value == null) {
                 // ??? Ca ne doit jamais arriver ...
+                LOG.error("Invalid format for restoreState (key=" + key + ").");
                 continue;
             }
 
@@ -282,11 +292,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         }
 
         return null;
-    } /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.internal.component.IPropertiesAccessor#isPropertySetted(java.lang.String)
-         */
+    }
 
     public boolean isPropertySetted(String propertyName) {
         return properties.containsKey(propertyName);

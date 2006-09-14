@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -188,8 +191,8 @@ import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
         IJavaScriptComponent {
@@ -934,8 +937,8 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private interface IEventDecoder {
         void decodeEvent(UIComponent component, IEventData eventData);
@@ -943,8 +946,8 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static abstract class AbstractEventDecoder implements IEventDecoder {
         private static final String REVISION = "$Revision$";

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -95,8 +98,8 @@ import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class BasicComponentEngine extends AbstractComponentEngine {
     private static final String REVISION = "$Revision$";
@@ -607,8 +610,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected class BasicDataAccessor extends BasicPropertiesManager implements
             IDataMapAccessor {

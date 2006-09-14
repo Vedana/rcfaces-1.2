@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -28,14 +31,16 @@ import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.model.IFilterProperties;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class DataGridPreference extends AbstractComponentPreference {
+
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -1760014871350310345L;
 
     private static final int SAVE_COLUMNS_ORDER = 0x0001;
 

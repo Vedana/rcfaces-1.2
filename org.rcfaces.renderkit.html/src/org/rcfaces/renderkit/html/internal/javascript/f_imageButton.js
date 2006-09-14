@@ -6,8 +6,8 @@
  * f_imageButton class
  *
  * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */ 
 var __static = {
 

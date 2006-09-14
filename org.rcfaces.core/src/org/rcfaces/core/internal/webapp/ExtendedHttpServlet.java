@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  */
 package org.rcfaces.core.internal.webapp;
@@ -25,16 +28,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ExtendedHttpServlet extends HttpServlet {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -8822434295699331135L;
 
     private static final Log LOG = LogFactory.getLog(ExtendedHttpServlet.class);
 
@@ -109,7 +114,6 @@ public class ExtendedHttpServlet extends HttpServlet {
             MessageDigest messageDigest = MessageDigest
                     .getInstance(ETAG_DIGEST_ALGORITHM);
 
-            // messageDigest.update(buffer);
             byte digest[] = messageDigest.digest(buffer);
 
             StringAppender sb = new StringAppender(digest.length * 2 + 16);

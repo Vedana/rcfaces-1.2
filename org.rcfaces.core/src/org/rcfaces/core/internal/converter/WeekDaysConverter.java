@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -56,21 +59,21 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
-import org.rcfaces.core.internal.codec.StringAppender;
-
+import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.model.AbstractConverter;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class WeekDaysConverter implements Converter {
+public class WeekDaysConverter extends AbstractConverter {
     private static final String REVISION = "$Revision$";
 
     public static final Converter SINGLETON = new WeekDaysConverter();
 
     private static final Integer ZERO = new Integer(0);
 
-    private final Map namesOfDayOfWeek = new HashMap(8);
+    private static final Map namesOfDayOfWeek = new HashMap(8);
 
     /*
      * (non-Javadoc)
@@ -105,7 +108,20 @@ public class WeekDaysConverter implements Converter {
             names = (Map) namesOfDayOfWeek.get(locale);
 
             if (names == null) {
-                names = computeNamesOfDayOfWeek(locale);
+
+                names = new HashMap(14 * 3);
+
+                // Machine par défaut
+                Locale defaultLocale = Locale.getDefault();
+                if (defaultLocale.equals(Locale.ENGLISH) == false
+                        && defaultLocale.equals(locale) == false) {
+                    computeNamesOfDayOfWeek(names, defaultLocale);
+                }
+
+                // English par défaut
+                computeNamesOfDayOfWeek(names, Locale.ENGLISH);
+
+                computeNamesOfDayOfWeek(names, locale);
 
                 namesOfDayOfWeek.put(locale, names);
             }
@@ -131,10 +147,8 @@ public class WeekDaysConverter implements Converter {
         return new Integer(mask);
     }
 
-    private Map computeNamesOfDayOfWeek(Locale locale) {
+    private void computeNamesOfDayOfWeek(Map map, Locale locale) {
         DateFormatSymbols dfs = new DateFormatSymbols(locale);
-
-        Map map = new HashMap(20);
 
         String swd[] = dfs.getShortWeekdays();
         if (swd != null) {
@@ -159,8 +173,6 @@ public class WeekDaysConverter implements Converter {
                 map.put(s.toLowerCase(), new Integer(1 << (i - 1)));
             }
         }
-
-        return map;
     }
 
     /*

@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
@@ -26,6 +29,7 @@
  */
 package org.rcfaces.core.internal.webapp;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,11 +43,14 @@ import org.rcfaces.core.internal.util.Delay;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class ExpirationDate {
+public class ExpirationDate implements Serializable {
+
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = 8408879197958606825L;
 
     private static final Log LOG = LogFactory.getLog(ExpirationDate.class);
 
@@ -127,7 +134,7 @@ public class ExpirationDate {
     public void sendExpires(HttpServletResponse response) {
 
         if (expiresDate > 0) {
-            response.setDateHeader(ParametredHttpServlet.HTTP_EXPIRES,
+            response.setDateHeader(ConfiguredHttpServlet.HTTP_EXPIRES,
                     expiresDate);
 
             if (LOG.isTraceEnabled()) {
@@ -139,10 +146,10 @@ public class ExpirationDate {
 
         if (expiresDelay > 0) {
             long d = System.currentTimeMillis() + expiresDelay;
-            response.setDateHeader(ParametredHttpServlet.HTTP_EXPIRES, d);
+            response.setDateHeader(ConfiguredHttpServlet.HTTP_EXPIRES, d);
 
             if (expiresMaxAge != null) {
-                response.setHeader(ParametredHttpServlet.HTTP_CACHE_CONTROL,
+                response.setHeader(ConfiguredHttpServlet.HTTP_CACHE_CONTROL,
                         expiresMaxAge);
             }
 

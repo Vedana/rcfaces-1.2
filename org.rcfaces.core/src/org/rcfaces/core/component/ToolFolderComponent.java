@@ -1,35 +1,37 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.iterator.IToolItemIterator;
-import org.rcfaces.core.internal.component.AbstractItemComponent;
 import org.rcfaces.core.internal.tools.ToolBarTools;
 
 public class ToolFolderComponent extends AbstractItemComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.toolFolder";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.toolFolder";
 
-    public ToolFolderComponent() {
-        setRendererType(null);
-    }
 
-    public ToolFolderComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public ToolFolderComponent() {
+		setRendererType(null);
+	}
 
-    public final IToolItemIterator listToolItems() {
+	public ToolFolderComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-        return ToolBarTools.listToolItems(this);
+	public final IToolItemIterator listToolItems() {
 
-    }
 
-    public final ToolBarComponent getToolBar() {
+		return ToolBarTools.listToolItems(this);
+		
+	}
 
-        return (ToolBarComponent) getParent();
+	public final ToolBarComponent getToolBar() {
 
-    }
 
-    public void release() {
-        super.release();
-    }
+		return (ToolBarComponent)getParent();
+		
+	}
+
+	public void release() {
+		super.release();
+	}
 }

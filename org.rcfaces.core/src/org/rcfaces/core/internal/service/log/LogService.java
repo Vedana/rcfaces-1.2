@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -31,16 +34,16 @@ import org.rcfaces.core.internal.service.AbstractService;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class LogService extends AbstractService {
 
     private static final String REVISION = "$Revision$";
 
-    public static final String PREFIX_LOGGER_NAME = "client.";
+    private static final Log LOG = LogFactory.getLog(LogService.class);
 
-    static final Log LOG = LogFactory.getLog(LogService.class);
+    public static final String PREFIX_LOGGER_NAME = "client.";
 
     protected static final IFilter[] EMPTY_FILTERS = new IFilter[0];
 
@@ -90,8 +93,8 @@ public abstract class LogService extends AbstractService {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class Filter implements IFilter {
         private static final String REVISION = "$Revision$";

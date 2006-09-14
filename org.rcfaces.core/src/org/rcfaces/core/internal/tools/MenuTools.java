@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -46,19 +49,18 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 
+import org.rcfaces.core.component.AbstractMenuComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.MenuItemComponent;
 import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.AbstractMenuComponent;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.util.ComponentIterators;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class MenuTools {
     private static final String REVISION = "$Revision$";
@@ -73,16 +75,16 @@ public class MenuTools {
 
     public static final IMenuItemIterator listMenuItems(
             AbstractMenuComponent menu) {
-        return listMenuItems(menu);
+        return listMenuItems((IContainerManager) menu);
     }
 
     public static final IMenuItemIterator listMenuItems(
             MenuItemComponent menuItem) {
-        return listMenuItems(menuItem);
+        return listMenuItems((IContainerManager) menuItem);
     }
 
     public static final IMenuItemIterator listMenuItems(MenuComponent menu) {
-        return listMenuItems(menu);
+        return listMenuItems((IContainerManager) menu);
     }
 
     private static IMenuItemIterator listMenuItems(IContainerManager manager) {
@@ -97,8 +99,8 @@ public class MenuTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static final class MenuItemListIterator extends
             ComponentIterators.ComponentListIterator implements
@@ -174,8 +176,8 @@ public class MenuTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static final class MenuListIterator extends
             ComponentIterators.ComponentListIterator implements IMenuIterator {

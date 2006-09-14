@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -24,15 +27,16 @@ import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.internal.component.ExpandableItemComponent;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class BasicImagesSelectItem extends BasicSelectItem implements
         IImagesSelectItem {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = 3611551357173361214L;
 
     private String imageURL;
 
@@ -45,7 +49,6 @@ public class BasicImagesSelectItem extends BasicSelectItem implements
     private String expandedImageURL;
 
     public BasicImagesSelectItem() {
-        super();
     }
 
     public BasicImagesSelectItem(UISelectItem component) {

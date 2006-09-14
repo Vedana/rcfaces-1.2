@@ -4,93 +4,96 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.internal.component.ExpandableItemComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.TreeTools;
 
-public class TreeNodeComponent extends ExpandableItemComponent implements
-        IRadioGroupCapability {
+public class TreeNodeComponent extends ExpandableItemComponent implements 
+	IRadioGroupCapability {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.treeNode";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.treeNode";
 
-    public TreeNodeComponent() {
-        setRendererType(null);
-    }
 
-    public TreeNodeComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public TreeNodeComponent() {
+		setRendererType(null);
+	}
 
-    public final void setExpanded(boolean expanded) {
+	public TreeNodeComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-        setExpanded(null, expanded);
+	public final void setExpanded(boolean expanded) {
 
-    }
 
-    public final void setExpanded(FacesContext context, boolean expanded) {
+				setExpanded(null, expanded);
+			
+	}
 
-        getTree().setExpanded(context, getItemValue(), expanded);
+	public final void setExpanded(FacesContext context, boolean expanded) {
 
-    }
 
-    public final boolean isExpanded() {
+				getTree().setExpanded(context, getItemValue(), expanded);
+			
+	}
 
-        return isExpanded(null);
+	public final boolean isExpanded() {
 
-    }
 
-    public final boolean isExpanded(FacesContext context) {
+				return isExpanded(null);
+			
+	}
 
-        return getTree().isExpanded(context, getItemValue());
+	public final boolean isExpanded(FacesContext context) {
 
-    }
 
-    public final TreeComponent getTree() {
+				return getTree().isExpanded(context, getItemValue());
+			
+	}
 
-        return TreeTools.getTree(this);
+	public final TreeComponent getTree() {
 
-    }
 
-    public final java.lang.String getGroupName() {
-        return getGroupName(null);
-    }
+			return TreeTools.getTree(this);
+			
+	}
 
-    public final java.lang.String getGroupName(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
-    }
+	public final java.lang.String getGroupName() {
+		return getGroupName(null);
+	}
 
-    public final void setGroupName(java.lang.String groupName) {
-        engine.setProperty(Properties.GROUP_NAME, groupName);
-    }
+	public final java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
+	}
 
-    public final void setGroupName(ValueBinding groupName) {
-        engine.setProperty(Properties.GROUP_NAME, groupName);
-    }
+	public final void setGroupName(java.lang.String groupName) {
+		engine.setProperty(Properties.GROUP_NAME, groupName);
+	}
 
-    public final String getInputType() {
-        return getInputType(null);
-    }
+	public final void setGroupName(ValueBinding groupName) {
+		engine.setProperty(Properties.GROUP_NAME, groupName);
+	}
 
-    public final String getInputType(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.INPUT_TYPE, facesContext);
-    }
+	public final String getInputType() {
+		return getInputType(null);
+	}
 
-    public final void setInputType(String inputType) {
-        engine.setProperty(Properties.INPUT_TYPE, inputType);
-    }
+	public final String getInputType(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.INPUT_TYPE, facesContext);
+	}
 
-    public final void setInputType(ValueBinding inputType) {
-        engine.setProperty(Properties.INPUT_TYPE, inputType);
-    }
+	public final void setInputType(String inputType) {
+		engine.setProperty(Properties.INPUT_TYPE, inputType);
+	}
 
-    public final boolean isInputTypeSetted() {
-        return engine.isPropertySetted(Properties.INPUT_TYPE);
-    }
+	public final void setInputType(ValueBinding inputType) {
+		engine.setProperty(Properties.INPUT_TYPE, inputType);
+	}
 
-    public void release() {
-        super.release();
-    }
+	public final boolean isInputTypeSetted() {
+		return engine.isPropertySetted(Properties.INPUT_TYPE);
+	}
+
+	public void release() {
+		super.release();
+	}
 }

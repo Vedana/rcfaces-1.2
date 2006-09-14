@@ -6,8 +6,8 @@
  * class f_radioButton
  *
  * @class f_radioButton extends f_checkButton, fa_groupName, fa_required
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __prototype = {
 

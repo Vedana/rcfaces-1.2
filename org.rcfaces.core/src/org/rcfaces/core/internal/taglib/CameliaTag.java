@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:50  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:12  oeuillot
  * Renommage  en rcfaces
  *
@@ -167,8 +170,8 @@ import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
 import org.rcfaces.core.internal.util.ForwardMethodBinding;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 abstract class CameliaTag extends UIComponentBodyTag {
     private static final String REVISION = "$Revision$";
@@ -301,7 +304,8 @@ abstract class CameliaTag extends UIComponentBodyTag {
 
         bodyContent = getBodyContent();
 
-        asyncRenderServer.setContent(getComponentInstance(), bodyContent);
+        asyncRenderServer.setContent(getFacesContext(), getComponentInstance(),
+                bodyContent);
 
         return super.doEndTag();
     }

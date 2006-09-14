@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
@@ -48,8 +51,8 @@ import org.rcfaces.core.provider.ImageURLRewritingInformation;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class ImageOperationsURLRewritingProvider extends
         AbstractURLRewritingProvider {
@@ -71,7 +74,8 @@ public abstract class ImageOperationsURLRewritingProvider extends
             UIComponent component, int type, String attributeName, String url,
             String rootURL, IURLRewritingInformation rewritingInformation) {
 
-        if (type != IURLRewritingProvider.IMAGE_URL_TYPE) {
+        if (isProviderEnabled() == false
+                || type != IURLRewritingProvider.IMAGE_URL_TYPE) {
             if (parent == null) {
                 return url;
             }
@@ -124,6 +128,10 @@ public abstract class ImageOperationsURLRewritingProvider extends
             mainURL = true;
         }
 
+        if (imageInformation == null) {
+            imageInformation = new ImageURLRewritingInformation();
+        }
+
         String ret = formatImageURL(facesContext, filter, url, mainURL,
                 imageInformation);
 
@@ -132,7 +140,7 @@ public abstract class ImageOperationsURLRewritingProvider extends
         }
 
         return parent.computeURL(facesContext, component, type, attributeName,
-                ret, rootURL, rewritingInformation);
+                ret, rootURL, imageInformation);
     }
 
     public static ImageOperationsURLRewritingProvider getInstance(
@@ -149,6 +157,8 @@ public abstract class ImageOperationsURLRewritingProvider extends
 
         return imageFiltersRepository;
     }
+
+    public abstract boolean isProviderEnabled();
 
     public abstract String getContentType(String url);
 

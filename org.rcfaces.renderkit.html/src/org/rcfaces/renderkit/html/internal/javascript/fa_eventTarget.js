@@ -6,8 +6,8 @@
  * fa_eventTarget class
  *
  * @aspect public fa_eventTarget
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __static = {

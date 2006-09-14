@@ -19,7 +19,7 @@ var __SYMBOL=function(x) { return x };
  *
  * @class public f_core extends Object
  * @author Joel Merlin + Olivier Oeuillot
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
 var f_core = {
 
@@ -114,12 +114,17 @@ var f_core = {
 	/**
 	 * @field hidden static boolean
 	 */
-	Debug_Mode:	false,
+	Debug_Mode:	undefined,
 
 	/**
 	 * @field private static
 	 */
 	_AjaxParametersUpdater: undefined,
+	
+	/**
+	 * @field private static boolean
+	 */
+	_DisabledContextMenu: undefined,
 	
 	/**
 	 * Throws a message if the expression is true.
@@ -555,6 +560,12 @@ var f_core = {
 				if (title.length>0) {
 					window.document.title+="  [Camelia: "+title.join(",")+"]";
 				}
+			}
+			
+			if (f_core._DisabledContextMenu) {
+				f_core._DisabledContextMenu=undefined;
+				
+				f_core.DisableContextMenu();
 			}
 							
 			// Hook the forms
@@ -2325,55 +2336,56 @@ var f_core = {
 			name=name.replace(/\+/g, ' ');
 			name=decodeURIComponent(name);
 
-			idx++;
-			var type=s.charAt(idx++);
+			idx++; // le =
+			var type=s.charAt(idx++); // le type
 			
 			var data=s.substring(idx);
-			if (data.length>0) {
-				switch(type) {
-				case 'S':
+			switch(type) {
+			case 'S':
+				if (data) {
 					data=data.replace(/\+/g, ' ');
 					data=decodeURIComponent(data);
-					break;
-	
-				case 'L':
-					data=null;
-					break;
-	
-				case 'T':
-					data=true;
-					break;
-	
-				case 'F':
-					data=false;
-					break;
-					
-				case '0':
-				case '1':
-				case '2':
-				case '3':
-				case '4':
-				case '5':
-				case '6':
-				case '7':
-				case '8':
-				case '9':
-					if (!data) {
-						data=parseFloat(type);
-						break;
-					}
-				
-				case '-':
-					data=parseFloat(type+data);
-					break;
-	
-					
-				default:
-					f_core.Error(f_core, "Unknown type '"+type+"' !");
-					data=undefined;
 				}
+				break;
+
+			case 'L':
+				data=null;
+				break;
+
+			case 'T':
+				data=true;
+				break;
+
+			case 'F':
+				data=false;
+				break;
+				
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				if (!data) {
+					data=parseFloat(type);
+					break;
+				}
+			
+			case '-':
+				data=-parseFloat(data);
+				break;
+
+				
+			default:
+				f_core.Error(f_core, "Unknown type '"+type+"' !");
+				data=undefined;
 			}
-						
+			
+			f_core.Debug(f_core, "Deserialize attribute '"+name+"' = '"+data+"'");
 			obj[name]=data;
 		}
 
@@ -3084,6 +3096,25 @@ var f_core = {
 		}
 		
 		return dest;
+	},
+	/** 
+	 * @method hidden static
+	 * @return void
+	 */
+	DisableContextMenu: function() {
+		if (!document.body) {
+			f_core._DisabledContextMenu=true;
+			return;
+		}
+		document.body.oncontextmenu=f_core.CancelEventHandler;
+	},
+	/** 
+	 * @method hidden static
+	 * @param String text
+	 * @return String
+	 */
+	Trim: function(text) {
+		return text.replace(/^\s*|\s*$/g, "");
 	},
 	/** 
 	 * @method hidden static

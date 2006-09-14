@@ -1,4 +1,4 @@
-package org.rcfaces.core.internal.component;
+package org.rcfaces.core.component;
 
 import java.util.Collections;
 import java.util.Map;
@@ -10,6 +10,8 @@ import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaItemComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.internal.tools.ComponentTools;

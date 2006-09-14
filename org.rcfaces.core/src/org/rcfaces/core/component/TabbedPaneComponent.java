@@ -9,76 +9,79 @@ import org.rcfaces.core.component.iterator.ITabIterator;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.TabbedPaneTools;
 
-public class TabbedPaneComponent extends CardBoxComponent implements
-        ICloseEventCapability, IClosableCapability {
+public class TabbedPaneComponent extends CardBoxComponent implements 
+	ICloseEventCapability,
+	IClosableCapability {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.tabbedPane";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.tabbedPane";
 
-    public TabbedPaneComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
 
-    public TabbedPaneComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public TabbedPaneComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public final ITabIterator listTabs() {
+	public TabbedPaneComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-        return TabbedPaneTools.listTabs(this);
+	public final ITabIterator listTabs() {
 
-    }
 
-    public final TabComponent getSelectedTab() {
+				return TabbedPaneTools.listTabs(this);				
+			
+	}
 
-        return (TabComponent) getSelectedCard();
+	public final TabComponent getSelectedTab() {
 
-    }
 
-    public final TabComponent getSelectedTab(FacesContext facesContext) {
+				return (TabComponent)getSelectedCard();
+			
+	}
 
-        return (TabComponent) getSelectedCard(facesContext);
+	public final TabComponent getSelectedTab(FacesContext facesContext) {
 
-    }
 
-    public final void select(TabComponent tab) {
+				return (TabComponent)getSelectedCard(facesContext);
+			
+	}
 
-        super.select(tab);
+	public final void select(TabComponent tab) {
 
-    }
 
-    public final void addCloseListener(
-            org.rcfaces.core.event.ICloseListener listener) {
-        addFacesListener(listener);
-    }
+				super.select(tab);
+			
+	}
 
-    public final void removeCloseListener(
-            org.rcfaces.core.event.ICloseListener listener) {
-        removeFacesListener(listener);
-    }
+	public final void addCloseListener(org.rcfaces.core.event.ICloseListener listener) {
+		addFacesListener(listener);
+	}
 
-    public final javax.faces.event.FacesListener[] listCloseListeners() {
-        return getFacesListeners(org.rcfaces.core.event.ICloseListener.class);
-    }
+	public final void removeCloseListener(org.rcfaces.core.event.ICloseListener listener) {
+		removeFacesListener(listener);
+	}
 
-    public final boolean isClosable() {
-        return isClosable(null);
-    }
+	public final javax.faces.event.FacesListener [] listCloseListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ICloseListener.class);
+	}
 
-    public final boolean isClosable(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.CLOSABLE, false, facesContext);
-    }
+	public final boolean isClosable() {
+		return isClosable(null);
+	}
 
-    public final void setClosable(boolean closable) {
-        engine.setProperty(Properties.CLOSABLE, closable);
-    }
+	public final boolean isClosable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CLOSABLE, false, facesContext);
+	}
 
-    public final void setClosable(ValueBinding closable) {
-        engine.setProperty(Properties.CLOSABLE, closable);
-    }
+	public final void setClosable(boolean closable) {
+		engine.setProperty(Properties.CLOSABLE, closable);
+	}
 
-    public void release() {
-        super.release();
-    }
+	public final void setClosable(ValueBinding closable) {
+		engine.setProperty(Properties.CLOSABLE, closable);
+	}
+
+	public void release() {
+		super.release();
+	}
 }

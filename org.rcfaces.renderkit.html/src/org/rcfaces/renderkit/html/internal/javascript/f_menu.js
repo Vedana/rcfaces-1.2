@@ -6,8 +6,8 @@
  * Class Menu
  *
  * @class public f_menu extends f_eventTarget, fa_menuCore
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static = {
@@ -42,8 +42,8 @@ var __static = {
 		}
 		menu._popupOpened=undefined;
 
-		f_popup.UnregisterWindowClick(menu);		
-	
+		f_popup.UnregisterWindowClick(menu);	
+		
 		var old=menu._selectedMenuItem;
 		if (old) {
 			menu._selectedMenuItem=undefined;

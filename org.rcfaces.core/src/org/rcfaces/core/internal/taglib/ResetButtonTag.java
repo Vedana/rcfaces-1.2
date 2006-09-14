@@ -1,10 +1,12 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.ResetButtonComponent;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import javax.servlet.jsp.tagext.Tag;
 
-public class ResetButtonTag extends ButtonTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ResetButtonComponent;
+
+public class ResetButtonTag extends ButtonTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ResetButtonTag.class);

@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:14  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -129,8 +132,8 @@ import org.rcfaces.renderkit.html.internal.taglib.InitializeTag;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class JavaScriptRenderContext implements IJavaScriptRenderContext {
     private static final String REVISION = "$Revision$";
@@ -146,6 +149,10 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             .getPackagePrefix()
             + ".client.ENABLE_LOG";
 
+    private static final String ENABLE_SCRIPT_VERIFY_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".client.SCRIPT_VERIFY";
+
     private static final String JAVASCRIPT_INITIALIZED_PROPERTY = "org.rcfaces.renderkit.html.JAVASCRIPT_INITIALIZED";
 
     private static final boolean USE_VARIABLE_CACHE = true;
@@ -156,7 +163,7 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
     private static final int COMPONENTS_INITIAL_SIZE = 16;
 
-    private static final String SCRIPT_VERIFY = "try { f_core; } catch(x) { alert(\"Vedana Faces Javascript Components are not initialized !\"); }";
+    private static final String SCRIPT_VERIFY = "try { f_core; } catch(x) { alert(\"RCFaces Javascript Components are not initialized !\"); }";
 
     private final JavaScriptRenderContext parent;
 
@@ -323,11 +330,14 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static final class VariablePool implements Serializable {
+
         private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = -3122263677480314082L;
 
         private static final String JAVASCRIPT_VARIABLE_PREFIX_PARAMETER = Constants
                 .getPackagePrefix()
@@ -549,8 +559,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             IJavaScriptRepository repository,
             IHtmlProcessContext renderExternalContext) throws WriterException {
 
-        Map requestMap = renderExternalContext.getExternalContext()
-                .getRequestMap();
+        Map requestMap = renderExternalContext.getFacesContext()
+                .getExternalContext().getRequestMap();
         if (requestMap.containsKey(JAVASCRIPT_INITIALIZED_PROPERTY)) {
             return;
         }
@@ -559,12 +569,17 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
         requestMap.put(JAVASCRIPT_INITIALIZED_PROPERTY, Boolean.TRUE);
 
-        writer.writeln(SCRIPT_VERIFY);
-
         FacesContext facesContext = writer.getFacesContext();
 
+        Map initParameter = facesContext.getExternalContext()
+                .getInitParameterMap();
+        if ("false".equalsIgnoreCase((String) initParameter
+                .get(ENABLE_SCRIPT_VERIFY_PARAMETER)) == false) {
+            writer.writeln(SCRIPT_VERIFY);
+        }
+
         IHtmlProcessContext processContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(facesContext.getExternalContext());
+                .getHtmlProcessContext(facesContext);
 
         boolean debugMode = processContext.getDebugMode();
         if (debugMode) {
@@ -583,6 +598,10 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
                     .writeString(invalidBrowserURL).writeln(");");
         }
 
+        if (InitializeTag.isDisableContextMenu(facesContext)) {
+            writer.writeCall("f_core", "DisableContextMenu").writeln(");");
+        }
+
         boolean flatIdentifier = processContext.isFlatIdentifierEnabled();
         if (flatIdentifier) {
             writer.writeCall("fa_namingContainer", "SetSeparator").writeln(
@@ -597,9 +616,9 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             }
         }
 
-        String baseURI = processContext.getExternalContext()
+        String baseURI = processContext.getFacesContext().getExternalContext()
                 .getRequestContextPath();
-        writer.writeCall("f_env", "SetBaseURI").writeString(baseURI);
+        writer.writeCall("f_env", "Initialize").writeString(baseURI);
 
         int pred = 0;
 
@@ -610,6 +629,29 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
                 writer.write(',').writeNull();
             }
             writer.write(',').writeString(requestURI);
+        } else {
+            pred++;
+        }
+
+        Locale locale = ContextTools.getUserLocale(facesContext);
+        if (locale != null) {
+            for (; pred > 0; pred--) {
+                writer.write(',').writeNull();
+            }
+            writer.write(",\"").write(locale.getLanguage());
+
+            String country = locale.getCountry();
+            if (country != null && country.length() > 0) {
+                writer.write('_').write(country);
+
+                String variant = locale.getLanguage();
+                if (variant != null && variant.length() > 0) {
+                    writer.write('_').write(variant);
+                }
+            }
+
+            writer.write('\"');
+
         } else {
             pred++;
         }
@@ -638,8 +680,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
         writer.writeln(");");
 
-        String logProperty = facesContext.getExternalContext()
-                .getInitParameter(ENABLE_LOG_CLIENT_PARAMETER);
+        String logProperty = (String) initParameter
+                .get(ENABLE_LOG_CLIENT_PARAMETER);
         if ("true".equalsIgnoreCase(logProperty)) {
             LogService logService = LogHtmlService.getInstance(facesContext);
             if (logService != null) {

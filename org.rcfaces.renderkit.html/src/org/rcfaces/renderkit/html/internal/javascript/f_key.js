@@ -5,7 +5,7 @@
 /**
  *
  * @class f_key extends f_object
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
 var __static = {
 

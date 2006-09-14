@@ -1,10 +1,12 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.MenuBarComponent;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import javax.servlet.jsp.tagext.Tag;
 
-public class MenuBarTag extends AbstractMenuTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.MenuBarComponent;
+
+public class MenuBarTag extends AbstractMenuTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(MenuBarTag.class);

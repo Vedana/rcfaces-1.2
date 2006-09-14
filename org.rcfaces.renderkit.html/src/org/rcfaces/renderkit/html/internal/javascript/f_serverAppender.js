@@ -6,8 +6,8 @@
  * f_serverAppender
  *
  * @class hidden f_serverAppender extends f_object
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static={

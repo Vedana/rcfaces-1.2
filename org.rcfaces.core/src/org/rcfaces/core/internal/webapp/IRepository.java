@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
@@ -57,99 +60,44 @@ package org.rcfaces.core.internal.webapp;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.URL;
-import java.util.Collection;
 import java.util.Locale;
-
-import org.rcfaces.core.internal.renderkit.IProcessContext;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public interface IRepository extends Serializable {
-
-    int FILE_COLLECTION_TYPE = 0;
-
-    int FILENAME_COLLECTION_TYPE = 1;
 
     String getVersion();
 
     IContext createContext(Locale locale);
 
-    IFile[] computeFiles(Collection collection, int typeOfCollection,
-            IContext context);
+    IFile getFileByName(String filename);
 
     IFile getFileByURI(String uri);
 
-    IFile getFileByName(String filename);
-
-    IModule[] listModules();
-
-    IModule getModuleByName(String name);
-
-    ISet getBootSet();
-
-    ISet getSetByName(String bootSet);
-
-    void setBootSet(ISet set);
-
-    ISet declareSet(String name, String uri, String[] moduleNames);
-
-    String getBaseURI(IProcessContext context);
-
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
-    public interface ISet extends IFile {
-        IFile[] listExternalDependencies();
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
-     */
-    public interface IModule extends IFile {
-        boolean getGroupAllFiles();
-
-        void setGroupAllFiles(boolean enable);
-
-        IFile[] listExternalDependencies();
-
-        IModule[] listExternalModules();
-
-        ISet getSet();
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
-     */
-    public interface IFile {
+    public interface IFile extends Serializable {
         IRepository getRepository();
 
         IContentProvider getContentProvider();
 
         String getFilename();
 
-        URL[] getContentLocations(Locale locale);
+        Object[] getContentReferences(Locale locale);
 
         String getURI(Locale locale);
-
-        IFile[] listDependencies();
-
-        IModule getModule();
     }
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public interface IContext {
         Locale getLocale();
@@ -167,15 +115,21 @@ public interface IRepository extends Serializable {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public interface IContentProvider {
-        IContent getContent(URL url, Locale locale);
+        IContent getContent(Object contentReference, Locale locale);
 
-        boolean testURL(URL url);
+        Object searchLocalizedContentReference(Object contentReference,
+                Locale locale);
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     public interface IContent {
         InputStream getInputStream() throws IOException;
 

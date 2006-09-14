@@ -5,7 +5,7 @@
 /**
  *
  * 
- * @author Olivier Oeuillot
+ * @author Olivier Oeuillot (latest modification by $Author$)
  */
  
 var __resources = {

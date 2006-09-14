@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
@@ -77,8 +80,8 @@ import org.rcfaces.core.internal.util.ForwardMethodBinding;
 
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 abstract class AbstractActionListener implements StateHolder,
         IServerActionListener {

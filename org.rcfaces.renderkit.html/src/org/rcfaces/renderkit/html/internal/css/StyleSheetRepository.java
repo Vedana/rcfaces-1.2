@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -49,8 +52,8 @@ import javax.servlet.ServletException;
 import org.rcfaces.core.internal.webapp.SourceRepository;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class StyleSheetRepository extends SourceRepository {
     private static final String REVISION = "$Revision$";
@@ -59,7 +62,7 @@ public class StyleSheetRepository extends SourceRepository {
             .getPackage().getName().replace('.', '/') + '/';
 
     private static final String CSS_REPOSITORY_DEFAULT_URI = CSS_PACKAGE
-            + StylesheetsServlet.CAMELIA_CSS;
+            + StylesheetsServlet.CAMELIA_CSS_URL;
 
     private static final String CSS_REPOSITORY_PARAMETER = "repository.uri";
 

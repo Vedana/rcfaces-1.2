@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
@@ -67,7 +70,6 @@ package org.rcfaces.core.internal.webapp;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -92,7 +94,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.codec.SourceFilter;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -100,8 +103,8 @@ import org.xml.sax.SAXException;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class SourceRepository {
     private static final String REVISION = "$Revision$";
@@ -403,16 +406,16 @@ public abstract class SourceRepository {
         }
 
         if (canUseETag) {
-            etag = ParametredHttpServlet.computeETag(sourceBuffer);
+            etag = ConfiguredHttpServlet.computeETag(sourceBuffer);
         }
 
         if (canUseHash) {
-            hash = ParametredHttpServlet.computeHash(sourceBuffer);
+            hash = ConfiguredHttpServlet.computeHash(sourceBuffer);
         }
 
         if (canUseGzip) {
             try {
-                ByteArrayOutputStream bos = new ByteArrayOutputStream(
+                ByteBufferOutputStream bos = new ByteBufferOutputStream(
                         sourceBuffer.length);
                 GZIPOutputStream gzos = new GZIPOutputStream(bos,
                         sourceBuffer.length);
@@ -652,7 +655,7 @@ public abstract class SourceRepository {
             return;
         }
 
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(64000);
+        ByteBufferOutputStream bos = new ByteBufferOutputStream(64000);
         try {
             byte buf[] = new byte[4096];
             for (;;) {

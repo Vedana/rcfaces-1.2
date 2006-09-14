@@ -2,14 +2,17 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
  * Revision 1.2  2005/10/05 14:34:20  oeuillot
- * Version avec decode/validation/update des propriétés des composants
+ * Version avec decode/validation/update des propriï¿½tï¿½s des composants
  *
  * Revision 1.1  2005/09/16 09:54:40  oeuillot
- * Ajout de fonctionnalités AJAX
+ * Ajout de fonctionnalitï¿½s AJAX
  * Ajout du JavaScriptRenderContext
  * Renomme les classes JavaScript
  *
@@ -28,8 +31,8 @@
 /**
  * Attente ...
  *
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 DIV.f_waiting {
 	text-align: left;

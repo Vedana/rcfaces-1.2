@@ -7,7 +7,7 @@
  *
  * @class public f_eventTarget extends f_object, fa_eventTarget
  * @author Joel Merlin & Olivier Oeuillot
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
 var __static = {
 

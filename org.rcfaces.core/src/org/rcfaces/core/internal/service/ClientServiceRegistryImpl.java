@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -34,8 +37,8 @@ import org.rcfaces.core.progressMonitor.SubProgressMonitor;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ClientServiceRegistryImpl implements IClientServiceRegistry {
     private static final String REVISION = "$Revision$";
@@ -99,8 +102,8 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static class ClientServiceImpl implements IClientService {
         private static final String REVISION = "$Revision$";
@@ -176,12 +179,15 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static final class ClientServiceEventReturnValue extends
             ServiceEvent implements IEventReturnValue {
+
         private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = 8740362936333831513L;
 
         private final int nbListeners;
 

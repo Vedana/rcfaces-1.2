@@ -6,8 +6,8 @@
  * Aspect PagedComponent
  *
  * @aspect fa_pagedComponent extends fa_filterProperties
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __static = {

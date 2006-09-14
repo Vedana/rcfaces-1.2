@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:13  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -46,14 +49,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.service.AbstractService;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractHtmlService extends AbstractService {
     private static final String REVISION = "$Revision$";
@@ -92,7 +95,7 @@ public abstract class AbstractHtmlService extends AbstractService {
 
     public void initialize(FacesContext facesContext) {
         useGzip = "true".equalsIgnoreCase(facesContext.getExternalContext()
-                .getInitParameter(ParametredHttpServlet.USE_GZIP_PARAMETER));
+                .getInitParameter(ConfiguredHttpServlet.USE_GZIP_PARAMETER));
     }
 
     protected final boolean canUseGzip(FacesContext facesContext) {
@@ -105,7 +108,7 @@ public abstract class AbstractHtmlService extends AbstractService {
         }
 
         // On verifie que le browser le supporte
-        return ParametredHttpServlet.hasGzipSupport(facesContext);
+        return ConfiguredHttpServlet.hasGzipSupport(facesContext);
     }
 
     static final void setNoCache(ServletResponse response) {
@@ -115,7 +118,7 @@ public abstract class AbstractHtmlService extends AbstractService {
             return;
         }
 
-        ParametredHttpServlet.setNoCache((HttpServletResponse) response);
+        ConfiguredHttpServlet.setNoCache((HttpServletResponse) response);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Set no cache for response.");

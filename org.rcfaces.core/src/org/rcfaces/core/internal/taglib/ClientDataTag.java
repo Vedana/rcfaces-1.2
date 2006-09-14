@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:50  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:12  oeuillot
  * Renommage  en rcfaces
  *
@@ -28,17 +31,21 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.rcfaces.core.internal.manager.IClientDataManager;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class ClientDataTag extends TagSupport {
+public class ClientDataTag extends TagSupport implements Tag {
+    private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -7633749361412060360L;
+
     private String name;
 
     private String value;

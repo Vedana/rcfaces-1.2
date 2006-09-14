@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -94,11 +97,10 @@ import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class MenuDecorator extends AbstractSelectItemsDecorator {
     private static final String REVISION = "$Revision$";
@@ -173,6 +175,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         MenuContext menuContext = getMenuContext();
 
+        String managerVarId = menuContext.getManagerVarId();
         String parentVarId = menuContext.peekVarId();
 
         String varId = javaScriptWriter.getJavaScriptRenderContext()
@@ -220,7 +223,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             cmd = "f_appendItem";
         }
 
-        javaScriptWriter.writeCall(null, cmd);
+        javaScriptWriter.writeCall(managerVarId, cmd);
         javaScriptWriter.write(parentVarId).write(',').writeString(sid);
 
         int pred = 0;
@@ -366,8 +369,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             boolean removeAllWhenShow = menuItemComponent
                     .isRemoveAllWhenShown(facesContext);
             if (removeAllWhenShow || l != null) {
-                javaScriptWriter.writeCall(null, "_setMenuItemListeners")
-                        .write(varId);
+                javaScriptWriter.writeCall(managerVarId,
+                        "_setMenuItemListeners").write(varId);
 
                 javaScriptWriter.write(',').writeBoolean(removeAllWhenShow);
 
@@ -434,7 +437,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
                             .allocateString(selectedImageURL);
                 }
 
-                javaScriptWriter.writeCall(null, "_setItemImages").write(varId);
+                javaScriptWriter.writeCall(managerVarId, "_setItemImages")
+                        .write(varId);
                 pred = 0;
 
                 if (imageURL != null) {
@@ -498,9 +502,11 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     protected void encodeJsMenuItemSeparator(UIComponent component)
             throws WriterException {
 
-        String parentVarId = getMenuContext().peekVarId();
+        MenuContext menuContext = getMenuContext();
+        String parentVarId = menuContext.peekVarId();
+        String managerVarId = menuContext.getManagerVarId();
 
-        javaScriptWriter.writeCall(null, "_appendSeparatorItem").write(
+        javaScriptWriter.writeCall(managerVarId, "_appendSeparatorItem").write(
                 parentVarId).writeln(");");
     }
 

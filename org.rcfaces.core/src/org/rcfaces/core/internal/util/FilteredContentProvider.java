@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -23,7 +26,6 @@
  */
 package org.rcfaces.core.internal.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,33 +33,33 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Locale;
 
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.ByteBufferInputStream;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.webapp.IRepository.IContent;
-
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class FilteredContentProvider extends BasicContentProvider {
+public class FilteredContentProvider extends URLContentProvider {
     private static final String REVISION = "$Revision$";
 
-    private static final String CHARSET = "UTF-8";
+    private static final String CONTENT_DEFAULT_CHARSET = "UTF-8";
 
-    public IContent getContent(URL url, Locale locale) {
-        return new FilteredContent(url, locale);
+    public IContent getContent(Object contentReference, Locale locale) {
+        return new FilteredURLContent((URL) contentReference, locale);
     }
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
-    protected class FilteredContent extends BasicContent {
+    protected class FilteredURLContent extends URLContent {
         private static final String REVISION = "$Revision$";
 
-        public FilteredContent(URL url, Locale locale) {
+        public FilteredURLContent(URL url, Locale locale) {
             super(url, locale);
         }
 
@@ -69,9 +71,8 @@ public class FilteredContentProvider extends BasicContentProvider {
             }
 
             StringWriter writer = new StringWriter(8000);
+            InputStreamReader reader = new InputStreamReader(ins, getCharset());
             try {
-                InputStreamReader reader = new InputStreamReader(ins,
-                        getCharset());
 
                 char buffer[] = new char[4096];
                 for (;;) {
@@ -83,19 +84,19 @@ public class FilteredContentProvider extends BasicContentProvider {
                     writer.write(buffer, 0, ret);
                 }
             } finally {
-                ins.close();
+                reader.close();
             }
 
             String file = writer.toString();
 
             file = updateBuffer(file, url, locale);
 
-            return new ByteArrayInputStream(file.getBytes(getCharset()));
+            return new ByteBufferInputStream(file.getBytes(getCharset()));
         }
     }
 
     protected String getCharset() {
-        return CHARSET;
+        return CONTENT_DEFAULT_CHARSET;
     }
 
     protected String updateBuffer(String buffer, URL url, Locale locale) {
@@ -127,6 +128,7 @@ public class FilteredContentProvider extends BasicContentProvider {
             if (last < dest.length) {
                 sb.append(dest, last, dest.length - last);
             }
+
             return sb.toString();
         }
     }

@@ -1,14 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.DataGridComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class DataGridTag extends AbstractGridTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.DataGridComponent;
+
+public class DataGridTag extends AbstractGridTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(DataGridTag.class);
@@ -24,8 +26,8 @@ public class DataGridTag extends AbstractGridTag {
 	private String border;
 	private String readOnly;
 	private String disabled;
-	private String verticalScrollPosition;
 	private String horizontalScrollPosition;
+	private String verticalScrollPosition;
 	private String filterProperties;
 	private String preference;
 	private String headerVisible;
@@ -132,20 +134,20 @@ public class DataGridTag extends AbstractGridTag {
 		this.disabled = disabled;
 	}
 
-	public final String getVerticalScrollPosition() {
-		return verticalScrollPosition;
-	}
-
-	public final void setVerticalScrollPosition(String verticalScrollPosition) {
-		this.verticalScrollPosition = verticalScrollPosition;
-	}
-
 	public final String getHorizontalScrollPosition() {
 		return horizontalScrollPosition;
 	}
 
 	public final void setHorizontalScrollPosition(String horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
+	}
+
+	public final String getVerticalScrollPosition() {
+		return verticalScrollPosition;
+	}
+
+	public final void setVerticalScrollPosition(String verticalScrollPosition) {
+		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
 	public final String getFilterProperties() {
@@ -273,8 +275,8 @@ public class DataGridTag extends AbstractGridTag {
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  disabled='"+disabled+"'");
-			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
+			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  preference='"+preference+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
@@ -392,16 +394,6 @@ public class DataGridTag extends AbstractGridTag {
 			}
 		}
 
-		if (verticalScrollPosition != null) {
-			if (isValueReference(verticalScrollPosition)) {
-				ValueBinding vb = application.createValueBinding(verticalScrollPosition);
-
-				component.setVerticalScrollPosition(vb);
-			} else {
-				component.setVerticalScrollPosition(verticalScrollPosition);
-			}
-		}
-
 		if (horizontalScrollPosition != null) {
 			if (isValueReference(horizontalScrollPosition)) {
 				ValueBinding vb = application.createValueBinding(horizontalScrollPosition);
@@ -409,6 +401,16 @@ public class DataGridTag extends AbstractGridTag {
 				component.setHorizontalScrollPosition(vb);
 			} else {
 				component.setHorizontalScrollPosition(horizontalScrollPosition);
+			}
+		}
+
+		if (verticalScrollPosition != null) {
+			if (isValueReference(verticalScrollPosition)) {
+				ValueBinding vb = application.createValueBinding(verticalScrollPosition);
+
+				component.setVerticalScrollPosition(vb);
+			} else {
+				component.setVerticalScrollPosition(verticalScrollPosition);
 			}
 		}
 
@@ -531,8 +533,8 @@ public class DataGridTag extends AbstractGridTag {
 		border = null;
 		readOnly = null;
 		disabled = null;
-		verticalScrollPosition = null;
 		horizontalScrollPosition = null;
+		verticalScrollPosition = null;
 		filterProperties = null;
 		preference = null;
 		headerVisible = null;

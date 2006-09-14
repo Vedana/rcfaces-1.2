@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -51,11 +54,13 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ResourcesServlet extends HttpServlet {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = 6219013927491730293L;
 
     private static final Log LOG = LogFactory.getLog(ResourcesServlet.class);
 
@@ -115,8 +120,8 @@ public class ResourcesServlet extends HttpServlet {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static final class ResourcesServletConfig implements ServletConfig {
         private static final String REVISION = "$Revision$";

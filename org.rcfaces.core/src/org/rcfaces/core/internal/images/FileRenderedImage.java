@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
@@ -42,7 +45,6 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -55,15 +57,16 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
 import org.rcfaces.core.internal.images.ImageOperationsServlet.IBufferedImage;
-import org.rcfaces.core.internal.util.CameliaVersion;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
+import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 class FileRenderedImage implements IBufferedImage {
     private static final String REVISION = "$Revision$";
@@ -74,7 +77,7 @@ class FileRenderedImage implements IBufferedImage {
 
     private static final String TEMP_FILE_SUFFIX;
     static {
-        TEMP_FILE_SUFFIX = "." + CameliaVersion.getVersion() + ".img";
+        TEMP_FILE_SUFFIX = "." + Constants.getVersion() + ".img";
     }
 
     private static boolean securityError;
@@ -109,7 +112,7 @@ class FileRenderedImage implements IBufferedImage {
         return redirectedURL;
     }
 
-    public void initializeRedirection(String url) throws IOException {
+    public void initializeRedirection(String url) {
         this.redirectedURL = url;
     }
 
@@ -158,7 +161,7 @@ class FileRenderedImage implements IBufferedImage {
             size = (int) originalSize + 256;
         }
 
-        ByteArrayOutputStream bous = new ByteArrayOutputStream(size);
+        ByteBufferOutputStream bous = new ByteBufferOutputStream(size);
 
         ImageOutputStream out = ImageIO.createImageOutputStream(bous);
 
@@ -211,8 +214,8 @@ class FileRenderedImage implements IBufferedImage {
 
         byte buffer[] = bous.toByteArray();
 
-        hash = ParametredHttpServlet.computeHash(buffer);
-        etag = ParametredHttpServlet.computeETag(buffer);
+        hash = ConfiguredHttpServlet.computeHash(buffer);
+        etag = ConfiguredHttpServlet.computeETag(buffer);
         this.size = buffer.length;
 
         FileOutputStream fileOutputStream = new FileOutputStream(file);

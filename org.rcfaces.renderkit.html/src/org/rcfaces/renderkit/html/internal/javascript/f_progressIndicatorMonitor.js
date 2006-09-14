@@ -7,7 +7,7 @@
  *
  * @class hidden f_progressIndicatorMonitor extends f_progressMonitor
  * @author Eclipse team & Olivier Oeuillot
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
  
 var __prototype={

@@ -19,296 +19,298 @@ import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.internal.tools.ComponentTools;
 
-public class ServiceComponent extends CameliaBaseComponent implements
-        IClientDataCapability, IServerDataCapability,
-        IPropertyChangeEventCapability, IServiceEventCapability,
-        IFilterCapability, IServerDataManager, IClientDataManager {
+public class ServiceComponent extends CameliaBaseComponent implements 
+	IClientDataCapability,
+	IServerDataCapability,
+	IPropertyChangeEventCapability,
+	IServiceEventCapability,
+	IFilterCapability,
+	IServerDataManager,
+	IClientDataManager {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.service";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.service";
 
-    public ServiceComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
 
-    public ServiceComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public ServiceComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
+
+	public ServiceComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    public final void setClientData(String name, ValueBinding value) {
+	public final void setClientData(String name, ValueBinding value) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", true);
 
-        dataMapAccessor.setData(name, value, null);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
 
-    }
+	public final void setServerData(String name, ValueBinding value) {
 
-    public final void setServerData(String name, ValueBinding value) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
 
-        dataMapAccessor.setData(name, value, null);
+	public final String getClientData(String name, FacesContext facesContext) {
 
-    }
 
-    public final String getClientData(String name, FacesContext facesContext) {
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return (String)dataMapAccessor.getData(name, facesContext);
+		
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
+	public final Object getServerData(String name, FacesContext facesContext) {
 
-        return (String) dataMapAccessor.getData(name, facesContext);
 
-    }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getData(name, facesContext);
+		
+	}
 
-    public final Object getServerData(String name, FacesContext facesContext) {
+	public final Map getClientDataMap(FacesContext facesContext) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
 
-        return dataMapAccessor.getData(name, facesContext);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
+		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		return dataMapAccessor.getDataMap(facesContext);
+		
+	}
 
-    }
+	public final Map getServerDataMap(FacesContext facesContext) {
 
-    public final Map getClientDataMap(FacesContext facesContext) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(
-                facesContext, "clientData", false);
-        if (dataMapAccessor == null) {
-            return Collections.EMPTY_MAP;
-        }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+ 		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		Map map=dataMapAccessor.getDataMap(facesContext);
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+			if (map.isEmpty()) {
+				return Collections.EMPTY_MAP;
+			}
+			map=Collections.unmodifiableMap(map);
+		}
+		return map;
+		
+	}
 
-        return dataMapAccessor.getDataMap(facesContext);
+	public final String[] listClientDataKeys(FacesContext facesContext) {
 
-    }
 
-    public final Map getServerDataMap(FacesContext facesContext) {
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(
-                facesContext, "serverData", false);
-        if (dataMapAccessor == null) {
-            return Collections.EMPTY_MAP;
-        }
+	public final String[] listServerDataKeys(FacesContext facesContext) {
 
-        Map map = dataMapAccessor.getDataMap(facesContext);
-        if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
-            if (map.isEmpty()) {
-                return Collections.EMPTY_MAP;
-            }
-            map = Collections.unmodifiableMap(map);
-        }
-        return map;
 
-    }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
 
-    public final String[] listClientDataKeys(FacesContext facesContext) {
+	public final Map getClientDataMap() {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", false);
-        if (dataMapAccessor == null) {
-            return ComponentTools.STRING_EMPTY_ARRAY;
-        }
 
-        return dataMapAccessor.listDataKeys(facesContext);
+		return getClientDataMap(null);
+		
+	}
 
-    }
+	public final int getClientDataCount() {
 
-    public final String[] listServerDataKeys(FacesContext facesContext) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return ComponentTools.STRING_EMPTY_ARRAY;
-        }
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+		 
+		 return dataMapAccessor.getDataCount();
+		
+	}
 
-        return dataMapAccessor.listDataKeys(facesContext);
+	public final String getClientData(String name) {
 
-    }
 
-    public final Map getClientDataMap() {
+		 return getClientData(name, null);
+		
+	}
 
-        return getClientDataMap(null);
+	public final String[] listClientDataKeys() {
 
-    }
 
-    public final int getClientDataCount() {
+			return listClientDataKeys(null);
+		
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", false);
-        if (dataMapAccessor == null) {
-            return 0;
-        }
+	public final String removeClientData(String name) {
 
-        return dataMapAccessor.getDataCount();
 
-    }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+            
+		return (String)dataMapAccessor.removeData(name, null);
+		
+	}
 
-    public final String getClientData(String name) {
+	public final String setClientData(String name, String value) {
 
-        return getClientData(name, null);
 
-    }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
+	}
 
-    public final String[] listClientDataKeys() {
+	public final Object getServerData(String name) {
 
-        return listClientDataKeys(null);
 
-    }
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return dataMapAccessor.getData(name, null);
+		
+	}
 
-    public final String removeClientData(String name) {
+	public final Object removeServerData(String name) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
 
-        return (String) dataMapAccessor.removeData(name, null);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+		 	return null;
+		}
+            
+		return dataMapAccessor.removeData(name, null);
+		
+	}
 
-    }
+	public final Map getServerDataMap() {
 
-    public final String setClientData(String name, String value) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", true);
+		return getServerDataMap(null);
+		
+	}
 
-        return (String) dataMapAccessor.setData(name, value, null);
+	public final int getServerDataCount() {
 
-    }
 
-    public final Object getServerData(String name) {
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
+		
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
+	public final Object setServerData(String name, Object value) {
 
-        return dataMapAccessor.getData(name, null);
 
-    }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
 
-    public final Object removeServerData(String name) {
+	public final String[] listServerDataKeys() {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
 
-        return dataMapAccessor.removeData(name, null);
+			return listServerDataKeys(null);
+		
+	}
 
-    }
+	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
+		addFacesListener(listener);
+	}
 
-    public final Map getServerDataMap() {
+	public final void removePropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
+		removeFacesListener(listener);
+	}
 
-        return getServerDataMap(null);
+	public final javax.faces.event.FacesListener [] listPropertyChangeListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
+	}
 
-    }
+	public final void addServiceEventListener(org.rcfaces.core.event.IServiceEventListener listener) {
+		addFacesListener(listener);
+	}
 
-    public final int getServerDataCount() {
+	public final void removeServiceEventListener(org.rcfaces.core.event.IServiceEventListener listener) {
+		removeFacesListener(listener);
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return 0;
-        }
+	public final javax.faces.event.FacesListener [] listServiceEventListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IServiceEventListener.class);
+	}
 
-        return dataMapAccessor.getDataCount();
+	public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+		return getFilterProperties(null);
+	}
 
-    }
+	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
+	}
 
-    public final Object setServerData(String name, Object value) {
+	public final void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", true);
+	public final void setFilterProperties(ValueBinding filterProperties) {
+		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
+	}
 
-        return dataMapAccessor.setData(name, value, null);
+	public final String getServiceId() {
+		return getServiceId(null);
+	}
 
-    }
+	public final String getServiceId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SERVICE_ID, facesContext);
+	}
 
-    public final String[] listServerDataKeys() {
+	public final void setServiceId(String serviceId) {
+		engine.setProperty(Properties.SERVICE_ID, serviceId);
+	}
 
-        return listServerDataKeys(null);
+	public final void setServiceId(ValueBinding serviceId) {
+		engine.setProperty(Properties.SERVICE_ID, serviceId);
+	}
 
-    }
+	public final boolean isServiceIdSetted() {
+		return engine.isPropertySetted(Properties.SERVICE_ID);
+	}
 
-    public final void addPropertyChangeListener(
-            org.rcfaces.core.event.IPropertyChangeListener listener) {
-        addFacesListener(listener);
-    }
-
-    public final void removePropertyChangeListener(
-            org.rcfaces.core.event.IPropertyChangeListener listener) {
-        removeFacesListener(listener);
-    }
-
-    public final javax.faces.event.FacesListener[] listPropertyChangeListeners() {
-        return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
-    }
-
-    public final void addServiceEventListener(
-            org.rcfaces.core.event.IServiceEventListener listener) {
-        addFacesListener(listener);
-    }
-
-    public final void removeServiceEventListener(
-            org.rcfaces.core.event.IServiceEventListener listener) {
-        removeFacesListener(listener);
-    }
-
-    public final javax.faces.event.FacesListener[] listServiceEventListeners() {
-        return getFacesListeners(org.rcfaces.core.event.IServiceEventListener.class);
-    }
-
-    public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
-        return getFilterProperties(null);
-    }
-
-    public final org.rcfaces.core.model.IFilterProperties getFilterProperties(
-            javax.faces.context.FacesContext facesContext) {
-        return (org.rcfaces.core.model.IFilterProperties) engine.getProperty(
-                Properties.FILTER_PROPERTIES, facesContext);
-    }
-
-    public final void setFilterProperties(
-            org.rcfaces.core.model.IFilterProperties filterProperties) {
-        engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
-    }
-
-    public final void setFilterProperties(ValueBinding filterProperties) {
-        engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
-    }
-
-    public final String getServiceId() {
-        return getServiceId(null);
-    }
-
-    public final String getServiceId(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.SERVICE_ID, facesContext);
-    }
-
-    public final void setServiceId(String serviceId) {
-        engine.setProperty(Properties.SERVICE_ID, serviceId);
-    }
-
-    public final void setServiceId(ValueBinding serviceId) {
-        engine.setProperty(Properties.SERVICE_ID, serviceId);
-    }
-
-    public final boolean isServiceIdSetted() {
-        return engine.isPropertySetted(Properties.SERVICE_ID);
-    }
-
-    public void release() {
-        super.release();
-    }
+	public void release() {
+		super.release();
+	}
 }

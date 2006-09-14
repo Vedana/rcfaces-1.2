@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,8 +31,10 @@ import org.rcfaces.core.internal.images.ImageOperationsURLRewritingProvider;
 import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
+import org.rcfaces.core.internal.taglib.AbstractInitializeTag;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 import org.rcfaces.core.internal.webapp.IRepository.IContext;
 import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.core.provider.ImageURLRewritingInformation;
@@ -47,12 +51,13 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
 import org.rcfaces.renderkit.html.internal.taglib.JavaScriptTag.JavaScriptWriterImpl;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class InitializeTag extends
-        org.rcfaces.core.internal.taglib.AbstractInitializeTag {
+public class InitializeTag extends AbstractInitializeTag implements Tag {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = 8729943902620288238L;
 
     private static final Log LOG = LogFactory.getLog(InitializeTag.class);
 
@@ -63,6 +68,10 @@ public class InitializeTag extends
     private static final String DISABLE_IE_IMAGE_BAR_PARAMETER = Constants
             .getPackagePrefix()
             + ".DISABLE_IE_IMAGE_BAR";
+
+    private static final String DISABLE_CONTEXT_MENU_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".DISABLE_CONTEXT_MENU";
 
     private static final String DISABLED_COOKIES_PAGE_URL_PARAMETER = Constants
             .getPackagePrefix()
@@ -88,13 +97,15 @@ public class InitializeTag extends
             .getPackagePrefix()
             + ".INVALID_BROWSER_PAGE_URL";
 
-    private static boolean firstLog = true;
+    private static final String DISABLE_CONTEXT_MENU_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.DISABLE_CONTEXT_MENU";
 
-    private boolean symbolsInitialized = false;
+    private static final boolean DISABLE_IE_IMAGEBAR_DEFAULT_VALUE = true;
+
+    private static final String APPLICATION_PARAMETERS_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.APPLICATION_PARAMETERS";
 
     private boolean disableIEImageBar = false;
 
-    private boolean multiWindowScript = false;
+    private boolean disableContextMenu = false;
 
     private boolean disableCache = false;
 
@@ -112,14 +123,6 @@ public class InitializeTag extends
 
     private String invalidBrowserPageURL;
 
-    private Map symbols = null;
-
-    private String defaultDisabledCookiesPageURL;
-
-    private String defaultDisabledScriptPageURL;
-
-    private String defaultInvalidBrowserPageURL;
-
     private IHtmlProcessContext htmlProcessContext;
 
     public int doStartTag() throws JspException {
@@ -128,32 +131,44 @@ public class InitializeTag extends
 
         JspWriter writer = pageContext.getOut();
 
-        if (disabledCookiesPageURL == null) {
-            disabledCookiesPageURL = defaultDisabledCookiesPageURL;
-        }
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ServletContext servletContext = pageContext.getServletContext();
+
+        htmlProcessContext = (IHtmlProcessContext) getProcessContext();
+        ApplicationParameters appParams = getApplicationParameters(htmlProcessContext);
+
         if ("false".equals(disabledCookiesPageURL)) {
             disabledCookiesPageURL = null;
+
+        } else if (disabledCookiesPageURL == null) {
+            disabledCookiesPageURL = appParams.disabledCookiesPageURL;
         }
 
-        if (disabledScriptPageURL == null) {
-            disabledScriptPageURL = defaultDisabledScriptPageURL;
-        }
         if ("false".equals(disabledScriptPageURL)) {
             disabledScriptPageURL = null;
+
+        } else if (disabledScriptPageURL == null) {
+            disabledScriptPageURL = appParams.disabledScriptPageURL;
         }
 
-        if (invalidBrowserPageURL == null) {
-            invalidBrowserPageURL = defaultInvalidBrowserPageURL;
-        }
         if ("false".equals(invalidBrowserPageURL)) {
             invalidBrowserPageURL = null;
+
+        } else if (invalidBrowserPageURL == null) {
+            invalidBrowserPageURL = appParams.invalidBrowserPageURL;
+        }
+
+        if (disableIEImageBar == false) {
+            disableIEImageBar = appParams.disableIEImageBar;
+        }
+
+        if (disableContextMenu == false) {
+            disableContextMenu = appParams.disableContextMenu;
         }
 
         setScriptType(IHtmlRenderContext.JAVASCRIPT_TYPE);
 
         try {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ServletContext servletContext = pageContext.getServletContext();
 
             if (disableCache) {
                 disableCache(writer);
@@ -174,13 +189,17 @@ public class InitializeTag extends
                 writer.print(IHtmlRenderContext.CSS_TYPE);
                 // writer.print("; charset=UTF-8");
                 writer.println("\" />");
-
             }
 
             if (disableIEImageBar) {
                 // Desactive la toolbar Image de IE !
                 writer
                         .println("<META http-equiv=\"imagetoolbar\" content=\"no\" />");
+            }
+
+            if (disableContextMenu) {
+                facesContext.getExternalContext().getRequestMap().put(
+                        DISABLE_CONTEXT_MENU_PROPERTY, Boolean.TRUE);
             }
 
             if (base != null) {
@@ -241,37 +260,38 @@ public class InitializeTag extends
                 writeDisabledScriptPageURL(facesContext, writer);
             }
 
-            IRepository repository = JavaScriptRepositoryServlet
+            IJavaScriptRepository repository = JavaScriptRepositoryServlet
                     .getRepository(facesContext);
-            IRepository.ISet bootSet = repository.getBootSet();
+            IHierarchicalRepository.ISet bootSet = repository.getBootSet();
+            if (bootSet == null) {
+                throw new JspException("BootSet must be defined !");
+            }
 
-            if (bootSet != null) {
-                IRepository.IContext repositoryContext = JavaScriptRepositoryServlet
-                        .getContextRepository(facesContext);
+            IRepository.IContext repositoryContext = JavaScriptRepositoryServlet
+                    .getContextRepository(facesContext);
 
-                if (repositoryContext.add(bootSet)) {
-                    // Il n'est pas connu du repository !
+            if (repositoryContext.add(bootSet)) {
+                // Il n'est pas connu du repository !
 
-                    String cameliaScriptURI = bootSet.getURI(repositoryContext
-                            .getLocale());
+                String cameliaScriptURI = bootSet.getURI(repositoryContext
+                        .getLocale());
 
-                    String jsBaseURI = repository
-                            .getBaseURI(htmlProcessContext);
+                String jsBaseURI = repository.getBaseURI(htmlProcessContext);
 
-                    if (multiWindowScript) {
-                        writeScriptTag_multiWindow(facesContext, writer,
-                                cameliaScriptURI, jsBaseURI, repository,
-                                repositoryContext);
+                if (appParams.multiWindowScript) {
+                    writeScriptTag_multiWindow(facesContext, writer,
+                            cameliaScriptURI, jsBaseURI, repository,
+                            repositoryContext);
 
-                    } else {
-                        writeScriptTag(facesContext, writer, cameliaScriptURI,
-                                jsBaseURI);
-                    }
+                } else {
+                    writeScriptTag(facesContext, writer, cameliaScriptURI,
+                            jsBaseURI);
                 }
             }
 
             if (invalidBrowserPageURL != null) {
-                initializeJavaScript(facesContext, writer, htmlProcessContext);
+                initializeJavaScript(facesContext, writer, htmlProcessContext,
+                        appParams);
             }
 
             if (title != null) {
@@ -287,9 +307,27 @@ public class InitializeTag extends
         return ret;
     }
 
+    private static synchronized ApplicationParameters getApplicationParameters(
+            IHtmlProcessContext htmlProcessContext) {
+
+        Map applicationMap = htmlProcessContext.getFacesContext()
+                .getExternalContext().getApplicationMap();
+        ApplicationParameters appParams = (ApplicationParameters) applicationMap
+                .get(APPLICATION_PARAMETERS_PROPERTY);
+        if (appParams != null) {
+            return appParams;
+        }
+
+        appParams = new ApplicationParameters(htmlProcessContext);
+
+        applicationMap.put(APPLICATION_PARAMETERS_PROPERTY, appParams);
+
+        return appParams;
+    }
+
     private void initializeJavaScript(FacesContext facesContext,
-            JspWriter writer, IHtmlProcessContext processContext)
-            throws IOException {
+            JspWriter writer, IHtmlProcessContext processContext,
+            ApplicationParameters appParams) throws IOException {
 
         IJavaScriptRepository repository = JavaScriptRepositoryServlet
                 .getRepository(facesContext);
@@ -298,31 +336,24 @@ public class InitializeTag extends
             return;
         }
 
-        Map symbols = JavaScriptRepositoryServlet.getSymbols(facesContext);
-
         IJavaScriptWriter jsWriter = new JavaScriptWriterImpl(facesContext,
-                symbols, writer);
+                appParams.symbols, writer);
 
         pageContext.getRequest().setAttribute(INVALID_BROWSER_URL_PROPERTY,
                 invalidBrowserPageURL);
 
-        writer.print("<SCRIPT");
-        if (htmlProcessContext.useMetaContentScriptType() == false) {
-            writer.write(" type=\"");
-            writer.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
-            writer.write('"');
-        }
-        writer.println(">");
+        JavaScriptTag.openScriptTag(writer, htmlProcessContext);
 
         JavaScriptRenderContext.initializeJavaScript(jsWriter, repository,
                 processContext);
-        writer.println("</SCRIPT>");
+
+        JavaScriptTag.closeScriptTag(writer, htmlProcessContext);
     }
 
     protected IProcessContext initializeExternalContext(
-            ExternalContext externalContext) {
+            FacesContext facesContext) {
         htmlProcessContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(externalContext);
+                .getHtmlProcessContext(facesContext);
 
         return htmlProcessContext;
     }
@@ -333,7 +364,7 @@ public class InitializeTag extends
             ServletResponse servletResponse = pageContext.getResponse();
 
             if (servletResponse instanceof HttpServletResponse) {
-                ParametredHttpServlet
+                ConfiguredHttpServlet
                         .setNoCache((HttpServletResponse) servletResponse);
             }
 
@@ -479,69 +510,6 @@ public class InitializeTag extends
     }
 
     protected void initializeTag() {
-        ExternalContext externalContext = getExternalContext()
-                .getExternalContext();
-
-        Map application = externalContext.getInitParameterMap();
-
-        disableIEImageBar = "false".equals(application
-                .get(DISABLE_IE_IMAGE_BAR_PARAMETER)) == false;
-
-        defaultDisabledCookiesPageURL = (String) application
-                .get(DISABLED_COOKIES_PAGE_URL_PARAMETER);
-        if (defaultDisabledCookiesPageURL != null
-                && defaultDisabledCookiesPageURL.trim().length() < 1) {
-            defaultDisabledCookiesPageURL = null;
-        }
-
-        defaultDisabledScriptPageURL = (String) application
-                .get(DISABLED_SCRIPT_PAGE_URL_PARAMETER);
-        if (defaultDisabledScriptPageURL != null
-                && defaultDisabledScriptPageURL.trim().length() < 1) {
-            defaultDisabledScriptPageURL = null;
-        }
-
-        defaultInvalidBrowserPageURL = (String) application
-                .get(INVALID_BROWSER_PAGE_URL_PARAMETER);
-        if (defaultInvalidBrowserPageURL != null
-                && defaultInvalidBrowserPageURL.trim().length() < 1) {
-            defaultInvalidBrowserPageURL = null;
-        }
-
-        multiWindowScript = "true".equalsIgnoreCase((String) application
-                .get(MULTI_WINDOW_PARAMETER));
-
-        if (firstLog && LOG.isInfoEnabled()) {
-            firstLog = false;
-
-            if (htmlProcessContext.useMetaContentScriptType()) {
-                LOG.info("UseMetaContentScriptType is enabled for context.");
-            }
-
-            if (htmlProcessContext.useMetaContentStyleType()) {
-                LOG.info("UseMetaContentStyleType is enabled for context.");
-            }
-
-            if (disableIEImageBar) {
-                LOG.info("DisableIEImageBar is enabled for context.");
-            }
-
-            if (multiWindowScript) {
-                LOG.info("MultiWindowScript is enabled for context.");
-            }
-
-            if (multiWindowScript) {
-                LOG.info("MULTI_WINDOW_ATTRIBUTE is enabled for context.");
-            }
-
-            if (htmlProcessContext.getDebugMode()) {
-                LOG.info("DEBUG_MODE is enabled for context.");
-            }
-
-            if (htmlProcessContext.getProfilerMode()) {
-                LOG.info("PROFILER_MODE is enabled for context.");
-            }
-        }
     }
 
     private void writeScriptTag(FacesContext facesContext, JspWriter writer,
@@ -652,7 +620,7 @@ public class InitializeTag extends
 
     private void writeScriptTag_multiWindow(FacesContext facesContext,
             JspWriter writer, String uri, String jsBaseURI,
-            IRepository repository, IContext repositoryContext)
+            IHierarchicalRepository repository, IContext repositoryContext)
             throws IOException {
 
         String javascriptCharset = IHtmlRenderContext.JAVASCRIPT_CHARSET;
@@ -708,7 +676,8 @@ public class InitializeTag extends
         List l = Collections.singletonList(MULTI_WINDOW_FILENAME);
 
         IRepository.IFile files[] = repository.computeFiles(l,
-                IRepository.FILENAME_COLLECTION_TYPE, repositoryContext);
+                IHierarchicalRepository.FILENAME_COLLECTION_TYPE,
+                repositoryContext);
         if (files != null && files.length > 0) {
             Locale locale = repositoryContext.getLocale();
             for (int i = 0; i < files.length; i++) {
@@ -746,17 +715,17 @@ public class InitializeTag extends
         invalidBrowserPageURL = null;
         disabledCookiesPageURL = null;
         disabledScriptPageURL = null;
+        disableContextMenu = false;
+        disableIEImageBar = false;
+
+        disableCache = false;
 
         htmlProcessContext = null;
 
         base = null;
-        symbols = null;
-        symbolsInitialized = false;
 
         title = null;
         favoriteImageURL = null;
-
-        disableCache = false;
 
         renderBaseTag = true;
 
@@ -783,24 +752,6 @@ public class InitializeTag extends
         }
 
         this.base = base;
-    }
-
-    private String convertSymbol(String symbol) {
-        if (symbolsInitialized == false) {
-            symbolsInitialized = true;
-
-        }
-
-        if (symbols == null) {
-            return symbol;
-        }
-
-        String s = (String) symbols.get(symbol);
-        if (s != null) {
-            return s;
-        }
-
-        return symbol;
     }
 
     public String getFavoriteImageURL() {
@@ -849,6 +800,12 @@ public class InitializeTag extends
         return (obj != null);
     }
 
+    public static boolean isDisableContextMenu(FacesContext facesContext) {
+        Object obj = facesContext.getExternalContext().getRequestMap().get(
+                DISABLE_CONTEXT_MENU_PROPERTY);
+        return (obj != null);
+    }
+
     private void metaDataInitialized() {
         pageContext.getRequest().setAttribute(META_DATA_INITIALIZED_PROPERTY,
                 Boolean.TRUE);
@@ -873,5 +830,129 @@ public class InitializeTag extends
     public static final String getInvalidBrowserURL(FacesContext facesContext) {
         return (String) facesContext.getExternalContext().getRequestMap().get(
                 INVALID_BROWSER_URL_PROPERTY);
+    }
+
+    public final boolean isDisableContextMenu() {
+        return disableContextMenu;
+    }
+
+    public final void setDisableContextMenu(boolean disableContextMenu) {
+        this.disableContextMenu = disableContextMenu;
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static class ApplicationParameters implements Serializable {
+
+        private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = 491523571265962718L;
+
+        boolean disableContextMenu;
+
+        boolean disableIEImageBar;
+
+        boolean multiWindowScript;
+
+        Map symbols;
+
+        String disabledCookiesPageURL;
+
+        String disabledScriptPageURL;
+
+        String invalidBrowserPageURL;
+
+        private boolean symbolsInitialized;
+
+        public ApplicationParameters() {
+        }
+
+        private ApplicationParameters(IHtmlProcessContext htmlProcessContext) {
+            initialize(htmlProcessContext);
+        }
+
+        private void initialize(IHtmlProcessContext htmlProcessContext) {
+            FacesContext facesContext = htmlProcessContext.getFacesContext();
+
+            ExternalContext externalContext = facesContext.getExternalContext();
+
+            Map initParameters = externalContext.getInitParameterMap();
+
+            String param = (String) initParameters
+                    .get(DISABLE_IE_IMAGE_BAR_PARAMETER);
+            if ("false".equalsIgnoreCase(param)) {
+                disableIEImageBar = false;
+
+            } else if ("true".equalsIgnoreCase(param)) {
+                disableIEImageBar = true;
+
+            } else {
+                disableIEImageBar = DISABLE_IE_IMAGEBAR_DEFAULT_VALUE;
+            }
+
+            disableContextMenu = "true".equals(initParameters
+                    .get(DISABLE_CONTEXT_MENU_PARAMETER));
+
+            disabledCookiesPageURL = (String) initParameters
+                    .get(DISABLED_COOKIES_PAGE_URL_PARAMETER);
+            if (disabledCookiesPageURL != null
+                    && disabledCookiesPageURL.trim().length() < 1) {
+                disabledCookiesPageURL = null;
+            }
+
+            disabledScriptPageURL = (String) initParameters
+                    .get(DISABLED_SCRIPT_PAGE_URL_PARAMETER);
+            if (disabledScriptPageURL != null
+                    && disabledScriptPageURL.trim().length() < 1) {
+                disabledScriptPageURL = null;
+            }
+
+            invalidBrowserPageURL = (String) initParameters
+                    .get(INVALID_BROWSER_PAGE_URL_PARAMETER);
+            if (invalidBrowserPageURL != null
+                    && invalidBrowserPageURL.trim().length() < 1) {
+                invalidBrowserPageURL = null;
+            }
+
+            multiWindowScript = "true".equalsIgnoreCase((String) initParameters
+                    .get(MULTI_WINDOW_PARAMETER));
+
+            symbols = JavaScriptRepositoryServlet.getSymbols(facesContext);
+
+            if (LOG.isInfoEnabled()) {
+
+                if (disableIEImageBar) {
+                    LOG.info("DisableIEImageBar is enabled for context.");
+                }
+
+                if (disableContextMenu) {
+                    LOG.info("DisableContextMenu is enabled for context.");
+                }
+
+                if (multiWindowScript) {
+                    LOG.info("MultiWindowScript is enabled for context.");
+                }
+
+                if (htmlProcessContext.useMetaContentScriptType()) {
+                    LOG
+                            .info("UseMetaContentScriptType is enabled for context.");
+                }
+
+                if (htmlProcessContext.useMetaContentStyleType()) {
+                    LOG.info("UseMetaContentStyleType is enabled for context.");
+                }
+
+                if (htmlProcessContext.getDebugMode()) {
+                    LOG.info("DEBUG_MODE is enabled for context.");
+                }
+
+                if (htmlProcessContext.getProfilerMode()) {
+                    LOG.info("PROFILER_MODE is enabled for context.");
+                }
+            }
+        }
     }
 }

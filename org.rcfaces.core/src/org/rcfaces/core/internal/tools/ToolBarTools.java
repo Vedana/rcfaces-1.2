@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -29,8 +32,8 @@ import org.rcfaces.core.component.iterator.IToolItemIterator;
 import org.rcfaces.core.internal.util.ComponentIterators;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ToolBarTools {
     private static final String REVISION = "$Revision$";
@@ -62,8 +65,8 @@ public class ToolBarTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static final class ToolItemListIterator extends
             ComponentIterators.ComponentListIterator implements
@@ -85,8 +88,8 @@ public class ToolBarTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static final class ToolFolderListIterator extends
             ComponentIterators.ComponentListIterator implements

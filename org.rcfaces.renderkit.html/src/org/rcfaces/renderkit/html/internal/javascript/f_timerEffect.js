@@ -6,8 +6,8 @@
  * 
  *
  * @class hidden f_timerEffect extends f_effect
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __static = {
 	/**

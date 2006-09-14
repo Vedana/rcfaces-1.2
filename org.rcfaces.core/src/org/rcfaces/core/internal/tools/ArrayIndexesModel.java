@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -25,291 +28,293 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.model.AbstractIndexesModel;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class ArrayIndexesModel extends AbstractIndexesModel implements Serializable {
-	private static final String REVISION = "$Revision$";
+public class ArrayIndexesModel extends AbstractIndexesModel implements
+        Serializable {
+    private static final String REVISION = "$Revision$";
 
-	protected static final int[] EMPTY_SELECTION = new int[0];
+    private static final long serialVersionUID = 7393822820762985697L;
 
-	private static final boolean VERIFY_ADD = true;
+    private static final Log LOG = LogFactory.getLog(ArrayIndexesModel.class);
 
-	private static final boolean VERIFY_GARBAGE = true;
+    protected static final int[] EMPTY_SELECTION = new int[0];
 
-	private static final boolean LOG_FAILED_REMOVE = true;
+    private static final boolean VERIFY_GARBAGE = true;
 
-	private int selectionIndexes[] = EMPTY_SELECTION;
+    private int selectionIndexes[] = EMPTY_SELECTION;
 
-	private int lastPos = 0;
+    private int lastPos = 0;
 
-	private int count = 0;
+    private int count = 0;
 
-	private boolean garbaged = true;
+    private boolean garbaged = true;
 
-	public ArrayIndexesModel() {
-	}
+    public ArrayIndexesModel() {
+    }
 
-	public ArrayIndexesModel(int[] indexes) {
-		setIndexes(indexes, false);
-	}
+    public ArrayIndexesModel(int[] indexes) {
+        setIndexes(indexes, false);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.ISelectionModel#listSelections()
-	 */
-	public int[] listSortedIndexes() {
-		if (count == 0) {
-			return EMPTY_SELECTION;
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.ISelectionModel#listSelections()
+     */
+    public int[] listSortedIndexes() {
+        if (count == 0) {
+            return EMPTY_SELECTION;
+        }
 
-		garbage();
+        garbage();
 
-		int a[] = new int[count];
-		System.arraycopy(selectionIndexes, 0, a, 0, count);
+        int a[] = new int[count];
+        System.arraycopy(selectionIndexes, 0, a, 0, count);
 
-		Arrays.sort(a);
+        Arrays.sort(a);
 
-		return a;
-	}
+        return a;
+    }
 
-	public int getFirstIndex() {
-		if (count == 0) {
-			return -1;
-		}
+    public int getFirstIndex() {
+        if (count == 0) {
+            return -1;
+        }
 
-		garbage();
+        garbage();
 
-		return selectionIndexes[0];
-	}
+        return selectionIndexes[0];
+    }
 
-	private void garbage() {
-		if (garbaged) {
-			return;
-		}
+    private void garbage() {
+        if (garbaged) {
+            return;
+        }
 
-		garbaged = true;
-		if (count == lastPos) {
-			return;
-		}
+        garbaged = true;
+        if (count == lastPos) {
+            return;
+        }
 
-		int lastEmpty = -1;
-		int last = -1;
-		for (int i = 0; i < lastPos; i++) {
-			int n = selectionIndexes[i];
+        int lastEmpty = -1;
+        int last = -1;
+        for (int i = 0; i < lastPos; i++) {
+            int n = selectionIndexes[i];
 
-			if (n < 0) {
-				if (lastEmpty < 0) {
-					lastEmpty = i;
-				}
+            if (n < 0) {
+                if (lastEmpty < 0) {
+                    lastEmpty = i;
+                }
 
-				continue;
-			}
+                continue;
+            }
 
-			if (lastEmpty >= 0) {
-				selectionIndexes[lastEmpty] = n;
-				last = lastEmpty;
-				lastEmpty++;
-				continue;
-			}
+            if (lastEmpty >= 0) {
+                selectionIndexes[lastEmpty] = n;
+                last = lastEmpty;
+                lastEmpty++;
+                continue;
+            }
 
-			last = i;
+            last = i;
 
-			continue;
-		}
+            continue;
+        }
 
-		// Assure que count==last
-		if (count != last + 1) {
-			System.err.println("YA un probleme !");
-		}
+        // Assure que count==last
+        if (count != last + 1) {
+            LOG.error("Y a un probleme ! (count!=last)");
+        }
 
-		if (VERIFY_GARBAGE) {
-			Set set = new HashSet(count);
-			for (int i = 0; i < count; i++) {
-				if (set.add(new Integer(i)) == false) {
-					System.err.println("YA un GROS probleme !");
-				}
-			}
-		}
+        if (VERIFY_GARBAGE) {
+            Set set = new HashSet(count);
+            for (int i = 0; i < count; i++) {
+                if (set.add(new Integer(i)) == false) {
+                    System.err.println("YA un GROS probleme !");
+                }
+            }
+        }
 
-		lastPos = count;
-	}
+        lastPos = count;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.ISelectionModel#clearSelections()
-	 */
-	public void clearIndexes() {
-		count = 0;
-		lastPos = 0;
-		garbaged = true;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.ISelectionModel#clearSelections()
+     */
+    public void clearIndexes() {
+        count = 0;
+        lastPos = 0;
+        garbaged = true;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.ISelectionModel#isSelected(int)
-	 */
-	public boolean containsIndex(int index) {
-		if (index < 0) {
-			throw new IllegalArgumentException("Invalid index (" + index
-					+ " < 0)");
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.ISelectionModel#isSelected(int)
+     */
+    public boolean containsIndex(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("Invalid index (" + index
+                    + " < 0)");
+        }
 
-		if (count == 0) {
-			return false;
-		}
+        if (count == 0) {
+            return false;
+        }
 
-		garbage();
+        garbage();
 
-		for (int i = 0; i < count; i++) {
-			int n = selectionIndexes[i];
+        for (int i = 0; i < count; i++) {
+            int n = selectionIndexes[i];
 
-			if (index == n) {
-				return true;
-			}
-		}
+            if (index == n) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.ISelectionModel#addSelection(int)
-	 */
-	public void addIndex(int index) {
-		if (index < 0) {
-			throw new IllegalArgumentException("Invalid index (" + index
-					+ " < 0)");
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.ISelectionModel#addSelection(int)
+     */
+    public void addIndex(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("Invalid index (" + index
+                    + " < 0)");
+        }
 
-		for (int i = 0; i < lastPos; i++) {
-			int n = selectionIndexes[i];
+        for (int i = 0; i < lastPos; i++) {
+            int n = selectionIndexes[i];
 
-			if (index == n) {
-				return;
-			}
-		}
+            if (index == n) {
+                return;
+            }
+        }
 
-		if (lastPos < selectionIndexes.length) {
-			selectionIndexes[lastPos++] = index;
-			count++;
-			garbaged = false;
-			return;
-		}
+        if (lastPos < selectionIndexes.length) {
+            selectionIndexes[lastPos++] = index;
+            count++;
+            garbaged = false;
+            return;
+        }
 
-		garbage();
+        garbage();
 
-		if (lastPos < selectionIndexes.length) {
-			selectionIndexes[lastPos++] = index;
-			count++;
-			garbaged = false;
-			return;
-		}
+        if (lastPos < selectionIndexes.length) {
+            selectionIndexes[lastPos++] = index;
+            count++;
+            garbaged = false;
+            return;
+        }
 
-		// On agrandi
-		int d = count / 2;
-		if (d < 8) {
-			d = 8;
-		}
-		int n[] = new int[count + d];
-		if (count > 0) {
-			System.arraycopy(selectionIndexes, 0, n, 0, count);
-		}
+        // On agrandi
+        int d = count / 2;
+        if (d < 8) {
+            d = 8;
+        }
+        int n[] = new int[count + d];
+        if (count > 0) {
+            System.arraycopy(selectionIndexes, 0, n, 0, count);
+        }
 
-		selectionIndexes = n;
+        selectionIndexes = n;
 
-		selectionIndexes[lastPos++] = index;
-		count++;
-		garbaged = false;
-	}
+        selectionIndexes[lastPos++] = index;
+        count++;
+        garbaged = false;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.ISelectionModel#removeSelection(int)
-	 */
-	public void removeIndex(int index) {
-		if (index < 0) {
-			throw new IllegalArgumentException("Invalid index (" + index
-					+ " < 0)");
-		}
-		if (count == 0) {
-			return;
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.ISelectionModel#removeSelection(int)
+     */
+    public void removeIndex(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("Invalid index (" + index
+                    + " < 0)");
+        }
+        if (count == 0) {
+            return;
+        }
 
-		for (int i = 0; i < lastPos; i++) {
-			if (selectionIndexes[i] != index) {
-				continue;
-			}
+        for (int i = 0; i < lastPos; i++) {
+            if (selectionIndexes[i] != index) {
+                continue;
+            }
 
-			selectionIndexes[i] = -1;
-			count--;
-			garbaged = false;
-			return;
-		}
-	}
+            selectionIndexes[i] = -1;
+            count--;
+            garbaged = false;
+            return;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#commitChanges()
-	 */
-	public void commitChanges() {
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#commitChanges()
+     */
+    public void commitChanges() {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#setIndexes(int[])
-	 */
-	public void setIndexes(int[] indexes) {
-		setIndexes(indexes, true);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#setIndexes(int[])
+     */
+    public void setIndexes(int[] indexes) {
+        setIndexes(indexes, true);
+    }
 
-	public void setIndexes(int[] indexes, boolean copy) {
-		if (indexes == null || indexes.length < 1) {
-			selectionIndexes = EMPTY_SELECTION;
-			lastPos = 0;
-			count = 0;
-			return;
-		}
+    public void setIndexes(int[] indexes, boolean copy) {
+        if (indexes == null || indexes.length < 1) {
+            selectionIndexes = EMPTY_SELECTION;
+            lastPos = 0;
+            count = 0;
+            return;
+        }
 
-		if (copy) {
-			selectionIndexes = new int[indexes.length];
-			System.arraycopy(indexes, 0, selectionIndexes, 0, indexes.length);
+        if (copy) {
+            selectionIndexes = new int[indexes.length];
+            System.arraycopy(indexes, 0, selectionIndexes, 0, indexes.length);
 
-		} else {
-			selectionIndexes = indexes;
-		}
+        } else {
+            selectionIndexes = indexes;
+        }
 
-		garbaged = true;
-		count = selectionIndexes.length;
-		lastPos = count;
+        garbaged = true;
+        count = selectionIndexes.length;
+        lastPos = count;
 
-		for (int i = 0; i < selectionIndexes.length; i++) {
-			if (selectionIndexes[i] >= 0) {
-				continue;
-			}
+        for (int i = 0; i < selectionIndexes.length; i++) {
+            if (selectionIndexes[i] >= 0) {
+                continue;
+            }
 
-			garbaged = false;
-			count--;
-		}
-	}
+            garbaged = false;
+            count--;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#countIndexes()
-	 */
-	public int countIndexes() {
-		return count;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#countIndexes()
+     */
+    public int countIndexes() {
+        return count;
+    }
 }

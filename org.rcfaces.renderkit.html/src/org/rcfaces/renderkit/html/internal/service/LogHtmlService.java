@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -36,8 +39,8 @@ import org.rcfaces.renderkit.html.internal.Constants;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class LogHtmlService extends LogService {
     private static final String REVISION = "$Revision$";
@@ -51,7 +54,7 @@ public class LogHtmlService extends LogService {
     public static LogService getInstance(FacesContext facesContext) {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
-                facesContext.getExternalContext()).getServicesRegistry();
+                facesContext).getServicesRegistry();
 
         return (LogService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
@@ -105,11 +108,13 @@ public class LogHtmlService extends LogService {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static final class ClientException extends Exception {
         private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = 6346621862119596920L;
 
         private final String viewId;
 

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -79,11 +82,10 @@ import org.rcfaces.core.model.SeparatorSelectItem;
 import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ToolBarDecorator extends AbstractSelectItemsDecorator {
     private static final String REVISION = "$Revision$";
@@ -157,7 +159,7 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
 
         String sid = toolBarContext.getComponentClientId(component); // menuContext.getMenuBarItemId();
 
-        javaScriptWriter.write("var ").write(varId).write('=').writeCall(null,
+        javaScriptWriter.write("var ").write(varId).write('=').writeMethodCall(
                 "_declareToolFolder").writeString(sid);
 
         int pred = 0;
@@ -240,7 +242,7 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
             cmd = "f_appendItem";
         }
 
-        javaScriptWriter.writeCall(null, cmd);
+        javaScriptWriter.writeMethodCall(cmd);
         javaScriptWriter.write(parentVarId).write(',').writeString(sid);
 
         int pred = 0;
@@ -367,7 +369,7 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
             if (imageURL != null || disabledImageURL != null
                     || hoverImageURL != null || selectedImageURL != null) {
 
-                javaScriptWriter.writeCall(null, "_setItemImages").write(varId);
+                javaScriptWriter.writeMethodCall("_setItemImages").write(varId);
                 pred = 0;
 
                 if (imageURL != null) {
@@ -419,7 +421,7 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
 
         String parentVarId = getToolBarContext().peekVarId();
 
-        javaScriptWriter.writeCall(null, "_appendSeparatorItem").write(
+        javaScriptWriter.writeMethodCall("_appendSeparatorItem").write(
                 parentVarId).writeln(");");
     }
 

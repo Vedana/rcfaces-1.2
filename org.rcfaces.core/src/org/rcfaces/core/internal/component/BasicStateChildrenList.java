@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -34,8 +37,8 @@ import java.util.ListIterator;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 class BasicStateChildrenList implements IStateChildrenList {
     private static final String REVISION = "$Revision$";
@@ -328,8 +331,8 @@ class BasicStateChildrenList implements IStateChildrenList {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private class StateIdIterator implements Iterator {
         private static final String REVISION = "$Revision$";
@@ -357,8 +360,8 @@ class BasicStateChildrenList implements IStateChildrenList {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private final class StateIdListIterator extends StateIdIterator implements
             ListIterator {
@@ -433,8 +436,8 @@ class BasicStateChildrenList implements IStateChildrenList {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private final class StateIdSubList extends BasicStateChildrenList {
         private static final String REVISION = "$Revision$";

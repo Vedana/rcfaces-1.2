@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:14  oeuillot
- * DerniËres corrections pour la migration Rcfaces
+ * DerniÔøΩres corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -107,7 +110,6 @@
  */
 package org.rcfaces.renderkit.html.internal.javascript;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -125,13 +127,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.context.FacesContextFactory;
-import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -140,16 +137,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.codec.SourceFilter;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.ByteBufferInputStream;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
-import org.rcfaces.core.internal.util.AbstractRepository;
-import org.rcfaces.core.internal.util.CameliaVersion;
 import org.rcfaces.core.internal.util.Delay;
 import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.webapp.AbstractHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
+import org.rcfaces.core.internal.webapp.HierarchicalRepositoryServlet;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
-import org.rcfaces.core.internal.webapp.RepositoryServlet;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IHierarchicalFile;
 import org.rcfaces.core.internal.webapp.IRepository.IContent;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.Constants;
@@ -157,16 +155,16 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class JavaScriptRepositoryServlet extends RepositoryServlet {
+public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -2654621696260702001L;
 
     private static final Log LOG = LogFactory
             .getLog(JavaScriptRepositoryServlet.class);
-
-    private static final String MAIN_REPOSITORY_URI = "rcfaces-js/";
 
     private static final String CLEAR_VARIABLES[] = { "__static",
             "__prototype", "__resources" };
@@ -183,23 +181,19 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
     private static final String REPOSITORY_DEV_MODE_PARAMETER = PARAMETER_PREFIX
             + ".REPOSITORY_DEV_MODE";
 
-    private static final String SYMBOLS_FILENAME = "/symbols";
+    private static final String COMPILED_JS_SUFFIX_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".COMPILED_JS_SUFFIX";
 
-    private static final String SYMBOLSC_FILENAME = "/symbolsc";
+    private static final String SYMBOLS_FILENAME = "/symbols";
 
     private static final String REPOSITORY_PROPERTY = "org.rcfaces.renderkit.html.javascript.DependenciesRepository";
 
     private static final String CONTEXT_REPOSITORY_PROPERTY = "org.rcfaces.renderkit.html.javascript.ContextRepository";
 
-    private static final String CAN_SKIP_SPACES_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".javascript.CAN_FILTER_SPACES";
-
     private static final String JAVASCRIPT_SYMBOLS_PARAMETER = Constants
             .getPackagePrefix()
             + ".javascript.SYMBOLS";
-
-    private static final boolean APPEND_HEADER = true;
 
     private static final String VERSIONED_EXPIRE_PARAMETER = Constants
             .getPackagePrefix()
@@ -211,39 +205,20 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
                 DateFormat.MEDIUM);
     }
 
-    private static final Set SYMBOLS_FILENAMES = new HashSet();
+    private static final Locale SYMBOL_LOCALE = new Locale("SYMBOLS");
+
+    private static final Set SYMBOLS_FILENAMES = new HashSet(2);
     static {
         SYMBOLS_FILENAMES.add(SYMBOLS_FILENAME);
-        SYMBOLS_FILENAMES.add(SYMBOLSC_FILENAME);
     }
-
-    private static final String DEFAULT_CHARSET = "UTF-8";
-
-    private static final String COMPILED_JS_SUFFIX_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".COMPILED_JS_SUFFIX";
 
     private String mainRepositoryURI;
 
-    private Locale defaultLocale;
-
-    private boolean canSkipSpace;
-
-    private boolean debugMode;
-
-    private boolean profilerMode;
-
-    private String rcfacesVersion;
+    private String htmlRCFacesVersion;
 
     private boolean enableSymbols = false;
 
-    private Object container;
-
     private long symbolsLastModified = 0;
-
-    private FacesContextFactory facesContextFactory;
-
-    private Lifecycle javascriptLifeCycle;
 
     private String repositoryVersion;
 
@@ -259,21 +234,19 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         this.mainRepositoryURI = mainRepositoryURI;
     }
 
-    protected String getParameterPrefix() {
-        return PARAMETER_PREFIX;
-    }
-
-    protected String getRepositoryDevModeParameterName() {
-        return REPOSITORY_DEV_MODE_PARAMETER;
-    }
-
     public void init(ServletConfig config) throws ServletException {
 
-        rcfacesVersion = CameliaVersion.getVersion();
+        htmlRCFacesVersion = Constants.getVersion();
 
         if (mainRepositoryURI == null) {
             mainRepositoryURI = ServletTools.computeResourceURI(config
-                    .getServletContext(), MAIN_REPOSITORY_URI, getClass());
+                    .getServletContext(), null, getClass());
+        }
+
+        if (mainRepositoryURI == null) {
+            LOG.error("Servlet '" + config.getServletName()
+                    + "' is disabled because its URL can not be determined !");
+            return;
         }
 
         super.init(config);
@@ -301,48 +274,22 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
             }
 
         }
+    }
 
-        String localeSupportProperty = getParameter("org.rcfaces.core.LOCALE_SUPPORT");
-        if ("false".equalsIgnoreCase(localeSupportProperty)) {
-            localeSupport = false;
+    protected boolean getVersionSupport() {
+        return Constants.FRAMEWORK_VERSIONED_URL_SUPPORT;
+    }
 
-            LOG.info("LOCALE_SUPPORT is disabled for servlet '"
-                    + getServletName() + "'.");
-        } else {
-            localeSupport = true;
+    protected String getParameterPrefix() {
+        return PARAMETER_PREFIX;
+    }
 
-            LOG.info("LOCALE_SUPPORT is enabled for servlet '"
-                    + getServletName() + "' (DEFAULT VALUE).");
-        }
-
-        facesContextFactory = (FacesContextFactory) FactoryFinder
-                .getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-
-        javascriptLifeCycle = new JavascriptRepositoryLifecycle();
+    protected String getRepositoryDevModeParameterName() {
+        return REPOSITORY_DEV_MODE_PARAMETER;
     }
 
     protected String getDefaultCharset() {
-        return DEFAULT_CHARSET;
-    }
-
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
-
-        synchronized (this) {
-            if (defaultLocale == null) {
-                FacesContext context = facesContextFactory.getFacesContext(
-                        getServletConfig().getServletContext(), request,
-                        response, javascriptLifeCycle);
-                try {
-                    defaultLocale = context.getApplication().getDefaultLocale();
-
-                } finally {
-                    context.release();
-                }
-            }
-        }
-
-        super.doGet(request, response);
+        return Constants.JAVASCRIPT_DEFAULT_CHARSET;
     }
 
     protected String getContentType(Record record) {
@@ -360,22 +307,22 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
             throws IOException {
         ServletContext servletContext = config.getServletContext();
 
-        if (org.rcfaces.core.internal.Constants.BUILD_ID_URL_SUPPORT) {
-            if (rcfacesVersion == null) {
+        if (Constants.FRAMEWORK_VERSIONED_URL_SUPPORT) {
+            if (htmlRCFacesVersion == null) {
                 throw new FacesException(
                         "Can not enable \"Repository version\", rcfaces version is not detected !");
             }
-            this.repositoryVersion = rcfacesVersion;
+            this.repositoryVersion = htmlRCFacesVersion;
 
-            LOG.info("Repository version '" + rcfacesVersion
-                    + "' enabled for servlet '" + getServletName() + "'.");
+            LOG.info("Repository version '" + htmlRCFacesVersion
+                    + "' setted for servlet '" + getServletName() + "'.");
         }
 
-        AbstractRepository repository = new JavaScriptRepository(
+        AbstractHierarchicalRepository repository = new JavaScriptRepository(
                 mainRepositoryURI, repositoryVersion);
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 
-        container = servletContext;
+        Object container = servletContext;
         InputStream in = servletContext
                 .getResourceAsStream(MAIN_REPOSITORY_LOCATION);
         if (in == null) {
@@ -400,18 +347,6 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
             }
         }
 
-        canSkipSpace = false;
-
-        String s_canSkipSpace = config
-                .getInitParameter(CAN_SKIP_SPACES_PARAMETER);
-        if (s_canSkipSpace != null) {
-            if ("true".equalsIgnoreCase(s_canSkipSpace)) {
-                canSkipSpace = true;
-            }
-
-            LOG.debug("Set CAN_SKIP_SPACES property to " + canSkipSpace + ".");
-        }
-
         IFile file = null;
         try {
             file = repository.declareFile(SYMBOLS_FILENAME,
@@ -423,20 +358,6 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
             }
 
         } catch (IllegalArgumentException ex) {
-        }
-
-        if (file == null) {
-            try {
-                file = repository.declareFile(SYMBOLSC_FILENAME,
-                        MAIN_REPOSITORY_DIRECTORY_LOCATION, null, null,
-                        container, null);
-
-                if (file != null) {
-                    LOG.info("Javascript compacted symbols detected.");
-                }
-
-            } catch (IllegalArgumentException ex) {
-            }
         }
 
         if (file == null) {
@@ -457,10 +378,6 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         return new JavaScriptRecord(file, locale);
     }
 
-    protected boolean canSkipSpace() {
-        return canSkipSpace;
-    }
-
     protected String getInputCharset() {
         return "UTF-8";
     }
@@ -471,10 +388,10 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
-    private class JavaScriptRecord extends Record {
+    private class JavaScriptRecord extends HierarchicalRecord {
         private static final String REVISION = "$Revision$";
 
         protected byte prolog[];
@@ -493,10 +410,10 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
             return super.getExpirationDate();
         }
 
-        protected URL[] getFileURL(IFile file) {
+        protected Object[] getFileContentReferences(IFile file) {
             // On peut tenter ici de rechercher la version compilÔøΩe !
 
-            URL urls[] = file.getContentLocations(locale);
+            Object urls[] = file.getContentReferences(locale);
 
             String surl = urls[0].toString();
             if (surl.endsWith(".js") == false) {
@@ -557,9 +474,6 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         protected byte[] updateBuffer(byte[] buffer) throws IOException {
 
             String fileName = getFile().getFilename();
-            if (fileName.endsWith(SYMBOLSC_FILENAME)) {
-                return buffer;
-            }
 
             prolog = null;
             if (enableSymbols) {
@@ -571,10 +485,6 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
             }
 
             String content = new String(buffer, getInputCharset());
-
-            if (canSkipSpace()) {
-                content = SourceFilter.filterSkipSpaces(content);
-            }
 
             return content.getBytes(getOuputCharset());
         }
@@ -608,7 +518,7 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         private void fillEpilog(StringAppender sb) {
 
             // if (isMultiWindowScript(getServletContext())) {
-            writeBundles(sb, getFile(), locale);
+            writeBundles(sb, (IHierarchicalFile) getFile(), locale);
             // }
 
             Map map = getSymbols();
@@ -637,14 +547,14 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         }
 
         protected void fillProlog(StringAppender sb) throws IOException {
-            if (APPEND_HEADER) {
-                if (rcfacesVersion != null) {
+            if (Constants.JAVASCRIPPT_APPEND_RCFACES_HEADER) {
+                if (htmlRCFacesVersion != null) {
                     sb.append("var rcfacesVersion=\"");
-                    sb.append(rcfacesVersion);
+                    sb.append(htmlRCFacesVersion);
                     sb.append("\";");
                 }
 
-                sb.append("// Vedana Faces Components:");
+                sb.append("// RCFaces Components:");
 
                 long date = getLastModificationDate();
                 if (date > 0) {
@@ -662,19 +572,16 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
     }
 
     /*
-    public static final IJavaScriptRepository getRepository(
-            ServletContext servletContext) {
-        IJavaScriptRepository javaScriptRepository = (IJavaScriptRepository) servletContext
-                .getAttribute(REPOSITORY_PROPERTY);
-
-        if (javaScriptRepository == null) {
-            throw new FacesException(
-                    "Javascript repository is not initialized !");
-        }
-
-        return javaScriptRepository;
-    }
-    */
+     * public static final IJavaScriptRepository getRepository( ServletContext
+     * servletContext) { IJavaScriptRepository javaScriptRepository =
+     * (IJavaScriptRepository) servletContext
+     * .getAttribute(REPOSITORY_PROPERTY);
+     * 
+     * if (javaScriptRepository == null) { throw new FacesException( "Javascript
+     * repository is not initialized !"); }
+     * 
+     * return javaScriptRepository; }
+     */
 
     public static final IJavaScriptRepository getRepository(
             FacesContext facesContext) {
@@ -691,16 +598,19 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         return javaScriptRepository;
     }
 
-    public void writeBundles(StringAppender sb, IFile file, Locale locale) {
-        IFile dependencies[];
-        if (file instanceof IRepository.ISet) {
-            dependencies = ((IRepository.ISet) file).listDependencies();
+    public void writeBundles(StringAppender sb, IHierarchicalFile file,
+            Locale locale) {
+        IHierarchicalFile dependencies[];
+        if (file instanceof IHierarchicalRepository.ISet) {
+            dependencies = ((IHierarchicalRepository.ISet) file)
+                    .listDependencies();
 
-        } else if (file instanceof IRepository.IModule) {
-            dependencies = ((IRepository.IModule) file).listDependencies();
+        } else if (file instanceof IHierarchicalRepository.IModule) {
+            dependencies = ((IHierarchicalRepository.IModule) file)
+                    .listDependencies();
 
         } else {
-            dependencies = new IFile[] { file };
+            dependencies = new IHierarchicalFile[] { file };
         }
 
         List classes = new ArrayList(dependencies.length);
@@ -781,17 +691,11 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
     }
 
     private void reloadSymbols(IRepository repository) throws IOException {
-        boolean crypted = false;
-
         IFile file = repository.getFileByName(SYMBOLS_FILENAME);
-        if (file == null) {
-            file = repository.getFileByName(SYMBOLSC_FILENAME);
-            crypted = true;
-        }
 
         byte buffer[] = null;
 
-        Record record = getFileRecord(file, null);
+        Record record = getFileRecord(file, SYMBOL_LOCALE);
         if (record != null) {
             if (symbolsLastModified == record.getLastModificationDate()) {
                 return;
@@ -806,34 +710,6 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
             return;
         }
 
-        if (crypted) {
-            int l = (buffer[0] & 0xff);
-
-            byte key[] = new byte[l];
-            System.arraycopy(buffer, 1, key, 0, key.length);
-
-            byte nbuf[] = new byte[buffer.length - 1 - key.length];
-            System.arraycopy(buffer, 1 + key.length, nbuf, 0, nbuf.length);
-            buffer = nbuf;
-
-            try {
-                SecretKeySpec skey = new SecretKeySpec(key, "DES");
-
-                Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-
-                cipher.init(Cipher.DECRYPT_MODE, skey);
-
-                buffer = cipher.doFinal(buffer);
-
-            } catch (Throwable th) {
-                IOException ex = new IOException(
-                        "Can not decrypt symbols table !");
-                ex.initCause(th);
-
-                throw ex;
-            }
-        }
-
         Map symbols = loadSymbols(buffer);
         symbolsLastModified = record.getLastModificationDate();
 
@@ -843,10 +719,12 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
     private Map loadSymbols(byte[] buffer) throws IOException {
         Map symbols = new HashMap(buffer.length / 16);
 
-        ByteArrayInputStream bin = new ByteArrayInputStream(buffer);
+        InputStream bin = new ByteBufferInputStream(buffer);
 
         Properties properties = new Properties();
         properties.load(bin);
+
+        bin.close();
 
         // On utilise une version non synchronis√©e !
         symbols.putAll(properties);
@@ -854,11 +732,22 @@ public class JavaScriptRepositoryServlet extends RepositoryServlet {
         return symbols;
     }
 
-    protected Locale getDefaultLocale() {
-        if (defaultLocale == null) {
-            return Locale.getDefault();
+    protected void service(HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
+        if (mainRepositoryURI == null) {
+            response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+            return;
         }
 
-        return defaultLocale;
+        super.service(request, response);
     }
+
+    protected String getBootSetDefaultValue() {
+        return Constants.JAVASCRIPT_BOOT_SET_DEFAULT_VALUE;
+    }
+
+    protected String getGroupAllDefaultValue() {
+        return Constants.JAVASCRIPT_GROUP_ALL_DEFAULT_VALUE;
+    }
+
 }

@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
@@ -49,10 +52,12 @@ import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.URLFormCodec;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.rewriting.IResourceVersionHandler;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.provider.IProvider;
 import org.rcfaces.core.provider.ImageURLRewritingInformation;
@@ -60,8 +65,8 @@ import org.xml.sax.Attributes;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ImageOperationsRepositoryImpl extends
         ImageOperationsURLRewritingProvider {
@@ -78,12 +83,16 @@ public class ImageOperationsRepositoryImpl extends
 
     private final String imageRepositoryURL;
 
+    private final RcfacesContext rcfacesContext;
+
     public ImageOperationsRepositoryImpl(IProvider provider) {
         super(provider);
 
         fileNameMap = URLConnection.getFileNameMap();
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
+        rcfacesContext = RcfacesContext.getInstance(facesContext);
+
         imageRepositoryURL = ImageOperationsServlet
                 .getImagesRepositoryURI(facesContext.getExternalContext()
                         .getApplicationMap());
@@ -283,6 +292,7 @@ public class ImageOperationsRepositoryImpl extends
 
         if (addFilterServletPath) {
             sb.append(imageRepositoryURL);
+
             sb.append('/');
 
             sb.append(filter);
@@ -290,33 +300,24 @@ public class ImageOperationsRepositoryImpl extends
 
         // Traitement du base href ????
         IProcessContext extContext = AbstractProcessContext
-                .getProcessContext(externalContext);
-        if (url.charAt(0) != '/') {
-            String baseHREF = extContext.getBaseHREF();
-            if (baseHREF == null || baseHREF.length() < 1) {
-                // On prend la servlet !
+                .getProcessContext(facesContext);
 
-                String servletPath = externalContext.getRequestServletPath();
-                if (servletPath != null) {
-                    int idx = servletPath.lastIndexOf('/');
-                    if (idx > 0) {
-                        sb.append(servletPath.substring(0, idx));
-                    }
-                }
+        String absolutePath = extContext.getAbsolutePath(url, false);
 
-            } else {
-                if (baseHREF.indexOf("://") >= 0) {
-                    throw new FacesException("Base href '" + baseHREF
-                            + "' is not supported !");
-                }
+        IResourceVersionHandler resourceVersionHandler = rcfacesContext
+                .getResourceVersionHandler();
+        if (resourceVersionHandler != null) {
+            String version = resourceVersionHandler.getResourceVersion(
+                    facesContext, absolutePath, null);
+            if (version != null) {
+                sb.append('/');
+                sb.append(version);
 
-                // Le BASE HREF est positionnÃ© !
-                sb.append(baseHREF.substring(requestContextPath.length()));
+                rewritingInformation.setVersioned();
             }
         }
 
-        sb.append('/');
-        URLFormCodec.appendURL(sb, url);
+        URLFormCodec.appendURL(sb, absolutePath);
 
         if (imageOperation != null) {
             String suffix = imageOperation.getForceSuffix();
@@ -345,6 +346,10 @@ public class ImageOperationsRepositoryImpl extends
         return fileNameMap.getContentTypeFor(url);
     }
 
+    public boolean isProviderEnabled() {
+        return imageRepositoryURL != null;
+    }
+
     public boolean isValidContenType(String contentType) {
         Boolean valid;
 
@@ -364,8 +369,8 @@ public class ImageOperationsRepositoryImpl extends
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static final class OperationBean {
         private static final String REVISION = "$Revision$";

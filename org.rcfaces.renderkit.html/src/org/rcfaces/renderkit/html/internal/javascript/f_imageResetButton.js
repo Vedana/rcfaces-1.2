@@ -6,8 +6,8 @@
  * A reset button, resets the form which contains itself.
  *
  * @class f_imageResetButton extends f_imageButton
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __prototype = {

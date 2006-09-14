@@ -5,8 +5,8 @@
 /**
  * 
  * @class public f_dataGrid extends f_component, fa_readOnly, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_checkManager
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static = {
@@ -517,8 +517,12 @@ var __static = {
 	 */
 	_Title_onMouseOver: function(evt) {
 		var column=this._column;
+		if (!column) {
+			return false;
+		}
+		
 		var dataGrid=column._dataGrid;
-		if (dataGrid.f_getEventLocked(false)) {
+		if (dataGrid.f_getEventLocked(false) || !dataGrid._columnCanBeSorted) {
 			return false;
 		}
 		
@@ -563,10 +567,14 @@ var __static = {
 		}	
 
 		var column=this._column;
+		if (!column) {
+			return false;
+		}
+		
 		var dataGrid=column._dataGrid;
 
-		if (dataGrid.f_isDisabled()) {
-			return f_core.CancelEvent(evt);
+		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted) {
+			return false;
 		}
 		
 		if (dataGrid._columnSelected==column) {
@@ -585,7 +593,12 @@ var __static = {
 	 * @method private static
 	 */
 	_Title_onMouseDown: function(evt) {
+
 		var column=this._column;
+		if (!column) {
+			return false;
+		}
+	
 		var dataGrid=column._dataGrid;
 		if (dataGrid.f_getEventLocked()) {
 			return false;
@@ -601,11 +614,17 @@ var __static = {
 		var sub=f_core.IsPopupButton(evt);
 		if (sub) {
 			var menu=dataGrid.f_getSubMenuById(f_dataGrid._HEAD_MENU_ID);
-			if (menu) {
+			
+				if (menu) {
 				menu.f_open(this, {
 					position: f_menu.MOUSE_POSITION
 					}, dataGrid, evt);
 			}
+			return f_core.CancelEvent(evt);
+		}
+	
+//	alert("CB="+dataGrid._columnCanBeSorted);
+		if (!dataGrid._columnCanBeSorted) {
 			return f_core.CancelEvent(evt);
 		}
 		
@@ -627,7 +646,7 @@ var __static = {
 			evt = window.event;
 		}
 
-		if (dataGrid.f_isDisabled()) {
+		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted) {
 			return f_core.CancelEvent(evt);
 		}
 
@@ -1187,6 +1206,7 @@ var __prototype = {
 
 		this._currentSort=undefined; // HTMLColElement
 //		this._ascendingOrder=undefined; // boolean
+//		this._columnCanBeSorted=undefined; // boolean
 		
 //		this._createFakeTH=undefined; //  boolean
 	
@@ -1478,6 +1498,11 @@ var __prototype = {
 			if (column._visibility) {
 				if (heads) {
 					var head=heads[v];
+
+					head.onmouseover=f_dataGrid._Title_onMouseOver;
+					head.onmouseout=f_dataGrid._Title_onMouseOut;
+					head.onmousedown=f_dataGrid._Title_onMouseDown;
+					head.onmouseup=f_dataGrid._Title_onMouseUp;
 					
 					column._head=head;
 					column._col=cols[v];
@@ -2728,9 +2753,10 @@ var __prototype = {
 			if (cursor) {
 				column._cursor=undefined;
 
+				cursor._column=undefined;
+
 				cursor.onmousedown=null;
 				cursor.onclick=null;
-				cursor._column=undefined;
 				
 				f_core.VerifyProperties(cursor);
 			}
@@ -3370,12 +3396,13 @@ var __prototype = {
 	 */
 	f_setColumnsImages: function(images) {
 		var j=0;
+		var columns=this._columns;
 		for(var i=0;i<arguments.length;) {
 			var col;
 
 			for(;;) {
-				col=this._columns[j++];
-				if (col._visibility==true) {
+				col=columns[j++];
+				if (col._visibility) {
 					break;
 				}
 			}
@@ -3383,9 +3410,9 @@ var __prototype = {
 			col._cellImage=arguments[i++];
 			// col._cellImage à TRUE signie qu'il y a une image par cellule pour cette colonne !
 
-			col._defaultCellImage=arguments[i++];
-			if (col._defaultCellImage) {
-				f_imageRepository.PrepareImage(col._defaultCellImage);				
+			var defaultCellImage=arguments[i++];
+			if (defaultCellImage) {
+				f_imageRepository.PrepareImage(defaultCellImage);				
 			}
 		}
 	},
@@ -3579,6 +3606,7 @@ var __prototype = {
 		var a=0;
 		for(var i=0;i<cols.length && a<arguments.length;i++) {
 			var col=cols[i];
+
 			if (!col._visibility) {
 				continue;
 			}
@@ -3587,7 +3615,7 @@ var __prototype = {
 			if (!sorter) {
 				continue;
 			}
-				
+			
 			this._installSorter(col, sorter);
 		}
 	},
@@ -3629,6 +3657,8 @@ var __prototype = {
 	_installSorter: function(column, method) {
 		f_core.Assert(column._head, "No Title for column '"+column._index+"'.");
 	
+		this._columnCanBeSorted=true;
+		
 		if (typeof(method)!="function") {
 			method=eval(method);
 			
@@ -3639,11 +3669,6 @@ var __prototype = {
 	
 		var th=column._head;
 		
-		th._column=column;
-		th.onmouseover=f_dataGrid._Title_onMouseOver;
-		th.onmouseout=f_dataGrid._Title_onMouseOut;
-		th.onmousedown=f_dataGrid._Title_onMouseDown;
-		th.onmouseup=f_dataGrid._Title_onMouseUp;
 		th.style.cursor="pointer";
 		th.style.cursor="hand";		
 	},

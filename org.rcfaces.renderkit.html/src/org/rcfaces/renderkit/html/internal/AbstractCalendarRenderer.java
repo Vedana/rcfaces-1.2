@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -80,9 +83,9 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
-import org.rcfaces.core.internal.codec.StringAppender;
-import org.rcfaces.core.internal.component.AbstractCalendarComponent;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
@@ -93,8 +96,8 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";

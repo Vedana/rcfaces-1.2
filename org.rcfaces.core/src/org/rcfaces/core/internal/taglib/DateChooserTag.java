@@ -1,14 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.DateChooserComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class DateChooserTag extends AbstractCalendarTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.DateChooserComponent;
+
+public class DateChooserTag extends AbstractCalendarTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(DateChooserTag.class);
@@ -21,8 +23,8 @@ public class DateChooserTag extends AbstractCalendarTag {
 	private String borderType;
 	private String text;
 	private String textPosition;
-	private String imageWidth;
 	private String imageHeight;
+	private String imageWidth;
 	private String valueChangeListeners;
 	private String forVal;
 	private String forValueFormat;
@@ -96,20 +98,20 @@ public class DateChooserTag extends AbstractCalendarTag {
 		this.textPosition = textPosition;
 	}
 
-	public final String getImageWidth() {
-		return imageWidth;
-	}
-
-	public final void setImageWidth(String imageWidth) {
-		this.imageWidth = imageWidth;
-	}
-
 	public final String getImageHeight() {
 		return imageHeight;
 	}
 
 	public final void setImageHeight(String imageHeight) {
 		this.imageHeight = imageHeight;
+	}
+
+	public final String getImageWidth() {
+		return imageWidth;
+	}
+
+	public final void setImageWidth(String imageWidth) {
+		this.imageWidth = imageWidth;
 	}
 
 	public final String getValueChangeListener() {
@@ -165,8 +167,8 @@ public class DateChooserTag extends AbstractCalendarTag {
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  textPosition='"+textPosition+"'");
-			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  forVal='"+forVal+"'");
 			LOG.debug("  forValueFormat='"+forValueFormat+"'");
 			LOG.debug("  homeDate='"+homeDate+"'");
@@ -262,16 +264,6 @@ public class DateChooserTag extends AbstractCalendarTag {
 			}
 		}
 
-		if (imageWidth != null) {
-			if (isValueReference(imageWidth)) {
-				ValueBinding vb = application.createValueBinding(imageWidth);
-
-				component.setImageWidth(vb);
-			} else {
-				component.setImageWidth(getInt(imageWidth));
-			}
-		}
-
 		if (imageHeight != null) {
 			if (isValueReference(imageHeight)) {
 				ValueBinding vb = application.createValueBinding(imageHeight);
@@ -279,6 +271,16 @@ public class DateChooserTag extends AbstractCalendarTag {
 				component.setImageHeight(vb);
 			} else {
 				component.setImageHeight(getInt(imageHeight));
+			}
+		}
+
+		if (imageWidth != null) {
+			if (isValueReference(imageWidth)) {
+				ValueBinding vb = application.createValueBinding(imageWidth);
+
+				component.setImageWidth(vb);
+			} else {
+				component.setImageWidth(getInt(imageWidth));
 			}
 		}
 
@@ -332,8 +334,8 @@ public class DateChooserTag extends AbstractCalendarTag {
 		borderType = null;
 		text = null;
 		textPosition = null;
-		imageWidth = null;
 		imageHeight = null;
+		imageWidth = null;
 		valueChangeListeners = null;
 		forVal = null;
 		forValueFormat = null;

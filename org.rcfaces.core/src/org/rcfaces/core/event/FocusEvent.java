@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -27,32 +30,34 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.FacesListener;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class FocusEvent extends CameliaEvent {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	public FocusEvent(UIComponent component) {
-		super(component);
-	}
+    private static final long serialVersionUID = -1451725996824836882L;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
-	 */
-	public boolean isAppropriateListener(FacesListener listener) {
-		return (listener instanceof IFocusListener);
-	}
+    public FocusEvent(UIComponent component) {
+        super(component);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
-	 */
-	public void processListener(FacesListener listener) {
-		((IFocusListener) listener).processFocus(this);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
+     */
+    public boolean isAppropriateListener(FacesListener listener) {
+        return (listener instanceof IFocusListener);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
+     */
+    public void processListener(FacesListener listener) {
+        ((IFocusListener) listener).processFocus(this);
+    }
 
 }

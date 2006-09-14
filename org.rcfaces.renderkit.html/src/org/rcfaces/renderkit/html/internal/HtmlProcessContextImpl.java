@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/05 08:57:14  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -31,18 +34,19 @@ import java.util.Map;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class HtmlProcessContextImpl extends AbstractProcessContext implements
         IHtmlProcessContext {
@@ -68,8 +72,10 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private boolean profilerMode;
 
-    public HtmlProcessContextImpl(ExternalContext externalContext) {
-        super(externalContext);
+    public HtmlProcessContextImpl(FacesContext facesContext) {
+        super(facesContext);
+
+        ExternalContext externalContext = facesContext.getExternalContext();
 
         Map applicationMap = externalContext.getInitParameterMap();
 
@@ -186,15 +192,15 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     }
 
     public static IHtmlProcessContext getHtmlProcessContext(
-            ExternalContext externalContext) {
+            FacesContext facesContext) {
 
-        IHtmlProcessContext htmlProcessContext = (IHtmlProcessContext) getProcessContext(externalContext);
+        IHtmlProcessContext htmlProcessContext = (IHtmlProcessContext) getProcessContext(facesContext);
         if (htmlProcessContext != null) {
             return htmlProcessContext;
         }
 
-        htmlProcessContext = new HtmlProcessContextImpl(externalContext);
-        setExternalContext(htmlProcessContext);
+        htmlProcessContext = new HtmlProcessContextImpl(facesContext);
+        setProcessContext(htmlProcessContext);
 
         return htmlProcessContext;
     }

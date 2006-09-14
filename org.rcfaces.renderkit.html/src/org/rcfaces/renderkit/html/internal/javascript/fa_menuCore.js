@@ -6,8 +6,8 @@
  * Aspect Menu
  *
  * @aspect hidden fa_menuCore extends fa_groupName, fa_items
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static = {
@@ -1414,7 +1414,13 @@ var __prototype = {
 			if (hoverImageURL) {
 				imageURL=hoverImageURL;
 			}
-		}
+
+		} else if (item._checked) {
+			var selectedImageURL=item._selectedImageURL;
+			if (selectedImageURL) {
+				imageURL=selectedImageURL;
+			}
+		} 
 		
 		if (item.className!=className) {
 			item.className=className;	

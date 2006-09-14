@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -28,7 +31,7 @@ package org.rcfaces.core.component.capability;
  * Sp�cifie le type d'ordre g�r� par l'�l�ment.
  * 
  * @author Joel Merlin, Olivier Oeuillot
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
 public interface IOrderCapability {
 

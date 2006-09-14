@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:13  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -110,7 +113,7 @@ import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
@@ -120,8 +123,8 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class DataGridService extends AbstractHtmlService {
     private static final String REVISION = "$Revision$";
@@ -139,7 +142,7 @@ public class DataGridService extends AbstractHtmlService {
     public static DataGridService getInstance(FacesContext facesContext) {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
-                facesContext.getExternalContext()).getServicesRegistry();
+                facesContext).getServicesRegistry();
 
         return (DataGridService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
@@ -240,7 +243,7 @@ public class DataGridService extends AbstractHtmlService {
                 printWriter = response.getWriter();
 
             } else {
-                ParametredHttpServlet
+                ConfiguredHttpServlet
                         .setGzipContentEncoding((HttpServletResponse) response);
 
                 OutputStream outputStream = response.getOutputStream();
@@ -292,12 +295,8 @@ public class DataGridService extends AbstractHtmlService {
                     "GetElementById").writeString(componentId).writeln(
                     ", document);");
 
-            jsWriter.write("with (").write(varId).writeln(") {");
-
-            jsWriter.writeCall(null, "_cancelServerRequest").writeInt(rowIndex)
+            jsWriter.writeMethodCall("_cancelServerRequest").writeInt(rowIndex)
                     .write(");");
-
-            jsWriter.writeln("}");
 
         } catch (IOException ex) {
             throw new FacesException("Can not write cancel response.", ex);
@@ -343,9 +342,7 @@ public class DataGridService extends AbstractHtmlService {
                 "GetElementById").writeString(componentId).writeln(
                 ", document);");
 
-        jsWriter.write("with(").write(varId).writeln(") {");
-
-        jsWriter.writeCall(null, "_startNewPage").writeInt(rowIndex).writeln(
+        jsWriter.writeMethodCall("_startNewPage").writeInt(rowIndex).writeln(
                 ");");
 
         String rowVarId = jsWriter.getJavaScriptRenderContext()
@@ -354,9 +351,7 @@ public class DataGridService extends AbstractHtmlService {
 
         dgr.encodeJsTransactionalRows(jsWriter, tableContext, false);
 
-        jsWriter.writeCall(null, "_updateNewPage").writeln(");");
-
-        jsWriter.writeln("}");
+        jsWriter.writeMethodCall("_updateNewPage").writeln(");");
 
         if (LOG.isTraceEnabled()) {
             pw.flush();

@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
@@ -11,8 +14,6 @@
  */
 package org.rcfaces.core.internal.images;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,31 +21,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.text.ParseException;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
+import org.rcfaces.core.internal.lang.ByteBufferInputStream;
+import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.util.IncludeHttpServletResponse;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
@@ -64,8 +58,8 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static class IncludeImageLoader implements IImageLoader {
         private static final String REVISION = "$Revision$";
@@ -145,7 +139,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
             }
 
             if (bufferArray != null) {
-                return new ByteArrayInputStream(bufferArray);
+                return new ByteBufferInputStream(bufferArray);
             }
 
             if (bufferFile != null) {
@@ -198,7 +192,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                     }
                 }
                 if (output == null) {
-                    output = new ByteArrayOutputStream(BUFFER_DEFAULT_SIZE);
+                    output = new ByteBufferOutputStream(BUFFER_DEFAULT_SIZE);
 
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Use memory byte array (size="
@@ -208,28 +202,10 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                     }
                 }
 
-                String charset = servletResponse.getCharacterEncoding();
-                if (charset == null) {
-                    charset = DEFAULT_CHARSET;
-                }
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Use charset '" + charset
-                            + "' for writer of image '" + uri + "'.");
-                }
-
-                Writer writer = null;
-                try {
-                    writer = new OutputStreamWriter(output, charset);
-
-                } catch (UnsupportedEncodingException e) {
-                    LOG.error("Unsupported encoding '" + charset + "'.", e);
-                }
-
                 HttpServletRequestWrapper request = new HttpServletRequestWrapper(
                         servletRequest);
-                IncludeHttpServletResponse response = new IncludeHttpServletResponse(
-                        servletResponse, output, writer);
+                IncludeHttpServletResponse response = IncludeHttpServletResponse
+                        .create(servletResponse, output, DEFAULT_CHARSET);
 
                 String requestURI = "/" + uri;
                 if (LOG.isDebugEnabled()) {
@@ -253,15 +229,6 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                     LOG.error("Failed to call request " + uri + ".", ex);
                     errored = true;
                     return;
-                }
-
-                if (writer != null) {
-                    try {
-                        writer.close();
-
-                    } catch (IOException ex) {
-                        LOG.error("Can not close writer !", ex);
-                    }
                 }
 
                 try {
@@ -301,7 +268,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                     bufferFile.deleteOnExit();
 
                 } else {
-                    bufferArray = ((ByteArrayOutputStream) output)
+                    bufferArray = ((ByteBufferOutputStream) output)
                             .toByteArray();
                 }
 
@@ -332,192 +299,4 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
         }
     }
 
-    /**
-     * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
-     */
-    private static class IncludeHttpServletResponse extends
-            HttpServletResponseWrapper {
-        private static final String REVISION = "$Revision$";
-
-        private final ServletOutputStream servletOutputStream;
-
-        private final PrintWriter writer;
-
-        private int status = HttpServletResponse.SC_OK;
-
-        private int contentLength;
-
-        private String contentType;
-
-        private long lastModified;
-
-        public IncludeHttpServletResponse(HttpServletResponse servletResponse,
-                final OutputStream outputStream, Writer writer) {
-            super(servletResponse);
-
-            this.writer = (writer != null) ? new PrintWriter(writer) : null;
-
-            servletOutputStream = new ServletOutputStream() {
-                private static final String REVISION = "$Revision$";
-
-                public void write(int b) throws IOException {
-                    outputStream.write(b);
-                }
-
-                public void flush() throws IOException {
-                    outputStream.flush();
-                }
-
-                public void write(byte[] b, int off, int len)
-                        throws IOException {
-                    outputStream.write(b, off, len);
-                }
-
-                public void write(byte[] b) throws IOException {
-                    outputStream.write(b);
-                }
-
-            };
-        }
-
-        public int getContentLength() {
-            return contentLength;
-        }
-
-        public long getLastModified() {
-            return lastModified;
-        }
-
-        public String getContentType() {
-            return contentType;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public ServletOutputStream getOutputStream() {
-            return servletOutputStream;
-        }
-
-        public PrintWriter getWriter() throws IOException {
-            if (writer == null) {
-                throw new IOException("No writer supported !");
-            }
-            return writer;
-        }
-
-        public void addCookie(Cookie arg0) {
-        }
-
-        public void addDateHeader(String name, long date) {
-            setDateHeader(name, date);
-        }
-
-        public void addHeader(String arg0, String arg1) {
-            setHeader(arg0, arg1);
-        }
-
-        public void addIntHeader(String arg0, int arg1) {
-            setIntHeader(arg0, arg1);
-        }
-
-        public void sendRedirect(String arg0) {
-        }
-
-        public void setDateHeader(String name, long date) {
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Inclusion set date header '" + name + "' to '"
-                        + date + "'.");
-            }
-
-            if (this.lastModified == 0
-                    && ParametredHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
-
-                this.lastModified = date;
-            }
-        }
-
-        public void setHeader(String name, String value) {
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Inclusion set header '" + name + "' to '" + value
-                        + "'.");
-            }
-
-            if (lastModified == 0
-                    && ParametredHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
-
-                try {
-                    Date d = ParametredHttpServlet.parseHttpDate(value);
-                    LOG.trace("Inclusion set Last-Modified property to " + d);
-
-                    if (d != null) {
-                        lastModified = d.getTime();
-                    }
-
-                } catch (ParseException ex) {
-                    LOG.error("Can not parse http date '" + value + "'.", ex);
-                }
-            }
-        }
-
-        public void setIntHeader(String arg0, int arg1) {
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Inclusion set int header '" + arg0 + "' to '" + arg1
-                        + "'.");
-            }
-        }
-
-        public void flushBuffer() {
-        }
-
-        public void reset() {
-        }
-
-        public void resetBuffer() {
-        }
-
-        public void setBufferSize(int arg0) {
-        }
-
-        public void setCharacterEncoding(String arg0) {
-        }
-
-        public void setContentLength(int contentLength) {
-            this.contentLength = contentLength;
-        }
-
-        public void setContentType(String contentType) {
-            this.contentType = contentType;
-        }
-
-        public void setLocale(Locale arg0) {
-        }
-
-        public void sendError(int status) throws IOException {
-            super.sendError(status);
-
-            this.status = status;
-        }
-
-        public void setStatus(int status) {
-            super.setStatus(status);
-
-            this.status = status;
-        }
-
-        public void sendError(int status, String arg1) throws IOException {
-            super.sendError(status, arg1);
-
-            this.status = status;
-        }
-
-        public void setStatus(int status, String arg1) {
-            super.setStatus(status, arg1);
-
-            this.status = status;
-        }
-    }
 }

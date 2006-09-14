@@ -15,17 +15,18 @@ import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class BasicSelectItem extends SelectItem implements
         IAccessKeySelectItem, IAcceleratorKeySelectItem, IGroupSelectItem,
         ICheckSelectItem, IStyledSelectItem, IVisibleSelectItem,
         IServerDataSelectItem, IClientDataSelectItem, IStyleClassItem {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = 6953469102413843158L;
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
@@ -127,7 +128,7 @@ public class BasicSelectItem extends SelectItem implements
 
             if (clientDataCapability.getClientDataCount() > 0) {
                 Map map = clientDataCapability.getClientDataMap();
-                
+
                 getClientDataMap().putAll(map);
             }
         }

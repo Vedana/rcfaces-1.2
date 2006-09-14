@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -28,18 +31,18 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractComponentRenderContext implements
         IComponentRenderContext {
     private static final String REVISION = "$Revision$";
 
-    private final FacesContext facesContext;
-
     private final UIComponent component;
 
     private final String componentId;
+
+    private FacesContext facesContext;
 
     private Map attributes;
 
@@ -56,6 +59,9 @@ public abstract class AbstractComponentRenderContext implements
      * @see org.rcfaces.core.internal.renderkit.IComponentRenderContext#getFacesContext()
      */
     public final FacesContext getFacesContext() {
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
         return facesContext;
     }
 

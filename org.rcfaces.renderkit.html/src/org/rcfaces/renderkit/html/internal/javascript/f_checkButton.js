@@ -6,8 +6,8 @@
  * class f_checkButton
  *
  * @class public f_checkButton extends f_button
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __prototype = {
 

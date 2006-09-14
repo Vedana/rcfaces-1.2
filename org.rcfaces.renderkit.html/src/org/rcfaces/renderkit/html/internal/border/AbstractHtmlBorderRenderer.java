@@ -10,8 +10,8 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         implements IHtmlBorderRenderer {

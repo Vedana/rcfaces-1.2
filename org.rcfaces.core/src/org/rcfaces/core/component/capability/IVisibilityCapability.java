@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/08/29 18:12:08  oeuillot
- * Refonte du systeme de packaging et de génération
+ * Refonte du systeme de packaging et de gï¿½nï¿½ration
  *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
@@ -37,8 +40,8 @@ package org.rcfaces.core.component.capability;
  * Un Ã©lement qui implemente l'interface VisibilityCapability peut d'etre
  * visible ou invisible.
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public interface IVisibilityCapability {
 

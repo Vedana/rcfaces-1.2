@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -63,11 +66,10 @@ import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.component.IConvertValueHolder;
 import org.rcfaces.core.internal.util.Convertor;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ValuesTools {
     private static final String REVISION = "$Revision$";
@@ -214,8 +216,7 @@ public class ValuesTools {
     public static Object convertStringToValue(FacesContext context,
             UIComponent component, Object submittedValue) {
 
-        if ((submittedValue instanceof String) == false
-                || submittedValue == null) {
+        if ((submittedValue instanceof String) == false) {
             return submittedValue;
         }
 
@@ -236,7 +237,7 @@ public class ValuesTools {
             UIComponent component, Converter converter, Object value,
             String attributeName) {
 
-        if ((value instanceof String) == false || value == null) {
+        if ((value instanceof String) == false) {
             return value;
         }
 

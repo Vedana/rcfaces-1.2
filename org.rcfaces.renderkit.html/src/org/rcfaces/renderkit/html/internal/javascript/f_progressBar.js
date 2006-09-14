@@ -6,8 +6,8 @@
  * Classe ProgressBar
  *
  * @class public f_progressBar extends f_component
- * @author Olivier Oeuillot 
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$) 
+ * @version $Revision$ $Date$
  */
 
 var __prototype = {

@@ -1,4 +1,4 @@
-package org.rcfaces.core.internal.component;
+package org.rcfaces.core.component;
 
 import java.util.Collections;
 import java.util.Map;
@@ -19,8 +19,12 @@ import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaOutputComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.manager.IServerDataManager;
@@ -28,14 +32,15 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.internal.tools.VisibilityTools;
 
-public abstract class AbstractMessageComponent extends CameliaMessageComponent implements 
+public abstract class AbstractOutputComponent extends CameliaOutputComponent implements 
 	ISizeCapability,
 	IVisibilityCapability,
 	IMouseEventCapability,
 	IHelpCapability,
 	IClientDataCapability,
-	IPositionCapability,
+	IValueLockedCapability,
 	ILookAndFeelCapability,
+	IPositionCapability,
 	IMarginCapability,
 	IForegroundBackgroundColorCapability,
 	IStyleClassCapability,
@@ -198,22 +203,6 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
-	public final java.lang.Boolean getVisible() {
-		return getVisible(null);
-	}
-
-	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
-	}
-
-	public final void setVisible(java.lang.Boolean visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	public final void setVisible(ValueBinding visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
 	public final int getHiddenMode() {
 		return getHiddenMode(null);
 	}
@@ -228,6 +217,22 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	public final void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public final java.lang.Boolean getVisible() {
+		return getVisible(null);
+	}
+
+	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
+	}
+
+	public final void setVisible(java.lang.Boolean visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final void setVisible(ValueBinding visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
@@ -356,36 +361,20 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		
 	}
 
-	public final java.lang.String getY() {
-		return getY(null);
+	public final boolean isValueLocked() {
+		return isValueLocked(null);
 	}
 
-	public final java.lang.String getY(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.Y, facesContext);
+	public final boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VALUE_LOCKED, false, facesContext);
 	}
 
-	public final void setY(java.lang.String y) {
-		engine.setProperty(Properties.Y, y);
+	public final void setValueLocked(boolean valueLocked) {
+		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 
-	public final void setY(ValueBinding y) {
-		engine.setProperty(Properties.Y, y);
-	}
-
-	public final java.lang.String getX() {
-		return getX(null);
-	}
-
-	public final java.lang.String getX(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.X, facesContext);
-	}
-
-	public final void setX(java.lang.String x) {
-		engine.setProperty(Properties.X, x);
-	}
-
-	public final void setX(ValueBinding x) {
-		engine.setProperty(Properties.X, x);
+	public final void setValueLocked(ValueBinding valueLocked) {
+		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 
 	public final java.lang.String getLookId() {
@@ -404,52 +393,36 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
-	public final java.lang.String getMarginRight() {
-		return getMarginRight(null);
+	public final java.lang.String getX() {
+		return getX(null);
 	}
 
-	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
+	public final java.lang.String getX(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.X, facesContext);
 	}
 
-	public final void setMarginRight(java.lang.String marginRight) {
-		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	public final void setX(java.lang.String x) {
+		engine.setProperty(Properties.X, x);
 	}
 
-	public final void setMarginRight(ValueBinding marginRight) {
-		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	public final void setX(ValueBinding x) {
+		engine.setProperty(Properties.X, x);
 	}
 
-	public final java.lang.String getMarginLeft() {
-		return getMarginLeft(null);
+	public final java.lang.String getY() {
+		return getY(null);
 	}
 
-	public final java.lang.String getMarginLeft(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MARGIN_LEFT, facesContext);
+	public final java.lang.String getY(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.Y, facesContext);
 	}
 
-	public final void setMarginLeft(java.lang.String marginLeft) {
-		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
+	public final void setY(java.lang.String y) {
+		engine.setProperty(Properties.Y, y);
 	}
 
-	public final void setMarginLeft(ValueBinding marginLeft) {
-		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
-	}
-
-	public final java.lang.String getMarginTop() {
-		return getMarginTop(null);
-	}
-
-	public final java.lang.String getMarginTop(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MARGIN_TOP, facesContext);
-	}
-
-	public final void setMarginTop(java.lang.String marginTop) {
-		engine.setProperty(Properties.MARGIN_TOP, marginTop);
-	}
-
-	public final void setMarginTop(ValueBinding marginTop) {
-		engine.setProperty(Properties.MARGIN_TOP, marginTop);
+	public final void setY(ValueBinding y) {
+		engine.setProperty(Properties.Y, y);
 	}
 
 	public final java.lang.String getMarginBottom() {
@@ -468,20 +441,52 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
 
-	public final java.lang.String getForegroundColor() {
-		return getForegroundColor(null);
+	public final java.lang.String getMarginLeft() {
+		return getMarginLeft(null);
 	}
 
-	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
+	public final java.lang.String getMarginLeft(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MARGIN_LEFT, facesContext);
 	}
 
-	public final void setForegroundColor(java.lang.String foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	public final void setMarginLeft(java.lang.String marginLeft) {
+		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
 
-	public final void setForegroundColor(ValueBinding foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	public final void setMarginLeft(ValueBinding marginLeft) {
+		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
+	}
+
+	public final java.lang.String getMarginRight() {
+		return getMarginRight(null);
+	}
+
+	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
+	}
+
+	public final void setMarginRight(java.lang.String marginRight) {
+		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	}
+
+	public final void setMarginRight(ValueBinding marginRight) {
+		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	}
+
+	public final java.lang.String getMarginTop() {
+		return getMarginTop(null);
+	}
+
+	public final java.lang.String getMarginTop(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MARGIN_TOP, facesContext);
+	}
+
+	public final void setMarginTop(java.lang.String marginTop) {
+		engine.setProperty(Properties.MARGIN_TOP, marginTop);
+	}
+
+	public final void setMarginTop(ValueBinding marginTop) {
+		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
 	public final java.lang.String getBackgroundColor() {
@@ -498,6 +503,22 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	public final void setBackgroundColor(ValueBinding backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
+	}
+
+	public final java.lang.String getForegroundColor() {
+		return getForegroundColor(null);
+	}
+
+	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
+	}
+
+	public final void setForegroundColor(java.lang.String foregroundColor) {
+		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	}
+
+	public final void setForegroundColor(ValueBinding foregroundColor) {
+		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
 	public final java.lang.String getStyleClass() {

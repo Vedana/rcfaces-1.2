@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:14  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
@@ -41,6 +44,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.Tag;
 
 import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.provider.IURLRewritingProvider;
@@ -50,11 +54,13 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class CssStyleTag extends BodyTagSupport {
+public class CssStyleTag extends BodyTagSupport implements Tag {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -7885621747032242759L;
 
     private String src;
 
@@ -82,7 +88,7 @@ public class CssStyleTag extends BodyTagSupport {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         htmlRenderContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(facesContext.getExternalContext());
+                .getHtmlProcessContext(facesContext);
 
         boolean useMetaContentStyleType = htmlRenderContext
                 .useMetaContentStyleType()

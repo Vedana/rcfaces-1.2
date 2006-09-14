@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
@@ -25,27 +28,28 @@ import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractProcessContext implements IProcessContext {
 
     private static final String REVISION = "$Revision$";
 
-    private static final String EXTERNAL_CONTEXT_PROPERTY = "org.rcfaces.renderkit.core.EXTERNAL_CONTEXT";
-
     private static final Log LOG = LogFactory
             .getLog(AbstractProcessContext.class);
 
-    protected final ExternalContext externalContext;
+    private static final String EXTERNAL_CONTEXT_PROPERTY = "org.rcfaces.renderkit.core.EXTERNAL_CONTEXT";
+
+    protected final FacesContext facesContext;
 
     private final String contextPath;
 
@@ -55,8 +59,10 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     private Locale userLocale;
 
-    protected AbstractProcessContext(ExternalContext externalContext) {
-        this.externalContext = externalContext;
+    protected AbstractProcessContext(FacesContext facesContext) {
+        this.facesContext = facesContext;
+
+        ExternalContext externalContext = facesContext.getExternalContext();
 
         contextPath = externalContext.getRequestContextPath();
         String servletPath = externalContext.getRequestServletPath();
@@ -68,8 +74,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
         this.servletPath = servletPath;
     }
 
-    public final ExternalContext getExternalContext() {
-        return externalContext;
+    public final FacesContext getFacesContext() {
+        return facesContext;
     }
 
     public boolean getDebugMode() {
@@ -102,7 +108,12 @@ public abstract class AbstractProcessContext implements IProcessContext {
         if (uri == null || uri.length() < 1) {
             // Retourne le context path
 
-            String p = contextPath + servletPath;
+            String p;
+            if (containsContextPath) {
+                p = contextPath + servletPath;
+            } else {
+                p = servletPath;
+            }
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Returns path='" + p + "' [uri=null]  ('"
                         + contextPath + "''" + servletPath + "'.)");
@@ -113,7 +124,18 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         if (uri.charAt(0) == '/') {
             // URL absolue
-            String p = normalizePath(contextPath + uri);
+            String p;
+            if (containsContextPath) {
+                p = contextPath + uri;
+
+            } else if (uri.startsWith(this.contextPath)) {
+                p = uri.substring(this.contextPath.length());
+
+            } else {
+                p = uri;
+            }
+
+            p = normalizePath(p);
             if (LOG.isDebugEnabled()) {
                 LOG
                         .debug("Returns path='" + p + "' [uri=absolute]  ('"
@@ -290,8 +312,9 @@ public abstract class AbstractProcessContext implements IProcessContext {
         return sa.toString();
     }
 
-    protected static void setExternalContext(IProcessContext externalContext) {
-        Map requestMap = externalContext.getExternalContext().getRequestMap();
+    protected static void setProcessContext(IProcessContext externalContext) {
+        Map requestMap = externalContext.getFacesContext().getExternalContext()
+                .getRequestMap();
         IProcessContext old = (IProcessContext) requestMap.put(
                 EXTERNAL_CONTEXT_PROPERTY, externalContext);
         if (old != null) {
@@ -300,8 +323,9 @@ public abstract class AbstractProcessContext implements IProcessContext {
         }
     }
 
-    public static IProcessContext getProcessContext(
-            ExternalContext externalContext) {
+    public static IProcessContext getProcessContext(FacesContext facesContext) {
+
+        ExternalContext externalContext = facesContext.getExternalContext();
 
         Map requestMap = externalContext.getRequestMap();
         return (IProcessContext) requestMap.get(EXTERNAL_CONTEXT_PROPERTY);

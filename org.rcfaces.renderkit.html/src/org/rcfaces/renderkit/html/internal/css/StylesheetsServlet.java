@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:13  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -92,7 +95,6 @@
 
 package org.rcfaces.renderkit.html.internal.css;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -112,33 +114,33 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.codec.SourceFilter;
-import org.rcfaces.core.internal.util.CameliaVersion;
+import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 import org.rcfaces.core.internal.webapp.URIParameters;
+import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlModulesServlet;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class StylesheetsServlet extends HtmlModulesServlet {
     private static final String REVISION = "$Revision$";
 
+    private static final long serialVersionUID = 708578720264413327L;
+
     private static final Log LOG = LogFactory.getLog(StylesheetsServlet.class);
 
-    private static final boolean BUILD_ID_VERSION_SUPPORT = true;
-
-    private static final String DEFAULT_STYLESHEET_URI = "/rcfaces";
+    // private static final String DEFAULT_STYLESHEET_URI = "/rcfaces";
 
     private static final String BASE_DIRECTORY = StylesheetsServlet.class
             .getPackage().getName().replace('.', '/') + '/';
 
-    static final String CAMELIA_CSS = "rcfaces.css";
+    static final String CAMELIA_CSS_URL = "rcfaces.css";
 
     private final int MAX_404_RESPONSE = 64;
 
@@ -174,8 +176,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         // useFilterSkipSpacesExtensions.add("css");
     }
 
-    private static final String DEFAULT_CHARSET = "UTF-8";
-
     private static final String REPOSITORY_VERSION_SUPPORT_PARAMETER = Constants
             .getPackagePrefix()
             + ".REPOSITORY_VERSION_SUPPORT";
@@ -183,6 +183,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     private static final String NO_CACHE_PARAMETER = Constants
             .getPackagePrefix()
             + ".NO_CACHE";
+
+    private static final int WORK_BUFFER_SIZE = 32000;
+
+    private static final String CHARSET_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".CSS_CHARSET";
 
     private final Map bufferedResponse = new HashMap();
 
@@ -192,8 +198,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private int count200Responses;
 
-    private final byte workBytes[] = new byte[32000];
-
     private boolean noCache = false;
 
     private StyleSheetRepository repository;
@@ -201,6 +205,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     private Object useMetaContentStyleType;
 
     private String repositoryVersion;
+
+    private String charset;
 
     public StylesheetsServlet() {
     }
@@ -218,7 +224,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         if (styleSheetURI == null) {
             styleSheetURI = ServletTools.computeResourceURI(config
-                    .getServletContext(), DEFAULT_STYLESHEET_URI, getClass());
+                    .getServletContext(), null, getClass());
         }
 
         super.init(config);
@@ -228,13 +234,19 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             noCache = true;
         }
 
-        if (noCache == false) {
-            StyleSheetRepository r = getRepository();
-            r.getRawBuffer();
+        charset = getParameter(CHARSET_PARAMETER);
+        if (charset != null) {
+            LOG.info("Charset setted to \"" + charset + "\"  for sevlet '"
+                    + getServletName() + "'.");
+        } else {
+            charset = Constants.CSS_DEFAULT_CHARSET;
+
+            LOG.info("Charset setted to DEFAULT value: \"" + charset
+                    + "\"  for sevlet '" + getServletName() + "'");
         }
 
         if (getServletContext().getAttribute(CSS_CONFIG_PROPERTY) == null) {
-            String fileName = CAMELIA_CSS;
+            String fileName = CAMELIA_CSS_URL;
             String version = getRepository().getVersion();
             if (version != null) {
                 URIParameters up = new URIParameters(fileName);
@@ -246,7 +258,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
             String uri = styleSheetURI;
 
-            if (BUILD_ID_VERSION_SUPPORT) {
+            if (Constants.FRAMEWORK_VERSIONED_URL_SUPPORT) {
                 if (version != null) {
                     uri += "/" + version;
                 }
@@ -256,23 +268,26 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                     new CssConfig(fileName, uri));
         }
 
-        getRepository();
+        StyleSheetRepository r = getRepository();
+        if (noCache == false) {
+            r.getRawBuffer();
+        }
+    }
+
+    protected final String getCharset() {
+        return charset;
     }
 
     public static ICssConfig getConfig(IHtmlProcessContext htmlExternalContext) {
         ICssConfig cssConfig = (ICssConfig) htmlExternalContext
-                .getExternalContext().getApplicationMap().get(
-                        CSS_CONFIG_PROPERTY);
+                .getFacesContext().getExternalContext().getApplicationMap()
+                .get(CSS_CONFIG_PROPERTY);
 
         if (cssConfig == null) {
             throw new FacesException("No initialized stylesheet config !");
         }
 
         return cssConfig;
-    }
-
-    protected String getDefaultCharset() {
-        return DEFAULT_CHARSET;
     }
 
     private StyleSheetRepository getRepository() throws ServletException {
@@ -299,7 +314,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         String repositoryVersionSupport = getParameter(REPOSITORY_VERSION_SUPPORT_PARAMETER);
         if ("false".equalsIgnoreCase(repositoryVersionSupport) == false) {
-            String cameliaVersion = CameliaVersion.getVersion();
+            String cameliaVersion = Constants.getVersion();
 
             if (cameliaVersion == null) {
                 throw new FacesException(
@@ -343,7 +358,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         if (repositoryVersion != null) {
             String version = null;
-            if (BUILD_ID_VERSION_SUPPORT) {
+            if (Constants.FRAMEWORK_VERSIONED_URL_SUPPORT) {
                 idx = url.indexOf('/');
                 if (idx < 0) {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -399,18 +414,18 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                         return;
                     }
 
-                    if (CAMELIA_CSS.equals(url)) {
+                    if (CAMELIA_CSS_URL.equals(url)) {
                         res.send(request, response);
                         return;
                     }
                 }
 
-                if (CAMELIA_CSS.equals(url)) {
+                if (CAMELIA_CSS_URL.equals(url)) {
                     res = new StyleSheetRepositoryResponse(CSS_MIME_TYPE,
                             getRepository());
 
                     if (noCache == false) {
-                        bufferedResponse.put(CAMELIA_CSS, res);
+                        bufferedResponse.put(CAMELIA_CSS_URL, res);
                     }
 
                     res.send(request, response);
@@ -432,6 +447,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             long lastModified = urlConnection.getLastModified();
+            int size = urlConnection.getContentLength();
 
             InputStream in = urlConnection.getInputStream();
             if (in == null) {
@@ -440,7 +456,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             try {
-                record200(url, in, lastModified, request, response);
+                record200(url, in, size, lastModified, request, response);
                 return;
 
             } finally {
@@ -453,9 +469,9 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
     }
 
-    private void record200(String url, InputStream in, long lastModified,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    private void record200(String url, InputStream in, int size,
+            long lastModified, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
 
         int ex = url.lastIndexOf('.');
         int ex2 = url.lastIndexOf('/');
@@ -470,48 +486,54 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             throw new ServletException("Unknown extension '" + extension + "'");
         }
 
-        int idx = 0;
+        if (size < 1) {
+            size = WORK_BUFFER_SIZE;
+        }
 
-        for (; idx < workBytes.length;) {
-            int ret = in.read(workBytes, idx, workBytes.length - idx);
+        ByteBufferOutputStream bout = new ByteBufferOutputStream(size);
+
+        byte w[] = new byte[8000];
+        for (;;) {
+            int ret = in.read(w);
 
             if (ret <= 0) {
                 break;
             }
 
-            idx += ret;
-        }
-        if (idx >= workBytes.length) {
-            throw new ServletException("Alert content of url '" + url
-                    + "' is too big. (max='" + workBytes.length + "' bytes)");
+            bout.write(w, 0, ret);
         }
 
-        byte w[] = workBytes;
+        byte workBytes[] = bout.toByteArray();
+
+        if (charset == null) {
+            charset = null;
+        }
+
         if (useFilterExtensions.contains(extension)) {
-            String filtered = SourceFilter.filter(new String(workBytes, 0, idx,
-                    getCharset()));
-            w = filtered.getBytes(getCharset());
-            idx = w.length;
+            String filtered = SourceFilter
+                    .filter(new String(workBytes, charset));
+            workBytes = filtered.getBytes(charset);
 
         } else if (useFilterSkipSpacesExtensions.contains(extension)) {
             String filtered = SourceFilter.filterSkipSpaces(new String(
-                    workBytes, 0, idx, getCharset()));
-            w = filtered.getBytes(getCharset());
-            idx = w.length;
+                    workBytes, charset));
+            workBytes = filtered.getBytes(charset);
         }
 
         byte bufferGZIP[] = null;
         if (hasGZipSupport()) {
             if (useGZIPExtensions.contains(extension)) {
                 try {
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream(idx);
-                    GZIPOutputStream gzos = new GZIPOutputStream(bos, idx);
-                    gzos.write(w, 0, idx);
+                    ByteBufferOutputStream bos = new ByteBufferOutputStream(
+                            workBytes.length);
+                    GZIPOutputStream gzos = new GZIPOutputStream(bos,
+                            workBytes.length);
+                    gzos.write(workBytes);
                     gzos.close();
 
-                    bufferGZIP = bos.toByteArray();
-
                     bos.close();
+
+                    bufferGZIP = bos.toByteArray();
 
                 } catch (IOException ex3) {
                     throw new ServletException(
@@ -521,7 +543,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
         }
 
-        Response res = new BytesResponse(w, idx, mimeType, bufferGZIP,
+        Response res = new BytesResponse(workBytes, mimeType, bufferGZIP,
                 lastModified);
         synchronized (bufferedResponse) {
             bufferedResponse.put(url, res);
@@ -569,6 +591,11 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private class BytesResponse extends AbstractResponse {
 
         private static final String REVISION = "$Revision$";
@@ -583,16 +610,14 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         private final String hash;
 
-        public BytesResponse(byte[] buffer, int idx, String mimeType,
-                byte bufferGZIP[], long lastModified) {
+        public BytesResponse(byte[] buffer, String mimeType, byte bufferGZIP[],
+                long lastModified) {
             super(mimeType);
 
-            this.buffer = new byte[idx];
+            this.buffer = buffer;
             this.bufferGZIP = bufferGZIP;
 
             this.lastModified = lastModified;
-
-            System.arraycopy(buffer, 0, this.buffer, 0, idx);
 
             if (hasEtagSupport()) {
                 etag = computeETag(buffer);
@@ -647,8 +672,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private abstract class AbstractResponse implements Response {
 
@@ -713,7 +738,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Set no cache for response.");
                 }
-                ParametredHttpServlet.setNoCache(response);
+                ConfiguredHttpServlet.setNoCache(response);
 
             } else {
                 ExpirationDate expirationDate = getDefaultExpirationDate();
@@ -751,8 +776,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private class StyleSheetRepositoryResponse extends AbstractResponse {
         private static final String REVISION = "$Revision$";
@@ -809,8 +834,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected static final class CssConfig implements ICssConfig {
         private static final String REVISION = "$Revision$";

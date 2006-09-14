@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -109,11 +112,10 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.border.AbstractHtmlBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractImageButtonFamillyDecorator extends
         AbstractComponentDecorator {
@@ -186,8 +188,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 borderType = imageButtonFamilly.getBorderType(facesContext);
 
                 IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
-                        .getInstance(facesContext.getExternalContext())
-                        .getBorderRenderersRegistry();
+                        .getInstance(facesContext).getBorderRenderersRegistry();
 
                 UIComponent cmp = (UIComponent) imageButtonFamilly;
 
@@ -204,8 +205,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             if (htmlBorderWriter == null && (text != null)) {
                 IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
-                        .getInstance(facesContext.getExternalContext())
-                        .getBorderRenderersRegistry();
+                        .getInstance(facesContext).getBorderRenderersRegistry();
 
                 htmlBorderWriter = (IHtmlBorderRenderer) borderRendererRegistry
                         .getBorderRenderer(facesContext,
@@ -724,7 +724,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     if (disabledImageURL != null) {
                         disabledImageURL = writer
                                 .allocateString(disabledImageURL);
-                        writer.writeCall(null, "f_setDisabledImageURL").write(
+                        writer.writeMethodCall("f_setDisabledImageURL").write(
                                 disabledImageURL).writeln(");");
                     }
                 }
@@ -750,7 +750,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     if (selectedImageURL != null) {
                         selectedImageURL = writer
                                 .allocateString(selectedImageURL);
-                        writer.writeCall(null, "f_setSelectedImageURL").write(
+                        writer.writeMethodCall("f_setSelectedImageURL").write(
                                 selectedImageURL).writeln(");");
                     }
                 }

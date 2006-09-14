@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -25,22 +28,21 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import org.rcfaces.core.internal.codec.StringAppender;
-
+import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.model.AbstractConverter;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class LocaleConverter implements Converter {
+public class LocaleConverter extends AbstractConverter {
     private static final String REVISION = "$Revision$";
 
     public static final Converter SINGLETON = new LocaleConverter();
 
-    private final Map localesByName;
-
-    public LocaleConverter() {
+    private static final Map localesByName;
+    static {
         Locale ls[] = Locale.getAvailableLocales();
 
         localesByName = new HashMap(ls.length);

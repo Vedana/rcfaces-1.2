@@ -1,14 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.ImageRadioButtonComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class ImageRadioButtonTag extends RadioButtonTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ImageRadioButtonComponent;
+
+public class ImageRadioButtonTag extends RadioButtonTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ImageRadioButtonTag.class);
@@ -19,8 +21,8 @@ public class ImageRadioButtonTag extends RadioButtonTag {
 	private String selectedImageURL;
 	private String border;
 	private String borderType;
-	private String imageWidth;
 	private String imageHeight;
+	private String imageWidth;
 	public String getComponentType() {
 		return ImageRadioButtonComponent.COMPONENT_TYPE;
 	}
@@ -73,20 +75,20 @@ public class ImageRadioButtonTag extends RadioButtonTag {
 		this.borderType = borderType;
 	}
 
-	public final String getImageWidth() {
-		return imageWidth;
-	}
-
-	public final void setImageWidth(String imageWidth) {
-		this.imageWidth = imageWidth;
-	}
-
 	public final String getImageHeight() {
 		return imageHeight;
 	}
 
 	public final void setImageHeight(String imageHeight) {
 		this.imageHeight = imageHeight;
+	}
+
+	public final String getImageWidth() {
+		return imageWidth;
+	}
+
+	public final void setImageWidth(String imageWidth) {
+		this.imageWidth = imageWidth;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -100,8 +102,8 @@ public class ImageRadioButtonTag extends RadioButtonTag {
 			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  borderType='"+borderType+"'");
-			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -173,16 +175,6 @@ public class ImageRadioButtonTag extends RadioButtonTag {
 			}
 		}
 
-		if (imageWidth != null) {
-			if (isValueReference(imageWidth)) {
-				ValueBinding vb = application.createValueBinding(imageWidth);
-
-				component.setImageWidth(vb);
-			} else {
-				component.setImageWidth(getInt(imageWidth));
-			}
-		}
-
 		if (imageHeight != null) {
 			if (isValueReference(imageHeight)) {
 				ValueBinding vb = application.createValueBinding(imageHeight);
@@ -190,6 +182,16 @@ public class ImageRadioButtonTag extends RadioButtonTag {
 				component.setImageHeight(vb);
 			} else {
 				component.setImageHeight(getInt(imageHeight));
+			}
+		}
+
+		if (imageWidth != null) {
+			if (isValueReference(imageWidth)) {
+				ValueBinding vb = application.createValueBinding(imageWidth);
+
+				component.setImageWidth(vb);
+			} else {
+				component.setImageWidth(getInt(imageWidth));
 			}
 		}
 	}
@@ -201,8 +203,8 @@ public class ImageRadioButtonTag extends RadioButtonTag {
 		selectedImageURL = null;
 		border = null;
 		borderType = null;
-		imageWidth = null;
 		imageHeight = null;
+		imageWidth = null;
 
 		super.release();
 	}

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -25,12 +28,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class URIParameters {
     private static final String REVISION = "$Revision$";

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -34,8 +37,8 @@ import javax.faces.context.FacesContext;
 /**
  * Classe de conversion de certains types/objets java en d'autres ...
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public final class Convertor {
     private static final String REVISION = "$Revision$";
@@ -69,7 +72,7 @@ public final class Convertor {
             }
 
             throw new FacesException("Can not convert primitive class '"
-                    + classRequested.getName() + "' value='" + data + "'", null);
+                    + classRequested.getName() + "' value=null", null);
         }
 
         Class cl = data.getClass();
@@ -354,7 +357,7 @@ public final class Convertor {
         private static final String REVISION = "$Revision$";
 
         public Object convert(Object bool) {
-            return new Boolean((String) bool);
+            return Boolean.valueOf((String) bool);
         }
     };
 

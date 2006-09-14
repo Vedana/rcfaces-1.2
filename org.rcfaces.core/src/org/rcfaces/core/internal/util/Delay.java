@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -41,8 +44,8 @@ import java.util.StringTokenizer;
 /**
  * Classe de constantes de gestion des delais en millisecondes.
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class Delay {
     private static final String REVISION = "$Revision$";
@@ -227,8 +230,12 @@ public class Delay {
             unit = "never";
         }
 
-        return delayNumberFormat.format(d) + " " + unit
-                + ((d > 1.0) ? "s" : "");
+        long floor = (int) Math.floor(d);
+        if (floor != d) {
+            return delayNumberFormat.format(d) + " " + unit
+                    + ((d > 1.0) ? "s" : "");
+        }
+        return floor + " " + unit + ((d > 1.0) ? "s" : "");
     }
 
     static {

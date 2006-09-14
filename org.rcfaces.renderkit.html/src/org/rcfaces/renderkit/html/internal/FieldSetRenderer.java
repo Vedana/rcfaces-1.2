@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -92,11 +95,10 @@ import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.renderkit.border.ITitledBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class FieldSetRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
@@ -185,8 +187,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         String borderType = fieldSetComponent.getBorderType(facesContext);
 
         IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
-                .getInstance(facesContext.getExternalContext())
-                .getBorderRenderersRegistry();
+                .getInstance(facesContext).getBorderRenderersRegistry();
 
         return (IHtmlBorderRenderer) borderRendererRegistry.getBorderRenderer(
                 facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT,

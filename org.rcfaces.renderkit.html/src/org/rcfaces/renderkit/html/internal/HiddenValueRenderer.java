@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -64,11 +67,10 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
     private static final String REVISION = "$Revision$";
@@ -122,8 +124,7 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
         }
     }
 
-    protected void writeInputAttributes(IHtmlWriter htmlWriter)
-            throws WriterException {
+    protected void writeInputAttributes(IHtmlWriter htmlWriter) {
     }
 
     protected String getJavaScriptClassName() {

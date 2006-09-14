@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -18,8 +21,8 @@ import org.rcfaces.core.internal.RcfacesContext;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractAsyncRenderService implements IService {
     private static final String REVISION = "$Revision$";
@@ -31,7 +34,7 @@ public abstract class AbstractAsyncRenderService implements IService {
             FacesContext facesContext) {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
-                facesContext.getExternalContext()).getServicesRegistry();
+                facesContext).getServicesRegistry();
 
         return (AbstractAsyncRenderService) serviceRegistry.getService(
                 facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT,
@@ -43,6 +46,6 @@ public abstract class AbstractAsyncRenderService implements IService {
     public abstract boolean isAsyncRendererEnabled(FacesContext facesContext,
             UIComponent component);
 
-    public abstract void setContent(UIComponent componentInstance,
-            BodyContent bodyContent);
+    public abstract void setContent(FacesContext facesContext,
+            UIComponent componentInstance, BodyContent bodyContent);
 }

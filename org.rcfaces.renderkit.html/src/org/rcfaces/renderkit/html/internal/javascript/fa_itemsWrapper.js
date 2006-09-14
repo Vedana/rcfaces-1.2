@@ -6,8 +6,8 @@
  * Aspect Items
  *
  * @aspect hidden fa_itemsWrapper
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __prototype = {
 	f_finalize: function() {

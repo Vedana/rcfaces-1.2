@@ -1,4 +1,4 @@
-package org.rcfaces.core.internal.component;
+package org.rcfaces.core.component;
 
 import java.util.Date;
 import java.util.Locale;
@@ -9,6 +9,7 @@ import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
 import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
 import org.rcfaces.core.internal.converter.DateConverter;
 import org.rcfaces.core.internal.converter.LocaleConverter;

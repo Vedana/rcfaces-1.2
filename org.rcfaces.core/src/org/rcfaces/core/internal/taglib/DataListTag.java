@@ -1,22 +1,24 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.DataListComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class DataListTag extends AbstractDataTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.DataListComponent;
+
+public class DataListTag extends AbstractDataTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(DataListTag.class);
 
 	private String border;
 	private String borderType;
-	private String verticalScrollPosition;
 	private String horizontalScrollPosition;
+	private String verticalScrollPosition;
 	private String rows;
 	private String first;
 	private String value;
@@ -46,20 +48,20 @@ public class DataListTag extends AbstractDataTag {
 		this.borderType = borderType;
 	}
 
-	public final String getVerticalScrollPosition() {
-		return verticalScrollPosition;
-	}
-
-	public final void setVerticalScrollPosition(String verticalScrollPosition) {
-		this.verticalScrollPosition = verticalScrollPosition;
-	}
-
 	public final String getHorizontalScrollPosition() {
 		return horizontalScrollPosition;
 	}
 
 	public final void setHorizontalScrollPosition(String horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
+	}
+
+	public final String getVerticalScrollPosition() {
+		return verticalScrollPosition;
+	}
+
+	public final void setVerticalScrollPosition(String verticalScrollPosition) {
+		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
 	public final String getRows() {
@@ -141,8 +143,8 @@ public class DataListTag extends AbstractDataTag {
 			}
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  borderType='"+borderType+"'");
-			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
+			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  first='"+first+"'");
 			LOG.debug("  value='"+value+"'");
@@ -183,16 +185,6 @@ public class DataListTag extends AbstractDataTag {
 			}
 		}
 
-		if (verticalScrollPosition != null) {
-			if (isValueReference(verticalScrollPosition)) {
-				ValueBinding vb = application.createValueBinding(verticalScrollPosition);
-
-				component.setVerticalScrollPosition(vb);
-			} else {
-				component.setVerticalScrollPosition(verticalScrollPosition);
-			}
-		}
-
 		if (horizontalScrollPosition != null) {
 			if (isValueReference(horizontalScrollPosition)) {
 				ValueBinding vb = application.createValueBinding(horizontalScrollPosition);
@@ -200,6 +192,16 @@ public class DataListTag extends AbstractDataTag {
 				component.setHorizontalScrollPosition(vb);
 			} else {
 				component.setHorizontalScrollPosition(horizontalScrollPosition);
+			}
+		}
+
+		if (verticalScrollPosition != null) {
+			if (isValueReference(verticalScrollPosition)) {
+				ValueBinding vb = application.createValueBinding(verticalScrollPosition);
+
+				component.setVerticalScrollPosition(vb);
+			} else {
+				component.setVerticalScrollPosition(verticalScrollPosition);
 			}
 		}
 
@@ -284,8 +286,8 @@ public class DataListTag extends AbstractDataTag {
 	public void release() {
 		border = null;
 		borderType = null;
-		verticalScrollPosition = null;
 		horizontalScrollPosition = null;
+		verticalScrollPosition = null;
 		rows = null;
 		first = null;
 		value = null;

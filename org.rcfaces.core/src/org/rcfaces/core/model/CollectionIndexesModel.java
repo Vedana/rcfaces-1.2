@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -28,179 +31,182 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class CollectionIndexesModel extends AbstractIndexesModel implements Serializable {
-	private static final String REVISION = "$Revision$";
+public class CollectionIndexesModel extends AbstractIndexesModel implements
+        Serializable {
+    private static final String REVISION = "$Revision$";
 
-	protected static final int[] EMPTY_SELECTION = new int[0];
+    private static final long serialVersionUID = -3821092264981658279L;
 
-	protected static final int UNKNOWN_INDEX = -1;
+    protected static final int[] EMPTY_SELECTION = new int[0];
 
-	protected final Collection collection;
+    protected static final int UNKNOWN_INDEX = -1;
 
-	public CollectionIndexesModel(Collection collection) {
-		this.collection = collection;
-	}
+    protected final Collection collection;
 
-	public int getFirstIndex() {
-		if (collection.isEmpty()) {
-			return -1;
-		}
+    public CollectionIndexesModel(Collection collection) {
+        this.collection = collection;
+    }
 
-		if (collection instanceof List) {
-			return getIndex(((List) collection).get(0));
-		}
+    public int getFirstIndex() {
+        if (collection.isEmpty()) {
+            return -1;
+        }
 
-		return getIndex(collection.iterator().next());
-	}
+        if (collection instanceof List) {
+            return getIndex(((List) collection).get(0));
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#listIndexes()
-	 */
-	public final int[] listSortedIndexes() {
-		if (collection.isEmpty()) {
-			return EMPTY_SELECTION;
-		}
+        return getIndex(collection.iterator().next());
+    }
 
-		int n[] = new int[collection.size()];
-		int pos = 0;
-		int unknownIndex = getUnknownIndex();
-		for (Iterator it = collection.iterator(); it.hasNext();) {
-			int idx = getIndex(it.next());
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#listIndexes()
+     */
+    public final int[] listSortedIndexes() {
+        if (collection.isEmpty()) {
+            return EMPTY_SELECTION;
+        }
 
-			if (idx == unknownIndex) {
-				continue;
-			}
+        int n[] = new int[collection.size()];
+        int pos = 0;
+        int unknownIndex = getUnknownIndex();
+        for (Iterator it = collection.iterator(); it.hasNext();) {
+            int idx = getIndex(it.next());
 
-			n[pos++] = idx;
-		}
+            if (idx == unknownIndex) {
+                continue;
+            }
 
-		if (pos == n.length) {
-			if (n.length > 1) {
-				Arrays.sort(n);
-			}
-			return n;
-		}
+            n[pos++] = idx;
+        }
 
-		int n2[] = new int[pos];
+        if (pos == n.length) {
+            if (n.length > 1) {
+                Arrays.sort(n);
+            }
+            return n;
+        }
 
-		System.arraycopy(n, 0, n2, 0, pos);
+        int n2[] = new int[pos];
 
-		if (n2.length > 1) {
-			Arrays.sort(n2);
-		}
+        System.arraycopy(n, 0, n2, 0, pos);
 
-		return n2;
-	}
+        if (n2.length > 1) {
+            Arrays.sort(n2);
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#clearIndexes()
-	 */
-	public final void clearIndexes() {
-		collection.clear();
-	}
+        return n2;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#containsIndex(int)
-	 */
-	public final boolean containsIndex(int index) {
-		return collection.contains(getKey(index));
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#clearIndexes()
+     */
+    public final void clearIndexes() {
+        collection.clear();
+    }
 
-	protected int getIndex(Object object) {
-		if (object instanceof Number) {
-			return ((Number) object).intValue();
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#containsIndex(int)
+     */
+    public final boolean containsIndex(int index) {
+        return collection.contains(getKey(index));
+    }
 
-		return getUnknownIndex();
-	}
+    protected int getIndex(Object object) {
+        if (object instanceof Number) {
+            return ((Number) object).intValue();
+        }
 
-	protected Object getKey(int index) {
-		return new Integer(index);
-	}
+        return getUnknownIndex();
+    }
 
-	protected int getUnknownIndex() {
-		return UNKNOWN_INDEX;
-	}
+    protected Object getKey(int index) {
+        return new Integer(index);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#addIndex(int)
-	 */
-	public void addIndex(int index) {
-		collection.add(getKey(index));
-	}
+    protected int getUnknownIndex() {
+        return UNKNOWN_INDEX;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#removeIndex(int)
-	 */
-	public final void removeIndex(int index) {
-		collection.remove(getKey(index));
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#addIndex(int)
+     */
+    public void addIndex(int index) {
+        collection.add(getKey(index));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#commitChanges()
-	 */
-	public void commitChanges() {
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#removeIndex(int)
+     */
+    public final void removeIndex(int index) {
+        collection.remove(getKey(index));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#setIndexes(int[])
-	 */
-	public void setIndexes(int[] indexes) {
-		clearIndexes();
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#commitChanges()
+     */
+    public void commitChanges() {
+    }
 
-		if (indexes == null || indexes.length < 1) {
-			return;
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#setIndexes(int[])
+     */
+    public void setIndexes(int[] indexes) {
+        clearIndexes();
 
-		for (int i = 0; i < indexes.length; i++) {
-			int val = indexes[i];
-			if (val < 0) {
-				continue;
-			}
+        if (indexes == null || indexes.length < 1) {
+            return;
+        }
 
-			addIndex(val);
-		}
-	}
+        for (int i = 0; i < indexes.length; i++) {
+            int val = indexes[i];
+            if (val < 0) {
+                continue;
+            }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#countIndexes()
-	 */
-	public int countIndexes() {
-		if (collection.isEmpty()) {
-			return 0;
-		}
+            addIndex(val);
+        }
+    }
 
-		int count = 0;
-		int unknownIndex = getUnknownIndex();
-		for (Iterator it = collection.iterator(); it.hasNext();) {
-			int idx = getIndex(it.next());
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#countIndexes()
+     */
+    public int countIndexes() {
+        if (collection.isEmpty()) {
+            return 0;
+        }
 
-			if (idx == unknownIndex) {
-				continue;
-			}
+        int count = 0;
+        int unknownIndex = getUnknownIndex();
+        for (Iterator it = collection.iterator(); it.hasNext();) {
+            int idx = getIndex(it.next());
 
-			count++;
-		}
+            if (idx == unknownIndex) {
+                continue;
+            }
 
-		return count;
-	}
+            count++;
+        }
+
+        return count;
+    }
 }

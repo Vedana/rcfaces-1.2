@@ -6,8 +6,8 @@
  * Aspect AsyncRender
  *
  * @aspect hidden fa_asyncRender
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __prototype = {
 	fa_asyncRender: function() {

@@ -1,45 +1,39 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.RulerComponent;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
 
-public class RulerTag extends CameliaTag {
+public class RulerTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(RulerTag.class);
 
-	private String y;
 	private String x;
-	private String marginRight;
-	private String marginLeft;
-	private String marginTop;
+	private String y;
 	private String marginBottom;
+	private String marginLeft;
+	private String marginRight;
+	private String marginTop;
 	private String height;
 	private String width;
-	private String visible;
 	private String hiddenMode;
+	private String visible;
 	private String lookId;
 	private String orientation;
-	private String foregroundColor;
 	private String backgroundColor;
+	private String foregroundColor;
 	private String alignment;
 	private String rendered;
 	private String margins;
 	public String getComponentType() {
 		return RulerComponent.COMPONENT_TYPE;
-	}
-
-	public final String getY() {
-		return y;
-	}
-
-	public final void setY(String y) {
-		this.y = y;
 	}
 
 	public final String getX() {
@@ -50,12 +44,20 @@ public class RulerTag extends CameliaTag {
 		this.x = x;
 	}
 
-	public final String getMarginRight() {
-		return marginRight;
+	public final String getY() {
+		return y;
 	}
 
-	public final void setMarginRight(String marginRight) {
-		this.marginRight = marginRight;
+	public final void setY(String y) {
+		this.y = y;
+	}
+
+	public final String getMarginBottom() {
+		return marginBottom;
+	}
+
+	public final void setMarginBottom(String marginBottom) {
+		this.marginBottom = marginBottom;
 	}
 
 	public final String getMarginLeft() {
@@ -66,20 +68,20 @@ public class RulerTag extends CameliaTag {
 		this.marginLeft = marginLeft;
 	}
 
+	public final String getMarginRight() {
+		return marginRight;
+	}
+
+	public final void setMarginRight(String marginRight) {
+		this.marginRight = marginRight;
+	}
+
 	public final String getMarginTop() {
 		return marginTop;
 	}
 
 	public final void setMarginTop(String marginTop) {
 		this.marginTop = marginTop;
-	}
-
-	public final String getMarginBottom() {
-		return marginBottom;
-	}
-
-	public final void setMarginBottom(String marginBottom) {
-		this.marginBottom = marginBottom;
 	}
 
 	public final String getHeight() {
@@ -98,20 +100,20 @@ public class RulerTag extends CameliaTag {
 		this.width = width;
 	}
 
-	public final String getVisible() {
-		return visible;
-	}
-
-	public final void setVisible(String visible) {
-		this.visible = visible;
-	}
-
 	public final String getHiddenMode() {
 		return hiddenMode;
 	}
 
 	public final void setHiddenMode(String hiddenMode) {
 		this.hiddenMode = hiddenMode;
+	}
+
+	public final String getVisible() {
+		return visible;
+	}
+
+	public final void setVisible(String visible) {
+		this.visible = visible;
 	}
 
 	public final String getLookId() {
@@ -130,20 +132,20 @@ public class RulerTag extends CameliaTag {
 		this.orientation = orientation;
 	}
 
-	public final String getForegroundColor() {
-		return foregroundColor;
-	}
-
-	public final void setForegroundColor(String foregroundColor) {
-		this.foregroundColor = foregroundColor;
-	}
-
 	public final String getBackgroundColor() {
 		return backgroundColor;
 	}
 
 	public final void setBackgroundColor(String backgroundColor) {
 		this.backgroundColor = backgroundColor;
+	}
+
+	public final String getForegroundColor() {
+		return foregroundColor;
+	}
+
+	public final void setForegroundColor(String foregroundColor) {
+		this.foregroundColor = foregroundColor;
 	}
 
 	public final String getAlignment() {
@@ -175,20 +177,20 @@ public class RulerTag extends CameliaTag {
 			if (RulerComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  y='"+y+"'");
 			LOG.debug("  x='"+x+"'");
-			LOG.debug("  marginRight='"+marginRight+"'");
-			LOG.debug("  marginLeft='"+marginLeft+"'");
-			LOG.debug("  marginTop='"+marginTop+"'");
+			LOG.debug("  y='"+y+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
+			LOG.debug("  marginLeft='"+marginLeft+"'");
+			LOG.debug("  marginRight='"+marginRight+"'");
+			LOG.debug("  marginTop='"+marginTop+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  width='"+width+"'");
-			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  orientation='"+orientation+"'");
-			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  alignment='"+alignment+"'");
 			LOG.debug("  rendered='"+rendered+"'");
 			LOG.debug("  margins='"+margins+"'");
@@ -203,16 +205,6 @@ public class RulerTag extends CameliaTag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (y != null) {
-			if (isValueReference(y)) {
-				ValueBinding vb = application.createValueBinding(y);
-
-				component.setY(vb);
-			} else {
-				component.setY(y);
-			}
-		}
-
 		if (x != null) {
 			if (isValueReference(x)) {
 				ValueBinding vb = application.createValueBinding(x);
@@ -223,13 +215,23 @@ public class RulerTag extends CameliaTag {
 			}
 		}
 
-		if (marginRight != null) {
-			if (isValueReference(marginRight)) {
-				ValueBinding vb = application.createValueBinding(marginRight);
+		if (y != null) {
+			if (isValueReference(y)) {
+				ValueBinding vb = application.createValueBinding(y);
 
-				component.setMarginRight(vb);
+				component.setY(vb);
 			} else {
-				component.setMarginRight(marginRight);
+				component.setY(y);
+			}
+		}
+
+		if (marginBottom != null) {
+			if (isValueReference(marginBottom)) {
+				ValueBinding vb = application.createValueBinding(marginBottom);
+
+				component.setMarginBottom(vb);
+			} else {
+				component.setMarginBottom(marginBottom);
 			}
 		}
 
@@ -243,6 +245,16 @@ public class RulerTag extends CameliaTag {
 			}
 		}
 
+		if (marginRight != null) {
+			if (isValueReference(marginRight)) {
+				ValueBinding vb = application.createValueBinding(marginRight);
+
+				component.setMarginRight(vb);
+			} else {
+				component.setMarginRight(marginRight);
+			}
+		}
+
 		if (marginTop != null) {
 			if (isValueReference(marginTop)) {
 				ValueBinding vb = application.createValueBinding(marginTop);
@@ -250,16 +262,6 @@ public class RulerTag extends CameliaTag {
 				component.setMarginTop(vb);
 			} else {
 				component.setMarginTop(marginTop);
-			}
-		}
-
-		if (marginBottom != null) {
-			if (isValueReference(marginBottom)) {
-				ValueBinding vb = application.createValueBinding(marginBottom);
-
-				component.setMarginBottom(vb);
-			} else {
-				component.setMarginBottom(marginBottom);
 			}
 		}
 
@@ -283,16 +285,6 @@ public class RulerTag extends CameliaTag {
 			}
 		}
 
-		if (visible != null) {
-			if (isValueReference(visible)) {
-				ValueBinding vb = application.createValueBinding(visible);
-
-				component.setVisible(vb);
-			} else {
-				component.setVisible(getBoolean(visible));
-			}
-		}
-
 		if (hiddenMode != null) {
 			if (isValueReference(hiddenMode)) {
 				ValueBinding vb = application.createValueBinding(hiddenMode);
@@ -300,6 +292,16 @@ public class RulerTag extends CameliaTag {
 				component.setHiddenMode(vb);
 			} else {
 				component.setHiddenMode(hiddenMode);
+			}
+		}
+
+		if (visible != null) {
+			if (isValueReference(visible)) {
+				ValueBinding vb = application.createValueBinding(visible);
+
+				component.setVisible(vb);
+			} else {
+				component.setVisible(getBoolean(visible));
 			}
 		}
 
@@ -323,16 +325,6 @@ public class RulerTag extends CameliaTag {
 			}
 		}
 
-		if (foregroundColor != null) {
-			if (isValueReference(foregroundColor)) {
-				ValueBinding vb = application.createValueBinding(foregroundColor);
-
-				component.setForegroundColor(vb);
-			} else {
-				component.setForegroundColor(foregroundColor);
-			}
-		}
-
 		if (backgroundColor != null) {
 			if (isValueReference(backgroundColor)) {
 				ValueBinding vb = application.createValueBinding(backgroundColor);
@@ -340,6 +332,16 @@ public class RulerTag extends CameliaTag {
 				component.setBackgroundColor(vb);
 			} else {
 				component.setBackgroundColor(backgroundColor);
+			}
+		}
+
+		if (foregroundColor != null) {
+			if (isValueReference(foregroundColor)) {
+				ValueBinding vb = application.createValueBinding(foregroundColor);
+
+				component.setForegroundColor(vb);
+			} else {
+				component.setForegroundColor(foregroundColor);
 			}
 		}
 
@@ -371,20 +373,20 @@ public class RulerTag extends CameliaTag {
 	}
 
 	public void release() {
-		y = null;
 		x = null;
-		marginRight = null;
-		marginLeft = null;
-		marginTop = null;
+		y = null;
 		marginBottom = null;
+		marginLeft = null;
+		marginRight = null;
+		marginTop = null;
 		height = null;
 		width = null;
-		visible = null;
 		hiddenMode = null;
+		visible = null;
 		lookId = null;
 		orientation = null;
-		foregroundColor = null;
 		backgroundColor = null;
+		foregroundColor = null;
 		alignment = null;
 		rendered = null;
 		margins = null;

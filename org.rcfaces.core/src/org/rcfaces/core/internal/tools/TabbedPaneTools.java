@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -24,8 +27,8 @@ import org.rcfaces.core.internal.util.ComponentIterators;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class TabbedPaneTools extends CardBoxTools {
     private static final String REVISION = "$Revision$";
@@ -42,6 +45,11 @@ public class TabbedPaneTools extends CardBoxTools {
         return new TabListIterator(list);
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static final class TabListIterator extends
             ComponentIterators.ComponentListIterator implements ITabIterator {
         private static final String REVISION = "$Revision$";

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -36,11 +39,10 @@ import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 class SelectItemsJsContext extends SelectItemsContext {
@@ -49,6 +51,8 @@ class SelectItemsJsContext extends SelectItemsContext {
     private final List varIds = new ArrayList(8);
 
     private final boolean disabled;
+
+    private String managerComponentId;
 
     public SelectItemsJsContext(ISelectItemNodeWriter renderer,
             IComponentRenderContext componentRenderContext,
@@ -62,6 +66,14 @@ class SelectItemsJsContext extends SelectItemsContext {
         } else {
             disabled = false;
         }
+    }
+
+    public final String getManagerVarId() {
+        return managerComponentId;
+    }
+
+    public final void setManagerComponentId(String managerComponentId) {
+        this.managerComponentId = managerComponentId;
     }
 
     public void popVarId() {

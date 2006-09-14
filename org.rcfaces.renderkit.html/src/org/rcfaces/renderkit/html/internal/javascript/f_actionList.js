@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:26  oeuillot
  * Renommage  en rcfaces
  *
@@ -11,7 +14,7 @@
  *
  * @class hidden f_actionList extends Object
  * @author Joel Merlin & Olivier Oeuillot
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
  
 function f_actionList(component,type) {

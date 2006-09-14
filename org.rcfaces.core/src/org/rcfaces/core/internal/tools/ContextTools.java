@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -42,17 +45,21 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public final class ContextTools {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(ContextTools.class);
 
     private static final String ATTRIBUTES_LOCALE_PROPERTY_NAME = "org.rcfaces.core.ATTRIBUTES_LOCALE";
 
@@ -188,11 +195,19 @@ public final class ContextTools {
         if (viewRoot != null) {
             Locale locale = viewRoot.getLocale();
             if (locale != null) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Get locale from viewRoot: " + locale);
+                }
                 return locale;
             }
         }
 
-        return facesContext.getApplication().getViewHandler().calculateLocale(
-                facesContext);
+        Locale locale = facesContext.getApplication().getViewHandler()
+                .calculateLocale(facesContext);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Calculate locale from view handler: " + locale);
+        }
+
+        return locale;
     }
 }

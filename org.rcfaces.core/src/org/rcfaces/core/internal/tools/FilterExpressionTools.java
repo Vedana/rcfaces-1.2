@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -50,28 +53,30 @@ import java.util.Map.Entry;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.AbstractProperties;
 import org.rcfaces.core.model.IFilterProperties;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public final class FilterExpressionTools {
     private static final String REVISION = "$Revision$";
 
+    private static final Log LOG = LogFactory
+            .getLog(FilterExpressionTools.class);
+
     private static final boolean TEST_MAP_CONTENT = true;
 
-    protected static final String[] STRING_EMPTY_ARRAY = new String[0];
+    private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
     public static final IFilterProperties EMPTY = new IFilterProperties() {
         private static final String REVISION = "$Revision$";
 
-        public Object get(String filterName) {
-            return null;
-        }
+        private static final long serialVersionUID = -3817846186098661680L;
 
         public boolean containsKey(String propertyName) {
             return false;
@@ -127,18 +132,6 @@ public final class FilterExpressionTools {
         public void setTransient(boolean newTransientValue) {
         }
 
-        public String getString(String propertyName) {
-            return null;
-        }
-
-        public Integer getInteger(String propertyName) {
-            return null;
-        }
-
-        public Boolean getBoolean(String propertyName) {
-            return null;
-        }
-
         public Object getProperty(String name) {
             return null;
         }
@@ -175,12 +168,15 @@ public final class FilterExpressionTools {
     // C'est un StateHolder, le constructeur doit etre public !
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static final class FilterParametersMap extends AbstractProperties
             implements IFilterProperties {
+
         private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = -6566852140453141630L;
 
         private final Map map;
 
@@ -251,7 +247,7 @@ public final class FilterExpressionTools {
                 return null;
             }
 
-            Object ret[] = new Object[map.size()*2];
+            Object ret[] = new Object[map.size() * 2];
 
             int idx = 0;
             for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
@@ -285,6 +281,12 @@ public final class FilterExpressionTools {
 
         public Object getProperty(String name) {
             return map.get(name);
+        }
+    }
+
+    static {
+        if (TEST_MAP_CONTENT) {
+            LOG.info("TEST_MAP_CONTENT=" + TEST_MAP_CONTENT);
         }
     }
 }

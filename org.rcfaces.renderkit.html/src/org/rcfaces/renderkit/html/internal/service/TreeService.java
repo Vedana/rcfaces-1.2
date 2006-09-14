@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:13  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -105,8 +108,9 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
+import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.TreeRenderer;
@@ -115,8 +119,8 @@ import org.rcfaces.renderkit.html.internal.decorator.SelectItemsContext;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class TreeService extends AbstractHtmlService {
     private static final String REVISION = "$Revision$";
@@ -138,7 +142,7 @@ public class TreeService extends AbstractHtmlService {
     public static TreeService getInstance(FacesContext facesContext) {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
-                facesContext.getExternalContext()).getServicesRegistry();
+                facesContext).getServicesRegistry();
 
         return (TreeService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
@@ -209,7 +213,7 @@ public class TreeService extends AbstractHtmlService {
                 printWriter = response.getWriter();
 
             } else {
-                ParametredHttpServlet
+                ConfiguredHttpServlet
                         .setGzipContentEncoding((HttpServletResponse) response);
 
                 OutputStream outputStream = response.getOutputStream();
@@ -261,12 +265,8 @@ public class TreeService extends AbstractHtmlService {
                     "GetElementById").writeString(treeId).writeln(
                     ", document);");
 
-            jsWriter.write("with (").write(varId).writeln(") {");
-
-            jsWriter.writeCall(null, "_cancelServerRequest").writeString(
+            jsWriter.writeMethodCall("_cancelServerRequest").writeString(
                     waitingId).write(");");
-
-            jsWriter.writeln("}");
 
         } catch (IOException ex) {
             throw new FacesException("Can not write cancel response.", ex);
@@ -292,6 +292,8 @@ public class TreeService extends AbstractHtmlService {
             TreeRenderer treeRenderer, String waitingId, String node)
             throws IOException {
 
+        HtmlProcessContextImpl.getHtmlProcessContext(facesContext);
+
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;
         if (LOG.isTraceEnabled()) {
@@ -311,15 +313,13 @@ public class TreeService extends AbstractHtmlService {
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
                 "GetElementById").writeString(treeId).writeln(", document);");
 
-        jsWriter.write("with (").write(varId).writeln(") {");
-
-        jsWriter.write("var ").write(waitingVarId).write('=').writeCall(null,
+        jsWriter.write("var ").write(waitingVarId).write('=').writeMethodCall(
                 "_getWaitingNode").write(waitingId).writeln(");");
 
         // Le varName a utiliser est celui du waitingVarId !
         // Car les noeuds sont encodï¿½s par rapport ï¿½ un parent nommï¿½ par le
         // componentVarName
-        jsWriter.setComponentVarName(waitingVarId);
+        jsWriter.setComponentVarName(varId);
 
         ISelectItemNodeWriter nodeWriter = treeRenderer
                 .getSelectItemNodeWriter(jsWriter.getComponentRenderContext());
@@ -328,7 +328,7 @@ public class TreeService extends AbstractHtmlService {
                 nodeWriter);
 
         treeRenderer.encodeNodes(jsWriter, treeComponent, nodeRenderer,
-                nodeRenderer.getDepth());
+                nodeRenderer.getDepth(), waitingVarId);
 
         /*
          * TreeRenderContext treeRenderContext = treeRenderer.createTreeContext(
@@ -336,10 +336,8 @@ public class TreeService extends AbstractHtmlService {
          */
 
         // treeRenderer.encodeJsTransactionalRows(jsWriter, treeRenderContext);
-        jsWriter.writeCall(null, "_clearWaiting").write(waitingId)
+        jsWriter.writeMethodCall("_clearWaiting").write(waitingId)
                 .writeln(");");
-
-        jsWriter.writeln("}");
 
         if (LOG.isTraceEnabled()) {
             pw.flush();
@@ -352,8 +350,8 @@ public class TreeService extends AbstractHtmlService {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static class FilterNodeRenderer implements ISelectItemNodeWriter {
         private static final String REVISION = "$Revision$";

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -26,11 +29,10 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class SubMenuDecorator extends MenuDecorator {
     private static final String REVISION = "$Revision$";
@@ -62,8 +64,8 @@ public class SubMenuDecorator extends MenuDecorator {
 
         String id = context.getComponentClientId(getComponent());
 
-        javaScriptWriter.write("var ").write(menuVarName).write("=").writeCall(
-                null, "_newSubMenu").writeString(menuId);
+        javaScriptWriter.write("var ").write(menuVarName).write("=")
+                .writeMethodCall("_newSubMenu").writeString(menuId);
 
         int pred = 0;
 
@@ -87,30 +89,24 @@ public class SubMenuDecorator extends MenuDecorator {
 
         context.pushVarId(menuVarName);
 
+        context.setManagerComponentId(menuVarName);
+
         return context;
     }
 
     protected void encodeComponentsBegin() throws WriterException {
         if (javaScriptWriter != null) {
-            javaScriptWriter.write("with(").write(menuVarName).writeln(") {");
-
             if (independantMenu) {
+                SelectItemsJsContext context = (SelectItemsJsContext) getContext();
+
                 Map listenersByType = ListenerTools.getListenersByType(
                         ListenerTools.JAVASCRIPT_NAME_SPACE, component);
 
-                EventsRenderer.encodeEventListeners(javaScriptWriter,
-                        listenersByType, null);
+                EventsRenderer.encodeEventListeners(javaScriptWriter, context
+                        .peekVarId(), listenersByType, null);
             }
 
         }
         super.encodeComponentsBegin();
     }
-
-    protected void encodeComponentsEnd() throws WriterException {
-        if (javaScriptWriter != null) {
-            javaScriptWriter.writeln("}");
-        }
-        super.encodeComponentsEnd();
-    }
-
 }

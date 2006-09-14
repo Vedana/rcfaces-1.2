@@ -5,7 +5,7 @@
 /**
  * @class f_locale
  * 
- * @author Olivier Oeuillot
+ * @author Olivier Oeuillot (latest modification by $Author$)
  */
  
 var __static = {
@@ -49,6 +49,19 @@ var __static = {
 	},
 	Finalizer: function() {
 		f_locale._Instance=undefined;
+	},
+	/**
+	 * @method private static final
+	 * @param number idx
+	 * @return string
+	 */
+	_GetLocaleNamePart: function(idx) {
+		var seps=f_env.GetLocaleName().split("_");
+		if (seps.length<=idx) {
+			return null;
+		}
+		
+		return seps[idx];
 	}
 }
 
@@ -152,9 +165,21 @@ var __prototype = {
 	f_getFirstDayOfWeek: function() {
 		return this._firstDayOfWeek;
 	},
+	/**
+	 * @method public
+	 * @return number
+	 */
 	f_getTwoDigitYearStart: function() {
 		return this._twoDigitYearStart;
 	},
+	/**
+	 * @method public
+	 * @param number form Form of date (SHORT, MEDIUM, LONG)
+	 * @return string
+	 * @see #LONG
+	 * @see #SHORT
+	 * @see #MEDIUM
+	 */
 	f_getDateFormat: function(form) {
 		var ds=this._dateFormats;
 	
@@ -167,6 +192,34 @@ var __prototype = {
 		}
 		
 		return ds[0];
+	},
+	/**
+     * Getter for the programmatic name of the entire locale,
+     * with the language, country and variant separated by underbars.
+     * Language is always lower case, and country is always upper case.
+     */
+	f_getName: function() {
+		return f_env.GetLocaleName();
+	},
+  	/**
+     * Returns the language code for this locale, which will either be the empty string
+     * or a lowercase ISO 639 code.
+     */
+	f_getLanguage: function() {
+		return f_locale._GetLocaleNamePart(0);
+	},
+ 	/**
+     * Returns the country/region code for this locale, which will either be the empty string
+     * or an upercase ISO 3166 2-letter code.
+     */
+ 	f_getCountry: function() {
+		return f_locale._GetLocaleNamePart(1);
+	},
+   /**
+     * Returns the variant code for this locale.
+     */
+	f_getVariant: function() {
+		return f_locale._GetLocaleNamePart(2);
 	}
 }
 

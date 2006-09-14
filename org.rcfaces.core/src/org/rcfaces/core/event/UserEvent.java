@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -34,11 +37,13 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesListener;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class UserEvent extends ActionEvent {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = 6509010645116536466L;
 
     private final String value;
 

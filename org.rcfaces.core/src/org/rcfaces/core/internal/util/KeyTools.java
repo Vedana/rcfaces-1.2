@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -23,15 +26,15 @@ import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 
-import org.rcfaces.core.internal.codec.StringAppender;
 import org.rcfaces.core.internal.converter.KeyFlagsConverter;
 import org.rcfaces.core.internal.converter.VirtualKeyConverter;
+import org.rcfaces.core.internal.lang.StringAppender;
 
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class KeyTools {
     private static final String REVISION = "$Revision$";
@@ -98,8 +101,8 @@ public class KeyTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static final class State {
         private static final String REVISION = "$Revision$";

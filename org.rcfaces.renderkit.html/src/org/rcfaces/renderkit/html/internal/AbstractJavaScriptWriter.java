@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -23,13 +26,15 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import javax.faces.FacesException;
+
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
     private static final String REVISION = "$Revision$";
@@ -52,10 +57,39 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
 
     public IJavaScriptWriter writeCall(String object, String symbol)
             throws WriterException {
-        if (object != null) {
-            write(convertSymbol(object));
-            write('.');
+        if (object == null) {
+            throw new FacesException("Can not call a method without object !");
         }
+        write(convertSymbol(object));
+        write('.');
+
+        write(convertSymbol(symbol));
+        write('(');
+
+        return this;
+    }
+
+    public IJavaScriptWriter writeMethodCall(String symbol)
+            throws WriterException {
+        isInitialized();
+
+        String componentVarName = getComponentVarName();
+        if (componentVarName == null) {
+            throw new FacesException("Component var name is not defined !");
+        }
+        write(convertSymbol(componentVarName));
+        write('.');
+        write(convertSymbol(symbol));
+        write('(');
+
+        return this;
+    }
+
+    protected abstract void isInitialized() throws WriterException;
+
+    public IJavaScriptWriter writeConstructor(String symbol)
+            throws WriterException {
+        write("new ");
         write(convertSymbol(symbol));
         write('(');
 

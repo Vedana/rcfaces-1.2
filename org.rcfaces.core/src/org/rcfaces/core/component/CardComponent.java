@@ -1,45 +1,45 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.internal.component.AbstractOutputComponent;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 
-public class CardComponent extends AbstractOutputComponent implements
-        ILoadEventCapability, IAsyncRenderComponent {
+public class CardComponent extends AbstractOutputComponent implements 
+	ILoadEventCapability,
+	IAsyncRenderComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.card";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.card";
 
-    public CardComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
 
-    public CardComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public CardComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public final CardBoxComponent getCardBox() {
+	public CardComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-        return CardBoxTools.getCardBox(this);
+	public final CardBoxComponent getCardBox() {
 
-    }
 
-    public final void addLoadListener(
-            org.rcfaces.core.event.ILoadListener listener) {
-        addFacesListener(listener);
-    }
+				return CardBoxTools.getCardBox(this);
+			
+	}
 
-    public final void removeLoadListener(
-            org.rcfaces.core.event.ILoadListener listener) {
-        removeFacesListener(listener);
-    }
+	public final void addLoadListener(org.rcfaces.core.event.ILoadListener listener) {
+		addFacesListener(listener);
+	}
 
-    public final javax.faces.event.FacesListener[] listLoadListeners() {
-        return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
-    }
+	public final void removeLoadListener(org.rcfaces.core.event.ILoadListener listener) {
+		removeFacesListener(listener);
+	}
 
-    public void release() {
-        super.release();
-    }
+	public final javax.faces.event.FacesListener [] listLoadListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
+	}
+
+	public void release() {
+		super.release();
+	}
 }

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -23,11 +26,10 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.model.IAccessKeySelectItem;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class MenuBarDecorator extends MenuDecorator {
 
@@ -63,8 +65,11 @@ public class MenuBarDecorator extends MenuDecorator {
 
         String sid = menuContext.getComponentClientId(component); // menuContext.getMenuBarItemId();
 
-        javaScriptWriter.write("var ").write(varId).write('=').writeCall(null,
+        javaScriptWriter.write("var ").write(varId).write('=').writeMethodCall(
                 "_declareBarItem").writeString(sid);
+
+        menuContext.setManagerComponentId(javaScriptWriter
+                .getComponentVarName());
 
         int pred = 0;
 

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -177,8 +180,8 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
-import org.rcfaces.core.internal.codec.StringAppender;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -205,10 +208,9 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 import org.rcfaces.renderkit.html.internal.service.DataGridService;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class DataGridRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
@@ -904,7 +906,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
             if (interactiveComponentClientId != null) {
                 // Pas de donn�es si nous sommes dans un scope interactif !
-                htmlWriter.writeCall(null, "f_setInteractiveShow").write('"')
+                htmlWriter.writeMethodCall("f_setInteractiveShow").write('"')
                         .write(interactiveComponentClientId).writeln("\");");
                 return;
             }
@@ -931,7 +933,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         DataGridComponent dataGridComponent = tableContext
                 .getDataGridComponent();
 
-        htmlWriter.writeCall(null, "f_setColumns");
+        htmlWriter.writeMethodCall("f_setColumns");
         boolean first = true;
         for (int i = 0; i < columnsStateCount; i++) {
             if (first) {
@@ -988,7 +990,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             }
 
             if (rowValueColumn == dataColumnComponent) {
-                htmlWriter.writeCall(null, "f_setRowValueColumn").write(
+                htmlWriter.writeMethodCall("f_setRowValueColumn").write(
                         String.valueOf(i)).writeln(");");
             }
 
@@ -1004,12 +1006,12 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
 
         if (autoFilter != null) {
-            htmlWriter.writeCall(null, "f_setAutoFilters").write(
+            htmlWriter.writeMethodCall("f_setAutoFilters").write(
                     autoFilter.toString()).writeln(");");
         }
 
         if (urls != null || tableContext.hasColumnImages()) {
-            htmlWriter.writeCall(null, "f_setColumnsImages");
+            htmlWriter.writeMethodCall("f_setColumnsImages");
             int pred = 0;
             first = true;
             for (int i = 0; i < cnt; i++) {
@@ -1106,7 +1108,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             }
 
             if (total > 0) {
-                htmlWriter.writeCall(null, "f_setColumnsStyleClass");
+                htmlWriter.writeMethodCall("f_setColumnsStyleClass");
                 int pred = 0;
                 first = true;
                 for (Iterator it2 = sc.iterator(); it2.hasNext();) {
@@ -1146,7 +1148,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
 
         if (tableContext.hasCellStyleClass()) {
-            htmlWriter.writeCall(null, "f_setColumnsCellStyle");
+            htmlWriter.writeMethodCall("f_setColumnsCellStyle");
             writeBooleanArray(htmlWriter, tableContext, cnt, CELL_STYLE_CLASS);
             htmlWriter.writeln(");");
         }
@@ -1154,7 +1156,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         if (tableContext.sortClientSide != null) {
             int pred = 0;
 
-            htmlWriter.writeCall(null, "f_setColumnSorters");
+            htmlWriter.writeMethodCall("f_setColumnSorters");
             // int cnt = tableContext.getColumnCount();
             first = true;
             for (int i = 0; i < cnt; i++) {
@@ -1256,7 +1258,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             ISortedComponent sortedComponents[] = tableContext
                     .listSortedComponents();
             if (sortedComponents.length > 0) {
-                htmlWriter.writeCall(null, "f_enableSorters");
+                htmlWriter.writeMethodCall("f_enableSorters");
                 pred = 0;
                 for (int j = 0; j < sortedComponents.length; j++) {
                     ISortedComponent sortedComponent = sortedComponents[j];
@@ -1753,7 +1755,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
     protected void encodeJsRowCount(IJavaScriptWriter htmlWriter,
             TableRenderContext tableContext, int count) throws WriterException {
-        htmlWriter.writeCall(null, "f_setRowCount").writeInt(count).writeln(
+        htmlWriter.writeMethodCall("f_setRowCount").writeInt(count).writeln(
                 ");");
     }
 
@@ -1776,7 +1778,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             if (index < 1) {
                 htmlWriter.write("var ");
             }
-            htmlWriter.write(rowVarName).write('=').writeCall(null, "_addRow");
+            htmlWriter.write(rowVarName).write('=').writeMethodCall("_addRow");
 
             if (rowId != null) {
                 htmlWriter.writeString(rowId);
@@ -1874,7 +1876,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             if (index < 1) {
                 htmlWriter.write("var ");
             }
-            htmlWriter.write(rowVarName).write('=').writeCall(null, "_addRow");
+            htmlWriter.write(rowVarName).write('=').writeMethodCall("_addRow");
 
             if (rowId != null) {
                 htmlWriter.writeString(rowId);
@@ -1930,7 +1932,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             values[i] = htmlWriter.allocateString(values[i]);
         }
 
-        htmlWriter.writeCall(null, command).write(varId);
+        htmlWriter.writeMethodCall(command).write(varId);
         int pred = 0;
         for (int i = 0; i < visibleColumns; i++) {
             if (values[i] == null) {
@@ -2291,8 +2293,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static final class TableRenderContext {
 
@@ -2760,7 +2762,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         FacesContext facesContext = jsWriter.getFacesContext();
         DataColumnComponent dataColumnComponent = context.getRowValueColumn();
 
-        jsWriter.writeCall(null, jsCommand).write('[');
+        jsWriter.writeMethodCall(jsCommand).write('[');
         int i = 0;
         for (Iterator it = objects.iterator(); it.hasNext();) {
             Object value = it.next();
@@ -2792,7 +2794,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             return;
         }
 
-        jsWriter.writeCall(null, jsCommand).write('[');
+        jsWriter.writeMethodCall(jsCommand).write('[');
         for (int i = 0; i < indexes.length; i++) {
             if (i > 0) {
                 jsWriter.write(',');

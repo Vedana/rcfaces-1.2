@@ -4,8 +4,8 @@
 
 /**
  * @class f_comboEx extends f_component, fa_readOnly, fa_disabled
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __static = {

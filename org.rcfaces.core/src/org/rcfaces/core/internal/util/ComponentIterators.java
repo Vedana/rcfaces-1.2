@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -37,8 +40,8 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.manager.IContainerManager;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ComponentIterators {
     private static final String REVISION = "$Revision$";
@@ -193,8 +196,8 @@ public class ComponentIterators {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static class EmptyComponentIterator implements IComponentIterator {
         private static final String REVISION = "$Revision$";
@@ -234,8 +237,8 @@ public class ComponentIterators {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class ComponentListIterator implements IComponentIterator {
         private static final String REVISION = "$Revision$";
@@ -284,7 +287,7 @@ public class ComponentIterators {
             if (count < 1) {
                 // Ca doit peter ici !
                 iterator.next();
-                return null;
+                return EMPTY_COMPONENT_ARRAY;
             }
 
             if (array == null) {
@@ -308,8 +311,8 @@ public class ComponentIterators {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class ComponentArrayIterator implements IComponentIterator {
         private static final String REVISION = "$Revision$";

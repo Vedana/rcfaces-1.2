@@ -5,8 +5,8 @@
 /**
  * 
  * @class public f_dateChooser extends f_imageButton, fa_calendarPopup
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __prototype={
 

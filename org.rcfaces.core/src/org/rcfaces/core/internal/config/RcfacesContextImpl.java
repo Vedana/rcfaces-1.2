@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
@@ -55,8 +58,11 @@
 package org.rcfaces.core.internal.config;
 
 import java.io.CharArrayReader;
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -83,6 +89,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.images.ImageOperationsRepositoryImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
+import org.rcfaces.core.internal.rewriting.IResourceVersionHandler;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.xml.sax.EntityResolver;
@@ -90,11 +97,15 @@ import org.xml.sax.InputSource;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class RcfacesContextImpl extends RcfacesContext implements Serializable {
+public class RcfacesContextImpl extends RcfacesContext implements
+        Externalizable {
+
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -4224530723124583628L;
 
     private static final Log LOG = LogFactory.getLog(RcfacesContextImpl.class);
 
@@ -121,18 +132,14 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
 
     private final Map attributes = new HashMap(32);
 
-    private String applicationVersion;
+    private transient IResourceVersionHandler resourceVersionHandler;
+
+    private transient String applicationVersion;
 
     public RcfacesContextImpl() {
-        this(null);
     }
 
-    public RcfacesContextImpl(ExternalContext externalContext) {
-        initialize(externalContext);
-    }
-
-    private synchronized void initialize(ExternalContext externalContext) {
-
+    protected void initialize(ExternalContext externalContext) {
         if (externalContext == null) {
             externalContext = FacesContext.getCurrentInstance()
                     .getExternalContext();
@@ -434,4 +441,22 @@ public class RcfacesContextImpl extends RcfacesContext implements Serializable {
     public final String getApplicationVersion() {
         return applicationVersion;
     }
+
+    public void setResourceVersionHandler(
+            IResourceVersionHandler resourceVersionHandler) {
+        this.resourceVersionHandler = resourceVersionHandler;
+    }
+
+    public final IResourceVersionHandler getResourceVersionHandler() {
+        return resourceVersionHandler;
+    }
+
+    public void readExternal(ObjectInput in) {
+        // On ne serialize rien !
+    }
+
+    public void writeExternal(ObjectOutput out) {
+        // On ne serialize rien !
+    }
+
 }

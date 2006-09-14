@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -33,13 +36,14 @@ import javax.faces.event.PhaseListener;
 
 import org.rcfaces.core.internal.Constants;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class TemplatesEngine implements PhaseListener {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -6370096499604012889L;
 
     private static final ThreadLocal templateConstructPhase = new ThreadLocal();
 

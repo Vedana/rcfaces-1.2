@@ -1,10 +1,12 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.HelpButtonComponent;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import javax.servlet.jsp.tagext.Tag;
 
-public class HelpButtonTag extends ImageButtonTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.HelpButtonComponent;
+
+public class HelpButtonTag extends ImageButtonTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(HelpButtonTag.class);

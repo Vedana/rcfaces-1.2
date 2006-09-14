@@ -1,20 +1,22 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.AbstractCommandComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public abstract class AbstractCommandTag extends CameliaTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AbstractCommandComponent;
+
+public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(AbstractCommandTag.class);
 
-	private String visible;
 	private String hiddenMode;
+	private String visible;
 	private String height;
 	private String width;
 	private String helpMessage;
@@ -26,44 +28,44 @@ public abstract class AbstractCommandTag extends CameliaTag {
 	private String valueLocked;
 	private String tabIndex;
 	private String lookId;
-	private String y;
 	private String x;
+	private String y;
 	private String blurListeners;
 	private String focusListeners;
-	private String marginRight;
-	private String marginLeft;
-	private String marginTop;
 	private String marginBottom;
-	private String foregroundColor;
+	private String marginLeft;
+	private String marginRight;
+	private String marginTop;
 	private String backgroundColor;
+	private String foregroundColor;
 	private String textAlignment;
 	private String styleClass;
 	private String userEventListeners;
 	private String propertyChangeListeners;
-	private String fontSize;
 	private String fontBold;
-	private String fontUnderline;
 	private String fontItalic;
 	private String fontName;
+	private String fontSize;
+	private String fontUnderline;
 	private String accessKey;
 	private String initListeners;
 	private String margins;
 	private String immediate;
 	private String value;
-	public final String getVisible() {
-		return visible;
-	}
-
-	public final void setVisible(String visible) {
-		this.visible = visible;
-	}
-
 	public final String getHiddenMode() {
 		return hiddenMode;
 	}
 
 	public final void setHiddenMode(String hiddenMode) {
 		this.hiddenMode = hiddenMode;
+	}
+
+	public final String getVisible() {
+		return visible;
+	}
+
+	public final void setVisible(String visible) {
+		this.visible = visible;
 	}
 
 	public final String getHeight() {
@@ -154,20 +156,20 @@ public abstract class AbstractCommandTag extends CameliaTag {
 		this.lookId = lookId;
 	}
 
-	public final String getY() {
-		return y;
-	}
-
-	public final void setY(String y) {
-		this.y = y;
-	}
-
 	public final String getX() {
 		return x;
 	}
 
 	public final void setX(String x) {
 		this.x = x;
+	}
+
+	public final String getY() {
+		return y;
+	}
+
+	public final void setY(String y) {
+		this.y = y;
 	}
 
 	public final String getBlurListener() {
@@ -186,12 +188,12 @@ public abstract class AbstractCommandTag extends CameliaTag {
 		this.focusListeners = focusListeners;
 	}
 
-	public final String getMarginRight() {
-		return marginRight;
+	public final String getMarginBottom() {
+		return marginBottom;
 	}
 
-	public final void setMarginRight(String marginRight) {
-		this.marginRight = marginRight;
+	public final void setMarginBottom(String marginBottom) {
+		this.marginBottom = marginBottom;
 	}
 
 	public final String getMarginLeft() {
@@ -202,6 +204,14 @@ public abstract class AbstractCommandTag extends CameliaTag {
 		this.marginLeft = marginLeft;
 	}
 
+	public final String getMarginRight() {
+		return marginRight;
+	}
+
+	public final void setMarginRight(String marginRight) {
+		this.marginRight = marginRight;
+	}
+
 	public final String getMarginTop() {
 		return marginTop;
 	}
@@ -210,12 +220,12 @@ public abstract class AbstractCommandTag extends CameliaTag {
 		this.marginTop = marginTop;
 	}
 
-	public final String getMarginBottom() {
-		return marginBottom;
+	public final String getBackgroundColor() {
+		return backgroundColor;
 	}
 
-	public final void setMarginBottom(String marginBottom) {
-		this.marginBottom = marginBottom;
+	public final void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
 	}
 
 	public final String getForegroundColor() {
@@ -224,14 +234,6 @@ public abstract class AbstractCommandTag extends CameliaTag {
 
 	public final void setForegroundColor(String foregroundColor) {
 		this.foregroundColor = foregroundColor;
-	}
-
-	public final String getBackgroundColor() {
-		return backgroundColor;
-	}
-
-	public final void setBackgroundColor(String backgroundColor) {
-		this.backgroundColor = backgroundColor;
 	}
 
 	public final String getTextAlignment() {
@@ -266,28 +268,12 @@ public abstract class AbstractCommandTag extends CameliaTag {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final String getFontSize() {
-		return fontSize;
-	}
-
-	public final void setFontSize(String fontSize) {
-		this.fontSize = fontSize;
-	}
-
 	public final String getFontBold() {
 		return fontBold;
 	}
 
 	public final void setFontBold(String fontBold) {
 		this.fontBold = fontBold;
-	}
-
-	public final String getFontUnderline() {
-		return fontUnderline;
-	}
-
-	public final void setFontUnderline(String fontUnderline) {
-		this.fontUnderline = fontUnderline;
 	}
 
 	public final String getFontItalic() {
@@ -304,6 +290,22 @@ public abstract class AbstractCommandTag extends CameliaTag {
 
 	public final void setFontName(String fontName) {
 		this.fontName = fontName;
+	}
+
+	public final String getFontSize() {
+		return fontSize;
+	}
+
+	public final void setFontSize(String fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public final String getFontUnderline() {
+		return fontUnderline;
+	}
+
+	public final void setFontUnderline(String fontUnderline) {
+		this.fontUnderline = fontUnderline;
 	}
 
 	public final String getAccessKey() {
@@ -348,8 +350,8 @@ public abstract class AbstractCommandTag extends CameliaTag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  helpMessage='"+helpMessage+"'");
@@ -359,21 +361,21 @@ public abstract class AbstractCommandTag extends CameliaTag {
 			LOG.debug("  valueLocked='"+valueLocked+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  lookId='"+lookId+"'");
-			LOG.debug("  y='"+y+"'");
 			LOG.debug("  x='"+x+"'");
-			LOG.debug("  marginRight='"+marginRight+"'");
-			LOG.debug("  marginLeft='"+marginLeft+"'");
-			LOG.debug("  marginTop='"+marginTop+"'");
+			LOG.debug("  y='"+y+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
-			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  marginLeft='"+marginLeft+"'");
+			LOG.debug("  marginRight='"+marginRight+"'");
+			LOG.debug("  marginTop='"+marginTop+"'");
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  fontSize='"+fontSize+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
-			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
 			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
@@ -387,16 +389,6 @@ public abstract class AbstractCommandTag extends CameliaTag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (visible != null) {
-			if (isValueReference(visible)) {
-				ValueBinding vb = application.createValueBinding(visible);
-
-				component.setVisible(vb);
-			} else {
-				component.setVisible(getBoolean(visible));
-			}
-		}
-
 		if (hiddenMode != null) {
 			if (isValueReference(hiddenMode)) {
 				ValueBinding vb = application.createValueBinding(hiddenMode);
@@ -404,6 +396,16 @@ public abstract class AbstractCommandTag extends CameliaTag {
 				component.setHiddenMode(vb);
 			} else {
 				component.setHiddenMode(hiddenMode);
+			}
+		}
+
+		if (visible != null) {
+			if (isValueReference(visible)) {
+				ValueBinding vb = application.createValueBinding(visible);
+
+				component.setVisible(vb);
+			} else {
+				component.setVisible(getBoolean(visible));
 			}
 		}
 
@@ -505,16 +507,6 @@ public abstract class AbstractCommandTag extends CameliaTag {
 			}
 		}
 
-		if (y != null) {
-			if (isValueReference(y)) {
-				ValueBinding vb = application.createValueBinding(y);
-
-				component.setY(vb);
-			} else {
-				component.setY(y);
-			}
-		}
-
 		if (x != null) {
 			if (isValueReference(x)) {
 				ValueBinding vb = application.createValueBinding(x);
@@ -522,6 +514,16 @@ public abstract class AbstractCommandTag extends CameliaTag {
 				component.setX(vb);
 			} else {
 				component.setX(x);
+			}
+		}
+
+		if (y != null) {
+			if (isValueReference(y)) {
+				ValueBinding vb = application.createValueBinding(y);
+
+				component.setY(vb);
+			} else {
+				component.setY(y);
 			}
 		}
 
@@ -533,13 +535,13 @@ public abstract class AbstractCommandTag extends CameliaTag {
 			parseActionListener(application, component, FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
-		if (marginRight != null) {
-			if (isValueReference(marginRight)) {
-				ValueBinding vb = application.createValueBinding(marginRight);
+		if (marginBottom != null) {
+			if (isValueReference(marginBottom)) {
+				ValueBinding vb = application.createValueBinding(marginBottom);
 
-				component.setMarginRight(vb);
+				component.setMarginBottom(vb);
 			} else {
-				component.setMarginRight(marginRight);
+				component.setMarginBottom(marginBottom);
 			}
 		}
 
@@ -553,6 +555,16 @@ public abstract class AbstractCommandTag extends CameliaTag {
 			}
 		}
 
+		if (marginRight != null) {
+			if (isValueReference(marginRight)) {
+				ValueBinding vb = application.createValueBinding(marginRight);
+
+				component.setMarginRight(vb);
+			} else {
+				component.setMarginRight(marginRight);
+			}
+		}
+
 		if (marginTop != null) {
 			if (isValueReference(marginTop)) {
 				ValueBinding vb = application.createValueBinding(marginTop);
@@ -563,13 +575,13 @@ public abstract class AbstractCommandTag extends CameliaTag {
 			}
 		}
 
-		if (marginBottom != null) {
-			if (isValueReference(marginBottom)) {
-				ValueBinding vb = application.createValueBinding(marginBottom);
+		if (backgroundColor != null) {
+			if (isValueReference(backgroundColor)) {
+				ValueBinding vb = application.createValueBinding(backgroundColor);
 
-				component.setMarginBottom(vb);
+				component.setBackgroundColor(vb);
 			} else {
-				component.setMarginBottom(marginBottom);
+				component.setBackgroundColor(backgroundColor);
 			}
 		}
 
@@ -580,16 +592,6 @@ public abstract class AbstractCommandTag extends CameliaTag {
 				component.setForegroundColor(vb);
 			} else {
 				component.setForegroundColor(foregroundColor);
-			}
-		}
-
-		if (backgroundColor != null) {
-			if (isValueReference(backgroundColor)) {
-				ValueBinding vb = application.createValueBinding(backgroundColor);
-
-				component.setBackgroundColor(vb);
-			} else {
-				component.setBackgroundColor(backgroundColor);
 			}
 		}
 
@@ -621,16 +623,6 @@ public abstract class AbstractCommandTag extends CameliaTag {
 			parseActionListener(application, component, PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
-		if (fontSize != null) {
-			if (isValueReference(fontSize)) {
-				ValueBinding vb = application.createValueBinding(fontSize);
-
-				component.setFontSize(vb);
-			} else {
-				component.setFontSize(fontSize);
-			}
-		}
-
 		if (fontBold != null) {
 			if (isValueReference(fontBold)) {
 				ValueBinding vb = application.createValueBinding(fontBold);
@@ -638,16 +630,6 @@ public abstract class AbstractCommandTag extends CameliaTag {
 				component.setFontBold(vb);
 			} else {
 				component.setFontBold(getBoolean(fontBold));
-			}
-		}
-
-		if (fontUnderline != null) {
-			if (isValueReference(fontUnderline)) {
-				ValueBinding vb = application.createValueBinding(fontUnderline);
-
-				component.setFontUnderline(vb);
-			} else {
-				component.setFontUnderline(getBoolean(fontUnderline));
 			}
 		}
 
@@ -668,6 +650,26 @@ public abstract class AbstractCommandTag extends CameliaTag {
 				component.setFontName(vb);
 			} else {
 				component.setFontName(fontName);
+			}
+		}
+
+		if (fontSize != null) {
+			if (isValueReference(fontSize)) {
+				ValueBinding vb = application.createValueBinding(fontSize);
+
+				component.setFontSize(vb);
+			} else {
+				component.setFontSize(fontSize);
+			}
+		}
+
+		if (fontUnderline != null) {
+			if (isValueReference(fontUnderline)) {
+				ValueBinding vb = application.createValueBinding(fontUnderline);
+
+				component.setFontUnderline(vb);
+			} else {
+				component.setFontUnderline(getBoolean(fontUnderline));
 			}
 		}
 
@@ -712,8 +714,8 @@ public abstract class AbstractCommandTag extends CameliaTag {
 	}
 
 	public void release() {
-		visible = null;
 		hiddenMode = null;
+		visible = null;
 		height = null;
 		width = null;
 		helpMessage = null;
@@ -725,25 +727,25 @@ public abstract class AbstractCommandTag extends CameliaTag {
 		valueLocked = null;
 		tabIndex = null;
 		lookId = null;
-		y = null;
 		x = null;
+		y = null;
 		blurListeners = null;
 		focusListeners = null;
-		marginRight = null;
-		marginLeft = null;
-		marginTop = null;
 		marginBottom = null;
-		foregroundColor = null;
+		marginLeft = null;
+		marginRight = null;
+		marginTop = null;
 		backgroundColor = null;
+		foregroundColor = null;
 		textAlignment = null;
 		styleClass = null;
 		userEventListeners = null;
 		propertyChangeListeners = null;
-		fontSize = null;
 		fontBold = null;
-		fontUnderline = null;
 		fontItalic = null;
 		fontName = null;
+		fontSize = null;
+		fontUnderline = null;
 		accessKey = null;
 		initListeners = null;
 		margins = null;

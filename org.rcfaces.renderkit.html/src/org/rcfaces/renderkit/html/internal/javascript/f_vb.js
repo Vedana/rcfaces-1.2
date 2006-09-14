@@ -828,7 +828,7 @@ var __static = {
 			return inVal;
 		}
 	
-		var text = inVal.replace(/^\s*(.*?)\s*$/, "$1");
+		var text = f_core.Trim(inVal);
 		validator.a_setObject(text);
 		return text;
 	},

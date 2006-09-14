@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
@@ -94,24 +97,17 @@
  */
 package org.rcfaces.core.internal.webapp;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 
+import javax.faces.FacesException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -120,47 +116,40 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.webapp.IRepository.IContent;
+import org.rcfaces.core.internal.webapp.IRepository.IContentProvider;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
-import org.rcfaces.core.internal.webapp.IRepository.ISet;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public abstract class RepositoryServlet extends ParametredHttpServlet {
+public abstract class RepositoryServlet extends ConfiguredHttpServlet {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(RepositoryServlet.class);
+
+    private static final byte[] BYTE_EMPTY_ARRAY = new byte[0];
 
     private static final String SET_PREFIX = ".sets";
 
     private static final String MODULES_PREFIX = ".modules";
 
-    private static final Log LOG = LogFactory.getLog(RepositoryServlet.class);
-
-    private IRepository repository;
-
-    private static final Map convertedLocales = new HashMap(32);
-
     private static final String NO_CACHE_PARAMETER = Constants
             .getPackagePrefix()
             + ".NO_CACHE";
 
-    private static final String FILTERED_LOCALES_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".FILTERED_LOCALES";
+    private static final String GROUP_ALL_DEFAULT_VALUE = null;
 
-    private static final String REPOSITORY_DEFAULT_LOCALE = Constants
-            .getPackagePrefix()
-            + ".REPOSITORY_DEFAULT_LOCALE";
+    private static final String BOOT_SET_DEFAULT_VALUE = null;
 
-    private final Map fileToRecordByLocale = new HashMap();
+    private static final int CONTENT_INITIAL_SIZE = 16000;
 
-    private Set filteredLocales = null;
+    private final Map fileToRecordByLocale = new HashMap(128);
 
-    protected boolean localeSupport;
-
-    private Locale defaultLocale;
+    private IRepository repository;
 
     private boolean noCache;
 
@@ -173,8 +162,7 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
         if ("true".equalsIgnoreCase(nc)) {
             noCache = true;
 
-            LOG.info("NO_CACHE detected and enabled for servlet '"
-                    + getServletName() + "'.");
+            LOG.info("Enable NO_CACHE for servlet '" + getServletName() + "'.");
         }
 
         String repositoryDevModePropertyName = getRepositoryDevModeParameterName();
@@ -184,43 +172,8 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
             if ("true".equalsIgnoreCase(dev)) {
                 devMode = true;
 
-                LOG
-                        .info("REPOSITORY_DEV_MODE detected and enabled for servlet '"
-                                + getServletName() + "'.");
-            }
-        }
-
-        String acceptedLocaleNames = getParameter(FILTERED_LOCALES_PARAMETER);
-        if (acceptedLocaleNames != null) {
-            localeSupport = true;
-
-            filteredLocales = new HashSet();
-
-            for (StringTokenizer st = new StringTokenizer(acceptedLocaleNames,
-                    ","); st.hasMoreTokens();) {
-                String localeName = st.nextToken();
-
-                Locale locale = convertLocaleName(localeName, false);
-                if (locale == null) {
-                    continue;
-                }
-
-                filteredLocales.add(locale);
-            }
-        }
-
-        String localeName = getParameter(REPOSITORY_DEFAULT_LOCALE);
-        if (localeName != null) {
-            defaultLocale = convertLocaleName(localeName, true);
-            localeSupport = true;
-
-            if (defaultLocale != null) {
-                LOG
-                        .info("REPOSITORY_DEFAULT_LOCALE specify default locale to '"
-                                + defaultLocale + "'.");
-            } else {
-                LOG.info("REPOSITORY_DEFAULT_LOCALE value '" + localeName
-                        + "' is not accepted ! (invalid or not accepted !)");
+                LOG.info("Enable REPOSITORY_DEV_MODE for servlet '"
+                        + getServletName() + "'.");
             }
         }
 
@@ -231,89 +184,6 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
             throw new ServletException(
                     "Can not initialize repository for servlet '"
                             + getServletName() + "'.", e);
-        }
-
-        String groupAll = config.getInitParameter(getParameterPrefix()
-                + MODULES_PREFIX + ".GROUP_ALL");
-        if (groupAll != null) {
-            LOG.debug("Group all modules: " + groupAll);
-
-            for (StringTokenizer st = new StringTokenizer(groupAll, ";, "); st
-                    .hasMoreTokens();) {
-                String name = st.nextToken();
-
-                if ("all".equalsIgnoreCase(name)) {
-                    IRepository.IModule modules[] = repository.listModules();
-                    for (int i = 0; i < modules.length; i++) {
-                        modules[i].setGroupAllFiles(true);
-                    }
-
-                    continue;
-                }
-
-                IRepository.IModule module = repository.getModuleByName(name);
-                if (module == null) {
-                    throw new IllegalArgumentException("Can not find module '"
-                            + name + "' to enable 'groupAll'.");
-                }
-
-                module.setGroupAllFiles(true);
-            }
-        }
-
-        String bootSet = config.getInitParameter(getParameterPrefix()
-                + ".BOOT_SET");
-
-        if (bootSet != null) {
-            StringTokenizer st = new StringTokenizer(bootSet, ",; \n\t\r");
-            if (st.countTokens() != 1) {
-                throw new ServletException(
-                        "Only one SET can be specified as BOOT_SET !");
-            }
-
-            bootSet = st.nextToken();
-
-            String parameterValue = config
-                    .getInitParameter(getParameterPrefix() + SET_PREFIX + "."
-                            + bootSet);
-            if (parameterValue == null) {
-                throw new ServletException(
-                        "Set specified by BOOT_SET is not defined !");
-            }
-
-            IRepository.ISet set = initializeModuleSet(bootSet, parameterValue);
-            if (set == null) {
-                throw new IllegalArgumentException("Can not find boot set '"
-                        + bootSet + "'.");
-            }
-
-            repository.setBootSet(set);
-        }
-
-        Enumeration parameterNames = config.getInitParameterNames();
-        String setPrefix = getParameterPrefix() + SET_PREFIX;
-        for (; parameterNames.hasMoreElements();) {
-            String parameterName = (String) parameterNames.nextElement();
-
-            if (parameterName.startsWith(setPrefix) == false) {
-                continue;
-            }
-
-            String parameterValue = config.getInitParameter(parameterName);
-
-            parameterName = parameterName.substring(setPrefix.length() + 1);
-            if (parameterName.length() < 1) {
-                continue;
-            }
-
-            if (parameterName.equals(bootSet)) {
-                continue;
-            }
-
-            LOG.debug("Group modules '" + parameterValue + "' to set : "
-                    + parameterName);
-
-            initializeModuleSet(parameterName, parameterValue);
         }
     }
 
@@ -326,24 +196,6 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
     protected final IRepository getRepository() {
         return repository;
     }
-
-    private ISet initializeModuleSet(String setName, String moduleNames) {
-        StringTokenizer st = new StringTokenizer(moduleNames, ",; \n\t\r");
-
-        List l = new ArrayList(st.countTokens());
-        for (; st.hasMoreTokens();) {
-            String moduleName = st.nextToken();
-
-            l.add(moduleName);
-        }
-
-        String uri = getSetURI(setName);
-
-        return repository.declareSet(setName, uri, (String[]) l
-                .toArray(new String[l.size()]));
-    }
-
-    protected abstract String getSetURI(String setName);
 
     protected abstract IRepository initializeRepository(ServletConfig config)
             throws IOException;
@@ -378,7 +230,7 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
         Locale locale = null;
 
         String version = null;
-        if (Constants.BUILD_ID_URL_SUPPORT) {
+        if (getVersionSupport()) {
             idx = uri.indexOf('/');
             if (idx < 0) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -426,16 +278,23 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
             return;
         }
 
+        if (locale == null) {
+            locale = getDefaultLocale(request, response);
+        }
+
         Record record = getFileRecord(file, locale);
 
         sendRecord(request, response, record);
     }
 
+    protected abstract boolean getVersionSupport();
+
     protected Record getFileRecord(IFile file, Locale locale) {
         Record record;
 
         if (locale == null) {
-            locale = getDefaultLocale();
+            throw new FacesException("Locale is NULL for file '"
+                    + file.getFilename() + "'.");
         }
 
         synchronized (fileToRecordByLocale) {
@@ -458,89 +317,6 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
         }
 
         return record;
-    }
-
-    protected Locale getDefaultLocale() {
-        if (defaultLocale == null) {
-            defaultLocale = Locale.getDefault();
-        }
-
-        return defaultLocale;
-    }
-
-    private Locale convertLocaleName(String localeName, boolean accept) {
-        localeName = localeName.toLowerCase();
-
-        Locale locale;
-        synchronized (convertedLocales) {
-            locale = (Locale) convertedLocales.get(localeName);
-        }
-
-        if (locale != null) {
-            return locale;
-        }
-
-        // On synchronise pas le bloc, histore de pas bloquer le reste des
-        // Threads ...
-        // Et tanpis pour les put multiple de la meme valeur !
-
-        StringTokenizer st = new StringTokenizer(localeName, "_");
-        String language = st.nextToken().toLowerCase();
-        String country = (st.hasMoreTokens()) ? st.nextToken().toLowerCase()
-                : "";
-        String variant = (st.hasMoreTokens()) ? st.nextToken().toLowerCase()
-                : "";
-
-        Locale bestLocale = null;
-        int bestHit = 0;
-
-        Locale locales[] = Locale.getAvailableLocales();
-        for (int i = 0; i < locales.length; i++) {
-            locale = locales[i];
-            if (accept && filteredLocales != null
-                    && filteredLocales.contains(locale) == false) {
-                continue;
-            }
-
-            if (locale.getLanguage().equalsIgnoreCase(language) == false) {
-                continue;
-            }
-            int hit = 1;
-
-            String lcountry = locale.getCountry();
-            if (lcountry.equalsIgnoreCase(country)) {
-                hit += 2;
-
-                String lvariant = locale.getVariant();
-                if (lvariant.equalsIgnoreCase(variant)) {
-                    hit += 2;
-
-                } else if (lvariant.length() < 1) {
-                    hit++;
-                }
-
-            } else if (lcountry.length() < 1) {
-                hit++;
-            }
-
-            if (hit < bestHit) {
-                continue;
-            }
-
-            bestLocale = locale;
-            bestHit = hit;
-        }
-
-        if (bestLocale == null) {
-            // On n'enregistre pas la mauvaise reponse !
-            return null;
-        }
-
-        synchronized (convertedLocales) {
-            convertedLocales.put(localeName, bestLocale);
-
-            return bestLocale;
-        }
     }
 
     private void sendRecord(HttpServletRequest request,
@@ -683,29 +459,25 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
         }
     }
 
-    /*
-     * private void closeConnection(URLConnection urlConnection) { // Il faut
-     * fermer le InputStream pour fermer la connection try { InputStream in =
-     * urlConnection.getInputStream(); if (in != null) { in.close(); } } catch
-     * (IOException ex) { } }
-     */
-    protected abstract Record newRecord(IFile file, Locale locale);
+    protected Record newRecord(IFile file, Locale locale) {
+        return new Record(file, locale);
+    }
 
     protected abstract String getContentType(Record record);
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
-    protected abstract class Record {
+    protected class Record {
         private static final String REVISION = "$Revision$";
 
-        private final IFile file;
+        protected final IFile file;
 
         protected final Locale locale;
 
-        private byte buffer[];
+        protected byte buffer[];
 
         private byte gzippedBuffer[];
 
@@ -732,38 +504,34 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
 
         public void verifyModifications() {
 
-            boolean modified;
-
-            if (file instanceof IRepository.ISet) {
-                modified = verifySetModifications((IRepository.ISet) file);
-
-            } else if (file instanceof IRepository.IModule) {
-                modified = verifyModuleModifications((IRepository.IModule) file);
-
-            } else {
-                modified = verifyFileModifications();
-            }
+            boolean modified = verifyFileModifications();
 
             if (modified == false) {
                 return;
             }
 
+            resetRecord();
+        }
+
+        protected void resetRecord() {
             buffer = null;
             gzippedBuffer = null;
             lastModificationDate = 0;
             etag = null;
             hash = null;
+
         }
 
         private boolean verifyFileModifications() {
 
-            URL urls[] = getFileURL(file);
+            Object urls[] = getFileContentReferences(file);
 
+            IContentProvider contentProvider = file.getContentProvider();
             for (int i = 0; i < urls.length; i++) {
                 long l;
                 try {
-                    IContent content = file.getContentProvider().getContent(
-                            urls[i], locale);
+                    IContent content = contentProvider.getContent(urls[i],
+                            locale);
                     try {
                         l = content.getLastModified();
 
@@ -797,15 +565,7 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
             return true;
         }
 
-        private boolean verifyModuleModifications(IRepository.IModule module) {
-            return verifyFilesModifications(module.listDependencies());
-        }
-
-        private boolean verifySetModifications(IRepository.ISet set) {
-            return verifyFilesModifications(set.listDependencies());
-        }
-
-        private boolean verifyFilesModifications(IFile[] files) {
+        protected boolean verifyFilesModifications(IFile[] files) {
             for (int i = 0; i < files.length; i++) {
                 Record record = getFileRecord(files[i], locale);
 
@@ -817,22 +577,15 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
             return false;
         }
 
-        public final byte[] getBuffer() throws IOException {
+        public byte[] getBuffer() throws IOException {
             if (buffer != null) {
                 return buffer;
             }
 
-            if (file instanceof IRepository.ISet) {
-                return getSetBuffer();
-            }
+            Object urls[] = getFileContentReferences(file);
 
-            if (file instanceof IRepository.IModule) {
-                return getModuleBuffer();
-            }
-
-            URL urls[] = getFileURL(file);
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream(16000);
+            ByteBufferOutputStream bos = new ByteBufferOutputStream(
+                    CONTENT_INITIAL_SIZE);
             lastModificationDate = -1;
 
             for (int i = 0; i < urls.length; i++) {
@@ -914,19 +667,7 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
             return buffer;
         }
 
-        private byte[] getModuleBuffer() throws IOException {
-            IRepository.IModule module = (IRepository.IModule) file;
-
-            return getFilesBuffer(module.listDependencies());
-        }
-
-        private byte[] getSetBuffer() throws IOException {
-            IRepository.ISet set = (IRepository.ISet) file;
-
-            return getFilesBuffer(set.listDependencies());
-        }
-
-        private byte[] getFilesBuffer(IFile files[]) throws IOException {
+        protected byte[] getFilesBuffer(IFile files[]) throws IOException {
             byte buffers[][] = new byte[files.length][];
             int size = 0;
             lastModificationDate = 0;
@@ -993,8 +734,8 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
             return buffer;
         }
 
-        protected URL[] getFileURL(IFile file) {
-            return file.getContentLocations(locale);
+        protected Object[] getFileContentReferences(IFile file) {
+            return file.getContentReferences(locale);
         }
 
         protected byte[] updateBuffer(byte[] buffer) throws IOException {
@@ -1029,18 +770,18 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
                 return buf;
             }
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream(buf.length);
+            ByteBufferOutputStream bos = new ByteBufferOutputStream(buf.length);
             GZIPOutputStream gzos = new GZIPOutputStream(bos, buf.length);
 
             byte prolog[] = getProlog();
-            if (prolog != null) {
+            if (prolog.length > 0) {
                 gzos.write(prolog);
             }
 
             gzos.write(buf);
 
             byte epilog[] = getEpilog();
-            if (epilog != null) {
+            if (epilog.length > 0) {
                 gzos.write(epilog);
             }
             gzos.close();
@@ -1056,11 +797,11 @@ public abstract class RepositoryServlet extends ParametredHttpServlet {
         }
 
         public byte[] getProlog() throws IOException {
-            return null;
+            return BYTE_EMPTY_ARRAY;
         }
 
         public byte[] getEpilog() throws IOException {
-            return null;
+            return BYTE_EMPTY_ARRAY;
         }
 
         public String getCharset() {

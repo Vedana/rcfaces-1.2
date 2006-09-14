@@ -1,14 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.ImageButtonComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class ImageButtonTag extends ButtonTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ImageButtonComponent;
+
+public class ImageButtonTag extends ButtonTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ImageButtonTag.class);
@@ -20,8 +22,8 @@ public class ImageButtonTag extends ButtonTag {
 	private String border;
 	private String borderType;
 	private String textPosition;
-	private String imageWidth;
 	private String imageHeight;
+	private String imageWidth;
 	public String getComponentType() {
 		return ImageButtonComponent.COMPONENT_TYPE;
 	}
@@ -82,20 +84,20 @@ public class ImageButtonTag extends ButtonTag {
 		this.textPosition = textPosition;
 	}
 
-	public final String getImageWidth() {
-		return imageWidth;
-	}
-
-	public final void setImageWidth(String imageWidth) {
-		this.imageWidth = imageWidth;
-	}
-
 	public final String getImageHeight() {
 		return imageHeight;
 	}
 
 	public final void setImageHeight(String imageHeight) {
 		this.imageHeight = imageHeight;
+	}
+
+	public final String getImageWidth() {
+		return imageWidth;
+	}
+
+	public final void setImageWidth(String imageWidth) {
+		this.imageWidth = imageWidth;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -110,8 +112,8 @@ public class ImageButtonTag extends ButtonTag {
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  textPosition='"+textPosition+"'");
-			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -193,16 +195,6 @@ public class ImageButtonTag extends ButtonTag {
 			}
 		}
 
-		if (imageWidth != null) {
-			if (isValueReference(imageWidth)) {
-				ValueBinding vb = application.createValueBinding(imageWidth);
-
-				component.setImageWidth(vb);
-			} else {
-				component.setImageWidth(getInt(imageWidth));
-			}
-		}
-
 		if (imageHeight != null) {
 			if (isValueReference(imageHeight)) {
 				ValueBinding vb = application.createValueBinding(imageHeight);
@@ -210,6 +202,16 @@ public class ImageButtonTag extends ButtonTag {
 				component.setImageHeight(vb);
 			} else {
 				component.setImageHeight(getInt(imageHeight));
+			}
+		}
+
+		if (imageWidth != null) {
+			if (isValueReference(imageWidth)) {
+				ValueBinding vb = application.createValueBinding(imageWidth);
+
+				component.setImageWidth(vb);
+			} else {
+				component.setImageWidth(getInt(imageWidth));
 			}
 		}
 	}
@@ -222,8 +224,8 @@ public class ImageButtonTag extends ButtonTag {
 		border = null;
 		borderType = null;
 		textPosition = null;
-		imageWidth = null;
 		imageHeight = null;
+		imageWidth = null;
 
 		super.release();
 	}

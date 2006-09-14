@@ -7,8 +7,8 @@
  * f_classLoader
  *
  * @class public f_classLoader
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 function f_classLoader(window, parentClassLoader) {
 	this._window=window;
@@ -540,7 +540,7 @@ f_classLoader.prototype._init = function(obj, ignoreNotFound) {
 					f_core.Assert(obj, "Component found by name ('"+id+"') has already an ID ('+obj.id+') !");
 		
 				} else if (f_core.GetAttribute(obj, "v:class")==null) {
-					f_core.Assert(obj, "Component found by name ('"+id+"') is not a Vedana Faces Component !");
+					f_core.Assert(obj, "Component found by name ('"+id+"') is not a RCFaces Component !");
 				}
 			}
 						

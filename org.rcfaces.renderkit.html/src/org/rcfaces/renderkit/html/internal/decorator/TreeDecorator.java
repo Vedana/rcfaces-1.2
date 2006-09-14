@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -87,11 +90,10 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class TreeDecorator extends AbstractSelectItemsDecorator {
 
@@ -205,7 +207,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             return;
         }
 
-        javaScriptWriter.writeCall(null, "_setDefaultImages");
+        javaScriptWriter.writeMethodCall("_setDefaultImages");
         int pred = 0;
         for (int i = 0; i < urls.length; i++) {
             String url = urls[i];
@@ -256,7 +258,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         IComponentRenderContext componentRenderContext = javaScriptWriter
                 .getComponentRenderContext();
 
-        jsWriter.writeCall(null, jsCommand).write('[');
+        jsWriter.writeMethodCall(jsCommand).write('[');
         int i = 0;
         for (Iterator it = objects.iterator(); it.hasNext();) {
             Object value = it.next();
@@ -306,7 +308,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             if (preloadLevelDepth > 0
                     && preloadLevelDepth < treeRenderContext.getDepth()) {
                 if (treeRenderContext.isFirstInteractiveChild(parentVarId)) {
-                    javaScriptWriter.writeCall(null, "_setInteractiveParent")
+                    javaScriptWriter.writeMethodCall("_setInteractiveParent")
                             .write(parentVarId).writeln(");");
                 }
 
@@ -325,7 +327,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             parentVarId = javaScriptWriter.getComponentVarName();
         }
 
-        javaScriptWriter.write('=').writeCall(null, "_appendNode").write(
+        javaScriptWriter.write('=').writeMethodCall("_appendNode").write(
                 parentVarId).write(',');
 
         int pred = 0;
@@ -486,7 +488,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             if (varImageURL != null || varExpandedImageURL != null
                     || varSelectedImageURL != null
                     || varDisabledImageURL != null || varHoverImageURL != null) {
-                javaScriptWriter.writeCall(null, "_setImages").write(varId);
+                javaScriptWriter.writeMethodCall("_setImages").write(varId);
                 pred = 0;
 
                 if (varImageURL != null) {
@@ -574,26 +576,26 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 .getComponent();
 
         return createContext(componentRenderContext, treeComponent, this, 0,
-                true);
+                true, null);
     }
 
     private SelectItemsContext createContext(
             IComponentRenderContext componentRenderContext,
             TreeComponent treeComponent, ISelectItemNodeWriter nodeRenderer,
-            int depth, boolean sendFullStates) {
+            int depth, boolean sendFullStates, String containerVarId) {
         return new TreeRenderContext(nodeRenderer, componentRenderContext,
-                treeComponent, depth, sendFullStates);
+                treeComponent, depth, sendFullStates, containerVarId);
     }
 
     public void encodeNodes(IJavaScriptWriter javaScriptWriter,
             TreeComponent treeComponent, ISelectItemNodeWriter nodeRenderer,
-            int depth) throws WriterException {
+            int depth, String containerVarId) throws WriterException {
 
         this.javaScriptWriter = javaScriptWriter;
         try {
             SelectItemsContext selectItemsContext = createContext(
                     javaScriptWriter.getComponentRenderContext(),
-                    treeComponent, nodeRenderer, depth, false);
+                    treeComponent, nodeRenderer, depth, false, containerVarId);
 
             this.selectItemsContext = selectItemsContext;
 
@@ -616,7 +618,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         if (interactiveComponentClientId != null) {
             // Pas de donn�es si nous sommes dans un scope interactif !
-            javaScriptWriter.writeCall(null, "_setInteractiveShow").write('"')
+            javaScriptWriter.writeMethodCall("_setInteractiveShow").write('"')
                     .write(interactiveComponentClientId).writeln("\");");
             return;
         }

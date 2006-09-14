@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -33,8 +36,8 @@ import org.rcfaces.core.image.AbstractBufferedIndexedImageOperation;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ColorsRescaleOperation extends
         AbstractBufferedIndexedImageOperation {
@@ -223,8 +226,8 @@ public class ColorsRescaleOperation extends
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected static class RescaleRasterOp extends ParametredRasterOp {
         private static final String REVISION = "$Revision$";

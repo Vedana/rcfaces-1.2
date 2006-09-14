@@ -6,8 +6,8 @@
  * 
  *
  * @class public f_env extends Object
- * @author Olivier Oeuillot & Joel Merlin
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
+ * @version $Revision$ $Date$
  */
  
 function f_env() {
@@ -47,6 +47,11 @@ var __static = {
 	 * @field private static string
 	 */
 	_ViewURI: undefined,
+
+	/**
+	 * @field private static string
+	 */
+	_LocaleName: undefined,
 
 	/**
 	 * @field private static boolean
@@ -153,13 +158,20 @@ var __static = {
 		
 		return f_env._DEFAULT_STYLESHEET_BASE;
 	},
+	/**
+	 * @method hidden static final 
+	 */
+	GetLocaleName: function() {
+		return f_env._LocaleName;
+	},
 	
 	/**
 	 * @method hidden static final
 	 */
-	SetBaseURI: function(baseURI, viewURI, jsBaseURI, styleSheetBaseURI) {
+	Initialize: function(baseURI, viewURI, localeName, jsBaseURI, styleSheetBaseURI) {
 		f_env._BaseURI=baseURI;		
 		f_env._JsBaseURI=jsBaseURI;
+		f_env._LocaleName=localeName;
 		if (!styleSheetBaseURI) {
 			styleSheetBaseURI=jsBaseURI;
 		}

@@ -6,8 +6,8 @@
  * class f_imageCheckButton
  *
  * @class f_imageCheckButton extends f_imageButton, fa_selected
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __prototype = {
 

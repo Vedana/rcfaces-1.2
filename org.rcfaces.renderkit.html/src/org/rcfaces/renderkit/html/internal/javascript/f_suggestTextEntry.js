@@ -6,8 +6,8 @@
  * f_suggestTextEntry class
  *
  * @class public f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands, fa_subMenu
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static = {
@@ -531,7 +531,9 @@ var __prototype = {
 		}
 		
 		if (!complete) {
-			var item=menu.f_appendItem(menu, "_result"+i, "-- Tous les résultats ne sont pas affichés --");			
+			var message=f_resourceBundle.Get(f_suggestTextEntry).f_get("MORE_RELEVANT_RESULTS");
+		
+			var item=menu.f_appendItem(menu, "_result"+i, message);			
 			menu.f_setItemDisabled(item, true);
 		}
 	

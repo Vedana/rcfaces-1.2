@@ -6,8 +6,8 @@
  * f_customButton class
  *
  * @class f_customButton extends f_component, fa_readOnly, fa_disabled, fa_borderType
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */ 
 var __static = {
 

@@ -20,612 +20,575 @@ import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.AbstractGridComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.CardinalityConverter;
 import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.model.ISortedComponent;
 
-public class DataGridComponent extends AbstractGridComponent implements
-        ISelectionEventCapability, ISelectableCapability,
-        ISelectionCardinalityCapability, ICheckEventCapability,
-        ICheckableCapability, ICheckCardinalityCapability,
-        IDoubleClickEventCapability, IRequiredCapability, IBorderCapability,
-        IReadOnlyCapability, IDisabledCapability, IMenuCapability,
-        IScrollableCapability, IFilterCapability, IPreferenceCapability {
+public class DataGridComponent extends AbstractGridComponent implements 
+	ISelectionEventCapability,
+	ISelectableCapability,
+	ISelectionCardinalityCapability,
+	ICheckEventCapability,
+	ICheckableCapability,
+	ICheckCardinalityCapability,
+	IDoubleClickEventCapability,
+	IRequiredCapability,
+	IBorderCapability,
+	IReadOnlyCapability,
+	IDisabledCapability,
+	IMenuCapability,
+	IScrollableCapability,
+	IFilterCapability,
+	IPreferenceCapability {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.dataGrid";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.dataGrid";
 
-    public DataGridComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
 
-    public DataGridComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public DataGridComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public final IDataColumnIterator listColumns() {
+	public DataGridComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-        return GridTools.listColumns(this);
+	public final IDataColumnIterator listColumns() {
 
-    }
 
-    public final void setSelectionCardinality(String cardinality) {
+		return GridTools.listColumns(this);
+		
+	}
 
-        setSelectionCardinality(((Integer) CardinalityConverter.SINGLETON
-                .getAsObject(null, null, cardinality)).intValue());
+	public final void setSelectionCardinality(String cardinality) {
 
-    }
 
-    public final void setCheckCardinality(String cardinality) {
+			setSelectionCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, null, cardinality)).intValue());
+		
+	}
 
-        setCheckCardinality(((Integer) CardinalityConverter.SINGLETON
-                .getAsObject(null, null, cardinality)).intValue());
+	public final void setCheckCardinality(String cardinality) {
 
-    }
 
-    public final int getSelectedRowsCount() {
+			setCheckCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, null, cardinality)).intValue());
+		
+	}
 
-        return GridTools.getCount(getSelectedValues());
+	public final int getSelectedRowsCount() {
 
-    }
 
-    public final int getCheckedRowsCount() {
+				return GridTools.getCount(getSelectedValues());
+			
+	}
 
-        return GridTools.getCount(getCheckedValues());
+	public final int getCheckedRowsCount() {
 
-    }
 
-    public final Object getFirstSelectedRow() {
+				return GridTools.getCount(getCheckedValues());
+			
+	}
 
-        return GridTools.getFirst(getDataModel(null), getSelectedValues());
+	public final Object getFirstSelectedRow() {
 
-    }
 
-    public final Object getFirstCheckedRow() {
+				return GridTools.getFirst(getDataModel(null), getSelectedValues());
+			
+	}
 
-        return GridTools.getFirst(getDataModel(null), getCheckedValues());
+	public final Object getFirstCheckedRow() {
 
-    }
 
-    public final boolean setSortedColumn(DataColumnComponent dataColumn) {
+				return GridTools.getFirst(getDataModel(null), getCheckedValues());
+			
+	}
 
-        return GridTools.setSortedColumn(this, dataColumn);
+	public final boolean setSortedColumn(DataColumnComponent dataColumn) {
 
-    }
 
-    public final DataColumnComponent getSortedColumn() {
+				return GridTools.setSortedColumn(this, dataColumn);
+			
+	}
 
-        return getSortedColumn(null);
+	public final DataColumnComponent getSortedColumn() {
 
-    }
 
-    public final DataColumnComponent getSortedColumn(FacesContext context) {
+				return getSortedColumn(null);
+			
+	}
 
-        return GridTools.getSortedColumn(context, this);
+	public final DataColumnComponent getSortedColumn(FacesContext context) {
 
-    }
 
-    public final ISortedComponent[] listSortedComponents() {
+				return GridTools.getSortedColumn(context, this);
+			
+	}
 
-        return listSortedComponents(null);
+	public final ISortedComponent[] listSortedComponents() {
 
-    }
 
-    public final ISortedComponent[] listSortedComponents(FacesContext context) {
+				return listSortedComponents(null);
+			
+	}
 
-        return GridTools.listSortedComponents(context, this);
+	public final ISortedComponent[] listSortedComponents(FacesContext context) {
 
-    }
 
-    public final void addSelectionListener(
-            org.rcfaces.core.event.ISelectionListener listener) {
-        addFacesListener(listener);
-    }
+				return GridTools.listSortedComponents(context, this);
+			
+	}
 
-    public final void removeSelectionListener(
-            org.rcfaces.core.event.ISelectionListener listener) {
-        removeFacesListener(listener);
-    }
-
-    public final javax.faces.event.FacesListener[] listSelectionListeners() {
-        return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-    }
-
-    public final boolean isSelectable() {
-        return isSelectable(null);
-    }
-
-    public final boolean isSelectable(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.SELECTABLE, false,
-                facesContext);
-    }
-
-    public final void setSelectable(boolean selectable) {
-        engine.setProperty(Properties.SELECTABLE, selectable);
-    }
-
-    public final void setSelectable(ValueBinding selectable) {
-        engine.setProperty(Properties.SELECTABLE, selectable);
-    }
-
-    public final int getSelectionCardinality() {
-        return getSelectionCardinality(null);
-    }
-
-    public final int getSelectionCardinality(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getIntProperty(Properties.SELECTION_CARDINALITY, 0,
-                facesContext);
-    }
-
-    public final void setSelectionCardinality(int selectionCardinality) {
-        engine.setProperty(Properties.SELECTION_CARDINALITY,
-                selectionCardinality);
-    }
-
-    public final void setSelectionCardinality(ValueBinding selectionCardinality) {
-        engine.setProperty(Properties.SELECTION_CARDINALITY,
-                selectionCardinality);
-    }
-
-    public final void addCheckListener(
-            org.rcfaces.core.event.ICheckListener listener) {
-        addFacesListener(listener);
-    }
-
-    public final void removeCheckListener(
-            org.rcfaces.core.event.ICheckListener listener) {
-        removeFacesListener(listener);
-    }
-
-    public final javax.faces.event.FacesListener[] listCheckListeners() {
-        return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
-    }
-
-    public final boolean isCheckable() {
-        return isCheckable(null);
-    }
-
-    public final boolean isCheckable(
-            javax.faces.context.FacesContext facesContext) {
-        return engine
-                .getBoolProperty(Properties.CHECKABLE, false, facesContext);
-    }
-
-    public final void setCheckable(boolean checkable) {
-        engine.setProperty(Properties.CHECKABLE, checkable);
-    }
-
-    public final void setCheckable(ValueBinding checkable) {
-        engine.setProperty(Properties.CHECKABLE, checkable);
-    }
-
-    public final int getCheckCardinality() {
-        return getCheckCardinality(null);
-    }
-
-    public final int getCheckCardinality(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getIntProperty(Properties.CHECK_CARDINALITY, 0,
-                facesContext);
-    }
-
-    public final void setCheckCardinality(int checkCardinality) {
-        engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
-    }
-
-    public final void setCheckCardinality(ValueBinding checkCardinality) {
-        engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
-    }
-
-    public final void addDoubleClickListener(
-            org.rcfaces.core.event.IDoubleClickListener listener) {
-        addFacesListener(listener);
-    }
+	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		addFacesListener(listener);
+	}
 
-    public final void removeDoubleClickListener(
-            org.rcfaces.core.event.IDoubleClickListener listener) {
-        removeFacesListener(listener);
-    }
-
-    public final javax.faces.event.FacesListener[] listDoubleClickListeners() {
-        return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
-    }
-
-    public final boolean isRequired() {
-        return isRequired(null);
-    }
-
-    public final boolean isRequired(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.REQUIRED, false, facesContext);
-    }
-
-    public final void setRequired(boolean required) {
-        engine.setProperty(Properties.REQUIRED, required);
-    }
-
-    public final void setRequired(ValueBinding required) {
-        engine.setProperty(Properties.REQUIRED, required);
-    }
-
-    public final boolean isBorder() {
-        return isBorder(null);
-    }
-
-    public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.BORDER, true, facesContext);
-    }
-
-    public final void setBorder(boolean border) {
-        engine.setProperty(Properties.BORDER, border);
-    }
-
-    public final void setBorder(ValueBinding border) {
-        engine.setProperty(Properties.BORDER, border);
-    }
-
-    public final boolean isReadOnly() {
-        return isReadOnly(null);
-    }
-
-    public final boolean isReadOnly(
-            javax.faces.context.FacesContext facesContext) {
-        return engine
-                .getBoolProperty(Properties.READ_ONLY, false, facesContext);
-    }
-
-    public final void setReadOnly(boolean readOnly) {
-        engine.setProperty(Properties.READ_ONLY, readOnly);
-    }
-
-    public final void setReadOnly(ValueBinding readOnly) {
-        engine.setProperty(Properties.READ_ONLY, readOnly);
-    }
-
-    public final boolean isDisabled() {
-        return isDisabled(null);
-    }
-
-    public final boolean isDisabled(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
-    }
-
-    public final void setDisabled(boolean disabled) {
-        engine.setProperty(Properties.DISABLED, disabled);
-    }
-
-    public final void setDisabled(ValueBinding disabled) {
-        engine.setProperty(Properties.DISABLED, disabled);
-    }
-
-    public final IMenuComponent getMenu(String menuId) {
-
-        return MenuTools.getMenu(this, menuId);
-
-    }
-
-    public final IMenuComponent getMenu() {
-
-        return MenuTools.getMenu(this);
-
-    }
-
-    public final IMenuIterator listMenus() {
-
-        return MenuTools.listMenus(this);
-
-    }
-
-    public final java.lang.String getVerticalScrollPosition() {
-        return getVerticalScrollPosition(null);
-    }
-
-    public final java.lang.String getVerticalScrollPosition(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.VERTICAL_SCROLL_POSITION,
-                facesContext);
-    }
-
-    public final void setVerticalScrollPosition(
-            java.lang.String verticalScrollPosition) {
-        engine.setProperty(Properties.VERTICAL_SCROLL_POSITION,
-                verticalScrollPosition);
-    }
-
-    public final void setVerticalScrollPosition(
-            ValueBinding verticalScrollPosition) {
-        engine.setProperty(Properties.VERTICAL_SCROLL_POSITION,
-                verticalScrollPosition);
-    }
-
-    public final java.lang.String getHorizontalScrollPosition() {
-        return getHorizontalScrollPosition(null);
-    }
-
-    public final java.lang.String getHorizontalScrollPosition(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.HORIZONTAL_SCROLL_POSITION,
-                facesContext);
-    }
-
-    public final void setHorizontalScrollPosition(
-            java.lang.String horizontalScrollPosition) {
-        engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION,
-                horizontalScrollPosition);
-    }
-
-    public final void setHorizontalScrollPosition(
-            ValueBinding horizontalScrollPosition) {
-        engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION,
-                horizontalScrollPosition);
-    }
-
-    public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
-        return getFilterProperties(null);
-    }
-
-    public final org.rcfaces.core.model.IFilterProperties getFilterProperties(
-            javax.faces.context.FacesContext facesContext) {
-        return (org.rcfaces.core.model.IFilterProperties) engine.getProperty(
-                Properties.FILTER_PROPERTIES, facesContext);
-    }
-
-    public final void setFilterProperties(
-            org.rcfaces.core.model.IFilterProperties filterProperties) {
-        engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
-    }
-
-    public final void setFilterProperties(ValueBinding filterProperties) {
-        engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
-    }
-
-    public final org.rcfaces.core.preference.IComponentPreference getPreference() {
-        return getPreference(null);
-    }
-
-    public final org.rcfaces.core.preference.IComponentPreference getPreference(
-            javax.faces.context.FacesContext facesContext) {
-        return (org.rcfaces.core.preference.IComponentPreference) engine
-                .getProperty(Properties.PREFERENCE, facesContext);
-    }
-
-    public final void setPreference(
-            org.rcfaces.core.preference.IComponentPreference preference) {
-        engine.setProperty(Properties.PREFERENCE, preference);
-    }
-
-    public final void setPreference(ValueBinding preference) {
-        engine.setProperty(Properties.PREFERENCE, preference);
-    }
-
-    public final boolean isHeaderVisible() {
-        return isHeaderVisible(null);
-    }
-
-    public final boolean isHeaderVisible(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.HEADER_VISIBLE, true,
-                facesContext);
-    }
-
-    public final void setHeaderVisible(boolean headerVisible) {
-        engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
-    }
-
-    public final void setHeaderVisible(ValueBinding headerVisible) {
-        engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
-    }
-
-    public final boolean isHeaderVisibleSetted() {
-        return engine.isPropertySetted(Properties.HEADER_VISIBLE);
-    }
-
-    public final Object getSelectedValues() {
-        return getSelectedValues(null);
-    }
-
-    public final Object getSelectedValues(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getValue(Properties.SELECTED_VALUES, facesContext);
-    }
-
-    public final void setSelectedValues(Object selectedValues) {
-        engine.setValue(Properties.SELECTED_VALUES, selectedValues);
-    }
-
-    public final void setSelectedValues(ValueBinding selectedValues) {
-        engine.setValueBinding(Properties.SELECTED_VALUES, selectedValues);
-    }
-
-    public final boolean isSelectedValuesSetted() {
-        return engine.isPropertySetted(Properties.SELECTED_VALUES);
-    }
-
-    public final Object getCheckedValues() {
-        return getCheckedValues(null);
-    }
-
-    public final Object getCheckedValues(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getValue(Properties.CHECKED_VALUES, facesContext);
-    }
-
-    public final void setCheckedValues(Object checkedValues) {
-        engine.setValue(Properties.CHECKED_VALUES, checkedValues);
-    }
-
-    public final void setCheckedValues(ValueBinding checkedValues) {
-        engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
-    }
-
-    public final boolean isCheckedValuesSetted() {
-        return engine.isPropertySetted(Properties.CHECKED_VALUES);
-    }
-
-    public final String getSortedColumnIds() {
-        return getSortedColumnIds(null);
-    }
-
-    public final String getSortedColumnIds(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.SORTED_COLUMN_IDS,
-                facesContext);
-    }
-
-    public final void setSortedColumnIds(String sortedColumnIds) {
-        engine.setProperty(Properties.SORTED_COLUMN_IDS, sortedColumnIds);
-    }
-
-    public final void setSortedColumnIds(ValueBinding sortedColumnIds) {
-        engine.setProperty(Properties.SORTED_COLUMN_IDS, sortedColumnIds);
-    }
-
-    public final boolean isSortedColumnIdsSetted() {
-        return engine.isPropertySetted(Properties.SORTED_COLUMN_IDS);
-    }
-
-    public final String getColumnsOrder() {
-        return getColumnsOrder(null);
-    }
-
-    public final String getColumnsOrder(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.COLUMNS_ORDER, facesContext);
-    }
-
-    public final void setColumnsOrder(String columnsOrder) {
-        engine.setProperty(Properties.COLUMNS_ORDER, columnsOrder);
-    }
-
-    public final void setColumnsOrder(ValueBinding columnsOrder) {
-        engine.setProperty(Properties.COLUMNS_ORDER, columnsOrder);
-    }
-
-    public final boolean isColumnsOrderSetted() {
-        return engine.isPropertySetted(Properties.COLUMNS_ORDER);
-    }
-
-    public final String getRowValueColumnId() {
-        return getRowValueColumnId(null);
-    }
-
-    public final String getRowValueColumnId(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID,
-                facesContext);
-    }
-
-    public final void setRowValueColumnId(String rowValueColumnId) {
-        engine.setProperty(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
-    }
-
-    public final void setRowValueColumnId(ValueBinding rowValueColumnId) {
-        engine.setProperty(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
-    }
-
-    public final boolean isRowValueColumnIdSetted() {
-        return engine.isPropertySetted(Properties.ROW_VALUE_COLUMN_ID);
-    }
-
-    public final String getRowCountVar() {
-        return getRowCountVar(null);
-    }
-
-    public final String getRowCountVar(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
-    }
-
-    public final void setRowCountVar(String rowCountVar) {
-        engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
-    }
-
-    public final void setRowCountVar(ValueBinding rowCountVar) {
-        engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
-    }
-
-    public final boolean isRowCountVarSetted() {
-        return engine.isPropertySetted(Properties.ROW_COUNT_VAR);
-    }
-
-    public final String getRowIndexVar() {
-        return getRowIndexVar(null);
-    }
-
-    public final String getRowIndexVar(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
-    }
-
-    public final void setRowIndexVar(String rowIndexVar) {
-        engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
-    }
-
-    public final void setRowIndexVar(ValueBinding rowIndexVar) {
-        engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
-    }
-
-    public final boolean isRowIndexVarSetted() {
-        return engine.isPropertySetted(Properties.ROW_INDEX_VAR);
-    }
-
-    public final boolean isClientSelectionFullState() {
-        return isClientSelectionFullState(null);
-    }
-
-    public final boolean isClientSelectionFullState(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE,
-                false, facesContext);
-    }
-
-    public final void setClientSelectionFullState(
-            boolean clientSelectionFullState) {
-        engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE,
-                clientSelectionFullState);
-    }
-
-    public final void setClientSelectionFullState(
-            ValueBinding clientSelectionFullState) {
-        engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE,
-                clientSelectionFullState);
-    }
-
-    public final boolean isClientSelectionFullStateSetted() {
-        return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
-    }
-
-    public final boolean isClientCheckFullState() {
-        return isClientCheckFullState(null);
-    }
-
-    public final boolean isClientCheckFullState(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE,
-                false, facesContext);
-    }
-
-    public final void setClientCheckFullState(boolean clientCheckFullState) {
-        engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE,
-                clientCheckFullState);
-    }
-
-    public final void setClientCheckFullState(ValueBinding clientCheckFullState) {
-        engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE,
-                clientCheckFullState);
-    }
-
-    public final boolean isClientCheckFullStateSetted() {
-        return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
-    }
-
-    public void release() {
-        super.release();
-    }
+	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public final boolean isSelectable() {
+		return isSelectable(null);
+	}
+
+	public final boolean isSelectable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SELECTABLE, false, facesContext);
+	}
+
+	public final void setSelectable(boolean selectable) {
+		engine.setProperty(Properties.SELECTABLE, selectable);
+	}
+
+	public final void setSelectable(ValueBinding selectable) {
+		engine.setProperty(Properties.SELECTABLE, selectable);
+	}
+
+	public final int getSelectionCardinality() {
+		return getSelectionCardinality(null);
+	}
+
+	public final int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
+	}
+
+	public final void setSelectionCardinality(int selectionCardinality) {
+		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
+	}
+
+	public final void setSelectionCardinality(ValueBinding selectionCardinality) {
+		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
+	}
+
+	public final void addCheckListener(org.rcfaces.core.event.ICheckListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeCheckListener(org.rcfaces.core.event.ICheckListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listCheckListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
+	}
+
+	public final boolean isCheckable() {
+		return isCheckable(null);
+	}
+
+	public final boolean isCheckable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CHECKABLE, false, facesContext);
+	}
+
+	public final void setCheckable(boolean checkable) {
+		engine.setProperty(Properties.CHECKABLE, checkable);
+	}
+
+	public final void setCheckable(ValueBinding checkable) {
+		engine.setProperty(Properties.CHECKABLE, checkable);
+	}
+
+	public final int getCheckCardinality() {
+		return getCheckCardinality(null);
+	}
+
+	public final int getCheckCardinality(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CHECK_CARDINALITY,0, facesContext);
+	}
+
+	public final void setCheckCardinality(int checkCardinality) {
+		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
+	}
+
+	public final void setCheckCardinality(ValueBinding checkCardinality) {
+		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
+	}
+
+	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDoubleClickListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
+	}
+
+	public final boolean isRequired() {
+		return isRequired(null);
+	}
+
+	public final boolean isRequired(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.REQUIRED, false, facesContext);
+	}
+
+	public final void setRequired(boolean required) {
+		engine.setProperty(Properties.REQUIRED, required);
+	}
+
+	public final void setRequired(ValueBinding required) {
+		engine.setProperty(Properties.REQUIRED, required);
+	}
+
+	public final boolean isBorder() {
+		return isBorder(null);
+	}
+
+	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
+	}
+
+	public final void setBorder(boolean border) {
+		engine.setProperty(Properties.BORDER, border);
+	}
+
+	public final void setBorder(ValueBinding border) {
+		engine.setProperty(Properties.BORDER, border);
+	}
+
+	public final boolean isReadOnly() {
+		return isReadOnly(null);
+	}
+
+	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
+	}
+
+	public final void setReadOnly(boolean readOnly) {
+		engine.setProperty(Properties.READ_ONLY, readOnly);
+	}
+
+	public final void setReadOnly(ValueBinding readOnly) {
+		engine.setProperty(Properties.READ_ONLY, readOnly);
+	}
+
+	public final boolean isDisabled() {
+		return isDisabled(null);
+	}
+
+	public final boolean isDisabled(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
+	}
+
+	public final void setDisabled(boolean disabled) {
+		engine.setProperty(Properties.DISABLED, disabled);
+	}
+
+	public final void setDisabled(ValueBinding disabled) {
+		engine.setProperty(Properties.DISABLED, disabled);
+	}
+
+	public final IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public final IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
+		
+	}
+
+	public final IMenuIterator listMenus() {
+
+
+		return MenuTools.listMenus(this);
+		
+	}
+
+	public final java.lang.String getHorizontalScrollPosition() {
+		return getHorizontalScrollPosition(null);
+	}
+
+	public final java.lang.String getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HORIZONTAL_SCROLL_POSITION, facesContext);
+	}
+
+	public final void setHorizontalScrollPosition(java.lang.String horizontalScrollPosition) {
+		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
+	}
+
+	public final void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
+		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
+	}
+
+	public final java.lang.String getVerticalScrollPosition() {
+		return getVerticalScrollPosition(null);
+	}
+
+	public final java.lang.String getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VERTICAL_SCROLL_POSITION, facesContext);
+	}
+
+	public final void setVerticalScrollPosition(java.lang.String verticalScrollPosition) {
+		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
+	}
+
+	public final void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
+		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
+	}
+
+	public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+		return getFilterProperties(null);
+	}
+
+	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
+	}
+
+	public final void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
+	}
+
+	public final void setFilterProperties(ValueBinding filterProperties) {
+		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
+	}
+
+	public final org.rcfaces.core.preference.IComponentPreference getPreference() {
+		return getPreference(null);
+	}
+
+	public final org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
+		return (org.rcfaces.core.preference.IComponentPreference)engine.getProperty(Properties.PREFERENCE, facesContext);
+	}
+
+	public final void setPreference(org.rcfaces.core.preference.IComponentPreference preference) {
+		engine.setProperty(Properties.PREFERENCE, preference);
+	}
+
+	public final void setPreference(ValueBinding preference) {
+		engine.setProperty(Properties.PREFERENCE, preference);
+	}
+
+	public final boolean isHeaderVisible() {
+		return isHeaderVisible(null);
+	}
+
+	public final boolean isHeaderVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADER_VISIBLE, true, facesContext);
+	}
+
+	public final void setHeaderVisible(boolean headerVisible) {
+		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
+	}
+
+	public final void setHeaderVisible(ValueBinding headerVisible) {
+		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
+	}
+
+	public final boolean isHeaderVisibleSetted() {
+		return engine.isPropertySetted(Properties.HEADER_VISIBLE);
+	}
+
+	public final Object getSelectedValues() {
+		return getSelectedValues(null);
+	}
+
+	public final Object getSelectedValues(javax.faces.context.FacesContext facesContext) {
+		return engine.getValue(Properties.SELECTED_VALUES, facesContext);
+	}
+
+	public final void setSelectedValues(Object selectedValues) {
+		engine.setValue(Properties.SELECTED_VALUES, selectedValues);
+	}
+
+	public final void setSelectedValues(ValueBinding selectedValues) {
+		engine.setValueBinding(Properties.SELECTED_VALUES, selectedValues);
+	}
+
+	public final boolean isSelectedValuesSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_VALUES);
+	}
+
+	public final Object getCheckedValues() {
+		return getCheckedValues(null);
+	}
+
+	public final Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
+		return engine.getValue(Properties.CHECKED_VALUES, facesContext);
+	}
+
+	public final void setCheckedValues(Object checkedValues) {
+		engine.setValue(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	public final void setCheckedValues(ValueBinding checkedValues) {
+		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	public final boolean isCheckedValuesSetted() {
+		return engine.isPropertySetted(Properties.CHECKED_VALUES);
+	}
+
+	public final String getSortedColumnIds() {
+		return getSortedColumnIds(null);
+	}
+
+	public final String getSortedColumnIds(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SORTED_COLUMN_IDS, facesContext);
+	}
+
+	public final void setSortedColumnIds(String sortedColumnIds) {
+		engine.setProperty(Properties.SORTED_COLUMN_IDS, sortedColumnIds);
+	}
+
+	public final void setSortedColumnIds(ValueBinding sortedColumnIds) {
+		engine.setProperty(Properties.SORTED_COLUMN_IDS, sortedColumnIds);
+	}
+
+	public final boolean isSortedColumnIdsSetted() {
+		return engine.isPropertySetted(Properties.SORTED_COLUMN_IDS);
+	}
+
+	public final String getColumnsOrder() {
+		return getColumnsOrder(null);
+	}
+
+	public final String getColumnsOrder(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.COLUMNS_ORDER, facesContext);
+	}
+
+	public final void setColumnsOrder(String columnsOrder) {
+		engine.setProperty(Properties.COLUMNS_ORDER, columnsOrder);
+	}
+
+	public final void setColumnsOrder(ValueBinding columnsOrder) {
+		engine.setProperty(Properties.COLUMNS_ORDER, columnsOrder);
+	}
+
+	public final boolean isColumnsOrderSetted() {
+		return engine.isPropertySetted(Properties.COLUMNS_ORDER);
+	}
+
+	public final String getRowValueColumnId() {
+		return getRowValueColumnId(null);
+	}
+
+	public final String getRowValueColumnId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
+	}
+
+	public final void setRowValueColumnId(String rowValueColumnId) {
+		engine.setProperty(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
+	}
+
+	public final void setRowValueColumnId(ValueBinding rowValueColumnId) {
+		engine.setProperty(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
+	}
+
+	public final boolean isRowValueColumnIdSetted() {
+		return engine.isPropertySetted(Properties.ROW_VALUE_COLUMN_ID);
+	}
+
+	public final String getRowCountVar() {
+		return getRowCountVar(null);
+	}
+
+	public final String getRowCountVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+	}
+
+	public final void setRowCountVar(String rowCountVar) {
+		engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
+	}
+
+	public final void setRowCountVar(ValueBinding rowCountVar) {
+		engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
+	}
+
+	public final boolean isRowCountVarSetted() {
+		return engine.isPropertySetted(Properties.ROW_COUNT_VAR);
+	}
+
+	public final String getRowIndexVar() {
+		return getRowIndexVar(null);
+	}
+
+	public final String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+	}
+
+	public final void setRowIndexVar(String rowIndexVar) {
+		engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
+	}
+
+	public final void setRowIndexVar(ValueBinding rowIndexVar) {
+		engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
+	}
+
+	public final boolean isRowIndexVarSetted() {
+		return engine.isPropertySetted(Properties.ROW_INDEX_VAR);
+	}
+
+	public final boolean isClientSelectionFullState() {
+		return isClientSelectionFullState(null);
+	}
+
+	public final boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
+	}
+
+	public final void setClientSelectionFullState(boolean clientSelectionFullState) {
+		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
+	}
+
+	public final void setClientSelectionFullState(ValueBinding clientSelectionFullState) {
+		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
+	}
+
+	public final boolean isClientSelectionFullStateSetted() {
+		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
+	}
+
+	public final boolean isClientCheckFullState() {
+		return isClientCheckFullState(null);
+	}
+
+	public final boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
+	}
+
+	public final void setClientCheckFullState(boolean clientCheckFullState) {
+		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
+	}
+
+	public final void setClientCheckFullState(ValueBinding clientCheckFullState) {
+		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
+	}
+
+	public final boolean isClientCheckFullStateSetted() {
+		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
+	}
+
+	public void release() {
+		super.release();
+	}
 }

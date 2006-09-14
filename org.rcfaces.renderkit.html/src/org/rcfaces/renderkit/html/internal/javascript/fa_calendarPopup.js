@@ -5,8 +5,8 @@
 /**
  * 
  * @aspect public fa_calendarPopup extends fa_itemsWrapper, fa_selectionProvider
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static={

@@ -1,14 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.ImageComboComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class ImageComboTag extends AbstractMenuTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ImageComboComponent;
+
+public class ImageComboTag extends AbstractMenuTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ImageComboTag.class);
@@ -21,8 +23,8 @@ public class ImageComboTag extends AbstractMenuTag {
 	private String borderType;
 	private String text;
 	private String textPosition;
-	private String imageWidth;
 	private String imageHeight;
+	private String imageWidth;
 	private String popupRowNumber;
 	public String getComponentType() {
 		return ImageComboComponent.COMPONENT_TYPE;
@@ -92,20 +94,20 @@ public class ImageComboTag extends AbstractMenuTag {
 		this.textPosition = textPosition;
 	}
 
-	public final String getImageWidth() {
-		return imageWidth;
-	}
-
-	public final void setImageWidth(String imageWidth) {
-		this.imageWidth = imageWidth;
-	}
-
 	public final String getImageHeight() {
 		return imageHeight;
 	}
 
 	public final void setImageHeight(String imageHeight) {
 		this.imageHeight = imageHeight;
+	}
+
+	public final String getImageWidth() {
+		return imageWidth;
+	}
+
+	public final void setImageWidth(String imageWidth) {
+		this.imageWidth = imageWidth;
 	}
 
 	public final String getPopupRowNumber() {
@@ -129,8 +131,8 @@ public class ImageComboTag extends AbstractMenuTag {
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  textPosition='"+textPosition+"'");
-			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  popupRowNumber='"+popupRowNumber+"'");
 		}
 		super.setProperties(uiComponent);
@@ -223,16 +225,6 @@ public class ImageComboTag extends AbstractMenuTag {
 			}
 		}
 
-		if (imageWidth != null) {
-			if (isValueReference(imageWidth)) {
-				ValueBinding vb = application.createValueBinding(imageWidth);
-
-				component.setImageWidth(vb);
-			} else {
-				component.setImageWidth(getInt(imageWidth));
-			}
-		}
-
 		if (imageHeight != null) {
 			if (isValueReference(imageHeight)) {
 				ValueBinding vb = application.createValueBinding(imageHeight);
@@ -240,6 +232,16 @@ public class ImageComboTag extends AbstractMenuTag {
 				component.setImageHeight(vb);
 			} else {
 				component.setImageHeight(getInt(imageHeight));
+			}
+		}
+
+		if (imageWidth != null) {
+			if (isValueReference(imageWidth)) {
+				ValueBinding vb = application.createValueBinding(imageWidth);
+
+				component.setImageWidth(vb);
+			} else {
+				component.setImageWidth(getInt(imageWidth));
 			}
 		}
 
@@ -262,8 +264,8 @@ public class ImageComboTag extends AbstractMenuTag {
 		borderType = null;
 		text = null;
 		textPosition = null;
-		imageWidth = null;
 		imageHeight = null;
+		imageWidth = null;
 		popupRowNumber = null;
 
 		super.release();

@@ -16,8 +16,8 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractHtmlWriter extends
         AbstractHtmlComponentlRenderContext implements IHtmlWriter {

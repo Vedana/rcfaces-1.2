@@ -6,8 +6,8 @@
  * Aspect fa_SubMenu
  *
  * @aspect public fa_subMenu
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __prototype = {

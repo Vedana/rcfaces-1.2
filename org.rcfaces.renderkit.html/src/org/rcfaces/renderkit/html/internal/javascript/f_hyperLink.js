@@ -6,8 +6,8 @@
  * class f_hyperLink
  *
  * @class f_hyperLink extends f_input
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __prototype = {

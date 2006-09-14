@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:50  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/08/29 16:13:12  oeuillot
  * Renommage  en rcfaces
@@ -14,7 +17,6 @@ package org.rcfaces.core.internal.taglib;
 import java.util.Locale;
 
 import javax.faces.FacesException;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -28,8 +30,8 @@ import org.rcfaces.core.internal.tools.ContextTools;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractInitializeTag extends TagSupport {
     private static final String REVISION = "$Revision$";
@@ -50,9 +52,7 @@ public abstract class AbstractInitializeTag extends TagSupport {
             throw new JspException("FacesContext is not initialized !");
         }
 
-        ExternalContext externalContext = facesContext.getExternalContext();
-
-        this.externalContext = initializeExternalContext(externalContext);
+        this.externalContext = initializeExternalContext(facesContext);
 
         initializeTag();
 
@@ -73,7 +73,7 @@ public abstract class AbstractInitializeTag extends TagSupport {
     }
 
     protected abstract IProcessContext initializeExternalContext(
-            ExternalContext externalContext);
+            FacesContext facesContext);
 
     protected void initializeTag() {
     }
@@ -94,7 +94,7 @@ public abstract class AbstractInitializeTag extends TagSupport {
         this.attributesLocale = attributesLocale;
     }
 
-    protected final IProcessContext getExternalContext() {
+    protected final IProcessContext getProcessContext() {
         return externalContext;
     }
 

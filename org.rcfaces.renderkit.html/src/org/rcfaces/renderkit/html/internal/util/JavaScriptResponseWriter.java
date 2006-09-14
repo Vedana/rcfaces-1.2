@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -93,6 +96,7 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -106,11 +110,10 @@ import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class JavaScriptResponseWriter extends
         AbstractHtmlComponentlRenderContext implements IJavaScriptWriter {
@@ -128,11 +131,21 @@ public class JavaScriptResponseWriter extends
 
     private IJavaScriptRenderContext javaScriptRenderContext;
 
+    private ServletContext servletContext;
+
     public JavaScriptResponseWriter(FacesContext facesContext, PrintWriter out,
             UIComponent component, String componentId) {
         super(facesContext, component, componentId);
 
         this.out = out;
+    }
+
+    public JavaScriptResponseWriter(ServletContext servletContext,
+            PrintWriter out) {
+        super(null, null, null);
+
+        this.out = out;
+        this.servletContext = servletContext;
     }
 
     public IJavaScriptRenderContext getJavaScriptRenderContext() {
@@ -290,9 +303,9 @@ public class JavaScriptResponseWriter extends
     public IRenderContext getRenderContext() {
         // Y en a pas !
         // Par contre, il ne faut pas envoyer d'exception,
-        // car le RewritingURL l'appelle ! 
+        // car le RewritingURL l'appelle !
         return null;
-//        throw new FacesException("Not supported !");
+        // throw new FacesException("Not supported !");
     }
 
     public IHtmlWriter getWriter() {
@@ -332,6 +345,23 @@ public class JavaScriptResponseWriter extends
         return this;
     }
 
+    public IJavaScriptWriter writeMethodCall(String symbol) {
+        write(convertSymbol(getComponentVarName()));
+        write('.');
+        write(convertSymbol(symbol));
+        write('(');
+
+        return this;
+    }
+
+    public IJavaScriptWriter writeConstructor(String symbol) {
+        write("new ");
+        write(convertSymbol(symbol));
+        write('(');
+
+        return this;
+    }
+
     public IJavaScriptWriter writeBoolean(boolean value) {
         if (value) {
             return write("true");
@@ -347,7 +377,7 @@ public class JavaScriptResponseWriter extends
     private String convertSymbol(String symbol) {
         if (symbolsInitialized == false) {
             symbolsInitialized = true;
-            symbols = JavaScriptRepositoryServlet.getSymbols(getFacesContext());
+            symbols = getSymbolsMap();
         }
 
         if (symbols == null) {
@@ -360,6 +390,13 @@ public class JavaScriptResponseWriter extends
         }
 
         return symbol;
+    }
+
+    protected Map getSymbolsMap() {
+        if (servletContext != null) {
+            return JavaScriptRepositoryServlet.getSymbols(servletContext);
+        }
+        return JavaScriptRepositoryServlet.getSymbols(getFacesContext());
     }
 
     public IJavaScriptWriter writeString(String s) throws WriterException {

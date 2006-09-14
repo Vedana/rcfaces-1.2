@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -33,11 +36,9 @@ package org.rcfaces.core.progressMonitor;
 public final class OperationCanceledException extends RuntimeException {
     private static final String REVISION = "$Revision$";
 
-    /**
-     * Creates a new exception.
-     */
+    private static final long serialVersionUID = 5920274573566673815L;
+
     public OperationCanceledException() {
-        super();
     }
 
     /**

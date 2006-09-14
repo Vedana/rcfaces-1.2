@@ -1,23 +1,25 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.BoxComponent;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class BoxTag extends AbstractBasicTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.BoxComponent;
+
+public class BoxTag extends AbstractBasicTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(BoxTag.class);
 
+	private String backgroundImageHorizontalPosition;
+	private String backgroundImageHorizontalRepeat;
 	private String backgroundImageURL;
 	private String backgroundImageVerticalPosition;
-	private String backgroundImageHorizontalPosition;
 	private String backgroundImageVerticalRepeat;
-	private String backgroundImageHorizontalRepeat;
 	private String border;
 	private String mouseOutListeners;
 	private String mouseOverListeners;
@@ -26,6 +28,22 @@ public class BoxTag extends AbstractBasicTag {
 	private String asyncRenderMode;
 	public String getComponentType() {
 		return BoxComponent.COMPONENT_TYPE;
+	}
+
+	public final String getBackgroundImageHorizontalPosition() {
+		return backgroundImageHorizontalPosition;
+	}
+
+	public final void setBackgroundImageHorizontalPosition(String backgroundImageHorizontalPosition) {
+		this.backgroundImageHorizontalPosition = backgroundImageHorizontalPosition;
+	}
+
+	public final String getBackgroundImageHorizontalRepeat() {
+		return backgroundImageHorizontalRepeat;
+	}
+
+	public final void setBackgroundImageHorizontalRepeat(String backgroundImageHorizontalRepeat) {
+		this.backgroundImageHorizontalRepeat = backgroundImageHorizontalRepeat;
 	}
 
 	public final String getBackgroundImageURL() {
@@ -44,28 +62,12 @@ public class BoxTag extends AbstractBasicTag {
 		this.backgroundImageVerticalPosition = backgroundImageVerticalPosition;
 	}
 
-	public final String getBackgroundImageHorizontalPosition() {
-		return backgroundImageHorizontalPosition;
-	}
-
-	public final void setBackgroundImageHorizontalPosition(String backgroundImageHorizontalPosition) {
-		this.backgroundImageHorizontalPosition = backgroundImageHorizontalPosition;
-	}
-
 	public final String getBackgroundImageVerticalRepeat() {
 		return backgroundImageVerticalRepeat;
 	}
 
 	public final void setBackgroundImageVerticalRepeat(String backgroundImageVerticalRepeat) {
 		this.backgroundImageVerticalRepeat = backgroundImageVerticalRepeat;
-	}
-
-	public final String getBackgroundImageHorizontalRepeat() {
-		return backgroundImageHorizontalRepeat;
-	}
-
-	public final void setBackgroundImageHorizontalRepeat(String backgroundImageHorizontalRepeat) {
-		this.backgroundImageHorizontalRepeat = backgroundImageHorizontalRepeat;
 	}
 
 	public final String getBorder() {
@@ -121,11 +123,11 @@ public class BoxTag extends AbstractBasicTag {
 			if (BoxComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  backgroundImageHorizontalPosition='"+backgroundImageHorizontalPosition+"'");
+			LOG.debug("  backgroundImageHorizontalRepeat='"+backgroundImageHorizontalRepeat+"'");
 			LOG.debug("  backgroundImageURL='"+backgroundImageURL+"'");
 			LOG.debug("  backgroundImageVerticalPosition='"+backgroundImageVerticalPosition+"'");
-			LOG.debug("  backgroundImageHorizontalPosition='"+backgroundImageHorizontalPosition+"'");
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
-			LOG.debug("  backgroundImageHorizontalRepeat='"+backgroundImageHorizontalRepeat+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
 		}
@@ -138,6 +140,26 @@ public class BoxTag extends AbstractBasicTag {
 		BoxComponent component = (BoxComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
+
+		if (backgroundImageHorizontalPosition != null) {
+			if (isValueReference(backgroundImageHorizontalPosition)) {
+				ValueBinding vb = application.createValueBinding(backgroundImageHorizontalPosition);
+
+				component.setBackgroundImageHorizontalPosition(vb);
+			} else {
+				component.setBackgroundImageHorizontalPosition(getInt(backgroundImageHorizontalPosition));
+			}
+		}
+
+		if (backgroundImageHorizontalRepeat != null) {
+			if (isValueReference(backgroundImageHorizontalRepeat)) {
+				ValueBinding vb = application.createValueBinding(backgroundImageHorizontalRepeat);
+
+				component.setBackgroundImageHorizontalRepeat(vb);
+			} else {
+				component.setBackgroundImageHorizontalRepeat(getBool(backgroundImageHorizontalRepeat));
+			}
+		}
 
 		if (backgroundImageURL != null) {
 			if (isValueReference(backgroundImageURL)) {
@@ -159,16 +181,6 @@ public class BoxTag extends AbstractBasicTag {
 			}
 		}
 
-		if (backgroundImageHorizontalPosition != null) {
-			if (isValueReference(backgroundImageHorizontalPosition)) {
-				ValueBinding vb = application.createValueBinding(backgroundImageHorizontalPosition);
-
-				component.setBackgroundImageHorizontalPosition(vb);
-			} else {
-				component.setBackgroundImageHorizontalPosition(getInt(backgroundImageHorizontalPosition));
-			}
-		}
-
 		if (backgroundImageVerticalRepeat != null) {
 			if (isValueReference(backgroundImageVerticalRepeat)) {
 				ValueBinding vb = application.createValueBinding(backgroundImageVerticalRepeat);
@@ -176,16 +188,6 @@ public class BoxTag extends AbstractBasicTag {
 				component.setBackgroundImageVerticalRepeat(vb);
 			} else {
 				component.setBackgroundImageVerticalRepeat(getBool(backgroundImageVerticalRepeat));
-			}
-		}
-
-		if (backgroundImageHorizontalRepeat != null) {
-			if (isValueReference(backgroundImageHorizontalRepeat)) {
-				ValueBinding vb = application.createValueBinding(backgroundImageHorizontalRepeat);
-
-				component.setBackgroundImageHorizontalRepeat(vb);
-			} else {
-				component.setBackgroundImageHorizontalRepeat(getBool(backgroundImageHorizontalRepeat));
 			}
 		}
 
@@ -227,11 +229,11 @@ public class BoxTag extends AbstractBasicTag {
 	}
 
 	public void release() {
+		backgroundImageHorizontalPosition = null;
+		backgroundImageHorizontalRepeat = null;
 		backgroundImageURL = null;
 		backgroundImageVerticalPosition = null;
-		backgroundImageHorizontalPosition = null;
 		backgroundImageVerticalRepeat = null;
-		backgroundImageHorizontalRepeat = null;
 		border = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;

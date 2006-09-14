@@ -1,14 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.SelectImageItemComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class SelectImageItemTag extends CameliaTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.SelectImageItemComponent;
+
+public class SelectImageItemTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(SelectImageItemTag.class);

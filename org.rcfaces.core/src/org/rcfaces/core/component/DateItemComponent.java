@@ -4,77 +4,83 @@ import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.internal.component.AbstractItemComponent;
 import org.rcfaces.core.internal.component.Properties;
 
-public class DateItemComponent extends AbstractItemComponent implements
-        ITextCapability, IStyleClassCapability {
+public class DateItemComponent extends AbstractItemComponent implements 
+	ITextCapability,
+	IStyleClassCapability {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.dateItem";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.dateItem";
 
-    public DateItemComponent() {
-        setRendererType(null);
-    }
 
-    public DateItemComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public DateItemComponent() {
+		setRendererType(null);
+	}
 
-    public final void setDate(Object date) {
+	public DateItemComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-        setItemValue(date);
+	public final void setDate(Object date) {
 
-    }
 
-    public final void setDate(ValueBinding valueBinding) {
+				setItemValue(date);
+			
+	}
 
-        setValueBinding("itemValue", valueBinding);
+	public final void setDate(ValueBinding valueBinding) {
 
-    }
 
-    public final Object getDate() {
+				setValueBinding("itemValue", valueBinding);
+			
+	}
 
-        return getItemValue();
+	public final Object getDate() {
 
-    }
 
-    public final void setText(String text) {
+			return getItemValue();
+			
+	}
 
-        setItemLabel(text);
+	public final void setText(String text) {
 
-    }
 
-    public final void setText(ValueBinding valueBinding) {
+			setItemLabel(text);
+			
+	}
 
-        setValueBinding("itemLabel", valueBinding);
+	public final void setText(ValueBinding valueBinding) {
 
-    }
 
-    public final String getText() {
+			setValueBinding("itemLabel", valueBinding);
+			
+	}
 
-        return getItemLabel();
+	public final String getText() {
 
-    }
 
-    public final java.lang.String getStyleClass() {
-        return getStyleClass(null);
-    }
+			return getItemLabel();
+			
+	}
 
-    public final java.lang.String getStyleClass(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
-    }
+	public final java.lang.String getStyleClass() {
+		return getStyleClass(null);
+	}
 
-    public final void setStyleClass(java.lang.String styleClass) {
-        engine.setProperty(Properties.STYLE_CLASS, styleClass);
-    }
+	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
+	}
 
-    public final void setStyleClass(ValueBinding styleClass) {
-        engine.setProperty(Properties.STYLE_CLASS, styleClass);
-    }
+	public final void setStyleClass(java.lang.String styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
 
-    public void release() {
-        super.release();
-    }
+	public final void setStyleClass(ValueBinding styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
+
+	public void release() {
+		super.release();
+	}
 }

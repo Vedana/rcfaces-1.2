@@ -1,4 +1,4 @@
-package org.rcfaces.core.internal.component;
+package org.rcfaces.core.component;
 
 import java.util.Collections;
 import java.util.Map;
@@ -7,7 +7,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
@@ -16,14 +15,15 @@ import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.component.capability.IResetEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaMessagesComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.manager.IServerDataManager;
@@ -31,19 +31,16 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.internal.tools.VisibilityTools;
 
-public abstract class AbstractDataComponent extends CameliaDataComponent implements 
-	IVisibilityCapability,
+public abstract class AbstractMessagesComponent extends CameliaMessagesComponent implements 
 	ISizeCapability,
+	IVisibilityCapability,
 	IMouseEventCapability,
 	IHelpCapability,
 	IClientDataCapability,
-	IValueLockedCapability,
-	ILookAndFeelCapability,
-	IFocusBlurEventCapability,
 	IPositionCapability,
+	ILookAndFeelCapability,
 	IMarginCapability,
 	IForegroundBackgroundColorCapability,
-	IResetEventCapability,
 	IStyleClassCapability,
 	IUserEventCapability,
 	IServerDataCapability,
@@ -172,38 +169,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		
 	}
 
-	public final java.lang.Boolean getVisible() {
-		return getVisible(null);
-	}
-
-	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
-	}
-
-	public final void setVisible(java.lang.Boolean visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	public final void setVisible(ValueBinding visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	public final int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	public final void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	public final void setHiddenMode(ValueBinding hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
 	public final java.lang.String getHeight() {
 		return getHeight(null);
 	}
@@ -234,6 +199,38 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public final void setWidth(ValueBinding width) {
 		engine.setProperty(Properties.WIDTH, width);
+	}
+
+	public final int getHiddenMode() {
+		return getHiddenMode(null);
+	}
+
+	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+	}
+
+	public final void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public final void setHiddenMode(ValueBinding hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public final java.lang.Boolean getVisible() {
+		return getVisible(null);
+	}
+
+	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
+	}
+
+	public final void setVisible(java.lang.Boolean visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final void setVisible(ValueBinding visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
@@ -362,60 +359,20 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		
 	}
 
-	public final boolean isValueLocked() {
-		return isValueLocked(null);
+	public final java.lang.String getX() {
+		return getX(null);
 	}
 
-	public final boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VALUE_LOCKED, false, facesContext);
+	public final java.lang.String getX(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.X, facesContext);
 	}
 
-	public final void setValueLocked(boolean valueLocked) {
-		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
+	public final void setX(java.lang.String x) {
+		engine.setProperty(Properties.X, x);
 	}
 
-	public final void setValueLocked(ValueBinding valueLocked) {
-		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
-	}
-
-	public final java.lang.String getLookId() {
-		return getLookId(null);
-	}
-
-	public final java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
-	}
-
-	public final void setLookId(java.lang.String lookId) {
-		engine.setProperty(Properties.LOOK_ID, lookId);
-	}
-
-	public final void setLookId(ValueBinding lookId) {
-		engine.setProperty(Properties.LOOK_ID, lookId);
-	}
-
-	public final void addBlurListener(org.rcfaces.core.event.IBlurListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeBlurListener(org.rcfaces.core.event.IBlurListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listBlurListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IBlurListener.class);
-	}
-
-	public final void addFocusListener(org.rcfaces.core.event.IFocusListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeFocusListener(org.rcfaces.core.event.IFocusListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listFocusListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IFocusListener.class);
+	public final void setX(ValueBinding x) {
+		engine.setProperty(Properties.X, x);
 	}
 
 	public final java.lang.String getY() {
@@ -434,68 +391,20 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.Y, y);
 	}
 
-	public final java.lang.String getX() {
-		return getX(null);
+	public final java.lang.String getLookId() {
+		return getLookId(null);
 	}
 
-	public final java.lang.String getX(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.X, facesContext);
+	public final java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
 	}
 
-	public final void setX(java.lang.String x) {
-		engine.setProperty(Properties.X, x);
+	public final void setLookId(java.lang.String lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
-	public final void setX(ValueBinding x) {
-		engine.setProperty(Properties.X, x);
-	}
-
-	public final java.lang.String getMarginRight() {
-		return getMarginRight(null);
-	}
-
-	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
-	}
-
-	public final void setMarginRight(java.lang.String marginRight) {
-		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
-	}
-
-	public final void setMarginRight(ValueBinding marginRight) {
-		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
-	}
-
-	public final java.lang.String getMarginLeft() {
-		return getMarginLeft(null);
-	}
-
-	public final java.lang.String getMarginLeft(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MARGIN_LEFT, facesContext);
-	}
-
-	public final void setMarginLeft(java.lang.String marginLeft) {
-		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
-	}
-
-	public final void setMarginLeft(ValueBinding marginLeft) {
-		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
-	}
-
-	public final java.lang.String getMarginTop() {
-		return getMarginTop(null);
-	}
-
-	public final java.lang.String getMarginTop(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MARGIN_TOP, facesContext);
-	}
-
-	public final void setMarginTop(java.lang.String marginTop) {
-		engine.setProperty(Properties.MARGIN_TOP, marginTop);
-	}
-
-	public final void setMarginTop(ValueBinding marginTop) {
-		engine.setProperty(Properties.MARGIN_TOP, marginTop);
+	public final void setLookId(ValueBinding lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
 	public final java.lang.String getMarginBottom() {
@@ -514,20 +423,52 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
 
-	public final java.lang.String getForegroundColor() {
-		return getForegroundColor(null);
+	public final java.lang.String getMarginLeft() {
+		return getMarginLeft(null);
 	}
 
-	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
+	public final java.lang.String getMarginLeft(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MARGIN_LEFT, facesContext);
 	}
 
-	public final void setForegroundColor(java.lang.String foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	public final void setMarginLeft(java.lang.String marginLeft) {
+		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
 
-	public final void setForegroundColor(ValueBinding foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	public final void setMarginLeft(ValueBinding marginLeft) {
+		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
+	}
+
+	public final java.lang.String getMarginRight() {
+		return getMarginRight(null);
+	}
+
+	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
+	}
+
+	public final void setMarginRight(java.lang.String marginRight) {
+		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	}
+
+	public final void setMarginRight(ValueBinding marginRight) {
+		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	}
+
+	public final java.lang.String getMarginTop() {
+		return getMarginTop(null);
+	}
+
+	public final java.lang.String getMarginTop(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MARGIN_TOP, facesContext);
+	}
+
+	public final void setMarginTop(java.lang.String marginTop) {
+		engine.setProperty(Properties.MARGIN_TOP, marginTop);
+	}
+
+	public final void setMarginTop(ValueBinding marginTop) {
+		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
 	public final java.lang.String getBackgroundColor() {
@@ -546,16 +487,20 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
-	public final void addResetListener(org.rcfaces.core.event.IResetListener listener) {
-		addFacesListener(listener);
+	public final java.lang.String getForegroundColor() {
+		return getForegroundColor(null);
 	}
 
-	public final void removeResetListener(org.rcfaces.core.event.IResetListener listener) {
-		removeFacesListener(listener);
+	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
 	}
 
-	public final javax.faces.event.FacesListener [] listResetListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IResetListener.class);
+	public final void setForegroundColor(java.lang.String foregroundColor) {
+		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	}
+
+	public final void setForegroundColor(ValueBinding foregroundColor) {
+		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
 	public final java.lang.String getStyleClass() {

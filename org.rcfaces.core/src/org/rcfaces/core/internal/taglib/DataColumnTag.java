@@ -1,25 +1,27 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.DataColumnComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class DataColumnTag extends CameliaTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.DataColumnComponent;
+
+public class DataColumnTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(DataColumnTag.class);
 
-	private String visible;
 	private String hiddenMode;
+	private String visible;
 	private String text;
 	private String toolTipText;
 	private String alignment;
-	private String foregroundColor;
 	private String backgroundColor;
+	private String foregroundColor;
 	private String sortListeners;
 	private String styleClass;
 	private String ascending;
@@ -40,20 +42,20 @@ public class DataColumnTag extends CameliaTag {
 		return DataColumnComponent.COMPONENT_TYPE;
 	}
 
-	public final String getVisible() {
-		return visible;
-	}
-
-	public final void setVisible(String visible) {
-		this.visible = visible;
-	}
-
 	public final String getHiddenMode() {
 		return hiddenMode;
 	}
 
 	public final void setHiddenMode(String hiddenMode) {
 		this.hiddenMode = hiddenMode;
+	}
+
+	public final String getVisible() {
+		return visible;
+	}
+
+	public final void setVisible(String visible) {
+		this.visible = visible;
 	}
 
 	public final String getText() {
@@ -80,20 +82,20 @@ public class DataColumnTag extends CameliaTag {
 		this.alignment = alignment;
 	}
 
-	public final String getForegroundColor() {
-		return foregroundColor;
-	}
-
-	public final void setForegroundColor(String foregroundColor) {
-		this.foregroundColor = foregroundColor;
-	}
-
 	public final String getBackgroundColor() {
 		return backgroundColor;
 	}
 
 	public final void setBackgroundColor(String backgroundColor) {
 		this.backgroundColor = backgroundColor;
+	}
+
+	public final String getForegroundColor() {
+		return foregroundColor;
+	}
+
+	public final void setForegroundColor(String foregroundColor) {
+		this.foregroundColor = foregroundColor;
 	}
 
 	public final String getSortListener() {
@@ -221,13 +223,13 @@ public class DataColumnTag extends CameliaTag {
 			if (DataColumnComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  alignment='"+alignment+"'");
-			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  ascending='"+ascending+"'");
 			LOG.debug("  sortComparator='"+sortComparator+"'");
@@ -252,16 +254,6 @@ public class DataColumnTag extends CameliaTag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (visible != null) {
-			if (isValueReference(visible)) {
-				ValueBinding vb = application.createValueBinding(visible);
-
-				component.setVisible(vb);
-			} else {
-				component.setVisible(getBoolean(visible));
-			}
-		}
-
 		if (hiddenMode != null) {
 			if (isValueReference(hiddenMode)) {
 				ValueBinding vb = application.createValueBinding(hiddenMode);
@@ -269,6 +261,16 @@ public class DataColumnTag extends CameliaTag {
 				component.setHiddenMode(vb);
 			} else {
 				component.setHiddenMode(hiddenMode);
+			}
+		}
+
+		if (visible != null) {
+			if (isValueReference(visible)) {
+				ValueBinding vb = application.createValueBinding(visible);
+
+				component.setVisible(vb);
+			} else {
+				component.setVisible(getBoolean(visible));
 			}
 		}
 
@@ -302,16 +304,6 @@ public class DataColumnTag extends CameliaTag {
 			}
 		}
 
-		if (foregroundColor != null) {
-			if (isValueReference(foregroundColor)) {
-				ValueBinding vb = application.createValueBinding(foregroundColor);
-
-				component.setForegroundColor(vb);
-			} else {
-				component.setForegroundColor(foregroundColor);
-			}
-		}
-
 		if (backgroundColor != null) {
 			if (isValueReference(backgroundColor)) {
 				ValueBinding vb = application.createValueBinding(backgroundColor);
@@ -319,6 +311,16 @@ public class DataColumnTag extends CameliaTag {
 				component.setBackgroundColor(vb);
 			} else {
 				component.setBackgroundColor(backgroundColor);
+			}
+		}
+
+		if (foregroundColor != null) {
+			if (isValueReference(foregroundColor)) {
+				ValueBinding vb = application.createValueBinding(foregroundColor);
+
+				component.setForegroundColor(vb);
+			} else {
+				component.setForegroundColor(foregroundColor);
 			}
 		}
 
@@ -453,13 +455,13 @@ public class DataColumnTag extends CameliaTag {
 	}
 
 	public void release() {
-		visible = null;
 		hiddenMode = null;
+		visible = null;
 		text = null;
 		toolTipText = null;
 		alignment = null;
-		foregroundColor = null;
 		backgroundColor = null;
+		foregroundColor = null;
 		sortListeners = null;
 		styleClass = null;
 		ascending = null;

@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -22,11 +25,13 @@ import java.io.Writer;
 
 import javax.faces.FacesException;
 
+import org.rcfaces.core.internal.lang.StringAppender;
+
 /**
  * Conversion UTF8-UNICODE / HTML
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class XMLCodec {
     private static final String REVISION = "$Revision$";
@@ -122,8 +127,8 @@ public class XMLCodec {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected static interface ACharset {
         String convertFromUTF8(char c);

@@ -6,8 +6,8 @@
  * class f_fieldSet
  *
  * @class public f_fieldSet extends f_component
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __prototype = {

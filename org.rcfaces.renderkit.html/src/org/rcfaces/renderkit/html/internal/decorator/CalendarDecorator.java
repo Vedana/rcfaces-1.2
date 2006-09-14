@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -50,7 +53,7 @@ import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.DateItemComponent;
 import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -66,8 +69,8 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class CalendarDecorator extends AbstractSelectItemsDecorator {
     private static final String REVISION = "$Revision$";
@@ -129,7 +132,7 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
             return EVAL_NODE;
         }
 
-        javaScriptWriter.writeCall(null, "_appendDateItem");
+        javaScriptWriter.writeMethodCall("_appendDateItem");
 
         StringAppender sb = new StringAppender(32);
         if (selectItemValue instanceof Date) {

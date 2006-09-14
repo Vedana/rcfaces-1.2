@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Derni�res corrections pour la migration Rcfaces
+ * Derni�res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
@@ -54,13 +57,14 @@ import javax.servlet.ServletResponse;
 import org.rcfaces.core.internal.config.IProvidersRegistry;
 import org.rcfaces.core.internal.config.RcfacesContextImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
+import org.rcfaces.core.internal.rewriting.IResourceVersionHandler;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class RcfacesContext {
     private static final String REVISION = "$Revision$";
@@ -80,6 +84,10 @@ public abstract class RcfacesContext {
         return getInstance((ExternalContext) null);
     }
 
+    public static final RcfacesContext getInstance(FacesContext facesContext) {
+        return getInstance(facesContext.getExternalContext());
+    }
+
     public static final RcfacesContext getInstance(
             ExternalContext externalContext) {
         if (externalContext == null) {
@@ -97,9 +105,11 @@ public abstract class RcfacesContext {
             if (cameliaContext == null) {
                 applicationMap.put(CAMELIA_CONTEXT_PROPERTY, Boolean.FALSE);
 
-                cameliaContext = createCameliaContext(externalContext);
+                cameliaContext = createCameliaContext();
 
                 applicationMap.put(CAMELIA_CONTEXT_PROPERTY, cameliaContext);
+
+                cameliaContext.initialize(externalContext);
             }
         }
 
@@ -118,9 +128,6 @@ public abstract class RcfacesContext {
 
             cameliaContext = createCameliaContext(servletContext, request,
                     response);
-
-            servletContext.setAttribute(CAMELIA_CONTEXT_PROPERTY,
-                    cameliaContext);
 
             return cameliaContext;
         }
@@ -159,7 +166,13 @@ public abstract class RcfacesContext {
             FacesContext facesContext = facesContextFactory.getFacesContext(
                     context, request, response, lifecycle);
             try {
-                return createCameliaContext(facesContext.getExternalContext());
+                RcfacesContext rcfacesContext = createCameliaContext();
+
+                context.setAttribute(CAMELIA_CONTEXT_PROPERTY, rcfacesContext);
+
+                rcfacesContext.initialize(facesContext.getExternalContext());
+
+                return rcfacesContext;
 
             } finally {
                 facesContext.release();
@@ -176,12 +189,13 @@ public abstract class RcfacesContext {
 
     }
 
-    private static RcfacesContext createCameliaContext(
-            ExternalContext externalContext) {
+    protected abstract void initialize(ExternalContext externalContext);
+
+    private static RcfacesContext createCameliaContext() {
 
         // @XXX Rechercher dans les propriétés la classe d'impl !
 
-        RcfacesContext cameliaContext = new RcfacesContextImpl(externalContext);
+        RcfacesContext cameliaContext = new RcfacesContextImpl();
 
         return cameliaContext;
     }
@@ -195,4 +209,7 @@ public abstract class RcfacesContext {
     public abstract IProvidersRegistry getProvidersRegistry();
 
     public abstract String getApplicationVersion();
+
+    public abstract IResourceVersionHandler getResourceVersionHandler();
+
 }

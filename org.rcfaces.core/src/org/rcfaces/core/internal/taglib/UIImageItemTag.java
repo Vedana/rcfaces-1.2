@@ -1,20 +1,22 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.UIImageItemComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class UIImageItemTag extends AbstractItemTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.UIImageItemComponent;
+
+public class UIImageItemTag extends AbstractItemTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(UIImageItemTag.class);
 
-	private String visible;
 	private String hiddenMode;
+	private String visible;
 	private String toolTipText;
 	private String imageURL;
 	private String disabledImageURL;
@@ -25,20 +27,20 @@ public class UIImageItemTag extends AbstractItemTag {
 		return UIImageItemComponent.COMPONENT_TYPE;
 	}
 
-	public final String getVisible() {
-		return visible;
-	}
-
-	public final void setVisible(String visible) {
-		this.visible = visible;
-	}
-
 	public final String getHiddenMode() {
 		return hiddenMode;
 	}
 
 	public final void setHiddenMode(String hiddenMode) {
 		this.hiddenMode = hiddenMode;
+	}
+
+	public final String getVisible() {
+		return visible;
+	}
+
+	public final void setVisible(String visible) {
+		this.visible = visible;
 	}
 
 	public final String getToolTipText() {
@@ -94,8 +96,8 @@ public class UIImageItemTag extends AbstractItemTag {
 			if (UIImageItemComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
@@ -113,16 +115,6 @@ public class UIImageItemTag extends AbstractItemTag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (visible != null) {
-			if (isValueReference(visible)) {
-				ValueBinding vb = application.createValueBinding(visible);
-
-				component.setVisible(vb);
-			} else {
-				component.setVisible(getBoolean(visible));
-			}
-		}
-
 		if (hiddenMode != null) {
 			if (isValueReference(hiddenMode)) {
 				ValueBinding vb = application.createValueBinding(hiddenMode);
@@ -130,6 +122,16 @@ public class UIImageItemTag extends AbstractItemTag {
 				component.setHiddenMode(vb);
 			} else {
 				component.setHiddenMode(hiddenMode);
+			}
+		}
+
+		if (visible != null) {
+			if (isValueReference(visible)) {
+				ValueBinding vb = application.createValueBinding(visible);
+
+				component.setVisible(vb);
+			} else {
+				component.setVisible(getBoolean(visible));
 			}
 		}
 
@@ -194,8 +196,8 @@ public class UIImageItemTag extends AbstractItemTag {
 	}
 
 	public void release() {
-		visible = null;
 		hiddenMode = null;
+		visible = null;
 		toolTipText = null;
 		imageURL = null;
 		disabledImageURL = null;

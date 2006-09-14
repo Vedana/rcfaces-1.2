@@ -590,7 +590,7 @@ var __prototype = {
 					}
 
 					try {
-						onInit(this);
+						onInit.call(this, this);
 
 					} catch (ex) {
 						f_core.Error(f_httpRequest, "Exception when calling onInit for url="+url+".\n"+onInit,ex);
@@ -668,7 +668,7 @@ var __prototype = {
 					}
 
 					try {
-						onProgress(this, response, len, contentType);
+						onProgress.call(this, this, response, len, contentType);
 
 					} catch (ex) {
 						f_core.Error(f_httpRequest, "Exception when calling onProgress method for url='"+url+"'.\n"+onProgress, ex);
@@ -733,7 +733,7 @@ var __prototype = {
 						f_core.Info(f_httpRequest, "Call onLoad for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)\nresponse size="+((response)?(response.length+" bytes"):"null"));
 					}
 
-					onLoad(this, response, this._responseContentType);
+					onLoad.call(this, this, response, this._responseContentType);
 					
 				} catch (ex) {
 					f_core.Error(f_httpRequest, "Exception when calling onLoad method for url '"+url+"'.\n"+onLoad, ex);
@@ -761,7 +761,7 @@ var __prototype = {
 				f_core.Info(f_httpRequest, "Call onError for url="+this._url+" . (+"+(new Date().getTime()-this._date)+"ms)");
 			}
 
-			onError(this, status, statusText);
+			onError.call(this, this, status, statusText);
 			
 		} catch (ex) {
 			f_core.Error(f_httpRequest, "Exception when calling onError.\n"+onError,ex);

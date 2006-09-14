@@ -4,8 +4,8 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public interface ISelectionCardinalityCapability extends ICardinality {
 

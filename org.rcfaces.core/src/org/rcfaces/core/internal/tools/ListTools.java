@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -24,7 +27,6 @@ import java.util.Set;
 import javax.faces.component.UISelectItem;
 
 import org.rcfaces.core.component.ComboComponent;
-import org.rcfaces.core.component.ListComponent;
 import org.rcfaces.core.component.capability.IMultipleSelectCapability;
 import org.rcfaces.core.component.iterator.ISelectItemIterator;
 import org.rcfaces.core.internal.util.ComponentIterators;
@@ -32,8 +34,8 @@ import org.rcfaces.core.internal.util.IncompatibleValueException;
 
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ListTools {
     private static final String REVISION = "$Revision$";
@@ -62,7 +64,7 @@ public class ListTools {
         }
 
         if (value instanceof Object[]) {
-            // C'est peut �tre le cas de la listBox
+            // C'est peut être le cas de la listBox
 
             List l = listAllSelectedItems(component, (Object[]) value);
             if (l == null || l.isEmpty()) {
@@ -72,7 +74,7 @@ public class ListTools {
             return new SelectItemListIterator(l);
         }
 
-        // C'est peut �tre le cas de la Combo
+        // C'est peut être le cas de la Combo
 
         UISelectItem si = listAllSelectedItems(component, value);
         if (si == null) {
@@ -91,7 +93,7 @@ public class ListTools {
     private static List listAllSelectedItems(ComboComponent component,
             Object values[]) {
         if (values == null || values.length < 1) {
-            // Aucun ID s�lectionn� !
+            // Aucun ID sélectionné !
             return null;
         }
 
@@ -115,7 +117,7 @@ public class ListTools {
             }
 
             if (valuesSet.contains(value) == false) {
-                // Pas dans la liste des Ids s�lectionn�s ...
+                // Pas dans la liste des Ids sélectionnés ...
                 continue;
             }
 
@@ -199,6 +201,11 @@ public class ListTools {
         return null;
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static final class SelectItemIteratorWrapper extends
             ComponentIterators.ComponentListIterator implements
             ISelectItemIterator {
@@ -217,6 +224,11 @@ public class ListTools {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static final class SelectItemListIterator extends
             ComponentIterators.ComponentListIterator implements
             ISelectItemIterator {
@@ -235,6 +247,11 @@ public class ListTools {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static final class SelectItemArrayIterator extends
             ComponentIterators.ComponentArrayIterator implements
             ISelectItemIterator {
@@ -418,11 +435,11 @@ public class ListTools {
 
         component.setValue(l.toArray(new String[l.size()]));
     }
-
+/*
     public static int[] listIndexOfAllSelectedItems(ListComponent component) {
         return null;
     }
-
+*/
     /**
      * @param item
      */

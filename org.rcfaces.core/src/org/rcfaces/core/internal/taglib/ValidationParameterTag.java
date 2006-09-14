@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:50  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:12  oeuillot
  * Renommage  en rcfaces
  *
@@ -46,24 +49,28 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.rcfaces.core.internal.manager.IValidationParameters;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class ValidationParameterTag extends TagSupport {
+public class ValidationParameterTag extends TagSupport implements Tag {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -1595891873980056092L;
+
+    private static final boolean CLIENT_SIDE_DEFAULT_VALUE = true;
 
     private String name;
 
     private String value;
 
-    private boolean clientSide = true;
+    private boolean clientSide = CLIENT_SIDE_DEFAULT_VALUE;
 
     public final String getName() {
         return name;
@@ -132,7 +139,7 @@ public class ValidationParameterTag extends TagSupport {
     public void release() {
         name = null;
         value = null;
-        clientSide = true;
+        clientSide = CLIENT_SIDE_DEFAULT_VALUE;
 
         super.release();
     }

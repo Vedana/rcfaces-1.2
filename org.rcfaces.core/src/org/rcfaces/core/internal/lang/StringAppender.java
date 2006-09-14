@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:29  oeuillot
  * Gestion des ICOs
  *
@@ -12,7 +15,7 @@
  * Version avant migation en org.rcfaces
  *
  */
-package org.rcfaces.core.internal.codec;
+package org.rcfaces.core.internal.lang;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -22,8 +25,8 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * 
- * @author Olivier Oeuillot & JDK team
- * @version $Revision$
+ * @author Java Team (latest modification by $Author$) 
+ * @version $Revision$ $Date$
  */
 public final class StringAppender {
     private static final String REVISION = "$Revision$";

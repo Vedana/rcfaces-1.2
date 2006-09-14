@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -95,8 +98,8 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
     private static final String REVISION = "$Revision$";
@@ -127,8 +130,8 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected class ImageRadioButtonWriter extends ImageCheckButtonDecorator {
         private static final String REVISION = "$Revision$";

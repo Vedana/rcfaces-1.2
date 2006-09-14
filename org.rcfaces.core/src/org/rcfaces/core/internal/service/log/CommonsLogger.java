@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -48,11 +51,13 @@ import org.rcfaces.core.internal.service.log.LogService.ILogger;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class CommonsLogger implements ILogger {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(CommonsLogger.class);
 
     private static final String DEFAULT_LOG_LEVEL_PARAMETER = Constants
             .getPackagePrefix()
@@ -107,15 +112,16 @@ public class CommonsLogger implements ILogger {
                 }
 
             } catch (LogConfigurationException logException) {
-                LogService.LOG.error("Can not log '" + name + "'.",
-                        logException);
+                LOG.error("Can not log '" + name + "'.", logException);
             }
         }
 
-        System.out.println("Name=" + name);
-        System.out.println("  level=" + level);
-        System.out.println("  message=" + message);
-        System.out.println("  exception=" + ex);
+        if (LOG.isDebugEnabled()) {
+            LOG.trace("Name=" + name);
+            LOG.trace("  level=" + level);
+            LOG.trace("  message=" + message);
+            LOG.trace("  exception=" + ex);
+        }
     }
 
     public synchronized IFilter[] listFilters(FacesContext facesContext) {

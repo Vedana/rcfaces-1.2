@@ -7,7 +7,7 @@
  * 
  * @class f_xml extends f_object
  * @author Joel Merlin
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
 var __static = {
 

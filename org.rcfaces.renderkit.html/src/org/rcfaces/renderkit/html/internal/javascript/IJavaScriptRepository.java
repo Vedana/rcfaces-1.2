@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -29,36 +32,38 @@
  */
 package org.rcfaces.renderkit.html.internal.javascript;
 
-import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public interface IJavaScriptRepository extends IRepository {
+public interface IJavaScriptRepository extends IHierarchicalRepository {
 
     int CLASS_NAME_COLLECTION_TYPE = 10;
 
+    String getBaseURI(IProcessContext context);
+
     IClass getClassByName(String className);
 
-    public interface IClassFile extends IFile {
+    public interface IClassFile extends IHierarchicalFile {
         IClass[] listClasses();
-    };
+    }
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public interface IClass {
         String getName();
 
-        IFile getFile();
+        IHierarchicalFile getFile();
 
         IClass[] listRequiredClasses(String requireId);
 
-        IFile[] listRequiredResources(String requiredId);
-
+        IHierarchicalFile[] listRequiredResources(String requiredId);
     }
 }

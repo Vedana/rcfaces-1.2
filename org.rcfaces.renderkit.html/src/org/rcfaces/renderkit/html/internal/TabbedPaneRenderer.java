@@ -12,8 +12,8 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class TabbedPaneRenderer extends CardBoxRenderer {
     private static final String REVISION = "$Revision$";

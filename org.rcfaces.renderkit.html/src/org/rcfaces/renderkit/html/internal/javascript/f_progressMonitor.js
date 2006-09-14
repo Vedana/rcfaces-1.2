@@ -6,8 +6,8 @@
  * Classe ProgressMonitor
  *
  * @class public f_progressMonitor extends f_object
- * @author Olivier Oeuillot & Eclipse team
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$) & Eclipse team
+ * @version $Revision$ $Date$
  */
  
 var __static = {

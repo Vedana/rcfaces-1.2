@@ -5,8 +5,8 @@
 /**
  * 
  * @class public f_dateEntry extends f_component, fa_calendarPopup
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __static={

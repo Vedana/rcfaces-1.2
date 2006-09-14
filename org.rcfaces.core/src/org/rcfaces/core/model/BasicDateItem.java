@@ -12,15 +12,17 @@ import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.internal.converter.LocalizedDateConverter;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class BasicDateItem extends SelectItem implements IStyleClassItem,
         IClientDataSelectItem {
+
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -2332673361111286166L;
 
     private String styleClass;
 

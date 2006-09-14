@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -83,16 +86,16 @@ import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public final class ListenerTools {
 
     private static final String REVISION = "$Revision$";
 
     /**
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static final INameSpace JAVASCRIPT_NAME_SPACE = new INameSpace() {
         private static final String REVISION = "$Revision$";
@@ -172,8 +175,8 @@ public final class ListenerTools {
     };
 
     /**
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static final INameSpace ATTRIBUTE_NAME_SPACE = new INameSpace() {
         private static final String REVISION = "$Revision$";
@@ -493,8 +496,8 @@ public final class ListenerTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public interface INameSpace {
         String getBlurEventName();

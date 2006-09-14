@@ -6,8 +6,8 @@
  * 
  *
  * @class hidden f_slideUpEffect extends f_timerEffect
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __static = {
 	/** 

@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:13  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -114,7 +117,7 @@ import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -124,8 +127,8 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ItemsService extends AbstractHtmlService {
     private static final String REVISION = "$Revision$";
@@ -145,7 +148,7 @@ public class ItemsService extends AbstractHtmlService {
     public static ItemsService getInstance(FacesContext facesContext) {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
-                facesContext.getExternalContext()).getServicesRegistry();
+                facesContext).getServicesRegistry();
 
         return (ItemsService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
@@ -216,7 +219,7 @@ public class ItemsService extends AbstractHtmlService {
                 printWriter = response.getWriter();
 
             } else {
-                ParametredHttpServlet
+                ConfiguredHttpServlet
                         .setGzipContentEncoding((HttpServletResponse) response);
 
                 OutputStream outputStream = response.getOutputStream();
@@ -269,12 +272,7 @@ public class ItemsService extends AbstractHtmlService {
             jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
                     "GetElementById").writeString(componentId).writeln(
                     ", document);");
-
-            jsWriter.write("with (").write(varId).writeln(") {");
-
-            jsWriter.writeCall(null, "_cancelServerRequest").write(");");
-
-            jsWriter.writeln("}");
+            jsWriter.writeMethodCall("_cancelServerRequest").write(");");
 
         } catch (IOException ex) {
             throw new FacesException("Can not write cancel response.", ex);
@@ -316,13 +314,8 @@ public class ItemsService extends AbstractHtmlService {
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
                 "GetElementById").writeString(componentId).writeln(
                 ", document);");
-
-        jsWriter.write("with(").write(varId).writeln(") {");
-
         dgr.encodeFilteredItems(jsWriter, component, filterProperties,
                 maxResultNumber);
-
-        jsWriter.writeln("}");
 
         if (LOG.isTraceEnabled()) {
             pw.flush();

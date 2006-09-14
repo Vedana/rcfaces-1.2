@@ -5,10 +5,15 @@
 /**
  *
  * @class hidden f_popup extends f_object
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __static = {
+	
+	/**
+	 * @field hidden static final String
+	 */
+	NO_CONTEXT_POPUP: "noContextPopup",
 	
 	/**
 	 * @field hidden static
@@ -128,7 +133,12 @@ var __static = {
 		f_core.Assert(callbacks, "f_popup: Callback parameter is null !");
 
 		if (!f_popup._OldContextMenu) {
-			f_popup._OldContextMenu=document.body.oncontextmenu;
+			var oldContextMenu=document.body.oncontextmenu;
+			if (!oldContextMenu) {
+				oldContextMenu=f_popup.NO_CONTEXT_POPUP;
+			}
+			f_popup._OldContextMenu=oldContextMenu;
+
 			document.body.oncontextmenu=f_core.CancelEventHandler;
 		}
 				
@@ -180,9 +190,16 @@ var __static = {
 		var document=component.ownerDocument;
 
 		var contextMenu=f_popup._OldContextMenu;
-		if (contextMenu!==undefined) {
+		if (contextMenu) {
 			f_popup._OldContextMenu=undefined;
 
+			if (contextMenu==f_popup.NO_CONTEXT_POPUP) {
+				contextMenu=null; // null pour IE
+
+			} else if (!contextMenu) {
+				contextMenu=null;
+			}
+			
 			document.body.oncontextmenu=contextMenu;
 		}
 

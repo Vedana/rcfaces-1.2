@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -21,37 +24,39 @@ package org.rcfaces.core.model;
 import javax.faces.model.SelectItem;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class SeparatorSelectItem {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	private static final String SEPARATOR_KEY = "$-camelia#separator-$";
+    private static final String SEPARATOR_KEY = "$-camelia#separator-$";
 
-	public static final SelectItem SEPARATOR = new SelectItem() {
-		private static final String REVISION = "$Revision$";
+    public static final SelectItem SEPARATOR = new SelectItem() {
+        private static final String REVISION = "$Revision$";
 
-		public Object getValue() {
-			return SEPARATOR_KEY;
-		}
+        private static final long serialVersionUID = 3542510884321447395L;
 
-		public void setValue(Object value) {
-			throw new IllegalStateException(
-					"Can not change value of Separator item !");
-		}
-	};
+        public Object getValue() {
+            return SEPARATOR_KEY;
+        }
 
-	public static final boolean isSeparator(SelectItem selectItem) {
-		if (selectItem == SEPARATOR) {
-			return true;
-		}
+        public void setValue(Object value) {
+            throw new IllegalStateException(
+                    "Can not change value of Separator item !");
+        }
+    };
 
-		if (SEPARATOR_KEY.equals(selectItem.getValue())) {
-			return true;
-		}
+    public static final boolean isSeparator(SelectItem selectItem) {
+        if (selectItem == SEPARATOR) {
+            return true;
+        }
 
-		return false;
-	}
+        if (SEPARATOR_KEY.equals(selectItem.getValue())) {
+            return true;
+        }
+
+        return false;
+    }
 
 }

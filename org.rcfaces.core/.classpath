@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="lib/jsf-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.9.jar"/>
+	<classpathentry exported="true" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Workspace CAMELIA/jsf-1_1_02/src" kind="lib" path="lib/jsf-api.jar"/>
 	<classpathentry exported="true" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes librairies JAVA/commons-digester-1.6/src/src/java" kind="lib" path="lib/commons-digester.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jstl.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry exported="true" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Workspace CAMELIA/org.rfaces packager/dist/rcfaces-b1767/rcfaces-html-src.jar" kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>

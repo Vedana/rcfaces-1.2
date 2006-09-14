@@ -1,24 +1,26 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.ExpandBarComponent;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class ExpandBarTag extends AbstractOutputTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ExpandBarComponent;
+
+public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ExpandBarTag.class);
 
 	private String asyncRenderMode;
-	private String fontSize;
 	private String fontBold;
-	private String fontUnderline;
 	private String fontItalic;
 	private String fontName;
+	private String fontSize;
+	private String fontUnderline;
 	private String disabled;
 	private String readOnly;
 	private String text;
@@ -45,28 +47,12 @@ public class ExpandBarTag extends AbstractOutputTag {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
-	public final String getFontSize() {
-		return fontSize;
-	}
-
-	public final void setFontSize(String fontSize) {
-		this.fontSize = fontSize;
-	}
-
 	public final String getFontBold() {
 		return fontBold;
 	}
 
 	public final void setFontBold(String fontBold) {
 		this.fontBold = fontBold;
-	}
-
-	public final String getFontUnderline() {
-		return fontUnderline;
-	}
-
-	public final void setFontUnderline(String fontUnderline) {
-		this.fontUnderline = fontUnderline;
 	}
 
 	public final String getFontItalic() {
@@ -83,6 +69,22 @@ public class ExpandBarTag extends AbstractOutputTag {
 
 	public final void setFontName(String fontName) {
 		this.fontName = fontName;
+	}
+
+	public final String getFontSize() {
+		return fontSize;
+	}
+
+	public final void setFontSize(String fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public final String getFontUnderline() {
+		return fontUnderline;
+	}
+
+	public final void setFontUnderline(String fontUnderline) {
+		this.fontUnderline = fontUnderline;
 	}
 
 	public final String getDisabled() {
@@ -203,11 +205,11 @@ public class ExpandBarTag extends AbstractOutputTag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
-			LOG.debug("  fontSize='"+fontSize+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
-			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
 			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  disabled='"+disabled+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  text='"+text+"'");
@@ -239,16 +241,6 @@ public class ExpandBarTag extends AbstractOutputTag {
 			}
 		}
 
-		if (fontSize != null) {
-			if (isValueReference(fontSize)) {
-				ValueBinding vb = application.createValueBinding(fontSize);
-
-				component.setFontSize(vb);
-			} else {
-				component.setFontSize(fontSize);
-			}
-		}
-
 		if (fontBold != null) {
 			if (isValueReference(fontBold)) {
 				ValueBinding vb = application.createValueBinding(fontBold);
@@ -256,16 +248,6 @@ public class ExpandBarTag extends AbstractOutputTag {
 				component.setFontBold(vb);
 			} else {
 				component.setFontBold(getBoolean(fontBold));
-			}
-		}
-
-		if (fontUnderline != null) {
-			if (isValueReference(fontUnderline)) {
-				ValueBinding vb = application.createValueBinding(fontUnderline);
-
-				component.setFontUnderline(vb);
-			} else {
-				component.setFontUnderline(getBoolean(fontUnderline));
 			}
 		}
 
@@ -286,6 +268,26 @@ public class ExpandBarTag extends AbstractOutputTag {
 				component.setFontName(vb);
 			} else {
 				component.setFontName(fontName);
+			}
+		}
+
+		if (fontSize != null) {
+			if (isValueReference(fontSize)) {
+				ValueBinding vb = application.createValueBinding(fontSize);
+
+				component.setFontSize(vb);
+			} else {
+				component.setFontSize(fontSize);
+			}
+		}
+
+		if (fontUnderline != null) {
+			if (isValueReference(fontUnderline)) {
+				ValueBinding vb = application.createValueBinding(fontUnderline);
+
+				component.setFontUnderline(vb);
+			} else {
+				component.setFontUnderline(getBoolean(fontUnderline));
 			}
 		}
 
@@ -407,11 +409,11 @@ public class ExpandBarTag extends AbstractOutputTag {
 
 	public void release() {
 		asyncRenderMode = null;
-		fontSize = null;
 		fontBold = null;
-		fontUnderline = null;
 		fontItalic = null;
 		fontName = null;
+		fontSize = null;
+		fontUnderline = null;
 		disabled = null;
 		readOnly = null;
 		text = null;

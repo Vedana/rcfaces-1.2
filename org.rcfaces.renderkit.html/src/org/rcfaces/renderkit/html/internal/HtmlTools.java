@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -71,8 +74,8 @@ import javax.faces.component.UIComponent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.internal.codec.StringAppender;
 import org.rcfaces.core.internal.codec.URLFormCodec;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
@@ -81,8 +84,8 @@ import org.rcfaces.core.model.IFilterProperties;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class HtmlTools {
     private static final String REVISION = "$Revision$";
@@ -247,7 +250,7 @@ public class HtmlTools {
     private static FacesException createFormatException(String message, int i,
             String datas) {
         return new FacesException(
-                "Bad format of vedana faces serialized datas ! (" + message
+                "Bad format of rcfaces serialized datas ! (" + message
                         + ": pos=" + i + " data='" + datas + "')");
     }
 

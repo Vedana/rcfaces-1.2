@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -60,11 +63,10 @@ import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IImagesSelectItem;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ComboExDecorator extends AbstractSelectItemsDecorator {
     private static final String REVISION = "$Revision$";
@@ -220,11 +222,11 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
 
         javaScriptWriter.write("var ").write(varId);
         if (parentVarId != null) {
-            javaScriptWriter.write('=').writeCall(null, "_addSubItem").write(
+            javaScriptWriter.write('=').writeMethodCall("_addSubItem").write(
                     parentVarId).write(',');
 
         } else {
-            javaScriptWriter.write('=').writeCall(null, "_addItem");
+            javaScriptWriter.write('=').writeMethodCall("_addItem");
         }
 
         String label = selectItem.getLabel();

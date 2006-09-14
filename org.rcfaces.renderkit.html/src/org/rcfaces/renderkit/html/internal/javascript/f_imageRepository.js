@@ -7,8 +7,8 @@
  * This class provides a method to load any images if not loaded yet.
  *
  * @class public f_imageRepository
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static = {

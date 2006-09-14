@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -61,15 +64,15 @@ import java.util.StringTokenizer;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import org.rcfaces.core.internal.component.AbstractCalendarComponent;
+import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class CalendarTools {
     private static final String REVISION = "$Revision$";
@@ -292,8 +295,8 @@ public class CalendarTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static abstract class DayDateKeyword implements IDateKeyword {
         private static final String REVISION = "$Revision$";
@@ -445,8 +448,8 @@ public class CalendarTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     private static final class CachedLocale {
         private final Locale locale;
@@ -508,8 +511,8 @@ public class CalendarTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected static interface IDateFormatNormalizer {
         String normalizeDateFormat(
@@ -519,8 +522,8 @@ public class CalendarTools {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected static class LocaleDateFormatNormalizer implements
             IDateFormatNormalizer {

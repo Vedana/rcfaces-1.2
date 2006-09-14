@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:13  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -54,21 +57,24 @@
  */
 package org.rcfaces.renderkit.html.internal.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.Externalizable;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
+import javax.faces.application.StateManager;
+import javax.faces.application.StateManager.SerializedView;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -79,16 +85,21 @@ import javax.servlet.jsp.tagext.BodyContent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
+import org.rcfaces.core.internal.lang.ByteBufferInputStream;
+import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
+import org.rcfaces.core.internal.tools.StateFieldMarkerTools;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class AsyncRenderService extends AbstractAsyncRenderService {
     private static final String REVISION = "$Revision$";
@@ -103,26 +114,50 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             .getPackagePrefix()
             + ".INTERACTIVE_RENDER";
 
-    private static final int MINIMUM_GZIP_SIZE = 64;
-
     private transient boolean interactiveRender;
 
     private transient boolean useGzip;
 
     public void initialize(FacesContext facesContext) {
-        useGzip = "true".equalsIgnoreCase(facesContext.getExternalContext()
-                .getInitParameter(ParametredHttpServlet.USE_GZIP_PARAMETER));
+        String interactiveRendererParameter = facesContext.getExternalContext()
+                .getInitParameter(INTERACTIVE_RENDERER_PARAMETER);
 
-        interactiveRender = ("false".equalsIgnoreCase(facesContext
-                .getExternalContext().getInitParameter(
-                        INTERACTIVE_RENDERER_PARAMETER)) == false);
+        if ("false".equalsIgnoreCase(interactiveRendererParameter)) {
+            LOG.info("Disable interactive render.");
+            interactiveRender = false;
 
-        if (interactiveRender) {
+        } else if ("true".equalsIgnoreCase(interactiveRendererParameter)) {
             LOG.info("Enable interactive render.");
+            interactiveRender = true;
 
         } else {
-            LOG.info("Disable interactive render.");
+            interactiveRender = Constants.INTERACTIVE_RENDER_DEFAULT_VALUE;
+
+            LOG.info("Use default interactive render value ("
+                    + interactiveRender + ").");
         }
+
+        if (interactiveRender) {
+            String useGZIPParameter = facesContext.getExternalContext()
+                    .getInitParameter(ConfiguredHttpServlet.USE_GZIP_PARAMETER);
+
+            if ("true".equalsIgnoreCase(useGZIPParameter)) {
+                LOG.info("Enable interactive render GZIP.");
+                useGzip = true;
+
+            } else if ("false".equalsIgnoreCase(useGZIPParameter)) {
+                LOG.info("Disable interactive render GZIP.");
+                useGzip = false;
+
+            } else {
+                useGzip = Constants.INTERACTIVE_RENDER_GZIP_DEFAULT_VALUE;
+
+                LOG.info("Use default interactive render GZIP value ("
+                        + useGzip + ").");
+
+            }
+        }
+
     }
 
     public void service(FacesContext facesContext, String commandId) {
@@ -176,7 +211,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 + AbstractHtmlService.RESPONSE_CHARSET);
 
         try {
-            content.sendBuffer(facesContext, response);
+            content.sendBuffer(facesContext);
 
         } catch (IOException ex) {
             throw new FacesException(
@@ -219,11 +254,11 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
         return interactiveRender;
     }
 
-    public void setContent(UIComponent component, BodyContent writer) {
+    public void setContent(FacesContext facesContext, UIComponent component,
+            BodyContent writer) {
         Map map = component.getAttributes();
 
-        map.put(INTERACTIVE_KEY,
-                new InteractiveBuffer(writer, canUseGzip(null)));
+        map.put(INTERACTIVE_KEY, new InteractiveBuffer(facesContext, writer));
     }
 
     protected final boolean canUseGzip(FacesContext facesContext) {
@@ -236,157 +271,329 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
         }
 
         // On verifie que le browser le supporte
-        return ParametredHttpServlet.hasGzipSupport(facesContext);
+        return ConfiguredHttpServlet.hasGzipSupport(facesContext);
     }
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
-    public static final class InteractiveBuffer implements Externalizable {
+    public static final class InteractiveBuffer implements StateHolder,
+            Externalizable {
+
+        private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = -8520292309943559285L;
+
+        private static final byte[] NO_GZIPPED_CONTENT = new byte[0];
 
         // Pour debug !
         private transient int id;
 
+        private transient boolean transientValue;
+
         private String content;
 
-        private byte gzipped[];
+        private byte gzippedContent[];
 
-        private boolean useGzip;
+        private boolean hasSaveStateFieldMarker;
 
         public InteractiveBuffer() {
             // Pour la dÃ©serialisation !
-        }
-
-        public InteractiveBuffer(BodyContent bodyContent, boolean useGzip) {
-            this.useGzip = useGzip;
-
-            int length = bodyContent.getBufferSize()
-                    - bodyContent.getRemaining();
-
             if (LOG.isTraceEnabled()) {
                 this.id = (BUFFER_ID++);
-
-                LOG.trace("New interactiveBuffer[" + id + "] (useGzip="
-                        + useGzip + ") :\n" + bodyContent.getString());
             }
-
-            if (length < MINIMUM_GZIP_SIZE || useGzip == false) {
-                this.content = bodyContent.getString();
-                this.gzipped = null;
-                return;
-            }
-
-            String content = null;
-            byte gzipped[] = null;
-            try {
-                ByteArrayOutputStream bout = new ByteArrayOutputStream(length);
-                OutputStream gzip = new GZIPOutputStream(bout, length);
-                Writer writer = new OutputStreamWriter(gzip,
-                        AbstractHtmlService.RESPONSE_CHARSET);
-
-                bodyContent.writeOut(writer);
-
-                writer.close(); // ferme bout !
-
-                gzipped = bout.toByteArray();
-
-                if (gzipped.length < length) {
-                    content = null;
-
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info("Compression: original=" + length + " z="
-                                + gzipped.length + " ("
-                                + (gzipped.length * 100 / length) + " %)");
-                    }
-                } else {
-                    if (LOG.isInfoEnabled()) {
-                        LOG
-                                .info("Compression: bad performance, cancel compression ! ("
-                                        + (gzipped.length * 100 / length)
-                                        + " %)");
-                    }
-                    gzipped = null;
-                    content = bodyContent.getString();
-                }
-
-            } catch (IOException ex) {
-                LOG.error("Can GZIP buffer !", ex);
-            }
-
-            this.content = content;
-            this.gzipped = gzipped;
         }
 
-        public void readExternal(ObjectInput in) {
-            // Rien !
-        }
-
-        public void writeExternal(ObjectOutput out) {
-            // Rien !
-        }
-
-        public void sendBuffer(FacesContext facesContext,
-                ServletResponse response) throws IOException {
-
-            boolean useGzip = this.useGzip;
-            if (useGzip) {
-                useGzip = ParametredHttpServlet.hasGzipSupport(facesContext);
-            }
+        public InteractiveBuffer(FacesContext facesContext,
+                BodyContent bodyContent) {
+            this();
 
             if (LOG.isTraceEnabled()) {
-                LOG.trace("Send interactiveBuffer[" + id + "] (gzip support="
+                LOG.trace("New interactiveBuffer[" + id + "]=\n"
+                        + bodyContent.getString());
+            }
+
+            this.content = bodyContent.getString();
+
+            String saveStateFieldMarker = StateFieldMarkerTools
+                    .getStateFieldMarker(facesContext);
+            if (saveStateFieldMarker != null
+                    && saveStateFieldMarker.length() > 0) {
+
+                if (content.indexOf(saveStateFieldMarker) >= 0) {
+                    this.hasSaveStateFieldMarker = true;
+                }
+            }
+
+            /*
+             * String content = null; byte gzipped[] = null; try {
+             * BufferOutputStream bout = new BufferOutputStream(length);
+             * OutputStream gzip = new GZIPOutputStream(bout, length); Writer
+             * writer = new OutputStreamWriter(gzip,
+             * AbstractHtmlService.RESPONSE_CHARSET);
+             * 
+             * bodyContent.writeOut(writer);
+             * 
+             * writer.close(); // ferme bout !
+             * 
+             * gzipped = bout.toByteArray();
+             * 
+             * if (gzipped.length < length) { content = null;
+             * 
+             * if (LOG.isInfoEnabled()) { LOG.info("Compression: original=" +
+             * length + " z=" + gzipped.length + " (" + (gzipped.length * 100 /
+             * length) + " %)"); } } else { if (LOG.isInfoEnabled()) { LOG
+             * .info("Compression: bad performance, cancel compression ! (" +
+             * (gzipped.length * 100 / length) + " %)"); } gzipped = null;
+             * content = bodyContent.getString(); } } catch (IOException ex) {
+             * LOG.error("Can GZIP buffer !", ex); }
+             * 
+             * this.content = content; this.gzipped = gzipped;
+             */
+        }
+
+        public void sendBuffer(FacesContext facesContext) throws IOException {
+
+            ServletResponse response = (ServletResponse) facesContext
+                    .getExternalContext().getResponse();
+
+            OutputStream responseStream = response.getOutputStream();
+            OutputStream outputStream = responseStream;
+
+            boolean useGzip = ConfiguredHttpServlet
+                    .hasGzipSupport(facesContext);
+
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Send interactiveBuffer[" + id + "] (Use gzip: "
                         + useGzip + ")");
             }
 
-            if (gzipped != null) {
-                if (useGzip) {
-                    ParametredHttpServlet
+            if (hasSaveStateFieldMarker == false) {
+                if (gzippedContent != null && useGzip) {
+
+                    if (LOG.isDebugEnabled()) {
+                        LOG
+                                .debug("Send an already gzipped interactive buffer. (no state field marker)");
+                    }
+                    ExtendedHttpServlet
                             .setGzipContentEncoding((HttpServletResponse) response);
 
-                    OutputStream out = response.getOutputStream();
-                    out.write(gzipped);
-
+                    outputStream.write(gzippedContent);
                     return;
                 }
+            }
 
-                // Ca peut toujours arriver !
+            String content = this.content;
+            if (content == null) {
+                // Content est necessaire !
 
-                OutputStream out = response.getOutputStream();
+                InputStream ins = new ByteBufferInputStream(gzippedContent);
+                GZIPInputStream gin = new GZIPInputStream(ins,
+                        gzippedContent.length);
 
-                ByteArrayInputStream bin = new ByteArrayInputStream(gzipped);
-                GZIPInputStream gzip = new GZIPInputStream(bin, gzipped.length);
-                try {
-                    byte bout[] = new byte[4096];
-                    for (;;) {
-                        int ret = gzip.read(bout);
-                        if (ret < 1) {
-                            break;
-                        }
+                Reader reader = new InputStreamReader(gin, "UTF-8");
 
-                        out.write(bout, 0, ret);
+                StringAppender sa = new StringAppender(
+                        gzippedContent.length * 2);
+                char buf[] = new char[4096];
+                for (;;) {
+                    int ret = reader.read(buf);
+                    if (ret < 1) {
+                        break;
                     }
-
-                } finally {
-                    gzip.close();
+                    sa.append(buf, 0, ret);
                 }
 
+                reader.close();
+
+                content = sa.toString();
+            }
+
+            ByteBufferOutputStream bos = null;
+            if (useGzip) {
+                ConfiguredHttpServlet
+                        .setGzipContentEncoding((HttpServletResponse) response);
+
+                if (hasSaveStateFieldMarker == false) {
+                    bos = new ByteBufferOutputStream(content.length());
+
+                    outputStream = new GZIPOutputStream(bos, content.length());
+
+                    if (LOG.isDebugEnabled()) {
+                        LOG
+                                .debug("GZip content of interactive buffer and keep result. (no state field marker)");
+                    }
+                } else {
+                    outputStream = new GZIPOutputStream(outputStream, content
+                            .length());
+
+                    if (LOG.isDebugEnabled()) {
+                        LOG
+                                .debug("GZip content of interactive buffer. (state field marker presn");
+                    }
+                }
+            } else {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Dont't use GZip to send content.");
+                }
+            }
+
+            Writer writer = new OutputStreamWriter(outputStream,
+                    AbstractHtmlService.RESPONSE_CHARSET);
+
+            if (hasSaveStateFieldMarker == false) {
+                writer.write(content);
+
+            } else {
+                String saveStateFieldMarker = StateFieldMarkerTools
+                        .getStateFieldMarker(facesContext);
+                if (saveStateFieldMarker == null) {
+                    throw new FacesException(
+                            "Save state field marker is null !");
+                }
+
+                StateManager stateManager = facesContext.getApplication()
+                        .getStateManager();
+
+                SerializedView serializedView = stateManager
+                        .saveSerializedView(facesContext);
+
+                String saveValue = StateFieldMarkerTools.getStateValue(
+                        facesContext, serializedView);
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Save value=" + saveValue);
+                }
+
+                for (int start = 0;;) {
+                    int offset = content.indexOf(saveStateFieldMarker, start);
+                    if (offset < 0) {
+                        if (start < content.length()) {
+                            writer.write(content.substring(start));
+                        }
+                        break;
+                    }
+                    if (offset > start) {
+                        writer.write(content.substring(start, offset));
+                    }
+                    writer.write(saveValue);
+                    start = offset + saveStateFieldMarker.length();
+                }
+            }
+
+            writer.close();
+
+            outputStream.close();
+
+            if (bos != null) {
+                gzippedContent = bos.toByteArray();
+
+                responseStream.write(gzippedContent);
+            }
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+            Object states[] = (Object[]) state;
+            hasSaveStateFieldMarker = (states[1] != null);
+
+            if (states[0] instanceof byte[]) {
+                gzippedContent = (byte[]) states[0];
                 return;
             }
 
-            PrintWriter pw = response.getWriter();
-            pw.write(content);
+            content = (String) states[0];
+            gzippedContent = NO_GZIPPED_CONTENT;
+        }
+
+        public Object saveState(FacesContext context) {
+            if (gzippedContent == null) {
+                // Test le GZIP
+
+                if (LOG.isDebugEnabled()) {
+                    LOG
+                            .debug("saveState of interactive buffer (not already gzipped)");
+                }
+
+                int length = content.length();
+                gzippedContent = NO_GZIPPED_CONTENT;
+                if (length >= Constants.INTERACTIVE_RENDER_MINIMUM_GZIP_BUFFER_SIZE) {
+                    try {
+                        ByteBufferOutputStream bos = new ByteBufferOutputStream(
+                                content.length());
+                        GZIPOutputStream out = new GZIPOutputStream(bos, 4096);
+
+                        out.write(content.getBytes("UTF-8"));
+
+                        out.close();
+
+                        byte gzipped[] = bos.toByteArray();
+                        if (gzipped.length < length * 2) {
+                            gzippedContent = gzipped;
+                        }
+
+                        if (LOG.isDebugEnabled()) {
+                            if (gzippedContent.length > 0) {
+                                LOG.debug("Compression: original=" + length
+                                        + " z=" + gzipped.length + " ("
+                                        + (gzipped.length * 100 / length)
+                                        + " %)");
+
+                            } else {
+                                LOG
+                                        .debug("Compression: bad performance, ignore compression ! ("
+                                                + (gzipped.length * 100 / length)
+                                                + " %)");
+
+                            }
+                        }
+                    } catch (IOException ex) {
+                        LOG.error("Can not compress async render buffer.", ex);
+                    }
+                } else {
+                    if (LOG.isDebugEnabled()) {
+                        LOG
+                                .debug("Buffer is too small to try compression ! ("
+                                        + length
+                                        + "<"
+                                        + Constants.INTERACTIVE_RENDER_MINIMUM_GZIP_BUFFER_SIZE
+                                        + ")");
+
+                    }
+                }
+            }
+
+            Boolean hasObject = (hasSaveStateFieldMarker) ? Boolean.TRUE : null;
+
+            if (gzippedContent.length > 0) {
+                return new Object[] { gzippedContent, hasObject };
+            }
+
+            return new Object[] { content, hasObject };
+        }
+
+        public boolean isTransient() {
+            return transientValue;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+            transientValue = newTransientValue;
+        }
+
+        public void readExternal(ObjectInput in) {
+            // Pas de serialization !
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("readExternal of interactive buffer.");
+            }
+        }
+
+        public void writeExternal(ObjectOutput out) {
+            // Pas de serialization !
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("writeExternal of interactive buffer.");
+            }
+
         }
     }
-
-    /*
-     * public static void main(String args[]) throws Exception { for (int i = 0;
-     * i < 64; i++) { ByteArrayOutputStream out = new ByteArrayOutputStream();
-     * GZIPOutputStream g = new GZIPOutputStream(out);
-     * 
-     * for (int j = 0; j <= i; j++) { g.write(j); } g.close(); out.close();
-     * 
-     * System.out.println("#" + i + " " + out.toByteArray().length); } }
-     */
 }

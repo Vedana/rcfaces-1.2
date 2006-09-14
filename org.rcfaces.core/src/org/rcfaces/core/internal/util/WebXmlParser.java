@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -29,8 +32,8 @@ import org.xml.sax.InputSource;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class WebXmlParser {
     private static final String REVISION = "$Revision$";
@@ -41,14 +44,14 @@ public class WebXmlParser {
 
     private static final ServletBean[] SERVLET_BEAN_EMPTY_ARRAY = new ServletBean[0];
 
-    private final ServletContext servletContext;
+   // private final ServletContext servletContext;
 
     private final Map servletByClassName = new HashMap();
 
     private final Map servletByName = new HashMap();
 
     public WebXmlParser(ServletContext servletContext) {
-        this.servletContext = servletContext;
+   //     this.servletContext = servletContext;
 
         URL url;
         try {
@@ -184,8 +187,8 @@ public class WebXmlParser {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class ServletBean {
         private static final String REVISION = "$Revision$";
@@ -220,8 +223,8 @@ public class WebXmlParser {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class ServletMapping {
         private static final String REVISION = "$Revision$";

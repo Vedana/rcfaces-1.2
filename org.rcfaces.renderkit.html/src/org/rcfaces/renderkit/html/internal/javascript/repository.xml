@@ -780,12 +780,15 @@
 		<file name="f_calendarObject.js">
 			<class name="f_calendarObject">
 				<required-class name="f_object" />
-				<required-class name="f_locale" />
-				<required-class name="fa_items" />
 				<required-class name="fa_eventTarget" />
+				<required-class name="fa_items" />
+				<required-class name="fa_selectionProvider" />
+				<required-class name="fa_commands" />
+
+				<required-class name="f_locale" />
 				<required-class name="f_resourceBundle" />
 				<required-class name="f_dateFormat" />
-				<required-class name="fa_commands" />
+
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
 			</class>

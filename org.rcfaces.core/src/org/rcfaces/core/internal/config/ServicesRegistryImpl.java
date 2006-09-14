@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -61,15 +64,16 @@ import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.xml.sax.Attributes;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
         implements Serializable, PhaseListener, IServicesRegistry {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -2873554843764179473L;
 
     private static final Log LOG = LogFactory
             .getLog(ServicesRegistryImpl.class);
@@ -159,8 +163,8 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static final class ServiceFacade {
         private static final String REVISION = "$Revision$";
@@ -223,8 +227,8 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class RenderKit extends
             AbstractRenderKitRegistryImpl.RenderKit {

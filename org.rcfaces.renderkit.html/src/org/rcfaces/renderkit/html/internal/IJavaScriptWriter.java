@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -84,11 +87,10 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.renderkit.WriterException;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 public interface IJavaScriptWriter {
@@ -130,6 +132,10 @@ public interface IJavaScriptWriter {
 
     IJavaScriptWriter writeCall(String object, String symbol)
             throws WriterException;
+
+    IJavaScriptWriter writeMethodCall(String symbol) throws WriterException;
+
+    IJavaScriptWriter writeConstructor(String symbol) throws WriterException;
 
     IJavaScriptWriter writeString(String s) throws WriterException;
 

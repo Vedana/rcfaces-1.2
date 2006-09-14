@@ -5,8 +5,8 @@
 /**
  * 
  * @class public f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __prototype = {

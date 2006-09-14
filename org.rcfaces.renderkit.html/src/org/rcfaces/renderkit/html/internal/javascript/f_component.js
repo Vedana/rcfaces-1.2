@@ -7,7 +7,7 @@
  *
  * @class f_component extends f_eventTarget, HTMLElement, fa_serializable, fa_clientData
  * @author Joel Merlin & Olivier Oeuillot
- * @version $Revision$
+ * @version $Revision$ $Date$
  */
  
 var __static = {

@@ -42,6 +42,10 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>disableContextMenu</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>renderBaseTag</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -52,6 +56,25 @@
 		<body-content>JSP</body-content>
 		<attribute>
 			<name>src</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>loadClientBundle</name>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadClientBundleTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>bundleName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>baseName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>serverSide</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

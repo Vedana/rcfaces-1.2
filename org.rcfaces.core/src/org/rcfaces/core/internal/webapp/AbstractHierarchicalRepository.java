@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:28  oeuillot
  * Gestion des ICOs
  *
@@ -84,11 +87,9 @@
  * Debuggage
  *
  */
-package org.rcfaces.core.internal.util;
+package org.rcfaces.core.internal.webapp;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -98,7 +99,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -109,20 +109,22 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.webapp.IRepository;
-import org.rcfaces.core.internal.webapp.URIParameters;
+import org.rcfaces.core.internal.util.ClassLocator;
+import org.rcfaces.core.internal.util.URLContentProvider;
 import org.xml.sax.Attributes;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public abstract class AbstractRepository implements IRepository {
+public abstract class AbstractHierarchicalRepository extends AbstractRepository
+        implements IHierarchicalRepository {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(AbstractRepository.class);
+    private static final Log LOG = LogFactory
+            .getLog(AbstractHierarchicalRepository.class);
 
-    protected static final IFile[] FILE_EMPTY_ARRAY = new IFile[0];
+    protected static final IHierarchicalFile[] HIERARCHICAL_FILE_EMPTY_ARRAY = new IHierarchicalFile[0];
 
     private static final IModule[] MODULE_EMPTY_ARRAY = new IModule[0];
 
@@ -132,42 +134,17 @@ public abstract class AbstractRepository implements IRepository {
 
     private static final Integer SET_TYPE = new Integer(2);
 
-    private final Map filesByName = new HashMap();
-
-    private final Map filesByURI = new HashMap();
-
     private final Map modulesByName = new HashMap();
 
     private final Map setsByName = new HashMap();
 
     private final Map resourcesByName = new HashMap();
 
-    protected final String repositoryVersion;
-
-    private final String fileVersion;
-
-    protected final String servletURI;
-
     private ISet bootSet;
 
-    public AbstractRepository(String servletURI, String repositoryVersion,
-            String fileVersion) {
-        if (servletURI.length() > 0) {
-            if (servletURI.endsWith("/") && servletURI.length() > 1) {
-                servletURI = servletURI.substring(0, servletURI.length() - 1);
-
-            } else if (servletURI.startsWith("/") == false) {
-                servletURI = "/" + servletURI;
-            }
-        }
-
-        this.servletURI = servletURI;
-        this.repositoryVersion = repositoryVersion;
-        this.fileVersion = fileVersion;
-    }
-
-    public String getVersion() {
-        return repositoryVersion;
+    public AbstractHierarchicalRepository(String servletURI,
+            String repositoryVersion) {
+        super(servletURI, repositoryVersion);
     }
 
     public ISet getBootSet() {
@@ -179,7 +156,7 @@ public abstract class AbstractRepository implements IRepository {
     }
 
     protected IContentProvider getDefaultContentProvider() {
-        return BasicContentProvider.SINGLETON;
+        return URLContentProvider.SINGLETON;
     }
 
     public void loadRepository(InputStream input,
@@ -249,7 +226,7 @@ public abstract class AbstractRepository implements IRepository {
                             "No 'name' attribute for <file> element !");
                 }
 
-                IFile ds[] = FILE_EMPTY_ARRAY;
+                IHierarchicalFile ds[] = HIERARCHICAL_FILE_EMPTY_ARRAY;
 
                 String depends = attributes.getValue("depends");
                 if (depends != null) {
@@ -258,7 +235,7 @@ public abstract class AbstractRepository implements IRepository {
                             .hasMoreTokens();) {
                         String dname = st.nextToken();
 
-                        IFile fd = getFileByName(dname);
+                        IHierarchicalFile fd = (IHierarchicalFile) getFileByName(dname);
                         if (fd == null) {
                             throw new IllegalArgumentException("Can not find '"
                                     + dname + "' referenced by file '" + name
@@ -273,7 +250,8 @@ public abstract class AbstractRepository implements IRepository {
                     }
 
                     if (l != null) {
-                        ds = (IFile[]) l.toArray(new IFile[l.size()]);
+                        ds = (IHierarchicalFile[]) l
+                                .toArray(new IHierarchicalFile[l.size()]);
                     }
                 }
 
@@ -299,8 +277,9 @@ public abstract class AbstractRepository implements IRepository {
 
                 IModule module = (IModule) this.digester.peek();
 
-                IFile f = declareFile(name, contentLocationDirectory, module,
-                        ds, container, contentProvider);
+                IHierarchicalFile f = declareFile(name,
+                        contentLocationDirectory, module, ds, container,
+                        contentProvider);
 
                 String uri = getURI(name);
                 filesByURI.put(uri, f);
@@ -314,8 +293,8 @@ public abstract class AbstractRepository implements IRepository {
         });
     }
 
-    public final IFile declareFile(String name, String directory,
-            IModule module, IFile depends[], Object container,
+    public final IHierarchicalFile declareFile(String name, String directory,
+            IModule module, IHierarchicalFile depends[], Object container,
             IContentProvider contentProvider) {
         String contentLocation = getContentLocation(name, directory);
 
@@ -345,8 +324,8 @@ public abstract class AbstractRepository implements IRepository {
         }
 
         String rname = "f:" + name;
-        File f = createFile(module, rname, name, name, url, depends,
-                contentProvider);
+        IHierarchicalFile f = createFile(module, rname, name, name, url,
+                depends, contentProvider);
 
         filesByName.put(name, f);
         resourcesByName.put(rname, f);
@@ -354,11 +333,12 @@ public abstract class AbstractRepository implements IRepository {
         return f;
     }
 
-    protected File createFile(IModule module, String name, String filename,
-            String unlocalizedURI, URL unlocalizedContentLocation,
-            IFile dependencies[], IContentProvider contentProvider) {
+    protected HierarchicalFile createFile(IModule module, String name,
+            String filename, String unlocalizedURI,
+            URL unlocalizedContentLocation, IHierarchicalFile dependencies[],
+            IContentProvider contentProvider) {
 
-        return new File(module, name, filename, unlocalizedURI,
+        return new HierarchicalFile(module, name, filename, unlocalizedURI,
                 unlocalizedContentLocation, dependencies, contentProvider);
     }
 
@@ -366,24 +346,16 @@ public abstract class AbstractRepository implements IRepository {
         return directory + name;
     }
 
-    public IFile getFileByName(String name) {
-        return (IFile) filesByName.get(name);
-    }
-
     public IModule getModuleByName(String name) {
         return (IModule) modulesByName.get(name);
     }
 
-    public IFile getFileById(String id) {
-        return (IFile) resourcesByName.get(id);
+    public IHierarchicalFile getFileById(String id) {
+        return (IHierarchicalFile) resourcesByName.get(id);
     }
 
     public ISet getSetByName(String name) {
         return (ISet) setsByName.get(name);
-    }
-
-    public IFile getFileByURI(String uri) {
-        return (IFile) filesByURI.get(uri);
     }
 
     private String getModuleFilename(String id) {
@@ -394,15 +366,15 @@ public abstract class AbstractRepository implements IRepository {
         return name;
     }
 
-    public IFile[] computeFiles(Collection files, int typeOfCollection,
-            IContext context) {
+    public IHierarchicalFile[] computeFiles(Collection files,
+            int typeOfCollection, IContext context) {
         List dependencies = null;
         List deps = null;
 
         for (Iterator it = files.iterator(); it.hasNext();) {
             Object next = it.next();
 
-            IFile file = convertType(next, typeOfCollection);
+            IHierarchicalFile file = convertType(next, typeOfCollection);
 
             if (file == null) {
                 throw new IllegalArgumentException("Object '" + next
@@ -441,18 +413,20 @@ public abstract class AbstractRepository implements IRepository {
         }
 
         if (dependencies == null || dependencies.isEmpty()) {
-            return FILE_EMPTY_ARRAY;
+            return HIERARCHICAL_FILE_EMPTY_ARRAY;
         }
 
-        return (IFile[]) dependencies.toArray(new IFile[dependencies.size()]);
+        return (IHierarchicalFile[]) dependencies
+                .toArray(new IHierarchicalFile[dependencies.size()]);
     }
 
-    protected IFile convertType(Object next, int typeOfCollection) {
+    protected IHierarchicalFile convertType(Object next, int typeOfCollection) {
         if (typeOfCollection == FILENAME_COLLECTION_TYPE) {
             String filename = (String) next;
 
             // On recherches les fichiers associ�s
-            IFile file = (IFile) filesByName.get(filename);
+            IHierarchicalFile file = (IHierarchicalFile) filesByName
+                    .get(filename);
             if (file == null) {
                 throw new IllegalArgumentException("File '" + filename
                         + "' is not known into repository !");
@@ -461,13 +435,14 @@ public abstract class AbstractRepository implements IRepository {
         }
 
         if (typeOfCollection == FILE_COLLECTION_TYPE) {
-            return (IFile) next;
+            return (IHierarchicalFile) next;
         }
 
         return null;
     }
 
-    private List computeFile(IFile file, IContext context, List newFiles) {
+    private List computeFile(IHierarchicalFile file, IContext context,
+            List newFiles) {
         if (context.contains(file)) {
             return newFiles;
         }
@@ -491,7 +466,7 @@ public abstract class AbstractRepository implements IRepository {
 
         if (module != null && module.getGroupAllFiles()) {
             if (context.contains(module)) {
-                // Il fait parti d'un module qui a �t� envoy� !
+                // Il fait parti d'un module qui a été envoyé !
                 return newFiles;
             }
             file = module;
@@ -505,7 +480,7 @@ public abstract class AbstractRepository implements IRepository {
             file = set;
         }
 
-        IFile ds[];
+        IHierarchicalFile ds[];
 
         if (file == set) {
             ds = set.listExternalDependencies();
@@ -602,80 +577,6 @@ public abstract class AbstractRepository implements IRepository {
         modules.add(module);
     }
 
-    public IContext createContext(Locale locale) {
-        return new ContextImpl(locale);
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
-     */
-    private static class ContextImpl implements IContext {
-        private static final String REVISION = "$Revision$";
-
-        private final Set files = new HashSet(32);
-
-        private final Locale locale;
-
-        public ContextImpl(Locale locale) {
-            this.locale = locale;
-        }
-
-        public Locale getLocale() {
-            return locale;
-        }
-
-        public boolean contains(IFile file) {
-            return files.contains(file);
-        }
-
-        public boolean add(IFile file) {
-            return files.add(file);
-        }
-
-        public IContext copy() {
-            ContextImpl ctx = new ContextImpl(locale);
-            ctx.files.addAll(files);
-
-            return ctx;
-        }
-
-        public void restoreState(IRepository repository, Object state) {
-            if (state == null) {
-                return;
-            }
-
-            Object fs[] = (Object[]) state;
-            for (int i = 0; i < fs.length; i++) {
-                IFile file = ((AbstractRepository) repository)
-                        .getFileById((String) fs[i]);
-
-                if (file == null) {
-                    continue;
-                }
-
-                add(file);
-            }
-        }
-
-        public Object saveState() {
-            if (files.isEmpty()) {
-                return null;
-            }
-
-            Iterator it = files.iterator();
-            Object ret[] = new Object[files.size()];
-            for (int i = 0; it.hasNext();) {
-                IFile file = (IFile) it.next();
-
-                ret[i++] = ((File) file).getId();
-            }
-
-            return ret;
-        }
-    }
-
     private static IModule[] filterModules(IModule[] modules) {
         List l = new ArrayList(modules.length);
 
@@ -694,19 +595,96 @@ public abstract class AbstractRepository implements IRepository {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
-    protected class SetImpl extends File implements ISet {
+    public class HierarchicalFile extends File implements IHierarchicalFile {
+
         private static final String REVISION = "$Revision$";
 
-        private IFile externalDependencies[];
+        private static final long serialVersionUID = -4635130019371035269L;
 
-        private IFile dependencies[];
+        private final IModule module;
 
-        public SetImpl(String name, String filename, String uri,
+        private IHierarchicalFile[] dependencies;
+
+        public HierarchicalFile(IModule module, String name, String filename,
+                String unlocalizedURI, Object unlocalizedContentLocation,
+                IHierarchicalFile[] dependencies,
+                IContentProvider contentProvider) {
+            super(name, filename, unlocalizedURI, unlocalizedContentLocation,
+                    contentProvider);
+
+            this.module = module;
+            this.dependencies = dependencies;
+
+            if (module != null) {
+                ((Module) module).addFile(this);
+
+            }
+        }
+
+        public void addDependencies(IHierarchicalFile dependencies[]) {
+            List l = new ArrayList(Arrays.asList(this.dependencies));
+
+            for (int i = 0; i < dependencies.length; i++) {
+                IHierarchicalFile f = dependencies[i];
+                if (l.contains(f)) {
+                    continue;
+                }
+
+                l.add(f);
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Dependencies of HFile[" + getId() + "]=" + l);
+            }
+
+            this.dependencies = (IHierarchicalFile[]) l
+                    .toArray(new IHierarchicalFile[l.size()]);
+        }
+
+        public IHierarchicalFile[] listDependencies() {
+            return dependencies;
+        }
+
+        public IModule getModule() {
+            return module;
+        }
+
+        public int hashCode() {
+            int h = super.hashCode();
+            if (module != null) {
+                // ((Module) module).addFile(this);
+                h ^= module.getFilename().hashCode();
+            }
+
+            return h;
+        }
+
+        public String toString() {
+            return "[HFile " + getId() + "]";
+        }
+
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public class SetImpl extends HierarchicalFile implements ISet {
+        private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = -5572999892750207302L;
+
+        private IHierarchicalFile externalDependencies[];
+
+        private IHierarchicalFile dependencies[];
+
+        public SetImpl(String id, String filename, String uri,
                 IModule modules[]) {
-            super(null, name, filename, uri, null, filterModules(modules), null);
+            super(null, id, filename, uri, null, filterModules(modules), null);
 
             modules = (IModule[]) super.listDependencies();
             for (int i = 0; i < modules.length; i++) {
@@ -718,23 +696,28 @@ public abstract class AbstractRepository implements IRepository {
 
                 ((Module) modules[i]).setSet(this);
             }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Declare SET [" + id + "] => "
+                        + Arrays.asList(modules));
+            }
         }
 
-        public IFile[] listExternalDependencies() {
+        public IHierarchicalFile[] listExternalDependencies() {
             if (externalDependencies != null) {
                 return externalDependencies;
             }
 
             Set l = null;
-            IFile files[] = listDependencies();
+            IHierarchicalFile files[] = listDependencies();
 
             for (int i = 0; i < files.length; i++) {
-                IFile file = files[i];
+                IHierarchicalFile file = files[i];
 
-                IFile dfiles[] = file.listDependencies();
+                IHierarchicalFile dfiles[] = file.listDependencies();
 
                 for (int j = 0; j < dfiles.length; j++) {
-                    IFile dfile = dfiles[j];
+                    IHierarchicalFile dfile = dfiles[j];
 
                     IModule module = dfile.getModule();
 
@@ -750,18 +733,23 @@ public abstract class AbstractRepository implements IRepository {
                 }
             }
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ExternalDependencies of SET[" + getId() + "]=" + l);
+            }
+
             if (l == null) {
-                externalDependencies = FILE_EMPTY_ARRAY;
+                externalDependencies = HIERARCHICAL_FILE_EMPTY_ARRAY;
 
                 return externalDependencies;
             }
 
-            externalDependencies = (IFile[]) l.toArray(new IFile[l.size()]);
+            externalDependencies = (IHierarchicalFile[]) l
+                    .toArray(new IHierarchicalFile[l.size()]);
 
             return externalDependencies;
         }
 
-        public IFile[] listDependencies() {
+        public IHierarchicalFile[] listDependencies() {
             if (dependencies != null) {
                 return dependencies;
             }
@@ -770,35 +758,46 @@ public abstract class AbstractRepository implements IRepository {
             IModule modules[] = (IModule[]) super.listDependencies();
             for (int i = 0; i < modules.length; i++) {
 
-                IFile fs[] = modules[i].listDependencies();
+                IHierarchicalFile fs[] = modules[i].listDependencies();
 
                 l.addAll(Arrays.asList(fs));
             }
 
-            dependencies = (IFile[]) l.toArray(new IFile[l.size()]);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Dependencies of SET[" + getId() + "]=" + l);
+            }
+
+            dependencies = (IHierarchicalFile[]) l
+                    .toArray(new IHierarchicalFile[l.size()]);
 
             return dependencies;
+        }
+
+        public String toString() {
+            return "[Set " + getId() + "]";
         }
 
     }
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
-    protected class Module extends File implements IModule {
+    public class Module extends HierarchicalFile implements IModule {
         private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = -5299468486306880225L;
 
         private boolean groupAllFiles;
 
-        private List filesList = new ArrayList();
+        private List filesList = new ArrayList(8);
 
-        private IFile files[];
+        private IHierarchicalFile files[];
 
         private ISet set;
 
-        private IFile externalDependencies[];
+        private IHierarchicalFile externalDependencies[];
 
         private IModule externalModules[];
 
@@ -817,35 +816,37 @@ public abstract class AbstractRepository implements IRepository {
             return groupAllFiles;
         }
 
-        public void addFile(IFile file) {
+        public void addFile(IHierarchicalFile file) {
             filesList.add(file);
         }
 
-        public IFile[] listDependencies() {
-            if (filesList != null) {
-                files = (IFile[]) filesList
-                        .toArray(new IFile[filesList.size()]);
-                filesList = null;
+        public IHierarchicalFile[] listDependencies() {
+            if (files != null) {
+                return files;
             }
+
+            files = (IHierarchicalFile[]) filesList
+                    .toArray(new IHierarchicalFile[filesList.size()]);
+            filesList = null;
 
             return files;
         }
 
-        public IFile[] listExternalDependencies() {
+        public IHierarchicalFile[] listExternalDependencies() {
             if (externalDependencies != null) {
                 return externalDependencies;
             }
 
             Set l = null;
-            IFile files[] = listDependencies();
+            IHierarchicalFile files[] = listDependencies();
 
             for (int i = 0; i < files.length; i++) {
-                IFile file = files[i];
+                IHierarchicalFile file = files[i];
 
-                IFile dfiles[] = file.listDependencies();
+                IHierarchicalFile dfiles[] = file.listDependencies();
 
                 for (int j = 0; j < dfiles.length; j++) {
-                    IFile dfile = dfiles[j];
+                    IHierarchicalFile dfile = dfiles[j];
 
                     if (dfile.getModule() == this) {
                         continue;
@@ -859,13 +860,19 @@ public abstract class AbstractRepository implements IRepository {
                 }
             }
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ExternalDependencies of MODULE[" + getId() + "]="
+                        + l);
+            }
+
             if (l == null) {
-                externalDependencies = FILE_EMPTY_ARRAY;
+                externalDependencies = HIERARCHICAL_FILE_EMPTY_ARRAY;
 
                 return externalDependencies;
             }
 
-            externalDependencies = (IFile[]) l.toArray(new IFile[l.size()]);
+            externalDependencies = (IHierarchicalFile[]) l
+                    .toArray(new IHierarchicalFile[l.size()]);
 
             return externalDependencies;
         }
@@ -876,7 +883,7 @@ public abstract class AbstractRepository implements IRepository {
             }
 
             Set l = null;
-            IFile files[] = listExternalDependencies();
+            IHierarchicalFile files[] = listExternalDependencies();
 
             for (int i = 0; i < files.length; i++) {
                 IModule module = files[i].getModule();
@@ -889,6 +896,10 @@ public abstract class AbstractRepository implements IRepository {
                 }
 
                 l.add(module);
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Dependencies of MODULE[" + getId() + "]=" + l);
             }
 
             if (l == null) {
@@ -909,288 +920,9 @@ public abstract class AbstractRepository implements IRepository {
         public ISet getSet() {
             return set;
         }
-    }
 
-    /**
-     * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
-     */
-    protected class File implements IFile, Serializable {
-        private static final String REVISION = "$Revision$";
-
-        private final int h;
-
-        private final IModule module;
-
-        private final String id;
-
-        private final String filename;
-
-        private final URL unlocalizedContentLocation;
-
-        private final String unlocalizedURI;
-
-        private final IContentProvider contentProvider;
-
-        private IFile[] dependencies;
-
-        private LocalizedFile unlocalizedFile;
-
-        private Map localizedFiles;
-
-        public File(IModule module, String name, String filename,
-                String unlocalizedURI, URL unlocalizedContentLocation,
-                IFile dependencies[], IContentProvider contentProvider) {
-            this.module = module;
-            this.id = name;
-            this.filename = filename;
-            this.unlocalizedURI = unlocalizedURI;
-            this.dependencies = dependencies;
-            this.unlocalizedContentLocation = unlocalizedContentLocation;
-            this.contentProvider = contentProvider;
-
-            int h = filename.hashCode();
-            if (module != null) {
-                ((Module) module).addFile(this);
-                h ^= module.getFilename().hashCode();
-            }
-
-            this.h = h;
-        }
-
-        public IRepository getRepository() {
-            return AbstractRepository.this;
-        }
-
-        public void addDependencies(IFile dependencies[]) {
-            List l = new ArrayList(Arrays.asList(this.dependencies));
-
-            for (int i = 0; i < dependencies.length; i++) {
-                IFile f = dependencies[i];
-                if (l.contains(f)) {
-                    continue;
-                }
-
-                l.add(f);
-            }
-
-            this.dependencies = (IFile[]) l.toArray(new IFile[l.size()]);
-        }
-
-        public final String getId() {
-            return id;
-        }
-
-        public URL[] getContentLocations(Locale locale) {
-            LocalizedFile localizedFile = getLocalizedFile(locale);
-
-            return localizedFile.getContentLocations();
-        }
-
-        public String getFilename() {
-            return filename;
-        }
-
-        public IContentProvider getContentProvider() {
-            if (contentProvider != null) {
-                return contentProvider;
-            }
-            return getDefaultContentProvider();
-        }
-
-        public String getURI(Locale locale) {
-            LocalizedFile localizedFile = getLocalizedFile(locale);
-
-            return localizedFile.getURI();
-        }
-
-        private synchronized LocalizedFile getLocalizedFile(Locale locale) {
-            if (locale == null) {
-                if (unlocalizedFile != null) {
-                    return unlocalizedFile;
-                }
-
-                unlocalizedFile = new LocalizedFile(fileVersion,
-                        getContentProvider(), null, unlocalizedURI,
-                        unlocalizedContentLocation);
-                return unlocalizedFile;
-            }
-
-            if (localizedFiles == null) {
-                localizedFiles = new HashMap();
-            }
-
-            LocalizedFile localizedFile = (LocalizedFile) localizedFiles
-                    .get(locale);
-            if (localizedFile != null) {
-                return localizedFile;
-            }
-
-            localizedFile = new LocalizedFile(fileVersion,
-                    getContentProvider(), locale, unlocalizedURI,
-                    unlocalizedContentLocation);
-            localizedFiles.put(locale, localizedFile);
-
-            return localizedFile;
-        }
-
-        public IFile[] listDependencies() {
-            return dependencies;
-        }
-
-        public IModule getModule() {
-            return module;
-        }
-
-        public boolean equals(Object obj) {
-            if (obj == null || (obj instanceof File) == false) {
-                return false;
-            }
-
-            File f = (File) obj;
-
-            return f.filename.equals(filename);
-        }
-
-        public int hashCode() {
-            return h;
-        }
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
-     */
-    private static class LocalizedFile {
-        private static final String REVISION = "$Revision$";
-
-        private final String uri;
-
-        private final URL[] contentLocations;
-
-        public LocalizedFile(String fileVersion,
-                IContentProvider contentProvider, Locale locale, String uri,
-                URL unlocalizedContentLocation) {
-            URL localizedContentLocation = null;
-
-            if (locale != null || fileVersion != null) {
-                URIParameters uriParameters = new URIParameters(uri);
-
-                if (locale != null) {
-                    uriParameters.appendLocale(locale);
-                }
-                if (fileVersion != null) {
-                    uriParameters.appendVersion(fileVersion);
-                }
-
-                uri = uriParameters.computeParametredURI();
-            }
-
-            if (locale != null) {
-                if (unlocalizedContentLocation != null) {
-                    String localized = unlocalizedContentLocation.toString();
-                    int idx = localized.lastIndexOf('.');
-                    if (idx > 0) {
-                        String variant = locale.getVariant();
-                        String country = locale.getCountry();
-                        String language = locale.getLanguage();
-                        Locale foundLocale = null;
-
-                        if (variant != null && variant.length() > 0) {
-                            String l = localized.substring(0, idx) + "_"
-                                    + locale.getLanguage()
-                                    + localized.substring(idx);
-
-                            localizedContentLocation = testURL(contentProvider,
-                                    l);
-                            if (localizedContentLocation != null) {
-                                foundLocale = locale;
-                            }
-                        }
-
-                        if (localizedContentLocation == null) {
-                            if (country != null && country.length() > 0) {
-                                String l = localized.substring(0, idx) + "_"
-                                        + language + "_" + country
-                                        + localized.substring(idx);
-
-                                localizedContentLocation = testURL(
-                                        contentProvider, l);
-                                if (localizedContentLocation != null) {
-                                    foundLocale = new Locale(language, country);
-                                }
-                            }
-                        }
-
-                        if (localizedContentLocation == null) {
-                            if (language != null && language.length() > 0) {
-                                String l = localized.substring(0, idx) + "_"
-                                        + language + localized.substring(idx);
-
-                                localizedContentLocation = testURL(
-                                        contentProvider, l);
-                                if (localizedContentLocation != null) {
-                                    foundLocale = new Locale(language);
-                                }
-                            }
-                        }
-
-                        if (localizedContentLocation != null) {
-                            if (LOG.isInfoEnabled()) {
-                                LOG.info("Localized version '" + locale
-                                        + "' found locale '" + foundLocale
-                                        + "' ('" + uri + "').");
-                            }
-
-                        } else {
-                            if (LOG.isTraceEnabled()) {
-                                LOG.trace("Can not find localized version ("
-                                        + locale + ") of '" + uri + "'.");
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (unlocalizedContentLocation == null) {
-                contentLocations = null;
-
-            } else if (localizedContentLocation == null) {
-                contentLocations = new URL[] { unlocalizedContentLocation };
-
-            } else {
-                contentLocations = new URL[] { unlocalizedContentLocation,
-                        localizedContentLocation };
-            }
-
-            this.uri = uri;
-        }
-
-        private URL testURL(IContentProvider contentProvider, String localized) {
-
-            URL localizedURL = null;
-            try {
-                localizedURL = new URL(localized);
-            } catch (IOException ex) {
-                LOG.error("Can not construct url '" + localized + "'.");
-                return null;
-            }
-
-            if (contentProvider.testURL(localizedURL) == false) {
-                return null;
-            }
-
-            return localizedURL;
-        }
-
-        public URL[] getContentLocations() {
-            return contentLocations;
-        }
-
-        public String getURI() {
-            return uri;
+        public String toString() {
+            return "[Module " + getId() + "]";
         }
     }
 }

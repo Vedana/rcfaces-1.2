@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -168,7 +171,7 @@ var __prototype = {
 		this.f_super(arguments);		
 	},
 	f_forceChildVisibility: function(component) {
-		alert("Test: "+component);
+		//alert("Test: "+component);
 		return false;
 	}
 }

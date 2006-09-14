@@ -6,8 +6,8 @@
  * f_event class extends Object
  *
  * @class public f_event extends Object
- * @author Olivier Oeuillot & Joel Merlin
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
+ * @version $Revision$ $Date$
  */
 
 /**

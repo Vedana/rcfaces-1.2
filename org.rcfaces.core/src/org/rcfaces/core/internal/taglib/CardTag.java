@@ -1,14 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.CardComponent;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.servlet.jsp.tagext.Tag;
 
-public class CardTag extends AbstractOutputTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.CardComponent;
+
+public class CardTag extends AbstractOutputTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(CardTag.class);

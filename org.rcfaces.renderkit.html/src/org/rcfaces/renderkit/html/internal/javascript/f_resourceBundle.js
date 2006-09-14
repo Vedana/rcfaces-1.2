@@ -5,19 +5,23 @@
 /**
  * @class public f_resourceBundle extends f_object
  * 
- * @author Olivier Oeuillot
+ * @author Olivier Oeuillot (latest modification by $Author$)
  */
 
 function f_resourceBundle(name) {
 	this._name=name;
 }
 
-/*
-f_resourceBundle.prototype.f_finalize=function() {
-	this._name=undefined;  // string
-	this._properties=undefined; // Map<string, string>
-}
-*/
+
+/**
+ * @field private static 
+ */
+f_resourceBundle._Resources=undefined;
+
+/**
+ * @field private static 
+ */
+f_resourceBundle._Loading=undefined;
 	
 /**
  * Search a value associated to a property.
@@ -103,16 +107,16 @@ f_resourceBundle.Get=function(name, create) {
 		name=name.f_getName();
 	}
 	
-	f_core.Assert(typeof(name)=="string", "Name of resourceBundle must be a string or f_class !");
+	f_core.Assert(typeof(name)=="string", "Name of resourceBundle must be a string or f_class ! ("+name+")");
 
 	if (!name) {
 		return null;
 	}
 
-	var resources=f_resourceBundle._resources;
+	var resources=f_resourceBundle._Resources;
 	if (!resources) {
 		resources=new Object();
-		f_resourceBundle._resources=resources;
+		f_resourceBundle._Resources=resources;
 	}
 
 	var resource=resources[name];
@@ -129,10 +133,12 @@ f_resourceBundle.Get=function(name, create) {
 	resources[name]=resource;
 	return resource;
 }
+
 /**
- * @method static final
+ * @method static final hidden
  * @param string name Name of resourceBundle. (can be a f_class !)
  * @param Object values
+ * @return void
  */
 f_resourceBundle.Define=function(name, values) {
 	var resourceBundle=f_resourceBundle.Get(name, true);
@@ -142,8 +148,52 @@ f_resourceBundle.Define=function(name, values) {
 	resourceBundle._putAll(values);
 }
 
+
+/**
+ * @method static final hidden
+ * @param string name Name of baseName of a previous request.
+ * @param Object values
+ * @return void
+ */
+f_resourceBundle.DefineLoaded=function(baseName, values) {
+	f_core.Assert(f_resourceBundle._Loading, "Resource bundle base='"+name+"' is not requested !");
+
+	var loading=f_resourceBundle._Loading;
+
+	var bundleName=loading[baseName];
+	f_core.Assert(bundleName, "Resource bundle bundleName='"+bundleName+"' is not known !");
+
+	loading[baseName]=undefined;
+
+	f_core.Debug(f_resourceBundle, "Loaded: baseName='"+baseName+"' bundleName='"+bundleName+"' values="+values);
+		
+	f_resourceBundle.Define(bundleName, values);
+}
+
+/**
+ * @method static final hidden
+ * @param string bunddleName Name of resourceBundle.
+ * @param string baseName
+ * @return void
+ */
+f_resourceBundle.Load=function(bundleName, baseName, url) {
+	f_core.Assert(f_resourceBundle.Get(bundleName)==null, "Resource bundle '"+bundleName+"' is already defined !");
+
+	var loading=f_resourceBundle._Loading;
+	if (!loading) {
+		loading=new Array;
+		f_resourceBundle._Loading=loading;
+	}
+
+	f_core.Debug(f_resourceBundle, "Load bundleName='"+bundleName+"' baseName='"+baseName+"' located at url '"+url+"'.");
+
+	loading[baseName]=bundleName;
+	
+	document.write("<SCRIPT type=\"text/javascript\" charset=\"UTF-8\" src=\""+url+"\"></SCRIPT>");
+}
+
 f_resourceBundle.Finalizer=function() {
-	f_resourceBundle._resources=undefined;
+	f_resourceBundle._Resources=undefined;
 }
 
 f_resourceBundle.f_getName=function() {

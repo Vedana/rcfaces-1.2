@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:26  oeuillot
  * Renommage  en rcfaces
  *
@@ -11,8 +14,8 @@
  * f_textEntry class
  *
  * @class f_textEntry extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __static = {

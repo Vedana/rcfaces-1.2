@@ -7,8 +7,8 @@
  * Moteur des aspects !
  *
  * @class public f_aspect
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 function f_aspect(aspectName, staticMembers, members) {
 	// Constructeur vide: on ne fait rien !

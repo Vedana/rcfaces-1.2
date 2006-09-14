@@ -6,8 +6,8 @@
  * f_textArea class
  *
  * @class public f_textArea extends f_textEntry
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __prototype= {

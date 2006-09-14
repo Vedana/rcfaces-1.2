@@ -7,8 +7,8 @@
  * class f_bundle
  *
  * @class public f_bundle extends Object
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 function f_bundle(name)  {
 	this._name=name;

@@ -1,4 +1,4 @@
-package org.rcfaces.core.internal.component;
+package org.rcfaces.core.component;
 
 import java.util.Collections;
 import java.util.Map;
@@ -30,6 +30,9 @@ import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.manager.IServerDataManager;
@@ -37,7 +40,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.internal.tools.VisibilityTools;
 
-public abstract class AbstractSelectManyComponent extends CameliaSelectManyComponent implements 
+public abstract class AbstractInputComponent extends CameliaInputComponent implements 
 	ISizeCapability,
 	IVisibilityCapability,
 	IMouseEventCapability,
@@ -50,21 +53,49 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 	ILookAndFeelCapability,
 	IFocusBlurEventCapability,
 	IMarginCapability,
-	IKeyEventCapability,
 	IForegroundBackgroundColorCapability,
+	IKeyEventCapability,
 	ITextAlignmentCapability,
 	IImmediateCapability,
-	IStyleClassCapability,
 	IUserEventCapability,
+	IStyleClassCapability,
 	IServerDataCapability,
 	IPropertyChangeEventCapability,
-	IAccessKeyCapability,
 	IFontCapability,
+	IAccessKeyCapability,
 	IInitEventCapability,
 	IServerDataManager,
 	IClientDataManager {
 
 
+
+	public final void setServerData(String name, ValueBinding value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public final boolean isVisible() {
+
+
+		return VisibilityTools.isVisible(this);
+		
+	}
+
+	public final String[] listServerDataKeys(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
 
 	public final Map getServerDataMap(FacesContext facesContext) {
 
@@ -85,34 +116,6 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		
 	}
 
-	public final String[] listServerDataKeys(FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-			return ComponentTools.STRING_EMPTY_ARRAY;
-		}
-		
-		return dataMapAccessor.listDataKeys(facesContext);
-		
-	}
-
-	public final boolean isVisible() {
-
-
-		return VisibilityTools.isVisible(this);
-		
-	}
-
-	public final void setServerData(String name, ValueBinding value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		dataMapAccessor.setData(name, value, null);
-		
-	}
-
 	public final String[] listClientDataKeys(FacesContext facesContext) {
 
 
@@ -125,17 +128,17 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		
 	}
 
-	public final void setImmediate(ValueBinding immediate) {
-
-
-			setValueBinding("immediate", immediate);
-		
-	}
-
 	public final void setHiddenMode(String hiddenMode) {
 
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, null, hiddenMode)).intValue());
+		
+	}
+
+	public final void setImmediate(ValueBinding immediate) {
+
+
+			setValueBinding("immediate", immediate);
 		
 	}
 
@@ -223,22 +226,6 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
-	public final java.lang.Boolean getVisible() {
-		return getVisible(null);
-	}
-
-	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
-	}
-
-	public final void setVisible(java.lang.Boolean visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	public final void setVisible(ValueBinding visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
 	public final int getHiddenMode() {
 		return getHiddenMode(null);
 	}
@@ -253,6 +240,22 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	public final void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public final java.lang.Boolean getVisible() {
+		return getVisible(null);
+	}
+
+	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
+	}
+
+	public final void setVisible(java.lang.Boolean visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final void setVisible(ValueBinding visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
@@ -429,22 +432,6 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
 
-	public final java.lang.String getY() {
-		return getY(null);
-	}
-
-	public final java.lang.String getY(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.Y, facesContext);
-	}
-
-	public final void setY(java.lang.String y) {
-		engine.setProperty(Properties.Y, y);
-	}
-
-	public final void setY(ValueBinding y) {
-		engine.setProperty(Properties.Y, y);
-	}
-
 	public final java.lang.String getX() {
 		return getX(null);
 	}
@@ -459,6 +446,22 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	public final void setX(ValueBinding x) {
 		engine.setProperty(Properties.X, x);
+	}
+
+	public final java.lang.String getY() {
+		return getY(null);
+	}
+
+	public final java.lang.String getY(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.Y, facesContext);
+	}
+
+	public final void setY(java.lang.String y) {
+		engine.setProperty(Properties.Y, y);
+	}
+
+	public final void setY(ValueBinding y) {
+		engine.setProperty(Properties.Y, y);
 	}
 
 	public final java.lang.String getLookId() {
@@ -501,20 +504,20 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IFocusListener.class);
 	}
 
-	public final java.lang.String getMarginRight() {
-		return getMarginRight(null);
+	public final java.lang.String getMarginBottom() {
+		return getMarginBottom(null);
 	}
 
-	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
+	public final java.lang.String getMarginBottom(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MARGIN_BOTTOM, facesContext);
 	}
 
-	public final void setMarginRight(java.lang.String marginRight) {
-		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	public final void setMarginBottom(java.lang.String marginBottom) {
+		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
 
-	public final void setMarginRight(ValueBinding marginRight) {
-		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	public final void setMarginBottom(ValueBinding marginBottom) {
+		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
 
 	public final java.lang.String getMarginLeft() {
@@ -533,6 +536,22 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
 
+	public final java.lang.String getMarginRight() {
+		return getMarginRight(null);
+	}
+
+	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
+	}
+
+	public final void setMarginRight(java.lang.String marginRight) {
+		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	}
+
+	public final void setMarginRight(ValueBinding marginRight) {
+		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
+	}
+
 	public final java.lang.String getMarginTop() {
 		return getMarginTop(null);
 	}
@@ -549,20 +568,36 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
-	public final java.lang.String getMarginBottom() {
-		return getMarginBottom(null);
+	public final java.lang.String getBackgroundColor() {
+		return getBackgroundColor(null);
 	}
 
-	public final java.lang.String getMarginBottom(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MARGIN_BOTTOM, facesContext);
+	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
 	}
 
-	public final void setMarginBottom(java.lang.String marginBottom) {
-		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
+	public final void setBackgroundColor(java.lang.String backgroundColor) {
+		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
-	public final void setMarginBottom(ValueBinding marginBottom) {
-		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
+	public final void setBackgroundColor(ValueBinding backgroundColor) {
+		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
+	}
+
+	public final java.lang.String getForegroundColor() {
+		return getForegroundColor(null);
+	}
+
+	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
+	}
+
+	public final void setForegroundColor(java.lang.String foregroundColor) {
+		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	}
+
+	public final void setForegroundColor(ValueBinding foregroundColor) {
+		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
 	public final void addKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
@@ -601,38 +636,6 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IKeyUpListener.class);
 	}
 
-	public final java.lang.String getForegroundColor() {
-		return getForegroundColor(null);
-	}
-
-	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
-	}
-
-	public final void setForegroundColor(java.lang.String foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
-	}
-
-	public final void setForegroundColor(ValueBinding foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
-	}
-
-	public final java.lang.String getBackgroundColor() {
-		return getBackgroundColor(null);
-	}
-
-	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
-	}
-
-	public final void setBackgroundColor(java.lang.String backgroundColor) {
-		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
-	}
-
-	public final void setBackgroundColor(ValueBinding backgroundColor) {
-		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
-	}
-
 	public final java.lang.String getTextAlignment() {
 		return getTextAlignment(null);
 	}
@@ -649,6 +652,18 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
+	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listUserEventListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
+	}
+
 	public final java.lang.String getStyleClass() {
 		return getStyleClass(null);
 	}
@@ -663,18 +678,6 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	public final void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
-	}
-
-	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listUserEventListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
 	}
 
 	public final Object getServerData(String name) {
@@ -748,38 +751,6 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
 	}
 
-	public final java.lang.String getAccessKey() {
-		return getAccessKey(null);
-	}
-
-	public final java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
-	}
-
-	public final void setAccessKey(java.lang.String accessKey) {
-		engine.setProperty(Properties.ACCESS_KEY, accessKey);
-	}
-
-	public final void setAccessKey(ValueBinding accessKey) {
-		engine.setProperty(Properties.ACCESS_KEY, accessKey);
-	}
-
-	public final java.lang.String getFontSize() {
-		return getFontSize(null);
-	}
-
-	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
-	}
-
-	public final void setFontSize(java.lang.String fontSize) {
-		engine.setProperty(Properties.FONT_SIZE, fontSize);
-	}
-
-	public final void setFontSize(ValueBinding fontSize) {
-		engine.setProperty(Properties.FONT_SIZE, fontSize);
-	}
-
 	public final java.lang.Boolean getFontBold() {
 		return getFontBold(null);
 	}
@@ -794,22 +765,6 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	public final void setFontBold(ValueBinding fontBold) {
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
-	}
-
-	public final java.lang.Boolean getFontUnderline() {
-		return getFontUnderline(null);
-	}
-
-	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
-	}
-
-	public final void setFontUnderline(java.lang.Boolean fontUnderline) {
-		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
-	}
-
-	public final void setFontUnderline(ValueBinding fontUnderline) {
-		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
 	public final java.lang.Boolean getFontItalic() {
@@ -842,6 +797,54 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	public final void setFontName(ValueBinding fontName) {
 		engine.setProperty(Properties.FONT_NAME, fontName);
+	}
+
+	public final java.lang.String getFontSize() {
+		return getFontSize(null);
+	}
+
+	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
+	}
+
+	public final void setFontSize(java.lang.String fontSize) {
+		engine.setProperty(Properties.FONT_SIZE, fontSize);
+	}
+
+	public final void setFontSize(ValueBinding fontSize) {
+		engine.setProperty(Properties.FONT_SIZE, fontSize);
+	}
+
+	public final java.lang.Boolean getFontUnderline() {
+		return getFontUnderline(null);
+	}
+
+	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
+		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
+	}
+
+	public final void setFontUnderline(java.lang.Boolean fontUnderline) {
+		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
+	}
+
+	public final void setFontUnderline(ValueBinding fontUnderline) {
+		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
+	}
+
+	public final java.lang.String getAccessKey() {
+		return getAccessKey(null);
+	}
+
+	public final java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
+	}
+
+	public final void setAccessKey(java.lang.String accessKey) {
+		engine.setProperty(Properties.ACCESS_KEY, accessKey);
+	}
+
+	public final void setAccessKey(ValueBinding accessKey) {
+		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {

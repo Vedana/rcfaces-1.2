@@ -6,8 +6,8 @@
  * Class MenuBar
  *
  * @class f_menuBar extends f_menuBase, fa_immediate, fa_readOnly, fa_disabled
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static = {

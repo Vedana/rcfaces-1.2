@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -158,9 +161,9 @@ import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.codec.StringAppender;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.config.ClientValidatorsRegistryImpl.ClientValidator;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -176,10 +179,9 @@ import org.rcfaces.core.internal.validator.IParameter;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class TextEntryRenderer extends AbstractInputRenderer {
     private static final String REVISION = "$Revision$";
@@ -367,8 +369,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         FacesContext facesContext = renderContext.getFacesContext();
 
         IClientValidatorsRegistry clientValidatorManager = RcfacesContext
-                .getInstance(facesContext.getExternalContext())
-                .getClientValidatorsRegistry();
+                .getInstance(facesContext).getClientValidatorsRegistry();
         if (clientValidatorManager == null) {
             throw new FacesException(
                     "Can not get descriptorManager from faces context !");
@@ -784,8 +785,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             IHtmlWriter writer, Validator[] validators) throws WriterException {
 
         IClientValidatorsRegistry clientValidatorManager = RcfacesContext
-                .getInstance(facesContext.getExternalContext())
-                .getClientValidatorsRegistry();
+                .getInstance(facesContext).getClientValidatorsRegistry();
         if (clientValidatorManager == null) {
             throw new FacesException(
                     "Can not get validator registry from faces context !");

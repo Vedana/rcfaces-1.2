@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -40,7 +43,7 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
@@ -51,8 +54,8 @@ import org.xml.sax.Attributes;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
         implements IClientValidatorsRegistry {
@@ -165,8 +168,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class RenderKit extends
             AbstractRenderKitRegistryImpl.RenderKit {
@@ -206,8 +209,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class ClientValidator implements IClientValidatorDescriptor {
         private static final String REVISION = "$Revision$";
@@ -346,8 +349,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     public static class Parameter implements IParameter {
         private static final String REVISION = "$Revision$";

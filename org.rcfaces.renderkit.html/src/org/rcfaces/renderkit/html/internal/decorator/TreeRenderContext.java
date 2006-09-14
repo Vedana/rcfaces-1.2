@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:28  oeuillot
  * Renommage  en rcfaces
  *
@@ -60,10 +63,9 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class TreeRenderContext extends SelectItemsJsContext {
     private static final String REVISION = "$Revision$";
@@ -82,7 +84,8 @@ public class TreeRenderContext extends SelectItemsJsContext {
 
     public TreeRenderContext(ISelectItemNodeWriter renderer,
             IComponentRenderContext componentRenderContext,
-            TreeComponent treeComponent, int depth, boolean sendFullStates) {
+            TreeComponent treeComponent, int depth, boolean sendFullStates,
+            String containerVarId) {
         super(renderer, componentRenderContext, treeComponent, null);
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
@@ -125,6 +128,10 @@ public class TreeRenderContext extends SelectItemsJsContext {
         }
 
         initializeTreeValue(facesContext, treeComponent, values);
+
+        if (containerVarId != null) {
+            pushVarId(containerVarId);
+        }
     }
 
     protected void initializeValue(UIComponent component, Object value) {

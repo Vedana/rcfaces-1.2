@@ -1,44 +1,46 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.component.AbstractMessagesComponent;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public abstract class AbstractMessagesTag extends CameliaTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AbstractMessagesComponent;
+
+public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(AbstractMessagesTag.class);
 
 	private String height;
 	private String width;
-	private String visible;
 	private String hiddenMode;
+	private String visible;
 	private String mouseOutListeners;
 	private String mouseOverListeners;
 	private String helpMessage;
 	private String helpURL;
 	private String toolTipText;
-	private String y;
 	private String x;
+	private String y;
 	private String lookId;
-	private String marginRight;
-	private String marginLeft;
-	private String marginTop;
 	private String marginBottom;
-	private String foregroundColor;
+	private String marginLeft;
+	private String marginRight;
+	private String marginTop;
 	private String backgroundColor;
+	private String foregroundColor;
 	private String styleClass;
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
 	private String globalOnly;
+	private String showDetail;
 	private String showSummary;
 	private String margins;
-	private String showDetail;
 	public final String getHeight() {
 		return height;
 	}
@@ -55,20 +57,20 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 		this.width = width;
 	}
 
-	public final String getVisible() {
-		return visible;
-	}
-
-	public final void setVisible(String visible) {
-		this.visible = visible;
-	}
-
 	public final String getHiddenMode() {
 		return hiddenMode;
 	}
 
 	public final void setHiddenMode(String hiddenMode) {
 		this.hiddenMode = hiddenMode;
+	}
+
+	public final String getVisible() {
+		return visible;
+	}
+
+	public final void setVisible(String visible) {
+		this.visible = visible;
 	}
 
 	public final String getMouseOutListener() {
@@ -111,20 +113,20 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 		this.toolTipText = toolTipText;
 	}
 
-	public final String getY() {
-		return y;
-	}
-
-	public final void setY(String y) {
-		this.y = y;
-	}
-
 	public final String getX() {
 		return x;
 	}
 
 	public final void setX(String x) {
 		this.x = x;
+	}
+
+	public final String getY() {
+		return y;
+	}
+
+	public final void setY(String y) {
+		this.y = y;
 	}
 
 	public final String getLookId() {
@@ -135,12 +137,12 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 		this.lookId = lookId;
 	}
 
-	public final String getMarginRight() {
-		return marginRight;
+	public final String getMarginBottom() {
+		return marginBottom;
 	}
 
-	public final void setMarginRight(String marginRight) {
-		this.marginRight = marginRight;
+	public final void setMarginBottom(String marginBottom) {
+		this.marginBottom = marginBottom;
 	}
 
 	public final String getMarginLeft() {
@@ -151,6 +153,14 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 		this.marginLeft = marginLeft;
 	}
 
+	public final String getMarginRight() {
+		return marginRight;
+	}
+
+	public final void setMarginRight(String marginRight) {
+		this.marginRight = marginRight;
+	}
+
 	public final String getMarginTop() {
 		return marginTop;
 	}
@@ -159,12 +169,12 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 		this.marginTop = marginTop;
 	}
 
-	public final String getMarginBottom() {
-		return marginBottom;
+	public final String getBackgroundColor() {
+		return backgroundColor;
 	}
 
-	public final void setMarginBottom(String marginBottom) {
-		this.marginBottom = marginBottom;
+	public final void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
 	}
 
 	public final String getForegroundColor() {
@@ -173,14 +183,6 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 
 	public final void setForegroundColor(String foregroundColor) {
 		this.foregroundColor = foregroundColor;
-	}
-
-	public final String getBackgroundColor() {
-		return backgroundColor;
-	}
-
-	public final void setBackgroundColor(String backgroundColor) {
-		this.backgroundColor = backgroundColor;
 	}
 
 	public final String getStyleClass() {
@@ -223,6 +225,14 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 		this.globalOnly = globalOnly;
 	}
 
+	public final String getShowDetail() {
+		return showDetail;
+	}
+
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
+	}
+
 	public final String getShowSummary() {
 		return showSummary;
 	}
@@ -239,37 +249,29 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 		this.margins = margins;
 	}
 
-	public final String getShowDetail() {
-		return showDetail;
-	}
-
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
-	}
-
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  width='"+width+"'");
-			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  helpMessage='"+helpMessage+"'");
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
-			LOG.debug("  y='"+y+"'");
 			LOG.debug("  x='"+x+"'");
+			LOG.debug("  y='"+y+"'");
 			LOG.debug("  lookId='"+lookId+"'");
-			LOG.debug("  marginRight='"+marginRight+"'");
-			LOG.debug("  marginLeft='"+marginLeft+"'");
-			LOG.debug("  marginTop='"+marginTop+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
-			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  marginLeft='"+marginLeft+"'");
+			LOG.debug("  marginRight='"+marginRight+"'");
+			LOG.debug("  marginTop='"+marginTop+"'");
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  globalOnly='"+globalOnly+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -301,16 +303,6 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 			}
 		}
 
-		if (visible != null) {
-			if (isValueReference(visible)) {
-				ValueBinding vb = application.createValueBinding(visible);
-
-				component.setVisible(vb);
-			} else {
-				component.setVisible(getBoolean(visible));
-			}
-		}
-
 		if (hiddenMode != null) {
 			if (isValueReference(hiddenMode)) {
 				ValueBinding vb = application.createValueBinding(hiddenMode);
@@ -318,6 +310,16 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 				component.setHiddenMode(vb);
 			} else {
 				component.setHiddenMode(hiddenMode);
+			}
+		}
+
+		if (visible != null) {
+			if (isValueReference(visible)) {
+				ValueBinding vb = application.createValueBinding(visible);
+
+				component.setVisible(vb);
+			} else {
+				component.setVisible(getBoolean(visible));
 			}
 		}
 
@@ -359,16 +361,6 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 			}
 		}
 
-		if (y != null) {
-			if (isValueReference(y)) {
-				ValueBinding vb = application.createValueBinding(y);
-
-				component.setY(vb);
-			} else {
-				component.setY(y);
-			}
-		}
-
 		if (x != null) {
 			if (isValueReference(x)) {
 				ValueBinding vb = application.createValueBinding(x);
@@ -376,6 +368,16 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 				component.setX(vb);
 			} else {
 				component.setX(x);
+			}
+		}
+
+		if (y != null) {
+			if (isValueReference(y)) {
+				ValueBinding vb = application.createValueBinding(y);
+
+				component.setY(vb);
+			} else {
+				component.setY(y);
 			}
 		}
 
@@ -389,13 +391,13 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 			}
 		}
 
-		if (marginRight != null) {
-			if (isValueReference(marginRight)) {
-				ValueBinding vb = application.createValueBinding(marginRight);
+		if (marginBottom != null) {
+			if (isValueReference(marginBottom)) {
+				ValueBinding vb = application.createValueBinding(marginBottom);
 
-				component.setMarginRight(vb);
+				component.setMarginBottom(vb);
 			} else {
-				component.setMarginRight(marginRight);
+				component.setMarginBottom(marginBottom);
 			}
 		}
 
@@ -409,6 +411,16 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 			}
 		}
 
+		if (marginRight != null) {
+			if (isValueReference(marginRight)) {
+				ValueBinding vb = application.createValueBinding(marginRight);
+
+				component.setMarginRight(vb);
+			} else {
+				component.setMarginRight(marginRight);
+			}
+		}
+
 		if (marginTop != null) {
 			if (isValueReference(marginTop)) {
 				ValueBinding vb = application.createValueBinding(marginTop);
@@ -419,13 +431,13 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 			}
 		}
 
-		if (marginBottom != null) {
-			if (isValueReference(marginBottom)) {
-				ValueBinding vb = application.createValueBinding(marginBottom);
+		if (backgroundColor != null) {
+			if (isValueReference(backgroundColor)) {
+				ValueBinding vb = application.createValueBinding(backgroundColor);
 
-				component.setMarginBottom(vb);
+				component.setBackgroundColor(vb);
 			} else {
-				component.setMarginBottom(marginBottom);
+				component.setBackgroundColor(backgroundColor);
 			}
 		}
 
@@ -436,16 +448,6 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 				component.setForegroundColor(vb);
 			} else {
 				component.setForegroundColor(foregroundColor);
-			}
-		}
-
-		if (backgroundColor != null) {
-			if (isValueReference(backgroundColor)) {
-				ValueBinding vb = application.createValueBinding(backgroundColor);
-
-				component.setBackgroundColor(vb);
-			} else {
-				component.setBackgroundColor(backgroundColor);
 			}
 		}
 
@@ -480,6 +482,15 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 			}
 		}
 
+		if (showDetail != null) {
+			if (isValueReference(showDetail)) {
+				ValueBinding vb = application.createValueBinding(showDetail);
+				component.setShowDetail(vb);
+			} else {
+				component.setShowDetail(getBool(showDetail));
+			}
+		}
+
 		if (showSummary != null) {
 			if (isValueReference(showSummary)) {
 				ValueBinding vb = application.createValueBinding(showSummary);
@@ -495,44 +506,35 @@ public abstract class AbstractMessagesTag extends CameliaTag {
 			}
 				component.setMargins(margins);
 		}
-
-		if (showDetail != null) {
-			if (isValueReference(showDetail)) {
-				ValueBinding vb = application.createValueBinding(showDetail);
-				component.setShowDetail(vb);
-			} else {
-				component.setShowDetail(getBool(showDetail));
-			}
-		}
 	}
 
 	public void release() {
 		height = null;
 		width = null;
-		visible = null;
 		hiddenMode = null;
+		visible = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
 		helpMessage = null;
 		helpURL = null;
 		toolTipText = null;
-		y = null;
 		x = null;
+		y = null;
 		lookId = null;
-		marginRight = null;
-		marginLeft = null;
-		marginTop = null;
 		marginBottom = null;
-		foregroundColor = null;
+		marginLeft = null;
+		marginRight = null;
+		marginTop = null;
 		backgroundColor = null;
+		foregroundColor = null;
 		styleClass = null;
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
 		globalOnly = null;
+		showDetail = null;
 		showSummary = null;
 		margins = null;
-		showDetail = null;
 
 		super.release();
 	}

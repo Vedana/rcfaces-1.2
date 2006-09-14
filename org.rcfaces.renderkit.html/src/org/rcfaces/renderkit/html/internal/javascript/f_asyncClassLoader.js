@@ -5,8 +5,8 @@
 /**
  * f_classLoader  Additionnal interactive methods.
  *
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 f_classLoader.prototype._load = function(component, htmlNode, content) {
@@ -114,15 +114,18 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 						
 	//					alert("Eval script: "+script);
 						
-						script=script.replace(/^\s*(.*?)\s*$/, "$1");
+						script=f_core.Trim(script);
 						
 						// Pour eviter un anti-virus plutot indelicat !
 						if (script.indexOf("<!--")==0) {
 							var v=script.indexOf("//-->");
 							if (v>0) {
-								f_core.Debug("f_asyncClassLoader", "Simplify script '"+script+"'.");
+								var newScript=script.substring(5, v);
+								newScript=f_core.Trim(newScript);
+
+								f_core.Debug("f_asyncClassLoader", "Simplify script '"+script+"' newScript='"+newScript+"'.");
 							
-								script=script.substring(v+5);
+								script=newScript;
 							}
 						}
 											

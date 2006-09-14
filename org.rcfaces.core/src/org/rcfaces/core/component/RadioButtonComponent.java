@@ -11,153 +11,152 @@ import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IRadioButtonIterator;
-import org.rcfaces.core.internal.component.AbstractInputComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 import org.rcfaces.core.internal.tools.RadioButtonTools;
 
-public class RadioButtonComponent extends AbstractInputComponent implements
-        ITextCapability, IHorizontalTextPositionCapability,
-        ISelectionEventCapability, IReadOnlyCapability, ISelectedCapability,
-        IRadioGroupCapability, IRequiredCapability {
+public class RadioButtonComponent extends AbstractInputComponent implements 
+	ITextCapability,
+	IHorizontalTextPositionCapability,
+	ISelectionEventCapability,
+	IReadOnlyCapability,
+	ISelectedCapability,
+	IRadioGroupCapability,
+	IRequiredCapability {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.radioButton";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.radioButton";
 
-    public RadioButtonComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
 
-    public RadioButtonComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public RadioButtonComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    protected Converter getTextPositionConverter() {
+	public RadioButtonComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-        return HorizontalTextPositionConverter.SINGLETON;
+	protected Converter getTextPositionConverter() {
 
-    }
 
-    public final void setTextPosition(String textPosition) {
+				return HorizontalTextPositionConverter.SINGLETON;
+			
+	}
 
-        setTextPosition(((Integer) getTextPositionConverter().getAsObject(null,
-                null, textPosition)).intValue());
+	public final void setTextPosition(String textPosition) {
 
-    }
 
-    public final RadioButtonComponent getSelectedFromSameGroup() {
+			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, null, textPosition)).intValue());
+		
+	}
 
-        return RadioButtonTools.getSelectedRadioButtonFromSameGroup(this);
+	public final RadioButtonComponent getSelectedFromSameGroup() {
 
-    }
 
-    public final IRadioButtonIterator listSameGroup() {
+			return RadioButtonTools.getSelectedRadioButtonFromSameGroup(this);
+			
+	}
 
-        return RadioButtonTools.listRadioButtonSameGroup(this);
+	public final IRadioButtonIterator listSameGroup() {
 
-    }
 
-    public final java.lang.String getText() {
-        return getText(null);
-    }
+			return RadioButtonTools.listRadioButtonSameGroup(this);
+			
+	}
 
-    public final java.lang.String getText(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.TEXT, facesContext);
-    }
+	public final java.lang.String getText() {
+		return getText(null);
+	}
 
-    public final void setText(java.lang.String text) {
-        engine.setProperty(Properties.TEXT, text);
-    }
+	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TEXT, facesContext);
+	}
 
-    public final void setText(ValueBinding text) {
-        engine.setProperty(Properties.TEXT, text);
-    }
+	public final void setText(java.lang.String text) {
+		engine.setProperty(Properties.TEXT, text);
+	}
 
-    public final int getTextPosition() {
-        return getTextPosition(null);
-    }
+	public final void setText(ValueBinding text) {
+		engine.setProperty(Properties.TEXT, text);
+	}
 
-    public final int getTextPosition(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getIntProperty(Properties.TEXT_POSITION, 0, facesContext);
-    }
+	public final int getTextPosition() {
+		return getTextPosition(null);
+	}
 
-    public final void setTextPosition(int textPosition) {
-        engine.setProperty(Properties.TEXT_POSITION, textPosition);
-    }
+	public final int getTextPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
+	}
 
-    public final void setTextPosition(ValueBinding textPosition) {
-        engine.setProperty(Properties.TEXT_POSITION, textPosition);
-    }
+	public final void setTextPosition(int textPosition) {
+		engine.setProperty(Properties.TEXT_POSITION, textPosition);
+	}
 
-    public final void addSelectionListener(
-            org.rcfaces.core.event.ISelectionListener listener) {
-        addFacesListener(listener);
-    }
+	public final void setTextPosition(ValueBinding textPosition) {
+		engine.setProperty(Properties.TEXT_POSITION, textPosition);
+	}
 
-    public final void removeSelectionListener(
-            org.rcfaces.core.event.ISelectionListener listener) {
-        removeFacesListener(listener);
-    }
+	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		addFacesListener(listener);
+	}
 
-    public final javax.faces.event.FacesListener[] listSelectionListeners() {
-        return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-    }
+	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
+	}
 
-    public final boolean isReadOnly() {
-        return isReadOnly(null);
-    }
+	public final javax.faces.event.FacesListener [] listSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
 
-    public final boolean isReadOnly(
-            javax.faces.context.FacesContext facesContext) {
-        return engine
-                .getBoolProperty(Properties.READ_ONLY, false, facesContext);
-    }
+	public final boolean isReadOnly() {
+		return isReadOnly(null);
+	}
 
-    public final void setReadOnly(boolean readOnly) {
-        engine.setProperty(Properties.READ_ONLY, readOnly);
-    }
+	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
+	}
 
-    public final void setReadOnly(ValueBinding readOnly) {
-        engine.setProperty(Properties.READ_ONLY, readOnly);
-    }
+	public final void setReadOnly(boolean readOnly) {
+		engine.setProperty(Properties.READ_ONLY, readOnly);
+	}
 
-    public final boolean isSelected() {
-        return isSelected(null);
-    }
+	public final void setReadOnly(ValueBinding readOnly) {
+		engine.setProperty(Properties.READ_ONLY, readOnly);
+	}
 
-    public final boolean isSelected(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.SELECTED, false, facesContext);
-    }
+	public final boolean isSelected() {
+		return isSelected(null);
+	}
 
-    public final void setSelected(boolean selected) {
-        engine.setProperty(Properties.SELECTED, selected);
-    }
+	public final boolean isSelected(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SELECTED, false, facesContext);
+	}
 
-    public final void setSelected(ValueBinding selected) {
-        engine.setProperty(Properties.SELECTED, selected);
-    }
+	public final void setSelected(boolean selected) {
+		engine.setProperty(Properties.SELECTED, selected);
+	}
 
-    public final java.lang.String getGroupName() {
-        return getGroupName(null);
-    }
+	public final void setSelected(ValueBinding selected) {
+		engine.setProperty(Properties.SELECTED, selected);
+	}
 
-    public final java.lang.String getGroupName(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
-    }
+	public final java.lang.String getGroupName() {
+		return getGroupName(null);
+	}
 
-    public final void setGroupName(java.lang.String groupName) {
-        engine.setProperty(Properties.GROUP_NAME, groupName);
-    }
+	public final java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
+	}
 
-    public final void setGroupName(ValueBinding groupName) {
-        engine.setProperty(Properties.GROUP_NAME, groupName);
-    }
+	public final void setGroupName(java.lang.String groupName) {
+		engine.setProperty(Properties.GROUP_NAME, groupName);
+	}
 
-    public void release() {
-        super.release();
-    }
+	public final void setGroupName(ValueBinding groupName) {
+		engine.setProperty(Properties.GROUP_NAME, groupName);
+	}
+
+	public void release() {
+		super.release();
+	}
 }

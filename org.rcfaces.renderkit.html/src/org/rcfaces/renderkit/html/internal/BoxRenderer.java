@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -70,11 +73,10 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
     private static final String REVISION = "$Revision$";
@@ -125,9 +127,15 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
      */
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        BoxComponent boxComponent = (BoxComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
 
         htmlWriter.endElement("DIV");
 
+        IMenuIterator menuIterator = boxComponent.listMenus();
+        if (menuIterator.hasNext()) {
+            htmlWriter.enableJavaScript();
+        }
         super.encodeEnd(writer);
     }
 

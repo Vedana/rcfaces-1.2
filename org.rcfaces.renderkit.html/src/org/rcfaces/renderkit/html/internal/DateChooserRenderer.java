@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -79,7 +82,7 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.DateChooserComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyDecorator;
@@ -89,8 +92,8 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class DateChooserRenderer extends AbstractCalendarRenderer {
     private static final String REVISION = "$Revision$";
@@ -124,8 +127,8 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected class DateChooserButtonDecorator extends
             AbstractImageButtonFamillyDecorator {

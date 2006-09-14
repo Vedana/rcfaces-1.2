@@ -33,19 +33,24 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.IIndexedImageOperation;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
+import org.rcfaces.core.internal.rewriting.IResourceVersionHandler;
 import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
-import org.rcfaces.core.internal.webapp.ParametredHttpServlet;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class ImageOperationsServlet extends ParametredHttpServlet {
+public class ImageOperationsServlet extends ConfiguredHttpServlet {
+
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -7550126702256108445L;
 
     private static final Log LOG = LogFactory
             .getLog(ImageOperationsServlet.class);
@@ -73,6 +78,8 @@ public class ImageOperationsServlet extends ParametredHttpServlet {
     private IImagesCache imagesCache;
 
     private boolean noCache = false;
+
+    private String imageRepositoryURL;
 
     /**
      * 
@@ -139,7 +146,7 @@ public class ImageOperationsServlet extends ParametredHttpServlet {
         String nc = getParameter(NO_CACHE_PARAMETER);
         if ("true".equalsIgnoreCase(nc)) {
             noCache = true;
-            LOG.info("Enable no cache mode.");
+            LOG.info("Enable 'no cache' mode.");
         }
 
         int maxImageCacheSize = Constants.DEFAULT_MAX_IMAGE_CACHE_SIZE;
@@ -154,7 +161,7 @@ public class ImageOperationsServlet extends ParametredHttpServlet {
                     + maxImageCacheSize + ").");
         }
 
-        String imageRepositoryURL = ServletTools.computeResourceURI(
+        imageRepositoryURL = ServletTools.computeResourceURI(
                 getServletContext(), IMAGE_REPOSITORY_DEFAULT_URL, getClass());
         LOG.info("Set image repository url to '" + imageRepositoryURL + "'.");
 
@@ -176,21 +183,39 @@ public class ImageOperationsServlet extends ParametredHttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        String url = request.getRequestURI();
+        String requestURL = (String) request
+                .getAttribute("javax.servlet.include.request_uri");
+        if (requestURL == null) {
+            requestURL = request.getRequestURI();
+        }
+        String url = requestURL;
 
-        String contextPath = request.getContextPath();
+        String contextPath = (String) request
+                .getAttribute("javax.servlet.include.context_path");
+        if (contextPath == null) {
+            contextPath = request.getContextPath();
+        }
         if (contextPath != null) {
             url = url.substring(contextPath.length());
         }
 
-        String servletPath = request.getServletPath();
+        // Retire le nom de notre servlet
+        String servletPath = (String) request
+                .getAttribute("javax.servlet.include.servlet_path");
+        if (servletPath == null) {
+            servletPath = request.getServletPath();
+        }
         if (servletPath != null) {
             url = url.substring(servletPath.length());
         }
 
-        // Retire le nom de notre servlet
         int idx = url.indexOf('/');
-        if (idx >= 0) {
+        if (idx == 0) {
+            url = url.substring(idx + 1);
+        }
+
+        idx = url.indexOf('/');
+        if (idx == 0) {
             url = url.substring(idx + 1);
         }
 
@@ -203,6 +228,18 @@ public class ImageOperationsServlet extends ParametredHttpServlet {
 
         String cmd = url.substring(0, idx);
         String imageURL = url.substring(idx + 1);
+
+        // La version ?
+        RcfacesContext rcfacesContext = RcfacesContext.getInstance(
+                getServletContext(), request, response);
+        IResourceVersionHandler resourceVersionHandler = rcfacesContext
+                .getResourceVersionHandler();
+        if (resourceVersionHandler != null) {
+            idx = imageURL.indexOf('/');
+            if (idx >= 0) {
+                imageURL = imageURL.substring(idx + 1);
+            }
+        }
 
         idx = imageURL.indexOf('?');
         if (idx >= 0) {
@@ -274,7 +311,7 @@ public class ImageOperationsServlet extends ParametredHttpServlet {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Set no cache into response.");
             }
-            ParametredHttpServlet.setNoCache(response);
+            ConfiguredHttpServlet.setNoCache(response);
 
             return;
         }
@@ -750,8 +787,8 @@ public class ImageOperationsServlet extends ParametredHttpServlet {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
 
     public static interface IBufferedImage {

@@ -6,8 +6,8 @@
  * f_dateFormat class
  *
  * @class public f_dateFormat extends Object
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 function f_dateFormat() {

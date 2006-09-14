@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -113,11 +116,10 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
     private static final String REVISION = "$Revision$";
@@ -181,9 +183,6 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         }
     }
 
-    /*
-     * @see com.vedana.adonis.factory.Writer#write(char)
-     */
     public IJavaScriptWriter write(char c) throws WriterException {
         isInitialized(true);
 
@@ -192,9 +191,6 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         return this;
     }
 
-    /*
-     * @see com.vedana.adonis.factory.Writer#write(String)
-     */
     public IJavaScriptWriter write(String string) throws WriterException {
         isInitialized(true);
 
@@ -225,6 +221,10 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         writeHeader(full);
 
         return start;
+    }
+
+    protected void isInitialized() throws WriterException {
+        isInitialized(true);
     }
 
     protected void writeHeader(boolean full) throws WriterException {

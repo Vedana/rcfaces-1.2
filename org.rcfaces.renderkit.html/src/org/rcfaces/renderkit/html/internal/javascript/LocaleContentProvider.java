@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -54,17 +57,16 @@ import javax.faces.application.FacesMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.FilteredContentProvider;
 import org.rcfaces.core.internal.webapp.IRepository.IContent;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class LocaleContentProvider extends FilteredContentProvider {
     private static final String REVISION = "$Revision$";
@@ -74,7 +76,7 @@ public class LocaleContentProvider extends FilteredContentProvider {
 
     private static final String JAVASCRIPT_CHARSET = "UTF-8";
 
-    private static final String PATTERN = "f_locale_";
+    private static final String LOCALE_CLASS_PATTERN = "f_locale_";
 
     private final String bundleName;
 
@@ -90,16 +92,16 @@ public class LocaleContentProvider extends FilteredContentProvider {
         this.bundleName = bundleName;
     }
 
-    public IContent getContent(URL url, Locale locale) {
-        String surl = url.toString();
-        int idx = surl.lastIndexOf(PATTERN);
+    public IContent getContent(Object contentReference, Locale locale) {
+        String surl = contentReference.toString();
+        int idx = surl.lastIndexOf(LOCALE_CLASS_PATTERN);
         if (idx >= 0) {
-            idx += PATTERN.length();
-            int idx2 = surl.indexOf(".", idx);
+            idx += LOCALE_CLASS_PATTERN.length();
+            int idx2 = surl.indexOf('.', idx);
 
             surl = surl.substring(0, idx) + "xx" + surl.substring(idx2);
             try {
-                url = new URL(surl);
+                contentReference = new URL(surl);
 
             } catch (MalformedURLException ex) {
                 LOG.error("Can not reformat url to '" + surl + "' !", ex);
@@ -108,12 +110,13 @@ public class LocaleContentProvider extends FilteredContentProvider {
             }
         }
 
-        return new FilteredContent(url, locale);
+        return new FilteredURLContent((URL) contentReference, locale);
     }
 
-    public boolean testURL(URL url) {
-        String surl = url.toString();
-        int idx = surl.lastIndexOf(PATTERN);
+    public boolean searchLocale(Object contentReference, Locale locale,
+            Locale[] foundLocale) {
+        String surl = contentReference.toString();
+        int idx = surl.lastIndexOf(LOCALE_CLASS_PATTERN);
         if (idx < 0) {
             return false;
         }

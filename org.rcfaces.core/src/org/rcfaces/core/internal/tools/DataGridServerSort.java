@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:14  oeuillot
  * Renommage  en rcfaces
  *
@@ -61,10 +64,9 @@ import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public final class DataGridServerSort {
     private static final String REVISION = "$Revision$";
@@ -95,6 +97,7 @@ public final class DataGridServerSort {
 
         ISortMethod sortMethod = getSortMethod(columnComponent, dataModel);
         if (sortMethod == null) {
+            // Returns NULL !
             return null;
         }
 
@@ -111,7 +114,7 @@ public final class DataGridServerSort {
         for (int j = 0; j < facesListeners.length; j++) {
             FacesListener facesListener = facesListeners[j];
 
-            // Priorit� cot� JAVASCRIPT, on verra le serveur dans un
+            // Priorité coté JAVASCRIPT, on verra le serveur dans un
             // deuxieme temps ...
             if (facesListener instanceof IServerActionListener) {
                 return new SortAction((IServerActionListener) facesListener);
@@ -135,6 +138,11 @@ public final class DataGridServerSort {
         return null;
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private interface ISortMethod {
 
         Comparator getComparator();
@@ -144,6 +152,11 @@ public final class DataGridServerSort {
                 boolean sortOrder);
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static abstract class AbstractSortMethod implements ISortMethod,
             Comparator {
         private static final String REVISION = "$Revision$";
@@ -275,6 +288,11 @@ public final class DataGridServerSort {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static class SortLong extends AbstractSortMethod {
 
         private static final String REVISION = "$Revision$";

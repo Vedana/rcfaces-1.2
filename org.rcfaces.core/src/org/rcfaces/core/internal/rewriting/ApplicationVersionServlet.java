@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:52  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/09/05 08:57:21  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  */
 package org.rcfaces.core.internal.rewriting;
@@ -27,12 +30,13 @@ import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ApplicationVersionServlet extends ExtendedHttpServlet {
-
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -4209462021160100620L;
 
     private static final Log LOG = LogFactory
             .getLog(ApplicationVersionServlet.class);
@@ -52,7 +56,10 @@ public class ApplicationVersionServlet extends ExtendedHttpServlet {
         String applicationVersionURL = ServletTools.computeResourceURI(
                 getServletContext(), DEFAULT_APPLICATION_VERSION_URL,
                 getClass());
-        LOG.info("Set application version url to '" + applicationVersionURL
+        if (applicationVersionURL == null) {
+            return;
+        }
+        LOG.info("Base of application version url is '" + applicationVersionURL
                 + "'.");
 
         String expires = getParameter(EXPIRE_PARAMETER);

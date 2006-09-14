@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -151,11 +154,10 @@ import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.TreeDecorator;
 
-
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class TreeRenderer extends AbstractSelectItemsRenderer {
     private static final String REVISION = "$Revision$";
@@ -322,13 +324,13 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     public void encodeNodes(IJavaScriptWriter jsWriter,
             TreeComponent treeComponent, ISelectItemNodeWriter nodeRenderer,
-            int depth) throws WriterException {
+            int depth, String containerVarId) throws WriterException {
 
         TreeDecorator selectItemNodeWriter = (TreeDecorator) getComponentDecorator(jsWriter
                 .getComponentRenderContext());
 
         selectItemNodeWriter.encodeNodes(jsWriter, treeComponent, nodeRenderer,
-                depth);
+                depth, containerVarId);
     }
 
     public ISelectItemNodeWriter getSelectItemNodeWriter(

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -54,17 +57,16 @@ import java.util.Map;
 
 import javax.faces.event.FacesListener;
 
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.AbstractScriptListener;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
-
 /**
  * 
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class EventsRenderer {
     private static final String REVISION = "$Revision$";
@@ -84,7 +86,7 @@ public class EventsRenderer {
     private static final FacesListener[] DEFAULT_SUBMIT_FACES_LISTENERS = new FacesListener[] { DEFAULT_SUBMIT_FACES_LISTENER };
 
     public static void encodeEventListeners(IJavaScriptWriter js,
-            Map listenersByType, String actionListenerType)
+            String varName, Map listenersByType, String actionListenerType)
             throws WriterException {
 
         if (listenersByType.isEmpty() == false) {
@@ -95,20 +97,20 @@ public class EventsRenderer {
                 String listenerType = (String) entry.getKey();
                 FacesListener listeners[] = (FacesListener[]) entry.getValue();
 
-                encodeEventListeners(js, listenerType, listeners);
+                encodeEventListeners(js, varName, listenerType, listeners);
             }
         }
 
         if (actionListenerType != null) {
             if (listenersByType.containsKey(actionListenerType) == false) {
                 // Il faut provoquer un Submit alors ...
-                encodeJavaScriptEventSubmit(js, actionListenerType);
+                encodeJavaScriptEventSubmit(js, varName, actionListenerType);
             }
         }
     }
 
     private static void encodeEventListeners(IJavaScriptWriter js,
-            String listenerType, FacesListener facesListeners[])
+            String varName, String listenerType, FacesListener facesListeners[])
             throws WriterException {
 
         boolean first = true;
@@ -129,7 +131,7 @@ public class EventsRenderer {
 
             if (first) {
                 first = false;
-                js.writeCall(null, ADD_EVENT_LISTENERS).write(listenerType);
+                js.writeCall(varName, ADD_EVENT_LISTENERS).write(listenerType);
             }
 
             js.write(',');
@@ -141,7 +143,7 @@ public class EventsRenderer {
             // Des evenements serveurs mais pas Javascript
             // Aussi on ajoute un submit() histoire de soliciter les methodes
             // cot� serveur
-            encodeJavaScriptEventSubmit(js, listenerType);
+            encodeJavaScriptEventSubmit(js, varName, listenerType);
             return;
         }
 
@@ -151,8 +153,8 @@ public class EventsRenderer {
     }
 
     public static final void encodeJavaScriptEventSubmit(IJavaScriptWriter js,
-            String listenerType) throws WriterException {
-        js.writeCall(null, ADD_EVENT_LISTENERS).write(listenerType);
+            String varName, String listenerType) throws WriterException {
+        js.writeCall(varName, ADD_EVENT_LISTENERS).write(listenerType);
         js.write(',').writeString(DEFAULT_SUBMIT_JAVA_SCRIPT);
         js.writeln(");");
     }

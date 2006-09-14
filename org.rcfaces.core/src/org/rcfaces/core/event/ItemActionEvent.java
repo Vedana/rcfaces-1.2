@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:51  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:13:13  oeuillot
  * Renommage  en rcfaces
  *
@@ -15,22 +18,24 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.ActionEvent;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class ItemActionEvent extends ActionEvent {
+    private static final String REVISION = "$Revision$";
 
-	private final Object itemValue;
-	
-	public ItemActionEvent(UIComponent component, Object itemValue) {
-		super(component);
-		
-		this.itemValue=itemValue;
-	}
+    private static final long serialVersionUID = -8692727663634080090L;
 
-	public Object getItemValue() {
-		return itemValue;
-	}
-	
-	
+    private final Object itemValue;
+
+    public ItemActionEvent(UIComponent component, Object itemValue) {
+        super(component);
+
+        this.itemValue = itemValue;
+    }
+
+    public Object getItemValue() {
+        return itemValue;
+    }
+
 }

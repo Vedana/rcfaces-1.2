@@ -6,8 +6,8 @@
  * Classe ProgressIndicator
  *
  * @class public f_progressIndicator extends f_component
- * @author Olivier Oeuillot 
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$) 
+ * @version $Revision$ $Date$
  */ 
  
 var __static = {

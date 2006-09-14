@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.3  2006/09/05 08:57:14  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
@@ -88,12 +91,14 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.Tag;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.core.provider.IURLRewritingProvider;
@@ -111,11 +116,13 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
 
 /**
  * 
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
-public class JavaScriptTag extends BodyTagSupport {
+public class JavaScriptTag extends BodyTagSupport implements Tag {
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = -5062201682788903876L;
 
     private static final Log LOG = LogFactory.getLog(JavaScriptTag.class);
 
@@ -127,7 +134,7 @@ public class JavaScriptTag extends BodyTagSupport {
 
     private String requiredClasses;
 
-    private IHtmlProcessContext htmlRenderContext;
+    private IHtmlProcessContext htmlProcessContext;
 
     public final String getSrc() {
         return src;
@@ -166,7 +173,7 @@ public class JavaScriptTag extends BodyTagSupport {
         src = null;
         requiredFiles = null;
         requiredClasses = null;
-        htmlRenderContext = null;
+        htmlProcessContext = null;
 
         super.release();
     }
@@ -179,9 +186,9 @@ public class JavaScriptTag extends BodyTagSupport {
         return EVAL_BODY_INCLUDE;
     }
 
-    private boolean addRequires(FacesContext facesContext, JspWriter writer,
-            boolean useMetaScript, String requiredFiles, String requiredClasses)
-            throws IOException {
+    static boolean addRequires(FacesContext facesContext, JspWriter writer,
+            IHtmlProcessContext htmlProcessContext, String requiredFiles,
+            String requiredClasses) throws IOException {
 
         IJavaScriptRepository repository = JavaScriptRepositoryServlet
                 .getRepository(facesContext);
@@ -190,7 +197,7 @@ public class JavaScriptTag extends BodyTagSupport {
             return false;
         }
 
-        List files = new ArrayList();
+        List files = new ArrayList(32);
 
         if (requiredFiles != null) {
             StringTokenizer st = new StringTokenizer(requiredFiles, ", ");
@@ -241,27 +248,15 @@ public class JavaScriptTag extends BodyTagSupport {
         repositoryContext = JavaScriptRepositoryServlet
                 .getContextRepository(facesContext);
 
-        IFile fs[] = repository.computeFiles(files,
-                IRepository.FILE_COLLECTION_TYPE, repositoryContext);
+        IFile fs[] = repository
+                .computeFiles(files,
+                        IHierarchicalRepository.FILE_COLLECTION_TYPE,
+                        repositoryContext);
         if (fs.length < 1) {
             return false;
         }
 
-        writer.print("<SCRIPT");
-        if (useMetaScript == false) {
-            writer.write(" type=\"");
-            writer.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
-            writer.write('"');
-        }
-        writer.write('>');
-
-        boolean useScriptCData = htmlRenderContext.useScriptCData();
-
-        if (useScriptCData) {
-            writer.write(IHtmlRenderContext.JAVASCRIPT_CDATA_BEGIN);
-        }
-
-        writer.println();
+        openScriptTag(writer, htmlProcessContext);
 
         Map symbols = JavaScriptRepositoryServlet.getSymbols(facesContext);
 
@@ -269,7 +264,7 @@ public class JavaScriptTag extends BodyTagSupport {
                 symbols, writer);
 
         JavaScriptRenderContext.initializeJavaScript(jsWriter, repository,
-                htmlRenderContext);
+                htmlProcessContext);
 
         jsWriter.writeCall("_classLoader", "requiresBundle");
         jsWriter.write("document");
@@ -291,17 +286,13 @@ public class JavaScriptTag extends BodyTagSupport {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        htmlRenderContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(facesContext.getExternalContext());
+        htmlProcessContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext);
 
         boolean opened = false;
         try {
             if (requiredFiles != null || requiredClasses != null) {
-                boolean useMetaScript = htmlRenderContext
-                        .useMetaContentScriptType()
-                        && InitializeTag.isMetaDataInitialized(pageContext);
-
-                opened = addRequires(facesContext, writer, useMetaScript,
+                opened = addRequires(facesContext, writer, htmlProcessContext,
                         requiredFiles, requiredClasses);
             }
 
@@ -312,20 +303,16 @@ public class JavaScriptTag extends BodyTagSupport {
         BodyContent bodyContent = getBodyContent();
         try {
             if (src != null || bodyContent != null) {
-                boolean useScriptCData = htmlRenderContext.useScriptCData();
+                boolean useScriptCData = htmlProcessContext.useScriptCData();
 
                 if (opened && src != null) {
-                    if (useScriptCData) {
-                        writer.println(IHtmlRenderContext.JAVASCRIPT_CDATA_END);
-                    }
-
-                    writer.println("</SCRIPT>");
+                    closeScriptTag(writer, htmlProcessContext);
                     opened = false;
                 }
 
                 boolean needScriptCData = false;
                 if (opened == false) {
-                    boolean useMetaScript = htmlRenderContext
+                    boolean useMetaScript = htmlProcessContext
                             .useMetaContentScriptType()
                             && InitializeTag.isMetaDataInitialized(pageContext);
 
@@ -421,8 +408,8 @@ public class JavaScriptTag extends BodyTagSupport {
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     static class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         private static final String REVISION = "$Revision$";
@@ -529,5 +516,38 @@ public class JavaScriptTag extends BodyTagSupport {
             return true;
         }
 
+        protected void isInitialized() {
+        }
+
+    }
+
+    static void openScriptTag(JspWriter writer,
+            IHtmlProcessContext htmlProcessContext) throws IOException {
+
+        writer.print("<SCRIPT");
+        if (htmlProcessContext.useMetaContentScriptType() == false) {
+            writer.write(" type=\"");
+            writer.write(IHtmlRenderContext.JAVASCRIPT_TYPE);
+            writer.write('"');
+        }
+        writer.write('>');
+
+        boolean useScriptCData = htmlProcessContext.useScriptCData();
+
+        if (useScriptCData) {
+            writer.write(IHtmlRenderContext.JAVASCRIPT_CDATA_BEGIN);
+        }
+
+        writer.println();
+    }
+
+    static void closeScriptTag(JspWriter writer,
+            IHtmlProcessContext htmlProcessContext) throws IOException {
+
+        if (htmlProcessContext.useScriptCData()) {
+            writer.println(IHtmlRenderContext.JAVASCRIPT_CDATA_END);
+        }
+
+        writer.print("</SCRIPT>");
     }
 }

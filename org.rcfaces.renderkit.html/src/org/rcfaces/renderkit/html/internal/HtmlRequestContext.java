@@ -2,8 +2,11 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/05 08:57:14  oeuillot
- * Dernières corrections pour la migration Rcfaces
+ * Derniï¿½res corrections pour la migration Rcfaces
  *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
@@ -83,8 +86,8 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 class HtmlRequestContext extends AbstractRequestContext implements
         IHtmlRequestContext {
@@ -125,7 +128,7 @@ class HtmlRequestContext extends AbstractRequestContext implements
         super.setFacesContext(facesContext);
 
         externalContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(facesContext.getExternalContext());
+                .getHtmlProcessContext(facesContext);
 
         parameters = facesContext.getExternalContext()
                 .getRequestParameterValuesMap();
@@ -156,12 +159,12 @@ class HtmlRequestContext extends AbstractRequestContext implements
     }
 
     protected Map parseProperties(Map parameters) {
-        Object vedanaFacesDatas = this.parameters.get(EVENT_SERIAL);
-        if (vedanaFacesDatas == null) {
+        Object facesDatas = this.parameters.get(EVENT_SERIAL);
+        if (facesDatas == null) {
             return Collections.EMPTY_MAP;
         }
 
-        return parseVedanaFacesData(vedanaFacesDatas);
+        return parseRCFacesData(facesDatas);
     }
 
     public String getComponentId(FacesContext facesContext,
@@ -264,7 +267,7 @@ class HtmlRequestContext extends AbstractRequestContext implements
         return value.toString();
     }
 
-    private Map parseVedanaFacesData(Object object) {
+    private Map parseRCFacesData(Object object) {
         String datas;
         if (object instanceof String) {
             datas = (String) object;
@@ -353,9 +356,8 @@ class HtmlRequestContext extends AbstractRequestContext implements
     }
 
     private static void throwFormatException(String message, int i, String datas) {
-        throw new FacesException(
-                "Bad format of vedana faces serialized datas ! (" + message
-                        + ": pos=" + i + " data='" + datas + "')");
+        throw new FacesException("Bad format of rcfaces serialized datas ! ("
+                + message + ": pos=" + i + " data='" + datas + "')");
     }
 
     protected IComponentData createEmptyComponentData() {
@@ -395,8 +397,8 @@ class HtmlRequestContext extends AbstractRequestContext implements
 
     /**
      * 
-     * @author Olivier Oeuillot
-     * @version $Revision$
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
     protected static abstract class AbstractHtmlComponentData extends
             AbstractComponentData {

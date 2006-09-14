@@ -14,8 +14,8 @@
  * f_class package
  *
  * @class public f_class
- * @author Olivier Oeuillot & Joel Merlin
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
+ * @version $Revision$ $Date$
  */
 function f_class(className, lookId, staticMembers, members, parentClass) {
 	// Constructeur vide: on ne fait rien !

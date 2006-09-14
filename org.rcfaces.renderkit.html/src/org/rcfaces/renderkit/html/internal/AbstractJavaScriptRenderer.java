@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/14 14:34:39  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.2  2006/09/01 15:24:34  oeuillot
  * Gestion des ICOs
  *
@@ -151,7 +154,7 @@ import javax.faces.event.FacesListener;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.internal.codec.StringAppender;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -160,10 +163,9 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
     private static final String REVISION = "$Revision$";
@@ -276,7 +278,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
         String componentVarName = writer.getComponentVarName();
 
-        writer.write("with(").write(componentVarName).writeln("){");
+//        writer.write("with(").write(componentVarName).writeln("){");
 
         IHtmlComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
@@ -348,10 +350,10 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
         }
 
         if (sendCompleteComponent()) {
-            writer.writeCall(null, "_completeComponent").writeln(");");
+            writer.writeMethodCall("_completeComponent").writeln(");");
         }
 
-        writer.writeln("}");
+//        writer.writeln("}");
     }
 
     protected abstract boolean sendCompleteComponent();
@@ -451,7 +453,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
             return;
         }
 
-        writer.writeCall(null, "f_setClientData");
+        writer.writeMethodCall("f_setClientData");
 
         for (int i = 0; i < keys.length; i++) {
             String key = keys[i];
@@ -558,7 +560,8 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
                         }
                     }
 
-                    EventsRenderer.encodeEventListeners(js, listenersByType,
+                    EventsRenderer.encodeEventListeners(js, js
+                            .getComponentVarName(), listenersByType,
                             actionListenerType);
                 }
 

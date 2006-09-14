@@ -1,24 +1,26 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.TextComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class TextTag extends AbstractOutputTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TextComponent;
+
+public class TextTag extends AbstractOutputTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(TextTag.class);
 
 	private String text;
-	private String fontSize;
 	private String fontBold;
-	private String fontUnderline;
 	private String fontItalic;
 	private String fontName;
+	private String fontSize;
+	private String fontUnderline;
 	private String textAlignment;
 	private String accessKey;
 	private String forVal;
@@ -34,28 +36,12 @@ public class TextTag extends AbstractOutputTag {
 		this.text = text;
 	}
 
-	public final String getFontSize() {
-		return fontSize;
-	}
-
-	public final void setFontSize(String fontSize) {
-		this.fontSize = fontSize;
-	}
-
 	public final String getFontBold() {
 		return fontBold;
 	}
 
 	public final void setFontBold(String fontBold) {
 		this.fontBold = fontBold;
-	}
-
-	public final String getFontUnderline() {
-		return fontUnderline;
-	}
-
-	public final void setFontUnderline(String fontUnderline) {
-		this.fontUnderline = fontUnderline;
 	}
 
 	public final String getFontItalic() {
@@ -72,6 +58,22 @@ public class TextTag extends AbstractOutputTag {
 
 	public final void setFontName(String fontName) {
 		this.fontName = fontName;
+	}
+
+	public final String getFontSize() {
+		return fontSize;
+	}
+
+	public final void setFontSize(String fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public final String getFontUnderline() {
+		return fontUnderline;
+	}
+
+	public final void setFontUnderline(String fontUnderline) {
+		this.fontUnderline = fontUnderline;
 	}
 
 	public final String getTextAlignment() {
@@ -104,11 +106,11 @@ public class TextTag extends AbstractOutputTag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
-			LOG.debug("  fontSize='"+fontSize+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
-			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
 			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  forVal='"+forVal+"'");
@@ -133,16 +135,6 @@ public class TextTag extends AbstractOutputTag {
 			}
 		}
 
-		if (fontSize != null) {
-			if (isValueReference(fontSize)) {
-				ValueBinding vb = application.createValueBinding(fontSize);
-
-				component.setFontSize(vb);
-			} else {
-				component.setFontSize(fontSize);
-			}
-		}
-
 		if (fontBold != null) {
 			if (isValueReference(fontBold)) {
 				ValueBinding vb = application.createValueBinding(fontBold);
@@ -150,16 +142,6 @@ public class TextTag extends AbstractOutputTag {
 				component.setFontBold(vb);
 			} else {
 				component.setFontBold(getBoolean(fontBold));
-			}
-		}
-
-		if (fontUnderline != null) {
-			if (isValueReference(fontUnderline)) {
-				ValueBinding vb = application.createValueBinding(fontUnderline);
-
-				component.setFontUnderline(vb);
-			} else {
-				component.setFontUnderline(getBoolean(fontUnderline));
 			}
 		}
 
@@ -180,6 +162,26 @@ public class TextTag extends AbstractOutputTag {
 				component.setFontName(vb);
 			} else {
 				component.setFontName(fontName);
+			}
+		}
+
+		if (fontSize != null) {
+			if (isValueReference(fontSize)) {
+				ValueBinding vb = application.createValueBinding(fontSize);
+
+				component.setFontSize(vb);
+			} else {
+				component.setFontSize(fontSize);
+			}
+		}
+
+		if (fontUnderline != null) {
+			if (isValueReference(fontUnderline)) {
+				ValueBinding vb = application.createValueBinding(fontUnderline);
+
+				component.setFontUnderline(vb);
+			} else {
+				component.setFontUnderline(getBoolean(fontUnderline));
 			}
 		}
 
@@ -215,11 +217,11 @@ public class TextTag extends AbstractOutputTag {
 
 	public void release() {
 		text = null;
-		fontSize = null;
 		fontBold = null;
-		fontUnderline = null;
 		fontItalic = null;
 		fontName = null;
+		fontSize = null;
+		fontUnderline = null;
 		textAlignment = null;
 		accessKey = null;
 		forVal = null;

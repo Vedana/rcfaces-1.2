@@ -1,22 +1,24 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.TreeComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
 
-public class TreeTag extends AbstractInputTag {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TreeComponent;
+
+public class TreeTag extends AbstractInputTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(TreeTag.class);
 
 	private String doubleClickListeners;
 	private String required;
-	private String verticalScrollPosition;
 	private String horizontalScrollPosition;
+	private String verticalScrollPosition;
 	private String border;
 	private String readOnly;
 	private String checkable;
@@ -62,20 +64,20 @@ public class TreeTag extends AbstractInputTag {
 		this.required = required;
 	}
 
-	public final String getVerticalScrollPosition() {
-		return verticalScrollPosition;
-	}
-
-	public final void setVerticalScrollPosition(String verticalScrollPosition) {
-		this.verticalScrollPosition = verticalScrollPosition;
-	}
-
 	public final String getHorizontalScrollPosition() {
 		return horizontalScrollPosition;
 	}
 
 	public final void setHorizontalScrollPosition(String horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
+	}
+
+	public final String getVerticalScrollPosition() {
+		return verticalScrollPosition;
+	}
+
+	public final void setVerticalScrollPosition(String verticalScrollPosition) {
+		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
 	public final String getBorder() {
@@ -284,8 +286,8 @@ public class TreeTag extends AbstractInputTag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  required='"+required+"'");
-			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
+			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  checkable='"+checkable+"'");
@@ -334,16 +336,6 @@ public class TreeTag extends AbstractInputTag {
 			}
 		}
 
-		if (verticalScrollPosition != null) {
-			if (isValueReference(verticalScrollPosition)) {
-				ValueBinding vb = application.createValueBinding(verticalScrollPosition);
-
-				component.setVerticalScrollPosition(vb);
-			} else {
-				component.setVerticalScrollPosition(verticalScrollPosition);
-			}
-		}
-
 		if (horizontalScrollPosition != null) {
 			if (isValueReference(horizontalScrollPosition)) {
 				ValueBinding vb = application.createValueBinding(horizontalScrollPosition);
@@ -351,6 +343,16 @@ public class TreeTag extends AbstractInputTag {
 				component.setHorizontalScrollPosition(vb);
 			} else {
 				component.setHorizontalScrollPosition(horizontalScrollPosition);
+			}
+		}
+
+		if (verticalScrollPosition != null) {
+			if (isValueReference(verticalScrollPosition)) {
+				ValueBinding vb = application.createValueBinding(verticalScrollPosition);
+
+				component.setVerticalScrollPosition(vb);
+			} else {
+				component.setVerticalScrollPosition(verticalScrollPosition);
 			}
 		}
 
@@ -579,8 +581,8 @@ public class TreeTag extends AbstractInputTag {
 	public void release() {
 		doubleClickListeners = null;
 		required = null;
-		verticalScrollPosition = null;
 		horizontalScrollPosition = null;
+		verticalScrollPosition = null;
 		border = null;
 		readOnly = null;
 		checkable = null;

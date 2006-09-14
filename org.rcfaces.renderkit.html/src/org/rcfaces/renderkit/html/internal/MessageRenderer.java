@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/14 14:34:38  oeuillot
+ * Version avec ClientBundle et correction de findBugs
+ *
  * Revision 1.1  2006/08/29 16:14:27  oeuillot
  * Renommage  en rcfaces
  *
@@ -124,10 +127,9 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.tools.MessageTools;
 
-
 /**
- * @author Olivier Oeuillot
- * @version $Revision$
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 public class MessageRenderer extends AbstractCssRenderer {
     public static final String REVISION = "$Revision$";
@@ -340,7 +342,7 @@ public class MessageRenderer extends AbstractCssRenderer {
                 detail = js.allocateString(detail);
             }
 
-            js.write("var ").write(key).write("=new ").writeCall(null,
+            js.write("var ").write(key).write('=').writeConstructor(
                     "f_messageObject");
 
             pred = 0;
@@ -372,7 +374,7 @@ public class MessageRenderer extends AbstractCssRenderer {
             js.writeln(");");
         }
 
-        js.writeCall(null, "_addMessageObject");
+        js.writeMethodCall("_addMessageObject");
 
         pred = 0;
         if (componentId != null) {
