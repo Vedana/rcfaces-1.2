@@ -1,6 +1,15 @@
-/* **********************************************************************
- * Menu
+/*
+ * $Id$
  */
+
+/**
+ *
+ * @class f_menuBar
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 
 .f_menuBar {
 	display: block;

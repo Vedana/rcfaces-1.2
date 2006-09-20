@@ -133,17 +133,27 @@ var __static = {
 	 */
 	_LOCK_MESSAGE: "Window has been locked.",
 
-	/* C'est sur la WINDOW !!!!!!
-	 * @field private static boolean
-	 *
-	_EvtLock: undefined,
-	*/
+	/**
+	 * @field hidden static final number
+	 */
+	SUBMIT_LOCK: 1,
+
+	/**
+	 * @field hidden static final number
+	 */
+	MODAL_LOCK: 2,
+
+	/* 
+	 * @field private static number
+	 */
+	_EvtLock: 0,
+
 	
-	/* C'est sur la WINDOW !!!!
+	/*
 	 * @field private static boolean
-	 *
+	 */
 	_EvtLockMode: true,
-	*/
+	
 	
 	/**
 	 * @field private static f_event
@@ -383,7 +393,7 @@ var __static = {
 	 * @method hidden static
 	 */
 	GetEventLockedMode: function() {
-		return window._EvtLockMode;
+		return f_event._EvtLockMode;
 	},
 	/**
 	 * @method hidden static
@@ -394,22 +404,34 @@ var __static = {
 			set=true;
 		}
 		
-		window._EvtLockMode = (set)?true:false;
+		f_event._EvtLockMode = (set)?true:false;
 	},
 	/**
 	 * @method hidden static
 	 * @return boolean Returns <code>true</code> if lock is setted !
 	 */
-	GetEventLocked: function(showAlert, win) {
-		if (!win) {
-			win=window;
+	GetEventLocked: function(showAlert) {
+	
+		if (!window.f_event) {
+			return true;
 		}
-		
-		if (win._EvtLockMode===false || !win._EvtLock) {
+	
+		var currentLock=f_event._EvtLock;
+		var currentMode=f_event._EvtLockMode;
+
+		if (currentMode===false || !currentLock) {
 			return false;
 		}
+		if (currentLock==f_event.MODAL_LOCK) {
+			if (!f_core.VerifyModalWindow()) {
+				return false;
+			}
 		
-		f_core.Debug("f_event", "Events are Locked, stop action ! (mode="+win._EvtLockMode+" state="+win._EvtLock+" show="+showAlert+")");
+			// On passe le focus dessus normalement, donc pas de boite d'alerte !
+			return true;
+		}
+		
+		f_core.Debug("f_event", "Events are locked, break current process ! (mode="+currentMode+" state="+currentLock+" show="+showAlert+")");
 
 		if (showAlert===false) {
 			return true;
@@ -434,25 +456,34 @@ var __static = {
 	/**
 	 * @method hidden static
 	 */
-	SetEventLocked: function(win, set) {
-		if (!win) {
-			win=window;
-		}
-				
-		if (set===undefined) {
-			set=true;
-		}
+	EnterEventLock: function(set) {
+		var currentLock=f_event._EvtLock;
 
+		f_core.Assert(typeof(set)=="number", "f_event.EnterEventLock: Lock type is invalid ! ("+set+")");
 		
-		f_core.Debug("f_core", "Change lock event state (new state="+set+" old="+win._EvtLock+")");
-	
-		if (set) {
-			if (win._EvtLock) {
-				alert("Several locks !!!!");
-			}
+		if (currentLock & set) {
+			f_core.Error("f_event", "Several same lock of type "+set+" !");
+			return;
 		}
 		
-		win._EvtLock = (set)?true:undefined;
+		f_event._EvtLock |= set;
+		f_core.Debug("f_event", "Enter event lock (new state="+f_event._EvtLock+" old="+currentLock+")");
+	},
+	/**
+	 * @method hidden static
+	 */
+	ExitEventLock: function(set) {
+		var currentLock=f_event._EvtLock;
+	
+		f_core.Assert(typeof(set)=="number", "f_event.ExitEventLock: Lock type is invalid ! ("+set+")");
+	
+		if (!(currentLock & set)) {
+			f_core.Error("f_event", "No lock for type "+set+" !");
+			return;
+		}
+		
+		f_event._EvtLock &= (~set);
+		f_core.Debug("f_event", "Exit event lock (new state="+f_event._EvtLock+" old="+currentLock+")");
 	}
 }
 

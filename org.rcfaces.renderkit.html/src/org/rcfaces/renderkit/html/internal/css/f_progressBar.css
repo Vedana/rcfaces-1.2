@@ -1,6 +1,15 @@
-/**
- * Table
+/*
+ * $Id$
  */
+
+/**
+ *
+ * @class f_progressBar
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 
 TABLE.f_progressBar {
 	border: none;

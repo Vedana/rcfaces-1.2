@@ -24,7 +24,9 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_initializeInput: function() {
-		var input=f_core.GetFirstElementByTagName(this, "INPUT");
+		var inputTagName=this.f_getInputTagName();
+		
+		var input=f_core.GetFirstElementByTagName(this, inputTagName);
 		if (input) {
 			return input;
 		}
@@ -74,13 +76,12 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_setDomEvent: function(type, target) {
-		if (this._input) {
-			switch(type) {
-			case f_event.SELECTION:
-			case f_event.DBLCLICK:
-				target=this._input;
-				break;
-			}
+	
+		switch(type) {
+		case f_event.SELECTION:
+		case f_event.DBLCLICK:
+			target=this.f_getInput();
+			break;
 		}
 		
 		this.f_super(arguments, type, target);
@@ -90,13 +91,11 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_clearDomEvent: function(type, target) {
-		if (this._input) {
-			switch(type) {
-			case f_event.SELECTION:
-			case f_event.DBLCLICK:
-				target=this._input;
-				break;
-			}
+		switch(type) {
+		case f_event.SELECTION:
+		case f_event.DBLCLICK:
+			target=this.f_getInput();
+			break;
 		}
 		
 		this.f_super(arguments, type, target);
@@ -130,14 +129,19 @@ var __prototype = {
 		this.f_setProperty(f_prop.TEXT,text);
 	},
 
-	_updateDisabled: function(disabled) {
+	/**
+	 * @method protected
+	 * @param boolean disabled
+	 * @return void
+	 */
+	f_updateDisabled: function(disabled) {
 		if (!this._label) {
 			return;
 		}
 		var clz=this.className+"_text";
 		
 		if (disabled) {
-		  clz+="_disabled";
+			clz+="_disabled";
 		}
 		
 		this._label.className=clz;

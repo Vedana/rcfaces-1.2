@@ -1,7 +1,8 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
-
+import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.IImageCapability;
 
 public class ImageComponent extends AbstractOutputComponent implements 

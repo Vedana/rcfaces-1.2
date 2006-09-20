@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/20 17:55:19  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.1  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -43,6 +47,17 @@ public class HashCodeTools {
     private static final String DEFAULT_CHARSET = "UTF-8";
 
     private static final int INITIAL_BUFFER_SIZE = 8000;
+
+    public static final String computeURLFormat(FacesContext facesContext,
+            String url, Object content, int maxHashCodeSize) {
+
+        String hash = compute(facesContext, url, content, maxHashCodeSize);
+        if (hash == null) {
+            return null;
+        }
+
+        return hash.replace('+', '.').replace('/', ':');
+    }
 
     public static final String compute(FacesContext facesContext, String url,
             Object content, int maxHashCodeSize) {

@@ -1,6 +1,15 @@
-/**
- * List
+/*
+ * $Id$
  */
+
+/**
+ *
+ * @class f_list
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
  
 .f_list_loading {
 	color: #888;

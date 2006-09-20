@@ -1,24 +1,24 @@
 package org.rcfaces.core.component;
 
-import javax.faces.component.ValueHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IOrderCapability;
+import java.lang.String;
 import org.rcfaces.core.component.capability.IResizableCapability;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IAlignmentCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.internal.converter.OrderConverter;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaColumnComponent;
-import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.internal.converter.OrderConverter;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import javax.faces.component.ValueHolder;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 
 public class DataColumnComponent extends CameliaColumnComponent implements 
 	IVisibilityCapability,

@@ -1,9 +1,9 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.ICheckedCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ICheckedCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.MenuItemComponent;
 
 public class MenuCheckItemComponent extends MenuItemComponent implements 
 	ICheckedCapability {

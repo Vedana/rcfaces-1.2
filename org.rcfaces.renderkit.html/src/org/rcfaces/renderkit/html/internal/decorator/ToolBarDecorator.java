@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -348,22 +352,22 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
             if (imageURL != null) {
                 imageURL = AbstractCameliaRenderer.rewriteURL(componentContext,
                         IURLRewritingProvider.IMAGE_URL_TYPE, "imageURL",
-                        imageURL, null);
+                        imageURL, null, null);
             }
             if (disabledImageURL != null) {
                 disabledImageURL = AbstractCameliaRenderer.rewriteURL(
                         componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "disabledImageURL", disabledImageURL, originalImageURL);
+                        "disabledImageURL", disabledImageURL, originalImageURL, null);
             }
             if (hoverImageURL != null) {
                 hoverImageURL = AbstractCameliaRenderer.rewriteURL(
                         componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "hoverImageURL", hoverImageURL, originalImageURL);
+                        "hoverImageURL", hoverImageURL, originalImageURL, null);
             }
             if (selectedImageURL != null) {
                 selectedImageURL = AbstractCameliaRenderer.rewriteURL(
                         componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "selectedImageURL", selectedImageURL, originalImageURL);
+                        "selectedImageURL", selectedImageURL, originalImageURL, null);
             }
 
             if (imageURL != null || disabledImageURL != null

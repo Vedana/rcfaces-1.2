@@ -37,6 +37,7 @@ var __static = {
  * Handle string encoding with a powerfull regular expression.
  * Reserved chars are the following set:
  *	\/.*+?|()[]{}-^
+ * @method private static
  */
   _BuildEscaped: function(str) {
 	if ((str == null) || (str == "")) {
@@ -736,91 +737,107 @@ var __static = {
  * Position 67 has to be d{2},|2A|2B
  * Position 1 has to be 1|2 when Position 67 are 2A|2B
  */
-  Checker_insee: function(validator, inVal) {
-	// Handle empty string
-	if (inVal == "") return inVal;
-	var l = inVal.length;
-
-	var r = null;
-	if (inVal != null && inVal != "" &&  ((l == 13) || (l == 15))) {
-		r = inVal.match(/^([125678])(\d{2})(\d{2})(\d{2}|2A|2B)(\d{3})(\d{3})(\d{2})?$/);
-	}
-	if ((r == null) || (inVal.match(/^[78][1-9].*$/)) ||
-		(inVal.match(/^[03456789]\d{4}(2A|2B).*$/))) {
-		validator.f_setLastError(
-			"VALIDATION INSEE",
-			"Le format de saisie du N° INSEE est invalide"
-		);
-		validator.f_setObject(null);
-		return null;
-	}
-	// Verify key if specified
-	if (l==15) {
-		var key = parseInt(r[7]);
-		var insee = parseInt(inVal.substr(0,13).replace(/2A/,"19").replace(/2B/,"18"),10);
-		if (key != (97 - (insee % 97))) {
+	Checker_insee: function(validator, inVal) {
+		// Handle empty string
+		if (!inVal) {
+			return inVal;
+		}
+		
+		var l = inVal.length;
+	
+		var r = null;
+		if (inVal != null && inVal != "" &&  ((l == 13) || (l == 15))) {
+			r = inVal.match(/^([125678])(\d{2})(\d{2})(\d{2}|2A|2B)(\d{3})(\d{3})(\d{2})?$/);
+		}
+		if ((r == null) || (inVal.match(/^[78][1-9].*$/)) ||
+			(inVal.match(/^[03456789]\d{4}(2A|2B).*$/))) {
 			validator.f_setLastError(
 				"VALIDATION INSEE",
-				"La clé du N° INSEE est invalide"
+				"Le format de saisie du N° INSEE est invalide"
 			);
 			validator.f_setObject(null);
 			return null;
 		}
-	}
-	validator.f_setObject(inVal);
-	return inVal;
-  },
+		// Verify key if specified
+		if (l==15) {
+			var key = parseInt(r[7]);
+			var insee = parseInt(inVal.substr(0,13).replace(/2A/,"19").replace(/2B/,"18"),10);
+			if (key != (97 - (insee % 97))) {
+				validator.f_setLastError(
+					"VALIDATION INSEE",
+					"La clé du N° INSEE est invalide"
+				);
+				validator.f_setObject(null);
+				return null;
+			}
+		}
+		validator.f_setObject(inVal);
+		return inVal;
+	},
 
-/**
- * @method public
- */
-  Checker_num: function(validator, inVal) {
-	// Handle empty string
-	if (inVal == "") return inVal;
-
-	var sTmp = inVal;
-	var signed = validator.f_getBoolParameter("num.signed");
-	var decimal = validator.f_getIntParameter("num.decimal", 0);
-	var dec = validator.f_getParameter("num.decSign");
-	var neg = validator.f_getParameter("num.negSign");
-	var n,ip,d,dp,r,v;
-	var exp = "^("+ f_vb._BuildEscaped(neg) +"?)(\\d*)([" + f_vb._BuildEscaped(dec)+ "]?)(\\d*)$";
-
-	// Normalize string, low cost and user friendly
-	if (sTmp.lastIndexOf(neg) > 0) {
-		sTmp = neg + sTmp.split(neg).join("");
-	}
-
-	// Check expression
-	r = sTmp.match(new RegExp(exp));
-
-	// No match
-	if (r == null) {
-		validator.f_setInputValue(sTmp);
-		validator.f_setOutputValue(sTmp);
-		validator.f_setLastError(
-			"VALIDATION NUMERIQUE",
-			"Le format de saisie est invalide"
-		);
-		validator.f_setObject(null);
-		return null;
-	}
-
-	// Get parts
-	n = r[1];
-	ip = (r[2])? r[2]:"0";
-	d = (r[3])? dec.charAt(0):"";
-	dp = (r[4])? r[4]:"";
-	dp = (dp.length > decimal)? dp.substr(0,decimal):dp;
+	/**
+	 * @method public static
+	 */
+	Checker_num: function(validator, inVal) {
+		// Handle empty string
+		if (!inVal) {
+			return inVal;
+		}
 	
-	// Rebuild string
-	sTmp = n+ip+d+dp;
-	// Math runtime uses dot as decimal separator
-	v = parseFloat(n+ip+"."+dp);
-	validator.f_setObject(v);
-	//alert(v);
-	return sTmp;
-  },
+		var sTmp = inVal;
+		var signed = validator.f_getBoolParameter("num.signed");
+		var decimal = validator.f_getIntParameter("num.cutdecimal", -1);
+		var dec = validator.f_getParameter("num.decSign");
+		var neg = validator.f_getParameter("num.negSign");
+		var sep = validator.f_getParameter("num.sepSign");
+		
+		if (sep) {
+			sTmp=sTmp.replace(new RegExp(f_vb._BuildEscaped(sep), "g"), "");			
+		}
+
+		var exp = "^("+ f_vb._BuildEscaped(neg) +"?)(\\d*)([" + f_vb._BuildEscaped(dec)+ "]?)(\\d*)$";
+	
+		// Normalize string, low cost and user friendly
+		if (sTmp.lastIndexOf(neg) > 0) {
+			sTmp = neg + sTmp.split(neg).join("");
+		}
+	
+		// Check expression
+		var r = sTmp.match(new RegExp(exp));
+	
+		// No match
+		if (!r) {
+			validator.f_setInputValue(sTmp);
+			validator.f_setOutputValue(sTmp);
+			validator.f_setLastError(
+				"VALIDATION NUMERIQUE",
+				"Le format de saisie est invalide"
+			);
+			validator.f_setObject(null);
+			return null;
+		}
+	
+		// Get parts
+		var n = r[1];
+		var ip = (r[2])? r[2]:"0";
+		var d = (r[3])? dec.charAt(0):"";
+		var dp = (r[4])? r[4]:"";
+		if (decimal>0) {
+			dp = (dp.length > decimal)? dp.substr(0,decimal):dp;
+
+		} else if (decimal==0) {
+			d="";
+			dp="";
+		}
+		
+		// Rebuild string
+		sTmp = n+ip+d+dp;
+		// Math runtime uses dot as decimal separator
+		var v = parseFloat(n+ip+"."+dp);
+		validator.f_setObject(v);
+		//alert(v);
+		return sTmp;
+	},
   
 	Checker_trim: function(validator, inVal) {
 		// Handle empty string
@@ -842,117 +859,149 @@ var __static = {
 /**
  * @method public
  */
-  Formatter_insee: function(validator, inVal) {
-	var l = inVal.length;
-	var re = /^(\d{1})(\d{2})(\d{2})(\d{1}[0-9AB]{1})(\d{3})(\d{3})(\d{2})?$/;
-	return inVal.replace(re, (l==15)? "$1 $2 $3 $4 $5 $6 $7":"$1 $2 $3 $4 $5 $6");
-  },
+	Formatter_insee: function(validator, inVal) {
+		var l = inVal.length;
+		var re = /^(\d{1})(\d{2})(\d{2})(\d{1}[0-9AB]{1})(\d{3})(\d{3})(\d{2})?$/;
+		return inVal.replace(re, (l==15)? "$1 $2 $3 $4 $5 $6 $7":"$1 $2 $3 $4 $5 $6");
+	},
 
 /**
  * @method public
  */
-  Formatter_num: function(validator, inVal) {
-	var sTmp = inVal;
-	var dec = validator.f_getParameter("num.decSign");
-	var neg = validator.f_getParameter("num.negSign");
-	var sep = validator.f_getParameter("num.sepSign");
-	var n,ip,d,dp,r,v;
-	var exp = "^("+ f_vb._BuildEscaped(neg) +"?)(\\d*)([" + f_vb._BuildEscaped(dec)+ "]?)(\\d*)$";
-
-	// Check expression
-	r = sTmp.match(new RegExp(exp));
-	n = r[1];ip = r[2];d = r[3];dp = r[4];
-
-	for(;ip.length>1 && ip.charAt(0)=="0";ip=ip.substring(1));
-
-	// Get generic decimal separator
-	if (d) {
-		d = dec.charAt(0);
-	}
-	sTmp = n+ip+d+dp;
-
-	// Check if no need
-	if (!sep || (ip.length < 4)) {
+	Formatter_num: function(validator, inVal) {
+		var sTmp = inVal;
+		var decimal = validator.f_getIntParameter("num.decimal", 0);
+		var dec = validator.f_getParameter("num.decSign");
+		var neg = validator.f_getParameter("num.negSign");
+		var sep = validator.f_getParameter("num.sepSign");
+		
+		if (sep) {
+			sTmp=sTmp.replace(new RegExp(f_vb._BuildEscaped(sep), "g"), "");			
+		}
+		
+		var exp = "^("+ f_vb._BuildEscaped(neg) +"?)(\\d*)([" + f_vb._BuildEscaped(dec)+ "]?)(\\d*)$";
+	
+		// Check expression
+		var r = sTmp.match(new RegExp(exp));
+		if (!r) {
+			f_core.Debug(f_vb, "Formatter_num: Invalid num value '"+inVal+"' (sTmp='"+sTmp+"').");
+			return;
+		}
+		
+		var n = r[1];  // negSign
+		var ip = r[2]; // integer
+		var d = r[3]; // decimalSign
+		var dp = r[4]; // decimal
+	
+		for(;ip.length>1 && ip.charAt(0)=="0";ip=ip.substring(1));
+	
+		if (!decimal) {
+			d="";
+			dp="";
+			
+		} else if (decimal>0) {
+			d=true;
+			
+			if (dp.length>decimal) {			
+				dp = dp.substring(0, decimal);
+				
+			} else {			
+				for(;dp.length<decimal;) {
+					dp+="0";
+				}
+			}
+		}
+	
+		// Get generic decimal separator
+		if (d) {
+			d = dec.charAt(0);
+		}
+				
+		// Check if no need
+		if (!sep || (ip.length < 4)) {
+			return n+ip+d+dp;
+		}
+		
+		// Traitement des milliers ...
+	
+		// Otherwise format integer part
+		// Reverse the string by split to array of chars and join
+		// Replace every occurence of 3 digits pattern with and additional trailing space
+		// Reverse the string again and there it is !
+		ip = ip.split("").reverse().join("").replace(/(\d{3})/g,"$1 ").split("").reverse().join("");
+		// Remove leading space if any
+		ip = ip.replace(/^(\s)/,"");
+		// Rebuild string
+		sTmp = n+ip+d+dp;
+		
 		return sTmp;
-	}
-
-	// Otherwise format integer part
-	// Reverse the string by split to array of chars and join
-	// Replace every occurence of 3 digits pattern with and additional trailing space
-	// Reverse the string again and there it is !
-	ip = ip.split("").reverse().join("").replace(/(\d{3})/g,"$1 ").split("").reverse().join("");
-	// Remove leading space if any
-	ip = ip.replace(/^(\s)/,"");
-	// Rebuild string
-	sTmp = n+ip+d+dp;
-	return sTmp;
-  },
+	},
 
 
 /*=============================================================================
 	BEHAVIORS in alphabetic order...please
 =============================================================================*/
-  Behavior_required: function(validator, inVal) {
-	var bRet;
-
-	// Check if input value from format
-	bRet = (inVal != null && inVal != "");
-
-	// Fill error status
-	if (!bRet) {
-		f_vb._SetLastError(validator, "required.error", "REQUIRED_ERROR");	
-	}
-
-	// Return boolean value
-	return bRet;
-  },
-  _SetLastError: function(validator, parameterPrefix, resourcePrefix, params) {
-	var resourceBundle=f_resourceBundle.Get(f_vb);
+	Behavior_required: function(validator, inVal) {
+		var bRet;
 	
-	var summary=validator.f_getStringParameter(parameterPrefix+".summary");
-	if (!summary) {
-		summary=resourceBundle.f_get(resourcePrefix+"_SUMMARY");
-	}
-	if (summary && params) {
-		summary=f_core.FormatMessage(summary, params);
-	}
+		// Check if input value from format
+		bRet = (inVal != null && inVal != "");
 	
-	var detail=validator.f_getStringParameter(parameterPrefix+".detail");
-	if (!detail) {
-		detail=resourceBundle.f_getParams(resourcePrefix+"_DETAIL", null, null);
-	}
-	if (detail && params) {
-		detail=f_core.FormatMessage(detail, params);
-	}
+		// Fill error status
+		if (!bRet) {
+			f_vb._SetLastError(validator, "required.error", "REQUIRED_ERROR");	
+		}
 	
-	var severity=validator.f_getStringParameter(parameterPrefix+".severity");
+		// Return boolean value
+		return bRet;
+	},
+	_SetLastError: function(validator, parameterPrefix, resourcePrefix, params) {
+		var resourceBundle=f_resourceBundle.Get(f_vb);
+		
+		var summary=validator.f_getStringParameter(parameterPrefix+".summary");
+		if (!summary) {
+			summary=resourceBundle.f_get(resourcePrefix+"_SUMMARY");
+		}
+		if (summary && params) {
+			summary=f_core.FormatMessage(summary, params);
+		}
+		
+		var detail=validator.f_getStringParameter(parameterPrefix+".detail");
+		if (!detail) {
+			detail=resourceBundle.f_formatParams(resourcePrefix+"_DETAIL", null, null);
+		}
+		if (detail && params) {
+			detail=f_core.FormatMessage(detail, params);
+		}
+		
+		var severity=validator.f_getStringParameter(parameterPrefix+".severity");
+	
+		validator.f_setLastError(summary, detail, severity);  	
+	},
 
-	validator.f_setLastError(summary, detail, severity);  	
-  },
-
-  Behavior_forcefill: function(validator, inVal) {
-	var bRet = true;
-
-	// Get input length
-	var len = validator.f_getComponent().f_getMaxLength();
-
-	// Silly
-	if (len == 0) {
-		return true;
-	}
-
-	// Check against inVal
-	// testing inVal is equivalent to (undefined, null, "")?
-	bRet = (inVal && (inVal.length == len));
-
-	// Fill error status
-	if (!bRet) {
-		f_vb._SetLastError(validator, "required.error", "REQUIRED_ERROR", [ len ]);	
-	}
-
-	// Return boolean value
-	return bRet;
-  },
+	Behavior_forcefill: function(validator, inVal) {
+		var bRet = true;
+	
+		// Get input length
+		var len = validator.f_getComponent().f_getMaxLength();
+	
+		// Silly
+		if (len == 0) {
+			return true;
+		}
+	
+		// Check against inVal
+		// testing inVal is equivalent to (undefined, null, "")?
+		bRet = (inVal && (inVal.length == len));
+	
+		// Fill error status
+		if (!bRet) {
+			f_vb._SetLastError(validator, "required.error", "REQUIRED_ERROR", [ len ]);	
+		}
+	
+		// Return boolean value
+		return bRet;
+	},
   
 	Processor_autoTab: function(validator, keyCode, shift, ctrl, alt) {
 		// Handle special key codes
@@ -990,7 +1039,85 @@ var __static = {
 		f_core.SetFocus(next);
 
 		return false;
-	}
+	},
+	
+	Converter_dat: {
+		// parameter name="date.sepSign" value="/-."
+		// parameter name="date.pivot" value="90"
+
+		f_getAsObject: function(validator, text) {
+		},
+		f_getAsString: function(validator, object) {
+		}
+	},
+	Converter_hour: {
+		// Parmaters: hour.sepSign" value=":. 
+		f_getAsObject: function(validator, text) {
+		},
+		f_getAsString: function(validator, object) {
+		}
+	},
+	Converter_num: {
+		// parameter name="num.negSign" value="-"
+		// parameter name="num.decSign" value=",."
+		// parameter name="num.sepSign" value=" "
+	
+		f_getAsObject: function(validator, text) {
+			var dec = validator.f_getParameter("num.decSign");
+			var neg = validator.f_getParameter("num.negSign");
+			var sep = validator.f_getParameter("num.sepSign");
+			var exp = "^("+ f_vb._BuildEscaped(neg) +"?)(\\d*)([" + f_vb._BuildEscaped(dec)+ "]?)(\\d*)$";
+		
+			// Check expression
+			var r = text.match(new RegExp(exp));
+			if (!r) {
+				// Invalide !
+				f_core.Debug(f_vb, "Converter_num: Invalid text '"+text+"'.");
+				return null;
+			}
+			
+			var n = r[1];
+			var ip = r[2];
+			var d = r[3];
+			var dp = r[4];
+		
+			for(;ip.length>1 && ip.charAt(0)=="0";ip=ip.substring(1));
+		
+			var num=parseFloat(n+ip+"."+dp);
+			
+			f_core.Debug(f_vb, "Converter_num: Convert text["+typeof(text)+"] '"+text+"' to number["+typeof(num)+"] '"+num+"'.");
+			return num;
+		},
+		f_getAsString: function(validator, object) {
+			var num=object;
+			if (typeof(num)!="number") {
+				num=parseFloat(num);
+			}
+			
+			var ret="";
+			if (num<0) {
+				var sign=validator.f_getParameter("num.negSign");
+				if (sign) {
+					ret+=sign;
+				}
+				
+				num=-num;
+			}
+			
+			var dec=validator.f_getIntParameter("num.decimal", 0);
+			var fixed=num.toFixed(dec);
+
+			var sign=validator.f_getParameter("num.decSign")[0];
+			if (sign!=".") {
+				fixed=fixed.replace("/\./g", sign);
+			}
+			
+			ret+=fixed;
+			
+			f_core.Debug(f_vb, "Converter_num: Convert number["+typeof(object)+"] '"+object+"' to string["+typeof(ret)+"] '"+ret+"'.");
+			return ret;
+		}
+	}	
 }
  
 var f_vb=new f_class("f_vb", null, __static);

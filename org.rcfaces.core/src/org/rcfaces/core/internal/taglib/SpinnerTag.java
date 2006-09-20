@@ -1,14 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.SpinnerComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class SpinnerTag extends TextEntryTag implements Tag {
 
@@ -17,6 +16,8 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 
 	private String minimum;
 	private String maximum;
+	private String step;
+	private String cycleValue;
 	public String getComponentType() {
 		return SpinnerComponent.COMPONENT_TYPE;
 	}
@@ -37,6 +38,22 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 		this.maximum = maximum;
 	}
 
+	public final String getStep() {
+		return step;
+	}
+
+	public final void setStep(String step) {
+		this.step = step;
+	}
+
+	public final String getCycleValue() {
+		return cycleValue;
+	}
+
+	public final void setCycleValue(String cycleValue) {
+		this.cycleValue = cycleValue;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (SpinnerComponent.COMPONENT_TYPE==getComponentType()) {
@@ -44,6 +61,8 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 			}
 			LOG.debug("  minimum='"+minimum+"'");
 			LOG.debug("  maximum='"+maximum+"'");
+			LOG.debug("  step='"+step+"'");
+			LOG.debug("  cycleValue='"+cycleValue+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -60,7 +79,7 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 				ValueBinding vb = application.createValueBinding(minimum);
 				component.setMinimum(vb);
 			} else {
-				component.setMinimum(getInt(minimum));
+				component.setMinimum(getDouble(minimum));
 			}
 		}
 
@@ -69,7 +88,25 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 				ValueBinding vb = application.createValueBinding(maximum);
 				component.setMaximum(vb);
 			} else {
-				component.setMaximum(getInt(maximum));
+				component.setMaximum(getDouble(maximum));
+			}
+		}
+
+		if (step != null) {
+			if (isValueReference(step)) {
+				ValueBinding vb = application.createValueBinding(step);
+				component.setStep(vb);
+			} else {
+				component.setStep(getDouble(step));
+			}
+		}
+
+		if (cycleValue != null) {
+			if (isValueReference(cycleValue)) {
+				ValueBinding vb = application.createValueBinding(cycleValue);
+				component.setCycleValue(vb);
+			} else {
+				component.setCycleValue(getBool(cycleValue));
 			}
 		}
 	}
@@ -77,6 +114,8 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 	public void release() {
 		minimum = null;
 		maximum = null;
+		step = null;
+		cycleValue = null;
 
 		super.release();
 	}

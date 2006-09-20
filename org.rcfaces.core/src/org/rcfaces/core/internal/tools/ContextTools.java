@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:19  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -113,14 +117,26 @@ public final class ContextTools {
 
         Locale locale = null;
         for (; component != null; component = component.getParent()) {
-            if ((component instanceof ILocalizedAttributesCapability) == false) {
+
+            if (component instanceof ILocalizedAttributesCapability) {
+
+                locale = ((ILocalizedAttributesCapability) component)
+                        .getAttributesLocale();
+                if (locale != null) {
+                    return locale;
+                }
+
                 continue;
             }
 
-            locale = ((ILocalizedAttributesCapability) component)
-                    .getAttributesLocale();
-            if (locale != null) {
-                return locale;
+            if (component instanceof UIViewRoot) {
+                UIViewRoot viewRoot = (UIViewRoot) component;
+
+                locale = (Locale) viewRoot.getAttributes().get(
+                        ATTRIBUTES_LOCALE_PROPERTY_NAME);
+                if (locale != null) {
+                    return locale;
+                }
             }
         }
 
@@ -179,11 +195,17 @@ public final class ContextTools {
                 "You must specify a default locale for attributes !");
     }
 
-    public static void setAttributesLocale(ExternalContext externalContext,
+    public static void setAttributesLocale(FacesContext facesContext,
             Locale locale) {
 
-        externalContext.getRequestMap().put(ATTRIBUTES_LOCALE_PROPERTY_NAME,
-                locale);
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        if (viewRoot != null) {
+            viewRoot.getAttributes().put(ATTRIBUTES_LOCALE_PROPERTY_NAME,
+                    locale);
+        }
+
+        facesContext.getExternalContext().getRequestMap().put(
+                ATTRIBUTES_LOCALE_PROPERTY_NAME, locale);
     }
 
     public static Locale getUserLocale(FacesContext facesContext) {

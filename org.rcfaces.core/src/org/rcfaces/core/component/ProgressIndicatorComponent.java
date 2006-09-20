@@ -1,11 +1,13 @@
 package org.rcfaces.core.component;
 
-import javax.faces.FacesException;
-import javax.faces.component.NamingContainer;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.Constants;
+import javax.faces.el.ValueBinding;
+import javax.faces.FacesException;
+import org.rcfaces.core.component.ProgressBarComponent;
+import javax.faces.component.NamingContainer;
+import org.rcfaces.core.component.AbstractBasicComponent;
 
 public class ProgressIndicatorComponent extends AbstractBasicComponent implements 
 	NamingContainer {

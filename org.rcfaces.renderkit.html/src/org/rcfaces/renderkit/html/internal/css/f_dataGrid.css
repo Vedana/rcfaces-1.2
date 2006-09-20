@@ -1,7 +1,15 @@
-/**
- * DataGrid
+/*
+ * $Id: $
  */
 
+/**
+ *
+ * @class f_dataGrid
+ *
+ * @author Olivier Oeuillot (latest modification by $Author: oeuillot $)
+ * @version $Revision: 1.2 $ $Date: 2006/09/14 14:34:38 $ 
+ */
+ 
 DIV.f_dataGrid {
 	border: 1px solid #666666;
 	list-style-type: none;

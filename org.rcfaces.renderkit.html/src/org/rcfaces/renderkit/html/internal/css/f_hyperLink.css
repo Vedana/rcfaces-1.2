@@ -1,11 +1,15 @@
 /*
  * $Id$
  */
- 
-/**
- *	Hyperlink
- */
 
+/**
+ *
+ * @class f_hyperLink
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 .f_hyperLink,
 .f_hyperLink_disabled {
 	-moz-user-select: none;

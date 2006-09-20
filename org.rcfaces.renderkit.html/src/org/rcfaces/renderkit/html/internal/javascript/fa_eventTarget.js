@@ -74,6 +74,9 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_getEventLocked: function(showAlert) {
+		if (!window.f_event) {
+			return true;
+		}
 		return f_event.GetEventLocked(showAlert);
 	},
 	/**

@@ -1,14 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractMessagesComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
@@ -37,10 +36,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
+	private String margins;
+	private String showSummary;
 	private String globalOnly;
 	private String showDetail;
-	private String showSummary;
-	private String margins;
 	public final String getHeight() {
 		return height;
 	}
@@ -217,6 +216,22 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
+	public final String getMargins() {
+		return margins;
+	}
+
+	public final void setMargins(String margins) {
+		this.margins = margins;
+	}
+
+	public final String getShowSummary() {
+		return showSummary;
+	}
+
+	public final void setShowSummary(String showSummary) {
+		this.showSummary = showSummary;
+	}
+
 	public final String getGlobalOnly() {
 		return globalOnly;
 	}
@@ -231,22 +246,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
 	public final void setShowDetail(String showDetail) {
 		this.showDetail = showDetail;
-	}
-
-	public final String getShowSummary() {
-		return showSummary;
-	}
-
-	public final void setShowSummary(String showSummary) {
-		this.showSummary = showSummary;
-	}
-
-	public final String getMargins() {
-		return margins;
-	}
-
-	public final void setMargins(String margins) {
-		this.margins = margins;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -268,10 +267,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
-			LOG.debug("  showSummary='"+showSummary+"'");
-			LOG.debug("  margins='"+margins+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -473,6 +472,22 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
 		}
 
+		if (margins != null) {
+			if (isValueReference(margins)) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins);
+		}
+
+		if (showSummary != null) {
+			if (isValueReference(showSummary)) {
+				ValueBinding vb = application.createValueBinding(showSummary);
+				component.setShowSummary(vb);
+			} else {
+				component.setShowSummary(getBool(showSummary));
+			}
+		}
+
 		if (globalOnly != null) {
 			if (isValueReference(globalOnly)) {
 				ValueBinding vb = application.createValueBinding(globalOnly);
@@ -489,22 +504,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			} else {
 				component.setShowDetail(getBool(showDetail));
 			}
-		}
-
-		if (showSummary != null) {
-			if (isValueReference(showSummary)) {
-				ValueBinding vb = application.createValueBinding(showSummary);
-				component.setShowSummary(vb);
-			} else {
-				component.setShowSummary(getBool(showSummary));
-			}
-		}
-
-		if (margins != null) {
-			if (isValueReference(margins)) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins);
 		}
 	}
 
@@ -531,10 +530,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
+		margins = null;
+		showSummary = null;
 		globalOnly = null;
 		showDetail = null;
-		showSummary = null;
-		margins = null;
 
 		super.release();
 	}

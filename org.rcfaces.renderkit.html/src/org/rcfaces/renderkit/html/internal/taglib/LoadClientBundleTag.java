@@ -49,7 +49,7 @@ public class LoadClientBundleTag extends TagSupport implements Tag {
 
     private static final Log LOG = LogFactory.getLog(LoadClientBundleTag.class);
 
-    private static final boolean SERVER_SIDE_DEFAULT_VALUE = true;
+    private static final boolean SERVER_SIDE_DEFAULT_VALUE = false;
 
     private static final String BUNDLE_REQUIRED_CLASSES = "f_resourceBundle";
 

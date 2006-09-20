@@ -110,7 +110,12 @@ var f_core = {
 	_FOCUSABLE_TAGS: new RegExp(
 		"^(A|AREA|BUTTON|IFRAME|INPUT|OBJECT|SELECT|TEXTAREA){1}$"
 	),
-
+	
+	/**
+	 * @field private static final String[]
+	 */
+	_OPEN_WINDOW_KEYWORDS: ["width", "height", "channelmode", "fullscreen", "resizable", "titlebar", "scrollbars", "location", "toolbar", "directories", "status", "menubar", "copyhistory" ],
+	
 	/**
 	 * @field hidden static boolean
 	 */
@@ -639,6 +644,7 @@ var f_core = {
 				
 				f_core.RemoveEventListener(win, "load", f_core._OnInit);
 				f_core.RemoveEventListener(win, "unload", f_core._OnExit);
+				f_core._DesinstallModalWindow();
 				
 				if (f_core.IsInternetExplorer()) {
 					f_core.RemoveEventListener(document, "selectstart", f_core._IeOnSelectStart);
@@ -866,7 +872,7 @@ var f_core = {
 		f_core.Info("f_core", "Catch reset event from form '"+form.id+"'.");
 
 		if (win.f_event) {
-			if (win.f_event.GetEventLocked(true, win)) {
+			if (win.f_event.GetEventLocked(true)) {
 				return false;
 			}
 		}
@@ -914,7 +920,7 @@ var f_core = {
 		f_core.Info("f_core", "Catch submit event from form '"+form.id+"'.");
 
 		if (win.f_event) {
-			if (win.f_event.GetEventLocked(true, win)) {
+			if (win.f_event.GetEventLocked(true)) {
 				return false;
 			}
 		}
@@ -964,7 +970,12 @@ var f_core = {
 			
 		return true;
 	},
-	_Submit: function(form, elt, event, url, target, createWindow, closeWindow, nomodal) {
+	_Submit: function(form, elt, event, url, target, createWindowParameters, closeWindow, modal) {
+		f_core.Assert(createWindowParameters===undefined || createWindowParameters===null || typeof(createWindowParameters)=="object", "Submit: createWindowParameters parameter must be undefined or an object.");
+		f_core.Assert(closeWindow===undefined || closeWindow===null || typeof(closeWindow)=="boolean", "Submit: closeWindow parameter must be undefined or a boolean.");
+		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "Submit: modal parameter must be undefined or a boolean.");
+		
+		
 		f_core.Profile("f_core.submit.enter("+url+")");
 
 		try {
@@ -1003,6 +1014,10 @@ var f_core = {
 
 			var document=form.ownerDocument;
 			var win=f_core.GetWindow(document);
+			
+			if (win.f_event.GetEventLocked(true)) {
+				return false;
+			}
 	
 			// Double check this is a real FORM
 			f_core.Assert((form.tagName.toUpperCase()=="FORM"),"f_core._Submit: Invalid form '"+form.tagName+"'.");
@@ -1063,35 +1078,27 @@ var f_core = {
 	
 			// Keep the previous for further restore
 			if (target) {
-				if (!form._old_target) {
+				if (form._old_target===undefined) {
 					form._old_target = form.target;
 				}
 				
 				form.target = target;
 				
-			} else if (form._old_target) {
+			} else if (form._old_target!==undefined) {
 				form.target=form._old_target;
 			}
 	
-			win.f_event.SetEventLocked(win, true);
+			win.f_event.EnterEventLock(f_event.SUBMIT_LOCK);
 			var unlockEvents=false;
 			try {
-				if (createWindow) {
-					if (!createWindow.target) {
-						createWindow.target=target;
+				if (createWindowParameters) {
+					if (!createWindowParameters.target) {
+						createWindowParameters.target=target;
 					}
-					var newWindow=f_core.OpenWindow(win, createWindow);
+					var newWindow=f_core.OpenWindow(win, createWindowParameters, modal);
 					
 					if (newWindow) {
-						try {
-							newWindow.focus();
-							
-							if (newWindow.GetAttention) {
-								newWindow.GetAttention();
-							}
-						} catch (x) {
-							f_core.Error(f_core, "Can not focus window "+newWindow, x);
-						}
+						f_core._FocusWindow(newWindow);
 					}
 				}
 	
@@ -1107,7 +1114,7 @@ var f_core = {
 					return true;
 				}
 				
-				if (createWindow) {
+				if (createWindowParameters) {
 					unlockEvents=true;
 				}
 				
@@ -1125,12 +1132,12 @@ var f_core = {
 		//				dlg.focus();
 		//			}
 					
-					win.f_event.SetEventLocked(win, false);
+					win.f_event.ExitEventLock(f_event.SUBMIT_LOCK);
 				}
 			}
 	
 			// IE Progress bar bug only
-			if (document.readyState) {
+			if (f_core.IsInternetExplorer()) {
 				switch (document.readyState) {
 				case "loading":
 					var msg=f_env.Get("F_SUBMIT_PROGRESS_MESSAGE");
@@ -1152,29 +1159,203 @@ var f_core = {
 			f_core.Profile("f_core.submit.exit("+url+")");
 		}
 	},
-	OpenWindow: function(window, parameters) {
+	/**
+	 * @method private static
+	 */
+	_FocusWindow: function(win) {
+		try {
+			win.focus();
+
+		} catch (x) {
+			// On est dans une situation trés strange !
+			//f_core.Error(f_core, "Can not focus window "+win, x);
+		}
+
+		try {
+			if (win.GetAttention) {
+				win.GetAttention();
+			}
+		} catch (x) {
+		}
+	},
+	/**
+	 * @method private static
+	 */
+	_InstallModalWindow: function(modalWindow) {
+		f_core._cameliaModalWindow=modalWindow;
+				
+		f_core.Debug("f_core", "Install modal window !");
+		
+		f_event.EnterEventLock(f_event.MODAL_LOCK);
+		
+		f_core.AddEventListener(document.body, "focus", f_core._ModalWindowFocus); 
+		if (f_core.IsInternetExplorer()) {
+			f_core.AddEventListener(document, "selectstart", f_core._ModalWindowFocus);
+		}
+
+/*
+		try {
+			modalWindow.onunload=f_core._CloseModalChildWindow;
+			
+		} catch (x) {
+			f_core.Error("f_core", "Can not set onclose callback.", x);
+		}
+		*/
+	},
+	/**
+	 * @method private static
+	 */
+	_DesinstallModalWindow: function() {
+		var modalWindow=f_core._cameliaModalWindow;
+		if (!modalWindow) {
+			return;
+		}
+		
+		try {
+			modalWindow.onclose=null;
+			
+		} catch (x) {
+			// Des problemes de sécurité peuvent survenir !
+		}
+		
+		f_core.Debug("f_core", "Desinstall modal window !");
+	
+		f_core._cameliaModalWindow=undefined;
+
+		f_event.ExitEventLock(f_event.MODAL_LOCK);
+
+		f_core.RemoveEventListener(document.body, "focus", f_core._ModalWindowFocus);
+		if (f_core.IsInternetExplorer()) {
+			f_core.RemoveEventListener(document, "selectstart", f_core._ModalWindowFocus);
+		}
+	},
+	/**
+	 * @method private static
+	 */
+	_CloseModalChildWindow: function(evt) {
+		if (!this.closed) {
+			return;
+		}
+				
+		if (!evt) {
+			evt = this.event;
+		}
+
+		var win;
+		if (evt.relatedTarget) {
+			win = evt.relatedTarget;
+			
+		} else if (evt.srcElement) {
+			win= evt.srcElement;
+		}
+
+		f_core.Debug("f_core", "CloseChildWindow: "+this+" window="+win+" event="+evt);
+		
+		if (f_core._cameliaModalWindow!=win) {
+			return;
+		}
+		
+		f_core._DesinstallModalWindow(win);
+	},
+	/**
+	 * @method hidden static
+	 * @return boolean <code>true</code> if the child window lock the current window.
+	 */
+	VerifyModalWindow: function() {
+		var modalWindow=f_core._cameliaModalWindow;
+		if (!modalWindow) {
+			return false;
+		}
+
+		var closed;
+		try {
+			closed=modalWindow.closed;
+			
+		} catch (x) {
+			// Sous IE on peut avoir un probleme de sécurité !
+			closed=true; // On considere que la fenetre est detachée
+		}
+		
+		if (closed) {
+			f_core._DesinstallModalWindow();
+			return false;
+		}
+
+		f_core._FocusWindow(modalWindow);
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 */
+	_ModalWindowFocus: function(event) {
+		var modalWindow=f_core._cameliaModalWindow;
+		if (!modalWindow) {
+			return;
+		}
+
+		var closed;		
+		try {
+			closed=modalWindow.closed;
+			
+		} catch (x) {
+			// Sous IE on peut avoir un probleme de sécurité !
+		}
+		
+		if (closed) {
+			f_core._DesinstallModalWindow();
+			return;
+		}
+			
+		f_core.Debug(f_core, "Catch focus of parent of a modal window !");
+
+		f_core._FocusWindow(modalWindow);
+		
+		return true;
+	},
+	/**
+	 * @method hidden static
+	 */
+	OpenWindow: function(window, parameters, modal) {
 		var url=parameters.url;
 		if (!url) {
 			url = "about:blank";
 		}
 		var target=parameters.target;
 		if (!target) {
-			target = "";
+			target = "T"+(new Date().getTime());
 		}
+		
 		var features = new Object;
 		features.left=parameters.x;
 		features.top=parameters.y;
-		features.width=parameters.width;
-		features.height=parameters.height;
 
 		if (parameters.dialog) {
-			features.scrollbars="no";
-			features.location="no";
-			features.toolbar="no";
-			features.directories="no";
-			features.status="no";
-			features.menubar="no";
-			features.copyhistory="no";
+			parameters.scrollbars=false;
+			parameters.location=false;
+			parameters.toolbar=false;
+			parameters.directories=false;
+			parameters.status=false;
+			parameters.menubar=false;
+			parameters.copyhistory=false;
+		}
+		
+		var keywords=f_core._OPEN_WINDOW_KEYWORDS;
+		for(var i=0;i<keywords.length;i++) {
+			var name=keywords[i];
+			
+			var v=parameters[name];
+			if (v===undefined) {
+				continue;
+			}
+			if (!v) {
+				v="no";
+					
+			} else if (v===true) {
+				v="yes";
+			}
+			
+			features[name]=v;
 		}
 
 		var deco=parameters.extra;
@@ -1186,7 +1367,7 @@ var f_core = {
 		
 		var s="";
 		for(var name in features) {
-			if (s.length>0) {
+			if (s.length) {
 				s+=",";
 			}
 			s+=name+"="+features[name];
@@ -1194,22 +1375,33 @@ var f_core = {
 		
 		f_core.Debug("f_core", "Open window, url="+url+" target="+target+" features="+s);
 		
+		var newWindow;
 		try {
-			var newWindow=window.open(url, target, s);
-		
-			return newWindow;
+			newWindow=window.open(url, target, s);
 
 		} catch (x) {
+			f_core.Debug("f_core", "Open window exception.", x);
+			newWindow=null;
+		}
+			
+		if (!newWindow) {
+			// Popup Blocker
 			var s=f_env.GetOpenWindowErrorMessage();
+			
 			if (s) {
 				alert(s);
 				return null;
 			}
 			
 			f_core.Error(f_core, "Can not open window url='"+url+"' target='"+target+"' features='"+s+"'.", x);
-			
-			throw x;
+			return null;
 		}
+		
+		if (modal) {
+			f_core._InstallModalWindow(newWindow);
+		}
+	
+		return newWindow;
 	},
 	/**
 	 * @method private static final
@@ -1364,26 +1556,43 @@ var f_core = {
 	 * @param optional string dest Window name.
 	 * @param optional HTMLElement elt
 	 * @param optional f_event event 
-	 * @param optional boolean createWindow
+	 * @param optional Object createWindowParameters
 	 * @param optional boolean closeWindow
-	 * @param optional boolean nomodal
+	 * @param optional boolean modal
 	 * @return boolean <code>true</code> if success.
 	 */
-	Submit: function(url, dest, elt, event, createWindow, closeWindow, nomodal) {
-		return f_core._Submit(null, elt, event, url, dest, createWindow, closeWindow, nomodal);
+	Submit: function(url, dest, elt, event, createWindowParameters, closeWindow, modal) {
+		return f_core._Submit(null, elt, event, url, dest, createWindowParameters, closeWindow, modal);
 	},
 	/**
 	 * Submit the page, and open a new window to show the response.
 	 * 
 	 * @method public static final
 	 * @param optional string dest Window name.
-	 * @param optional boolean createWindow
-	 * @param optional boolean nomodal
-	 * @param optional f_event event 
+	 * @param optional Object createWindowParameters
+	 * @param optional boolean modal
+	 * @param optional f_event event Event if any.
 	 * @return boolean <code>true</code> if success.
 	 */
-	SubmitOpenWindow: function(dest, createWindow, nomodal, event) {
-		return f_core._Submit(null, null, event, null, dest, createWindow, null, nomodal);
+	SubmitOpenWindow: function(dest, createWindowParameters, modal, event) {
+		return f_core._Submit(null, null, event, null, dest, createWindowParameters, null, modal);
+	},
+	/**
+	 * Submit the page, and open a new window to show the response.
+	 * 
+	 * @method public static final
+	 * @param optional string dest Window name.
+	 * @param optional Object createWindowParameters
+	 * @param optional f_event event Event if any.
+	 * @return boolean <code>true</code> if success.
+	 */
+	SubmitModalDialog: function(dest, createWindowParameters, event) {
+		if (!createWindowParameters) {
+			createWindowParameters=new Object;
+		}
+		createWindowParameters.dialog=true;
+	
+		return f_core._Submit(null, null, event, null, dest, createWindowParameters, null, true);
 	},
 	/**
 	 * Submit the page, and close the window.
@@ -1848,12 +2057,12 @@ var f_core = {
 	/**
 	 * @method hidden static final
 	 */
-	RemoveElement: function(list, index) {
-		if (list==null || list.length<1) {
+	RemoveElement: function(list, value) {
+		if (!list || !list.length) {
 			return false;
 		}
 		for(var i=0;i<list.length;i++) {
-			if (list[i]!=index) {
+			if (list[i]!==value) {
 				continue;
 			}
 			
@@ -1865,23 +2074,23 @@ var f_core = {
 	/**
 	 * @method hidden static final
 	 */
-	AddElement: function(list, index) {
+	AddElement: function(list, value) {
 		for(var i=0;i<list.length;i++) {
-			if (list[i]!=index) {
+			if (list[i]!==value) {
 				continue;
 			}
 			
 			return false;
 		}
 	
-		list.push(index);
+		list.push(value);
 		return true;
 	},
 	/**
 	 * @method hidden static final
 	 */
 	CancelEventHandler: function(evt) {
-		if (f_event.GetEventLocked(false, window)) {
+		if (f_event.GetEventLocked(false)) {
 			return false;
 		}
 	
@@ -1910,7 +2119,7 @@ var f_core = {
 	 * @method hidden static final
 	 */
 	CancelEventHandlerTrue: function(evt) {
-		if (f_event.GetEventLocked(false, window)) {
+		if (f_event.GetEventLocked(false)) {
 			return false;
 		}
 			
@@ -2571,14 +2780,14 @@ var f_core = {
 	 * @method hidden static
 	 */
 	GetEvtButton: function(evt) {
-		if (evt.button) {
+		if (evt.button!==undefined) {
 			return evt.button;
 		}
-		if (evt.which) {
+		if (evt.which!==undefined) {
 			return evt.which;
 		}
 		
-		return 1;
+		return 0;
 	},
 	/**
 	 * Returns an effect specified by its name.
@@ -2919,24 +3128,119 @@ var f_core = {
 		}
 	},
 	/**
+	 * @method public static final 
+	 */
+	ComputeDialogPosition: function(parameters) {
+		var x=0;
+		var y=0;
+
+		var body=document.body;
+		
+		if (window.screenX!==undefined) {
+		 	x=window.screenX;
+		 	y=window.screenY;
+		 	
+		} else if (window.screenLeft!==undefined) {
+			x=window.screenLeft;
+			y=window.screenTop;
+		}
+		
+		var width=0;
+		var height=0;
+		
+		if (window.innerWidth) {
+		 	width=window.outerWidth;
+		 	height=window.outerHeight;
+		 
+		} else if (document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight )) {
+			width = document.documentElement.clientWidth;
+	    	height = document.documentElement.clientHeight;	
+		
+		} else if (body && body.offsetWidth) {
+			width = body.clientWidth;
+	    	height = body.clientHeight;
+		}
+		
+		var dialogWidth=parameters.width;
+		f_core.Assert(typeof(dialogWidth)=="number", "f_core.ComputeDialogPosition: width must be specified into parameters object.");
+
+		var dialogHeight=parameters.height;
+		f_core.Assert(typeof(dialogHeight)=="number", "f_core.ComputeDialogPosition: height must be specified into parameters object.");
+		
+		var posX=Math.floor(x+(width-dialogWidth)/2);
+		var posY=Math.floor(y+(height-dialogHeight)/2);
+		
+		// document.title="posX="+posX+" posY="+posY+" x="+x+" y="+y+" width="+width+" height="+height+" dialogWidth="+dialogWidth+" dialogHeight="+dialogHeight;
+		
+		if (posX<0) {
+			posX=0;
+		}
+		
+		if (posY<0) {
+			posY=0;
+		}
+		
+		parameters.x=posX;
+		parameters.screenX=posX;
+
+		parameters.y=posY;
+		parameters.screenY=posY;
+	},
+	/**
 	 * @method hidden static final
 	 */
 	FormatMessage: function(message, parameters) {
 		f_core.Assert(typeof(message)=="string", "Message parameter is invalid '"+message+"'.");
-		f_core.Assert(parameters instanceof Array, "parameters parameter is invalid '"+parameters+"'.");
+//		f_core.Assert(parameters instanceof Array, "parameters parameter is invalid '"+parameters+"'.");
 		
-		for(var i=0;i<parameters.length;i++) {
-			var mk="{"+i+"}";
+		var ret="";
+		var pos=0;
+		for(;pos<message.length;) {
+			var idx=message.indexOf('{', pos);
+			var idx2=message.indexOf('\'', pos);
 			
-			var idx=message.indexOf(mk);
-			if (idx<0) {
+			if (idx2<0 && idx<0) {
+				return ret+message.substring(pos);
+			}
+			
+			if (idx2<0 || (idx>=0 && idx<idx2)) {	
+				idx2=message.indexOf('}', idx);
+				if (idx2<0) {
+					throw new Error("Invalid expression \""+parameters+"\".");
+				}
+				
+				ret+=message.substring(pos, idx);
+				
+				var num=parseInt(message.substring(idx+1, idx2));
+				if (parameters && num<parameters.length) {
+					ret+=parameters[num];
+				}
+				
+				pos=idx2+1
 				continue;
 			}
 			
-			message=message.substring(0, idx)+parameters[i]+message.substring(idx+mk.length);
+			ret+=message.substring(pos, idx2);
+			
+			idx=message.indexOf('\'', idx2+1);
+			if (idx<0) {
+				throw new Error("Invalid expression \""+parameters+"\".");
+			}
+			pos=idx+1;
+
+			if (idx==idx2+1) {
+				ret+='\'';
+				
+			} else {
+				ret+=message.substring(idx2+1, idx);
+
+				if (message.charAt(pos)=='\'') {
+					ret+='\'';
+				}
+			}
 		}
 		
-		return message;
+		return ret;
 	},
 	/**
 	 * @method hidden static final
@@ -3089,6 +3393,10 @@ var f_core = {
 			
 		} else {
 			length=args.length;
+		}
+		
+		if (!dest) {
+			dest=new Array();
 		}
 		
 		for(;index<length;index++) {

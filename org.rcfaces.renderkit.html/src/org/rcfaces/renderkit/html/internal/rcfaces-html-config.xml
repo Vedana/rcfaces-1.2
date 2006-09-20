@@ -247,6 +247,7 @@
 -->
 	<clientValidator id="scientific">
 		<filter call="f_vb.Filter_scientific" />
+		<converter object="f_vb.Converter_num" />
 	</clientValidator>
 
 <!--
@@ -454,6 +455,7 @@
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
 			-->
+		<converter object="f_vb.Converter_num" />
 	</clientValidator>
 
 <!--
@@ -598,6 +600,7 @@
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
 			-->
+		<converter object="f_vb.Converter_dat" />
 	</clientValidator>
 
 
@@ -638,6 +641,7 @@
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
 			-->
+		<converter object="f_vb.Converter_dat" />
 	</clientValidator>
 
 <!--
@@ -672,6 +676,7 @@
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
 			-->
+		<converter object="f_vb.Converter_dat" />
 	</clientValidator>
 
 <!--
@@ -696,6 +701,7 @@
 		<parameter name="hour.sepSign" value=":. " />
 		<filter call="f_vb.Filter_hour" />
 		<checker call="f_vb.Checker_hour" />
+		<converter object="f_vb.Converter_hour" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -729,6 +735,9 @@
 	<clientValidator id="number">
 		<parameter name="num.signed" value="false" />
 		<parameter name="num.decimal" value="0" />
+		<!--
+		<parameter name="num.cutdecimal" value="0" />
+		-->
 		<parameter name="num.negSign" value="-" />
 		<parameter name="num.decSign" value=",." />
 		<parameter name="num.sepSign" value=" " />
@@ -736,6 +745,8 @@
 		<translator call="f_vb.Translator_num" />
 		<checker call="f_vb.Checker_num" />
 		<formatter call="f_vb.Formatter_num" />
+		<converter object="f_vb.Converter_num" />
+		
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />

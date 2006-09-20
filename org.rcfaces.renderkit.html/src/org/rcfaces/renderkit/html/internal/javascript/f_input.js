@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  */
 
 /**
@@ -22,58 +14,69 @@ var __prototype = {
 	f_input: function() {
 		this.f_super(arguments);
 
-		var input=this.f_initializeInput();
-		if (input) {
-			f_core.Assert(input.tagName, "Input component is not a TAG !");
-			
-			input.f_link=this;
-			
-			// Trop tard ... ca sert à rien !
-			//if (this._accessKey) {
-				// Il faut positionner l'accessKey !
-			//	input.accessKey=this._accessKey;
-			//}
-			
-			this._input=input;
-		}
+		var input=this.f_getInput();
+		input.f_link=this;
+		
+		f_core.Debug(f_input, "Input associated to component '"+this.id+"' is id='"+input.id+"', tagName="+input.tagName+", name='"+input.name+"'.");
 	},
 	f_finalize: function() {
 		var input=this._input;
 		if (input) {
 			this._input=undefined;
-
 			input.f_link=undefined;
-			f_core.VerifyProperties(input);			
 		}
+		
 		this._validator=undefined;
 		
 		this.f_super(arguments);
+
+		if (input!=this) {
+			f_core.VerifyProperties(input);
+		}
 	},
 	/**
 	 * 
-	 * @method protected
-	 */
-	f_initializeInput: function() {
-		var tagName=this.tagName;
-		if (tagName && tagName.toUpperCase()=="INPUT") {
-			return null;
-		}
-		
-		var inputs=this.getElementsByTagName("INPUT");
-		if (inputs.length==0) {
-			f_core.Error(f_input, "No Input tag into this component !");
-			return null;
-		}
-		
-		f_core.Assert(inputs.length==1, "f_input.f_initializeInput: More than one input tag into this button component !");
-		return inputs[0];
-	},
-	/**
-	 * 
-	 * @method protected
+	 * @method protected final
+	 * @return HTMLElement
 	 */
 	f_getInput: function() {
-		return this._input;
+		var input=this._input;
+		if (input) {
+			return input;
+		}
+		
+		input=this.f_initializeInput();
+		if (!input) {
+			throw new Error("Can not find input associated to component '"+this.id+"'.");
+		}
+		this._input=input;
+		
+		return input;
+	},
+	/**
+	 * 
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_initializeInput: function() {
+		var inputTagName=this.f_getInputTagName();
+		
+		var tagName=this.tagName;
+		if (tagName && tagName.toUpperCase()==inputTagName) {
+			return this;
+		}
+		
+		var input=f_core.GetFirstElementByTagName(this, inputTagName, true);
+
+		return input;
+	},
+	/**
+	 * 
+	 * @method protected
+	 * @return string
+	 */
+	f_getInputTagName: function() {
+		return "INPUT";
 	},
 	/**
 	 * @method public
@@ -93,23 +96,21 @@ var __prototype = {
 
 		f_core.Debug("f_imageButton", "f_setFocus of input");
 		
-		var component=this;
-		if (this._input) {
-			component=this._input;
-		}
+		var input=this.f_getInput();
 		
 		try {
-			component.focus();
+			input.focus();
 			
 		} catch (x) {
-			f_core.Error(f_input, "Error while setting focus to '"+component.id+"'.", x);
+			f_core.Error(f_input, "Error while setting focus to '"+input.id+"'.", x);
 		}
 		
-		var typ=component.type;
-		if (typ) {
-			typ = typ.toUpperCase();
-			if ((typ == "TEXT") || (typ == "TEXTAREA")) {
-				component.select();
+		var type=input.type;
+		if (type) {
+			switch(type.toUpperCase()) {
+			case "TEXT":
+			case "TEXTAREA":
+				input.select();
 			}
 		}
 	},
@@ -123,7 +124,7 @@ var __prototype = {
 			return validator.f_getValue();
 		}
 	
-		return this.value;
+		return this.f_getInput().value;
 	},
 	/**
 	 * Returns the text associated to the input.
@@ -133,11 +134,13 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setText: function(text) {
-		if (text == this.value) {
+		var input=this.f_getInput();
+		
+		if (text == input.value) {
 			return;
 		}
 		
-		this.value = text;
+		input.value = text;
 		this.f_setProperty(f_prop.TEXT, text);
 
 		var validator=this._validator;
@@ -152,11 +155,7 @@ var __prototype = {
 	 * @return boolean Returns <code>true</code> if the input is disabled.
 	 */
 	f_isDisabled: function() {
-		if (this._input) {
-			return (this._input.disabled);
-		}
-		
-		return this.disabled;
+		return this.f_getInput().disabled;
 	},
 	/**
 	 * Set the disabled state of this component.
@@ -166,17 +165,15 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setDisabled: function(disabled) {
-		if (this._input) {
-			this._input.disabled = disabled;
-		}
+		this.f_getInput().disabled = disabled;
 		this.disabled = disabled;
-		this._updateDisabled(disabled);
+		this.f_updateDisabled(disabled);
 		this.f_setProperty(f_prop.DISABLED, disabled);
 	},
 	/**
 	 * @method protected
 	 */
-	_updateDisabled: function(disabled) {
+	f_updateDisabled: function(disabled) {
 	},
 	/**
 	 * Returns the read only state.
@@ -185,7 +182,7 @@ var __prototype = {
 	 * @return boolean Returns <code>true</code> if the component is in read only mode.
 	 */
 	f_isReadOnly: function() {
-		return (this.readOnly == true);
+		return (this.f_getInput().readOnly == true);
 	},
 	/**
 	 * @method public
@@ -193,10 +190,11 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setReadOnly: function(set) {
-		if (this.readOnly == set) {
+		var input=this.f_getInput();
+		if (input.readOnly == set) {
 			return;
 		}
-		this.readOnly = set;
+		input.readOnly = set;
 		this.f_setProperty(f_prop.READONLY,set);
 	},
 	/*
@@ -221,12 +219,26 @@ var __prototype = {
 	 * @return string The value associated.
 	 */
 	f_getValue: function() {
-		var input=this._input;
-		if (input) {
-			return input.value;
-		}
+		var validator=this._validator;
+		if (validator) {
+			return validator.f_getConvertedValue();
+		}		
 		
-		return this.value;
+		return this.f_getInput().value;
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @return string The value associated.
+	 */
+	f_setValue: function(value) {
+		var validator=this._validator;
+		if (validator) {
+			return validator.f_setConvertedValue(value);
+		}		
+		
+		this.f_getInput().value=value;
 	},
 	f_fireEvent: function(type, evt, item, value) {
 		if (type==f_event.CHANGE) {			

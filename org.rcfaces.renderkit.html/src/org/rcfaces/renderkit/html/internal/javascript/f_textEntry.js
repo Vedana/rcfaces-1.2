@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:26  oeuillot
- * Renommage  en rcfaces
- *
  */
 
 /**
@@ -50,11 +42,11 @@ var __prototype = {
 	},
 	/*
 	f_finalize: function() {
-		this._autoTab=undefined;  // boolean
-		this._oldStyleClass=undefined;  // string
-		this._emptyMessage=undefined; // string
-		this._showEmptyMessage=undefined; // string
-		this._requiredInstalled=undefined // boolean
+		// this._autoTab=undefined;  // boolean
+		// this._oldStyleClass=undefined;  // string
+		// this._emptyMessage=undefined; // string
+		// this._showEmptyMessage=undefined; // string
+		// this._requiredInstalled=undefined // boolean
 		
 		this.f_super(arguments);
 	},
@@ -99,7 +91,7 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getMaxLength: function() {
-		return this.maxLength;
+		return this._input.maxLength;
 	},
 	/**
 	 * @method public
@@ -113,6 +105,15 @@ var __prototype = {
 		case f_event.SELECTION: 
 			this.f_addEventListener(f_event.KEYPRESS, this._performSelectionEvent);
 			return;
+			
+		case f_event.KEYPRESS:
+		case f_event.KEYDOWN:
+		case f_event.KEYUP:
+		case f_event.FOCUS:
+		case f_event.BLUR:
+			// Car _input est peut etre pas encore initialisé !
+			target=this.f_getInput();
+			break;
 		}
 		
 		this.f_super(arguments, type, target);
@@ -122,6 +123,14 @@ var __prototype = {
 		case f_event.SELECTION: 
 			this.f_removeEventListener(f_event.KEYPRESS, this._performSelectionEvent);
 			return;
+	
+		case f_event.KEYPRESS:
+		case f_event.KEYDOWN:
+		case f_event.KEYUP:
+		case f_event.FOCUS:
+		case f_event.BLUR:
+			target=this.f_getInput();
+			break;
 		}
 		
 		this.f_super(arguments, type, target);
@@ -234,10 +243,21 @@ var __prototype = {
 			end=start;
 		}
 		
-		f_core.SelectText(this, start, end);
+		f_core.Debug(f_textEntry, "SetSelection start="+start+" end="+end+".");
+		
+		f_core.SelectText(this.f_getInput(), start, end);
 		
 		if (show) {
+			this.scrollIntoView();
 		}
+	},
+	/**
+	 * @method public
+	 * @param boolean show If possible, show the selection.
+	 * @return void
+	 */
+	f_selectAll: function(show) {
+		this.f_getInput().select();
 	},
 	/**
 	 * @method public
@@ -268,6 +288,10 @@ var __prototype = {
 		
 		this.f_setProperty(f_prop.AUTO_COMPLETION, complete);
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_installAutoTab: function() {
 		if (!window.f_clientValidator) {
 			f_core.Error(f_textEntry, "Validator class is not known !");
@@ -283,12 +307,24 @@ var __prototype = {
 		
 		validator.f_addProcessor(f_vb.Processor_autoTab);
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	_a_componentCaptureMenuEvent: function() {
 		return null;
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	_a_updateRequired: function() {
 		this._installRequiredValidator();
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_installRequiredValidator: function() {
 		if (this._requiredInstalled) {
 			return;

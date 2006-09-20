@@ -181,7 +181,7 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_onMouseOver: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEOVER,false); 
+		return f_eventTarget._Generic(this,evt,f_event.MOUSEOVER,true); 
 	},
 	/**
 	 * 
@@ -202,7 +202,7 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_onMouseDown: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEDOWN,false);
+		return f_eventTarget._Generic(this,evt,f_event.MOUSEDOWN,true);
 	},
 	/**
 	 * 

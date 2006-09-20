@@ -1,8 +1,8 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractOutputComponent;
 
 public class ProgressBarComponent extends AbstractOutputComponent {
 

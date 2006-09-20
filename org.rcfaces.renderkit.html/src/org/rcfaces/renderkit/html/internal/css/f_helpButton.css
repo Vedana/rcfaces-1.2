@@ -1,3 +1,15 @@
-INPUT.f_helpButton {
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_helpButton
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+ INPUT.f_helpButton {
 	cursor:hand;
 }

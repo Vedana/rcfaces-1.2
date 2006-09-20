@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -50,18 +54,11 @@
 package org.rcfaces.renderkit.html.internal.decorator;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
-import org.rcfaces.core.component.ComboExComponent;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.SelectItemMappers;
-import org.rcfaces.core.model.BasicImagesSelectItem;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.model.IImagesSelectItem;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+
 
 /**
  * 
@@ -69,8 +66,30 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  * @version $Revision$ $Date$
  */
 public class ComboExDecorator extends AbstractSelectItemsDecorator {
+ 
     private static final String REVISION = "$Revision$";
 
+    protected ComboExDecorator(UIComponent component, IFilterProperties filterProperties) {
+        super(component, filterProperties);
+    }
+
+    protected SelectItemsContext createHtmlContext() {
+         return null;
+    }
+
+    protected SelectItemsContext createJavaScriptContext() throws WriterException {
+        return null;
+    }
+
+    public int encodeNodeBegin(UIComponent component, SelectItem selectItem, boolean hasChild, boolean isVisible) throws WriterException {
+         return 0;
+    }
+
+    public void encodeNodeEnd(UIComponent component, SelectItem selectItem, boolean hasChild, boolean isVisible) throws WriterException {
+        
+    }
+
+    /*
     private static final String ARROW_BLANK_URI = "comboEx/blank.gif";
 
     private static final String INPUT = "_input";
@@ -167,21 +186,10 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
         super.preEncodeContainer();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createTreeContext(org.rcfaces.core.internal.renderkit.IWriter,
-     *      org.rcfaces.core.component.TreeComponent)
-     */
-    protected SelectItemsContext createHtmlContext() {
+     protected SelectItemsContext createHtmlContext() {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
-     */
     protected SelectItemsContext createJavaScriptContext() {
         IComponentRenderContext componentRenderContext = javaScriptWriter
                 .getComponentRenderContext();
@@ -192,13 +200,6 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
                 input.getValue());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeNodeBegin(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.Context,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem,
-     *      boolean)
-     */
     public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
             boolean hasChildren, boolean isVisible) throws WriterException {
 
@@ -264,17 +265,11 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
         return EVAL_NODE;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeNodeEnd(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.Context,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem,
-     *      boolean)
-     */
-    public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
+      public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
             boolean hasChildren, boolean isVisible) {
 
         ((SelectItemsJsContext) getContext()).popVarId();
     }
 
+*/
 }

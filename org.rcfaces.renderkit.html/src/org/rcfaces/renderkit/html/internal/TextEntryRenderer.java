@@ -2,6 +2,10 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -231,16 +235,19 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         if (textEntryComponent.isAutoCompletion(facesContext) == false) {
             htmlWriter.writeAttribute("autocomplete", "off");
         }
+    }
 
-        boolean useValidator = false;
+    protected void writeValidatorAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
 
-        if (textEntryComponent.isAutoTab(facesContext)) {
-            htmlWriter.writeAttribute("v:autoTab", "true");
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
 
-            // C'est un validateur, il faut forcer le stub pour le RESET
-            useValidator = true;
-        }
+        FacesContext facesContext = componentRenderContext.getFacesContext();
 
+        TextEntryComponent textEntryComponent = (TextEntryComponent) componentRenderContext
+                .getComponent();
+        
         String helpMessage = textEntryComponent.getHelpMessage(facesContext);
         if (helpMessage != null) {
             htmlWriter.writeAttribute("v:helpMessage", helpMessage);
@@ -253,6 +260,15 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             htmlWriter.writeAttribute("v:emptyMessage", emptyMessage);
 
             htmlWriter.enableJavaScript();
+        }
+
+        boolean useValidator = false;
+
+        if (textEntryComponent.isAutoTab(facesContext)) {
+            htmlWriter.writeAttribute("v:autoTab", "true");
+
+            // C'est un validateur, il faut forcer le stub pour le RESET
+            useValidator = true;
         }
 
         boolean renderValidator = false;
@@ -327,6 +343,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeCssAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
         writeTextEntryAttributes(htmlWriter);
+        writeValidatorAttributes(htmlWriter);
         writeValueAttributes(htmlWriter);
 
         htmlWriter.endElement("INPUT");
@@ -517,7 +534,11 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             if (checkError != null) {
                 htmlWriter.writeAttribute("v:vCheckError", checkError);
             }
-        }
+            String converter = validatorDescriptor.getConverter();
+            if (converter != null) {
+                htmlWriter.writeAttribute("v:converter", converter);
+            }
+       }
     }
 
     /*

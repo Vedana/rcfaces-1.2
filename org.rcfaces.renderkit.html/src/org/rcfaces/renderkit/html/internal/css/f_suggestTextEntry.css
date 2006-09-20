@@ -1,9 +1,16 @@
+/*
+ * $Id$
+ */
+
 /**
- * Suggest Text Entry
+ *
+ * @class f_suggestTextEntry
  *
  * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$
+ * @version $Revision$ $Date$ 
  */
+ 
+ 
 INPUT.f_suggestTextEntry {
 	margin: 0;
 	border: 1px solid #7F9DB9;

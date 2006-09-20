@@ -1,6 +1,10 @@
 /* $Id$
  *
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -51,7 +55,7 @@ var __prototype = {
 		this.f_super(arguments);
 	},
 	f_initializeInput: function() {
-		return null;
+		return this;
 	},
 	/**
 	 * @method public 

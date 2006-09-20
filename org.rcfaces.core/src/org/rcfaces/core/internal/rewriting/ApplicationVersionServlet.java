@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:19  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -22,18 +26,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.util.Delay;
 import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
-import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ApplicationVersionServlet extends ExtendedHttpServlet {
+public class ApplicationVersionServlet extends ConfiguredHttpServlet {
     private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -4209462021160100620L;
@@ -45,12 +47,8 @@ public class ApplicationVersionServlet extends ExtendedHttpServlet {
 
     private static final String APPLICATION_VERSION_URL_PROPERTY = "org.rcfaces.core.internal.rewriting.APPLICATION_VERSION_URL_PROPERTY";
 
-    private static final String EXPIRE_PARAMETER = Constants.getPackagePrefix()
-            + ".EXPIRES";
-
-    private ExpirationDate expirationDate;
-
     public void init(ServletConfig config) throws ServletException {
+
         super.init(config);
 
         String applicationVersionURL = ServletTools.computeResourceURI(
@@ -61,27 +59,6 @@ public class ApplicationVersionServlet extends ExtendedHttpServlet {
         }
         LOG.info("Base of application version url is '" + applicationVersionURL
                 + "'.");
-
-        String expires = getParameter(EXPIRE_PARAMETER);
-        if (expires != null) {
-            expirationDate = ExpirationDate.parse(getServletName(),
-                    EXPIRE_PARAMETER, expires);
-        }
-
-        if (LOG.isInfoEnabled() && expirationDate != null) {
-            if (expirationDate.getExpiresDate() >= 0) {
-                LOG.info("Expire date setted to "
-                        + expirationDate.getExpiresDate() + "  for sevlet '"
-                        + getServletName() + "'.");
-            }
-
-            if (expirationDate.getExpiresDelay() >= 0) {
-                LOG.info("Expire delay setted to "
-                        + Delay.format(expirationDate.getExpiresDelay())
-                        + " for sevlet '" + getServletName() + "'.");
-
-            }
-        }
 
         getServletContext().setAttribute(APPLICATION_VERSION_URL_PROPERTY,
                 applicationVersionURL);
@@ -137,6 +114,7 @@ public class ApplicationVersionServlet extends ExtendedHttpServlet {
                     "Can not get request dispatcher for url '" + url + "'.");
         }
 
+        ExpirationDate expirationDate = getDefaultExpirationDate(true);
         if (expirationDate != null) {
             expirationDate.sendExpires(response);
         }

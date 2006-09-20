@@ -28,36 +28,12 @@ f_resourceBundle._Loading=undefined;
  *
  * @method public
  * @param string key Key of property.
- * @param optional any params Parameters which will be formatted into the string associated to the key.
- *                 The Nth parameter will replace the '{n}' substring. (First parameter: {0}; Second parameter {1} ...)
+ * @param optional string defaultValue Default value if key is not found.
  * @return Object
  */
-f_resourceBundle.prototype.f_get=function(key, params) {
-
-	if (arguments.length<2) {
-		return this.f_getParams(key);
-	}
-	
-	var p=new Array;
-		
-	f_core.PushArguments(p, arguments, 1);
-	
-	return this.f_getParams(key, p);
-}
-
-/**
- * Search a value associated to a property.
- *
- * @method public
- * @param string key Key of property.
- * @param optional any[] params Parameters which will be formatted into the string associated to the key.
- *                 The Nth element in the array will replace the '{n}' substring. (First element: {0}; Second element {1} ...)
- * @return Object
- */
-f_resourceBundle.prototype.f_getParams=function(key, params, defaultValue) {
+f_resourceBundle.prototype.f_get=function(key, defaultValue) {
 	f_core.Assert(typeof(key)=="string", "Key must be a string !");
- 	f_core.Assert(params==null || (params instanceof Array), "Params parameter is invalid. (["+typeof(params)+"] "+params+").");
-	
+ 	
 	var properties=this._properties;
 	if (!properties) {
 		if (defaultValue!==undefined) {
@@ -76,11 +52,58 @@ f_resourceBundle.prototype.f_getParams=function(key, params, defaultValue) {
 		return "??"+key+"??";
 	}
 	
-	f_core.Debug(f_resourceBundle, "Format '"+message+"' with '"+params+"'.");
+	return message;
+}
+
+
+/**
+ * Search a value associated to a property.
+ *
+ * @method public
+ * @param string key Key of property.
+ * @param optional any params Parameters which will be formatted into the string associated to the key.
+ *                 The Nth parameter will replace the '{n}' substring. (First parameter: {0}; Second parameter {1} ...)
+ * @return Object
+ */
+f_resourceBundle.prototype.f_format=function(key, params) {
+
+	if (arguments.length<2) {
+		return this.f_formatParams(key);
+	}
+		
+	var p=f_core.PushArguments(null, arguments, 1);
 	
-	if (!params) {
+	return this.f_formatParams(key, p);
+}
+
+
+/**
+ * Search a value associated to a property.
+ *
+ * @method public
+ * @param string key Key of property.
+ * @param optional any[] params Parameters which will be formatted into the string associated to the key.
+ *                 The Nth element in the array will replace the '{n}' substring. (First element: {0}; Second element {1} ...)
+ * @return Object
+ */
+f_resourceBundle.prototype.f_formatParams=function(key, params, defaultValue) {
+ 	f_core.Assert(params==null || params===undefined || (params instanceof Array), "Params parameter is invalid. (["+typeof(params)+"] "+params+").");
+	
+	var message=this.f_get(key, defaultValue);
+	if (message===undefined) {
+		if (defaultValue===undefined) {
+			f_core.Error(f_resourceBundle, "Unknown key '"+key+"' for resourceBundle '"+this._name+"'.");
+			return "??"+key+"??";
+		}
+
+		message=defaultValue;
+	}
+	
+	if (!message) {
 		return message;
 	}
+
+	f_core.Debug(f_resourceBundle, "Format '"+message+"' with '"+params+"'.");
 	
 	return f_core.FormatMessage(message, params);
 }

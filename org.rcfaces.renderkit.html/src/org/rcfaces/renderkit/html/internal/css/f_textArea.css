@@ -1,7 +1,15 @@
-/** ===========================================================================
- * @component TextArea
- * @lookid classic
+/*
+ * $Id$
  */
+
+/**
+ *
+ * @class f_textArea
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 TEXTAREA.f_textArea {
 	margin: 0;
 }

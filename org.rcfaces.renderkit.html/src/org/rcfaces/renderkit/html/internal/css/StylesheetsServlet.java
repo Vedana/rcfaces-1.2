@@ -1,96 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.4  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.3  2006/09/05 08:57:13  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.2  2006/09/01 15:24:34  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.15  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.14  2006/07/18 17:06:29  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.13  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.12  2006/05/11 16:34:19  oeuillot
- * Correction du calendar
- * Ajout de DateChooser
- * Ajout du moteur de filtre d'images
- * Ajout de l'evt   loadListener pour le AsyncManager
- *
- * Revision 1.11  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.10  2006/02/06 16:47:05  oeuillot
- * Renomme le logger commons.log en LOG
- * Ajout du composant focusManager
- * Renomme vfc-all.xml en repository.xml
- * Ajout de la gestion de __Vversion et __Llocale
- *
- * Revision 1.9  2005/11/08 12:16:28  oeuillot
- * Ajout de  Preferences
- * Stabilisation de imageXXXButton
- * Ajout de la validation cot� client
- * Ajout du hash MD5 pour les servlets
- * Ajout des accelerateurs
- *
- * Revision 1.8  2005/10/28 14:41:49  oeuillot
- * InteractiveRenderer, CardBox, Card
- * Corrections de validations
- * PasswordEntry
- *
- * Revision 1.7  2005/10/05 14:34:20  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.6  2005/09/16 09:54:40  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
- * Revision 1.5  2005/03/18 18:03:41  oeuillot
- * Ameliration du look du TabbedPane !
- *
- * Revision 1.4  2005/03/18 14:42:50  oeuillot
- * Support de la table des symbols pour le javascript compress�
- * Menu du style XP et pas Office !
- *
- * Revision 1.3  2005/02/18 14:46:08  oeuillot
- * Corrections importantes pour stabilisation
- * R�ecriture du noyau JAVASCRIPT pour ameliorer performances.
- * Ajout de IValueLockedCapability
- *
- * Revision 1.2  2004/09/24 14:01:36  oeuillot
- * *** empty log message ***
- *
- * Revision 1.1  2004/08/30 12:52:48  oeuillot
- * *** empty log message ***
- *
  */
 
 package org.rcfaces.renderkit.html.internal.css;
@@ -114,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Globals;
 import org.rcfaces.core.internal.codec.SourceFilter;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.util.ServletTools;
@@ -134,8 +44,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     private static final long serialVersionUID = 708578720264413327L;
 
     private static final Log LOG = LogFactory.getLog(StylesheetsServlet.class);
-
-    // private static final String DEFAULT_STYLESHEET_URI = "/rcfaces";
 
     private static final String BASE_DIRECTORY = StylesheetsServlet.class
             .getPackage().getName().replace('.', '/') + '/';
@@ -190,7 +98,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             .getPackagePrefix()
             + ".CSS_CHARSET";
 
-    private final Map bufferedResponse = new HashMap();
+    private final Map bufferedResponse = new HashMap(1024);
 
     private String styleSheetURI;
 
@@ -314,15 +222,15 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         String repositoryVersionSupport = getParameter(REPOSITORY_VERSION_SUPPORT_PARAMETER);
         if ("false".equalsIgnoreCase(repositoryVersionSupport) == false) {
-            String cameliaVersion = Constants.getVersion();
+            String buildId = Constants.getBuildId();
 
-            if (cameliaVersion == null) {
+            if (buildId == null) {
                 throw new FacesException(
-                        "Can not enable \"Repository version\", camelia version is not detected !");
+                        "Can not enable \"Repository version\", camelia buildId is not detected !");
             }
-            repositoryVersion = cameliaVersion;
+            repositoryVersion = buildId;
 
-            LOG.info("Set repository version to '" + cameliaVersion
+            LOG.info("Set repository version to buildId='" + buildId
                     + "' for servlet '" + getServletName() + "'.");
         }
 
@@ -339,14 +247,35 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getRequestURI();
+        String requestURL = (String) request
+                .getAttribute(Globals.INCLUDE_REQUEST_URI_ATTR);
+        if (requestURL == null) {
+            requestURL = request.getRequestURI();
+        }
 
-        String contextPath = request.getContextPath();
+        String url = requestURL;
+
+        String contextPath = (String) request
+                .getAttribute(Globals.INCLUDE_CONTEXT_PATH_ATTR);
+        if (contextPath == null) {
+            contextPath = request.getContextPath();
+        }
+
         if (contextPath != null) {
             url = url.substring(contextPath.length());
         }
 
-        String servletPath = request.getServletPath();
+        String servletPath = (String) request
+                .getAttribute(Globals.INCLUDE_SERVLET_PATH_ATTR);
+        if (servletPath == null) {
+            servletPath = request.getServletPath();
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("New request uri='" + requestURL + "' contextPath='"
+                    + contextPath + "' servletPath='" + servletPath + "'.");
+        }
+
         if (servletPath != null) {
             url = url.substring(servletPath.length());
         }
@@ -354,6 +283,11 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         int idx = url.indexOf('/');
         if (idx >= 0) {
             url = url.substring(idx + 1);
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Filtred url='" + url + "' for requestURI='" + requestURL
+                    + "'.");
         }
 
         if (repositoryVersion != null) {
@@ -392,86 +326,34 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
         }
 
-        Response res;
+        Response res = null;
+        ResponseFacade responseFacade = null;
         synchronized (bufferedResponse) {
-            res = (Response) bufferedResponse.get(url);
-            if (noCache == false) {
-                if (res != null) {
-                    res.send(request, response);
-
-                    return;
+            Object ret = bufferedResponse.get(url);
+            if (ret == null) {
+                responseFacade = new ResponseFacade(url);
+                if (noCache == false) {
+                    bufferedResponse.put(url, responseFacade);
                 }
+
+            } else if (ret instanceof Response) {
+                res = (Response) ret;
+
+            } else {
+                responseFacade = (ResponseFacade) ret;
             }
         }
 
-        synchronized (this) {
-            synchronized (bufferedResponse) {
-                res = (Response) bufferedResponse.get(url);
-                if (res != null) {
-                    if (noCache == false) {
-                        res.send(request, response);
-
-                        return;
-                    }
-
-                    if (CAMELIA_CSS_URL.equals(url)) {
-                        res.send(request, response);
-                        return;
-                    }
-                }
-
-                if (CAMELIA_CSS_URL.equals(url)) {
-                    res = new StyleSheetRepositoryResponse(CSS_MIME_TYPE,
-                            getRepository());
-
-                    if (noCache == false) {
-                        bufferedResponse.put(CAMELIA_CSS_URL, res);
-                    }
-
-                    res.send(request, response);
-                    return;
-                }
-            }
-
-            URL resourceURL = getClass().getClassLoader().getResource(
-                    BASE_DIRECTORY + url);
-            if (resourceURL == null) {
-                record404(url, response);
-                return;
-            }
-
-            URLConnection urlConnection = resourceURL.openConnection();
-            if (urlConnection == null) {
-                record404(url, response);
-                return;
-            }
-
-            long lastModified = urlConnection.getLastModified();
-            int size = urlConnection.getContentLength();
-
-            InputStream in = urlConnection.getInputStream();
-            if (in == null) {
-                record404(url, response);
-                return;
-            }
-
-            try {
-                record200(url, in, size, lastModified, request, response);
-                return;
-
-            } finally {
-                try {
-                    in.close();
-                } catch (IOException ex) {
-                    log("Can not close pipe '" + in + "'", ex);
-                }
-            }
+        if (res != null) {
+            res.send(request, response);
+            return;
         }
+
+        responseFacade.send(request, response);
     }
 
-    private void record200(String url, InputStream in, int size,
-            long lastModified, HttpServletRequest request,
-            HttpServletResponse response) throws IOException, ServletException {
+    private Response record200(String url, InputStream in, int size,
+            long lastModified) throws IOException, ServletException {
 
         int ex = url.lastIndexOf('.');
         int ex2 = url.lastIndexOf('/');
@@ -545,30 +427,115 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         Response res = new BytesResponse(workBytes, mimeType, bufferGZIP,
                 lastModified);
-        synchronized (bufferedResponse) {
-            bufferedResponse.put(url, res);
-        }
-        count200Responses++;
 
-        if (response != null) {
-            res.send(request, response);
-        }
+        return res;
     }
 
-    private void record404(String url, HttpServletResponse response)
-            throws IOException {
-        if (count404Responses < MAX_404_RESPONSE) {
-            count404Responses++;
+    private Response record404(String url) {
 
-            synchronized (bufferedResponse) {
-                bufferedResponse.put(url, new NotFoundResponse(url));
+        return new NotFoundResponse(url);
+        /*
+         * if (count404Responses < MAX_404_RESPONSE) { count404Responses++;
+         * 
+         * synchronized (bufferedResponse) { bufferedResponse.put(url, new
+         * NotFoundResponse(url)); } }
+         * 
+         * response.sendError(HttpServletResponse.SC_NOT_FOUND, "URL requested
+         * not found '" + url + "'");
+         */
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private class ResponseFacade {
+        private static final String REVISION = "$Revision$";
+
+        private final String url;
+
+        private Response response;
+
+        public ResponseFacade(String url) {
+            this.url = url;
+        }
+
+        public synchronized void send(HttpServletRequest httpRequest,
+                HttpServletResponse httpResponse) throws IOException,
+                ServletException {
+            if (response != null) {
+                response.send(httpRequest, httpResponse);
+                return;
+            }
+
+            if (CAMELIA_CSS_URL.equals(url)) {
+                setResponse(new StyleSheetRepositoryResponse(CSS_MIME_TYPE,
+                        getRepository()), httpRequest, httpResponse);
+                return;
+            }
+
+            URL resourceURL = getClass().getClassLoader().getResource(
+                    BASE_DIRECTORY + url);
+            if (resourceURL == null) {
+                setResponse(record404(url), httpRequest, httpResponse);
+                return;
+            }
+
+            URLConnection urlConnection = resourceURL.openConnection();
+            if (urlConnection == null) {
+                setResponse(record404(url), httpRequest, httpResponse);
+                return;
+            }
+
+            long lastModified = urlConnection.getLastModified();
+            int size = urlConnection.getContentLength();
+
+            InputStream in = urlConnection.getInputStream();
+            if (in == null) {
+                setResponse(record404(url), httpRequest, httpResponse);
+                return;
+            }
+
+            try {
+                setResponse(record200(url, in, size, lastModified),
+                        httpRequest, httpResponse);
+                return;
+
+            } finally {
+                try {
+                    in.close();
+                } catch (IOException ex) {
+                    log("Can not close pipe '" + in + "'", ex);
+                }
             }
         }
 
-        response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                "URL requested not found '" + url + "'");
+        private void setResponse(Response response,
+                HttpServletRequest httpRequest, HttpServletResponse httpResponse)
+                throws IOException, ServletException {
+            this.response = response;
+
+            if (noCache == false) {
+                synchronized (bufferedResponse) {
+                    bufferedResponse.put(url, response);
+                }
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Response for '" + url + "' => " + response);
+            }
+
+            response.send(httpRequest, httpResponse);
+        }
+
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private interface Response {
 
         public void send(HttpServletRequest request,
@@ -576,6 +543,11 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 ServletException;
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private class NotFoundResponse implements Response {
         private static final String REVISION = "$Revision$";
 
@@ -587,6 +559,13 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         public void send(HttpServletRequest request,
                 HttpServletResponse response) throws IOException {
+
+            if (Constants.STAT_HTTP_RESPONSE) {
+                synchronized (StylesheetsServlet.this) {
+                    count404Responses++;
+                }
+            }
+
             response.sendError(HttpServletResponse.SC_NOT_FOUND, message);
         }
     }
@@ -634,29 +613,14 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.webapp.StylesheetsServlet.AbstractResponse#getBuffer()
-         */
         protected byte[] getBuffer() {
             return buffer;
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.webapp.StylesheetsServlet.AbstractResponse#getGZipedBuffer()
-         */
         protected byte[] getGZipedBuffer() {
             return bufferGZIP;
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.webapp.StylesheetsServlet.AbstractResponse#getLastModified()
-         */
         protected long getLastModified() {
             return lastModified;
         }
@@ -741,7 +705,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 ConfiguredHttpServlet.setNoCache(response);
 
             } else {
-                ExpirationDate expirationDate = getDefaultExpirationDate();
+                ExpirationDate expirationDate = getDefaultExpirationDate(repositoryVersion != null);
                 if (expirationDate != null) {
                     expirationDate.sendExpires(response);
                 }
@@ -757,6 +721,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
             if (hash != null) {
                 response.setHeader(HTTP_HASH, hash);
+            }
+
+            if (Constants.STAT_HTTP_RESPONSE) {
+                synchronized (StylesheetsServlet.this) {
+                    count200Responses++;
+                }
             }
 
             OutputStream out = response.getOutputStream();

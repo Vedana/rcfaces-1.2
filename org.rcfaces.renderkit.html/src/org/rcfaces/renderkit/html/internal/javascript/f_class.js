@@ -43,10 +43,8 @@ function f_class(className, lookId, staticMembers, members, parentClass) {
 	
 	if (arguments.length>5) {
 		// Aspects
-		var aspects=new Array;
+		var aspects=f_core.PushArguments(null, arguments, 5);
 		this._aspects=aspects;
-		
-		f_core.PushArguments(aspects, arguments, 5);
 		
 		if (f_core.IsDebugEnabled("f_class")) {
 			for(var i=0;i<aspects.length;i++) {
@@ -227,7 +225,7 @@ var __static = {
 			return ksuper.call(this, arguments[1]);
 		}
 		
-		var a = f_core.PushArguments(new Array, arguments, 1);
+		var a = f_core.PushArguments(null, arguments, 1);
 	
 		return ksuper.apply(this, a);
 	},

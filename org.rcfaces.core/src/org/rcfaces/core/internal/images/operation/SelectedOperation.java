@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/20 17:55:20  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.3  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -30,6 +34,8 @@ package org.rcfaces.core.internal.images.operation;
  */
 public class SelectedOperation extends ContrastBrithnessOperation {
     private static final String REVISION = "$Revision$";
+
+    public static final String ID = "selected";
 
     protected float getDefaultOffset() {
         return -0.3f;

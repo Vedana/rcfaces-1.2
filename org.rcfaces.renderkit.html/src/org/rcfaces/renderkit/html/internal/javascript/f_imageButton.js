@@ -320,6 +320,10 @@ var __prototype = {
 	 * @method private
 	 */
 	_onMouseOut: function() {
+		if (!this._hover) {
+			return true;
+		}
+		
 		this._mouseDown = undefined;		
 		this._hover = undefined;
 		
@@ -433,10 +437,10 @@ var __prototype = {
 		}
 
 		this._hoverInstalled = true;
-		this.f_addEventListener(f_event.MOUSEOVER,this._onMouseOver);
-		this.f_addEventListener(f_event.MOUSEOUT,this._onMouseOut);
-		this.f_addEventListener(f_event.FOCUS,this._onFocus);
-		this.f_addEventListener(f_event.BLUR,this._onBlur);
+		this.f_addEventListener(f_event.MOUSEOVER, this._onMouseOver);
+		this.f_addEventListener(f_event.MOUSEOUT, this._onMouseOut);
+		this.f_addEventListener(f_event.FOCUS, this._onFocus);
+		this.f_addEventListener(f_event.BLUR, this._onBlur);
 	},
 	f_setDomEvent: function(type, target) {
 		var link=this._link;

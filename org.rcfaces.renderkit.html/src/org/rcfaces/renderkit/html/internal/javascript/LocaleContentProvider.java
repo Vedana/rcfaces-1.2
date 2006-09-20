@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.3  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -93,6 +97,11 @@ public class LocaleContentProvider extends FilteredContentProvider {
     }
 
     public IContent getContent(Object contentReference, Locale locale) {
+
+        if (locale == null) {
+            throw new NullPointerException("Locale parameter can not be null !");
+        }
+
         String surl = contentReference.toString();
         int idx = surl.lastIndexOf(LOCALE_CLASS_PATTERN);
         if (idx >= 0) {
@@ -130,7 +139,7 @@ public class LocaleContentProvider extends FilteredContentProvider {
 
     protected String updateBuffer(String buffer, URL url, Locale locale) {
 
-        if (buffer.indexOf("$$$MONTH_SHORT_NAMES$$$") < 0) {
+        if (locale == null || buffer.indexOf("$$$MONTH_SHORT_NAMES$$$") < 0) {
             return super.updateBuffer(buffer, url, locale);
         }
 

@@ -288,20 +288,20 @@ var __prototype = {
 			f_dataPager._AddSpan(this, cls, resourceBundle.f_get("ONE_RESULT"));
 
 		} else {
-			f_dataPager._AddSpan(this, cls, resourceBundle.f_get("N_RESULTS", rowCount));
+			f_dataPager._AddSpan(this, cls, resourceBundle.f_format("N_RESULTS", rowCount));
 		}
 		
 		f_dataPager._AddText(this, ", ");
 		
 		if (rowCount<0) {
-			f_dataPager._AddSpan(this, cls, resourceBundle.f_get("SUMMARY_NO_END", first+1));
+			f_dataPager._AddSpan(this, cls, resourceBundle.f_format("SUMMARY_NO_END", first+1));
 			
 		} else {
 			var last=first+rows;
 			if (last>=rowCount) {
 				last=rowCount;
 			}
-			f_dataPager._AddSpan(this, cls, resourceBundle.f_get("SUMMARY", first+1, last));
+			f_dataPager._AddSpan(this, cls, resourceBundle.f_format("SUMMARY", first+1, last));
 		}
 		
 		this.appendChild(document.createElement("BR"));
@@ -373,7 +373,7 @@ var __prototype = {
 				tooltipKey="UNKNOWN_INDEX_TOOLTIP";
 			}
 
-			var tooltipIndex=resourceBundle.f_get(tooltipKey, (pi+1));
+			var tooltipIndex=resourceBundle.f_format(tooltipKey, pi+1);
 	
 			f_dataPager._AddButton(this, 
 				this, 

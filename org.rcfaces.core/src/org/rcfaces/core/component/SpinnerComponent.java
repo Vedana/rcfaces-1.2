@@ -1,8 +1,8 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.TextEntryComponent;
 
 public class SpinnerComponent extends TextEntryComponent {
 
@@ -18,15 +18,15 @@ public class SpinnerComponent extends TextEntryComponent {
 		setId(componentId);
 	}
 
-	public final int getMinimum() {
+	public final double getMinimum() {
 		return getMinimum(null);
 	}
 
-	public final int getMinimum(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.MINIMUM, 0, facesContext);
+	public final double getMinimum(javax.faces.context.FacesContext facesContext) {
+		return engine.getDoubleProperty(Properties.MINIMUM, 0.0, facesContext);
 	}
 
-	public final void setMinimum(int minimum) {
+	public final void setMinimum(double minimum) {
 		engine.setProperty(Properties.MINIMUM, minimum);
 	}
 
@@ -38,15 +38,15 @@ public class SpinnerComponent extends TextEntryComponent {
 		return engine.isPropertySetted(Properties.MINIMUM);
 	}
 
-	public final int getMaximum() {
+	public final double getMaximum() {
 		return getMaximum(null);
 	}
 
-	public final int getMaximum(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.MAXIMUM, 0, facesContext);
+	public final double getMaximum(javax.faces.context.FacesContext facesContext) {
+		return engine.getDoubleProperty(Properties.MAXIMUM, 0.0, facesContext);
 	}
 
-	public final void setMaximum(int maximum) {
+	public final void setMaximum(double maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
@@ -56,6 +56,46 @@ public class SpinnerComponent extends TextEntryComponent {
 
 	public final boolean isMaximumSetted() {
 		return engine.isPropertySetted(Properties.MAXIMUM);
+	}
+
+	public final double getStep() {
+		return getStep(null);
+	}
+
+	public final double getStep(javax.faces.context.FacesContext facesContext) {
+		return engine.getDoubleProperty(Properties.STEP, 0.0, facesContext);
+	}
+
+	public final void setStep(double step) {
+		engine.setProperty(Properties.STEP, step);
+	}
+
+	public final void setStep(ValueBinding step) {
+		engine.setProperty(Properties.STEP, step);
+	}
+
+	public final boolean isStepSetted() {
+		return engine.isPropertySetted(Properties.STEP);
+	}
+
+	public final boolean isCycleValue() {
+		return isCycleValue(null);
+	}
+
+	public final boolean isCycleValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CYCLE_VALUE, false, facesContext);
+	}
+
+	public final void setCycleValue(boolean cycleValue) {
+		engine.setProperty(Properties.CYCLE_VALUE, cycleValue);
+	}
+
+	public final void setCycleValue(ValueBinding cycleValue) {
+		engine.setProperty(Properties.CYCLE_VALUE, cycleValue);
+	}
+
+	public final boolean isCycleValueSetted() {
+		return engine.isPropertySetted(Properties.CYCLE_VALUE);
 	}
 
 	public void release() {

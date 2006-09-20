@@ -1,9 +1,15 @@
-/* ********************************************************************
-*
-*	Help Message Zone
-*
-*/
+/*
+ * $Id$
+ */
 
+/**
+ *
+ * @class f_helpMessageZone
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 .f_helpMessageZone {
 	font: 8pt Verdana, Arial, Helvetica, sans-serif;
 	vertical-align: top;

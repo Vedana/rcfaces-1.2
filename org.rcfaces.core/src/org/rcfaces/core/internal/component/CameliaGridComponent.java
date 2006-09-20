@@ -4,25 +4,32 @@ package org.rcfaces.core.internal.component;
 
 import java.util.List;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
+
 import javax.faces.model.DataModel;
-import javax.faces.render.Renderer;
+import javax.faces.component.NamingContainer;
+import org.rcfaces.core.internal.tools.GridTools;
+
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaComponents;
+import org.rcfaces.core.internal.component.TemplatesEngine;
+import org.rcfaces.core.internal.component.IComponentEngine;
+import org.rcfaces.core.internal.component.IFactory;
+import org.rcfaces.core.internal.component.IStateChildrenList;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IRendererExtension;
-import org.rcfaces.core.internal.tools.GridTools;
 
 /**
  * @author Olivier Oeuillot
@@ -249,7 +256,7 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait rï¿½fï¿½rence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait référence qu'a des ActionEvent
 		if (e instanceof ActionEvent) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

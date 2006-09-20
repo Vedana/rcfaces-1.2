@@ -99,8 +99,6 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
 
     private static final String DISABLE_CONTEXT_MENU_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.DISABLE_CONTEXT_MENU";
 
-    private static final boolean DISABLE_IE_IMAGEBAR_DEFAULT_VALUE = true;
-
     private static final String APPLICATION_PARAMETERS_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.APPLICATION_PARAMETERS";
 
     private boolean disableIEImageBar = false;
@@ -890,7 +888,7 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
                 disableIEImageBar = true;
 
             } else {
-                disableIEImageBar = DISABLE_IE_IMAGEBAR_DEFAULT_VALUE;
+                disableIEImageBar = org.rcfaces.renderkit.html.internal.Constants.DISABLE_IE_IMAGEBAR_DEFAULT_VALUE;
             }
 
             disableContextMenu = "true".equals(initParameters

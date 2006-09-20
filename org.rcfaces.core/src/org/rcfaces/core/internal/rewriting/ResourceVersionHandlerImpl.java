@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/20 17:55:19  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.1  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -194,12 +198,10 @@ public class ResourceVersionHandlerImpl extends AbstractURLRewritingProvider
 
         public synchronized String getHashCode(FacesContext facesContext) {
             if (etag == null) {
-                etag = HashCodeTools.compute(facesContext, absolutePath, url,
-                        Constants.VERSIONED_URI_HASHCODE_MAX_SIZE);
+                etag = HashCodeTools.computeURLFormat(facesContext, absolutePath,
+                        url, Constants.VERSIONED_URI_HASHCODE_MAX_SIZE);
                 if (etag == null) {
                     etag = NULL_HASH_CODE;
-                } else {
-                    etag = etag.replace('+', '.').replace('/', ':');
                 }
             }
             return etag;

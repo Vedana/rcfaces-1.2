@@ -1,9 +1,8 @@
 package org.rcfaces.core.internal.taglib;
 
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ImageResetButtonComponent;
 
 public class ImageResetButtonTag extends ImageButtonTag implements Tag {

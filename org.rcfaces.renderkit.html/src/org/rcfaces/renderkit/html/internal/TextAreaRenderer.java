@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -109,6 +113,7 @@ public class TextAreaRenderer extends TextEntryRenderer {
         }
 
         writeTextEntryAttributes(htmlWriter);
+        writeValidatorAttributes(htmlWriter);
 
         String txt = textAreaComponent.getText(facesContext);
         if (txt != null) {

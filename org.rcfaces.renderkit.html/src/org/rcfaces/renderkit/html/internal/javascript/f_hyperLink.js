@@ -16,14 +16,15 @@ var __prototype = {
 		this.f_super(arguments);
 		this._returnOnSelect = false;
 		
-		if (this.tagName.toUpperCase()=="A") {
-			if (!this.href) {
-				this.href=f_core.JAVASCRIPT_VOID;
+		var input=this._input;
+		if (input.tagName.toUpperCase()=="A") {
+			if (!input.href) {
+				input.href=f_core.JAVASCRIPT_VOID;
 			}
 		}
 	},	
 	f_initializeInput: function() {
-		return null;
+		return this;
 	},
 	/**
 	 * Returns the text of the link.

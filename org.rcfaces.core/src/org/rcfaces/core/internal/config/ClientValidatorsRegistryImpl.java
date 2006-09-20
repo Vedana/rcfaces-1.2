@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:20  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -51,7 +55,6 @@ import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.validator.IParameter;
 import org.xml.sax.Attributes;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -66,8 +69,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
     private static final IParameter[] PARAMETER_EMPTY_ARRAY = new IParameter[0];
 
-    public IClientValidatorDescriptor getClientValidatorById(FacesContext facesContext,
-            String validatorId) {
+    public IClientValidatorDescriptor getClientValidatorById(
+            FacesContext facesContext, String validatorId) {
 
         RenderKit renderKit = (RenderKit) getRenderKit(facesContext, null);
         if (renderKit == null) {
@@ -89,72 +92,89 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
     public void configureRules(Digester digester) {
 
-        digester.addRule("rcfaces-config/clientValidators/render-kit", new Rule() {
-            private static final String REVISION = "$Revision$";
+        digester.addRule("rcfaces-config/clientValidators/render-kit",
+                new Rule() {
+                    private static final String REVISION = "$Revision$";
 
-            public void begin(String namespace, String name,
-                    Attributes attributes) throws Exception {
+                    public void begin(String namespace, String name,
+                            Attributes attributes) throws Exception {
 
-                String renderKitId = attributes.getValue("render-kit-id");
+                        String renderKitId = attributes
+                                .getValue("render-kit-id");
 
-                RenderKit renderKit = (RenderKit) allocate(renderKitId);
+                        RenderKit renderKit = (RenderKit) allocate(renderKitId);
 
-                super.digester.push(renderKit);
-            }
+                        super.digester.push(renderKit);
+                    }
 
-            public void end(String namespace, String name) throws Exception {
-                super.digester.pop();
-            }
-        });
+                    public void end(String namespace, String name)
+                            throws Exception {
+                        super.digester.pop();
+                    }
+                });
 
         digester.addObjectCreate(
                 "rcfaces-config/clientValidators/render-kit/clientValidator",
                 ClientValidator.class);
         digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator", "id",
-                "id");
+                "rcfaces-config/clientValidators/render-kit/clientValidator",
+                "id", "id");
         digester.addSetProperties(
                 "rcfaces-config/clientValidators/render-kit/clientValidator",
                 "package", "packageName");
-        digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/filter",
-                "call", "filter");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/filter",
+                        "call", "filter");
         digester
                 .addSetProperties(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/translator",
                         "call", "translator");
-        digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/checker",
-                "call", "checker");
-        digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/formatter",
-                "call", "formatter");
-        digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/behavior",
-                "call", "behavior");
-        digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/onerror",
-                "call", "onerror");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/checker",
+                        "call", "checker");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/formatter",
+                        "call", "formatter");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/behavior",
+                        "call", "behavior");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/onerror",
+                        "call", "onerror");
         digester
                 .addSetProperties(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/oncheckerror",
                         "call", "oncheckerror");
-        digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/processor",
-                "call", "processor");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/processor",
+                        "call", "processor");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/converter",
+                        "object", "converter");
 
-        digester.addObjectCreate(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
-                Parameter.class);
-        digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
-                "name", "name");
-        digester.addSetProperties(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
-                "value", "value");
-        digester.addSetNext(
-                "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
-                "addParameter");
+        digester
+                .addObjectCreate(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
+                        Parameter.class);
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
+                        "name", "name");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
+                        "value", "value");
+        digester
+                .addSetNext(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
+                        "addParameter");
 
         digester.addSetNext(
                 "rcfaces-config/clientValidators/render-kit/clientValidator",
@@ -193,15 +213,17 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
          * 
          * @see org.rcfaces.core.internal.validator.IDescriptorManager#getValidatorById(java.lang.String)
          */
-        public final IClientValidatorDescriptor getValidatorById(String validatorId) {
-            return (IClientValidatorDescriptor) clientValidatorsById.get(validatorId);
+        public final IClientValidatorDescriptor getValidatorById(
+                String validatorId) {
+            return (IClientValidatorDescriptor) clientValidatorsById
+                    .get(validatorId);
         }
 
         public final void addclientValidator(ClientValidator validator) {
             validator.commitParameters();
 
-            LOG.trace("addclientValidator(" + validator.getId() + ", " + validator
-                    + ")");
+            LOG.trace("addclientValidator(" + validator.getId() + ", "
+                    + validator + ")");
 
             clientValidatorsById.put(validator.getId(), validator);
         }
@@ -236,6 +258,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
         private String oncheckerror;
 
         private List parametersList;
+
+        private String converter;
 
         private IParameter[] parameters;
 
@@ -275,7 +299,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             return processor;
         }
 
-        public void setProcessorCall(String processor) {
+        public void setProcessor(String processor) {
             this.processor = processor;
         }
 
@@ -345,6 +369,14 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
             parametersList.add(parameter);
         }
+
+        public final String getConverter() {
+            return converter;
+        }
+
+        public final void setConverter(String converter) {
+            this.converter = converter;
+        }
     }
 
     /**
@@ -401,7 +433,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
     private String getLengthValidatorExpression(IRenderContext renderContext,
             LengthValidator validator) {
         StringAppender sa = new StringAppender(64);
-  
+
         return convertValidatorExpression(renderContext, "f_validator",
                 "LengthValidator", sa.toString());
     }

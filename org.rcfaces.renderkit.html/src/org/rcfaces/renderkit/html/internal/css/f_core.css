@@ -1,4 +1,15 @@
+/*
+ * $Id$
+ */
 
+/**
+ *
+ * @class f_core
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 U.f_accessKey {
 	text-decoration: inherit;
 	accelerator:true;

@@ -1,5 +1,7 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.ImageButtonComponent;
 
 public class HelpButtonComponent extends ImageButtonComponent {
 

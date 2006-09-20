@@ -1,4 +1,15 @@
+/*
+ * $Id$
+ */
 
+/**
+ *
+ * @class f_consoleAppender
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 .f_consoleAppender_table {
 	position: absolute;
 	right: 1px;

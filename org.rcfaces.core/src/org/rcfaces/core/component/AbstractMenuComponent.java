@@ -1,13 +1,14 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractConverterCommandComponent;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public abstract class AbstractMenuComponent extends AbstractConverterCommandComponent implements 
 	ISelectionEventCapability,

@@ -37,6 +37,7 @@ public final class Properties {
 	public static final String COLUMNS_ORDER = "camelia.columnsOrder";
 	public static final String COLUMN_NUMBER = "camelia.columnNumber";
 	public static final String COLUMN_STYLE_CLASS = "camelia.columnStyleClass";
+	public static final String CYCLE_VALUE = "camelia.cycleValue";
 	public static final String DATA = "camelia.data";
 	public static final String DATE_FORMAT = "camelia.dateFormat";
 	public static final String DEFAULT_CELL_IMAGE_URL = "camelia.defaultCellImageURL";
@@ -52,7 +53,6 @@ public final class Properties {
 	public static final String DISABLED = "camelia.disabled";
 	public static final String DISABLED_IMAGE_URL = "camelia.disabledImageURL";
 	public static final String DISABLED_WEEK_DAYS = "camelia.disabledWeekDays";
-	public static final String EDITABLE = "camelia.editable";
 	public static final String EMPTY_MESSAGE = "camelia.emptyMessage";
 	public static final String ERROR_STYLE_CLASS = "camelia.errorStyleClass";
 	public static final String EXPANDED_IMAGE_URL = "camelia.expandedImageURL";
@@ -134,6 +134,7 @@ public final class Properties {
 	public static final String SHOW_CALENDAR_ON_FOCUS = "camelia.showCalendarOnFocus";
 	public static final String SORTED_COLUMN_IDS = "camelia.sortedColumnIds";
 	public static final String SORT_COMPARATOR = "camelia.sortComparator";
+	public static final String STEP = "camelia.step";
 	public static final String STYLE_CLASS = "camelia.styleClass";
 	public static final String SUGGESTION_CONVERTER = "camelia.suggestionConverter";
 	public static final String SUGGESTION_DELAY_MS = "camelia.suggestionDelayMs";

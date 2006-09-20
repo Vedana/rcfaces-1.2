@@ -14,8 +14,9 @@ var __prototype = {
 	f_radioButton: function() {
 		this.f_super(arguments);
 		
-		if (this._input && this._input.name) {
-			this._addToGroup(this._input.name, this);
+		var input=this._input;
+		if (input.name) {
+			this._addToGroup(input.name, this);
 		}
 	},
 	/**
@@ -23,10 +24,11 @@ var __prototype = {
 	 * @return string
 	 */
 	f_getGroupName: function() {
-		if (!this._input) {
+		var input=this._input;
+		if (!input) {
 			return null;
 		}
-		return this._input.name;
+		return input.name;
 	},
 	/**
 	 * @method public 
@@ -34,12 +36,13 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setGroupName: function(group) {
-		if (!this._input || !group) {
+		var input=this._input;
+		if (!input || !group) {
 			return;
 		}
 		
 		this._changeGroup(this.f_getGroupName(), group, this);
-		this._input.name = group;
+		input.name = group;
 	
 		this.f_setProperty(f_prop.GROUPNAME,group);
 	},
@@ -66,10 +69,12 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_isSelected: function() {
-		if (this._input) {
-			return (this._input.checked==true);
+		var input=this._input;
+		if (!input) {
+			return false;
 		}
-		return false;
+		
+		return (input.checked==true);
 	},
 	/**
 	 * @method public 
@@ -77,7 +82,9 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setSelected: function(set) {
-		if (!this._input || this._input.checked==set) {
+		var input=this._input;
+		
+		if (!input || input.checked==set) {
 			return;
 		}
 		
@@ -96,7 +103,7 @@ var __prototype = {
 			this._findIntoGroup(this.f_getGroupName(), unselect);
 		}
 				
-		this._input.checked = true;
+		input.checked = true;
 	},
 	_a_updateRequired: function() {
 	},

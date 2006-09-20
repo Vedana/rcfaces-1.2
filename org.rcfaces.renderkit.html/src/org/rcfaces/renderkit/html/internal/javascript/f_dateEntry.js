@@ -176,9 +176,9 @@ var __prototype={
 				input._predInput=undefined; // HtmlInputElement
 				input._dateEntry=undefined; // f_dateEntry
 				
-				input.onkeypress=null;
-				input.onkeydown=null;
-				input.onblur=null;
+				input.onkeypress=null; // function
+				input.onkeydown=null; // function
+				input.onblur=null; // function
 				
 				f_core.VerifyProperties(input);
 			}
@@ -193,7 +193,6 @@ var __prototype={
 		var sel=f_core.GetTextSelection(input);
 		f_core.Debug(f_dateEntry, "KeyDown '"+keyCode+"' sel0="+sel[0]+" sel1="+sel[1]);
 
-
 		switch(keyCode) {
 		case f_key.VK_LEFT:
 		case f_key.VK_HOME:
@@ -205,6 +204,7 @@ var __prototype={
 						for(;predInput._predInput;predInput=predInput._predInput);
 						
 						f_core.SelectText(predInput, 0, 0);
+						
 					} else if (keyCode==f_key.VK_LEFT && jsEvent.ctrlKey) {
 						f_core.SelectText(predInput, 0, 0);
 					}

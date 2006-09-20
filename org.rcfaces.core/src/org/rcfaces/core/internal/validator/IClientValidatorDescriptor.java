@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:19  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -61,6 +65,8 @@ public interface IClientValidatorDescriptor extends IDescriptor {
     String getOnErrorCall();
 
     String getOnCheckErrorCall();
+
+    String getConverter();
 
 //    IStringAdapterDescriptor getStringFormatter();
 

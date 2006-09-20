@@ -33,6 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.IIndexedImageOperation;
+import org.rcfaces.core.internal.Globals;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
@@ -184,14 +185,14 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
 
         String requestURL = (String) request
-                .getAttribute("javax.servlet.include.request_uri");
+                .getAttribute(Globals.INCLUDE_REQUEST_URI_ATTR);
         if (requestURL == null) {
             requestURL = request.getRequestURI();
         }
         String url = requestURL;
 
         String contextPath = (String) request
-                .getAttribute("javax.servlet.include.context_path");
+                .getAttribute(Globals.INCLUDE_CONTEXT_PATH_ATTR);
         if (contextPath == null) {
             contextPath = request.getContextPath();
         }
@@ -201,7 +202,7 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
 
         // Retire le nom de notre servlet
         String servletPath = (String) request
-                .getAttribute("javax.servlet.include.servlet_path");
+                .getAttribute(Globals.INCLUDE_SERVLET_PATH_ATTR);
         if (servletPath == null) {
             servletPath = request.getServletPath();
         }
@@ -229,6 +230,7 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
         String cmd = url.substring(0, idx);
         String imageURL = url.substring(idx + 1);
 
+        boolean isVersioned = false;
         // La version ?
         RcfacesContext rcfacesContext = RcfacesContext.getInstance(
                 getServletContext(), request, response);
@@ -238,6 +240,7 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
             idx = imageURL.indexOf('/');
             if (idx >= 0) {
                 imageURL = imageURL.substring(idx + 1);
+                isVersioned = true;
             }
         }
 
@@ -402,12 +405,11 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
                 response.setDateHeader(HTTP_LAST_MODIFIED, modificationDate);
             }
 
-            ExpirationDate expirationDate = null;
-            if (expirationDate == null) {
-                expirationDate = getDefaultExpirationDate();
-            }
+            ExpirationDate expirationDate = getDefaultExpirationDate(isVersioned);
 
-            expirationDate.sendExpires(response);
+            if (expirationDate != null) {
+                expirationDate.sendExpires(response);
+            }
         }
 
         if (etag != null) {

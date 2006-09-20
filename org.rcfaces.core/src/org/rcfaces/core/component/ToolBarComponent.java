@@ -1,15 +1,17 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.iterator.IToolFolderIterator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.MenuTools;
+import java.lang.String;
 import org.rcfaces.core.internal.tools.ToolBarTools;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.iterator.IToolFolderIterator;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class ToolBarComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,

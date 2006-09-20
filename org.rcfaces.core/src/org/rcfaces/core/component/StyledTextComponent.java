@@ -1,5 +1,7 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.TextComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class StyledTextComponent extends TextComponent {
 

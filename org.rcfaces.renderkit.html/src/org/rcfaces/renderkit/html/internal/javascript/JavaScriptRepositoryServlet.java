@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.4  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -140,7 +144,6 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
-import org.rcfaces.core.internal.util.Delay;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.AbstractHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
@@ -181,6 +184,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String REPOSITORY_DEV_MODE_PARAMETER = PARAMETER_PREFIX
             + ".REPOSITORY_DEV_MODE";
 
+    private static final String NO_CACHE_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".NO_CACHE";
+
     private static final String COMPILED_JS_SUFFIX_PARAMETER = Constants
             .getPackagePrefix()
             + ".COMPILED_JS_SUFFIX";
@@ -194,10 +201,6 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String JAVASCRIPT_SYMBOLS_PARAMETER = Constants
             .getPackagePrefix()
             + ".javascript.SYMBOLS";
-
-    private static final String VERSIONED_EXPIRE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".VERSIONED_EXPIRE";
 
     private static final DateFormat HEADER_DATE_FORMAT;
     static {
@@ -214,7 +217,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     private String mainRepositoryURI;
 
-    private String htmlRCFacesVersion;
+    private String htmlRCFacesBuildId;
 
     private boolean enableSymbols = false;
 
@@ -236,7 +239,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     public void init(ServletConfig config) throws ServletException {
 
-        htmlRCFacesVersion = Constants.getVersion();
+        htmlRCFacesBuildId = Constants.getBuildId();
 
         if (mainRepositoryURI == null) {
             mainRepositoryURI = ServletTools.computeResourceURI(config
@@ -252,28 +255,6 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         super.init(config);
 
         compiledJsSuffix = getParameter(COMPILED_JS_SUFFIX_PARAMETER);
-
-        String expires = getParameter(VERSIONED_EXPIRE_PARAMETER);
-        if (expires != null) {
-            versionedExpirationDate = ExpirationDate.parse(getServletName(),
-                    VERSIONED_EXPIRE_PARAMETER, expires);
-
-            if (LOG.isInfoEnabled()) {
-                if (versionedExpirationDate.getExpiresDate() >= 0) {
-                    LOG.info("Versioned resources expire date detected: "
-                            + versionedExpirationDate.getExpiresDate()
-                            + "  for sevlet '" + getServletName() + "'");
-                }
-
-                if (versionedExpirationDate.getExpiresDelay() >= 0) {
-                    LOG.info("Versioned resources expire delay setted to "
-                            + Delay.format(versionedExpirationDate
-                                    .getExpiresDelay()) + " for sevlet '"
-                            + getServletName() + "'");
-                }
-            }
-
-        }
     }
 
     protected boolean getVersionSupport() {
@@ -282,6 +263,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     protected String getParameterPrefix() {
         return PARAMETER_PREFIX;
+    }
+
+    protected String getNoCacheParameterName() {
+        return NO_CACHE_PARAMETER;
     }
 
     protected String getRepositoryDevModeParameterName() {
@@ -308,13 +293,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         ServletContext servletContext = config.getServletContext();
 
         if (Constants.FRAMEWORK_VERSIONED_URL_SUPPORT) {
-            if (htmlRCFacesVersion == null) {
+            if (htmlRCFacesBuildId == null) {
                 throw new FacesException(
-                        "Can not enable \"Repository version\", rcfaces version is not detected !");
+                        "Can not enable \"Repository version\", rcfaces buildId is not detected !");
             }
-            this.repositoryVersion = htmlRCFacesVersion;
+            this.repositoryVersion = htmlRCFacesBuildId;
 
-            LOG.info("Repository version '" + htmlRCFacesVersion
+            LOG.info("Repository version buildId='" + htmlRCFacesBuildId
                     + "' setted for servlet '" + getServletName() + "'.");
         }
 
@@ -548,9 +533,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         protected void fillProlog(StringAppender sb) throws IOException {
             if (Constants.JAVASCRIPPT_APPEND_RCFACES_HEADER) {
-                if (htmlRCFacesVersion != null) {
-                    sb.append("var rcfacesVersion=\"");
-                    sb.append(htmlRCFacesVersion);
+                if (htmlRCFacesBuildId != null) {
+                    sb.append("var rcfacesBuildId=\"");
+                    sb.append(htmlRCFacesBuildId);
                     sb.append("\";");
                 }
 

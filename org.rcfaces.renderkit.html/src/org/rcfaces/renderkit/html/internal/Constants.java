@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -62,10 +66,14 @@ public class Constants {
 
     private static final String version;
 
+    private static final String buildId;
+
     static {
         version = org.rcfaces.core.internal.Constants.searchVersion(
                 Constants.class, RCFACES_HTML_VERSION_SYSTEM_PARAMETER,
                 "RCFaces HTML");
+
+        buildId = org.rcfaces.core.internal.Constants.getBuildId(version);
 
         LOG.info("INTERACTIVE_RENDER_DEFAULT_VALUE="
                 + INTERACTIVE_RENDER_DEFAULT_VALUE);
@@ -83,5 +91,13 @@ public class Constants {
     public static final String getVersion() {
         return version;
     }
+
+    public static final String getBuildId() {
+        return buildId;
+    }
+
+    public static final boolean DISABLE_IE_IMAGEBAR_DEFAULT_VALUE = true;
+
+    public static final boolean STAT_HTTP_RESPONSE = false;
 
 }

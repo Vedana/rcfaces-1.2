@@ -770,6 +770,22 @@
 		</file>
 	</module>
 
+	
+<!-- Spinner component -->
+	<module id="spinner">
+		<file name="fa_spinner.js">
+			<class name="fa_spinner">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
+		<file name="f_spinner.js">
+			<class name="f_spinner">
+				<required-class name="f_textEntry" />
+				<required-class name="fa_spinner" />
+			</class>
+		</file>
+	</module>
+
 <!-- Calendar Components -->
 	<module id="calendar">		
 		<file name="f_dateFormat.js">

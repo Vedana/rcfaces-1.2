@@ -1,7 +1,15 @@
-/**
- * DataGridPager
+/*
+ * $Id$
  */
 
+/**
+ *
+ * @class f_datePager
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 .f_dataPager {
 	border: 1px dotted #999999;
 	background-color: #EEEEEE;

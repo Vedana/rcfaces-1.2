@@ -31,10 +31,6 @@
 		<component-class>org.rcfaces.core.component.ComboComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.comboEx</component-type>
-		<component-class>org.rcfaces.core.component.ComboExComponent</component-class>
-	</component>
-	<component>
 		<component-type>org.rcfaces.core.customButton</component-type>
 		<component-class>org.rcfaces.core.component.CustomButtonComponent</component-class>
 	</component>

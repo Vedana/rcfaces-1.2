@@ -2,6 +2,10 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -60,7 +64,6 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.SpinnerComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -68,9 +71,85 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 public class SpinnerRenderer extends TextEntryRenderer {
     private static final String REVISION = "$Revision$";
 
-    protected void writeTextEntryAttributes(IHtmlWriter htmlWriter)
+    protected boolean isNameEqualsId() {
+        return false;
+    }
+
+    protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
-        super.writeTextEntryAttributes(htmlWriter);
+
+        SpinnerComponent spinner = (SpinnerComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        htmlWriter.startElement("TABLE");
+        htmlWriter.writeAttribute("cellpadding", "0");
+        htmlWriter.writeAttribute("cellpspacing", "0");
+
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter);
+        writeValidatorAttributes(htmlWriter);
+        writeSpinnerAttributes(htmlWriter);
+
+        htmlWriter.startElement("COL");
+        htmlWriter.writeAttribute("width", "1*");
+
+        htmlWriter.startElement("COL");
+        htmlWriter.writeAttribute("width", "16");
+
+        htmlWriter.startElement("TR");
+        htmlWriter.writeAttribute("valign", "middle");
+
+        htmlWriter.startElement("TD");
+
+        String className = getStyleClassName(htmlWriter
+                .getComponentRenderContext());
+
+        htmlWriter.startElement("INPUT");
+        htmlWriter.writeAttribute("class", className + "_input");
+        writeInputAttributes(htmlWriter);
+        writeTextEntryAttributes(htmlWriter);
+        writeValueAttributes(htmlWriter);
+
+        htmlWriter.endElement("TD");
+
+        htmlWriter.startElement("TD");
+        htmlWriter.writeAttribute("width", "16");
+
+        String buttonSuffix = "";
+        if (spinner.isDisabled(htmlWriter.getComponentRenderContext()
+                .getFacesContext())) {
+            buttonSuffix = "_disabled";
+        }
+
+        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(htmlWriter);
+        String blankImageURL = htmlRenderContext.getHtmlExternalContext()
+                .getStyleSheetURI(BLANK_IMAGE_URL);
+
+        htmlWriter.startElement("IMG");
+        htmlWriter.writeAttribute("class", className + "_up" + buttonSuffix);
+        htmlWriter.writeAttribute("src", blankImageURL);
+        htmlWriter.writeAttribute("width", "16");
+        htmlWriter.writeAttribute("height", "10");
+
+        htmlWriter.startElement("IMG");
+        htmlWriter.writeAttribute("class", className + "_down" + buttonSuffix);
+        htmlWriter.writeAttribute("src", blankImageURL);
+        htmlWriter.writeAttribute("width", "16");
+        htmlWriter.writeAttribute("height", "10");
+
+        htmlWriter.endElement("TD");
+
+        htmlWriter.endElement("TR");
+
+        htmlWriter.endElement("TABLE");
+
+        htmlWriter.enableJavaScript();
+
+    }
+
+    protected void writeSpinnerAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
@@ -78,26 +157,29 @@ public class SpinnerRenderer extends TextEntryRenderer {
         SpinnerComponent spinnerComponent = (SpinnerComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
-        int minimum = spinnerComponent.getMinimum(facesContext);
-        if (minimum != 0) {
-            htmlWriter.writeAttribute("v:minimum", minimum);
+        if (spinnerComponent.isMinimumSetted()) {
+            double minimum = spinnerComponent.getMinimum(facesContext);
+
+            htmlWriter.writeAttribute("v:minimum", String.valueOf(minimum));
         }
 
-        int maximum = spinnerComponent.getMaximum(facesContext);
-        if (maximum != 0) {
-            htmlWriter.writeAttribute("v:maximum", maximum);
+        if (spinnerComponent.isMaximumSetted()) {
+            double maximum = spinnerComponent.getMaximum(facesContext);
+
+            htmlWriter.writeAttribute("v:maximum", String.valueOf(maximum));
+        }
+
+        if (spinnerComponent.isStepSetted()) {
+            double step = spinnerComponent.getStep(facesContext);
+
+            htmlWriter.writeAttribute("v:step", String.valueOf(step));
+        }
+
+        if (spinnerComponent.isCycleValue(facesContext)) {
+            htmlWriter.writeAttribute("v:cycle", "true");
+
         }
     }
-
-    protected boolean isNameEqualsId() {
-        return false;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.SPINNER;

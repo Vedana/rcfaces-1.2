@@ -230,9 +230,7 @@ var __prototype = {
 		}
 				
 		if (arguments.length>2) {
-			parameters=new Array;
-
-			f_core.PushArguments(parameters, arguments, 2);
+			parameters=f_core.PushArguments(null, arguments, 2);
 		}
 		
 		var rule={

@@ -1,0 +1,56 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_spinner
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_spinner_up,
+.f_spinner_up_disabled,
+.f_spinner_up_hover,
+.f_spinner_up_pushed,
+.f_spinner_down,
+.f_spinner_down_disabled,
+.f_spinner_down_hover,
+.f_spinner_down_pushed {
+	background: transparent url('spinner/buttons.gif') no-repeat 0 0;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.f_spinner_up,
+.f_spinner_up_hover,
+.f_spinner_up_pushed,
+.f_spinner_down,
+.f_spinner_down_hover,
+.f_spinner_down_pushed {
+	cursor: pointer; 
+	cursor: hand;
+}
+
+.f_spinner_down {
+	background-position: 0 -10px;
+}
+.f_spinner_up_hover {
+	background-position: 0 -20px;
+}
+.f_spinner_down_hover {
+	background-position: 0 -30px;
+}
+.f_spinner_up_pushed {
+	background-position: 0 -40px;	
+}
+.f_spinner_down_pushed {
+	background-position: 0 -50px;
+}
+.f_spinner_up_disabled {
+	background-position: 0 -60px;
+}
+.f_spinner_down_disabled {
+	background-position: 0 -70px;
+}

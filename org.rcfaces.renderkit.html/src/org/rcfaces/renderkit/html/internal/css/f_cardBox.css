@@ -1,13 +1,15 @@
-/* 
+/*
  * $Id$
  */
- 
+
 /**
- * CardBox et Card
+ *
+ * @class f_cardBox
  *
  * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$
+ * @version $Revision$ $Date$ 
  */
+ 
  
 DIV.f_cardBox {
 	display: block;
@@ -16,7 +18,7 @@ DIV.f_cardBox {
  
 DIV.f_cardBox_card {
 	position:absolute;
-	left: 0px;
-	top: 0px;
+	left: 0;
+	top: 0;
 	display: block;
 }

@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -82,13 +86,17 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.DateChooserComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.images.ImageOperationsURLRewritingProvider;
+import org.rcfaces.core.internal.images.operation.DisableOperation;
+import org.rcfaces.core.internal.images.operation.HoverOperation;
+import org.rcfaces.core.internal.images.operation.SelectedOperation;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
+import org.rcfaces.core.provider.ImageURLRewritingInformation;
 import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
-
 
 /**
  * 
@@ -216,8 +224,10 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
             return super.computeHorizontalSpan() + 1;
         }
 
-        protected String getImageURL(FacesContext facesContext) {
-            String imageURL = super.getImageURL(facesContext);
+        protected String getImageURL(FacesContext facesContext,
+                ImageURLRewritingInformation imageURLRewritingInformation) {
+            String imageURL = super.getImageURL(facesContext,
+                    imageURLRewritingInformation);
             if (imageURL != null) {
                 return imageURL;
             }
@@ -231,7 +241,39 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
             imageButtonFamilly.setImageWidth(DATE_CHOOSER_WIDTH);
             imageButtonFamilly.setImageHeight(DATE_CHOOSER_HEIGHT);
 
+            imageURLRewritingInformation.setVersioned();
+
             return imageURL;
+        }
+
+        protected String getDisabledImageURL(FacesContext facesContext) {
+            String disabledImageURL = super.getDisabledImageURL(facesContext);
+            if (disabledImageURL != null) {
+                return disabledImageURL;
+            }
+
+            return DisableOperation.ID
+                    + ImageOperationsURLRewritingProvider.URL_REWRITING_SEPARATOR;
+        }
+
+        protected String getHoverImageURL(FacesContext facesContext) {
+            String hoverImageURL = super.getHoverImageURL(facesContext);
+            if (hoverImageURL != null) {
+                return hoverImageURL;
+            }
+
+            return HoverOperation.ID
+                    + ImageOperationsURLRewritingProvider.URL_REWRITING_SEPARATOR;
+        }
+
+        protected String getSelectedImageURL(FacesContext facesContext) {
+            String selectedImageURL = super.getSelectedImageURL(facesContext);
+            if (selectedImageURL != null) {
+                return selectedImageURL;
+            }
+
+            return SelectedOperation.ID
+                    + ImageOperationsURLRewritingProvider.URL_REWRITING_SEPARATOR;
         }
 
         protected boolean isCompositeComponent() {

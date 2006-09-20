@@ -1,22 +1,21 @@
 package org.rcfaces.core.component;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 import java.util.Map;
-
 import javax.faces.context.FacesContext;
+import java.util.HashMap;
 import javax.faces.el.ValueBinding;
-
+import java.util.Date;
+import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.AbstractCalendarComponent;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.DateConverter;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.DateConverter;
-import org.rcfaces.core.internal.manager.IValidationParameters;
 
 public class DateEntryComponent extends AbstractCalendarComponent implements 
 	IRequiredCapability,

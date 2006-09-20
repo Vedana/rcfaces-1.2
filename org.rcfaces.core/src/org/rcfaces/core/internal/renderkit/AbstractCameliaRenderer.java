@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/09/20 17:55:20  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.4  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -106,6 +110,7 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.provider.IURLRewritingProvider;
+import org.rcfaces.core.provider.IURLRewritingProvider.IURLRewritingInformation;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -289,7 +294,8 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
     public static final String rewriteURL(
             IComponentRenderContext componentRenderContext, int type,
-            String attributeName, String url, String rootURL) {
+            String attributeName, String url, String rootURL,
+            IURLRewritingInformation rewritingInformation) {
         if (Constants.URL_REWRITING_SUPPORT == false) {
             return url;
         }
@@ -301,6 +307,7 @@ public abstract class AbstractCameliaRenderer extends Renderer {
                 .getRenderContext();
         if (renderContext != null) {
             urlRewritingProvider = renderContext.getURLRewritingProvider();
+            
         } else {
             urlRewritingProvider = AbstractURLRewritingProvider
                     .getInstance(facesContext.getExternalContext());
@@ -312,6 +319,6 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         return urlRewritingProvider.computeURL(facesContext,
                 componentRenderContext.getComponent(), type, attributeName,
-                url, rootURL, null);
+                url, rootURL, rewritingInformation);
     }
 }

@@ -1,7 +1,15 @@
-/* ***************************************************************************
- * 
- * CompositeButton
+/*
+ * $Id$
  */
+
+/**
+ *
+ * @class f_compositeButton
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
  
 .f_compositeButton, 
 .f_compositeButton_link,

@@ -1,6 +1,15 @@
-/**
- * Radio-Button
+/*
+ * $Id$
  */
+
+/**
+ *
+ * @class f_radioButton
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
  
 SPAN.f_radioButton {
  	-moz-user-select: none;

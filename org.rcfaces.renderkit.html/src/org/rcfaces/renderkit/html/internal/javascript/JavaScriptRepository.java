@@ -370,8 +370,8 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
         request.put(JAVASCRIPT_BASE_URI_PROPERTY, uri);
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Set Javascript repository URL to '" + uri + "'.");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Set Javascript repository URL to '" + uri + "'.");
         }
         return uri;
     }

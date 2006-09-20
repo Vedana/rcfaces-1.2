@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -99,16 +103,6 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-
-import org.rcfaces.core.component.ComboExComponent;
-import org.rcfaces.core.internal.renderkit.IComponentData;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IRequestContext;
-import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.renderkit.html.internal.decorator.ComboExDecorator;
-import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
 
 /**
@@ -119,6 +113,7 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 public class ComboExRenderer extends AbstractSelectItemsRenderer {
     private static final String REVISION = "$Revision$";
 
+ /*
     protected void encodeBeforeDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeBeforeDecorator(writer, componentDecorator);
@@ -164,11 +159,6 @@ public class ComboExRenderer extends AbstractSelectItemsRenderer {
         super.encodeAfterDecorator(writer, componentDecorator);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMBO_EX;
     }
@@ -178,13 +168,7 @@ public class ComboExRenderer extends AbstractSelectItemsRenderer {
         return new ComboExDecorator(component, null);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decode(javax.faces.component.UIComponent,
-     *      org.rcfaces.core.internal.renderkit.IComponentData)
-     */
-    protected void decode(IRequestContext context, UIComponent component,
+     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
 
         ComboExComponent comboExComponent = (ComboExComponent) component;
@@ -204,4 +188,5 @@ public class ComboExRenderer extends AbstractSelectItemsRenderer {
 
         super.decode(context, component, componentData);
     }
+    */
 }

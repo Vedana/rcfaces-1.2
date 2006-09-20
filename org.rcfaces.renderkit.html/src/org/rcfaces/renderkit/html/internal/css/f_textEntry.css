@@ -1,7 +1,16 @@
-/** ===========================================================================
- * @component TextEntry
- * @lookid classic
+/*
+ * $Id$
  */
+
+/**
+ *
+ * @class f_textEntry
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+
 INPUT.f_textEntry {
 	margin: 0;
 }

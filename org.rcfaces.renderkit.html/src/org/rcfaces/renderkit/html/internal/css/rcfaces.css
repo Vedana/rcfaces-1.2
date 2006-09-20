@@ -38,6 +38,7 @@
 @import url(f_radioButton.css);				//module:basic
 @import url(f_resetButton.css);				//module:basic
 @import url(f_ruler.css);					//module:basic
+@import url(f_spinner.css); 				//module:basic
 @import url(f_submitButton.css); 			//module:basic
 @import url(f_suggestTextEntry.css); 		//module:suggestion
 @import url(f_tabbedPane.css); 				//module:tabbedPane

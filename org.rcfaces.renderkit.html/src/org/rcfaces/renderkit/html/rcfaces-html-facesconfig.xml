@@ -34,11 +34,6 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.core.comboEx</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ComboExRenderer</renderer-class>
-		</renderer>
-		<renderer>
-			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.customButton</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.CustomButtonRenderer</renderer-class>
 		</renderer>

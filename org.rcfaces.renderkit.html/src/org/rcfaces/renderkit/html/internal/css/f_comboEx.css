@@ -1,7 +1,14 @@
-/**
- * ComboEx
+/*
+ * $Id$
  */
- 
+
+/**
+ *
+ * @class f_comboEx
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
  
 TABLE.f_comboEx {
 	border: 1px solid #7F9DB9;

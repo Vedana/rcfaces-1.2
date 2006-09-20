@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.4  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -230,7 +234,7 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
     public void computeRequires(IHtmlWriter writer,
             AbstractJavaScriptRenderer renderer) {
 
-        // On recupere les fichiers � inclure ...
+        // On recupere les fichiers à inclure ...
         renderer
                 .addRequiredJavaScriptClassNames(writer, waitingRequiredClasses);
     }

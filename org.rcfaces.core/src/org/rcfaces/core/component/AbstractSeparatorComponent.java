@@ -1,11 +1,12 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
+import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.ISeparatorComponent;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
 
 public abstract class AbstractSeparatorComponent extends CameliaBaseComponent implements 
 	IVisibilityCapability,

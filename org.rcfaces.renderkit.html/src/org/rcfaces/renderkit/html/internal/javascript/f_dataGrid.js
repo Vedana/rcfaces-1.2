@@ -664,7 +664,9 @@ var __static = {
 			return true;
 		}
 		
-		dataGrid.f_sortColumn(column);
+		var append=(evt.shiftKey);
+		
+		dataGrid.f_setColumnSort(column, undefined, append); 
 		
 		return true;
 	},
@@ -672,7 +674,9 @@ var __static = {
 	 * @method private static
 	 */
 	_OnScroll: function(evt) {
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt = window.event;
+		}
 
 		var dataGrid=this._dataGrid;
 		
@@ -814,14 +818,14 @@ var __static = {
 		}
 		
 		if (w<24) {
-			if (dataGrid._currentSort==column && !column._restoreClass) {
+			if (column._ascendingOrder!==undefined && !column._restoreClass) {
 				column._restoreClass=column._label.className;
 				column._label.className=dataGrid._className+"_ttext";
 			}
 			
 		} else if (column._restoreClass) {
 			column._label.className=column._restoreClass;
-			column._restoreClass=null;
+			column._restoreClass=undefined;
 		}
 			
 	 	if (f_core.IsInternetExplorer()) {
@@ -1204,8 +1208,7 @@ var __prototype = {
 // 		this._loading=undefined; // boolean
 		this._waiting=undefined;
 
-		this._currentSort=undefined; // HTMLColElement
-//		this._ascendingOrder=undefined; // boolean
+		this._currentSorts=undefined; // HTMLColElement
 //		this._columnCanBeSorted=undefined; // boolean
 		
 //		this._createFakeTH=undefined; //  boolean
@@ -1297,8 +1300,7 @@ var __prototype = {
 //		this._initialHorizontalScrollPosition=undefined; // string
 //		this._initialVerticalScrollPosition=undefined; // string
 		
-		this._initSortColumn=undefined;  // HTMLColElement
-//		this._initSortAscending=undefined;	 // boolean
+//		this._initSort=undefined;  // boolean
 //		this._resizable=undefined; // boolean
 		
 		this.f_super(arguments);
@@ -1383,18 +1385,10 @@ var __prototype = {
 		
 		this.f_super(arguments);
 		
-		if (this._initSortColumn) {
-			var sortColumn=this._initSortColumn;
-			var ascending=this._initSortAscending;
+		if (this._initSort) {
+			this._initSort=undefined;
 			
-			this._initSortColumn=undefined;
-			this._initSortAscending=undefined;
-		
-			var noSort=(sortColumn._method==f_dataGrid.Sort_Server);
-			
-			//alert("Nosort="+noSort+"/"+sortColumn._method);
-			
-			this.f_sortColumn(sortColumn, ascending?true:false, noSort);
+			this._sortTable();
 		}				
 
 		var scrollBody=this._scrollBody;					
@@ -2453,8 +2447,7 @@ var __prototype = {
 		params.index=firstIndex;
 
 		var orderColumnIndex=this.f_getProperty(f_prop.SORT_INDEX);
-		
-		if (typeof(orderColumnIndex)=="number" && orderColumnIndex>=0) {
+		if (orderColumnIndex>=0) {
 			params.sortIndex=orderColumnIndex;
 			
 			if (this.f_getProperty(f_prop.SORT_ORDER)) {
@@ -2772,14 +2765,14 @@ var __prototype = {
 			column._tcell=undefined;
 			column._box=undefined;
 			column._label=undefined;
-			column._index=undefined;
-			column._sorter=undefined;
-			column._dataGrid=undefined;
-			column._id=undefined;
-			column._method=undefined;
-			column._visibility=undefined;
-			column._cellStyle=undefined;
-			column._autoFilter=undefined;
+			// column._index=undefined; // number
+			column._dataGrid=undefined; // f_dataGrid
+			// column._id=undefined; // String
+			column._method=undefined; // function
+			// column._visibility=undefined; // boolean
+			// column._cellStyle=undefined; // String
+			// column._autoFilter=undefined; // boolean
+			// column._ascendingOrder=undefined; // boolean
 			
 			f_core.VerifyProperties(column);
 		}
@@ -3637,22 +3630,31 @@ var __prototype = {
 	/**
 	 * @method hidden
 	 */
-	f_enableSorters: function(sortColumnIndex, ascending) {
+	f_enableSorters: function(sortColumnIndex1, ascending1, sortColumnIndex2, ascending2) {
 		var cols=this._columns;
-
-		f_core.Assert(sortColumnIndex>=0 && sortColumnIndex<cols.length, "Bad sortColumnIndex !");
-
-		var col=cols[sortColumnIndex];
-		if (col!=f_dataGrid.Sort_Server) {
-			this._ascendingOrder=ascending;
-			this._currentSort=col;
-			
-			this._updateTitleStyle(col);
-			return;
+		var currentSorts=this._currentSorts;
+		if (!currentSorts) {
+			currentSorts=new Array;
+			this._currentSorts=currentSorts;
 		}
 
-		this._initSortColumn=col;
-		this._initSortAscending=(ascending===true);
+		for(var i=0;i<arguments.length;) {		
+			var sortColumnIndex=arguments[i++];
+			var ascending=(arguments[i++])?true:false;
+			
+			f_core.Assert(sortColumnIndex>=0 && sortColumnIndex<cols.length, "Bad sortColumnIndex !");
+	
+			var col=cols[sortColumnIndex];
+			col._ascendingOrder=ascending;
+			
+			currentSorts.push(col);
+			
+			this._updateTitleStyle(col);
+			
+			if (col._method!=f_dataGrid.Sort_Server) {
+				this._initSort=true;
+			}
+		}
 	},
 	_installSorter: function(column, method) {
 		f_core.Assert(column._head, "No Title for column '"+column._index+"'.");
@@ -3660,7 +3662,14 @@ var __prototype = {
 		this._columnCanBeSorted=true;
 		
 		if (typeof(method)!="function") {
-			method=eval(method);
+			try {
+				method=eval(method);
+				
+			} catch (x) {
+				f_core.Error(f_dataGrid, "Can not eval sort method '"+method+"'.", x);
+				
+				throw x;
+			}
 			
 			f_core.Assert(typeof(method)=="function", "Bad sort method for column '"+column._index+"' !");
 		}
@@ -3676,43 +3685,70 @@ var __prototype = {
 	 * @method public
 	 * @param Object col Column to sort
 	 * @param optional boolean ascending Sort ascending.
-	 * @param optional hidden boolean init Sort is already made !
 	 * @return void
 	 */
-	f_sortColumn: function(col, ascending, init) {
-		if (this._currentSort && this._currentSort!=col) {
-			var old=this._currentSort;
-			this._currentSort=null;
-			
-			this._updateTitleStyle(old);
-		}
-	
-	
-		if (!col._method) {
-			if (!init) {
-				this._sortTable(null);
-			}
-			return;
-		}
-	
+	f_setColumnSort: function(col, ascending, append) {
+		var args=[false];
+		
 		if (ascending===undefined) {
-			if (this._currentSort==col) {
-				this._ascendingOrder=!this._ascendingOrder;
-				
+			if (col._ascendingOrder===undefined) {
+				ascending=true;
 			} else {
-				this._ascendingOrder=true;
-				this._currentSort=col;
+				ascending=!col._ascendingOrder;
 			}
-		} else {
-			this._ascendingOrder=ascending;
-			this._currentSort=col;
 		}
+		
+		var currentSorts=this._currentSorts;
+		if (!currentSorts) {
+			currentSorts=new Array;
+			this._currentSorts=currentSorts;
+		}
+
+		f_core.Debug(f_dataGrid, "Sort col="+col._index+" ascending="+ascending+" append="+append);
+
+		if (currentSorts.length) {
+			if ((append || currentSorts.length==1) && currentSorts[currentSorts.length-1]==col) {
+				f_core.Debug(f_dataGrid, "Just inverse");
+				col._ascendingOrder=ascending;
+		
+				this._updateTitleStyle(col);
+				this._sortTable();
+				return;				
+			}
+		}
+		
+		if (!append && currentSorts.length) {
+		
+			f_core.Debug(f_dataGrid, "Remove olds");
+		
+			for(var i=0;i<currentSorts.length;i++) {
+				var old=currentSorts[i];
+				
+				old._ascendingOrder=undefined;
+				this._updateTitleStyle(old);
+			}
+			
+			currentSorts=new Array;
+			this._currentSorts=currentSorts;
+		}
+		
+		if (!f_core.AddElement(currentSorts, col)) {
+			// Déjà connu !
 	
+			f_core.Debug(f_dataGrid, "Already known ???");
+			
+			if (col._ascendingOrder==ascending) {
+				// Et dans le même sens !
+				return;
+			}				
+		}
+
+		f_core.Debug(f_dataGrid, "Change order '"+ascending+"'");
+		
+		col._ascendingOrder=ascending;
 		this._updateTitleStyle(col);
 		
-		if (!init) {
-			this._sortTable(col._method, col._index, this._ascendingOrder);
-		}
+		this._sortTable();
 	},
 	_updateTitleStyle: function(column) {
 		var className=this._className+"_tcell";
@@ -3731,8 +3767,8 @@ var __prototype = {
 		className=this._className+"_ttext";
 		
 		var wc=className;
-		if (this._currentSort==column) {
-			if (this._ascendingOrder) {
+		if (column._ascendingOrder!==undefined) {
+			if (column._ascendingOrder) {
 				className+="_ascending";
 				
 			} else {
@@ -3770,53 +3806,84 @@ var __prototype = {
 	_a_componentCaptureMenuEvent: function() {
 		return null;
 	},
-	_sortTable: function(method, columnIndex, ascending) {
-		if (columnIndex===undefined) {
-			columnIndex=-1;
-			ascending=true;
+	_sortTable: function() {
+		var currentSorts=this._currentSorts;
+		if (!currentSorts || !currentSorts.length) {
+			return;
 		}
 
-		this.f_setProperty(f_prop.SORT_INDEX, columnIndex);
-		this.f_setProperty(f_prop.SORT_ORDER, ascending);
+		var methods=new Array;
+		var tdIndexes=new Array;
+		var ascendings=new Array;
+		
+		var serverSort=false;
+		var columns=this._columns;
+		
+		var serial="";	
+				
+		for(var i=0;i<currentSorts.length;i++) {
+			var col=currentSorts[i];
 			
-		if (this._rowCount<0 || (this._rows && this._rows<this._rowCount) || method==f_dataGrid.Sort_Server) {
+		 	var method=col._method;
+		 	methods.push(method);
+		 	if (method==f_dataGrid.Sort_Server) {
+		 		serverSort=true;
+		 	}
+		 	
+		 	ascendings.push(col._ascendingOrder);
+		 	
+		 	var columnIndex=col._index;
+		 	var tdIndex=0;
+			for(var j=0;j<columns.length;j++) {
+				var col=columns[j];
+				if (!col._visibility) {
+					continue;
+				}
+	
+				if (columnIndex==j) {
+					break;	
+				}
+	
+				tdIndex++;
+			}
+			tdIndexes.push(tdIndex);
+			
+			if (serial) {
+				serial+=",";
+			}
+			serial+=col._index+","+col._ascendingOrder;
+		}
+		
+	
+		this.f_setProperty(f_prop.SORT_INDEX, serial);
+			
+		if (this._rowCount<0 || (this._rows && this._rows<this._rowCount) || serverSort) {
 			// Plusieurs pages !
 			// Il faut partir cot? serveur !
 
-			f_core.Debug(f_dataGrid, "_sortTable SERVER:\nColumnIndex="+columnIndex+"\nrowCount="+this._rowCount+"\nrows="+this._rows+"\nxascending="+ascending+"\nSort="+method);
+			f_core.Debug(f_dataGrid, "_sortTable SERVER:\nserial='"+serial+"'\nrowCount="+this._rowCount+"\nrows="+this._rows);
 			
 			return this.f_setFirst(this._first);
 		}
-	
-		if (!method) {
-			method=f_dataGrid._Sort_Index;
-		}
 		
-		var columns=this._columns;
-		var tdIndex=0;
-		for(var i=0;i<columns.length;i++) {
-			var col=columns[i];
-			if (!col._visibility) {
-				continue;
+		f_core.Debug(f_dataGrid, "_sortTable CLIENT:\ntdIndexes="+tdIndexes+"\nascendings="+ascendings+"\nSort="+methods);
+		
+		function _internalSort(obj1, obj2) {	
+			for(var i=0;i<methods.length;i++) {
+				var tdIndex=tdIndexes[i];
+				
+				var tc1 = obj1.childNodes[tdIndex];
+				var tc2 = obj2.childNodes[tdIndex];
+
+				 var ret=methods[i].call(this, tc1._text, tc2._text, tc1, tc2);
+				 if (!ret) {
+					continue;
+				 }
+				 
+				return (ascendings[i])? ret:-ret;
 			}
-
-			if (columnIndex==i) {
-				break;	
-			}
-
-			tdIndex++;
-		}
-		
-		var up=(ascending!==false);
-		
-		f_core.Debug("f_dataGrid", "_sortTable CLIENT:\nColumnIndex="+columnIndex+"\ntdIndex="+tdIndex+"\nascending="+ascending+"\nSort="+method);
-		
-		function _internalSort(obj1, obj2) {
-			var tc1 = obj1.childNodes[tdIndex];
-			var tc2 = obj2.childNodes[tdIndex];
-			var ret = method.call(this, tc1._text, tc2._text, tc1, tc2);
-
-			return (up)? ret:-ret;
+			
+			return 0;
 		}
 		
 		var body=f_core.GetFirstElementByTagName(this._table, "TBODY", true);
@@ -3835,7 +3902,6 @@ var __prototype = {
 		
 		trs.sort(_internalSort);
 
-		var internetExplorer=f_core.IsInternetExplorer();
 		this._table.removeChild(body);
 		
 		while(body.firstChild) {

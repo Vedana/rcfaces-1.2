@@ -1,6 +1,13 @@
-/* ********************************************************************
+/*
+ * $Id$
+ */
+
+/**
  *
- *	CheckButton
+ * @class f_checkButton
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
  */
  
 SPAN.f_checkButton {

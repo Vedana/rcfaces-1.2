@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:24  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -108,7 +112,7 @@ public class ImageRenderer extends AbstractCssRenderer {
                 .getImageURL(componentRenderContext.getFacesContext());
         if (src != null) {
             src = rewriteURL(componentRenderContext,
-                    IURLRewritingProvider.IMAGE_URL_TYPE, "imageURL", src, null);
+                    IURLRewritingProvider.IMAGE_URL_TYPE, "imageURL", src, null, null);
 
             if (src != null) {
                 htmlWriter.writeAttribute("src", src);

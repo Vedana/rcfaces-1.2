@@ -1,11 +1,12 @@
 package org.rcfaces.core.component;
 
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.component.AbstractMenuComponent;
 
 public class ImageComboComponent extends AbstractMenuComponent implements 
 	IImageButtonFamilly {

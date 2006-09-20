@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/20 17:55:20  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.1  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -120,6 +124,10 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
     private static final String EXPIRE_PARAMETER = Constants.getPackagePrefix()
             + ".EXPIRES";
 
+    private static final String VERSIONED_EXPIRE_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".VERSIONED_EXPIRES";
+
     private static final String ETAG_SUPPORT_PARAMETER = Constants
             .getPackagePrefix()
             + ".ETAG_SUPPORT";
@@ -140,6 +148,8 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
             .getPackagePrefix()
             + ".LOCALE_SUPPORT";
 
+    private static final String NONE_EXPIRATION_KEYWORD = "none";
+
     private boolean gZipSupport;
 
     private boolean etagSupport;
@@ -147,6 +157,8 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
     private boolean hashSupport;
 
     private ExpirationDate expirationDate;
+
+    private ExpirationDate versionedExpirationDate;
 
     private Set filteredLocales;
 
@@ -227,7 +239,8 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
                     EXPIRE_PARAMETER, expires);
         }
 
-        if (expirationDate == null) {
+        if (expirationDate == null
+                && NONE_EXPIRATION_KEYWORD.equalsIgnoreCase(expires) == false) {
             expirationDate = ExpirationDate
                     .fromDelay(getDefaultExpirationDelay());
         }
@@ -247,63 +260,100 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
             }
         }
 
-        String localeSupportProperty = getParameter(LOCALE_SUPPORT_PARAMETER);
-        if ("false".equalsIgnoreCase(localeSupportProperty)) {
-            localeSupport = false;
-
-            LOG.info("LOCALE_SUPPORT is disabled for servlet '"
-                    + getServletName() + "'.");
-        } else if ("true".equalsIgnoreCase(localeSupportProperty)) {
-            localeSupport = true;
-
-            LOG.info("LOCALE_SUPPORT is enabled for servlet '"
-                    + getServletName() + "'.");
-        } else {
-            localeSupport = getDefaultLocaleSupport();
-
-            LOG.info("Use default value (" + localeSupport
-                    + ") for LOCALE_SUPPORT for servlet '" + getServletName()
-                    + "'.");
+        String versionedExpires = getParameter(VERSIONED_EXPIRE_PARAMETER);
+        if (versionedExpires != null) {
+            versionedExpirationDate = ExpirationDate.parse(getServletName(),
+                    VERSIONED_EXPIRE_PARAMETER, versionedExpires);
         }
 
-        if (localeSupport) {
-            String acceptedLocaleNames = getParameter(FILTERED_LOCALES_PARAMETER);
-            if (acceptedLocaleNames != null
-                    && acceptedLocaleNames.trim().length() > 0) {
+        if (versionedExpirationDate == null
+                && NONE_EXPIRATION_KEYWORD.equalsIgnoreCase(versionedExpires) == false) {
+            versionedExpirationDate = ExpirationDate
+                    .fromDelay(getDefaultVersionedExpirationDelay());
+        }
 
-                StringTokenizer st = new StringTokenizer(acceptedLocaleNames,
-                        ", ");
-                filteredLocales = new HashSet(st.countTokens());
+        if (LOG.isInfoEnabled() && versionedExpirationDate != null) {
+            if (versionedExpirationDate.getExpiresDate() >= 0) {
+                LOG.info("Versioned resources expire date detected: "
+                        + versionedExpirationDate.getExpiresDate()
+                        + "  for sevlet '" + getServletName() + "'");
+            }
 
-                for (; st.hasMoreTokens();) {
-                    String localeName = st.nextToken();
+            if (versionedExpirationDate.getExpiresDelay() >= 0) {
+                LOG.info("Versioned resources expire delay setted to "
+                        + Delay.format(versionedExpirationDate
+                                .getExpiresDelay()) + " for sevlet '"
+                        + getServletName() + "'");
+            }
+        }
 
-                    Locale locale = convertLocaleName(localeName, false);
-                    if (locale == null) {
-                        LOG.error("Rejected locale '" + localeName + "'.");
-                        continue;
+        if (hasLocaleSupport()) {
+            String localeSupportProperty = getParameter(LOCALE_SUPPORT_PARAMETER);
+            if ("false".equalsIgnoreCase(localeSupportProperty)) {
+                localeSupport = false;
+
+                LOG.info("LOCALE_SUPPORT is disabled for servlet '"
+                        + getServletName() + "'.");
+            } else if ("true".equalsIgnoreCase(localeSupportProperty)) {
+                localeSupport = true;
+
+                LOG.info("LOCALE_SUPPORT is enabled for servlet '"
+                        + getServletName() + "'.");
+            } else {
+                localeSupport = getDefaultLocaleSupport();
+
+                LOG.info("Use default value (" + localeSupport
+                        + ") for LOCALE_SUPPORT for servlet '"
+                        + getServletName() + "'.");
+            }
+
+            if (localeSupport) {
+                String acceptedLocaleNames = getParameter(FILTERED_LOCALES_PARAMETER);
+                if (acceptedLocaleNames != null
+                        && acceptedLocaleNames.trim().length() > 0) {
+
+                    StringTokenizer st = new StringTokenizer(
+                            acceptedLocaleNames, ", ");
+                    filteredLocales = new HashSet(st.countTokens());
+
+                    for (; st.hasMoreTokens();) {
+                        String localeName = st.nextToken();
+
+                        Locale locale = convertLocaleName(localeName, false);
+                        if (locale == null) {
+                            LOG.error("Rejected locale '" + localeName + "'.");
+                            continue;
+                        }
+
+                        filteredLocales.add(locale);
                     }
 
-                    filteredLocales.add(locale);
+                    LOG.info("Accepted locale: " + filteredLocales
+                            + " for servlet '" + getServletName() + "'.");
                 }
 
-                LOG.info("Accepted locale: " + filteredLocales
-                        + " for servlet '" + getServletName() + "'.");
-            }
+                String localeName = getParameter(DEFAULT_LOCALE_PARAMETER);
+                if (localeName != null) {
+                    defaultLocale = convertLocaleName(localeName, true);
 
-            String localeName = getParameter(DEFAULT_LOCALE_PARAMETER);
-            if (localeName != null) {
-                defaultLocale = convertLocaleName(localeName, true);
-
-                if (defaultLocale != null) {
-                    LOG.info("DEFAULT_LOCALE specify default locale to '"
-                            + defaultLocale + "'.");
-                } else {
-                    LOG.info("DEFAULT_LOCALE value '" + localeName
-                            + "' is not valid !");
+                    if (defaultLocale != null) {
+                        LOG.info("DEFAULT_LOCALE specify default locale to '"
+                                + defaultLocale + "'.");
+                    } else {
+                        LOG.info("DEFAULT_LOCALE value '" + localeName
+                                + "' is not valid !");
+                    }
                 }
             }
         }
+    }
+
+    protected boolean hasLocaleSupport() {
+        return true;
+    }
+
+    private long getDefaultVersionedExpirationDelay() {
+        return Constants.DEFAULT_VERSIONED_EXPIRATION_DELAY;
     }
 
     protected boolean getDefaultLocaleSupport() {
@@ -326,7 +376,11 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
         return Constants.DEFAULT_GZIP_SUPPORT;
     }
 
-    protected ExpirationDate getDefaultExpirationDate() {
+    protected ExpirationDate getDefaultExpirationDate(boolean versioned) {
+        if (versioned && versionedExpirationDate != null) {
+            return versionedExpirationDate;
+        }
+
         return expirationDate;
     }
 

@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.clientBundle;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -244,7 +245,7 @@ class ClientBundleRepository extends AbstractRepository implements
             }
 
             return HashCodeTools
-                    .compute(
+                    .computeURLFormat(
                             null,
                             null,
                             content.getByteArray(),
@@ -261,9 +262,18 @@ class ClientBundleRepository extends AbstractRepository implements
         ByteBufferOutputStream out = new ByteBufferOutputStream(
                 BUNDLE_BUFFER_INITIAL_SIZE);
 
-        OutputStreamWriter owriter = new OutputStreamWriter(out);
+        OutputStreamWriter outputStreamWriter;
+        try {
+            outputStreamWriter = new OutputStreamWriter(out,
+                    ClientResourceBundleServlet.RESOURCE_BUNDLE_ENCODING);
 
-        PrintWriter writer = new PrintWriter(owriter);
+        } catch (UnsupportedEncodingException ex) {
+            LOG.error(ex);
+            throw new FacesException(
+                    "Can not write DefineRequested method content.", ex);
+        }
+
+        PrintWriter writer = new PrintWriter(outputStreamWriter);
 
         IJavaScriptWriter javaScriptWriter = new JavaScriptResponseWriter(
                 servletContext, writer);

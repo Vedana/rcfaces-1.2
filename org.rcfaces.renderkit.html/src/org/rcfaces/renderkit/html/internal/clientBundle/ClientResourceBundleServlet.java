@@ -34,6 +34,11 @@ public class ClientResourceBundleServlet extends RepositoryServlet {
 
     private static final String BUNDLE_REPOSITORY_PROPERTY = "org.rcfaces.renderkit.html.internal.clientBundle.BUNDLE_REPOSITORY";
 
+    static final String RESOURCE_BUNDLE_ENCODING = "UTF-8";
+
+    private static final String CLIENT_RESOURCE_BUNDLE_CONTENT_TYPE = IHtmlRenderContext.JAVASCRIPT_TYPE
+            + "; charset=" + RESOURCE_BUNDLE_ENCODING;
+
     private String clientBundleURI;
 
     public void init(ServletConfig config) throws ServletException {
@@ -73,14 +78,7 @@ public class ClientResourceBundleServlet extends RepositoryServlet {
     }
 
     protected String getContentType(Record record) {
-        String contentType = IHtmlRenderContext.JAVASCRIPT_TYPE;
-
-        String charset = record.getCharset();
-        if (charset == null) {
-            return contentType;
-        }
-
-        return contentType + "; charset=" + charset;
+        return CLIENT_RESOURCE_BUNDLE_CONTENT_TYPE;
     }
 
     protected String getParameterPrefix() {

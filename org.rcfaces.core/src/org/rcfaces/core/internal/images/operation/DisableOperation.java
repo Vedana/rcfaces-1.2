@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/20 17:55:20  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.3  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -38,6 +42,8 @@ import java.util.Map;
  */
 public class DisableOperation extends GrayOperation {
     private static final String REVISION = "$Revision$";
+
+    public static final String ID = "disabled";
 
     private static byte[] disableTable = new byte[256];
     static { // Initialize the arrays

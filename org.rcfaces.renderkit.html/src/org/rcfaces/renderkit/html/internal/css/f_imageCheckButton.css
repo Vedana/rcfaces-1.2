@@ -1,8 +1,15 @@
-/* ***************************************************************************
- * 
- * ImageCheckButton
+/*
+ * $Id$
  */
 
+/**
+ *
+ * @class f_imageCheckButton
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 .f_imageCheckButton_image,
 .f_imageCheckButton_text,
 .f_imageCheckButton, 

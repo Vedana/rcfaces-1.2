@@ -1,13 +1,15 @@
-/* 
+/*
  * $Id$
  */
- 
+
 /**
- * Tabbed Pane
+ *
+ * @class f_tabbedPane
  *
  * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$
+ * @version $Revision$ $Date$ 
  */
+ 
  
 DIV.f_tabbedPane {
 	display: block;

@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:19  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -307,13 +311,17 @@ public class ImageOperationsRepositoryImpl extends
         IResourceVersionHandler resourceVersionHandler = rcfacesContext
                 .getResourceVersionHandler();
         if (resourceVersionHandler != null) {
-            String version = resourceVersionHandler.getResourceVersion(
-                    facesContext, absolutePath, null);
-            if (version != null) {
-                sb.append('/');
-                sb.append(version);
+            if (rewritingInformation.isVersioned() == false) {
+                String version = resourceVersionHandler.getResourceVersion(
+                        facesContext, absolutePath, null);
+                if (version != null) {
+                    sb.append('/');
+                    sb.append(version);
 
-                rewritingInformation.setVersioned();
+                    rewritingInformation.setVersioned();
+                }
+            } else {
+                sb.append("/x");
             }
         }
 

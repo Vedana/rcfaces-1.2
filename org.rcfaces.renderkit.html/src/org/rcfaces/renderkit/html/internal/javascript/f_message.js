@@ -1,15 +1,12 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.1  2006/08/29 16:14:26  oeuillot
- * Renommage  en rcfaces
- *
- *
  */
 
 /**
  * @class public f_message extends f_component, fa_message
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 var __static = {
 	FillComponent: function(className, component, summaryLabel, detailLabel, message, styleMessage) {

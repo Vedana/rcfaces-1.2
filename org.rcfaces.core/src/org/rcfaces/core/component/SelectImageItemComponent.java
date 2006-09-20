@@ -1,10 +1,9 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.internal.component.CameliaItemComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.component.CameliaItemComponent;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IImageCapability;
 
 public class SelectImageItemComponent extends CameliaItemComponent implements 
 	IImageCapability {

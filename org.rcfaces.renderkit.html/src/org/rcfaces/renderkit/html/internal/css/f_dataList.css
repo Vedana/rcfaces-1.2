@@ -1,7 +1,15 @@
-/**
- * DataGrid
+/*
+ * $Id$
  */
 
+/**
+ *
+ * @class f_dataList
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 .f_dataList {
 	border: 1px solid #666666;
 	margin: 0;

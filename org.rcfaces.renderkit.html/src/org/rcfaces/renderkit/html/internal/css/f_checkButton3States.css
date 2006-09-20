@@ -1,7 +1,16 @@
-/* ********************************************************************
- *
- *	CheckButton 3 états
+/*
+ * $Id$
  */
+
+/**
+ *
+ * @class f_checkButton3States
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+ 
 DIV.f_checkButton3States {
 	cursor: pointer;
 	cursor: hand;

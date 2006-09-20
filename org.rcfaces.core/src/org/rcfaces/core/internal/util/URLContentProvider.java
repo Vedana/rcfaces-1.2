@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/09/20 17:55:20  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.1  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -71,17 +75,16 @@ public class URLContentProvider implements IContentProvider {
 
         try {
             if (variant != null && variant.length() > 0) {
-                URL l = new URL(localized.substring(0, idx) + "_"
-                        + locale.getLanguage() + "_" + country + "_" + variant
+                URL l = new URL(localized.substring(0, idx) + "_" + language
+                        + "_" + country + "_" + variant
                         + localized.substring(idx));
 
-                if (testURL(l)) {
-                    Locale foundLocale = new Locale(language);
-
+                Locale tryLocale = locale;
+                if (testURL(l, tryLocale)) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Localized version '" + locale
                                 + "' found for url '" + localized + "' => "
-                                + foundLocale);
+                                + tryLocale);
                     }
 
                     return l;
@@ -92,13 +95,16 @@ public class URLContentProvider implements IContentProvider {
                 URL l = new URL(localized.substring(0, idx) + "_" + language
                         + "_" + country + localized.substring(idx));
 
-                if (testURL(l)) {
-                    Locale foundLocale = new Locale(language, country);
+                Locale tryLocale = locale;
+                if (variant != null && variant.length() > 0) {
+                    tryLocale = new Locale(language, country);
+                }
 
+                if (testURL(l, tryLocale)) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Localized version '" + locale
                                 + "' found for url '" + localized + "' => "
-                                + foundLocale);
+                                + tryLocale);
                     }
 
                     return l;
@@ -109,13 +115,17 @@ public class URLContentProvider implements IContentProvider {
                 URL l = new URL(localized.substring(0, idx) + "_" + language
                         + localized.substring(idx));
 
-                if (testURL(l)) {
-                    Locale foundLocale = new Locale(language);
+                Locale tryLocale = locale;
+                if ((country != null && country.length() > 0)
+                        || (variant != null && variant.length() > 0)) {
+                    tryLocale = new Locale(language);
+                }
 
+                if (testURL(l, tryLocale)) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Localized version '" + locale
                                 + "' found for url '" + localized + "' => "
-                                + foundLocale);
+                                + tryLocale);
                     }
 
                     return l;
@@ -136,15 +146,19 @@ public class URLContentProvider implements IContentProvider {
         return null;
     }
 
-    private boolean testURL(URL contentReference) {
-        IContent content = getContent(contentReference, null);
+    private boolean testURL(URL contentReference, Locale locale) {
+        IContent content = getContent(contentReference, locale);
 
         InputStream inputStream;
         try {
             inputStream = content.getInputStream();
 
         } catch (IOException ex) {
-            // LOG.info("URL '" + url + "' does not exist !", ex);
+            if (LOG.isDebugEnabled()) {
+                LOG
+                        .debug("URL '" + contentReference
+                                + "' does not exist !", ex);
+            }
             return false;
         }
 

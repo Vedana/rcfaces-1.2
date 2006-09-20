@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
-import javax.faces.el.ValueBinding;
-
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 
 public class TextComponent extends AbstractOutputComponent implements 
 	ITextCapability,

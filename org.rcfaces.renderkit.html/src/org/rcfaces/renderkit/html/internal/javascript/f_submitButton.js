@@ -15,7 +15,7 @@ var __prototype = {
 		this._returnOnSelect = false;
 	}
 	 /*,
-	_updateDisabled: function(disabled) {
+	f_updateDisabled: function(disabled) {
 		this.f_super(arguments, disabled);
 		
 		if (f_core.IsGecko()) {

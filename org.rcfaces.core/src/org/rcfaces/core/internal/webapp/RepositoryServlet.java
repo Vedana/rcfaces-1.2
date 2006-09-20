@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/09/20 17:55:20  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.3  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -158,7 +162,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        String nc = getParameter(NO_CACHE_PARAMETER);
+        String nc = getParameter(getNoCacheParameterName());
         if ("true".equalsIgnoreCase(nc)) {
             noCache = true;
 
@@ -185,6 +189,10 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                     "Can not initialize repository for servlet '"
                             + getServletName() + "'.", e);
         }
+    }
+
+    protected String getNoCacheParameterName() {
+        return NO_CACHE_PARAMETER;
     }
 
     protected String getRepositoryDevModeParameterName() {
@@ -229,6 +237,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
         Locale locale = null;
 
+        boolean isVersioned = false;
         String version = null;
         if (getVersionSupport()) {
             idx = uri.indexOf('/');
@@ -239,6 +248,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
             version = uri.substring(0, idx);
             uri = uri.substring(idx + 1);
+            isVersioned = true;
         }
 
         URIParameters up = URIParameters.parseURI(uri);
@@ -284,7 +294,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
         Record record = getFileRecord(file, locale);
 
-        sendRecord(request, response, record);
+        sendRecord(request, response, record, isVersioned);
     }
 
     protected abstract boolean getVersionSupport();
@@ -320,7 +330,8 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
     }
 
     private void sendRecord(HttpServletRequest request,
-            HttpServletResponse response, Record record) throws IOException {
+            HttpServletResponse response, Record record, boolean isVersioned)
+            throws IOException {
 
         byte buf[] = null;
         long modificationDate;
@@ -411,10 +422,12 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             }
             ExpirationDate expirationDate = record.getExpirationDate();
             if (expirationDate == null) {
-                expirationDate = getDefaultExpirationDate();
+                expirationDate = getDefaultExpirationDate(isVersioned);
             }
 
-            expirationDate.sendExpires(response);
+            if (expirationDate != null) {
+                expirationDate.sendExpires(response);
+            }
         }
 
         if (etag != null) {
@@ -510,6 +523,9 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                 return;
             }
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Modification detected: " + getFile());
+            }
             resetRecord();
         }
 
@@ -566,15 +582,18 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
         }
 
         protected boolean verifyFilesModifications(IFile[] files) {
+            boolean modified = false;
+
             for (int i = 0; i < files.length; i++) {
                 Record record = getFileRecord(files[i], locale);
 
                 if (record.verifyFileModifications()) {
-                    return true;
+                    record.resetRecord();
+                    modified = true;
                 }
             }
 
-            return false;
+            return modified;
         }
 
         public byte[] getBuffer() throws IOException {
@@ -807,5 +826,18 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
         public String getCharset() {
             return null;
         }
+
+        public String toString() {
+            return "[Record file='"
+                    + file
+                    + "' expiration='"
+                    + expirationDate
+                    + "' lastModication='"
+                    + lastModificationDate
+                    + "' buffer.size="
+                    + ((buffer == null) ? "null" : String
+                            .valueOf(buffer.length)) + "]";
+        }
+
     }
 }

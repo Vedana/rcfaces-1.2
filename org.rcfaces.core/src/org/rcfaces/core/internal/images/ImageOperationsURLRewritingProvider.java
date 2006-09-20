@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/09/20 17:55:19  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -74,8 +78,23 @@ public abstract class ImageOperationsURLRewritingProvider extends
             UIComponent component, int type, String attributeName, String url,
             String rootURL, IURLRewritingInformation rewritingInformation) {
 
-        if (isProviderEnabled() == false
-                || type != IURLRewritingProvider.IMAGE_URL_TYPE) {
+        if (type != IURLRewritingProvider.IMAGE_URL_TYPE) {
+            if (parent == null) {
+                return url;
+            }
+
+            return parent.computeURL(facesContext, component, type,
+                    attributeName, url, rootURL, rewritingInformation);
+        }
+
+        int idx = url.indexOf(URL_REWRITING_SEPARATOR);
+        if (isProviderEnabled() == false) {
+            if (idx >= 0) {
+                return null;
+            }
+
+            // Pas de filtre ... donc on continue
+            
             if (parent == null) {
                 return url;
             }
@@ -89,7 +108,6 @@ public abstract class ImageOperationsURLRewritingProvider extends
             imageInformation = (ImageURLRewritingInformation) rewritingInformation;
         }
 
-        int idx = url.indexOf(URL_REWRITING_SEPARATOR);
         if (idx < 0) {
             if (parent == null) {
 

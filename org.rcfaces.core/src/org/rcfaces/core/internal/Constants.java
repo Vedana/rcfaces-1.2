@@ -2,6 +2,10 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/09/20 17:55:20  oeuillot
+ * Tri multiple des tables
+ * Dialogue modale en JS
+ *
  * Revision 1.4  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -19,6 +23,8 @@
  *
  */
 package org.rcfaces.core.internal;
+
+import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,6 +62,8 @@ public class Constants {
     public static final boolean DEFAULT_GZIP_SUPPORT = true;
 
     public static final long DEFAULT_EXPIRATION_DELAY = Delay.WEEK;
+
+    public static final long DEFAULT_VERSIONED_EXPIRATION_DELAY = Delay.YEAR;
 
     public static final int VERSIONED_URI_HASHCODE_MAX_SIZE = 16;
 
@@ -111,6 +119,10 @@ public class Constants {
 
         LOG.info("DEFAULT_EXPIRATION_DELAY=" + DEFAULT_EXPIRATION_DELAY + " ("
                 + Delay.format(DEFAULT_EXPIRATION_DELAY) + ")");
+
+        LOG.info("DEFAULT_VERSIONED_EXPIRATION_DELAY="
+                + DEFAULT_VERSIONED_EXPIRATION_DELAY + " ("
+                + Delay.format(DEFAULT_VERSIONED_EXPIRATION_DELAY) + ")");
 
         LOG.info("DEFAULT_CLIENT_LOCALE_SUPPORT="
                 + DEFAULT_CLIENT_LOCALE_SUPPORT);
@@ -186,5 +198,18 @@ public class Constants {
                 + ")");
 
         return version;
+    }
+
+    public static final String getBuildId(String version) {
+        StringTokenizer st = new StringTokenizer(version, ".");
+        if (st.countTokens() < 4) {
+            return version;
+        }
+
+        st.nextToken();
+        st.nextToken();
+        st.nextToken();
+
+        return st.nextToken();
     }
 }

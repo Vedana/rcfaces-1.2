@@ -1,20 +1,21 @@
 package org.rcfaces.core.component;
 
-import java.util.Collections;
+import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.internal.component.CameliaItemComponent;
+import java.lang.Object;
 import java.util.Map;
-
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IServerDataCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.CameliaItemComponent;
+import java.util.Collections;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IServerDataCapability;
 
 public abstract class AbstractItemComponent extends CameliaItemComponent implements 
 	IDisabledCapability,

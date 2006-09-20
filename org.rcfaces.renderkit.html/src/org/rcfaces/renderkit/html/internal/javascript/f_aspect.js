@@ -27,10 +27,8 @@ function f_aspect(aspectName, staticMembers, members) {
 	this._classLoader=window._classLoader;
 
 	if (arguments.length>3) {
-		var parents=new Array;		
+		var parents=f_core.PushArguments(null, arguments, 3);
 		this._parents=parents;
-		
-		f_core.PushArguments(parents, arguments, 3);
 		
 		if (f_core.IsDebugEnabled("f_aspect")) {
 			for(var i=0;i<parents.length;i++) {
