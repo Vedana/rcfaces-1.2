@@ -45,6 +45,8 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected static final String BORDER_BLANK_IMAGEURL_PROPERTY = "camelia.borderWriter.blank.imageURL";
 
+    protected static final String MARKER_IMAGEURL = "blank.gif";
+
     protected String width;
 
     protected String height;
@@ -430,4 +432,30 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         return tableClassName;
     }
+
+    public void writeComboImage(IHtmlWriter writer, String componentClassName)
+            throws WriterException {
+
+        writer.startElement("IMG");
+
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
+                .getRenderContext();
+
+        String imageURL = htmlRenderContext.getHtmlExternalContext()
+                .getStyleSheetURI(MARKER_IMAGEURL);
+        writer.writeAttribute("class", componentClassName + "_marker");
+        writer.writeAttribute("src", imageURL);
+        writer.writeAttribute("width", 5);
+        writer.writeAttribute("height", 3);
+        writer.writeAttribute("valign", getComboImageVerticalAlign(writer));
+
+        writer.endElement("IMG");
+    }
+
+    protected String getComboImageVerticalAlign(IHtmlWriter writer) {
+        return "center";
+    }
+
 }

@@ -56,13 +56,13 @@ var __prototype = {
 		
 		this._showSummary=showSummary;
 		
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 
 		this.f_setProperty(f_message.SHOW_SUMMARY, showSummary);
 				
-		this._a_updateMessages();
+		this.fa_updateMessages();
 	},
 	*/
 	/**
@@ -92,13 +92,13 @@ var __prototype = {
 		
 		this._showDetail=showDetail;
 		
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 
 		this.f_setProperty(f_message.SHOW_DETAIL, showDetail);
 		
-		this._a_updateMessages();
+		this.fa_updateMessages();
 	},
 	*/
 	/**
@@ -172,10 +172,10 @@ var __prototype = {
 	f_performMessageChanges: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_updateMessages: f_class.ABSTRACT
+	fa_updateMessages: f_class.ABSTRACT
 	
 }
 

@@ -275,6 +275,13 @@ var __static={
 			component.f_setDate(date);
 			return;
 		}
+
+		if (component.f_setValue) {
+			f_core.Debug(fa_calendarPopup, "_SetDateToComponent: call f_setValue of component '"+component.id+"' with date '"+date+"' and format '"+format+"'.");
+			if (component.f_setValue(date)) {
+				return;
+			}
+		}
 		
 		var value=calendarObject.f_formatDate(date, format);
 		

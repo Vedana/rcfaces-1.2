@@ -51,7 +51,7 @@ var __static = {
 			old._closePopup(old);
 			old._over=undefined;
 			
-			menu._a_updateItemStyle(old);
+			menu.fa_updateItemStyle(old);
 		}
 				
 		f_key.ExitScope(menu.id);
@@ -160,7 +160,7 @@ var __static = {
 }
 
 var __prototype = {
-	f_menu: function(parentComponent, redirectEvents, id, menuId) {
+	f_menu: function(parentComponent, redirectEvents, id, menuId, itemImageWidth, itemImageHeight) {
 		this.f_super(arguments);
 
 		this._parentComponent=parentComponent;
@@ -173,23 +173,28 @@ var __prototype = {
 		this._closePopup=f_menu._ClosePopup;
 		this._menuBar=this;
 		this.ownerDocument=parentComponent.ownerDocument;
+		
+		if (itemImageWidth && itemImageHeight) {
+			this.f_setItemImageSize(itemImageWidth, itemImageHeight);
+		}
 	},
 	f_finalize: function() {
 		this._redirectEvents=undefined; // fa_targetEvent
 		// this.id=undefined; // string
-		this._component=undefined;
-		this._openPopup=undefined;
-		this._closePopup=undefined;
-		this._menuBar=undefined;
-		this._parentComponent=undefined;
+ 
+		this._component=undefined; // f_component
+		this._openPopup=undefined; // function 
+		this._closePopup=undefined; // function
+		this._menuBar=undefined; // f_menu
+		this._parentComponent=undefined; // f_component
 		this._selectedMenuItem=undefined;
-		// this._componentUpdated=undefined; // boolean
+		// this.fa_componentUpdated=undefined; // boolean
 
 		this._selectionProvider=undefined;
 		this._attachedTable=undefined;
 		this._iePopup=undefined;
 
-		this.ownerDocument=undefined;
+		this.ownerDocument=undefined; // Document
 		this.f_super(arguments);
 	},
 	f_update: function(set) {
@@ -201,7 +206,7 @@ var __prototype = {
 		
 		this._menuItemsChanged=true;
 		
-		this._componentUpdated = (set===undefined)? true:set;		
+		this.fa_componentUpdated = (set===undefined)? true:set;		
 	},
 	/**
 	 * @method hidden
@@ -423,6 +428,7 @@ var __prototype = {
 	},
 	
 	_filterKey: function(phase, evt) {
+		f_core.Debug(f_menu, "Filter key '"+evt.keyCode+"'.");
 		if (!this._catchOnlyPopupKeys) {
 			return false;
 		}

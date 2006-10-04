@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -26,7 +29,6 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
-
 
 /**
  * 
@@ -86,13 +88,16 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.startElement("COL");
         htmlWriter.writeAttribute("width", BORDER_LEFT_WIDTH);
-
+        htmlWriter.endElement("COL");
+        
         htmlWriter.startElement("COL");
         htmlWriter.writeAttribute("width", "*");
-
+        htmlWriter.endElement("COL");
+        
         htmlWriter.startElement("COL");
         htmlWriter.writeAttribute("width", BORDER_RIGHT_WIDTH);
-
+        htmlWriter.endElement("COL");
+        
         htmlWriter.writeln();
 
         htmlWriter.startElement("TBODY");
@@ -106,6 +111,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
         htmlWriter.writeAttribute("width", BORDER_LEFT_WIDTH);
         htmlWriter.writeAttribute("height", BORDER_HEIGHT);
         htmlWriter.writeAttribute("src", blankImageURL);
+        htmlWriter.endElement("IMG");
 
         htmlWriter.endElement("TD");
 
@@ -121,6 +127,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
         htmlWriter.writeAttribute("width", BORDER_RIGHT_WIDTH);
         htmlWriter.writeAttribute("height", BORDER_HEIGHT);
         htmlWriter.writeAttribute("src", blankImageURL);
+        htmlWriter.endElement("IMG");
 
         htmlWriter.endElement("TD");
 

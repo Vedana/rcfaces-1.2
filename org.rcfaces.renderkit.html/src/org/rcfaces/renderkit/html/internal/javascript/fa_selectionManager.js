@@ -167,11 +167,11 @@ var __prototype = {
 			this._cursor=element;
 			
 			if (old) {
-				this._updateElementStyle(old);
+				this.fa_updateElementStyle(old);
 			}
 			
 			if (element) {
-				this._updateElementStyle(element);
+				this.fa_updateElementStyle(element);
 			}
 		}
 		
@@ -179,7 +179,7 @@ var __prototype = {
 			return;
 		}
 
-		f_core.Debug(fa_selectionManager, "Move cursor to element '"+this._getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this._isElementDisabled(element));
+		f_core.Debug(fa_selectionManager, "Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
 		
 		if (selection) {
 			if (this._performElementSelection(element, show, evt, selection)) {
@@ -188,7 +188,7 @@ var __prototype = {
 		}
 		
 		if (show) {
-			this._showElement(element);
+			this.fa_showElement(element);
 		}
 		
 		if (!this._selectable) {
@@ -196,8 +196,8 @@ var __prototype = {
 		}
 		
 		if ((selection & fa_selectionManager.STARTRANGE_SELECTION) 
-				&& !this._isElementDisabled(element)) {
-			f_core.Debug(fa_selectionManager, "Set lastSelectedElement to '"+this._getElementValue(element)+"'.");
+				&& !this.fa_isElementDisabled(element)) {
+			f_core.Debug(fa_selectionManager, "Set lastSelectedElement to '"+this.fa_getElementValue(element)+"'.");
 			this._lastSelectedElement=element;
 		}
 		
@@ -237,10 +237,10 @@ var __prototype = {
 	},
 	// Suivant l'état enregistré, on recalcule l'état !
 	_updateElementSelection: function(element, selected) {
-		var value=this._getElementValue(element);
+		var value=this.fa_getElementValue(element);
 	
 		selected=this._isElementValueSelected(value, selected);
-		this._setElementSelected(element, selected);
+		this.fa_setElementSelected(element, selected);
 		
 		if (!selected) {
 			return false;
@@ -251,17 +251,17 @@ var __prototype = {
 		return true;
 	},
 	_selectElement: function(element, value, show) {
-		if (this._isElementSelected(element)) {
+		if (this.fa_isElementSelected(element)) {
 			return;
 		}
 		
-		this._setElementSelected(element, true);
-		this._updateElementStyle(element);
+		this.fa_setElementSelected(element, true);
+		this.fa_updateElementStyle(element);
 		
 		this._currentSelection.push(element);
 		
 		if (value===undefined) {
-			value=this._getElementValue(element);
+			value=this.fa_getElementValue(element);
 		}
 		
 		if (!this._deselectedElementValues.f_removeElement(value)) {
@@ -269,21 +269,21 @@ var __prototype = {
 		}
 		
 		if (show) {
-			this._showElement(element);
+			this.fa_showElement(element);
 		}
 	},
 	_deselectElement: function(element, value) {
-		if (!this._isElementSelected(element)) {
+		if (!this.fa_isElementSelected(element)) {
 			return false;
 		}
 
-		this._setElementSelected(element, false);
-		this._updateElementStyle(element);
+		this.fa_setElementSelected(element, false);
+		this.fa_updateElementStyle(element);
 		
 		this._currentSelection.f_removeElement(element);
 		
 		if (value===undefined) {
-			value=this._getElementValue(element);
+			value=this.fa_getElementValue(element);
 		}
 		
 		if (this._selectedElementValues.f_removeElement(value)) {
@@ -304,8 +304,8 @@ var __prototype = {
 			for(var i=0;i<currentSelection.length;i++) {
 				var element=currentSelection[i];
 				
-				this._setElementSelected(element, false);
-				this._updateElementStyle(element);
+				this.fa_setElementSelected(element, false);
+				this.fa_updateElementStyle(element);
 			}
 		}
 		
@@ -316,9 +316,9 @@ var __prototype = {
 	_selectRange: function(first, last, appendSelection) {
 		// on deselectionne tout ... puis on selectionne le range !
 		
-		f_core.Debug("fa_selectionManager", "Select range from '"+this._getElementValue(first)+"'=>'"+this._getElementValue(last)+"' appendMode="+appendSelection);
+		f_core.Debug("fa_selectionManager", "Select range from '"+this.fa_getElementValue(first)+"'=>'"+this.fa_getElementValue(last)+"' appendMode="+appendSelection);
 		
-		var elements=this._listVisibleElements();
+		var elements=this.fa_listVisibleElements();
 		if (!elements) {
 			return;
 		}
@@ -328,8 +328,8 @@ var __prototype = {
 		for(var i=0;i<elements.length;i++) {
 			var element=elements[i];
 			
-			var elementValue=this._getElementValue(element);
-			if (append && !this._isElementDisabled(element)) {
+			var elementValue=this.fa_getElementValue(element);
+			if (append && !this.fa_isElementDisabled(element)) {
 				l.push(elementValue);
 			}
 			
@@ -342,7 +342,7 @@ var __prototype = {
 				break;
 			}
 			
-			if (!this._isElementDisabled(element)) {
+			if (!this.fa_isElementDisabled(element)) {
 				l.push(elementValue);
 			}
 			
@@ -377,13 +377,13 @@ var __prototype = {
 
 		var elementByValue=new Object;
 		if (elements===undefined) {
-			elements=this._listVisibleElements();
+			elements=this.fa_listVisibleElements();
 		}
 		
 		for(var i=0;i<elements.length;i++) {
 			var element=elements[i];
 			
-			elementByValue[this._getElementValue(element)]=element;
+			elementByValue[this.fa_getElementValue(element)]=element;
 		}
 			
 		var selectedElementValues=this._selectedElementValues;
@@ -477,9 +477,9 @@ var __prototype = {
 		f_core.Debug("fa_selectionManager", "performElementSelection "+
 			" exclusive='"+((selection & fa_selectionManager.EXCLUSIVE_SELECTION)>0)+"'"+
 			" append='"+((selection & fa_selectionManager.APPEND_SELECTION)>0)+"'"+
-			" range='"+((selection & fa_selectionManager.RANGE_SELECTION)>0)+"'  disabled="+this._isElementDisabled(element));
+			" range='"+((selection & fa_selectionManager.RANGE_SELECTION)>0)+"'  disabled="+this.fa_isElementDisabled(element));
 	
-		if (this._isElementDisabled(element)) {
+		if (this.fa_isElementDisabled(element)) {
 			return false;
 		}
 
@@ -487,8 +487,8 @@ var __prototype = {
 		
 //		alert("Select="+this._selectionCardinality+"/"+node._value+"/"+li._node._selected);
 		
-		var elementSelected=this._isElementSelected(element);
-		var elementValue=this._getElementValue(element);
+		var elementSelected=this.fa_isElementSelected(element);
+		var elementValue=this.fa_getElementValue(element);
 		
 		switch(cardinality) {
 		case fa_cardinality.ONE_CARDINALITY:
@@ -528,7 +528,7 @@ var __prototype = {
 			if (rangeMode) {
 				var lastSelectedElement=this._lastSelectedElement;
 				if (!lastSelectedElement) {
-					f_core.Debug("fa_selectionManager", "No lastSelectedElement set to '"+this._getElementValue(element)+"'.");
+					f_core.Debug("fa_selectionManager", "No lastSelectedElement set to '"+this.fa_getElementValue(element)+"'.");
 
 					this._lastSelectedElement=element;
 					lastSelectedElement=element;
@@ -609,7 +609,7 @@ var __prototype = {
 		for(var i=0;i<currentSelection.length;i++) {
 			var element=currentSelection[i];
 			
-			var value=this._getElementValue(element);
+			var value=this.fa_getElementValue(element);
 			if (value===undefined) {
 				continue;
 			}
@@ -666,19 +666,40 @@ var __prototype = {
 		this.f_fireEvent(f_event.SELECTION, evt, element, elementValue, this, detail);
 	},
 
-	_getElementValue: f_class.ABSTRACT,
+	/**
+	 * @method protected abstract
+	 */
+	fa_getElementValue: f_class.ABSTRACT,
 
-	_isElementDisabled: f_class.ABSTRACT,
+	/**
+	 * @method protected abstract
+	 */
+	fa_isElementDisabled: f_class.ABSTRACT,
 
-	_isElementSelected: f_class.ABSTRACT,
+	/**
+	 * @method protected abstract
+	 */
+	fa_isElementSelected: f_class.ABSTRACT,
 
-	_listVisibleElements: f_class.ABSTRACT,
+	/**
+	 * @method protected abstract
+	 */
+	fa_listVisibleElements: f_class.ABSTRACT,
 
-	_showElement: f_class.ABSTRACT,
+	/**
+	 * @method protected abstract
+	 */
+	fa_showElement: f_class.ABSTRACT,
 	
-	_setElementSelected: f_class.ABSTRACT,
+	/**
+	 * @method protected abstract
+	 */
+	fa_setElementSelected: f_class.ABSTRACT,
 
-	_updateElementStyle: f_class.ABSTRACT
+	/**
+	 * @method protected abstract
+	 */
+	fa_updateElementStyle: f_class.ABSTRACT
 }
 
 

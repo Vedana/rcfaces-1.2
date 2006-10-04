@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -56,6 +59,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.FacesListener;
 import javax.faces.model.DataModel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.ISortEventCapability;
@@ -71,7 +76,7 @@ import org.rcfaces.core.model.ISortedComponent;
 public final class DataGridServerSort {
     private static final String REVISION = "$Revision$";
 
-    private static final boolean TEST_SORT = false;
+    private static final Log LOG = LogFactory.getLog(DataGridServerSort.class);
 
     private static final Long LONG_0 = new Long(0l);
 
@@ -89,21 +94,124 @@ public final class DataGridServerSort {
         SORT_ALIASES.put(ISortEventCapability.SORT_DATE, new SortDate());
     }
 
-    public static int[] createTranslation(FacesContext facesContext,
+    public static int[] computeSortedTranslation(FacesContext facesContext,
             DataGridComponent data, DataModel dataModel,
             ISortedComponent sortedComponents[]) {
-        DataColumnComponent columnComponent = (DataColumnComponent) sortedComponents[0]
-                .getComponent();
 
-        ISortMethod sortMethod = getSortMethod(columnComponent, dataModel);
-        if (sortMethod == null) {
-            // Returns NULL !
-            return null;
+        ISortMethod sortMethods[] = new ISortMethod[sortedComponents.length];
+
+        for (int i = 0; i < sortMethods.length; i++) {
+            DataColumnComponent columnComponent = (DataColumnComponent) sortedComponents[i]
+                    .getComponent();
+
+            sortMethods[i] = getSortMethod(columnComponent, dataModel);
         }
 
-        return sortMethod.sort(facesContext, data, dataModel, columnComponent,
-                sortedComponents[0].getIndex(), sortedComponents[0]
-                        .isAscending());
+        int rowCount = data.getRowCount();
+
+        List datas[] = new List[sortedComponents.length];
+        for (int i = 0; i < datas.length; i++) {
+            if (rowCount > 0) {
+                datas[i] = new ArrayList(rowCount);
+
+            } else {
+                datas[i] = new ArrayList();
+            }
+        }
+
+        if (dataModel instanceof IRangeDataModel) {
+            // Charge tout !
+            ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
+        }
+
+        try {
+            for (int rowIndex = 0;; rowIndex++) {
+                data.setRowIndex(rowIndex);
+
+                if (data.isRowAvailable() == false) {
+                    break;
+                }
+
+                for (int i = 0; i < datas.length; i++) {
+                    DataColumnComponent column = (DataColumnComponent) sortedComponents[i]
+                            .getComponent();
+
+                    Object value = column.getValue(facesContext);
+
+                    value = sortMethods[i].convertValue(facesContext, column,
+                            value);
+
+                    datas[i].add(value);
+                }
+            }
+        } finally {
+            data.setRowIndex(-1);
+        }
+
+        int translations[] = new int[datas[0].size()];
+        for (int i = 0; i < translations.length; i++) {
+            translations[i] = i;
+        }
+        if (translations.length < 2) {
+            return translations;
+        }
+
+        Object ds[][] = new Object[datas.length][];
+        Comparator comparators[] = new Comparator[datas.length];
+        boolean sortOrders[] = new boolean[datas.length];
+        for (int i = 0; i < ds.length; i++) {
+            ds[i] = datas[i].toArray();
+            comparators[i] = sortMethods[i].getComparator();
+            sortOrders[i] = sortedComponents[i].isAscending();
+        }
+
+        for (int i = 0; i < translations.length; i++) {
+
+            next_element: for (int j = i; j > 0; j--) {
+                int j0 = translations[j - 1];
+                int j1 = translations[j];
+
+                for (int k = 0; k < sortMethods.length; k++) {
+                    Object o1 = ds[k][j0];
+                    Object o2 = ds[k][j1];
+
+                    if (comparators[k] == null) {
+                        continue;
+                    }
+
+                    int order = comparators[k].compare(o1, o2);
+                    if (order == 0) {
+                        continue;
+                    }
+
+                    if (sortOrders[k]) {
+                        if (order < 0) {
+                            break next_element;
+                        }
+                    } else if (order > 0) {
+                        break next_element;
+                    }
+
+                    translations[j] = j0;
+                    translations[j - 1] = j1;
+                    continue next_element;
+                }
+            }
+        }
+
+        if (LOG.isDebugEnabled()) {
+            Set set2 = new HashSet(translations.length);
+            LOG.debug("Valid SORT translation ...");
+            for (int i = 0; i < translations.length; i++) {
+                if (set2.add(new Integer(translations[i])) == false) {
+
+                    LOG.debug("*** INVALID TRANSLATION ***");
+                    continue;
+                }
+            }
+        }
+
+        return translations;
     }
 
     private static ISortMethod getSortMethod(
@@ -147,9 +255,9 @@ public final class DataGridServerSort {
 
         Comparator getComparator();
 
-        int[] sort(FacesContext facesContext, DataGridComponent data,
-                DataModel dataModel, DataColumnComponent column, int sortIndex,
-                boolean sortOrder);
+        Object convertValue(FacesContext facesContext,
+                DataColumnComponent component, Object value);
+
     }
 
     /**
@@ -160,117 +268,6 @@ public final class DataGridServerSort {
     private static abstract class AbstractSortMethod implements ISortMethod,
             Comparator {
         private static final String REVISION = "$Revision$";
-
-        public int[] sort(FacesContext facesContext,
-                DataGridComponent dataGrid, DataModel dataModel,
-                DataColumnComponent column, int sortColumnIndex,
-                boolean sortOrder) {
-
-            int rowCount = dataGrid.getRowCount();
-
-            List datas;
-            if (rowCount > 0) {
-                datas = new ArrayList(rowCount);
-
-            } else {
-                datas = new ArrayList();
-            }
-
-            if (dataModel instanceof IRangeDataModel) {
-                // Charge tout !
-                ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
-            }
-
-            Set testSort;
-            if (TEST_SORT) {
-                testSort = new HashSet();
-            }
-            try {
-                for (int rowIndex = 0;; rowIndex++) {
-                    dataGrid.setRowIndex(rowIndex);
-
-                    if (dataGrid.isRowAvailable() == false) {
-                        break;
-                    }
-
-                    if (TEST_SORT) {
-                        Object rowData1 = dataGrid.getRowData();
-                        Object rowData2 = dataGrid.getRowData();
-                        if (testSort.add(rowData1) == false) {
-                            System.err.println("**** SAME OBJECT !");
-                        }
-                        if (rowData1 != rowData2) {
-                            System.err.println("**** Not SAME DATA !");
-                        }
-                    }
-
-                    Object value = column.getValue(facesContext);
-
-                    value = convertValue(facesContext, column, value);
-
-                    datas.add(value);
-                }
-            } finally {
-                dataGrid.setRowIndex(-1);
-            }
-
-            int translations[] = new int[datas.size()];
-            for (int i = 0; i < translations.length; i++) {
-                translations[i] = i;
-            }
-            if (translations.length < 2) {
-                return translations;
-            }
-
-            Object ds[] = datas.toArray();
-
-            Comparator comparator = getComparator();
-
-            /*
-             * for (int i=low; i <high; i++) for (int j=i; j>low &&
-             * c.compare(dest[j-1], dest[j])>0; j--) swap(dest, j, j-1);
-             */
-            for (int i = 0; i < translations.length; i++) {
-                for (int j = i; j > 0; j--) {
-                    int j0 = translations[j - 1];
-                    int j1 = translations[j];
-
-                    Object o1 = ds[j0];
-                    Object o2 = ds[j1];
-
-                    int order = comparator.compare(o1, o2);
-                    if (sortOrder) {
-                        if (order <= 0) {
-                            break;
-                        }
-                    } else if (order >= 0) {
-                        break;
-                    }
-
-                    translations[j] = j0;
-                    translations[j - 1] = j1;
-                }
-            }
-
-            if (TEST_SORT) {
-                Set set2 = new HashSet();
-                System.err.println("*** TEST SORT");
-                for (int i = 0; i < translations.length; i++) {
-
-                    if (set2.add(new Integer(translations[i])) == false) {
-
-                        System.err
-                                .println("******* INDEX FAILED ******************");
-                        continue;
-                    }
-                }
-            }
-
-            return translations;
-        }
-
-        protected abstract Object convertValue(FacesContext facesContext,
-                DataColumnComponent component, Object value);
 
         public Comparator getComparator() {
             return this;
@@ -297,7 +294,7 @@ public final class DataGridServerSort {
 
         private static final String REVISION = "$Revision$";
 
-        protected Object convertValue(FacesContext facesContext,
+        public Object convertValue(FacesContext facesContext,
                 DataColumnComponent component, Object value) {
             if (value == null) {
                 return LONG_0;
@@ -325,10 +322,15 @@ public final class DataGridServerSort {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static class SortDouble extends AbstractSortMethod {
         private static final String REVISION = "$Revision$";
 
-        protected Object convertValue(FacesContext facesContext,
+        public Object convertValue(FacesContext facesContext,
                 DataColumnComponent component, Object value) {
             if (value == null) {
                 return DOUBLE_0;
@@ -356,10 +358,15 @@ public final class DataGridServerSort {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static class SortAlpha extends AbstractSortMethod {
         private static final String REVISION = "$Revision$";
 
-        protected Object convertValue(FacesContext facesContext,
+        public Object convertValue(FacesContext facesContext,
                 DataColumnComponent component, Object value) {
             if (value == null) {
                 return "";
@@ -379,10 +386,15 @@ public final class DataGridServerSort {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static class SortAlphaIgnoreCase extends AbstractSortMethod {
         private static final String REVISION = "$Revision$";
 
-        protected Object convertValue(FacesContext facesContext,
+        public Object convertValue(FacesContext facesContext,
                 DataColumnComponent component, Object value) {
             if (value == null) {
                 return "";
@@ -401,10 +413,15 @@ public final class DataGridServerSort {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static class SortDate extends AbstractSortMethod {
         private static final String REVISION = "$Revision$";
 
-        protected Object convertValue(FacesContext facesContext,
+        public Object convertValue(FacesContext facesContext,
                 DataColumnComponent component, Object value) {
             if (value == null) {
                 return null;
@@ -418,6 +435,11 @@ public final class DataGridServerSort {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static class SortAction extends AbstractSortMethod {
         private static final String REVISION = "$Revision$";
 
@@ -427,7 +449,7 @@ public final class DataGridServerSort {
             this.listener = listener;
         }
 
-        protected Object convertValue(FacesContext facesContext,
+        public Object convertValue(FacesContext facesContext,
                 DataColumnComponent component, Object value) {
             return value;
         }
@@ -437,5 +459,4 @@ public final class DataGridServerSort {
             return null;
         }
     }
-
 }

@@ -1,91 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.15  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.14  2006/06/27 09:23:09  oeuillot
- * Mise � jour du calendrier de dateChooser
- *
- * Revision 1.13  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.12  2006/05/04 13:40:13  oeuillot
- * Ajout de f_findComponent cot� client
- *
- * Revision 1.11  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.10  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.9  2006/03/23 19:12:39  oeuillot
- * Ajout des marges
- * Ajout des processors
- * Amelioration des menus
- *
- * Revision 1.8  2006/03/15 13:53:04  oeuillot
- * Stabilisation
- * Ajout des bundles pour le javascript
- * R�organisation de l'arborescence de GridData qui n'herite plus de UIData
- *
- * Revision 1.7  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.6  2006/02/06 16:47:04  oeuillot
- * Renomme le logger commons.log en LOG
- * Ajout du composant focusManager
- * Renomme vfc-all.xml en repository.xml
- * Ajout de la gestion de __Vversion et __Llocale
- *
- * Revision 1.5  2006/02/03 11:37:32  oeuillot
- * Calcule les classes pour le Javascript, plus les fichiers !
- *
- * Revision 1.4  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.3  2005/12/27 16:08:16  oeuillot
- * Gestion imageButtonWriter
- * Ajout de fa_images
- * Preparation de f_imageCombo
- *
- * Revision 1.2  2005/12/22 11:48:08  oeuillot
- * Ajout de :
- * - JS:  calendar, locale, dataList, log
- * - Evenement User
- * - ClientData  multi-directionnel (+TAG)
- *
- * Revision 1.1  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
  */
 package org.rcfaces.renderkit.html.internal;
 
@@ -103,7 +17,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.DataListComponent;
+import org.rcfaces.core.component.ComponentsListComponent;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
@@ -115,7 +29,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.renderkit.html.internal.service.DataListService;
+import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
 
 
 /**
@@ -123,10 +37,10 @@ import org.rcfaces.renderkit.html.internal.service.DataListService;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DataListRenderer extends AbstractCssRenderer {
+public class ComponentsGridRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(DataListRenderer.class);
+    private static final Log LOG = LogFactory.getLog(ComponentsGridRenderer.class);
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
@@ -141,7 +55,7 @@ public class DataListRenderer extends AbstractCssRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        DataListComponent dataListComponent = (DataListComponent) componentRenderContext
+        ComponentsListComponent dataListComponent = (ComponentsListComponent) componentRenderContext
                 .getComponent();
 
         dataListComponent.setRowIndex(-1);
@@ -158,7 +72,7 @@ public class DataListRenderer extends AbstractCssRenderer {
         writeCssAttributes(htmlWriter);
 
         if (ENABLE_SERVER_REQUEST) {
-            DataListService dataListServer = DataListService
+            ComponentsListService dataListServer = ComponentsListService
                     .getInstance(facesContext);
             if (dataListServer != null) {
                 htmlWriter.writeAttribute("v:asyncRender", "true");
@@ -224,11 +138,13 @@ public class DataListRenderer extends AbstractCssRenderer {
                 htmlWriter.writeAttribute("width", "1*");
 
                 if (columnClasses == null || columnClasses.length < 1) {
+                    htmlWriter.endElement("COL");
                     continue;
                 }
                 int rs = i % columnClasses.length;
 
                 htmlWriter.writeAttribute("class", columnClasses[rs]);
+                htmlWriter.endElement("COL");
             }
         }
 
@@ -257,7 +173,7 @@ public class DataListRenderer extends AbstractCssRenderer {
                 .getAttribute(LIST_CONTEXT);
 
         // Dans tous les cas il faut positionner le renderContext !
-        DataListService dataListServer = DataListService
+        ComponentsListService dataListServer = ComponentsListService
                 .getInstance(facesContext);
         dataListServer.setupComponent(componentRenderContext);
 
@@ -275,12 +191,12 @@ public class DataListRenderer extends AbstractCssRenderer {
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
-        DataListComponent dataListComponent = (DataListComponent) componentRenderContext
+        ComponentsListComponent dataListComponent = (ComponentsListComponent) componentRenderContext
                 .getComponent();
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        boolean filtered = false;
+        boolean filtred = false;
         /*
          * DataModel dataModel = listContext.getDataModel();
          * 
@@ -416,7 +332,7 @@ public class DataListRenderer extends AbstractCssRenderer {
 
     public void encodeEnd(IComponentWriter writer) throws WriterException {
 
-        DataListComponent dataListComponent = (DataListComponent) writer
+        ComponentsListComponent dataListComponent = (ComponentsListComponent) writer
                 .getComponentRenderContext().getComponent();
 
         dataListComponent.setRowIndex(-1);
@@ -463,7 +379,7 @@ public class DataListRenderer extends AbstractCssRenderer {
      * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
      */
     protected String getJavaScriptClassName() {
-        return JavaScriptClasses.DATA_LIST;
+        return JavaScriptClasses.COMPONENTS_LIST;
     }
 
     protected void writeCustomCss(IHtmlWriter componentWriter,
@@ -472,7 +388,7 @@ public class DataListRenderer extends AbstractCssRenderer {
 
         IComponentRenderContext componentRenderContext = componentWriter
                 .getComponentRenderContext();
-        DataListComponent dataListComponent = (DataListComponent) componentRenderContext
+        ComponentsListComponent dataListComponent = (ComponentsListComponent) componentRenderContext
                 .getComponent();
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
@@ -499,7 +415,7 @@ public class DataListRenderer extends AbstractCssRenderer {
 
         // FacesContext facesContext = context.getFacesContext();
 
-        DataListComponent dg = (DataListComponent) component;
+        ComponentsListComponent dg = (ComponentsListComponent) component;
 
         Number first = componentData.getNumberProperty("first");
         if (first != null) {
@@ -531,7 +447,7 @@ public class DataListRenderer extends AbstractCssRenderer {
 
         private final FacesContext facesContext;
 
-        private final DataListComponent dataListComponent;
+        private final ComponentsListComponent dataListComponent;
 
         private final String rowIndexVar;
 
@@ -554,7 +470,7 @@ public class DataListRenderer extends AbstractCssRenderer {
         private boolean interactiveShow;
 
         ListContext(FacesContext facesContext,
-                DataListComponent dataListComponent) {
+                ComponentsListComponent dataListComponent) {
             this(facesContext, dataListComponent, false);
 
             first = dataListComponent.getFirst();
@@ -571,7 +487,7 @@ public class DataListRenderer extends AbstractCssRenderer {
         }
 
         ListContext(FacesContext facesContext,
-                DataListComponent dataListComponent, int rowIndex,
+                ComponentsListComponent dataListComponent, int rowIndex,
                 String filterExpression) {
             this(facesContext, dataListComponent, true);
 
@@ -581,7 +497,7 @@ public class DataListRenderer extends AbstractCssRenderer {
         }
 
         private ListContext(FacesContext facesContext,
-                DataListComponent dataListComponent, boolean dummy) {
+                ComponentsListComponent dataListComponent, boolean dummy) {
             this.facesContext = facesContext;
             this.dataListComponent = dataListComponent;
 
@@ -681,7 +597,7 @@ public class DataListRenderer extends AbstractCssRenderer {
     }
 
     public ListContext createListContext(FacesContext facesContext,
-            DataListComponent dgc, int rowIndex,
+            ComponentsListComponent dgc, int rowIndex,
             ISortedComponent[] sortedComponents, String filterExpression) {
         return new ListContext(facesContext, dgc, rowIndex, filterExpression);
     }
@@ -690,7 +606,7 @@ public class DataListRenderer extends AbstractCssRenderer {
             Set classes) {
         super.addRequiredJavaScriptClassNames(writer, classes);
 
-        DataListComponent dataListComponent = (DataListComponent) writer
+        ComponentsListComponent dataListComponent = (ComponentsListComponent) writer
                 .getComponentRenderContext().getComponent();
 
         IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
@@ -699,12 +615,12 @@ public class DataListRenderer extends AbstractCssRenderer {
         IMenuIterator menuIterator = dataListComponent.listMenus();
         if (menuIterator.hasNext()) {
             javaScriptRenderContext.appendRequiredClasses(classes,
-                    JavaScriptClasses.DATA_LIST, "menu");
+                    JavaScriptClasses.COMPONENTS_LIST, "menu");
         }
 
         if (dataListComponent.getRows() > 0) {
             javaScriptRenderContext.appendRequiredClasses(classes,
-                    JavaScriptClasses.DATA_LIST, "ajax");
+                    JavaScriptClasses.COMPONENTS_LIST, "ajax");
         }
     }
 }

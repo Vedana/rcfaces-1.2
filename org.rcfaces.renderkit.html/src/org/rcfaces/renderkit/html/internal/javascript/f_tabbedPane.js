@@ -640,6 +640,7 @@ var __prototype = {
 			// Premier !
 			
 			var tdTitleLeft=document.createElement("TD");
+			trTitle.appendChild(tdTitleLeft);
 			
 			tab._leftTTitleImage=document.createElement("IMG");
 			tab._leftTTitleImage.src=blankImage;
@@ -648,8 +649,6 @@ var __prototype = {
 			tdTitleLeft.appendChild(tab._leftTTitleImage);
 			
 			tab._leftTitle=document.createElement("TD");
-
-			trTitle.appendChild(tdTitleLeft);
 			trText.appendChild(tab._leftTitle);
 			
 		} else {
@@ -659,9 +658,12 @@ var __prototype = {
 			tab._leftTitle=cellsText[cellsText.length-1];
 		}
 		
-		tab._textTTitle=document.createElement("TD");
+		tab._textTTitle=document.createElement("TD");		
+		trTitle.appendChild(tab._textTTitle);
 
 		tab._textTitle=document.createElement("TD");
+		trText.appendChild(tab._textTitle);
+
 		tab._textTitle._tab=tab;
 		tab._textTitle.onclick=f_tabbedPane._TabbedPane_click;
 		tab._textTitle.onmouseover=f_tabbedPane._TabbedPane_mouseover;
@@ -702,6 +704,8 @@ var __prototype = {
 		tab._textLink.href=f_core.JAVASCRIPT_VOID;
 	
 		var tdTitleRight=document.createElement("TD");
+		trTitle.appendChild(tdTitleRight);
+
 		tab._rightTTitleImage=document.createElement("IMG");
 		tab._rightTTitleImage.src=blankImage;
 		tab._rightTTitleImage.width=5;
@@ -709,10 +713,6 @@ var __prototype = {
 		tdTitleRight.appendChild(tab._rightTTitleImage);		
 		
 		tab._rightTitle=document.createElement("TD");
-		
-		trTitle.appendChild(tab._textTTitle);
-		trText.appendChild(tab._textTitle);
-		trTitle.appendChild(tdTitleRight);
 		trText.appendChild(tab._rightTitle);
 		
 		this._updateCardStyle(tab);
@@ -778,7 +778,7 @@ var __prototype = {
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+_tab+")");
 		tab._imageURL=imageURL;
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 
@@ -789,7 +789,7 @@ var __prototype = {
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab +")");
 		tab._disabledImageURL=imageURL;
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 
@@ -800,7 +800,7 @@ var __prototype = {
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
 		tab._hoverImageURL=imageURL;
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 
@@ -811,7 +811,7 @@ var __prototype = {
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
 		tab._selectedImageURL=imageURL;
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 
@@ -829,7 +829,7 @@ var __prototype = {
 		tab._disabled=disabled;
 		tab._textLink.disabled=disabled;
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		

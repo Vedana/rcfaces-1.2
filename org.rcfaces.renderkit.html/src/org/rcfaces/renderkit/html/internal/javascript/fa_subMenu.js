@@ -27,7 +27,10 @@ var __prototype = {
 			}
 		}
 	},
-	_newSubMenu: function(menuId, id) {
+	/**
+	 * @method hidden
+	 */
+	f_newSubMenu: function(menuId, id, removeAllWhenShown, itemImageWidth, itemImageHeight) {
 		if (!window.f_menu) {
 			throw new Error("f_menu class has not beeen loaded !");
 		}
@@ -45,9 +48,9 @@ var __prototype = {
 			id=this.id+"__subMenu"+cnt;
 		}
 
-		var componentEventRedirect=this._a_componentCaptureMenuEvent();
+		var componentEventRedirect=this.fa_componentCaptureMenuEvent();
 		
-		var menu=f_menu.f_newInstance(this, componentEventRedirect, id, menuId);
+		var menu=f_menu.f_newInstance(this, componentEventRedirect, id, menuId, itemImageWidth, itemImageHeight);
 
 		var subMenus=this._subMenus;
 		if (!subMenus) {
@@ -107,7 +110,10 @@ var __prototype = {
 		return (menu)?menu:null;
 	},
 	
-	_a_componentCaptureMenuEvent: f_class.ABSTRACT
+	/**
+	 * @method protected
+	 */
+	fa_componentCaptureMenuEvent: f_class.ABSTRACT
 }
 
 

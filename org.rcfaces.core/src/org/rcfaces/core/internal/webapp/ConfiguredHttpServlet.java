@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/20 17:55:20  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -160,7 +163,7 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
 
     private ExpirationDate versionedExpirationDate;
 
-    private Set filteredLocales;
+    private Set filtredLocales;
 
     protected boolean localeSupport;
 
@@ -314,7 +317,7 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
 
                     StringTokenizer st = new StringTokenizer(
                             acceptedLocaleNames, ", ");
-                    filteredLocales = new HashSet(st.countTokens());
+                    filtredLocales = new HashSet(st.countTokens());
 
                     for (; st.hasMoreTokens();) {
                         String localeName = st.nextToken();
@@ -325,10 +328,10 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
                             continue;
                         }
 
-                        filteredLocales.add(locale);
+                        filtredLocales.add(locale);
                     }
 
-                    LOG.info("Accepted locale: " + filteredLocales
+                    LOG.info("Accepted locale: " + filtredLocales
                             + " for servlet '" + getServletName() + "'.");
                 }
 
@@ -437,8 +440,8 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
         Locale locales[] = Locale.getAvailableLocales();
         for (int i = 0; i < locales.length; i++) {
             locale = locales[i];
-            if (accept && filteredLocales != null
-                    && filteredLocales.contains(locale) == false) {
+            if (accept && filtredLocales != null
+                    && filtredLocales.contains(locale) == false) {
                 continue;
             }
 

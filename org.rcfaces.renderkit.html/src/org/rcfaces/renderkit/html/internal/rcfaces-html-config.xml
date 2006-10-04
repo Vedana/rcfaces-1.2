@@ -10,8 +10,8 @@
 				<command id="dataGrid.update" />
 			</service>
 
-			<service id="org.rcfaces.renderkit.html.DataList" class="org.rcfaces.renderkit.html.internal.service.DataListService">
-				<command id="dataList.update" />
+			<service id="org.rcfaces.renderkit.html.ComponentsList" class="org.rcfaces.renderkit.html.internal.service.ComponentsListService">
+				<command id="componentsList.update" />
 			</service>
 			
 			<service id="org.rcfaces.renderkit.html.Tree" class="org.rcfaces.renderkit.html.internal.service.TreeService">
@@ -40,6 +40,14 @@
 			<border-renderer>
 				<border-id>none</border-id>
 				<renderer-class threadSafe="true">org.rcfaces.renderkit.html.internal.border.NoneBorderRenderer</renderer-class>
+			</border-renderer>			
+			<border-renderer>
+				<border-id>noComboMark</border-id>
+				<renderer-class threadSafe="true">org.rcfaces.renderkit.html.internal.border.NoComboMarkBorderRenderer</renderer-class>
+			</border-renderer>			
+			<border-renderer>
+				<border-id>bottomArrow</border-id>
+				<renderer-class threadSafe="true">org.rcfaces.renderkit.html.internal.border.BottomArrowBorderRenderer</renderer-class>
 			</border-renderer>			
 			<border-renderer>
 				<border-id>solid</border-id>

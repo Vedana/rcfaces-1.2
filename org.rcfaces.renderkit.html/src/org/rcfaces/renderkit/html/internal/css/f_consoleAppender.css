@@ -19,6 +19,8 @@
 	border: 1px solid black;
 	background-color: #EEE;
 	display: block;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 .f_consoleAppender_button {

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.6  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.5  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -192,6 +195,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             .getPackagePrefix()
             + ".COMPILED_JS_SUFFIX";
 
+    private static final String CONFIGURATION_VERSION_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".CONFIGURATION_VERSION";
+
     private static final String SYMBOLS_FILENAME = "/symbols";
 
     private static final String REPOSITORY_PROPERTY = "org.rcfaces.renderkit.html.javascript.DependenciesRepository";
@@ -297,7 +304,15 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                 throw new FacesException(
                         "Can not enable \"Repository version\", rcfaces buildId is not detected !");
             }
-            this.repositoryVersion = htmlRCFacesBuildId;
+
+            String buildId = htmlRCFacesBuildId;
+
+            String configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER);
+            if (configurationVersion != null) {
+                buildId += "." + configurationVersion;
+            }
+
+            this.repositoryVersion = buildId;
 
             LOG.info("Repository version buildId='" + htmlRCFacesBuildId
                     + "' setted for servlet '" + getServletName() + "'.");

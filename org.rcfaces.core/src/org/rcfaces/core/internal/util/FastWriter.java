@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -26,6 +29,8 @@
  */
 package org.rcfaces.core.internal.util;
 
+import org.rcfaces.core.internal.lang.StringAppender;
+
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -33,71 +38,42 @@ package org.rcfaces.core.internal.util;
 public class FastWriter {
     private static final String REVISION = "$Revision$";
 
-    private static final char EMPTY_BUFFER[] = new char[0];
-
-    protected char buffer[];
-
-    protected int count;
+    protected final StringAppender sa;
 
     /**
      * Creates a new CharArrayWriter.
      */
     public FastWriter() {
-        buffer = EMPTY_BUFFER;
+        sa = new StringAppender();
     }
 
     public FastWriter(int initialSize) {
-        buffer = new char[initialSize];
+        sa = new StringAppender(initialSize);
     }
 
-    public final FastWriter write(int c) {
-        int newcount = count + 1;
-        if (newcount > buffer.length) {
-            char newbuf[] = new char[Math.max(buffer.length << 1, newcount)];
-            System.arraycopy(buffer, 0, newbuf, 0, count);
-            buffer = newbuf;
-        }
-        buffer[count] = (char) c;
-        count = newcount;
-
-        return this;
-    }
-
-    public final FastWriter write(String str, int off, int len) {
-        int newcount = count + len;
-        if (newcount > buffer.length) {
-            char newbuf[] = new char[Math.max(buffer.length << 1, newcount)];
-            System.arraycopy(buffer, 0, newbuf, 0, count);
-            buffer = newbuf;
-        }
-        str.getChars(off, off + len, buffer, count);
-        count = newcount;
+    public final FastWriter write(char c) {
+        sa.append(c);
 
         return this;
     }
 
     public final FastWriter write(String str) {
-        write(str, 0, str.length());
+        sa.append(str);
 
         return this;
     }
 
-    public final void ensure(int len) {
-        int newcount = count + len;
-        if (newcount <= buffer.length) {
-            return;
-        }
-
-        char newbuf[] = new char[Math.max(buffer.length << 1, newcount)];
-        System.arraycopy(buffer, 0, newbuf, 0, count);
-        buffer = newbuf;
-    }
-
     public final String getBuffer() {
-        return new String(buffer, 0, count);
+        return sa.toString();
     }
 
     public final int getSize() {
-        return count;
+        return sa.length();
+    }
+
+    public final FastWriter ensure(int length) {
+        sa.ensure(length);
+
+        return this;
     }
 }

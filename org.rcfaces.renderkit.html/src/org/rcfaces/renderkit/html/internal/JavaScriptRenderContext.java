@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.6  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.5  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -117,7 +120,6 @@ import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
@@ -198,6 +200,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
     private Map componentIds;
 
     private Locale userLocale;
+
+    private boolean javaScriptStubForced;
 
     public JavaScriptRenderContext(FacesContext facesContext) {
         parent = null;
@@ -612,9 +616,9 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
                     "false);");
 
         } else {
-            char separator = processContext.getNamingSeparatorChar();
+            String separator = processContext.getNamingSeparator();
 
-            if (separator != NamingContainer.SEPARATOR_CHAR) {
+            if (separator != null) {
                 writer.writeCall("fa_namingContainer", "SetSeparator")
                         .writeString(String.valueOf(separator)).writeln(");");
             }
@@ -712,6 +716,18 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         }
 
         LOG.debug("Javascript initialized.");
+    }
+
+    public void clearJavaScriptStubForced() {
+        javaScriptStubForced = false;
+    }
+
+    public void forceJavaScriptStub() {
+        javaScriptStubForced = true;
+    }
+
+    public boolean isJavaScriptStubForced() {
+        return javaScriptStubForced;
     }
 
 }

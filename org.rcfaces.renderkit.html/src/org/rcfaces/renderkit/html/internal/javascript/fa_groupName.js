@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  */
  
 /**
@@ -31,7 +23,7 @@ var __static = {
 }
 var __prototype = {
 	f_finalize: function() {
-		var scope=this._a_getRadioScope();
+		var scope=this.fa_getRadioScope();
 		if (scope) {
 			scope._Groups=undefined; // Map<string,List<any>>
 		}
@@ -73,7 +65,7 @@ var __prototype = {
 	_listGroup: function(groupName, create) {
 		f_core.Assert(groupName, "You must specify a groupName !");
 	
-		var scope=this._a_getRadioScope();
+		var scope=this.fa_getRadioScope();
 		if (!scope) {
 			scope=window;
 		}
@@ -111,6 +103,9 @@ var __prototype = {
 		return group;
 	},
 	
-	_a_getRadioScope: f_class.ABSTRACT
+	/**
+	 * @method protected abstract
+	 */
+	fa_getRadioScope: f_class.ABSTRACT
 }
 var fa_groupName=new f_aspect("fa_groupName", __static, __prototype);

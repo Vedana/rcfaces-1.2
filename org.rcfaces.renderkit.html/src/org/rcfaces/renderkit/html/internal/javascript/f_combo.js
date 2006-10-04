@@ -1,16 +1,5 @@
-/* $Id$
- *
- * $Log$
- * Revision 1.3  2006/09/20 17:55:24  oeuillot
- * Tri multiple des tables
- * Dialogue modale en JS
- *
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:26  oeuillot
- * Renommage  en rcfaces
- *
+/* 
+ * $Id$
  */
 
 
@@ -245,7 +234,7 @@ var __prototype = {
 		this.f_super(arguments, type, target);
 	},
 	
-	_a_updateFilterProperties: function() {
+	fa_updateFilterProperties: function() {
 		this.f_appendCommand(function(combo) {			
 			combo._callServer(0);
 		});

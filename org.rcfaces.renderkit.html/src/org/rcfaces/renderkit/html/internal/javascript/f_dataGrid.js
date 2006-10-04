@@ -66,6 +66,26 @@ var __static = {
 	 */
 	_HEAD_MENU_ID: "#head",
 	
+	/** 
+	 * @field private static final number	
+	 */
+	_TEXT_RIGHT_PADDING: 4,
+	
+	/** 
+	 * @field private static final number	
+	 */
+	_SORT_PADDING: 10,
+	
+	/** 
+	 * @field private static 	
+	 */
+	_DragOldCursor: undefined,
+	
+	/** 
+	 * @field private static	
+	 */
+	_DragColumn: undefined,
+	
 	/**
 	 * @method private static
 	 */
@@ -188,9 +208,16 @@ var __static = {
 		var tr=f_core.GetFirstElementByTagName(dataGrid._table, "TR");
 		if (!tr) {
 			// Le tableau est vide ?
-			dataGrid._title.style.width=dataGrid.offsetWidth+"px";
+//			dataGrid._title.style.width=dataGrid.offsetWidth+"px";
+			
+			f_core.Debug(f_dataGrid, "No rows !");
 			return;
 		}
+		
+		dataGrid._titleLayout=true;
+
+		var ttr=f_core.GetFirstElementByTagName(dataGrid._title, "TR");
+		var tths=ttr.getElementsByTagName("TH");
 		
 		var ths=tr.getElementsByTagName("TD");
 
@@ -211,7 +238,6 @@ var __static = {
 		var tcols=null;
 		var tds=null;
 		var columns=dataGrid._columns;
-		var isInternetExplorer;
 		if (!columns[0]._tcol) {
 			tcols=dataGrid._table.getElementsByTagName("COL");
 			var tr=f_core.GetFirstElementByTagName(dataGrid._table, "TR", false);
@@ -229,6 +255,8 @@ var __static = {
 			if (!col) {
 				break;
 			}
+			tths[i].width="";
+			
 			var w=ths[i].offsetWidth;
 			col.style.width=w+"px";
 			total+=w;
@@ -340,13 +368,13 @@ var __static = {
 		if (this.type=="radio") {
 			checked=true;
 		} else {
-			checked=!dataGrid._isElementChecked(row);
+			checked=!dataGrid.fa_isElementChecked(row);
 		}
 	
-		dataGrid._performElementCheck(row, true, evt, checked);
+		dataGrid.fa_performElementCheck(row, true, evt, checked);
 		
 		if (f_core.IsGecko()) {
-			if (dataGrid._isElementChecked(row)!=checked) {
+			if (dataGrid.fa_isElementChecked(row)!=checked) {
 				return false;
 			}
 		}
@@ -531,7 +559,7 @@ var __static = {
 		}
 		
 		// En drag ?
-		if (window._dragColumn) {
+		if (f_dataGrid._DragColumn) {
 			return false;
 		}	
 
@@ -562,7 +590,7 @@ var __static = {
 		}
 
 		// En drag ?
-		if (window._dragColumn) {
+		if (f_dataGrid._DragColumn) {
 			return false;
 		}	
 
@@ -573,7 +601,7 @@ var __static = {
 		
 		var dataGrid=column._dataGrid;
 
-		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted) {
+		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted || !column._method) {
 			return false;
 		}
 		
@@ -624,7 +652,7 @@ var __static = {
 		}
 	
 //	alert("CB="+dataGrid._columnCanBeSorted);
-		if (!dataGrid._columnCanBeSorted) {
+		if (!dataGrid._columnCanBeSorted || !column._method) {
 			return f_core.CancelEvent(evt);
 		}
 		
@@ -729,7 +757,7 @@ var __static = {
 		var cursorPos=f_core.GetAbsolutePos(this);
 		dataGrid._dragDeltaX=eventPos.x-cursorPos.x+dataGrid._scrollTitle.scrollLeft;
 
-		window._dragColumn=column;
+		f_dataGrid._DragColumn=column;
 		dataGrid._dragOriginX=eventPos.x;
 
 		var ths=dataGrid._title.getElementsByTagName("TH");
@@ -739,7 +767,7 @@ var __static = {
 			ths[i].style.cursor="e-resize";
 		}
 		
-		window._dragOldCursor=document.body.style.cursor;
+		f_dataGrid._DragOldCursor=document.body.style.cursor;
 		document.body.style.cursor="e-resize";
 		
 		return false;
@@ -748,7 +776,7 @@ var __static = {
 	 * @method private static
 	 */
 	_TitleCursorDragMove: function(evt) {
-		var column=window._dragColumn;
+		var column=f_dataGrid._DragColumn;
 		if (!column) {
 			return;
 		}
@@ -770,7 +798,7 @@ var __static = {
 	 * @method private static
 	 */
 	_TimerDragMove: function() {
-		var column=window._dragColumn;
+		var column=f_dataGrid._DragColumn;
 		if (!column) {
 			return;
 		}
@@ -791,7 +819,7 @@ var __static = {
 		
 		if (dataGrid._dragTimerId) {
 			window.clearTimeout(dataGrid._dragTimerId);
-			dataGrid._dragTimerId=null;
+			dataGrid._dragTimerId=undefined;
 		}
 
 		var w=column._col.offsetWidth+dw;
@@ -804,7 +832,7 @@ var __static = {
 		}		
 
 		dw=w-column._col.offsetWidth;
-			
+		
 		if (dw==0) {
 			return false;
 		}
@@ -828,21 +856,51 @@ var __static = {
 			column._restoreClass=undefined;
 		}
 			
+		var tcol=column._tcol;
+		var col=column._col;
+		var head=column._head;
+		var tableOffsetWidth=dataGrid._table.offsetWidth;
+		
+		var twidth=0;
+		if (column._ascendingOrder!==undefined) {
+			twidth-=f_dataGrid._SORT_PADDING;
+		}
+		
 	 	if (f_core.IsInternetExplorer()) {
 			// AVANT !
-			dataGrid._table.style.width=(dataGrid._table.offsetWidth+dw)+"px";
+			if (tableOffsetWidth) {
+				dataGrid._table.style.width=(tableOffsetWidth+dw)+"px";
+			}
+			
 			dataGrid._title.style.width=(dataGrid._title.offsetWidth+dw)+"px";
 
-			column._tcol.style.width=w+"px";
-			column._col.style.width=w+"px";
-		} else {
+			if (tcol) {
+				tcol.style.width=w+"px";
+			}
+			col.style.width=w+"px";
 			
-			column._tcol.style.width=w+"px";
-			column._col.style.width=w+"px";
+			head.style.width=w+"px";
+			column._box.style.width=(w-f_dataGrid._TEXT_RIGHT_PADDING)+"px";
+			column._label.style.width=(w-f_dataGrid._TEXT_RIGHT_PADDING+twidth)+"px";
 
+		} else {
+			if (tcol) {
+				tcol.style.width=w+"px";
+			}
+			col.style.width=w+"px";
+			head.style.width=w+"px";
+			column._box.style.width=(w-f_dataGrid._TEXT_RIGHT_PADDING)+"px";
+			column._label.style.width=(w-f_dataGrid._TEXT_RIGHT_PADDING+twidth)+"px";
+			
+
+			// Ca a peut etre changé !
+			tableOffsetWidth=dataGrid._table.offsetWidth;
+			
 			// APRES !
-			var tw=dataGrid._table.offsetWidth+dw;
-			dataGrid._table.style.width=tw+"px";
+			if (tableOffsetWidth) {
+				var tw=tableOffsetWidth+dw;
+				dataGrid._table.style.width=tw+"px";
+			}
 			dataGrid._title.style.width=(dataGrid._title.offsetWidth+dw)+"px";
 		}
 		
@@ -856,7 +914,7 @@ var __static = {
 	 * @method private static
 	 */
 	_TitleCursorDragStop: function(evt) {
-		var column=window._dragColumn;
+		var column=f_dataGrid._DragColumn;
 		if (!column) {
 			// Cela peut survenir si les stops sont enchainés ....
 			return false;
@@ -872,8 +930,8 @@ var __static = {
 		f_core.RemoveEventListener(document, "mousemove", f_dataGrid._TitleCursorDragMove, dataGrid);
 		f_core.RemoveEventListener(document, "mouseup",   f_dataGrid._TitleCursorDragStop, dataGrid);
 
-		document.body.style.cursor=window._dragOldCursor;
-		window._dragOldCursor=undefined;
+		document.body.style.cursor=f_dataGrid._DragOldCursor;
+		f_dataGrid._DragOldCursor=undefined;
 
 		var ths=dataGrid._title.getElementsByTagName("TH");
 		for(var i=0;i<ths.length;i++) {
@@ -883,7 +941,7 @@ var __static = {
 		
 		column._restoreClass=undefined;
 		
-		window._dragColumn=undefined;
+		f_dataGrid._DragColumn=undefined;
 		dataGrid._dragDeltaX=undefined;
 		dataGrid._dragOriginX=undefined;
 		dataGrid._dragMousePosition=undefined;
@@ -1178,7 +1236,7 @@ var __prototype = {
 	},
 	f_finalize: function() {
 	
-		if (window._dragColumn) {
+		if (f_dataGrid._DragColumn) {
 			f_dataGrid._TitleCursorDragStop();
 		}
 	
@@ -1198,7 +1256,8 @@ var __prototype = {
 		}
 	*/	
 	
-//		this._documentComplete=undefined;
+//		this._titleLayout=undefined; // boolean
+//		this._documentComplete=undefined; // boolean
 
 //		this._blankImageURL=undefined; // string
 //		this._columnsStyleClass=undefined; // string
@@ -1504,13 +1563,13 @@ var __prototype = {
 					column._box=f_core.GetFirstElementByTagName(head, "DIV", true);
 					column._label=f_core.GetFirstElementByTagName(column._box, "DIV");
 
-					if (this._resizable && f_core.GetAttribute(head, "resizable")) {
-					  column._minWidth=f_core.GetAttribute(head, "minWidth");						
+					if (this._resizable && f_core.GetAttribute(head, "v:resizable")) {
+					  column._minWidth=f_core.GetAttribute(head, "v:minWidth");						
 						if (!column._minWidth || column._minWidth<1) {
 							column._minWidth=f_dataGrid._COLUMN_MIN_WIDTH;
 						}
 						
-						column._maxWidth=f_core.GetAttribute(head, "maxWidth");
+						column._maxWidth=f_core.GetAttribute(head, "v:maxWidth");
 						if (!column._maxWidth || column._maxWidth<column._minWidth) {
 							column._maxWidth=f_dataGrid._COLUMN_MAX_WIDTH;
 						}
@@ -1529,7 +1588,7 @@ var __prototype = {
 					
 							if (isInternetExplorer) {
 								// Ben oui ... il faut bien !
-								cursor.style.right="-4px";
+								cursor.style.right="-8px";
 							}
 						}
 					}
@@ -1549,7 +1608,7 @@ var __prototype = {
 	f_isRowSelected: function(row) {
 		return (row._selected)?true:false;
 	},
-	_updateElementStyle: function(row) {
+	fa_updateElementStyle: function(row) {
 		var className;
 		if (this.f_isDisabled()) {
 			className=row._className+"_disabled";
@@ -1843,12 +1902,12 @@ var __prototype = {
 							var input=document.createElement("INPUT");
 							row._input=input;
 							
-							input.id=this.id+fa_namingContainer.SeparatorChar+rowIdx;
+							input.id=this.id+"::"+rowIdx;
 							
 							if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
 								input.type="radio";
 								input.value="CHECKED_"+rowIdx;
-								input.name=this.id+fa_namingContainer.SeparatorChar+"radio";
+								input.name=this.id+"::radio";
 								
 							} else {							
 								input.type="checkbox";
@@ -1881,7 +1940,7 @@ var __prototype = {
 							row._label.className=this._className+"_label";
 							td.appendChild(row._label);
 							
-							this._updateElementCheck(row, checked);
+							this.fa_updateElementCheck(row, checked);
 						}
 					}
 					
@@ -1909,7 +1968,7 @@ var __prototype = {
 			cells.push(td);
 		}
 			
-		this._updateElementStyle(row);
+		this.fa_updateElementStyle(row);
 		
 		return row;
 	},
@@ -1971,7 +2030,7 @@ var __prototype = {
 			this._fireSelectionChangedEvent();
 		}
 		if (checkChanged) {
-			this._fireCheckChangedEvent();
+			this.fa_fireCheckChangedEvent();
 		}
 					
 		return ret;
@@ -1985,8 +2044,8 @@ var __prototype = {
 	f_removeRows: function(rowValues) {
 		return this.f_removeRow.apply(this, rowValues);
 	},
-	_a_updateDisabled: function(disabled) {
-		if (!this._componentUpdated) {
+	fa_updateDisabled: function(disabled) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		var suffix=(disabled)?"_disabled":"";
@@ -2009,7 +2068,7 @@ var __prototype = {
 				row._input.disabled=disabled;
 			}
 			
-			this._updateElementStyle(row);
+			this.fa_updateElementStyle(row);
 		}
 
 		var ths=this._listTitleCells();
@@ -2021,7 +2080,7 @@ var __prototype = {
 			}
 		}			
 	},
-	_a_updateReadOnly: function() {
+	fa_updateReadOnly: function() {
 	},
 	_listTitleCells: function() {
 		var list=new Array;
@@ -2091,6 +2150,7 @@ var __prototype = {
 	 * @return string[] 
 	 */
 	f_getRowValues: function(rowValue, onlyVisible) {
+		f_core.Assert(rowValue, "Invalid rowValue parameter ! ("+rowValue+")");
 		var row;
 		
 		if (rowValue._dataGrid) {
@@ -2228,7 +2288,7 @@ var __prototype = {
 			return value;
 		}
 		
-		var rows=this._listVisibleElements();
+		var rows=this.fa_listVisibleElements();
 		if (!rows) {
 			f_core.Debug(f_dataGrid, "Empty rows to get row by value "+value);
 			if (throwError) {
@@ -2447,12 +2507,8 @@ var __prototype = {
 		params.index=firstIndex;
 
 		var orderColumnIndex=this.f_getProperty(f_prop.SORT_INDEX);
-		if (orderColumnIndex>=0) {
+		if (orderColumnIndex) {
 			params.sortIndex=orderColumnIndex;
-			
-			if (this.f_getProperty(f_prop.SORT_ORDER)) {
-				params.sortOrder=true;
-			}
 		}
 		
 		var filterExpression=this.f_getProperty(f_prop.FILTER_EXPRESSION);
@@ -2646,7 +2702,7 @@ var __prototype = {
 			}			
 		}
 		
-		this._componentUpdated=false;
+		this.fa_componentUpdated=false;
 	},
 	_updateNewPage: function() {
 		// Appeler par la génération du serveur !
@@ -2700,10 +2756,13 @@ var __prototype = {
 			}
 		}
 	
-		this._componentUpdated=true;
+		this.fa_componentUpdated=true;
 
-		if (this._interactiveShow) {
+		f_dataGrid._UpdateTitle(this);
+
+		if (this._interactiveShow || !this._titleLayout ) {
 			this._interactiveShow=undefined;
+			
 			f_dataGrid._UpdateTitle(this);
 		}
 
@@ -2771,6 +2830,7 @@ var __prototype = {
 			column._method=undefined; // function
 			// column._visibility=undefined; // boolean
 			// column._cellStyle=undefined; // String
+			// column._cellToolTipText=undefined; // String
 			// column._autoFilter=undefined; // boolean
 			// column._ascendingOrder=undefined; // boolean
 			
@@ -2896,7 +2956,7 @@ var __prototype = {
 			if (this._checkable) {
 				var cursor=this._cursor;
 				if (cursor) {
-					this._performElementCheck(cursor, true, evt, !this._isElementChecked(this._cursor));
+					this.fa_performElementCheck(cursor, true, evt, !this.fa_isElementChecked(this._cursor));
 				}
 				cancel=true;
 				break;
@@ -2906,7 +2966,6 @@ var __prototype = {
 			
 		case f_key.VK_RETURN:
 		case f_key.VK_ENTER:
-						
 			if (this._cursor && this._selectable) {
 				this._performElementSelection(this._cursor, true, evt, selection);
 			}
@@ -2920,7 +2979,7 @@ var __prototype = {
 		}
 						
 		if (cancel) {
-			return f_core.CancelEvent(evt);;		
+			return f_core.CancelEvent(evt);
 		}
 		
 		return true;
@@ -2948,12 +3007,12 @@ var __prototype = {
 					cursorRow=undefined;
 				}
 				
-				this._updateElementStyle(r);
+				this.fa_updateElementStyle(r);
 			}
 		}
 				
 		if (cursorRow) {
-			this._updateElementStyle(cursorRow);
+			this.fa_updateElementStyle(cursorRow);
 		}
 	},
 	_forceFocus: function() {
@@ -3427,6 +3486,21 @@ var __prototype = {
 	/**
 	 * @method hidden
 	 */
+	f_setColumnsToolTipText: function() {
+		var cols=this._columns;
+		var a=0;
+		for(var i=0;i<cols.length;i++) {
+			var col=cols[i];
+			if (!col._visibility) {
+				continue;
+			}
+			
+			col._cellToolTipText=arguments[a++];
+		}
+	},
+	/**
+	 * @method hidden
+	 */
 	f_setCellImages: function(row) {
 		// Les arguments
 		var images=row._cellImages;
@@ -3590,6 +3664,39 @@ var __prototype = {
 			td.className=td._cellStyleClass;
 		}
 	},
+	/**
+	 * @method hidden
+	 */
+	f_setCellToolTipText: function(row) {
+		var tds=row.getElementsByTagName("TD");
+		var cols=this._columns;
+		row._cellsToolTipText=true;
+		
+		var argIdx=1;
+		var tdIdx=0;
+		for(var i=0;i<cols.length;i++) {
+			var col=cols[i];
+			if (!col._visibility) {
+				continue;
+			}
+
+			if (!col._cellToolTipText) {
+				tdIdx++;
+				continue;
+			}
+
+			var td=tds[tdIdx++];
+			
+			var text=arguments[argIdx++];
+			if (!text) {
+				continue;
+			}
+			
+			td._cellToolTipText=text;
+			td.title=text;
+		}
+	},
+	
 	/**
 	 * @method hidden
 	 */
@@ -3760,22 +3867,55 @@ var __prototype = {
 			className+="_over";
 		}
 
-		if (column._head.className!=className) {
-			column._head.className=className;
+		var head=column._head;
+		if (head.className!=className) {
+			head.className=className;
 		}
 	
 		className=this._className+"_ttext";
 		
+		var stextClassName=this._className+"_stext";
+		
+		var suffix="";
 		var wc=className;
 		if (column._ascendingOrder!==undefined) {
 			if (column._ascendingOrder) {
-				className+="_ascending";
-				
+				suffix="_ascending";
+
 			} else {
-				className+="_descending";
+				suffix="_descending";
 			}
 		}
 		
+		className+=suffix;
+		stextClassName+=suffix;
+		
+		var cw=column._col.style.width;
+		var swidth;
+		if (cw) {
+			swidth=parseInt(cw);
+		} else {
+			swidth=parseInt(column._head.width);
+		}
+		
+		swidth-=f_dataGrid._TEXT_RIGHT_PADDING;
+		
+		document.title="swidth='"+swidth+"' cur='"+column._label.style.width+"' col="+column._col.style.width;
+		
+		var sw=swidth+"px";
+		if (column._box.style.width!=sw) {
+			column._box.style.width=sw;
+		}			
+	
+		if (suffix) {
+			swidth-=f_dataGrid._SORT_PADDING;
+		}
+		
+		var sw=swidth+"px";
+		if (column._label.style.width!=sw) {
+			column._label.style.width=sw;
+		}			
+			
 		if (column._restoreClass) {
 			column._restoreClass=className;
 			className=wc;
@@ -3784,8 +3924,11 @@ var __prototype = {
 		if (column._label.className!=className) {
 			column._label.className=className;
 		}
+		if (column._box.className!=stextClassName) {
+			column._box.className=stextClassName;
+		}
 	},
-	_a_updateFilterProperties: function(filterProperties) {
+	fa_updateFilterProperties: function(filterProperties) {
 		if (!this._interactive) {
 			return false;
 		}
@@ -3803,7 +3946,7 @@ var __prototype = {
 		
 		return false;
 	},	
-	_a_componentCaptureMenuEvent: function() {
+	fa_componentCaptureMenuEvent: function() {
 		return null;
 	},
 	_sortTable: function() {
@@ -3928,7 +4071,7 @@ var __prototype = {
 				row._className=even;
 			}
 			
-			this._updateElementStyle(row);
+			this.fa_updateElementStyle(row);
 		}
 	
 		this._table.appendChild(body);	
@@ -3962,7 +4105,7 @@ var __prototype = {
 	f_deselectRow: function(rowValue, show, jsEvent) {
 		var row=this.f_getRowByValue(rowValue, true);
 		
-		if (!this._isElementSelected(row)) {
+		if (!this.fa_isElementSelected(row)) {
 			return false;
 		}
 
@@ -3980,11 +4123,11 @@ var __prototype = {
 	f_checkRow: function(rowValue, show, jsEvent) {
 		var row=this.f_getRowByValue(rowValue, true);
 			
-		if (this._isElementChecked(row)) {
+		if (this.fa_isElementChecked(row)) {
 			return false;
 		}
 		
-		return this._performElementCheck(row, show, jsEvent, true);
+		return this.fa_performElementCheck(row, show, jsEvent, true);
 	},
 	/**
 	 * Uncheck a row.
@@ -3997,11 +4140,11 @@ var __prototype = {
 	f_uncheckRow: function(rowValue, jsEvent) {
 		var row=this.f_getRowByValue(rowValue, true);
 		
-		if (!this._isElementChecked(row)) {
+		if (!this.fa_isElementChecked(row)) {
 			return false;
 		}
 		
-		return this._performElementCheck(row, false, jsEvent, false);
+		return this.fa_performElementCheck(row, false, jsEvent, false);
 	},
 	
 	/**
@@ -4014,7 +4157,7 @@ var __prototype = {
 	f_getChecked: function(rowValue) {
 		var row=this.f_getRowByValue(rowValue, true);
 	
-		return this._isElementValueChecked(row);
+		return this.fa_isElementValueChecked(row);
 	},
 	/**
 	 * Returns <code>true</code> if the receiver is checked, and <code>false</code> otherwise
@@ -4029,30 +4172,30 @@ var __prototype = {
 		return this._isElementValueSelected(row); 
 	},
 
-	_getElementValue: function(row) {
-		f_core.Assert(row && row.tagName=="TR", "f_dataGrid._getElementValue: Invalid element parameter ! ("+row+")");
+	fa_getElementValue: function(row) {
+		f_core.Assert(row && row.tagName=="TR", "f_dataGrid.fa_getElementValue: Invalid element parameter ! ("+row+")");
 
 		return row._index;
 	},
 
-	_isElementDisabled: function(row) {
+	fa_isElementDisabled: function(row) {
 		return false;
 	},
 
-	_isElementSelected: function(row) {
-		f_core.Assert(row && row.tagName=="TR", "f_dataGrid._isElementSelected: Invalid element parameter ! ("+row+")");
+	fa_isElementSelected: function(row) {
+		f_core.Assert(row && row.tagName=="TR", "f_dataGrid.fa_isElementSelected: Invalid element parameter ! ("+row+")");
 		
 		return row._selected;
 	},
 	
-	_setElementSelected: function(row, selected) {
-		f_core.Assert(row && row.tagName=="TR", "f_dataGrid._setElementSelected: Invalid element parameter ! ("+row+")");
+	fa_setElementSelected: function(row, selected) {
+		f_core.Assert(row && row.tagName=="TR", "f_dataGrid.fa_setElementSelected: Invalid element parameter ! ("+row+")");
 		
 		row._selected=selected;
 	},
 	
-	_showElement: function(row) {
-		f_core.Assert(row && row.tagName=="TR", "f_dataGrid._showElement: Invalid element parameter ! ("+row+")");
+	fa_showElement: function(row) {
+		f_core.Assert(row && row.tagName=="TR", "f_dataGrid.fa_showElement: Invalid element parameter ! ("+row+")");
 
 		var scrollBody=this._scrollBody;
 		if (row.offsetTop-scrollBody.scrollTop<0) {
@@ -4065,16 +4208,16 @@ var __prototype = {
 		}		
 	},
 	
-	_listVisibleElements: function() {
+	fa_listVisibleElements: function() {
 		return this._rowsPool;
 	},
-	_isElementChecked: function(row) {
-		f_core.Assert(row && row.tagName=="TR", "f_dataGrid._isElementChecked: Invalid element parameter ! ("+row+")");
+	fa_isElementChecked: function(row) {
+		f_core.Assert(row && row.tagName=="TR", "f_dataGrid.fa_isElementChecked: Invalid element parameter ! ("+row+")");
 
 		return (row._checked)?true:false;
 	},
-	_setElementChecked: function(row, checked) {
-		f_core.Assert(row && row.tagName=="TR", "f_dataGrid._setElementChecked: Invalid element parameter ! ("+row+")");
+	fa_setElementChecked: function(row, checked) {
+		f_core.Assert(row && row.tagName=="TR", "f_dataGrid.fa_setElementChecked: Invalid element parameter ! ("+row+")");
 
 		row._checked=checked;
 	}	

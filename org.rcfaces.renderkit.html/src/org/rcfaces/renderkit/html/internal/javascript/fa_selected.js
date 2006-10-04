@@ -52,18 +52,18 @@ var __prototype = {
 		// On le met avant l'update, car des fois que la valeur rechange ...
 		this.f_setProperty(f_prop.SELECTED, set);
 	
-		this._a_updateSelected(set);
+		this.fa_updateSelected(set);
 	},
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_updateSelected: f_class.ABSTRACT,
+	fa_updateSelected: f_class.ABSTRACT,
 
 
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT

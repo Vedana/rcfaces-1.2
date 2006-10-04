@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -425,7 +428,7 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
 
         String parentVarId = getToolBarContext().peekVarId();
 
-        javaScriptWriter.writeMethodCall("_appendSeparatorItem").write(
+        javaScriptWriter.writeMethodCall("f_appendSeparatorItem").write(
                 parentVarId).writeln(");");
     }
 

@@ -1252,18 +1252,26 @@ var __prototype = {
 	 */
 	f_setConvertedValue: function(value) {		
 		var converter=this._converter;
-		if (converter) {
-			try {
-				value=converter.f_getAsString(this, value);
-				
-			} catch (x) {
-				f_core.Error(f_clientValidator, "Exception when calling converter with object '"+value+"'. (converter='"+converter+"')", x);
-				
-				throw x;
-			}
+		if (!converter) {
+			f_core.Debug(f_clientValidator, "No conversion, returns false");
+
+			return false;
 		}
+
+		try {
+			value=converter.f_getAsString(this, value);
+			
+		} catch (x) {
+			f_core.Error(f_clientValidator, "Exception when calling converter with object '"+value+"'. (converter='"+converter+"')", x);
+			
+			throw x;
+		}
+
+		f_core.Debug(f_clientValidator, "Update value of converted value="+value);
 		
 		this.f_updateValue(value);
+		
+		return true;
 	}
 }
 

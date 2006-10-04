@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -91,8 +94,8 @@ import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.model.BasicImagesSelectItem;
 import org.rcfaces.core.model.BasicSelectItem;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.model.IFilteredCollection;
-import org.rcfaces.core.model.IFilteredCollection.IFilteredIterator;
+import org.rcfaces.core.model.IFiltredCollection;
+import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.ICssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -475,8 +478,8 @@ public abstract class AbstractSelectItemsDecorator extends
             return;
         }
 
-        if (value instanceof IFilteredCollection) {
-            IFilteredCollection filteredList = (IFilteredCollection) value;
+        if (value instanceof IFiltredCollection) {
+            IFiltredCollection filtredList = (IFiltredCollection) value;
 
             int max = getMaxResultNumber();
             if (max > 0) {
@@ -486,7 +489,7 @@ public abstract class AbstractSelectItemsDecorator extends
                 }
             }
 
-            Iterator it = filteredList.iterator(filterProperties, max);
+            Iterator it = filtredList.iterator(filterProperties, max);
             try {
                 int sic = 0;
 
@@ -498,8 +501,8 @@ public abstract class AbstractSelectItemsDecorator extends
                     sic++;
                 }
 
-                if (it instanceof IFilteredCollection.IFilteredIterator) {
-                    int s = ((IFilteredCollection.IFilteredIterator) it)
+                if (it instanceof IFiltredCollection.IFiltredIterator) {
+                    int s = ((IFiltredCollection.IFiltredIterator) it)
                             .getSize();
                     if (s > sic) {
                         selectItemCount += s - sic;
@@ -507,8 +510,8 @@ public abstract class AbstractSelectItemsDecorator extends
                 }
 
             } finally {
-                if (it instanceof IFilteredIterator) {
-                    ((IFilteredIterator) it).release();
+                if (it instanceof IFiltredIterator) {
+                    ((IFiltredIterator) it).release();
                 }
             }
 
@@ -556,7 +559,7 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected int getMaxResultNumber() {
-        return IFilteredCollection.NO_MAXIMUM_RESULT_NUMBER;
+        return IFiltredCollection.NO_MAXIMUM_RESULT_NUMBER;
     }
 
     private boolean encodeSelectItem(UIComponent component,

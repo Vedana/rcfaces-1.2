@@ -11,7 +11,7 @@
  */
 var __prototype = {
 	f_finalize: function() {
-		this._itemsWrapper=undefined;
+		this._itemsWrapper=undefined; // fa_items
 	},
 
 	/**
@@ -215,6 +215,9 @@ var __prototype = {
 	f_getItemClientData: function(item, key) {
 		return this._getItemsWrapper().f_getItemClientData(item, key);
 	},
+	/**
+	 * @method private
+	 */
 	_getItemsWrapper: function() {
 		var itemsWrapper=this._itemsWrapper;
 		
@@ -222,7 +225,7 @@ var __prototype = {
 			return itemsWrapper;
 		}
 		
-		itemsWrapper=this._a_getItemsWrapper();
+		itemsWrapper=this.fa_getItemsWrapper();
 		f_core.Assert(itemsWrapper, "Items wrapper is not defined !");
 		
 		this._itemsWrapper=itemsWrapper;
@@ -230,7 +233,10 @@ var __prototype = {
 		return itemsWrapper;
 	},
 	
-	_a_getItemsWrapper: f_class.ABSTRACT
+	/**
+	 * @method protected abstract
+	 */
+	fa_getItemsWrapper: f_class.ABSTRACT
 }
 
 var fa_itemsWrapper=new f_aspect("fa_itemsWrapper", null, __prototype);

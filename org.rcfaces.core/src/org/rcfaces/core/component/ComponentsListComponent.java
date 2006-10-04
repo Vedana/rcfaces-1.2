@@ -12,20 +12,20 @@ import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IBorderCapability;
 
-public class DataListComponent extends AbstractDataComponent implements 
+public class ComponentsListComponent extends AbstractDataComponent implements 
 	IMenuCapability,
 	IBorderCapability,
 	IBorderTypeCapability,
 	IScrollableCapability {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.dataList";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.componentsList";
 
 
-	public DataListComponent() {
+	public ComponentsListComponent() {
 		setRendererType(COMPONENT_TYPE);
 	}
 
-	public DataListComponent(String componentId) {
+	public ComponentsListComponent(String componentId) {
 		this();
 		setId(componentId);
 	}

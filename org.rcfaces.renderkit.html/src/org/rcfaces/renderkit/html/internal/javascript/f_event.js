@@ -143,6 +143,11 @@ var __static = {
 	 */
 	MODAL_LOCK: 2,
 
+	/**
+	 * @field hidden static final number
+	 */
+	POPUP_LOCK: 4,
+
 	/* 
 	 * @field private static number
 	 */
@@ -410,25 +415,38 @@ var __static = {
 	 * @method hidden static
 	 * @return boolean Returns <code>true</code> if lock is setted !
 	 */
-	GetEventLocked: function(showAlert) {
+	GetEventLocked: function(showAlert, mask) {
 	
 		if (!window.f_event) {
 			return true;
 		}
-	
-		var currentLock=f_event._EvtLock;
-		var currentMode=f_event._EvtLockMode;
 
-		if (currentMode===false || !currentLock) {
+		var currentLock=f_event._EvtLock;
+
+		if (mask) {
+			currentLock &= ~mask;
+		}
+		if (!currentLock) {
 			return false;
 		}
+
 		if (currentLock==f_event.MODAL_LOCK) {
 			if (!f_core.VerifyModalWindow()) {
-				return false;
+				return false; // finalement c'est pas verouillé !
 			}
 		
 			// On passe le focus dessus normalement, donc pas de boite d'alerte !
 			return true;
+		}
+	
+		if (currentLock==f_event.POPUP_LOCK) {
+			f_core.Debug("f_event", "Catch popup lock (mask="+mask+" show="+showAlert+")");
+			return true;
+		}
+	
+		var currentMode=f_event._EvtLockMode;
+		if (currentLock==f_event.SUBMIT_LOCK && currentMode===false) {
+			return false;
 		}
 		
 		f_core.Debug("f_event", "Events are locked, break current process ! (mode="+currentMode+" state="+currentLock+" show="+showAlert+")");

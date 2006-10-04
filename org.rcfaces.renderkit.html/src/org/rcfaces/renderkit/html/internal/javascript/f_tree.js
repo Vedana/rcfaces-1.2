@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/01 15:24:34  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:14:26  oeuillot
- * Renommage  en rcfaces
- *
  */
 
 /**
@@ -50,34 +42,73 @@ var __static = {
 	 */
 	_COMMAND_IMAGE_HEIGHT: 16,
 
+	/**
+	 * @method private static 
+	 */
 	_NodeLabel_mouseOver: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
-		if (tree.f_getEventLocked(false)) {
+		if (tree.f_getEventLocked(false) || li._labelOver) {
 			return false;
 		}
-		
-		if (!evt) evt = window.event;
 			
-		li._over=true;
+		li._labelOver=true;
 		
-		tree._updateElementStyle(li);
+		tree.fa_updateElementStyle(li);
 	},
+	/**
+	 * @method private static 
+	 */
 	_NodeLabel_mouseOut: function(evt) {
-		if (!evt) evt = window.event;
-
 		var li=this._node;
 		var tree=li._tree;
 
-		if (!li._over) {
+		if (!li._labelOver) {
 			return;
 		}
 		
-		li._over=false;
+		li._labelOver=undefined;
 		
-		tree._updateElementStyle(li);
+		tree.fa_updateElementStyle(li);
 	},
-	_NodeLabel_dblClick: function(evt) {
+	/**
+	 * @method private static 
+	 */
+	_DivNode_mouseOver: function(evt) {
+		var li=this._node;
+		var tree=li._tree;
+
+		f_core.Assert(tree && tree.tagName, "f_tree._DivNode_mouseOver: Invalid tree this=("+this.id+"/"+this.tagname+") li=("+li.id+"/"+li.tagName+")");
+
+		if (!tree || tree.f_getEventLocked(false) || li._over) {
+			return false;
+		}
+			
+		li._over=true;
+		
+		tree.fa_updateElementStyle(li);
+	},
+	/**
+	 * @method private static 
+	 */
+	_DivNode_mouseOut: function(evt) {
+		var li=this._node;
+		var tree=li._tree;
+
+		f_core.Assert(tree && tree.tagName, "f_tree._DivNode_mouseOut: Invalid tree this=("+this.id+"/"+this.tagname+") li=("+li.id+"/"+li.tagName+")");
+
+		if (!tree || !li._over) {
+			return;
+		}
+		
+		li._over=undefined;
+		
+		tree.fa_updateElementStyle(li);
+	},
+	/**
+	 * @method private static 
+	 */
+	_DivNode_dblClick: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
 		if (tree.f_getEventLocked()) {
@@ -93,7 +124,10 @@ var __static = {
 
 		return f_core.CancelEvent(evt);
 	},
-	_NodeLabel_mouseDown: function(evt) {
+	/**
+	 * @method private static 
+	 */
+	_DivNode_mouseDown: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
 		if (tree.f_getEventLocked()) {
@@ -122,6 +156,9 @@ var __static = {
 
 		return f_core.CancelEvent(evt);
 	},
+	/**
+	 * @method private static 
+	 */
 	_BodyMouseDown: function(evt) {
 		var tree=this;
 		
@@ -155,6 +192,9 @@ var __static = {
 			
 		return f_core.CancelEvent(evt);
 	},
+	/**
+	 * @method private static 
+	 */
 	_Command_mouseDown: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
@@ -180,6 +220,9 @@ var __static = {
 		
 		return f_core.CancelEvent(evt);
 	},
+	/**
+	 * @method private static 
+	 */
 	_Link_bodyOnfocus: function(evt) {
 		var tree=this._tree;
 		if (tree.f_getEventLocked(false)) {
@@ -189,6 +232,9 @@ var __static = {
 		
 		tree.f_setFocus();
 	},
+	/**
+	 * @method private static 
+	 */
 	_Link_onfocus: function(evt) {
 		var tree=this._tree;
 		if (tree.f_getEventLocked(false)) {
@@ -224,6 +270,9 @@ var __static = {
 
 		return true;		
 	},
+	/**
+	 * @method private static 
+	 */
 	_Link_onblur: function(evt) {
 		var tree=this._tree;
 
@@ -252,6 +301,9 @@ var __static = {
 
 		return true;
 	},
+	/**
+	 * @method private static 
+	 */
 	_Link_onkeydown: function(evt) {
 		var tree=this._tree;
 		if (tree.f_getEventLocked(true)) {
@@ -265,6 +317,9 @@ var __static = {
 
 		return tree.f_onKeyDown(evt);
 	},
+	/**
+	 * @method private static 
+	 */
 	_Link_onkeyup: function(evt) {
 		var tree=this._tree;
 		if (tree.f_getEventLocked(false)) {
@@ -278,6 +333,9 @@ var __static = {
 
 		return tree.f_onKeyUp(evt);
 	},
+	/**
+	 * @method private static 
+	 */
 	_Link_onkeypress: function(evt) {
 		var tree=this._tree;
 		if (tree.f_getEventLocked(false)) {
@@ -291,6 +349,9 @@ var __static = {
 
 		return tree.f_onKeyPress(evt);
 	},
+	/**
+	 * @method private static 
+	 */
 	_NodeInput_mouseClick: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
@@ -310,19 +371,22 @@ var __static = {
 		if (this.type=="radio") {
 			checked=true;
 		} else {
-			checked=!tree._isElementChecked(li);
+			checked=!tree.fa_isElementChecked(li);
 		}
 	
-		tree._performElementCheck(li, true, evt, checked);
+		tree.fa_performElementCheck(li, true, evt, checked);
 		
 		if (f_core.IsGecko()) {
-			if (tree._isElementChecked(li)!=checked) {
+			if (tree.fa_isElementChecked(li)!=checked) {
 				return false;
 			}
 		}
  
 		return true;
 	},
+	/**
+	 * @method private static 
+	 */
 	_InitializeScrollbars: function(tree) {
 		var pos=tree._initialHorizontalScrollPosition;
 		if (pos) {
@@ -352,9 +416,7 @@ var __prototype = {
 		}
 				
 		var v_userExpandable=f_core.GetAttribute(this, "v:userExpandable");
-		if (v_userExpandable) {
-			this._userExpandable=true;
-		}
+		this._userExpandable=(v_userExpandable!="false");
 		
 		this._className=f_core.GetAttribute(this, "v:className");
 		if (!this._className) {
@@ -545,12 +607,30 @@ var __prototype = {
 		li._node=undefined;
 		li._nodes=undefined;
 //		li._depth=undefined; // number
-		li._tree=undefined;
+//		li._className=undefined; // string
+		li._tree=undefined; // f_tree
+		li._divNode=undefined; // HtmlDivElement
 		// li.title=null;
 //		li._over=undefined; // boolean
 		
-		if (li._command) {
-			var command=li._command;
+		var divNode=li._divNode;
+		if (divNode) {
+			li._divNode=undefined;
+
+			divNode.onmouseover=null;
+			divNode.onmouseout=null;
+			divNode.onmousedown=null;
+			divNode.onmouseup=null;
+			divNode.onclick=null;
+			divNode.ondblclick=null;
+
+			divNode._node=undefined;
+			
+			f_core.VerifyProperties(divNode);			
+		}
+		
+		var command=li._command;
+		if (command) {
 			li._command=undefined;
 			
 			command._node=undefined;
@@ -562,19 +642,19 @@ var __prototype = {
 			f_core.VerifyProperties(command);			
 		}
 		
-		if (li._input) {
-			var input=li._input;
+		var input=li._input;
+		if (input) {
 			li._input=undefined;
 
 			input._node=undefined;
 			input.onclick=null;
-			input.tabIndex=null;
+			// input.tabIndex=undefined; // string
 			
 			f_core.VerifyProperties(input);			
 		}
 		
-		if (li._image) {
-			var image=li._image;
+		var image=li._image;
+		if (image) {
 			li._image=undefined;
 
 			image._node=undefined;
@@ -582,23 +662,19 @@ var __prototype = {
 			f_core.VerifyProperties(image);			
 		}
 		
-		if (li._span) {
-			var span=li._span;
+		var span=li._span;
+		if (span) {
 			li._span=undefined;
 
-			span._node=undefined;
 			span.onmouseover=null;
 			span.onmouseout=null;
-			span.onmousedown=null;
-			span.onmouseup=null;
-			span.onclick=null;
-			span.ondblclick=null;
+			span._node=undefined;
 		
 			f_core.VerifyProperties(span);			
 		}
 		
-		if (li._label) {
-			var label=li._label;
+		var label=li._label;
+		if (label) {
 			li._label=undefined;
 
 			label._node=undefined;
@@ -673,15 +749,33 @@ var __prototype = {
 			var node=nodes[i];
 			
 			var li=document.createElement("LI");
+
 			li._node=node;
 			li._depth=depth;
 			li._tree=this;
-			li.className=this.className+"_parent";
+			li._className=this.className+"_parent";
+			li.className=li._className;
 			if (node._tooltip) {
 				li.title=node._tooltip;
 			}
 			
-			var d=1;
+			container.appendChild(li); // Evite les fuites memoires
+
+			var divNode=document.createElement("DIV");
+			li._divNode=divNode;
+			divNode._node=li;
+			divNode.className=this.className+"_depth"+depth;
+			
+			divNode.onmouseover=f_tree._DivNode_mouseOver;
+			divNode.onmouseout=f_tree._DivNode_mouseOut;
+			divNode.onmousedown=f_tree._DivNode_mouseDown;
+			divNode.onmouseup=f_core.CancelEventHandler;
+			divNode.onclick=f_core.CancelEventHandler;
+			divNode.ondblclick=f_tree._DivNode_dblClick;
+
+			li.appendChild(divNode);
+			
+			var d=depth;
 			if (this._userExpandable) {
 				if (depth>0 || !this._hideRootExpandSign) {
 					var command=document.createElement("IMG");
@@ -691,7 +785,7 @@ var __prototype = {
 					command.src=this._blankNodeImageURL;
 					command._node=li;
 		
-					li.appendChild(command);
+					divNode.appendChild(command);
 					li._command=command;
 									
 					command._className=this._className+"_command";					
@@ -701,14 +795,12 @@ var __prototype = {
 					
 					this._updateCommandStyle(li);					
 				}
-				if (depth==0 || (depth<=1 && this._hideRootExpandSign)) {
+				if (depth==1 && this._hideRootExpandSign) {
 					d=0;
 				}
-			} else if (depth==0) {
-				d=0;
-			}	
+			}
 			
-			li.style.paddingLeft=(d*f_tree._COMMAND_IMAGE_WIDTH)+"px";
+			divNode.style.paddingLeft=(d*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 			
 			if (this._checkable) {
 				var input=document.createElement("INPUT");
@@ -721,12 +813,12 @@ var __prototype = {
 				var nodeIdx=(this._nodeIdx)?(this._nodeIdx++):1;
 				this._nodeIdx=nodeIdx;
 			
-				input.id=container.id+fa_namingContainer.SeparatorChar+":"+nodeIdx;
+				input.id=container.id+"::"+nodeIdx;
 	
 				if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
 					input.type="radio";
 					input.value="CHECKED_"+nodeIdx;
-					input.name=this.id+fa_namingContainer.SeparatorChar+"radio";
+					input.name=this.id+"::radio";
 					
 				} else {
 					input.type="checkbox";
@@ -734,20 +826,16 @@ var __prototype = {
 					input.name=input.id;
 				}
 
-				li.appendChild(input);
+				divNode.appendChild(input);
 			}
 
 			var span=document.createElement("SPAN");
 			li._span=span;
-			li.appendChild(span);
+			divNode.appendChild(span);
 			
+			span._node=li;
 			span.onmouseover=f_tree._NodeLabel_mouseOver;
 			span.onmouseout=f_tree._NodeLabel_mouseOut;
-			span.onmousedown=f_tree._NodeLabel_mouseDown;
-			span.onmouseup=f_core.CancelEventHandler;
-			span.onclick=f_core.CancelEventHandler;
-			span.ondblclick=f_tree._NodeLabel_dblClick;
-			span._node=li;
 			
 			if (this._images) {
 				var image=document.createElement("IMG");
@@ -775,10 +863,10 @@ var __prototype = {
 				this._updateElementSelection(li, li._node._selected);
 			}
 			if (this._checkable) {	
-				this._updateElementCheck(li, li._node._checked);
+				this.fa_updateElementCheck(li, li._node._checked);
 			}
 			
-			this._updateElementStyle(li);
+			this.fa_updateElementStyle(li);
 			
 			if (node._container) {
 				// On peut etre un container sans posseder (encore) d'enfants.
@@ -801,8 +889,6 @@ var __prototype = {
 					li._nodes.style.display="list-item";
 				}
 			}
-			
-			container.appendChild(li);
 		}
 	},
 	/**
@@ -843,7 +929,7 @@ var __prototype = {
 	
 		ul.style.display="none";
 			
-		this._updateElementStyle(li);
+		this.fa_updateElementStyle(li);
 		this._updateCommandStyle(li);
 		
 		return true;
@@ -908,7 +994,7 @@ var __prototype = {
 				ul.style.display="list-item";
 			}
 							
-			var waitingNode=this._newWaitingNode();
+			var waitingNode=this._newWaitingNode(li._depth);
 			ul.appendChild(waitingNode);
 	
 			if (!this._waitingNodes) {
@@ -932,7 +1018,7 @@ var __prototype = {
 		
 		ul.style.display="list-item";
 
-		this._updateElementStyle(li);
+		this.fa_updateElementStyle(li);
 		this._updateCommandStyle(li);
 		
 		return true;
@@ -940,7 +1026,7 @@ var __prototype = {
 	_reloadTree: function() {
 		var ul=this;
 	
-		var waitingNode=this._newWaitingNode();
+		var waitingNode=this._newWaitingNode(0);
 		ul.appendChild(waitingNode);
 
 		if (!this._waitingNodes) {
@@ -1072,13 +1158,18 @@ var __prototype = {
 		request.f_doFormRequest(params);
 		
 	},
-	_newWaitingNode: function() {
+	_newWaitingNode: function(parentDepth) {
 		var li=document.createElement("LI");
 
 		li.className=this.className+"_parent";
 		
+		var divNode=document.createElement("DIV");
+		li.appendChild(divNode);
+		divNode.className=this.className+"_depth"+(parentDepth+1);
+		divNode.style.paddingLeft=(parentDepth*f_tree._COMMAND_IMAGE_WIDTH)+"px";
+		
 		var command=document.createElement("IMG");
-		li.appendChild(command);
+		divNode.appendChild(command);
 
 		command.align="center";
 		command.width=f_tree._COMMAND_IMAGE_WIDTH;
@@ -1086,7 +1177,7 @@ var __prototype = {
 		command.src=this._blankNodeImageURL;
 
 		var span=document.createElement("SPAN");
-		li.appendChild(span);
+		divNode.appendChild(span);
 		
 		var image=document.createElement("IMG");
 		span.appendChild(image);
@@ -1122,14 +1213,11 @@ var __prototype = {
 			return false;
 		}
 		
-		this._showElement(item);
+		this.fa_showElement(item);
 		
 		return true;
 	},
-	/**
-	 * @method private
-	 */
-	_showElement: function(item) {
+	fa_showElement: function(item) {
 		f_core.Assert(item && item.tagName, "Item parameter must be a LI tag ! ("+item+")");
 		
 		//f_core.Debug("f_tree", "Show="+item._label.innerHTML);
@@ -1146,26 +1234,51 @@ var __prototype = {
 			return;
 		}
 	},
-	_updateElementStyle: function(li) {
+	fa_updateElementStyle: function(li) {
 		f_core.Assert(li && li.tagName=="LI", "Invalid LI parameter ("+li+")");
 		
 		var node=li._node;
-		var className=this._className+"_node";
+	
+		var suffixLabel="";
+		var suffixDivNode="";
 	
 		if (node._disabled) {
-			className+="_disabled";
+			if (!node._container) {
+				suffixDivNode+="_leaf"
+			}	
+			
+			suffixLabel+="_disabled";
+			suffixDivNode+="_disabled";
 		
 		} else {
-			if (node._selected) {
-				className+="_selected";
+			if (node._opened) {
+				suffixDivNode+="_opened"
 				
-				if (this._focus) {
-					className+="_focus";
-				}
-			}
+			} else if (!node._container) {
+				suffixDivNode+="_leaf"
+			}	
+		
 			if (li._over) {
-				className+="_hover";
+				suffixDivNode+="_hover";
 			}
+
+			if (node._selected) {
+				suffixLabel+="_selected";
+			}				
+			if (this._focus && li==this._cursor) {
+				suffixLabel+="_focus";
+			}
+			if (li._labelOver) {
+				suffixLabel+="_hover";
+			}
+		}
+	
+		var divNode=li._divNode;
+		var divNodeClassName=this.className+"_depth"+li._depth+suffixDivNode;
+		var labelClassName=this._className+"_node"+suffixLabel;
+		
+		if (divNode.className!=divNodeClassName) {
+			divNode.className=divNodeClassName;
 		}
 	
 		var liImage=li._image;	
@@ -1178,18 +1291,18 @@ var __prototype = {
 		}
 		
 		var span=li._span;
-		if (span.className!=className) {
-			span.className=className;
+		if (span.className!=labelClassName) {
+			span.className=labelClassName;
 		}
 		
-		className=this._className+"_label";
+		labelClassName=this._className+"_label";
 		if (this._cursor==li && this._focus) {
-			className+="_cursor";
+			labelClassName+="_cursor";
 		}
 
 		var label=li._label;
-		if (label.className!=className) {
-			label.className=className;
+		if (label.className!=labelClassName) {
+			label.className=labelClassName;
 		}
 		
 		var input=li._input;
@@ -1216,17 +1329,23 @@ var __prototype = {
 
 		var node=li._node;
 		
+		var className=command._className;
+		
 		if (node._container) {
 			if (!node._opened) {
-				command.className=command._className+"_opened";
-				return;
+				className+="_opened";
+			} else {
+				className+="_closed";
 			}
-
-			command.className=command._className+"_closed";
-			return;
+		}
+		
+		if (node._selected) {
+			className+="_selected";
 		}
 
-		command.className=command._className;
+		if (className!=command.className) {
+			command.className=className;
+		}
 	},
 	_searchNodeImageURL: function(node) {
 		var imageURL;
@@ -1499,7 +1618,7 @@ var __prototype = {
 
 		case f_key.VK_SPACE:
 			if (this._checkable) {
-				this._performElementCheck(this._cursor, true, evt);
+				this.fa_performElementCheck(this._cursor, true, evt);
 				cancel=true;
 				break;
 			}
@@ -1558,7 +1677,7 @@ var __prototype = {
 			return;
 		}
 		
-		var lis=this._listVisibleElements();
+		var lis=this.fa_listVisibleElements();
 		
 		var i=0;
 		for(;i<lis.length;i++) {
@@ -1579,7 +1698,7 @@ var __prototype = {
 		this._moveCursor(lis[i], true, evt, selection);
 	},
 	_lastTreeNode: function(evt, selection) {
-		var lis=this._listVisibleElements();
+		var lis=this.fa_listVisibleElements();
 		if (!lis || lis.length<1) {
 			return;
 		}
@@ -1593,7 +1712,7 @@ var __prototype = {
 			return;
 		}
 
-		var lis=this._listVisibleElements();
+		var lis=this.fa_listVisibleElements();
 		
 		var parent=this;
 		
@@ -1628,7 +1747,7 @@ var __prototype = {
 		this._moveCursor(last, true, evt, selection);
 	},
 	_firstTreeNode: function(evt, selection) {		
-		var lis=this._listVisibleElements();
+		var lis=this.fa_listVisibleElements();
 		if (!lis || lis.length<1) {
 			return;
 		}
@@ -1642,7 +1761,7 @@ var __prototype = {
 			return;
 		}
 
-		var lis=this._listVisibleElements();
+		var lis=this.fa_listVisibleElements();
 		
 		var i=0;
 		for(;i<lis.length;i++) {
@@ -1670,7 +1789,7 @@ var __prototype = {
 			return;
 		}
 		
-		var lis=this._listVisibleElements();
+		var lis=this.fa_listVisibleElements();
 		
 		var parent=this;
 		
@@ -1704,7 +1823,7 @@ var __prototype = {
 
 		this._moveCursor(last, true, evt, selection);
 	},
-	_listVisibleElements: function(container, list) {
+	fa_listVisibleElements: function(container, list) {
 		if (container===undefined) {
 			container=this;
 			list=new Array;
@@ -1728,7 +1847,7 @@ var __prototype = {
 			
 			var ul=li.getElementsByTagName("UL");
 			if (ul.length>0) {
-				this._listVisibleElements(ul[0], list);
+				this.fa_listVisibleElements(ul[0], list);
 			}
 		}
 		
@@ -1754,7 +1873,7 @@ var __prototype = {
 			return;
 		}
 		
-		this._showElement(cursorLi);
+		this.fa_showElement(cursorLi);
 		this.f_openNode(cursorLi._node, evt, cursorLi);
 	},
 	_closeTreeNode: function(evt, selection) {
@@ -1767,7 +1886,7 @@ var __prototype = {
 		
 		if (cursorNode._container && cursorNode._opened) {
 			this._closeNode(cursorNode, evt, cursorLi);
-			this._showElement(cursorLi);
+			this.fa_showElement(cursorLi);
 			return;
 		}
 
@@ -1792,7 +1911,7 @@ var __prototype = {
 			return;
 		}
 
-		this._showElement(cursorLi);
+		this.fa_showElement(cursorLi);
 
 		var listLI=new Array;
 		listLI.push(cursorLi);
@@ -1814,11 +1933,11 @@ var __prototype = {
 				continue;
 			}
 
-			this._listVisibleElements(ul, listLI);
+			this.fa_listVisibleElements(ul, listLI);
 		}
 	},
 	_searchTreeNode: function(code, evt) {
-		var lis=this._listVisibleElements();
+		var lis=this.fa_listVisibleElements();
 		
 		var pos=0;
 
@@ -1890,11 +2009,11 @@ var __prototype = {
 				cursorLi=undefined;
 			}
 			
-			this._updateElementStyle(li);
+			this.fa_updateElementStyle(li);
 		}
 		
 		if (cursorLi) {
-			this._updateElementStyle(cursorLi);
+			this.fa_updateElementStyle(cursorLi);
 		}
 	},
 	f_setFocus: function() {
@@ -1988,7 +2107,7 @@ var __prototype = {
 	f_check: function(value, show, jsEvent) {
 		var li=this._searchComponentByNodeOrValue(value);
 		
-		return this._performElementCheck(li, true, jsEvent, true);
+		return this.fa_performElementCheck(li, true, jsEvent, true);
 	},
 	/**
 	 * Uncheck a node.
@@ -2001,7 +2120,7 @@ var __prototype = {
 	f_uncheck: function(value, jsEvent) {
 		var li=this._searchComponentByNodeOrValue(value);
 		
-		return this._performElementCheck(li, false, jsEvent, false);
+		return this.fa_performElementCheck(li, false, jsEvent, false);
 	},
 	/**
 	 * @method public
@@ -2011,7 +2130,7 @@ var __prototype = {
 	f_getChecked: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
 
-		return this._isElementChecked(value);
+		return this.fa_isElementChecked(value);
 	},
 	/**
 	 * @method public
@@ -2031,7 +2150,7 @@ var __prototype = {
 	f_isSelected: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
 
-		return this._isElementSelected(li);
+		return this.fa_isElementSelected(li);
 	},
 	/**
 	 * @method public
@@ -2041,7 +2160,7 @@ var __prototype = {
 	f_isNodeDisabled: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
 
-		return this._isElementDisabled(li);
+		return this.fa_isElementDisabled(li);
 	},
 	/**
 	 * Disable or enable a tree node.
@@ -2056,7 +2175,7 @@ var __prototype = {
 
 		disabled=(disabled!==false)?true:false;
 		li._node._disabled=disabled;
-		this._updateElementStyle(li);
+		this.fa_updateElementStyle(li);
 		
 		// C'est pas forcement la bonne value !
 		value=li._node._value;
@@ -2188,34 +2307,41 @@ var __prototype = {
 		
 		throw new Error("Can not find a node with value '"+value+"'.");
 	},
-	_a_updateDisabled: function() {
-		if (!this._componentUpdated) {
+	fa_updateDisabled: function() {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 	},
-	_a_updateReadOnly: function() {
+	fa_updateReadOnly: function() {
 	},
+	/** 
+	 * @method private
+	 */
 	_setInteractiveParent: function(node) {
 		node._container=true;
 		node._interactive=true;
 	},
 	f_serialize: function() {		
 		if (this._userExpandable) {
-			if (this._expandedValues) {
-				this.f_setProperty(f_prop.EXPANDED_ITEMS, this._expandedValues, true);
+			var expandedValues=this._expandedValues;
+			if (expandedValues) {
+				this.f_setProperty(f_prop.EXPANDED_ITEMS, expandedValues, true);
 			}
 	
-			if (this._collapsedValues) {
-				this.f_setProperty(f_prop.COLLAPSED_ITEMS, this._collapsedValues, true);
+			var collapsedValues=this._collapsedValues;
+			if (collapsedValues) {
+				this.f_setProperty(f_prop.COLLAPSED_ITEMS, collapsedValues, true);
 			}
 		}
 		
-		if (this._disabledValues) {
-			this.f_setProperty(f_prop.DISABLED_ITEMS, this._disabledValues, true);
+		var disabledValues=this._disabledValues;
+		if (disabledValues) {
+			this.f_setProperty(f_prop.DISABLED_ITEMS, disabledValues, true);
 		}
 	
-		if (this._enabledValues) {
-			this.f_setProperty(f_prop.ENABLED_ITEMS, this._enabledValues, true);
+		var enabledValues=this._enabledValues;
+		if (enabledValues) {
+			this.f_setProperty(f_prop.ENABLED_ITEMS, enabledValues, true);
 		}
 		
 		this.f_setProperty(f_prop.HORZSCROLLPOS, this.scrollLeft);
@@ -2223,6 +2349,9 @@ var __prototype = {
 		
 		return this.f_super(arguments);
 	},
+	/** 
+	 * @method private
+	 */
 	_getWaitingNode: function(waitingId) {
 		var waiting=this._waitingNodes[waitingId];
 		f_core.Assert(waiting, "Can not find waiting #"+waitingId);
@@ -2234,6 +2363,9 @@ var __prototype = {
 
 		return li._node;
 	},
+	/** 
+	 * @method private
+	 */
 	_clearWaiting: function(waitingId) {
 		var waiting=this._waitingNodes[waitingId];
 		f_core.Assert(waiting, "Can not find waiting #"+waitingId);
@@ -2270,7 +2402,7 @@ var __prototype = {
 			
 			ul.style.display="list-item";
 	
-			this._updateElementStyle(li);
+			this.fa_updateElementStyle(li);
 			this._updateCommandStyle(li);			
 		}
 	},
@@ -2339,42 +2471,42 @@ var __prototype = {
 			this._openNode(node, null, li);
 		}
 	},
-	_a_componentCaptureMenuEvent: function() {
+	fa_componentCaptureMenuEvent: function() {
 		return null;
 	},
 
-	_getElementValue: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree._getElementValue: Invalid element parameter ! ("+li+")");
+	fa_getElementValue: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_getElementValue: Invalid element parameter ! ("+li+")");
 
 		return li._node._value;
 	},
 
-	_isElementDisabled: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree._isElementDisabled: Invalid element parameter ! ("+li+")");
+	fa_isElementDisabled: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_isElementDisabled: Invalid element parameter ! ("+li+")");
 		
 		return li._node._disabled;
 	},
 
-	_isElementSelected: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree._isElementSelected: Invalid element parameter ! ("+li+")");
+	fa_isElementSelected: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_isElementSelected: Invalid element parameter ! ("+li+")");
 		
 		return li._node._selected;
 	},
 	
-	_setElementSelected: function(li, selected) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree._setElementSelected: Invalid element parameter ! ("+li+")");
+	fa_setElementSelected: function(li, selected) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_setElementSelected: Invalid element parameter ! ("+li+")");
 		
 		li._node._selected=selected;
 	},
 
-	_isElementChecked: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree._isElementChecked: Invalid element parameter ! ("+li+")");
+	fa_isElementChecked: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_isElementChecked: Invalid element parameter ! ("+li+")");
 		
 		return li._node._checked;
 	},
 	
-	_setElementChecked: function(li, checked) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree._setElementChecked: Invalid element parameter ! ("+li+")");
+	fa_setElementChecked: function(li, checked) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_setElementChecked: Invalid element parameter ! ("+li+")");
 		
 		li._node._checked=checked;
 	}

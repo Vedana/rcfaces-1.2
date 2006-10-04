@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -35,7 +38,6 @@ import org.rcfaces.core.internal.renderkit.border.IBorderRenderer;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.xml.sax.Attributes;
-
 
 /**
  * 
@@ -140,6 +142,11 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     public static class Family {
 
         private static final String REVISION = "$Revision$";
@@ -177,7 +184,13 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
 
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     public static class BorderRendererFacade {
+        private static final String REVISION = "$Revision$";
 
         private IBorderRenderer threadSafeObject;
 
@@ -254,7 +267,14 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     public static final class DefaultBorder {
+        private static final String REVISION = "$Revision$";
+
         private String borderId;
 
         private String family;

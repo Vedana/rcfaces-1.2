@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -71,7 +74,6 @@ import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -80,6 +82,12 @@ import org.rcfaces.core.internal.webapp.IRepository;
 public interface IJavaScriptRenderContext extends IScriptRenderContext {
 
     boolean isInitialized();
+
+    void forceJavaScriptStub();
+
+    boolean isJavaScriptStubForced();
+
+    void clearJavaScriptStubForced();
 
     void computeRequires(IHtmlWriter writer, AbstractJavaScriptRenderer renderer);
 

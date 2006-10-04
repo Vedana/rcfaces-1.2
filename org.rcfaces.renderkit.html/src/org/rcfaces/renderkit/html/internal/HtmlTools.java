@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -69,7 +72,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -78,9 +83,9 @@ import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.model.IFilterProperties;
-
 
 /**
  * 
@@ -197,7 +202,7 @@ public class HtmlTools {
                 case '8':
                 case '9':
                     if (valueStart == valueEnd) {
-                        type-='0';
+                        type -= '0';
                         if (type == 0) {
                             vs = NUMBER_0;
                         } else {
@@ -249,9 +254,8 @@ public class HtmlTools {
 
     private static FacesException createFormatException(String message, int i,
             String datas) {
-        return new FacesException(
-                "Bad format of rcfaces serialized datas ! (" + message
-                        + ": pos=" + i + " data='" + datas + "')");
+        return new FacesException("Bad format of rcfaces serialized datas ! ("
+                + message + ": pos=" + i + " data='" + datas + "')");
     }
 
     public static String encodeParametersFromMap(Map map, char sep) {
@@ -303,6 +307,8 @@ public class HtmlTools {
             if (value instanceof Number) {
                 // sb.append(NUMBER_TYPE);
                 // Pas necessaire !
+
+                value = ((Number) value).toString();
 
             } else {
                 sb.append(STRING_TYPE);
@@ -473,5 +479,74 @@ public class HtmlTools {
         writer.writeAttribute("v:data", datas.toString());
 
         return writer;
+    }
+
+    public static String replaceSeparator(String id, String separatorChar) {
+        int idx = id.indexOf(NamingContainer.SEPARATOR_CHAR);
+        if (idx < 0) {
+            return id;
+        }
+
+        StringAppender sa = new StringAppender(id.length()
+                + (separatorChar.length() - 1) * 4);
+
+        char chs[] = id.toCharArray();
+        sa.append(chs, 0, idx);
+        sa.append(separatorChar);
+
+        for (idx++; idx < chs.length; idx++) {
+            char ch = chs[idx];
+
+            if (ch != NamingContainer.SEPARATOR_CHAR) {
+                sa.append(ch);
+                continue;
+            }
+
+            sa.append(separatorChar);
+        }
+
+        return sa.toString();
+    }
+
+    public static String convertToNamingSeparator(String id, String separator) {
+        int idx = id.indexOf(separator);
+        if (idx < 0) {
+            return id;
+        }
+
+        StringAppender sa = new StringAppender(id.length()
+                + (separator.length() - 1) * 4);
+
+        sa.append(id, 0, idx);
+        sa.append(NamingContainer.SEPARATOR_CHAR);
+        idx += separator.length();
+
+        for (;;) {
+            int newIdx = id.indexOf(separator, idx);
+
+            if (newIdx < 0) {
+                sa.append(id, idx, id.length() - idx);
+                break;
+            }
+
+            sa.append(NamingContainer.SEPARATOR_CHAR);
+            idx = newIdx + separator.length();
+        }
+
+        return sa.toString();
+    }
+
+    public static UIComponent getForComponent(FacesContext context,
+            String forComponent, UIComponent component) {
+
+        IHtmlProcessContext processContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(context);
+
+        String separator = processContext.getNamingSeparator();
+        if (separator != null) {
+            forComponent = convertToNamingSeparator(forComponent, separator);
+        }
+
+        return ComponentTools.getForComponent(context, forComponent, component);
     }
 }

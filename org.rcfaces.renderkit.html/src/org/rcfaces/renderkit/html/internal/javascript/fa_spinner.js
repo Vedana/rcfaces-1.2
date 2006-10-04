@@ -431,7 +431,7 @@ var __prototype = {
 	 */
 	f_updateDisabled: {
 		before: function(disabled) {
-			if (!this._componentUpdated) {
+			if (!this.fa_componentUpdated) {
 				return;
 			}
 

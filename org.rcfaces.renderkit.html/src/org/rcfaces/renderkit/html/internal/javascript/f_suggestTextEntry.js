@@ -35,7 +35,7 @@ var __prototype = {
 		
 		this.setAttribute("autocomplete", "off");
 		
-		this._filtered=true;
+		this._filtred=true;
 		this._rowCount=0;
 		
 		var rows=f_suggestTextEntry._DEFAULT_ROWS_NUMBER;
@@ -78,7 +78,7 @@ var __prototype = {
 		this.f_addEventListener(f_event.KEYUP, this._onSuggest);
 		
 		var suggestTextEntry=this;
-		var menu=this._newSubMenu(f_suggestTextEntry._SUGGESTION_MENU_ID);
+		var menu=this.f_newSubMenu(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		menu.f_setCatchOnlyPopupKeys(true);
 		menu.f_addEventListener(f_event.SELECTION, function(evt) {
 			var jsEvt=evt.f_getJsEvent();
@@ -160,6 +160,9 @@ var __prototype = {
 		this._suggestionDelayMs=suggestionDelayMs;
 		this.f_setProperty(f_prop.DELAY_MS, suggestionDelayMs);
 	},
+	/**
+	 * @method private
+	 */
 	_onCancelDown: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
 		if (jsEvt.cancelBubble) {
@@ -175,6 +178,9 @@ var __prototype = {
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 */
 	_onSuggest: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
 		if (jsEvt.cancelBubble) {
@@ -278,6 +284,9 @@ var __prototype = {
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 */
 	_onSuggestTimeOut: function(text) {
 		if (!text) {
 			text=this.f_getText();
@@ -314,7 +323,7 @@ var __prototype = {
 		
 		this.f_setFilterProperties(p);
 	},
-	_a_updateFilterProperties: function() {
+	fa_updateFilterProperties: function() {
 		if (this._calling) {
 			return;
 		}
@@ -416,6 +425,9 @@ var __prototype = {
 			this._calling=undefined;
 		}
 	},
+	/**
+	 * @method hidden
+	 */
 	f_setLoading: function(state) {
 		if (state==this._loading) {
 			return;
@@ -431,6 +443,9 @@ var __prototype = {
 	
 		this.className=this._className+"_waiting";
 	},
+	/**
+	 * @method public
+	 */
 	f_appendItem: function(label, value, description, imageURL) {
 		var results=this._results;
 		if (!results) {
@@ -470,6 +485,9 @@ var __prototype = {
 		
 		this._showProposal();
 	},
+	/**
+	 * @method private
+	 */
 	_showProposal: function(jsEvt) {	
 		var results=this._results;
 		if (!results) {
@@ -494,6 +512,9 @@ var __prototype = {
 			this._showPopup();
 		}
 	},
+	/**
+	 * @method private
+	 */
 	_showPopup: function(autoSelect) {
 		var menu=this.f_getSubMenuById(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		if (!menu) {
@@ -609,6 +630,9 @@ var __prototype = {
 			end: proposalLabel.length-label.length
 		});
 	},
+	/**
+	 * @method private
+	 */
 	_setSuggestion: function(label, value, item, jsEvt) {
 		f_core.Debug("f_suggestTextEntry", "_setSuggestion: label='"+label+"' value='"+value+"' item='"+item+"'.");
 
@@ -629,6 +653,9 @@ var __prototype = {
 			this._setSuggestionValue(null);
 		}
 	},
+	/**
+	 * @method private
+	 */
 	_filterProposals: function(ret) {
 		var d=this.f_getSelection();
 		if (!d) {
@@ -686,7 +713,7 @@ var __prototype = {
 		return this._suggestionValue;
 	},
 	/** 
-	 * @method public
+	 * @method private
 	 * @param string
 	 * @return void
 	 */
@@ -701,6 +728,12 @@ var __prototype = {
 
 		this.f_fireEvent(f_event.SUGGESTION, jsEvt, item, value);
 	},
+	/**
+	 * @method public
+	 * @param Object item
+	 * @param String key
+	 * @return String Named data associated to the item.
+	 */
 	f_getItemClientData: function(item, key) {
 		var clientDatas=item._clientDatas;
 		if (!clientDatas) {
@@ -709,9 +742,19 @@ var __prototype = {
 		
 		return clientDatas[key];
 	},
+	/**
+	 * @method public
+	 * @param Object item
+	 * @return String Text associated to the item.
+	 */
 	f_getItemLabel: function(item) {
 		return item._label;
 	},
+	/**
+	 * @method public
+	 * @param Object item
+	 * @return any Value associated to the item.
+	 */
 	f_getItemValue: function(item) {
 		return item._value;
 	}

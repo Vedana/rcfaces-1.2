@@ -18,6 +18,9 @@ var __static = {
 	 
 	/**
 	 * @method hidden static final 
+	 * @param String componentId
+	 * @param fa_pager pager
+	 * @return void
 	 */
 	RegisterPager: function(componentId, pager) {
 	
@@ -41,10 +44,19 @@ var __static = {
 		var dp=pager.ownerDocument.getElementById(componentId);
 		// Le dataGrid n'existe pas forcement lors de son enregistrement !		
 		if (dp && f_class.IsObjectInitialized(dp)) {
+
+			f_core.Debug(fa_pagedComponent, "Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Initialize now ! ");
+			try {		
+				pager.fa_pagedComponentInitialized(dp);
 		
-			pager.f_dataComponentInitialized(dp);
+			} catch (x) {
+				f_core.Error(fa_pagedComponent, "Call of fa_pagedComponentInitialized() throws an exception ! (pager="+pager.id+")", x);
+			}
+							
 			return;
 		}
+
+		f_core.Debug(fa_pagedComponent, "Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Waiting initialization ! ");
 	},
 	Finalizer: function() {
 		fa_pagedComponent._DataPagers=undefined;
@@ -93,19 +105,34 @@ var __prototype = {
 	 */
 	f_performPagedComponentInitialized: function() {
 		var dps=fa_pagedComponent._DataPagers;
+
 		if (!dps) {
+			f_core.Debug(fa_pagedComponent, "Perform page component initialized:  NO pagers !");
+
 			return;
 		}
 		
 		var lst=dps[this.id];
+		f_core.Debug(fa_pagedComponent, "Perform page component initialized ("+this.id+") list="+lst);
+		
 		if (!lst) {
 			return;
 		}
 		
 		for(var i=0;i<lst.length;i++) {
 			var p=lst[i];
+			if (!p) {
+				continue;
+			}
 			
-			p.f_dataComponentInitialized.call(p, this);
+			try {
+				p.fa_pagedComponentInitialized(this);
+
+			} catch (x) {
+				f_core.Error(fa_pagedComponent, "Call of fa_pagedComponentInitialized() throws an exception ! (pager="+pager.id+")", x);
+				
+				lst[i]=undefined;
+			}
 		}
 	},
 
@@ -154,7 +181,7 @@ var __prototype = {
 	},
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setFirst: f_class.ABSTRACT

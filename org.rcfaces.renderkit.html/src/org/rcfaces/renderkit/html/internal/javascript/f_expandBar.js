@@ -209,7 +209,7 @@ var __prototype = {
 		
 		return ret;
 	},
-	_a_updateCollapsed: function(set) {
+	fa_updateCollapsed: function(set) {
 	
 		var body=this._body;
 		
@@ -295,6 +295,6 @@ var __prototype = {
 	f_getGroupName: function() {
 		return this._groupName;
 	},
-	_a_getRadioScope: fa_groupName.GlobalScope	
+	fa_getRadioScope: fa_groupName.GlobalScope	
 }
 var f_expandBar=new f_class("f_expandBar", null, __static, __prototype, f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName);

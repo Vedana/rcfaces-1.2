@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -54,7 +57,6 @@ import org.rcfaces.core.internal.service.AbstractClientService;
 import org.rcfaces.core.internal.service.ClientServiceException;
 import org.rcfaces.core.internal.service.IClientService;
 import org.rcfaces.core.internal.service.IClientServiceRegistry;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.progressMonitor.IProgressMonitor;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.w3c.dom.Document;
@@ -86,18 +88,26 @@ public class ClientService extends AbstractClientService {
     private static final String CAMELIA_PROGRESS_MONITOR = "X-Camelia-ProgressMonitor";
 
     public void service(FacesContext facesContext, String commandId) {
-        if ("client.newService".equals(commandId)) {
-            createOperation(facesContext);
-            return;
-        }
 
-        if ("client.infoService".equals(commandId)) {
-            infoClientService(facesContext);
-            return;
-        }
+        try {
+            if ("client.newService".equals(commandId)) {
+                createOperation(facesContext);
+                return;
+            }
 
-        AbstractHtmlService.sendJsError(facesContext,
-                "Can not identify command '" + commandId + "'.");
+            if ("client.infoService".equals(commandId)) {
+                infoClientService(facesContext);
+                return;
+            }
+
+            AbstractHtmlService.sendJsError(facesContext,
+                    "Can not identify command '" + commandId + "'.");
+
+        } catch (RuntimeException ex) {
+            LOG.error("Catch runtime exception !", ex);
+
+            throw ex;
+        }
     }
 
     private void createOperation(FacesContext facesContext) {
@@ -120,7 +130,7 @@ public class ClientService extends AbstractClientService {
 
         UIViewRoot viewRoot = facesContext.getViewRoot();
 
-        UIComponent component = ComponentTools.getForComponent(facesContext,
+        UIComponent component = HtmlTools.getForComponent(facesContext,
                 componentId, viewRoot);
         if (component == null) {
             AbstractHtmlService.sendJsError(facesContext, "Can not get view '"

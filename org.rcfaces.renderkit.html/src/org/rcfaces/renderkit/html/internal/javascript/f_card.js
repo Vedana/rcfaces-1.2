@@ -54,7 +54,7 @@ var __prototype = {
 	 * @method hidden
 	 * @return void
 	 */
-	_a_getInteractiveParent: function() {
+	fa_getInteractiveParent: function() {
 		return this; //._tabbedPane;
 	}
 }

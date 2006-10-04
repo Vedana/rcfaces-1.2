@@ -24,7 +24,7 @@ f_dateFormat._DEFAULT_TWO_DIGIT_YEAR_START=1960;
  * @param string format Expression of format.
  * @param Date twoDigitYearStart 
  * @param optional f_locale locale Locale used by format.
- * @return string Date formatted.
+ * @return string Formatted date.
  */
 f_dateFormat.FormatDate=function(date, format, twoDigitYearStart, locale) {
 	if (!locale) {

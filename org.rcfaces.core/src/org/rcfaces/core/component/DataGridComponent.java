@@ -114,17 +114,24 @@ public class DataGridComponent extends AbstractGridComponent implements
 			
 	}
 
-	public final DataColumnComponent getSortedColumn() {
+	public final boolean setSortedColumns(DataColumnComponent[] dataColumns) {
 
 
-				return getSortedColumn(null);
+				return GridTools.setSortedColumns(this, dataColumns);
 			
 	}
 
-	public final DataColumnComponent getSortedColumn(FacesContext context) {
+	public final DataColumnComponent getFirstSortedColumn() {
 
 
-				return GridTools.getSortedColumn(context, this);
+				return getFirstSortedColumn(null);
+			
+	}
+
+	public final DataColumnComponent getFirstSortedColumn(FacesContext context) {
+
+
+				return GridTools.getFirstSortedColumn(context, this);
 			
 	}
 

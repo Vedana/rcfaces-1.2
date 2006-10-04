@@ -763,24 +763,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final int getRows() {
-		return getRows(null);
+	public final String getVar() {
+		return getVar(null);
 	}
 
-	public final int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	public final String getVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VAR, facesContext);
 	}
 
-	public final void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
+	public final void setVar(String var) {
+		engine.setProperty(Properties.VAR, var);
+		this.var=var;
 	}
 
-	public final void setRows(ValueBinding rows) {
-		engine.setProperty(Properties.ROWS, rows);
+	public final void setVar(ValueBinding var) {
+		engine.setProperty(Properties.VAR, var);
+		this.var=null;
 	}
 
-	public final boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
+	public final boolean isVarSetted() {
+		return engine.isPropertySetted(Properties.VAR);
 	}
 
 	public final int getFirst() {
@@ -803,26 +805,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.FIRST);
 	}
 
-	public final String getVar() {
-		return getVar(null);
+	public final int getRows() {
+		return getRows(null);
 	}
 
-	public final String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
+	public final int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
 	}
 
-	public final void setVar(String var) {
-		engine.setProperty(Properties.VAR, var);
-		this.var=var;
+	public final void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
 	}
 
-	public final void setVar(ValueBinding var) {
-		engine.setProperty(Properties.VAR, var);
-		this.var=null;
+	public final void setRows(ValueBinding rows) {
+		engine.setProperty(Properties.ROWS, rows);
 	}
 
-	public final boolean isVarSetted() {
-		return engine.isPropertySetted(Properties.VAR);
+	public final boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	public void release() {

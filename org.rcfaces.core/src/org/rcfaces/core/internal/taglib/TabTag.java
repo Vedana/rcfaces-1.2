@@ -20,7 +20,6 @@ public class TabTag extends CardTag implements Tag {
 	private String fontName;
 	private String fontSize;
 	private String fontUnderline;
-	private String textAlignment;
 	private String disabled;
 	private String imageURL;
 	private String disabledImageURL;
@@ -77,14 +76,6 @@ public class TabTag extends CardTag implements Tag {
 
 	public final void setFontUnderline(String fontUnderline) {
 		this.fontUnderline = fontUnderline;
-	}
-
-	public final String getTextAlignment() {
-		return textAlignment;
-	}
-
-	public final void setTextAlignment(String textAlignment) {
-		this.textAlignment = textAlignment;
 	}
 
 	public final String getDisabled() {
@@ -146,7 +137,6 @@ public class TabTag extends CardTag implements Tag {
 			LOG.debug("  fontName='"+fontName+"'");
 			LOG.debug("  fontSize='"+fontSize+"'");
 			LOG.debug("  fontUnderline='"+fontUnderline+"'");
-			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  disabled='"+disabled+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
@@ -224,16 +214,6 @@ public class TabTag extends CardTag implements Tag {
 			}
 		}
 
-		if (textAlignment != null) {
-			if (isValueReference(textAlignment)) {
-				ValueBinding vb = application.createValueBinding(textAlignment);
-
-				component.setTextAlignment(vb);
-			} else {
-				component.setTextAlignment(textAlignment);
-			}
-		}
-
 		if (disabled != null) {
 			if (isValueReference(disabled)) {
 				ValueBinding vb = application.createValueBinding(disabled);
@@ -302,7 +282,6 @@ public class TabTag extends CardTag implements Tag {
 		fontName = null;
 		fontSize = null;
 		fontUnderline = null;
-		textAlignment = null;
 		disabled = null;
 		imageURL = null;
 		disabledImageURL = null;

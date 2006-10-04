@@ -119,7 +119,7 @@ var __prototype = {
 		
 		var data=this._clientDatas;
 		
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			for (var i=0;i<arguments.length;) {
 				var name=arguments[i++];
 				var data=arguments[i++];

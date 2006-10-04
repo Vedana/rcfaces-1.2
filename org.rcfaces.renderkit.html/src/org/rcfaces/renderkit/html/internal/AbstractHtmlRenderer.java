@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -192,7 +195,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -901,13 +903,6 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decodeEvent(org.rcfaces.core.internal.renderkit.IRequestContext,
-     *      javax.faces.component.UIComponent, java.lang.String,
-     *      java.lang.String)
-     */
     protected void decodeEvent(IRequestContext context, UIComponent component,
             IEventData eventData) {
         super.decodeEvent(context, component, eventData);
@@ -921,20 +916,10 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
         eventDecoder.decodeEvent(component, eventData);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#getRenderContext(javax.faces.context.FacesContext)
-     */
     protected final IRenderContext getRenderContext(FacesContext context) {
-        return HtmlRenderContextImpl.getRenderContext(context);
+        return HtmlRenderContext.getRenderContext(context);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#getRequestContext(javax.faces.context.FacesContext)
-     */
     protected final IRequestContext getRequestContext(FacesContext context) {
         return HtmlRequestContext.getRequestContext(context);
     }
@@ -1033,5 +1018,30 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
         }
 
         return writer;
+    }
+
+    static boolean isEquals(Object object1, Object object2) {
+        if (object1 == object2) {
+            return true;
+        }
+        if (object1 != null && object1.equals(object2)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected String getRequestComponentId(IRequestContext requestContext,
+            UIComponent component) {
+
+        String id = super.getRequestComponentId(requestContext, component);
+
+        String separator = requestContext.getProcessContext()
+                .getNamingSeparator();
+        if (separator != null) {
+            return HtmlTools.replaceSeparator(id, separator);
+        }
+
+        return id;
     }
 }

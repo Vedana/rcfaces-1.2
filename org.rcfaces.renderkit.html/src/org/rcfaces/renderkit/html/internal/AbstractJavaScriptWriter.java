@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -28,6 +31,8 @@ package org.rcfaces.renderkit.html.internal;
 
 import javax.faces.FacesException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
 
@@ -38,6 +43,9 @@ import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
  */
 public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(AbstractJavaScriptWriter.class);
 
     private static final String LF = "\n";
 
@@ -60,6 +68,11 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
         if (object == null) {
             throw new FacesException("Can not call a method without object !");
         }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Write call object='" + object + "' symbol='" + symbol
+                    + "'.");
+        }
+
         write(convertSymbol(object));
         write('.');
 
@@ -71,7 +84,17 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
 
     public IJavaScriptWriter writeMethodCall(String symbol)
             throws WriterException {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Write method call symbol='" + symbol + "'.");
+        }
+
         isInitialized();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("  STEP2: Write method call symbol='" + symbol
+                    + "' (componentVarName='" + getComponentVarName() + "')");
+        }
 
         String componentVarName = getComponentVarName();
         if (componentVarName == null) {
@@ -89,6 +112,10 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
 
     public IJavaScriptWriter writeConstructor(String symbol)
             throws WriterException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Write constructor symbol='" + symbol + "'.");
+        }
+
         write("new ");
         write(convertSymbol(symbol));
         write('(');

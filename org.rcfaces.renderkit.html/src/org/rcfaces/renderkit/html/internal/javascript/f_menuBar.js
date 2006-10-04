@@ -57,7 +57,7 @@ var __static = {
 	 */
 	_MenuBarItem_mouseOver: function(evt) {
 		var menuBar=this._menuBar;
-		if (menuBar.f_getEventLocked(false)) {
+		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		
@@ -85,7 +85,7 @@ var __static = {
 	 */
 	_MenuBarItem_mouseDown: function(evt) {
 		var menuBar=this._menuBar;
-		if (menuBar.f_getEventLocked()) {
+		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		if (!evt) evt = window.event;
@@ -106,7 +106,7 @@ var __static = {
 	_MenuBarItemInput_click: function(evt) {
 		var item=this;
 		var menuBar=item._menuBar;
-		if (menuBar.f_getEventLocked()) {
+		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		if (!evt) evt = window.event;
@@ -133,7 +133,7 @@ var __static = {
 	_MenuBarItem_keyDown: function(evt) {
 		var item=this;
 		var menuBar=item._menuBar;
-		if (menuBar.f_getEventLocked()) {
+		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		
@@ -147,7 +147,7 @@ var __static = {
 	_MenuBarItem_focus: function(evt) {
 		var menuItem=this; //._link;
 		var menuBar=menuItem._menuBar;
-		if (menuBar.f_getEventLocked(false)) {
+		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		if (!evt) evt = window.event;
@@ -166,11 +166,11 @@ var __static = {
 			old._closePopup(old);
 			menuBar._selectedMenuItem=undefined;
 			
-			menuBar._a_updateItemStyle(old);
+			menuBar.fa_updateItemStyle(old);
 		}
 			
 		menuBar._selectedMenuItem=menuItem;
-		menuBar._a_updateItemStyle(menuItem);
+		menuBar.fa_updateItemStyle(menuItem);
 
 		if (menuBar.f_isItemDisabled(menuItem)) {
 //			f_core.Info("f_menuBar", "Focus-DISABLED cur="+menuBar._selectedMenuItem);
@@ -189,7 +189,7 @@ var __static = {
 	_MenuBarItem_blur: function(evt) {
 		var menuItem=this; //._link;
 		var menuBar=menuItem._menuBar;
-		if (menuBar.f_getEventLocked(false)) {
+		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		if (!evt) evt = window.event;
@@ -216,7 +216,7 @@ var __static = {
 		old._closePopup(old);
 		menuBar._selectedMenuItem=undefined;
 		
-		menuBar._a_updateItemStyle(old);
+		menuBar.fa_updateItemStyle(old);
 
 		return true;
 	},
@@ -242,7 +242,7 @@ var __static = {
 			old._over=undefined;
 			
 			menuBarItem._selectedMenuItem=undefined;
-			menuBar._a_updateItemStyle(old);
+			menuBar.fa_updateItemStyle(old);
 		}
 				
 		f_key.ExitScope(menuBarItem.id);
@@ -264,7 +264,7 @@ var __static = {
 			}			
 		}
 		
-		menuBar._a_updateItemStyle(menuBarItem);			
+		menuBar.fa_updateItemStyle(menuBarItem);			
 	},
 	/**
 	 * @method private static
@@ -285,12 +285,12 @@ var __static = {
 		var old=menuBar._selectedMenuItem;
 		if (old) {
 			menuBar._selectedMenuItem=undefined;
-			menuBar._a_updateItemStyle(old);
+			menuBar.fa_updateItemStyle(old);
 		}
 
 		if (!menuBarItem._menuPopup) {
 			menuBar._selectedMenuItem=menuBarItem;
-			menuBar._a_updateItemStyle(menuBarItem);
+			menuBar.fa_updateItemStyle(menuBarItem);
 		
 			return;
 		}
@@ -337,7 +337,7 @@ var __static = {
 	
 		menuBarItem._popupOpened=true;
 		menuBar._selectedMenuItem=menuBarItem;
-		menuBar._a_updateItemStyle(menuBarItem);
+		menuBar.fa_updateItemStyle(menuBarItem);
 
 		if (autoSelect) {
 			if (menuBarItem._items && menuBarItem._items.length>0) {
@@ -385,7 +385,7 @@ var __prototype = {
 				
 // XXXX On est pas pressé !
 				this._updateBarItem(menuBarItem);
-//				this._a_updateItemStyle(menuBarItem);
+//				this.fa_updateItemStyle(menuBarItem);
 				
 				this.appendChild(menuBarItem);
 			}
@@ -411,7 +411,7 @@ var __prototype = {
 		MenuBarItem
 		
 	 * ********************************************************************/
-	_a_destroyItems: function(items) {
+	fa_destroyItems: function(items) {
 		for(var i=0;i<items.length;i++) {
 			f_menuBar._DestroyMenuBarItem(this, items[i]);
 		}
@@ -434,7 +434,7 @@ var __prototype = {
 			}
 		}
 						
-		this._a_updateItemStyle(menuBarItem);
+		this.fa_updateItemStyle(menuBarItem);
 	},
 	_menuBarItem_over: function(menuBarItem) {
 		var old=this._selectedMenuItem;
@@ -443,7 +443,7 @@ var __prototype = {
 //		f_core.Info("f_menuBar", "OVER: cur="+old+" param="+menuBarItem+" openMode="+this._openMode);
 		
 		if (old==menuBarItem) {
-			this._a_updateItemStyle(menuBarItem);
+			this.fa_updateItemStyle(menuBarItem);
 			
 			if (this._openMode) {
 				menuBarItem._openPopup.call(this, menuBarItem, false);
@@ -456,11 +456,11 @@ var __prototype = {
 			old._closePopup(old);
 			this._selectedMenuItem=undefined;
 			
-			this._a_updateItemStyle(old);
+			this.fa_updateItemStyle(old);
 		}
 
 		this._selectedMenuItem=menuBarItem;
-		this._a_updateItemStyle(menuBarItem);
+		this.fa_updateItemStyle(menuBarItem);
 				
 		if (this.f_isItemDisabled(menuBarItem)) {	
 			this._openMode=oldOpenMode;
@@ -495,7 +495,7 @@ var __prototype = {
 		this._selectedMenuItem=undefined;
 		old._closePopup(old);
 			
-		this._a_updateItemStyle(old);
+		this.fa_updateItemStyle(old);
 	},
 	_menuBarItem_select: function(menuBarItem, autoSelect, jsEvent) {
 		var old=this._selectedMenuItem;
@@ -505,7 +505,7 @@ var __prototype = {
 			
 			old._closePopup(old);
 
-			this._a_updateItemStyle(old);
+			this.fa_updateItemStyle(old);
 
 			return;			
 		}
@@ -529,7 +529,7 @@ var __prototype = {
 		this._openMode=true;
 		menuBarItem._openPopup(menuBarItem, autoSelect);
 	},
-	_a_updateItemStyle: function(item) {
+	fa_updateItemStyle: function(item) {
 		if (!item._parentItem && !item._separator) {
 			// MenuBarItem 
 			var className=item._className;
@@ -610,7 +610,7 @@ var __prototype = {
 		menuBarItem._openPopup=f_menuBar._MenuBarItem_openPopup;
 		menuBarItem._closePopup=f_menuBar._MenuBarItem_closePopup;
 	
-		this._addItem(this, menuBarItem);
+		this.f_addItem(this, menuBarItem);
 
 		if (f_popup.Ie_enablePopup()) {
 			// On associe le POPUP 
@@ -698,7 +698,7 @@ var __prototype = {
 		var old=this._selectedMenuItem;
 		if (old) {
 			this._selectedMenuItem=undefined;
-			this._a_updateItemStyle(old);
+			this.fa_updateItemStyle(old);
 		}
 		
 		this._selectedMenuItem=menuBarItem;
@@ -725,21 +725,21 @@ var __prototype = {
 		}
 		menuBarItem._closePopup(menuBarItem, jsEvt);
 		
-		this._a_updateItemStyle(menuBarItem);		
+		this.fa_updateItemStyle(menuBarItem);		
 	},
-	_a_updateDisabled: function() {
-		if (!this._componentUpdated) {
+	fa_updateDisabled: function() {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
 		if (this._items) {
 			var l=this._items;
 			for(var i=0;i<l.length;i++) {
-				this._a_updateItemStyle(l[i]);
+				this.fa_updateItemStyle(l[i]);
 			}
 		}		
 	},
-	_a_updateReadOnly: function() {
+	fa_updateReadOnly: function() {
 	},
 	_a_getSelectionProvider: function() {
 		return null;

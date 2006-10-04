@@ -88,6 +88,10 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             .getPackagePrefix()
             + ".REPOSITORY_VERSION_SUPPORT";
 
+    private static final String CONFIGURATION_VERSION_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".CONFIGURATION_VERSION";
+
     private static final String NO_CACHE_PARAMETER = Constants
             .getPackagePrefix()
             + ".NO_CACHE";
@@ -228,6 +232,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 throw new FacesException(
                         "Can not enable \"Repository version\", camelia buildId is not detected !");
             }
+
+            String configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER);
+            if (configurationVersion != null) {
+                buildId += "." + configurationVersion;
+            }
+
             repositoryVersion = buildId;
 
             LOG.info("Set repository version to buildId='" + buildId
@@ -392,14 +402,14 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
 
         if (useFilterExtensions.contains(extension)) {
-            String filtered = SourceFilter
+            String filtred = SourceFilter
                     .filter(new String(workBytes, charset));
-            workBytes = filtered.getBytes(charset);
+            workBytes = filtred.getBytes(charset);
 
         } else if (useFilterSkipSpacesExtensions.contains(extension)) {
-            String filtered = SourceFilter.filterSkipSpaces(new String(
+            String filtred = SourceFilter.filterSkipSpaces(new String(
                     workBytes, charset));
-            workBytes = filtered.getBytes(charset);
+            workBytes = filtred.getBytes(charset);
         }
 
         byte bufferGZIP[] = null;

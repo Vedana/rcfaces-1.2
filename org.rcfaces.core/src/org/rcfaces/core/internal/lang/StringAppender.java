@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.1  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -25,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * 
- * @author Java Team (latest modification by $Author$) 
+ * @author Java Team (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public final class StringAppender {
@@ -174,6 +177,18 @@ public final class StringAppender {
         return this;
     }
 
+    public StringAppender append(String text, int offset, int len) {
+        int newcount = count + len;
+        if (newcount > value.length) {
+            expandCapacity(newcount);
+        }
+
+        text.getChars(offset, offset + len, value, count);
+        count = newcount;
+
+        return this;
+    }
+
     public StringAppender append(boolean b) {
         if (b) {
             return append("true");
@@ -214,5 +229,13 @@ public final class StringAppender {
         }
 
         writer.write(value, 0, count);
+    }
+
+    public void ensure(int length) {
+        int newcount = count + length;
+        if (newcount <= value.length) {
+            return;
+        }
+        expandCapacity(newcount);
     }
 }

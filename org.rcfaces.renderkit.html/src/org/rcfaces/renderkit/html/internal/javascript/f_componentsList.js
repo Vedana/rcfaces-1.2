@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_dataList extends f_component, fa_pagedComponent
+ * @class public f_componentsList extends f_component, fa_pagedComponent
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -13,24 +13,24 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	_InitializeScrollbars: function(dataList) {
-		if (!dataList._scrollBody) {
+	_InitializeScrollbars: function(componentsList) {
+		if (!componentsList._scrollBody) {
 			return;
 		}
 		
-		var pos=dataList._initialHorizontalScrollPosition;
+		var pos=componentsList._initialHorizontalScrollPosition;
 		if (pos) {
-			dataList._scrollBody.scrollLeft=pos;
-			if (dataList._scrollTitle) {
-				dataList._scrollTitle.scrollLeft=pos;
+			componentsList._scrollBody.scrollLeft=pos;
+			if (componentsList._scrollTitle) {
+				componentsList._scrollTitle.scrollLeft=pos;
 			}
 		}
 		
-		pos=dataList._initialVerticalScrollPosition;
+		pos=componentsList._initialVerticalScrollPosition;
 		if (pos) {
-			dataList._scrollBody.scrollTop=pos;
-			if (dataList._scrollTitle) {
-				dataList._scrollTitle.scrollTop=pos;
+			componentsList._scrollBody.scrollTop=pos;
+			if (componentsList._scrollTitle) {
+				componentsList._scrollTitle.scrollTop=pos;
 			}
 		}
 	}
@@ -38,7 +38,7 @@ var __static = {
  
 var __prototype = {
 	
-	f_dataList: function() {
+	f_componentsList: function() {
 		this.f_super(arguments);
 
 		this._className=f_core.GetAttribute(this, "v:className");
@@ -90,7 +90,7 @@ var __prototype = {
 	 */
 	f_performComponentVisible: function() {
 		
-		f_dataList._InitializeScrollbars(this);		
+		f_componentsList._InitializeScrollbars(this);		
 
 		if (this._interactiveShow) {
 			this.f_setFirst(this._first, this._currentCursor);			
@@ -143,7 +143,7 @@ var __prototype = {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		
 		var params=new Object;
-		params.dataListId=this.id;
+		params.componentsListId=this.id;
 		params.index=firstIndex;
 		
 		var filterExpression=this.f_getProperty(f_prop.FILTER_EXPRESSION);
@@ -172,16 +172,16 @@ var __prototype = {
 
 		var url=f_env.GetViewURI();
 		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
-		var dataList=this;
+		var componentsList=this;
 		request.f_setListener({
 			/**
 			 * @method public
 			 */
 	 		onInit: function(request) {
-	 			var waiting=dataList._waiting;
+	 			var waiting=componentsList._waiting;
 	 			if (!waiting) {	
-	 				waiting=f_waiting.Create(dataList);
-	 				dataList._waiting=waiting;
+	 				waiting=f_waiting.Create(componentsList);
+	 				componentsList._waiting=waiting;
 	 			}
 	 			
 	 			waiting.f_setText(f_waiting.GetLoadingMessage());
@@ -191,16 +191,16 @@ var __prototype = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_dataList, "Bad status: "+request.f_getStatus());
+	 			f_core.Info(f_componentsList, "Bad status: "+request.f_getStatus());
 	 			
-				if (dataList._nextCommand) {
-					dataList._processNextCommand();
+				if (componentsList._nextCommand) {
+					componentsList._processNextCommand();
 					return;
 				}
 
-				dataList._loading=false;		
+				componentsList._loading=false;		
 				
-				var waiting=dataList._waiting;
+				var waiting=componentsList._waiting;
 				if (waiting) {
 					waiting.f_hide();
 				}
@@ -209,7 +209,7 @@ var __prototype = {
 			 * @method public
 			 */
 	 		onProgress: function(request, content, length, contentType) {
-	 			var waiting=dataList._waiting;
+	 			var waiting=componentsList._waiting;
 				if (waiting) {
 					waiting.f_setText(f_waiting.GetReceivingMessage());
 				}	 			
@@ -218,21 +218,21 @@ var __prototype = {
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {			
-				if (dataList._nextCommand) {
-					dataList._processNextCommand();
+				if (componentsList._nextCommand) {
+					componentsList._processNextCommand();
 					return;
 				}
 
-	 			var waiting=dataList._waiting;
+	 			var waiting=componentsList._waiting;
 				try {
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-						f_core.Error(f_dataList, "Bad Status ! ("+request.f_getStatusText()+")");
+						f_core.Error(f_componentsList, "Bad Status ! ("+request.f_getStatusText()+")");
 						return;
 					}
 	
 					var responseContentType=request.f_getResponseContentType();
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
-						f_core.Error(f_dataList, "Unsupported content type: "+responseContentType);
+						f_core.Error(f_componentsList, "Unsupported content type: "+responseContentType);
 						return;
 					}
 				
@@ -242,16 +242,16 @@ var __prototype = {
 					eval(ret);
 					
 				} finally {				
-					dataList._loading=false;
+					componentsList._loading=false;
 
 					if (waiting) {
 						waiting.f_hide();
 					}
 				}
 	
-				var event=new f_event(dataList, f_event.CHANGE);
+				var event=new f_event(componentsList, f_event.CHANGE);
 				try {
-					dataList.f_fireEvent(event);
+					componentsList.f_fireEvent(event);
 					
 				} finally {
 					f_classLoader.Destroy(event);
@@ -260,7 +260,7 @@ var __prototype = {
 		});
 
 		this._loading=true;
-		request.f_setRequestHeader("X-Camelia", "dataList.update");
+		request.f_setRequestHeader("X-Camelia", "componentsList.update");
 		request.f_doFormRequest(params);
 	},
 	_startNewPage: function(rowIndex) {
@@ -282,7 +282,7 @@ var __prototype = {
 		
 		this._first=rowIndex;
 		
-		this._componentUpdated=false;
+		this.fa_componentUpdated=false;
 	},
 	_updateNewPage: function(rowCount, buffer) {
 		// Appeler par la génération du serveur !
@@ -315,7 +315,7 @@ var __prototype = {
 			}
 		}
 
-		this._componentUpdated=true;
+		this.fa_componentUpdated=true;
 
 		if (this._interactiveShow) {
 			this._interactiveShow=undefined;
@@ -326,7 +326,7 @@ var __prototype = {
 	_cancelServerRequest: function() {
 		// Appeler par la génération du serveur !
 	},
-	_a_updateFilterProperties: function(filterProperties) {
+	fa_updateFilterProperties: function(filterProperties) {
 		if (!this._interactive) {
 			return false;
 		}
@@ -346,4 +346,4 @@ var __prototype = {
 	}
 }
  
-var f_dataList=new f_class("f_dataList", null, __static, __prototype, f_component, fa_pagedComponent);
+var f_componentsList=new f_class("f_componentsList", null, __static, __prototype, f_component, fa_pagedComponent);

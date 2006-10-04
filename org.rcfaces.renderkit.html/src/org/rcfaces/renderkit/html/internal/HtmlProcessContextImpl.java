@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -32,7 +35,6 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.Map;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -62,7 +64,7 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private final boolean useFlatIdentifier;
 
-    private final char separatorChar;
+    private final String separatorChar;
 
     private final boolean useMetaContentScriptType;
 
@@ -153,7 +155,7 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         return useFlatIdentifier;
     }
 
-    static final char getHtmlSeparatorChar(ExternalContext externalContext) {
+    static final String getHtmlSeparatorChar(ExternalContext externalContext) {
 
         Map applicationMap = externalContext.getInitParameterMap();
 
@@ -161,13 +163,13 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
                 .get(HTML_SEPARATOR_CHAR_PARAMETER);
 
         if (separatorChar != null && separatorChar.length() > 0) {
-            return separatorChar.charAt(0);
+            return separatorChar;
         }
 
-        return NamingContainer.SEPARATOR_CHAR;
+        return null; // NamingContainer.SEPARATOR_CHAR;
     }
 
-    public char getNamingSeparatorChar() {
+    public String getNamingSeparator() {
         return separatorChar;
     }
 

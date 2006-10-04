@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  */
  
 /**
@@ -56,20 +48,20 @@ var __prototype = {
 		// On le met avant l'update, car des fois que la valeur rechange ...
 		this.f_setProperty(f_prop.REQUIRED,this._required);
 	
-		this._a_updateRequired(set);
+		this.fa_updateRequired(set);
 	},
 
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_updateRequired: f_class.ABSTRACT
+	fa_updateRequired: f_class.ABSTRACT
 }
 
 var fa_required=new f_aspect("fa_required", null, __prototype);

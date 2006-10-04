@@ -10,33 +10,37 @@
  * @version $Revision$ $Date$ 
  */
  
-.f_dataPager {
+.f_pager {
+	-moz-user-select: none;
+	user-select: none;
+}
+
+DIV.f_pager {
 	border: 1px dotted #999999;
 	background-color: #EEEEEE;
 	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif; 
 	font-size: 11px;
 	text-align: left;
-	-moz-user-select: none;
-	user-select: none;
+	vertical-align: baseline;
 }
 
-SPAN.f_dataPager_pgoto {
+.f_pager_pgoto_disabled {
 	font-weight: bold;
 	color: black;
 }
 
-SPAN.f_dataPager_pfirst, 
-SPAN.f_dataPager_plast, 
-SPAN.f_dataPager_pprev, 
-SPAN.f_dataPager_pnext {
+.f_pager_pfirst_disabled, 
+.f_pager_plast_disabled, 
+.f_pager_pprev_disabled, 
+.f_pager_pnext_disabled {
 	color: #AAA;
 }
 
-A.f_dataPager_pfirst, 
-A.f_dataPager_plast, 
-A.f_dataPager_pprev, 
-A.f_dataPager_pnext,
-A.f_dataPager_pgoto {
+.f_pager_pfirst, 
+.f_pager_plast, 
+.f_pager_pprev, 
+.f_pager_pnext,
+.f_pager_pgoto {
 	color: #666;
 	text-decoration: none;
 }

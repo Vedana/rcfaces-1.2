@@ -1,4 +1,4 @@
-#Tue Aug 29 16:49:06 CEST 2006
+#Thu Sep 28 18:28:10 CEST 2006
 eclipse.preferences.version=1
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_accelerator.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_actionList.js=UTF-8
@@ -15,7 +15,6 @@ encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_comboEx.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_component.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_core.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_dataGrid.js=UTF-8
-encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_dataPager.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_env.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_eventTarget.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_fieldSet.js=UTF-8
@@ -34,4 +33,5 @@ encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_input.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_key.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_list.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_menuBase.js=UTF-8
+encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_pager.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/rcfaces-html-config.xml=UTF-8

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -23,8 +26,10 @@ package org.rcfaces.renderkit.html.internal.decorator;
 
 import java.util.Map;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
@@ -41,17 +46,24 @@ public class SubMenuDecorator extends MenuDecorator {
 
     protected String menuVarName;
 
-    private boolean independantMenu;
+    private String suffixMenuId;
 
     private boolean removeAllWhenShown;
 
+    private int itemImageWidth;
+
+    private int itemImageHeight;
+
     public SubMenuDecorator(UIComponent component, String menuId,
-            boolean independantMenu, boolean removeAllWhenShown) {
+            String suffixMenuId, boolean removeAllWhenShown,
+            int itemImageWidth, int itemImageHeight) {
         super(component);
 
-        this.independantMenu = independantMenu;
+        this.suffixMenuId = suffixMenuId;
         this.menuId = menuId;
         this.removeAllWhenShown = removeAllWhenShown;
+        this.itemImageWidth = itemImageWidth;
+        this.itemImageHeight = itemImageHeight;
     }
 
     protected SelectItemsContext createJavaScriptContext()
@@ -62,15 +74,29 @@ public class SubMenuDecorator extends MenuDecorator {
         menuVarName = javaScriptWriter.getJavaScriptRenderContext()
                 .allocateVarName();
 
-        String id = context.getComponentClientId(getComponent());
-
         javaScriptWriter.write("var ").write(menuVarName).write("=")
-                .writeMethodCall("_newSubMenu").writeString(menuId);
+                .writeMethodCall("f_newSubMenu").writeString(menuId);
 
         int pred = 0;
 
-        if (independantMenu) {
+        String id = context.getComponentClientId(getComponent());
+
+        if (suffixMenuId != null) {
+            IProcessContext processContext = getComponentRenderContext()
+                    .getRenderContext().getProcessContext();
+
+            String namingSeparator = processContext.getNamingSeparator();
+            if (namingSeparator != null) {
+                id += namingSeparator + suffixMenuId;
+                
+            } else {
+                id += NamingContainer.SEPARATOR_CHAR + suffixMenuId;
+            }
+        }
+
+        if (id != null) {
             javaScriptWriter.write(',').writeString(id);
+
         } else {
             pred++;
         }
@@ -81,6 +107,26 @@ public class SubMenuDecorator extends MenuDecorator {
             }
 
             javaScriptWriter.write(',').writeBoolean(true);
+        } else {
+            pred++;
+        }
+
+        if (itemImageWidth >= 0) {
+            for (; pred > 0; pred--) {
+                javaScriptWriter.write(',').writeNull();
+            }
+
+            javaScriptWriter.write(',').writeInt(itemImageWidth);
+        } else {
+            pred++;
+        }
+
+        if (itemImageHeight >= 0) {
+            for (; pred > 0; pred--) {
+                javaScriptWriter.write(',').writeNull();
+            }
+
+            javaScriptWriter.write(',').writeInt(itemImageHeight);
         } else {
             pred++;
         }
@@ -96,7 +142,7 @@ public class SubMenuDecorator extends MenuDecorator {
 
     protected void encodeComponentsBegin() throws WriterException {
         if (javaScriptWriter != null) {
-            if (independantMenu) {
+            if (suffixMenuId == null) {
                 SelectItemsJsContext context = (SelectItemsJsContext) getContext();
 
                 Map listenersByType = ListenerTools.getListenersByType(

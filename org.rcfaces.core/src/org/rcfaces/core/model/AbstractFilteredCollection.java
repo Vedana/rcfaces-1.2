@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -52,7 +55,7 @@ import javax.faces.model.SelectItem;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractFilteredCollection implements Collection,
-        IFilteredCollection {
+        IFiltredCollection {
     private static final String REVISION = "$Revision$";
 
     public static final Collection EMPTY_COLLECTION = new AbstractFilteredCollection() {
@@ -63,7 +66,7 @@ public abstract class AbstractFilteredCollection implements Collection,
         }
     };
 
-    public static final IFilteredCollection EMPTY_FILTERED_COLLECTION = (IFilteredCollection) EMPTY_COLLECTION;
+    public static final IFiltredCollection EMPTY_FILTERED_COLLECTION = (IFiltredCollection) EMPTY_COLLECTION;
 
     protected final Collection collection;
 
@@ -144,7 +147,7 @@ public abstract class AbstractFilteredCollection implements Collection,
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    protected class FilteredIterator implements IFilteredIterator {
+    protected class FilteredIterator implements IFiltredIterator {
         private static final String REVISION = "$Revision$";
 
         private final IFilterProperties filterProperties;

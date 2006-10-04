@@ -21,6 +21,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private String fontUnderline;
 	private String text;
 	private String textAlignment;
+	private String verticalAlignment;
 	private String borderType;
 	private String imageURL;
 	public String getComponentType() {
@@ -83,6 +84,14 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		this.textAlignment = textAlignment;
 	}
 
+	public final String getVerticalAlignment() {
+		return verticalAlignment;
+	}
+
+	public final void setVerticalAlignment(String verticalAlignment) {
+		this.verticalAlignment = verticalAlignment;
+	}
+
 	public final String getBorderType() {
 		return borderType;
 	}
@@ -111,6 +120,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
 		}
@@ -194,6 +204,16 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
+		if (verticalAlignment != null) {
+			if (isValueReference(verticalAlignment)) {
+				ValueBinding vb = application.createValueBinding(verticalAlignment);
+
+				component.setVerticalAlignment(vb);
+			} else {
+				component.setVerticalAlignment(verticalAlignment);
+			}
+		}
+
 		if (borderType != null) {
 			if (isValueReference(borderType)) {
 				ValueBinding vb = application.createValueBinding(borderType);
@@ -223,6 +243,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		fontUnderline = null;
 		text = null;
 		textAlignment = null;
+		verticalAlignment = null;
 		borderType = null;
 		imageURL = null;
 

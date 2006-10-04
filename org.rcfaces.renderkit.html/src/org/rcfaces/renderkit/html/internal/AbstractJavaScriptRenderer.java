@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -151,9 +154,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 import javax.faces.event.FacesListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
+import org.rcfaces.core.internal.component.IRCFacesComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -169,6 +175,9 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(AbstractJavaScriptRenderer.class);
 
     // private static final String JAVASCRIPT_INITIALIZED =
     // "camelia.html.javascript.initialized";
@@ -278,7 +287,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
         String componentVarName = writer.getComponentVarName();
 
-//        writer.write("with(").write(componentVarName).writeln("){");
+        // writer.write("with(").write(componentVarName).writeln("){");
 
         IHtmlComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
@@ -298,15 +307,25 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
         IJavaScriptRenderContext javascriptRenderContext = renderContext
                 .getJavaScriptRenderContext();
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Release Javascript javascriptInitialized="
+                    + javascriptRenderContext.isInitialized() + " writer.open="
+                    + writer.isOpened() + "  canUseLazyTag="
+                    + renderContext.canUseLazyTag() + " sendComplete="
+                    + sendCompleteComponent());
+        }
+
         if (writer.isOpened() == false && renderContext.canUseLazyTag()) {
-            // Le LAZY seulement en cas de non interactive, car IE ne reconnait
+            // Le LAZY seulement en cas de non interactive, car IE ne
+            // reconnait
             // pas les <v:init> dans le traitement interactif !
 
             if (javascriptRenderContext.isInitialized()) {
                 if (componentRenderContext.setAttribute(ALREADY_LAZY_OBJECT,
                         Boolean.TRUE) == null) {
                     IHtmlWriter w = writer.getWriter();
-                    // On ecrit à la main le tag, car on ne peut pas le fermer
+                    // On ecrit à la main le tag, car on ne peut pas le
+                    // fermer
                     // directement dans le m�me tag !
                     w.startElement(LAZY_INIT_TAG);
 
@@ -353,7 +372,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
             writer.writeMethodCall("_completeComponent").writeln(");");
         }
 
-//        writer.writeln("}");
+        // writer.writeln("}");
     }
 
     protected abstract boolean sendCompleteComponent();
@@ -528,9 +547,31 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
             enableJavascript = true;
         }
 
+        boolean javaScriptStubForced = javascriptRenderContext
+                .isJavaScriptStubForced();
         if (js == null) {
             if (enableJavascript == false) {
                 enableJavascript = writer.isJavaScriptEnabled();
+            }
+
+            if (javaScriptStubForced) {
+                IRCFacesComponent cameliaParent = null;
+
+                for (UIComponent parent = component.getParent(); parent != null; parent = parent
+                        .getParent()) {
+
+                    if (parent instanceof IRCFacesComponent) {
+                        cameliaParent = (IRCFacesComponent) parent;
+                        break;
+                    }
+                }
+
+                if (cameliaParent != null) {
+                    javaScriptStubForced = false;
+
+                } else {
+                    enableJavascript = true;
+                }
             }
 
             if (enableJavascript) {
@@ -539,8 +580,10 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
         }
 
         if (js != null) {
-            if (writer.isJavaScriptStubForced()) {
+            if (javaScriptStubForced) {
                 js.ensureInitialization();
+
+                javascriptRenderContext.clearJavaScriptStubForced();
             }
 
             try {

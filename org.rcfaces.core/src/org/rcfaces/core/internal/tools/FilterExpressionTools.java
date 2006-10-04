@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -73,6 +76,9 @@ public final class FilterExpressionTools {
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
+    /**
+     * 
+     */
     public static final IFilterProperties EMPTY = new IFilterProperties() {
         private static final String REVISION = "$Revision$";
 
@@ -159,6 +165,23 @@ public final class FilterExpressionTools {
         public Number getNumberProperty(String name) {
             return null;
         }
+
+        public int hashCode() {
+            return 31;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+
+            return true;
+        }
+
     };
 
     public static IFilterProperties create(Map map) {
@@ -282,6 +305,36 @@ public final class FilterExpressionTools {
         public Object getProperty(String name) {
             return map.get(name);
         }
+
+        public int hashCode() {
+            final int PRIME = 31;
+            int result = 1;
+            result = PRIME * result + ((map == null) ? 0 : map.hashCode());
+            return result;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+
+            final FilterParametersMap other = (FilterParametersMap) obj;
+            if (map == null) {
+                if (other.map != null) {
+                    return false;
+                }
+
+            } else if (!map.equals(other.map)) {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 
     static {

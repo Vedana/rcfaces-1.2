@@ -311,14 +311,14 @@ var __prototype = {
 	 * @method protected
 	 * @return void
 	 */
-	_a_componentCaptureMenuEvent: function() {
+	fa_componentCaptureMenuEvent: function() {
 		return null;
 	},
 	/**
 	 * @method protected
 	 * @return void
 	 */
-	_a_updateRequired: function() {
+	fa_updateRequired: function() {
 		this._installRequiredValidator();
 	},
 	/**

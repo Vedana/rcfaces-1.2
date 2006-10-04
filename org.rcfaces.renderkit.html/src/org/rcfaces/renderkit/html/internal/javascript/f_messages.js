@@ -50,7 +50,7 @@ var __prototype = {
 
 		this._currentMessages=messageContext.f_listMessages(null, this.f_isGlobalOnly());
 
-		this._a_updateMessages();		
+		this.fa_updateMessages();		
 				
 		return this.f_super(arguments);	
 	},
@@ -92,9 +92,9 @@ var __prototype = {
 			this._currentMessages=currentMessages;
 		}
 
-		this._a_updateMessages();
+		this.fa_updateMessages();
 	},
-	_a_updateMessages: function() {
+	fa_updateMessages: function() {
 		var messages=this._currentMessages;
 
 		var tbody=this._tbody;
@@ -140,7 +140,7 @@ var __prototype = {
 				tr.appendChild(detailLabel);
 			}
 			
-			f_message.FillComponent(this.className, tr, summaryLabel, detailLabel, message, styleMessage);
+			f_message.FillComponent(this.className, tr, null, summaryLabel, detailLabel, message, styleMessage);
 			
 			tbody.appendChild(tr);
 		}

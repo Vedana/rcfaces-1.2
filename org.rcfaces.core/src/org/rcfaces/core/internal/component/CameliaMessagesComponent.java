@@ -3,6 +3,7 @@
 package org.rcfaces.core.internal.component;
 
 import java.util.List;
+import java.io.IOException;
 
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -18,6 +19,7 @@ import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.IRCFacesComponent;
 import org.rcfaces.core.internal.component.CameliaComponents;
 import org.rcfaces.core.internal.component.TemplatesEngine;
 import org.rcfaces.core.internal.component.IComponentEngine;
@@ -32,7 +34,7 @@ import org.rcfaces.core.internal.renderkit.IRendererExtension;
  * @author Olivier Oeuillot
  */
 public abstract class CameliaMessagesComponent extends javax.faces.component.UIMessages implements
-		IContainerManager, ITransientAttributesManager {
+		IRCFacesComponent, IContainerManager, ITransientAttributesManager {
 	private static final String REVISION = "$Revision$";
 
 	protected final transient IComponentEngine engine;
@@ -122,6 +124,42 @@ public abstract class CameliaMessagesComponent extends javax.faces.component.UIM
 		}
 	}
 
+    public void encodeBegin(FacesContext context) throws IOException {
+		if (context == null) {
+			throw new NullPointerException();
+		}
+
+		if (isRendered()==false || isClientRendered()==false) {
+			return;
+		}
+
+    	super.encodeBegin(context);    	
+	}
+	
+    public void encodeChildren(FacesContext context) throws IOException {
+		if (context == null) {
+			throw new NullPointerException();
+		}
+
+		if (isRendered()==false || isClientRendered()==false) {
+			return;
+		}
+
+    	super.encodeChildren(context);    	
+	}
+	
+    public void encodeEnd(FacesContext context) throws IOException {
+		if (context == null) {
+			throw new NullPointerException();
+		}
+
+		if (isRendered()==false || isClientRendered()==false) {
+			return;
+		}
+
+    	super.encodeEnd(context);    	
+	}
+	
 	public void processDecodes(FacesContext context) {
 		if (context == null) {
 			throw new NullPointerException();
@@ -220,7 +258,7 @@ public abstract class CameliaMessagesComponent extends javax.faces.component.UIM
 		return engine.setTransientAttribute(name, value);
 	}
 
-	protected final boolean isClientRendered() {
+	public final boolean isClientRendered() {
 		if ((this instanceof IVisibilityCapability)==false) {
 			return true;
 		}

@@ -34,6 +34,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private String defaultCellImageURL;
 	private String cellImageURL;
 	private String cellStyleClass;
+	private String cellToolTipText;
 	private String autoFilter;
 	private String converter;
 
@@ -201,6 +202,14 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.cellStyleClass = cellStyleClass;
 	}
 
+	public final String getCellToolTipText() {
+		return cellToolTipText;
+	}
+
+	public final void setCellToolTipText(String cellToolTipText) {
+		this.cellToolTipText = cellToolTipText;
+	}
+
 	public final String getAutoFilter() {
 		return autoFilter;
 	}
@@ -241,6 +250,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  defaultCellImageURL='"+defaultCellImageURL+"'");
 			LOG.debug("  cellImageURL='"+cellImageURL+"'");
 			LOG.debug("  cellStyleClass='"+cellStyleClass+"'");
+			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
 			LOG.debug("  autoFilter='"+autoFilter+"'");
 		}
 		super.setProperties(uiComponent);
@@ -435,6 +445,15 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (cellToolTipText != null) {
+			if (isValueReference(cellToolTipText)) {
+				ValueBinding vb = application.createValueBinding(cellToolTipText);
+				component.setCellToolTipText(vb);
+			} else {
+				component.setCellToolTipText(cellToolTipText);
+			}
+		}
+
 		if (autoFilter != null) {
 			if (isValueReference(autoFilter)) {
 				ValueBinding vb = application.createValueBinding(autoFilter);
@@ -474,6 +493,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		defaultCellImageURL = null;
 		cellImageURL = null;
 		cellStyleClass = null;
+		cellToolTipText = null;
 		autoFilter = null;
 		converter = null;
 

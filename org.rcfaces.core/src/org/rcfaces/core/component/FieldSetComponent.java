@@ -8,11 +8,13 @@ import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 public class FieldSetComponent extends AbstractOutputComponent implements 
 	IFontCapability,
 	ITextCapability,
 	ITextAlignmentCapability,
+	IVerticalAlignmentCapability,
 	IBorderTypeCapability,
 	IImageCapability {
 
@@ -138,6 +140,22 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	public final void setTextAlignment(ValueBinding textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
+	}
+
+	public final java.lang.String getVerticalAlignment() {
+		return getVerticalAlignment(null);
+	}
+
+	public final java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
+	}
+
+	public final void setVerticalAlignment(java.lang.String verticalAlignment) {
+		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
+	}
+
+	public final void setVerticalAlignment(ValueBinding verticalAlignment) {
+		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
 	public final java.lang.String getBorderType() {

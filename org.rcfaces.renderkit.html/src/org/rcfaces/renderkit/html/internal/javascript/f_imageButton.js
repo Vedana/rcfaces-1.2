@@ -228,7 +228,7 @@ var __prototype = {
 	/**
 	 * @method private
 	 */
-	_a_borderFinalizer: function(border) {
+	fa_borderFinalizer: function(border) {
 		border.onmousedown=null;
 		border.onmouseup=null;
 	},
@@ -402,7 +402,17 @@ var __prototype = {
 		if (this.className!=className) {
 			this.className=className;
 		}
+
+/*		
+		var text=this._text;
+		if (text) {
+			className=this._className+"_text"+suffix;
 		
+			if (text.className!=className) {
+				text.className=className;
+			}			
+		}		
+*/		
 		if (!url) {
 			url=this.f_getImageURL();
 			if (!url) {
@@ -414,7 +424,7 @@ var __prototype = {
 		if (border) {
 			var borderClassName=border._className+suffix;
 			
-			if (this.f_isFlatTypeBorder() && ignoreFlat!==undefined && this!=this.f_getLastFlatBorder()) {
+			if (this.f_isFlatTypeBorder() && ignoreFlat!==undefined && this!=fa_borderType.GetCurrentBorder()) {
 				borderClassName=border._className+ignoreFlat;
 			}
 			
@@ -476,14 +486,14 @@ var __prototype = {
 				
 		this.f_super(arguments, type, target);
 	},
-	_a_updateImages: function(prop, url) {
+	fa_updateImages: function(prop, url) {
 		if (prop==f_prop.HOVER_IMAGE_URL && url) {
 			this._installHoverFocus();
 		}
 	
 		this._updateImage();
 	},
-	_a_updateDisabled: function(disabled) {
+	fa_updateDisabled: function(disabled) {
 		var cmp=(this._link)?this._link:this;
 
 		if (disabled) {
@@ -495,13 +505,13 @@ var __prototype = {
 			cmp.hideFocus=false;
 		}
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
 		this._updateImage();
 	},
-	_a_updateReadOnly: function() {
+	fa_updateReadOnly: function() {
 	},
 	f_update: function() {
 		this._updateImage();

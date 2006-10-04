@@ -5,7 +5,7 @@
 /**
  * class f_imageCombo
  *
- * @class f_imageCombo extends f_imageButton
+ * @class f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -70,13 +70,13 @@ var __prototype = {
 		return false;
 	},
 	
-	_a_componentCaptureMenuEvent: function() {
+	fa_componentCaptureMenuEvent: function() {
 		return this;
 	},
 	
-	_a_getItemsWrapper: function() {
+	fa_getItemsWrapper: function() {
 		return this.f_getSubMenuById(f_imageCombo._MENU_ID);
 	}
-}
+}		
 
 var f_imageCombo=new f_class("f_imageCombo", null, __static, __prototype, f_imageButton, fa_subMenu, fa_itemsWrapper);

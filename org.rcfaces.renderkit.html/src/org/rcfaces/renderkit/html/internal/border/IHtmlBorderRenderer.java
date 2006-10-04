@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -54,10 +57,11 @@ public interface IHtmlBorderRenderer {
     IHtmlWriter startChild(IHtmlWriter writer, String classSuffix)
             throws WriterException;
 
-    IHtmlWriter startChild(IHtmlWriter writer, String classSuffix, String halign,
-            String valign, String width, String height, int colspan, int rowspan)
-            throws WriterException;
+    IHtmlWriter startChild(IHtmlWriter writer, String classSuffix,
+            String halign, String valign, String width, String height,
+            int colspan, int rowspan) throws WriterException;
 
     IHtmlWriter endChild(IHtmlWriter writer) throws WriterException;
 
+    void writeComboImage(IHtmlWriter writer, String componentClassName) throws WriterException;
 }

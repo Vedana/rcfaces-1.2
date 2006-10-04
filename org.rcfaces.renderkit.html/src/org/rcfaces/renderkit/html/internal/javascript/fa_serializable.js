@@ -42,7 +42,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setProperty: function(name, value, isList, listSep) {
-		if (this._componentUpdated===false || this._noPropertyUpdates) {
+		if (this.fa_componentUpdated===false || this._noPropertyUpdates) {
 			return;
 		}
 
@@ -121,7 +121,7 @@ var __prototype = {
 	 * @method hidden
 	 * @return string Serialized form.
 	 */
-	_serialize0: function() {
+	f_serialize0: function() {
 		if (this.f_serialize) {
 			this.f_serialize();
 		}
@@ -134,10 +134,19 @@ var __prototype = {
 		return f_core.EncodeObject(p, ",");
 	},
 	
-	_componentUpdated: f_class.OPTIONAL_ABSTRACT,
+	/**
+	 * @method protected abstract optional
+	 */
+	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT,
 	
+	/**
+	 * @method protected abstract optional
+	 */
 	f_performPropertyChange: f_class.OPTIONAL_ABSTRACT,
 	
+	/**
+	 * @method protected abstract optional
+	 */
 	f_serialize: f_class.OPTIONAL_ABSTRACT
 }
 

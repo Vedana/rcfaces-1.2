@@ -39,16 +39,20 @@
 		<component-class>org.rcfaces.core.component.DataColumnComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.dataPager</component-type>
-		<component-class>org.rcfaces.core.component.DataPagerComponent</component-class>
+		<component-type>org.rcfaces.core.pager</component-type>
+		<component-class>org.rcfaces.core.component.PagerComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.dataGrid</component-type>
 		<component-class>org.rcfaces.core.component.DataGridComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.dataList</component-type>
-		<component-class>org.rcfaces.core.component.DataListComponent</component-class>
+		<component-type>org.rcfaces.core.componentsGrid</component-type>
+		<component-class>org.rcfaces.core.component.ComponentsGridComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.componentsList</component-type>
+		<component-class>org.rcfaces.core.component.ComponentsListComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.dateItem</component-type>
@@ -117,6 +121,10 @@
 	<component>
 		<component-type>org.rcfaces.core.imageCombo</component-type>
 		<component-class>org.rcfaces.core.component.ImageComboComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.imagePagerButton</component-type>
+		<component-class>org.rcfaces.core.component.ImagePagerButtonComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.imageRadioButton</component-type>

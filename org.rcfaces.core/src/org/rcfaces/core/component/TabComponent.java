@@ -14,13 +14,11 @@ import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
 
 public class TabComponent extends CardComponent implements 
 	ITextCapability,
 	IFontCapability,
-	ITextAlignmentCapability,
 	IDisabledCapability,
 	IImageCapability,
 	IStatesImageCapability,
@@ -140,22 +138,6 @@ public class TabComponent extends CardComponent implements
 
 	public final void setFontUnderline(ValueBinding fontUnderline) {
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
-	}
-
-	public final java.lang.String getTextAlignment() {
-		return getTextAlignment(null);
-	}
-
-	public final java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
-	}
-
-	public final void setTextAlignment(java.lang.String textAlignment) {
-		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
-	}
-
-	public final void setTextAlignment(ValueBinding textAlignment) {
-		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
 	public final boolean isDisabled() {

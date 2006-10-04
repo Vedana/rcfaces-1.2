@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -510,7 +513,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         String parentVarId = menuContext.peekVarId();
         String managerVarId = menuContext.getManagerVarId();
 
-        javaScriptWriter.writeCall(managerVarId, "_appendSeparatorItem").write(
+        javaScriptWriter.writeCall(managerVarId, "f_appendSeparatorItem").write(
                 parentVarId).writeln(");");
     }
 

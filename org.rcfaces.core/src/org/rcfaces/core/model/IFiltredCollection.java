@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -37,14 +40,14 @@ import java.util.Iterator;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IFilteredCollection {
+public interface IFiltredCollection {
 
     int NO_MAXIMUM_RESULT_NUMBER = -1;
 
     Iterator iterator(IFilterProperties filterProperties,
             int maximumResultNumber);
 
-    public interface IFilteredIterator extends Iterator {
+    public interface IFiltredIterator extends Iterator {
         int getSize();
 
         void release();

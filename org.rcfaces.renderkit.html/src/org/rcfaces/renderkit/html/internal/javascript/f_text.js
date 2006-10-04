@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  */
 
 /**
@@ -30,13 +22,29 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setText: function(text) {
+		f_core.Assert(typeof(text)=="string", "Invalid text parameter ! ('"+text+"')");
 		if (this.f_getText() == text) {
 			return;
 		}
 		f_core.SetTextNode(this, text);
 		
 		this.f_setProperty(f_prop.TEXT,text);
-	}
+	},
+	/**
+	 * @method public
+	 * @return string
+	 */
+	f_getValue: function() {
+		return this.f_getText();
+	},
+	/**
+	 * @method public
+	 * @param string text The text.
+	 * @return void
+	 */
+	f_setValue: function(text) {
+		this.f_setText(text);
+	}	
 }
 
 var f_text=new f_class("f_text", null, null, __prototype, f_component);

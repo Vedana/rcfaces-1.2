@@ -45,22 +45,22 @@ var __prototype = {
 		
 		this._collapsed = set;
 	
-		this._a_updateCollapsed(set);
+		this.fa_updateCollapsed(set);
 		
 		this.f_setProperty(f_prop.COLLAPSED,this._collapsed);
 	},
 
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_updateCollapsed: f_class.ABSTRACT
+	fa_updateCollapsed: f_class.ABSTRACT
 }
 
 var fa_collapsed=new f_aspect("fa_collapsed", null, __prototype);

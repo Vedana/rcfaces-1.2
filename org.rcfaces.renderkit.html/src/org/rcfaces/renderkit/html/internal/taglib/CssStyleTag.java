@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -64,6 +67,8 @@ public class CssStyleTag extends BodyTagSupport implements Tag {
 
     private String src;
 
+    private boolean componentRules;
+
     private IHtmlProcessContext htmlRenderContext;
 
     public final String getSrc() {
@@ -111,6 +116,10 @@ public class CssStyleTag extends BodyTagSupport implements Tag {
                             null, null);
                 }
 
+                if (componentRules) {
+                    writer.write(" v:rules=\"true\"");
+                }
+
                 writer.write(" href=\"");
                 writer.write(src);
                 writer.write("\" />");
@@ -142,6 +151,10 @@ public class CssStyleTag extends BodyTagSupport implements Tag {
                     writer.write(IHtmlRenderContext.CSS_TYPE);
                     writer.write('\"');
                 }
+
+                if (componentRules) {
+                    writer.write(" v:rules=\"true\"");
+                }
                 writer.println(">");
 
                 bodyContent.writeOut(writer);
@@ -154,6 +167,14 @@ public class CssStyleTag extends BodyTagSupport implements Tag {
         }
 
         return super.doEndTag();
+    }
+
+    public final boolean isComponentRules() {
+        return componentRules;
+    }
+
+    public final void setComponentRules(boolean componentRules) {
+        this.componentRules = componentRules;
     }
 
 }

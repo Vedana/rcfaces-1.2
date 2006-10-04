@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -26,4 +29,6 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
  */
 public interface IHtmlComponentRenderContext extends IComponentRenderContext {
     boolean hasClientDatas(boolean clear);
+
+    IHtmlRenderContext getHtmlRenderContext();
 }

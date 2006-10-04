@@ -51,7 +51,7 @@ var __prototype = {
 	/**
 	 * @method protected
 	 */
-	_a_getItemsWrapper: function() {
+	fa_getItemsWrapper: function() {
 		return this._calendar;
 	},
 	f_getCalendarObject: function() {

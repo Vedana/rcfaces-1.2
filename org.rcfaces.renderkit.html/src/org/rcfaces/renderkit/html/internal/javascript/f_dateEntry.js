@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_dateEntry extends f_component, fa_calendarPopup
+ * @class public f_dateEntry extends f_component, fa_calendarPopup, fa_disabled, fa_readOnly, fa_required
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -508,7 +508,7 @@ var __prototype={
 		// C'est un TAB, on laisse faire ....
 		return true;
 	},
-	_a_updateReadOnly: function() {
+	fa_updateReadOnly: function() {
 		var inputs=this._inputs;
 		var readOnly=this._readOnly;
 		for(var i=0;i<inputs.length;i++) {
@@ -517,7 +517,7 @@ var __prototype={
 			input.readOnly=readOnly;
 		}
 	},
-	_a_updateDisabled: function() {
+	fa_updateDisabled: function() {
 		var inputs=this._inputs;
 		var disabled=this._disabled;
 		for(var i=0;i<inputs.length;i++) {
@@ -711,4 +711,4 @@ var __prototype={
 	}
 }
  
-var f_dateEntry=new f_class("f_dateEntry", null, __static, __prototype, f_component, fa_calendarPopup, fa_disabled, fa_readOnly);
+var f_dateEntry=new f_class("f_dateEntry", null, __static, __prototype, f_component, fa_calendarPopup, fa_disabled, fa_readOnly, fa_required);

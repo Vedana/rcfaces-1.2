@@ -75,7 +75,7 @@ var __prototype = {
 			return event.f_preventDefault();
 		}
 	},
-	_a_componentCaptureMenuEvent: function() {
+	fa_componentCaptureMenuEvent: function() {
 		return null;
 	}
 }

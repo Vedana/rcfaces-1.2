@@ -14,6 +14,8 @@ DIV.f_calendar {
 	font-family: arial, helvetica;
 	-moz-user-select: none;
 	user-select: none;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 IMG.f_calendar_weekImage,

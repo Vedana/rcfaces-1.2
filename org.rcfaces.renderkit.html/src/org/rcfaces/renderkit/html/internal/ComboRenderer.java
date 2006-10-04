@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -103,7 +106,7 @@ import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.model.IFilteredCollection;
+import org.rcfaces.core.model.IFiltredCollection;
 import org.rcfaces.renderkit.html.internal.decorator.ComboDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
@@ -117,7 +120,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         IFilteredItemsRenderer {
     private static final String REVISION = "$Revision$";
 
-    private static final String FILTERED_COLLECTION_PROPERTY = "camelia.combo.filteredCollection";
+    private static final String FILTRED_COLLECTION_PROPERTY = "camelia.combo.filtredCollection";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         UIComponent combo = writer.getComponentRenderContext().getComponent();
@@ -152,9 +155,9 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         if (combo instanceof IFilterCapability) {
             if (hasFilteredCollections(combo)) {
                 htmlWriter.getComponentRenderContext().setAttribute(
-                        FILTERED_COLLECTION_PROPERTY, Boolean.TRUE);
+                        FILTRED_COLLECTION_PROPERTY, Boolean.TRUE);
 
-                htmlWriter.writeAttribute("v:filtered", "true");
+                htmlWriter.writeAttribute("v:filtred", "true");
             }
         }
 
@@ -173,7 +176,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
             UISelectItems selectItems = (UISelectItems) child;
 
             Object value = selectItems.getValue();
-            if ((value instanceof IFilteredCollection) == false) {
+            if ((value instanceof IFiltredCollection) == false) {
                 continue;
             }
 
@@ -219,7 +222,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         super.addRequiredJavaScriptClassNames(htmlWriter, classes);
 
         if (htmlWriter.getComponentRenderContext().containsAttribute(
-                FILTERED_COLLECTION_PROPERTY)) {
+                FILTRED_COLLECTION_PROPERTY)) {
 
             IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
                     htmlWriter).getJavaScriptRenderContext();

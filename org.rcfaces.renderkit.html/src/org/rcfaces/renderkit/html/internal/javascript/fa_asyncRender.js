@@ -23,8 +23,8 @@ var __prototype = {
 //		this._intLoading=undefined; // boolean
 		this._intWaiting=undefined; // f_waiting
 	},
-	_updateVisibility: {
-		after: function(component, visible) {
+	f_updateVisibility: {
+		after: function(visible) {
 			if (visible) {
 				this.f_prepare(false);
 			}
@@ -46,8 +46,8 @@ var __prototype = {
 		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		var component=this;
 		if (!parent) {
-			if (typeof(this._a_getInteractiveParent)=="function") {
-				parent=this._a_getInteractiveParent();
+			if (typeof(this.fa_getInteractiveParent)=="function") {
+				parent=this.fa_getInteractiveParent();
 			}
 			
 			if (!parent) {
@@ -133,7 +133,6 @@ var __prototype = {
 					
 					f_core.Error(fa_asyncRender, "Unknown content type: "+responseContentType);
 					
-					
 				} finally {				
 					component._intLoading=false;
 
@@ -156,10 +155,10 @@ var __prototype = {
 	},
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_getInteractiveParent: f_class.ABSTRACT
+	fa_getInteractiveParent: f_class.ABSTRACT
 	
 }
 

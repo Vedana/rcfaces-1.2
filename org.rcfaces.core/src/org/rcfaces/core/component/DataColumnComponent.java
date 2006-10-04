@@ -454,6 +454,26 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return engine.isPropertySetted(Properties.CELL_STYLE_CLASS);
 	}
 
+	public final String getCellToolTipText() {
+		return getCellToolTipText(null);
+	}
+
+	public final String getCellToolTipText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CELL_TOOL_TIP_TEXT, facesContext);
+	}
+
+	public final void setCellToolTipText(String cellToolTipText) {
+		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
+	}
+
+	public final void setCellToolTipText(ValueBinding cellToolTipText) {
+		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
+	}
+
+	public final boolean isCellToolTipTextSetted() {
+		return engine.isPropertySetted(Properties.CELL_TOOL_TIP_TEXT);
+	}
+
 	public final boolean isAutoFilter() {
 		return isAutoFilter(null);
 	}

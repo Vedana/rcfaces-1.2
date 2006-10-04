@@ -30,7 +30,7 @@ var __prototype = {
 		
 		this.f_super(arguments);
 
-		if (input!=this) {
+		if (input && input!=this) {
 			f_core.VerifyProperties(input);
 		}
 	},
@@ -206,7 +206,7 @@ var __prototype = {
 		//}
 		// Update value if necessary
 		//if (this.value && this.f_clientValidatorEx) {
-		//this.f_clientValidatorEx._componentUpdatedValue(this.value);
+		//this.f_clientValidatorEx.fa_componentUpdatedValue(this.value);
 		//}
 
 		this.f_super(arguments);
@@ -230,13 +230,18 @@ var __prototype = {
 	 * Returns the value associated to the input component.
 	 *
 	 * @method public
-	 * @return string The value associated.
+	 * @return boolean If value is recognized.
 	 */
 	f_setValue: function(value) {
 		var validator=this._validator;
 		if (validator) {
 			return validator.f_setConvertedValue(value);
 		}		
+
+		if (typeof(value)!="string") {
+			f_core.Debug(f_input, "Invalid value: "+value);
+			return false;
+		}
 		
 		this.f_getInput().value=value;
 	},

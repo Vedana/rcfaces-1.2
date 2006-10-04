@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  */
  
 /**
@@ -53,22 +45,22 @@ var __prototype = {
 		
 		this._readOnly = set;
 	
-		this._a_updateReadOnly(set);
+		this.fa_updateReadOnly(set);
 		
 		this.f_setProperty(f_prop.READONLY,this._readOnly);
 	},
 
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_updateReadOnly: f_class.ABSTRACT
+	fa_updateReadOnly: f_class.ABSTRACT
 }
 
 var fa_readOnly=new f_aspect("fa_readOnly", null, __prototype);

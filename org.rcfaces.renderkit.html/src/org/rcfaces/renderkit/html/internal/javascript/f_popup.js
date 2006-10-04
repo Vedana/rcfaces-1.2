@@ -50,6 +50,10 @@ var __static = {
 	 */
 	_PopupKey: undefined,
 	
+	/**
+	 * @field private static boolean
+	 */
+	_LockPopupEvents: undefined,
 	
 	Finalizer: function() {
 		f_popup.Callbacks=undefined; // Map of functions
@@ -98,14 +102,17 @@ var __static = {
 
 		return popup;
 	},
+	/**
+	 * @method hidden static
+	 */
 	Ie_CreatePopup: function(document) {
 		var popup=document.parentWindow.createPopup();
 				
 		var pdocument=popup.document;
 		
 		var bases=document.getElementsByTagName("BASE");
-		for(var i=0;i<bases.length;i++) {
-			var base=bases[i];			
+		if (bases.length) {
+			var base=bases[bases.length-1];			
 			
 			var pbase=pdocument.createElement(base.tagName);
 			pbase.href=base.href;
@@ -141,7 +148,13 @@ var __static = {
 
 			document.body.oncontextmenu=f_core.CancelEventHandler;
 		}
-				
+		
+		if (!f_popup._LockPopupEvents) {
+			f_popup._LockPopupEvents=true;
+		
+			f_event.EnterEventLock(f_event.POPUP_LOCK);
+		}
+		
 		f_core.Debug("f_popup", "Register popup on "+component.id);
 
 		var oldComponent=f_popup.Component;
@@ -186,8 +199,22 @@ var __static = {
 	/**
 	 * @method hidden static
 	 */
+	UnlockPopupEvent: function() {	
+		if (!f_popup._LockPopupEvents) {
+			return;
+		}
+		
+		f_popup._LockPopupEvents=undefined;
+		
+		f_event.ExitEventLock(f_event.POPUP_LOCK);
+	},
+	/**
+	 * @method hidden static
+	 */
 	UnregisterWindowClick: function(component) {	
 		var document=component.ownerDocument;
+		
+		f_popup.UnlockPopupEvent();
 
 		var contextMenu=f_popup._OldContextMenu;
 		if (contextMenu) {

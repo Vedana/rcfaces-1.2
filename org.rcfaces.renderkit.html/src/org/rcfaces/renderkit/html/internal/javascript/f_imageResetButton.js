@@ -13,14 +13,18 @@
 var __prototype = {
 
 	_onSelect: function() {
-		if (this.f_isReadOnly()) {
+		if (this.f_isReadOnly() || this.f_isDisabled()) {
 			return false;
 		}
 		
-		var form = f_core._GetParentForm(this);
+		var form = f_core.GetParentForm(this);
 		if (form) {
 			form.reset();
+			
+		} else {
+			f_core.Error(f_imageResetButton, "FORM component was not found !");
 		}
+		
 		return false;
 	}
 }

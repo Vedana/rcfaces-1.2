@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  */
  
 /*
@@ -111,9 +103,9 @@ var __prototype = {
 	f_listAllInGroup: function() {
 		return this._listGroup(this.f_getGroupName());
 	},
-	_a_updateRequired: function() {
+	fa_updateRequired: function() {
 	},
-	_a_getRadioScope: fa_groupName.GlobalScope
+	fa_getRadioScope: fa_groupName.GlobalScope
 }
 
 var f_imageRadioButton=new f_class("f_imageRadioButton", null, null, __prototype, f_imageCheckButton, fa_groupName, fa_required);

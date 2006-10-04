@@ -21,6 +21,8 @@
 	background: transparent url('spinner/buttons.gif') no-repeat 0 0;
 	-moz-user-select: none;
 	user-select: none;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 .f_spinner_up,

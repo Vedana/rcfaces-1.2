@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -122,7 +125,6 @@ import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyD
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -181,7 +183,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
                 throws WriterException {
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
-            writeCssAttributes(writer, classSuffix);
+            writeCssAttributes(writer, classSuffix, ~CSS_FONT_MASK);
 
             FacesContext facesContext = writer.getComponentRenderContext()
                     .getFacesContext();

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -51,6 +54,35 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  * @version $Revision$ $Date$
  */
 public interface ICssWriter {
+
+    String DISPLAY = "display";
+
+    String HEIGHT = "height";
+
+    String LEFT = "left";
+
+    String MARGIN = "margin";
+
+    String MARGIN_BOTTOM = "margin-bottom";
+
+    String MARGIN_LEFT = "margin-left";
+
+    String MARGIN_RIGHT = "margin-right";
+
+    String MARGIN_TOP = "margin-top";
+
+    String TEXT_ALIGN = "text-align";
+
+    String TEXT_DECORATION = "text-decoration";
+
+    String TOP = "top";
+
+    String VERTICAL_ALIGN = "vertical-align";
+
+    String VISIBILITY = "visibility";
+
+    String WIDTH = "width";
+
     void close(IHtmlWriter writer) throws WriterException;
 
     ICssWriter writeProperty(String name, String value);

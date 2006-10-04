@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -142,6 +145,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
@@ -206,8 +210,8 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             }
         }
 
-        if (treeComponent.isUserExpandable(facesContext)) {
-            htmlWriter.writeAttribute("v:userExpandable", "true");
+        if (treeComponent.isUserExpandable(facesContext) == false) {
+            htmlWriter.writeAttribute("v:userExpandable", "false");
         }
 
         if (treeComponent.isHideRootExpandSign(facesContext)) {
@@ -303,8 +307,10 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             MenuComponent menuComponent = menuIterator.next();
 
             IComponentDecorator menuDecorator = new SubMenuDecorator(
-                    menuComponent, menuComponent.getMenuId(), true,
-                    menuComponent.isRemoveAllWhenShown(facesContext));
+                    menuComponent, menuComponent.getMenuId(), null,
+                    menuComponent.isRemoveAllWhenShown(facesContext),
+                    getItemImageWidth(menuComponent),
+                    getItemImageHeight(menuComponent));
 
             if (menuDecorators == null) {
                 menuDecorators = menuDecorator;
@@ -320,6 +326,14 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         }
 
         return decorator;
+    }
+
+    protected int getItemImageHeight(IMenuComponent menuComponent) {
+        return -1;
+    }
+
+    protected int getItemImageWidth(IMenuComponent menuComponent) {
+        return -1;
     }
 
     public void encodeNodes(IJavaScriptWriter jsWriter,

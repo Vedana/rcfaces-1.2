@@ -28,6 +28,8 @@
 	user-select: none;
 	color: black;
 	text-decoration: none;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 .f_imageRadioButton, 

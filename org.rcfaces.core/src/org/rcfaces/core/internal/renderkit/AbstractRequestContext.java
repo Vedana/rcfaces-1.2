@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -48,7 +51,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.AbstractReleasable;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -132,6 +134,11 @@ public abstract class AbstractRequestContext extends AbstractReleasable
         return component.getClientId(facesContext);
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     protected static abstract class AbstractComponentData extends
             AbstractProperties implements IComponentData {
         private static final String REVISION = "$Revision$";

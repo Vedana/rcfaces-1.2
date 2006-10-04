@@ -24,7 +24,7 @@ var __prototype = {
 		
 		return false;
 	},
-	_a_updateSelected: function() {
+	fa_updateSelected: function() {
 		this._updateImage();
 	}
 }

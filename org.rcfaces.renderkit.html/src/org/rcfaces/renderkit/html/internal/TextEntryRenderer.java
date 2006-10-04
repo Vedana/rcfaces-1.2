@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -160,6 +163,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 
 import org.rcfaces.core.component.IClientValidator;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.component.iterator.IMenuIterator;
@@ -247,7 +251,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         TextEntryComponent textEntryComponent = (TextEntryComponent) componentRenderContext
                 .getComponent();
-        
+
         String helpMessage = textEntryComponent.getHelpMessage(facesContext);
         if (helpMessage != null) {
             htmlWriter.writeAttribute("v:helpMessage", helpMessage);
@@ -311,7 +315,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
 
         if (useValidator) {
-            htmlWriter.forceJavaScriptStub();
+            htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+                    .getJavaScriptRenderContext().forceJavaScriptStub();
         }
     }
 
@@ -538,7 +543,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             if (converter != null) {
                 htmlWriter.writeAttribute("v:converter", converter);
             }
-       }
+        }
     }
 
     /*
@@ -787,8 +792,10 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             MenuComponent menuComponent = menuIterator.next();
 
             IComponentDecorator menuDecorator = new SubMenuDecorator(
-                    menuComponent, menuComponent.getMenuId(), true,
-                    menuComponent.isRemoveAllWhenShown(facesContext));
+                    menuComponent, menuComponent.getMenuId(), null,
+                    menuComponent.isRemoveAllWhenShown(facesContext),
+                    getItemImageWidth(menuComponent),
+                    getItemImageHeight(menuComponent));
 
             if (decorator == null) {
                 decorator = menuDecorator;
@@ -800,6 +807,14 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
 
         return decorator;
+    }
+
+    protected int getItemImageHeight(IMenuComponent menuComponent) {
+        return -1;
+    }
+
+    protected int getItemImageWidth(IMenuComponent menuComponent) {
+        return -1;
     }
 
     private void appendValidators(FacesContext facesContext,

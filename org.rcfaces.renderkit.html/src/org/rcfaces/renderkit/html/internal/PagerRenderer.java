@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -63,57 +66,83 @@ package org.rcfaces.renderkit.html.internal;
 
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.component.DataPagerComponent;
+import org.rcfaces.core.component.PagerComponent;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DataPagerRenderer extends AbstractCssRenderer {
+public class PagerRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
     protected String getJavaScriptClassName() {
-        return JavaScriptClasses.DATA_PAGER;
+        return JavaScriptClasses.PAGER;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#encodeBegin(org.rcfaces.core.internal.renderkit.IWriter)
-     */
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
 
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
 
-        DataPagerComponent dataPagerComponent = (DataPagerComponent) writer
+        PagerComponent pagerComponent = (PagerComponent) writer
                 .getComponentRenderContext().getComponent();
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV");
+        String componentTag = "SPAN";
+        if (pagerComponent.getWidth(facesContext) != null
+                || pagerComponent.getHeight(facesContext) != null) {
+            componentTag = "DIV";
+        }
+
+        htmlWriter.startElement(componentTag);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        String forValue = dataPagerComponent.getFor(facesContext);
+        String forValue = pagerComponent.getFor(facesContext);
         if (forValue == null) {
             throw new WriterException("'for' attribute must be specified !",
-                    null, dataPagerComponent);
+                    null, pagerComponent);
         }
 
         htmlWriter.writeAttribute("v:for", forValue);
 
-        htmlWriter.endElement("DIV");
+        String message = pagerComponent.getMessage(facesContext);
+        if (message != null) {
+            htmlWriter.writeAttribute("v:message", message);
+
+            String zeroResultMessage = pagerComponent
+                    .getZeroResultMessage(facesContext);
+            if (zeroResultMessage != null) {
+                htmlWriter.writeAttribute("v:zeroResultMessage",
+                        zeroResultMessage);
+            }
+
+            String oneResultMessage = pagerComponent
+                    .getOneResultMessage(facesContext);
+            if (oneResultMessage != null) {
+                htmlWriter.writeAttribute("v:oneResultMessage",
+                        oneResultMessage);
+            }
+
+            String manyResultsMessage = pagerComponent
+                    .getManyResultsMessage(facesContext);
+            if (manyResultsMessage != null) {
+                htmlWriter.writeAttribute("v:manyResultMessage",
+                        manyResultsMessage);
+            }
+        }
+
+        String noPagedMessage = pagerComponent.getNoPagedMessage(facesContext);
+        if (noPagedMessage != null) {
+            htmlWriter.writeAttribute("v:noPagedMessage", noPagedMessage);
+        }
+
+        htmlWriter.endElement(componentTag);
 
         htmlWriter.enableJavaScript();
     }

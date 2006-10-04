@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -85,7 +88,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 
 import org.rcfaces.core.component.FieldSetComponent;
+import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -123,21 +128,21 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         encodeFieldSetTop(htmlWriter, component);
     }
 
-    protected void encodeFieldSetTop(IHtmlWriter writer,
+    protected void encodeFieldSetTop(IHtmlWriter htmlWriter,
             FieldSetComponent fieldSetComponent) throws WriterException {
 
-        IComponentRenderContext componentRenderContext = writer
+        IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        writer.startElement("DIV");
-        writeCoreAttributes(writer);
+        htmlWriter.startElement("DIV");
+        writeCoreAttributes(htmlWriter);
         String className = getStyleClassName(componentRenderContext,
                 fieldSetComponent);
-        writer.writeAttribute("class", className);
+        htmlWriter.writeAttribute("class", className);
 
-        writeJavaScriptAttributes(writer);
+        writeJavaScriptAttributes(htmlWriter);
 
         ICssWriter cssWriter = createCssWriter();
         cssWriter.writePosition(fieldSetComponent);
@@ -145,9 +150,14 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         cssWriter.writeMargin(fieldSetComponent);
         cssWriter.writeVisibility(fieldSetComponent);
         cssWriter.writeBackground(fieldSetComponent, null);
-        cssWriter.close(writer);
+        cssWriter.close(htmlWriter);
 
-        IHtmlBorderRenderer borderRenderer = getHtmlBorderRenderer(writer,
+        String textAlignement = fieldSetComponent
+                .getTextAlignment(facesContext);
+        String verticalAlignement = fieldSetComponent
+                .getVerticalAlignment(facesContext);
+
+        IHtmlBorderRenderer borderRenderer = getHtmlBorderRenderer(htmlWriter,
                 fieldSetComponent);
 
         if (borderRenderer != null) {
@@ -157,23 +167,50 @@ public class FieldSetRenderer extends AbstractCssRenderer {
             String width = fieldSetComponent.getWidth(facesContext);
             String height = fieldSetComponent.getHeight(facesContext);
 
-            borderRenderer
-                    .initialize(writer, width, height, 1, 1, false, false);
+            borderRenderer.initialize(htmlWriter, width, height, 1, 1, false,
+                    false);
 
             if (borderRenderer instanceof ITitledBorderRenderer) {
-                ((ITitledBorderRenderer) borderRenderer).setText(writer,
+                ((ITitledBorderRenderer) borderRenderer).setText(htmlWriter,
                         fieldSetComponent.getText(facesContext));
             }
 
-            borderRenderer.startComposite(writer);
+            borderRenderer.startComposite(htmlWriter);
 
-            borderRenderer.startRow(writer);
+            borderRenderer.startRow(htmlWriter);
 
-            borderRenderer.startChild(writer, CELL_BODY);
+            borderRenderer.startChild(htmlWriter, CELL_BODY, textAlignement,
+                    verticalAlignement, null, null, 1, 1);
         }
 
-        writer.startElement("DIV")
-                .writeAttribute("class", className + DIV_BODY);
+        htmlWriter.startElement("DIV").writeAttribute("class",
+                className + DIV_BODY);
+
+        if (borderRenderer == null) {
+            // On aligne par CSS ...
+
+            CssWriter alignWriter = null;
+
+            if (textAlignement != null) {
+                if (alignWriter == null) {
+                    alignWriter = new CssWriter(64);
+                }
+                alignWriter
+                        .writeProperty(ICssWriter.TEXT_ALIGN, textAlignement);
+            }
+
+            if (verticalAlignement != null) {
+                if (alignWriter == null) {
+                    alignWriter = new CssWriter(64);
+                }
+                alignWriter.writeProperty(ICssWriter.VERTICAL_ALIGN,
+                        verticalAlignement);
+            }
+
+            if (alignWriter != null) {
+                htmlWriter.writeAttribute("style", alignWriter.getBuffer());
+            }
+        }
     }
 
     protected IHtmlBorderRenderer getHtmlBorderRenderer(IHtmlWriter writer,
@@ -254,7 +291,13 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
         String text = componentData.getStringProperty("text");
         if (text != null) {
-            fieldSetComponent.setText(text);
+            String old = fieldSetComponent.getText();
+            if (text.equals(old) == false) {
+                fieldSetComponent.setText(text);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.TEXT, old, text));
+            }
         }
     }
 

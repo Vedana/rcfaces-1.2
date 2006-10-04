@@ -127,7 +127,7 @@ var __prototype = {
 		this._imageURL=url;
 		f_imageRepository.PrepareImage(url);
 		
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return true;
 		}
 
@@ -135,7 +135,7 @@ var __prototype = {
 		// On le met avant l'update, car des fois que la valeur rechange ...
 		this.f_setProperty(prop, url);
 
-		this._a_updateImages(prop, url);
+		this.fa_updateImages(prop, url);
 		
 		return true;
 	},
@@ -152,7 +152,7 @@ var __prototype = {
 		this._selectedImageURL=url;
 		f_imageRepository.PrepareImage(url);
 		
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return true;
 		}
 
@@ -160,7 +160,7 @@ var __prototype = {
 		// On le met avant l'update, car des fois que la valeur rechange ...
 		this.f_setProperty(prop, url);
 		
-		this._a_updateImages(prop, url);
+		this.fa_updateImages(prop, url);
 		
 		return true;
 	},
@@ -177,7 +177,7 @@ var __prototype = {
 		this._disabledImageURL=url;
 		f_imageRepository.PrepareImage(url);
 		
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return true;
 		}
 
@@ -185,7 +185,7 @@ var __prototype = {
 		// On le met avant l'update, car des fois que la valeur rechange ...
 		this.f_setProperty(prop, url);
 
-		this._a_updateImages(prop, url);
+		this.fa_updateImages(prop, url);
 		
 		return true;
 	},
@@ -202,7 +202,7 @@ var __prototype = {
 		this._hoverImageURL=url;
 		f_imageRepository.PrepareImage(url);
 		
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return true;
 		}
 
@@ -210,22 +210,22 @@ var __prototype = {
 		// On le met avant l'update, car des fois que la valeur rechange ...
 		this.f_setProperty(prop, url);
 		
-		this._a_updateImages(prop, url);
+		this.fa_updateImages(prop, url);
 		
 		return true;
 	},
 
 	/**
-	 * @method public abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT,
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_updateImages: f_class.ABSTRACT
+	fa_updateImages: f_class.ABSTRACT
 	
 }
 

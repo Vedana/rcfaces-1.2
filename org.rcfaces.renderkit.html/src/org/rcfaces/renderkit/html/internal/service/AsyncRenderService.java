@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.4  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -89,11 +92,11 @@ import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.StateFieldMarkerTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
@@ -161,62 +164,69 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
     }
 
     public void service(FacesContext facesContext, String commandId) {
-        Map parameters = facesContext.getExternalContext()
-                .getRequestParameterMap();
-
-        String componentId = (String) parameters.get("id");
-        if (componentId == null) {
-            AbstractHtmlService.sendJsError(facesContext,
-                    "Can not find 'id' parameter.");
-            return;
-        }
-
-        UIViewRoot viewRoot = facesContext.getViewRoot();
-
-        UIComponent component = ComponentTools.getForComponent(facesContext,
-                componentId, viewRoot);
-        if (component == null) {
-            AbstractHtmlService.sendJsError(facesContext,
-                    "Can not find component '" + componentId + "'.");
-
-            return;
-        }
-
-        if ((component instanceof IAsyncRenderComponent) == false) {
-            AbstractHtmlService.sendJsError(facesContext,
-                    "Can not find AsyncRenderComponent (id='" + componentId
-                            + "').");
-            return;
-        }
-
-        Object object = component.getAttributes().remove(INTERACTIVE_KEY);
-        if ((object instanceof InteractiveBuffer) == false) {
-            AbstractHtmlService.sendJsError(facesContext,
-                    "Object is not ready ! (id='" + componentId + "').");
-            return;
-        }
-
-        InteractiveBuffer content = (InteractiveBuffer) object;
-        if (content == null) {
-            AbstractHtmlService.sendJsError(facesContext,
-                    "No content for component id='" + componentId + "'.");
-            return;
-        }
-
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        AbstractHtmlService.setNoCache(response);
-        response.setContentType(IHtmlRenderContext.HTML_TYPE + "; charset="
-                + AbstractHtmlService.RESPONSE_CHARSET);
-
         try {
-            content.sendBuffer(facesContext);
+            Map parameters = facesContext.getExternalContext()
+                    .getRequestParameterMap();
 
-        } catch (IOException ex) {
-            throw new FacesException(
-                    "Can not write async content of component id='"
-                            + componentId + "'.", ex);
+            String componentId = (String) parameters.get("id");
+            if (componentId == null) {
+                AbstractHtmlService.sendJsError(facesContext,
+                        "Can not find 'id' parameter.");
+                return;
+            }
+
+            UIViewRoot viewRoot = facesContext.getViewRoot();
+
+            UIComponent component = HtmlTools.getForComponent(facesContext,
+                    componentId, viewRoot);
+            if (component == null) {
+                AbstractHtmlService.sendJsError(facesContext,
+                        "Can not find component '" + componentId + "'.");
+
+                return;
+            }
+
+            if ((component instanceof IAsyncRenderComponent) == false) {
+                AbstractHtmlService.sendJsError(facesContext,
+                        "Can not find AsyncRenderComponent (id='" + componentId
+                                + "').");
+                return;
+            }
+
+            Object object = component.getAttributes().remove(INTERACTIVE_KEY);
+            if ((object instanceof InteractiveBuffer) == false) {
+                AbstractHtmlService.sendJsError(facesContext,
+                        "Object is not ready ! (id='" + componentId + "').");
+                return;
+            }
+
+            InteractiveBuffer content = (InteractiveBuffer) object;
+            if (content == null) {
+                AbstractHtmlService.sendJsError(facesContext,
+                        "No content for component id='" + componentId + "'.");
+                return;
+            }
+
+            ServletResponse response = (ServletResponse) facesContext
+                    .getExternalContext().getResponse();
+
+            AbstractHtmlService.setNoCache(response);
+            response.setContentType(IHtmlRenderContext.HTML_TYPE + "; charset="
+                    + AbstractHtmlService.RESPONSE_CHARSET);
+
+            try {
+                content.sendBuffer(facesContext);
+
+            } catch (IOException ex) {
+                throw new FacesException(
+                        "Can not write async content of component id='"
+                                + componentId + "'.", ex);
+            }
+
+        } catch (RuntimeException ex) {
+            LOG.error("Catch runtime exception !", ex);
+
+            throw ex;
         }
 
         facesContext.responseComplete();

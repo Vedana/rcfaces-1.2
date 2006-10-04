@@ -606,12 +606,17 @@ var __static = {
 	/**
 	 * @method hidden static final
 	 */
-	Clean: function(obj) {
-		for(var i=0;i<arguments.length;i++) {
-			obj=arguments[i];
+	Clean: function(objs) {
+		f_core.Assert(objs instanceof Array,"f_class.Clean: Invalid array of objects ("+objs+")");
+
+		for(var i=0;i<objs.length;i++) {
+			var obj=objs[i];
+			if (!obj) {
+				continue;
+			}
 			
 			var cls=obj._kclass;
-			f_core.Assert(cls instanceof f_class,"Not a class object ? ("+cls+")");
+			f_core.Assert(cls instanceof f_class,"f_class.Clean: Not a class object ? ("+cls+")");
 			
 			try {
 				obj.f_finalize();

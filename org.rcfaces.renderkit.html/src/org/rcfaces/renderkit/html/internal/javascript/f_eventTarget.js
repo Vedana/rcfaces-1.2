@@ -258,8 +258,8 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_setDomEvent: function(type, target) {
-		f_core.Assert(typeof(type)=="string", "Type of event is incorrect ! ("+type+")");
-		f_core.Assert(target && target.tagName, "Type of target is incorrect ! ("+target+")");
+		f_core.Assert(typeof(type)=="string", "f_eventTarget.f_setDomEvent: Type of event is incorrect ! ("+type+")");
+		f_core.Assert(target && target.tagName, "f_eventTarget.f_setDomEvent: Type of target is incorrect ! ("+target+")");
 		
 		var cb=f_eventTarget._Callbacks[type];
 		
@@ -290,8 +290,8 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_clearDomEvent: function(type, target) {
-		f_core.Assert(typeof(type)=="string", "Type of event is incorrect ! ("+type+")");
-		f_core.Assert(target && target.tagName, "Type of target is incorrect ! ("+target+")");
+		f_core.Assert(typeof(type)=="string", "f_eventTarget.f_clearDomEvent: Type of event is incorrect ! ("+type+")");
+		f_core.Assert(target && target.tagName, "f_eventTarget.f_clearDomEvent: Type of target is incorrect ! ("+target+")");
 
 		var cb=f_eventTarget._Callbacks[type];
 		if (cb) {

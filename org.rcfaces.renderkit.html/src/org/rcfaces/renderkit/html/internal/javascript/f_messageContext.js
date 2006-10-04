@@ -107,7 +107,7 @@ f_messageContext.prototype.f_removeMessageListener=function(listener) {
 f_messageContext.prototype.f_listMessages=function(componentId, globalOnly) {
 	var msgs=this._messages;
 	if (!msgs) {
-		return null;
+		return [];
 	}
 	
 	if (globalOnly) {
@@ -116,7 +116,7 @@ f_messageContext.prototype.f_listMessages=function(componentId, globalOnly) {
 	
 	if (typeof(componentId)=="string") {
 		var l=msgs[componentId];
-		return (l)?l:null;
+		return (l)?l:[];
 	}
 	
 	var l=new Array;
@@ -137,14 +137,15 @@ f_messageContext.prototype.f_listMessages=function(componentId, globalOnly) {
  */
 f_messageContext.prototype.f_addMessageObject=function(componentOrId, message, performEvent) {	
 	f_core.Assert(componentOrId===null || componentOrId===false || typeof(componentOrId)=="string" || componentOrId.id, "Component parameter must be a component or an id !");
+	f_core.Assert(typeof(componentOrId)!="string" || componentOrId.length, "Parameter componentId is invalid ! ('"+componentOrId+"')"); 
 
 	var id;
-	if (componentOrId && componentOrId.id) {
-		id=componentOrId.id;
-		
-	} else if (typeof(componentOrId)=="string") {
+	if (typeof(componentOrId)=="string") {
 		id=fa_namingContainer.ComputeComponentId(this._form, componentOrId);
 
+	} else if (componentOrId && componentOrId.id) {
+		id=componentOrId.id;
+		
 	} else {
 		id=componentOrId;
 	}
@@ -183,7 +184,7 @@ f_messageContext.prototype.f_addMessageObject=function(componentOrId, message, p
 /**
  * @method public
  *
- * @param HTMLElement component Component to add the message, or its id.
+ * @param HTMLElement component Component to add the message, or its id, or an array of component or ids.
  * @param number severity
  * @param string summary
  * @param string detail
@@ -192,12 +193,25 @@ f_messageContext.prototype.f_addMessageObject=function(componentOrId, message, p
 f_messageContext.prototype.f_addMessage=function(component, severity, summary, detail) {
 	f_core.Assert(typeof(severity)=="number", "Bad type of severity !");
 	f_core.Assert(summary, "Summary is null !");
-	f_core.Assert(component===null || typeof(component)=="string" || component.id, "Component parameter must be a component or an id or null !");
+	f_core.Assert(component===null || (component instanceof Array) || typeof(component)=="string" || component.id, "Component parameter must be a component or an id or null !");
+	f_core.Assert(typeof(component)!="string" || component.length, "Parameter component (string) is invalid ! ('"+component+"')"); 
 	
 	var message=new f_messageObject(severity, summary, detail);
 	
-	this.f_addMessageObject(component, message);
+	if (component instanceof Array) {
+		for(var i=0;i<component.length;i++) {
+			var cmp=component[i];
+			
+			f_core.Assert(cmp===null || typeof(cmp)=="string" || cmp.id, "Component parameter #"+i+" must be a component or an id or null !");
+
+			this.f_addMessageObject(cmp, message);
+		}
+		
+		return message;
+	}
 	
+	this.f_addMessageObject(component, message);
+
 	return message;
 }
 
@@ -282,7 +296,7 @@ f_messageContext._UNKNOWN_COMPONENT_ID="?";
 f_messageContext.Get=function(component) {
 	f_core.Assert(component && component.nodeType, "f_messageContext.Get: Bad component parameter ! ("+component+")");
 	
-	var form=f_core._GetParentForm(component);
+	var form=f_core.GetParentForm(component);
 	f_core.Assert(form, "f_messageContext.Get: Can not find form associated to component ! (id="+component.id+")");
 
 	var ctx=form._messageContext;

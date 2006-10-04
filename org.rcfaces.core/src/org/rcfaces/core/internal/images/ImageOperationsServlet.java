@@ -549,7 +549,7 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
                 bufferedImage.initializeRedirection(url);
 
             } catch (IOException e) {
-                throw new ServletException("Can not create filtered image '"
+                throw new ServletException("Can not create filtred image '"
                         + url + "'.", e);
             }
 
@@ -655,7 +655,7 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
                         renderedImage, imageWriter, sourceImageType);
 
             } catch (IOException e) {
-                throw new ServletException("Can not create filtered image '"
+                throw new ServletException("Can not create filtred image '"
                         + url + "'.", e);
             }
 

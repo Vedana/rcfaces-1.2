@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -30,7 +33,7 @@ import javax.faces.context.FacesContext;
  */
 public interface IProcessContext {
 
-    char getNamingSeparatorChar();
+    String getNamingSeparator();
 
     FacesContext getFacesContext();
 /*

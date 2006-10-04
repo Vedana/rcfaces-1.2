@@ -11,12 +11,14 @@
  */
  
  
-DIV.f_cardBox {
+.f_cardBox {
 	display: block;
 	position: relative;
+	text-align: left;
+	vertical-align: baseline;
 }
  
-DIV.f_cardBox_card {
+.f_cardBox_card {
 	position:absolute;
 	left: 0;
 	top: 0;

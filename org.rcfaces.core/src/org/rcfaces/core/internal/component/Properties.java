@@ -22,6 +22,7 @@ public final class Properties {
 	public static final String CASE_SENSITIVE = "camelia.caseSensitive";
 	public static final String CELL_IMAGE_URL = "camelia.cellImageURL";
 	public static final String CELL_STYLE_CLASS = "camelia.cellStyleClass";
+	public static final String CELL_TOOL_TIP_TEXT = "camelia.cellToolTipText";
 	public static final String CHECKABLE = "camelia.checkable";
 	public static final String CHECKED = "camelia.checked";
 	public static final String CHECKED_VALUES = "camelia.checkedValues";
@@ -54,10 +55,12 @@ public final class Properties {
 	public static final String DISABLED_IMAGE_URL = "camelia.disabledImageURL";
 	public static final String DISABLED_WEEK_DAYS = "camelia.disabledWeekDays";
 	public static final String EMPTY_MESSAGE = "camelia.emptyMessage";
+	public static final String ERROR_IMAGE_URL = "camelia.errorImageURL";
 	public static final String ERROR_STYLE_CLASS = "camelia.errorStyleClass";
 	public static final String EXPANDED_IMAGE_URL = "camelia.expandedImageURL";
 	public static final String EXPANSION_USE_VALUE = "camelia.expansionUseValue";
 	public static final String EXPANSION_VALUES = "camelia.expansionValues";
+	public static final String FATAL_IMAGE_URL = "camelia.fatalImageURL";
 	public static final String FATAL_STYLE_CLASS = "camelia.fatalStyleClass";
 	public static final String FILTER_PROPERTIES = "camelia.filterProperties";
 	public static final String FIRST = "first";
@@ -79,6 +82,7 @@ public final class Properties {
 	public static final String HELP_MESSAGE = "camelia.helpMessage";
 	public static final String HELP_URL = "camelia.helpURL";
 	public static final String HIDDEN_MODE = "camelia.hiddenMode";
+	public static final String HIDE_IF_DISABLED = "camelia.hideIfDisabled";
 	public static final String HIDE_ROOT_EXPAND_SIGN = "camelia.hideRootExpandSign";
 	public static final String HOME_DATE = "camelia.homeDate";
 	public static final String HOME_DATE_LABEL = "camelia.homeDateLabel";
@@ -89,10 +93,12 @@ public final class Properties {
 	public static final String IMAGE_WIDTH = "camelia.imageWidth";
 	public static final String IMMEDIATE = "immediate";
 	public static final String INDETERMINATE = "camelia.indeterminate";
+	public static final String INFO_IMAGE_URL = "camelia.infoImageURL";
 	public static final String INFO_STYLE_CLASS = "camelia.infoStyleClass";
 	public static final String INPUT_TYPE = "camelia.inputType";
 	public static final String KEY_BINDING = "camelia.keyBinding";
 	public static final String LOOK_ID = "camelia.lookId";
+	public static final String MANY_RESULTS_MESSAGE = "camelia.manyResultsMessage";
 	public static final String MARGIN_BOTTOM = "camelia.marginBottom";
 	public static final String MARGIN_LEFT = "camelia.marginLeft";
 	public static final String MARGIN_RIGHT = "camelia.marginRight";
@@ -103,11 +109,15 @@ public final class Properties {
 	public static final String MAX_TEXT_LENGTH = "camelia.maxTextLength";
 	public static final String MAX_WIDTH = "camelia.maxWidth";
 	public static final String MENU_ID = "camelia.menuId";
+	public static final String MESSAGE = "camelia.message";
 	public static final String MINIMUM = "camelia.minimum";
 	public static final String MIN_DATE = "camelia.minDate";
 	public static final String MIN_WIDTH = "camelia.minWidth";
 	public static final String MODE = "camelia.mode";
 	public static final String MULTIPLE_SELECT = "camelia.multipleSelect";
+	public static final String NO_MESSAGE_TEXT = "camelia.noMessageText";
+	public static final String NO_PAGED_MESSAGE = "camelia.noPagedMessage";
+	public static final String ONE_RESULT_MESSAGE = "camelia.oneResultMessage";
 	public static final String ORIENTATION = "camelia.orientation";
 	public static final String POPUP_ROW_NUMBER = "camelia.popupRowNumber";
 	public static final String PREFERENCE = "camelia.preference";
@@ -146,15 +156,19 @@ public final class Properties {
 	public static final String TEXT_POSITION = "camelia.textPosition";
 	public static final String TOOL_TIP_TEXT = "camelia.toolTipText";
 	public static final String TWO_DIGIT_YEAR_START = "camelia.twoDigitYearStart";
+	public static final String TYPE = "camelia.type";
 	public static final String USER_EXPANDABLE = "camelia.userExpandable";
 	public static final String VALUE = "value";
 	public static final String VALUE_LOCKED = "camelia.valueLocked";
 	public static final String VAR = "camelia.var";
 	public static final String VERTICAL_ALIGN = "camelia.verticalAlign";
+	public static final String VERTICAL_ALIGNMENT = "camelia.verticalAlignment";
 	public static final String VERTICAL_SCROLL_POSITION = "camelia.verticalScrollPosition";
 	public static final String VISIBLE = "camelia.visible";
+	public static final String WARN_IMAGE_URL = "camelia.warnImageURL";
 	public static final String WARN_STYLE_CLASS = "camelia.warnStyleClass";
 	public static final String WIDTH = "camelia.width";
 	public static final String X = "camelia.x";
 	public static final String Y = "camelia.y";
+	public static final String ZERO_RESULT_MESSAGE = "camelia.zeroResultMessage";
 }

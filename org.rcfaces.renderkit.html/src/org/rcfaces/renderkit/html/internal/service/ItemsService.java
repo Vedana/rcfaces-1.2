@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.4  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -116,7 +119,6 @@ import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
@@ -168,7 +170,7 @@ public class ItemsService extends AbstractHtmlService {
 
         String filterExpression = (String) parameters.get("filterExpression");
 
-        UIComponent component = ComponentTools.getForComponent(facesContext,
+        UIComponent component = HtmlTools.getForComponent(facesContext,
                 componentId, viewRoot);
         if (component == null) {
             // Cas special: la session a du expir�e ....
@@ -180,7 +182,7 @@ public class ItemsService extends AbstractHtmlService {
 
         if ((component instanceof IFilterCapability) == false) {
             sendJsError(facesContext, "Component (id='" + componentId
-                    + "') can not be filtered.");
+                    + "') can not be filtred.");
             return;
         }
 
@@ -194,11 +196,11 @@ public class ItemsService extends AbstractHtmlService {
 
         IFilterCapability filterCapability = (IFilterCapability) component;
 
-        IFilteredItemsRenderer filteredItemsRenderer = getFilteredItemsRenderer(
+        IFilteredItemsRenderer filtredItemsRenderer = getFilteredItemsRenderer(
                 facesContext, filterCapability);
-        if (filteredItemsRenderer == null) {
+        if (filtredItemsRenderer == null) {
             sendJsError(facesContext,
-                    "Can not find filteredItemsRenderer. (componentId='"
+                    "Can not find filtredItemsRenderer. (componentId='"
                             + componentId + "')");
             return;
         }
@@ -237,12 +239,18 @@ public class ItemsService extends AbstractHtmlService {
                     .decodeFilterExpression(component, filterExpression);
 
             writeJs(facesContext, printWriter, filterCapability, componentId,
-                    filteredItemsRenderer, filterProperties, maxResultNumber);
+                    filtredItemsRenderer, filterProperties, maxResultNumber);
 
         } catch (IOException ex) {
 
             throw new FacesException(
                     "Can not write dataGrid javascript rows !", ex);
+
+        } catch (RuntimeException ex) {
+            LOG.error("Catch runtime exception !", ex);
+
+            throw ex;
+            
         } finally {
             if (printWriter != null) {
                 printWriter.close();

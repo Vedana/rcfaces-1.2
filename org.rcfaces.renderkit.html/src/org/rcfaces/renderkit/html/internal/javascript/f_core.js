@@ -154,7 +154,7 @@ var f_core = {
 	/**
 	 * @method private static final
 	 */
-	_AddLog: function (level, name, message, exception, win) {
+	_AddLog: function(level, name, message, exception, win) {
 		if (level!==undefined) {
 			if (typeof(name)!="string" && name.f_getName) {
 				var className=name.f_getName();
@@ -756,10 +756,10 @@ var f_core = {
 
 	},
 	/**
-	 * @method static hidden
+	 * @method public static
 	 */
-	_GetParentForm: function(elt) {
-		f_core.Assert(elt.ownerDocument, "f_core._GetParentForm: Invalid parameter element ("+elt+")");
+	GetParentForm: function(elt) {
+		f_core.Assert(elt.ownerDocument, "f_core.GetParentForm: Invalid parameter element ("+elt+")");
 	
 		// Optimisation s'il n'y a qu'une seule form !
 		var forms=elt.ownerDocument.forms;
@@ -769,7 +769,7 @@ var f_core = {
 	
 		for(;elt;elt=elt.parentNode) {
 			var tagName=elt.tagName;
-			if (!tagName) {
+			if (!tagName || tagName.type!=1) {
 				continue;
 			}
 			
@@ -930,7 +930,7 @@ var f_core = {
 
 			// Cas ou l'utilisateur va plus vite que la musique ! (avant le onload de la page)
 			
-			if (f_env.IsLockSubmitUntilPageCompleteEnable()) {
+			if (f_env.IsSubmitUntilPageCompleteLocked()) {
 				return false;
 			}
 			
@@ -1003,7 +1003,7 @@ var f_core = {
 	
 			// Get form form element parent if not given
 			if (!form && elt) {
-				form = f_core._GetParentForm(elt);
+				form = f_core.GetParentForm(elt);
 			}
 			if (!form) {
 				var ex=new Error("Can not find form !");
@@ -1506,7 +1506,7 @@ var f_core = {
 		f_core.Assert(typeof(listener)=="object", "Listener must be an object ! ("+listener+")");
 		f_core.Assert(component.nodeType, "f_core.AddCheckListener: Invalid component parameter ("+component+")");
 
-		var form=this._GetParentForm(component);
+		var form=this.GetParentForm(component);
 		f_core.Assert(form, "Can not get form of component '"+component.id+"'.");
 		
 		var checkListeners=form._checkListeners;
@@ -1523,7 +1523,7 @@ var f_core = {
 	AddResetListener: function(component) {
 		f_core.Assert(typeof(component)=="object", "Listener is invalid !");
 
-		var form=this._GetParentForm(component);
+		var form=this.GetParentForm(component);
 		f_core.Assert(form, "Can not get form of component '"+component.id+"'.");
 		
 		var resetListeners=form._resetListeners;
@@ -1540,7 +1540,7 @@ var f_core = {
 	RemoveResetListener: function(component) {
 		f_core.Assert(typeof(component)=="object", "Listener is invalid !");
 
-		var form=this._GetParentForm(component);
+		var form=this.GetParentForm(component);
 		f_core.Assert(form, "Can not get form of component '"+component.id+"'.");
 		
 		var resetListeners=form._resetListeners;
@@ -1754,17 +1754,21 @@ var f_core = {
 	 * @method hidden static final
 	 * @param Element 
 	 */
-	GetAttribute: function(object, attributeName) {
+	GetAttribute: function(object, attributeName, defaultValue) {
 		f_core.Assert(object && object.nodeType==1, "Object parameter is node a valid node ! ("+object+")");
 		f_core.Assert(typeof(attributeName)=="string", "attributeName parameter is invalid.");
 
 		try {
-			return object.getAttribute(attributeName);
+			var value=object.getAttribute(attributeName);
+			if (defaultValue===undefined || (value!==undefined && value!==null)) {
+				return value;
+			}
 			
 		} catch (x) {
 			/* ignore, in IE6 calling on a table results in an exception */
-			return null;
 		}
+
+		return defaultValue;
 	},	
 	/** 
 	 * Returns true if component (and its ancestors) is visible.
@@ -2934,19 +2938,25 @@ var f_core = {
 		// Check view elements
 		elts=new Array;
 
-		function getAllElements(elements, node) {
-			if (node.nodeType==1) {
-				elements.push(node);
+		var e=[ doc.documentElement ];
+		
+		for(;e.length;) {
+			var p=e.pop();
+		
+			if (p.nodeType==1) {
+				elts.push(p);
 			}
-			if (node.firstChild) {
-				getAllElements(elements, node.firstChild);
+			
+			var nextSibling=p.nextSibling;
+			if (nextSibling) {
+				e.push(nextSibling);
 			}
-			if (node.nextSibling) {
-				getAllElements(elements, node.nextSibling);
+			
+			var firstChild=p.firstChild;
+			if (firstChild) {
+				e.push(firstChild);
 			}
 		}
-
-		getAllElements(elts, doc.documentElement);
 		
 		return elts;
 	},
@@ -3296,7 +3306,7 @@ var f_core = {
 			form=forms[0];
 
 		} else if (component.tagName!="FORM") {
-			form=f_core._GetParentForm(component);
+			form=f_core.GetParentForm(component);
 		}
 		
 		var ajaxParametersUpdater=f_core._AjaxParametersUpdater;
@@ -3436,8 +3446,22 @@ var f_core = {
 		
 		document.location=url;
 	},
+	
+	/** 
+	 * @method hidden static
+	 * @param String text
+	 * @return String
+	 */
+	UpperCaseFirstChar: function(text) {
+		if (text.length<1) {
+			return text;
+		}
+		
+		return text.charAt(0).toUpperCase()+text.substring(1);
+	},
+	
 	/**
-	 * @method public static final
+	 * @method public static
 	 * @return string
 	 */
 	f_getName: function() {
@@ -3552,17 +3576,6 @@ Array.prototype.f_contains=function(element) {
 	return false;
 }
 
-
-/** 
- * @class hidden String
- */
-String.prototype._upperCaseFirstChar=function() {
-	if (this.length<1) {
-		return "";
-	}
-	
-	return this.charAt(0).toUpperCase()+this.substring(1);
-}
 
 f_core._InitLibrary(window);
 

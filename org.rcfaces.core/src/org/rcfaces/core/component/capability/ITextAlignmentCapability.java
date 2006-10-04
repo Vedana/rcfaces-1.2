@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -21,8 +24,7 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * Un �l�ment qui impl�mente cette interface permet de specifier l'alignement du
- * texte dans celui-ci.
+ * Horizontal alignment.
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -30,12 +32,12 @@ package org.rcfaces.core.component.capability;
 public interface ITextAlignmentCapability {
 
 	/**
-	 * Retourne le type d'alignement du texte dans l'�l�ment.
+	 * Returns horizontal alignment.
 	 */
 	String getTextAlignment();
 
 	/**
-	 * Sp�cifie le type d'alignement du texte dans l'�lement.
+	 * Specifies horizontal alignment.
 	 */
 	void setTextAlignment(String textAlignment);
 }

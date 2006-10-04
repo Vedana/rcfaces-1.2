@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.4  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -107,10 +110,10 @@ import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.TreeRenderer;
@@ -172,8 +175,8 @@ public class TreeService extends AbstractHtmlService {
             return;
         }
 
-        UIComponent component = ComponentTools.getForComponent(facesContext,
-                treeId, viewRoot);
+        UIComponent component = HtmlTools.getForComponent(facesContext, treeId,
+                viewRoot);
         if (component == null) {
             // Cas special: la session a du expir�e ....
 
@@ -234,6 +237,12 @@ public class TreeService extends AbstractHtmlService {
 
             throw new FacesException(
                     "Can not write dataGrid javascript rows !", ex);
+            
+        } catch (RuntimeException ex) {
+            LOG.error("Catch runtime exception !", ex);
+
+            throw ex;
+            
         } finally {
             if (printWriter != null) {
                 printWriter.close();

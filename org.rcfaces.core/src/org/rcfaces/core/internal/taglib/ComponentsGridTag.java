@@ -1,18 +1,18 @@
 package org.rcfaces.core.internal.taglib;
 
 import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.DataListComponent;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
 import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.ComponentsGridComponent;
 import javax.faces.application.Application;
 
-public class DataListTag extends AbstractDataTag implements Tag {
+public class ComponentsGridTag extends AbstractDataTag implements Tag {
 
 
-	private static final Log LOG=LogFactory.getLog(DataListTag.class);
+	private static final Log LOG=LogFactory.getLog(ComponentsGridTag.class);
 
 	private String border;
 	private String borderType;
@@ -24,11 +24,10 @@ public class DataListTag extends AbstractDataTag implements Tag {
 	private String var;
 	private String rowCountVar;
 	private String rowIndexVar;
-	private String columnNumber;
 	private String rowStyleClass;
 	private String columnStyleClass;
 	public String getComponentType() {
-		return DataListComponent.COMPONENT_TYPE;
+		return ComponentsGridComponent.COMPONENT_TYPE;
 	}
 
 	public final String getBorder() {
@@ -111,14 +110,6 @@ public class DataListTag extends AbstractDataTag implements Tag {
 		this.rowIndexVar = rowIndexVar;
 	}
 
-	public final String getColumnNumber() {
-		return columnNumber;
-	}
-
-	public final void setColumnNumber(String columnNumber) {
-		this.columnNumber = columnNumber;
-	}
-
 	public final String getRowStyleClass() {
 		return rowStyleClass;
 	}
@@ -137,7 +128,7 @@ public class DataListTag extends AbstractDataTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			if (DataListComponent.COMPONENT_TYPE==getComponentType()) {
+			if (ComponentsGridComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  border='"+border+"'");
@@ -150,17 +141,16 @@ public class DataListTag extends AbstractDataTag implements Tag {
 			LOG.debug("  var='"+var+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
-			LOG.debug("  columnNumber='"+columnNumber+"'");
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
 			LOG.debug("  columnStyleClass='"+columnStyleClass+"'");
 		}
 		super.setProperties(uiComponent);
 
-		if ((uiComponent instanceof DataListComponent)==false) {
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'DataListComponent'.");
+		if ((uiComponent instanceof ComponentsGridComponent)==false) {
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComponentsGridComponent'.");
 		}
 
-		DataListComponent component = (DataListComponent) uiComponent;
+		ComponentsGridComponent component = (ComponentsGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
@@ -254,15 +244,6 @@ public class DataListTag extends AbstractDataTag implements Tag {
 				component.setRowIndexVar(rowIndexVar);
 		}
 
-		if (columnNumber != null) {
-			if (isValueReference(columnNumber)) {
-				ValueBinding vb = application.createValueBinding(columnNumber);
-				component.setColumnNumber(vb);
-			} else {
-				component.setColumnNumber(getInt(columnNumber));
-			}
-		}
-
 		if (rowStyleClass != null) {
 			if (isValueReference(rowStyleClass)) {
 				ValueBinding vb = application.createValueBinding(rowStyleClass);
@@ -293,7 +274,6 @@ public class DataListTag extends AbstractDataTag implements Tag {
 		var = null;
 		rowCountVar = null;
 		rowIndexVar = null;
-		columnNumber = null;
 		rowStyleClass = null;
 		columnStyleClass = null;
 

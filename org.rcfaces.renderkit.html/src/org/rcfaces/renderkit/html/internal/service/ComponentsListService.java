@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.1  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.4  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -124,18 +127,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.DataListComponent;
+import org.rcfaces.core.component.ComponentsListComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.renderkit.html.internal.ComponentsListRenderer;
 import org.rcfaces.renderkit.html.internal.Constants;
-import org.rcfaces.renderkit.html.internal.DataListRenderer;
-import org.rcfaces.renderkit.html.internal.HtmlRenderContextImpl;
+import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
@@ -144,13 +147,14 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DataListService extends AbstractHtmlService {
+public class ComponentsListService extends AbstractHtmlService {
     private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
-            + ".DataList";
+            + ".ComponentsList";
 
-    private static final Log LOG = LogFactory.getLog(DataListService.class);
+    private static final Log LOG = LogFactory
+            .getLog(ComponentsListService.class);
 
     private static final int DEFAULT_BUFFER_SIZE = 4096;
 
@@ -158,15 +162,15 @@ public class DataListService extends AbstractHtmlService {
 
     private static final String RENDER_CONTEXT_STATE = "camelia.renderContext";
 
-    public DataListService() {
+    public ComponentsListService() {
     }
 
-    public static DataListService getInstance(FacesContext facesContext) {
+    public static ComponentsListService getInstance(FacesContext facesContext) {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
                 facesContext).getServicesRegistry();
 
-        return (DataListService) serviceRegistry.getService(facesContext,
+        return (ComponentsListService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
     }
 
@@ -182,9 +186,10 @@ public class DataListService extends AbstractHtmlService {
             return;
         }
 
-        String dataGridId = (String) parameters.get("dataListId");
-        if (dataGridId == null) {
-            sendJsError(facesContext, "Can not find 'dataListId' parameter.");
+        String componentsListId = (String) parameters.get("componentsListId");
+        if (componentsListId == null) {
+            sendJsError(facesContext,
+                    "Can not find 'componentsListId' parameter.");
             return;
         }
 
@@ -192,23 +197,23 @@ public class DataListService extends AbstractHtmlService {
 
         int rowIndex = Integer.parseInt(index_s);
 
-        UIComponent component = ComponentTools.getForComponent(facesContext,
-                dataGridId, viewRoot);
+        UIComponent component = HtmlTools.getForComponent(facesContext,
+                componentsListId, viewRoot);
         if (component == null) {
             // Cas special: la session a du expir�e ....
 
-            sendCancel(facesContext, dataGridId, rowIndex);
+            sendCancel(facesContext, componentsListId, rowIndex);
 
             return;
         }
 
-        if ((component instanceof DataListComponent) == false) {
+        if ((component instanceof ComponentsListComponent) == false) {
             sendJsError(facesContext, "Can not find dataListComponent (id='"
-                    + dataGridId + "').");
+                    + componentsListId + "').");
             return;
         }
 
-        DataListComponent dgc = (DataListComponent) component;
+        ComponentsListComponent dgc = (ComponentsListComponent) component;
 
         ISortedComponent sortedComponents[] = null;
 
@@ -236,11 +241,11 @@ public class DataListService extends AbstractHtmlService {
          * order); } }
          */
 
-        DataListRenderer dgr = getDataListRenderer(facesContext, dgc);
+        ComponentsListRenderer dgr = getDataListRenderer(facesContext, dgc);
         if (dgr == null) {
             sendJsError(facesContext,
-                    "Can not find dataListRenderer. (dataListId='" + dataGridId
-                            + "')");
+                    "Can not find dataListRenderer. (dataListId='"
+                            + componentsListId + "')");
             return;
         }
 
@@ -274,13 +279,19 @@ public class DataListService extends AbstractHtmlService {
                 printWriter = new PrintWriter(writer, false);
             }
 
-            writeJs(facesContext, printWriter, dgc, dataGridId, dgr, rowIndex,
-                    sortedComponents, filterExpression);
+            writeJs(facesContext, printWriter, dgc, componentsListId, dgr,
+                    rowIndex, sortedComponents, filterExpression);
 
         } catch (IOException ex) {
 
             throw new FacesException(
                     "Can not write dataGrid javascript rows !", ex);
+
+        } catch (RuntimeException ex) {
+            LOG.error("Catch runtime exception !", ex);
+
+            throw ex;
+
         } finally {
             if (printWriter != null) {
                 printWriter.close();
@@ -322,24 +333,25 @@ public class DataListService extends AbstractHtmlService {
         facesContext.responseComplete();
     }
 
-    private DataListRenderer getDataListRenderer(FacesContext facesContext,
-            DataListComponent component) {
+    private ComponentsListRenderer getDataListRenderer(
+            FacesContext facesContext, ComponentsListComponent component) {
 
         Renderer renderer = getRenderer(facesContext, component);
 
-        if ((renderer instanceof DataListRenderer) == false) {
+        if ((renderer instanceof ComponentsListRenderer) == false) {
             return null;
         }
 
-        return (DataListRenderer) renderer;
+        return (ComponentsListRenderer) renderer;
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
-            DataListComponent dgc, String componentId, DataListRenderer dgr,
-            int rowIndex, ISortedComponent sortedComponents[],
-            String filterExpression) throws IOException {
+            ComponentsListComponent dgc, String componentId,
+            ComponentsListRenderer dgr, int rowIndex,
+            ISortedComponent sortedComponents[], String filterExpression)
+            throws IOException {
 
-        DataListRenderer.ListContext listContext = dgr
+        ComponentsListRenderer.ListContext listContext = dgr
                 .createListContext(facesContext, dgc, rowIndex,
                         sortedComponents, filterExpression);
 
@@ -375,7 +387,7 @@ public class DataListService extends AbstractHtmlService {
 
             facesContext.setResponseWriter(newWriter);
 
-            IRenderContext renderContext = HtmlRenderContextImpl
+            IRenderContext renderContext = HtmlRenderContext
                     .restoreRenderContext(facesContext, state, true);
 
             renderContext.pushComponent(facesContext, dgc, componentId);
@@ -414,7 +426,7 @@ public class DataListService extends AbstractHtmlService {
     }
 
     public void setupComponent(IComponentRenderContext componentRenderContext) {
-        DataListComponent dataListComponent = (DataListComponent) componentRenderContext
+        ComponentsListComponent dataListComponent = (ComponentsListComponent) componentRenderContext
                 .getComponent();
 
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext

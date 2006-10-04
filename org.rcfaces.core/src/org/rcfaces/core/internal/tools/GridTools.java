@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -66,6 +69,7 @@ import javax.servlet.jsp.jstl.sql.Result;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.model.CollectionIndexesModel;
 import org.rcfaces.core.model.DefaultSortedComponent;
@@ -73,7 +77,6 @@ import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.IndexesModels;
 import org.rcfaces.core.model.MapIndexesModel;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -275,8 +278,8 @@ public class GridTools {
         return (ISortedComponent[]) l.toArray(new ISortedComponent[l.size()]);
     }
 
-    public static DataColumnComponent getSortedColumn(FacesContext context,
-            DataGridComponent dataGridComponent) {
+    public static DataColumnComponent getFirstSortedColumn(
+            FacesContext context, DataGridComponent dataGridComponent) {
 
         String ids = dataGridComponent.getSortedColumnIds(context);
         if (ids == null) {
@@ -330,6 +333,53 @@ public class GridTools {
         }
 
         component.setSortedColumnIds(id);
+
+        return true;
+    }
+
+    public static boolean setSortedColumns(DataGridComponent component,
+            DataColumnComponent dataColumns[]) {
+
+        if (dataColumns == null || dataColumns.length < 1) {
+            component.setSortedColumnIds((String) null);
+            return true;
+        }
+
+        StringAppender sa = new StringAppender(dataColumns.length * 8);
+        for (int i = 0; i < dataColumns.length; i++) {
+            DataColumnComponent dataColumn = dataColumns[i];
+
+            String id = dataColumn.getId();
+            if (id == null || ComponentTools.isAnonymousComponentId(id)) {
+                // On utilise l'index alors ...
+
+                id = null;
+
+                int idx = 0;
+                for (IDataColumnIterator it = component.listColumns(); it
+                        .hasNext(); idx++) {
+                    DataColumnComponent column = it.next();
+
+                    if (column != dataColumn) {
+                        continue;
+                    }
+
+                    id = "#" + idx;
+                    break;
+                }
+
+                if (id == null) {
+                    throw new FacesException("Can not get id of DataColumn !");
+                }
+            }
+            if (sa.length() > 0) {
+                sa.append(',');
+            }
+
+            sa.append(id);
+        }
+
+        component.setSortedColumnIds(sa.toString());
 
         return true;
     }

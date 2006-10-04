@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -104,7 +107,6 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -210,21 +212,48 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         if (selected == false) {
             if (style == null) {
                 style = new StringAppender(64);
+            } else {
+                style.append(';');
             }
-            style.append("visibility:hidden;");
+            style.append("visibility:hidden");
         }
         if (cardBoxComponent.getWidth(facesContext) != null) {
             if (style == null) {
                 style = new StringAppender(64);
+            } else {
+                style.append(';');
             }
-            style.append("width:100%;");
+            style.append("width:100%");
         }
 
         if (cardBoxComponent.getHeight(facesContext) != null) {
             if (style == null) {
                 style = new StringAppender(64);
+            } else {
+                style.append(';');
             }
-            style.append("height:100%;");
+            style.append("height:100%");
+        }
+
+        String textAlignement = cardComponent.getTextAlignment(facesContext);
+        if (textAlignement != null) {
+            if (style == null) {
+                style = new StringAppender(64);
+            } else {
+                style.append(';');
+            }
+            style.append("text-align:").append(textAlignement);
+        }
+
+        String verticalAlignement = cardComponent
+                .getVerticalAlignment(facesContext);
+        if (verticalAlignement != null) {
+            if (style == null) {
+                style = new StringAppender(64);
+            } else {
+                style.append(';');
+            }
+            style.append("vertical-align:").append(verticalAlignement);
         }
 
         if (style != null) {

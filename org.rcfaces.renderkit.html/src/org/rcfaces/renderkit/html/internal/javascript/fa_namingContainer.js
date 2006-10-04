@@ -13,9 +13,9 @@
 var __static = {
 	
 	/** 
-	 * @field public static string
+	 * @field private static string
 	 */
-	SeparatorChar:		":",
+	PageSeparator:		":",
 
 	/** 
 	 * @field private static final string
@@ -27,6 +27,16 @@ var __static = {
 	 */
 	_NAMING_CONTAINER_COMPONENT:		"v:namingContainer",
 	
+	/** 
+	 * @field private static final string
+	 */
+	_SEPARATOR_CHAR:		":",
+
+	/** 
+	 * @field private static final string
+	 */
+	_SEPARATOR_CHAR_REGEXP:	new RegExp(":", "g"),
+	
 	/**
 	 * @method public static final 
 	 * @param HTMLElement component
@@ -37,12 +47,21 @@ var __static = {
 		f_core.Assert(component && component.tagName, "fa_namingContainer.FindComponent: Bad component parameter ! ("+component+")");
 		f_core.Assert(typeof(id)=="string", "Bad id parameter !");
 
-		if (component.id==id) {
-			return component;
+		var pageId=id;
+		var separator=fa_namingContainer._SEPARATOR_CHAR;
+		if (id.charAt(0)!=separator) {
+			var pageSeparator=fa_namingContainer.PageSeparator;
+			if (separator!=pageSeparator) {
+				pageId=id.replace(fa_namingContainer._SEPARATOR_CHAR_REGEXP, pageSeparator);
+			}
+	
+			if (component.id==pageId) {
+				return component;
+			}
 		}
-		
+				
 		var cid=fa_namingContainer.ComputeComponentId(component, id);
-		f_core.Debug("fa_namingContainer", "Compute component id '"+id+"' returns '"+cid+"'.");
+		f_core.Debug("fa_namingContainer", "Compute component id='"+id+"' (pageId='"+pageId+"') returns '"+cid+"'.");
 
 		return f_core.GetElementById(cid, component.ownerDocument);
 	},
@@ -78,34 +97,60 @@ var __static = {
 			return id;
 		}
 		
-		var separator=fa_namingContainer.SeparatorChar;
+		var separator=fa_namingContainer._SEPARATOR_CHAR;
+		var pageSeparator=fa_namingContainer.PageSeparator;
 		
         if (id.charAt(0)==separator) {
         	// Ca commence par un ':'  l'ID est donc en absolue
         	// On y va directe !
         	
-	        return id.substring(1);
+  	        var pageId=id.substring(1);
+	      	if (separator!=pageSeparator) {
+        		pageId=pageId.replace(fa_namingContainer._SEPARATOR_CHAR_REGEXP, pageSeparator);
+        	}
+
+			return pageId;	        
 		}
+
+       	var pageId=id;
+      	if (separator!=pageSeparator) {
+    		pageId=id.replace(fa_namingContainer._SEPARATOR_CHAR_REGEXP, pageSeparator);
+    	}
+		
+	//	f_core.Debug(fa_namingContainer, "SearchElementId id='"+id+"' pageId='"+pageId+"' componentId='"+component.id+"' pageSeparator='"+pageSeparator+"'.");
 
     	// Le chemin est en relatif 
     	// On remplace le dernier segment du composant, par l'ID recherché !
     	
        	var cid=component.id;
-
+ 
        	if (!fa_namingContainer._IsNamingContainer(component)) {
-	       	var idx=cid.lastIndexOf(separator);
+	       	var idx=cid.lastIndexOf(pageSeparator);
 	       	
 	       	if (idx<0) {
 	       		// Pas de container ... !
 	       		// On recherche donc à la racine !
-	       		return id;
+	       		return pageId;
 	       	}
+	       	if (pageSeparator.length>1) {
+	       		for(;idx;idx--) {
+	       			if (cid.substring(idx-1, idx+1)==pageSeparator) {
+	       				continue;
+	       			}
+	       			
+	       			break;
+	       		}
+		   	}
 	       	
 	       	// On prend le container précédant !
        		cid=cid.substring(0, idx);
     	}
     	
-    	return cid+separator+id;
+    	cid=cid+pageSeparator+pageId;
+    	
+//    	f_core.Debug(fa_namingContainer, "SearchElementId returns '"+cid+"'.");
+    	
+    	return cid;
 	},
 	/**
 	 * @method private static final
@@ -114,6 +159,9 @@ var __static = {
 		f_core.Assert(component.tagName, "Component is invalid ! ("+component+").");
 
 		var tagName=component.tagName;
+		if (!tagName) {
+			return false;
+		}
 		if (tagName.toUpperCase()=="FORM" || tagName==fa_namingContainer._NAMING_CONTAINER_COMPONENT) {
 			return true;
 		}
@@ -137,7 +185,7 @@ var __static = {
 			return;
 		}
 		
-		fa_namingContainer.SeparatorChar=separator;
+		fa_namingContainer.PageSeparator=separator;
 	},
 	
 	/**
@@ -154,12 +202,19 @@ var __static = {
 			return null;
 		}
 
-		var separator=fa_namingContainer.SeparatorChar;
+		var separator=fa_namingContainer._SEPARATOR_CHAR;
 		
 		// On ne traite pas les id avec séparateurs
 		if (id.indexOf(separator)>=0) {
 			return null;
 		}
+	
+		var pageSeparator=fa_namingContainer.PageSeparator;
+	
+		var pageId=id;
+      	if (separator!=pageSeparator) {
+    		pageId=id.replace(fa_namingContainer._SEPARATOR_CHAR_REGEXP, pageSeparator);
+    	}
 		
 		// Nous sommes dans la recherche d'un ID sans séparateur !
 		// C'est peut etre un composant dans une form !
@@ -167,14 +222,14 @@ var __static = {
 		
 		var forms = doc.forms;
 		for (var i=0;i<forms.length; i++) {
-			var fid=forms[i].id+separator+id;
+			var fid=forms[i].id+pageSeparator+pageId;
 			
 			var obj=doc.getElementById(fid);
 			if (!obj) {
 				continue;
 			}
 			
-			f_core.Debug("f_core", "SearchElementById of direct id '"+id+"' (without scope).");
+			f_core.Debug("f_core", "SearchElementById of direct id='"+id+"' (pageId='"+pageId+"') (without scope).");
 			return obj;
 		}
 		

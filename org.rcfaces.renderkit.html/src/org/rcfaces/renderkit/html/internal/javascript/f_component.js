@@ -13,17 +13,24 @@
 var __static = {
 	
 	/**
-	 * @field public static final string 
+	 * @field public static final number
 	 */
-	HIDDEN_MODE_IGNORE: "ignore",
+	HIDDEN_MODE_SERVER: 1,
+
 	/**
-	 * @field public static final string 
+	 * @field public static final number 
 	 */
-	HIDDEN_MODE_SERVER: "server",
+	HIDDEN_MODE_PHANTOM: 2,
+
 	/**
-	 * @field public static final string 
+	 * @field public static final number
 	 */
-	HIDDEN_MODE_PHANTOM: "phantom",
+	HIDDEN_MODE_IGNORE: 4,
+
+	/**
+	 * @field public static final number
+	 */
+	DEFAULT_HIDDEN_MODE: 4,
 	
 	/**
 	 * @method static hidden
@@ -70,7 +77,7 @@ var __static = {
 	},
 	
 	/**
-	 * @method hidden static final
+	 * @method protected static final
 	 */
 	GetDefaultHiddenMode: function() {
 		return f_component.DEFAULT_HIDDEN_MODE;
@@ -84,7 +91,7 @@ var __prototype = {
 	 */
 	f_component: function() {
 		this.f_super(arguments);
-		this._componentUpdated = false;
+		this.fa_componentUpdated = false;
 		
 		var accessKey=f_core.GetAttribute(this, "v:accessKey");
 		if (accessKey) {
@@ -97,29 +104,14 @@ var __prototype = {
 		if (accessKey) {
 			f_key.AddKeyHandler(null, accessKey, this, this.f_performAccessKey);
 		}
-		
-		var helpURL=f_core.GetAttribute(this, "v:helpURL");
-		if (helpURL) {
-			this.f_setHelpURL(helpURL);
-		}
-		var helpMessage=f_core.GetAttribute(this, "v:helpMessage");
-		if (helpMessage) {
-			this.f_setHelpMessage(helpMessage);
-		}
-		var hiddenMode=f_core.GetAttribute(this, "v:hiddenMode");
-		if (hiddenMode) {
-			this.f_setHiddenMode(hiddenMode);
-		}
 	},
 	/*
 	f_finalize: function() {
 		this._hiddenMode = undefined; // string 
-		this._helpMessageSet=undefined; // boolean
 		this._helpMessage = undefined; // string
-		this._helpURLSet=undefined; // boolean
 		this._helpURL=undefined; // string
 		this._accessKey=undefined; // string
-		this._componentUpdated = undefined; // boolean
+		this.fa_componentUpdated = undefined; // boolean
 		this._oldDisplay = undefined; // string
 
 		this.f_super(arguments);		
@@ -276,17 +268,22 @@ var __prototype = {
 	 * @return boolean the receiver's visibility state
 	 */
 	f_getVisible: function() {
-		if (this._visible===undefined) {
-			var hiddenMode=this.f_getHiddenMode();
-			if (hiddenMode==f_component.HIDDEN_MODE_PHANTOM) {
-				this._visible=(this.style.visibility!="hidden");
-
-			} else {
-				this._visible=(this.style.display!="none");
-			}
+		var visible=this._visible;
+		if (visible!==undefined) {
+			return visible;
 		}
+		
+		var hiddenMode=this.f_getHiddenMode();
+		if (hiddenMode==f_component.HIDDEN_MODE_PHANTOM) {
+			visible=(this.style.visibility!="hidden");
 
-		return this._visible;
+		} else {
+			visible=(this.style.display!="none");
+		}
+		
+		this._visible=visible;
+
+		return visible;
 	},
 	/**
 	 * Returns <code>true</code> if the receiver is visible and all ancestors up to and including the receiver's nearest ancestor document are visible.
@@ -315,50 +312,50 @@ var __prototype = {
 	f_setVisible: function(visible) {
 		f_core.Assert(typeof(visible)=="boolean", "Visible parameter must be a boolean ! ("+visible+")");
 
-		if (this._visible==visible) {
+		visible=(visible)?true:false;
+
+		if (visible==this.f_getVisible()) {
 			return;
 		}
 		
 		this._visible=visible;
 		
-		this._updateVisibility(this, visible);
+		this.f_updateVisibility(visible);
 
 		this._kclass._classLoader.fireVisibleEvent(this);
 
-		this.f_setProperty(f_prop.VISIBLE,visible);		
+		this.f_setProperty(f_prop.VISIBLE, visible);		
 	},
 	/**
-	 * @method private
+	 * @method protected
 	 * @return void
 	 */
-	_updateVisibility: function(component, visible) {
+	f_updateVisibility: function(visible) {
+		var style=this.style;
+
 		var hiddenMode=this.f_getHiddenMode();
 		if (hiddenMode==f_component.HIDDEN_MODE_PHANTOM) {
-			if (!visible) {
-				component.style.visibility="hidden";
-				return;
-			}
-			
-			component.style.visibility="inherit";
+			style.visibility=(visible)?"inherit":"hidden";
 			return;
 		}
-			
+
 		// Mode IGNORE et SERVEUR
 		if (!visible) {
-			if (component.style.display != "none") {
-				component._oldDisplay = component.style.display;
-				component.style.display="none";
+			if (style.display != "none") {
+				this._oldDisplay = style.display;
+				style.display="none";
 			}
 			return;
 		}
 			
-		if (component._oldDisplay) {
-			component.style.display = component._oldDisplay;
+		if (this._oldDisplay) {
+			style.display = this._oldDisplay;
 			return;
 		}
 		
-		component.style.display = f_core.GetDefaultDisplayMode(component);
-		component._oldDisplay = component.style.display;
+		var display=f_core.GetDefaultDisplayMode(this);
+		style.display = display;
+		this._oldDisplay = display;
 	},
 	/**
 	 * @method public
@@ -366,26 +363,52 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setHiddenMode: function(mode) {
-		f_core.Assert(mode===null || typeof(mode)=="string", "Hidden mode parameter must be a string ! ("+mode+")");
+		f_core.Assert(typeof(mode)=="number", "Hidden mode parameter must be a number ! ("+mode+")");
+
+		if (mode==this.f_getHiddenMode()) {
+			return;
+		}
 
 		this._hiddenMode = mode;
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return number
 	 */
 	f_getHiddenMode: function() {
-		if (!this._hiddenMode) {
-			this._hiddenMode = f_component.GetDefaultHiddenMode();
+		var hiddenMode=this._hiddenMode;
+		if (hiddenMode!==undefined) {
+			return hiddenMode;
 		}
-		return this._hiddenMode;
+
+		hiddenMode=f_core.GetAttribute(this, "v:hiddenMode");
+		if (hiddenMode) {
+			hiddenMode=parseInt(hiddenMode);
+		}
+
+		if (typeof(hiddenMode)!="number") {
+			hiddenMode=f_component.GetDefaultHiddenMode();
+		}
+		
+		this._hiddenMode=hiddenMode
+
+		return hiddenMode;
 	},
 	/**
 	 * @method public
 	 * @return string
 	 */
 	f_getHelpURL: function() {
-		return this.f_helpURL;
+		var helpURL=this._helpURL;
+		if (helpURL!==undefined) {
+			return helpURL;
+		}
+		
+		var helpURL=f_core.GetAttribute(this, "v:helpURL", null);
+
+		this._helpURL=helpURL;
+		
+		return helpURL;
 	},
 	/**
 	 * @method public
@@ -395,8 +418,13 @@ var __prototype = {
 	f_setHelpURL: function(url) {
 		f_core.Assert(url===null || typeof(url)=="string", "Help URL parameter must be a string ! ("+url+")");
 
+		if (url==this.f_getHelpURL()) {
+			return;
+		}
+		
 		this._helpURL = url;
-
+	
+		/*
 		if (this._helpURLSet) {
 			return;
 		}
@@ -410,13 +438,22 @@ var __prototype = {
 		f_help.Install();
 		this.f_addEventListener(f_event.FOCUS, f_help._OnFocus);
 		this.f_addEventListener(f_event.BLUR, f_help._OnBlur);
+		*/
 	},
 	/**
 	 * @method public
 	 * @return string
 	 */
 	f_getHelpMessage: function() {
-		return this._helpMessage;
+		var helpMessage=this._helpMessage;
+		if (helpMessage!==undefined) {
+			return helpMessage;
+		}
+		
+		helpMessage=f_core.GetAttribute(this, "v:helpMessage", null);
+		this._helpMessage=helpMessage;		
+		
+		return helpMessage;
 	},
 	/**
 	 * @method public
@@ -426,8 +463,14 @@ var __prototype = {
 	f_setHelpMessage: function(msg) {
 		f_core.Assert(msg===null || typeof(msg)=="string", "Message parameter must be a string ! ("+msg+")");
 
+		var helpMessage=this._helpMessage;
+		if (helpMessage!==undefined) {
+			return helpMessage;
+		}
+
 		this._helpMessage = msg;
 
+/*
 		if (this._helpMessageSet) {
 			return;
 		}
@@ -443,6 +486,7 @@ var __prototype = {
 		this.f_addEventListener(f_event.MOUSEOUT,f_help._OnHideHelpMessage);
 		this.f_addEventListener(f_event.FOCUS,f_help._OnShowHelpMessage);
 		this.f_addEventListener(f_event.BLUR,f_help._OnHideHelpMessage);
+		*/
 	},
 	/**
 	 * @method protected
@@ -521,7 +565,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_update: function(set) {
-		this._componentUpdated = (set===undefined)? true:set;		
+		this.fa_componentUpdated = (set===undefined)? true:set;		
 	},
 	/**
 	 * @method hidden
@@ -542,7 +586,7 @@ var __prototype = {
 		this.f_onInitEvent();
 	},
 	f_serialize: function() {
-		f_core.Assert(this._componentUpdated, "Method _componentUpdated not called for component '"+this.id+"/"+this._kclass+"'.");
+		f_core.Assert(this.fa_componentUpdated, "Method fa_componentUpdated not called for component '"+this.id+"/"+this._kclass+"'.");
 	},
 	
 	/**

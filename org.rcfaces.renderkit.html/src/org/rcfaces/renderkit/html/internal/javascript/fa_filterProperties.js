@@ -12,8 +12,8 @@
  
 var __prototype = {
 	fa_filterProperties: function() {
-		if (f_core.GetAttribute(this, "v:filtered")) {
-			this._filtered=true;
+		if (f_core.GetAttribute(this, "v:filtred")) {
+			this._filtred=true;
 		}
 		
 		var filterExpression=f_core.GetAttribute(this, "v:filterExpression");
@@ -23,7 +23,7 @@ var __prototype = {
 	},
 	/*
 	f_finalize:  function() {
-		// this._filtered=undefined; // boolean
+		// this._filtred=undefined; // boolean
 		// this._filterProperties=undefined; // Map<string, string>
 	},
 	*/
@@ -79,7 +79,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setFilterProperties: function(properties) {
-		f_core.Assert(this._filtered, "This component does not support filter properties !");
+		f_core.Assert(this._filtred, "This component does not support filter properties !");
 
 		f_core.Assert(typeof(properties)=="object", "Filter properties must be an Object or null !");
 	
@@ -103,14 +103,14 @@ var __prototype = {
 		this._filterProperties=myProps;
 		this.f_setProperty(f_prop.FILTER_EXPRESSION, expression);
 		
-		this._a_updateFilterProperties(myProps);
+		this.fa_updateFilterProperties(myProps);
 	},
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_updateFilterProperties: f_class.ABSTRACT
+	fa_updateFilterProperties: f_class.ABSTRACT
 			
 }
 

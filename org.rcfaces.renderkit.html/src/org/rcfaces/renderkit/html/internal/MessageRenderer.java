@@ -1,113 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.22  2006/07/18 17:06:30  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.21  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.20  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.19  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.18  2006/02/03 11:37:32  oeuillot
- * Calcule les classes pour le Javascript, plus les fichiers !
- *
- * Revision 1.17  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.16  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.15  2005/12/27 16:08:16  oeuillot
- * Gestion imageButtonWriter
- * Ajout de fa_images
- * Preparation de f_imageCombo
- *
- * Revision 1.14  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
- * Revision 1.13  2005/11/08 12:16:28  oeuillot
- * Ajout de  Preferences
- * Stabilisation de imageXXXButton
- * Ajout de la validation cot� client
- * Ajout du hash MD5 pour les servlets
- * Ajout des accelerateurs
- *
- * Revision 1.12  2005/10/28 14:41:50  oeuillot
- * InteractiveRenderer, CardBox, Card
- * Corrections de validations
- * PasswordEntry
- *
- * Revision 1.11  2005/10/05 14:34:19  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.10  2005/09/16 09:54:42  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
- * Revision 1.9  2005/03/18 14:42:50  oeuillot
- * Support de la table des symbols pour le javascript compress�
- * Menu du style XP et pas Office !
- *
- * Revision 1.8  2005/03/07 10:47:03  oeuillot
- * Systeme de Logging
- * Debuggage
- *
- * Revision 1.7  2004/12/24 15:10:04  oeuillot
- * Refonte des tabbedPanes
- * Correction de problemes de value sur FieldSet nottament
- *
- * Revision 1.6  2004/12/22 12:16:15  oeuillot
- * Refonte globale de l'arborescence des composants ....
- * Int�gration des corrections de Didier
- *
- * Revision 1.5  2004/11/19 18:01:30  oeuillot
- * Version debut novembre
- *
- * Revision 1.4  2004/09/24 14:01:35  oeuillot
- * *** empty log message ***
- *
- * Revision 1.3  2004/09/02 17:44:30  oeuillot
- * *** empty log message ***
- *
- * Revision 1.2  2004/09/01 13:47:36  oeuillot
- * *** empty log message ***
- *
- * Revision 1.1  2004/08/31 08:29:46  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.renderkit.html.internal;
 
@@ -140,11 +32,6 @@ public class MessageRenderer extends AbstractCssRenderer {
 
     private static final String STYLE_CLASS_PROPERTY = "message.style.class";
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#encodeBegin(org.rcfaces.core.internal.renderkit.IWriter)
-     */
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         IComponentRenderContext componentContext = writer
                 .getComponentRenderContext();
@@ -196,6 +83,69 @@ public class MessageRenderer extends AbstractCssRenderer {
                 .getFatalStyleClass(facesContext);
         if (fatalStyleClass != null) {
             htmlWriter.writeAttribute("v:fatalStyleClass", fatalStyleClass);
+        }
+
+        String imageURL = messageComponent.getImageURL(facesContext);
+        String infoImageURL = messageComponent.getInfoImageURL(facesContext);
+        String warnImageURL = messageComponent.getWarnImageURL(facesContext);
+        String errorImageURL = messageComponent.getErrorImageURL(facesContext);
+        String fatalImageURL = messageComponent.getFatalImageURL(facesContext);
+        if (imageURL != null || infoImageURL != null || warnImageURL != null
+                || errorImageURL != null || fatalImageURL != null) {
+
+            if (infoImageURL != null) {
+                htmlWriter.writeAttribute("v:infoImageURL", infoImageURL);
+            }
+
+            if (warnImageURL != null) {
+                htmlWriter.writeAttribute("v:warnImageURL", warnImageURL);
+            }
+
+            if (errorImageURL != null) {
+                htmlWriter.writeAttribute("v:errorImageURL", errorImageURL);
+            }
+
+            if (fatalImageURL != null) {
+                htmlWriter.writeAttribute("v:fatalImageURL", fatalImageURL);
+            }
+
+            htmlWriter.startElement("IMG");
+
+            String imageStyleClass = getStyleClassName(componentContext,
+                    messageComponent, "_image");
+
+            htmlWriter.writeAttribute("class", imageStyleClass);
+
+            if (imageURL != null) {
+                htmlWriter.writeAttribute("src", imageURL);
+            } else {
+                htmlWriter.writeAttribute("style", "display:none");
+            }
+
+            int imageWidth = messageComponent.getImageWidth(facesContext);
+            if (imageWidth > 0) {
+                htmlWriter.writeAttribute("width", imageWidth);
+            }
+
+            int imageHeight = messageComponent.getImageHeight(facesContext);
+            if (imageHeight > 0) {
+                htmlWriter.writeAttribute("height", imageHeight);
+            }
+
+            htmlWriter.endElement("IMG");
+        }
+
+        String noMessageText = messageComponent.getNoMessageText(facesContext);
+        if (noMessageText != null) {
+            htmlWriter.startElement("LABEL");
+
+            String noMessageStyleClass = getStyleClassName(componentContext,
+                    messageComponent, "_noMessage");
+
+            htmlWriter.writeAttribute("class", noMessageStyleClass);
+
+            htmlWriter.writeText(noMessageText);
+            htmlWriter.endElement("LABEL");
         }
 
         htmlWriter.endElement("DIV");

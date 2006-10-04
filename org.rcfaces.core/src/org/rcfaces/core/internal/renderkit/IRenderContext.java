@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -91,7 +94,6 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.provider.IURLRewritingProvider;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -100,7 +102,7 @@ public interface IRenderContext {
 
     // Pas de FacesContext car en cas de traitement à la Tiles ca marche plus !
 
-    IProcessContext getExternalContext();
+    IProcessContext getProcessContext();
 
     IScriptRenderContext getScriptRenderContext();
 
@@ -120,9 +122,14 @@ public interface IRenderContext {
 
     Object getAttribute(String key);
 
+    boolean containsAttribute(String key);
+
+    Object removeAttribute(String key);
+
     UIComponent getComponent();
 
     void encodeEnd(FacesContext facesContext, UIComponent component);
 
     IURLRewritingProvider getURLRewritingProvider();
+
 }

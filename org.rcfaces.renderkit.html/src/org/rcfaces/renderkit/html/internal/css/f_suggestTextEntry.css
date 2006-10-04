@@ -11,9 +11,11 @@
  */
  
  
-INPUT.f_suggestTextEntry {
+.f_suggestTextEntry {
 	margin: 0;
 	border: 1px solid #7F9DB9;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 INPUT.f_suggestTextEntry_readonly,

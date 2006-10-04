@@ -7,4 +7,30 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var f_styledText=new f_class("f_styledText", null, null, null, f_text);
+var __prototype = {
+
+	/**
+	 * @method public
+	 * @return string
+	 */
+	f_getText: function() {
+		return this.innerHTML;
+	},
+	/**
+	 * @method public
+	 * @param string text The text.
+	 * @return void
+	 */
+	f_setText: function(text) {
+		f_core.Assert(typeof(text)=="string", "Invalid text parameter ! ('"+text+"')");
+
+		if (this.f_getText() == text) {
+			return;
+		}
+		this.innerHTML=text;
+		
+		this.f_setProperty(f_prop.TEXT,text);
+	}
+}
+
+var f_styledText=new f_class("f_styledText", null, null, __prototype, f_text);

@@ -691,26 +691,40 @@
 		</file>
 	</module>
 
-<!-- DATAPAGER Components -->
-	<module id="dataPager">
+<!-- PAGER Components -->
+	<module id="pager">
+		<file name="fa_pager.js">
+			<class name="fa_pager">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
 		<file name="fa_pagedComponent.js">
 			<class name="fa_pagedComponent">
 				<required-class name="fa_filterProperties" />
+				<required-class name="fa_namingContainer" />
 			</class>
 		</file>
-		<file name="f_dataPager.js">
-			<class name="f_dataPager">
+		<file name="f_pager.js">
+			<class name="f_pager">
 				<required-class name="f_component" />
+				<required-class name="fa_pager" />
 				<required-class name="fa_pagedComponent" />
 				<required-class name="f_resourceBundle" />
+			</class>
+		</file>
+		<file name="f_imagePagerButton.js">
+			<class name="f_imagePagerButton">
+				<required-class name="f_imageButton" />
+				<required-class name="fa_pager" />
+				<required-class name="fa_pagedComponent" />
 			</class>
 		</file>
 	</module>
 
 <!-- DATALIST Components -->
-	<module id="dataList">
-		<file name="f_dataList.js">
-			<class name="f_dataList">
+	<module id="componentsList">
+		<file name="f_componentsList.js">
+			<class name="f_componentsList">
 				<required-class name="f_component" />
 				<required-class name="fa_pagedComponent" />
 				<required-class id="ajax" name="fa_asyncRender" />
@@ -838,6 +852,9 @@
 			<class name="f_dateEntry">
 				<required-class name="f_component" />
 				<required-class name="fa_calendarPopup" />
+				<required-class name="fa_disabled" />
+				<required-class name="fa_required" />
+				<required-class name="fa_readOnly" />
 			</class>
 		</file>
 	</module>

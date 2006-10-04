@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -23,7 +26,6 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.internal.IReleasable;
 import org.rcfaces.core.internal.renderkit.AbstractComponentRenderContext;
-
 
 /**
  * 
@@ -59,6 +61,10 @@ public abstract class AbstractHtmlComponentlRenderContext extends
         }
 
         return true;
+    }
+
+    public IHtmlRenderContext getHtmlRenderContext() {
+        return (IHtmlRenderContext) getRenderContext();
     }
 
     public void release() {

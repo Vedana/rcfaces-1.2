@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -28,22 +31,22 @@ public interface IBackgroundImageCapability {
 	/**
 	 * Retourne la position horizontale en % de l'image de fond.
 	 */
-	int getBackgroundImageHorizontalPosition();
+	String getBackgroundImageHorizontalPosition();
 
 	/**
 	 * Sp�cifie la position horizontale en % de l'image de fond.
 	 */
-	void setBackgroundImageHorizontalPosition(int position);
+	void setBackgroundImageHorizontalPosition(String position);
 
 	/**
 	 * Retourne la position verticale en % de l'image de fond.
 	 */
-	int getBackgroundImageVerticalPosition();
+    String getBackgroundImageVerticalPosition();
 
 	/**
 	 * Sp�cifie la position verticale en % de l'image de fond.
 	 */
-	void setBackgroundImageVerticalPosition(int position);
+	void setBackgroundImageVerticalPosition(String position);
 
 	/**
 	 * Retourne <code>true</code> si l'image de fond est r�pet�e sur l'axe

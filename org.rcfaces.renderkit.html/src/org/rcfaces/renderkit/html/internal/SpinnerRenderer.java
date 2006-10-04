@@ -2,6 +2,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -93,9 +96,11 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         htmlWriter.startElement("COL");
         htmlWriter.writeAttribute("width", "1*");
+        htmlWriter.endElement("COL");
 
         htmlWriter.startElement("COL");
         htmlWriter.writeAttribute("width", "16");
+        htmlWriter.endElement("COL");
 
         htmlWriter.startElement("TR");
         htmlWriter.writeAttribute("valign", "middle");
@@ -110,6 +115,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         writeInputAttributes(htmlWriter);
         writeTextEntryAttributes(htmlWriter);
         writeValueAttributes(htmlWriter);
+        htmlWriter.endElement("INPUT");
 
         htmlWriter.endElement("TD");
 
@@ -131,12 +137,14 @@ public class SpinnerRenderer extends TextEntryRenderer {
         htmlWriter.writeAttribute("src", blankImageURL);
         htmlWriter.writeAttribute("width", "16");
         htmlWriter.writeAttribute("height", "10");
+        htmlWriter.endElement("IMG");
 
         htmlWriter.startElement("IMG");
         htmlWriter.writeAttribute("class", className + "_down" + buttonSuffix);
         htmlWriter.writeAttribute("src", blankImageURL);
         htmlWriter.writeAttribute("width", "16");
         htmlWriter.writeAttribute("height", "10");
+        htmlWriter.endElement("IMG");
 
         htmlWriter.endElement("TD");
 

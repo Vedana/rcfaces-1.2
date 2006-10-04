@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.4  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -112,12 +115,12 @@ import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.DataGridRenderer;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
@@ -170,7 +173,7 @@ public class DataGridService extends AbstractHtmlService {
 
         int rowIndex = Integer.parseInt(index_s);
 
-        UIComponent component = ComponentTools.getForComponent(facesContext,
+        UIComponent component = HtmlTools.getForComponent(facesContext,
                 dataGridId, viewRoot);
         if (component == null) {
             // Cas special: la session a du expir�e ....
@@ -194,22 +197,13 @@ public class DataGridService extends AbstractHtmlService {
         if (sortIndex_s != null) {
             DataColumnComponent columns[] = dgc.listColumns().toArray();
 
-            String sortOrder_s = (String) parameters.get("sortOrder");
-
             StringTokenizer st1 = new StringTokenizer(sortIndex_s, ",");
-            StringTokenizer st2 = null;
-            if (sortOrder_s != null) {
-                st2 = new StringTokenizer(sortOrder_s, ",");
-            }
 
-            sortedComponents = new ISortedComponent[st1.countTokens()];
+            sortedComponents = new ISortedComponent[st1.countTokens() / 2];
 
             for (int i = 0; st1.hasMoreTokens(); i++) {
                 String tok1 = st1.nextToken();
-                String tok2 = null;
-                if (st2 != null) {
-                    tok2 = st2.nextToken();
-                }
+                String tok2 = st1.nextToken();
 
                 int idx = Integer.parseInt(tok1);
                 boolean order = "true".equalsIgnoreCase(tok2);
@@ -264,6 +258,11 @@ public class DataGridService extends AbstractHtmlService {
 
             throw new FacesException(
                     "Can not write dataGrid javascript rows !", ex);
+        } catch (RuntimeException ex) {
+            LOG.error("Catch runtime exception !", ex);
+
+            throw ex;
+
         } finally {
             if (printWriter != null) {
                 printWriter.close();

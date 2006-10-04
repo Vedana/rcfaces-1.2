@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -97,6 +100,8 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
@@ -107,9 +112,9 @@ import org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
-import org.rcfaces.core.provider.BasicURLRewritingInformation;
 import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.core.provider.ImageURLRewritingInformation;
+import org.rcfaces.renderkit.html.internal.CssWriter;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.ICssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -117,6 +122,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.border.AbstractHtmlBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
+import org.rcfaces.renderkit.html.internal.border.NoneBorderRenderer;
 
 /**
  * 
@@ -130,8 +136,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     private static final String SELECTED_IMAGE_RENDERED = "imageButton.selected.rendered";
 
     private static final String DISABLED_IMAGE_RENDERED = "imageButton.disabled.rendered";
-
-    static final String MARKER_IMAGEURL = "blank.gif";
 
     private static final String IMAGE = "_image";
 
@@ -172,6 +176,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     private boolean alignHorizontal;
 
     protected int textPosition;
+
+    protected int imageWidth;
+
+    protected int imageHeight;
 
     public AbstractImageButtonFamillyDecorator(
             IImageButtonFamilly imageButtonFamilly) {
@@ -227,13 +235,16 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                         .isSelected();
             }
 
+            imageWidth = imageButtonFamilly.getImageWidth(facesContext);
+            imageHeight = imageButtonFamilly.getImageHeight(facesContext);
+
             String width = null;
             String height = null;
             if (imageButtonFamilly instanceof ISizeCapability) {
                 ISizeCapability sizeCapability = (ISizeCapability) imageButtonFamilly;
 
                 width = sizeCapability.getWidth();
-                if (width != null) {
+                if (width != null && imageWidth < 1) {
                     alignHorizontal = true;
                 }
 
@@ -468,13 +479,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             }
         }
 
-        int imageWidth = imageButtonFamilly.getImageWidth(facesContext);
-        if (imageWidth > 0) {
-            int imageHeight = imageButtonFamilly.getImageHeight(facesContext);
-            if (imageHeight > 0) {
-                writer.writeAttribute("width", imageWidth);
-                writer.writeAttribute("height", imageHeight);
-            }
+        if (imageWidth > 0 && imageHeight > 0) {
+            writer.writeAttribute("width", imageWidth);
+            writer.writeAttribute("height", imageHeight);
         }
     }
 
@@ -568,7 +575,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         }
 
         writeImageAttributes(writer, imageButtonFamilly);
-
     }
 
     protected void writeText() throws WriterException {
@@ -651,6 +657,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             halign = HALIGN_LEFT;
         }
 
+        if (width == null && imageWidth >= 0) {
+            width = String.valueOf(imageWidth);
+        }
+
         writeImage(halign, VALIGN_CENTER, width, null);
 
         writeEndRow(0);
@@ -668,7 +678,13 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             width = "50%";
         }
 
-        writeImage(halign, VALIGN_CENTER, width, null);
+        String imgWidth = width;
+        if (imgWidth == null && imageWidth >= 0) {
+            imgWidth = String.valueOf(imageWidth);
+            width = null;
+        }
+
+        writeImage(halign, VALIGN_CENTER, imgWidth, null);
 
         if (text != null) {
             writeText(HALIGN_LEFT, VALIGN_CENTER, width, null);
@@ -689,6 +705,31 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         writer.startElement("SPAN");
         writer.writeAttribute("class", getClassName() + TEXT);
+
+        CssWriter cssWriter = null;
+
+        UIComponent mainComponent = writer.getComponentRenderContext()
+                .getComponent();
+        if (mainComponent instanceof IFontCapability) {
+            if (cssWriter == null) {
+                cssWriter = new CssWriter();
+            }
+
+            cssWriter.writeFont((IFontCapability) mainComponent);
+        }
+
+        if (mainComponent instanceof IForegroundBackgroundColorCapability) {
+            if (cssWriter == null) {
+                cssWriter = new CssWriter();
+            }
+
+            cssWriter
+                    .writeForeground((IForegroundBackgroundColorCapability) mainComponent);
+        }
+
+        if (cssWriter != null) {
+            cssWriter.close(writer);
+        }
 
         writeText();
 
@@ -799,19 +840,11 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     }
 
     protected void writeComboImage() throws WriterException {
-        writer.startElement("IMG");
-
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
-        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
-                .getRenderContext();
-
-        String imageURL = htmlRenderContext.getHtmlExternalContext()
-                .getStyleSheetURI(MARKER_IMAGEURL);
-        writer.writeAttribute("class", getClassName() + "_marker");
-        writer.writeAttribute("src", imageURL);
-        writer.writeAttribute("width", 5);
-        writer.writeAttribute("height", 3);
-        writer.writeAttribute("valign", "center");
+        if (htmlBorderWriter == null) {
+            NoneBorderRenderer.SINGLETON
+                    .writeComboImage(writer, getClassName());
+            return;
+        }
+        htmlBorderWriter.writeComboImage(writer, getClassName());
     }
 }

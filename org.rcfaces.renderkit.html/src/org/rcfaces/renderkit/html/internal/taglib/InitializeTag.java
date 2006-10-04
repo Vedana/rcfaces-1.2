@@ -212,6 +212,7 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
                     contextPath += "/";
 
                     htmlProcessContext.changeBaseHREF(contextPath);
+                    base = contextPath;
 
                 } else {
                     htmlProcessContext.changeBaseHREF(base);

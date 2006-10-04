@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -42,10 +45,12 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public final class NoneBorderRenderer extends AbstractHtmlBorderRenderer {
+public class NoneBorderRenderer extends AbstractHtmlBorderRenderer {
     private static final String REVISION = "$Revision$";
 
     public static final String NONE_BORDER_CLASS = null;
+
+    public static final IHtmlBorderRenderer SINGLETON = new NoneBorderRenderer();
 
     protected boolean hasBorder() {
         return false;

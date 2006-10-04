@@ -263,7 +263,7 @@ var __static = {
 	 */
 	_OnHomeDateClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -284,7 +284,7 @@ var __static = {
 	 */
 	_OnDayClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -306,7 +306,7 @@ var __static = {
 	_OnDayKey: function(evt) {
 		var calendar=this._calendar;
 	
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -484,7 +484,7 @@ var __static = {
 	 */
 	_OnMonthClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -506,7 +506,7 @@ var __static = {
 	_OnMonthKey: function(evt) {
 		var calendar=this._calendar;
 
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return null;
 		}
 		if (!evt) {
@@ -605,7 +605,7 @@ var __static = {
 	 */
 	_OnYearClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -626,7 +626,7 @@ var __static = {
 	 */
 	_OnYearKey: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 			
@@ -675,7 +675,7 @@ var __static = {
 	_OnWeekClick: function(evt) {
 		try {
 			var calendar=this._calendar;
-			if (calendar.f_getEventLocked()) {
+			if (calendar.f_getEventLocked2()) {
 				return false;
 			}
 			if (!evt) {
@@ -700,7 +700,7 @@ var __static = {
 	_OnWeekKey: function(evt) {
 		var calendar=this._calendar;
 
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -767,7 +767,7 @@ var __static = {
 	 */
 	_OnWeekDayClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -789,7 +789,7 @@ var __static = {
 	_OnWeekDayKey: function(evt) {
 		var calendar=this._calendar;
 
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -834,7 +834,7 @@ var __static = {
 	 */
 	_OnNextUnitClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -851,7 +851,7 @@ var __static = {
 	 */
 	_OnPrevUnitClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -869,7 +869,7 @@ var __static = {
 	_OnUnitKey: function(evt) {
 		var calendar=this._calendar;
 
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -907,7 +907,7 @@ var __static = {
 	 */
 	_OnNextYearClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -924,7 +924,7 @@ var __static = {
 	 */
 	_OnPrevYearClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -941,7 +941,7 @@ var __static = {
 	 */
 	_OnNextMonthClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -958,7 +958,7 @@ var __static = {
 	 */
 	_OnPrevMonthClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked()) {
+		if (calendar.f_getEventLocked2()) {
 			return false;
 		}
 		if (!evt) {
@@ -995,7 +995,7 @@ var __static = {
 	 * @method private static
 	 */
 	_LongFormatMonth: function(date, locale) {
-		return locale.f_getMonthName(date.getMonth(), f_locale.LONG)._upperCaseFirstChar()
+		return f_core.UpperCaseFirstChar(locale.f_getMonthName(date.getMonth(), f_locale.LONG))
 			+" "
 			+date.getFullYear();
 	},
@@ -1236,10 +1236,14 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setTwoDigitYearStart: function(twoDigitYearStart) {
-		if (typeof(twoDigitYearStart)=="string") {
+		switch(typeof(twoDigitYearStart)) {
+		case "string":
 			twoDigitYearStart=f_dateFormat.ParseStringDate(twoDigitYearStart);
-		} else if (typeof(twoDigitYearStart)=="number") {
+			break;
+			
+		case "number":
 			twoDigitYearStart=new Date(1, 0, twoDigitYearStart);
+			break;
 		}
 		this._twoDigitYearStart=twoDigitYearStart;
 	},
@@ -1533,7 +1537,7 @@ var __prototype = {
 			
 			var dayLongName=this._locale.f_getDayName(d, f_locale.LONG);
 			if (dayLongName) {
-				link.title=dayLongName._upperCaseFirstChar();
+				link.title=f_core.UpperCaseFirstChar(dayLongName);
 			}
 			
 			link.appendChild(name);
@@ -1813,17 +1817,17 @@ var __prototype = {
 				d.setDate(1);
 				// Pas de title , y a rien a y mettre !				
 				var monthName=this._locale.f_getMonthName(d.getMonth(), f_locale.LONG);
-				this._monthText.data=monthName._upperCaseFirstChar()+" "+date.getFullYear();
+				this._monthText.data=f_core.UpperCaseFirstChar(monthName)+" "+date.getFullYear();
 		
 				d=new Date(d.getTime());
 				d.setMonth(d.getMonth()-1);
 				monthButtons[0]._date=d;
-				monthButtons[0].title=this._locale.f_getMonthName(d.getMonth(), f_locale.LONG)._upperCaseFirstChar()+" "+d.getFullYear();
+				monthButtons[0].title=f_core.UpperCaseFirstChar(this._locale.f_getMonthName(d.getMonth(), f_locale.LONG))+" "+d.getFullYear();
 		
 				d=new Date(d.getTime());
 				d.setMonth(d.getMonth()+2);
 				monthButtons[1]._date=d;
-				monthButtons[1].title=this._locale.f_getMonthName(d.getMonth(), f_locale.LONG)._upperCaseFirstChar()+" "+d.getFullYear();
+				monthButtons[1].title=f_core.UpperCaseFirstChar(this._locale.f_getMonthName(d.getMonth(), f_locale.LONG))+" "+d.getFullYear();
 	
 				
 			} else {
@@ -2738,18 +2742,18 @@ var __prototype = {
 			this.f_setItemClientData(item, cd);
 		}
 		
-		this._addItem(this, item);
+		this.f_addItem(this, item);
 
 		f_core.Debug(f_calendarObject, "Add date item '"+item._dates+"' label="+label);
 
 		this._disabledDates=undefined;
 		this._itemDates=undefined;
 	},
-	_a_updateItemStyle: function() {
+	fa_updateItemStyle: function() {
 		this._disabledDates=undefined;
 		this._itemDates=undefined;
 	},
-	_a_destroyItems: function() {
+	fa_destroyItems: function() {
 		this._disabledDates=undefined;
 		this._itemDates=undefined;
 	},
@@ -2850,13 +2854,25 @@ var __prototype = {
 	f_formatDate: function(date, format) {
 		return f_dateFormat.FormatDate(date, format, this._twoDigitYearStart, this._locale);
 	},
+	f_getEventLocked2: function(showAlert, mask) {
+
+		if (this._popupMode) {
+			if (!mask) {
+				mask=0;
+			}	
+			
+			mask|=f_event.POPUP_LOCK;
+		}
+
+		return this.f_getEventLocked(showAlert, mask);
+	},
 	_longFormatDate: function(date) {
 		var format=this._locale.f_getDateFormat(f_locale.LONG);
 		if (!format) {
 			return String(date);
 		}
 		
-		return this.f_formatDate(date, format)._upperCaseFirstChar();
+		return f_core.UpperCaseFirstChar(this.f_formatDate(date, format));
 	},
 	f_refreshComponent: function() {		
 		this._updateCells(this._showDate);

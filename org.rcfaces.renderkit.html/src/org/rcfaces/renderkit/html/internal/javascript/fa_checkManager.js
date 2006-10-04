@@ -68,17 +68,17 @@ var __prototype = {
 		this._checkFullState=checkFullState;
 	},
 	_checkElement: function(element, value, show) {
-		if (this._isElementChecked(element)) {
+		if (this.fa_isElementChecked(element)) {
 			return;
 		}
 		
-		this._setElementChecked(element, true);
-		this._updateElementStyle(element);
+		this.fa_setElementChecked(element, true);
+		this.fa_updateElementStyle(element);
 		
 		this._currentChecks.push(element);
 		
 		if (value===undefined) {
-			value=this._getElementValue(element);
+			value=this.fa_getElementValue(element);
 		}
 		
 		if (!this._uncheckedElementValues.f_removeElement(value)) {
@@ -86,21 +86,21 @@ var __prototype = {
 		}
 		
 		if (show) {
-			this._showElement(element);
+			this.fa_showElement(element);
 		}
 	},
 	_uncheckElement: function(element, value) {
-		if (!this._isElementChecked(element)) {
+		if (!this.fa_isElementChecked(element)) {
 			return false;
 		}
 
-		this._setElementChecked(element, false);
-		this._updateElementStyle(element);
+		this.fa_setElementChecked(element, false);
+		this.fa_updateElementStyle(element);
 		
 		this._currentChecks.f_removeElement(element);
 		
 		if (value===undefined) {
-			value=this._getElementValue(element);
+			value=this.fa_getElementValue(element);
 		}
 		
 		if (this._checkedElementValues.f_removeElement(value)) {
@@ -121,8 +121,8 @@ var __prototype = {
 			for(var i=0;i<currentChecks.length;i++) {
 				var element=currentChecks[i];
 				
-				this._setElementChecked(element, false);
-				this._updateElementStyle(element);
+				this.fa_setElementChecked(element, false);
+				this.fa_updateElementStyle(element);
 			}
 		}
 		
@@ -130,12 +130,15 @@ var __prototype = {
 		this._uncheckedElementValues=new Array;
 		this._checkedElementValues=new Array;
 	},
-
-	_updateElementCheck: function(element, checked) {
-		var value=this._getElementValue(element);
 	
-		checked=this._isElementValueChecked(value, checked);
-		this._setElementChecked(element, checked);
+	/**
+	 * @method protected
+	 */
+	fa_updateElementCheck: function(element, checked) {
+		var value=this.fa_getElementValue(element);
+	
+		checked=this.fa_isElementValueChecked(value, checked);
+		this.fa_setElementChecked(element, checked);
 		
 		if (!checked) {
 			return false;
@@ -146,20 +149,23 @@ var __prototype = {
 		return true;
 	},
 	
-	_performElementCheck: function(element, show, evt, checked) {
+	/**
+	 * @method protected
+	 */
+	fa_performElementCheck: function(element, show, evt, checked) {
 		var cardinality=this._checkCardinality;
 		if (!cardinality) {
 			return false;
 		}
 		
-		f_core.Debug("fa_checkManager", "performElementCheck '"+this._getElementValue(element)+"' disabled="+this._isElementDisabled(element)+" cardinality="+cardinality);
+		f_core.Debug("fa_checkManager", "performElementCheck '"+this.fa_getElementValue(element)+"' disabled="+this.fa_isElementDisabled(element)+" cardinality="+cardinality);
 	
-		if (this._isElementDisabled(element)) {
+		if (this.fa_isElementDisabled(element)) {
 			return false;
 		}
 		
-		var elementChecked=this._isElementChecked(element);
-		var elementValue=this._getElementValue(element);
+		var elementChecked=this.fa_isElementChecked(element);
+		var elementValue=this.fa_getElementValue(element);
 		
 		switch(cardinality) {
 		case fa_cardinality.ONE_CARDINALITY:
@@ -203,15 +209,21 @@ var __prototype = {
 			detail|=1;
 		}
 	
-		this._fireCheckChangedEvent(evt, detail, element, elementValue);
+		this.fa_fireCheckChangedEvent(evt, detail, element, elementValue);
 		
 		return true;
 	},
-	_fireCheckChangedEvent: function(evt, detail, element, elementValue) {
+	/**
+	 * @method protected
+	 */
+	fa_fireCheckChangedEvent: function(evt, detail, element, elementValue) {
 
 		return this.f_fireEvent(f_event.CHECK, evt, element, elementValue, null, detail);
 	},
-	_isElementValueChecked: function(value, defaultValue) {
+	/**
+	 * @method protected
+	 */
+	fa_isElementValueChecked: function(value, defaultValue) {
 		var checked=defaultValue;
 		
 		var checkFullState=this._checkFullState;
@@ -270,7 +282,7 @@ var __prototype = {
 		for(var i=0;i<currentChecks.length;i++) {
 			var element=currentChecks[i];
 			
-			var value=this._getElementValue(element);
+			var value=this.fa_getElementValue(element);
 			if (value===undefined) {
 				continue;
 			}
@@ -281,9 +293,15 @@ var __prototype = {
 		return ret;
 	},
 
-	_isElementChecked: f_class.ABSTRACT,
+	/**
+	 * @method protected abstract
+	 */
+	fa_isElementChecked: f_class.ABSTRACT,
 	
-	_setElementChecked: f_class.ABSTRACT
+	/**
+	 * @method protected abstract
+	 */
+	fa_setElementChecked: f_class.ABSTRACT
 	
 }
 

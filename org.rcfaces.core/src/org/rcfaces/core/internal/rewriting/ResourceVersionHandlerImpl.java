@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/20 17:55:19  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -122,7 +125,7 @@ public class ResourceVersionHandlerImpl extends AbstractURLRewritingProvider
             int type, String attributeName, String url, String rootURL,
             IURLRewritingInformation rewritingInformation) {
 
-        if (prefixURI == null || url.length() < 1) {
+        if (prefixURI == null || (url==null || url.length() < 1)) {
             return url;
         }
 

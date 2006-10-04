@@ -29,7 +29,7 @@ var __prototype = {
 	},
 
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT

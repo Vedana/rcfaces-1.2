@@ -33,6 +33,16 @@ var __static = {
 	_AS_RADIO_BUTTON: 4,
 	
 	/** 
+	 * @field private static final number
+	 */
+	_ITEM_IMAGE_WIDTH: 18,
+	
+	/** 
+	 * @field private static final number
+	 */
+	_ITEM_IMAGE_HEIGHT: 18,
+	
+	/** 
 	 * @field private static final string
 	 */
 	_BLANK_IMAGE_URL: "/menu/blank.gif",
@@ -137,7 +147,7 @@ var __static = {
 	 */
 	_MenuItem_mouseOver: function(evt) {
 		var menuBar=this._menuBar;
-		if (menuBar.f_getEventLocked(false)) {
+		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		
@@ -168,7 +178,7 @@ var __static = {
 	 */
 	_MenuItem_mouseDown: function(evt) {
 		var menuBar=this._menuBar;
-		if (menuBar.f_getEventLocked()) {
+		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		if (!evt) {
@@ -231,7 +241,7 @@ var __static = {
 		f_key.EnterScope(menuItem.id);
 		
 		menuItem._popupOpened=true;
-		menuBar._a_updateItemStyle(menuItem);
+		menuBar.fa_updateItemStyle(menuItem);
 
 		// Il faut filtrer les separators ...
 		fa_menuCore.HideSeparators(menuItem);
@@ -303,14 +313,14 @@ var __static = {
 			menuItem._selectedMenuItem=undefined;
 
 			selectedMenuItem._over=false;			
-			selectedMenuItem._menuBar._a_updateItemStyle(selectedMenuItem);			
+			selectedMenuItem._menuBar.fa_updateItemStyle(selectedMenuItem);			
 		}
 
 		var menuBar=menuItem._menuBar;
 		
 		f_key.ExitScope(menuItem.id);
 		
-		menuBar._a_updateItemStyle(menuItem);
+		menuBar.fa_updateItemStyle(menuItem);
 
 		if (menuItem._menuPopup) {
 			if (menuItem._iePopup) {
@@ -373,6 +383,10 @@ var __static = {
 		var code=evt.keyCode;
 
 		switch(code) {
+		case f_key.VK_CONTEXTMENU:
+			cancel=true;
+			break;
+
 		case f_key.VK_DOWN: // FLECHE VERS LE BAS
 			menu._nextMenuItem(menuPopup, evt);
 			cancel=true;
@@ -673,12 +687,28 @@ var __static = {
 
 var __prototype = {
 	fa_menuCore: function() {
+
 		if (this.tagName) {
 			this._menuClassName=f_core.GetAttribute(this, "v:menuClassName");
+
+			var itemImageWidth=f_core.GetAttribute(this, "v:itemImageWidth");
+			if (itemImageWidth) {
+				this._itemImageWidth=parseInt(itemImageWidth);
+			}
+	
+			var itemImageHeight=f_core.GetAttribute(this, "v:itemImageHeight");
+			if (itemImageHeight) {
+				this._itemImageHeight=parseInt(itemImageHeight);
+			}
+			
+			if (itemImageWidth || itemImageHeight) {
+				f_core.Debug(fa_menuCore, "Set item image width/height by tag attributes width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
+			}
 		}
 		if (!this._menuClassName) {
 			this._menuClassName=fa_menuCore._MENU_CLASSNAME;
 		}
+		
 		
 		this._blankMenuImageURL=f_env.GetStyleSheetBase()+fa_menuCore._BLANK_IMAGE_URL;
 		
@@ -690,6 +720,8 @@ var __prototype = {
 		// this._menuClassName=undefined; // string
 		// this._blankMenuImageURL=undefined; // string
 		// this._menuItemsChanged=undefined; // boolean
+		// this._itemImageWidth=undefined; // number
+		// this._itemImageHeight=undefined; // number
 	},
 	/**
 	 * @method public
@@ -713,7 +745,7 @@ var __prototype = {
 		
 		item._style=fa_menuCore._AS_RADIO_BUTTON;
 		if (groupName) {
-			this._setItemGroupName(item, groupName);
+			this.f_setItemGroupName(item, groupName);
 		}		
 		if (checked) {
 			this.f_setItemChecked(item, checked);
@@ -774,7 +806,9 @@ var __prototype = {
 		
 		var table=parentItem._menuPopup;
 		if (!table) {
-			table=this.f_createPopup();
+			var parentId=(parentItem==this)?this.id:null;
+			
+			table=this.f_createPopup(parentId);
 			
 			parentItem._menuPopup=table;
 		}
@@ -785,13 +819,24 @@ var __prototype = {
 		menuItem._style=fa_menuCore._AS_PUSH_BUTTON;
 		
 		table.appendChild(menuItem);
+		
+		if (!this._itemImageWidth) {
+			this._itemImageWidth=fa_menuCore._ITEM_IMAGE_WIDTH;
+		}
+		
+		if (!this._itemImageHeight) {
+			this._itemImageHeight=fa_menuCore._ITEM_IMAGE_HEIGHT;
+
+			f_core.Debug(fa_menuCore, "Use default size for item image width/height, width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
+		}
 
 		var image=document.createElement("IMG");
 		image.className=this._menuClassName+"_item_image";
 		image.align="middle";
+		image.valign="middle";
 		image.border=0;
-		image.width=18;
-		image.height=18;
+		image.width=this._itemImageWidth;
+		image.height=this._itemImageHeight;
 		image.src=this._blankMenuImageURL;
 		image._menuClassName=image.className;
 		menuItem._icon=image;
@@ -836,7 +881,7 @@ var __prototype = {
 		menuItem._openPopup=fa_menuCore._MenuItem_openPopup;
 		menuItem._closePopup=fa_menuCore._MenuItem_closePopup;
 		
-		this._addItem(parentItem, menuItem);
+		this.f_addItem(parentItem, menuItem);
 
 		if (f_popup.Ie_enablePopup()) {
 			// On associe le POPUP 
@@ -859,8 +904,20 @@ var __prototype = {
 		return menuItem;
 	},
 	/**
-	 * @method hidden
+	 * @method protected
 	 */
+	f_setItemImageSize: function(itemImageWidth, itemImageHeight) {
+		f_core.Assert(typeof(itemImageWidth)=="number" && itemImageWidth, "fa_menuCore.f_setItemImageSize: Invalid itemImageWidth parameter ("+itemImageWidth+").");
+		f_core.Assert(typeof(itemImageHeight)=="number" && itemImageHeight, "fa_menuCore.f_setItemImageSize: Invalid itemImageHeight parameter ("+itemImageHeight+").");
+
+		this._itemImageWidth=itemImageWidth;
+		this._itemImageHeight=itemImageHeight;
+
+		f_core.Debug(fa_menuCore, "Set item image size to width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
+	},
+	/** ???? Jamais appelé !
+	 * @method hidden
+	 *
 	_addMenuItemListeners: function(menuItem, removeAllWhenShow, listeners) {
 		menuItem._removeAllWhenShow=true;
 		
@@ -878,22 +935,32 @@ var __prototype = {
 			l.f_addAction(arguments[i]);
 		}
 	},
+	*/
 	/**
 	 * @method protected 
 	 */
-	f_createPopup: function() {
+	f_createPopup: function(parentId) {
 		var table=document.createElement("UL");
 		table.className=this._menuClassName+"_popup";
 		table.style.visibility="hidden";
+		if (parentId) {
+			table.id=parentId;
+		}
 		
 		return table;
 	},
-	_appendSeparatorItem: function(parentItem) {
+	/**
+	 * @method public 
+	 * @param Object parentItem Parent object or <code>null</code>
+	 */
+	f_appendSeparatorItem: function(parentItem) {
 		var document=this.ownerDocument;
 
 		var table=parentItem._menuPopup;
 		if (!table) {
-			table=this.f_createPopup();
+			var parentId=(parentItem==this)?this.id:null;
+			
+			table=this.f_createPopup(parentId);
 			
 			parentItem._menuPopup=table;
 		}
@@ -908,10 +975,13 @@ var __prototype = {
 		
 		table.appendChild(item);
 		
-		this._addItem(parentItem, item);
+		this.f_addItem(parentItem, item);
 		
 		this._menuItemsChanged=true;
 	},
+	/** 
+	 * @method private
+	 */
 	_updateItem: function(menuItem) {
 		var items=menuItem._items;
 		if (items) {
@@ -940,7 +1010,7 @@ var __prototype = {
 			}
 		}
 		
-		this._a_updateItemStyle(menuItem);		
+		this.fa_updateItemStyle(menuItem);		
 	},
 	_nextMenuItem: function(menuBarItem, evt) {
 	
@@ -1252,7 +1322,7 @@ var __prototype = {
 
 // Deja selectionné !
 //		this._selectedMenuItem=menuBarItem;
-//		this._a_updateItemStyle(menuBarItem);		
+//		this.fa_updateItemStyle(menuBarItem);		
 
 		if (!menuBarItem._menuPopup) {
 			var value=menuBarItem._value;
@@ -1310,7 +1380,7 @@ var __prototype = {
 			oldMenuItem._closePopup(oldMenuItem);
 
 			parent._selectedMenuItem=undefined;
-			this._a_updateItemStyle(oldMenuItem);
+			this.fa_updateItemStyle(oldMenuItem);
 		}
 				
 		parent._selectedMenuItem=menuItem;
@@ -1320,7 +1390,7 @@ var __prototype = {
 			return;
 		}
 	*/	
-		this._a_updateItemStyle(menuItem);
+		this.fa_updateItemStyle(menuItem);
 
 		if (menuItem._disabled) {
 			return;
@@ -1337,7 +1407,7 @@ var __prototype = {
 		
 		menuItem._over=false;
 	
-		this._a_updateItemStyle(menuItem);
+		this.fa_updateItemStyle(menuItem);
 	},
 	_menuItem_select: function(menuItem, jsEvent) {
 	
@@ -1360,7 +1430,7 @@ var __prototype = {
 		
 		this._performItemSelect(menuItem, value, jsEvent);
 	},
-	_a_updateItemStyle: function(item) {	
+	fa_updateItemStyle: function(item) {	
 	
 		if (item._separator) {
 			return;
@@ -1382,7 +1452,29 @@ var __prototype = {
 			}
 		}
 				
-		if (item._disabled) {
+		if (item._menuPopup) {
+			if (item._popupOpened || item._over) {
+				className+="_selected";
+	
+			} else {
+				className+="_popup";
+			}
+
+			if (item._disabled) {
+				className+="_disabled";
+			
+				var disabledImageURL=item._disabledImageURL;
+				if (disabledImageURL) {
+					imageURL=disabledImageURL;
+				}
+			} else {
+				var expandedImageURL=item._expandedImageURL;
+				if (expandedImageURL) {
+					imageURL=expandedImageURL;
+				}
+			}
+				
+		} else if (item._disabled) {
 			className+="_disabled";
 			
 			if (item._over) {
@@ -1392,19 +1484,6 @@ var __prototype = {
 			var disabledImageURL=item._disabledImageURL;
 			if (disabledImageURL) {
 				imageURL=disabledImageURL;
-			}
-	
-		} else if (item._menuPopup) {
-			if (item._popupOpened || item._over) {
-				className+="_selected";
-	
-			} else {
-				className+="_popup";
-			}
-
-			var expandedImageURL=item._expandedImageURL;
-			if (expandedImageURL) {
-				imageURL=expandedImageURL;
 			}
 	
 		} else if (item._over) {
@@ -1544,7 +1623,7 @@ var __prototype = {
 			}
 		}
 	
-		this._a_destroyItems(items);
+		this.fa_destroyItems(items);
 		menuItem._items=new Array;
 		
 		this._menuItemsChanged=true;
@@ -1568,16 +1647,18 @@ var __prototype = {
 			return;
 		}
 
+		this._a_clickOutside(jsEvent);
+
 		var selectionProvider=this._a_getSelectionProvider();
 
 		this.f_fireEvent(f_event.SELECTION, jsEvent, item, value, selectionProvider);
 	},
-	_a_destroyItems: function(items) {
+	fa_destroyItems: function(items) {
 		for(var i=0;i<items.length;i++) {
 			fa_menuCore.DestroyMenuItem(items[i]);
 		}
 	},	
-	_a_getRadioScope: function() {
+	fa_getRadioScope: function() {
 		return this;
 	},
 

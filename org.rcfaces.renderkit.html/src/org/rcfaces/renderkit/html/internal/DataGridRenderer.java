@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -173,6 +176,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.capability.ISortEventCapability;
@@ -197,7 +201,7 @@ import org.rcfaces.core.internal.tools.DataGridServerSort;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.model.IFilteredDataModel;
+import org.rcfaces.core.model.IFiltredDataModel;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -225,7 +229,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
     private static final String TITLE_IMAGE = "_timage";
 
-    private static final String TITLE_TEXT = "_ttext";
+    private static final String TITLE_TTEXT = "_ttext";
 
     private static final String TITLE_STEXT = "_stext";
 
@@ -260,11 +264,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 "f_dataGrid.Sort_Server");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
+    private static final int TEXT_RIGHT_PADDING = 4;
+
+    private static final int SORT_PADDING = 10;
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.DATA_GRID;
     }
@@ -401,7 +404,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         htmlWriter.startElement("DIV", dg);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter, cssClassNameSuffix);
+        writeCssAttributes(htmlWriter, cssClassNameSuffix, CSS_ALL_MASK);
 
         String className = getStyleClassName(componentRenderContext, dg);
 
@@ -450,8 +453,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
 
         Object dataModel = tableContext.getDataModel();
-        if (dataModel instanceof IFilteredDataModel) {
-            htmlWriter.writeAttribute("v:filtered", "true");
+        if (dataModel instanceof IFiltredDataModel) {
+            htmlWriter.writeAttribute("v:filtred", "true");
 
             IFilterProperties filterMap = tableContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
@@ -615,6 +618,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     htmlWriter.writeAttribute("style", "width:" + width + "px");
                 }
             }
+            htmlWriter.endElement("COL");
         }
         // htmlWriter.startElement("COL");
 
@@ -673,13 +677,6 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
         htmlWriter.writeAttribute("class", clName);
 
-        String halign = dc.getAlignment(facesContext);
-        if (halign != null) {
-            htmlWriter.writeAttribute("align", halign);
-        } else {
-            htmlWriter.writeAttribute("align", "left");
-        }
-
         String toolTip = dc.getToolTipText(facesContext);
         if (toolTip != null) {
             htmlWriter.writeAttribute("title", toolTip);
@@ -687,36 +684,58 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         if (tableContext.isResizable()) {
             if (dc.isResizable(facesContext)) {
-                htmlWriter.writeAttribute("resizable", "true");
+                htmlWriter.writeAttribute("v:resizable", "true");
 
                 int min = dc.getMinWidth(facesContext);
                 if (min > 0) {
-                    htmlWriter.writeAttribute("minWidth", min);
+                    htmlWriter.writeAttribute("v:minWidth", min);
                 }
 
                 int max = dc.getMaxWidth(facesContext);
                 if (max > 0) {
-                    htmlWriter.writeAttribute("maxWidth", max);
+                    htmlWriter.writeAttribute("v:maxWidth", max);
                 }
             }
         }
 
-        encodeTitleText(htmlWriter, className, tableContext, dc);
+        String width = dc.getWidth(facesContext);
+        if (width != null) {
+            htmlWriter.writeAttribute("width", width);
+        }
+
+        encodeTitleText(htmlWriter, className, tableContext, dc, width);
 
         htmlWriter.endElement("TH");
     }
 
     protected void encodeTitleText(IHtmlWriter htmlWriter, String className,
-            TableRenderContext tableContext, DataColumnComponent dc)
-            throws WriterException {
+            TableRenderContext tableContext, DataColumnComponent dc,
+            String width) throws WriterException {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
         htmlWriter.startElement("DIV");
         htmlWriter.writeAttribute("class", className + TITLE_STEXT);
 
+        if (width != null) {
+            String widthRightPadding = computeSize(width, -1, -TEXT_RIGHT_PADDING);
+            htmlWriter.writeAttribute("style", "width: " + widthRightPadding);
+        }
+
         htmlWriter.startElement("DIV");
-        htmlWriter.writeAttribute("class", className + TITLE_TEXT);
+        htmlWriter.writeAttribute("class", className + TITLE_TTEXT);
+
+        String halign = dc.getAlignment(facesContext);
+        if (halign != null) {
+            htmlWriter.writeAttribute("align", halign);
+        } else {
+            htmlWriter.writeAttribute("align", "left");
+        }
+
+        if (true) { // SORTER
+            String widthRightPadding = computeSize(width, -1, -TEXT_RIGHT_PADDING);
+            htmlWriter.writeAttribute("style", "width: " + widthRightPadding);
+        }
 
         String text = dc.getText(facesContext);
         if (text != null && text.trim().length() > 0) {
@@ -846,6 +865,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
             htmlWriter.writeAttribute("style", sb.toString());
         }
+
+        htmlWriter.endElement("COL");
     }
 
     protected void encodeTitleText(IHtmlWriter htmlWriter, int number,
@@ -877,7 +898,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("title", toolTip);
         }
 
-        encodeTitleText(htmlWriter, className, tableContext, dc);
+        encodeTitleText(htmlWriter, className, tableContext, dc, null);
 
         htmlWriter.endElement("TH");
     }
@@ -1153,6 +1174,12 @@ public class DataGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeln(");");
         }
 
+        if (tableContext.hasCellToolTipText()) {
+            htmlWriter.writeMethodCall("f_setColumnsToolTipText");
+            writeBooleanArray(htmlWriter, tableContext, cnt, CELL_TOOLTIP_TEXT);
+            htmlWriter.writeln(");");
+        }
+
         if (tableContext.sortClientSide != null) {
             int pred = 0;
 
@@ -1296,6 +1323,14 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
     };
 
+    private static final IBooleanStateCallback CELL_TOOLTIP_TEXT = new IBooleanStateCallback() {
+        private static final String REVISION = "$Revision$";
+
+        public boolean test(TableRenderContext tableContext, int index) {
+            return tableContext.isCellToolTipText(index);
+        }
+    };
+
     private void writeBooleanArray(IJavaScriptWriter htmlWriter,
             TableRenderContext tableContext, int cnt,
             IBooleanStateCallback callback) throws WriterException {
@@ -1365,31 +1400,31 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 .getDataGridComponent();
         DataModel dataModel = tableContext.getDataModel();
 
-        boolean filtered = false;
+        boolean filtred = false;
         int firstCount = tableContext.getRowCount();
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
         if (filtersMap != null) {
-            if (dataModel instanceof IFilteredDataModel) {
-                IFilteredDataModel filteredDataModel = (IFilteredDataModel) dataModel;
+            if (dataModel instanceof IFiltredDataModel) {
+                IFiltredDataModel filtredDataModel = (IFiltredDataModel) dataModel;
 
-                filteredDataModel.setFilter(filtersMap);
+                filtredDataModel.setFilter(filtersMap);
                 tableContext.updateRowCount();
 
-                filtered = true;
+                filtred = true;
 
             } else {
                 dataModel = FilteredDataModel.filter(dataModel, filtersMap);
                 tableContext.updateRowCount();
             }
 
-        } else if (dataModel instanceof IFilteredDataModel) {
-            IFilteredDataModel filteredDataModel = (IFilteredDataModel) dataModel;
+        } else if (dataModel instanceof IFiltredDataModel) {
+            IFiltredDataModel filtredDataModel = (IFiltredDataModel) dataModel;
 
-            filteredDataModel.setFilter(FilterExpressionTools.EMPTY);
+            filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
             tableContext.updateRowCount();
 
-            filtered = true;
+            filtred = true;
         }
 
         int rows = tableContext.getRows();
@@ -1421,7 +1456,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             } else {
                 // Il faut faire le tri à la main !
 
-                sortTranslations = DataGridServerSort.createTranslation(
+                sortTranslations = DataGridServerSort.computeSortedTranslation(
                         jsWriter.getFacesContext(), dataGridComponent,
                         dataModel, sortedComponents);
             }
@@ -1746,7 +1781,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         } else if (tableContext.getRowCount() < 0) {
             encodeJsRowCount(jsWriter, tableContext, rowIndex);
 
-        } else if (filtered) {
+        } else if (filtred) {
             if (searchEnd && count == 0) {
                 encodeJsRowCount(jsWriter, tableContext, count);
             }
@@ -1799,11 +1834,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
 
         String images[] = null;
-        String cellStyleClass[] = null;
+        String cellStyleClasses[] = null;
+        String cellToolTipTexts[] = null;
         int visibleColumns = 0;
 
         int ciIndex = 0;
         int csIndex = 0;
+        int ctIndex = 0;
         for (int i = 0; i < columnNumber; i++) {
             DataColumnComponent dc = dcs[i];
 
@@ -1851,13 +1888,25 @@ public class DataGridRenderer extends AbstractCssRenderer {
             if (tableContext.isCellStyleClass(i)) {
                 String cs = dc.getCellStyleClass(facesContext);
                 if (cs != null) {
-                    if (cellStyleClass == null) {
-                        cellStyleClass = new String[columnNumber];
+                    if (cellStyleClasses == null) {
+                        cellStyleClasses = new String[columnNumber];
                     }
 
-                    cellStyleClass[csIndex] = cs;
+                    cellStyleClasses[csIndex] = cs;
                 }
                 csIndex++;
+            }
+
+            if (tableContext.isCellToolTipText(i)) {
+                String ct = dc.getCellToolTipText(facesContext);
+                if (ct != null) {
+                    if (cellToolTipTexts == null) {
+                        cellToolTipTexts = new String[columnNumber];
+                    }
+
+                    cellToolTipTexts[ctIndex] = ct;
+                }
+                ctIndex++;
             }
 
             visibleColumns++;
@@ -1915,9 +1964,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
             writeRowProperties(htmlWriter, tableContext, ciIndex, rowVarName,
                     "f_setCellImages", images);
         }
-        if (cellStyleClass != null) {
+        if (cellStyleClasses != null) {
             writeRowProperties(htmlWriter, tableContext, csIndex, rowVarName,
-                    "f_setCellStyleClass", cellStyleClass);
+                    "f_setCellStyleClass", cellStyleClasses);
+        }
+        if (cellToolTipTexts != null) {
+            writeRowProperties(htmlWriter, tableContext, ctIndex, rowVarName,
+                    "f_setCellToolTipText", cellToolTipTexts);
         }
     }
 
@@ -1946,9 +1999,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 }
             }
 
-            htmlWriter.write(',');
-
-            htmlWriter.write(values[i]);
+            htmlWriter.write(',').write(values[i]);
         }
 
         htmlWriter.writeln(");");
@@ -2000,10 +2051,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
         if (first != null) {
             int old = dg.getFirst();
 
-            dg.setFirst(first.intValue());
+            int f = first.intValue();
+            if (old != f) {
+                dg.setFirst(f);
 
-            component.queueEvent(new PropertyChangeEvent(component,
-                    Properties.FIRST, new Integer(old), first));
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.FIRST, new Integer(old), first));
+            }
         }
 
         DataColumnComponent rowValueColumn = null;
@@ -2079,26 +2133,45 @@ public class DataGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        Number sortIndex = componentData.getNumberProperty("sortIndex");
+        String sortIndex = componentData.getStringProperty("sortIndex");
         if (sortIndex != null) {
-            int cnt = sortIndex.intValue();
+            DataColumnComponent columns[] = dg.listColumns().toArray();
 
-            IDataColumnIterator it = dg.listColumns();
-            for (; it.hasNext(); cnt--) {
-                DataColumnComponent col = it.next();
+            List sortedColumns = new ArrayList(columns.length);
+            StringTokenizer st1 = new StringTokenizer(sortIndex, ",");
 
-                if (cnt > 0) {
+            for (; st1.hasMoreTokens();) {
+                String tok1 = st1.nextToken();
+                String tok2 = st1.nextToken();
+
+                int idx = Integer.parseInt(tok1);
+                boolean order = "true".equalsIgnoreCase(tok2);
+
+                DataColumnComponent dataColumn = columns[idx];
+
+                sortedColumns.add(dataColumn);
+
+                if (dataColumn.isAscending(facesContext) == order) {
                     continue;
                 }
 
-                dg.setSortedColumn(col);
-                Boolean sortOrder = componentData
-                        .getBooleanProperty("sortOrder");
-                if (sortOrder != null) {
-                    col.setAscending(sortOrder.booleanValue() == false);
-                }
+                dataColumn.setAscending(order);
 
-                break;
+                dataColumn.queueEvent(new PropertyChangeEvent(dataColumn,
+                        Properties.ASCENDING, Boolean.valueOf(!order), Boolean
+                                .valueOf(order)));
+            }
+
+            String old = dg.getSortedColumnIds(facesContext);
+
+            if (dg.setSortedColumns((DataColumnComponent[]) sortedColumns
+                    .toArray(new DataColumnComponent[sortedColumns.size()]))) {
+
+                String newIds = dg.getSortedColumnIds(facesContext);
+                if (isEquals(old, newIds) == false) {
+                    component.queueEvent(new PropertyChangeEvent(component,
+                            Properties.SORTED_COLUMN_IDS, old, newIds));
+                }
             }
         }
 
@@ -2117,7 +2190,15 @@ public class DataGridRenderer extends AbstractCssRenderer {
                         continue;
                     }
 
+                    String old = col.getWidth(facesContext);
+                    if (isEquals(old, width)) {
+                        break;
+                    }
+
                     col.setWidth(width);
+
+                    col.queueEvent(new PropertyChangeEvent(col,
+                            Properties.WIDTH, old, width));
                     break;
                 }
             }
@@ -2130,8 +2211,17 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 filterExpression = null;
             }
 
-            dg.setFilterProperties(HtmlTools.decodeFilterExpression(component,
-                    filterExpression));
+            IFilterProperties fexp = HtmlTools.decodeFilterExpression(
+                    component, filterExpression);
+
+            IFilterProperties old = dg.getFilterProperties(facesContext);
+            if (isEquals(fexp, old) == false) {
+                dg.setFilterProperties(fexp);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.FILTER_PROPERTIES, old, fexp));
+            }
+
         }
 
         IComponentPreference preference = dg.getPreference(facesContext);
@@ -2328,15 +2418,17 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         private boolean hasCellStyleClass;
 
-        private final boolean cellStyleClass[];
+        private final boolean cellStyleClasses[];
+
+        private boolean hasCellToolTipText;
+
+        private final boolean cellToolTipText[];
 
         private final int columnStates[];
 
         private String rowVarName;
 
         private boolean hasColumnImages;
-
-        // private String sortedColumnId;
 
         private ISortedComponent sortedComponents[];
 
@@ -2470,7 +2562,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
             columnStates = new int[columns.length];
             columnImageURLs = new boolean[columns.length];
-            cellStyleClass = new boolean[columns.length];
+            cellStyleClasses = new boolean[columns.length];
+            cellToolTipText = new boolean[columns.length];
             columnIds = new String[columns.length];
 
             for (int i = 0; i < columns.length; i++) {
@@ -2506,8 +2599,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 }
 
                 if (dc.isCellStyleClassSetted()) {
-                    cellStyleClass[i] = true;
+                    cellStyleClasses[i] = true;
                     hasCellStyleClass = true;
+                }
+
+                if (dc.isCellToolTipTextSetted()) {
+                    cellToolTipText[i] = true;
+                    hasCellToolTipText = true;
                 }
 
                 if (columnStates[i] != VISIBLE) {
@@ -2681,15 +2779,20 @@ public class DataGridRenderer extends AbstractCssRenderer {
             return rows;
         }
 
-        /*
-         * public final String getSortedColumnId() { return sortedColumnId; }
-         */
         public boolean hasCellStyleClass() {
             return hasCellStyleClass;
         }
 
+        public boolean hasCellToolTipText() {
+            return hasCellToolTipText;
+        }
+
         public boolean isCellStyleClass(int index) {
-            return cellStyleClass[index];
+            return cellStyleClasses[index];
+        }
+
+        public boolean isCellToolTipText(int index) {
+            return cellToolTipText[index];
         }
 
         public boolean hasColumnImages() {
@@ -2737,8 +2840,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
             MenuComponent menuComponent = menuIterator.next();
 
             IComponentDecorator menuDecorator = new SubMenuDecorator(
-                    menuComponent, menuComponent.getMenuId(), true,
-                    menuComponent.isRemoveAllWhenShown(facesContext));
+                    menuComponent, menuComponent.getMenuId(), null,
+                    menuComponent.isRemoveAllWhenShown(facesContext),
+                    getItemImageWidth(menuComponent),
+                    getItemImageHeight(menuComponent));
 
             if (decorator == null) {
                 decorator = menuDecorator;
@@ -2750,6 +2855,14 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
 
         return decorator;
+    }
+
+    protected int getItemImageHeight(IMenuComponent menuComponent) {
+        return -1;
+    }
+
+    protected int getItemImageWidth(IMenuComponent menuComponent) {
+        return -1;
     }
 
     private void writeFullStates(IJavaScriptWriter jsWriter,

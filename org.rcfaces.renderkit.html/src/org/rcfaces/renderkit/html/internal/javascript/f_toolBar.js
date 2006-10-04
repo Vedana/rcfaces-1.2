@@ -1,14 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- *
  */
 
 /**
@@ -54,7 +45,7 @@ var __prototype = {
 			
 		return this.f_super(arguments);
 	},
-	_a_destroyItems: function(items) {
+	fa_destroyItems: function(items) {
 		for(var i=0;i<items.length;i++) {
 			f_toolBar._DestroyToolFolder(this, items[i]);
 		}
@@ -69,9 +60,9 @@ var __prototype = {
 	_setItemImages: function(item) {
 	},
 	
-	_appendSeparatorItem: function(toolFolder) {
+	f_appendSeparatorItem: function(toolFolder) {
 	},
-	_a_getRadioScope: function() {
+	fa_getRadioScope: function() {
 		return this;
 	}
 }

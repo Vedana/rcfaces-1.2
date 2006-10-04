@@ -4,13 +4,13 @@
 
 /**
  *
- * @class f_dataList
+ * @class f_componentsList
  *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$ 
  */
  
-.f_dataList {
+.f_componentsList {
 	border: 1px solid #666666;
 	margin: 0;
 	padding: 0;	
@@ -18,14 +18,13 @@
 	vertical-align: top;
 	-moz-user-select: none;
 	user-select: none;
- 	position: relative;
 }
 
-.f_dataList_disabled {
+.f_componentsList_disabled {
  	border: 1px solid #BBB;		
 }
 
-.f_dataList_cell {
+.f_componentsList_cell {
 	text-align: left;
 	vertical-align: top;
 }

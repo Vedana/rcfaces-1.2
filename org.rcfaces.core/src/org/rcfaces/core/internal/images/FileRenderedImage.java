@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.4  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -133,7 +136,7 @@ class FileRenderedImage implements IBufferedImage {
 
         } catch (IOException ex) {
             LOG.error(
-                    "Can not create temp file for filtered image ! (imageName="
+                    "Can not create temp file for filtred image ! (imageName="
                             + imageName + ")", ex);
 
             throw ex;
@@ -224,7 +227,7 @@ class FileRenderedImage implements IBufferedImage {
 
         } catch (IOException ex) {
             LOG.error(
-                    "Can not write temp file for filtered image ! (imageName="
+                    "Can not write temp file for filtred image ! (imageName="
                             + imageName + ")", ex);
 
             throw ex;
@@ -235,7 +238,7 @@ class FileRenderedImage implements IBufferedImage {
 
         lastModified = imageDownloader.getLastModified();
 
-        LOG.debug("Store filtered image '" + imageName + "' into " + size
+        LOG.debug("Store filtred image '" + imageName + "' into " + size
                 + " bytes. (disk location='" + file.getAbsolutePath() + "')");
 
     }

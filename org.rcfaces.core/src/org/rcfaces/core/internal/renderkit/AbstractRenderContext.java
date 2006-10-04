@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:59  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -103,7 +106,6 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.AbstractReleasable;
 import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.provider.IURLRewritingProvider;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -284,6 +286,21 @@ public abstract class AbstractRenderContext extends AbstractReleasable
         }
 
         return attributes.put(key, value);
+    }
+
+    public boolean containsAttribute(String key) {
+        if (attributes == null) {
+            return false;
+        }
+        return attributes.containsKey(key);
+    }
+
+    public Object removeAttribute(String key) {
+        if (attributes == null) {
+            return null;
+        }
+
+        return attributes.remove(key);
     }
 
     public final UIComponent getComponent() {

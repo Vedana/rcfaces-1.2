@@ -13,7 +13,6 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -40,6 +39,10 @@ public abstract class AbstractHtmlWriter extends
     }
 
     public final IComponentRenderContext getComponentRenderContext() {
+        return this;
+    }
+
+    public final IHtmlComponentRenderContext getHtmlComponentRenderContext() {
         return this;
     }
 

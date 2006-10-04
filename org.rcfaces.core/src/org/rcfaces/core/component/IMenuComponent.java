@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:58  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -32,6 +35,16 @@ import org.rcfaces.core.component.iterator.IMenuItemIterator;
  */
 public interface IMenuComponent extends ICheckEventCapability,
         ISelectionEventCapability {
+
+    /*
+    int getItemImageWidth();
+
+    void setItemImageWidth(int width);
+
+    int getItemImageHeight();
+
+    void setItemImageHeight(int height);
+*/
     IMenuItemIterator listMenuItems();
 
     boolean isRemoveAllWhenShown();

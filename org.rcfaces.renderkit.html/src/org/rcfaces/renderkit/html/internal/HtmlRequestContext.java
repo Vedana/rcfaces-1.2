@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -74,7 +77,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.faces.FacesException;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -83,6 +85,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.AbstractRequestContext;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 
 /**
@@ -117,7 +120,7 @@ class HtmlRequestContext extends AbstractRequestContext implements
 
     private String eventComponentId;
 
-    private IHtmlProcessContext externalContext;
+    private IHtmlProcessContext processContext;
 
     /*
      * (non-Javadoc)
@@ -127,7 +130,7 @@ class HtmlRequestContext extends AbstractRequestContext implements
     public void setFacesContext(FacesContext facesContext) {
         super.setFacesContext(facesContext);
 
-        externalContext = HtmlProcessContextImpl
+        processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
 
         parameters = facesContext.getExternalContext()
@@ -150,10 +153,11 @@ class HtmlRequestContext extends AbstractRequestContext implements
                     EVENT_COMPONENT_ID);
 
             if (eventComponentId != null) {
+
                 putComponentData(eventComponentId, Boolean.FALSE);
             }
-        } else {
 
+        } else {
             eventComponentId = null;
         }
     }
@@ -169,15 +173,15 @@ class HtmlRequestContext extends AbstractRequestContext implements
 
     public String getComponentId(FacesContext facesContext,
             UIComponent component) {
-        if (externalContext.isFlatIdentifierEnabled() == false) {
+        if (processContext.isFlatIdentifierEnabled() == false) {
             String id = component.getClientId(facesContext);
 
-            char separatorChar = externalContext.getNamingSeparatorChar();
-            if (separatorChar == NamingContainer.SEPARATOR_CHAR) {
+            String separatorChar = processContext.getNamingSeparator();
+            if (separatorChar == null) {
                 return id;
             }
 
-            return id.replace(NamingContainer.SEPARATOR_CHAR, separatorChar);
+            return HtmlTools.replaceSeparator(id, separatorChar);
         }
 
         String id = component.getId();
@@ -334,8 +338,9 @@ class HtmlRequestContext extends AbstractRequestContext implements
                 throwFormatException("EOF", i, datas);
             }
 
-            properties.put(datas.substring(nameStart, nameEnd), datas
-                    .substring(valueStart, valueEnd));
+            String componentId = datas.substring(nameStart, nameEnd);
+
+            properties.put(componentId, datas.substring(valueStart, valueEnd));
 
             i++;
             if (i == cs.length) {
@@ -391,8 +396,12 @@ class HtmlRequestContext extends AbstractRequestContext implements
         return componentData;
     }
 
-    public IHtmlProcessContext getExternalContext() {
-        return externalContext;
+    public IProcessContext getProcessContext() {
+        return processContext;
+    }
+
+    public IHtmlProcessContext getHtmlProcessContext() {
+        return processContext;
     }
 
     /**
@@ -477,6 +486,11 @@ class HtmlRequestContext extends AbstractRequestContext implements
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     protected static class HtmlComponentData extends AbstractHtmlComponentData {
         private static final String REVISION = "$Revision$";
 

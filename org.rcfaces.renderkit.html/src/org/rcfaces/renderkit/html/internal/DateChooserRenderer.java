@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/04 12:31:42  oeuillot
+ * Stabilisation
+ *
  * Revision 1.3  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -158,7 +161,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
                 throws WriterException {
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
-            writeCssAttributes(writer, classSuffix);
+            writeCssAttributes(writer, classSuffix, CSS_ALL_MASK);
 
             FacesContext facesContext = writer.getComponentRenderContext()
                     .getFacesContext();

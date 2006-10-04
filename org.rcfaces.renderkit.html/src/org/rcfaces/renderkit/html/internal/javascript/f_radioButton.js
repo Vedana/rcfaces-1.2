@@ -105,9 +105,9 @@ var __prototype = {
 				
 		input.checked = true;
 	},
-	_a_updateRequired: function() {
+	fa_updateRequired: function() {
 	},
-	_a_getRadioScope: fa_groupName.GlobalScope
+	fa_getRadioScope: fa_groupName.GlobalScope
 }
 
 var f_radioButton=new f_class("f_radioButton", null, null, __prototype, f_checkButton, fa_groupName, fa_required);

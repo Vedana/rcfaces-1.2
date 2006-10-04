@@ -1,105 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.3  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.2  2006/09/05 08:57:14  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.3  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.2  2006/06/28 17:48:28  oeuillot
- * Ajout de dateEntry
- * Ajout D'une constante g�n�rale de sp�cification de l'attributesLocale
- * Ajout d'un attribut <v:init attributesLocale='' />
- *
- * Revision 1.1  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.24  2006/05/11 16:34:19  oeuillot
- * Correction du calendar
- * Ajout de DateChooser
- * Ajout du moteur de filtre d'images
- * Ajout de l'evt   loadListener pour le AsyncManager
- *
- * Revision 1.23  2006/05/04 13:40:13  oeuillot
- * Ajout de f_findComponent cot� client
- *
- * Revision 1.22  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.21  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.20  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.19  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.18  2005/12/22 11:48:08  oeuillot
- * Ajout de :
- * - JS:  calendar, locale, dataList, log
- * - Evenement User
- * - ClientData  multi-directionnel (+TAG)
- *
- * Revision 1.17  2005/11/17 10:04:56  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
- * Revision 1.16  2005/09/16 09:54:42  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
- * Revision 1.15  2005/03/18 14:42:50  oeuillot
- * Support de la table des symbols pour le javascript compress�
- * Menu du style XP et pas Office !
- *
- * Revision 1.14  2005/03/07 10:47:03  oeuillot
- * Systeme de Logging
- * Debuggage
- *
- * Revision 1.13  2004/12/30 17:24:20  oeuillot
- * Gestion des validateurs
- * Debuggage des composants
- *
- * Revision 1.12  2004/12/22 12:16:15  oeuillot
- * Refonte globale de l'arborescence des composants ....
- * Int�gration des corrections de Didier
- *
- * Revision 1.11  2004/11/19 18:01:30  oeuillot
- * Version debut novembre
- *
- * Revision 1.10  2004/09/24 14:01:35  oeuillot
- * *** empty log message ***
- *
- * Revision 1.9  2004/09/17 15:59:32  oeuillot
- * *** empty log message ***
- *
- * Revision 1.8  2004/09/17 15:18:43  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.renderkit.html.internal;
 
@@ -107,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -128,12 +27,11 @@ import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class HtmlRenderContextImpl extends AbstractRenderContext implements
+public class HtmlRenderContext extends AbstractRenderContext implements
         IHtmlRenderContext {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory
-            .getLog(HtmlRenderContextImpl.class);
+    private static final Log LOG = LogFactory.getLog(HtmlRenderContext.class);
 
     protected static final String RENDER_CONTEXT = "camelia.render.html.context";
 
@@ -152,6 +50,8 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
     private boolean noLazyTag = false;
 
     private boolean asyncRenderer = false;
+
+    private boolean javaScriptEnabled = false;
 
     private IHtmlProcessContext htmlExternalContext;
 
@@ -221,7 +121,7 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
 
     public static final IRenderContext restoreRenderContext(
             FacesContext facesContext, Object state, boolean noLazyTag) {
-        HtmlRenderContextImpl renderContext = (HtmlRenderContextImpl) getRenderContext(facesContext);
+        HtmlRenderContext renderContext = (HtmlRenderContext) getRenderContext(facesContext);
 
         renderContext.restoreState(state);
 
@@ -268,7 +168,7 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
      */
 
     static final IRenderContext createRenderContext(FacesContext context) {
-        HtmlRenderContextImpl hrc = new HtmlRenderContextImpl();
+        HtmlRenderContext hrc = new HtmlRenderContext();
         hrc.initialize(context);
 
         return hrc;
@@ -365,13 +265,12 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
 
         String id = component.getClientId(facesContext);
 
-        char separatorChar = htmlExternalContext.getNamingSeparatorChar();
-        if (separatorChar == NamingContainer.SEPARATOR_CHAR) {
+        String separatorChar = htmlExternalContext.getNamingSeparator();
+        if (separatorChar == null) {
             return id;
         }
 
-        return id.replace(NamingContainer.SEPARATOR_CHAR, separatorChar);
-
+        return HtmlTools.replaceSeparator(id, separatorChar);
     }
 
     public String computeBrotherComponentId(FacesContext facesContext,
@@ -383,12 +282,12 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
         String id = super.computeBrotherComponentId(facesContext,
                 brotherComponent, componentId);
 
-        char separatorChar = htmlExternalContext.getNamingSeparatorChar();
-        if (separatorChar == NamingContainer.SEPARATOR_CHAR || id == null) {
+        String separatorChar = htmlExternalContext.getNamingSeparator();
+        if (separatorChar == null || id == null) {
             return id;
         }
 
-        return id.replace(NamingContainer.SEPARATOR_CHAR, separatorChar);
+        return HtmlTools.replaceSeparator(id, separatorChar);
     }
 
     /*
@@ -421,46 +320,17 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
 
         private static final String ENABLE_JAVASCRIPT = "camelia.html.javascript.enable";
 
-        private static final String FORCE_JAVASCRIPT_STUB = "camelia.html.javascript.forceStub";
-
-        private boolean javaScriptEnabled = false;
-
         public HtmlWriterImpl(FacesContext facesContext,
-                HtmlRenderContextImpl context) {
+                HtmlRenderContext context) {
             super(facesContext, context);
         }
 
         public void enableJavaScript() {
-            if (javaScriptEnabled) {
-                return;
-            }
-
-            javaScriptEnabled = true;
-            getComponentRenderContext().setAttribute(ENABLE_JAVASCRIPT,
-                    Boolean.TRUE);
-        }
-
-        public boolean isJavaScriptStubForced() {
-            return getComponentRenderContext().containsAttribute(
-                    FORCE_JAVASCRIPT_STUB);
-        }
-
-        public void forceJavaScriptStub() {
-            enableJavaScript();
-
-            getComponentRenderContext().setAttribute(FORCE_JAVASCRIPT_STUB,
-                    Boolean.TRUE);
+            ((HtmlRenderContext) renderContext).enableJavaScript();
         }
 
         public boolean isJavaScriptEnabled() {
-            if (javaScriptEnabled) {
-                return true;
-            }
-
-            javaScriptEnabled = getComponentRenderContext().containsAttribute(
-                    ENABLE_JAVASCRIPT);
-
-            return javaScriptEnabled;
+            return ((HtmlRenderContext) renderContext).isJavaScriptEnabled();
         }
     }
 
@@ -468,7 +338,15 @@ public class HtmlRenderContextImpl extends AbstractRenderContext implements
         return htmlExternalContext;
     }
 
-    public IProcessContext getExternalContext() {
+    public boolean isJavaScriptEnabled() {
+        return javaScriptEnabled;
+    }
+
+    public void enableJavaScript() {
+        javaScriptEnabled = true;
+    }
+
+    public IProcessContext getProcessContext() {
         return htmlExternalContext;
     }
 

@@ -45,15 +45,15 @@ public class BoxComponent extends AbstractBasicComponent implements
 		
 	}
 
-	public final int getBackgroundImageHorizontalPosition() {
+	public final java.lang.String getBackgroundImageHorizontalPosition() {
 		return getBackgroundImageHorizontalPosition(null);
 	}
 
-	public final int getBackgroundImageHorizontalPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION,0, facesContext);
+	public final java.lang.String getBackgroundImageHorizontalPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, facesContext);
 	}
 
-	public final void setBackgroundImageHorizontalPosition(int backgroundImageHorizontalPosition) {
+	public final void setBackgroundImageHorizontalPosition(java.lang.String backgroundImageHorizontalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, backgroundImageHorizontalPosition);
 	}
 
@@ -93,15 +93,15 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_URL, backgroundImageURL);
 	}
 
-	public final int getBackgroundImageVerticalPosition() {
+	public final java.lang.String getBackgroundImageVerticalPosition() {
 		return getBackgroundImageVerticalPosition(null);
 	}
 
-	public final int getBackgroundImageVerticalPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION,0, facesContext);
+	public final java.lang.String getBackgroundImageVerticalPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, facesContext);
 	}
 
-	public final void setBackgroundImageVerticalPosition(int backgroundImageVerticalPosition) {
+	public final void setBackgroundImageVerticalPosition(java.lang.String backgroundImageVerticalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, backgroundImageVerticalPosition);
 	}
 

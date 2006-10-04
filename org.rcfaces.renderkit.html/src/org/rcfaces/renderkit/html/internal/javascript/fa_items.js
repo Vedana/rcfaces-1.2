@@ -1,13 +1,5 @@
 /*
  * $Id$
- *
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:26  oeuillot
- * Renommage  en rcfaces
- *
  */
  
 /**
@@ -32,7 +24,7 @@ var __prototype = {
 		this._itemByValues=undefined;
 		
 		if (this._items) {
-			this._a_destroyItems(this._items);
+			this.fa_destroyItems(this._items);
 			this._items=undefined;
 		}
 	},
@@ -57,7 +49,10 @@ var __prototype = {
 	f_getItemValue: function(item) {
 		return item._value;
 	},
-	_addItem: function(parent, item) {
+	/**
+	 * @method hidden
+	 */
+	f_addItem: function(parent, item) {
 		var items=parent._items;
 		if (!items) {
 			items=new Array;
@@ -67,7 +62,7 @@ var __prototype = {
 		items.push(item);
 		
 		var value=item._value;
-		f_core.Debug("fa_items", "Add item '"+value+"' to parent '"+parent+"'.");
+		f_core.Debug(fa_items, "Add item '"+value+"' to parent '"+parent+"'.");
 		if (value) {
 			this._itemByValues[value]=item;
 		}
@@ -96,11 +91,11 @@ var __prototype = {
 	f_setItemToolTip: function(item, message) {
 		item.title=message;
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
-		this._a_updateItemStyle(item);
+		this.fa_updateItemStyle(item);
 	},
 	/**
 	 * @method public
@@ -123,11 +118,11 @@ var __prototype = {
 			f_imageRepository.PrepareImage(imageURL);
 		}
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
-		this._a_updateItemStyle(item);
+		this.fa_updateItemStyle(item);
 	},
 	/**
 	 * @method public
@@ -150,11 +145,11 @@ var __prototype = {
 			f_imageRepository.PrepareImage(imageURL);
 		}
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
-		this._a_updateItemStyle(item);
+		this.fa_updateItemStyle(item);
 	},
 	/**
 	 * @method public
@@ -177,11 +172,11 @@ var __prototype = {
 			f_imageRepository.PrepareImage(imageURL);
 		}
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
-		this._a_updateItemStyle(item);
+		this.fa_updateItemStyle(item);
 	},
 	/**
 	 * @method public
@@ -204,11 +199,11 @@ var __prototype = {
 			f_imageRepository.PrepareImage(imageURL);
 		}
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
-		this._a_updateItemStyle(item);
+		this.fa_updateItemStyle(item);
 	},
 	/**
 	 * @method public
@@ -259,11 +254,11 @@ var __prototype = {
 			return;
 		}
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
-		this._a_updateItemStyle(item);
+		this.fa_updateItemStyle(item);
 
 		if (item.id) {
 			if (item._disabled) {
@@ -337,11 +332,11 @@ var __prototype = {
 			return;
 		}
 				
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 
-		this._a_updateItemStyle(item);
+		this.fa_updateItemStyle(item);
 	
 		this.f_performPropertyChange("visible", visible, old);
 	},
@@ -396,7 +391,7 @@ var __prototype = {
 
 		item._checked=checked;
 				
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 
@@ -423,7 +418,7 @@ var __prototype = {
 			}
 		}
 
-		this._a_updateItemStyle(item);
+		this.fa_updateItemStyle(item);
 		
 		this.f_fireEvent(f_event.CHECK, null, item, item._checked);
 	},
@@ -462,7 +457,10 @@ var __prototype = {
 	f_getItemAccessKey: function(item) {
 		return item._accessKey;
 	},
-	_setItemAccessKey: function(item, accessKey) {
+	/**
+	 * @method hidden
+	 */
+	f_setItemAccessKey: function(item, accessKey) {
 		item._accessKey=accessKey;
 	},
 	/**
@@ -475,7 +473,15 @@ var __prototype = {
 	f_getItemGroupName: function(item) {
 		return item._groupName;
 	},
-	_setItemGroupName: function(item, groupName) {
+	/**
+	 * Set group of an item.
+	 *
+	 * @method public
+	 * @param Object item
+	 * @param String groupName Name of group.
+	 * @return void
+	 */
+	f_setItemGroupName: function(item, groupName) {
 		this._changeGroup(item._groupName, groupName, item);
 		item._groupName = groupName;
 	},
@@ -542,19 +548,19 @@ var __prototype = {
 	},
 
 	/**
-	 * @method abstract
+	 * @method abstract protected
 	 * @return void
 	 */
-	_a_updateItemStyle: f_class.ABSTRACT,
+	fa_updateItemStyle: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method abstract protected
 	 * @return void
 	 */
-	_a_destroyItems: f_class.ABSTRACT,
+	fa_destroyItems: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT,
@@ -563,7 +569,7 @@ var __prototype = {
 	 * @method abstract
 	 * @return void
 	 */
-	_componentUpdated: f_class.OPTIONAL_ABSTRACT
+	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT
 }
 
 var fa_items=new f_aspect("fa_items", null, __prototype);

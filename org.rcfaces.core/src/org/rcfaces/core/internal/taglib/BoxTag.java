@@ -146,7 +146,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 
 				component.setBackgroundImageHorizontalPosition(vb);
 			} else {
-				component.setBackgroundImageHorizontalPosition(getInt(backgroundImageHorizontalPosition));
+				component.setBackgroundImageHorizontalPosition(backgroundImageHorizontalPosition);
 			}
 		}
 
@@ -176,7 +176,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 
 				component.setBackgroundImageVerticalPosition(vb);
 			} else {
-				component.setBackgroundImageVerticalPosition(getInt(backgroundImageVerticalPosition));
+				component.setBackgroundImageVerticalPosition(backgroundImageVerticalPosition);
 			}
 		}
 

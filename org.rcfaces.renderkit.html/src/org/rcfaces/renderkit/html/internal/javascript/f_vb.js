@@ -12,7 +12,7 @@
 =============================================================================*/
 
 
-var __static = {
+var f_vb = {
 	/**
 	 * @field private static final string
 	 */
@@ -32,519 +32,596 @@ var __static = {
 		69,/[ÌÍÎÏ]/,73,/[Ñ]/,78,/[ÓÔÕÖÒ]/,79,/[ÙÚÛÜ]/,85,/[Ç]/,67,/[Ý]/,89
 		],
 
-/**
- * There are a few reserved chars in regular expressions.
- * Handle string encoding with a powerfull regular expression.
- * Reserved chars are the following set:
- *	\/.*+?|()[]{}-^
- * @method private static
- */
-  _BuildEscaped: function(str) {
-	if ((str == null) || (str == "")) {
-		return str;
-	}
-	return str.replace(/([\\\/\.\*\+\?\|\(\)\[\]\{\}\-\^])/g, "\\$1");
-  },
+	/**
+	 * @field private static final RegExp
+	 */
+	_TRANSLATOR_UPPERCASE: /[áãàâäåçéèêëíìîïñóõòôöúùûüý]/,
+
+	/**
+	 * @field private static final RegExp
+	 */
+	_TRANSLATOR_LOWERCASE: /[ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÓÔÕÖÒÙÚÛÜÝ]/,
+
+	/**
+	 * @field private static final RegExp
+	 */
+	_ESCAPE_REGEXP: /([\\\/\.\*\+\?\|\(\)\[\]\{\}\-\^])/g,
+	
+	/**
+	 * @method private static
+	 *
+	 * There are a few reserved chars in regular expressions.
+	 * Handle string encoding with a powerfull regular expression.
+	 * Reserved chars are the following set:
+	 *	\/.*+?|()[]{}-^
+	 */
+	_BuildEscaped: function(str) {
+		if ((str == null) || (str == "")) {
+			return str;
+		}
+		return str.replace(f_vb._ESCAPE_REGEXP, "\\$1");
+	},
+
+	/**
+	 * @method public static
+	 */
+	Filter_alpha: function(validator, keyCode, keyChar) {
+		var exp = "[a-zA-Z";
+		var sup = validator.f_getParameter("alpha.otherChars");
+		exp += (f_vb._BuildEscaped(sup) + "]");
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
+	},
+
+	/**
+	 * @method public static
+	 */
+	Filter_alpha_fr: function(validator, keyCode, keyChar) {
+		var exp = "[a-zA-Z" + f_vb._LATIN_ACCENT_FR;
+		var sup = validator.f_getParameter("alpha.otherChars");
+		exp += (f_vb._BuildEscaped(sup) + "]");
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
+  	},
+
+	/**
+	 * @method public static
+	 */
+	Filter_alphanum: function(validator, keyCode, keyChar) {
+		var exp = "[0-9a-zA-Z";
+		var sup = validator.f_getParameter("alpha.otherChars");
+		exp += (f_vb._BuildEscaped(sup) + "]");
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
+	},
+
+	/**
+	 * @method public static
+	 */
+	Filter_card: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9\.]/, keyCode, keyChar);
+	},
+
+	/**
+	 * @method public static
+	 */
+	Filter_code: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9a-zA-Z]/, keyCode, keyChar);
+	},
+
+	/**
+	 * @method public static
+	 */
+	Filter_dat: function(validator, keyCode, keyChar) {
+		var exp = "[0-9";
+		var sup = validator.f_getParameter("date.sepSign");
+		exp += (f_vb._BuildEscaped(sup) + "]");
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
+	},
+
+	/**
+	 * @method public static
+	 */
+	Filter_date: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9\/]/, keyCode, keyChar);
+	  },
 
 /**
  * @method public
  */
-  Filter_alpha: function(validator, keyCode, keyChar) {
-   var exp = "[a-zA-Z";
-   var sup = validator.f_getParameter("alpha.otherChars");
-   exp += (f_vb._BuildEscaped(sup) + "]");
-   return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
-  },
+	Filter_digit: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_alpha_fr: function(validator, keyCode, keyChar) {
-   var exp = "[a-zA-Z" + f_vb._LATIN_ACCENT_FR;
-   var sup = validator.f_getParameter("alpha.otherChars");
-   exp += (f_vb._BuildEscaped(sup) + "]");
-   return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_dps: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[\040-\177]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_alphanum: function(validator, keyCode, keyChar) {
-	var exp = "[0-9a-zA-Z";
-	var sup = validator.f_getParameter("alpha.otherChars");
-	exp += (f_vb._BuildEscaped(sup) + "]");
-	return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_hour: function(validator, keyCode, keyChar) {
+		var exp = "[0-9";
+		var sup = validator.f_getParameter("hour.sepSign");
+		exp += (f_vb._BuildEscaped(sup) + "]");
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_card: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9\.]/, keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_insee: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9aAbB]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_code: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9a-zA-Z]/, keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_integer: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_dat: function(validator, keyCode, keyChar) {
-	var exp = "[0-9";
-	var sup = validator.f_getParameter("date.sepSign");
-	exp += (f_vb._BuildEscaped(sup) + "]");
-	return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
-  },
-
-/**
- * @method public
- */
-  Filter_date: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9\/]/, keyCode, keyChar);
-  },
-
-/**
- * @method public
- */
-  Filter_digit: function(validator, keyCode, keyChar) {
-   return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode, keyChar);
-  },
-
-/**
- * @method public
- */
-  Filter_dps: function(validator, keyCode, keyChar) {
-   return f_clientValidator.Filter_generic(validator, /[\040-\177]/, keyCode, keyChar);
-  },
-
-/**
- * @method public
- */
-  Filter_hour: function(validator, keyCode, keyChar) {
-	var exp = "[0-9";
-	var sup = validator.f_getParameter("hour.sepSign");
-	exp += (f_vb._BuildEscaped(sup) + "]");
-	return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
-  },
-
-/**
- * @method public
- */
-  Filter_insee: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9aAbB]/, keyCode, keyChar);
-  },
-
-/**
- * @method public
- */
-  Filter_integer: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode, keyChar);
-  },
-
-/**
- * @method public
- */
+	/**
+	 * @method public static
+	 */
   Filter_money: function(validator, keyCode, keyChar) {
 	return f_clientValidator.Filter_generic(validator, /[0-9\.\+\-]/, keyCode, keyChar);
   },
 
-/**
- * @method public
- */
-  Filter_name: function(validator, keyCode, keyChar) {
- 	// Un espace dans l'expression reguliere: il faut passer par le constructeur,
- 	// a cause du filtre Javascript
-	return f_clientValidator.Filter_generic(validator, new RegExp("[ a-zA-Z0-9\*\.\-]"), keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_name: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[ a-zA-Z0-9\*\.\-]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_noblank: function(validator, keyCode, keyChar) {
- 	// Un espace dans l'expression reguliere: il faut passer par le constructeur,
- 	// a cause du filtre Javascript
-	return f_clientValidator.Filter_generic(validator, new RegExp("[^ ]"), keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_noblank: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[^ ]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_num: function(validator, keyCode, keyChar) {
-	var exp = "[0-9";
-	var sup = "";
-	if (validator.f_getBoolParameter("num.signed", false)) {
-		sup = validator.f_getParameter("num.negSign");
-		exp += f_vb._BuildEscaped(sup);
-	}
-	if (validator.f_getIntParameter("num.decimal", 0) != 0) {
-		sup = validator.f_getParameter("num.decSign");
-		exp += f_vb._BuildEscaped(sup);
-	}
-   	sup = validator.f_getParameter("num.sepSign");
-	exp += (f_vb._BuildEscaped(sup) + "]");
-	return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_num: function(validator, keyCode, keyChar) {
+		var exp = "[0-9";
+		var sup = "";
+		if (validator.f_getBoolParameter("num.signed", false)) {
+			sup = validator.f_getParameter("num.negSign");
+			exp += f_vb._BuildEscaped(sup);
+		}
+		if (validator.f_getIntParameter("num.decimal", 0) != 0) {
+			sup = validator.f_getParameter("num.decSign");
+			exp += f_vb._BuildEscaped(sup);
+		}
+	   	sup = validator.f_getParameter("num.sepSign");
+		exp += (f_vb._BuildEscaped(sup) + "]");
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_number: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9\,\-]/, keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_number: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9\,\-]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_signed: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9\-]/, keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_signed: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9\-]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_scientific: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9\.\-eE]/, keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_scientific: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9\.\-eE]/, keyCode, keyChar);
+	},
 
-/**
- * @method public
- */
-  Filter_time: function(validator, keyCode, keyChar) {
-	return f_clientValidator.Filter_generic(validator, /[0-9\:]/, keyCode, keyChar);
-  },
+	/**
+	 * @method public static
+	 */
+	Filter_time: function(validator, keyCode, keyChar) {
+		return f_clientValidator.Filter_generic(validator, /[0-9\:]/, keyCode, keyChar);
+	},
 
 /*=============================================================================
 	TRANSLATORS in alphabetic order...please
 =============================================================================*/
 
-/**
- * @method public
- */
-  Translator_date: function(validator, keyCode, keyChar) {
-	var set = validator.f_getParameter("date.sepSign");
-	if (set && (set.length > 1) && (set.indexOf(keyChar) != -1)) {
-		return set.charCodeAt(0);
-	}
-	return keyCode;
-  },
-
-/**
- * @method public
- */
-  Translator_hour: function(validator, keyCode, keyChar) {
-	var set = validator.f_getParameter("hour.sepSign");
-	if (set && (set.length > 1) && (set.indexOf(keyChar) != -1)) {
-		return set.charCodeAt(0);
-	}
-	return keyCode;
-  },
-
-/**
- * @method public
- */
-  Translator_num: function(validator, keyCode, keyChar) {
-	var set = validator.f_getParameter("num.decSign");
-	if (set && (set.length > 1) && (set.indexOf(keyChar) != -1)) {
-		return set.charCodeAt(0);
-	}
-	return keyCode;
-  },
-
-/**
- * @method public
- */
-  Translator_removeaccent: function(validator, keyCode, keyChar) {
-	var expr,code;
-	var mapper=f_vb._ACCENTS_MAPPER;
-	for (var i=0; i<mapper.length;) {
-		expr = mapper[i++];
-		code = mapper[i++];
-		if (expr.test(keyChar)) {
-			keyCode = code;
-			break;
+	/**
+	 * @method public static
+	 */
+	Translator_date: function(validator, keyCode, keyChar) {
+		var set = validator.f_getParameter("date.sepSign");
+		if (set && (set.length > 1) && (set.indexOf(keyChar) != -1)) {
+			return set.charCodeAt(0);
 		}
-	}
-	return keyCode;
-  },
+		return keyCode;
+	},
 
-/**
- * @method public
- */
-  Translator_uppercase: function(validator, keyCode, keyChar) {
-	if (keyCode >= 97 && keyCode <= 122) {
-		return (keyCode - 32);
-	} else if (keyCode > 127) {
-		if (/[áãàâäåéèêëíìîïñóõòôöúùûüçý]/.test(keyChar)) {
+	/**
+	 * @method public static
+	 */
+	Translator_hour: function(validator, keyCode, keyChar) {
+		var set = validator.f_getParameter("hour.sepSign");
+		if (set && (set.length > 1) && (set.indexOf(keyChar) >= 0)) {
+			return set.charCodeAt(0);
+		}
+		return keyCode;
+	},
+
+	/**
+	 * @method public static
+	 */
+	Translator_num: function(validator, keyCode, keyChar) {
+		var set = validator.f_getParameter("num.decSign");
+		if (set && (set.length > 1) && (set.indexOf(keyChar) >= 0)) {
+			return set.charCodeAt(0);
+		}
+		return keyCode;
+	},
+
+	/**
+	 * @method public static
+	 */
+	Translator_removeaccent: function(validator, keyCode, keyChar) {
+		var mapper=f_vb._ACCENTS_MAPPER;
+		for (var i=0; i<mapper.length;) {
+			var expr = mapper[i++];
+			var code = mapper[i++];
+			if (expr.test(keyChar)) {
+				return code;
+			}
+		}
+		return keyCode;
+	},
+
+	/**
+	 * @method public static
+	 */
+	Translator_uppercase: function(validator, keyCode, keyChar) {
+		if (keyCode >= 97 && keyCode <= 122) {
 			return (keyCode - 32);
 		}
-	}
-	return keyCode;
-  },
-  Translator_lowercase: function(validator, keyCode, keyChar) {
-	if (keyCode >= 65 && keyCode <= 90) {
-		return (keyCode + 32);
-	} else if (keyCode > 127) {
-		if (/[ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÓÔÕÖÒÙÚÛÜÝÇ]/.test(keyChar)) {
+		if (keyCode > 127 && f_vb._TRANSLATOR_UPPERCASE.test(keyChar)) {
+			return (keyCode - 32);
+		}
+		return keyCode;
+	},
+
+	/**
+	 * @method public static
+	 */
+	Translator_lowercase: function(validator, keyCode, keyChar) {
+		if (keyCode >= 65 && keyCode <= 90) {
 			return (keyCode + 32);
 		}
-	}
-	return keyCode;
-  },
+		if (keyCode > 127 && f_vb._TRANSLATOR_LOWERCASE.test(keyChar)) {
+			return (keyCode + 32);
+		}
+		return keyCode;
+	},
 
 /*=============================================================================
 	CHECKERS in alphabetic order...please
 =============================================================================*/
 
-/**
- * @method public
- */
-  Checker_dat: function(validator, inVal) {
-	var min = validator.f_getIntParameter("date.min", 1850);
-	var max = validator.f_getIntParameter("date.max", 2100);
-	var pivot = validator.f_getIntParameter("date.pivot", 0);
-	var sep = validator.f_getParameter("date.sepSign");
+	/**
+	 * @method public static
+	 */
+	Checker_dat: function(validator, inVal) {
+		var min = validator.f_getIntParameter("date.min", 1850);
+		var max = validator.f_getIntParameter("date.max", 2100);
+		var pivot = validator.f_getIntParameter("date.pivot", 0);
+		var sep = validator.f_getParameter("date.sepSign");
 		var set = "["+f_vb._BuildEscaped(sep)+"]";
-	var s = sep.charAt(0);
-	var	sTmp = inVal;
-	var d,m,y,p,dd;
-	var res = "";
-
-	// Deal with empty string and required attribute
-	if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
-		return inVal;
-	}
-
-	// Get the day date
-	dd = new Date();
-	d = m = y = null;
-
-	// Check if digits only
-	var r = sTmp.match(/^\d*$/);
-	if (r) {
-		switch (sTmp.length) {
+		var s = sep.charAt(0);
+		var	sTmp = inVal;
+		var d,m,y,p;
+		var res = "";
+	
+		// Deal with empty string and required attribute
+		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
+			return inVal;
+		}
+	
+		// Get the day date
+		var dd = new Date();
+		d = m = y = null;
+	
+		// Check if digits only
+		var r = sTmp.match(/^\d*$/);
+		if (r) {
+			switch (sTmp.length) {
 			case 8:
-			case 6: y = sTmp.substr(4);
-			case 4: m = sTmp.substr(2,2);
-			case 2: d = sTmp.substr(0,2); break;
-			case 1: d = sTmp;
-			case 0: break;
-			default: sTmp = null;
-		}
-	// Otherwise we have separators
-	} else {
-		var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?"+set+"?(\\d{2}|\\d{4})?$";
-		r = sTmp.match(new RegExp(exp));
-		if (r == null) {
-			sTmp = null;
+			case 6: 
+				y = sTmp.substr(4);
+			case 4: 
+				m = sTmp.substr(2,2);
+			case 2: 
+				d = sTmp.substr(0,2);
+				break;
+			case 1: 
+				d = sTmp;
+			case 0: 
+				break;
+			default: 
+				sTmp = null;
+			}
+		// Otherwise we have separators
 		} else {
-			d = r[1]; m = r[2]; y = r[3];
+			var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?"+set+"?(\\d{2}|\\d{4})?$";
+			r = sTmp.match(new RegExp(exp));
+			if (r == null) {
+				sTmp = null;
+			} else {
+				d = r[1]; 
+				m = r[2]; 
+				y = r[3];
+			}
 		}
-	}
-	// Check valid string
-	if (sTmp == null) {
-		sTmp = inVal.replace(new RegExp("("+set+")","g"),s);
+		// Check valid string
+		if (sTmp == null) {
+			sTmp = inVal.replace(new RegExp("("+set+")","g"),s);
+			validator.f_setInputValue(sTmp);
+			validator.f_setOutputValue(sTmp);
+			validator.f_setObject(null);
+			validator.f_setLastError(
+				"VALIDATION DATE",
+				"Le format de saisie de date est invalide"
+			);
+			return null;
+		}
+		// Compute year, month ,day
+		y = (y)? parseInt(y, 10):dd.getFullYear();
+		y += (y >= 100)? 0:((y > pivot)? 1900:2000);
+		m = (m)? parseInt(m, 10):(dd.getMonth() +1);
+		d = (d)? parseInt(d, 10):dd.getDate();
+	
+		// Build input and output value
+		sTmp = ((d<10)? "0":"")+d+s+((m<10)? "0":"")+m+s+y;
 		validator.f_setInputValue(sTmp);
 		validator.f_setOutputValue(sTmp);
-		validator.f_setObject(null);
-		validator.f_setLastError(
-			"VALIDATION DATE",
-			"Le format de saisie de date est invalide"
-		);
-		return null;
-	}
-	// Compute year, month ,day
-	y = (y)? parseInt(y, 10):dd.getFullYear();
-	y += (y >= 100)? 0:((y > pivot)? 1900:2000);
-	m = (m)? parseInt(m, 10):(dd.getMonth() +1);
-	d = (d)? parseInt(d, 10):dd.getDate();
-
-	// Build input and output value
-	sTmp = ((d<10)? "0":"")+d+s+((m<10)? "0":"")+m+s+y;
-	validator.f_setInputValue(sTmp);
-	validator.f_setOutputValue(sTmp);
-
-	// Check valid year boundaries
-	if (y<min || y>max) {
-		validator.f_setObject(null);
-		validator.f_setLastError("VALIDATION DATE",
-			"L'année se trouve en dehors de la période de référence"
-		);
-		return null;
-	}
-
-	// Check valid date
-	var test = new Date(y,m-1,d,12,0,0,0);
-	if (test.getDate() == d && test.getMonth() == (m-1) && test.getFullYear() == y) {
-		validator.f_setObject(test);
-	} else {
-		validator.f_setObject(null);
-		validator.f_setLastError("VALIDATION DATE",
-			"Le format de saisie de date est invalide"
-		);
-		sTmp = null;
-	}
-	validator.f_setObject(sTmp);
-	return sTmp;
-  },
-
-/**
- * @method public
- */
-  Checker_dat_msa: function(validator, inVal) {
-	var pivot = validator.f_getIntParameter("date.pivot", 0);
-	var sep = validator.f_getParameter("date.sepSign");
-	var set = "["+f_vb._BuildEscaped(sep)+"]";
-	var s = sep.charAt(0);
-	var	sTmp = inVal;
-	var m,y,p,dd,l,r;
-
-	// Deal with empty string and required attribute
-	if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
-		return inVal;
-	}
-
-	// Get the day date
-	dd = new Date();
-	m = y = null;
-
-	// Check if digits only
-	if (r = sTmp.match(/^\d*$/)) {
-		switch (l = sTmp.length) {
-			case 6:
-			case 4: y = sTmp.substr(2);
-			case 2: m = sTmp.substr(0,2); break;
-			case 1: m = sTmp;
-			case 0: break;
-			default: sTmp = null;
+	
+		// Check valid year boundaries
+		if (y<min || y>max) {
+			validator.f_setObject(null);
+			validator.f_setLastError("VALIDATION DATE",
+				"L'année se trouve en dehors de la période de référence"
+			);
+			return null;
 		}
-	// Otherwise we have separators
-	} else {
-		var exp = "^(\\d{1,2})?"+set+"(\\d{2}|\\d{4})?$";
-		r = sTmp.match(new RegExp(exp));
-		if (r == null) {
-			sTmp = null;
+	
+		// Check valid date
+		var test = new Date(y,m-1,d,12,0,0,0);
+		if (test.getDate() == d && test.getMonth() == (m-1) && test.getFullYear() == y) {
+			validator.f_setObject(test);
 		} else {
-			m = r[1]; y = r[2];
+			validator.f_setObject(null);
+			validator.f_setLastError("VALIDATION DATE",
+				"Le format de saisie de date est invalide"
+			);
+			sTmp = null;
 		}
-	}
-	// Check valid string
-	if (sTmp == null) {
-		sTmp = inVal.replace(new RegExp("("+set+")","g"),s);
-		validator.f_setInputValue(sTmp);
-		validator.f_setOutputValue(sTmp);
-		validator.f_setObject(null);
-		validator.f_setLastError(
-			"VALIDATION DATE",
-			"Le format de saisie de date est invalide"
-		);
-		return null;
-	}
-	// Compute year, month
-	y = (y)? parseInt(y, 10):dd.getFullYear();
-	y += (y >= 100)? 0:((y > pivot)? 1900:2000);
-	m = (m)? parseInt(m, 10):(dd.getMonth() +1);
+		validator.f_setObject(sTmp);
+		return sTmp;
+	},
 
-	// Allow whatever month
-	sTmp = ((m<10)? "0":"")+m+s+y;
-	validator.f_setObject(sTmp);
-	return sTmp;
-  },
+	/**
+	 * @method public static
+	 */
+	Checker_dat_msa: function(validator, inVal) {
+		var pivot = validator.f_getIntParameter("date.pivot", 0);
+		var sep = validator.f_getParameter("date.sepSign");
+		var set = "["+f_vb._BuildEscaped(sep)+"]";
+		var s = sep.charAt(0);
+		var	sTmp = inVal;
+		var m,y,p,dd,l,r;
+	
+		// Deal with empty string and required attribute
+		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
+			return inVal;
+		}
+	
+		// Get the day date
+		dd = new Date();
+		m = y = null;
+	
+		// Check if digits only
+		if (r = sTmp.match(/^\d*$/)) {
+			switch (l = sTmp.length) {
+				case 6:
+				case 4: y = sTmp.substr(2);
+				case 2: m = sTmp.substr(0,2); break;
+				case 1: m = sTmp;
+				case 0: break;
+				default: sTmp = null;
+			}
+		// Otherwise we have separators
+		} else {
+			var exp = "^(\\d{1,2})?"+set+"(\\d{2}|\\d{4})?$";
+			r = sTmp.match(new RegExp(exp));
+			if (r == null) {
+				sTmp = null;
+			} else {
+				m = r[1]; y = r[2];
+			}
+		}
+		// Check valid string
+		if (sTmp == null) {
+			sTmp = inVal.replace(new RegExp("("+set+")","g"),s);
+			validator.f_setInputValue(sTmp);
+			validator.f_setOutputValue(sTmp);
+			validator.f_setObject(null);
+			validator.f_setLastError(
+				"VALIDATION DATE",
+				"Le format de saisie de date est invalide"
+			);
+			return null;
+		}
+		// Compute year, month
+		y = (y)? parseInt(y, 10):dd.getFullYear();
+		y += (y >= 100)? 0:((y > pivot)? 1900:2000);
+		m = (m)? parseInt(m, 10):(dd.getMonth() +1);
+	
+		// Allow whatever month
+		sTmp = ((m<10)? "0":"")+m+s+y;
+		validator.f_setObject(sTmp);
+		return sTmp;
+	},
 
-/**
- * @method public
- */
-  Checker_dat_nai: function(validator, inVal) {
-	// Handle empty string
-	if (inVal == "") return inVal;
-
-	var sep = validator.f_getParameter("date.sepSign");
-	var set = "["+f_vb._BuildEscaped(sep)+"]";
-	var s = sep.charAt(0);
-	var	sTmp = inVal;
-	var d,m,y;
-	var dd,mm,yy;
-	var DD,MM,YYYY;
-	var aa,alt,ssss,mmmm,yyyy;
-	var err = false;
-	var msg = "";
-
-	// Initialize fields
-	d = m = y = null;
-
-	// Check if digits only
-	var r = sTmp.match(/^\d*$/);
-	if (r) {
-		var l = sTmp.length;
-		switch (l) {
+	/**
+	 * @method public static
+	 */
+	Checker_dat_nai: function(validator, inVal) {
+		// Handle empty string
+		if (inVal == "") return inVal;
+	
+		var sep = validator.f_getParameter("date.sepSign");
+		var set = "["+f_vb._BuildEscaped(sep)+"]";
+		var s = sep.charAt(0);
+		var	sTmp = inVal;
+		var d,m,y;
+		var dd,mm,yy;
+		var DD,MM,YYYY;
+		var aa,alt,ssss,mmmm,yyyy;
+		var err = false;
+		var msg = "";
+	
+		// Initialize fields
+		d = m = y = null;
+	
+		// Check if digits only
+		var r = sTmp.match(/^\d*$/);
+		if (r) {
+			var l = sTmp.length;
+			switch (l) {
 			case 8:
 			case 7:
 			case 6:
-			case 5: y = sTmp.substr(4);
+			case 5: 
+				y = sTmp.substr(4);
 			case 4:
-			case 3: m = sTmp.substr(2,2);
-			case 2: d = sTmp.substr(0,2); break;
-			case 1: d = sTmp;
-			case 0: break;
-			default: sTmp = null;
-		}
-	// Otherwise we have separators
-	} else {
-		var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?"+set+"?(\\d{1,4})?$";
-		r = sTmp.match(new RegExp(exp));
-		if (r == null) {
-			sTmp = null;
+			case 3: 
+				m = sTmp.substr(2,2);
+			case 2: 
+				d = sTmp.substr(0,2); 
+				break;
+			case 1: 
+				d = sTmp;
+			case 0: 
+				break;
+			default: 
+				sTmp = null;
+			}
+		// Otherwise we have separators
 		} else {
-			d = r[1]; m = r[2]; y = r[3];
+			var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?"+set+"?(\\d{1,4})?$";
+			r = sTmp.match(new RegExp(exp));
+			if (r == null) {
+				sTmp = null;
+			} else {
+				d = r[1]; m = r[2]; y = r[3];
+			}
 		}
-	}
-	// Check valid string
-	if (sTmp == null) {
-		msg = "Format de saisie invalide";
-		sTmp = inVal.replace(new RegExp("("+set+")","g"),s);
-		validator.f_setInputValue(sTmp);
-		validator.f_setOutputValue(sTmp);
-		validator.f_setObject(null);
-		validator.f_setLastError("VALIDATION DATE",msg);
-		return null;
-	}
-
-	// Get some default
-	aa = new Date();
-	DD = aa.getDate();
-	MM = aa.getMonth()+1;
-	YYYY = aa.getFullYear();
-
-	// Parse values
-	dd = d? parseInt(d,10):DD;
-	mm = m? parseInt(m,10):MM;
-	yy = y? parseInt(y,10):YYYY;
-
-	// Special rules
-	// Force day 0 for month 0
-	if (mm == 0) dd = 0;
-	// Force month 0 if day 0 and no month specified
-	if (dd == 0 && !m) mm = 0;
-
-	// Compute year between two limits
-	// Compute century
-	ssss = (Math.floor(YYYY/100))*100;
-	// Compute millenary
-	mmmm = (Math.floor(YYYY/1000))*1000;
-
-	// Special date
-	if (mm<=0 || mm>12) {
-		// Year is one or two digits
+		// Check valid string
+		if (sTmp == null) {
+			msg = "Format de saisie invalide";
+			sTmp = inVal.replace(new RegExp("("+set+")","g"),s);
+			validator.f_setInputValue(sTmp);
+			validator.f_setOutputValue(sTmp);
+			validator.f_setObject(null);
+			validator.f_setLastError("VALIDATION DATE",msg);
+			return null;
+		}
+	
+		// Get some default
+		aa = new Date();
+		DD = aa.getDate();
+		MM = aa.getMonth()+1;
+		YYYY = aa.getFullYear();
+	
+		// Parse values
+		dd = d? parseInt(d,10):DD;
+		mm = m? parseInt(m,10):MM;
+		yy = y? parseInt(y,10):YYYY;
+	
+		// Special rules
+		// Force day 0 for month 0
+		if (mm == 0) dd = 0;
+		// Force month 0 if day 0 and no month specified
+		if (dd == 0 && !m) mm = 0;
+	
+		// Compute year between two limits
+		// Compute century
+		ssss = (Math.floor(YYYY/100))*100;
+		// Compute millenary
+		mmmm = (Math.floor(YYYY/1000))*1000;
+	
+		// Special date
+		if (mm<=0 || mm>12) {
+			// Year is one or two digits
+			if (yy<100) {
+				yyyy = yy+ssss;
+				alt = yyyy-100;
+				yyyy = (yyyy<=YYYY)? yyyy:alt;
+			// Year is three digits
+			} else if (yy==100) {
+				yyyy = yy+mmmm;
+			} else if (yy<850) {
+				yyyy = yy+mmmm;
+				err = true;
+				msg = "Année invalide";
+			} else if (yy<1000) {
+				yyyy = yy+mmmm-1000;
+			} else {
+				yyyy = yy;
+				if (yyyy<1850 || yyyy>2100) {
+					err = true;
+					msg = "Année invalide";
+				}
+			}
+			// Check year against pivot year
+			if (!err) {
+				err = (yyyy>YYYY);
+				if (err && alt) yyyy=alt;
+				err = (yyyy>YYYY);
+				if (err) msg = "Année invalide";
+			}
+			// Check month
+			if (!err) {
+				if (mm>12 && mm<20) {
+					err = true;
+					msg = "Mois invalide";
+				}
+			}
+			// Build string
+			sTmp = ((dd<10)?"0"+dd:""+dd)+s+((mm<10)?"0"+mm:mm)+s+yyyy;
+			if (err) {
+				validator.f_setInputValue(sTmp);
+				validator.f_setOutputValue(sTmp);
+				validator.f_setObject(null);
+				validator.f_setLastError("VALIDATION DATE",msg);
+				return null;
+			}
+			validator.f_setObject(sTmp);
+			return sTmp;
+		}
+	
+		// Normal date
+		alt = undefined;
 		if (yy<100) {
 			yyyy = yy+ssss;
 			alt = yyyy-100;
-			yyyy = (yyyy<=YYYY)? yyyy:alt;
-		// Year is three digits
 		} else if (yy==100) {
 			yyyy = yy+mmmm;
+			err = true;
+			msg = "Année invalide";
 		} else if (yy<850) {
 			yyyy = yy+mmmm;
 			err = true;
@@ -553,27 +630,42 @@ var __static = {
 			yyyy = yy+mmmm-1000;
 		} else {
 			yyyy = yy;
-			if (yyyy<1850 || yyyy>2100) {
-				err = true;
-				msg = "Année invalide";
+		}
+	
+		// At this point check valid date and alternate
+		if (!err) {
+			// Check if valid alternate date
+			var t = new Date(alt,mm-1,dd,12,0,0,0);
+			alt = (t.getFullYear()!=alt || t.getMonth()!=(mm-1) || t.getDate()!=dd)?
+				undefined:alt;
+	
+			// Check date
+			var t = new Date(yyyy,mm-1,dd,12,0,0,0);
+			err = (t.getFullYear()!=yyyy || t.getMonth()!=(mm-1) || t.getDate()!=dd);
+	
+			// Get alternate date if invalid date
+			if (err && alt) {
+				err = false;
+				yyyy=alt;
+			} else {
+				msg = "Date invalide";
 			}
 		}
-		// Check year against pivot year
 		if (!err) {
-			err = (yyyy>YYYY);
-			if (err && alt) yyyy=alt;
-			err = (yyyy>YYYY);
-			if (err) msg = "Année invalide";
-		}
-		// Check month
-		if (!err) {
-			if (mm>12 && mm<20) {
-				err = true;
-				msg = "Mois invalide";
+			// Check date against pivot date
+			err = ((yyyy>YYYY)||(yyyy==YYYY && mm>MM)||(yyyy==YYYY && mm==MM && dd>DD));
+			// We have an unused alternate
+			if (err && alt && yyyy!=alt) {
+				yyyy = alt;
+				err = ((yyyy>YYYY)||(yyyy==YYYY && mm>MM)||(yyyy==YYYY && mm==MM && dd>DD));
 			}
+			if (err) msg = "Date supérieure à la date courante";
 		}
-		// Build string
+	
+		// Build output string
 		sTmp = ((dd<10)?"0"+dd:""+dd)+s+((mm<10)?"0"+mm:mm)+s+yyyy;
+	
+		// Invalid date
 		if (err) {
 			validator.f_setInputValue(sTmp);
 			validator.f_setOutputValue(sTmp);
@@ -581,162 +673,96 @@ var __static = {
 			validator.f_setLastError("VALIDATION DATE",msg);
 			return null;
 		}
+	
+		// Date is elligible
 		validator.f_setObject(sTmp);
 		return sTmp;
-	}
+	},
 
-	// Normal date
-	alt = undefined;
-	if (yy<100) {
-		yyyy = yy+ssss;
-		alt = yyyy-100;
-	} else if (yy==100) {
-		yyyy = yy+mmmm;
-		err = true;
-		msg = "Année invalide";
-	} else if (yy<850) {
-		yyyy = yy+mmmm;
-		err = true;
-		msg = "Année invalide";
-	} else if (yy<1000) {
-		yyyy = yy+mmmm-1000;
-	} else {
-		yyyy = yy;
-	}
-
-	// At this point check valid date and alternate
-	if (!err) {
-		// Check if valid alternate date
-		var t = new Date(alt,mm-1,dd,12,0,0,0);
-		alt = (t.getFullYear()!=alt || t.getMonth()!=(mm-1) || t.getDate()!=dd)?
-			undefined:alt;
-
-		// Check date
-		var t = new Date(yyyy,mm-1,dd,12,0,0,0);
-		err = (t.getFullYear()!=yyyy || t.getMonth()!=(mm-1) || t.getDate()!=dd);
-
-		// Get alternate date if invalid date
-		if (err && alt) {
-			err = false;
-			yyyy=alt;
+	/**
+	 * @method public static
+	 */
+	Checker_hour: function(validator, inVal) {
+		var sep = validator.f_getParameter("hour.sepSign");
+		var set = "["+f_vb._BuildEscaped(sep)+"]";
+		var s = sep.charAt(0);
+		var	sTmp = inVal;
+		var h,m,l,r;
+	
+		// Deal with empty string and required attribute
+		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
+			return inVal;
+		}
+	
+		// Get the day date
+		h = m = null;
+	
+		// Check if digits only
+		if (r = sTmp.match(/^\d*$/)) {
+			switch (l = sTmp.length) {
+				case 4: 
+					m = sTmp.substr(2,2);
+				case 2: 
+					h = sTmp.substr(0,2); 
+					break;
+				case 1: 
+					h = sTmp;
+				case 0: 
+					break;
+				default: 
+					sTmp = null;
+			}
+		// Otherwise we have separators
 		} else {
-			msg = "Date invalide";
-		}
-	}
-	if (!err) {
-		// Check date against pivot date
-		err = ((yyyy>YYYY)||(yyyy==YYYY && mm>MM)||(yyyy==YYYY && mm==MM && dd>DD));
-		// We have an unused alternate
-		if (err && alt && yyyy!=alt) {
-			yyyy = alt;
-			err = ((yyyy>YYYY)||(yyyy==YYYY && mm>MM)||(yyyy==YYYY && mm==MM && dd>DD));
-		}
-		if (err) msg = "Date supérieure à la date courante";
-	}
-
-	// Build output string
-	sTmp = ((dd<10)?"0"+dd:""+dd)+s+((mm<10)?"0"+mm:mm)+s+yyyy;
-
-	// Invalid date
-	if (err) {
-		validator.f_setInputValue(sTmp);
-		validator.f_setOutputValue(sTmp);
-		validator.f_setObject(null);
-		validator.f_setLastError("VALIDATION DATE",msg);
-		return null;
-	}
-
-	// Date is elligible
-	validator.f_setObject(sTmp);
-	return sTmp;
-  },
-
-
-/**
- * @method public
- */
-  Checker_hour: function(validator, inVal) {
-	var sep = validator.f_getParameter("hour.sepSign");
-	var set = "["+f_vb._BuildEscaped(sep)+"]";
-	var s = sep.charAt(0);
-	var	sTmp = inVal;
-	var h,m,l,r;
-
-	// Deal with empty string and required attribute
-	if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
-		return inVal;
-	}
-
-	// Get the day date
-	h = m = null;
-
-	// Check if digits only
-	if (r = sTmp.match(/^\d*$/)) {
-		switch (l = sTmp.length) {
-			case 4: 
-				m = sTmp.substr(2,2);
-			case 2: 
-				h = sTmp.substr(0,2); 
-				break;
-			case 1: 
-				h = sTmp;
-			case 0: 
-				break;
-			default: 
+			var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?$";
+			r = sTmp.match(new RegExp(exp));
+			if (r == null) {
 				sTmp = null;
+			} else {
+				h = r[1]; m = r[2];
+			}
 		}
-	// Otherwise we have separators
-	} else {
-		var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?$";
-		r = sTmp.match(new RegExp(exp));
-		if (r == null) {
-			sTmp = null;
-		} else {
-			h = r[1]; m = r[2];
+		// Check valid string
+		if (sTmp == null) {
+			sTmp = inVal.replace(new RegExp("("+set+")","g"),s);
+			validator.f_setInputValue(sTmp);
+			validator.f_setOutputValue(sTmp);
+			validator.f_setObject(null);
+			validator.f_setLastError(
+				"VALIDATION HEURE",
+				"Le format de saisie d'heure est invalide"
+			);
+			return null;
 		}
-	}
-	// Check valid string
-	if (sTmp == null) {
-		sTmp = inVal.replace(new RegExp("("+set+")","g"),s);
-		validator.f_setInputValue(sTmp);
-		validator.f_setOutputValue(sTmp);
-		validator.f_setObject(null);
-		validator.f_setLastError(
-			"VALIDATION HEURE",
-			"Le format de saisie d'heure est invalide"
-		);
-		return null;
-	}
-	// Compute hour
-	h = (h)? parseInt(h, 10):0;
-	if (h > 23) {
-		validator.f_setObject(null);
-		validator.f_setLastError("VALIDATION HEURE","Heure invalide");
-		return null;
-	}
-	// Compute minute
-	m = (m)? parseInt(m, 10):0;
-	if (m > 59) {
-		validator.f_setObject(null);
-		validator.f_setLastError("VALIDATION HEURE","Heure invalide");
-		return null;
-	}
+		// Compute hour
+		h = (h)? parseInt(h, 10):0;
+		if (h > 23) {
+			validator.f_setObject(null);
+			validator.f_setLastError("VALIDATION HEURE","Heure invalide");
+			return null;
+		}
+		// Compute minute
+		m = (m)? parseInt(m, 10):0;
+		if (m > 59) {
+			validator.f_setObject(null);
+			validator.f_setLastError("VALIDATION HEURE","Heure invalide");
+			return null;
+		}
+	
+		// Valid hour
+		sTmp = ((h<10)? "0":"")+h+s+((m<10)? "0":"")+m;
+		validator.f_setObject(sTmp);
+		return sTmp;
+	},
 
-	// Valid hour
-	sTmp = ((h<10)? "0":"")+h+s+((m<10)? "0":"")+m;
-	validator.f_setObject(sTmp);
-	return sTmp;
-},
-
-/**
- * @method public
- *
- * @comment
- * Rules are the following:
- * Position 1 has to be 125678
- * Position 67 has to be d{2},|2A|2B
- * Position 1 has to be 1|2 when Position 67 are 2A|2B
- */
+	/**
+	 * @method public static
+	 *
+	 * Rules are the following:
+	 * Position 1 has to be 125678
+	 * Position 67 has to be d{2},|2A|2B
+	 * Position 1 has to be 1|2 when Position 67 are 2A|2B
+	 */
 	Checker_insee: function(validator, inVal) {
 		// Handle empty string
 		if (!inVal) {
@@ -839,6 +865,9 @@ var __static = {
 		return sTmp;
 	},
   
+	/**
+	 * @method public static
+	 */
 	Checker_trim: function(validator, inVal) {
 		// Handle empty string
 		if (inVal == "") {
@@ -856,18 +885,18 @@ var __static = {
 =============================================================================*/
 
 
-/**
- * @method public
- */
+	/**
+	 * @method public static
+	 */
 	Formatter_insee: function(validator, inVal) {
 		var l = inVal.length;
 		var re = /^(\d{1})(\d{2})(\d{2})(\d{1}[0-9AB]{1})(\d{3})(\d{3})(\d{2})?$/;
 		return inVal.replace(re, (l==15)? "$1 $2 $3 $4 $5 $6 $7":"$1 $2 $3 $4 $5 $6");
 	},
 
-/**
- * @method public
- */
+	/**
+	 * @method public static
+	 */
 	Formatter_num: function(validator, inVal) {
 		var sTmp = inVal;
 		var decimal = validator.f_getIntParameter("num.decimal", 0);
@@ -938,9 +967,13 @@ var __static = {
 	},
 
 
-/*=============================================================================
-	BEHAVIORS in alphabetic order...please
-=============================================================================*/
+	/*=============================================================================
+		BEHAVIORS in alphabetic order...please
+	=============================================================================*/
+	
+	/**
+	 * @method public static
+	 */
 	Behavior_required: function(validator, inVal) {
 		var bRet;
 	
@@ -955,6 +988,10 @@ var __static = {
 		// Return boolean value
 		return bRet;
 	},
+
+	/**
+	 * @method private static
+	 */
 	_SetLastError: function(validator, parameterPrefix, resourcePrefix, params) {
 		var resourceBundle=f_resourceBundle.Get(f_vb);
 		
@@ -979,6 +1016,9 @@ var __static = {
 		validator.f_setLastError(summary, detail, severity);  	
 	},
 
+	/**
+	 * @method public static
+	 */
 	Behavior_forcefill: function(validator, inVal) {
 		var bRet = true;
 	
@@ -986,7 +1026,7 @@ var __static = {
 		var len = validator.f_getComponent().f_getMaxLength();
 	
 		// Silly
-		if (len == 0) {
+		if (!len) {
 			return true;
 		}
 	
@@ -1003,6 +1043,9 @@ var __static = {
 		return bRet;
 	},
   
+	/**
+	 * @method public static
+	 */
 	Processor_autoTab: function(validator, keyCode, shift, ctrl, alt) {
 		// Handle special key codes
 		if (!f_key.IsPrintable(keyCode)) {			
@@ -1041,6 +1084,9 @@ var __static = {
 		return false;
 	},
 	
+	/**
+	 * @method public static
+	 */
 	Converter_dat: {
 		// parameter name="date.sepSign" value="/-."
 		// parameter name="date.pivot" value="90"
@@ -1048,8 +1094,18 @@ var __static = {
 		f_getAsObject: function(validator, text) {
 		},
 		f_getAsString: function(validator, object) {
+			if (!(object instanceof Date)) {
+				return undefined;
+			}
+			
+			var sep = validator.f_getParameter("date.sepSign");
+						
 		}
 	},
+
+	/**
+	 * @method public static
+	 */
 	Converter_hour: {
 		// Parmaters: hour.sepSign" value=":. 
 		f_getAsObject: function(validator, text) {
@@ -1057,6 +1113,10 @@ var __static = {
 		f_getAsString: function(validator, object) {
 		}
 	},
+
+	/**
+	 * @method public static
+	 */
 	Converter_num: {
 		// parameter name="num.negSign" value="-"
 		// parameter name="num.decSign" value=",."
@@ -1066,24 +1126,56 @@ var __static = {
 			var dec = validator.f_getParameter("num.decSign");
 			var neg = validator.f_getParameter("num.negSign");
 			var sep = validator.f_getParameter("num.sepSign");
-			var exp = "^("+ f_vb._BuildEscaped(neg) +"?)(\\d*)([" + f_vb._BuildEscaped(dec)+ "]?)(\\d*)$";
+
+			if (sep) {
+				text=text.replace(new RegExp(f_vb._BuildEscaped(sep), "g"), "");			
+			}
+
+			var exp = "^";
+			if (neg) {
+				exp+="("+f_vb._BuildEscaped(neg) +"?)";
+			}
+
+			exp+="(\\d*)";
+			if (dec) {
+				exp+="([" + f_vb._BuildEscaped(dec)+ "]?)(\\d*)";
+			}
+			exp+="$";
 		
 			// Check expression
 			var r = text.match(new RegExp(exp));
 			if (!r) {
 				// Invalide !
-				f_core.Debug(f_vb, "Converter_num: Invalid text '"+text+"'.");
+				f_core.Debug(f_vb, "Converter_num: Invalid text '"+text+"'. (regexp='"+exp+"')");
 				return null;
 			}
 			
-			var n = r[1];
-			var ip = r[2];
-			var d = r[3];
-			var dp = r[4];
+			var n;
+			var ip;
+			var d;
+			var dp;
+
+			if (neg) {
+				n = r[1];
+				ip = r[2];
+				dp = r[4];
+			} else {
+				ip = r[1];
+				dp = r[3];
+			}
 		
 			for(;ip.length>1 && ip.charAt(0)=="0";ip=ip.substring(1));
 		
-			var num=parseFloat(n+ip+"."+dp);
+			var num;
+			if (dp) {
+				num=parseFloat(ip+"."+dp);
+			} else {
+				num=parseInt(ip);
+			}
+			
+			if (n) {
+				num=-num;
+			}
 			
 			f_core.Debug(f_vb, "Converter_num: Convert text["+typeof(text)+"] '"+text+"' to number["+typeof(num)+"] '"+num+"'.");
 			return num;
@@ -1117,7 +1209,9 @@ var __static = {
 			f_core.Debug(f_vb, "Converter_num: Convert number["+typeof(object)+"] '"+object+"' to string["+typeof(ret)+"] '"+ret+"'.");
 			return ret;
 		}
-	}	
+	},
+	
+	f_getName: function() {
+		return "f_vb";
+	}
 }
- 
-var f_vb=new f_class("f_vb", null, __static);

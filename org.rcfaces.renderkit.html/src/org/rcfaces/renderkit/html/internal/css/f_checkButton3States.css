@@ -11,10 +11,12 @@
  */
  
  
-DIV.f_checkButton3States {
+.f_checkButton3States {
 	cursor: pointer;
 	cursor: hand;
 	display: inline;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 INPUT.f_checkButton3States_input {

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/04 12:31:43  oeuillot
+ * Stabilisation
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -59,12 +62,12 @@ package org.rcfaces.renderkit.html.internal;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.ImageComboComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -74,6 +77,8 @@ public class ImageComboRenderer extends ImageButtonRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final String MENU_ID = "#popup";
+
+    private static final String COMPONENT_SUFFIX_ID = "popup";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_COMBO;
@@ -85,8 +90,10 @@ public class ImageComboRenderer extends ImageButtonRenderer {
         ImageComboComponent imageComboComponent = (ImageComboComponent) component;
 
         SubMenuDecorator subMenuDecorator = new SubMenuDecorator(
-                imageComboComponent, MENU_ID, false, imageComboComponent
-                        .isRemoveAllWhenShown(facesContext));
+                imageComboComponent, MENU_ID, COMPONENT_SUFFIX_ID,
+                imageComboComponent.isRemoveAllWhenShown(facesContext),
+                getItemImageWidth(imageComboComponent),
+                getItemImageHeight(imageComboComponent));
 
         ImageComboDecorator decorator = new ImageComboDecorator(
                 (IImageButtonFamilly) component);
@@ -94,6 +101,14 @@ public class ImageComboRenderer extends ImageButtonRenderer {
         decorator.addChildDecorator(subMenuDecorator);
 
         return decorator;
+    }
+
+    protected int getItemImageHeight(IMenuComponent menuComponent) {
+        return -1;
+    }
+
+    protected int getItemImageWidth(IMenuComponent menuComponent) {
+        return -1;
     }
 
     /**
@@ -137,7 +152,6 @@ public class ImageComboRenderer extends ImageButtonRenderer {
 
             super.writeEndCompositeComponent();
         }
-
     }
 
 }

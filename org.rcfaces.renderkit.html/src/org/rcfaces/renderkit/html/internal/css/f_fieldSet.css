@@ -9,6 +9,11 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$ 
  */
+
+.f_fieldSet {
+	text-align: left;
+	vertical-align: baseline;
+}
  
 TABLE.f_fieldSet_table {
 	font-family:Verdana;

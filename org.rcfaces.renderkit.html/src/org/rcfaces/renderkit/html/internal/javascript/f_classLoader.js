@@ -157,7 +157,7 @@ f_classLoader.prototype._onExit=function() {
 	this._componentPool=undefined;
 
 	f_core.Debug("f_classLoader", "Clean "+pool.length+" components store into component pool !");
-	f_class.Clean.apply(f_class, pool);
+	f_class.Clean(pool);
 	
 	f_core.Profile("f_classLoader.onExit.clean(components)");
 	
@@ -167,7 +167,7 @@ f_classLoader.prototype._onExit=function() {
 	this._objectPool=undefined;
 
 	f_core.Debug("f_classLoader","Clean "+pool.length+" objects store into component pool !");
-	f_class.Clean.apply(f_class, pool);
+	f_class.Clean(pool);
 
 	f_core.Profile("f_classLoader.onExit.clean(objects)");
 
@@ -288,13 +288,15 @@ f_classLoader.prototype._onDocumentComplete=function() {
 	}
 	f_core.Debug("f_classLoader", nb+" static DocumentComplete method(s) called.");
 
-	
 	nb=0;
 
 	var componentPool = this._componentPool;
 	f_core.Debug("f_classLoader", "Calling f_documentComplete methods ... ("+componentPool.length+" objects)");
 	for (var i=0; i<componentPool.length; i++) {
 		var obj = componentPool[i];
+		if (!obj) {
+			continue;
+		}
 		
 		var fct=obj.f_documentComplete;
 		if (!fct) {
@@ -578,27 +580,41 @@ f_classLoader.prototype._init = function(obj, ignoreNotFound) {
 /**
  * @method private
  */
-f_classLoader.prototype._destroy = function(obj) {
+f_classLoader.prototype._destroy = function(objs) {
 	if (this._exiting) {
 		return;
 	}
 	
-	var pool=(obj.tagName)?this._componentPool:this._objectPool;
-	f_core.Assert(pool, "f_classLoader._destroy: Invalid Objects pool for object "+obj);
-
-	for (var i=0;i<pool.length;i++) {
-		if (pool[i]!=obj) {
-			continue;
-		}
-		
-		f_class.Clean(obj);
-		pool.splice(i, 1);
-
-		f_core.Debug("f_classLoader", "Object '"+obj+"' has been removed from the pool !");
-		return;
-	}
+	var toClean=new Array;
+	for(var i=0;i<objs.length;i++) {
+		var obj=objs[i];
 	
-	f_core.Warn("f_classLoader", "Object '"+obj+"' is not found into pool, and can not be destroyed !");
+		var pool=(obj.tagName)?this._componentPool:this._objectPool;
+		f_core.Assert(pool, "f_classLoader._destroy: Invalid Objects pool for object "+obj);
+	
+		for (var i=0;i<pool.length;i++) {
+			if (pool[i]!=obj) {
+				continue;
+			}
+			
+			pool[i]=undefined;
+	
+			toClean.push(obj);
+			obj=undefined;
+	
+			f_core.Debug("f_classLoader", "Object '"+obj+"' has been removed from the pool !");
+			
+			break;
+		}
+
+		if (obj) {
+			f_core.Warn("f_classLoader", "Object '"+obj+"' is not found into pool, and can not be destroyed !");
+		}
+	}	
+			
+	if (toClean.length>0) {
+		f_class.Clean(toClean);
+	}
 }
 
 /**
@@ -613,16 +629,16 @@ f_classLoader.prototype.serialize=function(form) {
 		var a = this._componentPool;
 		for (var i=0; i<a.length; i++) {
 			var obj = a[i];
-			if (!obj.id) {
+			if (!obj || !obj.id) {
 				continue;
 			}
 			
-			var f = obj._serialize0;
+			var f = obj.f_serialize0;
 			if (!f) {
 				continue;
 			}
 						
-			f_core.Assert(typeof(f)=="function", "Field _serialize0 is not a method !");
+			f_core.Assert(typeof(f)=="function", "Field f_serialize0 is not a method !");
 			
 			var ser;
 			try {
@@ -762,7 +778,7 @@ f_classLoader.prototype.garbageObjects=function() {
 	}
 
 	if (toClean) {		
-		f_class.Clean.apply(f_class, toClean);
+		f_class.Clean(toClean);
 	}
 	
 	f_core.Debug("f_classLoader", ((toClean)?toClean.length:0)+" objects garbaged.");
@@ -812,25 +828,42 @@ f_classLoader.prototype.toString=function() {
  * @param optional Object object2
  * @return void;
  */
-f_classLoader.Destroy=function(object, objectN) {
+f_classLoader.Destroy=function(object1, object2) {
+
+	var lastClassLoader=undefined;
+	var toDestroy=undefined;
+	
 	for(var i=0;i<arguments.length;i++) {
-		object=arguments[i];
+		var object=arguments[i];
 		
 		f_core.Assert(typeof(object)=="object", "f_classLoader.Destroy: Invalid object: "+object);
 		
 		var klass=object._kclass;
 		if (!klass) {
-			var finalizer=object.f_finalize;
-			if (typeof(finalizer)=="function") {
-				finalizer.call(object);
-			}
+			var finalizer=object.f_finalize;	
+			f_core.Assert(typeof(finalizer)=="function", "f_classLoader.Destroy: finalizer field must be a function. ("+finalizer+")");
+
+			finalizer.call(object);
 			continue;
 		}
 		
 		var classLoader=klass._classLoader;
-		f_core.Assert(classLoader, "Classloader is not defined for '"+object+"'.");
+		f_core.Assert(classLoader, "f_classLoader.Destroy: Classloader is not defined for '"+object+"'.");
 		
-		classLoader._destroy(object);
+		if (!lastClassLoader || (lastClassLoader && lastClassLoader!=classLoader)) {
+			if (lastClassLoader) {
+				lastClassLoader._destroy(toDestroy);
+			}
+			
+			lastClassLoader=classLoader;
+			toDestroy=new Array;
+		}
+		
+		toDestroy.push(object);
+	}
+	
+	if (lastClassLoader) {
+		lastClassLoader._destroy(toDestroy);
 	}
 }
 

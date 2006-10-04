@@ -135,7 +135,7 @@ var __prototype = {
 			links.push(div);
 		}
 	},
-	_a_borderFinalizer: function(border) {
+	fa_borderFinalizer: function(border) {
 		border.onmousedown=null;
 		border.onmouseup=null;
 	},
@@ -245,7 +245,7 @@ var __prototype = {
 		if (border) {
 			var className=border._className+suffix;
 			
-			if (this.f_isFlatTypeBorder() && ignoreFlat!==undefined && this!=this.f_getLastFlatBorder()) {
+			if (this.f_isFlatTypeBorder() && ignoreFlat!==undefined && this!=fa_borderType.GetCurrentBorder()) {
 				className=border._className+ignoreFlat;
 			}
 			
@@ -291,7 +291,7 @@ var __prototype = {
 				
 		this.f_super(arguments, type, target);
 	},
-	_a_updateDisabled: function(disabled) {
+	fa_updateDisabled: function(disabled) {
 		var cmp=(this._link)?this._link:this;
 
 		if (disabled) {
@@ -303,15 +303,15 @@ var __prototype = {
 			cmp.hideFocus=false;
 		}
 
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
 		this._updateImage();
 	},
-	_a_updateReadOnly: function() {
+	fa_updateReadOnly: function() {
 	},
-	_a_updateValue: function() {
+	fa_updateValue: function() {
 	},
 	f_update: function() {
 		this._updateImage();

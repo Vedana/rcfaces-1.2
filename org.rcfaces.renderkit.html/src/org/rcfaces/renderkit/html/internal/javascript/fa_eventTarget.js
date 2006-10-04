@@ -73,11 +73,11 @@ var __prototype = {
 	 * 
 	 * @method hidden
 	 */
-	f_getEventLocked: function(showAlert) {
+	f_getEventLocked: function(showAlert, mask) {
 		if (!window.f_event) {
 			return true;
 		}
-		return f_event.GetEventLocked(showAlert);
+		return f_event.GetEventLocked(showAlert, mask);
 	},
 	/**
 	 * 

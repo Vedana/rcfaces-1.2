@@ -47,21 +47,21 @@ var __prototype = {
 		
 		this._value = value;
 	
-		if (this._a_updateValue) {
-			this._a_updateValue(value);
+		if (this.fa_updateValue) {
+			this.fa_updateValue(value);
 		}
 	
 		this.f_setProperty(f_prop.VALUE, value);
 	},
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_updateValue: f_class.OPTIONAL_ABSTRACT,
+	fa_updateValue: f_class.OPTIONAL_ABSTRACT,
 
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT

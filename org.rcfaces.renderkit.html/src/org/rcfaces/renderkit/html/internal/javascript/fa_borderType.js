@@ -15,23 +15,39 @@ var __static = {
 	/** 
 	 * @field hidden static final string 
 	 */
-	NONE_BORDER_TYPE: "none"
+	NONE_BORDER_TYPE: "none",
+
+	/** 
+	 * @field private static f_borderType
+	 */
+	_LastFlatBorder: undefined,
+
+	/**
+	 * @method hidden static
+	 */
+	GetCurrentBorder: function() {
+		return fa_borderType._LastFlatBorder;
+	},
+
+	Finalizer: function() {
+		fa_borderType._LastFlatBorder=undefined;
+	}
 }
 
 var __prototype = {
 
 	f_finalize: function() {
-		this._borderType=undefined; // string
-		this._flatType=undefined; // string
+		// this._borderType=undefined; // string
+		// this._flatType=undefined; // string
 		
 		var border=this._border;
 		if (border) {
 			this._border=undefined;
 
-			border._className=undefined;
+			// border._className=undefined; // string
 			border.f_link=undefined;
 			
-			this._a_borderFinalizer(border);
+			this.fa_borderFinalizer(border);
 		
 			f_core.VerifyProperties(border);
 		}
@@ -104,13 +120,13 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_updateLastFlatBorder: function() {
-		var lastFlat=window._lastFlatBorder;
+		var lastFlat=fa_borderType._LastFlatBorder;
 		if (lastFlat && f_class.IsObjectInitialized(lastFlat)) {
 			if (lastFlat==this) {
 				return;
 			}
 			
-			window._lastFlatBorder=undefined;
+			fa_borderType._LastFlatBorder=undefined;
 
 			//alert("Update last !");
 			// Il s'est peut être passé un garbage ou qq chose du genre :
@@ -124,27 +140,15 @@ var __prototype = {
 			return;
 		}
 		
-		window._lastFlatBorder=this;
-	},
-	/**
-	 * @method protected
-	 */
-	f_getLastFlatBorder: function() {
-		return window._lastFlatBorder;
-	},
-	/**
-	 * @method static hidden
-	 */
-	Finalizer: function() {
-		window._lastFlatBorder=undefined;
+		fa_borderType._LastFlatBorder=this;
 	},
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 * @param HTMLElement border
 	 * @return void
 	 */
-	_a_borderFinalizer: f_class.ABSTRACT
+	fa_borderFinalizer: f_class.ABSTRACT
 }
 
 var fa_borderType=new f_aspect("fa_borderType", __static, __prototype);

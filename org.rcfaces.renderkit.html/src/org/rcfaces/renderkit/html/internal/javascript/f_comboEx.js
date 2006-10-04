@@ -398,7 +398,7 @@ var __static = {
 			if (comboEx._filter) {
 				comboEx._filter=false;
 				comboEx._hoverItem=null;
-				comboEx._filteredItems=null;
+				comboEx._filtredItems=null;
 			}
 					
 			if (comboEx._showPopup(evt)) {
@@ -841,7 +841,7 @@ var __prototype = {
 				
 		this._items=undefined;
 		this._filter=undefined;
-		this._filteredItems=undefined;
+		this._filtredItems=undefined;
 
 		this._menuPopup=undefined;
 		this._popupOpened=undefined;
@@ -1102,7 +1102,7 @@ var __prototype = {
 			// Reconstruit !
 			
 			if (this._filter) {
-				this._constructPopupMenu(this._filteredItems);
+				this._constructPopupMenu(this._filtredItems);
 				
 			} else {
 				this._constructPopupMenu(this._items);
@@ -1193,7 +1193,10 @@ var __prototype = {
 			this._button.className=cname;
 		}
 	},
-	_addItem: function(label, value, imageURL, disabled) {
+	/**
+	 * @method hidden
+	 */
+	f_addItem: function(label, value, imageURL, disabled) {
 		return this._addSubItem(this, label, value, imageURL, disabled);
 	},
 	_addSubItem: function(parent, label, value, imageURL, disabled) {
@@ -1450,7 +1453,7 @@ var __prototype = {
 		}
 		
 		var found=null;
-		var filteredItems=new Array;
+		var filtredItems=new Array;
 		for(var i=0;i<items.length;i++) {
 			var item=items[i];
 			
@@ -1463,7 +1466,7 @@ var __prototype = {
 				continue;
 			}
 
-			filteredItems.push(item);
+			filtredItems.push(item);
 			
 			if (!found || found>label) {
 				found=label;
@@ -1476,7 +1479,7 @@ var __prototype = {
 			return;
 		}
 		
-		if (filteredItems.length<1) {
+		if (filtredItems.length<1) {
 			this._closePopup();
 			return;
 		}
@@ -1497,16 +1500,16 @@ var __prototype = {
 			
 			return 0;
 		}
-		filteredItems.sort(alphabeticOrder);
+		filtredItems.sort(alphabeticOrder);
 		
 		if (opened) {
 			if (this._filter) {
-				var fis=this._filteredItems;
-				if (fis && fis.length==filteredItems.length) {
+				var fis=this._filtredItems;
+				if (fis && fis.length==filtredItems.length) {
 					var same=true;
 					
-					for(var i=0;i<filteredItems.length;i++) {
-						if (fis[i].label==filteredItems[i].label) {
+					for(var i=0;i<filtredItems.length;i++) {
+						if (fis[i].label==filtredItems[i].label) {
 							continue;
 						}
 						
@@ -1536,7 +1539,7 @@ var __prototype = {
 		}		
 		
 		this._filter=value;
-		this._filteredItems=filteredItems;
+		this._filtredItems=filtredItems;
 		this._setHoverItem(null);
 		this._showPopup(evt);
 
@@ -1614,8 +1617,8 @@ var __prototype = {
 		
 		return null;
 	},
-	_a_updateReadOnly: function(readOnly) {
-		if (!this._componentUpdated) {
+	fa_updateReadOnly: function(readOnly) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 	
@@ -1623,8 +1626,11 @@ var __prototype = {
 	
 		this._input.readOnly=ro;
 	},
-	_a_updateDisabled: function(disabled) {		
-		if (!this._componentUpdated) {
+	/**
+	 * @method protected
+	 */
+	fa_updateDisabled: function(disabled) {		
+		if (!this.fa_componentUpdated) {
 			return;
 		}	
 		this._input.disabled=disabled;
@@ -1657,7 +1663,7 @@ var __prototype = {
 		
 		this._editable = (set)?true:false;
 		
-		if (!this._componentUpdated) {
+		if (!this.fa_componentUpdated) {
 			return;
 		}
 	
