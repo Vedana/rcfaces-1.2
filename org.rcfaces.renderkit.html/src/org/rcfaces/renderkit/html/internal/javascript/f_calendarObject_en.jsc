@@ -1,2 +1,0 @@
-var _y={UNIT_NAMES:["Week","Day","D/W","Month","Year"],GOTO_DATE:"Select",WEEK:"Week #",PREVIOUS_UNIT:"Previous",NEXT_UNIT:"Next"}
-f_resourceBundle.en(f_calendarObject,_y);

@@ -1,2 +1,0 @@
-var _y={LOADING_MESSAGE:"Loading ...",RECEIVING_MESSAGE:"Receiving ..."}
-f_resourceBundle.en(f_waiting,_y);

@@ -1,2 +1,0 @@
-var _e={lg:function(){}}
-var f_imageSubmitButton=new f_class("f_imageSubmitButton",null,null,_e,f_imageButton);

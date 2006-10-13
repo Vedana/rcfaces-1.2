@@ -1,8 +1,0 @@
-var _e={f_calendar:function(){var e=this
-e.f_super(arguments)
-e.__=f_calendarObject.ig(e,1|2|8|32)},f_finalize:function(){var r,t=this,e=t.__
-if(e){t.__=r
-f_classLoader.ot(e)}t.f_super(arguments)},rr:function(){this.gp()
-this.f_super(arguments)},gp:function(){var t=this,e=t.ownerDocument
-t.__.ch(t)},_pt:function(e,t,r,n){this.__.ug.apply(this.__,arguments)},gr:function(){return this.__},f_getCalendarObject:function(){return this.__}}
-var f_calendar=new f_class("f_calendar",null,null,_e,f_component,fa_readOnly,fa_disabled,fa_itemsWrapper);

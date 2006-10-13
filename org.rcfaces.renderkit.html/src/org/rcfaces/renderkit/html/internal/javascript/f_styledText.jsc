@@ -1,5 +1,0 @@
-var _e={f_getText:function(){return this.innerHTML},f_setText:function(e){var t=this
-if(t.f_getText()==e)return
-t.innerHTML=e
-t.V("text",e)}}
-var f_styledText=new f_class("f_styledText",null,null,_e,f_text);
