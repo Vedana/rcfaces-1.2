@@ -50,7 +50,7 @@ var __prototype = {
 		var groupName=f_core.GetAttribute(this, "v:groupName");
 		if (groupName) {
 			this._groupName=groupName;
-			this._addToGroup(groupName, this);
+			this.f_addToGroup(groupName, this);
 		}
 
 		var head=f_core.GetFirstElementByTagName(this, "LI");
@@ -273,7 +273,7 @@ var __prototype = {
 				item.f_setCollapsed(true);
 			}
 	
-			this._findIntoGroup(this._groupName, unselect);
+			this.f_findIntoGroup(this._groupName, unselect);
 		}
 	},
 	/**

@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -174,14 +182,7 @@ class HtmlRequestContext extends AbstractRequestContext implements
     public String getComponentId(FacesContext facesContext,
             UIComponent component) {
         if (processContext.isFlatIdentifierEnabled() == false) {
-            String id = component.getClientId(facesContext);
-
-            String separatorChar = processContext.getNamingSeparator();
-            if (separatorChar == null) {
-                return id;
-            }
-
-            return HtmlTools.replaceSeparator(id, separatorChar);
+            return component.getClientId(facesContext);
         }
 
         String id = component.getId();

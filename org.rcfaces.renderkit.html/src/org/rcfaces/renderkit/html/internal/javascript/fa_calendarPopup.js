@@ -185,17 +185,22 @@ var __static={
 				f_popup.Ie_openPopup(popup, dateChooser, position, offsetX, offsetY, offsetWidth);
 			
 			} else {
-				var p1=f_core.GetAbsolutePos(position);
+				var p1=f_core.GetAbsolutePosition(position);
+				var parentPos=f_core.GetAbsolutePosition(popup.offsetParent);
 			
-				var x=p1.x+offsetX;
-				var y=p1.y+offsetY;
+				f_core.Debug(fa_calendarPopup, "Popup absolute pos x="+p1.x+" y="+p1.y+" offsetX="+offsetX+" offsetY="+offsetY+" parentX="+parentPos.x+" parentY="+parentPos.y);
+			
+				var x=p1.x+offsetX-parentPos.x;
+				var y=p1.y+offsetY-parentPos.y;
 
-				x+=1; // Les bordures ....
-				y+=1;
+				x+=0; // Les bordures ....
+				y+=3;
 			
 				var pos={ x: x, y: y };
 				
 				f_core.ComputePopupPosition(popup, pos);
+
+				f_core.Debug(fa_calendarPopup, "Computed pos x="+p1.x+" y="+p1.y+" offsetX="+offsetX+" offsetY="+offsetY);
 					
 				popup.style.left=pos.x+"px";
 				popup.style.top=pos.y+"px";

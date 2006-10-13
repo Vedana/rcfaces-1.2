@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -38,7 +46,7 @@ public interface IComponentRenderContext {
 
     UIComponent getComponent();
 
-    String getComponentId();
+    String getComponentClientId();
 
     boolean containsAttribute(String key);
 

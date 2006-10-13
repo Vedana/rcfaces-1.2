@@ -1,16 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.1  2004/08/24 13:39:54  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.core.component.capability;
 
@@ -19,7 +8,7 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface IRadioGroupCapability {
-	String getGroupName();
+    String getGroupName();
 
-	void setGroupName(String groupName);
+    void setGroupName(String groupName);
 }

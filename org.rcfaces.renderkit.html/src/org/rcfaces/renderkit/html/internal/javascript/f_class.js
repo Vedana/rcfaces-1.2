@@ -90,6 +90,15 @@ f_class.prototype.f_newInstance=function() {
 	return f_class.Init(obj, this, arguments);
 }
 /**
+ * @method hidden final
+ * @return Object
+ */
+f_class.prototype.f_newSystemInstance=function() {
+	var obj = new Object;
+	
+	return f_class.Init(obj, this, arguments, true);
+}
+/**
  * Returns the classes loader of this class.
  * 
  * @method public final
@@ -506,7 +515,15 @@ var __static = {
 	 * @method private static final
 	 */
 	_InstallAspectMethod: function(claz, methods, memberName, type, member, constructor) {
-		var old=(constructor)?(claz._constructor):methods[memberName];
+		var old;
+		if (constructor) {
+			for(var pclaz=claz;!old && pclaz;pclaz=pclaz._parent) {
+				old=pclaz._constructor;
+			}
+					
+		} else {
+			old=methods[memberName];
+		}
 		
 		// Il faut refaire une function a chaque niveau de classe !
 		if (!old || !old._kmethod || old._kclass!=claz) {
@@ -517,7 +534,7 @@ var __static = {
 			
 			if (constructor) {
 				claz._constructor=f;
-			}
+			}		
 			
 			old=f;
 			methods[memberName]=f;
@@ -570,7 +587,7 @@ var __static = {
 	/**
 	 * @method hidden static final
 	 */
-	Init: function(obj, cls, args) {
+	Init: function(obj, cls, args, systemClass) {
 		if (obj._kclass) {
 			return obj;
 		}
@@ -597,7 +614,7 @@ var __static = {
 			throw ex;
 		}
 							
-		cls._classLoader._newInstance(obj);
+		cls._classLoader._newInstance(obj, systemClass);
 		
 		// f_core.Profile("f_class.init.exit("+obj.id+" / "+cls._name+")");
 		

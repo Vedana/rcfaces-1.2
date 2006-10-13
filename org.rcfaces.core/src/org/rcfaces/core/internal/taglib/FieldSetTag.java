@@ -24,6 +24,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private String verticalAlignment;
 	private String borderType;
 	private String imageURL;
+	private String imageHeight;
+	private String imageWidth;
 	public String getComponentType() {
 		return FieldSetComponent.COMPONENT_TYPE;
 	}
@@ -108,6 +110,22 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		this.imageURL = imageURL;
 	}
 
+	public final String getImageHeight() {
+		return imageHeight;
+	}
+
+	public final void setImageHeight(String imageHeight) {
+		this.imageHeight = imageHeight;
+	}
+
+	public final String getImageWidth() {
+		return imageWidth;
+	}
+
+	public final void setImageWidth(String imageWidth) {
+		this.imageWidth = imageWidth;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (FieldSetComponent.COMPONENT_TYPE==getComponentType()) {
@@ -123,6 +141,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -233,6 +253,26 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 				component.setImageURL(imageURL);
 			}
 		}
+
+		if (imageHeight != null) {
+			if (isValueReference(imageHeight)) {
+				ValueBinding vb = application.createValueBinding(imageHeight);
+
+				component.setImageHeight(vb);
+			} else {
+				component.setImageHeight(getInt(imageHeight));
+			}
+		}
+
+		if (imageWidth != null) {
+			if (isValueReference(imageWidth)) {
+				ValueBinding vb = application.createValueBinding(imageWidth);
+
+				component.setImageWidth(vb);
+			} else {
+				component.setImageWidth(getInt(imageWidth));
+			}
+		}
 	}
 
 	public void release() {
@@ -246,6 +286,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		verticalAlignment = null;
 		borderType = null;
 		imageURL = null;
+		imageHeight = null;
+		imageWidth = null;
 
 		super.release();
 	}

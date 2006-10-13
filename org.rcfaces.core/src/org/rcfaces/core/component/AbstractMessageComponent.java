@@ -19,6 +19,7 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.internal.tools.VisibilityTools;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import java.lang.String;
 import javax.faces.context.FacesContext;
@@ -48,7 +49,8 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 	IPropertyChangeEventCapability,
 	IInitEventCapability,
 	IServerDataManager,
-	IClientDataManager {
+	IClientDataManager,
+	IForCapability {
 
 
 

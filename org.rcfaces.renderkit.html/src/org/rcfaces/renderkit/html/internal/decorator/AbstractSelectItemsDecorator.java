@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -100,7 +108,6 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.ICssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-
 
 /**
  * 
@@ -459,6 +466,11 @@ public abstract class AbstractSelectItemsDecorator extends
     private void encodeUISelectItems(UIComponent component, Object value,
             int depth, boolean visible) throws WriterException {
 
+        if (value == null) {
+            throw new WriterException("UISelectItems value is null !", null,
+                    component);
+        }
+
         if (value instanceof SelectItem) {
             SelectItem si = (SelectItem) value;
 
@@ -553,8 +565,8 @@ public abstract class AbstractSelectItemsDecorator extends
             }
         }
 
-        throw new WriterException("Illegal uiSelectItems value type !", null,
-                component);
+        throw new WriterException("Illegal uiSelectItems value type ! (class='"
+                + value.getClass() + "')", null, component);
 
     }
 

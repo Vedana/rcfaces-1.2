@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -133,7 +141,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         writeCssAttributes(htmlWriter);
 
         htmlWriter.writeAttribute("name", htmlWriter
-                .getComponentRenderContext().getComponentId());
+                .getComponentRenderContext().getComponentClientId());
 
         if (isMultipleSelect(combo)) {
             htmlWriter.writeAttribute("multiple");

@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -105,9 +113,7 @@ import javax.faces.component.UIComponent;
 
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -151,8 +157,8 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
     protected final IHtmlWriter writeInputAttributes(IHtmlWriter writer,
             String id) throws WriterException {
 
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
+        IHtmlComponentRenderContext componentRenderContext = writer
+                .getHtmlComponentRenderContext();
 
         UIComponent component = componentRenderContext.getComponent();
 
@@ -190,7 +196,7 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
     }
 
     protected String getInputName(
-            IComponentRenderContext componentRenderContext, String id) {
-        return componentRenderContext.getComponentId();
+            IHtmlComponentRenderContext componentRenderContext, String id) {
+        return componentRenderContext.getComponentClientId();
     }
 }

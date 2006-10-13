@@ -1,0 +1,29 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_messageFieldSet
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+
+.f_messageFieldSet {
+	text-align: left;
+	vertical-align: baseline;
+}
+
+/*
+.f_messageFieldSet_body {
+	top: 0;
+	left: 0;
+}
+
+.f_messageFieldSet_cellBody {
+	position:relative;
+}
+
+*/
+

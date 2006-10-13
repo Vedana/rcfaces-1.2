@@ -14,9 +14,18 @@ public class MenuRadioItemTag extends MenuCheckItemTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(MenuRadioItemTag.class);
 
+	private String radioValue;
 	private String groupName;
 	public String getComponentType() {
 		return MenuRadioItemComponent.COMPONENT_TYPE;
+	}
+
+	public final String getRadioValue() {
+		return radioValue;
+	}
+
+	public final void setRadioValue(String radioValue) {
+		this.radioValue = radioValue;
 	}
 
 	public final String getGroupName() {
@@ -32,6 +41,7 @@ public class MenuRadioItemTag extends MenuCheckItemTag implements Tag {
 			if (MenuRadioItemComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  radioValue='"+radioValue+"'");
 			LOG.debug("  groupName='"+groupName+"'");
 		}
 		super.setProperties(uiComponent);
@@ -43,6 +53,16 @@ public class MenuRadioItemTag extends MenuCheckItemTag implements Tag {
 		MenuRadioItemComponent component = (MenuRadioItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
+
+		if (radioValue != null) {
+			if (isValueReference(radioValue)) {
+				ValueBinding vb = application.createValueBinding(radioValue);
+
+				component.setRadioValue(vb);
+			} else {
+				component.setRadioValue(radioValue);
+			}
+		}
 
 		if (groupName != null) {
 			if (isValueReference(groupName)) {
@@ -56,6 +76,7 @@ public class MenuRadioItemTag extends MenuCheckItemTag implements Tag {
 	}
 
 	public void release() {
+		radioValue = null;
 		groupName = null;
 
 		super.release();

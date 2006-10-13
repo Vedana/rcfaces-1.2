@@ -1,0 +1,32 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_timeEntry
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_timeEntry {
+	margin: 0;
+	border: 1px solid #7F9DB9;
+}
+
+.f_timeEntry INPUT {
+	border: 0;
+	background-color: transparent;
+	text-align: right;
+}
+
+.f_timeEntry_HH,
+.f_timeEntry_mm,
+.f_timeEntry_ss {
+	width: 16px;
+} 
+
+.f_timeEntry_SSS {
+	width: 24px;
+}

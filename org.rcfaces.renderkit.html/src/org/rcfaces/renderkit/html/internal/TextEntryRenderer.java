@@ -2,6 +2,14 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -402,7 +410,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         if (validatorDescriptor == null) {
             throw new FacesException("Can not find validator '"
                     + command.getName() + "' for component '"
-                    + renderContext.getComponentId() + "' !");
+                    + renderContext.getComponentClientId() + "' !");
         }
 
         renderContext.setAttribute(VALIDATOR_COMMAND, command);

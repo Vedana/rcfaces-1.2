@@ -18,6 +18,9 @@ var __prototype = {
 		this.f_super(arguments);
 	},
 	*/
+	/**
+	 * @method protected
+	 */
 	_onSelect: function() {
 		if (!this._focus)  {
 			this.f_setFocus();
@@ -31,6 +34,9 @@ var __prototype = {
 		
 		return false;
 	},
+	/**
+	 * @method protected
+	 */
 	f_parseAttributes: function() {
     	var v_groupName=f_core.GetAttribute(this, "v:groupName");
 		if (v_groupName) {
@@ -72,12 +78,12 @@ var __prototype = {
 	/**
 	 * Set the group name of the button.
 	 *
-	 * @method public
+	 * @method hiden
 	 * @param string group
 	 * @return void
-	 */
+	 *
 	f_setGroupName: function(group) {
-		this._changeGroup(this._groupName, group, this);
+		this.f_changeGroup(this._groupName, group, this);
 		this._groupName = group;
 		this.f_setProperty(f_prop.GROUPNAME, group);
 	},
@@ -92,7 +98,7 @@ var __prototype = {
 			return item.f_isSelected.call(item)?item:null;
 		}
 
-		return this._findIntoGroup(this.f_getGroupName(), search);
+		return this.f_findIntoGroup(this.f_getGroupName(), search);
 	},
 	/**
 	 * List all buttons of same group.
@@ -101,7 +107,7 @@ var __prototype = {
 	 * @return f_imageRadioButton[]
 	 */
 	f_listAllInGroup: function() {
-		return this._listGroup(this.f_getGroupName());
+		return this.f_listGroup(this.f_getGroupName());
 	},
 	fa_updateRequired: function() {
 	},

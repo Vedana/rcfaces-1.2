@@ -1,0 +1,9 @@
+var _e={f_isCollapsed:function(){var r,t=this,e
+if(t._0u===r){e=f_core.D(t,"v:collapsed")
+t._0u=(e)?!0:!1}return t._0u},f_setCollapsed:function(e){var t=this
+if(e!==!1)e=!0
+if(t.f_isCollapsed()==e)return
+t._0u=e
+t.d_(e)
+t.V("collapsed",t._0u)}}
+var fa_collapsed=new f_aspect("fa_collapsed",null,_e);

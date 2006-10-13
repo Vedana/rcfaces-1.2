@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -54,6 +62,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.config.IProvidersRegistry;
 import org.rcfaces.core.internal.config.RcfacesContextImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
@@ -211,5 +220,7 @@ public abstract class RcfacesContext {
     public abstract String getApplicationVersion();
 
     public abstract IResourceVersionHandler getResourceVersionHandler();
+
+    public abstract IAdapterManager getAdapterManager();
 
 }

@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:43  oeuillot
  * Stabilisation
  *
@@ -147,6 +155,10 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         if (hasComponenDecoratorSupport() == false) {
             encodeComponent((IHtmlWriter) writer);
         }
+
+        // Il faut activer le Javascript
+        // car l'attribut SELECTED doit être envoyé a chaque requete du client vers le serveur !
+        ((IHtmlWriter) writer).enableJavaScript();
 
         super.encodeEnd(writer);
     }

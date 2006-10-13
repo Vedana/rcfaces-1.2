@@ -1,0 +1,93 @@
+function f_dateFormat(){}
+f_dateFormat.FormatDate=function(e,t,r,n){var m="'",d="0",f,i,o,a,c,u,s,l,v,g,h,p
+if(!n)n=f_locale.Get()
+if(!t){t=n.f_getDateFormat()
+if(!t)return String(e)}f=t.length
+o=0
+a=""
+for(c=0;c<=f;c++){u=0
+if(c<f){u=t.charAt(c)
+if(u==i){o++
+continue}if(!i){i=u
+o=1
+if(u!=m)continue}}if(!o)break
+s=2
+if(o<3)s=0;else if(o<4)s=1
+switch(i){case"y":l=e.getFullYear()
+if(o<4){l%=100
+if(o>1&&l<10)l=d+l}a+=l
+break;case"M":v=e.getMonth()
+if(o<2){a+=(v+1)
+break}if(o<3){a+=(v>8)?(v+1):d+(v+1)
+break}a+=n.f_getMonthName(v,s)
+break;case"d":g=e.getDate()
+if(o<2){a+=g
+break}a+=(g>9)?g:d+g
+break;case"E":h=e.getDay()
+a+=n.f_getDayName(h,s)
+break;case"z":a+=e.getTimezoneOffset()
+break;case m:break;default:for(;o;o--)a+=i;}if(!u)break
+if(u!=m){i=u
+o=1
+continue}for(c++;c<f;c++){p=t.charAt(c)
+if(p!=m){a+=p
+continue}if(c+1<f&&t.charAt(c+1)==p){a+=p
+c++
+continue}break}o=1
+i=u}return a}
+f_dateFormat.ParseDate=function(e,t,r,n){var T="y",k="'.",N="M",C="') for token '",b="Invalid char at position '",E="0",w="' (expression='",m="' nb='",d="d",p,f,i,o,a,c,u,s,l,v,g,h
+if(!t){if(!n)n=f_locale.Get()
+t=n.f_getDateFormat()
+if(!t)return new Date(e)}f=t.length
+o=a=0
+for(l=0;l<=f;l++){v=0
+if(l<f){v=t.charAt(l)
+if(v==i){o++
+continue}if(!i){i=v
+o=1
+continue}}switch(i){case T:case N:case d:o=g=0
+for(;a<e.length;){h=e.charAt(a)
+if(h<E||h>"9")break
+o=(o*10)+(h-E)
+a++
+g++}if(g<1)throw new Error(b+a+w+e+C+i+m+o+k)
+switch(i){case T:c=o
+break;case N:u=o
+break;case d:s=o
+break;}break;default:for(;o;o--){if(a>=e.length)throw new Error("Not enough character '"+i+"' for expression '"+e+k)
+h=e.charAt(a++)
+if(h!=i)throw new Error(b+a+w+e+"', character '"+h+C+i+m+o+k)}break;}i=v
+o=1}if(s===p||s<1)s=1
+if(u===p)u=0;else if(u>0)u--
+if(c===p)throw new Error("Invalid parse date for expression '"+e+"' format='"+t+"' year="+c+" month="+u+" date="+s)
+if(c<100)c=f_dateFormat.ResolveYear(c,u,s,r,n)
+return new Date(c,u,s)}
+f_dateFormat.ResolveYear=function(e,t,r,n,f){var i,o
+if(e>=100)return e
+if(!n){if(!f)f=f_locale.Get()
+n=f_dateFormat.ae(f.f_getTwoDigitYearStart())
+if(!n)n=new Date(1960,0,1)}i=n.getFullYear()
+e+=i-(i%100)
+o=new Date(e,t,r)
+if(o.getTime()<n.getTime())e+=100
+return e}
+f_dateFormat.v_=function(e,t){var r=e.getFullYear(),n=e.getMonth(),f=e.getDate()-1
+if(!f){if(!n)return"Y"+r.toString(32)
+n+=r*12
+return"M"+n.toString(32)}f+=(n+r*12)*31
+f=f.toString(32)
+if(t)return f
+return"D"+f}
+f_dateFormat.ae=function(e){var t,r,n,f
+if(e.length<1)return null
+t=e.charAt(0)
+if(t>="A"&&t<="Z")e=e.substring(1)
+e=parseInt(e,32)
+if(t=="Y")return new Date(e,0,1)
+if(t=="M"){r=e%12
+n=Math.floor(e/12)
+return new Date(n,r,1)}f=(e%31)+1
+r=Math.floor(e/31)
+n=Math.floor(r/12)
+return new Date(n,r%12,f)}
+f_dateFormat.f_getName=function(){return"f_dateFormat"};

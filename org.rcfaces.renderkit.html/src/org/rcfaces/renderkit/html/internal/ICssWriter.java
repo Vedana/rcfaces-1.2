@@ -1,40 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.3  2006/10/04 12:31:42  oeuillot
- * Stabilisation
- *
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.5  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.4  2006/03/23 19:12:39  oeuillot
- * Ajout des marges
- * Ajout des processors
- * Amelioration des menus
- *
- * Revision 1.3  2005/12/27 16:08:16  oeuillot
- * Gestion imageButtonWriter
- * Ajout de fa_images
- * Preparation de f_imageCombo
- *
- * Revision 1.2  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
- * Revision 1.1  2004/12/22 12:16:14  oeuillot
- * Refonte globale de l'arborescence des composants ....
- * Int�gration des corrections de Didier
- *
  */
 package org.rcfaces.renderkit.html.internal;
 
@@ -55,53 +20,61 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  */
 public interface ICssWriter {
 
-    String DISPLAY = "display";
+    String ABSOLUTE = "absolute";
 
-    String HEIGHT = "height";
+    String BOLD = "bold";
 
-    String LEFT = "left";
+    String HIDDEN = "hidden";
 
-    String MARGIN = "margin";
+    String INHERIT = "inherit";
 
-    String MARGIN_BOTTOM = "margin-bottom";
+    String ITALIC = "italic";
 
-    String MARGIN_LEFT = "margin-left";
+    String NO_REPEAT = "no-repeat";
 
-    String MARGIN_RIGHT = "margin-right";
+    String NONE = "none";
 
-    String MARGIN_TOP = "margin-top";
+    String NORMAL = "normal";
 
-    String TEXT_ALIGN = "text-align";
+    String REPEAT_X = "repeat-x";
 
-    String TEXT_DECORATION = "text-decoration";
+    String REPEAT_Y = "repeat-Y";
 
-    String TOP = "top";
+    String UNDERLINE = "underline";
 
-    String VERTICAL_ALIGN = "vertical-align";
-
-    String VISIBILITY = "visibility";
-
-    String WIDTH = "width";
-
-    void close(IHtmlWriter writer) throws WriterException;
+    void close() throws WriterException;
 
     ICssWriter writeProperty(String name, String value);
 
-    ICssWriter writePropertyName(String name);
-
-    ICssWriter writeValue(char character);
-
-    ICssWriter writeValue(int value);
-
-    ICssWriter writeValue(String string);
-
     ICssWriter writeFont(IFontCapability capability);
+
+    ICssWriter writeFont(String font);
+
+    ICssWriter writeFontFamily(String fontFamily);
+
+    ICssWriter writeFontSize(String fontSize);
+
+    ICssWriter writeFontStyle(String fontStyle);
+
+    ICssWriter writeFontWeight(String fontWeight);
 
     ICssWriter writeTextAlignment(ITextAlignmentCapability capability);
 
     ICssWriter writeForeground(IForegroundBackgroundColorCapability capability);
 
+    ICssWriter writeColor(String color);
+
+    ICssWriter writeVisibility(String visibility);
+
     ICssWriter writePosition(IPositionCapability capability);
+
+    ICssWriter writePosition(String position);
+
+    ICssWriter writeTextDecoration(String textDecoration);
+
+    ICssWriter writeTop(String top);
+
+    ICssWriter writeLeft(String left);
 
     ICssWriter writeSize(ISizeCapability capability);
 
@@ -112,4 +85,24 @@ public interface ICssWriter {
     ICssWriter writeBackground(
             IForegroundBackgroundColorCapability foregroundBackgroundColorCapability,
             IBackgroundImageCapability backgroundImageCapability);
+
+    ICssWriter writeBackground(String backgroundColor,
+            String backgroundImageURL, Boolean repeatX, Boolean repeatY,
+            String positionX, String positionY);
+
+    ICssWriter writeOverflow(String overflowValue);
+
+    ICssWriter writeDisplay(String displayValue);
+
+    ICssWriter writeWidth(String widthValue);
+
+    ICssWriter writeHeight(String heightValue);
+
+    ICssWriter writeTextAlign(String textAlignement);
+
+    ICssWriter writeVerticalAlign(String verticalAlignement);
+
+    ICssWriter writeBorderStyle(String borderStyle);
+
+    ICssWriter writeMargin(String margin);
 }

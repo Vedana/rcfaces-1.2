@@ -14,11 +14,18 @@ var __prototype = {
 	fa_message: function() {
 		var messageContext=f_messageContext.Get(this);
 		
+		this._className=f_core.GetAttribute(this, "v:styleClass");
+		if (!this._className) {
+			this._className=this.className;
+		}
+		
 		messageContext.f_addMessageListener(this);
 	},
 	
 	/*
-	f_finalize: function() {		
+	f_finalize: function() {
+		// this._classSpecified=undefined; // boolean
+		// this._className=undefined; // string
 		// this._showSummary=undefined; // boolean
 		// this._showDetail=undefined; // boolean
 		
@@ -83,6 +90,8 @@ var __prototype = {
 	 * @return void
 	 *
 	f_setShowDetail: function(showDetail) {
+		f_core.Assert(typeof(showDetail)=="boolean", "Invalid showDetail parameter ('"+showDetail+"')");
+
 		var old=this.f_isShowDetail();
 		showDetail=(showDetail)?true:false;
 		
@@ -107,9 +116,9 @@ var __prototype = {
 	 */
 	f_getFatalStyleClass: function() {
 		if (this._fatalStyleClass===undefined) {
-			var style=f_core.GetAttribute(this, "v:fatalStyleClass");
-			this._fatalStyleClass=(style)?style:null;
+			this._fatalStyleClass=this._computeStyleClass("v:fatalStyleClass", "_fatal");
 		}
+
 		return this._fatalStyleClass;
 	},
 	/**
@@ -118,9 +127,9 @@ var __prototype = {
 	 */
 	f_getErrorStyleClass: function() {
 		if (this._errorStyleClass===undefined) {
-			var style=f_core.GetAttribute(this, "v:errorStyleClass");
-			this._errorStyleClass=(style)?style:null;
+			this._errorStyleClass=this._computeStyleClass("v:errorStyleClass", "_error");
 		}
+
 		return this._errorStyleClass;
 	},
 	/**
@@ -129,8 +138,7 @@ var __prototype = {
 	 */
 	f_getWarnStyleClass: function() {
 		if (this._warnStyleClass===undefined) {
-			var style=f_core.GetAttribute(this, "v:warnStyleClass");
-			this._warnStyleClass=(style)?style:null;
+			this._warnStyleClass=this._computeStyleClass("v:warnStyleClass", "_warn");
 		}
 		return this._warnStyleClass;
 	},
@@ -140,30 +148,71 @@ var __prototype = {
 	 */
 	f_getInfoStyleClass: function() {
 		if (this._infoStyleClass===undefined) {
-			var style=f_core.GetAttribute(this, "v:infoStyleClass");
-			this._infoStyleClass=(style)?style:null;
+			this._infoStyleClass=this._computeStyleClass("v:infoStyleClass", "_info");
 		}
+		
 		return this._infoStyleClass;
 	},
+	/**
+	 * @method private
+	 */
+	_computeStyleClass: function(attributeName, suffix) {
+		var style=f_core.GetAttribute(this, attributeName);
+		if (style) {
+			return style;
+		}
 	
+		var classSpecified=this._classSpecified;
+		
+		if (classSpecified===undefined) {
+			classSpecified=(f_core.GetAttribute(this, "v:fatalStyleClass") ||
+				f_core.GetAttribute(this, "v:errorStyleClass") ||
+				f_core.GetAttribute(this, "v:warnStyleClass") ||
+				f_core.GetAttribute(this, "v:infoStyleClass"))?true:false;
+			
+			this._classSpecified=classSpecified;
+		}
+		
+		if (classSpecified) {
+			return null;
+		}	
+		
+		return this._className+suffix;
+	},
 	/**
 	 * @method protected final
-	 * @param string severity
+	 * @param number severity
 	 * @return string style class name.
 	 */
 	f_getStyleClassFromSeverity: function(severity) {
+		f_core.Assert(typeof(severity)=="number", "Invalid severity parameter ('"+severity+"')");
+		
+		var className=null;
+		
 		switch(severity) {
-		case f_messageObject.SEVERITY_INFO:
-			return this.f_getInfoStyleClass();
-
-		case f_messageObject.SEVERITY_WARN:
-			return this.f_getWarnStyleClass();
+		case f_messageObject.SEVERITY_FATAL:
+			className=this.f_getFatalStyleClass();
+			if (className) {
+				return className;
+			}
 
 		case f_messageObject.SEVERITY_ERROR:
-			return this.f_getErrorStyleClass();
+			className=this.f_getErrorStyleClass();
+			if (className) {
+				return className;
+			}
 
-		case f_messageObject.SEVERITY_FATAL:
-			return this.f_getFatalStyleClass();
+		case f_messageObject.SEVERITY_WARN:
+			className=this.f_getWarnStyleClass();
+			if (className) {
+				return className;
+			}
+
+		case f_messageObject.SEVERITY_INFO:
+			className=this.f_getInfoStyleClass();
+			if (className) {
+				return className;
+			}
 		}
 		
 		return null;

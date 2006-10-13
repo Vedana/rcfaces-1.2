@@ -13,19 +13,23 @@ var __prototype = {
 	f_card: function() {
 		this.f_super(arguments);
 
-		this.f_setHiddenMode(f_component.HIDDEN_MODE_PHANTOM);
+		this.f_setHiddenMode(f_component.HIDDEN_MODE_IGNORE);
 	},
 	f_finalize: function() {
 		var cardBox=this._cardBox;
-		if (cardBox) {
-			this._cardBox=undefined;
+		this._cardBox=undefined;
 
-			if (cardBox._destroyCard) {
-				cardBox._destroyCard(this);
+		var vcard=this._vcard;
+		if (vcard) {
+			// On efface la trace de cette carte .. 
+			// Pour que le VerifyComponent soit correcte
+			if (cardBox.f_destroyCard) {
+				cardBox.f_destroyCard(vcard);
 			}
-		}
 
-		this._vcard=undefined;
+			// On verifie tout de meme ....
+			this._vcard=undefined;
+		}
 		
 		this.f_super(arguments);
 	},
@@ -33,7 +37,7 @@ var __prototype = {
 	 * @method hidden
 	 * @return void
 	 */
-	_declareCard: function(cardBox) {
+	f_declareCard: function(cardBox) {
 		this._cardBox=cardBox;
 	},
 	/**
@@ -46,8 +50,9 @@ var __prototype = {
 			return;
 		}
 
-		if (this._cardBox) {
-			this._cardBox._setCardFocus(this, evt);
+		var cardBox=this._cardBox;
+		if (cardBox) {
+			cardBox.f_setCardFocus(this, evt);
 		}
 	},
 	/**

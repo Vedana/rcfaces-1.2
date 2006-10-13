@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -30,6 +38,10 @@
  *
  */
 package org.rcfaces.core.internal.util;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -106,5 +118,78 @@ public class ClassLocator {
         }
 
         throw thOrigin;
+    }
+
+    public static final URL getResource(String resourceLocation,
+            Object fallback, Object context) {
+
+        IOException thOrigin[] = new IOException[1];
+
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (cl != null) {
+            URL url = cl.getResource(resourceLocation);
+
+            if (testURL(url, thOrigin)) {
+                return url;
+            }
+        }
+
+        if (fallback != null) {
+            URL url = fallback.getClass().getClassLoader().getResource(
+                    resourceLocation);
+            if (testURL(url, thOrigin)) {
+                return url;
+            }
+        }
+
+        URL url = ClassLocator.class.getClassLoader().getResource(
+                resourceLocation);
+        if (testURL(url, thOrigin)) {
+            return url;
+        }
+
+        if (context instanceof FacesContext) {
+            context = ((FacesContext) context).getExternalContext()
+                    .getContext();
+        }
+
+        if (context instanceof ServletContext) {
+            context = ((ServletContext) context).getClass().getClassLoader();
+        }
+
+        if (context instanceof ClassLoader) {
+            url = ((ClassLoader) context).getResource(resourceLocation);
+
+            if (testURL(url, thOrigin)) {
+                return url;
+            }
+        }
+
+        if (thOrigin[0] == null) {
+            thOrigin[0] = new IOException("Can not find resource '"
+                    + resourceLocation + "'.");
+        }
+
+        return null;
+    }
+
+    protected static boolean testURL(URL url, IOException exs[]) {
+        if (url == null) {
+            return false;
+        }
+        try {
+            InputStream ins = url.openStream();
+
+            ins.close();
+
+            return true;
+
+        } catch (IOException ex) {
+            if (exs != null && exs[0] == null) {
+                exs[0] = ex;
+            }
+        }
+
+        return false;
     }
 }

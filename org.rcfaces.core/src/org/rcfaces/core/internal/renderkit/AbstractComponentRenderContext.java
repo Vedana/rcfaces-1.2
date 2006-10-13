@@ -1,26 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.3  2005/10/28 14:41:50  oeuillot
- * InteractiveRenderer, CardBox, Card
- * Corrections de validations
- * PasswordEntry
- *
- * Revision 1.2  2005/02/18 14:46:07  oeuillot
- * Corrections importantes pour stabilisation
- * R�ecriture du noyau JAVASCRIPT pour ameliorer performances.
- * Ajout de IValueLockedCapability
- *
- * Revision 1.1  2004/11/19 18:01:30  oeuillot
- * Version debut novembre
- *
  */
 package org.rcfaces.core.internal.renderkit;
 
@@ -40,17 +19,17 @@ public abstract class AbstractComponentRenderContext implements
 
     private final UIComponent component;
 
-    private final String componentId;
+    private final String componentClientId;
 
     private FacesContext facesContext;
 
     private Map attributes;
 
     protected AbstractComponentRenderContext(FacesContext facesContext,
-            UIComponent component, String componentId) {
+            UIComponent component, String componentClientId) {
         this.facesContext = facesContext;
         this.component = component;
-        this.componentId = componentId;
+        this.componentClientId = componentClientId;
     }
 
     /*
@@ -65,24 +44,14 @@ public abstract class AbstractComponentRenderContext implements
         return facesContext;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IComponentRenderContext#getComponent()
-     */
     public final UIComponent getComponent() {
         return component;
     }
 
-    public final String getComponentId() {
-        return componentId;
+    public final String getComponentClientId() {
+        return componentClientId;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IComponentRenderContext#getAttribute(java.lang.String)
-     */
     public Object getAttribute(String key) {
         if (attributes == null) {
             return null;
@@ -99,12 +68,6 @@ public abstract class AbstractComponentRenderContext implements
         return attributes.containsKey(key);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IComponentRenderContext#setAttribute(java.lang.String,
-     *      java.lang.Object)
-     */
     public Object setAttribute(String key, Object value) {
         if (attributes == null) {
             attributes = new HashMap();

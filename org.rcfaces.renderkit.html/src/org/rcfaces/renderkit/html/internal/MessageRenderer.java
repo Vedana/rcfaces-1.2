@@ -3,21 +3,18 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import java.util.Iterator;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.MessageComponent;
+import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ContextTools;
-import org.rcfaces.core.internal.tools.MessageTools;
+import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -43,7 +40,7 @@ public class MessageRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement("SPAN");
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -51,6 +48,10 @@ public class MessageRenderer extends AbstractCssRenderer {
         String forValue = messageComponent.getFor();
         if (forValue != null) {
             htmlWriter.writeAttribute("v:for", forValue);
+        }
+
+        if (messageComponent.isSetFocusIfMessage(facesContext)) {
+            htmlWriter.writeAttribute("v:setFocusIfMessage", "true");
         }
 
         if (messageComponent.isShowSummary()) {
@@ -61,53 +62,10 @@ public class MessageRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:showDetail", "true");
         }
 
-        String infoStyleClass = messageComponent
-                .getInfoStyleClass(facesContext);
-        if (infoStyleClass != null) {
-            htmlWriter.writeAttribute("v:infoStyleClass", infoStyleClass);
-        }
+        writeSeverityStyleClasses(htmlWriter, messageComponent);
 
-        String warnStyleClass = messageComponent
-                .getWarnStyleClass(facesContext);
-        if (warnStyleClass != null) {
-            htmlWriter.writeAttribute("v:warnStyleClass", warnStyleClass);
-        }
-
-        String errorStyleClass = messageComponent
-                .getErrorStyleClass(facesContext);
-        if (errorStyleClass != null) {
-            htmlWriter.writeAttribute("v:errorStyleClass", errorStyleClass);
-        }
-
-        String fatalStyleClass = messageComponent
-                .getFatalStyleClass(facesContext);
-        if (fatalStyleClass != null) {
-            htmlWriter.writeAttribute("v:fatalStyleClass", fatalStyleClass);
-        }
-
-        String imageURL = messageComponent.getImageURL(facesContext);
-        String infoImageURL = messageComponent.getInfoImageURL(facesContext);
-        String warnImageURL = messageComponent.getWarnImageURL(facesContext);
-        String errorImageURL = messageComponent.getErrorImageURL(facesContext);
-        String fatalImageURL = messageComponent.getFatalImageURL(facesContext);
-        if (imageURL != null || infoImageURL != null || warnImageURL != null
-                || errorImageURL != null || fatalImageURL != null) {
-
-            if (infoImageURL != null) {
-                htmlWriter.writeAttribute("v:infoImageURL", infoImageURL);
-            }
-
-            if (warnImageURL != null) {
-                htmlWriter.writeAttribute("v:warnImageURL", warnImageURL);
-            }
-
-            if (errorImageURL != null) {
-                htmlWriter.writeAttribute("v:errorImageURL", errorImageURL);
-            }
-
-            if (fatalImageURL != null) {
-                htmlWriter.writeAttribute("v:fatalImageURL", fatalImageURL);
-            }
+        if (writeSeverityImages(htmlWriter, messageComponent)) {
+            String imageURL = messageComponent.getImageURL(facesContext);
 
             htmlWriter.startElement("IMG");
 
@@ -135,7 +93,7 @@ public class MessageRenderer extends AbstractCssRenderer {
             htmlWriter.endElement("IMG");
         }
 
-        String noMessageText = messageComponent.getNoMessageText(facesContext);
+        String noMessageText = messageComponent.getText(facesContext);
         if (noMessageText != null) {
             htmlWriter.startElement("LABEL");
 
@@ -148,14 +106,14 @@ public class MessageRenderer extends AbstractCssRenderer {
             htmlWriter.endElement("LABEL");
         }
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement("SPAN");
 
         htmlWriter.enableJavaScript();
     }
 
     protected void writeText(IHtmlWriter htmlWriter,
-            MessageComponent messageComponent, String bundleVar, String text)
-            throws WriterException {
+            ISeverityImagesCapability messageComponent, String bundleVar,
+            String text) throws WriterException {
         if (bundleVar != null) {
             FacesContext facesContext = htmlWriter.getComponentRenderContext()
                     .getFacesContext();
@@ -170,56 +128,17 @@ public class MessageRenderer extends AbstractCssRenderer {
         htmlWriter.writeText(text);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#encodeJavaScript(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
-     */
     protected void encodeJavaScript(IJavaScriptWriter js)
             throws WriterException {
         super.encodeJavaScript(js);
 
-        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(js
-                .getWriter());
-        MessageComponent messageComponent = (MessageComponent) htmlRenderContext
-                .getComponent();
-
-        FacesContext facesContext = js.getFacesContext();
-
-        String forValue = messageComponent.getFor();
-        if (forValue == null) {
-            return;
-        }
-
-        Iterator iterator = MessageTools.listMessages(facesContext, forValue,
-                messageComponent);
-        if (iterator.hasNext() == false) {
-            return;
-        }
-
-        FacesMessage facesMessage = (FacesMessage) iterator.next();
-
-        String bundleVar = messageComponent.getBundleVar(facesContext);
-
-        writeMessage(js, facesMessage, forValue, false, bundleVar);
+        JavaScriptTools.writeFirstMessage(js);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MESSAGE;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decode(org.rcfaces.core.internal.renderkit.IRequestContext,
-     *      javax.faces.component.UIComponent,
-     *      org.rcfaces.core.internal.renderkit.IComponentData)
-     */
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
 
@@ -253,92 +172,5 @@ public class MessageRenderer extends AbstractCssRenderer {
 
         return super.getStyleClassName(componentRenderContext, component,
                 suffix);
-    }
-
-    static IJavaScriptWriter writeMessage(IJavaScriptWriter js,
-            FacesMessage facesMessage, String componentId, boolean isGlobal,
-            String bundleVar) throws WriterException {
-
-        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) js
-                .getComponentRenderContext().getRenderContext();
-
-        IJavaScriptRenderContext javascriptRenderContext = htmlRenderContext
-                .getJavaScriptRenderContext();
-
-        FacesContext facesContext = js.getFacesContext();
-
-        boolean declare[] = new boolean[1];
-        String key = javascriptRenderContext.allocateFacesMessage(facesMessage,
-                declare);
-
-        int pred;
-        if (declare[0]) {
-            String summary = facesMessage.getSummary();
-            if (summary != null) {
-                if (bundleVar != null) {
-                    summary = ContextTools.resolveText(facesContext, bundleVar,
-                            summary);
-                }
-
-                summary = js.allocateString(summary);
-            }
-
-            String detail = facesMessage.getDetail();
-            if (detail != null) {
-                if (bundleVar != null) {
-                    detail = ContextTools.resolveText(facesContext, bundleVar,
-                            detail);
-                }
-                detail = js.allocateString(detail);
-            }
-
-            js.write("var ").write(key).write('=').writeConstructor(
-                    "f_messageObject");
-
-            pred = 0;
-
-            Severity severity = facesMessage.getSeverity();
-            // La severity ne peut etre null !
-            js.writeInt(severity.getOrdinal());
-
-            if (summary != null) {
-                for (; pred > 0; pred--) {
-                    js.write(',').writeNull();
-                }
-
-                js.write(',').write(summary);
-            } else {
-                pred++;
-            }
-
-            if (detail != null && detail.equals(summary) == false) {
-                for (; pred > 0; pred--) {
-                    js.write(',').writeNull();
-                }
-                js.write(',').write(detail);
-
-            } else {
-                pred++;
-            }
-
-            js.writeln(");");
-        }
-
-        js.writeMethodCall("_addMessageObject");
-
-        pred = 0;
-        if (componentId != null) {
-            js.writeString(componentId);
-
-        } else if (isGlobal) {
-            js.write("true");
-
-        } else {
-            js.writeNull();
-        }
-
-        js.write(',').write(key).writeln(");");
-
-        return js;
     }
 }

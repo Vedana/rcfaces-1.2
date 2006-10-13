@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IRadioValueCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.MenuCheckItemComponent;
 
 public class MenuRadioItemComponent extends MenuCheckItemComponent implements 
-	IRadioGroupCapability {
+	IRadioValueCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuRadioItem";
 
@@ -18,6 +18,22 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 	public MenuRadioItemComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public final java.lang.Object getRadioValue() {
+		return getRadioValue(null);
+	}
+
+	public final java.lang.Object getRadioValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.RADIO_VALUE, facesContext);
+	}
+
+	public final void setRadioValue(java.lang.Object radioValue) {
+		engine.setProperty(Properties.RADIO_VALUE, radioValue);
+	}
+
+	public final void setRadioValue(ValueBinding radioValue) {
+		engine.setProperty(Properties.RADIO_VALUE, radioValue);
 	}
 
 	public final java.lang.String getGroupName() {

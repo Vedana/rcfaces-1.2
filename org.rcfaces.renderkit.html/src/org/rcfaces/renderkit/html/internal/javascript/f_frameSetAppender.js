@@ -17,6 +17,7 @@ var __static={
 		for(;parentWindow.parent && parentWindow.parent!=parentWindow;) {
 			parentWindow=parentWindow.parent;
 		}
+//		alert("ParentWindow="+parentWindow);
 		if (!parentWindow || !parentWindow._Camelia_frameSetAppend) {
 			// On doit se debrouiller à trouver l'URL du stylesheet,
 			// car le stylesheet est surement pas encore initialisé au niveau du f_env.
@@ -45,6 +46,7 @@ var __static={
 				parentWindow=window;
 			}
 			
+			//alert("Set location: "+parentWindow+" "+window+" "+uri);
 			window.document.location=uri;
 			return;
 		}

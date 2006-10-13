@@ -10,8 +10,6 @@
  * @version $Revision$ $Date$
  */
 var __prototype = {
-
-
 	f_imagePagerButton: function() {
 		this.f_super(arguments);
 		
@@ -24,6 +22,7 @@ var __prototype = {
 
 		if (this._for) {
 			fa_pagedComponent.RegisterPager(this._for, this);
+			
 		} else  {
 			f_core.Error(f_imagePagerButton, "'for' attribute is not defined !");
 		}

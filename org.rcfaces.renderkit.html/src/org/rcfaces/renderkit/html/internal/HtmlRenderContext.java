@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -214,7 +215,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         lastInteractiveRenderComponent = (IAsyncRenderComponent) componentRenderContext
                 .getComponent();
         lastInteractiveRenderComponentClientId = componentRenderContext
-                .getComponentId();
+                .getComponentClientId();
         javascriptRenderContext = javascriptRenderContext.pushInteractive();
     }
 
@@ -250,10 +251,9 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return getCurrentInteractiveRenderComponent() == null;
     }
 
-    public String getComponentId(FacesContext facesContext,
+    public String getComponentClientId(FacesContext facesContext,
             UIComponent component) {
         if (htmlExternalContext.isFlatIdentifierEnabled()) {
-
             String id = component.getId();
 
             if (id == null || id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
@@ -263,31 +263,41 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             return id;
         }
 
-        String id = component.getClientId(facesContext);
-
-        String separatorChar = htmlExternalContext.getNamingSeparator();
-        if (separatorChar == null) {
-            return id;
-        }
-
-        return HtmlTools.replaceSeparator(id, separatorChar);
+        return component.getClientId(facesContext);
     }
 
-    public String computeBrotherComponentId(FacesContext facesContext,
+    public String computeBrotherComponentClientId(FacesContext facesContext,
             UIComponent brotherComponent, String componentId) {
         if (htmlExternalContext.isFlatIdentifierEnabled()) {
             return componentId;
         }
 
-        String id = super.computeBrotherComponentId(facesContext,
-                brotherComponent, componentId);
+        String brotherComponentId = brotherComponent.getClientId(facesContext);
 
-        String separatorChar = htmlExternalContext.getNamingSeparator();
-        if (separatorChar == null || id == null) {
-            return id;
+        if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT) {
+            String separatorChar = htmlExternalContext.getNamingSeparator();
+
+            if (separatorChar != null) {
+                int idx = brotherComponentId.lastIndexOf(separatorChar);
+                for (; idx > 0; idx--) {
+                    if (brotherComponentId.indexOf(separatorChar, idx - 1) != idx - 1) {
+                        break;
+                    }
+                }
+
+                return brotherComponentId.substring(0, idx
+                        + separatorChar.length())
+                        + componentId;
+            }
         }
 
-        return HtmlTools.replaceSeparator(id, separatorChar);
+        int idx = brotherComponentId
+                .lastIndexOf(NamingContainer.SEPARATOR_CHAR);
+        if (idx < 0) {
+            return componentId;
+        }
+
+        return brotherComponentId.substring(0, idx + 1) + componentId;
     }
 
     /*
@@ -332,9 +342,77 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         public boolean isJavaScriptEnabled() {
             return ((HtmlRenderContext) renderContext).isJavaScriptEnabled();
         }
+
+        public IHtmlWriter writeMaxLength(int maxLength) throws WriterException {
+            writeAttribute("maxlength", maxLength);
+
+            return this;
+        }
+
+        public IHtmlWriter writeSize(int size) throws WriterException {
+            writeAttribute("size", size);
+
+            return this;
+        }
+
+        public IHtmlWriter writeType(String type) throws WriterException {
+            writeAttribute("type", type);
+
+            return this;
+        }
+
+        public IHtmlWriter writeId(String id) throws WriterException {
+            writeAttribute("id", id);
+
+            return this;
+        }
+
+        public IHtmlWriter writeName(String name) throws WriterException {
+            writeAttribute("name", name);
+
+            return this;
+        }
+
+        public IHtmlWriter writeClass(String className) throws WriterException {
+            writeAttribute("class", className);
+
+            return this;
+        }
+
+        public IHtmlWriter writeDisabled() throws WriterException {
+            writeAttribute("DISABLED");
+
+            return this;
+        }
+
+        public IHtmlWriter writeReadOnly() throws WriterException {
+            writeAttribute("READONLY");
+
+            return this;
+        }
+
+        public IHtmlWriter writeValue(String value) throws WriterException {
+            writeAttribute("value", value);
+
+            return this;
+        }
+
+        public IHtmlWriter writeAccessKey(String accessKey)
+                throws WriterException {
+            writeAttribute("accessKey", accessKey);
+
+            return this;
+        }
+
+        public IHtmlWriter writeTabIndex(int tabIndex) throws WriterException {
+            writeAttribute("tabIndex", tabIndex);
+
+            return this;
+        }
+
     }
 
-    public IHtmlProcessContext getHtmlExternalContext() {
+    public IHtmlProcessContext getHtmlProcessContext() {
         return htmlExternalContext;
     }
 

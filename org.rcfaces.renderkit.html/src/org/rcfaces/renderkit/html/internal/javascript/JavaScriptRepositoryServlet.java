@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.7  2006/10/13 18:04:37  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.6  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -147,6 +155,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
+import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.AbstractHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
@@ -307,15 +316,22 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
             String buildId = htmlRCFacesBuildId;
 
+            boolean compiledVersion = isCompiledVersion();
+            if (compiledVersion) {
+                buildId += "c";
+            }
+
             String configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER);
-            if (configurationVersion != null) {
+            if (configurationVersion != null
+                    && configurationVersion.length() > 0) {
                 buildId += "." + configurationVersion;
             }
 
             this.repositoryVersion = buildId;
 
             LOG.info("Repository version buildId='" + htmlRCFacesBuildId
-                    + "' setted for servlet '" + getServletName() + "'.");
+                    + "' compiledVersion=" + compiledVersion
+                    + " setted for servlet '" + getServletName() + "'.");
         }
 
         AbstractHierarchicalRepository repository = new JavaScriptRepository(
@@ -368,6 +384,20 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         reloadSymbols(repository);
 
         return repository;
+    }
+
+    protected boolean isCompiledVersion() {
+        ServletContext servletContext = getServletContext();
+
+        String symbolURL = MAIN_REPOSITORY_DIRECTORY_LOCATION
+                + SYMBOLS_FILENAME;
+
+        URL url = ClassLocator.getResource(symbolURL, this, servletContext);
+        if (url == null) {
+            return false;
+        }
+
+        return true;
     }
 
     protected String getSetURI(String setName) {

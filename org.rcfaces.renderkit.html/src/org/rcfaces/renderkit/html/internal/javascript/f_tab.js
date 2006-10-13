@@ -13,14 +13,14 @@
 var __prototype = {
 	f_finalize: function() {		
 		this._mask=undefined;  // HTMLElement
-		this._text=undefined;  // String
-		this._accessKey=undefined; // string
+		// this._text=undefined;  // String
+		// this._accessKey=undefined; // string
 		
-		this._disabled=undefined; // boolean
-		this._imageURL=undefined; // string
-		this._hoverImageURL=undefined; // string
-		this._disabledImageURL=undefined; // string
-		this._selectedImageURL=undefined; // string
+		// this._disabled=undefined; // boolean
+		// this._imageURL=undefined; // string
+		// this._hoverImageURL=undefined; // string
+		// this._disabledImageURL=undefined; // string
+		// this._selectedImageURL=undefined; // string
 		
 		this.f_super(arguments);
 	},
@@ -43,8 +43,9 @@ var __prototype = {
 		this._text=text;
 		this.f_setProperty(f_prop.TEXT,text);
 		
-		if (this._cardBox) {
-			this._cardBox._setTabText(this, text);
+		var cardBox=this._cardBox;
+		if (cardBox) {
+			cardBox.f_setTabText(this, text);
 		}
 	},
 	/**
@@ -54,8 +55,10 @@ var __prototype = {
 	 */
 	f_setImageURL: function(imageURL) {
 		this._imageURL=imageURL;
-		if (this._cardBox) {
-			this._cardBox._setTabImageURL(this, imageURL);
+
+		var cardBox=this._cardBox;
+		if (cardBox) {
+			cardBox.f_setTabImageURL(this, imageURL);
 		}
 	},
 	/**
@@ -65,8 +68,10 @@ var __prototype = {
 	 */
 	f_setDisabledImageURL: function(imageURL) {
 		this._disabledImageURL=imageURL;
-		if (this._cardBox) {
-			this._cardBox._setTabDisabledImageURL(this, imageURL);
+
+		var cardBox=this._cardBox;
+		if (cardBox) {
+			cardBox.f_setTabDisabledImageURL(this, imageURL);
 		}
 	},
 	/**
@@ -76,8 +81,10 @@ var __prototype = {
 	 */
 	f_setHoverImageURL: function(imageURL) {
 		this._hoverImageURL=imageURL;
-		if (this._cardBox) {
-			this._cardBox._setTabHoverImageURL(this, imageURL);
+
+		var cardBox=this._cardBox;
+		if (cardBox) {
+			cardBox.f_setTabHoverImageURL(this, imageURL);
 		}
 	},
 	/**
@@ -87,8 +94,10 @@ var __prototype = {
 	 */
 	f_setSelectedImageURL: function(imageURL) {
 		this._selectedImageURL=imageURL;
-		if (this._cardBox) {
-			this._cardBox._setTabSelectedImageURL(this, imageURL);
+
+		var cardBox=this._cardBox;
+		if (cardBox) {
+			cardBox.f_setTabSelectedImageURL(this, imageURL);
 		}
 	},
 	/**
@@ -107,8 +116,9 @@ var __prototype = {
 		
 		this._disabled=disabled;
 		
-		if (this._cardBox) {
-			this._cardBox._setTabDisabled(this, disabled);
+		var cardBox=this._cardBox;
+		if (cardBox) {
+			cardBox.f_setTabDisabled(this, disabled);
 		}
 	},
 	/**
@@ -118,8 +128,8 @@ var __prototype = {
 	f_isDisabled: function() {
 		return this._disabled;
 	},
-	_declareTab: function(tabbedPane, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
-		this._declareCard(tabbedPane);
+	f_declareTab: function(tabbedPane, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
+		this.f_declareCard(tabbedPane);
 
 		this._text=text;
 		this._accessKey=accessKey;
@@ -132,14 +142,11 @@ var __prototype = {
 		this._hoverImageURL=hoverImageURL;
 		this._selectedImageURL=selectedImageURL;
 		
-		this._mask=document.createElement("DIV");
-		this._mask.className=tabbedPane.className+"_tab_mask";
+		var mask=document.createElement("DIV");
+		this._mask=mask;
+		mask.className=tabbedPane.className+"_tab_mask";
 		
-		if (this.hasChildNodes()) {
-			this.insertBefore(this._mask, this.childNodes[0]);
-		} else {
-			this.appendChild(this._mask);		
-		}
+		this.insertBefore(mask, this.firstChild);
 	},
 	/**
 	 * @method public
@@ -149,8 +156,9 @@ var __prototype = {
 		return this._accessKey;
 	},
 	f_performAccessKey: function(evt) {
-		if (this._cardBox) {
-			this._cardBox._performTabAccessKey(this, evt);
+		var cardBox=this._cardBox;
+		if (cardBox) {
+			cardBox.f_performTabAccessKey(this, evt);
 		}
 	},
 	f_parentShow: function() {

@@ -1,0 +1,2 @@
+var _y={LOCK_MESSAGE:"Une action est déjà en cours de traitement.\nVeuillez patienter !"}
+f_resourceBundle.en(f_event,_y);

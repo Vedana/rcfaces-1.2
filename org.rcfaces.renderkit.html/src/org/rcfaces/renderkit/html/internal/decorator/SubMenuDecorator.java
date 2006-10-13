@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -31,6 +39,7 @@ import javax.faces.component.UIComponent;
 
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 
@@ -82,13 +91,18 @@ public class SubMenuDecorator extends MenuDecorator {
         String id = context.getComponentClientId(getComponent());
 
         if (suffixMenuId != null) {
-            IProcessContext processContext = getComponentRenderContext()
-                    .getRenderContext().getProcessContext();
 
-            String namingSeparator = processContext.getNamingSeparator();
-            if (namingSeparator != null) {
-                id += namingSeparator + suffixMenuId;
-                
+            if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT) {
+                IProcessContext processContext = getComponentRenderContext()
+                        .getRenderContext().getProcessContext();
+
+                String namingSeparator = processContext.getNamingSeparator();
+                if (namingSeparator != null) {
+                    id += namingSeparator + suffixMenuId;
+
+                } else {
+                    id += NamingContainer.SEPARATOR_CHAR + suffixMenuId;
+                }
             } else {
                 id += NamingContainer.SEPARATOR_CHAR + suffixMenuId;
             }

@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -71,11 +79,11 @@ public class CommonsLogger implements ILogger {
 
     static {
         LOG_LEVELS.put("FATAL", new Integer(0));
-        LOG_LEVELS.put("ERROR", new Integer(3));
-        LOG_LEVELS.put("WARN", new Integer(4));
-        LOG_LEVELS.put("INFO", new Integer(6));
-        LOG_LEVELS.put("DEBUG", new Integer(7));
-        LOG_LEVELS.put("TRACE", new Integer(8));
+        LOG_LEVELS.put("ERROR", new Integer(1));
+        LOG_LEVELS.put("WARN", new Integer(2));
+        LOG_LEVELS.put("INFO", new Integer(3));
+        LOG_LEVELS.put("DEBUG", new Integer(4));
+        LOG_LEVELS.put("TRACE", new Integer(5));
     }
 
     private IFilter filters[];
@@ -88,25 +96,36 @@ public class CommonsLogger implements ILogger {
                 Log log = LogFactory.getLog(LogService.PREFIX_LOGGER_NAME
                         + name);
                 if (log != null) {
+                    if (level < 0) {
+                        level = 0;
+
+                    } else if (level > 5) {
+                        level = 5;
+                    }
+
                     switch (level) {
                     case 0:
                         log.fatal(message, ex);
                         return;
 
-                    case 3:
+                    case 1:
                         log.error(message, ex);
                         return;
 
-                    case 4:
+                    case 2:
                         log.warn(message, ex);
                         return;
 
-                    case 6:
+                    case 3:
                         log.info(message, ex);
                         return;
 
-                    case 7:
+                    case 4:
                         log.debug(message, ex);
+                        return;
+
+                    case 5:
+                        log.trace(message, ex);
                         return;
                     }
                 }

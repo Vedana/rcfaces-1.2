@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -90,7 +98,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -141,7 +148,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
             IBorderCapability borderCapability = (IBorderCapability) component;
 
             if (borderCapability.isBorder() == false) {
-                cssWriter.writeProperty("border-style", "none");
+                cssWriter.writeBorderStyle("none");
             }
         }
     }

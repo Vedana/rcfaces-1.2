@@ -1,0 +1,29 @@
+var _r={SUPPRESS_SUBTASK_LABEL:2,PREPEND_MAIN_LABEL_TO_SUBTASK:4}
+var _e={f_subProgressMonitor:function(e,t,r){var n=this
+n.f_super(arguments)
+n._f8=e
+n._5s=(t)?t:0
+n._n2=(r)?r:0
+n._fu=n._fo=n._af=0
+n._5g=!1},f_finalize:function(){var e
+this._f8=e
+this.f_super(arguments)},f_beginTask:function(e,t){var r=this
+r._af++
+if(r._af>1)return
+r._fo=(t<=0)?0:r._5s/t
+if(r._n2&4)r.__i=e},f_done:function(){var t=this,e
+if(!t._af||(--t._af)>0)return
+e=t._5s-t._fu
+if(e>0)t._f8.cu(e)
+t.f_subTask("")
+t._fu=0},cu:function(e){var r=this,t
+if(r._5g||r._af!=1)return
+t=r._fo*e
+r._f8.cu(t)
+r._fu+=t
+if(r._fu>=r._5s)r._5g=!0},f_isCanceled:function(){return this._f8.f_isCanceled()},f_cancel:function(){this._f8.f_cancel()},f_setTaskName:function(e){this._f8.f_setTaskName(e)},f_subTask:function(e){var r=this,t
+if(r._n2&2)return
+t=e
+if((r._n2&4)&&r.__i&&r.__i.length>0)t=r.__i+" "+t
+r._f8.f_subTask(t)}}
+var f_subProgressMonitor=new f_class("f_subProgressMonitor",null,_r,_e,f_progressMonitor);

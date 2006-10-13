@@ -25,7 +25,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 	private String imageHeight;
 	private String imageWidth;
 	private String valueChangeListeners;
-	private String forVal;
+	private String forValue;
 	private String forValueFormat;
 	private String homeDate;
 	private String homeDateLabel;
@@ -122,11 +122,11 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 	}
 
 	public final String getFor() {
-		return forVal;
+		return forValue;
 	}
 
-	public final void setFor(String forVal) {
-		this.forVal = forVal;
+	public final void setFor(String forValue) {
+		this.forValue = forValue;
 	}
 
 	public final String getForValueFormat() {
@@ -168,7 +168,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
-			LOG.debug("  forVal='"+forVal+"'");
+			LOG.debug("  forValue='"+forValue+"'");
 			LOG.debug("  forValueFormat='"+forValueFormat+"'");
 			LOG.debug("  homeDate='"+homeDate+"'");
 			LOG.debug("  homeDateLabel='"+homeDateLabel+"'");
@@ -287,12 +287,13 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			parseActionListener(application, component, VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
 		}
 
-		if (forVal != null) {
-			if (isValueReference(forVal)) {
-				ValueBinding vb = application.createValueBinding(forVal);
+		if (forValue != null) {
+			if (isValueReference(forValue)) {
+				ValueBinding vb = application.createValueBinding(forValue);
+
 				component.setFor(vb);
 			} else {
-				component.setFor(forVal);
+				component.setFor(forValue);
 			}
 		}
 
@@ -336,7 +337,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		imageHeight = null;
 		imageWidth = null;
 		valueChangeListeners = null;
-		forVal = null;
+		forValue = null;
 		forValueFormat = null;
 		homeDate = null;
 		homeDateLabel = null;

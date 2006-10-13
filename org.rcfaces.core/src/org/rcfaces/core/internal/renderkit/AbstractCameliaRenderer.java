@@ -32,9 +32,9 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         IRenderContext renderContext = getRenderContext(context);
 
-        String id = renderContext.getComponentId(context, component);
+        String clientId = renderContext.getComponentClientId(context, component);
 
-        renderContext.pushComponent(context, component, id);
+        renderContext.pushComponent(context, component, clientId);
 
         IComponentWriter writer = renderContext.getComponentWriter(context);
         try {

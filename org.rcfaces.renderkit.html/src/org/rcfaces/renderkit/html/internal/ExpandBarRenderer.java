@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -229,7 +237,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         ExpandBarComponent expandBarComponent = (ExpandBarComponent) componentContext
                 .getComponent();
 
-        String buttonId = componentContext.getComponentId() + "__button";
+        String buttonId = componentContext.getComponentClientId() + "__button";
 
         htmlWriter.startElement("INPUT");
         htmlWriter.writeAttribute("type", "IMAGE");
@@ -281,7 +289,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             imageURL = EXPANDED_BUTTON_IMAGE_URL;
         }
 
-        return getHtmlRenderContext(htmlWriter).getHtmlExternalContext()
+        return getHtmlRenderContext(htmlWriter).getHtmlProcessContext()
                 .getStyleSheetURI(imageURL);
     }
 

@@ -1,0 +1,2 @@
+var _y={EVENT_LOCKED:"Loading data, please wait !"}
+f_resourceBundle.en(f_dataGrid,_y);

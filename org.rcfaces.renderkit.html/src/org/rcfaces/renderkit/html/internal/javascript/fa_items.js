@@ -482,7 +482,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemGroupName: function(item, groupName) {
-		this._changeGroup(item._groupName, groupName, item);
+		this.f_changeGroup(item._groupName, groupName, item);
 		item._groupName = groupName;
 	},
 	/**

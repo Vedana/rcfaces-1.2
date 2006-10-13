@@ -404,6 +404,8 @@ var __prototype = {
 	
 	f_tree: function() {
 		this.f_super(arguments);
+		
+		this._nodesList=new Array();
 
 		var v_interactive=f_core.GetAttribute(this, "v:asyncRender");
 		if (v_interactive) {
@@ -553,7 +555,10 @@ var __prototype = {
 //		this._defaultSelectedLeafImageURL=undefined; // string
 //		this._defaultDisabledLeafImageURL=undefined; // string
 
-		var lis=this.getElementsByTagName("LI");
+		var lis=this._nodesList;
+		this._nodesList=undefined;
+
+		f_core.Debug(f_tree, "Remove LIs: "+lis.length);
 		for(var i=0;i<lis.length;i++) {
 			var li=lis[i];
 			
@@ -563,7 +568,7 @@ var __prototype = {
 				continue;
 			}
 			
-			this._nodeFinalizer(li, false);
+			this._nodeFinalizer(li);
 		}
 
 //		this._collapsedValues=undefined;
@@ -593,6 +598,8 @@ var __prototype = {
 	_nodeFinalizer: function(li, deepFinalizer) {
 	
 		if (deepFinalizer) {
+			this._nodesList.f_removeElement(li);
+		
 			var ul=li._nodes;
 			if (ul) {
 				var children=ul.childNodes;				
@@ -627,6 +634,8 @@ var __prototype = {
 			divNode._node=undefined;
 			
 			f_core.VerifyProperties(divNode);			
+		} else {
+			f_core.Debug(f_tree, "No div node ? "+li);
 		}
 		
 		var command=li._command;
@@ -758,6 +767,8 @@ var __prototype = {
 			if (node._tooltip) {
 				li.title=node._tooltip;
 			}
+			
+			this._nodesList.push(li);
 			
 			container.appendChild(li); // Evite les fuites memoires
 

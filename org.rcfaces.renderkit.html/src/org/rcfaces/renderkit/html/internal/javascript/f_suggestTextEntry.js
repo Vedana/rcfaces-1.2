@@ -757,6 +757,22 @@ var __prototype = {
 	 */
 	f_getItemValue: function(item) {
 		return item._value;
+	},
+	/**
+	 * @method protected
+	 */
+	f_getEventLocked: function(showAlert, mask) {
+		var menu=this.f_getSubMenuById(f_suggestTextEntry._SUGGESTION_MENU_ID);
+		var menuOpened=(menu && menu.f_isOpened());
+		if (menuOpened) {
+			if (!mask) {
+				mask=0;
+			}	
+			
+			mask|=f_event.POPUP_LOCK;
+		}
+
+		return this.f_super(arguments, showAlert, mask);
 	}
 }
 

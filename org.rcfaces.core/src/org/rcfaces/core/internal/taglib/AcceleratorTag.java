@@ -15,7 +15,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(AcceleratorTag.class);
 
 	private String keyPressListeners;
-	private String forVal;
+	private String forValue;
 	private String forItemValue;
 	private String keyBinding;
 	private String action;
@@ -35,11 +35,11 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 	}
 
 	public final String getFor() {
-		return forVal;
+		return forValue;
 	}
 
-	public final void setFor(String forVal) {
-		this.forVal = forVal;
+	public final void setFor(String forValue) {
+		this.forValue = forValue;
 	}
 
 	public final String getForItemValue() {
@@ -95,7 +95,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 			if (AcceleratorComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  forVal='"+forVal+"'");
+			LOG.debug("  forValue='"+forValue+"'");
 			LOG.debug("  forItemValue='"+forItemValue+"'");
 			LOG.debug("  keyBinding='"+keyBinding+"'");
 			LOG.debug("  action='"+action+"'");
@@ -115,12 +115,13 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 			parseActionListener(application, component, KEY_PRESS_LISTENER_TYPE, keyPressListeners);
 		}
 
-		if (forVal != null) {
-			if (isValueReference(forVal)) {
-				ValueBinding vb = application.createValueBinding(forVal);
+		if (forValue != null) {
+			if (isValueReference(forValue)) {
+				ValueBinding vb = application.createValueBinding(forValue);
+
 				component.setFor(vb);
 			} else {
-				component.setFor(forVal);
+				component.setFor(forValue);
 			}
 		}
 
@@ -171,7 +172,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 
 	public void release() {
 		keyPressListeners = null;
-		forVal = null;
+		forValue = null;
 		forItemValue = null;
 		keyBinding = null;
 		action = null;

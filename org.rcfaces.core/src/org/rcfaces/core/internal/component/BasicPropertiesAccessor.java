@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -217,22 +225,21 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
-            rets[i++] = entry.getKey();
-
             Object value = entry.getValue();
             if (value == null) {
                 continue;
             }
 
-            if (isPrimitive(value) == false) {
-                rets[i++] = UIComponentBase.saveAttachedState(context, value);
+            rets[i++] = entry.getKey();
 
+            if (isPrimitive(value)) {
+                rets[i++] = value;
                 continue;
             }
-
-            rets[i++] = value;
+            
+            rets[i++] = UIComponentBase.saveAttachedState(context, value);
         }
-
+        
         return rets;
     }
 
@@ -244,11 +251,6 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return PRIMITIVE_CLASSES.contains(value.getClass());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.components.IPropertiesAccessor#release()
-     */
     public void release() {
         properties = null;
     }

@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -117,6 +125,7 @@ import org.rcfaces.core.provider.ImageURLRewritingInformation;
 import org.rcfaces.renderkit.html.internal.CssWriter;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.ICssRenderer;
+import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -231,8 +240,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             boolean selected = false;
             if (imageButtonFamilly instanceof ISelectedCapability) {
-                selected = ((ISelectedCapability) imageButtonFamilly)
-                        .isSelected();
+                selected = isSelected((ISelectedCapability) imageButtonFamilly);
             }
 
             imageWidth = imageButtonFamilly.getImageWidth(facesContext);
@@ -288,8 +296,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             if (disabled) {
                 classSuffix = "_disabled";
 
-            } else if ((imageButtonFamilly instanceof ISelectedCapability)
-                    && ((ISelectedCapability) imageButtonFamilly).isSelected()) {
+            } else if (selected) {
                 classSuffix = "_selected";
             }
 
@@ -460,6 +467,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         }
 
         super.encodeContainerEnd(writer, renderer);
+    }
+
+    protected boolean isSelected(ISelectedCapability imageButtonFamilly) {
+        return imageButtonFamilly.isSelected();
     }
 
     protected void writeEndCompositeComponent() throws WriterException {
@@ -706,30 +717,20 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         writer.startElement("SPAN");
         writer.writeAttribute("class", getClassName() + TEXT);
 
-        CssWriter cssWriter = null;
+        ICssWriter cssWriter = new CssWriter(writer);
 
         UIComponent mainComponent = writer.getComponentRenderContext()
                 .getComponent();
         if (mainComponent instanceof IFontCapability) {
-            if (cssWriter == null) {
-                cssWriter = new CssWriter();
-            }
-
             cssWriter.writeFont((IFontCapability) mainComponent);
         }
 
         if (mainComponent instanceof IForegroundBackgroundColorCapability) {
-            if (cssWriter == null) {
-                cssWriter = new CssWriter();
-            }
-
             cssWriter
                     .writeForeground((IForegroundBackgroundColorCapability) mainComponent);
         }
 
-        if (cssWriter != null) {
-            cssWriter.close(writer);
-        }
+        cssWriter.close();
 
         writeText();
 
@@ -826,7 +827,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
                 .getRenderContext();
 
-        return htmlRenderContext.getHtmlExternalContext().getStyleSheetURI(
+        return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
                 EMPTY_IMAGE_URL);
     }
 

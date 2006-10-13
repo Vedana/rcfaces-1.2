@@ -12,6 +12,9 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.lang.String;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.component.IConvertValueHolder;
@@ -39,6 +42,8 @@ import org.rcfaces.core.internal.renderkit.IRendererExtension;
 public abstract class CameliaSelectManyComponent extends javax.faces.component.UISelectMany implements
 		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder {
 	private static final String REVISION = "$Revision$";
+
+	private static final Log LOG = LogFactory.getLog(CameliaSelectManyComponent.class);
 
 	protected final transient IComponentEngine engine;
 
@@ -89,18 +94,34 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 	}
 
 	public void restoreState(FacesContext context, Object state) {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("Restoring state of component '"+getId()+"'.");
+		}
+		
 		Object states[] = (Object[]) state;
 
 		super.restoreState(context, states[0]);
 
 		engine.restoreState(context, states[1]);
+
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("State of component '"+getId()+"' restored.");
+		}
 	}
 
 	public Object saveState(FacesContext context) {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("Saving state of component '"+getId()+"'.");
+		}
+
 		Object states[] = new Object[2];
 
 		states[0] = super.saveState(context);
 		states[1] = engine.saveState(context);
+
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("State of component '"+getId()+"' saved.");
+		}
 
 		return states;
 	}
@@ -127,6 +148,7 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 		}
 	}
 
+/*
     public void encodeBegin(FacesContext context) throws IOException {
 		if (context == null) {
 			throw new NullPointerException();
@@ -162,13 +184,14 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 
     	super.encodeEnd(context);    	
 	}
+	*/
 	
 	public void processDecodes(FacesContext context) {
 		if (context == null) {
 			throw new NullPointerException();
 		}
 
-		if (isRendered()==false || isClientRendered()==false) {
+		if (isRendered()==false) {
 			return;
 		}
 
@@ -192,7 +215,7 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
         }
 
         // Skip processing if our rendered flag is false
-		if (isRendered()==false || isClientRendered()==false) {
+		if (isRendered()==false) {
             return;
         }
 
@@ -211,7 +234,7 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 
     public void processUpdates(FacesContext context) {
 
- 		if (isRendered()==false || isClientRendered()==false) {
+ 		if (isRendered()==false) {
             return;
         }
  
@@ -279,6 +302,14 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 		}
 		
 		return true;
+	}
+	
+	public final boolean isRendered() {
+		if (super.isRendered()==false) {
+			return false;
+		}
+		
+		return isClientRendered();
 	}
 	
 	public final IAsyncRenderer getAsyncRenderer(FacesContext facesContext) {

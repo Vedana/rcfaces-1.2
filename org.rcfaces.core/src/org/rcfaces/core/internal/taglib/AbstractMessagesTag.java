@@ -36,10 +36,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
+	private String showDetail;
 	private String showSummary;
 	private String margins;
 	private String globalOnly;
-	private String showDetail;
 	public final String getHeight() {
 		return height;
 	}
@@ -216,6 +216,14 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
+	public final String getShowDetail() {
+		return showDetail;
+	}
+
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
+	}
+
 	public final String getShowSummary() {
 		return showSummary;
 	}
@@ -240,14 +248,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.globalOnly = globalOnly;
 	}
 
-	public final String getShowDetail() {
-		return showDetail;
-	}
-
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
-	}
-
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  height='"+height+"'");
@@ -267,10 +267,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  globalOnly='"+globalOnly+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -472,6 +472,15 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
 		}
 
+		if (showDetail != null) {
+			if (isValueReference(showDetail)) {
+				ValueBinding vb = application.createValueBinding(showDetail);
+				component.setShowDetail(vb);
+			} else {
+				component.setShowDetail(getBool(showDetail));
+			}
+		}
+
 		if (showSummary != null) {
 			if (isValueReference(showSummary)) {
 				ValueBinding vb = application.createValueBinding(showSummary);
@@ -494,15 +503,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 				component.setGlobalOnly(vb);
 			} else {
 				component.setGlobalOnly(getBool(globalOnly));
-			}
-		}
-
-		if (showDetail != null) {
-			if (isValueReference(showDetail)) {
-				ValueBinding vb = application.createValueBinding(showDetail);
-				component.setShowDetail(vb);
-			} else {
-				component.setShowDetail(getBool(showDetail));
 			}
 		}
 	}
@@ -530,10 +530,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
+		showDetail = null;
 		showSummary = null;
 		margins = null;
 		globalOnly = null;
-		showDetail = null;
 
 		super.release();
 	}

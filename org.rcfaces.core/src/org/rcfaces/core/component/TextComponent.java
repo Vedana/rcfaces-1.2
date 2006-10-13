@@ -7,12 +7,14 @@ import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.IForCapability;
 
 public class TextComponent extends AbstractOutputComponent implements 
 	ITextCapability,
 	IFontCapability,
 	ITextAlignmentCapability,
-	IAccessKeyCapability {
+	IAccessKeyCapability,
+	IForCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.text";
 
@@ -154,24 +156,20 @@ public class TextComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
-	public final String getFor() {
+	public final java.lang.String getFor() {
 		return getFor(null);
 	}
 
-	public final String getFor(javax.faces.context.FacesContext facesContext) {
+	public final java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR, facesContext);
 	}
 
-	public final void setFor(String forVal) {
-		engine.setProperty(Properties.FOR, forVal);
+	public final void setFor(java.lang.String forValue) {
+		engine.setProperty(Properties.FOR, forValue);
 	}
 
-	public final void setFor(ValueBinding forVal) {
-		engine.setProperty(Properties.FOR, forVal);
-	}
-
-	public final boolean isForSetted() {
-		return engine.isPropertySetted(Properties.FOR);
+	public final void setFor(ValueBinding forValue) {
+		engine.setProperty(Properties.FOR, forValue);
 	}
 
 	public void release() {

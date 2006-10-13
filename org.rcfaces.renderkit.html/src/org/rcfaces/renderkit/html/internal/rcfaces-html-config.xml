@@ -65,9 +65,15 @@
 				<border-id>rounded</border-id>
 				<renderer-class>org.rcfaces.renderkit.html.internal.border.RoundedBorderRenderer</renderer-class>
 			</border-renderer>
+
 			<default-border>
 				<component-family>rcfaces</component-family>
 				<renderer-type>org.rcfaces.core.fieldSet</renderer-type>
+				<border-id>rounded</border-id>
+			</default-border>
+			<default-border>
+				<component-family>rcfaces</component-family>
+				<renderer-type>org.rcfaces.core.messageFieldSet</renderer-type>
 				<border-id>rounded</border-id>
 			</default-border>
 		</render-kit>
@@ -305,11 +311,11 @@
  * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
  * @example	clientValidator="alphanum('@._')"
  */
--->
 	<clientValidator id="alphanum">
 		<parameter name="alpha.otherChars" value="" />
 		<filter call="f_vb.Filter_alphanum" />
 	</clientValidator>
+-->
 
 <!--
 /**

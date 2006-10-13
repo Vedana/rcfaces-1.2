@@ -1,0 +1,2 @@
+var _y={EVENT_LOCKED:"Des données de la table sont en cours de chargement ...\nVeuillez patienter !"}
+f_resourceBundle.en(f_dataGrid,_y);

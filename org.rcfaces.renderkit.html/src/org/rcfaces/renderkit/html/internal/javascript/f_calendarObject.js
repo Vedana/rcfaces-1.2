@@ -2854,6 +2854,9 @@ var __prototype = {
 	f_formatDate: function(date, format) {
 		return f_dateFormat.FormatDate(date, format, this._twoDigitYearStart, this._locale);
 	},
+	/** 
+	 * @method protected
+	 */
 	f_getEventLocked2: function(showAlert, mask) {
 
 		if (this._popupMode) {

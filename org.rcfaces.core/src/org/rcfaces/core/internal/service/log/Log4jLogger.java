@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -30,7 +38,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
 import org.rcfaces.core.internal.service.log.LogService.IFilter;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -52,7 +59,7 @@ class Log4jLogger implements LogService.ILogger {
             return;
         }
 
-        Level levelObject = Level.toLevel(level, Level.FATAL);
+        Level levelObject = convertIntToLevel(level);
 
         logger.callAppenders(new LoggingEvent(name, logger, date, levelObject,
                 message, exception));
@@ -79,7 +86,7 @@ class Log4jLogger implements LogService.ILogger {
                 name = name.substring(1);
             }
 
-            int level = logger.getLevel().toInt();
+            int level = convertLevelToInt(logger.getEffectiveLevel());
 
             if (l == null) {
                 l = new ArrayList();
@@ -93,5 +100,45 @@ class Log4jLogger implements LogService.ILogger {
         }
 
         return (LogService.Filter[]) l.toArray(new LogService.Filter[l.size()]);
+    }
+
+    private static final int convertLevelToInt(Level level) {
+        int l = level.toInt();
+        if (l >= Level.FATAL_INT) {
+            return 0;
+        }
+        if (l >= Level.ERROR_INT) {
+            return 1;
+        }
+        if (l >= Level.WARN_INT) {
+            return 2;
+        }
+        if (l >= Level.INFO_INT) {
+            return 3;
+        }
+        if (l >= Level.DEBUG_INT) {
+            return 4;
+        }
+
+        return 5;
+    }
+
+    private static final Level convertIntToLevel(int level) {
+        switch (level) {
+        case 0:
+            return Level.FATAL;
+
+        case 1:
+            return Level.ERROR;
+
+        case 2:
+            return Level.WARN;
+
+        case 3:
+            return Level.INFO;
+
+        default:
+            return Level.DEBUG;
+        }
     }
 }

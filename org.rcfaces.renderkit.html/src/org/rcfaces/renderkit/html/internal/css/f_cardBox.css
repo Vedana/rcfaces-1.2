@@ -13,14 +13,10 @@
  
 .f_cardBox {
 	display: block;
-	position: relative;
 	text-align: left;
 	vertical-align: baseline;
 }
  
 .f_cardBox_card {
-	position:absolute;
-	left: 0;
-	top: 0;
 	display: block;
 }

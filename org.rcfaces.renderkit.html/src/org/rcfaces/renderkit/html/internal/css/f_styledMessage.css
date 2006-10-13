@@ -1,0 +1,20 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_styledMessage
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_styledMessage,
+.f_styledMessage_info,
+.f_styledMessage_warn,
+.f_styledMessage_error,
+.f_styledMessage_fatal {
+	display: inline;
+}
+ 

@@ -274,7 +274,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
                     // Render the beginning of this row
                     htmlWriter.startElement("TR");
 
-                    String rowId = htmlRenderContext.getComponentId(
+                    String rowId = htmlRenderContext.getComponentClientId(
                             facesContext, componentsListComponent);
                     if (rowId != null) {
                         htmlWriter.writeAttribute("id", rowId);
@@ -394,7 +394,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
         if (componentsListComponent.isBorder(facesContext) == false) {
-            cssWriter.writeProperty("border-style", "none");
+            cssWriter.writeBorderStyle("none");
         }
 
         String w = componentsListComponent.getWidth(facesContext);
@@ -402,7 +402,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         if (w != null || h != null) {
             cssWriter.writeSize(componentsListComponent);
             if (h != null) {
-                cssWriter.writeProperty("overflow", "auto");
+                cssWriter.writeOverflow("auto");
             }
         }
 

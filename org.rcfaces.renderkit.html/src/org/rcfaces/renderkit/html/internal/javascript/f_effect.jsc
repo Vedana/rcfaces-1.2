@@ -1,0 +1,15 @@
+var _r={pv:function(e,t){var r=f_effect.S
+if(!r){r={}
+f_effect.S=r}r[e]=t},Create:function(e,t,r){var i=null,n=f_effect.S,f
+if(!n)return i
+f=n[e]
+if(!f)return i
+return f.f_newInstance(t,r)},Finalizer:function(){var e
+f_effect.S=e}}
+var _e={f_effect:function(e,t){var r=this
+r.f_super(arguments)
+r._d=e
+r._nn=t},f_finalize:function(){var t,e=this
+e._d=e._nn=t
+e.f_super(arguments)},f_performEffect:function(e){},f_getComponent:function(){return this._d}}
+var f_effect=new f_class("f_effect",null,_r,_e,f_object);

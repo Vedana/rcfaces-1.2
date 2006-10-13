@@ -1,0 +1,29 @@
+var _e={f_finalize:function(){var e
+this._f1=e},rr:{after:function(){var r=this,e=f_messageContext.Get(r),t=e.f_listMessages(r.f_getFor())
+if(t&&t.length>0&&t[0]!=r._f1){r._f1=t[0]
+r.rc()}}},f_getFor:function(){var e=this.f_getForComponentIds()
+return e[0]},f_getForComponentIds:function(){var c,a=this,e=a._dr,t,r,n,f,i,o
+if(e===c){t=f_core.D(a,"v:for")
+e=[]
+a._dr=e
+r=[]
+a._do=r
+if(t){n=t.split(",")
+for(f=0;f<n.length;f++){i=f_core.cs(n[f])
+e.push(i)
+o=fa_namingContainer.sr(a,i)
+r.push(o)}}}return e},_ny:function(){this.f_getForComponentIds()
+return this._do},f_isSetFocusIfMessage:function(){var r,t=this,e
+if(t._tl===r){e=f_core.D(t,"v:setFocusIfMessage")
+t._tl=(e)?!0:!1}return t._tl},f_setFocusIfMessage:function(e){this._tl=e},f_performMessageChanges:function(e){var s=this,t=s._ny(),r,n,f,i,o,a,c,u
+if(t.length==0)t=[null]
+for(n=0;n<t.length;n++){f=t[n]
+i=e.f_listMessages(f)
+for(o=0;o<i.length;o++){a=i[o]
+if(!r||r.f_getSeverity()<a.f_getSeverity())r=a}}if(r==s._f1)return
+s._f1=r
+s.rc()
+if(r&&s.f_isSetFocusIfMessage()){c=s.f_getFor()
+if(c){u=s.f_findComponent(c)
+if(u)f_core.SetFocus(u,!0)}}}}
+var fa_message1=new f_aspect("fa_message1",null,_e,fa_message);

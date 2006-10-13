@@ -1,23 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.1  2004/12/22 12:16:15  oeuillot
- * Refonte globale de l'arborescence des composants ....
- * Int�gration des corrections de Didier
- *
- * Revision 1.2  2004/09/24 14:01:36  oeuillot
- * *** empty log message ***
- *
- * Revision 1.1  2004/08/20 17:21:12  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.core.model;
 

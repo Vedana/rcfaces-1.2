@@ -27,41 +27,53 @@ var __prototype={
 				var card=cards[i];
 				
 				// On peut le faire de ce destructeur, ou celui de la card !
-				this._destroyCard(card);
+				this.f_destroyCard(card);
 			}
 		}
 
 		this.f_super(arguments);
 	},
 	/**
-	 * @method hidden
+	 * @method protected
 	 * @return void
 	 */
-	_updateCards: function() {
+	f_updateCards: function() {
 		var cards=this._cards;
 		for(var i=0;i<cards.length;i++) {
 			var card=cards[i];
 		
-			var body=f_core.GetElementById(card._id, this.ownerDocument);
-			f_core.Assert(body, "Can not find body of card '"+card._id+"'.");
+			var ccard=f_core.GetElementById(card._id, this.ownerDocument);
+			f_core.Assert(ccard, "Can not find card component of card '"+card._id+"'.");
 
-			card._body=body;
-			body._vcard=card;			
-			body._declareCard(this);	
+			f_core.Debug(f_cardBox, "Update card#"+i+" card="+card+" ccard="+ccard);
+			card._ccard=ccard;
+			ccard._vcard=card;			
+			ccard.f_declareCard(this);	
 		}
 	},
 	/**
-	 * @method hidden
+	 * @method protected
 	 * @return void
 	 */
-	_destroyCard: function(card) {
-		card._id=undefined;
+	f_destroyCard: function(card) {
+		var cards=this._cards;
+		if (cards) {
+			cards.f_removeElement(card);
+		}
+
+		if (!card._cardBox) {
+			return;
+		}		
+		
+		// card._id=undefined; // string
 		card._cardBox=undefined;
 
-		var vcard=card._vcard;
-		if (vcard) {
-			card._vcard=undefined;
-			vcard._vcard=undefined;
+		var ccard=card._ccard;
+		f_core.Debug(f_cardBox, "Destroy card: "+card+"  comp="+ccard);
+		if (ccard) {
+			card._ccard=undefined;
+		
+			ccard._vcard=undefined;
 		}
 				
 		// Pas forcement les cartes peuvent etre effacées aprés !
@@ -72,29 +84,30 @@ var __prototype={
 	 * @method hidden
 	 * @return void
 	 */
-	_setCardFocus: function(card) {
+	f_setCardFocus: function(card) {
 	},
 
 	/**
 	 * @method hidden
 	 * @return void
 	 */
-	_updateCardStyle: function(card) {
+	f_updateCardStyle: function(card) {
 	},
 
 	/**
 	 * @method hidden
 	 * @return void
 	 */
-	_declareCard: function(cardBodyId, selected) {
+	f_declareCard: function(cardBodyId, selected) {
 		var card=new Object;
 
-		if (this._cards.length>0) {
-			var prev=this._cards[this._cards.length-1];
+		var cards=this._cards;
+		if (cards.length) {
+			var prev=cards[cards.length-1];
 			prev._next=card;
 			card._prev=prev;
 		}
-		this._cards.push(card);		
+		cards.push(card);		
 		card._cardBox=this;
 
 		card._id=cardBodyId;
@@ -119,18 +132,9 @@ var __prototype={
 	
 			f_core.Assert(cardComponent, "Can not find car '"+id+"'.");
 		}
-	
-		var card;
-		for(var i=0;i<this._cards.length;i++) {
-			var c=this._cards[i];
-			
-			if (c._body!=cardComponent) {
-				continue;
-			}
-			
-			card=c;
-			break
-		}
+
+		var card=cardComponent._vcard;
+		f_core.Assert(card && card._cardBox==this , "Invalid tab object ("+tab+")");
 		
 		if (!card) {
 			return false;
@@ -143,16 +147,16 @@ var __prototype={
 		var old=this._selectedCard;
 		this._selectedCard=null;
 		if (old) {
-			this._updateCardStyle(old);
-		}
-			
-		card._body.f_setVisible(true);
-		if (old) {
-			old._body.f_setVisible(false);
+			this.f_updateCardStyle(old);
 		}
 		
+		if (old) {
+			old._ccard.f_setVisible(false);
+		}
+		card._ccard.f_setVisible(true);
+		
 		this._selectedCard=card;
-		this._updateCardStyle(card);
+		this.f_updateCardStyle(card);
 		
 		this.f_setProperty(f_prop.SELECTED, card._id);
 		
@@ -169,7 +173,7 @@ var __prototype={
 			return null;
 		}
 		
-		return sc._body;
+		return sc._ccard;
 	}
 }
  

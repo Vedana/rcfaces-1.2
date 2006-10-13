@@ -10,16 +10,20 @@
  * @version $Revision$ $Date$ 
  */
  
-SPAN.f_message {
+.f_message,
+.f_message_info,
+.f_message_warn,
+.f_message_error,
+.f_message_fatal {
 	-moz-user-select: none;
 	user-select: none;
 }
 
-LABEL.f_message_summary {
+.f_message_summary {
 	color: red;
 	font-weight: bold;
 }
 
-LABEL.f_message_detail {
+.f_message_detail {
 	color: red;
 }

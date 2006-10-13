@@ -14,12 +14,14 @@ var __prototype = {
 	f_fieldSet: function() {
 		this.f_super(arguments);
 		
-		this._text = f_core.GetFirstElementByTagName(this, "LABEL");
 		// Le premier LABEL est forcement notre titre !
+		this._titleLabel = f_core.GetFirstElementByTagName(this, "LABEL");		
 	},
 	f_finalize: function() {
-		if (this._text) {
-			this._text=undefined; // HtmlElement
+		var text=this._titleLabel;
+		if (text) {
+			this._titleLabel=undefined; // HtmlElement
+			f_core.VerifyProperties(text);
 		}
 		
 		this.f_super(arguments);
@@ -29,40 +31,49 @@ var __prototype = {
 	 * @return string
 	 */
 	f_getText: function() {
-		if (!this._text) {
+		var titleLabel=this._titleLabel;
+
+		if (!titleLabel) {
 			return "";
 		}
 		
-		return f_core.GetTextNode(this._text);
+		return f_core.GetTextNode(titleLabel);
 	},
 	/**
 	 * @method public
 	 * @param string text
+	 * @param hidden boolean noSerialize
 	 * @return void
 	 */
 	f_setText: function(text) {
-		var cp=this._text;
+		f_core.Assert(text===null || typeof(text)=="string", "f_fieldSet.f_setText: Invalid text parameter ('"+text+"')");
 
-		if (!cp) {
+		var titleLabel=this._titleLabel;
+
+		f_core.Debug(f_fieldSet, "Change Label ("+titleLabel+") to text '"+text+"'");
+
+		if (!titleLabel) {
 			return;
 		}
-		
-		if (typeof(text)!="string") {
-			text="";
-		}
 				
-		f_core.SetTextNode(cp, text);
+		if (!text) {
+			text="";
+		}	
+			
+		f_core.SetTextNode(titleLabel, text);
+		
+		var style=titleLabel.style;
 		if (text.length) {
-			if (cp.style.display=="none") {
-				cp.style.display="inherit";
+			if (style.display=="none") {
+				style.display="inherit";
 			}
 			
 		// Titre pas visible !
-		} else if (cp.style.display!="none") {
-			cp.style.display="none";
+		} else if (style.display!="none") {
+			style.display="none";
 		}
 
-		this.f_setProperty(f_prop.TEXT, text);		
+		this.f_setProperty(f_prop.TEXT, text);
 	}
 }
 var f_fieldSet=new f_class("f_fieldSet", null, null, __prototype, f_component);

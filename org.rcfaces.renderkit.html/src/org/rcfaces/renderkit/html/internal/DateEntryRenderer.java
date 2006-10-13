@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -53,7 +61,6 @@ import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -99,8 +106,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
             Locale locale = htmlWriter.getComponentRenderContext()
                     .getRenderContext().getProcessContext().getUserLocale();
 
-            dateFormat = CalendarTools.getDateFormatPattern(locale,
-                    DateFormat.SHORT);
+            dateFormat = CalendarTools.getDefaultPattern(locale);
         }
 
         if (dateFormat == null) {
@@ -108,7 +114,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
                     + dateEntryComponent.getId() + "'.");
         }
 
-        dateFormat = CalendarTools.normalizeDateFormat(componentRenderContext,
+        dateFormat = CalendarTools.normalizeFormat(componentRenderContext,
                 dateFormat);
 
         htmlWriter.writeAttribute("v:dateFormat", dateFormat);
@@ -289,18 +295,12 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
                 curValue = curYear;
 
                 if (nb == 2) {
-                    if (minValue >= 0) {
+                    if (minValue < maxValue && minValue / 100 == maxValue / 100) {
                         minValue %= 100;
-                    }
-                    if (maxValue >= 0) {
                         maxValue %= 100;
-
-                        if (minValue > maxValue) {
-                            // Ca peut arriver dans des cas d'année sur 2
-                            // chiffres !
-
-                            maxValue += 100;
-                        }
+                    } else {
+                        minValue = 0;
+                        maxValue = 99;
                     }
                     if (defaultValue >= 0) {
                         defaultValue %= 100;
@@ -421,7 +421,8 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
             int minValue, int maxValue, int defaultValue, int curValue,
             boolean disabled, boolean readOnly, String separators)
             throws WriterException {
-        String subId = htmlWriter.getComponentRenderContext().getComponentId()
+        String subId = htmlWriter.getComponentRenderContext()
+                .getComponentClientId()
                 + NamingContainer.SEPARATOR_CHAR + ch;
 
         htmlWriter.startElement("INPUT");
@@ -459,7 +460,6 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         }
 
         if (minValue >= 0) {
-
             htmlWriter.writeAttribute("v:min", minValue);
         }
 

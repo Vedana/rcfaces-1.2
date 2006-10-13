@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/10/04 12:31:59  oeuillot
  * Stabilisation
  *
@@ -106,9 +114,9 @@ public interface IRenderContext {
 
     IScriptRenderContext getScriptRenderContext();
 
-    String getComponentId(FacesContext facesContext, UIComponent component);
+    String getComponentClientId(FacesContext facesContext, UIComponent component);
 
-    String computeBrotherComponentId(FacesContext facesContext,
+    String computeBrotherComponentClientId(FacesContext facesContext,
             UIComponent brotherComponent, String componentId);
 
     IComponentWriter getComponentWriter(FacesContext facesContext);

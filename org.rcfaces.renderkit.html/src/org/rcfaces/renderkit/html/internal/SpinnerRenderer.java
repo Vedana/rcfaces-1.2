@@ -2,6 +2,14 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -86,7 +94,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         htmlWriter.startElement("TABLE");
         htmlWriter.writeAttribute("cellpadding", "0");
-        htmlWriter.writeAttribute("cellpspacing", "0");
+        htmlWriter.writeAttribute("cellspacing", "0");
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -129,7 +137,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         }
 
         IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(htmlWriter);
-        String blankImageURL = htmlRenderContext.getHtmlExternalContext()
+        String blankImageURL = htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetURI(BLANK_IMAGE_URL);
 
         htmlWriter.startElement("IMG");

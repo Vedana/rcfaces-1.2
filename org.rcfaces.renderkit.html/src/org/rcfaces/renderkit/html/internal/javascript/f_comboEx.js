@@ -1113,7 +1113,7 @@ var __prototype = {
 			f_comboEx._Ie_showPopup(this);
 			
 		} else {
-			var p2=f_core.GetAbsolutePos(this);
+			var p2=f_core.GetAbsolutePosition(this);
 			popup.style.left=p2.x;
 			popup.style.top=p2.y+this.offsetHeight;
 			popup.style.width=this.offsetWidth-2;

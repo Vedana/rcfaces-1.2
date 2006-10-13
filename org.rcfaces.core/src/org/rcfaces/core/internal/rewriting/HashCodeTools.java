@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/20 17:55:19  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -25,13 +33,13 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.util.Base64;
+import org.rcfaces.core.internal.util.IncludeHttpServletRequest;
 import org.rcfaces.core.internal.util.IncludeHttpServletResponse;
 
 /**
@@ -227,7 +235,7 @@ public class HashCodeTools {
         ByteBufferOutputStream outputStream = new ByteBufferOutputStream(
                 INITIAL_BUFFER_SIZE);
 
-        ServletRequest request = new HttpServletRequestWrapper(servletRequest);
+        ServletRequest request = new IncludeHttpServletRequest(servletRequest);
         IncludeHttpServletResponse response = IncludeHttpServletResponse
                 .create(servletResponse, outputStream, DEFAULT_CHARSET);
 

@@ -378,6 +378,17 @@
 			</class>
 		</file>
 	</module>
+
+<!-- Entries Aspect -->
+	<module id="entryAspect">
+		<file name="fa_compositeEntry.js">
+			<class name="fa_compositeEntry">
+				<required-class name="f_aspect" />
+				<required-class name="fa_readOnly" />
+				<required-class name="fa_disabled" />
+			</class>
+		</file>
+	</module>
 	
 <!-- Popups Components -->
 	<module id="popup">
@@ -656,9 +667,9 @@
 				<required-class name="f_messageContext" />
 			</class>
 		</file>
-		<file name="f_message.js">
-			<class name="f_message">
-				<required-class name="f_component" />
+		<file name="fa_message1.js">
+			<class name="fa_message1">
+				<required-class name="f_aspect" />
 				<required-class name="fa_message" />
 			</class>
 		</file>
@@ -666,6 +677,24 @@
 			<class name="f_messages">
 				<required-class name="f_component" />
 				<required-class name="fa_message" />
+			</class>
+		</file>
+		<file name="f_message.js">
+			<class name="f_message">
+				<required-class name="f_component" />
+				<required-class name="fa_message1" />
+			</class>
+		</file>
+		<file name="f_styledMessage.js">
+			<class name="f_styledMessage">
+				<required-class name="f_component" />
+				<required-class name="fa_message1" />
+			</class>
+		</file>
+		<file name="f_messageFieldSet.js">
+			<class name="f_messageFieldSet">
+				<required-class name="f_fieldSet" />
+				<required-class name="fa_message1" />
 			</class>
 		</file>
 	</module>
@@ -852,9 +881,15 @@
 			<class name="f_dateEntry">
 				<required-class name="f_component" />
 				<required-class name="fa_calendarPopup" />
-				<required-class name="fa_disabled" />
+				<required-class name="fa_compositeEntry" />
 				<required-class name="fa_required" />
-				<required-class name="fa_readOnly" />
+			</class>
+		</file>
+		<file name="f_timeEntry.js">
+			<class name="f_timeEntry">
+				<required-class name="f_component" />
+				<required-class name="fa_compositeEntry" />
+				<required-class name="fa_required" />
 			</class>
 		</file>
 	</module>

@@ -357,7 +357,7 @@ var __prototype = {
 
 		f_pager._AddText(this, "]  ");
 		
-		this.f_appendPagesButtons(this, first, rows, rowCount, maxRows,className+"_pgoto", resourceBundle);
+		this.f_appendPagesButtons(this, first, rows, rowCount, maxRows,className+"_pgoto", resourceBundle, parameter);
 	
 		f_pager._AddText(this, "  [");
 	
@@ -432,6 +432,13 @@ var __prototype = {
 					resourceBundle=f_resourceBundle.Get(f_pager);
 				}
 				
+				var parameter=undefined;
+				var pvar=varName.indexOf(':');
+				if (pvar>=0) {
+					parameter=varName.substring(pvar+1);
+					varName=varName.substring(0, pvar);
+				}
+				
 				switch(varName) {
 				case "first":
 				case "position":
@@ -485,7 +492,7 @@ var __prototype = {
 					break;
 				
 				case "bpages":
-					this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,className+"_pgoto", resourceBundle);
+					this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,className+"_pgoto", resourceBundle, parameter);
 					break;
 					
 				default:
@@ -656,7 +663,7 @@ var __prototype = {
 	/**
 	 * @method protected
 	 */
-	f_appendPagesButtons: function(component, first, rows, rowCount, maxRows, cls, resourceBundle) {
+	f_appendPagesButtons: function(component, first, rows, rowCount, maxRows, cls, resourceBundle, separator) {
 		var selectedPage = Math.floor(first / rows);
 		var nbPage;
 		if (rowCount<0) {				
@@ -682,11 +689,34 @@ var __prototype = {
 			}
 		}
 		
-	
+		var sep=null;
+		
+		if (separator) {
+			var ss=separator.split(';');
+			for(var i=0;i<ss.length;i++) {
+				var s=ss[i];
+				var p="";
+				var ep=s.indexOf('=');
+				if (ep>=0) {
+					p=s.substring(ep+1);
+					s=s.substring(0, ep);
+				}
+				
+				switch(s) {
+				case "separator":
+					sep=p;
+					break;
+				}
+			}
+		}
+		
+		if (sep===null) {
+			sep=", ";
+		}
 		
 		for (var i = 0; i < showPage; i++) {
 			if (i > 0) {
-				f_pager._AddText(component, ", ");
+				f_pager._AddText(component, sep);
 			}
 
 			var pi = pageOffset + i;

@@ -71,7 +71,7 @@ var __prototype = {
 	},	
 	/**
 	 * 
-	 * @method hidden
+	 * @method protected
 	 */
 	f_getEventLocked: function(showAlert, mask) {
 		if (!window.f_event) {

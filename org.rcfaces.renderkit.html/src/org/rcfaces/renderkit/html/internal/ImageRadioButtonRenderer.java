@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -88,13 +96,14 @@ package org.rcfaces.renderkit.html.internal;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ImageRadioButtonComponent;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
-
 
 /**
  * 
@@ -104,19 +113,30 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
     private static final String REVISION = "$Revision$";
 
-    public void encodeEnd(IComponentWriter writer) throws WriterException {
-        FacesContext facesContext = writer.getComponentRenderContext()
-                .getFacesContext();
+    private static final Log LOG = LogFactory
+            .getLog(ImageRadioButtonRenderer.class);
 
-        ImageRadioButtonComponent radioButton = (ImageRadioButtonComponent) writer
-                .getComponentRenderContext().getComponent();
+    protected void decodeSelection(IImageButtonFamilly imageButtonCapability,
+            boolean selected) {
+        super.decodeSelection(imageButtonCapability, selected);
 
-        if (radioButton.isDisabled(facesContext) == false
-                || radioButton.isSelected(facesContext)) {
-            ((IHtmlWriter) writer).enableJavaScript();
+        ImageRadioButtonComponent imageRadioButtonComponent = (ImageRadioButtonComponent) imageButtonCapability;
+        Object radioValue = imageRadioButtonComponent.getRadioValue();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Decode selection of componentId='"
+                    + ((UIComponent) imageRadioButtonComponent).getId()
+                    + "' radioValue=" + radioValue + " selected=" + selected);
         }
 
-        super.encodeEnd(writer);
+        if (radioValue == null) {
+            return;
+        }
+
+        // La selection pouvait être déjà faite !
+        if (imageRadioButtonComponent.isSelected()) {
+            imageRadioButtonComponent.setSubmittedValue(radioValue);
+        }
     }
 
     protected String getJavaScriptClassName() {
@@ -126,6 +146,18 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
         return new ImageRadioButtonWriter((IImageButtonFamilly) component);
+    }
+
+    protected boolean isSelected(
+            ImageRadioButtonComponent imageRadioButtonComponent,
+            FacesContext facesContext) {
+        Object radioValue = imageRadioButtonComponent.getRadioValue();
+        if (radioValue == null) {
+            return imageRadioButtonComponent.isSelected(facesContext);
+        }
+
+        Object currentValue = imageRadioButtonComponent.getValue();
+        return radioValue.equals(currentValue);
     }
 
     /**
@@ -144,11 +176,22 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
                 throws WriterException {
             super.encodeAttributes(facesContext);
 
-            String group = ((IRadioGroupCapability) imageButtonFamilly)
+            String groupName = ((IRadioGroupCapability) imageButtonFamilly)
                     .getGroupName();
-            if (group != null) {
-                writer.writeAttribute("v:groupName", group);
+            if (groupName != null) {
+
+                groupName = HtmlTools.computeGroupName(writer
+                        .getHtmlComponentRenderContext().getHtmlRenderContext()
+                        .getHtmlProcessContext(),
+                        (UIComponent) imageButtonFamilly, groupName);
+
+                writer.writeAttribute("v:groupName", groupName);
             }
+        }
+
+        protected boolean isSelected(ISelectedCapability imageButtonFamilly) {
+            return ImageRadioButtonRenderer.this.isSelected(
+                    (ImageRadioButtonComponent) imageButtonFamilly, null);
         }
     }
 }

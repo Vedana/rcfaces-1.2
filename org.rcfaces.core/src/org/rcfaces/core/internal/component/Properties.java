@@ -51,6 +51,7 @@ public final class Properties {
 	public static final String DEFAULT_LEAF_IMAGE_URL = "camelia.defaultLeafImageURL";
 	public static final String DEFAULT_SELECTED_IMAGE_URL = "camelia.defaultSelectedImageURL";
 	public static final String DEFAULT_SELECTED_LEAF_IMAGE_URL = "camelia.defaultSelectedLeafImageURL";
+	public static final String DEFAULT_TIME = "camelia.defaultTime";
 	public static final String DISABLED = "camelia.disabled";
 	public static final String DISABLED_IMAGE_URL = "camelia.disabledImageURL";
 	public static final String DISABLED_WEEK_DAYS = "camelia.disabledWeekDays";
@@ -86,6 +87,7 @@ public final class Properties {
 	public static final String HIDE_ROOT_EXPAND_SIGN = "camelia.hideRootExpandSign";
 	public static final String HOME_DATE = "camelia.homeDate";
 	public static final String HOME_DATE_LABEL = "camelia.homeDateLabel";
+	public static final String HORIZONTAL_SCROLL = "camelia.horizontalScroll";
 	public static final String HORIZONTAL_SCROLL_POSITION = "camelia.horizontalScrollPosition";
 	public static final String HOVER_IMAGE_URL = "camelia.hoverImageURL";
 	public static final String IMAGE_HEIGHT = "camelia.imageHeight";
@@ -107,21 +109,23 @@ public final class Properties {
 	public static final String MAX_DATE = "camelia.maxDate";
 	public static final String MAX_RESULT_NUMBER = "camelia.maxResultNumber";
 	public static final String MAX_TEXT_LENGTH = "camelia.maxTextLength";
+	public static final String MAX_TIME = "camelia.maxTime";
 	public static final String MAX_WIDTH = "camelia.maxWidth";
 	public static final String MENU_ID = "camelia.menuId";
 	public static final String MESSAGE = "camelia.message";
 	public static final String MINIMUM = "camelia.minimum";
 	public static final String MIN_DATE = "camelia.minDate";
+	public static final String MIN_TIME = "camelia.minTime";
 	public static final String MIN_WIDTH = "camelia.minWidth";
 	public static final String MODE = "camelia.mode";
 	public static final String MULTIPLE_SELECT = "camelia.multipleSelect";
-	public static final String NO_MESSAGE_TEXT = "camelia.noMessageText";
 	public static final String NO_PAGED_MESSAGE = "camelia.noPagedMessage";
 	public static final String ONE_RESULT_MESSAGE = "camelia.oneResultMessage";
 	public static final String ORIENTATION = "camelia.orientation";
 	public static final String POPUP_ROW_NUMBER = "camelia.popupRowNumber";
 	public static final String PREFERENCE = "camelia.preference";
 	public static final String PRELOADED_LEVEL_DEPTH = "camelia.preloadedLevelDepth";
+	public static final String RADIO_VALUE = "camelia.radioValue";
 	public static final String READ_ONLY = "camelia.readOnly";
 	public static final String REMOVE_ALL_WHEN_SHOWN = "camelia.removeAllWhenShown";
 	public static final String REQUIRED = "required";
@@ -141,7 +145,9 @@ public final class Properties {
 	public static final String SELECTION_CARDINALITY = "camelia.selectionCardinality";
 	public static final String SELECTION_VALUES = "camelia.selectionValues";
 	public static final String SERVICE_ID = "camelia.serviceId";
+	public static final String SET_FOCUS_IF_MESSAGE = "camelia.setFocusIfMessage";
 	public static final String SHOW_CALENDAR_ON_FOCUS = "camelia.showCalendarOnFocus";
+	public static final String SHOW_IF_MESSAGE = "camelia.showIfMessage";
 	public static final String SORTED_COLUMN_IDS = "camelia.sortedColumnIds";
 	public static final String SORT_COMPARATOR = "camelia.sortComparator";
 	public static final String STEP = "camelia.step";
@@ -154,6 +160,7 @@ public final class Properties {
 	public static final String TEXT = "camelia.text";
 	public static final String TEXT_ALIGNMENT = "camelia.textAlignment";
 	public static final String TEXT_POSITION = "camelia.textPosition";
+	public static final String TIME_FORMAT = "camelia.timeFormat";
 	public static final String TOOL_TIP_TEXT = "camelia.toolTipText";
 	public static final String TWO_DIGIT_YEAR_START = "camelia.twoDigitYearStart";
 	public static final String TYPE = "camelia.type";
@@ -163,6 +170,7 @@ public final class Properties {
 	public static final String VAR = "camelia.var";
 	public static final String VERTICAL_ALIGN = "camelia.verticalAlign";
 	public static final String VERTICAL_ALIGNMENT = "camelia.verticalAlignment";
+	public static final String VERTICAL_SCROLL = "camelia.verticalScroll";
 	public static final String VERTICAL_SCROLL_POSITION = "camelia.verticalScrollPosition";
 	public static final String VISIBLE = "camelia.visible";
 	public static final String WARN_IMAGE_URL = "camelia.warnImageURL";

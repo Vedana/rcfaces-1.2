@@ -570,7 +570,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         public void send(HttpServletRequest request,
                 HttpServletResponse response) throws IOException {
 
-            if (Constants.STAT_HTTP_RESPONSE) {
+            if (Constants.STAT_RESOURCES_HTTP_RESPONSE) {
                 synchronized (StylesheetsServlet.this) {
                     count404Responses++;
                 }
@@ -663,6 +663,28 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 HttpServletResponse response) throws IOException,
                 ServletException {
 
+            long lastModified = getLastModified();
+            if (lastModified > 0) {
+                lastModified -= (lastModified % 1000);
+            }
+
+            if (noCache) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Set no cache for response.");
+                }
+                ConfiguredHttpServlet.setNoCache(response);
+
+            } else {
+                ExpirationDate expirationDate = getDefaultExpirationDate(repositoryVersion != null);
+                if (expirationDate != null) {
+                    expirationDate.sendExpires(response);
+                }
+
+                if (lastModified > 0) {
+                    response.setDateHeader(HTTP_LAST_MODIFIED, lastModified);
+                }
+            }
+
             String etag = getETag();
             if (etag != null) {
                 String ifETag = request.getHeader(HTTP_IF_NONE_MATCH);
@@ -681,11 +703,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 }
             }
 
-            long lastModified = getLastModified();
             if (lastModified > 0) {
                 long ifModifiedSince = request
                         .getDateHeader(HTTP_IF_MODIFIED_SINCE);
                 if (ifModifiedSince > 0) {
+                    ifModifiedSince -= (ifModifiedSince % 1000);
+
                     if (ifModifiedSince >= lastModified) {
                         response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                         return;
@@ -707,24 +730,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 }
             }
 
-            if (noCache) {
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Set no cache for response.");
-                }
-                ConfiguredHttpServlet.setNoCache(response);
-
-            } else {
-                ExpirationDate expirationDate = getDefaultExpirationDate(repositoryVersion != null);
-                if (expirationDate != null) {
-                    expirationDate.sendExpires(response);
-                }
-
-                if (lastModified > 0) {
-                    response.setDateHeader(HTTP_LAST_MODIFIED, lastModified);
-                }
-            }
-
             response.setContentLength(buf.length);
             if (etag != null) {
                 response.setHeader(HTTP_ETAG, etag);
@@ -733,7 +738,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 response.setHeader(HTTP_HASH, hash);
             }
 
-            if (Constants.STAT_HTTP_RESPONSE) {
+            if (Constants.STAT_RESOURCES_HTTP_RESPONSE) {
                 synchronized (StylesheetsServlet.this) {
                     count200Responses++;
                 }

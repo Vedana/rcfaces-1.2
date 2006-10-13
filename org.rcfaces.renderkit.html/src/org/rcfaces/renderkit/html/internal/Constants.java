@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/09/20 17:55:24  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -64,6 +72,16 @@ public class Constants {
 
     public static final boolean CLIENT_BUNDLE_VERSIONED_SUPPORT = true;
 
+    public static final boolean PARAMETERIZED_SEPARATOR_SUPPORT = true;
+
+    public static final boolean CLIENT_GROUP_NAME_SUPPORT = true;
+
+    public static final boolean NORMALIZE_MARGINS = true;
+
+    public static final boolean DISABLE_IE_IMAGEBAR_DEFAULT_VALUE = true;
+
+    public static final boolean STAT_RESOURCES_HTTP_RESPONSE = false;
+
     private static final String version;
 
     private static final String buildId;
@@ -86,6 +104,19 @@ public class Constants {
 
         LOG.info("CLIENT_BUNDLE_VERSIONED_SUPPORT="
                 + CLIENT_BUNDLE_VERSIONED_SUPPORT);
+
+        LOG.info("PARAMETERIZED_SEPARATOR_SUPPORT="
+                + PARAMETERIZED_SEPARATOR_SUPPORT);
+
+        LOG.info("CLIENT_GROUP_NAME_SUPPORT=" + CLIENT_GROUP_NAME_SUPPORT);
+
+        LOG.info("NORMALIZE_MARGINS=" + NORMALIZE_MARGINS);
+
+        LOG.debug("DISABLE_IE_IMAGEBAR_DEFAULT_VALUE="
+                + DISABLE_IE_IMAGEBAR_DEFAULT_VALUE);
+
+        LOG.debug("STAT_RESOURCES_HTTP_RESPONSE="
+                + STAT_RESOURCES_HTTP_RESPONSE);
     }
 
     public static final String getVersion() {
@@ -95,9 +126,5 @@ public class Constants {
     public static final String getBuildId() {
         return buildId;
     }
-
-    public static final boolean DISABLE_IE_IMAGEBAR_DEFAULT_VALUE = true;
-
-    public static final boolean STAT_HTTP_RESPONSE = false;
 
 }

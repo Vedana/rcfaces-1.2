@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -314,7 +322,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         if (dataGridComponent
                 .isBorder(componentRenderContext.getFacesContext()) == false) {
-            cssWriter.writeProperty("border-style", "none");
+            cssWriter.writeBorderStyle("none");
         }
     }
 
@@ -515,18 +523,16 @@ public class DataGridRenderer extends AbstractCssRenderer {
             htmlWriter.startElement("DIV");
             htmlWriter.writeAttribute("class", className + "_dataBody_scroll");
 
-            {
-                ICssWriter cssWriter = createCssWriter();
+            ICssWriter cssWriter = new CssWriter(htmlWriter, 32);
 
-                if (height != null) {
-                    cssWriter.writeProperty("height", computeSize(height, -1,
-                            -getTitleHeight()));
-                }
-                if (w != null) {
-                    cssWriter.writeProperty("width", w);
-                }
-                cssWriter.close(htmlWriter);
+            if (height != null) {
+                cssWriter
+                        .writeHeight(computeSize(height, -1, -getTitleHeight()));
             }
+            if (w != null) {
+                cssWriter.writeWidth(w);
+            }
+            cssWriter.close();
         }
 
         htmlWriter.startElement("TABLE");
@@ -718,7 +724,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeAttribute("class", className + TITLE_STEXT);
 
         if (width != null) {
-            String widthRightPadding = computeSize(width, -1, -TEXT_RIGHT_PADDING);
+            String widthRightPadding = computeSize(width, -1,
+                    -TEXT_RIGHT_PADDING);
             htmlWriter.writeAttribute("style", "width: " + widthRightPadding);
         }
 
@@ -733,7 +740,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
 
         if (true) { // SORTER
-            String widthRightPadding = computeSize(width, -1, -TEXT_RIGHT_PADDING);
+            String widthRightPadding = computeSize(width, -1,
+                    -TEXT_RIGHT_PADDING);
             htmlWriter.writeAttribute("style", "width: " + widthRightPadding);
         }
 

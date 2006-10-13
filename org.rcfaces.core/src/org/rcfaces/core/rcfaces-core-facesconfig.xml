@@ -147,6 +147,10 @@
 		<component-class>org.rcfaces.core.component.MessageComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.messageFieldSet</component-type>
+		<component-class>org.rcfaces.core.component.MessageFieldSetComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.messages</component-type>
 		<component-class>org.rcfaces.core.component.MessagesComponent</component-class>
 	</component>
@@ -211,6 +215,10 @@
 		<component-class>org.rcfaces.core.component.SpinnerComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.styledMessage</component-type>
+		<component-class>org.rcfaces.core.component.StyledMessageComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.styledText</component-type>
 		<component-class>org.rcfaces.core.component.StyledTextComponent</component-class>
 	</component>
@@ -241,6 +249,10 @@
 	<component>
 		<component-type>org.rcfaces.core.textArea</component-type>
 		<component-class>org.rcfaces.core.component.TextAreaComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.timeEntry</component-type>
+		<component-class>org.rcfaces.core.component.TimeEntryComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.toolBar</component-type>
@@ -274,6 +286,30 @@
 		<component-type>org.rcfaces.core.service</component-type>
 		<component-class>org.rcfaces.core.component.ServiceComponent</component-class>
 	</component>
+	<converter>
+		<converter-id>org.rcfaces.Byte</converter-id>
+		<converter-class>org.rcfaces.core.converter.ByteConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>org.rcfaces.Short</converter-id>
+		<converter-class>org.rcfaces.core.converter.ShortConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>org.rcfaces.Integer</converter-id>
+		<converter-class>org.rcfaces.core.converter.IntegerConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>org.rcfaces.Long</converter-id>
+		<converter-class>org.rcfaces.core.converter.LongConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>org.rcfaces.Float</converter-id>
+		<converter-class>org.rcfaces.core.converter.FloatConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>org.rcfaces.Double</converter-id>
+		<converter-class>org.rcfaces.core.converter.DoubleConverter</converter-class>
+	</converter>
 <lifecycle>
 	<phase-listener>org.rcfaces.core.internal.config.ServicesRegistryImpl</phase-listener>
 	<phase-listener>org.rcfaces.core.internal.component.TemplatesEngine</phase-listener>

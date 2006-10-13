@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.1  2006/10/04 12:31:43  oeuillot
  * Stabilisation
  *
@@ -346,7 +354,7 @@ public class ComponentsListService extends AbstractHtmlService {
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
-            ComponentsListComponent dgc, String componentId,
+            ComponentsListComponent dgc, String componentClientId,
             ComponentsListRenderer dgr, int rowIndex,
             ISortedComponent sortedComponents[], String filterExpression)
             throws IOException {
@@ -365,12 +373,12 @@ public class ComponentsListService extends AbstractHtmlService {
         Object state = dgc.getAttributes().get(RENDER_CONTEXT_STATE);
 
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, dgc, componentId);
+                pw, dgc, componentClientId);
 
         String varId = jsWriter.getComponentVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementById").writeString(componentId).writeln(
+                "GetElementById").writeString(componentClientId).writeln(
                 ", document);");
 
         jsWriter.writeMethodCall("_startNewPage").writeInt(rowIndex).writeln(
@@ -390,7 +398,7 @@ public class ComponentsListService extends AbstractHtmlService {
             IRenderContext renderContext = HtmlRenderContext
                     .restoreRenderContext(facesContext, state, true);
 
-            renderContext.pushComponent(facesContext, dgc, componentId);
+            renderContext.pushComponent(facesContext, dgc, componentClientId);
 
             IComponentWriter writer = renderContext
                     .getComponentWriter(facesContext);

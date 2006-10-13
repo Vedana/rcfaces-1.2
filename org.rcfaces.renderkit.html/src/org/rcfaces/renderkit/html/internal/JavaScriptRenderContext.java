@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.7  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.6  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -519,7 +527,7 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
                 .getRenderContext();
 
         initializeJavaScript(writer, repository, renderContext
-                .getHtmlExternalContext());
+                .getHtmlProcessContext());
     }
 
     public void restoreState(Object state) {
@@ -616,11 +624,14 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
                     "false);");
 
         } else {
-            String separator = processContext.getNamingSeparator();
+            if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT) {
+                String separator = processContext.getNamingSeparator();
 
-            if (separator != null) {
-                writer.writeCall("fa_namingContainer", "SetSeparator")
-                        .writeString(String.valueOf(separator)).writeln(");");
+                if (separator != null) {
+                    writer.writeCall("fa_namingContainer", "SetSeparator")
+                            .writeString(String.valueOf(separator)).writeln(
+                                    ");");
+                }
             }
         }
 

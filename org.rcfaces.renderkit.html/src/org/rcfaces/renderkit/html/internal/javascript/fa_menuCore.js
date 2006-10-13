@@ -250,8 +250,8 @@ var __static = {
 			fa_menuCore._Ie_openPopup(menuItem, menuItem, menuItem._rlink.offsetWidth+1, 0);
 
 		} else {
-			var p1=f_core.GetAbsolutePos(menuItem);
-			var p2=f_core.GetAbsolutePos(popup);
+			var p1=f_core.GetAbsolutePosition(menuItem);
+			var p2=f_core.GetAbsolutePosition(popup);
 		
 			var x=p1.x+menuItem.offsetWidth;
 			var y=p1.y;
@@ -1593,7 +1593,7 @@ var __prototype = {
 			return this.f_isItemChecked(i)?i:null;
 		}
 
-		return this._findIntoGroup(this.f_getItemGroupName(item), search);
+		return this.f_findIntoGroup(this.f_getItemGroupName(item), search);
 	},
 	/**
 	 * @method public
@@ -1601,7 +1601,7 @@ var __prototype = {
 	 * @return Object[]
 	 */
 	f_listAllInGroup: function(item) {
-		return this._listGroup(this.f_getItemGroupName(item));
+		return this.f_listGroup(this.f_getItemGroupName(item));
 	},
 	/**
 	 * Remove all items

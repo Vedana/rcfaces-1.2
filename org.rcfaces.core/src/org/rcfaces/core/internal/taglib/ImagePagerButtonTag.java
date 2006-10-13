@@ -14,7 +14,7 @@ public class ImagePagerButtonTag extends ImageButtonTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(ImagePagerButtonTag.class);
 
-	private String forVal;
+	private String forValue;
 	private String type;
 	private String hideIfDisabled;
 	public String getComponentType() {
@@ -22,11 +22,11 @@ public class ImagePagerButtonTag extends ImageButtonTag implements Tag {
 	}
 
 	public final String getFor() {
-		return forVal;
+		return forValue;
 	}
 
-	public final void setFor(String forVal) {
-		this.forVal = forVal;
+	public final void setFor(String forValue) {
+		this.forValue = forValue;
 	}
 
 	public final String getType() {
@@ -50,7 +50,7 @@ public class ImagePagerButtonTag extends ImageButtonTag implements Tag {
 			if (ImagePagerButtonComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  forVal='"+forVal+"'");
+			LOG.debug("  forValue='"+forValue+"'");
 			LOG.debug("  type='"+type+"'");
 			LOG.debug("  hideIfDisabled='"+hideIfDisabled+"'");
 		}
@@ -64,12 +64,13 @@ public class ImagePagerButtonTag extends ImageButtonTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (forVal != null) {
-			if (isValueReference(forVal)) {
-				ValueBinding vb = application.createValueBinding(forVal);
+		if (forValue != null) {
+			if (isValueReference(forValue)) {
+				ValueBinding vb = application.createValueBinding(forValue);
+
 				component.setFor(vb);
 			} else {
-				component.setFor(forVal);
+				component.setFor(forValue);
 			}
 		}
 
@@ -93,7 +94,7 @@ public class ImagePagerButtonTag extends ImageButtonTag implements Tag {
 	}
 
 	public void release() {
-		forVal = null;
+		forValue = null;
 		type = null;
 		hideIfDisabled = null;
 

@@ -1,6 +1,7 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -16,7 +17,8 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 	ITextAlignmentCapability,
 	IVerticalAlignmentCapability,
 	IBorderTypeCapability,
-	IImageCapability {
+	IImageCapability,
+	IImageSizeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.fieldSet";
 
@@ -188,6 +190,38 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	public final void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	public final int getImageHeight() {
+		return getImageHeight(null);
+	}
+
+	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
+	}
+
+	public final void setImageHeight(int imageHeight) {
+		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
+	}
+
+	public final void setImageHeight(ValueBinding imageHeight) {
+		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
+	}
+
+	public final int getImageWidth() {
+		return getImageWidth(null);
+	}
+
+	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
+	}
+
+	public final void setImageWidth(int imageWidth) {
+		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
+	}
+
+	public final void setImageWidth(ValueBinding imageWidth) {
+		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
 	public void release() {

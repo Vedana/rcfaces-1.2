@@ -18,18 +18,18 @@
 	vertical-align: baseline;
 }
 
-INPUT.f_suggestTextEntry_readonly,
-INPUT.f_suggestTextEntry_disabled {
+.f_suggestTextEntry_readonly,
+.f_suggestTextEntry_disabled {
 	border: 1px solid #7F9DB9;
 	margin: 1px;
 }
 
-INPUT.f_suggestTextEntry_required {
+.f_suggestTextEntry_required {
 	border: 1px solid #7F9DB9;
 	color: red;
 }
 
-INPUT.f_suggestTextEntry_waiting {
+.f_suggestTextEntry_waiting {
 	border: 1px solid #7F9DB9;
 	background: url("suggestTextEntry/waiting.gif") no-repeat right center;
 }

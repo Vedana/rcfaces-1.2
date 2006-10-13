@@ -754,7 +754,7 @@ var __static = {
 	 	f_core.CancelEvent(evt);
 
 		var eventPos=f_core.GetEventPosition(evt, document);
-		var cursorPos=f_core.GetAbsolutePos(this);
+		var cursorPos=f_core.GetAbsolutePosition(this);
 		dataGrid._dragDeltaX=eventPos.x-cursorPos.x+dataGrid._scrollTitle.scrollLeft;
 
 		f_dataGrid._DragColumn=column;
@@ -785,7 +785,7 @@ var __static = {
 		if (!evt) evt = window.event;
 
 		var eventPos=f_core.GetEventPosition(evt, document);
-		var cursorPos=f_core.GetAbsolutePos(column._cursor);
+		var cursorPos=f_core.GetAbsolutePosition(column._cursor);
 		dataGrid._dragMousePosition=eventPos.x;
 		
 		var dw=eventPos.x-cursorPos.x+dataGrid._scrollTitle.scrollLeft-dataGrid._dragDeltaX;
@@ -806,7 +806,7 @@ var __static = {
 		var dataGrid=column._dataGrid;
 
 		var eventPos=dataGrid._dragMousePosition;
-		var cursorPos=f_core.GetAbsolutePos(column._cursor);
+		var cursorPos=f_core.GetAbsolutePosition(column._cursor);
 		
 		var dw=eventPos-cursorPos.x+dataGrid._scrollTitle.scrollLeft-dataGrid._dragDeltaX;
 		
@@ -1392,6 +1392,9 @@ var __prototype = {
 		
 		this.f_super(arguments, type, target);
 	},
+	/**
+	 * @method protected
+	 */
 	f_getEventLocked: function(showAlert) {
 		if (this._loading) {
 			if (showAlert!==false) {
@@ -3900,7 +3903,7 @@ var __prototype = {
 		
 		swidth-=f_dataGrid._TEXT_RIGHT_PADDING;
 		
-		document.title="swidth='"+swidth+"' cur='"+column._label.style.width+"' col="+column._col.style.width;
+//		document.title="swidth='"+swidth+"' cur='"+column._label.style.width+"' col="+column._col.style.width;
 		
 		var sw=swidth+"px";
 		if (column._box.style.width!=sw) {

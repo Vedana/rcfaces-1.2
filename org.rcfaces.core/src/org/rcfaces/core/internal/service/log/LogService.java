@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -29,6 +37,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.Jdk14Logger;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.rcfaces.core.internal.service.AbstractService;
 
@@ -60,6 +69,15 @@ public abstract class LogService extends AbstractService {
             try {
                 if (LOG instanceof Log4JLogger) {
                     logger = new Log4jLogger();
+                }
+
+            } catch (Throwable th) {
+                // en cas de debuggage, on peut avoir un ClassCastException !
+            }
+
+            try {
+                if (LOG instanceof Jdk14Logger) {
+                    logger = new Java14Logger();
                 }
 
             } catch (Throwable th) {

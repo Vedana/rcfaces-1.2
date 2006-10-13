@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -133,20 +141,16 @@ public class ExpirationDate implements Serializable {
 
     public void sendExpires(HttpServletResponse response) {
 
+        long d = 0;
         if (expiresDate > 0) {
-            response.setDateHeader(ConfiguredHttpServlet.HTTP_EXPIRES,
-                    expiresDate);
+            d = expiresDate;
 
             if (LOG.isTraceEnabled()) {
-                LOG.trace("Set expiration date to " + expiresDate);
+                LOG.trace("Expiration date is setted.");
             }
 
-            return;
-        }
-
-        if (expiresDelay > 0) {
-            long d = System.currentTimeMillis() + expiresDelay;
-            response.setDateHeader(ConfiguredHttpServlet.HTTP_EXPIRES, d);
+        } else if (expiresDelay > 0) {
+            d = System.currentTimeMillis() + expiresDelay;
 
             if (expiresMaxAge != null) {
                 response.setHeader(ConfiguredHttpServlet.HTTP_CACHE_CONTROL,
@@ -154,15 +158,23 @@ public class ExpirationDate implements Serializable {
             }
 
             if (LOG.isTraceEnabled()) {
-                LOG.trace("Compute expiration date: " + new Date(d)
-                        + " (delay=" + expiresDelay / Delay.SECOND + "s)");
+                LOG.trace("Compute expiration date from delay: " + expiresDelay
+                        / Delay.SECOND + "s");
             }
-
-            return;
         }
 
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("No expiration defined");
+        if (d > 0) {
+            d -= (d % 1000); // Retire les ms !
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Set expiration date to " + d + " (" + new Date(d)
+                        + ")");
+            }
+
+            response.setDateHeader(ConfiguredHttpServlet.HTTP_EXPIRES, d);
+
+        } else if (LOG.isDebugEnabled()) {
+            LOG.debug("No expiration defined");
         }
 
     }

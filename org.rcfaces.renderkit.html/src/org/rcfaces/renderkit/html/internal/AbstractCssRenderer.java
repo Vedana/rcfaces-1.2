@@ -1,94 +1,13 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.3  2006/10/04 12:31:42  oeuillot
- * Stabilisation
- *
- * Revision 1.2  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.32  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.31  2006/05/04 13:40:13  oeuillot
- * Ajout de f_findComponent cot� client
- *
- * Revision 1.30  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.29  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.28  2006/03/23 19:12:39  oeuillot
- * Ajout des marges
- * Ajout des processors
- * Amelioration des menus
- *
- * Revision 1.27  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.26  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.25  2005/12/27 16:08:16  oeuillot
- * Gestion imageButtonWriter
- * Ajout de fa_images
- * Preparation de f_imageCombo
- *
- * Revision 1.24  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
- * Revision 1.23  2005/11/08 12:16:28  oeuillot
- * Ajout de  Preferences
- * Stabilisation de imageXXXButton
- * Ajout de la validation cot� client
- * Ajout du hash MD5 pour les servlets
- * Ajout des accelerateurs
- *
- * Revision 1.22  2005/10/05 14:34:19  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.21  2005/09/16 09:54:42  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
- * Revision 1.20  2005/03/07 10:47:03  oeuillot
- * Systeme de Logging
- * Debuggage
- *
- * Revision 1.19  2004/12/30 17:24:20  oeuillot
- * Gestion des validateurs
- * Debuggage des composants
- *
- * Revision 1.18  2004/12/24 15:10:04  oeuillot
- * Refonte des tabbedPanes
- * Correction de problemes de value sur FieldSet nottament
- *
- * Revision 1.17  2004/12/22 12:16:15  oeuillot
- * Refonte globale de l'arborescence des composants ....
- * Int�gration des corrections de Didier
- *
  */
 package org.rcfaces.renderkit.html.internal;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
@@ -108,6 +27,8 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         implements ICssRenderer {
 
+    private static final Log LOG = LogFactory.getLog(AbstractCssRenderer.class);
+
     private static final String REVISION = "$Revision$";
 
     private static final int DEFAULT_RENDERED_HIDDEN_MODE = IVisibilityCapability.IGNORE_HIDDEN_MODE;
@@ -115,8 +36,6 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
     private static final String DEFAULT_MARGIN_UNIT = "px";
 
     public static final String BLANK_IMAGE_URL = "blank.gif";
-
-    private static final boolean NORMALIZE_MARGIN = true;
 
     protected static final int CSS_ALL_MASK = 0xffff;
 
@@ -189,7 +108,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         writeStyleClass(writer, classSuffix);
 
-        CssWriter cssWriter = new CssWriter();
+        ICssWriter cssWriter = new CssWriter(writer);
 
         int hiddenMode = DEFAULT_RENDERED_HIDDEN_MODE;
 
@@ -248,7 +167,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         writeCustomCss(writer, cssWriter);
 
-        cssWriter.close(writer);
+        cssWriter.close();
 
         if (hiddenMode != DEFAULT_RENDERED_HIDDEN_MODE) {
             writer.writeAttribute("v:hiddenMode", hiddenMode);
@@ -329,13 +248,10 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         }
     }
 
-    public static ICssWriter createCssWriter() {
-        return new CssWriter();
-    }
-
     protected static String normalizeMarginValue(String value) {
-        if (NORMALIZE_MARGIN == false) {
-            value = value.trim();
+        value = value.trim();
+
+        if (Constants.NORMALIZE_MARGINS == false) {
             if (value.length() < 1) {
                 return null;
             }
@@ -410,7 +326,14 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
                             + "'.");
                 }
             }
-            return "0";
+
+            String margin = "0";
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Normalize margins original='" + value
+                        + "' normalized='" + margin + "'.");
+            }
+
+            return margin;
         }
 
         if (negative) {
@@ -418,15 +341,31 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         }
 
         // La fin !
+        String unit;
         if (i == chs.length) {
             // Pas d'unité, on en ajoute une !
-            if (decimal < 1) {
-                return Math.floor(v) + DEFAULT_MARGIN_UNIT;
+            unit = DEFAULT_MARGIN_UNIT;
+
+        } else {
+            unit = value.substring(i).trim();
+            if (unit.length() < 1) {
+                unit = DEFAULT_MARGIN_UNIT;
             }
-            return v + DEFAULT_MARGIN_UNIT;
         }
 
-        return null;
+        String margin;
+        if (decimal < 1) {
+            margin = Math.floor(v) + DEFAULT_MARGIN_UNIT;
+        } else {
+            margin = v + DEFAULT_MARGIN_UNIT;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Normalize margins original='" + value + "' normalized='"
+                    + margin + "'.");
+        }
+
+        return margin;
     }
 
     protected boolean sendCompleteComponent() {

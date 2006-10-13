@@ -28,27 +28,39 @@ var __prototype = {
 			scope._Groups=undefined; // Map<string,List<any>>
 		}
 	},
-	_delFromGroup: function(groupName, obj) {
-		var g = this._listGroup(groupName);
+	/**
+	 * @method protected
+	 */
+	f_delFromGroup: function(groupName, obj) {
+		var g = this.f_listGroup(groupName);
 		if (!g) {
 			return null;
 		}
 		g.f_removeElement(obj);
 	},
-	_addToGroup: function(groupName, obj) {
-		var g = this._listGroup(groupName, true);
+	/**
+	 * @method protected
+	 */
+	f_addToGroup: function(groupName, obj) {
+		var g = this.f_listGroup(groupName, true);
 		g.f_addElement(obj);
 	},
-	_changeGroup: function(groupName, newGroupName, obj) {
+	/**
+	 * @method protected
+	 */
+	f_changeGroup: function(groupName, newGroupName, obj) {
 		if (groupName) {
-			this._delFromGroup(groupName, obj);
+			this.f_delFromGroup(groupName, obj);
 		}
 		if (newGroupName) {
-			this._addToGroup(newGroupName, obj);
+			this.f_addToGroup(newGroupName, obj);
 		}
 	},
-	_findIntoGroup: function(groupName, fct) {
-		var g = this._listGroup(groupName);
+	/**
+	 * @method protected
+	 */
+	f_findIntoGroup: function(groupName, fct) {
+		var g = this.f_listGroup(groupName);
 		if (!g) {
 			return null;
 		}
@@ -62,7 +74,10 @@ var __prototype = {
 		}
 		return false;
 	},
-	_listGroup: function(groupName, create) {
+	/**
+	 * @method protected
+	 */
+	f_listGroup: function(groupName, create) {
 		f_core.Assert(groupName, "You must specify a groupName !");
 	
 		var scope=this.fa_getRadioScope();

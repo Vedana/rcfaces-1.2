@@ -82,7 +82,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
             LOG
                     .debug("Initialize Writer componentId='"
                             + writer.getComponentRenderContext()
-                                    .getComponentId()
+                                    .getComponentClientId()
                             + "' requiresPending="
                             + (javascriptRenderContext != null && javascriptRenderContext
                                     .isRequiresPending()) + ".");
@@ -311,7 +311,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
             IComponentRenderContext componentRenderContext = getComponentRenderContext();
             if (componentRenderContext != null) {
                 LOG.debug("Set component (id='"
-                        + componentRenderContext.getComponentId()
+                        + componentRenderContext.getComponentClientId()
                         + "') var name to '" + varName + "'.");
             } else {
                 LOG.debug("Set component (id='?') var name to '" + varName

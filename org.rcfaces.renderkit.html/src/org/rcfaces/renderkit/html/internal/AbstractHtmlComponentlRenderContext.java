@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -41,8 +49,8 @@ public abstract class AbstractHtmlComponentlRenderContext extends
     private int clientDataCount = 0;
 
     protected AbstractHtmlComponentlRenderContext(FacesContext facesContext,
-            UIComponent component, String componentId) {
-        super(facesContext, component, componentId);
+            UIComponent component, String componentClientId) {
+        super(facesContext, component, componentClientId);
     }
 
     public boolean hasClientDatas(boolean clear) {

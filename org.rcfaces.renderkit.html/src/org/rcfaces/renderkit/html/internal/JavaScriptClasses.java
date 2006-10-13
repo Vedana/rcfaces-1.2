@@ -90,6 +90,8 @@ public final class JavaScriptClasses {
 
     public static final String MESSAGES = "f_messages";
 
+    public static final String MESSAGE_FIELD_SET = "f_messageFieldSet";
+
     public static final String PAGER = "f_pager";
 
     public static final String PASSWORD_ENTRY = "f_passwordEntry";
@@ -108,6 +110,8 @@ public final class JavaScriptClasses {
 
     public static final String SPINNER = "f_spinner";
 
+    public static final String STYLED_MESSAGE = "f_styledMessage";
+
     public static final String STYLED_TEXT = "f_styledText";
 
     public static final String SUBMIT_BUTTON = "f_submitButton";
@@ -123,6 +127,8 @@ public final class JavaScriptClasses {
     public static final String TEXT_ENTRY = "f_textEntry";
 
     public static final String TEXT_AREA = "f_textArea";
+
+    public static final String TIME_ENTRY = "f_timeEntry";
 
     public static final String TOOL_BAR = "f_toolBar";
 
@@ -241,4 +247,5 @@ public final class JavaScriptClasses {
     public static final String EVENT_VALUE_CHANGE_ATTRIBUTE = "change";
 
     public static final String EVENT_LOAD_ATTRIBUTE = "load";
+
 }

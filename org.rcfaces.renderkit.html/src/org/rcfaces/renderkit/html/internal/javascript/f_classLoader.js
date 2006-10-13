@@ -16,6 +16,7 @@ function f_classLoader(window, parentClassLoader) {
 
 	this._objectPool=new Array;
 	this._componentPool=new Array;
+	this._systemComponentPool=new Array;
 	this._classes=new Object;
 	this._aspects=new Object;
 	this._bundles=new Object;
@@ -162,11 +163,19 @@ f_classLoader.prototype._onExit=function() {
 	f_core.Profile("f_classLoader.onExit.clean(components)");
 	
 	// Vide le pool des composants
-	var pool=this._objectPool;
+	pool=this._objectPool;
 	f_core.Assert(pool, "f_classLoader._onExit: Invalid Objects pool !");
 	this._objectPool=undefined;
 
 	f_core.Debug("f_classLoader","Clean "+pool.length+" objects store into component pool !");
+	f_class.Clean(pool);
+
+	// Vide le pool SYSTEM des composants
+	pool=this._systemComponentPool;
+	f_core.Assert(pool, "f_classLoader._onExit: Invalid Objects pool !");
+	this._systemComponentPool=undefined;
+
+	f_core.Debug("f_classLoader","Clean "+pool.length+" system objects store into component pool !");
 	f_class.Clean(pool);
 
 	f_core.Profile("f_classLoader.onExit.clean(objects)");
@@ -316,15 +325,19 @@ f_classLoader.prototype._onDocumentComplete=function() {
 	f_core.Debug("f_classLoader", nb+" f_documentComplete method(s) called.");
 }
 
-f_classLoader.prototype._newInstance=function(object) {
+f_classLoader.prototype._newInstance=function(object, systemClass) {
 	f_core.Assert(typeof(object)=="object", "Object parameter must be an object ! ("+typeof(object)+")");
 
-	if (this._exiting) {
-		throw "This classloader is exiting ... [newInstance]";
+	if (this._exiting && !systemClass) {
+		throw "This classloader is exiting ... [newInstance: "+((object._kclass)?("className="+object._kclass._name):"")+",tagName="+object.tagName+"]";
 	}
 
 	var pool;
-	if (object.tagName) {
+	if (systemClass) {
+		pool=this._systemComponentPool;
+		f_core.Debug("f_classLoader", "Add SYSTEM component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.");
+
+	} else if (object.tagName) {
 		pool=this._componentPool;
 		f_core.Debug("f_classLoader", "Add component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.");
 		

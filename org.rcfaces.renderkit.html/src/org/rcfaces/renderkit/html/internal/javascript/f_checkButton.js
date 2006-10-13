@@ -38,8 +38,8 @@ var __prototype = {
 		return this.f_super(arguments);
 	},
 	f_finalize: function() {
-		if (this._label) {
-			var label=this._label;
+		var label=this._label;
+		if (label) {
 			this._label=undefined;
 			
 			f_core.VerifyProperties(label);			

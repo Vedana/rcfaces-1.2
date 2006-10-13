@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -285,11 +293,11 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
         if (treeComponent.getWidth(facesContext) != null
                 || treeComponent.getHeight(facesContext) != null) {
-            cssWriter.writeProperty("overflow", "auto");
+            cssWriter.writeOverflow("auto");
         }
 
         if (treeComponent.isBorder(facesContext) == false) {
-            cssWriter.writeProperty("border-style", "none");
+            cssWriter.writeBorderStyle("none");
         }
     }
 

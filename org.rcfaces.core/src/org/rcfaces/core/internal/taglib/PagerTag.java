@@ -14,7 +14,7 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(PagerTag.class);
 
-	private String forVal;
+	private String forValue;
 	private String message;
 	private String zeroResultMessage;
 	private String oneResultMessage;
@@ -25,11 +25,11 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 	}
 
 	public final String getFor() {
-		return forVal;
+		return forValue;
 	}
 
-	public final void setFor(String forVal) {
-		this.forVal = forVal;
+	public final void setFor(String forValue) {
+		this.forValue = forValue;
 	}
 
 	public final String getMessage() {
@@ -77,7 +77,7 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 			if (PagerComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  forVal='"+forVal+"'");
+			LOG.debug("  forValue='"+forValue+"'");
 			LOG.debug("  message='"+message+"'");
 			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
 			LOG.debug("  oneResultMessage='"+oneResultMessage+"'");
@@ -94,12 +94,13 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (forVal != null) {
-			if (isValueReference(forVal)) {
-				ValueBinding vb = application.createValueBinding(forVal);
+		if (forValue != null) {
+			if (isValueReference(forValue)) {
+				ValueBinding vb = application.createValueBinding(forValue);
+
 				component.setFor(vb);
 			} else {
-				component.setFor(forVal);
+				component.setFor(forValue);
 			}
 		}
 
@@ -150,7 +151,7 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 	}
 
 	public void release() {
-		forVal = null;
+		forValue = null;
 		message = null;
 		zeroResultMessage = null;
 		oneResultMessage = null;

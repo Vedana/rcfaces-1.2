@@ -1,0 +1,13 @@
+var _r={S:function(e){var i,t=e._o2,r=e._ei,n=e.f_getStep(),f=e._d
+if(r!=t)t+=(r>t)?n:-n
+if(t>1)t=1;else if(t<0)t=0
+e._o2=t
+if(t==r){window.clearInterval(e._Q)
+e._Q=i}e.f_performTick(f,t,r)}}
+var _e={f_finalize:function(){var r,t=this,e=t._Q
+if(e){t._Q=r
+window.clearInterval(e)}t.f_super(arguments)},f_getStepMs:function(){return 100},f_getStep:function(){return 0.1},f_performTick:function(e,t,r){},f_wakeUpTimer:function(){var t=this,e
+if(t._Q)return
+e=t
+t._Q=window.setInterval(function(){f_timerEffect.S.call(f_timerEffect,e)},t.f_getStepMs())}}
+var f_timerEffect=new f_class("f_timerEffect",null,_r,_e,f_effect);

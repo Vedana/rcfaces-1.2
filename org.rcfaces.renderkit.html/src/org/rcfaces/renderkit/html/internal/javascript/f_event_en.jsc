@@ -1,0 +1,2 @@
+var _y={LOCK_MESSAGE:"An event is already processing.\nPlease wait !"}
+f_resourceBundle.en(f_event,_y);

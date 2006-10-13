@@ -1,0 +1,16 @@
+var _e={fa_filterProperties:function(){var t=this,e
+if(f_core.D(t,"v:filtred"))t._5m=!0
+e=f_core.D(t,"v:filterExpression")
+if(e)t._sf=f_core.gl(e)},f_getFilterProperties:function(){var e={},t=this._sf,r
+if(!t)return e
+for(r in t)e[r]=t[r];return e},f_setFilterProperty:function(e,t){var o=this,r=o._sf,n,f,i
+if(!r)r={}
+for(n=0;n<arguments.length;){f=arguments[n++]
+i=arguments[n++]
+r[f]=i}o.f_setFilterProperties(r)},f_setFilterProperties:function(e){var f=this,t="",r,n
+if(e)t=f_core.le(e)
+r={}
+if(e)for(n in e)r[n]=e[n];f._sf=r
+f.V(f_prop.ci,t)
+f.sf(r)}}
+var fa_filterProperties=new f_aspect("fa_filterProperties",null,_e);

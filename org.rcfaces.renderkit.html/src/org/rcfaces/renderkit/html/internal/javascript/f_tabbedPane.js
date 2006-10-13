@@ -13,6 +13,11 @@
 var __static = {
 
 	/**
+	 * @field private static final String
+	 */
+	_BLANK_IMAGE_URL: "/blank.gif",
+	
+	/**
 	 * @field private static 
 	 */
 	_PreparedImages: undefined,
@@ -28,7 +33,7 @@ var __static = {
 		if (!evt) evt = window.event;
 		
 		
-		tabbedPane._resize.call(tabbedPane);
+		tabbedPane._resize();
 		
 		return true;
 	},
@@ -46,7 +51,7 @@ var __static = {
 
 		var old=tabbedPane._selectedCard;
 
-		tabbedPane._selectTab.call(tabbedPane, this._tab, true, evt);
+		tabbedPane._selectTab(this._tab, true, evt);
 				
 		return f_core.CancelEvent(evt);
 	},
@@ -101,7 +106,7 @@ var __static = {
 			var next=tab._next;
 			for(;next && next._disabled;next=next._next);
 			if (next) {
-				tabbedPane._selectTab.call(tabbedPane, next, true, evt);
+				tabbedPane._selectTab(next, true, evt);
 			}
 			break;
 			
@@ -109,7 +114,7 @@ var __static = {
 			var prev=tab._prev;
 			for(;prev && prev._disabled;prev=prev._prev);		
 			if (prev) {
-				tabbedPane._selectTab.call(tabbedPane, prev, true, evt);
+				tabbedPane._selectTab(prev, true, evt);
 			}
 			break;
 			
@@ -117,7 +122,7 @@ var __static = {
 			var next=tabbedPane._cards[0];
 			for(;next && next._disabled;next=next._next);
 			if (next && next!=tabbedPane._selectedCard) {
-				tabbedPane._selectTab.call(tabbedPane, next, true, evt);
+				tabbedPane._selectTab(next, true, evt);
 			}
 			break;
 
@@ -125,13 +130,13 @@ var __static = {
 			var prev=tabbedPane._cards[tabbedPane._cards.length-1];
 			for(;prev && prev._disabled;prev=prev._prev);
 			if (prev && prev!=tabbedPane._selectedCard) {
-				tabbedPane._selectTab.call(tabbedPane, prev, true, evt);
+				tabbedPane._selectTab(prev, true, evt);
 			}
 			break;
 			
 		case f_key.VK_SPACE:
 			if (tab!=tabbedPane._selectedCard) {
-				tabbedPane._selectTab.call(tabbedPane, tab, false, evt);
+				tabbedPane._selectTab(tab, false, evt);
 			}
 			break;
 			
@@ -200,7 +205,7 @@ var __static = {
 	},
 	Initializer: function() {
 		f_tabbedPane._PrepareImages(
-			"/blank.gif",
+			f_tabbedPane._BLANK_IMAGE_URL,
 			"/tabbedPane/xpMid2.gif", 
 			"/tabbedPane/xpT2.gif");
 	}
@@ -223,24 +228,27 @@ var __prototype = {
 			f_core.VerifyProperties(title);
 		}
 
-		this._tabIndex=undefined;
-		this._overTab=undefined;
-		this._imageURL=undefined;
+		// this._tabIndex=undefined; // number
+		this._overTab=undefined; // f_tab
+		// this._imageURL=undefined; // string
 		this.onresize=null;
-		this._resizeHeight=undefined;
-		this._resizeWidth=undefined;
+		// this._resizeHeight=undefined; // boolean
+		// this._resizeWidth=undefined; //boolean
 		
 		this.f_super(arguments);
 	},
-	_updateCards: function() {
+	/**
+	 * @method protected
+	 */
+	f_updateCards: function() {
 		for(var i=0;i<this._cards.length;i++) {
 			var tab=this._cards[i];
 		
-			tab._body=f_core.GetElementById(tab._id, this.ownerDocument);
-			f_core.Assert(tab._body, "Can not find body of tab '"+tab._id+"'.");
+			tab._ccard=f_core.GetElementById(tab._id, this.ownerDocument);
+			f_core.Assert(tab._ccard, "Can not find body of tab '"+tab._id+"'.");
 
-			tab._body._vcard=tab;			
-			tab._body._declareTab(this, tab._text, tab._accessKey, tab._disabled, tab._imageURL, tab._disabledImageURL, tab._selectedImageURL, tab._hoverImageURL);	
+			//tab._ccard._vcard=tab;			
+			tab._ccard.f_declareTab(this, tab._text, tab._accessKey, tab._disabled, tab._imageURL, tab._disabledImageURL, tab._selectedImageURL, tab._hoverImageURL);	
 		}
 	},
 	f_documentComplete: function() {
@@ -254,7 +262,7 @@ var __prototype = {
 			for(var i=0;i<this._cards.length;i++) {
 				var tab=this._cards[i];
 	
-				var _tab=tab._body;
+				var _tab=tab._ccard;
 				if (!_tab) {
 					continue;
 				}
@@ -279,10 +287,13 @@ var __prototype = {
 		
 			if (f_core.IsInternetExplorer()) {
 				// Il faut le faire reafficher la barre, sinon il y a un probleme de position des titres
-				this._updateCardStyle(this._selectedCard);
+				this.f_updateCardStyle(this._selectedCard);
 			}
 		}
 	},
+	/**
+	 * @method private
+	 */
 	_resize:function() {
 		var width=undefined;
 		if (this._resizeWidth) {		
@@ -294,8 +305,9 @@ var __prototype = {
 		for(var i=0;i<this._cards.length;i++) {
 			var tab=this._cards[i];
 
-			var _tab=tab._body;
-			
+			var _tab=tab._ccard;
+		
+		/*	
 			if (this._resizeHeight) {
 				_tab.style.height="";
 	
@@ -303,6 +315,7 @@ var __prototype = {
 					maxHeight=_tab.offsetHeight;
 				}
 			}
+			*/
 			
 			if (width) {
 				_tab.style.width=width;
@@ -324,9 +337,9 @@ var __prototype = {
 	
 		if (this.style.height) {
 			// Hauteur fixée !
-			var p1=f_core.GetAbsolutePos(this);
+			var p1=f_core.GetAbsolutePosition(this);
 			var div0=f_core.GetFirstElementByTagName(this, "DIV", true);
-			var p2=f_core.GetAbsolutePos(div0);
+			var p2=f_core.GetAbsolutePosition(div0);
 	
 			var ythis=p1.y;
 			var ybody=p2.y;
@@ -334,13 +347,14 @@ var __prototype = {
 			maxHeight=this.offsetHeight-ybody+ythis;
 		}				
 
+
 		if (maxHeight>0) {
 			var height=maxHeight+"px";
 			
 			for(var i=0;i<this._cards.length;i++) {
 				var tab=this._cards[i];
 	
-				var _tab=tab._body;
+				var _tab=tab._ccard;
 				if (!_tab) {
 					continue;
 				}
@@ -375,6 +389,9 @@ var __prototype = {
 		
 		return this._selectTab(_tab, setFocus, null);
 	},
+	/**
+	 * @method private
+	 */
 	_selectTab: function(tab, setFocus, evt) {
 		if (tab._disabled) {
 			return false;
@@ -392,21 +409,24 @@ var __prototype = {
 		var old=this._selectedCard;
 		this._selectedCard=null;
 		if (old) {
-			this._updateCardStyle(old);
+			this.f_updateCardStyle(old);
 		}
 			
-		tab._body.f_setVisible(true);
 		if (old) {
-			old._body.f_setVisible(false);
+			old._ccard.f_setVisible(false);
 		}
+		tab._ccard.f_setVisible(true);
 		
 		this._selectedCard=tab;
-		this._updateCardStyle(tab);
+		this.f_updateCardStyle(tab);
 		
 		this.f_setProperty(f_prop.SELECTED, tab._id);
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 */
 	_tabMouseOver: function(tab, evt) {
 		if (tab._disabled) {
 			return;
@@ -424,20 +444,26 @@ var __prototype = {
 
 		this._overTab=tab;
 		if (old) {		
-			this._updateCardStyle(old);		
+			this.f_updateCardStyle(old);		
 		}
 		
-		this._updateCardStyle(tab);
+		this.f_updateCardStyle(tab);
 	},
+	/**
+	 * @method private
+	 */
 	_tabMouseOut: function(tab, evt) {
 		if (this._overTab!=tab) {
 			return;
 		}
-		this._overTab=null;
+		this._overTab=undefined;
 		
-		this._updateCardStyle(tab);
+		this.f_updateCardStyle(tab);
 	},
-	_updateCardStyle: function(tab) {
+	/**
+	 * @method protected
+	 */
+	f_updateCardStyle: function(tab) {
 		var rightTTitleImage;
 		var leftTTitleImage;
 		var rightTitle;
@@ -592,34 +618,39 @@ var __prototype = {
 			}
 		}
 	},
-	_declareTab: function(tabBodyId, selected, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
-		var tab=this._declareCard(tabBodyId, selected);
+	/**
+	 * @method hidden
+	 */
+	f_declareTab: function(tabBodyId, selected, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
+		var tab=this.f_declareCard(tabBodyId, selected);
+
+		f_core.Debug(f_tabbedPane, "Declare tab : "+tab);
 
 		if (disabled===undefined) {
 			disabled=false;
 		}
 		tab._disabled=disabled;
 		
-		var blankImage=f_tabbedPane._GetImageURL("/blank.gif");
+		var blankImage=f_tabbedPane._GetImageURL(f_tabbedPane._BLANK_IMAGE_URL);
 		
 		tab._imageURL=imageURL;
-		if (tab._imageURL) {
-			f_imageRepository.PrepareImage(tab._imageURL);
+		if (imageURL) {
+			f_imageRepository.PrepareImage(imageURL);
 		}
 		
 		tab._disabledImageURL=disabledImageURL;
-		if (tab._disabledImageURL) {
-			f_imageRepository.PrepareImage(tab._disabledImageURL);
+		if (disabledImageURL) {
+			f_imageRepository.PrepareImage(disabledImageURL);
 		}
 		
 		tab._hoverImageURL=hoverImageURL;
-		if (tab._hoverImageURL) {
-			f_imageRepository.PrepareImage(tab._hoverImageURL);
+		if (hoverImageURL) {
+			f_imageRepository.PrepareImage(hoverImageURL);
 		}
 		
 		tab._selectedImageURL=selectedImageURL;
-		if (tab._selectedImageURL) {
-			f_imageRepository.PrepareImage(tab._selectedImageURL);
+		if (selectedImageURL) {
+			f_imageRepository.PrepareImage(selectedImageURL);
 		}
 		
 		var table=this._title;
@@ -715,65 +746,77 @@ var __prototype = {
 		tab._rightTitle=document.createElement("TD");
 		trText.appendChild(tab._rightTitle);
 		
-		this._updateCardStyle(tab);
+		this.f_updateCardStyle(tab);
 	},
-	_destroyCard: function(_tab) {
-		var tab=_tab._vcard;
-		if (tab) {
-			_tab._vcard=undefined;
+	/**
+	 * @method protected
+	 */
+	f_destroyCard: function(tab) {
+		f_core.Assert(tab._cardBox, "Invalid tab object ("+tab+")");
+		
+		var ccard=tab._ccard;
+		
+		f_core.Debug(f_tabbedPane, "Destroy tab: "+tab+"  component="+ccard);
+		
+		tab._next=undefined;
+		tab._prev=undefined;
+		
+		f_core.VerifyProperties(tab._leftTitle);	
+		tab._leftTitle=undefined; // HTMLTDElement
+		
+		f_core.VerifyProperties(tab._rightTitle);	
+		tab._rightTitle=undefined; // HTMLTDElement
+		
+		f_core.VerifyProperties(tab._leftTTitleImage);	
+		tab._leftTTitleImage=undefined;
+		
+		f_core.VerifyProperties(tab._textTTitle);	
+		tab._textTTitle=undefined;
+		
+		f_core.VerifyProperties(tab._rightTTitleImage);	
+		tab._rightTTitleImage=undefined;
+		
+		f_core.VerifyProperties(tab._icon);	
+		tab._icon=undefined; // HTMLImageElement
+		
+		var textTitle=tab._textTitle;
+		if (textTitle) {
+			tab._textTitle=undefined;
 			
-			tab._next=undefined;
-			tab._prev=undefined;
-			tab._textLink=undefined;
-			tab._imageURL=undefined;
-			tab._disabledImageURL=undefined;
-			tab._hoverImageURL=undefined;
-			tab._selectedImageURL=undefined;
-			tab._disabled=undefined;
-			
-			tab._leftTitle=undefined;
-			tab._rightTitle=undefined;
-			tab._leftTTitleImage=undefined;
-			tab._textTTitle=undefined;
-			tab._rightTTitleImage=undefined;
-			tab._icon=undefined;
-			
-			var textTitle=tab._textTitle;
-			if (textTitle) {
-				tab._textTitle=undefined;
-				
-				textTitle.onclick=null;
-				textTitle.onmouseover=null;
-				textTitle.onmouseout=null;
-				textTitle._tab=undefined;
-	
-				f_core.VerifyProperties(textTitle);		
-			}
-	
-			var textLink=tab._textLink;
-			if (textLink) {
-				tab._textLink=undefined;
-				
-				textLink.onclick=null;
-				textLink.onfocus=null;
-				textLink.onkeydown=null;
-				textLink.onkeypress=null;
-				textLink._tab=undefined;
-	
-				f_core.VerifyProperties(textLink);		
-			}
-	
-			tab._id=undefined;
-			tab._imageURL=undefined;
-			tab._disabledImageURL=undefined;
-			tab._hoverImageURL=undefined;
-			tab._selectedImageURL=undefined;
-			tab._body=undefined;
+			textTitle.onclick=null;
+			textTitle.onmouseover=null;
+			textTitle.onmouseout=null;
+			textTitle._tab=undefined;
+
+			f_core.VerifyProperties(textTitle);		
 		}
+
+		var textLink=tab._textLink;
+		if (textLink) {
+			tab._textLink=undefined;
+			
+			textLink.onclick=null;
+			textLink.onfocus=null;
+			textLink.onkeydown=null;
+			textLink.onkeypress=null;
+			textLink._tab=undefined;
+
+			f_core.VerifyProperties(textLink);		
+		}
+
+		// tab._id=undefined; // string
+		// tab._imageURL=undefined; // string
+		// tab._disabledImageURL=undefined; // string
+		// tab._hoverImageURL=undefined; // string
+		// tab._selectedImageURL=undefined; // string
+		// tab._disabled=undefined; // boolean
 				
-		this.f_super(arguments, _tab);
+		this.f_super(arguments, tab);
 	},
-	_setTabImageURL: function(_tab, imageURL) {
+	/**
+	 * @method hidden
+	 */
+	f_setTabImageURL: function(_tab, imageURL) {
 		var tab=_tab._vcard;
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+_tab+")");
 		tab._imageURL=imageURL;
@@ -782,9 +825,12 @@ var __prototype = {
 			return;
 		}
 
-		this._updateCardStyle(tab);
+		this.f_updateCardStyle(tab);
 	},
-	_setTabDisabledImageURL: function(_tab, imageURL) {
+	/**
+	 * @method hidden
+	 */
+	f_setTabDisabledImageURL: function(_tab, imageURL) {
 		var tab=_tab._vcard;
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab +")");
 		tab._disabledImageURL=imageURL;
@@ -793,9 +839,12 @@ var __prototype = {
 			return;
 		}
 
-		this._updateCardStyle(tab);
+		this.f_updateCardStyle(tab);
 	},
-	_setTabHoverImageURL: function(_tab, imageURL) {
+	/**
+	 * @method hidden
+	 */
+	f_setTabHoverImageURL: function(_tab, imageURL) {
 		var tab=_tab._vcard;
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
 		tab._hoverImageURL=imageURL;
@@ -804,9 +853,12 @@ var __prototype = {
 			return;
 		}
 
-		this._updateCardStyle(tab);
+		this.f_updateCardStyle(tab);
 	},
-	_setTabSelectedImageURL: function(_tab, imageURL) {
+	/**
+	 * @method hidden
+	 */
+	f_setTabSelectedImageURL: function(_tab, imageURL) {
 		var tab=_tab._vcard;
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
 		tab._selectedImageURL=imageURL;
@@ -815,14 +867,20 @@ var __prototype = {
 			return;
 		}
 
-		this._updateCardStyle(tab);
+		this.f_updateCardStyle(tab);
 	},
-	_setTabText: function(_tab, text) {
+	/**
+	 * @method hidden
+	 */
+	f_setTabText: function(_tab, text) {
 		var tab=_tab._vcard;
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
 		// @TODO !
 	},
-	_setTabDisabled: function(_tab, disabled) {
+	/**
+	 * @method hidden
+	 */
+	f_setTabDisabled: function(_tab, disabled) {
 		var tab=_tab._vcard;
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
 		
@@ -866,16 +924,22 @@ var __prototype = {
 		}
 		
 		if (update) {
-			this._updateCardStyle(tab);
+			this.f_updateCardStyle(tab);
 		}
 	},
-	_setCardFocus: function(_tab, evt) {
+	/**
+	 * @method hidden
+	 */
+	f_setCardFocus: function(_tab, evt) {
 		var tab=_tab._vcard;
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
 		
 		f_core.SetFocus(tab._textLink);
 	},
-	_performTabAccessKey: function(_tab, evt) {
+	/**
+	 * @method hidden
+	 */
+	f_performTabAccessKey: function(_tab, evt) {
 		var tab=_tab._vcard;
 		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
 	

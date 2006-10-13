@@ -319,6 +319,26 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
             return;
         }
 
+        long modificationDate = bufferedImage.getModificationDate();
+        if (modificationDate > 0) {
+            modificationDate -= (modificationDate % 1000);
+        }
+
+        if (noCache) {
+            setNoCache(response);
+
+        } else {
+            if (modificationDate > 0) {
+                response.setDateHeader(HTTP_LAST_MODIFIED, modificationDate);
+            }
+
+            ExpirationDate expirationDate = getDefaultExpirationDate(isVersioned);
+
+            if (expirationDate != null) {
+                expirationDate.sendExpires(response);
+            }
+        }
+
         String redirection = bufferedImage.getRedirection();
         if (redirection != null) {
 
@@ -376,13 +396,13 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
             }
         }
 
-        long modificationDate = bufferedImage.getModificationDate();
-        if (different == false) {
+        if (different == false && modificationDate > 0) {
             long ifModifiedSince = request
                     .getDateHeader(HTTP_IF_MODIFIED_SINCE);
             if (ifModifiedSince > 0) {
-                if (ifModifiedSince >= modificationDate) {
+                ifModifiedSince -= (ifModifiedSince % 1000);
 
+                if (ifModifiedSince >= modificationDate) {
                     if (LOG.isDebugEnabled()) {
                         LOG
                                 .debug("Client sent a valid date for last modification, send a NOT MODIFIED response.");
@@ -396,21 +416,6 @@ public class ImageOperationsServlet extends ConfiguredHttpServlet {
 
         String contentType = bufferedImage.getContentType();
         response.setContentType(contentType);
-
-        if (noCache) {
-            setNoCache(response);
-
-        } else {
-            if (modificationDate > 0) {
-                response.setDateHeader(HTTP_LAST_MODIFIED, modificationDate);
-            }
-
-            ExpirationDate expirationDate = getDefaultExpirationDate(isVersioned);
-
-            if (expirationDate != null) {
-                expirationDate.sendExpires(response);
-            }
-        }
 
         if (etag != null) {
             response.setHeader(HTTP_ETAG, etag);

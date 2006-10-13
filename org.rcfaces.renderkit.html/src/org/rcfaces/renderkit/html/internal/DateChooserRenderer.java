@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -198,7 +206,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
                 String forValueFormat = dateChooserComponent
                         .getForValueFormat(facesContext);
                 if (forValueFormat != null) {
-                    forValueFormat = CalendarTools.normalizeDateFormat(writer
+                    forValueFormat = CalendarTools.normalizeFormat(writer
                             .getComponentRenderContext(), forValueFormat);
 
                     writer.writeAttribute("v:forValueFormat", forValueFormat);
@@ -238,7 +246,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
             IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) writer
                     .getComponentRenderContext().getRenderContext();
 
-            imageURL = htmlRenderContext.getHtmlExternalContext()
+            imageURL = htmlRenderContext.getHtmlProcessContext()
                     .getStyleSheetURI(DATE_CHOOSER_IMAGEURL);
 
             imageButtonFamilly.setImageWidth(DATE_CHOOSER_WIDTH);

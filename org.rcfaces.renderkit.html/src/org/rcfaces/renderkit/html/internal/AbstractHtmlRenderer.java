@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -163,6 +171,8 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
+import org.rcfaces.core.component.capability.ISeverityImagesCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
@@ -420,9 +430,8 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
                 });
     }
 
-    protected final IHtmlRenderContext getHtmlRenderContext(IHtmlWriter writer) {
-        return (IHtmlRenderContext) writer.getComponentRenderContext()
-                .getRenderContext();
+    protected static IHtmlRenderContext getHtmlRenderContext(IHtmlWriter writer) {
+        return writer.getHtmlComponentRenderContext().getHtmlRenderContext();
     }
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
@@ -564,7 +573,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
 
     protected IHtmlWriter writeIdAttribute(IHtmlWriter writer)
             throws WriterException {
-        String id = writer.getComponentRenderContext().getComponentId();
+        String id = writer.getComponentRenderContext().getComponentClientId();
         if (id != null) {
             writer.writeAttribute("id", id);
         }
@@ -1011,7 +1020,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
         return writer;
     }
 
-    protected final IHtmlWriter writeChecked(IHtmlWriter writer,
+    protected IHtmlWriter writeChecked(IHtmlWriter writer,
             ISelectedCapability selectedCapability) throws WriterException {
         if (selectedCapability.isSelected()) {
             writer.writeAttribute("CHECKED");
@@ -1031,17 +1040,79 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
         return false;
     }
 
-    protected String getRequestComponentId(IRequestContext requestContext,
-            UIComponent component) {
-
-        String id = super.getRequestComponentId(requestContext, component);
-
-        String separator = requestContext.getProcessContext()
-                .getNamingSeparator();
-        if (separator != null) {
-            return HtmlTools.replaceSeparator(id, separator);
+    public String convertClientId(FacesContext context, String clientId) {
+        if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT == false) {
+            return super.convertClientId(context, clientId);
         }
 
-        return id;
+        String namingSeparator = HtmlRenderContext.getRenderContext(context)
+                .getProcessContext().getNamingSeparator();
+
+        if (namingSeparator == null) {
+            return super.convertClientId(context, clientId);
+        }
+
+        return HtmlTools.replaceSeparator(clientId, namingSeparator);
+    }
+
+    protected static void writeSeverityStyleClasses(IHtmlWriter htmlWriter,
+            ISeverityStyleClassCapability severityStyleClassCapability)
+            throws WriterException {
+
+        String infoStyleClass = severityStyleClassCapability
+                .getInfoStyleClass();
+        if (infoStyleClass != null) {
+            htmlWriter.writeAttribute("v:infoStyleClass", infoStyleClass);
+        }
+
+        String warnStyleClass = severityStyleClassCapability
+                .getWarnStyleClass();
+        if (warnStyleClass != null) {
+            htmlWriter.writeAttribute("v:warnStyleClass", warnStyleClass);
+        }
+
+        String errorStyleClass = severityStyleClassCapability
+                .getErrorStyleClass();
+        if (errorStyleClass != null) {
+            htmlWriter.writeAttribute("v:errorStyleClass", errorStyleClass);
+        }
+
+        String fatalStyleClass = severityStyleClassCapability
+                .getFatalStyleClass();
+        if (fatalStyleClass != null) {
+            htmlWriter.writeAttribute("v:fatalStyleClass", fatalStyleClass);
+        }
+    }
+
+    protected static boolean writeSeverityImages(IHtmlWriter htmlWriter,
+            ISeverityImagesCapability severity) throws WriterException {
+
+        String imageURL = severity.getImageURL();
+        String infoImageURL = severity.getInfoImageURL();
+        String warnImageURL = severity.getWarnImageURL();
+        String errorImageURL = severity.getErrorImageURL();
+        String fatalImageURL = severity.getFatalImageURL();
+        if (imageURL == null && infoImageURL == null && warnImageURL == null
+                && errorImageURL == null && fatalImageURL == null) {
+            return false;
+        }
+
+        if (infoImageURL != null) {
+            htmlWriter.writeAttribute("v:infoImageURL", infoImageURL);
+        }
+
+        if (warnImageURL != null) {
+            htmlWriter.writeAttribute("v:warnImageURL", warnImageURL);
+        }
+
+        if (errorImageURL != null) {
+            htmlWriter.writeAttribute("v:errorImageURL", errorImageURL);
+        }
+
+        if (fatalImageURL != null) {
+            htmlWriter.writeAttribute("v:fatalImageURL", fatalImageURL);
+        }
+
+        return true;
     }
 }

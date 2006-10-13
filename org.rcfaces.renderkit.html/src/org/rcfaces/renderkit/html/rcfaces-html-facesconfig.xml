@@ -159,6 +159,11 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.messageFieldSet</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.MessageFieldSetRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.messages</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.MessagesRenderer</renderer-class>
 		</renderer>
@@ -214,6 +219,11 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.styledMessage</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.StyledMessageRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.styledText</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.StyledTextRenderer</renderer-class>
 		</renderer>
@@ -251,6 +261,11 @@
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.textArea</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.TextAreaRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.timeEntry</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.TimeEntryRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>

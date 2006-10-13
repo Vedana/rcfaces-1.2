@@ -99,4 +99,522 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+  <tag>
+<name>convertByte</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertByteTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a ByteConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertShort</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertShortTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a ShortConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertInteger</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertIntegerTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a IntegerConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertLong</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertLongTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a LongConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertFloat</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertFloatTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a FloatConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>integerOnly</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether only the integer part of the value will be formatted and parsed. Expressions must evaluate to a boolean. 
+        Default value is false. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxFractionDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the fractional portion of the output.  Expressions  must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minFractionDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the fractional portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertDouble</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertDoubleTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a DoubleConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>integerOnly</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether only the integer part of the value will be formatted and parsed. Expressions must evaluate to a boolean. 
+        Default value is false. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxFractionDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the fractional portion of the output.  Expressions  must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minFractionDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the fractional portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
 </taglib>

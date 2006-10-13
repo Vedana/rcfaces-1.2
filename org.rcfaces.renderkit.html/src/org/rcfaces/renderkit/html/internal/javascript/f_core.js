@@ -54,6 +54,11 @@ var f_core = {
 	_DETAIL:	"VFC_DETAIL",
 		
 	/**
+	 * @field private static final number
+	 */
+	_FOCUS_TIMEOUT_DELAY: 100,
+	
+	/**
 	 * @field hidden static final string
 	 */
 	FIREFOX_1_0: "firefox.1.0",
@@ -132,6 +137,26 @@ var f_core = {
 	_DisabledContextMenu: undefined,
 	
 	/**
+	 * @field private static boolean
+	 */
+	_Logging: undefined,
+	
+	/**
+	 * @field private static boolean
+	 */
+	_LoggingProfile: undefined,
+	
+	/**
+	 * @field private static any
+	 */
+	_FocusTimeoutID: undefined,
+	
+	/**
+	 * @field private static HTMLComponent
+	 */
+	_FocusComponent: undefined,
+	
+	/**
 	 * Throws a message if the expression is true.
 	 *
 	 * @method public static final
@@ -155,17 +180,43 @@ var f_core = {
 	 * @method private static final
 	 */
 	_AddLog: function(level, name, message, exception, win) {
-		if (level!==undefined) {
-			if (typeof(name)!="string" && name.f_getName) {
-				var className=name.f_getName();
-				f_core.Assert(typeof(className)=="string", "Invalid class name of object '"+name+"'.");
-				name=className;
+		if (f_core._Logging) {
+			if (exception) {
+				throw exception;
 			}
-			
-			f_core.Assert(typeof(name)=="string", "Invalid name of log '"+name+"'.");
-			
-			if (window._ignoreLog) {
-				if (level===0) {
+			if (level<2) {
+				window.status="Exception: "+message;
+			}
+			return;
+		}	
+		try {
+			f_core._Logging=true;
+
+			if (level!==undefined) {
+				if (typeof(name)!="string" && name.f_getName) {
+					var className=name.f_getName();
+					f_core.Assert(typeof(className)=="string", "Invalid class name of object '"+name+"'.");
+					name=className;
+				}
+				
+				f_core.Assert(typeof(name)=="string", "Invalid name of log '"+name+"'.");
+				
+				if (window._ignoreLog) {
+					if (level===0) {
+						var msg="Error: ("+name+"): "+message;
+						if (exception) {
+							msg+="\nException:\n"+exception;
+						}
+						
+						alert(msg);
+					}
+		
+					return true;
+				}
+			}
+					
+			if (!window._flushLogs) {
+				if (level<2) {
 					var msg="Error: ("+name+"): "+message;
 					if (exception) {
 						msg+="\nException:\n"+exception;
@@ -173,69 +224,71 @@ var f_core = {
 					
 					alert(msg);
 				}
-	
-				return true;
-			}
-		}
 				
-		if (!window._flushLogs) {
-			if (level===0) {
-				var msg="Error: ("+name+"): "+message;
-				if (exception) {
-					msg+="\nException:\n"+exception;
+				var l=window._coreLogs;
+				if (!l) {
+					l=new Array;
+					window._coreLogs=l;
 				}
-				
-				alert(msg);
+				l.push([level, name, message, exception, win]);
+				return true;
 			}
 			
 			var l=window._coreLogs;
-			if (!l) {
-				l=new Array;
-				window._coreLogs=l;
+			if (l) {
+				window._coreLogs=undefined;
+				for(var i=0;i<l.length;i++) {
+					f_core._AddLog.apply(f_core, l[i]);
+				}
 			}
-			l.push([level, name, message, exception, win]);
-			return true;
-		}
-		
-		var l=window._coreLogs;
-		if (l) {
-			window._coreLogs=undefined;
-			for(var i=0;i<l.length;i++) {
-				f_core._AddLog.apply(f_core, l[i]);
+	
+			if (level===undefined) {
+				// Grosse astuce: c'etait histoire de faire afficher les logs.
+				return true;
 			}
-		}
-
-		if (level===undefined) {
-			// Grosse astuce: c'etait histoire de faire afficher les logs.
-			return true;
-		}
-
-		var log=f_log.GetLog(name);
-		var fct;
-		
-		switch(level) {
-		case 1:
-			fct=log.f_warn;
-			break;
-
-		case 2:
-			fct=log.f_info;
-			break;
+	
+			var log=f_log.GetLog(name);
+			var fct;
 			
-		case 3:
-			fct=log.f_debug;
-			break;
+			switch(level) {
+			case 0:
+				fct=log.f_fatal;
+				break;
+
+			case 1:
+				fct=log.f_error;
+				break;
+
+			case 2:
+				fct=log.f_warn;
+				break;
+	
+			case 3:
+				fct=log.f_info;
+				break;
+				
+			case 4:
+				fct=log.f_debug;
+				break;
+				
+			case 5:
+				fct=log.f_trace;
+				break;
+				
+			default:
+				fct=log.f_error;
+			}
 			
-		default:
-			fct=log.f_error;
+			f_core.Assert(typeof(fct)=="function", "f_core._AddLog: Log function is invalid '"+fct+"'.");
+			if (!fct) {
+				return false;
+			}
+			
+			return fct.call(log, message, exception, win);
+			
+		} finally {
+			f_core._Logging=undefined;
 		}
-		
-		f_core.Assert(typeof(fct)=="function", "f_core._AddLog: Log function is invalid '"+fct+"'.");
-		if (!fct) {
-			return false;
-		}
-		
-		return fct.call(log, message, exception, win);
 	},
 	/**
 	 * @method private static final
@@ -257,7 +310,7 @@ var f_core = {
 	 * @return void
 	 */
 	Debug: function(name, message, exception, win) {
-		f_core._AddLog(3, name, message, exception, win);
+		f_core._AddLog(4, name, message, exception, win);
 	},
     /**
      * <p>Is debug logging currently enabled ?</p>
@@ -285,8 +338,37 @@ var f_core = {
 	 * @param Error exception An exception if any.	 
 	 * @return void
 	 */
+	Trace: function(name, message, exception, win) {
+		f_core._AddLog(5, name, message, exception, win);
+	},
+    /**
+     * <p>Is trace logging currently enabled ?</p>
+     *
+     * <p> Call this method to prevent having to perform expensive operations
+     * (for example, <code>String</code> concatenation)
+     * when the log level is more than trace. </p>
+	 *
+	 * @method public static final
+	 * @param string name Log name.
+	 * @return boolean <code>true</code> if debug logging  is enabled.
+	 */
+	IsTraceEnabled: function(name) {
+		f_core.Assert(typeof(name)=="string", "f_core.IsTraceEnabled: name parameter is invalid. ('"+name+"')");
+		if (!window.f_log) {
+			return (f_core.Debug_Mode);
+		}
+		
+		return f_log.GetLog(name).f_isTraceEnabled();
+	},
+	/**
+	 * @method public static final
+	 * @param string name Log name.
+	 * @param string message The message.
+	 * @param Error exception An exception if any.	 
+	 * @return void
+	 */
 	Info: function(name, message, exception, win) {
-		f_core._AddLog(2, name, message, exception, win);
+		f_core._AddLog(3, name, message, exception, win);
 	},
 	/**
      * <p> Is info logging currently enabled ? </p>
@@ -313,7 +395,7 @@ var f_core = {
 	 * @return void
 	 */
 	Warn: function(name, message, exception, win) {
-		f_core._AddLog(1, name, message, exception, win);
+		f_core._AddLog(2, name, message, exception, win);
 	},
 	/**
      * <p> Is warning logging currently enabled ? </p>
@@ -356,7 +438,7 @@ var f_core = {
 			}
 		}
 
-		if (!f_core._AddLog(0, name, message, exception, win)) {
+		if (!f_core._AddLog(1, name, message, exception, win)) {
 			// Rien n'a été rapporté, on passe à la console !
 			
 			if (!exception) {
@@ -508,40 +590,50 @@ var f_core = {
 	 * @return void
 	 */
 	Profile: function(name, date) {
-		var profiler=window.f_profilerCB;
-		if (profiler===undefined) {
+		if (f_core._LoggingProfile) {
 			return;
 		}
-		
-		if (typeof(profiler)=="function") {
-			try {
-				profiler.apply(window, arguments);
-				
-			} catch (x) {
-				f_core.Error(f_core, "While calling external profiler.", x);
+		try {
+			f_core._LoggingProfile=true;	
+	
+			var profiler=window.f_profilerCB;
+			if (profiler===undefined) {
+				return;
 			}
 			
-			return;
-		}
+			if (typeof(profiler)=="function") {
+				try {
+					profiler.apply(window, arguments);
+					
+				} catch (x) {
+					f_core.Error(f_core, "While calling external profiler.", x);
+				}
+				
+				return;
+			}
+			
+			if (profiler!==true || window._f_exiting) {
+				return;
+			}
 		
-		if (profiler!==true || window._f_exiting) {
-			return;
-		}
+			if (!date) {
+				date=new Date().getTime();
 	
-		if (!date) {
-			date=new Date().getTime();
-
-		} else if (date instanceof Date) {
-			date=date.getTime();
-		}
+			} else if (date instanceof Date) {
+				date=date.getTime();
+			}
+		
+			var diff=date-window._f_core_initLibraryDate;
+			if (diff<1) {
+				f_core.Debug("f_core.profile", "Profiler: "+name+"  "+date);
+				return;
+			}
 	
-		var diff=date-window._f_core_initLibraryDate;
-		if (diff<1) {
-			f_core.Debug("f_core.profile", "Profiler: "+name+"  "+date);
-			return;
+			f_core.Debug("f_core.profile", "Profiler: "+name+"  +"+diff+"ms.");
+			
+		} finally {
+			f_core._LoggingProfile=undefined;
 		}
-
-		f_core.Debug("f_core.profile", "Profiler: "+name+"  +"+diff+"ms.");
 	},
 	_OnInit: function() {
 		var now=new Date();
@@ -649,6 +741,13 @@ var f_core = {
 				if (f_core.IsInternetExplorer()) {
 					f_core.RemoveEventListener(document, "selectstart", f_core._IeOnSelectStart);
 				}
+				
+				var timeoutID=f_core._FocusTimeoutID;
+				if (timeoutID) {
+					f_core._FocusTimeoutID=undefined;
+					window.clearTimeout(timeoutID);
+				}
+				f_core._FocusComponent=undefined;
 		
 				var forms = document.forms;
 				for (var i=0; i<forms.length; i++) {
@@ -921,7 +1020,7 @@ var f_core = {
 
 		if (win.f_event) {
 			if (win.f_event.GetEventLocked(true)) {
-				return false;
+				return f_core.CancelEvent(evt);
 			}
 		}
 
@@ -931,7 +1030,7 @@ var f_core = {
 			// Cas ou l'utilisateur va plus vite que la musique ! (avant le onload de la page)
 			
 			if (f_env.IsSubmitUntilPageCompleteLocked()) {
-				return false;
+				return f_core.CancelEvent(evt);
 			}
 			
 			// On essaye d'initialiser les objets qui ne sont pas encore initializés
@@ -946,7 +1045,7 @@ var f_core = {
 		var immediate;
 		var component=win.f_event.GetComponent();
 
-		f_core.Debug("f_core", "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"'");
+		f_core.Debug("f_core", "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
 		if (component && component.f_isImmediate) {
 			immediate=component.f_isImmediate();
 
@@ -954,11 +1053,14 @@ var f_core = {
 		}
 		
 		if (immediate!==true && f_env.GetCheckValidation()) {
-			if (!f_core._CallFormCheckListeners(form)) {
-				return false;
-			}
+			var valid=f_core._CallFormCheckListeners(form);
 			
 			f_core.Profile("f_core.SubmitEvent.checkListeners");
+			
+			f_core.Debug(f_core, "Validation of checkers returns: "+valid);
+			if (!valid) {
+				return f_core.CancelEvent(evt);
+			}
 		}
 		
 		var classLoader=win._classLoader;
@@ -1409,6 +1511,8 @@ var f_core = {
 	_CallFormCheckListeners: function(form) {
 		var checkListeners=form._checkListeners;
 		if (!checkListeners || checkListeners.length<1) {
+		
+			f_core.Debug(f_core, "No check listeners to call ...");
 			return true;
 		}
 		
@@ -1443,6 +1547,8 @@ var f_core = {
 				cfs.push(checkListener);
 			}
 		}
+
+		f_core.Debug(f_core, "PreCheck="+(cfp?cfp.length:0)+" Check="+(ces?ces.length:0)+" PostCheck="+(cfs?cfs.length:0)+".");
 		
 		var ret=true;
 		try {
@@ -1450,7 +1556,12 @@ var f_core = {
 				for(var i=0;i<cfp.length;i++) {
 					var checkPre=cfp[i];
 					
-					checkPre.f_performCheckPre(form);
+					try {
+						checkPre.f_performCheckPre(form);
+						
+					} catch (x) {
+						f_core.Error(f_core, "PreCheck value throws an exception : "+checkPre, x);
+					}
 				}
 			}
 			
@@ -1458,8 +1569,13 @@ var f_core = {
 				for(var i=0;i<ces.length && ret;i++) {
 					var checkEvent=ces[i];
 					
-					if (checkEvent.f_performCheckValue(form)===false) {
-						ret=false;
+					try {
+						if (checkEvent.f_performCheckValue(form)===false) {
+							ret=false;
+						}
+						
+					} catch (x) {
+						f_core.Error(f_core, "Check value throws an exception : "+checkEvent, x);
 					}
 				}
 			}
@@ -1469,7 +1585,12 @@ var f_core = {
 				for(var i=0;i<cfs.length;i++) {
 					var checkPost=cfs[i];
 					
-					checkPost.f_performCheckPost(ret, form);
+					try {
+						checkPost.f_performCheckPost(ret, form);
+
+					} catch (x) {
+						f_core.Error(f_core, "Post check value throws an exception : "+checkPost, x);
+					}
 				}
 			}
 		}
@@ -1862,24 +1983,29 @@ var f_core = {
 	 * @param HTMLElement obj
 	 * @return Object 
 	 */
-	GetAbsolutePos: function(obj) {
-		var curtop = 0;
-		var curleft= 0;
+	GetAbsolutePosition: function(obj) {
+		var curTop = 0;
+		var curLeft= 0;
+		
+	//	f_core.Debug(f_core, "Get absolutePos of '"+obj.id+"'.");
 		if (obj.offsetParent) {
 			for (;obj.offsetParent;obj = obj.offsetParent) {
-				curtop += obj.offsetTop;
-				curleft += obj.offsetLeft;
+				curTop += obj.offsetTop;
+				curLeft += obj.offsetLeft;
+
+		//		f_core.Debug(f_core, " Sub absolutePos of '"+obj.id+"' x="+obj.offsetLeft+" y="+obj.offsetTop+"  totX="+curLeft+" totY="+curTop);
 			}
 		} else {
 			if (obj.x) {
-				curleft+=obj.x;
+				curLeft+=obj.x;
 			}
 			if (obj.y) {
-				curtop += obj.y;
+				curTop += obj.y;
 			}
 		}
 		
-		return { x: curleft, y: curtop };
+	//	f_core.Debug(f_core, "  End absolutePos x="+curLeft+" y="+curTop);
+		return { x: curLeft, y: curTop };
 	},
 	/**
 	 * @method hidden static final
@@ -2216,7 +2342,7 @@ var f_core = {
 	 * @return boolean
 	 */
 	IsComponentInside: function(component, event) {			
-		var p=f_core.GetAbsolutePos(component);
+		var p=f_core.GetAbsolutePosition(component);
 	
 		if (event.clientX<p.x || 
 			event.clientY<p.y || 
@@ -2339,11 +2465,24 @@ var f_core = {
 	/**
 	 * @method public static final
 	 * @param HTMLElement component
+	 * @param hidden boolean asyncMode
 	 * @return boolean <code>true</code> is success !
 	 */
-	SetFocus: function(component) {
+	SetFocus: function(component, asyncMode) {
 		f_core.Assert(component, "Component is NULL");
 		f_core.Assert(component.tagName, "Parameter is not a component.");
+
+		if (f_core._FocusTimeoutID) {
+			f_core._FocusComponent=component;
+			return;
+		}
+		
+		if (asyncMode) {
+			f_core._FocusComponent=component;
+			
+			f_core._FocusTimeoutID=window.setTimeout(f_core._FocusTimeout, f_core._FOCUS_TIMEOUT_DELAY);
+			return;
+		}
 
 		if (!f_core.ForceComponentVisibility(component)) {
 			f_core.Info("f_core", "Can not set focus to a not visible component");
@@ -2384,6 +2523,23 @@ var f_core = {
 		
 		return false;
 	},
+	/**
+	 * @method private static
+	 */
+	_FocusTimeout: function() {
+		// On sait jamais !
+		if (!window.f_core) {
+			return;
+		}
+		f_core._FocusTimeoutID=undefined;
+		
+		var component=f_core._FocusComponent;
+		if (!component) {
+			return;
+		}
+		f_core._FocusComponent=undefined;
+		f_core.SetFocus(component);
+	},	
 	/**
 	 * @method hidden static final
 	 */
@@ -3129,12 +3285,14 @@ var f_core = {
 		var bw=body.clientWidth+window.scrollX;
 		var bh=body.clientHeight+window.scrollY;
 
-		if (popup.offsetWidth+positions.x>bw) {
-			positions.x=bw-popup.offsetWidth;
+		var absPos=f_core.GetAbsolutePosition(popup.offsetParent);
+
+		if (popup.offsetWidth+positions.x+absPos.x>bw) {
+			positions.x=bw-popup.offsetWidth-absPos.x;
 		}
 		
-		if (popup.offsetHeight+positions.y>bh) {
-			positions.y=bh-popup.offsetHeight;
+		if (popup.offsetHeight+positions.y+absPos.y>bh) {
+			positions.y=bh-popup.offsetHeight-absPos.y;
 		}
 	},
 	/**

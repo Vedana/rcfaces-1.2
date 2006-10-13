@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:50  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:59  oeuillot
  * Stabilisation
  *
@@ -134,7 +142,6 @@ import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
-import org.rcfaces.core.internal.component.IRCFacesComponent;
 import org.rcfaces.core.internal.listener.BlurActionListener;
 import org.rcfaces.core.internal.listener.BlurScriptListener;
 import org.rcfaces.core.internal.listener.ChangeActionListener;
@@ -186,6 +193,10 @@ abstract class CameliaTag extends UIComponentBodyTag {
             .getPackagePrefix()
             + ".RESPONSE_WRITER_PATCH";
 
+    private static final String HIDDEN_MODE_SERVER_PROPERTY = Constants
+            .getPackagePrefix()
+            + ".HIDDEN_MODE_SERVER";
+
     private AbstractAsyncRenderService asyncRenderServer = null;
 
     private IAsyncRenderer asyncRender = null;
@@ -229,10 +240,6 @@ abstract class CameliaTag extends UIComponentBodyTag {
         if (component.isRendered() == false) {
             ignoreBody = true;
             return EVAL_BODY_BUFFERED;
-        }
-        if (((IRCFacesComponent) component).isClientRendered() == false) {
-     /*       ignoreBody = true;
-           return EVAL_BODY_BUFFERED; */
         }
 
         return (EVAL_BODY_INCLUDE);

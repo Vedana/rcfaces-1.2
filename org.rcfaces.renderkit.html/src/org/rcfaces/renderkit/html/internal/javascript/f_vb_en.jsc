@@ -1,0 +1,2 @@
+var _y={REQUIRED_ERROR_SUMMARY:"Required field can not be empty.",FORCE_FILL_ERROR_SUMMARY:"The field must contain {0} characters."}
+f_resourceBundle.en(f_vb,_y);

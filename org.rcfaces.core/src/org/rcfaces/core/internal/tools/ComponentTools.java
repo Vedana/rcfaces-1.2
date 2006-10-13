@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -76,7 +84,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 import org.rcfaces.core.internal.renderkit.WriterException;
-
 
 /**
  * 

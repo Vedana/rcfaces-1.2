@@ -1,86 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.3  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.2  2006/09/01 15:24:28  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.4  2006/08/28 16:03:53  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.3  2006/07/18 17:06:29  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.2  2006/06/27 09:23:09  oeuillot
- * Mise � jour du calendrier de dateChooser
- *
- * Revision 1.1  2006/06/19 17:22:17  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.13  2006/04/27 13:49:46  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.12  2006/03/15 13:53:04  oeuillot
- * Stabilisation
- * Ajout des bundles pour le javascript
- * R�organisation de l'arborescence de GridData qui n'herite plus de UIData
- *
- * Revision 1.11  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.10  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.9  2005/12/27 16:08:17  oeuillot
- * Gestion imageButtonWriter
- * Ajout de fa_images
- * Preparation de f_imageCombo
- *
- * Revision 1.8  2005/12/22 11:48:08  oeuillot
- * Ajout de :
- * - JS:  calendar, locale, dataList, log
- * - Evenement User
- * - ClientData  multi-directionnel (+TAG)
- *
- * Revision 1.7  2005/10/05 14:34:20  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.6  2004/11/19 18:01:30  oeuillot
- * Version debut novembre
- *
- * Revision 1.5  2004/09/24 14:01:36  oeuillot
- * *** empty log message ***
- *
- * Revision 1.4  2004/09/02 17:44:30  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.core.internal.component;
 
@@ -93,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
@@ -393,13 +313,19 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         }
 
         Object converter = states[2];
-        if (Boolean.FALSE.equals(converter)) {
-            this.converterSetted = false;
-            this.converter = null;
+        if (converter != null) {
+            this.converterSetted = true;
+            if (Boolean.FALSE.equals(converter)) {
+                this.converter = null;
+
+            } else {
+                this.converter = (Converter) UIComponentBase
+                        .restoreAttachedState(context, converter);
+            }
 
         } else {
-            this.converterSetted = true;
-            this.converter = (Converter) converter;
+            this.converterSetted = false;
+            this.converter = null;
         }
     }
 
@@ -442,10 +368,17 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         }
 
         if (converterSetted) {
-            states[2] = converter;
+            Object savedConverter = Boolean.FALSE;
+            if (converter != null) {
+                savedConverter = UIComponentBase.saveAttachedState(context,
+                        converter);
 
-        } else {
-            states[2] = Boolean.FALSE;
+                if (savedConverter == null) {
+                    savedConverter = Boolean.FALSE;
+                }
+            }
+
+            states[2] = savedConverter;
         }
 
         return states;
@@ -531,7 +464,18 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             facesContext = getFacesContext();
         }
 
-        String converterId = getConverterId(facesContext);
+        Object converterValue = getProperty(CONVERTER_ID_PROPERTY, facesContext);
+        if (converterValue == null) {
+            return null;
+        }
+
+        if (converterValue instanceof Converter) {
+            converter = (Converter) converterValue;
+
+            return converter;
+        }
+
+        String converterId = String.valueOf(converterValue);
         if (converterId == null) {
             return null;
         }

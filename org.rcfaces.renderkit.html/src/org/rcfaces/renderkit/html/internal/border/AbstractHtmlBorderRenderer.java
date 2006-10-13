@@ -3,7 +3,7 @@ package org.rcfaces.renderkit.html.internal.border;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.AbstractBorderRenderer;
-import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.CssWriter;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -165,22 +165,22 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         writer.writeAttribute("cellpadding", "0");
 
         if (width != null || height != null) {
-            ICssWriter cssWriter = AbstractCssRenderer.createCssWriter();
+            ICssWriter cssWriter = new CssWriter(writer, 64);
 
             if (width != null) {
                 if (onlyDigit(width)) {
                     width += "px";
                 }
-                cssWriter.writeProperty("width", width);
+                cssWriter.writeWidth(width);
             }
             if (height != null) {
                 if (onlyDigit(height)) {
                     width += "px";
                 }
-                cssWriter.writeProperty("height", height);
+                cssWriter.writeHeight(height);
             }
 
-            cssWriter.close(writer);
+            cssWriter.close();
         }
 
         this.writeTopBorder = hasBorder();
@@ -218,7 +218,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
                 .getRenderContext();
 
-        return htmlRenderContext.getHtmlExternalContext().getStyleSheetURI(
+        return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
                 BORDER_BLANK_IMAGEURL);
     }
 
@@ -443,7 +443,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
                 .getRenderContext();
 
-        String imageURL = htmlRenderContext.getHtmlExternalContext()
+        String imageURL = htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetURI(MARKER_IMAGEURL);
         writer.writeAttribute("class", componentClassName + "_marker");
         writer.writeAttribute("src", imageURL);

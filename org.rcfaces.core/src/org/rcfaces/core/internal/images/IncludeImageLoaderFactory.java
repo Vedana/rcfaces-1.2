@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -25,14 +33,15 @@ import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.util.IncludeHttpServletRequest;
 import org.rcfaces.core.internal.util.IncludeHttpServletResponse;
 
 /**
@@ -202,7 +211,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                     }
                 }
 
-                HttpServletRequestWrapper request = new HttpServletRequestWrapper(
+                ServletRequest request = new IncludeHttpServletRequest(
                         servletRequest);
                 IncludeHttpServletResponse response = IncludeHttpServletResponse
                         .create(servletResponse, output, DEFAULT_CHARSET);

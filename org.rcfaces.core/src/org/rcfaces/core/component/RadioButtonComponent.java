@@ -2,12 +2,12 @@ package org.rcfaces.core.component;
 
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.RadioButtonComponent;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IRadioValueCapability;
 import org.rcfaces.core.component.iterator.IRadioButtonIterator;
 import org.rcfaces.core.internal.tools.RadioButtonTools;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
@@ -23,7 +23,7 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 	ISelectionEventCapability,
 	IReadOnlyCapability,
 	ISelectedCapability,
-	IRadioGroupCapability,
+	IRadioValueCapability,
 	IRequiredCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.radioButton";
@@ -140,6 +140,22 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 
 	public final void setSelected(ValueBinding selected) {
 		engine.setProperty(Properties.SELECTED, selected);
+	}
+
+	public final java.lang.Object getRadioValue() {
+		return getRadioValue(null);
+	}
+
+	public final java.lang.Object getRadioValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.RADIO_VALUE, facesContext);
+	}
+
+	public final void setRadioValue(java.lang.Object radioValue) {
+		engine.setProperty(Properties.RADIO_VALUE, radioValue);
+	}
+
+	public final void setRadioValue(ValueBinding radioValue) {
+		engine.setProperty(Properties.RADIO_VALUE, radioValue);
 	}
 
 	public final java.lang.String getGroupName() {

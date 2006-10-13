@@ -226,6 +226,46 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
+	public final boolean isHorizontalScroll() {
+		return isHorizontalScroll(null);
+	}
+
+	public final boolean isHorizontalScroll(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HORIZONTAL_SCROLL, false, facesContext);
+	}
+
+	public final void setHorizontalScroll(boolean horizontalScroll) {
+		engine.setProperty(Properties.HORIZONTAL_SCROLL, horizontalScroll);
+	}
+
+	public final void setHorizontalScroll(ValueBinding horizontalScroll) {
+		engine.setProperty(Properties.HORIZONTAL_SCROLL, horizontalScroll);
+	}
+
+	public final boolean isHorizontalScrollSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_SCROLL);
+	}
+
+	public final boolean isVerticalScroll() {
+		return isVerticalScroll(null);
+	}
+
+	public final boolean isVerticalScroll(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VERTICAL_SCROLL, false, facesContext);
+	}
+
+	public final void setVerticalScroll(boolean verticalScroll) {
+		engine.setProperty(Properties.VERTICAL_SCROLL, verticalScroll);
+	}
+
+	public final void setVerticalScroll(ValueBinding verticalScroll) {
+		engine.setProperty(Properties.VERTICAL_SCROLL, verticalScroll);
+	}
+
+	public final boolean isVerticalScrollSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_SCROLL);
+	}
+
 	public void release() {
 		super.release();
 	}

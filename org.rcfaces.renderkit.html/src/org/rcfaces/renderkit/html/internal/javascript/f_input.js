@@ -15,20 +15,24 @@ var __prototype = {
 		this.f_super(arguments);
 
 		var input=this.f_getInput();
-		input.f_link=this;
+		if (input!=this) {
+			input.f_link=this;
+		}
 		
 		f_core.Debug(f_input, "Input associated to component '"+this.id+"' is id='"+input.id+"', tagName="+input.tagName+", name='"+input.name+"'.");
 	},
 	f_finalize: function() {
+		
+		this._validator=undefined;
+		
+		this.f_super(arguments);
+
+		// On efface l'INPUT aprés car le _input peut être reinitialisé par les classes parentes !
 		var input=this._input;
 		if (input) {
 			this._input=undefined;
 			input.f_link=undefined;
 		}
-		
-		this._validator=undefined;
-		
-		this.f_super(arguments);
 
 		if (input && input!=this) {
 			f_core.VerifyProperties(input);
@@ -235,8 +239,14 @@ var __prototype = {
 	f_setValue: function(value) {
 		var validator=this._validator;
 		if (validator) {
-			return validator.f_setConvertedValue(value);
+			if (validator.f_setConvertedValue(value)) {
+				return true;
+			}
 		}		
+
+		if (typeof(value)=="number") {
+			value=String(value);
+		}
 
 		if (typeof(value)!="string") {
 			f_core.Debug(f_input, "Invalid value: "+value);

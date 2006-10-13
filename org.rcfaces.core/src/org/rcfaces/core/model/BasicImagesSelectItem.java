@@ -1,23 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.1  2006/03/15 13:53:04  oeuillot
- * Stabilisation
- * Ajout des bundles pour le javascript
- * R�organisation de l'arborescence de GridData qui n'herite plus de UIData
- *
  */
 package org.rcfaces.core.model;
 

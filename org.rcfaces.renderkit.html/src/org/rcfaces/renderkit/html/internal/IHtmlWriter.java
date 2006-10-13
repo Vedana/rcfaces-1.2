@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -30,6 +38,7 @@
 package org.rcfaces.renderkit.html.internal;
 
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
+import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
  * 
@@ -42,4 +51,26 @@ public interface IHtmlWriter extends ISgmlWriter {
     boolean isJavaScriptEnabled();
 
     IHtmlComponentRenderContext getHtmlComponentRenderContext();
+
+    IHtmlWriter writeType(String type) throws WriterException;
+
+    IHtmlWriter writeMaxLength(int maxLength) throws WriterException;
+
+    IHtmlWriter writeSize(int size) throws WriterException;
+
+    IHtmlWriter writeName(String name) throws WriterException;
+
+    IHtmlWriter writeId(String id) throws WriterException;
+
+    IHtmlWriter writeClass(String className) throws WriterException;
+
+    IHtmlWriter writeDisabled() throws WriterException;
+
+    IHtmlWriter writeReadOnly() throws WriterException;
+
+    IHtmlWriter writeValue(String value) throws WriterException;
+
+    IHtmlWriter writeAccessKey(String accessKey) throws WriterException;
+
+    IHtmlWriter writeTabIndex(int tabIndex) throws WriterException;
 }

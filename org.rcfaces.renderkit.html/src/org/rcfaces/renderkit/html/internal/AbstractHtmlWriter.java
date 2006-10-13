@@ -31,7 +31,7 @@ public abstract class AbstractHtmlWriter extends
     public AbstractHtmlWriter(FacesContext facesContext,
             AbstractRenderContext renderContext) {
         super(facesContext, renderContext.getComponent(), renderContext
-                .getComponentId());
+                .getComponentClientId());
 
         this.renderContext = renderContext;
 

@@ -12,9 +12,9 @@
 var __static = {
 
 	/**
-	 * @field public static final number
+	 * @field private static final number
 	 */	
-	DEFAULT: 0,
+	_DEFAULT: 0,
 
  	/**
  	 * Fatal level.
@@ -28,14 +28,14 @@ var __static = {
  	 *
 	 * @field public static final number
 	 */
-	ERROR: 3,
+	ERROR: 1,
 
  	/**
  	 * War, level.
  	 *
 	 * @field public static final number
 	 */
-	WARN: 4,
+	WARN: 2,
 
 	
  	/**
@@ -43,7 +43,7 @@ var __static = {
  	 *
 	 * @field public static final number
 	 */
-  	INFO: 6,
+  	INFO: 3,
 
 	
  	/**
@@ -51,7 +51,7 @@ var __static = {
  	 *
 	 * @field public static final number
 	 */
-	DEBUG: 7,
+	DEBUG: 4,
 
 	
  	/**
@@ -59,7 +59,7 @@ var __static = {
  	 *
 	 * @field public static final number
 	 */
-	TRACE: 9,
+	TRACE: 5,
 
 	/**
 	 * @field private static
@@ -104,7 +104,7 @@ var __static = {
 			return log;
 		}
 		
-		var level=f_log.DEFAULT;
+		var level=f_log._DEFAULT;
 		if (f_core && f_core.Debug_Mode) {
 			level=f_log.DEBUG;
 		}
@@ -127,7 +127,7 @@ var __static = {
 			}
 		}
 		
-		log=f_log.f_newInstance(logName, level);
+		log=f_log.f_newSystemInstance(logName, level);
 		
 		logs[logName]=log;
 		

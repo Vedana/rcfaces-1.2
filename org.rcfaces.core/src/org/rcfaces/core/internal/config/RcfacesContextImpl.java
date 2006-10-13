@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/09/14 14:34:51  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -86,6 +94,8 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.adapter.AdapterManagerImpl;
+import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.images.ImageOperationsRepositoryImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
@@ -136,6 +146,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     private transient String applicationVersion;
 
+    private transient IAdapterManager adapterManager;
+
     public RcfacesContextImpl() {
     }
 
@@ -165,6 +177,9 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
         LOG.debug("Initialize providers registry");
         providersRegistry = createProvidersRegistry();
+
+        LOG.debug("Initialize adapter manager");
+        adapterManager = createAdapterManager();
     }
 
     public final IServicesRegistry getServicesRegistry() {
@@ -457,6 +472,14 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     public void writeExternal(ObjectOutput out) {
         // On ne serialize rien !
+    }
+
+    public IAdapterManager getAdapterManager() {
+        return adapterManager;
+    }
+
+    protected IAdapterManager createAdapterManager() {
+        return new AdapterManagerImpl();
     }
 
 }

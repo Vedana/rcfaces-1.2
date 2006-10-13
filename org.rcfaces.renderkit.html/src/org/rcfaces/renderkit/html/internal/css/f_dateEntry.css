@@ -17,13 +17,22 @@
 
 .f_dateEntry INPUT {
 	border: 0;
+	background-color: transparent;
+	text-align: right;
 }
 
-.f_dateEntry_dd,
+.f_dateEntry_hh,
 .f_dateEntry_mm,
+.f_dateEntry_ss,
+.f_dateEntry_dd,
+.f_dateEntry_MM,
 .f_dateEntry_yy {
 	width: 16px;
 } 
+
+.f_dateEntry_SSS {
+	width: 24px;
+}
 
 .f_dateEntry_yyyy {
 	width: 32px;

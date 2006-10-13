@@ -2,6 +2,14 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -57,7 +65,7 @@ public class Delay {
      * The object has not an expirable date !<br>
      * <B> CAREFUL It's a LONG constant !</B>
      */
-    public static final long IMMORTAL = 0;
+    public static final long NONE = 0;
 
     /** 1 second = 1000 milliseconds */
     public static final long SECOND = 1000l;
@@ -98,8 +106,10 @@ public class Delay {
         int current = 0;
         boolean cv = false;
 
-        if (value.trim().equalsIgnoreCase("never")) {
-            return (int) Delay.IMMORTAL;
+        value = value.trim();
+
+        if (value.equalsIgnoreCase("none")) {
+            return (int) Delay.NONE;
         }
 
         StringTokenizer st = new StringTokenizer(value, " wdhmsWDHMS", true);

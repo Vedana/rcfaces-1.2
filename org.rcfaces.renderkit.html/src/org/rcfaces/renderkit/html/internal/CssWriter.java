@@ -20,19 +20,74 @@ import org.rcfaces.core.internal.util.FastWriter;
 public class CssWriter extends FastWriter implements ICssWriter {
     private static final String REVISION = "$Revision$";
 
-    public CssWriter() {
+    protected static final String BACKGROUND = "background";
+
+    protected static final String BORDER_STYLE = "border-style";
+
+    protected static final String COLOR = "color";
+
+    protected static final String DISPLAY = "display";
+
+    protected static final String FONT = "font";
+
+    protected static final String FONT_FAMILY = "font-family";
+
+    protected static final String FONT_SIZE = "font-size";
+
+    protected static final String FONT_STYLE = "font-style";
+
+    protected static final String FONT_WEIGHT = "font-weight";
+
+    protected static final String HEIGHT = "height";
+
+    protected static final String LEFT = "left";
+
+    protected static final String MARGIN = "margin";
+
+    protected static final String MARGIN_BOTTOM = "margin-bottom";
+
+    protected static final String MARGIN_LEFT = "margin-left";
+
+    protected static final String MARGIN_RIGHT = "margin-right";
+
+    protected static final String MARGIN_TOP = "margin-top";
+
+    protected static final String OVERFLOW = "overflow";
+
+    protected static final String POSITION = "position";
+
+    protected static final String TEXT_ALIGN = "text-align";
+
+    protected static final String TEXT_DECORATION = "text-decoration";
+
+    protected static final String TOP = "top";
+
+    protected static final String VERTICAL_ALIGN = "vertical-align";
+
+    protected static final String VISIBILITY = "visibility";
+
+    protected static final String WIDTH = "width";
+
+    private final IHtmlWriter htmlWriter;
+
+    private boolean needSpace = false;
+
+    public CssWriter(IHtmlWriter htmlWriter) {
+        this.htmlWriter = htmlWriter;
     }
 
-    public CssWriter(int initialSize) {
+    public CssWriter(IHtmlWriter htmlWriter, int initialSize) {
         super(initialSize);
+
+        this.htmlWriter = htmlWriter;
     }
 
-    public void close(IHtmlWriter writer) throws WriterException {
+    public void close() throws WriterException {
         if (this.getSize() < 1) {
             return;
         }
 
-        writer.writeAttribute("style", getBuffer());
+        htmlWriter.writeAttribute("style", getBuffer());
     }
 
     public ICssWriter writePropertyName(String name) {
@@ -58,11 +113,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
         write(name).write(':').write(value);
 
-        return this;
-    }
-
-    public ICssWriter writeValue(char character) {
-        write(character);
+        needSpace = true;
 
         return this;
     }
@@ -74,7 +125,13 @@ public class CssWriter extends FastWriter implements ICssWriter {
     }
 
     public ICssWriter writeValue(String text) {
+        if (needSpace) {
+            write(' ');
+        }
+
         write(text);
+
+        needSpace = true;
 
         return this;
     }
@@ -86,7 +143,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
             return this;
         }
 
-        return writeProperty("color", fg);
+        return writeColor(fg);
     }
 
     public final ICssWriter writeTextAlignment(ITextAlignmentCapability element) {
@@ -95,7 +152,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
             return this;
         }
 
-        return writeProperty(TEXT_ALIGN, align);
+        return writeTextAlign(align);
     }
 
     public final ICssWriter writeFont(IFontCapability element) {
@@ -103,9 +160,9 @@ public class CssWriter extends FastWriter implements ICssWriter {
         Boolean funderline = element.getFontUnderline();
         if (funderline != null) {
             if (funderline.booleanValue()) {
-                writeProperty(TEXT_DECORATION, "underline");
+                writeTextDecoration(UNDERLINE);
             } else {
-                writeProperty(TEXT_DECORATION, "none");
+                writeTextDecoration(NONE);
             }
         }
 
@@ -119,9 +176,9 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
             if (fitalic != null) {
                 if (fitalic.booleanValue()) {
-                    sb.append("italic");
+                    sb.append(ITALIC);
                 } else {
-                    sb.append("normal");
+                    sb.append(NORMAL);
                 }
             }
             if (fbold != null) {
@@ -130,9 +187,9 @@ public class CssWriter extends FastWriter implements ICssWriter {
                 }
 
                 if (fbold.booleanValue()) {
-                    sb.append("bold");
+                    sb.append(BOLD);
                 } else {
-                    sb.append("normal");
+                    sb.append(NORMAL);
                 }
             }
 
@@ -148,35 +205,55 @@ public class CssWriter extends FastWriter implements ICssWriter {
                 sb.append(fontName);
             }
 
-            writeProperty("font", sb.toString());
+            writeFont(sb.toString());
             return this;
         }
 
         if (fontName != null) {
-            writeProperty("font-family", fontName);
+            writeFontFamily(fontName);
         }
 
         if (fontSize != null) {
-            writeProperty("font-size", fontSize);
+            writeFontSize(fontSize);
         }
 
         if (fbold != null) {
             if (fbold.booleanValue()) {
-                writeProperty("font-weight", "bold");
+                writeFontWeight(BOLD);
             } else {
-                writeProperty("font-weight", "normal");
+                writeFontWeight(NORMAL);
             }
         }
 
         if (fitalic != null) {
             if (fitalic.booleanValue()) {
-                writeProperty("font-style", "italic");
+                writeFontStyle(ITALIC);
             } else {
-                writeProperty("font-style", "normal");
+                writeFontStyle(NORMAL);
             }
         }
 
         return this;
+    }
+
+    public ICssWriter writeFontFamily(String fontFamily) {
+        return writeProperty(FONT_FAMILY, fontFamily);
+    }
+
+    public ICssWriter writeFontSize(String fontSize) {
+        return writeProperty(FONT_SIZE, fontSize);
+    }
+
+    public ICssWriter writeFontStyle(String fontStyle) {
+        return writeProperty(FONT_STYLE, fontStyle);
+    }
+
+    public ICssWriter writeFontWeight(String fontWeight) {
+        return writeProperty(FONT_WEIGHT, fontWeight);
+    }
+
+    public ICssWriter writeFont(String font) {
+        return writeProperty(FONT, font);
     }
 
     public final ICssWriter writePosition(IPositionCapability element) {
@@ -193,28 +270,52 @@ public class CssWriter extends FastWriter implements ICssWriter {
             return this;
         }
 
-        writeProperty("position", "absolute");
+        writePosition(ABSOLUTE);
 
         if (x != null) {
-            writeProperty(LEFT, AbstractCssRenderer.getSize(x));
+            writeLeft(AbstractCssRenderer.getSize(x));
         }
 
         if (y != null) {
-            writeProperty(TOP, AbstractCssRenderer.getSize(y));
+            writeTop(AbstractCssRenderer.getSize(y));
         }
 
         return this;
     }
 
+    public ICssWriter writeTop(String top) {
+        return writeProperty(TOP, top);
+    }
+
+    public ICssWriter writeLeft(String left) {
+        return writeProperty(LEFT, left);
+    }
+
+    public ICssWriter writePosition(String position) {
+        return writeProperty(POSITION, position);
+    }
+
+    public ICssWriter writeTextDecoration(String textDecoration) {
+        return writeProperty(TEXT_DECORATION, textDecoration);
+    }
+
+    public ICssWriter writeColor(String color) {
+        return writeProperty(COLOR, color);
+    }
+
+    public ICssWriter writeVisibility(String visibility) {
+        return writeProperty(VISIBILITY, visibility);
+    }
+
     public final ICssWriter writeSize(ISizeCapability element) {
         String width = element.getWidth();
         if ((width != null) && width.length() > 0) {
-            writeProperty(WIDTH, AbstractCssRenderer.getSize(width));
+            writeWidth(AbstractCssRenderer.getSize(width));
         }
 
         String height = element.getHeight();
         if ((height != null) && height.length() > 0) {
-            writeProperty(HEIGHT, AbstractCssRenderer.getSize(height));
+            writeHeight(AbstractCssRenderer.getSize(height));
         }
 
         return this;
@@ -263,19 +364,19 @@ public class CssWriter extends FastWriter implements ICssWriter {
             if (right.equals(left)) {
                 if (top.equals(bottom)) {
                     if (top.equals(right)) {
-                        writeProperty(MARGIN, top);
+                        writeMargin(top);
                         return this;
                     }
 
-                    writeProperty(MARGIN, top + " " + left);
+                    writeMargin(top + " " + left);
                     return this;
                 }
 
-                writeProperty(MARGIN, top + " " + left + " " + bottom);
+                writeMargin(top + " " + left + " " + bottom);
                 return this;
             }
 
-            writeProperty(MARGIN, top + " " + left + " " + bottom + " " + right);
+            writeMargin(top + " " + left + " " + bottom + " " + right);
 
             return this;
         }
@@ -300,8 +401,8 @@ public class CssWriter extends FastWriter implements ICssWriter {
             IForegroundBackgroundColorCapability foregroundBackgroundColorCapability,
             IBackgroundImageCapability backgroundImageCapability) {
         String backgroundImageURL = null;
-        boolean repeatX = true;
-        boolean repeatY = true;
+        Boolean repeatX = null;
+        Boolean repeatY = null;
         String positionX = null;
         String positionY = null;
         String backgroundColor = null;
@@ -314,10 +415,10 @@ public class CssWriter extends FastWriter implements ICssWriter {
             backgroundImageURL = backgroundImageCapability
                     .getBackgroundImageURL();
             if (backgroundImageURL != null) {
-                repeatX = backgroundImageCapability
-                        .isBackgroundImageHorizontalRepeat();
-                repeatY = backgroundImageCapability
-                        .isBackgroundImageVerticalRepeat();
+                repeatX = Boolean.valueOf(backgroundImageCapability
+                        .isBackgroundImageHorizontalRepeat());
+                repeatY = Boolean.valueOf(backgroundImageCapability
+                        .isBackgroundImageVerticalRepeat());
                 positionX = backgroundImageCapability
                         .getBackgroundImageHorizontalPosition();
                 positionY = backgroundImageCapability
@@ -325,34 +426,41 @@ public class CssWriter extends FastWriter implements ICssWriter {
             }
         }
 
-        if (backgroundImageURL == null && repeatX == true && repeatY == true
+        if (backgroundImageURL == null && repeatX == null && repeatY == null
                 && positionX == null && positionY == null
                 && backgroundColor == null) {
             // Repeat=TRUE est la valeur par d?faut !
             return this;
         }
 
-        writePropertyName("background");
+        return writeBackground(backgroundColor, backgroundImageURL, repeatX,
+                repeatY, positionX, positionY);
+    }
+
+    public ICssWriter writeBackground(String backgroundColor,
+            String backgroundImageURL, Boolean repeatX, Boolean repeatY,
+            String positionX, String positionY) {
+
+        writePropertyName(BACKGROUND);
 
         if (backgroundColor != null) {
-            writeValue(' ').writeValue(backgroundColor);
+            writeValue(backgroundColor);
         }
 
         if (backgroundImageURL != null) {
-            writeValue(" url('").writeValue(backgroundImageURL)
-                    .writeValue("')");
+            writeURL(backgroundImageURL);
         }
 
-        if (repeatX == false) {
-            if (repeatY == false) {
-                writeValue(" no-repeat");
+        if (repeatX != null || repeatY != null) {
+            if (Boolean.TRUE.equals(repeatX)) {
+                writeValue(REPEAT_X);
+
+            } else if (Boolean.TRUE.equals(repeatY)) {
+                writeValue(REPEAT_Y);
 
             } else {
-                writeValue(" repeat-y");
+                writeValue(NO_REPEAT);
             }
-
-        } else if (repeatY == false) {
-            writeValue(" repeat-x");
         }
 
         if (positionX != null || positionY != null) {
@@ -363,8 +471,8 @@ public class CssWriter extends FastWriter implements ICssWriter {
             if (positionY == null || positionY.length() < 1) {
                 positionY = "0";
             }
-            writeValue(' ').writeValue(positionX).writeValue(' ').writeValue(
-                    positionY);
+            writeValue(positionX);
+            writeValue(positionY);
         }
 
         return this;
@@ -377,7 +485,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
         }
 
         if (visible == Boolean.TRUE || visible.booleanValue()) {
-            writeProperty(VISIBILITY, "inherit");
+            writeVisibility(INHERIT);
             return this;
         }
 
@@ -387,12 +495,52 @@ public class CssWriter extends FastWriter implements ICssWriter {
         }
 
         if (IVisibilityCapability.IGNORE_HIDDEN_MODE == hiddenMode) {
-            writeProperty(DISPLAY, "none");
+            writeDisplay(NONE);
             return this;
         }
 
-        writeProperty(VISIBILITY, "hidden");
+        writeVisibility(HIDDEN);
 
         return this;
     }
+
+    public ICssWriter writeOverflow(String overflowValue) {
+        return writeProperty(OVERFLOW, overflowValue);
+    }
+
+    public ICssWriter writeDisplay(String displayValue) {
+        return writeProperty(DISPLAY, displayValue);
+    }
+
+    public ICssWriter writeHeight(String heightValue) {
+        return writeProperty(HEIGHT, heightValue);
+    }
+
+    public ICssWriter writeTextAlign(String textAlignement) {
+        return writeProperty(TEXT_ALIGN, textAlignement);
+    }
+
+    public ICssWriter writeVerticalAlign(String verticalAlignement) {
+        return writeProperty(VERTICAL_ALIGN, verticalAlignement);
+    }
+
+    public ICssWriter writeWidth(String widthValue) {
+        return writeProperty(WIDTH, widthValue);
+    }
+
+    public ICssWriter writeBorderStyle(String borderStyle) {
+        return writeProperty(BORDER_STYLE, borderStyle);
+    }
+
+    public ICssWriter writeMargin(String margin) {
+        return writeProperty(MARGIN, margin);
+    }
+
+    public ICssWriter writeURL(String url) {
+        writeValue("url('");
+        write(url).write("')");
+
+        return this;
+    }
+
 }

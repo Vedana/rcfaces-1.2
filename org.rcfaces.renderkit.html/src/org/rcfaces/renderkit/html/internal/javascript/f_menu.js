@@ -123,7 +123,7 @@ var __static = {
 				fa_menuCore._Ie_openPopup(menu, position, offsetX, offsetY, offsetWidth);
 			
 			} else {
-				var p1=f_core.GetAbsolutePos(position);
+				var p1=f_core.GetAbsolutePosition(position);
 			
 				var x=p1.x+offsetX;
 				var y=p1.y+offsetY;
@@ -282,7 +282,7 @@ var __prototype = {
 		default:
 			// Calcule la position de la souris 
 			var eventPos=f_core.GetEventPosition(jsEvt, component.ownerDocument);
-			var cursorPos=f_core.GetAbsolutePos(component);
+			var cursorPos=f_core.GetAbsolutePosition(component);
 			
 			offsetX=eventPos.x-cursorPos.x;
 			offsetY=eventPos.y-cursorPos.y;

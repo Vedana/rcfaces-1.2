@@ -1,85 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.3  2006/10/04 12:31:42  oeuillot
- * Stabilisation
- *
- * Revision 1.2  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.27  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.26  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.25  2006/03/23 19:12:39  oeuillot
- * Ajout des marges
- * Ajout des processors
- * Amelioration des menus
- *
- * Revision 1.24  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.23  2006/02/03 11:37:32  oeuillot
- * Calcule les classes pour le Javascript, plus les fichiers !
- *
- * Revision 1.22  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.21  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.20  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
- * Revision 1.19  2005/11/08 12:16:28  oeuillot
- * Ajout de  Preferences
- * Stabilisation de imageXXXButton
- * Ajout de la validation cot� client
- * Ajout du hash MD5 pour les servlets
- * Ajout des accelerateurs
- *
- * Revision 1.18  2005/09/16 09:54:42  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
- * Revision 1.17  2005/03/07 10:47:03  oeuillot
- * Systeme de Logging
- * Debuggage
- *
- * Revision 1.16  2004/12/24 15:10:04  oeuillot
- * Refonte des tabbedPanes
- * Correction de problemes de value sur FieldSet nottament
- *
- * Revision 1.15  2004/12/22 12:16:14  oeuillot
- * Refonte globale de l'arborescence des composants ....
- * Int�gration des corrections de Didier
- *
  */
 package org.rcfaces.renderkit.html.internal;
 
@@ -137,20 +57,8 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
         htmlWriter.startElement("DIV");
-        writeCoreAttributes(htmlWriter);
-        String className = getStyleClassName(componentRenderContext,
-                fieldSetComponent);
-        htmlWriter.writeAttribute("class", className);
 
-        writeJavaScriptAttributes(htmlWriter);
-
-        ICssWriter cssWriter = createCssWriter();
-        cssWriter.writePosition(fieldSetComponent);
-        cssWriter.writeSize(fieldSetComponent);
-        cssWriter.writeMargin(fieldSetComponent);
-        cssWriter.writeVisibility(fieldSetComponent);
-        cssWriter.writeBackground(fieldSetComponent, null);
-        cssWriter.close(htmlWriter);
+        writeFieldSetAttributes(htmlWriter, fieldSetComponent);
 
         String textAlignement = fieldSetComponent
                 .getTextAlignment(facesContext);
@@ -183,34 +91,51 @@ public class FieldSetRenderer extends AbstractCssRenderer {
                     verticalAlignement, null, null, 1, 1);
         }
 
+        String className = getStyleClassName(componentRenderContext,
+                fieldSetComponent);
+
         htmlWriter.startElement("DIV").writeAttribute("class",
                 className + DIV_BODY);
 
         if (borderRenderer == null) {
             // On aligne par CSS ...
 
-            CssWriter alignWriter = null;
+            ICssWriter cssWriter = new CssWriter(htmlWriter, 64);
 
             if (textAlignement != null) {
-                if (alignWriter == null) {
-                    alignWriter = new CssWriter(64);
-                }
-                alignWriter
-                        .writeProperty(ICssWriter.TEXT_ALIGN, textAlignement);
+                cssWriter.writeTextAlign(textAlignement);
             }
 
             if (verticalAlignement != null) {
-                if (alignWriter == null) {
-                    alignWriter = new CssWriter(64);
-                }
-                alignWriter.writeProperty(ICssWriter.VERTICAL_ALIGN,
-                        verticalAlignement);
+                cssWriter.writeVerticalAlign(verticalAlignement);
             }
 
-            if (alignWriter != null) {
-                htmlWriter.writeAttribute("style", alignWriter.getBuffer());
-            }
+            cssWriter.close();
         }
+    }
+
+    protected void writeFieldSetAttributes(IHtmlWriter htmlWriter,
+            FieldSetComponent fieldSetComponent) throws WriterException {
+
+        writeCoreAttributes(htmlWriter);
+        String className = getStyleClassName(htmlWriter
+                .getComponentRenderContext(), fieldSetComponent);
+        htmlWriter.writeAttribute("class", className);
+
+        writeJavaScriptAttributes(htmlWriter);
+
+        ICssWriter cssWriter = new CssWriter(htmlWriter, 32);
+        writeFiledSetCss(cssWriter, fieldSetComponent);
+        cssWriter.close();
+    }
+
+    protected void writeFiledSetCss(ICssWriter cssWriter,
+            FieldSetComponent fieldSetComponent) {
+        cssWriter.writePosition(fieldSetComponent);
+        cssWriter.writeSize(fieldSetComponent);
+        cssWriter.writeMargin(fieldSetComponent);
+        cssWriter.writeVisibility(fieldSetComponent);
+        cssWriter.writeBackground(fieldSetComponent, null);
     }
 
     protected IHtmlBorderRenderer getHtmlBorderRenderer(IHtmlWriter writer,
@@ -236,11 +161,6 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         return "rounded";
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#encodeEnd(org.rcfaces.core.internal.renderkit.IWriter)
-     */
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
         IComponentRenderContext componentContext = writer
@@ -301,11 +221,6 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.FIELD_SET;
     }

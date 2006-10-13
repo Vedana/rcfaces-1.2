@@ -25,6 +25,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private String initListeners;
 	private String loadListeners;
 	private String asyncRenderMode;
+	private String horizontalScroll;
+	private String verticalScroll;
 	public String getComponentType() {
 		return BoxComponent.COMPONENT_TYPE;
 	}
@@ -117,6 +119,22 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
+	public final String getHorizontalScroll() {
+		return horizontalScroll;
+	}
+
+	public final void setHorizontalScroll(String horizontalScroll) {
+		this.horizontalScroll = horizontalScroll;
+	}
+
+	public final String getVerticalScroll() {
+		return verticalScroll;
+	}
+
+	public final void setVerticalScroll(String verticalScroll) {
+		this.verticalScroll = verticalScroll;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (BoxComponent.COMPONENT_TYPE==getComponentType()) {
@@ -129,6 +147,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
+			LOG.debug("  verticalScroll='"+verticalScroll+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -225,6 +245,24 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 				component.setAsyncRenderMode(asyncRenderMode);
 			}
 		}
+
+		if (horizontalScroll != null) {
+			if (isValueReference(horizontalScroll)) {
+				ValueBinding vb = application.createValueBinding(horizontalScroll);
+				component.setHorizontalScroll(vb);
+			} else {
+				component.setHorizontalScroll(getBool(horizontalScroll));
+			}
+		}
+
+		if (verticalScroll != null) {
+			if (isValueReference(verticalScroll)) {
+				ValueBinding vb = application.createValueBinding(verticalScroll);
+				component.setVerticalScroll(vb);
+			} else {
+				component.setVerticalScroll(getBool(verticalScroll));
+			}
+		}
 	}
 
 	public void release() {
@@ -239,6 +277,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		initListeners = null;
 		loadListeners = null;
 		asyncRenderMode = null;
+		horizontalScroll = null;
+		verticalScroll = null;
 
 		super.release();
 	}

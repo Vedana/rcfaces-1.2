@@ -214,8 +214,6 @@ var __prototype = {
 			this._spinnerDown=undefined; // HTMLImageElement
 			this._destroySpinnerButton(down);
 		}
-		
-		this.f_super(arguments);
 	},
 	/**
 	 * @method hidden

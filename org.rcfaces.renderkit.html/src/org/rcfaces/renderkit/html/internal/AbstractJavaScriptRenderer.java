@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -231,7 +239,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
-        String componentId = componentRenderContext.getComponentId();
+        String componentId = componentRenderContext.getComponentClientId();
 
         IJavaScriptRenderContext javascriptRenderContext = ((IHtmlRenderContext) componentRenderContext
                 .getRenderContext()).getJavaScriptRenderContext();
@@ -331,7 +339,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
                     if (LAZY_TAG_USE_BROTHER == false) {
                         w.writeAttribute("rid", componentRenderContext
-                                .getComponentId());
+                                .getComponentClientId());
                     }
 
                     IRepository.IFile files[] = renderContext
@@ -362,7 +370,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
                 javascriptRenderContext
                         .pushUnitializedComponent(componentRenderContext
-                                .getComponentId());
+                                .getComponentClientId());
 
                 return;
             }

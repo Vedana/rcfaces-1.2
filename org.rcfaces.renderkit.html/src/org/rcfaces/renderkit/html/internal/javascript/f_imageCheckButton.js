@@ -26,6 +26,16 @@ var __prototype = {
 	},
 	fa_updateSelected: function() {
 		this._updateImage();
+	},
+	/**
+	 * @method protected
+	 */
+	f_serialize: function() {
+		// Dans tous les cas, il faut renvoyer au serveur l'état
+		// car il peut utiliser des Beans request !
+		this.f_setProperty(f_prop.SELECTED,this.f_isSelected());
+
+		return this.f_super(arguments);
 	}
 }
 

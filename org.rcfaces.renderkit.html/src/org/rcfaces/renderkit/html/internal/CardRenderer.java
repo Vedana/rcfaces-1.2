@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -103,7 +111,6 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -175,8 +182,8 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         initializePendingComponents(js);
 
-        String cardBoxVarId = htmlRenderContext.getComponentId(facesContext,
-                cardBoxComponent);
+        String cardBoxVarId = htmlRenderContext.getComponentClientId(
+                facesContext, cardBoxComponent);
 
         String var;
         boolean declare[] = new boolean[1];
@@ -208,57 +215,32 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         htmlWriter.writeAttribute("class", cardClassName);
-        StringAppender style = null;
+        
+        ICssWriter cssWriter = new CssWriter(htmlWriter, 128);
         if (selected == false) {
-            if (style == null) {
-                style = new StringAppender(64);
-            } else {
-                style.append(';');
-            }
-            style.append("visibility:hidden");
+            cssWriter.writeDisplay("none");
         }
+
         if (cardBoxComponent.getWidth(facesContext) != null) {
-            if (style == null) {
-                style = new StringAppender(64);
-            } else {
-                style.append(';');
-            }
-            style.append("width:100%");
+            cssWriter.writeWidth("100%");
         }
 
         if (cardBoxComponent.getHeight(facesContext) != null) {
-            if (style == null) {
-                style = new StringAppender(64);
-            } else {
-                style.append(';');
-            }
-            style.append("height:100%");
+            cssWriter.writeHeight("100%");
         }
 
         String textAlignement = cardComponent.getTextAlignment(facesContext);
         if (textAlignement != null) {
-            if (style == null) {
-                style = new StringAppender(64);
-            } else {
-                style.append(';');
-            }
-            style.append("text-align:").append(textAlignement);
+            cssWriter.writeTextAlign(textAlignement);
         }
 
         String verticalAlignement = cardComponent
                 .getVerticalAlignment(facesContext);
         if (verticalAlignement != null) {
-            if (style == null) {
-                style = new StringAppender(64);
-            } else {
-                style.append(';');
-            }
-            style.append("vertical-align:").append(verticalAlignement);
+            cssWriter.writeVerticalAlign(verticalAlignement);
         }
 
-        if (style != null) {
-            htmlWriter.writeAttribute("style", style.toString());
-        }
+        cssWriter.close();
     }
 
     protected String getCardStyleClass(FacesContext facesContext,
@@ -302,8 +284,8 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(writer);
         FacesContext facesContext = js.getFacesContext();
 
-        js.writeCall(var, "_declareCard").writeString(
-                writer.getComponentRenderContext().getComponentId());
+        js.writeCall(var, "f_declareCard").writeString(
+                writer.getComponentRenderContext().getComponentClientId());
 
         int pred = 0;
         if (selected) {

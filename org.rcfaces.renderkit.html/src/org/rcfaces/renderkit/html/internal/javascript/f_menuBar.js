@@ -315,7 +315,7 @@ var __static = {
 				fa_menuCore._Ie_openPopup(menuBarItem, menuBarItem, 0, menuBarItem.offsetHeight);
 			
 			} else {
-				var p1=f_core.GetAbsolutePos(menuBarItem);
+				var p1=f_core.GetAbsolutePosition(menuBarItem);
 			
 				var x=p1.x;
 				var y=p1.y+menuBarItem.offsetHeight;

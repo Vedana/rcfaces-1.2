@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -80,7 +88,6 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -101,12 +108,16 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
 
         Boolean selected = componentData.getBooleanProperty("selected");
         if (selected != null) {
-            ((ISelectedCapability) imageButtonCapability).setSelected(selected
-                    .booleanValue());
+            decodeSelection(imageButtonCapability, selected.booleanValue());
         }
 
         // System.out.println("Component:"+component.getId()+"
         // Selected="+selected+" : "+componentData.getProperty("selected"));
+    }
+
+    protected void decodeSelection(IImageButtonFamilly imageButtonCapability,
+            boolean selected) {
+        ((ISelectedCapability) imageButtonCapability).setSelected(selected);
     }
 
     protected IComponentDecorator createComponentDecorator(
@@ -131,9 +142,15 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
                 throws WriterException {
             super.encodeAttributes(facesContext);
 
-            if (((ISelectedCapability) imageButtonFamilly).isSelected()) {
-                writer.writeAttribute("v:selected", "true");
+            encodeSelectedAttribute(facesContext);
+        }
+
+        protected void encodeSelectedAttribute(FacesContext facesContext)
+                throws WriterException {
+            if (isSelected((ISelectedCapability) imageButtonFamilly) == false) {
+                return;
             }
+            writer.writeAttribute("v:selected", "true");
         }
     }
 }

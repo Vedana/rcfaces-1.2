@@ -763,6 +763,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
+	public final int getFirst() {
+		return getFirst(null);
+	}
+
+	public final int getFirst(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
+	}
+
+	public final void setFirst(int first) {
+		engine.setProperty(Properties.FIRST, first);
+	}
+
+	public final void setFirst(ValueBinding first) {
+		engine.setProperty(Properties.FIRST, first);
+	}
+
+	public final boolean isFirstSetted() {
+		return engine.isPropertySetted(Properties.FIRST);
+	}
+
 	public final String getVar() {
 		return getVar(null);
 	}
@@ -783,26 +803,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 
 	public final boolean isVarSetted() {
 		return engine.isPropertySetted(Properties.VAR);
-	}
-
-	public final int getFirst() {
-		return getFirst(null);
-	}
-
-	public final int getFirst(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
-	}
-
-	public final void setFirst(int first) {
-		engine.setProperty(Properties.FIRST, first);
-	}
-
-	public final void setFirst(ValueBinding first) {
-		engine.setProperty(Properties.FIRST, first);
-	}
-
-	public final boolean isFirstSetted() {
-		return engine.isPropertySetted(Properties.FIRST);
 	}
 
 	public final int getRows() {

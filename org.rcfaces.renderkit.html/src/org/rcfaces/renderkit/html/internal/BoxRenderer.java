@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -71,7 +79,6 @@ import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -91,14 +98,21 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.startElement("DIV");
+
+        writeComponentAttributes(htmlWriter);
+    }
+
+    protected void writeComponentAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
 
-        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(htmlWriter);
+        IHtmlRenderContext htmlRenderContext = componentRenderContext
+                .getHtmlRenderContext();
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
@@ -124,11 +138,6 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         setAsyncRenderer(htmlWriter, box, asyncRender);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#encodeEnd(org.rcfaces.core.internal.renderkit.IWriter)
-     */
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
         BoxComponent boxComponent = (BoxComponent) htmlWriter
@@ -143,11 +152,6 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         super.encodeEnd(writer);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.BOX;
     }

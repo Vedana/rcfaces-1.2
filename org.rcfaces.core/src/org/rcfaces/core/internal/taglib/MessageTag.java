@@ -14,29 +14,23 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(MessageTag.class);
 
-	private String imageURL;
 	private String imageHeight;
 	private String imageWidth;
-	private String infoStyleClass;
-	private String infoImageURL;
+	private String text;
 	private String errorStyleClass;
-	private String errorImageURL;
-	private String warnStyleClass;
-	private String warnImageURL;
 	private String fatalStyleClass;
+	private String infoStyleClass;
+	private String warnStyleClass;
+	private String errorImageURL;
 	private String fatalImageURL;
+	private String infoImageURL;
+	private String warnImageURL;
+	private String imageURL;
 	private String bundleVar;
-	private String noMessageText;
+	private String setFocusIfMessage;
+	private String showIfMessage;
 	public String getComponentType() {
 		return MessageComponent.COMPONENT_TYPE;
-	}
-
-	public final String getImageURL() {
-		return imageURL;
-	}
-
-	public final void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
 	}
 
 	public final String getImageHeight() {
@@ -55,20 +49,12 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		this.imageWidth = imageWidth;
 	}
 
-	public final String getInfoStyleClass() {
-		return infoStyleClass;
+	public final String getText() {
+		return text;
 	}
 
-	public final void setInfoStyleClass(String infoStyleClass) {
-		this.infoStyleClass = infoStyleClass;
-	}
-
-	public final String getInfoImageURL() {
-		return infoImageURL;
-	}
-
-	public final void setInfoImageURL(String infoImageURL) {
-		this.infoImageURL = infoImageURL;
+	public final void setText(String text) {
+		this.text = text;
 	}
 
 	public final String getErrorStyleClass() {
@@ -79,12 +65,20 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final String getErrorImageURL() {
-		return errorImageURL;
+	public final String getFatalStyleClass() {
+		return fatalStyleClass;
 	}
 
-	public final void setErrorImageURL(String errorImageURL) {
-		this.errorImageURL = errorImageURL;
+	public final void setFatalStyleClass(String fatalStyleClass) {
+		this.fatalStyleClass = fatalStyleClass;
+	}
+
+	public final String getInfoStyleClass() {
+		return infoStyleClass;
+	}
+
+	public final void setInfoStyleClass(String infoStyleClass) {
+		this.infoStyleClass = infoStyleClass;
 	}
 
 	public final String getWarnStyleClass() {
@@ -95,20 +89,12 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final String getWarnImageURL() {
-		return warnImageURL;
+	public final String getErrorImageURL() {
+		return errorImageURL;
 	}
 
-	public final void setWarnImageURL(String warnImageURL) {
-		this.warnImageURL = warnImageURL;
-	}
-
-	public final String getFatalStyleClass() {
-		return fatalStyleClass;
-	}
-
-	public final void setFatalStyleClass(String fatalStyleClass) {
-		this.fatalStyleClass = fatalStyleClass;
+	public final void setErrorImageURL(String errorImageURL) {
+		this.errorImageURL = errorImageURL;
 	}
 
 	public final String getFatalImageURL() {
@@ -119,6 +105,30 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		this.fatalImageURL = fatalImageURL;
 	}
 
+	public final String getInfoImageURL() {
+		return infoImageURL;
+	}
+
+	public final void setInfoImageURL(String infoImageURL) {
+		this.infoImageURL = infoImageURL;
+	}
+
+	public final String getWarnImageURL() {
+		return warnImageURL;
+	}
+
+	public final void setWarnImageURL(String warnImageURL) {
+		this.warnImageURL = warnImageURL;
+	}
+
+	public final String getImageURL() {
+		return imageURL;
+	}
+
+	public final void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+
 	public final String getBundleVar() {
 		return bundleVar;
 	}
@@ -127,12 +137,20 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		this.bundleVar = bundleVar;
 	}
 
-	public final String getNoMessageText() {
-		return noMessageText;
+	public final String getSetFocusIfMessage() {
+		return setFocusIfMessage;
 	}
 
-	public final void setNoMessageText(String noMessageText) {
-		this.noMessageText = noMessageText;
+	public final void setSetFocusIfMessage(String setFocusIfMessage) {
+		this.setFocusIfMessage = setFocusIfMessage;
+	}
+
+	public final String getShowIfMessage() {
+		return showIfMessage;
+	}
+
+	public final void setShowIfMessage(String showIfMessage) {
+		this.showIfMessage = showIfMessage;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -140,19 +158,21 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			if (MessageComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
-			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
-			LOG.debug("  infoImageURL='"+infoImageURL+"'");
+			LOG.debug("  text='"+text+"'");
 			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
-			LOG.debug("  errorImageURL='"+errorImageURL+"'");
-			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
-			LOG.debug("  warnImageURL='"+warnImageURL+"'");
 			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
+			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
+			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
+			LOG.debug("  errorImageURL='"+errorImageURL+"'");
 			LOG.debug("  fatalImageURL='"+fatalImageURL+"'");
+			LOG.debug("  infoImageURL='"+infoImageURL+"'");
+			LOG.debug("  warnImageURL='"+warnImageURL+"'");
+			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  bundleVar='"+bundleVar+"'");
-			LOG.debug("  noMessageText='"+noMessageText+"'");
+			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
+			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -163,16 +183,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		MessageComponent component = (MessageComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
-
-		if (imageURL != null) {
-			if (isValueReference(imageURL)) {
-				ValueBinding vb = application.createValueBinding(imageURL);
-
-				component.setImageURL(vb);
-			} else {
-				component.setImageURL(imageURL);
-			}
-		}
 
 		if (imageHeight != null) {
 			if (isValueReference(imageHeight)) {
@@ -194,111 +204,151 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			}
 		}
 
-		if (infoStyleClass != null) {
-			if (isValueReference(infoStyleClass)) {
-				ValueBinding vb = application.createValueBinding(infoStyleClass);
-				component.setInfoStyleClass(vb);
-			} else {
-				component.setInfoStyleClass(infoStyleClass);
-			}
-		}
+		if (text != null) {
+			if (isValueReference(text)) {
+				ValueBinding vb = application.createValueBinding(text);
 
-		if (infoImageURL != null) {
-			if (isValueReference(infoImageURL)) {
-				ValueBinding vb = application.createValueBinding(infoImageURL);
-				component.setInfoImageURL(vb);
+				component.setText(vb);
 			} else {
-				component.setInfoImageURL(infoImageURL);
+				component.setText(text);
 			}
 		}
 
 		if (errorStyleClass != null) {
 			if (isValueReference(errorStyleClass)) {
 				ValueBinding vb = application.createValueBinding(errorStyleClass);
+
 				component.setErrorStyleClass(vb);
 			} else {
 				component.setErrorStyleClass(errorStyleClass);
 			}
 		}
 
-		if (errorImageURL != null) {
-			if (isValueReference(errorImageURL)) {
-				ValueBinding vb = application.createValueBinding(errorImageURL);
-				component.setErrorImageURL(vb);
-			} else {
-				component.setErrorImageURL(errorImageURL);
-			}
-		}
-
-		if (warnStyleClass != null) {
-			if (isValueReference(warnStyleClass)) {
-				ValueBinding vb = application.createValueBinding(warnStyleClass);
-				component.setWarnStyleClass(vb);
-			} else {
-				component.setWarnStyleClass(warnStyleClass);
-			}
-		}
-
-		if (warnImageURL != null) {
-			if (isValueReference(warnImageURL)) {
-				ValueBinding vb = application.createValueBinding(warnImageURL);
-				component.setWarnImageURL(vb);
-			} else {
-				component.setWarnImageURL(warnImageURL);
-			}
-		}
-
 		if (fatalStyleClass != null) {
 			if (isValueReference(fatalStyleClass)) {
 				ValueBinding vb = application.createValueBinding(fatalStyleClass);
+
 				component.setFatalStyleClass(vb);
 			} else {
 				component.setFatalStyleClass(fatalStyleClass);
 			}
 		}
 
+		if (infoStyleClass != null) {
+			if (isValueReference(infoStyleClass)) {
+				ValueBinding vb = application.createValueBinding(infoStyleClass);
+
+				component.setInfoStyleClass(vb);
+			} else {
+				component.setInfoStyleClass(infoStyleClass);
+			}
+		}
+
+		if (warnStyleClass != null) {
+			if (isValueReference(warnStyleClass)) {
+				ValueBinding vb = application.createValueBinding(warnStyleClass);
+
+				component.setWarnStyleClass(vb);
+			} else {
+				component.setWarnStyleClass(warnStyleClass);
+			}
+		}
+
+		if (errorImageURL != null) {
+			if (isValueReference(errorImageURL)) {
+				ValueBinding vb = application.createValueBinding(errorImageURL);
+
+				component.setErrorImageURL(vb);
+			} else {
+				component.setErrorImageURL(errorImageURL);
+			}
+		}
+
 		if (fatalImageURL != null) {
 			if (isValueReference(fatalImageURL)) {
 				ValueBinding vb = application.createValueBinding(fatalImageURL);
+
 				component.setFatalImageURL(vb);
 			} else {
 				component.setFatalImageURL(fatalImageURL);
 			}
 		}
 
+		if (infoImageURL != null) {
+			if (isValueReference(infoImageURL)) {
+				ValueBinding vb = application.createValueBinding(infoImageURL);
+
+				component.setInfoImageURL(vb);
+			} else {
+				component.setInfoImageURL(infoImageURL);
+			}
+		}
+
+		if (warnImageURL != null) {
+			if (isValueReference(warnImageURL)) {
+				ValueBinding vb = application.createValueBinding(warnImageURL);
+
+				component.setWarnImageURL(vb);
+			} else {
+				component.setWarnImageURL(warnImageURL);
+			}
+		}
+
+		if (imageURL != null) {
+			if (isValueReference(imageURL)) {
+				ValueBinding vb = application.createValueBinding(imageURL);
+
+				component.setImageURL(vb);
+			} else {
+				component.setImageURL(imageURL);
+			}
+		}
+
 		if (bundleVar != null) {
 			if (isValueReference(bundleVar)) {
 				ValueBinding vb = application.createValueBinding(bundleVar);
+
 				component.setBundleVar(vb);
 			} else {
 				component.setBundleVar(bundleVar);
 			}
 		}
 
-		if (noMessageText != null) {
-			if (isValueReference(noMessageText)) {
-				ValueBinding vb = application.createValueBinding(noMessageText);
-				component.setNoMessageText(vb);
+		if (setFocusIfMessage != null) {
+			if (isValueReference(setFocusIfMessage)) {
+				ValueBinding vb = application.createValueBinding(setFocusIfMessage);
+				component.setSetFocusIfMessage(vb);
 			} else {
-				component.setNoMessageText(noMessageText);
+				component.setSetFocusIfMessage(getBool(setFocusIfMessage));
+			}
+		}
+
+		if (showIfMessage != null) {
+			if (isValueReference(showIfMessage)) {
+				ValueBinding vb = application.createValueBinding(showIfMessage);
+				component.setShowIfMessage(vb);
+			} else {
+				component.setShowIfMessage(getBool(showIfMessage));
 			}
 		}
 	}
 
 	public void release() {
-		imageURL = null;
 		imageHeight = null;
 		imageWidth = null;
-		infoStyleClass = null;
-		infoImageURL = null;
+		text = null;
 		errorStyleClass = null;
-		errorImageURL = null;
-		warnStyleClass = null;
-		warnImageURL = null;
 		fatalStyleClass = null;
+		infoStyleClass = null;
+		warnStyleClass = null;
+		errorImageURL = null;
 		fatalImageURL = null;
+		infoImageURL = null;
+		warnImageURL = null;
+		imageURL = null;
 		bundleVar = null;
-		noMessageText = null;
+		setFocusIfMessage = null;
+		showIfMessage = null;
 
 		super.release();
 	}

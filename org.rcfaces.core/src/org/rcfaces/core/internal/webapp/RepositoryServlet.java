@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.4  2006/09/20 17:55:20  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -344,6 +352,8 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             hash = record.getHash();
 
             modificationDate = record.getLastModificationDate();
+            if (modificationDate > 0)
+                modificationDate -= (modificationDate % 1000);
 
             if (hasGZipSupport() && hasGzipSupport(request)) {
                 byte jsGZip[] = record.getGZipedBuffer();
@@ -369,6 +379,23 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             setNoCache(response);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
+        }
+
+        if (noCache) {
+            setNoCache(response);
+
+        } else {
+            if (modificationDate > 0) {
+                response.setDateHeader(HTTP_LAST_MODIFIED, modificationDate);
+            }
+            ExpirationDate expirationDate = record.getExpirationDate();
+            if (expirationDate == null) {
+                expirationDate = getDefaultExpirationDate(isVersioned);
+            }
+
+            if (expirationDate != null) {
+                expirationDate.sendExpires(response);
+            }
         }
 
         boolean different = false;
@@ -397,10 +424,12 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             }
         }
 
-        if (different == false) {
+        if (different == false && modificationDate > 0) {
             long ifModifiedSince = request
                     .getDateHeader(HTTP_IF_MODIFIED_SINCE);
             if (ifModifiedSince > 0) {
+                ifModifiedSince -= (ifModifiedSince % 1000);
+
                 if (ifModifiedSince >= modificationDate) {
                     response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                     return;
@@ -412,23 +441,6 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
         String contentType = getContentType(record);
         response.setContentType(contentType);
-
-        if (noCache) {
-            setNoCache(response);
-
-        } else {
-            if (modificationDate > 0) {
-                response.setDateHeader(HTTP_LAST_MODIFIED, modificationDate);
-            }
-            ExpirationDate expirationDate = record.getExpirationDate();
-            if (expirationDate == null) {
-                expirationDate = getDefaultExpirationDate(isVersioned);
-            }
-
-            if (expirationDate != null) {
-                expirationDate.sendExpires(response);
-            }
-        }
 
         if (etag != null) {
             response.setHeader(HTTP_ETAG, etag);

@@ -15,8 +15,10 @@ var __prototype = {
 		this.f_super(arguments);
 		
 		var input=this._input;
-		if (input.name) {
-			this._addToGroup(input.name, this);
+		
+		var name=input.name;
+		if (name) {
+			this.f_addToGroup(name, this);
 		}
 	},
 	/**
@@ -30,22 +32,24 @@ var __prototype = {
 		}
 		return input.name;
 	},
-	/**
+	/*
 	 * @method public 
 	 * @param string group
 	 * @return void
-	 */
+	 *
 	f_setGroupName: function(group) {
 		var input=this._input;
 		if (!input || !group) {
 			return;
 		}
 		
-		this._changeGroup(this.f_getGroupName(), group, this);
+		this.f_changeGroup(this.f_getGroupName(), group, this);
 		input.name = group;
 	
 		this.f_setProperty(f_prop.GROUPNAME,group);
 	},
+	*/
+	
 	/**
 	 * @method public 
 	 * @return f_radioButton
@@ -55,14 +59,14 @@ var __prototype = {
 			return item.f_isSelected()?item:false;
 		}
 
-		return this._findIntoGroup(this.f_getGroupName(), search);
+		return this.f_findIntoGroup(this.f_getGroupName(), search);
 	},
 	/**
 	 * @method public 
 	 * @return f_radioButton[]
 	 */
 	f_listAllInGroup: function() {
-		return this._listGroup(this.f_getGroupName());
+		return this.f_listGroup(this.f_getGroupName());
 	},
 	/**
 	 * @method public 
@@ -100,7 +104,7 @@ var __prototype = {
 				}
 			}
 	
-			this._findIntoGroup(this.f_getGroupName(), unselect);
+			this.f_findIntoGroup(this.f_getGroupName(), unselect);
 		}
 				
 		input.checked = true;

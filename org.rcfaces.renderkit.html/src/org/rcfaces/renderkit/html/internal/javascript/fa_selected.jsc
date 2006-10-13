@@ -1,0 +1,9 @@
+var _e={f_isSelected:function(){var r,t=this,e
+if(t._ee===r){e=f_core.D(t,"v:selected")
+t._ee=(e)?!0:!1}return t._ee},f_setSelected:function(e){var t=this
+if(e!==!1)e=!0
+if(t.f_isSelected()==e)return
+t._ee=e
+t.V(f_prop.ui,e)
+t.cp(e)}}
+var fa_selected=new f_aspect("fa_selected",null,_e);

@@ -1,0 +1,38 @@
+var _r={S:{change:f_event.CHANGE,check:f_event.CHECK,blur:f_event.BLUR,dblClick:f_event.DBLCLICK,focus:f_event.FOCUS,init:f_event.INIT,keyUp:f_event.KEYUP,keyDown:f_event.KEYDOWN,keyPress:f_event.KEYPRESS,load:f_event.LOAD,menu:f_event.MENU,mouseDown:f_event.MOUSEDOWN,mouseOver:f_event.MOUSEOVER,mouseOut:f_event.MOUSEOUT,mouseUp:f_event.MOUSEUP,propertyChange:f_event.PROPERTY_CHANGE,suggestion:f_event.SUGGESTION,selection:f_event.SELECTION,user:f_event.USER},Initializer:function(){var t=null,e={}
+this.F=e
+e[f_event.BLUR]={_3t:"onblur",_r0:"he"}
+e[f_event.CHANGE]={_3t:"onchange",_r0:"gy"}
+e[f_event.CHECK]=e[f_event.CLOSE]=t
+e[f_event.DBLCLICK]={_3t:"ondblclick",_r0:"yo"}
+e[f_event.FOCUS]={_3t:"onfocus",_r0:"oh"}
+e[f_event.INIT]=t
+e[f_event.KEYDOWN]={_3t:"onkeydown",_r0:"hu"}
+e[f_event.KEYPRESS]={_3t:"onkeypress",_r0:"eh"}
+e[f_event.KEYUP]={_3t:"onkeyup",_r0:"ge"}
+e[f_event.LOAD]=e[f_event.MENU]=t
+e[f_event.MOUSEDOWN]={_3t:"onmousedown",_r0:"vp"}
+e[f_event.MOUSEOUT]={_3t:"onmouseout",_r0:"ay"}
+e[f_event.MOUSEOVER]={_3t:"onmouseover",_r0:"tw"}
+e[f_event.MOUSEUP]={_3t:"onmouseup",_r0:"em"}
+e["propertyChange"]=t
+e[f_event.SELECTION]={_3t:"onclick",_r0:"ic"}
+e[f_event.SUBMIT]=e[f_event.SUGGESTION]=e[f_event.USER]=t},O:function(e,t,r,n,f){var a,i,o
+if(!t)t=window.event
+i=(e.f_link)?e.f_link:e
+if(n&&i.B())return!1
+o=i.f_fireEvent(r,t)
+if(f!==a){o=i._ta
+if(o===a){o=f
+if(t&&f===!1)f_core.M(t)}}return o}}
+var _e={f_eventTarget:function(){var e=this
+e.f_super(arguments)
+if(e.tagName)e.sh(f_eventTarget.S)},ow:function(e){return f_eventTarget.O(this,e,"check",!0,!1)},ic:function(e){return f_eventTarget.O(this,e,"selection",!0,!1)},oh:function(e){return f_eventTarget.O(this,e,"focus",!1)},he:function(e){return f_eventTarget.O(this,e,"blur",!1)},gy:function(e){return f_eventTarget.O(this,e,"change",!0)},ge:function(e){return f_eventTarget.O(this,e,"keyup",!0)},hu:function(e){return f_eventTarget.O(this,e,"keydown",!0)},eh:function(e){return f_eventTarget.O(this,e,"keypress",!0)},tw:function(e){return f_eventTarget.O(this,e,"mouseover",!1)},ay:function(e){return f_eventTarget.O(this,e,"mouseout",!1)},yo:function(e){return f_eventTarget.O(this,e,"dblclick",!0)},vp:function(e){return f_eventTarget.O(this,e,"mousedown",!0)},em:function(e){return f_eventTarget.O(this,e,"mouseup",!1)},fw:function(e){return f_eventTarget.O(this,e,f_event.PREPAGESUGGESTION,!1)},yv:function(e){return f_eventTarget.O(this,e,"propertyChange",!1)},yl:function(e){return f_eventTarget.O(this,e,"menu",!1)},p_:function(e){return f_eventTarget.O(this,e,"reset",!1)},yt:function(e){return f_eventTarget.O(this,e,"user",!1)},ld:function(){return this.f_fireEvent("init")},fn:function(e,t){var n=this,r=f_eventTarget.F[e]
+if(r){t[r._3t]=n[r._r0]
+return}else if(r===null)return
+switch(e){case"reset":f_core.gm(n)
+return;}},yc:function(){return this.f_fireEvent("init",null)},ie:function(e,t){var n=null,r=f_eventTarget.F[e]
+if(r){t[r._3t]=n
+return}else if(r===n)return
+switch(e){case"reset":f_core.dv(this)
+return;}}}
+var f_eventTarget=new f_class("f_eventTarget",null,_r,_e,f_object,fa_eventTarget);

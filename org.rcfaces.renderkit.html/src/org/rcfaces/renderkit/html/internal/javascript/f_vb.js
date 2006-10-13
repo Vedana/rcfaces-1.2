@@ -56,8 +56,8 @@ var f_vb = {
 	 *	\/.*+?|()[]{}-^
 	 */
 	_BuildEscaped: function(str) {
-		if ((str == null) || (str == "")) {
-			return str;
+		if (!str || !str.length) {
+			return "";
 		}
 		return str.replace(f_vb._ESCAPE_REGEXP, "\\$1");
 	},
@@ -68,7 +68,7 @@ var f_vb = {
 	Filter_alpha: function(validator, keyCode, keyChar) {
 		var exp = "[a-zA-Z";
 		var sup = validator.f_getParameter("alpha.otherChars");
-		exp += (f_vb._BuildEscaped(sup) + "]");
+		exp += f_vb._BuildEscaped(sup)+"]";
 		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
 	},
 
@@ -78,7 +78,7 @@ var f_vb = {
 	Filter_alpha_fr: function(validator, keyCode, keyChar) {
 		var exp = "[a-zA-Z" + f_vb._LATIN_ACCENT_FR;
 		var sup = validator.f_getParameter("alpha.otherChars");
-		exp += (f_vb._BuildEscaped(sup) + "]");
+		exp += f_vb._BuildEscaped(sup)+"]";
 		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
   	},
 
@@ -88,7 +88,7 @@ var f_vb = {
 	Filter_alphanum: function(validator, keyCode, keyChar) {
 		var exp = "[0-9a-zA-Z";
 		var sup = validator.f_getParameter("alpha.otherChars");
-		exp += (f_vb._BuildEscaped(sup) + "]");
+		exp += f_vb._BuildEscaped(sup)+"]";
 		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
 	},
 
@@ -121,11 +121,11 @@ var f_vb = {
 	 */
 	Filter_date: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\/]/, keyCode, keyChar);
-	  },
+	},
 
-/**
- * @method public
- */
+	/**
+	 * @method public
+	 */
 	Filter_digit: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode, keyChar);
 	},
@@ -1198,12 +1198,15 @@ var f_vb = {
 			
 			var dec=validator.f_getIntParameter("num.decimal", 0);
 			var fixed=num.toFixed(dec);
-
-			var sign=validator.f_getParameter("num.decSign")[0];
-			if (sign!=".") {
-				fixed=fixed.replace("/\./g", sign);
-			}
 			
+			var sign=validator.f_getParameter("num.decSign");
+			if (sign) {
+				sign=sign[0];
+				if (sign!=".") {
+					fixed=fixed.replace("/\./g", sign);
+				}
+			}
+						
 			ret+=fixed;
 			
 			f_core.Debug(f_vb, "Converter_num: Convert number["+typeof(object)+"] '"+object+"' to string["+typeof(ret)+"] '"+ret+"'.");

@@ -1,0 +1,41 @@
+var _e={f_imagePagerButton:function(){var e=this
+e.f_super(arguments)
+e._t5=f_core.D(e,"v:type")
+e._o6=f_core.D(e,"v:for")
+e._pu=(f_core.D(e,"v:hideIfDisabled")!=null)
+if(e._o6)fa_pagedComponent.gu(e._o6,e);else f_core.Error(f_imagePagerButton,"'for' attribute is not defined !")},f_finalize:function(){var e
+this._a2=e
+this.f_super(arguments)},fa_pagedComponentInitialized:function(e){var c=this,t,r,n,f,i,o,a
+c._a2=e
+t=!0
+r=c._t5
+n=e.f_getRows()
+f=e.f_getRowCount()
+if(e&&r&&f&&n){r=r.toLowerCase()
+i=e.f_getFirst()
+o=e.f_getMaxRows()
+switch(r){case"first":case"prev":t=(i<1)
+break;case"next":case"last":t=(f>0&&i+n>=f)
+break;default:a=parseInt(r)
+if(!isNaN(a)&&(i/n)!=a)t=(f>=0&&a*n>f);}}c.f_setDisabled(t)},na:function(){var e=this
+e.f_super(arguments)
+if(e._pu)e.f_setVisible(e.f_isDisabled())},_r2:function(){var a=this,e,t,r,n,f,i,o
+if(!a._m)a.f_setFocus()
+if(a.f_isReadOnly()||a.f_isDisabled())return!1
+e=a._t5
+if(!e)return!1
+t=a._a2
+if(!t)return!1
+r=t.f_getFirst()
+n=t.f_getRows()
+f=-1
+switch(e.toLowerCase()){case"first":f=0
+break;case"prev":f=r-n
+if(f<0)f=0
+break;case"next":f=r+n
+break;case"last":i=t.f_getMaxRows()
+o=t.f_getRowCount()
+if(o>0)f=o-((o+n-1)%n)-1;else if(r+n==i)f=i;else f=i-((i+n-1)%n)-1
+break;}if(f>=0)t.f_setFirst(f)
+return!1}}
+var f_imagePagerButton=new f_class("f_imagePagerButton",null,null,_e,f_imageButton,fa_pager);

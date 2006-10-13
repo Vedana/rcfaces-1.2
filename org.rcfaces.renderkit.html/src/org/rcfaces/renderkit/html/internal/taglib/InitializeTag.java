@@ -97,6 +97,10 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
             .getPackagePrefix()
             + ".INVALID_BROWSER_PAGE_URL";
 
+    public static final Object META_CONTENT_TYPE_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".META_CONTENT_TYPE_PARAMETER";
+
     private static final String DISABLE_CONTEXT_MENU_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.DISABLE_CONTEXT_MENU";
 
     private static final String APPLICATION_PARAMETERS_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.APPLICATION_PARAMETERS";
@@ -170,6 +174,21 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
 
             if (disableCache) {
                 disableCache(writer);
+            }
+
+            if (appParams.metaContentType) {
+                ServletResponse response = pageContext.getResponse();
+                if (response instanceof HttpServletResponse) {
+                    HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
+                    String contentType = httpServletResponse.getContentType();
+                    if (contentType != null) {
+                        writer
+                                .print("<META http-equiv=\"Content-Type\" content=\"");
+                        writer.print(contentType);
+                        writer.println("\" />");
+                    }
+                }
             }
 
             if (htmlProcessContext.useMetaContentScriptType()) {
@@ -850,6 +869,8 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
 
         private static final long serialVersionUID = 491523571265962718L;
 
+        boolean metaContentType;
+
         boolean disableContextMenu;
 
         boolean disableIEImageBar;
@@ -916,6 +937,12 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
                 invalidBrowserPageURL = null;
             }
 
+            metaContentType = true;
+            if ("false".equalsIgnoreCase((String) initParameters
+                    .get(META_CONTENT_TYPE_PARAMETER))) {
+                metaContentType = false;
+            }
+
             multiWindowScript = "true".equalsIgnoreCase((String) initParameters
                     .get(MULTI_WINDOW_PARAMETER));
 
@@ -933,6 +960,10 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
 
                 if (multiWindowScript) {
                     LOG.info("MultiWindowScript is enabled for context.");
+                }
+
+                if (metaContentType) {
+                    LOG.info("MetaContentType is enabled for context.");
                 }
 
                 if (htmlProcessContext.useMetaContentScriptType()) {

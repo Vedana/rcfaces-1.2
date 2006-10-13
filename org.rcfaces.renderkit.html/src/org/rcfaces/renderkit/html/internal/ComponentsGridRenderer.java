@@ -31,7 +31,6 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -40,7 +39,8 @@ import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
 public class ComponentsGridRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(ComponentsGridRenderer.class);
+    private static final Log LOG = LogFactory
+            .getLog(ComponentsGridRenderer.class);
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
@@ -274,7 +274,7 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
                     // Render the beginning of this row
                     htmlWriter.startElement("TR");
 
-                    String rowId = htmlRenderContext.getComponentId(
+                    String rowId = htmlRenderContext.getComponentClientId(
                             facesContext, dataListComponent);
                     if (rowId != null) {
                         htmlWriter.writeAttribute("id", rowId);
@@ -394,7 +394,7 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
         if (dataListComponent.isBorder(facesContext) == false) {
-            cssWriter.writeProperty("border-style", "none");
+            cssWriter.writeBorderStyle("none");
         }
 
         String w = dataListComponent.getWidth(facesContext);
@@ -402,7 +402,7 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
         if (w != null || h != null) {
             cssWriter.writeSize(dataListComponent);
             if (h != null) {
-                cssWriter.writeProperty("overflow", "scroll");
+                cssWriter.writeOverflow("scroll");
             }
         }
 

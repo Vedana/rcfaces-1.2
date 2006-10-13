@@ -67,7 +67,10 @@ var __prototype = {
 		this._globalOnly=b;
 		return b;
 	},
-	_addMessageObject: function(global, messageObject) {			
+	/**
+	 * @method hidden
+	 */
+	f_registerMessageObject: function(global, messageObject) {			
 		var ctx=f_messageContext.Get(this);
 		
 		return ctx.f_addMessageObject(global, messageObject, false);

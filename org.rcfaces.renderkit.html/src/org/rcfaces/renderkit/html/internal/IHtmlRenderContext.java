@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/09/14 14:34:38  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -108,7 +116,7 @@ public interface IHtmlRenderContext extends IRenderContext {
 
     String HTML_TYPE = "text/html";
 
-    IHtmlProcessContext getHtmlExternalContext();
+    IHtmlProcessContext getHtmlProcessContext();
 
     IJavaScriptWriter removeJavaScriptWriter(IHtmlWriter writer);
 

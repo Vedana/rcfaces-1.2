@@ -15,6 +15,7 @@
 	display: block;
 	text-align: left;
 	vertical-align: baseline;
+	border-bottom: 1px solid #919B9C;
 }
  
 .f_tabbedPane_title {
@@ -181,14 +182,14 @@
 }
 
 .f_tabbedPane_tab {
-	position:absolute;
-	left: 0;
-	top: 0;
+	position: relative;
 	display: block;
 	font-family: Verdana;
 	font-size: 7pt;
 	border: 1px solid #919B9C;
+	border-width: 1px 1px 0 1px;
 	background-color: white;
+	-moz-box-sizing: border-box;
 }
 
 .f_tabbedPane_tab_mask {

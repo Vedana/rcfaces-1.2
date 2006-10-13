@@ -37,6 +37,7 @@
 		</attribute>
 		<attribute>
 			<name>for</name>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -192,6 +193,14 @@
 		</attribute>
 		<attribute>
 			<name>asyncRenderMode</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>horizontalScroll</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>verticalScroll</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -1381,6 +1390,7 @@
 		</attribute>
 		<attribute>
 			<name>for</name>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -1539,19 +1549,19 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>rows</name>
+			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>rows</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -3310,6 +3320,14 @@
 		</attribute>
 		<attribute>
 			<name>imageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>imageHeight</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>imageWidth</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -5288,6 +5306,7 @@
 		</attribute>
 		<attribute>
 			<name>for</name>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -5495,6 +5514,10 @@
 		</attribute>
 		<attribute>
 			<name>selected</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>radioValue</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6138,10 +6161,6 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>showSummary</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>for</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -6150,7 +6169,234 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>showSummary</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>imageHeight</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>imageWidth</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>errorImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fatalImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>infoImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>warnImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>imageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>bundleVar</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>setFocusIfMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>showIfMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>messageFieldSet</name>
+		<tag-class>org.rcfaces.core.internal.taglib.MessageFieldSetTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>converter</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>hiddenMode</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>visible</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>mouseOutListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>mouseOverListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>helpMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>helpURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>toolTipText</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>valueLocked</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>lookId</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>x</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>y</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginBottom</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginLeft</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginRight</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginTop</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>backgroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>foregroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>userEventListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>propertyChangeListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>initListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontBold</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontItalic</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontSize</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontUnderline</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>textAlignment</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>verticalAlignment</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>borderType</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6166,11 +6412,8 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>infoStyleClass</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>infoImageURL</name>
+			<name>for</name>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6178,7 +6421,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>errorImageURL</name>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>infoStyleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6186,11 +6433,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>warnImageURL</name>
+			<name>styleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>fatalStyleClass</name>
+			<name>errorImageURL</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6198,11 +6445,23 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>infoImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>warnImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>imageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>bundleVar</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>noMessageText</name>
+			<name>setFocusIfMessage</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -6309,6 +6568,10 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>showDetail</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>showSummary</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -6321,7 +6584,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>showDetail</name>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fatalStyleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6329,15 +6596,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>errorStyleClass</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>warnStyleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>fatalStyleClass</name>
+			<name>styleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6972,6 +7235,10 @@
 		</attribute>
 		<attribute>
 			<name>checked</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>radioValue</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -7926,6 +8193,10 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>radioValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>groupName</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -8651,6 +8922,170 @@
 		</attribute>
 		<attribute>
 			<name>cycleValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>styledMessage</name>
+		<tag-class>org.rcfaces.core.internal.taglib.StyledMessageTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>propertyChangeListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>userEventListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>x</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>y</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginBottom</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginLeft</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginRight</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginTop</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>helpMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>helpURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>toolTipText</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>backgroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>foregroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>hiddenMode</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>visible</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>lookId</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>backgroundImageHorizontalPosition</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>backgroundImageHorizontalRepeat</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>backgroundImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>backgroundImageVerticalPosition</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>backgroundImageVerticalRepeat</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>border</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>mouseOutListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>mouseOverListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>initListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>for</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>showIfMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>setFocusIfMessage</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -10155,6 +10590,233 @@
 		</attribute>
 	</tag>
 	<tag>
+		<name>timeEntry</name>
+		<tag-class>org.rcfaces.core.internal.taglib.TimeEntryTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>converter</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>hiddenMode</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>visible</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>mouseOutListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>mouseOverListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>helpMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>helpURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>toolTipText</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>disabled</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>valueLocked</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>tabIndex</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>x</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>y</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>lookId</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>blurListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>focusListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginBottom</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginLeft</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginRight</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginTop</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>backgroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>foregroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>keyPressListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>keyDownListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>keyUpListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>textAlignment</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>immediate</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>userEventListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>propertyChangeListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontBold</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontItalic</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontSize</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fontUnderline</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>accessKey</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>initListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>required</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>autoTab</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>valueChangeListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>focusStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>selectionListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>readOnly</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>autoCompletion</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>time</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>minTime</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultTime</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>maxTime</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>timeFormat</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
 		<name>toolBar</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ToolBarTag</tag-class>
 		<body-content>JSP</body-content>
@@ -10995,4 +11657,522 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+  <tag>
+<name>convertByte</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertByteTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a ByteConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertShort</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertShortTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a ShortConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertInteger</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertIntegerTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a IntegerConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertLong</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertLongTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a LongConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertFloat</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertFloatTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a FloatConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>integerOnly</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether only the integer part of the value will be formatted and parsed. Expressions must evaluate to a boolean. 
+        Default value is false. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxFractionDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the fractional portion of the output.  Expressions  must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minFractionDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the fractional portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
+  <tag>
+<name>convertDouble</name>
+<tag-class>org.rcfaces.core.internal.taglib.ConvertDoubleTag</tag-class>
+<body-content>empty</body-content>
+<description>Register a DoubleConverter instance on the UIComponent associated 
+      with the closest parent UIComponent custom action.</description>
+<attribute>
+      <name>currencyCode</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        ISO 4217 currency code, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>currencySymbol</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Currency symbol, applied only when formatting currencies. 
+      </description>
+    </attribute>
+<attribute>
+      <name>groupingUsed</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether formatted output will contain grouping separators.  Expressions must  evaluate to a boolean.  Default value is true. 
+      </description>
+    </attribute>
+<attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Locale whose predefined styles for numbers are used during formatting and parsing.  If not specified, the Locale returned by  FacesContext.getViewRoot().getLocale() will be used.  Expressions must evaluate to a java.util.Locale. 
+      </description>
+    </attribute>
+<attribute>
+      <name>integerOnly</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag specifying whether only the integer part of the value will be formatted and parsed. Expressions must evaluate to a boolean. 
+        Default value is false. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxFractionDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the fractional portion of the output.  Expressions  must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minFractionDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the fractional portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>maxIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Maximum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>minIntegerDigits</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Minimum number of digits that will be formatted in the integer portion of the output.  Expressions must evaluate to an int. 
+      </description>
+    </attribute>
+<attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Custom formatting pattern which determins how the number string should be formatted and parsed. 
+      </description>
+    </attribute>
+<attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies how the number string will be formatted and parsed.  Valid values are "number", "currency", and "percentage".  Default value is "number". 
+      </description>
+    </attribute>
+<attribute>
+      <name>defaultValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the default value if the string is null or empty.</description>
+    </attribute>
+</tag>
 </taglib>

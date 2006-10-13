@@ -19,6 +19,7 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 	private String selectionListeners;
 	private String readOnly;
 	private String selected;
+	private String radioValue;
 	private String groupName;
 	private String required;
 	public String getComponentType() {
@@ -65,6 +66,14 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 		this.selected = selected;
 	}
 
+	public final String getRadioValue() {
+		return radioValue;
+	}
+
+	public final void setRadioValue(String radioValue) {
+		this.radioValue = radioValue;
+	}
+
 	public final String getGroupName() {
 		return groupName;
 	}
@@ -90,6 +99,7 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  selected='"+selected+"'");
+			LOG.debug("  radioValue='"+radioValue+"'");
 			LOG.debug("  groupName='"+groupName+"'");
 			LOG.debug("  required='"+required+"'");
 		}
@@ -147,6 +157,16 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (radioValue != null) {
+			if (isValueReference(radioValue)) {
+				ValueBinding vb = application.createValueBinding(radioValue);
+
+				component.setRadioValue(vb);
+			} else {
+				component.setRadioValue(radioValue);
+			}
+		}
+
 		if (groupName != null) {
 			if (isValueReference(groupName)) {
 				ValueBinding vb = application.createValueBinding(groupName);
@@ -174,6 +194,7 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 		selectionListeners = null;
 		readOnly = null;
 		selected = null;
+		radioValue = null;
 		groupName = null;
 		required = null;
 

@@ -60,7 +60,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
             IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) htmlWriter
                     .getComponentRenderContext().getRenderContext();
 
-            String cardComponentId = htmlRenderContext.getComponentId(
+            String cardComponentId = htmlRenderContext.getComponentClientId(
                     facesContext, cardComponent);
 
             htmlWriter.writeAttribute("v:selectedCard", cardComponentId);
@@ -85,7 +85,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
             throws WriterException {
         super.encodeJavaScript(writer);
 
-        writer.writeMethodCall("_updateCards").writeln(");");
+        writer.writeMethodCall("f_updateCards").writeln(");");
     }
 
     protected void renderTabHeader(IHtmlWriter writer, String className)
@@ -121,6 +121,23 @@ public class CardBoxRenderer extends AbstractCssRenderer {
                 .getPreference(facesContext);
         if (preference != null) {
             preference.savePreference(facesContext, cardBoxComponent);
+        }
+    }
+
+    protected void writeCustomCss(IHtmlWriter writer, ICssWriter cssWriter) {
+        super.writeCustomCss(writer, cssWriter);
+
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
+        CardBoxComponent cardBoxComponent = (CardBoxComponent) componentRenderContext
+                .getComponent();
+
+        if (cardBoxComponent.getWidth(facesContext) != null
+                && cardBoxComponent.getHeight(facesContext) != null) {
+            cssWriter.writeOverflow("hidden");
         }
     }
 }

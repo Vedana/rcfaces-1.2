@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -539,14 +547,63 @@ public class HtmlTools {
     public static UIComponent getForComponent(FacesContext context,
             String forComponent, UIComponent component) {
 
-        IHtmlProcessContext processContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(context);
+        if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT) {
+            IHtmlProcessContext processContext = HtmlProcessContextImpl
+                    .getHtmlProcessContext(context);
 
-        String separator = processContext.getNamingSeparator();
-        if (separator != null) {
-            forComponent = convertToNamingSeparator(forComponent, separator);
+            String separator = processContext.getNamingSeparator();
+            if (separator != null) {
+                forComponent = convertToNamingSeparator(forComponent, separator);
+            }
         }
 
         return ComponentTools.getForComponent(context, forComponent, component);
+    }
+
+    public static String computeGroupName(IHtmlProcessContext processContext,
+            UIComponent component, String groupName) {
+
+        if (Constants.CLIENT_GROUP_NAME_SUPPORT == false) {
+            return groupName;
+        }
+
+        // Recherche un Container
+        for (; component != null; component = component.getParent()) {
+            if (component instanceof NamingContainer) {
+                break;
+            }
+        }
+
+        StringAppender prefixClientId = new StringAppender(64);
+
+        if (component == null) {
+            LOG.error("No naming container for component '" + component.getId()
+                    + "'.");
+        } else {
+            NamingContainer namingContainer = (NamingContainer) component;
+
+            String parentClientId = ((UIComponent) namingContainer)
+                    .getClientId(processContext.getFacesContext());
+            if (parentClientId != null) {
+                prefixClientId.append(parentClientId);
+            }
+        }
+
+        String separator = processContext.getNamingSeparator();
+        if (separator != null) {
+            prefixClientId.append(separator);
+        } else {
+            prefixClientId.append(NamingContainer.SEPARATOR_CHAR);
+        }
+
+        prefixClientId.append(groupName);
+
+        String convertedGroupName = prefixClientId.toString();
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Convert groupName '" + groupName + "' to '"
+                    + convertedGroupName + "'.");
+        }
+
+        return convertedGroupName;
     }
 }

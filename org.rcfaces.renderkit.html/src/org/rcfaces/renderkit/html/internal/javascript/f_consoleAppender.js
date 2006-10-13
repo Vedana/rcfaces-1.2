@@ -95,7 +95,7 @@ var __static={
 		f_core.CancelEvent(evt);
   		
 		var eventPos=f_core.GetEventPosition(evt, document);
-		var cursorPos=f_core.GetAbsolutePos(console._console);
+		var cursorPos=f_core.GetAbsolutePosition(console._console);
 		console._dragDeltaX=eventPos.x-cursorPos.x;
 		console._dragDeltaY=eventPos.y-(cursorPos.y+console._console.clientHeight);
 		
@@ -135,7 +135,7 @@ var __static={
  	 	var console=window._dragConsole;
  		
 		var eventPos=f_core.GetEventPosition(evt, document);
-		var cursorPos=f_core.GetAbsolutePos(console._console);	
+		var cursorPos=f_core.GetAbsolutePosition(console._console);	
 
 		var dx=eventPos.x-cursorPos.x-console._dragDeltaX;
 		var dy=eventPos.y-(cursorPos.y+console._console.clientHeight)-console._dragDeltaY;

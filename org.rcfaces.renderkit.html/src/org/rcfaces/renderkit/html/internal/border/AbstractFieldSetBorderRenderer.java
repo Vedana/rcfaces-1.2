@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:38  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -37,7 +45,7 @@ import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.ITitledBorderRenderer;
-import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.CssWriter;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
@@ -103,7 +111,7 @@ public abstract class AbstractFieldSetBorderRenderer extends
 
         writer.flush();
 
-        ICssWriter cssWriter = AbstractCssRenderer.createCssWriter();
+        ICssWriter cssWriter = new CssWriter(writer, 64);
 
         if (component instanceof IFontCapability) {
             cssWriter.writeFont((IFontCapability) component);
@@ -117,7 +125,7 @@ public abstract class AbstractFieldSetBorderRenderer extends
                     .writeForeground((IForegroundBackgroundColorCapability) component);
         }
 
-        cssWriter.close(writer);
+        cssWriter.close();
 
         if (title != null) {
             writer.writeText(title);

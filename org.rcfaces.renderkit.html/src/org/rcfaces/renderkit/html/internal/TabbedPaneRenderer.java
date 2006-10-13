@@ -1,14 +1,15 @@
+/*
+ * $Id$
+ */
+
 package org.rcfaces.renderkit.html.internal;
 
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TabbedPaneComponent;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
-
 
 /**
  * 
@@ -22,11 +23,6 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
 
     protected static final String CONTENT = "_content";
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.TABBED_PANE;
     }
@@ -67,6 +63,7 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
         String width = tabbedPaneComponent.getWidth(facesContext);
         String height = tabbedPaneComponent.getHeight(facesContext);
 
+        /*
         if (tabbedPaneComponent.getAsyncRenderMode(facesContext) != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
             if (width == null || height == null) {
                 throw new FacesException(
@@ -76,6 +73,7 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
                         null);
             }
         }
+        */
 
         String style = "";
         if (width != null) {

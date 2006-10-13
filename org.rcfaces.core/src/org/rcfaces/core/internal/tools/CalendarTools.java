@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.3  2006/10/04 12:31:59  oeuillot
  * Stabilisation
  *
@@ -54,7 +62,6 @@ package org.rcfaces.core.internal.tools;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,9 +75,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
 import org.rcfaces.core.component.AbstractCalendarComponent;
-import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-
 
 /**
  * 
@@ -85,10 +90,6 @@ public class CalendarTools {
     private static final Date EMPTY_DATE[] = new Date[0];
 
     private static final Date EMPTY_PERIODS[][] = new Date[0][0];
-
-    private static final Object DEFAULT_DATE_FORMAT_LOCK = new Object();
-
-    private static final Map DATE_FORMAT_BY_LOCALE = new HashMap(32);
 
     private static final int DEFAULT_CENTURY = 1900;
 
@@ -144,20 +145,7 @@ public class CalendarTools {
 
     // Pas de support, car si l'on spécifie un LOCALE, il ne sera pas de toute
     // facon, dispo coté client !
-    private static final boolean NORMALIZE_PARAMETER_SUPPORT = false;
-
-    private static final Map DATE_NORMALIZERS = new HashMap(4);
-
-    static {
-        DATE_NORMALIZERS.put("SHORT", new LocaleDateFormatNormalizer(
-                DateFormat.SHORT));
-        DATE_NORMALIZERS.put("MEDIUM", new LocaleDateFormatNormalizer(
-                DateFormat.MEDIUM));
-        DATE_NORMALIZERS.put("LONG", new LocaleDateFormatNormalizer(
-                DateFormat.LONG));
-        DATE_NORMALIZERS.put("FULL", new LocaleDateFormatNormalizer(
-                DateFormat.FULL));
-    }
+    static final boolean NORMALIZE_PARAMETER_SUPPORT = false;
 
     public static void setDate(AbstractCalendarComponent component, String date) {
         DateFormat dateFormat = getShortDateFormat(component);
@@ -348,45 +336,6 @@ public class CalendarTools {
         }
     }
 
-    public static String normalizeDateFormat(
-            IComponentRenderContext componentRenderContext, String format) {
-        if (format == null || format.length() < 1) {
-            return format;
-        }
-
-        String param = null;
-        if (NORMALIZE_PARAMETER_SUPPORT) {
-            if (format.charAt(0) != '$') {
-                return format;
-            }
-
-            format = format.substring(1);
-
-            int idx = format.indexOf('(');
-            if (idx >= 0) {
-                param = format.substring(idx + 1);
-                format = format.substring(0, idx);
-
-                idx = param.lastIndexOf(')');
-                if (idx < 0 || idx != param.length() - 1) {
-                    throw new FacesException("Invalid date format '" + format
-                            + "' parentheses are not correctly balanced.");
-                }
-
-                param = param.substring(0, idx);
-            }
-        }
-
-        IDateFormatNormalizer normalizer = (IDateFormatNormalizer) DATE_NORMALIZERS
-                .get(format.toUpperCase());
-        if (normalizer == null) {
-            return format;
-        }
-
-        return normalizer.normalizeDateFormat(componentRenderContext, format,
-                param);
-    }
-
     public static Date parseTwoDigitYearDate(UIComponent component, String value) {
         if (value == null || value.length() < 1) {
             return null;
@@ -423,142 +372,22 @@ public class CalendarTools {
         return calendar.getTime();
     }
 
-    private static DateFormat getShortDateFormat(UIComponent calendarComponent) {
-        Locale locale = ContextTools.getAttributesLocale(calendarComponent);
-
-        return getCachedLocale(locale).getShortDateFormat();
+    private static DateFormat getShortDateFormat(UIComponent component) {
+        return LocaleTools.getDefaultFormat(component, LocaleTools.DATE_TYPE);
     }
 
     public static String getDateFormatPattern(Locale locale, int style) {
-
-        return getCachedLocale(locale).getPattern(style);
+        return LocaleTools.getDateTimeFormatPattern(locale, style,
+                LocaleTools.DATE_TYPE);
     }
 
-    private static final CachedLocale getCachedLocale(Locale locale) {
-        synchronized (DATE_FORMAT_BY_LOCALE) {
-            CachedLocale cachedLocale = (CachedLocale) DATE_FORMAT_BY_LOCALE
-                    .get(locale);
-            if (cachedLocale != null) {
-                return cachedLocale;
-            }
-
-            cachedLocale = new CachedLocale(locale);
-            DATE_FORMAT_BY_LOCALE.put(locale, cachedLocale);
-
-            return cachedLocale;
-        }
+    public static String normalizeFormat(
+            IComponentRenderContext componentRenderContext, String format) {
+        return LocaleTools.normalizeFormat(componentRenderContext, format,
+                LocaleTools.DATE_TYPE);
     }
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    private static final class CachedLocale {
-        private final Locale locale;
-
-        private final DateFormat shortDateFormat;
-
-        private String patterns[];
-
-        public CachedLocale(Locale locale) {
-            this.locale = locale;
-
-            this.shortDateFormat = DateFormat.getDateInstance(DateFormat.SHORT,
-                    locale);
-        }
-
-        public Locale getLocale() {
-            return locale;
-        }
-
-        public DateFormat getShortDateFormat() {
-            return shortDateFormat;
-        }
-
-        public synchronized String getPattern(int style) {
-            if (patterns == null) {
-                patterns = new String[DateFormat.SHORT + 1];
-            }
-
-            String pattern = patterns[style];
-            if (pattern != null) {
-                return pattern;
-            }
-
-            DateFormat dateFormat;
-            if (style == DateFormat.SHORT) {
-                dateFormat = getShortDateFormat();
-
-            } else {
-                dateFormat = DateFormat.getDateInstance(style, locale);
-            }
-
-            synchronized (dateFormat) {
-                if ((dateFormat instanceof SimpleDateFormat) == false) {
-                    throw new FacesException(
-                            "Can not get format pattern from date format: "
-                                    + dateFormat + ": (locale '" + locale
-                                    + "')");
-                }
-
-                pattern = ((SimpleDateFormat) dateFormat).toPattern();
-            }
-
-            patterns[style] = pattern;
-
-            return pattern;
-        }
-
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    protected static interface IDateFormatNormalizer {
-        String normalizeDateFormat(
-                IComponentRenderContext componentRenderContext, String format,
-                String param);
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    protected static class LocaleDateFormatNormalizer implements
-            IDateFormatNormalizer {
-        private static final String REVISION = "$Revision$";
-
-        private final int style;
-
-        LocaleDateFormatNormalizer(int style) {
-            this.style = style;
-        }
-
-        public String normalizeDateFormat(
-                IComponentRenderContext componentRenderContext, String format,
-                String param) {
-
-            Locale locale = null;
-
-            if (param != null) {
-                locale = (Locale) LocaleConverter.SINGLETON.getAsObject(null,
-                        null, param);
-                if (locale == null) {
-                    throw new FacesException("Invalid locale name '" + param
-                            + "'.");
-                }
-            }
-
-            if (locale == null) {
-                locale = componentRenderContext.getRenderContext()
-                        .getProcessContext().getUserLocale();
-            }
-
-            return CalendarTools.getDateFormatPattern(locale, style);
-        }
+    public static String getDefaultPattern(Locale locale) {
+        return LocaleTools.getDefaultPattern(locale, LocaleTools.DATE_TYPE);
     }
 }

@@ -89,7 +89,7 @@ var __static = {
 		var ret = comp.f_fireEvent(type, jsEvent);
 
 		if (custom !== undefined) {
-			ret = elt._returnOnSelect;
+			ret = comp._returnOnSelect;
 			if (ret===undefined) {
 				ret=custom;
 				if (jsEvent && custom===false) {
@@ -100,6 +100,7 @@ var __static = {
 			}
 		}
 
+		f_core.Debug(f_eventTarget, "Generic call type '"+type+"' elt='"+((elt)?elt.id:"?")+"' comp='"+comp+"' returns '"+ret+"'.");
 		return ret;
 	}
 }
@@ -181,7 +182,7 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_onMouseOver: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEOVER,true); 
+		return f_eventTarget._Generic(this,evt,f_event.MOUSEOVER,false); 
 	},
 	/**
 	 * 

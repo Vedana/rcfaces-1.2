@@ -1,3 +1,6 @@
+/*
+ * $Id$
+ */
 package org.rcfaces.core.model;
 
 import java.util.Date;

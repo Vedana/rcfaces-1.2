@@ -129,7 +129,7 @@ var __prototype = {
 				p.fa_pagedComponentInitialized(this);
 
 			} catch (x) {
-				f_core.Error(fa_pagedComponent, "Call of fa_pagedComponentInitialized() throws an exception ! (pager="+pager.id+")", x);
+				f_core.Error(fa_pagedComponent, "Call of fa_pagedComponentInitialized() throws an exception ! (pager="+p.id+")", x);
 				
 				lst[i]=undefined;
 			}

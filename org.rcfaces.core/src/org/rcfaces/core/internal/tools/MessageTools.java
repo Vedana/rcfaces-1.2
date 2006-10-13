@@ -2,6 +2,14 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/10/13 18:04:51  oeuillot
+ * Ajout de:
+ * DateEntry
+ * StyledMessage
+ * MessageFieldSet
+ * xxxxConverter
+ * Adapter
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -38,6 +46,9 @@ import javax.faces.context.FacesContext;
 public final class MessageTools {
     private static final String REVISION = "$Revision$";
 
+    private static final Iterator EMPTY_ITERATOR = Collections.EMPTY_LIST
+            .iterator();
+
     public static final Iterator listMessages(FacesContext context,
             String forComponent, UIComponent component) {
 
@@ -61,6 +72,6 @@ public final class MessageTools {
             return iterator;
         }
 
-        return Collections.EMPTY_LIST.iterator();
+        return EMPTY_ITERATOR;
     }
 }

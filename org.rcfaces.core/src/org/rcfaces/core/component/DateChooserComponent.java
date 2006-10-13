@@ -9,11 +9,13 @@ import org.rcfaces.core.internal.converter.DateConverter;
 import javax.faces.el.ValueBinding;
 import java.util.Date;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 
 public class DateChooserComponent extends AbstractCalendarComponent implements 
 	IImageButtonFamilly,
-	IValueChangeEventCapability {
+	IValueChangeEventCapability,
+	IForCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateChooser";
 
@@ -220,24 +222,20 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 		return getFacesListeners(javax.faces.event.ValueChangeListener.class);
 	}
 
-	public final String getFor() {
+	public final java.lang.String getFor() {
 		return getFor(null);
 	}
 
-	public final String getFor(javax.faces.context.FacesContext facesContext) {
+	public final java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR, facesContext);
 	}
 
-	public final void setFor(String forVal) {
-		engine.setProperty(Properties.FOR, forVal);
+	public final void setFor(java.lang.String forValue) {
+		engine.setProperty(Properties.FOR, forValue);
 	}
 
-	public final void setFor(ValueBinding forVal) {
-		engine.setProperty(Properties.FOR, forVal);
-	}
-
-	public final boolean isForSetted() {
-		return engine.isPropertySetted(Properties.FOR);
+	public final void setFor(ValueBinding forValue) {
+		engine.setProperty(Properties.FOR, forValue);
 	}
 
 	public final String getForValueFormat() {
