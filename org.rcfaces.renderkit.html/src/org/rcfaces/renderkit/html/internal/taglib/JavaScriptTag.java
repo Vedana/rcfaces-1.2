@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -96,12 +99,13 @@ import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
-import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -324,17 +328,23 @@ public class JavaScriptTag extends BodyTagSupport implements Tag {
                     }
 
                     if (src != null) {
-                        src = rewriteURL(null, src);
-                        src = reformatSource(src);
-                        writer.write(" src=\"");
-                        writer.write(src);
-                        writer.write('"');
+                        IContentAccessor contentAccessor = ContentAccessorFactory
+                                .createFromWebResource(src, IContentType.SCRIPT);
 
-                        String javascriptCharset = IHtmlRenderContext.JAVASCRIPT_CHARSET;
-                        if (javascriptCharset != null) {
-                            writer.write(" charset=\"");
-                            writer.write(javascriptCharset);
+                        src = contentAccessor.resolveURL(facesContext, null, null);
+
+                        if (src != null) {
+                            src = reformatSource(src);
+                            writer.write(" src=\"");
+                            writer.write(src);
                             writer.write('"');
+
+                            String javascriptCharset = IHtmlRenderContext.JAVASCRIPT_CHARSET;
+                            if (javascriptCharset != null) {
+                                writer.write(" charset=\"");
+                                writer.write(javascriptCharset);
+                                writer.write('"');
+                            }
                         }
                     }
 
@@ -366,21 +376,6 @@ public class JavaScriptTag extends BodyTagSupport implements Tag {
         }
 
         return super.doEndTag();
-    }
-
-    private String rewriteURL(FacesContext facesContext, String src) {
-        if (facesContext == null) {
-            facesContext = FacesContext.getCurrentInstance();
-        }
-
-        IURLRewritingProvider urlRewritingProvider = AbstractURLRewritingProvider
-                .getInstance(facesContext.getExternalContext());
-        if (urlRewritingProvider == null) {
-            return src;
-        }
-
-        return urlRewritingProvider.computeURL(facesContext, null,
-                IURLRewritingProvider.SCRIPT_URL_TYPE, null, src, null, null);
     }
 
     private String reformatSource(String src) {

@@ -103,7 +103,7 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getText: function() {
 		if (!this._label) {
@@ -115,7 +115,7 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @param string text
+	 * @param String text
 	 * @return void
 	 */
 	f_setText: function(text) {

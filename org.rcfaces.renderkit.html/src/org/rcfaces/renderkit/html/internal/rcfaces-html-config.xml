@@ -21,6 +21,10 @@
 			<service id="org.rcfaces.renderkit.html.Items" class="org.rcfaces.renderkit.html.internal.service.ItemsService">
 				<command id="items.request" />
 			</service>
+		
+			<service id="org.rcfaces.renderkit.html.Images" class="org.rcfaces.renderkit.html.internal.service.ImageService">
+				<command id="image.request" />
+			</service>
 			
 			<service id="org.rcfaces.renderkit.html.ClientService" class="org.rcfaces.renderkit.html.internal.service.ClientService">
 				<command id="client.newService" />
@@ -63,7 +67,7 @@
 			</border-renderer>			
 			<border-renderer>
 				<border-id>rounded</border-id>
-				<renderer-class>org.rcfaces.renderkit.html.internal.border.RoundedBorderRenderer</renderer-class>
+				<renderer-class>org.rcfaces.renderkit.html.internal.border.RoundedFieldSetBorderRenderer</renderer-class>
 			</border-renderer>
 
 			<default-border>

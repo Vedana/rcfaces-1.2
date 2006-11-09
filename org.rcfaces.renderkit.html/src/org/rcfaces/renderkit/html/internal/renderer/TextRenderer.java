@@ -1,0 +1,108 @@
+/*
+ * $Id$
+ */
+package org.rcfaces.renderkit.html.internal.renderer;
+
+import org.rcfaces.core.component.TextComponent;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
+import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
+
+/**
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
+ */
+public class TextRenderer extends AbstractCssRenderer {
+    private static final String REVISION = "$Revision$";
+
+    private static final String DEFAULT_TEXT_ELEMENT = "LABEL";
+
+    protected boolean useHtmlAccessKeyAttribute() {
+        return true;
+    }
+
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        // En dernier car les clientDatas / converter ne sont peut �tre pas
+        // encore positionn�s !
+        TextComponent textComponent = (TextComponent) writer
+                .getComponentRenderContext().getComponent();
+
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        String element = null;
+        String ac = textComponent.getFor();
+        if (ac == null) {
+            element = getTextElement(htmlWriter);
+        }
+
+        if (element == null) {
+            element = getDefaultTextElement(htmlWriter);
+        }
+
+        htmlWriter.startElement(element);
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter);
+
+        if (ac != null) {
+            // On peut pas calculer la véritable ID car le composant est peut
+            // etre pas encore présent.
+            // Il faut le calculer coté Javascript
+
+            IComponentRenderContext componentRenderContext = htmlWriter
+                    .getComponentRenderContext();
+
+            IRenderContext renderContext = componentRenderContext
+                    .getRenderContext();
+
+            String forId = renderContext
+                    .computeBrotherComponentClientId(componentRenderContext
+                            .getFacesContext(), textComponent, ac);
+
+            if (forId != null) {
+                htmlWriter.writeFor(forId);
+            }
+        }
+
+        if (writeText(htmlWriter, textComponent)) {
+            // Un accessKey est postionné !
+
+            htmlWriter.enableJavaScript();
+        }
+
+        htmlWriter.endElement(element);
+
+        super.encodeEnd(htmlWriter);
+    }
+
+    protected String getDefaultTextElement(IHtmlWriter htmlWriter) {
+        return DEFAULT_TEXT_ELEMENT;
+    }
+
+    protected String getTextElement(IHtmlWriter htmlWriter) {
+
+        return TextTypeTools.getType(htmlWriter);
+    }
+
+    protected boolean writeText(IHtmlWriter htmlWriter,
+            TextComponent textComponent) throws WriterException {
+        String text = textComponent.getText(htmlWriter
+                .getComponentRenderContext().getFacesContext());
+        if (text == null || text.trim().length() < 1) {
+            return false;
+        }
+
+        return HtmlTools.writeSpanAccessKey(htmlWriter, textComponent, text,
+                true);
+    }
+
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.TEXT;
+    }
+}

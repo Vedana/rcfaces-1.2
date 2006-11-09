@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -35,6 +38,10 @@ public abstract class AbstractAsyncRenderService implements IService {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
                 facesContext).getServicesRegistry();
+        if (serviceRegistry == null) {
+            // Designer mode
+            return null;
+        }
 
         return (AbstractAsyncRenderService) serviceRegistry.getService(
                 facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT,

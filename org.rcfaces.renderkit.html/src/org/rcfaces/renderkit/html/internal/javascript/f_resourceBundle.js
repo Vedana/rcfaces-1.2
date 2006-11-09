@@ -27,8 +27,8 @@ f_resourceBundle._Loading=undefined;
  * Search a value associated to a property.
  *
  * @method public
- * @param string key Key of property.
- * @param optional string defaultValue Default value if key is not found.
+ * @param String key Key of property.
+ * @param optional String defaultValue Default value if key is not found.
  * @return Object
  */
 f_resourceBundle.prototype.f_get=function(key, defaultValue) {
@@ -60,7 +60,7 @@ f_resourceBundle.prototype.f_get=function(key, defaultValue) {
  * Search a value associated to a property.
  *
  * @method public
- * @param string key Key of property.
+ * @param String key Key of property.
  * @param optional any params Parameters which will be formatted into the string associated to the key.
  *                 The Nth parameter will replace the '{n}' substring. (First parameter: {0}; Second parameter {1} ...)
  * @return Object
@@ -81,7 +81,7 @@ f_resourceBundle.prototype.f_format=function(key, params) {
  * Search a value associated to a property.
  *
  * @method public
- * @param string key Key of property.
+ * @param String key Key of property.
  * @param optional any[] params Parameters which will be formatted into the string associated to the key.
  *                 The Nth element in the array will replace the '{n}' substring. (First element: {0}; Second element {1} ...)
  * @return Object
@@ -119,7 +119,7 @@ f_resourceBundle.prototype._putAll=function(values) {
 
 /**
  * @method public static final
- * @param string name Name of resourceBundle. (can be a f_class !)
+ * @param String name Name of resourceBundle. (can be a f_class !)
  * @param hidden boolean create Create ResourceBundle if not found !
  * @return f_resourceBundle
  */
@@ -159,7 +159,7 @@ f_resourceBundle.Get=function(name, create) {
 
 /**
  * @method static final hidden
- * @param string name Name of resourceBundle. (can be a f_class !)
+ * @param String name Name of resourceBundle. (can be a f_class !)
  * @param Object values
  * @return void
  */
@@ -174,7 +174,7 @@ f_resourceBundle.Define=function(name, values) {
 
 /**
  * @method static final hidden
- * @param string name Name of baseName of a previous request.
+ * @param String name Name of baseName of a previous request.
  * @param Object values
  * @return void
  */
@@ -195,8 +195,8 @@ f_resourceBundle.DefineLoaded=function(baseName, values) {
 
 /**
  * @method static final hidden
- * @param string bunddleName Name of resourceBundle.
- * @param string baseName
+ * @param String bunddleName Name of resourceBundle.
+ * @param String baseName
  * @return void
  */
 f_resourceBundle.Load=function(bundleName, baseName, url) {

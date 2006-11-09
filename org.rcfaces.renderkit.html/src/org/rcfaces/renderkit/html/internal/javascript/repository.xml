@@ -257,11 +257,6 @@
 				<required-class name="f_button" />
 			</class>
 		</file>
-		<file name="f_image.js">
-			<class name="f_image">
-				<required-class name="f_component" />
-			</class>
-		</file>
 		<file name="f_hyperLink.js">
 			<class name="f_hyperLink">
 				<required-class name="f_input" />
@@ -303,7 +298,6 @@
 			</class>
 		</file>
 	</module>
-		
 	<module id="extraButton">
 		<file name="f_imageButton.js">
 			<class name="f_imageButton">
@@ -380,12 +374,23 @@
 	</module>
 
 <!-- Entries Aspect -->
-	<module id="entryAspect">
+	<module id="entries">
 		<file name="fa_compositeEntry.js">
 			<class name="fa_compositeEntry">
 				<required-class name="f_aspect" />
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_disabled" />
+			</class>
+		</file>
+		<file name="fa_compositeNumEntry.js">
+			<class name="fa_compositeNumEntry">
+				<required-class name="fa_compositeEntry" />
+			</class>
+		</file>
+		<file name="f_compositeNumEntry.js">
+			<class name="f_compositeNumEntry">
+				<required-class name="f_component" />
+				<required-class name="fa_required" />
 			</class>
 		</file>
 	</module>
@@ -543,6 +548,18 @@
 				<required-class name="fa_asyncRender" />
 				<required-class name="fa_subMenu" />
 				<required-class id="menu" name="f_menu" />
+			</class>
+		</file>
+	</module>
+		
+	<module id="image">
+		<file name="f_image.js">
+			<class name="f_image">
+				<required-class name="f_component" />
+				<required-class name="fa_filterProperties"/>
+				<required-class name="fa_commands" />
+				<required-class id="filter" name="f_httpRequest" />
+				<required-class id="filter" name="f_waiting" />
 			</class>
 		</file>
 	</module>
@@ -831,6 +848,10 @@
 
 <!-- Calendar Components -->
 	<module id="calendar">		
+		<file name="f_time.js">
+			<class name="f_time">
+			</class>
+		</file>
 		<file name="f_dateFormat.js">
 			<class name="f_dateFormat">
 				<required-class name="f_locale" />
@@ -879,17 +900,19 @@
 		</file>
 		<file name="f_dateEntry.js">
 			<class name="f_dateEntry">
-				<required-class name="f_component" />
+				<required-class name="f_compositeNumEntry" />
 				<required-class name="fa_calendarPopup" />
-				<required-class name="fa_compositeEntry" />
-				<required-class name="fa_required" />
 			</class>
 		</file>
 		<file name="f_timeEntry.js">
 			<class name="f_timeEntry">
-				<required-class name="f_component" />
-				<required-class name="fa_compositeEntry" />
-				<required-class name="fa_required" />
+				<required-class name="f_compositeNumEntry" />
+				<required-class name="f_time" />
+			</class>
+		</file>
+		<file name="f_numberEntry.js">
+			<class name="f_numberEntry">
+				<required-class name="f_compositeNumEntry" />
 			</class>
 		</file>
 	</module>
@@ -908,6 +931,11 @@
 		<file name="f_slideUpEffect.js">
 			<class name="f_slideUpEffect">
 				<required-class name="f_timerEffect" />
+			</class>
+		</file>
+		<file name="f_slideUpTransEffect.js">
+			<class name="f_slideUpTransEffect">
+				<required-class name="f_slideUpEffect" />
 			</class>
 		</file>
 	</module>

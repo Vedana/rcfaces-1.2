@@ -23,10 +23,16 @@ var __prototype = {
 		
 		this.f_addEventListener(f_event.KEYDOWN, this._onKeyDown);		
 	},
-	f_update: function(set) {
-		this.f_super(arguments);
-		
+	/**
+	 * 
+	 * @method protected
+	 */
+	f_getMainClassName: function() {
+		return "f_imageCombo";
 	},
+	/** 
+	 * @method private
+	 */
 	_onKeyDown: function(event) {
 		var code=event.f_getJsEvent().keyCode;
 
@@ -45,6 +51,9 @@ var __prototype = {
 		
 		return false;
 	},
+	/** 
+	 * @method private
+	 */
 	_onSelect: function(evt) {
 		if (!this._focus)  {
 			this.f_setFocus();
@@ -69,11 +78,9 @@ var __prototype = {
 		
 		return false;
 	},
-	
 	fa_componentCaptureMenuEvent: function() {
 		return this;
-	},
-	
+	},	
 	fa_getItemsWrapper: function() {
 		return this.f_getSubMenuById(f_imageCombo._MENU_ID);
 	}

@@ -12,11 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.tools.ValuesTools;
-import org.rcfaces.core.provider.IURLRewritingProvider;
-import org.rcfaces.core.provider.IURLRewritingProvider.IURLRewritingInformation;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -32,7 +28,8 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         IRenderContext renderContext = getRenderContext(context);
 
-        String clientId = renderContext.getComponentClientId(context, component);
+        String clientId = renderContext
+                .getComponentClientId(context, component);
 
         renderContext.pushComponent(context, component, clientId);
 
@@ -172,15 +169,16 @@ public abstract class AbstractCameliaRenderer extends Renderer {
                 submittedValue);
     }
 
-    public static final String rewriteURL(
+    /*
+    public static final String resolveContentURL(
             IComponentRenderContext componentRenderContext, int type,
-            String attributeName, String url, String rootURL,
+            String attributeName, IContentAccessor url,
             IURLRewritingInformation rewritingInformation) {
-        if (Constants.URL_REWRITING_SUPPORT == false) {
-            return url;
-        }
-
         FacesContext facesContext = componentRenderContext.getFacesContext();
+
+        if (Constants.URL_REWRITING_SUPPORT == false) {
+            return url.resolveURL(facesContext, null);
+        }
 
         IURLRewritingProvider urlRewritingProvider;
         IRenderContext renderContext = componentRenderContext
@@ -194,11 +192,12 @@ public abstract class AbstractCameliaRenderer extends Renderer {
         }
 
         if (urlRewritingProvider == null) {
-            return url;
+            return url.resolveURL(facesContext, null);
         }
 
-        return urlRewritingProvider.computeURL(facesContext,
-                componentRenderContext.getComponent(), type, attributeName,
-                url, rootURL, rewritingInformation);
+        return urlRewritingProvider.resolveContentURL(facesContext,
+                componentRenderContext.getComponent(), attributeName, url,
+                rewritingInformation);
     }
+    */
 }

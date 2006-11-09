@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -93,7 +96,6 @@ import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.decorator.CalendarDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -164,6 +166,15 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         StringAppender sb = new StringAppender(dates.length * 10);
 
         appendDates(calendar, dates, sb, onlyDate);
+
+        return sb.toString();
+    }
+
+    protected static String convertDate(Calendar calendar, Date date,
+            boolean onlyDate) {
+        StringAppender sb = new StringAppender(10);
+
+        appendDate(calendar, date, sb, onlyDate);
 
         return sb.toString();
     }

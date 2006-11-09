@@ -21,10 +21,10 @@ public class TabTag extends CardTag implements Tag {
 	private String fontSize;
 	private String fontUnderline;
 	private String disabled;
-	private String imageURL;
 	private String disabledImageURL;
 	private String hoverImageURL;
 	private String selectedImageURL;
+	private String imageURL;
 	private String accessKey;
 	public String getComponentType() {
 		return TabComponent.COMPONENT_TYPE;
@@ -86,14 +86,6 @@ public class TabTag extends CardTag implements Tag {
 		this.disabled = disabled;
 	}
 
-	public final String getImageURL() {
-		return imageURL;
-	}
-
-	public final void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
-	}
-
 	public final String getDisabledImageURL() {
 		return disabledImageURL;
 	}
@@ -118,6 +110,14 @@ public class TabTag extends CardTag implements Tag {
 		this.selectedImageURL = selectedImageURL;
 	}
 
+	public final String getImageURL() {
+		return imageURL;
+	}
+
+	public final void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+
 	public final String getAccessKey() {
 		return accessKey;
 	}
@@ -138,10 +138,10 @@ public class TabTag extends CardTag implements Tag {
 			LOG.debug("  fontSize='"+fontSize+"'");
 			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  disabled='"+disabled+"'");
-			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
 			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
 			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
+			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
 		}
 		super.setProperties(uiComponent);
@@ -224,16 +224,6 @@ public class TabTag extends CardTag implements Tag {
 			}
 		}
 
-		if (imageURL != null) {
-			if (isValueReference(imageURL)) {
-				ValueBinding vb = application.createValueBinding(imageURL);
-
-				component.setImageURL(vb);
-			} else {
-				component.setImageURL(imageURL);
-			}
-		}
-
 		if (disabledImageURL != null) {
 			if (isValueReference(disabledImageURL)) {
 				ValueBinding vb = application.createValueBinding(disabledImageURL);
@@ -264,6 +254,16 @@ public class TabTag extends CardTag implements Tag {
 			}
 		}
 
+		if (imageURL != null) {
+			if (isValueReference(imageURL)) {
+				ValueBinding vb = application.createValueBinding(imageURL);
+
+				component.setImageURL(vb);
+			} else {
+				component.setImageURL(imageURL);
+			}
+		}
+
 		if (accessKey != null) {
 			if (isValueReference(accessKey)) {
 				ValueBinding vb = application.createValueBinding(accessKey);
@@ -283,10 +283,10 @@ public class TabTag extends CardTag implements Tag {
 		fontSize = null;
 		fontUnderline = null;
 		disabled = null;
-		imageURL = null;
 		disabledImageURL = null;
 		hoverImageURL = null;
 		selectedImageURL = null;
+		imageURL = null;
 		accessKey = null;
 
 		super.release();

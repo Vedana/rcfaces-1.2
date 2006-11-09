@@ -73,8 +73,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
-	 * @param string name Name of property
-	 * @return string
+	 * @param String name Name of property
+	 * @return String
 	 */
 	f_getClientData: function(name) {
 		f_core.Assert(typeof(name)=="string", "Name of clientData must be a string !");
@@ -108,8 +108,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
-	 * @param string name
-	 * @param string value
+	 * @param String name
+	 * @param String value
 	 * @return void
 	 */
 	f_setClientData: function(name, value) {

@@ -161,7 +161,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @param string pattern
+	 * @param String pattern
 	 * @param f_class clazz f_class or a javascript class.
 	 * @return void
 	 */
@@ -171,11 +171,11 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @param string pattern 
-	 * @param string name
-	 * @param string value  (if NULL take name as value !)
-	 * @param optional string name2
-	 * @param optional string value2
+	 * @param String pattern 
+	 * @param String name
+	 * @param String value  (if NULL take name as value !)
+	 * @param optional String name2
+	 * @param optional String value2
 	 * @return void
 	 */
 	f_addSetProperty: function(pattern, name, value, name2, value2) {
@@ -184,7 +184,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @param string pattern 
+	 * @param String pattern 
 	 * @return void
 	 */
 	f_addSetProperties: function(pattern, attributes) {
@@ -197,8 +197,8 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @param string pattern 
-	 * @param string name  Name of method to call to append top object of the stack, to the previous top object.
+	 * @param String pattern 
+	 * @param String name  Name of method to call to append top object of the stack, to the previous top object.
 	 * @return void 
 	 */
 	f_addSetNextRule: function(pattern, name) {
@@ -207,8 +207,8 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @param string pattern 
-	 * @param string name  Name of method to call to append the second top object of the stack, to the top object.
+	 * @param String pattern 
+	 * @param String name  Name of method to call to append the second top object of the stack, to the top object.
 	 * @return void 
 	 */
 	f_addSetTopRule: function(pattern, name) {
@@ -388,7 +388,7 @@ var __prototype = {
 	 * Note: a stack is considered empty if no objects have been pushed onto it yet.
 	 * 
 	 * @method public
-	 * @param optional string name Name of stack
+	 * @param optional String name Name of stack
 	 * @return any the top Object on the stack or or null if the stack is either empty or has not been created yet
 	 */
 	f_pop: function(name) {
@@ -414,7 +414,7 @@ var __prototype = {
 	 * Push a new object onto the top of the object stack.
 	 *
 	 * @method public
-	 * @param optional string name Name of stack
+	 * @param optional String name Name of stack
 	 * @param any object The new object
 	 * @return void
 	 */
@@ -462,7 +462,7 @@ var __prototype = {
 	 * Return the n'th object down the stack, where 0 is the top element and [getCount()-1] is the bottom element. If the specified index is out of range, return null.
 	 * 
 	 * @method public
-	 * @param optional string name Name of stack
+	 * @param optional String name Name of stack
 	 * @param optional number Index of the desired element, where 0 is the top of the stack, 1 is the next element down, and so on.
 	 * @return any
 	 */
@@ -505,7 +505,7 @@ var __prototype = {
 	 * Note: a stack is considered empty if no objects have been pushed onto it yet.
 	 *
 	 * @method public
-	 * @param optional string name The name of the stack whose emptiness should be evaluated.
+	 * @param optional String name The name of the stack whose emptiness should be evaluated.
 	 * @return boolean <code>true</code> if the given stack if empty 
 	 */
 	f_isEmpty: function(name) {
@@ -516,7 +516,7 @@ var __prototype = {
      * Return the current depth of the element stack.
      * 
      * @method public
-     * @param  optional string name The name of the stack whose depth should be evaluated.
+     * @param optional String name The name of the stack whose depth should be evaluated.
      * @return number The depth of the stack.
      */
 	f_getCount: function(name) {		

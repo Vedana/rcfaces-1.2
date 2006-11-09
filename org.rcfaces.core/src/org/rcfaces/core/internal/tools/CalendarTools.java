@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/09 19:09:07  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/13 18:04:51  oeuillot
  * Ajout de:
  * DateEntry
@@ -76,6 +79,7 @@ import javax.faces.component.UIComponent;
 
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.tools.LocaleTools.LocaleDateTimeFormatNormalizer;
 
 /**
  * 
@@ -143,9 +147,19 @@ public class CalendarTools {
         });
     }
 
-    // Pas de support, car si l'on spécifie un LOCALE, il ne sera pas de toute
-    // facon, dispo coté client !
-    static final boolean NORMALIZE_PARAMETER_SUPPORT = false;
+    private static final Map DATE_NORMALIZERS;
+
+    static {
+        DATE_NORMALIZERS = new HashMap(4);
+        DATE_NORMALIZERS.put("SHORT", new LocaleDateTimeFormatNormalizer(
+                DateFormat.SHORT));
+        DATE_NORMALIZERS.put("MEDIUM", new LocaleDateTimeFormatNormalizer(
+                DateFormat.MEDIUM));
+        DATE_NORMALIZERS.put("LONG", new LocaleDateTimeFormatNormalizer(
+                DateFormat.LONG));
+        DATE_NORMALIZERS.put("FULL", new LocaleDateTimeFormatNormalizer(
+                DateFormat.FULL));
+    }
 
     public static void setDate(AbstractCalendarComponent component, String date) {
         DateFormat dateFormat = getShortDateFormat(component);
@@ -373,18 +387,19 @@ public class CalendarTools {
     }
 
     private static DateFormat getShortDateFormat(UIComponent component) {
-        return LocaleTools.getDefaultFormat(component, LocaleTools.DATE_TYPE);
+        return (DateFormat) LocaleTools.getDefaultFormat(component,
+                LocaleTools.DATE_TYPE);
     }
 
     public static String getDateFormatPattern(Locale locale, int style) {
-        return LocaleTools.getDateTimeFormatPattern(locale, style,
+        return LocaleTools.getFormatPattern(locale, style,
                 LocaleTools.DATE_TYPE);
     }
 
     public static String normalizeFormat(
             IComponentRenderContext componentRenderContext, String format) {
         return LocaleTools.normalizeFormat(componentRenderContext, format,
-                LocaleTools.DATE_TYPE);
+                LocaleTools.DATE_TYPE, DATE_NORMALIZERS);
     }
 
     public static String getDefaultPattern(Locale locale) {

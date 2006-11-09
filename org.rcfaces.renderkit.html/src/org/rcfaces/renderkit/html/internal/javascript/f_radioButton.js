@@ -23,7 +23,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public 
-	 * @return string
+	 * @return String
 	 */
 	f_getGroupName: function() {
 		var input=this._input;
@@ -34,7 +34,7 @@ var __prototype = {
 	},
 	/*
 	 * @method public 
-	 * @param string group
+	 * @param String group
 	 * @return void
 	 *
 	f_setGroupName: function(group) {

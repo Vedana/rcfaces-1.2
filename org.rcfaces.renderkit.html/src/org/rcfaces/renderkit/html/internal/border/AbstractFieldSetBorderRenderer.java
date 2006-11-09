@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/10/13 18:04:38  oeuillot
  * Ajout de:
  * DateEntry
@@ -45,7 +48,6 @@ import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.ITitledBorderRenderer;
-import org.rcfaces.renderkit.html.internal.CssWriter;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
@@ -55,7 +57,8 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractFieldSetBorderRenderer extends
-        AbstractHtmlBorderRenderer implements ITitledBorderRenderer {
+        AbstractHtmlBorderRenderer implements IFieldSetBorderRenderer,
+        ITitledBorderRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final String TEXT = "_text";
@@ -79,43 +82,43 @@ public abstract class AbstractFieldSetBorderRenderer extends
             return super.writeCellBorderNorth(writer);
         }
 
-        String className = getClassName();
-
         writer.startElement("TD");
-        writer.writeAttribute("class", getClassName() + CELL_HEAD);
+        writer.writeClass(getCellHeadClassName(writer));
         if (horizontalSpan > 1) {
-            writer.writeAttribute("colspan", horizontalSpan);
+            writer.writeColSpan(horizontalSpan);
         }
 
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
 
         if (((ISizeCapability) component).getWidth() != null) {
-            writer.writeAttribute("width", "100%");
+            writer.writeWidth("100%");
         }
 
-        writer.startElement("TABLE").writeAttribute("class",
-                className + TABLE_HEAD);
-        writer.writeAttribute("cellspacing", "0");
-        writer.writeAttribute("cellpadding", "0");
+        writer.startElement("TABLE");
+        writer.writeClass(getTableHeadClassName(writer));
+        writer.writeCellSpacing(0);
+        writer.writeCellPadding(0);
 
-        writer.startElement("TR").writeAttribute("class", className + ROW_HEAD);
+        writer.startElement("TR");
+        writer.writeClass(getRowHeadClassName(writer));
 
         writer.startElement("TD");
 
-        writer.startElement("LABEL").writeAttribute("class",
-                getClassName() + TEXT);
+        writer.startElement("LABEL");
+        writer.writeClass(getLabelClassName(writer));
+
+
+        ICssWriter cssWriter = writer.writeStyle(64);
+
         if (title == null) {
-            writer.writeAttribute("style", "display: none");
+            cssWriter.writeDisplay("none");
         }
-
-        writer.flush();
-
-        ICssWriter cssWriter = new CssWriter(writer, 64);
 
         if (component instanceof IFontCapability) {
             cssWriter.writeFont((IFontCapability) component);
         }
+        
         if (component instanceof ITextAlignmentCapability) {
             cssWriter.writeTextAlignment((ITextAlignmentCapability) component);
         }
@@ -125,8 +128,6 @@ public abstract class AbstractFieldSetBorderRenderer extends
                     .writeForeground((IForegroundBackgroundColorCapability) component);
         }
 
-        cssWriter.close();
-
         if (title != null) {
             writer.writeText(title);
         }
@@ -135,7 +136,8 @@ public abstract class AbstractFieldSetBorderRenderer extends
 
         writer.endElement("TD");
 
-        writer.startElement("TD").writeAttribute("class", className + BORDER_N);
+        writer.startElement("TD");
+        writer.writeClass(getBorderNorthClassName(writer));
 
         writer.endElement("TD");
 
@@ -146,6 +148,26 @@ public abstract class AbstractFieldSetBorderRenderer extends
         writer.endElement("TD");
 
         return writer;
+    }
+
+    protected String getTableHeadClassName(IHtmlWriter writer) {
+        return getClassName() + TABLE_HEAD;
+    }
+
+    protected String getRowHeadClassName(IHtmlWriter writer) {
+        return getClassName() + ROW_HEAD;
+    }
+
+    protected String getBorderNorthClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_N;
+    }
+
+    protected String getLabelClassName(IHtmlWriter writer) {
+        return getClassName() + TEXT;
+    }
+
+    protected String getCellHeadClassName(IHtmlWriter writer) {
+        return getClassName() + CELL_HEAD;
     }
 
     public void setText(IComponentWriter writer, String text) {

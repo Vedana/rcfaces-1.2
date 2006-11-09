@@ -13,12 +13,14 @@
 .f_timeEntry {
 	margin: 0;
 	border: 1px solid #7F9DB9;
+	text-align: left;
 }
 
 .f_timeEntry INPUT {
 	border: 0;
 	background-color: transparent;
 	text-align: right;
+	margin: 0;
 }
 
 .f_timeEntry_HH,

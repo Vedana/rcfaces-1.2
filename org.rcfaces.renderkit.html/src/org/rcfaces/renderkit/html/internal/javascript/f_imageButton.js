@@ -91,7 +91,7 @@ var __prototype = {
 		if (!this._image) {
 			var images=this.getElementsByTagName("IMG");
 			if (images.length>0) {
-				var cl=this._className+"_image";
+				var cl=this.f_getMainClassName()+"_image";
 				var image;
 				for(var i=0;i<images.length;i++) {
 					var img=images[i];
@@ -104,12 +104,14 @@ var __prototype = {
 					break;
 				}
 				this._image = image;
+
+				f_core.Assert(image, "Can not find IMAGE tag into ImageButton ! (classname='"+cl+"', id="+this.id+")");
 			}
 		}
 		
 		var texts=this.getElementsByTagName("SPAN");
 		if (texts.length>0) {
-			var cl=this._className+"_text";
+			var cl=this.f_getMainClassName()+"_text";
 			var text;
 			for(var i=0;i<texts.length;i++) {
 				var txt=texts[i];
@@ -123,7 +125,7 @@ var __prototype = {
 				break;
 			}
 
-			f_core.Assert(text, "Can not find SPAN tag into ImageButton ! (classname='"+cl+"')");
+			f_core.Assert(text, "Can not find SPAN tag into ImageButton ! (classname='"+cl+"', id="+this.id+")");
 			
 			this._text = text;
 			text.f_link=this;
@@ -216,7 +218,13 @@ var __prototype = {
 			f_core.VerifyProperties(image);
 		}		
 	},
-
+	/**
+	 * 
+	 * @method protected
+	 */
+	f_getMainClassName: function() {
+		return "f_imageButton";
+	},
 	/**
 	 * 
 	 * @method protected
@@ -406,7 +414,7 @@ var __prototype = {
 /*		
 		var text=this._text;
 		if (text) {
-			className=this._className+"_text"+suffix;
+			className=this.f_getMainClassName()+"_text"+suffix;
 		
 			if (text.className!=className) {
 				text.className=className;
@@ -421,7 +429,7 @@ var __prototype = {
 		}
 		
 		var border=this.f_getBorderComponent();
-		if (border) {
+		if (border && border._className) {
 			var borderClassName=border._className+suffix;
 			
 			if (this.f_isFlatTypeBorder() && ignoreFlat!==undefined && this!=fa_borderType.GetCurrentBorder()) {
@@ -522,7 +530,7 @@ var __prototype = {
 	 * Set the text of the button
 	 *
 	 * @method public 
-	 * @param string text
+	 * @param String text
 	 * @return void
 	 */	
 	f_setText: function(text) {

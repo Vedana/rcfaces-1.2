@@ -27,7 +27,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
-	 * @return string
+	 * @return String
 	 */
 	f_getProperty: function(name) {
 		if (!this._properties) {
@@ -119,7 +119,7 @@ var __prototype = {
 	 *
 	 *
 	 * @method hidden
-	 * @return string Serialized form.
+	 * @return String Serialized form.
 	 */
 	f_serialize0: function() {
 		if (this.f_serialize) {

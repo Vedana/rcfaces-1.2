@@ -25,7 +25,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string message
+	 * @param String message
 	 * @return void
 	 */
 	f_setItemToolTip: function(item, message) {
@@ -34,7 +34,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemToolTip: function(item) {
 		return this._getItemsWrapper().f_getItemToolTip(item);
@@ -42,7 +42,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setItemImageURL: function(item, imageURL) {
@@ -51,7 +51,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemImageURL: function(item) {
 		return this._getItemsWrapper().f_getItemImageURL(item);
@@ -59,7 +59,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setItemDisabledImageURL: function(item, imageURL) {
@@ -68,7 +68,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemDisabledImageURL: function(item) {
 		return this._getItemsWrapper().f_getItemDisabledImageURL(item);
@@ -76,7 +76,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setItemHoverImageURL: function(item, imageURL) {
@@ -85,7 +85,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemHoverImageURL: function(item) {
 		return this._getItemsWrapper().f_getItemHoverImageURL(item);
@@ -93,7 +93,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setItemSelectedImageURL: function(item, imageURL) {
@@ -102,7 +102,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemSelectedImageURL: function(item) {
 		return this._getItemsWrapper().f_getItemSelectedImageURL(item);
@@ -177,7 +177,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemAccessKey: function(item) {
 		return this._getItemsWrapper().f_getItemAccessKey(item);
@@ -185,7 +185,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemGroupName: function(item) {
 		return this._getItemsWrapper().f_getItemGroupName(item);
@@ -209,8 +209,8 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item Item object.
-	 * @param string key Key of property.
-	 * @return string Value associated to the specified property.
+	 * @param String key Key of property.
+	 * @return String Value associated to the specified property.
 	 */
 	f_getItemClientData: function(item, key) {
 		return this._getItemsWrapper().f_getItemClientData(item, key);

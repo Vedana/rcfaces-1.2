@@ -10,7 +10,8 @@
  * @version $Revision$ $Date$ 
  */
  
-.f_expandBar {
+.f_expandBar,
+.f_expandBar_collapsed {
 	font-family:Verdana;
 	font-size:7pt;
 	margin: 0;
@@ -18,6 +19,14 @@
 	list-style-type: none;
 	border: 1px solid #CCCCCC;
 	text-align: left;
+}
+
+.f_expandBar_button {
+	background: transparent url('expandBar/arrows.gif') scroll no-repeat 0 0; 
+}
+
+.f_expandBar_collapsed .f_expandBar_button {
+	background-position: -16px 0;
 }
 
 .f_expandBar_tbody {
@@ -70,9 +79,18 @@
 }
 
 
-.f_expandBar_body {
-	overflow: hidden;
+.f_expandBar_body,
+.f_expandBar_body_effect {
 	background: white;
 	padding: 2px;
 }
 
+.f_expandBar_body_effect {
+	overflow: hidden;
+}
+
+.f_expandBar_body_collapsed {
+	display: none;
+	padding: 0;
+	overflow: hidden;
+}

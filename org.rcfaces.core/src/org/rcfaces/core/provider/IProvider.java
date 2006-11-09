@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -20,6 +23,8 @@
  */
 package org.rcfaces.core.provider;
 
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.digester.Digester;
 
 /**
@@ -29,4 +34,6 @@ import org.apache.commons.digester.Digester;
 public interface IProvider {
 
     void configureRules(Digester digester);
+
+    void startup(FacesContext facesContext);
 }

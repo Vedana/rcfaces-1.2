@@ -11,14 +11,14 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getText: function() {
 		return f_core.GetTextNode(this);
 	},
 	/**
 	 * @method public
-	 * @param string text The text.
+	 * @param String text The text.
 	 * @return void
 	 */
 	f_setText: function(text) {
@@ -32,14 +32,14 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getValue: function() {
 		return this.f_getText();
 	},
 	/**
 	 * @method public
-	 * @param string text The text.
+	 * @param String text The text.
 	 * @return void
 	 */
 	f_setValue: function(text) {

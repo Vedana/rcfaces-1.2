@@ -11,18 +11,18 @@
  */
  
 
-INPUT.f_textEntry {
+.f_textEntry {
 	margin: 0;
 }
-INPUT.f_textEntry_disabled {
+.f_textEntry_disabled {
 	border: 1px solid black;
 	margin: 1px;
 }
-INPUT.f_textEntry_readonly {
+.f_textEntry_readonly {
 	border: 1px solid black;
 	margin: 1px;
 }
 
-LABEL.f_textEntry_required {
+.f_textEntry_required {
 	color: red;
 }

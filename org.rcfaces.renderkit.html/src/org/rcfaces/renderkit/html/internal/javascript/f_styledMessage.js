@@ -13,7 +13,6 @@ var __prototype = {
 		this.f_super(arguments);
 
 		this._showIfMessage=f_core.GetAttribute(this, "v:showIfMessage");
-
 	},
 	
 	/*

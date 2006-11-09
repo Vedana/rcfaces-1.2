@@ -23,7 +23,7 @@ import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.rewriting.HashCodeTools;
+import org.rcfaces.core.internal.version.HashCodeTools;
 import org.rcfaces.core.internal.webapp.AbstractRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.URIParameters;

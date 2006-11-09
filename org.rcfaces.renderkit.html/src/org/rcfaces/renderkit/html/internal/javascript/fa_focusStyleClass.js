@@ -17,7 +17,7 @@ var __prototype = {
 	*/
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getFocusStyleClass: function() {
 		if (this._focusStyleClass===undefined) {

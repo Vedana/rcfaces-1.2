@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/13 18:04:51  oeuillot
  * Ajout de:
  * DateEntry
@@ -53,7 +56,6 @@ import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.event.PhaseListener;
@@ -65,10 +67,13 @@ import javax.servlet.ServletResponse;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.config.IProvidersRegistry;
 import org.rcfaces.core.internal.config.RcfacesContextImpl;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessorRegistry;
+import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
+import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
-import org.rcfaces.core.internal.rewriting.IResourceVersionHandler;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
+import org.rcfaces.core.internal.version.IResourceVersionHandler;
 
 /**
  * 
@@ -86,25 +91,40 @@ public abstract class RcfacesContext {
 
     public static final String APPLICATION_VERSION_PROPERTY = "org.rcfaces.core.internal.APPLICATION_VERSION";
 
+    private static final Lifecycle EMPTY_LIFECYCLE = new Lifecycle() {
+        private static final String REVISION = "$Revision$";
+
+        public void addPhaseListener(PhaseListener listener) {
+        }
+
+        public void execute(FacesContext context) throws FacesException {
+        }
+
+        public PhaseListener[] getPhaseListeners() {
+            return new PhaseListener[0];
+        }
+
+        public void removePhaseListener(PhaseListener listener) {
+        }
+
+        public void render(FacesContext context) throws FacesException {
+        }
+    };
+
     protected RcfacesContext() {
     }
 
     public static final RcfacesContext getCurrentInstance() {
-        return getInstance((ExternalContext) null);
+        return getInstance((FacesContext) null);
     }
 
     public static final RcfacesContext getInstance(FacesContext facesContext) {
-        return getInstance(facesContext.getExternalContext());
-    }
-
-    public static final RcfacesContext getInstance(
-            ExternalContext externalContext) {
-        if (externalContext == null) {
-            externalContext = FacesContext.getCurrentInstance()
-                    .getExternalContext();
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
         }
 
-        Map applicationMap = externalContext.getApplicationMap();
+        Map applicationMap = facesContext.getExternalContext()
+                .getApplicationMap();
 
         RcfacesContext cameliaContext;
         synchronized (CAMELIA_CONTEXT_PROPERTY) {
@@ -118,7 +138,7 @@ public abstract class RcfacesContext {
 
                 applicationMap.put(CAMELIA_CONTEXT_PROPERTY, cameliaContext);
 
-                cameliaContext.initialize(externalContext);
+                cameliaContext.initialize(facesContext);
             }
         }
 
@@ -142,63 +162,57 @@ public abstract class RcfacesContext {
         }
     }
 
-    private static RcfacesContext createCameliaContext(ServletContext context,
-            ServletRequest request, ServletResponse response) {
+    public static void runIntoFacesContext(ServletContext context,
+            ServletRequest request, ServletResponse response, Runnable runnable) {
+
+        if (FacesContext.getCurrentInstance() != null) {
+            runnable.run();
+            return;
+        }
+
+        FacesContextFactory facesContextFactory = (FacesContextFactory) FactoryFinder
+                .getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+
+        if (facesContextFactory == null) {
+            throw new FacesException("Can not get Faces Context Factory !");
+        }
+
+        FacesContext facesContext = facesContextFactory.getFacesContext(
+                context, request, response, EMPTY_LIFECYCLE);
         try {
-            FacesContextFactory facesContextFactory = (FacesContextFactory) FactoryFinder
-                    .getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+            runnable.run();
 
-            if (facesContextFactory == null) {
-                throw new FacesException("Can not get Faces Context Factory !");
-            }
+        } finally {
+            facesContext.release();
+        }
+    }
 
-            Lifecycle lifecycle = new Lifecycle() {
-                private static final String REVISION = "$Revision$";
+    private static RcfacesContext createCameliaContext(
+            final ServletContext context, ServletRequest request,
+            ServletResponse response) {
 
-                public void addPhaseListener(PhaseListener listener) {
-                }
+        final RcfacesContext rcfacesContextRef[] = new RcfacesContext[1];
 
-                public void execute(FacesContext context) throws FacesException {
-                }
+        runIntoFacesContext(context, request, response, new Runnable() {
 
-                public PhaseListener[] getPhaseListeners() {
-                    return new PhaseListener[0];
-                }
+            public void run() {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
 
-                public void removePhaseListener(PhaseListener listener) {
-                }
-
-                public void render(FacesContext context) throws FacesException {
-                }
-            };
-
-            FacesContext facesContext = facesContextFactory.getFacesContext(
-                    context, request, response, lifecycle);
-            try {
                 RcfacesContext rcfacesContext = createCameliaContext();
 
                 context.setAttribute(CAMELIA_CONTEXT_PROPERTY, rcfacesContext);
 
-                rcfacesContext.initialize(facesContext.getExternalContext());
+                rcfacesContext.initialize(facesContext);
 
-                return rcfacesContext;
-
-            } finally {
-                facesContext.release();
+                rcfacesContextRef[0] = rcfacesContext;
             }
 
-        } catch (FacesException e) {
-            Throwable rootCause = e.getCause();
-            if (rootCause == null) {
-                throw e;
-            }
+        });
 
-            throw new FacesException(e.getMessage(), rootCause);
-        }
-
+        return rcfacesContextRef[0];
     }
 
-    protected abstract void initialize(ExternalContext externalContext);
+    protected abstract void initialize(FacesContext facesContext);
 
     private static RcfacesContext createCameliaContext() {
 
@@ -209,6 +223,10 @@ public abstract class RcfacesContext {
         return cameliaContext;
     }
 
+    public abstract String getApplicationVersion();
+
+    public abstract boolean isDesignerMode();
+
     public abstract IServicesRegistry getServicesRegistry();
 
     public abstract IClientValidatorsRegistry getClientValidatorsRegistry();
@@ -217,10 +235,28 @@ public abstract class RcfacesContext {
 
     public abstract IProvidersRegistry getProvidersRegistry();
 
-    public abstract String getApplicationVersion();
+    public abstract IAdapterManager getAdapterManager();
+
+    public abstract void setAdapterManager(IAdapterManager adapterManager);
+
+    public abstract IContentVersionHandler getDefaultContentVersionHandler();
+
+    public abstract void setDefaultContentVersionHandler(
+            IContentVersionHandler handler);
+
+    public abstract IContentAccessorRegistry getContentAccessorRegistry();
+
+    public abstract void setContentAccessorRegistry(
+            IContentAccessorRegistry registry);
 
     public abstract IResourceVersionHandler getResourceVersionHandler();
 
-    public abstract IAdapterManager getAdapterManager();
+    public abstract void setResourceVersionHandler(
+            IResourceVersionHandler resourceVersionHandler);
+
+    public abstract IContentStorageEngine getContentStorageEngine();
+
+    public abstract void setContentStorageEngine(
+            IContentStorageEngine indirectContentRepository);
 
 }

@@ -55,7 +55,7 @@ var __static = {
 	 */
 	_OnSpinnerButtonOver: function(evt) {
 		var spinner=this._spinner;
-		if (spinner.f_getEventLocked() || spinner.f_isDisabled()) {
+		if (spinner.f_getEventLocked(false) || spinner.f_isDisabled()) {
 			return false;
 		}
 		if (!evt) evt = window.event;
@@ -349,7 +349,7 @@ var __prototype = {
 	 * @method public
 	 * @param number minimum Minimum value.
 	 * @return void
-	 */
+	 *
 	f_setMinimum: function(minimum) {
 		f_core.Assert(typeof(minimum)=="number", "Invalid parameter '"+minimum+"'.");
 		
@@ -362,6 +362,7 @@ var __prototype = {
 			this.f_setProperty(f_prop.MIN, minimum);	
 		}
 	},
+	*/
 	/**
 	 * @method public
 	 * @return number Maximum value or <code>null</code>.
@@ -376,11 +377,11 @@ var __prototype = {
 		}
 		return maximum;
 	},
-	/**
+	/*
 	 * @method public
 	 * @param number maximum Maximum value.
 	 * @return void
-	 */
+	 *
 	f_setMaximum: function(maximum) {
 		f_core.Assert(typeof(maximum)=="number", "Invalid parameter '"+maximum+"'.");
 		
@@ -393,6 +394,7 @@ var __prototype = {
 			this.f_setProperty(f_prop.MAX, maximum);
 		}
 	},
+	*/
 	/**
 	 * @method public
 	 * @return number Maximum value or <code>null</code>.
@@ -400,18 +402,15 @@ var __prototype = {
 	f_getStep: function() {
 		var step=this._step;
 		if (step===undefined) {
-			step=f_core.GetAttribute(this, "v:step");
-			
-			step=(step)?parseFloat(step):fa_spinner._DEFAULT_STEP;
-			this._step=step;
+			this._step=f_core.GetAttribute(this, "v:step");
 		}
 		return step;
 	},
-	/**
+	/*
 	 * @method public
-	 * @param number maximum Maximum value.
+	 * @param number step Step value.
 	 * @return void
-	 */
+	 *
 	f_setStep: function(step) {
 		f_core.Assert(typeof(step)=="number", "Invalid parameter '"+step+"'.");
 		
@@ -424,6 +423,7 @@ var __prototype = {
 			this.f_setProperty(f_prop.STEP, step);
 		}
 	},
+	*/
 	/**
 	 * @method protected
 	 */

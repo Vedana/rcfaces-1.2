@@ -58,7 +58,7 @@ f_messageObject.prototype.f_getSeverity=function() {
 
 /**
  * @method public 
- * @return string Summary
+ * @return String Summary
  */
 f_messageObject.prototype.f_getSummary=function() {
 	return this._summary;
@@ -66,7 +66,7 @@ f_messageObject.prototype.f_getSummary=function() {
 
 /**
  * @method public 
- * @return string Detail
+ * @return String Detail
  */
 f_messageObject.prototype.f_getDetail=function() {
 	if (this._detail) {

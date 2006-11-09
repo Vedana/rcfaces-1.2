@@ -28,7 +28,7 @@ var __static = {
 	 * Prepare an image. (Preload it if necessary)
 	 *
 	 * @method public static final
-	 * @param string url
+	 * @param String url
 	 * @return void
 	 */
 	PrepareImage: function(url) {

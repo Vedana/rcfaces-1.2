@@ -4,10 +4,13 @@ import org.rcfaces.core.component.capability.IBundleVarCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractMessageComponent;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 public class MessageComponent extends AbstractMessageComponent implements 
 	IImageSizeCapability,
@@ -26,6 +29,13 @@ public class MessageComponent extends AbstractMessageComponent implements
 	public MessageComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
 	}
 
 	public final int getImageHeight() {
@@ -218,6 +228,13 @@ public class MessageComponent extends AbstractMessageComponent implements
 
 	public final void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	public final IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
+		
 	}
 
 	public final java.lang.String getBundleVar() {

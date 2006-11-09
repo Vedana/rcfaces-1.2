@@ -3,7 +3,7 @@
  */
 
 /**
- * f_event class extends Object
+ * f_event class
  *
  * @class public f_event extends Object
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
@@ -28,7 +28,7 @@ function f_event(component, type, jsEvent, item, value, selectionProvider, detai
 
 /**
  * @method public
- * @return string
+ * @return String
  */
 f_event.prototype.f_getType=function() {
 	return this._type;
@@ -84,7 +84,7 @@ f_event.prototype.f_getDetail=function() {
 
 /**
  * @method public
- * @param string id Identifier of component.
+ * @param String id Identifier of component.
  * @return f_component
  * @see f_component#f_findComponent
  */
@@ -122,8 +122,8 @@ f_event.prototype.f_finalize=function() {
 	this._selectionProvider = undefined; // fa_selectionProvider
 }
  
-f_event.f_getName=function() {
-	return "f_event";
+f_event.prototype.toString=function() {
+	return "[f_event type='"+this._type+"' component='"+this._component+"' value='"+this._value+"' item='"+this._item+"' jsEvent='"+this._jsEvent+"']";
 }
  
 var __static = {
@@ -502,6 +502,12 @@ var __static = {
 		
 		f_event._EvtLock &= (~set);
 		f_core.Debug("f_event", "Exit event lock (new state="+f_event._EvtLock+" old="+currentLock+")");
+	},
+	toString: function() {
+		return "[class f_event]";
+	},
+	f_getName: function() {
+		return "f_event";
 	}
 }
 

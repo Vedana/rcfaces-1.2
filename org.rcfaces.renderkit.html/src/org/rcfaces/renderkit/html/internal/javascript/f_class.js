@@ -59,14 +59,14 @@ function f_class(className, lookId, staticMembers, members, parentClass) {
 }
 /**
  * @method public final
- * @return string
+ * @return String
  */
 f_class.prototype.f_getName=function() {
 	return this._name;
 }
 /**
  * @method public final
- * @return string
+ * @return String
  */
 f_class.prototype.f_getLookId=function() {
 	return this._look;
@@ -133,7 +133,7 @@ f_class.f_getName=function() {
 
 /**
  * @method public final
- * @return string
+ * @return String
  */
 f_class.prototype.toString=function() {
 	return "[f_class "+this._name+"]";

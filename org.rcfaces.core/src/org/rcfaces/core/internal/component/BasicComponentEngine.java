@@ -490,11 +490,6 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         this.converterSetted = true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.component.IComponentEngine#getTransientAttribute(java.lang.String)
-     */
     public Object getTransientAttribute(String name) {
         if (transientAttributes == null) {
             return null;
@@ -503,12 +498,6 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         return transientAttributes.get(name);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.component.IComponentEngine#setTransientAttribute(java.lang.String,
-     *      java.lang.Object)
-     */
     public Object setTransientAttribute(String name, Object value) {
         if (transientAttributes == null) {
             transientAttributes = factory.createMap(4);
@@ -517,13 +506,13 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         return transientAttributes.put(name, value);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.component.IComponentEngine#isPropertySetted(java.lang.String)
-     */
     public boolean isPropertySetted(String propertyName) {
-        return getPropertiesAccessor(false).isPropertySetted(propertyName);
+        IPropertiesAccessor propertiesAccessor = getPropertiesAccessor(false);
+        if (propertiesAccessor == null) {
+            return false;
+        }
+
+        return propertiesAccessor.isPropertySetted(propertyName);
     }
 
     public void processUpdates(FacesContext context) {

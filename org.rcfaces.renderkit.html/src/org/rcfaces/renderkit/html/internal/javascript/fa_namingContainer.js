@@ -40,7 +40,7 @@ var __static = {
 	/**
 	 * @method public static final 
 	 * @param HTMLElement component
-	 * @param string id
+	 * @param String id
 	 * @return HTMLElement
 	 */
 	FindComponent: function(component, id) {
@@ -68,7 +68,7 @@ var __static = {
 	/**
 	 * @method hidden static final 
 	 * @param HTMLElement component
-	 * @param string[] args component ids
+	 * @param String[] args component ids
 	 * @return HTMLElement
 	 */
 	FindComponents: function(component, args) {
@@ -86,8 +86,8 @@ var __static = {
 	/**
 	 * @method hidden static final 
 	 * @param HTMLElement component
-	 * @param string id
-	 * @return string Identifier
+	 * @param String id
+	 * @return String Identifier
 	 */
 	ComputeComponentId: function(component, id) {
 		f_core.Assert(component && component.tagName, "fa_namingContainer.ComputeComponentId: Invalid component parameter ('"+component+"')");
@@ -194,7 +194,7 @@ var __static = {
 	 *
 	 * @method hidden static final
 	 * @param Document doc The document.
-	 * @param string id Identifier of the searched component.
+	 * @param String id Identifier of the searched component.
 	 * @return HTMLElement
 	 */
 	SearchElementById: function(doc, id) {

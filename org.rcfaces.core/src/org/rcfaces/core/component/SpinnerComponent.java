@@ -58,26 +58,6 @@ public class SpinnerComponent extends TextEntryComponent {
 		return engine.isPropertySetted(Properties.MAXIMUM);
 	}
 
-	public final double getStep() {
-		return getStep(null);
-	}
-
-	public final double getStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getDoubleProperty(Properties.STEP, 0.0, facesContext);
-	}
-
-	public final void setStep(double step) {
-		engine.setProperty(Properties.STEP, step);
-	}
-
-	public final void setStep(ValueBinding step) {
-		engine.setProperty(Properties.STEP, step);
-	}
-
-	public final boolean isStepSetted() {
-		return engine.isPropertySetted(Properties.STEP);
-	}
-
 	public final boolean isCycleValue() {
 		return isCycleValue(null);
 	}
@@ -96,6 +76,26 @@ public class SpinnerComponent extends TextEntryComponent {
 
 	public final boolean isCycleValueSetted() {
 		return engine.isPropertySetted(Properties.CYCLE_VALUE);
+	}
+
+	public final String getStep() {
+		return getStep(null);
+	}
+
+	public final String getStep(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.STEP, facesContext);
+	}
+
+	public final void setStep(String step) {
+		engine.setProperty(Properties.STEP, step);
+	}
+
+	public final void setStep(ValueBinding step) {
+		engine.setProperty(Properties.STEP, step);
+	}
+
+	public final boolean isStepSetted() {
+		return engine.isPropertySetted(Properties.STEP);
 	}
 
 	public void release() {

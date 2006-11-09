@@ -575,8 +575,8 @@ var __prototype = {
 	},
 	/** 
 	 * @method public
-	 * @param string proposalLabel
-	 * @param string proposalValue
+	 * @param String proposalLabel
+	 * @param String proposalValue
 	 * @param hidden Object proposalItem
 	 * @param hidden Event jsEvt
 	 * @return boolean
@@ -642,7 +642,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string text
+	 * @param String text
 	 * @param hidden boolean keepSuggestion
 	 * @return void
 	 */
@@ -707,14 +707,14 @@ var __prototype = {
 	},
 	/** 
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getSuggestionValue: function() {
 		return this._suggestionValue;
 	},
 	/** 
 	 * @method private
-	 * @param string
+	 * @param String
 	 * @return void
 	 */
 	_setSuggestionValue: function(value, item, jsEvt) {
@@ -773,6 +773,11 @@ var __prototype = {
 		}
 
 		return this.f_super(arguments, showAlert, mask);
+	},
+	/**
+	 * @method hidden
+	 */
+	fa_cancelFilterRequest: function() {
 	}
 }
 

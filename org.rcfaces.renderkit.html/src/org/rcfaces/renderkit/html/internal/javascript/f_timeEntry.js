@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_timeEntry extends f_component, fa_compositeEntry, fa_required
+ * @class public f_timeEntry extends f_compositeNumEntry
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -14,20 +14,14 @@ var __prototype={
 	f_timeEntry: function() {
 		this.f_super(arguments);
 
-		this._timeFormat=f_core.GetAttribute(this, "v:timeFormat");
-		
-		var validatorParams=f_core.GetAttribute(this, "v:clientValidatorParams");
-		if (validatorParams) {
-			this._validatorParams=f_core.ParseParameters(validatorParams);
-		}
-				
-		f_core.AddCheckListener(this, this);	
+//		this._timeFormat=f_core.GetAttribute(this, "v:timeFormat");
 	},
 	/*
 	f_finalize: function() {
 		// this._timeFormat=undefined; // String
-		// this._validatorParams=undefined; // Map<String, String>
-		
+		// this._minTime=undefined; // f_time
+		// this._maxTime=undefined; // f_time
+				
 		this.f_super(arguments);
 	},
 	*/
@@ -35,7 +29,7 @@ var __prototype={
 	/**
 	 * @method public
 	 * @param optional hidden number timeType Type of time. (min, max, default)
-	 * @return number
+	 * @return f_time
 	 */
 	f_getTime: function(timeType) {
 		var hour=-1;
@@ -52,14 +46,7 @@ var __prototype={
 			var max=input._max;
 			
 			var v;
-			switch(dateType) {
-			case fa_compositeEntry.MIN_TYPE:
-				v=min;
-				break;
-				
-			case fa_compositeEntry.MAX_TYPE:
-				v=max;
-				break;
+			switch(timeType) {
 				
 			case fa_compositeEntry.DEFAULT_TYPE:
 				v=input._default;
@@ -98,16 +85,24 @@ var __prototype={
 			return null;
 		}
 		
-		var t=((((hour*60)+minute)*60)+seconde)*1000+millis;
+		var t=new f_time(hour, minute, second, millis);
+		
+		if (t.f_getHours()!=hour || 
+				t.f_getMinutes()!=minute || 
+				t.f_getSeconds()!=second || 
+				t.f_getMilliseconds()!=millis) {
+			return null;
+		}
 		
 		return t;
 	},
 	/**
 	 * @method public
-	 * @param number time
+	 * @param f_time time
 	 * @return void
 	 */
-	f_setDate: function(time) {
+	f_setTime: function(time) {
+		f_core.Assert(time instanceof f_time, "Invalid time parameter ("+time+").");
 		var inputs=this._inputs;
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
@@ -117,43 +112,160 @@ var __prototype={
 			var v=-1;
 			switch(type) {
 			case "H":
-				v=Math.floor(time/(60*60*1000));
+				v=time.f_getHours();
 				break;
 				
 			case "m":
-				v=(Math.floor(time/(60*1000)) % 60);
+				v=time.f_getMinutes();
 				break;
 				
 			case "s":
-				v=(Math.floor(time/1000) % 60);				
+				v=time.f_getSeconds();
 				break;
 
 			case "S":
-				v=time % 1000;				
+				v=m.f_getMilliseconds();	
 				break;
 			}
 			if (v<0) {
 				continue;
 			}
 			
-			v=fa_compositeEntry.FormatNumber(v, maxLength);
+			v=this.fa_formatNumber(input, v, maxLength);
 			if (v!=input.value) {
 				input.value=v;
 			}
 		}
 	},
+	/**
+	 * @method public
+	 * @return f_time
+	 */
+	f_getMinTime: function() {
+		var minTime=this._minTime;
+		if (minTime!==undefined) {
+			return minTime;
+		}
+		
+		minTime=f_core.GetAttribute(this, "v:minTime");
+		if (minTime) {
+			minTime=new f_time(parseInt(minTime));
+		} else {
+			minTime=null;
+		}
+		
+		this._minTime=minTime;
+
+		return minTime;
+	},
+
+	/**
+	 * @method public
+	 * @return f_time
+	 */
+	f_getMaxTime: function() {
+		var maxTime=this._maxTime;
+		if (maxTime!==undefined) {
+			return maxTime;
+		}
+		
+		maxTime=f_core.GetAttribute(this, "v:maxTime");
+		if (maxTime) {
+			maxTime=new f_time(parseInt(maxTime));
+		} else {
+			maxTime=null;
+		}
+		
+		this._maxTime=maxTime;
+
+		return maxTime;
+	},
 	f_serialize: function() {
 		var time=this.f_getTime();
+		if (time) {
+			time=time.f_getTime();
+		}
 		
 		this.f_setProperty(f_prop.VALUE, time);
 
 		this.f_super(arguments);
 	},
 	f_performCheckValue: function() {		
+		var messageContext=f_messageContext.Get(this);
+		if (!messageContext) {
+			return;
+		}
+
 		var errorMessage=null;
+			
+		var date=this.f_getTime();
 		
-		return true;
+		f_core.Debug(f_timeEntry, "Time: "+date);
+		if (!date) {
+			if (!this.f_isRequired()) {
+				// Si c'est pas requis, on ne rale que si un des champs est rempli
+				var empty=true;
+				var inputs=this._inputs;
+				for(var i=0;i<inputs.length;i++) {
+					if (inputs[i].value.length<1) {
+						continue;
+					}
+					
+					empty=false;
+					break;
+				}
+				
+				if (empty) {
+					// Tous les champs sont vides
+					return;
+				}
+
+				errorMessage="invalidTime.error";
+				
+			} else {
+				errorMessage="required.error";
+			}
+			
+			// Le champ n'est pas requis, mais un des champs n'est pas vide !
+			// ou le champ est requis et la date est invalide 
+
+		} else {
+			// La date est valide ! ?
+			var t=date.f_getTime();
+			
+			var d2=new f_time(t);
+			
+			if (d2.f_getHours()!=date.f_getHours() || 
+					d2.f_getMinutes()!=date.f_getMinutes() || 
+					d2.f_getSeconds()!=date.f_getSeconds() ||
+					d2.f_getMilliseconds()!=date.f_getMilliseconds()) {
+					
+//					alert("Different ! "+d2.f_getHours()+"/"+date.f_getHours());
+				errorMessage="invalidTime.error";
+				
+			} else {			
+				var minTime=this.f_getMinTime();
+				var maxTime=this.f_getMaxTime();
+				
+				if (minTime && t<minTime.f_getTime()) {
+					errorMessage="minTime.error";
+	
+				} else if (maxTime && t>maxTime.f_getTime()) {
+					errorMessage="maxTime.error";
+				}
+
+				f_core.Debug(f_timeEntry, "Test Min/max : Error Message: "+errorMessage+" time="+date+" timeMin="+minTime+" timeMax="+maxTime);
+			}
+		}
+		
+		f_core.Debug(f_timeEntry, "Error Message: "+errorMessage+" date="+date);
+		
+		if (!errorMessage) {
+			return;
+		}
+		
+		this.f_addErrorMessage(f_timeEntry, errorMessage);
 	}
 }
  
-var f_timeEntry=new f_class("f_timeEntry", null, null, __prototype, f_component, fa_compositeEntry, fa_required);
+var f_timeEntry=new f_class("f_timeEntry", null, null, __prototype, f_compositeNumEntry);

@@ -92,6 +92,8 @@ public final class JavaScriptClasses {
 
     public static final String MESSAGE_FIELD_SET = "f_messageFieldSet";
 
+    public static final String NUMBER_ENTRY = "f_numberEntry";
+
     public static final String PAGER = "f_pager";
 
     public static final String PASSWORD_ENTRY = "f_passwordEntry";

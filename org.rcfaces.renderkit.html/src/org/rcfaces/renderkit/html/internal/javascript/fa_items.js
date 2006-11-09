@@ -85,7 +85,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string message
+	 * @param String message
 	 * @return void
 	 */
 	f_setItemToolTip: function(item, message) {
@@ -100,7 +100,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemToolTip: function(item) {
 		return item.title;
@@ -108,7 +108,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setItemImageURL: function(item, imageURL) {
@@ -127,7 +127,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemImageURL: function(item) {
 		return item._imageURL;
@@ -135,7 +135,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setItemDisabledImageURL: function(item, imageURL) {
@@ -154,7 +154,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemDisabledImageURL: function(item) {
 		return item._disabledImageURL;
@@ -162,7 +162,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setItemHoverImageURL: function(item, imageURL) {
@@ -181,7 +181,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemHoverImageURL: function(item) {
 		return item._hoverImageURL;
@@ -189,7 +189,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setItemSelectedImageURL: function(item, imageURL) {
@@ -208,7 +208,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemSelectedImageURL: function(item) {
 		return item._selectedImageURL;
@@ -231,7 +231,7 @@ var __prototype = {
 	 * Returns the disable state of the item.
 	 * 
 	 * @method public
-	 * @param string item Value of the item, or the item object.
+	 * @param String item Value of the item, or the item object.
 	 * @param boolean disabled Disable state to set.
 	 * @return void
 	 */
@@ -291,7 +291,7 @@ var __prototype = {
 	 * Returns the visibility state of the item.
 	 *
 	 * @method public
-	 * @param string item Value of the item or the item object.
+	 * @param String item Value of the item or the item object.
 	 * @return boolean The visibility state of the item.
 	 */
 	f_isItemVisible: function(item) {
@@ -307,7 +307,7 @@ var __prototype = {
 	 * Change the visibility state of the item.
 	 * 
 	 * @method public
-	 * @param string item Value of the item, or the item object.
+	 * @param String item Value of the item, or the item object.
 	 * @param boolean visible Visibility state.
 	 * @return void
 	 */
@@ -344,7 +344,7 @@ var __prototype = {
 	 * Returns the check state of the item.
 	 *
 	 * @method public
-	 * @param string item Value of the item, or the item object.
+	 * @param String item Value of the item, or the item object.
 	 * @return boolean The check state.
 	 */
 	f_isItemChecked: function(item) {
@@ -358,7 +358,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string item Value of the item, or the item object.
+	 * @param String item Value of the item, or the item object.
 	 * @param boolean checked
 	 * @return void
 	 */
@@ -426,7 +426,7 @@ var __prototype = {
 	 * Returns the item associated to the specified value.
 	 * 
 	 * @method public
-	 * @param string value Value of an item.
+	 * @param String value Value of an item.
 	 * @return Object Item associated with the value.
 	 */
 	f_getItemByValue: function(value) {
@@ -443,7 +443,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string item
+	 * @param String item
 	 * @return any
 	 */
 	f_getItemValue: function(item) {
@@ -452,7 +452,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return string
+	 * @return String
 	 */
 	f_getItemAccessKey: function(item) {
 		return item._accessKey;
@@ -468,7 +468,7 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param Object item
-	 * @return string Group name
+	 * @return String Group name
 	 */
 	f_getItemGroupName: function(item) {
 		return item._groupName;
@@ -526,8 +526,8 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item Item object.
-	 * @param string key Key of property.
-	 * @return string Value associated to the specified property.
+	 * @param String key Key of property.
+	 * @return String Value associated to the specified property.
 	 */
 	f_getItemClientData: function(item, key) {
 		f_core.Assert(item._dates!==undefined, "fa_items.f_getItemClientData: Invalid item parameter '"+item+"'.");

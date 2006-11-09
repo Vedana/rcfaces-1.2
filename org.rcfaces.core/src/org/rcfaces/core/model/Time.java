@@ -134,4 +134,9 @@ public class Time extends DefaultAdaptable implements Serializable, Comparable {
             return false;
         return true;
     }
+
+    public String toString() {
+        return "[Time " + getHours() + ":" + getMinutes() + ":" + getSeconds()
+                + "." + getMillis() + "]";
+    }
 }

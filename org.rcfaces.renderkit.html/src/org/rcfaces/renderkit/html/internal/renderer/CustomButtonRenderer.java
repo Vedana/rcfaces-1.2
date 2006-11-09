@@ -1,0 +1,253 @@
+/*
+ * $Id$
+ */
+package org.rcfaces.renderkit.html.internal.renderer;
+
+import java.io.IOException;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.render.RenderKitFactory;
+
+import org.rcfaces.core.component.CustomButtonComponent;
+import org.rcfaces.core.component.capability.ISelectedCapability;
+import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
+import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.border.AbstractHtmlBorderRenderer;
+import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
+import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
+
+/**
+ * 
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
+ */
+public class CustomButtonRenderer extends AbstractCssRenderer {
+    private static final String REVISION = "$Revision$";
+
+    private static final String BORDER_RENDERER = "camelia.customButton.borderRenderer";
+
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.CUSTOM_BUTTON;
+    }
+
+    public void encodeBegin(IComponentWriter writer) throws WriterException {
+
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
+        CustomButtonComponent component = (CustomButtonComponent) componentRenderContext
+                .getComponent();
+
+        IHtmlBorderRenderer borderRenderer = null;
+        String borderType = null;
+        if (component.isBorder(facesContext)) {
+            borderType = component.getBorderType(facesContext);
+
+            IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
+                    .getInstance(facesContext).getBorderRenderersRegistry();
+
+            borderRenderer = (IHtmlBorderRenderer) borderRendererRegistry
+                    .getBorderRenderer(facesContext,
+                            RenderKitFactory.HTML_BASIC_RENDER_KIT, component
+                                    .getFamily(), component.getRendererType(),
+                            borderType);
+        }
+
+        String className = getStyleClassName(component);
+
+        boolean disabled = component.isDisabled(facesContext);
+
+        String width = component.getWidth(facesContext);
+        String height = component.getHeight(facesContext);
+
+        boolean selected = false;
+        if (component instanceof ISelectedCapability) {
+            ISelectedCapability selectedCapability = (ISelectedCapability) component;
+
+            selected = selectedCapability.isSelected();
+        }
+
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        htmlWriter.startElement("DIV");
+
+        if (borderRenderer != null) {
+            htmlWriter.writeAttribute("v:borderType", borderType);
+        }
+
+        String classSuffix = null;
+        if (disabled) {
+            classSuffix = "_disabled";
+        }
+
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter, classSuffix, CSS_ALL_MASK);
+
+        if (classSuffix != null) {
+            htmlWriter.writeAttribute("v:className", className);
+        }
+
+        encodeAttributes(htmlWriter, component);
+
+        if (borderRenderer != null) {
+            borderRenderer.initialize(htmlWriter, width, height, 1, 1,
+                    disabled, selected);
+
+            borderRenderer.startComposite(htmlWriter);
+
+            componentRenderContext
+                    .setAttribute(BORDER_RENDERER, borderRenderer);
+        }
+        /*
+         * Le javascript s'occupe de ca ! if (button == false && imageJavascript ==
+         * false) { htmlWriter.writeAttribute("href", "javascript:void(0)"); }
+         */
+
+        htmlWriter.enableJavaScript();
+    }
+
+    public boolean getRendersChildren() {
+        return true;
+    }
+
+    public void encodeChildren(FacesContext facesContext, UIComponent component)
+            throws IOException {
+
+        IRenderContext renderContext = getRenderContext(facesContext);
+
+        IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
+                .getComponentWriter(facesContext);
+
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        IHtmlBorderRenderer borderRenderer = (IHtmlBorderRenderer) componentRenderContext
+                .getAttribute(BORDER_RENDERER);
+
+        if (borderRenderer == null) {
+            htmlWriter.startElement("A");
+
+            htmlWriter.writeClass(getLinkClassName(htmlWriter));
+
+            encodeChildren(htmlWriter);
+
+            htmlWriter.endElement("A");
+
+            return;
+        }
+
+        borderRenderer.startRow(htmlWriter);
+
+        try {
+            borderRenderer.startChild(htmlWriter,
+                    AbstractHtmlBorderRenderer.TD_TEXT);
+            try {
+                htmlWriter.startElement("A");
+
+                htmlWriter
+                        .writeAttribute("class", getLinkClassName(htmlWriter));
+
+                encodeChildren(htmlWriter);
+
+                htmlWriter.endElement("A");
+
+            } finally {
+                borderRenderer.endChild(htmlWriter);
+            }
+
+        } finally {
+            borderRenderer.endRow(htmlWriter);
+        }
+
+    }
+
+    protected String getLinkClassName(IHtmlWriter htmlWriter) {
+        return getMainStyleClassName() + "_link";
+    }
+
+    protected void encodeChildren(IComponentWriter writer)
+            throws WriterException {
+
+        writer.flush();
+
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+
+        ComponentTools.encodeChildrenRecursive(componentRenderContext
+                .getFacesContext(), componentRenderContext.getComponent());
+    }
+
+    public void encodeEnd(IComponentWriter writer) throws WriterException {
+
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+
+        IHtmlBorderRenderer borderRenderer = (IHtmlBorderRenderer) componentRenderContext
+                .getAttribute(BORDER_RENDERER);
+
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        if (borderRenderer != null) {
+            borderRenderer.endComposite(htmlWriter);
+        }
+
+        htmlWriter.endElement("DIV");
+
+        super.encodeEnd(htmlWriter);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#encodeJavaScript(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
+     * 
+     * protected void encodeJavaScript(IJavaScriptWriter htmlWriter) throws
+     * WriterException { super.encodeJavaScript(htmlWriter);
+     * 
+     * IComponentRenderContext componentContext = htmlWriter
+     * .getComponentRenderContext();
+     * 
+     * FacesContext facesContext = componentContext.getFacesContext(); }
+     */
+
+    protected String getActionEventName(INameSpace nameSpace) {
+        return nameSpace.getSelectionEventName();
+    }
+
+    protected void encodeAttributes(IHtmlWriter htmlWriter,
+            CustomButtonComponent component) throws WriterException {
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        if (component.isDisabled(facesContext)) {
+            htmlWriter.writeAttribute("v:disabled", "true");
+        }
+
+        if (component.isReadOnly(facesContext)) {
+            htmlWriter.writeAttribute("v:readOnly", "true");
+        }
+
+        Object value = component.getValue();
+        if (value != null) {
+            String svalue = ValuesTools.convertValueToString(value, component,
+                    facesContext);
+
+            if (svalue != null) {
+                htmlWriter.writeAttribute("v:value", svalue);
+            }
+        }
+    }
+}

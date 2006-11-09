@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_dateEntry extends f_component, fa_calendarPopup, fa_compositeEntry, fa_required
+ * @class public f_dateEntry extends f_compositeNumEntry, fa_calendarPopup
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -14,43 +14,52 @@ var __prototype={
 	f_dateEntry: function() {
 		this.f_super(arguments);
 
-		this._dateFormat=f_core.GetAttribute(this, "v:dateFormat");
-
 		this._showOnFocus=f_core.GetAttribute(this, "v:showOnFocus");
-
-		this._autoCompletion=f_core.GetAttribute(this, "v:autoCompletion");
 		
 		var twoDigitYearStart=f_core.GetAttribute(this, "v:twoDigitYearStart");
 		if (twoDigitYearStart) {
 			this._twoDigitYearStart=f_dateFormat.ParseStringDate(twoDigitYearStart);
 		}
-		
-		var validatorParams=f_core.GetAttribute(this, "v:clientValidatorParams");
-		if (validatorParams) {
-			this._validatorParams=f_core.ParseParameters(validatorParams);
-		}
-		
-		if (window.f_messageContext) {
-			f_core.AddCheckListener(this, this);	
-		}
 	},
 	/*
 	f_finalize: function() {
 		// this._twoDigitYearStart=undefined;  // Date
-		// this._dateFormat=undefined; // String
 		// this._showOnFocus=undefined; // boolean
-		// this._validatorParams=undefined; // Map<String, String>
-		
+		// this._minDate=undefined; // Date
+		// this._maxDate=undefined; // Date
+				
 		this.f_super(arguments);
 	},
 	*/
+	fa_initializeInput: function(input) {
+		this.f_super(arguments, input);
+
+		if (input._min===undefined) {
+			input._min=0;
+		}
+
+	},
 
 	/**
 	 * @method public
 	 * @return Date
 	 */
 	f_getMinDate: function() {
-		return this.f_getDate(fa_compositeEntry.MIN_TYPE);
+		var minDate=this._minDate;
+		if (minDate!==undefined) {
+			return minDate;
+		}
+		
+		minDate=f_core.GetAttribute(this, "v:minDate");
+		if (minDate) {
+			minDate=f_dateFormat.ParseStringDate(minDate);
+		} else {
+			minDate=null;
+		}
+		
+		this._minDate=minDate;
+
+		return minDate;
 	},
 
 	/**
@@ -58,7 +67,21 @@ var __prototype={
 	 * @return Date
 	 */
 	f_getMaxDate: function() {
-		return this.f_getDate(fa_compositeEntry.MAX_TYPE);
+		var maxDate=this._maxDate;
+		if (maxDate!==undefined) {
+			return maxDate;
+		}
+		
+		maxDate=f_core.GetAttribute(this, "v:maxDate");
+		if (maxDate) {
+			maxDate=f_dateFormat.ParseStringDate(maxDate);
+		} else {
+			maxDate=null;
+		}
+		
+		this._maxDate=maxDate;
+
+		return maxDate;
 	},
 	/**
 	 * @method public
@@ -86,22 +109,14 @@ var __prototype={
 			var max=input._max;
 			
 			var v;
-			switch(dateType) {
-			case fa_compositeEntry.MIN_TYPE:
-				v=min;
-				break;
-				
-			case fa_compositeEntry.MAX_TYPE:
-				v=max;
-				break;
-				
+			switch(dateType) {				
 			case fa_compositeEntry.DEFAULT_TYPE:
 				v=input._default;
 				break;
 
 			default:
 				v=parseInt(input.value, 10);
-				if (isNaN(v)) {
+				if (isNaN(v) || (min!==undefined && v<min) || (max!==undefined && v>max)) {
 					v=-1;
 				}
 			}
@@ -193,7 +208,7 @@ var __prototype={
 				continue;
 			}
 			
-			v=fa_compositeEntry.FormatNumber(v, maxLength);
+			v=this.fa_formatNumber(input, v, maxLength);
 			if (v!=input.value) {
 				input.value=v;
 			}
@@ -248,7 +263,7 @@ var __prototype={
 			// ou le champ est requis et la date est invalide 
 
 		} else {
-			// La date est valide !
+			// La date est valide !?
 			var t=date.getTime();
 			
 			var d2=new Date(t);
@@ -277,31 +292,9 @@ var __prototype={
 			return;
 		}
 		
-		var summary=null;
-		var detail=null;
-		var severity=f_messageObject.SEVERITY_ERROR;
 		
-		var validatorParams=this._validatorParams;
-		if (validatorParams) {
-			summary=validatorParams[errorMessage+".summary"];
-			if (summary) {
-				detail=validatorParams[errorMessage+".detail"];
-			} else {
-				summary=validatorParams[errorMessage];
-			}			
-		}
-		
-		if (!summary) {
-			var resourceBundle=f_resourceBundle.Get(f_dateEntry);
-			
-			summary=resourceBundle.f_get(errorMessage.toUpperCase().replace(/\./g, "_")+"_SUMMARY");
-		}
-
-		var message=new f_messageObject(severity, summary, detail);
-		messageContext.f_addMessageObject(this, message);
-		
-		return false;
+		this.f_addErrorMessage(f_dateEntry, errorMessage);
 	}
 }
  
-var f_dateEntry=new f_class("f_dateEntry", null, null, __prototype, f_component, fa_calendarPopup, fa_compositeEntry, fa_required);
+var f_dateEntry=new f_class("f_dateEntry", null, null, __prototype, f_compositeNumEntry, fa_calendarPopup);

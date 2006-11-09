@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.6  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.5  2006/10/04 12:31:43  oeuillot
  * Stabilisation
  *
@@ -119,10 +122,10 @@ import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
-import org.rcfaces.renderkit.html.internal.DataGridRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
@@ -146,6 +149,10 @@ public class DataGridService extends AbstractHtmlService {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
                 facesContext).getServicesRegistry();
+        if (serviceRegistry == null) {
+            // Designer mode
+            return null;
+        }
 
         return (DataGridService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
@@ -294,7 +301,7 @@ public class DataGridService extends AbstractHtmlService {
                     "GetElementById").writeString(componentId).writeln(
                     ", document);");
 
-            jsWriter.writeMethodCall("_cancelServerRequest").writeInt(rowIndex)
+            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeInt(rowIndex)
                     .write(");");
 
         } catch (IOException ex) {

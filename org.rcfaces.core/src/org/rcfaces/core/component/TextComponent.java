@@ -172,6 +172,26 @@ public class TextComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
+	public final String getType() {
+		return getType(null);
+	}
+
+	public final String getType(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TYPE, facesContext);
+	}
+
+	public final void setType(String type) {
+		engine.setProperty(Properties.TYPE, type);
+	}
+
+	public final void setType(ValueBinding type) {
+		engine.setProperty(Properties.TYPE, type);
+	}
+
+	public final boolean isTypeSetted() {
+		return engine.isPropertySetted(Properties.TYPE);
+	}
+
 	public void release() {
 		super.release();
 	}

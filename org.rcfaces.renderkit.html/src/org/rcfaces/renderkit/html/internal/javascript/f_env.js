@@ -78,7 +78,7 @@ var __static = {
 	
 	/**
 	 * @method public static final 
-	 * @param string name Name of the key.
+	 * @param String name Name of the key.
 	 * @param any val Value to associate to the specified key
 	 * @return any Previous value.
 	 */
@@ -92,7 +92,7 @@ var __static = {
 	
 	/**
 	 * @method public static final 
-	 * @param string name
+	 * @param String name
 	 * @param any defaultValue
 	 * @return any Value associated to name, or specified default value.
 	 */
@@ -109,7 +109,7 @@ var __static = {
 	
 	/**
 	 * @method public static final 
-	 * @param string name
+	 * @param String name
 	 * @return any Previous value associated to specified name.
 	 */
 	Delete: function(name) {

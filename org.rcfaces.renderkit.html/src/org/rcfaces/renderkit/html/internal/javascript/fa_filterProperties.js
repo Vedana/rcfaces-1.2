@@ -52,8 +52,8 @@ var __prototype = {
 	 * Specify some properties of a filter expression.
 	 * 
 	 * @method public
-	 * @param string name1
-	 * @param string value1
+	 * @param String name1
+	 * @param String value1
 	 * @return void
 	 */
 	f_setFilterProperty: function(name1, value1) {
@@ -105,6 +105,13 @@ var __prototype = {
 		
 		this.fa_updateFilterProperties(myProps);
 	},
+	
+	/**
+	 * @method hidden abstract
+	 * @param String message
+	 * @return void
+	 */
+	fa_cancelFilterRequest: f_class.ABSTRACT,
 	
 	/**
 	 * @method protected abstract

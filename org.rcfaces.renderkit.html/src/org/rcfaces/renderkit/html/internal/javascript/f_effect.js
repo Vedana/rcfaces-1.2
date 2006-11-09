@@ -19,7 +19,7 @@ var __static = {
 	 * Declare an effect.
 	 *
 	 * @method hidden static final
-	 * @param string name Name of effect.
+	 * @param String name Name of effect.
 	 * @param f_class clazz Class of effect to instanciate.
 	 * @return void
 	 */
@@ -43,7 +43,7 @@ var __static = {
 	 * Create an effect found by its name !
 	 *
 	 * @method public static final
-	 * @param string name Name of the effect.
+	 * @param String name Name of the effect.
 	 * @param HTMLElement component Component which be affected by the effect.
 	 * @return f_effect An instance of f_effect class.
 	 */

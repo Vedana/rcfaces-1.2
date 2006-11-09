@@ -20,12 +20,17 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 	private String focusStyleClass;
 	private String selectionListeners;
 	private String readOnly;
+	private String attributesLocale;
 	private String autoCompletion;
 	private String time;
 	private String minTime;
 	private String defaultTime;
 	private String maxTime;
 	private String timeFormat;
+	private String hourStep;
+	private String minuteStep;
+	private String secondStep;
+	private String millisStep;
 	public String getComponentType() {
 		return TimeEntryComponent.COMPONENT_TYPE;
 	}
@@ -78,6 +83,14 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		this.readOnly = readOnly;
 	}
 
+	public final String getAttributesLocale() {
+		return attributesLocale;
+	}
+
+	public final void setAttributesLocale(String attributesLocale) {
+		this.attributesLocale = attributesLocale;
+	}
+
 	public final String getAutoCompletion() {
 		return autoCompletion;
 	}
@@ -126,6 +139,38 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		this.timeFormat = timeFormat;
 	}
 
+	public final String getHourStep() {
+		return hourStep;
+	}
+
+	public final void setHourStep(String hourStep) {
+		this.hourStep = hourStep;
+	}
+
+	public final String getMinuteStep() {
+		return minuteStep;
+	}
+
+	public final void setMinuteStep(String minuteStep) {
+		this.minuteStep = minuteStep;
+	}
+
+	public final String getSecondStep() {
+		return secondStep;
+	}
+
+	public final void setSecondStep(String secondStep) {
+		this.secondStep = secondStep;
+	}
+
+	public final String getMillisStep() {
+		return millisStep;
+	}
+
+	public final void setMillisStep(String millisStep) {
+		this.millisStep = millisStep;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (TimeEntryComponent.COMPONENT_TYPE==getComponentType()) {
@@ -135,12 +180,17 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 			LOG.debug("  autoTab='"+autoTab+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  attributesLocale='"+attributesLocale+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
 			LOG.debug("  time='"+time+"'");
 			LOG.debug("  minTime='"+minTime+"'");
 			LOG.debug("  defaultTime='"+defaultTime+"'");
 			LOG.debug("  maxTime='"+maxTime+"'");
 			LOG.debug("  timeFormat='"+timeFormat+"'");
+			LOG.debug("  hourStep='"+hourStep+"'");
+			LOG.debug("  minuteStep='"+minuteStep+"'");
+			LOG.debug("  secondStep='"+secondStep+"'");
+			LOG.debug("  millisStep='"+millisStep+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -200,6 +250,16 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (attributesLocale != null) {
+			if (isValueReference(attributesLocale)) {
+				ValueBinding vb = application.createValueBinding(attributesLocale);
+
+				component.setAttributesLocale(vb);
+			} else {
+				component.setAttributesLocale(attributesLocale);
+			}
+		}
+
 		if (autoCompletion != null) {
 			if (isValueReference(autoCompletion)) {
 				ValueBinding vb = application.createValueBinding(autoCompletion);
@@ -253,6 +313,42 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 				component.setTimeFormat(timeFormat);
 			}
 		}
+
+		if (hourStep != null) {
+			if (isValueReference(hourStep)) {
+				ValueBinding vb = application.createValueBinding(hourStep);
+				component.setHourStep(vb);
+			} else {
+				component.setHourStep(hourStep);
+			}
+		}
+
+		if (minuteStep != null) {
+			if (isValueReference(minuteStep)) {
+				ValueBinding vb = application.createValueBinding(minuteStep);
+				component.setMinuteStep(vb);
+			} else {
+				component.setMinuteStep(minuteStep);
+			}
+		}
+
+		if (secondStep != null) {
+			if (isValueReference(secondStep)) {
+				ValueBinding vb = application.createValueBinding(secondStep);
+				component.setSecondStep(vb);
+			} else {
+				component.setSecondStep(secondStep);
+			}
+		}
+
+		if (millisStep != null) {
+			if (isValueReference(millisStep)) {
+				ValueBinding vb = application.createValueBinding(millisStep);
+				component.setMillisStep(vb);
+			} else {
+				component.setMillisStep(millisStep);
+			}
+		}
 	}
 
 	public void release() {
@@ -262,12 +358,17 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		focusStyleClass = null;
 		selectionListeners = null;
 		readOnly = null;
+		attributesLocale = null;
 		autoCompletion = null;
 		time = null;
 		minTime = null;
 		defaultTime = null;
 		maxTime = null;
 		timeFormat = null;
+		hourStep = null;
+		minuteStep = null;
+		secondStep = null;
+		millisStep = null;
 
 		super.release();
 	}

@@ -5,6 +5,7 @@ package org.rcfaces.core.internal.tools;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -51,7 +52,8 @@ public class TimeTools {
     }
 
     private static DateFormat getShortTimeFormat(UIComponent component) {
-        return LocaleTools.getDefaultFormat(component, LocaleTools.TIME_TYPE);
+        return (DateFormat) LocaleTools.getDefaultFormat(component,
+                LocaleTools.TIME_TYPE);
     }
 
     public static String getDefaultTimeFormatPattern(Locale locale) {
@@ -61,7 +63,7 @@ public class TimeTools {
     public static String normalizeTimeFormat(
             IComponentRenderContext componentRenderContext, String format) {
         return LocaleTools.normalizeFormat(componentRenderContext, format,
-                LocaleTools.TIME_TYPE);
+                LocaleTools.TIME_TYPE, Collections.EMPTY_MAP);
     }
 
 }

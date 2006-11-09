@@ -91,7 +91,7 @@ var __prototype={
 	},
 	/**
 	 * @method public
-	 * @param string requestId Request identifier. (returned by f_asyncCall() )
+	 * @param String requestId Request identifier. (returned by f_asyncCall() )
 	 * @return number State of the request, or -1 if the request is unknown !
 	 * @see #f_asyncCall
 	 */
@@ -110,14 +110,14 @@ var __prototype={
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getServiceId: function() {
 		return this._serviceId;
 	},
 	/**
 	 * @method hidden
-	 * @return string
+	 * @return String
 	 */
 	_allocateRequestId: function() {
 		return (f_service._Id++)+"."+(new Date().getTime())*Math.random();
@@ -127,7 +127,7 @@ var __prototype={
 	 * @param function resultCallback Callback which will be called, when the result has been received.
 	 * @param any parameter Parameters of the request.
 	 * @param f_progressMonitor progressMonitor Progress monitor associated to the call.
-	 * @return string Request identifier.
+	 * @return String Request identifier.
 	 */
 	f_asyncCall: function(resultCallback, parameter, progressMonitor) {
 		var requestId=this._allocateRequestId();
@@ -410,11 +410,16 @@ var __prototype={
 	},
 	/**
 	 * @method public
-	 * @param string id Identifier of component.
+	 * @param String id Identifier of component.
 	 * @return HTMLElement
 	 */
 	f_findComponent: function(id) {
 		return fa_namingContainer.FindComponents(this, arguments);
+	},
+	/**
+	 * @method hidden
+	 */
+	fa_cancelFilterRequest: function() {
 	}
 }
  

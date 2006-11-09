@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
 
@@ -43,6 +44,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     private Locale userLocale;
 
+    private boolean designerMode;
+
     protected AbstractProcessContext(FacesContext facesContext) {
         this.facesContext = facesContext;
 
@@ -56,6 +59,9 @@ public abstract class AbstractProcessContext implements IProcessContext {
         }
 
         this.servletPath = servletPath;
+
+        this.designerMode = RcfacesContext.getCurrentInstance()
+                .isDesignerMode();
     }
 
     public final FacesContext getFacesContext() {
@@ -68,6 +74,10 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     public boolean getProfilerMode() {
         return false;
+    }
+
+    public boolean isDesignerMode() {
+        return designerMode;
     }
 
     public final Locale getUserLocale() {

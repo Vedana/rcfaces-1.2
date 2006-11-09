@@ -16,8 +16,8 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 
 	private String minimum;
 	private String maximum;
-	private String step;
 	private String cycleValue;
+	private String step;
 	public String getComponentType() {
 		return SpinnerComponent.COMPONENT_TYPE;
 	}
@@ -38,20 +38,20 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 		this.maximum = maximum;
 	}
 
-	public final String getStep() {
-		return step;
-	}
-
-	public final void setStep(String step) {
-		this.step = step;
-	}
-
 	public final String getCycleValue() {
 		return cycleValue;
 	}
 
 	public final void setCycleValue(String cycleValue) {
 		this.cycleValue = cycleValue;
+	}
+
+	public final String getStep() {
+		return step;
+	}
+
+	public final void setStep(String step) {
+		this.step = step;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -61,8 +61,8 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 			}
 			LOG.debug("  minimum='"+minimum+"'");
 			LOG.debug("  maximum='"+maximum+"'");
-			LOG.debug("  step='"+step+"'");
 			LOG.debug("  cycleValue='"+cycleValue+"'");
+			LOG.debug("  step='"+step+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -92,15 +92,6 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 			}
 		}
 
-		if (step != null) {
-			if (isValueReference(step)) {
-				ValueBinding vb = application.createValueBinding(step);
-				component.setStep(vb);
-			} else {
-				component.setStep(getDouble(step));
-			}
-		}
-
 		if (cycleValue != null) {
 			if (isValueReference(cycleValue)) {
 				ValueBinding vb = application.createValueBinding(cycleValue);
@@ -109,13 +100,22 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 				component.setCycleValue(getBool(cycleValue));
 			}
 		}
+
+		if (step != null) {
+			if (isValueReference(step)) {
+				ValueBinding vb = application.createValueBinding(step);
+				component.setStep(vb);
+			} else {
+				component.setStep(step);
+			}
+		}
 	}
 
 	public void release() {
 		minimum = null;
 		maximum = null;
-		step = null;
 		cycleValue = null;
+		step = null;
 
 		super.release();
 	}

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.2  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.1  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -188,12 +191,12 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
 
             bootSet = st.nextToken();
 
-            String parameterValue = config
-                    .getInitParameter(getParameterPrefix() + SET_PREFIX + "."
-                            + bootSet);
+            String bootSetName = getParameterPrefix() + SET_PREFIX + "."
+                    + bootSet;
+            String parameterValue = config.getInitParameter(bootSetName);
             if (parameterValue == null) {
-                throw new ServletException(
-                        "Set specified by BOOT_SET is not defined !");
+                throw new ServletException("Set specified by " + bootSetName
+                        + " is not defined !");
             }
 
             IHierarchicalRepository.ISet set = initializeModuleSet(bootSet,

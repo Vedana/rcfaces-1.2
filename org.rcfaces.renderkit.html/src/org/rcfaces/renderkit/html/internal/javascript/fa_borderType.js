@@ -56,7 +56,7 @@ var __prototype = {
 	 * Returns the border type name.
 	 *
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getBorderType: function() {
 		if (this._borderType!==undefined) {

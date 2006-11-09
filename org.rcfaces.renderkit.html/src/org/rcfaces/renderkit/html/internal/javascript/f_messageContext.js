@@ -130,24 +130,18 @@ f_messageContext.prototype.f_listMessages=function(componentId, globalOnly) {
 /**
  * @method public
  *
- * @param HTMLElement componentOrId Component to add the message, or its id.
+ * @param HTMLElement componentOrId Component to add the message.
  * @param f_messageObject message
  * @param hidden boolean performEvent
  * @return void
  */
-f_messageContext.prototype.f_addMessageObject=function(componentOrId, message, performEvent) {	
-	f_core.Assert(componentOrId===null || componentOrId===false || typeof(componentOrId)=="string" || componentOrId.id, "Component parameter must be a component or an id !");
-	f_core.Assert(typeof(componentOrId)!="string" || componentOrId.length, "Parameter componentId is invalid ! ('"+componentOrId+"')"); 
+f_messageContext.prototype.f_addMessageObject=function(component, message, performEvent) {	
+	f_core.Assert(component===null || component===false || component.id, "Component parameter must be a component or an id !");
+	f_core.Assert(typeof(component)!="string" || component.length, "Parameter componentId is invalid ! ('"+component+"')"); 
 
-	var id;
-	if (typeof(componentOrId)=="string") {
-		id=fa_namingContainer.ComputeComponentId(this._form, componentOrId);
-
-	} else if (componentOrId && componentOrId.id) {
-		id=componentOrId.id;
-		
-	} else {
-		id=componentOrId;
+	var id=component;
+	if (component && component.id) {
+		id=component.id;
 	}
 
 	var l=this._messages;
@@ -184,17 +178,16 @@ f_messageContext.prototype.f_addMessageObject=function(componentOrId, message, p
 /**
  * @method public
  *
- * @param HTMLElement component Component to add the message, or its id, or an array of component or ids.
+ * @param HTMLElement component Component to add the message, or an array of components.
  * @param number severity
- * @param string summary
- * @param string detail
+ * @param String summary
+ * @param String detail
  * @return f_messageObject
  */
 f_messageContext.prototype.f_addMessage=function(component, severity, summary, detail) {
 	f_core.Assert(typeof(severity)=="number", "Bad type of severity !");
 	f_core.Assert(summary, "Summary is null !");
-	f_core.Assert(component===null || (component instanceof Array) || typeof(component)=="string" || component.id, "Component parameter must be a component or an id or null !");
-	f_core.Assert(typeof(component)!="string" || component.length, "Parameter component (string) is invalid ! ('"+component+"')"); 
+	f_core.Assert(component===null || (component instanceof Array) || component.id, "Component parameter must be a component or an id or null !");
 	
 	var message=new f_messageObject(severity, summary, detail);
 	
@@ -202,7 +195,7 @@ f_messageContext.prototype.f_addMessage=function(component, severity, summary, d
 		for(var i=0;i<component.length;i++) {
 			var cmp=component[i];
 			
-			f_core.Assert(cmp===null || typeof(cmp)=="string" || cmp.id, "Component parameter #"+i+" must be a component or an id or null !");
+			f_core.Assert(cmp===null || cmp.id, "Component parameter #"+i+" must be a component or null !");
 
 			this.f_addMessageObject(cmp, message);
 		}
@@ -218,15 +211,16 @@ f_messageContext.prototype.f_addMessage=function(component, severity, summary, d
 /**
  * @method public
  * @param HTMLElement component (or an id)
- * @return boolean 
+ * @return boolean Returns <code>true</code> if some messages have been removed.
  */
-f_messageContext.prototype.f_clearMessages=function(component) {
+f_messageContext.prototype.f_clearMessages=function(component, component2) {
 	var l=this._messages;
 	if (!l) {
+		f_core.Debug(f_messageContext, "Nothing to clear.");
 		return false;
 	}
 	
-	if (component===undefined) {
+	if (component===undefined) {		
 		this._messages=undefined;
 
 		f_core.Info(f_messageContext, "Clear all messages.");
@@ -235,23 +229,33 @@ f_messageContext.prototype.f_clearMessages=function(component) {
 		return true;
 	}
 	
-	var componentId=component;
-	if (component && component.id) {
-		componentId=component.id;
+	var changed=false;
+	for(var i=0;i<arguments.length;i++) {
+		var componentId=arguments[i];
+		if (componentId===null) {
+			componentId=f_messageContext._GLOBAL_COMPONENT_ID;
+		} else {
+			componentId=componentId.id;			
+		}
 		
-	} else if (component===null) {
-		componentId=f_messageContext._GLOBAL_COMPONENT_ID;
+		f_core.Assert(typeof(componentId)=="string", "f_messageContext.f_clearMessages: Invalid parameter #"+i+" ("+arguments[i]+").");
+
+		var l2=l[componentId];
+		if (!l2) {
+			f_core.Debug(f_messageContext, "Nothing to clear for component '"+componentId+"'.");
+			continue;
+		}
+		
+		l[componentId]=undefined;
+		changed=true;
+	
+		f_core.Info(f_messageContext, "Clear "+(l2.length)+" messages associated to the component '"+componentId+"'.");
 	}
 	
-	var l2=l[componentId];
-	if (!l2) {
+	if (!changed) {
 		return false;
 	}
 	
-	l[componentId]=undefined;
-
-	f_core.Info(f_messageContext, "Clear message of component '"+componentId+"'.");
-
 	this._fireMessageEvent();
 	return true;
 }

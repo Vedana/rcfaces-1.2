@@ -48,7 +48,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public 
-	 * @param string value
+	 * @param String value
 	 * @return Object The item object or <code>null</code> if the item is not found.
 	 */
 	f_getItemByValue: function(value) {
@@ -70,7 +70,7 @@ var __prototype = {
 	/**
 	 * @method public 
 	 * @param hidden boolean byIndex Returns the index of the item if setted to <code>true</code>.
-	 * @return string Value, or index of the item.
+	 * @return String Value, or index of the item.
 	 */
 	f_getValue: function(byIndex) {
 		var items = this.options;
@@ -86,7 +86,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public 
-	 * @param string val Value associated to an item. (if val is a number, val specifies the index of the item)
+	 * @param String val Value associated to an item. (if val is a number, val specifies the index of the item)
 	 * @param hidden boolean byIndex Select the item by index instead of value.
 	 * @param hidden boolean deselectOther Deselect not specified items.
 	 * @return boolean True is success. (Item has been found !)
@@ -140,7 +140,7 @@ var __prototype = {
 	/**
 	 * Clear the selection.
 	 *
-	 * @methid public
+	 * @method public
 	 * @return void
 	 */
 	f_clearSelection: function() {
@@ -236,13 +236,13 @@ var __prototype = {
 	
 	fa_updateFilterProperties: function() {
 		this.f_appendCommand(function(combo) {			
-			combo._callServer(0);
+			combo._callServer();
 		});
 	},
 	/**
 	 * @method private
 	 */
-	_callServer: function(firstIndex, cursorIndex) {
+	_callServer: function() {
 		if (!window.f_httpRequest) {
 			f_core.Error(f_combo, "Class f_httpRequest is not defined !");
 			return;
@@ -255,7 +255,7 @@ var __prototype = {
 			}
 		}
 		
-		f_core.Info(f_combo, "Width="+w);
+		// f_core.Info(f_combo, "Width="+w);
 		
 		if (!w || w=="auto") {
 			if (!this._oldWidth) {
@@ -416,11 +416,11 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param boolean parent
-	 * @param string label
-	 * @param string value
+	 * @param String label
+	 * @param String value
 	 * @param optional boolean selected
 	 * @param optional boolean disabled
-	 * @param optional string description
+	 * @param optional String description
 	 */
 	f_appendItem: function(parent, label, value, selected, disabled, description) {
 		if (parent) {
@@ -555,6 +555,11 @@ var __prototype = {
 		}
 		
 		return fa_clientData.InitializeDataAttribute(item);
+	},
+	/**
+	 * @method hidden
+	 */
+	fa_cancelFilterRequest: function() {
 	}
 }
 

@@ -3,19 +3,18 @@
  */
 package org.rcfaces.core.model;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface IImagesSelectItem {
-	String getImageURL();
+    String getImageURL();
 
-	String getDisabledImageURL();
+    String getDisabledImageURL();
 
-	String getHoverImageURL();
+    String getHoverImageURL();
 
-	String getSelectedImageURL();
+    String getSelectedImageURL();
 
-	String getExpandedImageURL();
+    String getExpandedImageURL();
 }

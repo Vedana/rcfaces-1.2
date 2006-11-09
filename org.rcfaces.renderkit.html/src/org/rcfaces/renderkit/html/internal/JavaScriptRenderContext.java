@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.8  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.7  2006/10/13 18:04:38  oeuillot
  * Ajout de:
  * DateEntry
@@ -141,6 +144,7 @@ import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
+import org.rcfaces.renderkit.html.internal.renderer.MessagesRepository;
 import org.rcfaces.renderkit.html.internal.service.LogHtmlService;
 import org.rcfaces.renderkit.html.internal.taglib.InitializeTag;
 
@@ -599,12 +603,17 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
         boolean debugMode = processContext.getDebugMode();
         if (debugMode) {
-            writer.writeCall("f_core", "SetDebugMode").writeln("true);");
+            writer.writeCall("f_core", "SetDebugMode").writeln(");");
         }
 
         boolean profilerMode = processContext.getProfilerMode();
         if (profilerMode) {
-            writer.writeCall("f_core", "SetProfilerMode").writeln("true);");
+            writer.writeCall("f_core", "SetProfilerMode").writeln(");");
+        }
+
+        boolean designerMode = processContext.isDesignerMode();
+        if (designerMode) {
+            writer.writeCall("f_core", "SetDesignerMode").writeln(");");
         }
 
         String invalidBrowserURL = InitializeTag

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/13 18:04:38  oeuillot
  * Ajout de:
  * DateEntry
@@ -73,4 +76,46 @@ public interface IHtmlWriter extends ISgmlWriter {
     IHtmlWriter writeAccessKey(String accessKey) throws WriterException;
 
     IHtmlWriter writeTabIndex(int tabIndex) throws WriterException;
+
+    IHtmlWriter writeWidth(int width) throws WriterException;
+
+    IHtmlWriter writeWidth(String width) throws WriterException;
+
+    IHtmlWriter writeHeight(int height) throws WriterException;
+
+    IHtmlWriter writeFor(String id) throws WriterException;
+
+    ICssWriter writeStyle();
+
+    ICssWriter writeStyle(int size);
+
+    IHtmlWriter writeTitle(String title) throws WriterException;
+
+    IHtmlWriter writeChecked() throws WriterException;
+
+    IHtmlWriter writeCellSpacing(int cellSpacing) throws WriterException;
+
+    IHtmlWriter writeCellPadding(int cellPadding) throws WriterException;
+
+    IHtmlWriter writeAlign(String align) throws WriterException;
+
+    IHtmlWriter writeSrc(String url) throws WriterException;
+
+    IHtmlWriter writeMultiple() throws WriterException;
+
+    IHtmlWriter writeVAlign(String valign) throws WriterException;
+
+    IHtmlWriter writeHeight(String height) throws WriterException;
+
+    IHtmlWriter writeColSpan(int colspan) throws WriterException;
+
+    IHtmlWriter writeRowSpan(int rowspan) throws WriterException;
+
+    IHtmlWriter writeCols(int col) throws WriterException;
+
+    IHtmlWriter writeRows(int row) throws WriterException;
+
+    IHtmlWriter writeLabel(String text) throws WriterException;
+
+    IHtmlWriter writeSelected() throws WriterException;
 }

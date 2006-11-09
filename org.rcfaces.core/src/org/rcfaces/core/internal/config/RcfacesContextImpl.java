@@ -1,67 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.5  2006/10/13 18:04:51  oeuillot
- * Ajout de:
- * DateEntry
- * StyledMessage
- * MessageFieldSet
- * xxxxConverter
- * Adapter
- *
- * Revision 1.4  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.3  2006/09/05 08:57:21  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.2  2006/09/01 15:24:28  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.7  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.6  2006/07/18 17:06:31  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.5  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.4  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.3  2006/02/06 16:47:04  oeuillot
- * Renomme le logger commons.log en LOG
- * Ajout du composant focusManager
- * Renomme vfc-all.xml en repository.xml
- * Ajout de la gestion de __Vversion et __Llocale
- *
- * Revision 1.2  2005/12/22 11:48:08  oeuillot
- * Ajout de :
- * - JS:  calendar, locale, dataList, log
- * - Evenement User
- * - ClientData  multi-directionnel (+TAG)
- *
- * Revision 1.1  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
  */
 package org.rcfaces.core.internal.config;
 
@@ -96,12 +34,17 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.AdapterManagerImpl;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
-import org.rcfaces.core.internal.images.ImageOperationsRepositoryImpl;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessorRegistry;
+import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
+import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
+import org.rcfaces.core.internal.contentStorage.ContentStorageAccessorHandler;
+import org.rcfaces.core.internal.images.ImageContentAccessorHandlerImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
-import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
-import org.rcfaces.core.internal.rewriting.IResourceVersionHandler;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
+import org.rcfaces.core.internal.version.IResourceVersionHandler;
+import org.rcfaces.core.internal.version.ResourceVersionHandlerImpl;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
@@ -127,10 +70,14 @@ public class RcfacesContextImpl extends RcfacesContext implements
     private static final Package[] KERNEL_CONFIG_FILENAMES = new Package[] {
             RcfacesContext.class.getPackage(),
             RcfacesContextImpl.class.getPackage(),
-            AbstractURLRewritingProvider.class.getPackage(),
-            ImageOperationsRepositoryImpl.class.getPackage()
-    // HtmlRenderKit.class.getPackage()
-    };
+            AdapterManagerImpl.class.getPackage(),
+            ResourceVersionHandlerImpl.class.getPackage(),
+            ContentAccessorsRegistryImpl.class.getPackage(),
+            ImageContentAccessorHandlerImpl.class.getPackage(),
+            ContentAccessorsRegistryImpl.class.getPackage(),
+            ContentStorageAccessorHandler.class.getPackage() };
+
+    private static final String DESIGNER_MODE_PROPERTY = "com.vedana.nodus3.designer";
 
     private transient ServicesRegistryImpl servicesRegistry;
 
@@ -142,44 +89,61 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     private final Map attributes = new HashMap(32);
 
+    private transient IContentVersionHandler contentVersionHandler;
+
+    private transient IContentAccessorRegistry contentAccessorRegistry;
+
     private transient IResourceVersionHandler resourceVersionHandler;
 
     private transient String applicationVersion;
 
     private transient IAdapterManager adapterManager;
 
+    private transient IContentStorageEngine indirectContentRepository;
+
+    private boolean designerMode;
+
     public RcfacesContextImpl() {
     }
 
-    protected void initialize(ExternalContext externalContext) {
-        if (externalContext == null) {
-            externalContext = FacesContext.getCurrentInstance()
-                    .getExternalContext();
+    protected void initialize(FacesContext facesContext) {
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
         }
 
-        initializeRegistries(externalContext);
+        designerMode = facesContext.getExternalContext().getApplicationMap()
+                .containsKey(DESIGNER_MODE_PROPERTY);
+        if (designerMode) {
+            LOG.info("Designer MODE  detected.");
+        }
 
-        loadConfigs(externalContext);
+        initializeRegistries(null);
 
-        initializeConfigs(externalContext);
+        loadConfigs(facesContext);
+
+        initializeConfigs(facesContext);
     }
 
-    protected void initializeRegistries(ExternalContext externalContext) {
+    protected void initializeRegistries(FacesContext facesContext) {
 
-        LOG.debug("Initialize service registry");
-        servicesRegistry = createServicesRegistry();
+        if (designerMode) {
+            LOG.debug("Ignore service registry (designer mode)");
+
+            LOG.debug("Ignore clientValidators registry (designer mode)");
+
+        } else {
+            LOG.debug("Initialize service registry");
+            servicesRegistry = createServicesRegistry();
+
+            LOG.debug("Initialize clientValidators registry");
+            clientValidatorsRegistry = createClientValidatorsRegistry();
+        }
 
         LOG.debug("Initialize border renderers registry");
         borderRenderersRegistry = createBorderRenderersRegistry();
 
-        LOG.debug("Initialize clientValidators registry");
-        clientValidatorsRegistry = createClientValidatorsRegistry();
-
         LOG.debug("Initialize providers registry");
         providersRegistry = createProvidersRegistry();
-
-        LOG.debug("Initialize adapter manager");
-        adapterManager = createAdapterManager();
     }
 
     public final IServicesRegistry getServicesRegistry() {
@@ -259,7 +223,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return (Serializable) attributes.remove(property);
     }
 
-    private void loadConfigs(ExternalContext externalContext) {
+    private void loadConfigs(FacesContext facesContext) {
         LOG.info("Loading rcfaces config ...");
 
         Digester digester = new Digester();
@@ -321,6 +285,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
                 }
             }
 
+            ExternalContext externalContext = facesContext.getExternalContext();
+
             String configFilenames = externalContext
                     .getInitParameter(CAMELIA_CONFIG_FILES_PARAMETER);
 
@@ -360,7 +326,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
         loadConfigurations(digester, urls);
 
-        completeConfiguration(urls);
+        loadProvidersConfiguration(facesContext, urls);
 
         LOG.info("Rcfaces config loaded.");
     }
@@ -419,15 +385,20 @@ public class RcfacesContextImpl extends RcfacesContext implements
     }
 
     private void configureRules(Digester digester) {
-        ((ServicesRegistryImpl) getServicesRegistry()).configureRules(digester);
-        ((ClientValidatorsRegistryImpl) getClientValidatorsRegistry())
-                .configureRules(digester);
+        if (designerMode == false) {
+            ((ServicesRegistryImpl) getServicesRegistry())
+                    .configureRules(digester);
+            ((ClientValidatorsRegistryImpl) getClientValidatorsRegistry())
+                    .configureRules(digester);
+        }
+
         ((ProvidersRegistry) getProvidersRegistry()).configureRules(digester);
         ((BorderRenderersRegistryImpl) getBorderRenderersRegistry())
                 .configureRules(digester);
     }
 
-    private void completeConfiguration(final List urls) {
+    private void loadProvidersConfiguration(FacesContext facesContext,
+            final List urls) {
 
         IProvidersConfigurator providersConfigurator = new IProvidersConfigurator() {
 
@@ -438,12 +409,16 @@ public class RcfacesContextImpl extends RcfacesContext implements
         };
 
         ((ProvidersRegistry) getProvidersRegistry())
-                .completeConfiguration(providersConfigurator);
+                .loadProvidersConfiguration(providersConfigurator);
+
+        ((ProvidersRegistry) getProvidersRegistry())
+                .startupProviders(facesContext);
     }
 
-    protected void initializeConfigs(ExternalContext externalContext) {
+    protected void initializeConfigs(FacesContext facesContext) {
 
-        Map applicationMap = externalContext.getApplicationMap();
+        Map applicationMap = facesContext.getExternalContext()
+                .getApplicationMap();
 
         applicationVersion = (String) applicationMap
                 .get(APPLICATION_VERSION_PROPERTY);
@@ -457,13 +432,13 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return applicationVersion;
     }
 
-    public void setResourceVersionHandler(
-            IResourceVersionHandler resourceVersionHandler) {
-        this.resourceVersionHandler = resourceVersionHandler;
+    public void setDefaultContentVersionHandler(
+            IContentVersionHandler contentVersionHandler) {
+        this.contentVersionHandler = contentVersionHandler;
     }
 
-    public final IResourceVersionHandler getResourceVersionHandler() {
-        return resourceVersionHandler;
+    public final IContentVersionHandler getDefaultContentVersionHandler() {
+        return contentVersionHandler;
     }
 
     public void readExternal(ObjectInput in) {
@@ -478,8 +453,39 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return adapterManager;
     }
 
-    protected IAdapterManager createAdapterManager() {
-        return new AdapterManagerImpl();
+    public void setAdapterManager(IAdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
+    }
+
+    public boolean isDesignerMode() {
+        return designerMode;
+    }
+
+    public IContentAccessorRegistry getContentAccessorRegistry() {
+        return contentAccessorRegistry;
+    }
+
+    public IResourceVersionHandler getResourceVersionHandler() {
+        return resourceVersionHandler;
+    }
+
+    public void setContentAccessorRegistry(
+            IContentAccessorRegistry contentAccessorRegistry) {
+        this.contentAccessorRegistry = contentAccessorRegistry;
+    }
+
+    public void setResourceVersionHandler(
+            IResourceVersionHandler resourceVersionHandler) {
+        this.resourceVersionHandler = resourceVersionHandler;
+    }
+
+    public IContentStorageEngine getContentStorageEngine() {
+        return indirectContentRepository;
+    }
+
+    public void setContentStorageEngine(
+            IContentStorageEngine indirectContentRepository) {
+        this.indirectContentRepository = indirectContentRepository;
     }
 
 }

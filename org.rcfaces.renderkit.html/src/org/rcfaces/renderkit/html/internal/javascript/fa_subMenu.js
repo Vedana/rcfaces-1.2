@@ -94,7 +94,7 @@ var __prototype = {
 	 * Returns the menu associated with an identifier.
 	 * 
 	 * @method public
-	 * @param string menuId Identifier of menu
+	 * @param String menuId Identifier of menu
 	 * @return f_menu The menu or <code>null</code>.
 	 */
 	f_getSubMenuById: function(menuId) {

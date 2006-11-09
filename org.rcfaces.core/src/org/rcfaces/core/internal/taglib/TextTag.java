@@ -23,6 +23,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 	private String textAlignment;
 	private String accessKey;
 	private String forValue;
+	private String type;
 	public String getComponentType() {
 		return TextComponent.COMPONENT_TYPE;
 	}
@@ -99,6 +100,14 @@ public class TextTag extends AbstractOutputTag implements Tag {
 		this.forValue = forValue;
 	}
 
+	public final String getType() {
+		return type;
+	}
+
+	public final void setType(String type) {
+		this.type = type;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (TextComponent.COMPONENT_TYPE==getComponentType()) {
@@ -113,6 +122,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  forValue='"+forValue+"'");
+			LOG.debug("  type='"+type+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -213,6 +223,15 @@ public class TextTag extends AbstractOutputTag implements Tag {
 				component.setFor(forValue);
 			}
 		}
+
+		if (type != null) {
+			if (isValueReference(type)) {
+				ValueBinding vb = application.createValueBinding(type);
+				component.setType(vb);
+			} else {
+				component.setType(type);
+			}
+		}
 	}
 
 	public void release() {
@@ -225,6 +244,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 		textAlignment = null;
 		accessKey = null;
 		forValue = null;
+		type = null;
 
 		super.release();
 	}

@@ -47,7 +47,7 @@ var __prototype = {
 	
 		this.fa_updateCollapsed(set);
 		
-		this.f_setProperty(f_prop.COLLAPSED,this._collapsed);
+		this.f_setProperty(f_prop.COLLAPSED, set);
 	},
 
 	/**

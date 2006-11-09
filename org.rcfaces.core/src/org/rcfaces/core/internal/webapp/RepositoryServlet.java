@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.6  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.5  2006/10/13 18:04:51  oeuillot
  * Ajout de:
  * DateEntry
@@ -283,7 +286,8 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                             + repositoryVersion + " request=" + version + ")");
 
                     setNoCache(response);
-                    response.setStatus(HttpServletResponse.SC_CONFLICT);
+                    response.sendError(HttpServletResponse.SC_CONFLICT,
+                            "Invalid RCFaces version !");
                     return;
                 }
             }

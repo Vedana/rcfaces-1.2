@@ -17,6 +17,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 	private String imageURL;
 	private String imageHeight;
 	private String imageWidth;
+	private String filterProperties;
 	public String getComponentType() {
 		return ImageComponent.COMPONENT_TYPE;
 	}
@@ -45,6 +46,14 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		this.imageWidth = imageWidth;
 	}
 
+	public final String getFilterProperties() {
+		return filterProperties;
+	}
+
+	public final void setFilterProperties(String filterProperties) {
+		this.filterProperties = filterProperties;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ImageComponent.COMPONENT_TYPE==getComponentType()) {
@@ -53,6 +62,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
+			LOG.debug("  filterProperties='"+filterProperties+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -93,12 +103,19 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 				component.setImageWidth(getInt(imageWidth));
 			}
 		}
+
+		if (filterProperties != null) {
+				ValueBinding vb = application.createValueBinding(filterProperties);
+
+				component.setFilterProperties(vb);
+		}
 	}
 
 	public void release() {
 		imageURL = null;
 		imageHeight = null;
 		imageWidth = null;
+		filterProperties = null;
 
 		super.release();
 	}

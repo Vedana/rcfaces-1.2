@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -19,6 +22,10 @@
  */
 package org.rcfaces.core.provider;
 
+import javax.faces.context.FacesContext;
+
+import org.apache.commons.digester.Digester;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -27,4 +34,9 @@ package org.rcfaces.core.provider;
 public abstract class AbstractProvider implements IProvider {
     private static final String REVISION = "$Revision$";
 
+    public void configureRules(Digester digester) {
+    }
+
+    public void startup(FacesContext facesContext) {
+    }
 }

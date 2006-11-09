@@ -9,14 +9,16 @@ import java.util.Map;
 import java.util.HashMap;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
 import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.IValidationParameters;
+import java.util.Locale;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.model.Time;
-import org.rcfaces.core.internal.tools.TimeTools;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.internal.converter.TimeConverter;
 import org.rcfaces.core.component.capability.IRequiredCapability;
@@ -29,6 +31,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	IFocusStyleClassCapability,
 	ISelectionEventCapability,
 	IReadOnlyCapability,
+	ILocalizedAttributesCapability,
 	IValidationParameters {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.timeEntry";
@@ -115,7 +118,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 
 				if (value instanceof String) {
-					value=TimeConverter.SINGLETON.getAsObject(null, this, (String)value);
+					FacesContext facesContext=FacesContext.getCurrentInstance();
+					value=TimeConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
 				}
 				
 				super.setValue(value);
@@ -172,6 +176,13 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 			Time timeValue=(Time)TimeConverter.SINGLETON.getAsObject(null, this, time);
 			setMaxTime(timeValue);
+		
+	}
+
+	public final void setAttributesLocale(String locale) {
+
+
+		setAttributesLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
@@ -383,6 +394,22 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	public final java.util.Locale getAttributesLocale() {
+		return getAttributesLocale(null);
+	}
+
+	public final java.util.Locale getAttributesLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.ATTRIBUTES_LOCALE, facesContext);
+	}
+
+	public final void setAttributesLocale(java.util.Locale attributesLocale) {
+		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
+	}
+
+	public final void setAttributesLocale(ValueBinding attributesLocale) {
+		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
+	}
+
 	public final boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
@@ -481,6 +508,86 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 	public final boolean isTimeFormatSetted() {
 		return engine.isPropertySetted(Properties.TIME_FORMAT);
+	}
+
+	public final String getHourStep() {
+		return getHourStep(null);
+	}
+
+	public final String getHourStep(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HOUR_STEP, facesContext);
+	}
+
+	public final void setHourStep(String hourStep) {
+		engine.setProperty(Properties.HOUR_STEP, hourStep);
+	}
+
+	public final void setHourStep(ValueBinding hourStep) {
+		engine.setProperty(Properties.HOUR_STEP, hourStep);
+	}
+
+	public final boolean isHourStepSetted() {
+		return engine.isPropertySetted(Properties.HOUR_STEP);
+	}
+
+	public final String getMinuteStep() {
+		return getMinuteStep(null);
+	}
+
+	public final String getMinuteStep(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
+	}
+
+	public final void setMinuteStep(String minuteStep) {
+		engine.setProperty(Properties.MINUTE_STEP, minuteStep);
+	}
+
+	public final void setMinuteStep(ValueBinding minuteStep) {
+		engine.setProperty(Properties.MINUTE_STEP, minuteStep);
+	}
+
+	public final boolean isMinuteStepSetted() {
+		return engine.isPropertySetted(Properties.MINUTE_STEP);
+	}
+
+	public final String getSecondStep() {
+		return getSecondStep(null);
+	}
+
+	public final String getSecondStep(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SECOND_STEP, facesContext);
+	}
+
+	public final void setSecondStep(String secondStep) {
+		engine.setProperty(Properties.SECOND_STEP, secondStep);
+	}
+
+	public final void setSecondStep(ValueBinding secondStep) {
+		engine.setProperty(Properties.SECOND_STEP, secondStep);
+	}
+
+	public final boolean isSecondStepSetted() {
+		return engine.isPropertySetted(Properties.SECOND_STEP);
+	}
+
+	public final String getMillisStep() {
+		return getMillisStep(null);
+	}
+
+	public final String getMillisStep(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
+	}
+
+	public final void setMillisStep(String millisStep) {
+		engine.setProperty(Properties.MILLIS_STEP, millisStep);
+	}
+
+	public final void setMillisStep(ValueBinding millisStep) {
+		engine.setProperty(Properties.MILLIS_STEP, millisStep);
+	}
+
+	public final boolean isMillisStepSetted() {
+		return engine.isPropertySetted(Properties.MILLIS_STEP);
 	}
 
 	public void release() {

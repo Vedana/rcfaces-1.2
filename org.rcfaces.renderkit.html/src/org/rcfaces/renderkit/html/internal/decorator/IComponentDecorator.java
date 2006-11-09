@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -27,13 +30,24 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface IComponentDecorator {
+
+    String HALIGN_LEFT = "left";
+
+    String HALIGN_RIGHT = "right";
+
+    String HALIGN_CENTER = "center";
+
+    String VALIGN_CENTER = "middle";
+
+    String VALIGN_BOTTOM = "bottom";
+
+    String VALIGN_TOP = "top";
 
     void addChildDecorator(IComponentDecorator decorator);
 

@@ -37,8 +37,30 @@ var __prototype = {
 		if (isNaN(value)) {
 			return;
 		}
+
+		var newValue=value;
+		
+		var step=this.f_getStep();
+		if (!step) {
+			newValue+=scale;
+
+		} else if (step.charAt(0)=="%") {
+			newValue=Math.floor(newValue);
+			var s=parseFloat(step.substring(1));
+			
+			if ((newValue % s)==0) {
+				newValue+=scale*s;
 				
-		var newValue=value+scale*this.f_getStep();
+			} else {
+				newValue+=((scale>0)?s:0)-(newValue % s);
+			}
+		
+		} else {
+			var s=parseFloat(step);
+			if (!isNan(s)) {
+				newValue+=scale*s;
+			}
+		}
 		
 		var max=this.f_getMaximum();
 		var min=this.f_getMinimum();

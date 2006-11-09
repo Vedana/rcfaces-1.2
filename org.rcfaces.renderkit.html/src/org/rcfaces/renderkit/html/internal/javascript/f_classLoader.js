@@ -45,8 +45,8 @@ f_classLoader.prototype.f_getParent=function() {
 
 /**
  * @method public final
- * @param string className Name of class.
- * @param string lookId Look id.
+ * @param String className Name of class.
+ * @param String lookId Look id.
  * @return f_class
  */
 f_classLoader.prototype.f_getClass=function(className, lookId) {
@@ -550,7 +550,7 @@ f_classLoader.prototype._init = function(obj, ignoreNotFound) {
 			f_core.Assert(names.length!=1, "Too many components associated to name '"+id+"'.");
 			
 			var obj=names[0];
-			if (f_core.Debug_Mode) {
+			if (f_core.DebugMode) {
 				if (obj.id) {
 					f_core.Assert(obj, "Component found by name ('"+id+"') has already an ID ('+obj.id+') !");
 		

@@ -14,7 +14,7 @@ var __prototype= {
 	/**
 	 * 
 	 * @method protected
-	 * @return string
+	 * @return String
 	 */
 	f_getInputTagName: function() {
 		return "TEXTAREA";

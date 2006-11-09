@@ -463,7 +463,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @param string id Identifier of component.
+	 * @param String id Identifier of component.
 	 * @return f_component
 	 * @see f_component.f_findComponent
 	 */

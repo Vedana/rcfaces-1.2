@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/09 19:09:08  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/10/13 18:04:51  oeuillot
  * Ajout de:
  * DateEntry
@@ -78,6 +81,7 @@ import javax.faces.el.ValueBinding;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -230,16 +234,26 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
                 continue;
             }
 
-            rets[i++] = entry.getKey();
+            Object key = entry.getKey();
+            if (Constants.COMPACTED_PROPERTY_NAME) {
+                // La clef est forcement un string ....
+                // Par contre, on peut la transformer en Integer !
+                Object k = PropertiesRepository.getKey((String) key);
+                if (k != null) {
+                    key = k;
+                }
+            }
+
+            rets[i++] = key;
 
             if (isPrimitive(value)) {
                 rets[i++] = value;
                 continue;
             }
-            
+
             rets[i++] = UIComponentBase.saveAttachedState(context, value);
         }
-        
+
         return rets;
     }
 
@@ -278,7 +292,17 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         properties = createMap(datas.length / 2);
 
         for (int i = 0; i < datas.length;) {
-            String key = (String) datas[i++];
+            Object key = datas[i++];
+            if (Constants.COMPACTED_PROPERTY_NAME) {
+                if ((key instanceof String) == false) {
+                    key = PropertiesRepository.getPropertyFromKey(key);
+
+                    if (key == null) {
+                        throw new FacesException("Unknown key '" + key + "' !");
+                    }
+                }
+            }
+
             Object value = datas[i++];
             if (value == null) {
                 // ??? Ca ne doit jamais arriver ...
@@ -290,7 +314,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
                 value = UIComponentBase.restoreAttachedState(context, value);
             }
 
-            setProperty(context, key, value);
+            setProperty(context, (String) key, value);
         }
 
         return null;

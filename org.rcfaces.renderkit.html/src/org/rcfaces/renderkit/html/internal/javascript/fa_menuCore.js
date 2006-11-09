@@ -726,16 +726,16 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object parentItem Parent object or <code>null</code>
-	 * @param string id Identifier of the item. (can be <code>null</code>)
-	 * @param string groupName Group name of the item.
-	 * @param string label Label of the item.
-	 * @param optional string value
+	 * @param String id Identifier of the item. (can be <code>null</code>)
+	 * @param String groupName Group name of the item.
+	 * @param String label Label of the item.
+	 * @param optional String value
 	 * @param optional boolean checked
-	 * @param optional string accessKey
-	 * @param optional string tooltip
+	 * @param optional String accessKey
+	 * @param optional String tooltip
 	 * @param optional boolean disabled
 	 * @param optional boolean visible
-	 * @param optional string acceleratorKey
+	 * @param optional String acceleratorKey
 	 * @return Object
 	 */
 	f_appendRadioItem: function(parentItem, id, groupName, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
@@ -756,15 +756,15 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object parentItem Parent object or <code>null</code>
-	 * @param string id Identifier of the item. (can be <code>null</code>)
-	 * @param string label Label of the item.
-	 * @param optional string value
+	 * @param String id Identifier of the item. (can be <code>null</code>)
+	 * @param String label Label of the item.
+	 * @param optional String value
 	 * @param optional boolean checked
-	 * @param optional string accessKey
-	 * @param optional string tooltip
+	 * @param optional String accessKey
+	 * @param optional String tooltip
 	 * @param optional boolean disabled
 	 * @param optional boolean visible
-	 * @param optional string acceleratorKey
+	 * @param optional String acceleratorKey
 	 * @return Object
 	 */
 	f_appendCheckItem: function(parentItem, id, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
@@ -782,11 +782,11 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param Object parentItem Parent object or <code>null</code>
-	 * @param string id Identifier of the item. (can be <code>null</code>)
-	 * @param string label Label of the item.
-	 * @param optional string value Value of the item.
-	 * @param optional string accessKey Access key of the item.
-	 * @param optional string tooltip
+	 * @param String id Identifier of the item. (can be <code>null</code>)
+	 * @param String label Label of the item.
+	 * @param optional String value Value of the item.
+	 * @param optional String accessKey Access key of the item.
+	 * @param optional String tooltip
 	 * @param optional boolean disabled
 	 * @param optional boolean visible
 	 * @return Object
@@ -1550,7 +1550,7 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param any item The value of the item, or the item object.
-	 * @return string The label.
+	 * @return String The label.
 	 */
 	f_getItemLabel: function(item) {
 		if (typeof(item)=="string") {
@@ -1566,7 +1566,7 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param any item The value of the item, or the item object.
-	 * @param string label Label of the item.
+	 * @param String label Label of the item.
 	 * @return void
 	 */
 	f_setItemLabel: function(item, label) {

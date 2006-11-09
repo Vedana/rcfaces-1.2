@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/04 12:31:43  oeuillot
  * Stabilisation
  *
@@ -49,8 +52,9 @@ import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.Tag;
 
-import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
-import org.rcfaces.core.provider.IURLRewritingProvider;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -108,13 +112,10 @@ public class CssStyleTag extends BodyTagSupport implements Tag {
                     writer.write('\"');
                 }
 
-                IURLRewritingProvider urlRewritingProvider = AbstractURLRewritingProvider
-                        .getInstance(facesContext.getExternalContext());
-                if (urlRewritingProvider != null) {
-                    src = urlRewritingProvider.computeURL(facesContext, null,
-                            IURLRewritingProvider.STYLE_URL_TYPE, null, src,
-                            null, null);
-                }
+                IContentAccessor contentAccessor = ContentAccessorFactory
+                        .createFromWebResource(src, IContentType.STYLE);
+
+                src = contentAccessor.resolveURL(facesContext, null, null);
 
                 if (componentRules) {
                     writer.write(" v:rules=\"true\"");

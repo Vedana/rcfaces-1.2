@@ -14,9 +14,9 @@ var __static = {
 	/**
 	 * @method public static
 	 * @param Element element XML node.
-	 * @param optional string tagName Name of the tag, or null.
-	 * @param optional string attrName Name of an attribute or null.
-	 * @param optional string attrValue A value for the specified attribute of null.
+	 * @param optional String tagName Name of the tag, or null.
+	 * @param optional String attrName Name of an attribute or null.
+	 * @param optional String attrValue A value for the specified attribute of null.
 	 * @return Element[] An array of xml nodes.
 	 */
 	GetChildElements: function(element, tagName, attrName, attrValue) {
@@ -49,7 +49,7 @@ var __static = {
 	/**
 	 * @method public static
 	 * @param Object element XML node.
-	 * @param optional string tagName Name of the tag. (or null)
+	 * @param optional String tagName Name of the tag. (or null)
 	 * @return Object XML node or null.
 	 */
 	GetFirstChildElement: function(element, tagName) {
@@ -125,7 +125,7 @@ var __static = {
 
 	/**
 	 * @method public static
-	 * @param string data XML content.
+	 * @param String data XML content.
 	 * @return Object XML Document.
 	 */
 	FromString: function(data) {
@@ -150,7 +150,7 @@ var __static = {
 	/**
 	 * @method public static
 	 * @param Object node XML node.
-	 * @return string XML output.
+	 * @return String XML output.
 	 */
 	Serialize: function(node) {
 		var ret = "";

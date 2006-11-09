@@ -1,14 +1,17 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IExpandImageCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.UIImageItemComponent;
 
 public abstract class ExpandableItemComponent extends UIImageItemComponent implements 
 	IForegroundBackgroundColorCapability,
-	ITextCapability {
+	ITextCapability,
+	IExpandImageCapability {
 
 
 
@@ -65,24 +68,20 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
-	public final String getExpandedImageURL() {
+	public final java.lang.String getExpandedImageURL() {
 		return getExpandedImageURL(null);
 	}
 
-	public final String getExpandedImageURL(javax.faces.context.FacesContext facesContext) {
+	public final java.lang.String getExpandedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.EXPANDED_IMAGE_URL, facesContext);
 	}
 
-	public final void setExpandedImageURL(String expandedImageURL) {
+	public final void setExpandedImageURL(java.lang.String expandedImageURL) {
 		engine.setProperty(Properties.EXPANDED_IMAGE_URL, expandedImageURL);
 	}
 
 	public final void setExpandedImageURL(ValueBinding expandedImageURL) {
 		engine.setProperty(Properties.EXPANDED_IMAGE_URL, expandedImageURL);
-	}
-
-	public final boolean isExpandedImageURLSetted() {
-		return engine.isPropertySetted(Properties.EXPANDED_IMAGE_URL);
 	}
 
 	public void release() {

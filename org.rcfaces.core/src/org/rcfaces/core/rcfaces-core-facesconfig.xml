@@ -179,6 +179,10 @@
 		<component-class>org.rcfaces.core.component.MenuRadioItemComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.numberEntry</component-type>
+		<component-class>org.rcfaces.core.component.NumberEntryComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.passwordEntry</component-type>
 		<component-class>org.rcfaces.core.component.PasswordEntryComponent</component-class>
 	</component>

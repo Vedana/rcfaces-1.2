@@ -34,7 +34,7 @@ f_actionList.prototype.f_getElement=function() {
 /**
  * 
  * @method public
- * @return string 
+ * @return String 
  */
 f_actionList.prototype.f_getType=function() {
 	return this._type;

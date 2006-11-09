@@ -79,7 +79,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getImageURL: function() {
 		if (this._imageURL===undefined) {
@@ -89,7 +89,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getHoverImageURL: function() { 
 		this._parseImageURLs();
@@ -98,7 +98,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getSelectedImageURL: function() { 
 		this._parseImageURLs();
@@ -107,7 +107,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getDisabledImageURL: function() { 
 		this._parseImageURLs();
@@ -116,7 +116,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string url
+	 * @param String url
 	 * @return boolean
 	 */
 	f_setImageURL: function(url) {
@@ -141,7 +141,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string url
+	 * @param String url
 	 * @return boolean
 	 */
 	f_setSelectedImageURL: function(url) {
@@ -166,7 +166,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string url
+	 * @param String url
 	 * @return boolean
 	 */
 	f_setDisabledImageURL: function(url) {
@@ -191,7 +191,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string url
+	 * @param String url
 	 * @return boolean
 	 */
 	f_setHoverImageURL: function(url) {

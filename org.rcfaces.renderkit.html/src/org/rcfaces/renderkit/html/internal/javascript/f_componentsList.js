@@ -323,7 +323,10 @@ var __prototype = {
 
 		this.f_performPagedComponentInitialized();
 	},
-	_cancelServerRequest: function() {
+	/**
+	 * @method hidden
+	 */
+	fa_cancelFilterRequest: function() {
 		// Appeler par la génération du serveur !
 	},
 	fa_updateFilterProperties: function(filterProperties) {

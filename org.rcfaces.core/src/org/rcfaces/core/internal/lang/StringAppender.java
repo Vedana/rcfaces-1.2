@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.2  2006/10/04 12:31:59  oeuillot
  * Stabilisation
  *
@@ -198,12 +201,21 @@ public final class StringAppender {
     }
 
     public StringAppender append(char c) {
-        int newcount = count + 1;
+        return append(c, 1);
+    }
+
+    public StringAppender append(char c, int nb) {
+        if (nb < 1) {
+            return this;
+        }
+        int newcount = count + nb;
         if (newcount > value.length) {
             expandCapacity(newcount);
         }
 
-        value[count++] = c;
+        for (; nb > 0; nb--) {
+            value[count++] = c;
+        }
         return this;
     }
 
@@ -238,4 +250,46 @@ public final class StringAppender {
         }
         expandCapacity(newcount);
     }
+
+    public StringAppender insert(int offset, String str) {
+        if ((offset < 0) || (offset > count)) {
+            throw new StringIndexOutOfBoundsException();
+        }
+
+        if (str == null) {
+            str = String.valueOf(str);
+        }
+        int len = str.length();
+        int newcount = count + len;
+        if (newcount > value.length) {
+            expandCapacity(newcount);
+        }
+
+        System.arraycopy(value, offset, value, offset + len, count - offset);
+        str.getChars(0, len, value, offset);
+        count = newcount;
+        return this;
+    }
+
+    public StringAppender insert(int offset, char c) {
+        return insert(offset, c, 1);
+    }
+
+    public StringAppender insert(int offset, char c, int nb) {
+        if (nb < 1) {
+            return this;
+        }
+        int newcount = count + nb;
+        if (newcount > value.length) {
+            expandCapacity(newcount);
+        }
+
+        System.arraycopy(value, offset, value, offset + nb, count - offset);
+        for (; nb > 0; nb--) {
+            value[offset++] = c;
+        }
+        count = newcount;
+        return this;
+    }
+
 }

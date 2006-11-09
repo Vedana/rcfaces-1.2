@@ -248,7 +248,7 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 	 * @see javax.faces.component.UIComponent#getChildren()
 	 */
 	public final List getChildren() {
-		if (Constants.STATE_CHILDREN_LIST_ENABLED==false) {
+		if (Constants.STATED_COMPONENT_CHILDREN_LIST==false) {
 			return super.getChildren();
 		}
 		
@@ -264,8 +264,8 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 	}
 
 	public final int getChildrenListState() {
-		if (Constants.STATE_CHILDREN_LIST_ENABLED==false) {
-			throw new UnsupportedOperationException("STATE_CHILDREN_LIST_ENABLED=false");
+		if (Constants.STATED_COMPONENT_CHILDREN_LIST==false) {
+			throw new UnsupportedOperationException("STATED_COMPONENT_CHILDREN_LIST=false");
 		}
 
 		if (stateChildrenList == null) {

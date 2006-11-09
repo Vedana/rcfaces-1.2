@@ -35,6 +35,7 @@
 @import url(f_message.css);					//module:message
 @import url(f_messageFieldSet.css);			//module:message
 @import url(f_messages.css);				//module:message
+@import url(f_numberEntry.css);				//module:entry
 @import url(f_pager.css); 					//module:pager
 @import url(f_passwordEntry.css);			//module:basic
 @import url(f_progressBar.css);				//module:progressBar

@@ -1,149 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.5  2006/10/13 18:04:38  oeuillot
- * Ajout de:
- * DateEntry
- * StyledMessage
- * MessageFieldSet
- * xxxxConverter
- * Adapter
- *
- * Revision 1.4  2006/10/04 12:31:42  oeuillot
- * Stabilisation
- *
- * Revision 1.3  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.2  2006/09/01 15:24:34  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.24  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.23  2006/06/28 17:48:28  oeuillot
- * Ajout de dateEntry
- * Ajout D'une constante g�n�rale de sp�cification de l'attributesLocale
- * Ajout d'un attribut <v:init attributesLocale='' />
- *
- * Revision 1.22  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.21  2006/05/16 13:58:18  oeuillot
- * Suite de l'impl�mentation du Calendar
- * D�but d'implementation de dateChooser
- * Creation du CalendarObject
- * R�vision et optimisation du modele de chargement des classes
- * Gestion complete des f_bundle
- * Ajout des DatesItems pour la gestion de jours f�riers
- *
- * Revision 1.20  2006/04/27 13:49:47  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.19  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.18  2006/03/23 19:12:39  oeuillot
- * Ajout des marges
- * Ajout des processors
- * Amelioration des menus
- *
- * Revision 1.17  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.16  2006/02/03 11:37:32  oeuillot
- * Calcule les classes pour le Javascript, plus les fichiers !
- *
- * Revision 1.15  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.14  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.13  2005/12/27 16:08:16  oeuillot
- * Gestion imageButtonWriter
- * Ajout de fa_images
- * Preparation de f_imageCombo
- *
- * Revision 1.12  2005/12/22 11:48:08  oeuillot
- * Ajout de :
- * - JS:  calendar, locale, dataList, log
- * - Evenement User
- * - ClientData  multi-directionnel (+TAG)
- *
- * Revision 1.11  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
- * Revision 1.10  2005/11/08 12:16:28  oeuillot
- * Ajout de  Preferences
- * Stabilisation de imageXXXButton
- * Ajout de la validation cot� client
- * Ajout du hash MD5 pour les servlets
- * Ajout des accelerateurs
- *
- * Revision 1.9  2005/10/28 14:41:50  oeuillot
- * InteractiveRenderer, CardBox, Card
- * Corrections de validations
- * PasswordEntry
- *
- * Revision 1.8  2005/10/05 14:34:19  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.7  2005/09/16 09:54:41  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
- * Revision 1.6  2005/03/18 18:03:41  oeuillot
- * Ameliration du look du TabbedPane !
- *
- * Revision 1.5  2005/03/18 14:42:50  oeuillot
- * Support de la table des symbols pour le javascript compress�
- * Menu du style XP et pas Office !
- *
- * Revision 1.4  2005/03/07 10:47:03  oeuillot
- * Systeme de Logging
- * Debuggage
- *
- * Revision 1.3  2005/02/21 17:33:06  oeuillot
- * Reorganisation du JAVASCRIPT
- * Reorganisation des ImageXxxxButton
- * Reorganise le ComponentTools => Converters
- *
- * Revision 1.2  2005/02/18 14:46:06  oeuillot
- * Corrections importantes pour stabilisation
- * R�ecriture du noyau JAVASCRIPT pour ameliorer performances.
- * Ajout de IValueLockedCapability
- *
- * Revision 1.1  2004/12/30 17:24:20  oeuillot
- * Gestion des validateurs
- * Debuggage des composants
- *
  */
 package org.rcfaces.renderkit.html.internal;
 
@@ -196,7 +52,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
     // private static final String LAZY_COMPONENTS = "camelia.component.lazy";
 
-    static final String LAZY_INIT_TAG = "v:init";
+    protected static final String LAZY_INIT_TAG = "v:init";
 
     // private static final String INIT_BY_NAME = "javascript.InitByName";
 
@@ -411,9 +267,15 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
         if (ENCODE_EVENT_ATTRIBUTE == false) {
             return writer;
         }
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
 
-        UIComponent component = writer.getComponentRenderContext()
-                .getComponent();
+        if (componentRenderContext.getRenderContext().getProcessContext()
+                .isDesignerMode()) {
+            return writer;
+        }
+
+        UIComponent component = componentRenderContext.getComponent();
 
         MethodBinding action = null;
         if (component instanceof UICommand) {
@@ -530,7 +392,8 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
         MethodBinding action = null;
         Map listenersByType = null;
-        if (ENCODE_EVENT_ATTRIBUTE == false) {
+        if (ENCODE_EVENT_ATTRIBUTE == false
+                && htmlRenderContext.getProcessContext().isDesignerMode() == false) {
             // On recherche l'attribut Action
             if (component instanceof UICommand) {
                 action = ((UICommand) component).getAction();

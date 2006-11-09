@@ -42,7 +42,7 @@ public interface ICssWriter {
 
     String UNDERLINE = "underline";
 
-    void close() throws WriterException;
+    void done() throws WriterException;
 
     ICssWriter writeProperty(String name, String value);
 
@@ -105,4 +105,6 @@ public interface ICssWriter {
     ICssWriter writeBorderStyle(String borderStyle);
 
     ICssWriter writeMargin(String margin);
+
+    ICssWriter writeBackgroundColor(String backgroundColor);
 }

@@ -77,7 +77,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
-	 * @return string
+	 * @return String
 	 */
 	f_getInputTagName: function() {
 		return "INPUT";
@@ -120,7 +120,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getText: function() {
 		var validator=this._validator;
@@ -134,7 +134,7 @@ var __prototype = {
 	 * Returns the text associated to the input.
 	 * 
 	 * @method public
-	 * @param string text The text of the input.
+	 * @param String text The text of the input.
 	 * @return void
 	 */
 	f_setText: function(text) {
@@ -220,7 +220,7 @@ var __prototype = {
 	 * Returns the value associated to the input component.
 	 *
 	 * @method public
-	 * @return string The value associated.
+	 * @return String The value associated.
 	 */
 	f_getValue: function() {
 		var validator=this._validator;

@@ -17,10 +17,10 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 	private String hiddenMode;
 	private String visible;
 	private String toolTipText;
-	private String imageURL;
 	private String disabledImageURL;
 	private String hoverImageURL;
 	private String selectedImageURL;
+	private String imageURL;
 	private String rendered;
 	public String getComponentType() {
 		return UIImageItemComponent.COMPONENT_TYPE;
@@ -50,14 +50,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		this.toolTipText = toolTipText;
 	}
 
-	public final String getImageURL() {
-		return imageURL;
-	}
-
-	public final void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
-	}
-
 	public final String getDisabledImageURL() {
 		return disabledImageURL;
 	}
@@ -82,6 +74,14 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		this.selectedImageURL = selectedImageURL;
 	}
 
+	public final String getImageURL() {
+		return imageURL;
+	}
+
+	public final void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+
 	public final String getRendered() {
 		return rendered;
 	}
@@ -98,10 +98,10 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
-			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
 			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
 			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
+			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  rendered='"+rendered+"'");
 		}
 		super.setProperties(uiComponent);
@@ -144,16 +144,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			}
 		}
 
-		if (imageURL != null) {
-			if (isValueReference(imageURL)) {
-				ValueBinding vb = application.createValueBinding(imageURL);
-
-				component.setImageURL(vb);
-			} else {
-				component.setImageURL(imageURL);
-			}
-		}
-
 		if (disabledImageURL != null) {
 			if (isValueReference(disabledImageURL)) {
 				ValueBinding vb = application.createValueBinding(disabledImageURL);
@@ -184,6 +174,16 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			}
 		}
 
+		if (imageURL != null) {
+			if (isValueReference(imageURL)) {
+				ValueBinding vb = application.createValueBinding(imageURL);
+
+				component.setImageURL(vb);
+			} else {
+				component.setImageURL(imageURL);
+			}
+		}
+
 		if (rendered != null) {
 			if (isValueReference(rendered)) {
 				ValueBinding vb = application.createValueBinding(rendered);
@@ -198,10 +198,10 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		hiddenMode = null;
 		visible = null;
 		toolTipText = null;
-		imageURL = null;
 		disabledImageURL = null;
 		hoverImageURL = null;
 		selectedImageURL = null;
+		imageURL = null;
 		rendered = null;
 
 		super.release();

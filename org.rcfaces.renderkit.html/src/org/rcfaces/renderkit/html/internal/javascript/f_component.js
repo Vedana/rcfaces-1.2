@@ -5,7 +5,7 @@
 /** 
  * f_component class
  *
- * @class f_component extends f_eventTarget, HTMLElement, fa_serializable, fa_clientData
+ * @class f_component extends f_eventTarget, fa_serializable, fa_clientData
  * @author Joel Merlin & Olivier Oeuillot
  * @version $Revision$ $Date$
  */
@@ -122,7 +122,7 @@ var __prototype = {
 	 * Returns the idenfiant of the component.
 	 * 
 	 * @method public
-	 * @return string Identifier
+	 * @return String Identifier
 	 */
 	f_getId: function() {
 		return this.id;
@@ -201,14 +201,14 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getBackgroundColor: function() {
 		return this.style.backgroundColor;
 	},
 	/**
 	 * @method public
-	 * @param string color
+	 * @param String color
 	 * @return void
 	 */
 	f_setBackgroundColor: function(color) {
@@ -219,14 +219,14 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getForegroundColor: function() {
 		return this.style.color;
 	},
 	/**
 	 * @method public
-	 * @param string color
+	 * @param String color
 	 * @return void
 	 */
 	f_setForegroundColor: function(color) {
@@ -239,7 +239,7 @@ var __prototype = {
 	 * Returns the receiver's tool tip text, or <code>null</code> if it has not been set.
 	 * 
 	 * @method public
-	 * @return string the receiver's tool tip text
+	 * @return String the receiver's tool tip text
 	 */
 	f_getToolTipText: function() {
 		return this.title;
@@ -249,7 +249,7 @@ var __prototype = {
 	 * which may be <code>null</code> indicating that no tool tip text should be shown.
 	 
 	 * @method public
-	 * @param string title the new tool tip text (or <code>null</code>)
+	 * @param String title the new tool tip text (or <code>null</code>)
 	 * @return void
 	 */
 	f_setToolTipText: function(title) {
@@ -359,7 +359,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string mode
+	 * @param String mode
 	 * @return void
 	 */
 	f_setHiddenMode: function(mode) {
@@ -396,7 +396,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getHelpURL: function() {
 		var helpURL=this._helpURL;
@@ -412,7 +412,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string url
+	 * @param String url
 	 * @return void
 	 */
 	f_setHelpURL: function(url) {
@@ -442,7 +442,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getHelpMessage: function() {
 		var helpMessage=this._helpMessage;
@@ -457,7 +457,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string msg
+	 * @param String msg
 	 * @return void
 	 */
 	f_setHelpMessage: function(msg) {
@@ -538,7 +538,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getAccessKey: function() {
 		return this._accessKey;
@@ -647,8 +647,8 @@ var __prototype = {
      *
      * @method public 
      *
- 	 * @param string id Identifier of component.
-	 * @param optional string id2 Identifier of the child of the found component. (optional)
+ 	 * @param String id Identifier of component.
+	 * @param optional String id2 Identifier of the child of the found component. (optional)
       *
      * @return f_component the found {@link f_component}, or <code>null</code>
      *  if the component was not found.

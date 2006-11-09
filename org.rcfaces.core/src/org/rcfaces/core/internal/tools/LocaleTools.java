@@ -4,6 +4,9 @@
 package org.rcfaces.core.internal.tools;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.Format;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -12,6 +15,7 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 
@@ -23,29 +27,36 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 public class LocaleTools {
     private static final String REVISION = "$Revision$";
 
+    public static final boolean NORMALIZE_LOCALE_PARAMETER_SUPPORT = false;
+
     public static final int DATE_TYPE = 0;
 
     public static final int TIME_TYPE = 1;
 
     public static final int DATE_TIME_TYPE = 2;
 
-    private static final Map dateFormatByLocale = new HashMap(32);
+    public static final int NUMBER_TYPE = 3;
 
-    private static final int DEFAULT_STYLE_BY_TYPE[] = new int[] {
-            DateFormat.SHORT, DateFormat.MEDIUM, DateFormat.SHORT };
+    public static final int INTEGER_TYPE = 4;
 
-    private static final Map NORMALIZERS;
+    public static final int PERCENT_TYPE = 5;
 
+    public static final int CURRENCY_TYPE = 6;
+
+    public static final int MAX_TYPE = 6;
+
+    private static final Map dateFormatByLocale;
     static {
-        NORMALIZERS = new HashMap(4);
-        NORMALIZERS.put("SHORT", new LocaleDateTimeFormatNormalizer(
-                DateFormat.SHORT));
-        NORMALIZERS.put("MEDIUM", new LocaleDateTimeFormatNormalizer(
-                DateFormat.MEDIUM));
-        NORMALIZERS.put("LONG", new LocaleDateTimeFormatNormalizer(
-                DateFormat.LONG));
-        NORMALIZERS.put("FULL", new LocaleDateTimeFormatNormalizer(
-                DateFormat.FULL));
+        if (Constants.CACHED_LOCALE_FORMAT) {
+            dateFormatByLocale = new HashMap(32);
+        }
+    }
+
+    private static final int DEFAULT_STYLE_BY_TYPE[] = new int[MAX_TYPE+1];
+    static {
+        DEFAULT_STYLE_BY_TYPE[0] = DateFormat.SHORT;
+        DEFAULT_STYLE_BY_TYPE[1] = DateFormat.MEDIUM;
+        DEFAULT_STYLE_BY_TYPE[2] = DateFormat.MEDIUM;
     }
 
     /**
@@ -53,7 +64,7 @@ public class LocaleTools {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    protected static interface IDateTimeFormatNormalizer {
+    protected static interface IFormatNormalizer {
         String normalizeFormat(IComponentRenderContext componentRenderContext,
                 int type, String format, String param);
     }
@@ -64,7 +75,7 @@ public class LocaleTools {
      * @version $Revision$ $Date$
      */
     protected static class LocaleDateTimeFormatNormalizer implements
-            LocaleTools.IDateTimeFormatNormalizer {
+            LocaleTools.IFormatNormalizer {
         private static final String REVISION = "$Revision$";
 
         private final int style;
@@ -79,7 +90,7 @@ public class LocaleTools {
 
             Locale locale = getLocale(componentRenderContext, param);
 
-            return getDateTimeFormatPattern(locale, style, type);
+            return getFormatPattern(locale, style, type);
         }
 
         protected Locale getLocale(
@@ -106,13 +117,13 @@ public class LocaleTools {
 
     public static String normalizeFormat(
             IComponentRenderContext componentRenderContext, String format,
-            int type) {
+            int type, Map normalizers) {
         if (format == null || format.length() < 1) {
             return format;
         }
 
         String param = null;
-        if (CalendarTools.NORMALIZE_PARAMETER_SUPPORT) {
+        if (LocaleTools.NORMALIZE_LOCALE_PARAMETER_SUPPORT) {
             if (format.charAt(0) != '$') {
                 return format;
             }
@@ -134,7 +145,7 @@ public class LocaleTools {
             }
         }
 
-        LocaleTools.IDateTimeFormatNormalizer normalizer = (LocaleTools.IDateTimeFormatNormalizer) NORMALIZERS
+        LocaleTools.IFormatNormalizer normalizer = (LocaleTools.IFormatNormalizer) normalizers
                 .get(format.toUpperCase());
         if (normalizer == null) {
             return format;
@@ -159,6 +170,50 @@ public class LocaleTools {
         }
     }
 
+    private static Format getFormatByType(Locale locale, int type, int style) {
+        if (style < 0) {
+            style = DEFAULT_STYLE_BY_TYPE[type];
+        }
+        switch (type) {
+        case DATE_TYPE:
+            return DateFormat.getDateInstance(style, locale);
+
+        case TIME_TYPE:
+            return DateFormat.getTimeInstance(style, locale);
+
+        case DATE_TIME_TYPE:
+            return DateFormat.getDateTimeInstance(style, style, locale);
+
+        case NUMBER_TYPE:
+            return NumberFormat.getNumberInstance(locale);
+
+        case INTEGER_TYPE:
+            return NumberFormat.getIntegerInstance(locale);
+
+        case PERCENT_TYPE:
+            return NumberFormat.getPercentInstance(locale);
+
+        case CURRENCY_TYPE:
+            return NumberFormat.getCurrencyInstance(locale);
+        }
+
+        return null;
+    }
+
+    private static String getPattern(Format format) {
+        if (format instanceof SimpleDateFormat) {
+            return ((SimpleDateFormat) format).toPattern();
+        }
+
+        if (format instanceof DecimalFormat) {
+            return ((DecimalFormat) format).toPattern();
+        }
+
+        throw new FacesException("Can not get format pattern from format: "
+                + format);
+
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -167,103 +222,106 @@ public class LocaleTools {
     private static final class CachedLocale {
         private final Locale locale;
 
-        private final DateFormat defaultFormats[];
+        private final Format defaultFormats[];
 
         private String patternsByType[][];
 
         public CachedLocale(Locale locale) {
             this.locale = locale;
 
-            this.defaultFormats = new DateFormat[] {
-                    getDateFormatByType(DATE_TYPE, -1),
-                    getDateFormatByType(TIME_TYPE, -1),
-                    getDateFormatByType(DATE_TIME_TYPE, -1) };
-        }
-
-        private DateFormat getDateFormatByType(int type, int style) {
-            if (style < 0) {
-                style = DEFAULT_STYLE_BY_TYPE[type];
-            }
-            switch (type) {
-            case 0:
-                return DateFormat.getDateInstance(style, locale);
-
-            case 1:
-                return DateFormat.getTimeInstance(style, locale);
-
-            default:
-                return DateFormat.getDateTimeInstance(style, style, locale);
-            }
+            this.defaultFormats = new Format[MAX_TYPE+1];
         }
 
         public Locale getLocale() {
             return locale;
         }
 
-        public DateFormat getDefaultFormat(int type) {
-            return defaultFormats[type];
+        public Format getDefaultFormat(int type) {
+            Format format;
+
+            synchronized (defaultFormats) {
+                format = defaultFormats[type];
+                if (format == null) {
+                    format = getFormatByType(locale, type, -1);
+                    defaultFormats[type] = format;
+                }
+            }
+
+            return format;
         }
 
         public String getDefaultPattern(int type) {
             return getPattern(type, DEFAULT_STYLE_BY_TYPE[type]);
         }
 
-        public synchronized String getPattern(int type, int style) {
-            if (patternsByType == null) {
-                patternsByType = new String[DATE_TIME_TYPE + 1][];
-            }
+        public String getPattern(int type, int style) {
 
-            String patterns[] = patternsByType[type];
-            if (patterns != null) {
-                String pattern = patterns[style];
-                if (pattern != null) {
-                    return pattern;
-                }
-            } else {
-                patterns = new String[DateFormat.SHORT + 1];
-                patternsByType[type] = patterns;
-            }
-
-            DateFormat dateFormat;
-            if (style == DEFAULT_STYLE_BY_TYPE[type]) {
-                dateFormat = getDefaultFormat(type);
-
-            } else {
-                dateFormat = getDateFormatByType(type, style);
-            }
-
-            String pattern;
-            synchronized (dateFormat) {
-                if ((dateFormat instanceof SimpleDateFormat) == false) {
-                    throw new FacesException(
-                            "Can not get format pattern from date format: "
-                                    + dateFormat + ": (locale '" + locale
-                                    + "')");
+            synchronized (this) {
+                if (patternsByType == null) {
+                    patternsByType = new String[MAX_TYPE + 1][];
                 }
 
-                pattern = ((SimpleDateFormat) dateFormat).toPattern();
+                String patterns[] = patternsByType[type];
+                if (patterns != null) {
+                    String pattern = patterns[style];
+                    if (pattern != null) {
+                        return pattern;
+                    }
+                } else {
+                    patterns = new String[DateFormat.SHORT + 1];
+                    patternsByType[type] = patterns;
+                }
+
+                Format format;
+                if (style == DEFAULT_STYLE_BY_TYPE[type]) {
+                    format = getDefaultFormat(type);
+
+                } else {
+                    format = getFormatByType(locale, type, style);
+                }
+
+                String pattern;
+                synchronized (format) {
+                    pattern = LocaleTools.getPattern(format);
+                }
+
+                patterns[style] = pattern;
+
+                return pattern;
             }
-
-            patterns[style] = pattern;
-
-            return pattern;
         }
     }
 
-    public static String getDateTimeFormatPattern(Locale locale, int style,
-            int type) {
+    public static String getFormatPattern(Locale locale, int style, int type) {
+
+        if (Constants.CACHED_LOCALE_FORMAT == false) {
+            Format format = getFormatByType(locale, type, style);
+
+            return getPattern(format);
+        }
 
         return LocaleTools.getCachedLocale(locale).getPattern(type, style);
     }
 
-    public static DateFormat getDefaultFormat(UIComponent calendarComponent,
-            int type) {
-        Locale locale = ContextTools.getAttributesLocale(calendarComponent);
+    public static Format getDefaultFormat(UIComponent component, int type) {
+
+        Locale locale = ContextTools.getAttributesLocale(component);
+
+        if (Constants.CACHED_LOCALE_FORMAT == false) {
+            return getFormatByType(locale, type, -1);
+        }
 
         return LocaleTools.getCachedLocale(locale).getDefaultFormat(type);
     }
 
     public static String getDefaultPattern(Locale locale, int type) {
+
+        if (Constants.CACHED_LOCALE_FORMAT == false) {
+            Format format = getFormatByType(locale, type, -1);
+
+            return getPattern(format);
+        }
+
         return LocaleTools.getCachedLocale(locale).getDefaultPattern(type);
     }
 

@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.6  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.5  2006/10/13 18:04:38  oeuillot
  * Ajout de:
  * DateEntry
@@ -171,7 +174,6 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
-import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
@@ -193,7 +195,11 @@ import org.rcfaces.core.event.ResetEvent;
 import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.event.SuggestionEvent;
 import org.rcfaces.core.event.UserEvent;
+import org.rcfaces.core.internal.component.ISeverityImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -202,7 +208,6 @@ import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 
@@ -480,7 +485,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
             return writer;
         }
 
-        writer.writeAttribute("title", title);
+        writer.writeTitle(title);
 
         return writer;
     }
@@ -500,7 +505,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
                     null, (UIComponent) tabIndexCapability);
         }
 
-        writer.writeAttribute("tabIndex", idx);
+        writer.writeTabIndex(idx);
 
         return writer;
     }
@@ -541,7 +546,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
 
         if (ak != null && ak.length() > 0) {
             // L'API IE spécifie une majuscule à Key !
-            writer.writeAttribute("accessKey", ak);
+            writer.writeAccessKey(ak);
 
             writer.enableJavaScript();
         }
@@ -575,7 +580,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
             throws WriterException {
         String id = writer.getComponentRenderContext().getComponentClientId();
         if (id != null) {
-            writer.writeAttribute("id", id);
+            writer.writeId(id);
         }
 
         return writer;
@@ -649,13 +654,15 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
             IHelpCapability helpComponent) throws WriterException {
         String helpURL = helpComponent.getHelpURL();
         if (helpURL != null) {
-            helpURL = AbstractCameliaRenderer.rewriteURL(writer
-                    .getComponentRenderContext(),
-                    IURLRewritingProvider.HELP_URL_TYPE, "helpURL", helpURL,
-                    null, null);
 
-            if (helpURL != null) {
-                writer.writeAttribute("v:helpURL", helpURL);
+            IContentAccessor contentAccessor = ContentAccessorFactory
+                    .createFromWebResource(helpURL, IContentType.HELP);
+
+            String resolvedHelpURL = contentAccessor.resolveURL(writer
+                    .getComponentRenderContext().getFacesContext(), null, null);
+
+            if (resolvedHelpURL != null) {
+                writer.writeAttribute("v:helpURL", resolvedHelpURL);
             }
         }
 
@@ -676,12 +683,6 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
 
         return HtmlTools.writeClientData(writer, values);
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.CameliaRenderer#decode(org.rcfaces.core.internal.renderkit.IComponentData)
-     */
 
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
@@ -1005,7 +1006,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
     protected final IHtmlWriter writeReadOnly(IHtmlWriter writer,
             IReadOnlyCapability readOnlyCapability) throws WriterException {
         if (readOnlyCapability.isReadOnly()) {
-            writer.writeAttribute("READONLY");
+            writer.writeReadOnly();
         }
 
         return writer;
@@ -1014,7 +1015,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
     protected final IHtmlWriter writeEnabled(IHtmlWriter writer,
             IDisabledCapability enabledCapability) throws WriterException {
         if (enabledCapability.isDisabled()) {
-            writer.writeAttribute("DISABLED");
+            writer.writeDisabled();
         }
 
         return writer;
@@ -1023,13 +1024,13 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
     protected IHtmlWriter writeChecked(IHtmlWriter writer,
             ISelectedCapability selectedCapability) throws WriterException {
         if (selectedCapability.isSelected()) {
-            writer.writeAttribute("CHECKED");
+            writer.writeChecked();
         }
 
         return writer;
     }
 
-    static boolean isEquals(Object object1, Object object2) {
+    protected static boolean isEquals(Object object1, Object object2) {
         if (object1 == object2) {
             return true;
         }
@@ -1085,32 +1086,58 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
     }
 
     protected static boolean writeSeverityImages(IHtmlWriter htmlWriter,
-            ISeverityImagesCapability severity) throws WriterException {
+            ISeverityImageAccessors severityImageAccessors)
+            throws WriterException {
 
-        String imageURL = severity.getImageURL();
-        String infoImageURL = severity.getInfoImageURL();
-        String warnImageURL = severity.getWarnImageURL();
-        String errorImageURL = severity.getErrorImageURL();
-        String fatalImageURL = severity.getFatalImageURL();
-        if (imageURL == null && infoImageURL == null && warnImageURL == null
-                && errorImageURL == null && fatalImageURL == null) {
+        IContentAccessor imageAccessor = severityImageAccessors
+                .getImageAccessor();
+        IContentAccessor infoImageAccessor = severityImageAccessors
+                .getInfoImageAccessor();
+        IContentAccessor warnImageAccessor = severityImageAccessors
+                .getWarnImageAccessor();
+        IContentAccessor errorImageAccessor = severityImageAccessors
+                .getErrorImageAccessor();
+        IContentAccessor fatalImageAccessor = severityImageAccessors
+                .getFatalImageAccessor();
+        if (imageAccessor == null && infoImageAccessor == null
+                && warnImageAccessor == null && errorImageAccessor == null
+                && fatalImageAccessor == null) {
             return false;
         }
 
-        if (infoImageURL != null) {
-            htmlWriter.writeAttribute("v:infoImageURL", infoImageURL);
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        if (infoImageAccessor != null) {
+            String infoImageURL = infoImageAccessor.resolveURL(facesContext,
+                    null, null);
+            if (infoImageURL != null) {
+                htmlWriter.writeAttribute("v:infoImageURL", infoImageURL);
+            }
         }
 
-        if (warnImageURL != null) {
-            htmlWriter.writeAttribute("v:warnImageURL", warnImageURL);
+        if (warnImageAccessor != null) {
+            String warnImageURL = warnImageAccessor.resolveURL(facesContext,
+                    null, null);
+            if (warnImageURL != null) {
+                htmlWriter.writeAttribute("v:warnImageURL", warnImageURL);
+            }
         }
 
-        if (errorImageURL != null) {
-            htmlWriter.writeAttribute("v:errorImageURL", errorImageURL);
+        if (errorImageAccessor != null) {
+            String errorImageURL = errorImageAccessor.resolveURL(facesContext,
+                    null, null);
+            if (errorImageURL != null) {
+                htmlWriter.writeAttribute("v:errorImageURL", errorImageURL);
+            }
         }
 
-        if (fatalImageURL != null) {
-            htmlWriter.writeAttribute("v:fatalImageURL", fatalImageURL);
+        if (fatalImageAccessor != null) {
+            String fatalImageURL = fatalImageAccessor.resolveURL(facesContext,
+                    null, null);
+            if (fatalImageURL != null) {
+                htmlWriter.writeAttribute("v:fatalImageURL", fatalImageURL);
+            }
         }
 
         return true;

@@ -763,24 +763,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final int getFirst() {
-		return getFirst(null);
+	public final int getRows() {
+		return getRows(null);
 	}
 
-	public final int getFirst(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
+	public final int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
 	}
 
-	public final void setFirst(int first) {
-		engine.setProperty(Properties.FIRST, first);
+	public final void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
 	}
 
-	public final void setFirst(ValueBinding first) {
-		engine.setProperty(Properties.FIRST, first);
+	public final void setRows(ValueBinding rows) {
+		engine.setProperty(Properties.ROWS, rows);
 	}
 
-	public final boolean isFirstSetted() {
-		return engine.isPropertySetted(Properties.FIRST);
+	public final boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	public final String getVar() {
@@ -805,24 +805,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.VAR);
 	}
 
-	public final int getRows() {
-		return getRows(null);
+	public final int getFirst() {
+		return getFirst(null);
 	}
 
-	public final int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	public final int getFirst(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
 	}
 
-	public final void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
+	public final void setFirst(int first) {
+		engine.setProperty(Properties.FIRST, first);
 	}
 
-	public final void setRows(ValueBinding rows) {
-		engine.setProperty(Properties.ROWS, rows);
+	public final void setFirst(ValueBinding first) {
+		engine.setProperty(Properties.FIRST, first);
 	}
 
-	public final boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
+	public final boolean isFirstSetted() {
+		return engine.isPropertySetted(Properties.FIRST);
 	}
 
 	public void release() {

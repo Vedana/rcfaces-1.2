@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/10/04 12:31:59  oeuillot
  * Stabilisation
  *
@@ -42,6 +45,8 @@ public interface IProcessContext {
     boolean getDebugMode();
 
     boolean getProfilerMode();
+
+    boolean isDesignerMode();
 
     Locale getUserLocale();
 

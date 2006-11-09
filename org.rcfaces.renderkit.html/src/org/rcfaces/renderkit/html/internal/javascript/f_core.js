@@ -124,7 +124,12 @@ var f_core = {
 	/**
 	 * @field hidden static boolean
 	 */
-	Debug_Mode:	undefined,
+	DebugMode:	undefined,
+
+	/**
+	 * @field hidden static boolean
+	 */
+	DesignerMode:	undefined,
 
 	/**
 	 * @field private static
@@ -161,7 +166,7 @@ var f_core = {
 	 *
 	 * @method public static final
 	 * @param boolean expr Expression.
-	 * @param string message The message.
+	 * @param String message The message.
 	 * @return void
 	 */
 	Assert: function(expr, message) {
@@ -304,8 +309,8 @@ var f_core = {
 	},
 	/**
 	 * @method public static final
-	 * @param string name Log name.
-	 * @param string message The message.
+	 * @param String name Log name.
+	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
 	 * @return void
 	 */
@@ -320,21 +325,21 @@ var f_core = {
      * when the log level is more than debug. </p>
 	 *
 	 * @method public static final
-	 * @param string name Log name.
+	 * @param String name Log name.
 	 * @return boolean <code>true</code> if debug logging  is enabled.
 	 */
 	IsDebugEnabled: function(name) {
 		f_core.Assert(typeof(name)=="string", "f_core.IsDebugEnabled: name parameter is invalid. ('"+name+"')");
 		if (!window.f_log) {
-			return (f_core.Debug_Mode);
+			return (f_core.DebugMode);
 		}
 		
 		return f_log.GetLog(name).f_isDebugEnabled();
 	},
 	/**
 	 * @method public static final
-	 * @param string name Log name.
-	 * @param string message The message.
+	 * @param String name Log name.
+	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
 	 * @return void
 	 */
@@ -349,21 +354,21 @@ var f_core = {
      * when the log level is more than trace. </p>
 	 *
 	 * @method public static final
-	 * @param string name Log name.
+	 * @param String name Log name.
 	 * @return boolean <code>true</code> if debug logging  is enabled.
 	 */
 	IsTraceEnabled: function(name) {
 		f_core.Assert(typeof(name)=="string", "f_core.IsTraceEnabled: name parameter is invalid. ('"+name+"')");
 		if (!window.f_log) {
-			return (f_core.Debug_Mode);
+			return (f_core.DebugMode);
 		}
 		
 		return f_log.GetLog(name).f_isTraceEnabled();
 	},
 	/**
 	 * @method public static final
-	 * @param string name Log name.
-	 * @param string message The message.
+	 * @param String name Log name.
+	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
 	 * @return void
 	 */
@@ -378,7 +383,7 @@ var f_core = {
      * when the log level is more than info. </p>
  	 *
 	 * @method public static final
-	 * @param string name Log name.
+	 * @param String name Log name.
 	 * @return boolean <code>true</code> if info logging  is enabled.
 	 */
 	IsInfoEnabled: function(name) {
@@ -389,8 +394,8 @@ var f_core = {
 	/**
 	/**
 	 * @method public static final
-	 * @param string name Log name.
-	 * @param string message The message.
+	 * @param String name Log name.
+	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
 	 * @return void
 	 */
@@ -405,7 +410,7 @@ var f_core = {
      * when the log level is more than info. </p>
  	 *
 	 * @method public static final
-	 * @param string name Log name.
+	 * @param String name Log name.
 	 * @return boolean <code>true</code> if info logging  is enabled.
 	 */
 	IsWarnEnabled: function(name) {
@@ -415,8 +420,8 @@ var f_core = {
 	},
 	/**
 	 * @method public static final
-	 * @param string name Log name.
-	 * @param string message The message.
+	 * @param String name Log name.
+	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
 	 * @return void
 	 */
@@ -424,7 +429,7 @@ var f_core = {
 	
 		f_core.Profile("f_core.Error("+name+") "+message+"\n"+exception);
 	
-		if (f_core.Debug_Mode) {
+		if (f_core.DebugMode) {
 			if (!exception) {
 				exception=new Error(message);	
 			}			
@@ -447,7 +452,7 @@ var f_core = {
 			throw exception;
 		}
 
-		if (f_core.Debug_Mode) {
+		if (f_core.DebugMode) {
 			if (!exception) {
 				exception=new Error(message);
 			}
@@ -462,7 +467,7 @@ var f_core = {
      * when the log level is more than error. </p>
  	 *
 	 * @method public static final
-	 * @param string name Log name.
+	 * @param String name Log name.
 	 * @return boolean <code>true</code> if error logging  is enabled.
 	 */
 	IsErrorEnabled: function(name) {
@@ -478,7 +483,7 @@ var f_core = {
 		if (debugMode===undefined) {
 			debugMode=true;
 		}
-		f_core.Debug_Mode=debugMode;
+		f_core.DebugMode=debugMode;
 	},
 	/**
 	 * @method hidden static final
@@ -491,6 +496,13 @@ var f_core = {
 		if (!window.f_profilerCB) {
 			window.f_profilerCB=profilerMode;
 		}
+	},
+	/**
+	 * @method hidden static final
+	 * @return void
+	 */
+	SetDesignerMode: function(designerMode) {
+		f_core.DesignerMode=designerMode;
 	},
 	/**
 	 * @method hidden static final
@@ -538,7 +550,7 @@ var f_core = {
 	/**
 	 * @method hidden static final
 	 * @param HTMLElement component
-	 * @param string name Event name
+	 * @param String name Event name
 	 * @param function Called callback.
 	 * @param HTMLElement capture Component which will capture events.
 	 * @return void
@@ -561,7 +573,7 @@ var f_core = {
 	/**
 	 * @method hidden static final
 	 * @param HTMLElement component
-	 * @param string name Event name
+	 * @param String name Event name
 	 * @param function Called callback.
 	 * @param HTMLElement capture Component which captured events.
 	 * @return void
@@ -585,7 +597,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static final
-	 * @param string name of profile point.
+	 * @param String name of profile point.
 	 * @param optional any Date of profile point. (Can be 'Date' or numer)
 	 * @return void
 	 */
@@ -645,7 +657,7 @@ var f_core = {
 		
 			f_core.Info("f_core", "Install library (onload) on "+now);
 			
-			if (f_core.Debug_Mode) {
+			if (f_core.DebugMode) {
 				var title=["DEBUG"];
 				f_core.Info("f_core", "Enable f_core.DEBUG mode");
 			
@@ -863,12 +875,13 @@ var f_core = {
 		// Optimisation s'il n'y a qu'une seule form !
 		var forms=elt.ownerDocument.forms;
 		if (forms.length==1) {
+			f_core.Debug(f_core, "Only one form into document, returns "+forms[0].id);
 			return forms[0];
 		}
 	
-		for(;elt;elt=elt.parentNode) {
-			var tagName=elt.tagName;
-			if (!tagName || tagName.type!=1) {
+		for(var f=elt;f;f=f.parentNode) {
+			var tagName=f.tagName;
+			if (!tagName || f.nodeType!=1) {
 				continue;
 			}
 			
@@ -876,9 +889,12 @@ var f_core = {
 				continue;
 			}
 			
-			return elt;
+			f_core.Debug(f_core, "Parent form of '"+elt.id+"': "+f.id);
+			
+			return f;
 		}
 
+		f_core.Debug(f_core, "Can not find any parent form for component '"+elt.id+"'.");
 		return null;
 	},
 	/**
@@ -1673,8 +1689,8 @@ var f_core = {
 	},
 	/**
 	 * @method public static final
-	 * @param optional string url
-	 * @param optional string dest Window name.
+	 * @param optional String url
+	 * @param optional String dest Window name.
 	 * @param optional HTMLElement elt
 	 * @param optional f_event event 
 	 * @param optional Object createWindowParameters
@@ -1689,7 +1705,7 @@ var f_core = {
 	 * Submit the page, and open a new window to show the response.
 	 * 
 	 * @method public static final
-	 * @param optional string dest Window name.
+	 * @param optional String dest Window name.
 	 * @param optional Object createWindowParameters
 	 * @param optional boolean modal
 	 * @param optional f_event event Event if any.
@@ -1702,7 +1718,7 @@ var f_core = {
 	 * Submit the page, and open a new window to show the response.
 	 * 
 	 * @method public static final
-	 * @param optional string dest Window name.
+	 * @param optional String dest Window name.
 	 * @param optional Object createWindowParameters
 	 * @param optional f_event event Event if any.
 	 * @return boolean <code>true</code> if success.
@@ -1771,7 +1787,7 @@ var f_core = {
 	 *
 	 * @method public static final
 	 * @param HTMLElement elt Start node.
-	 * @param string claz Css class name. 
+	 * @param String claz Css class name. 
 	 * @return HTMLElement
 	 */
 	GetChildByCssClass: function(elt,claz) {
@@ -1782,7 +1798,7 @@ var f_core = {
 	 *
 	 * @method public static final
 	 * @param HTMLElement elt Start node.
-	 * @param string claz Class name.
+	 * @param String claz Class name.
 	 * @param boolean css Search Css class.
 	 * @return HTMLElement
 	 */
@@ -1815,8 +1831,8 @@ var f_core = {
 	 * Find component
 	 *
 	 * @method public static final
-	 * @param string id1 Identifier
-	 * @param optional string id2 Identifier
+	 * @param String id1 Identifier
+	 * @param optional String id2 Identifier
 	 * @return HTMLElement
 	 */
 	FindComponent: function(id1, id2) {
@@ -1833,7 +1849,7 @@ var f_core = {
 	 * Find a child by its identifier.
 	 *
 	 * @method public static final
-	 * @param string id Identifier
+	 * @param String id Identifier
 	 * @param Document doc Document.
 	 * @param hidden boolean noCompleteComponent Dont complete component !
 	 * @return HTMLElement
@@ -2009,7 +2025,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static final
-	 * @param optional string version
+	 * @param optional String version
 	 * @return boolean 
 	 */
 	IsGecko: function(version) {
@@ -2049,7 +2065,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static final
-	 * @param optional string version
+	 * @param optional String version
 	 * @return boolean 
 	 */
 	IsInternetExplorer: function(version) {
@@ -2115,6 +2131,9 @@ var f_core = {
 		}
 		
 		var firefox=agt.indexOf("firefox");
+		if (firefox<0) {
+			firefox=agt.indexOf("mozilla");
+		}
 		if (firefox>=0) {			
 			// On coupe aprés le premier espace, ou la fin de la chaine !
 			var p1=agt.indexOf(" ",firefox);
@@ -2358,7 +2377,7 @@ var f_core = {
 	 * @method hidden static final
 	 */
 	VerifyProperties: function(object) {
-		if (!f_core.Debug_Mode) {
+		if (!f_core.DebugMode) {
 			return;
 		}
 		
@@ -2390,6 +2409,12 @@ var f_core = {
 			}
 			
 			if (value instanceof RegExp) {
+				continue;
+
+			} else if (value instanceof Date) {
+				continue;
+
+			} else if (window.f_time && (value instanceof f_time)) {
 				continue;
 
 			} else if (value instanceof Array) {
@@ -2835,9 +2860,9 @@ var f_core = {
 	},
 	/**
 	 * @method public static final
-	 * @param string cookieName
+	 * @param String cookieName
 	 * @param optional HTMLDocument doc Html document.
-	 * @return string value associated to the cookie, or <code>null</code>.
+	 * @return String value associated to the cookie, or <code>null</code>.
 	 */
 	GetCookieValue: function(cookieName, doc) {
 		f_core.Assert(typeof(cookieName)=="string", "Bad cookieName ! ("+cookieName+")");
@@ -2887,8 +2912,8 @@ var f_core = {
 	},
 	/**
 	 * @method public static final
-	 * @param string cookieName
-	 * @param optional string cookieValue Value to associate with cookie, or <code>null</code> to delete cookie !
+	 * @param String cookieName
+	 * @param optional String cookieValue Value to associate with cookie, or <code>null</code> to delete cookie !
 	 * @param optional HTMLDocument doc Html document
 	 * @return boolean Returns <code>true</code> if success.
 	 */
@@ -2911,7 +2936,7 @@ var f_core = {
 		} catch (x) {
 			f_core.Error(f_core, "Can not set cookie '"+cookieName+"', value='"+cookieValue+"'.", x);
 	
-			if (f_core.Debug_Mode) {
+			if (f_core.DebugMode) {
 				throw x;
 			}
 			
@@ -2953,7 +2978,7 @@ var f_core = {
 	 * Returns an effect specified by its name.
 	 *
 	 * @method hidden static 
-	 * @param string effectName Name of effect
+	 * @param String effectName Name of effect
 	 * @param HTMLElement body Component which be applied the effect.
 	 * @param optional Function callback Callback which be called when the effect changes properties.
 	 * @return f_effect An f_effect object. 
@@ -3489,7 +3514,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static final
-	 * @param HtmlFormElement form
+	 * @param HTMLFormElement form
 	 * @param String pattern
 	 * @param any data
 	 * @param boolean onlyOne
@@ -3537,8 +3562,8 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static final
-	 * @param string text Text to encode to HTML form
-	 * @return string Html form of text.
+	 * @param String text Text to encode to HTML form
+	 * @return String Html form of text.
 	 */
 	EncodeHtml: function(text) {
 		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -3617,20 +3642,50 @@ var f_core = {
 		
 		return text.charAt(0).toUpperCase()+text.substring(1);
 	},
-	
+	/**
+	 * @method hidden static
+	 * @param HTMLElement component Html component.
+	 * @param number opacity Value between 0 (hidden) and 1 (visible)
+	 * @return void
+	 */
+	SetOpacity: function(component, opacity) {
+		f_core.Assert(component && component.tagName, "Invalid component parameter ("+component+")");
+
+		if (component.style.opacity!==undefined) {
+			// CSS 3  on peut toujours réver !
+			component.style.opacity = cur;
+			return;
+		}
+		
+		if (f_core.IsInternetExplorer()) {
+			if (cur==1) {
+				component.style.filter = "";
+				
+			} else {
+				component.style.filter = "alpha(opacity="+Math.floor(cur*100)+")";
+			}
+			
+			return;
+		}
+		
+		if (f_core.IsGecko()) {
+			component.style.MozOpacity = cur;
+			return;
+		}
+	},
 	/**
 	 * @method public static
-	 * @return string
+	 * @return String
 	 */
 	f_getName: function() {
 		return "f_core";
 	},
 	/**
 	 * @method public string
-	 * @return string
+	 * @return String
 	 */
 	toString: function() {
-		return "[f_core]";
+		return "[class f_core]";
 	}
 }
 

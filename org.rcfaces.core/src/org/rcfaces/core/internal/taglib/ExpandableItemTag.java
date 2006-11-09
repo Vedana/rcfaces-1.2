@@ -100,6 +100,7 @@ public abstract class ExpandableItemTag extends UIImageItemTag implements Tag {
 		if (expandedImageURL != null) {
 			if (isValueReference(expandedImageURL)) {
 				ValueBinding vb = application.createValueBinding(expandedImageURL);
+
 				component.setExpandedImageURL(vb);
 			} else {
 				component.setExpandedImageURL(expandedImageURL);

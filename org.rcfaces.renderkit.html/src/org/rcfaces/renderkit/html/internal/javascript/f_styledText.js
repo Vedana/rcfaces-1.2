@@ -11,14 +11,14 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getText: function() {
 		return this.innerHTML;
 	},
 	/**
 	 * @method public
-	 * @param string text The text.
+	 * @param String text The text.
 	 * @return void
 	 */
 	f_setText: function(text) {

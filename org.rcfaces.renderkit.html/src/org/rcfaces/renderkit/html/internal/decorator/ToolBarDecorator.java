@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -74,7 +77,6 @@ import javax.faces.model.SelectItemGroup;
 import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.component.ToolItemSeparatorComponent;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -86,7 +88,6 @@ import org.rcfaces.core.model.IImagesSelectItem;
 import org.rcfaces.core.model.IStyledSelectItem;
 import org.rcfaces.core.model.IVisibleSelectItem;
 import org.rcfaces.core.model.SeparatorSelectItem;
-import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 
 /**
@@ -344,79 +345,10 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
         javaScriptWriter.writeln(");");
 
         if (selectItem instanceof IImagesSelectItem) {
-            IImagesSelectItem iim = (IImagesSelectItem) selectItem;
-
-            String imageURL = iim.getImageURL();
-            String disabledImageURL = iim.getDisabledImageURL();
-            String hoverImageURL = iim.getHoverImageURL();
-            String selectedImageURL = iim.getSelectedImageURL();
-
-            String originalImageURL = imageURL;
-            if (imageURL != null) {
-                imageURL = AbstractCameliaRenderer.rewriteURL(componentContext,
-                        IURLRewritingProvider.IMAGE_URL_TYPE, "imageURL",
-                        imageURL, null, null);
-            }
-            if (disabledImageURL != null) {
-                disabledImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "disabledImageURL", disabledImageURL, originalImageURL, null);
-            }
-            if (hoverImageURL != null) {
-                hoverImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "hoverImageURL", hoverImageURL, originalImageURL, null);
-            }
-            if (selectedImageURL != null) {
-                selectedImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "selectedImageURL", selectedImageURL, originalImageURL, null);
-            }
-
-            if (imageURL != null || disabledImageURL != null
-                    || hoverImageURL != null || selectedImageURL != null) {
-
-                javaScriptWriter.writeMethodCall("_setItemImages").write(varId);
-                pred = 0;
-
-                if (imageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeNull();
-                    }
-                    javaScriptWriter.write(',').writeString(imageURL);
-                } else {
-                    pred++;
-                }
-
-                if (disabledImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeNull();
-                    }
-                    javaScriptWriter.write(',').writeString(disabledImageURL);
-                } else {
-                    pred++;
-                }
-                if (hoverImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeNull();
-                    }
-                    javaScriptWriter.write(',').writeString(hoverImageURL);
-                } else {
-                    pred++;
-                }
-
-                if (selectedImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeNull();
-                    }
-                    javaScriptWriter.write(',').writeString(selectedImageURL);
-                } else {
-                    pred++;
-                }
-
-                javaScriptWriter.writeln(");");
-            }
+            writeSelectItemImages((IImagesSelectItem) selectItem,
+                    javaScriptWriter, null, "_setItemImages", varId, true);
         }
+
     }
 
     protected final ToolBarContext getToolBarContext() {

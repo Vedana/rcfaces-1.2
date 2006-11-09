@@ -329,7 +329,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                                 + ")");
 
                         setNoCache(response);
-                        response.setStatus(HttpServletResponse.SC_CONFLICT);
+                        response.sendError(HttpServletResponse.SC_CONFLICT,
+                                "Invalid RCFaces version !");
                         return;
                     }
                 }

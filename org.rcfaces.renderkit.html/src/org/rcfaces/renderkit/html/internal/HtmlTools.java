@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/13 18:04:38  oeuillot
  * Ajout de:
  * DateEntry
@@ -450,7 +453,7 @@ public class HtmlTools {
 
             } else {
                 writer.startElement("U");
-                writer.writeAttribute("class", ACCESSKEY_CLASSNAME);
+                writer.writeClass(ACCESSKEY_CLASSNAME);
                 writer.write(c);
                 writer.endElement("U");
                 ak = NO_ACCESS_KEY;

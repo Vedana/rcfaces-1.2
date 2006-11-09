@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/10/04 12:31:59  oeuillot
  * Stabilisation
  *
@@ -29,6 +32,8 @@
  */
 package org.rcfaces.core.internal.util;
 
+import javax.faces.FacesException;
+
 import org.rcfaces.core.internal.lang.StringAppender;
 
 /**
@@ -39,6 +44,8 @@ public class FastWriter {
     private static final String REVISION = "$Revision$";
 
     protected final StringAppender sa;
+
+    private boolean closed = false;
 
     /**
      * Creates a new CharArrayWriter.
@@ -52,12 +59,19 @@ public class FastWriter {
     }
 
     public final FastWriter write(char c) {
+        if (closed) {
+            throw new FacesException("Writer is closed !");
+        }
         sa.append(c);
 
         return this;
     }
 
     public final FastWriter write(String str) {
+        if (closed) {
+            throw new FacesException("Writer is closed !");
+        }
+
         sa.append(str);
 
         return this;
@@ -72,8 +86,16 @@ public class FastWriter {
     }
 
     public final FastWriter ensure(int length) {
+        if (closed) {
+            throw new FacesException("Writer is closed !");
+        }
+
         sa.ensure(length);
 
         return this;
+    }
+
+    protected void close() {
+        this.closed = true;
     }
 }

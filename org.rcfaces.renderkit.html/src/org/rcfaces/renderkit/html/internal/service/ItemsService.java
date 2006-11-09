@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.6  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.5  2006/10/04 12:31:43  oeuillot
  * Stabilisation
  *
@@ -151,6 +154,10 @@ public class ItemsService extends AbstractHtmlService {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
                 facesContext).getServicesRegistry();
+        if (serviceRegistry == null) {
+            // Designer mode
+            return null;
+        }
 
         return (ItemsService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
@@ -250,7 +257,7 @@ public class ItemsService extends AbstractHtmlService {
             LOG.error("Catch runtime exception !", ex);
 
             throw ex;
-            
+
         } finally {
             if (printWriter != null) {
                 printWriter.close();
@@ -280,7 +287,7 @@ public class ItemsService extends AbstractHtmlService {
             jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
                     "GetElementById").writeString(componentId).writeln(
                     ", document);");
-            jsWriter.writeMethodCall("_cancelServerRequest").write(");");
+            jsWriter.writeMethodCall("fa_cancelFilterRequest").write(");");
 
         } catch (IOException ex) {
             throw new FacesException("Can not write cancel response.", ex);

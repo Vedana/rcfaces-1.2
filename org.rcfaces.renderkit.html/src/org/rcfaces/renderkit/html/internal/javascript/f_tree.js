@@ -2240,7 +2240,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @return string
+	 * @return String
 	 */
 	f_getNodeLabel: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2250,7 +2250,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object node
-	 * @return string
+	 * @return String
 	 */
 	f_getNodeValue: function(node) {
 		f_core.Assert(node._parentTreeNode, "f_getNodeLabel: Node parameter is invalid !");

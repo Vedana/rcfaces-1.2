@@ -19,7 +19,7 @@ var __prototype = {
 	 * Retourne <code>true</code> if the component is value
 	 *
 	 * @method public
-	 * @return string Or <code>null</code> if not defined !
+	 * @return String Or <code>null</code> if not defined !
 	 */
 	f_getValue: function() {
 		if (this._value===undefined) {
@@ -35,7 +35,7 @@ var __prototype = {
 	 * Set value state.
 	 *
 	 * @method public
-	 * @param string value
+	 * @param String value
 	 * @return void
 	 */
 	f_setValue: function(value) {

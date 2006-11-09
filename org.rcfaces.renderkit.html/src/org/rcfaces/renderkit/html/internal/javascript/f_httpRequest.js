@@ -141,7 +141,7 @@ var __prototype = {
 	 * Returns the message associated to the status of the response.
 	 *
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getStatusText: function() {
 		if (!this._request) {
@@ -154,7 +154,7 @@ var __prototype = {
 	 * Returns the raw data of the response.
 	 *
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getResponse: function() {
 		if (this._response===false) {
@@ -192,7 +192,7 @@ var __prototype = {
 	 * Returns the response content type;
 	 *
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getResponseContentType: function() {
 		return this._responseContentType;
@@ -202,8 +202,8 @@ var __prototype = {
 	 * 
 	 *
 	 * @method public
-	 * @param string name
-	 * @return string
+	 * @param String name
+	 * @return String
 	 */
 	f_getResponseHeader: function(name) {
 		var request=this._request;
@@ -263,8 +263,8 @@ var __prototype = {
 	 * Specifies a request header.
 	 *
 	 * @method public
-	 * @param string name Name of property.
-	 * @param string value Value to associate.
+	 * @param String name Name of property.
+	 * @param String value Value to associate.
 	 * @return void
 	 */
 	f_setRequestHeader: function(name, value) {
@@ -294,9 +294,9 @@ var __prototype = {
 	 * "text/plain" et le mode de transmission synchrone.
 	 *
 	 * @method public
-	 * @param string method
+	 * @param String method
 	 * @param any data
-	 * @param optional string contentType
+	 * @param optional String contentType
 	 * @param optional f_progressMonitor progressMonitor
 	 * @return void
 	 */
@@ -512,7 +512,7 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param any data
-	 * @param optional string contentType
+	 * @param optional String contentType
 	 * @param optional f_progressMonitor progressMonitor
 	 * @return void
 	 */

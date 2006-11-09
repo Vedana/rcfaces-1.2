@@ -36,6 +36,13 @@ var __prototype = {
 		
 		this.f_super(arguments);
 	},
+	/**
+	 * 
+	 * @method protected
+	 */
+	f_getMainClassName: function() {
+		return "f_imagePagerButton";
+	},
 
 	fa_pagedComponentInitialized: function(pagedComponent) {
 		this._pagedComponent=pagedComponent;

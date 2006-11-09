@@ -60,6 +60,7 @@ public class JavaScriptTools {
 
                     facesMessage = message;
                     forValue = forToken;
+
                 }
             }
         }
@@ -88,6 +89,11 @@ public class JavaScriptTools {
                 .getJavaScriptRenderContext();
 
         FacesContext facesContext = js.getFacesContext();
+
+        String componentClientId = htmlRenderContext
+                .computeBrotherComponentClientId(facesContext, js.getWriter()
+                        .getComponentRenderContext().getComponent(),
+                        componentId);
 
         boolean declare[] = new boolean[1];
         String key = javascriptRenderContext.allocateFacesMessage(facesMessage,
@@ -149,8 +155,8 @@ public class JavaScriptTools {
         js.writeMethodCall("f_registerMessageObject");
 
         pred = 0;
-        if (componentId != null) {
-            js.writeString(componentId);
+        if (componentClientId != null) {
+            js.writeString(componentClientId);
 
         } else if (isGlobal) {
             js.write("true");
@@ -163,5 +169,4 @@ public class JavaScriptTools {
 
         return js;
     }
-
 }

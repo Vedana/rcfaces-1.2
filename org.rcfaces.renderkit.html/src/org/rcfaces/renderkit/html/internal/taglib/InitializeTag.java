@@ -27,17 +27,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.codec.URLFormCodec;
-import org.rcfaces.core.internal.images.ImageOperationsURLRewritingProvider;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
+import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
 import org.rcfaces.core.internal.taglib.AbstractInitializeTag;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IRepository.IContext;
-import org.rcfaces.core.provider.IURLRewritingProvider;
-import org.rcfaces.core.provider.ImageURLRewritingInformation;
+import org.rcfaces.core.model.ImageContentInformation;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -422,45 +423,27 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
             return;
         }
 
-        String original = favoriteImageURL;
-        IURLRewritingProvider urlRewritingProvider = null;
-        ImageURLRewritingInformation favoriteImageOperation = null;
-        if (Constants.URL_REWRITING_SUPPORT) {
-            urlRewritingProvider = AbstractURLRewritingProvider
-                    .getInstance(facesContext.getExternalContext());
+        ImageContentInformation favoriteImageOperation = new ImageContentInformation();
 
-            if (urlRewritingProvider != null) {
-                favoriteImageOperation = new ImageURLRewritingInformation();
+        IContentAccessor favoriteContentAccessor = ContentAccessorFactory
+                .createFromWebResource(favoriteImageURL, IContentType.IMAGE);
 
-                favoriteImageURL = urlRewritingProvider.computeURL(
-                        facesContext, null,
-                        IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "favoriteImageURL", original, null,
-                        favoriteImageOperation);
+        String favoriteImageURL = favoriteContentAccessor.resolveURL(
+                facesContext, favoriteImageOperation, null);
 
-                if (favoriteImageURL == null) {
-                    return;
-                }
-            }
+        if (favoriteImageURL == null) {
+            return;
         }
 
-        String favoriteIcoImageURL = null;
-        ImageURLRewritingInformation favoriteIcoImageInformation = null;
-        if (urlRewritingProvider != null) {
-            favoriteIcoImageInformation = new ImageURLRewritingInformation(
-                    favoriteImageOperation);
+        ImageContentInformation favoriteIcoImageInformation = new ImageContentInformation();
 
-            favoriteIcoImageURL = urlRewritingProvider
-                    .computeURL(
-                            facesContext,
-                            null,
-                            IURLRewritingProvider.IMAGE_URL_TYPE,
-                            "favoriteImageURL",
-                            // IURLRewritingProvider.URL_REWRITING_PROVIDER_ID
-                            IEFavoriteIconOperation.ID
-                                    + ImageOperationsURLRewritingProvider.URL_REWRITING_SEPARATOR,
-                            original, favoriteIcoImageInformation);
-        }
+        IContentAccessor favoriteIcoContentAccessor = ContentAccessorFactory
+                .createFromWebResource(IEFavoriteIconOperation.ID
+                        + ImageContentAccessorHandler.URL_REWRITING_SEPARATOR,
+                        favoriteContentAccessor);
+
+        String favoriteIcoImageURL = favoriteIcoContentAccessor.resolveURL(
+                facesContext, favoriteIcoImageInformation, null);
 
         if (favoriteIcoImageURL != null) {
             writer.print("<LINK rel=\"SHORTCUT ICON\"");
@@ -981,6 +964,10 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
 
                 if (htmlProcessContext.getProfilerMode()) {
                     LOG.info("PROFILER_MODE is enabled for context.");
+                }
+
+                if (htmlProcessContext.isDesignerMode()) {
+                    LOG.info("DESIGNER_MODE is enabled for context.");
                 }
             }
         }

@@ -4,8 +4,11 @@ import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.RadioButtonComponent;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 public class ImageRadioButtonComponent extends RadioButtonComponent implements 
 	IImageButtonFamilly {
@@ -155,6 +158,20 @@ public class ImageRadioButtonComponent extends RadioButtonComponent implements
 
 	public final void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
+	}
+
+	public final IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
+		
+	}
+
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
 	}
 
 	public void release() {

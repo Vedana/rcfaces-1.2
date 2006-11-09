@@ -19,7 +19,6 @@ var __prototype = {
 	f_finalize: function() {
 		// this._fors=undefined; // string[]
 		// this._forsTranslated=undefined; // String[]
-		// this._showIfMessage=undefined; // boolean
 		
 		this._currentMessage=undefined; // f_messageObject
  	},

@@ -63,7 +63,7 @@ var __static = {
 	_FindZone: undefined, 
 	
 	/**
-	 * @field private static window
+	 * @field private static Window
 	 */
 	_Window: undefined,
 

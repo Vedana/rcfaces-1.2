@@ -28,7 +28,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getText: function() {
 		var titleLabel=this._titleLabel;
@@ -41,7 +41,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string text
+	 * @param String text
 	 * @param hidden boolean noSerialize
 	 * @return void
 	 */

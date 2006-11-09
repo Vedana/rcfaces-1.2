@@ -10,18 +10,18 @@
  * @version $Revision$ $Date$ 
  */
  
-TEXTAREA.f_textArea {
+.f_textArea {
 	margin: 0;
 }
-TEXTAREA.f_textArea_disabled {
+.f_textArea_disabled {
 	border: 1px solid black;
 	margin: 1px;
 }
-TEXTAREA.f_textArea_readonly {
+.f_textArea_readonly {
 	border: 1px solid black;
 	margin: 1px;
 }
 
-LABEL.f_textArea_required {
+.f_textArea_required {
 	color: red;
 }

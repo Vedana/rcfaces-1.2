@@ -13,8 +13,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.AbstractReleasable;
-import org.rcfaces.core.internal.rewriting.AbstractURLRewritingProvider;
-import org.rcfaces.core.provider.IURLRewritingProvider;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -30,14 +28,10 @@ public abstract class AbstractRenderContext extends AbstractReleasable
 
     private Map attributes;
 
-    private IURLRewritingProvider urlRewritingProvider;
-
     protected AbstractRenderContext() {
     }
 
     protected void initialize(FacesContext facesContext) {
-        urlRewritingProvider = AbstractURLRewritingProvider
-                .getInstance(facesContext.getExternalContext());
     }
 
     public String getComponentClientId(FacesContext facesContext,
@@ -226,9 +220,4 @@ public abstract class AbstractRenderContext extends AbstractReleasable
 
     public void encodeEnd(FacesContext facesContext, UIComponent component) {
     }
-
-    public IURLRewritingProvider getURLRewritingProvider() {
-        return urlRewritingProvider;
-    }
-
 }

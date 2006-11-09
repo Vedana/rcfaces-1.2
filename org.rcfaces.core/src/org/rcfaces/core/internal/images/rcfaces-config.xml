@@ -2,8 +2,9 @@
 <rcfaces-config>
 	<providers>
   		<provider>
-  			<provider-id>org.rcfaces.core.URL_REWRITING_PROVIDER</provider-id>
-  			<provider-class>org.rcfaces.core.internal.images.ImageOperationsRepositoryImpl</provider-class>
+  			<provider-id>org.rcfaces.core.IMAGE_CONTENT_PROVIDER</provider-id>
+  			<provider-class>org.rcfaces.core.internal.images.ImageContentAccessorHandlerImpl</provider-class>
+  			<required>org.rcfaces.core.CONTENT_ACCESSOR_REGISTRY</required>
   		</provider>
   	</providers>
 
@@ -94,4 +95,23 @@
 			</operation-internal-contentType>
 		</operation>
 	</image-operations>
+	
+	<adapters>
+		<adapter>
+			<adaptable-class>
+				java.awt.image.RenderedImage
+			</adaptable-class>
+			<adapterFactory-class>
+				org.rcfaces.core.internal.images.ImageAdapterFactory
+			</adapterFactory-class>
+		</adapter>
+		<adapter>
+			<adaptable-class>
+				java.awt.image.RenderedImage[]
+			</adaptable-class>
+			<adapterFactory-class>
+				org.rcfaces.core.internal.images.ImageAdapterFactory
+			</adapterFactory-class>
+		</adapter>
+	</adapters>
 </rcfaces-config>

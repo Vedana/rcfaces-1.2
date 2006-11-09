@@ -4,13 +4,16 @@ import java.lang.String;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import java.util.Date;
+import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
 import org.rcfaces.core.internal.converter.DateConverter;
-import javax.faces.el.ValueBinding;
-import java.util.Date;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IForCapability;
-import org.rcfaces.core.component.AbstractCalendarComponent;
 
 public class DateChooserComponent extends AbstractCalendarComponent implements 
 	IImageButtonFamilly,
@@ -208,6 +211,20 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 	public final void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
+	}
+
+	public final IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
+		
+	}
+
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
 	}
 
 	public final void addValueChangeListener(javax.faces.event.ValueChangeListener listener) {

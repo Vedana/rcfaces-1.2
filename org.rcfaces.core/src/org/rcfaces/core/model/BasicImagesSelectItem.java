@@ -4,10 +4,14 @@
 package org.rcfaces.core.model;
 
 import javax.faces.component.UISelectItem;
+import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
-import org.rcfaces.core.internal.component.ExpandableItemComponent;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.component.IExpandImageAccessors;
+import org.rcfaces.core.internal.component.IImageAccessors;
+import org.rcfaces.core.internal.component.IStatesImageAccessors;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 
 /**
  * 
@@ -36,23 +40,51 @@ public class BasicImagesSelectItem extends BasicSelectItem implements
     public BasicImagesSelectItem(UISelectItem component) {
         super(component);
 
+        IContentAccessors contentAccessors = null;
+
         if (component instanceof IImageCapability) {
-            imageURL = ((IImageCapability) component).getImageURL();
+            contentAccessors = ((IImageCapability) component)
+                    .getImageAccessors();
         }
 
-        if (component instanceof IStatesImageCapability) {
-            IStatesImageCapability is = (IStatesImageCapability) component;
+        if (contentAccessors instanceof IImageAccessors) {
+            IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
 
-            disabledImageURL = is.getDisabledImageURL();
-            hoverImageURL = is.getHoverImageURL();
-            selectedImageURL = is.getSelectedImageURL();
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+
+            IContentAccessor ca = imageAccessors.getImageAccessor();
+            if (ca != null) {
+                imageURL = ca.resolveURL(facesContext, null, null);
+            }
+
+            if (contentAccessors instanceof IStatesImageAccessors) {
+                IStatesImageAccessors is = (IStatesImageAccessors) imageAccessors;
+
+                ca = is.getDisabledImageAccessor();
+                if (ca != null) {
+                    disabledImageURL = ca.resolveURL(facesContext, null, null);
+                }
+
+                ca = is.getHoverImageAccessor();
+                if (ca != null) {
+                    hoverImageURL = ca.resolveURL(facesContext, null, null);
+                }
+
+                ca = is.getSelectedImageAccessor();
+                if (ca != null) {
+                    selectedImageURL = ca.resolveURL(facesContext, null, null);
+                }
+
+                if (contentAccessors instanceof IExpandImageAccessors) {
+                    IExpandImageAccessors ei = (IExpandImageAccessors) is;
+
+                    ca = ei.getExpandedImageAccessor();
+                    if (ca != null) {
+                        expandedImageURL = ca.resolveURL(facesContext, null, null);
+                    }
+                }
+            }
         }
-
-        if (component instanceof ExpandableItemComponent) {
-            expandedImageURL = ((ExpandableItemComponent) component)
-                    .getExpandedImageURL();
-        }
-
     }
 
     public String getImageURL() {

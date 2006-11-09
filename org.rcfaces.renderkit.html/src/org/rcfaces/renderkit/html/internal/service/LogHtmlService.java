@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.2  2006/09/14 14:34:39  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -55,6 +58,10 @@ public class LogHtmlService extends LogService {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
                 facesContext).getServicesRegistry();
+        if (serviceRegistry == null) {
+            // Designer mode
+            return null;
+        }
 
         return (LogService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);

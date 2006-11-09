@@ -11,15 +11,6 @@
  */
  
 var __static = {
-	/**
-	 * @field private static final string
-	 */
-	_COLLAPSED_IMAGE_URL: "/expandBar/arrow_collapsed.gif",
-
-	/**
-	 * @field private static final string
-	 */
-	_EXPANDED_IMAGE_URL: "/expandBar/arrow_expanded.gif",
 
 	/**
 	 * @method private static
@@ -47,6 +38,8 @@ var __prototype = {
 	f_expandBar: function() {
 		this.f_super(arguments);
 		
+		this._className=f_core.GetAttribute(this, "v:className", this.className);
+		
 		var groupName=f_core.GetAttribute(this, "v:groupName");
 		if (groupName) {
 			this._groupName=groupName;
@@ -69,12 +62,6 @@ var __prototype = {
 			text._link=this;
 			text.onclick=f_expandBar._OnHeadClick;
 		}
-	
-		var button=f_core.GetFirstElementByTagName(this, "INPUT");
-		if (button) {
-			this._button=button;
-			button.f_link=this;
-		}
 
 		var body=f_core.GetFirstElementByTagName(this, "DIV");
 		if (body) {
@@ -89,6 +76,8 @@ var __prototype = {
 		this.f_addEventListener(f_event.SELECTION, this._onSelect);
 	},
 	f_finalize: function() {
+		// this._className=undefined;
+	
 		var effect=this._effect;
 		if (effect) {
 			// On force la destruction !
@@ -97,25 +86,31 @@ var __prototype = {
 			this._effect=undefined;
 		}
 	
-		this._body=undefined;
-		this._groupName=undefined;
+		var body=this._body;
+		if (body) {
+			this._body=undefined; // HTMLDivElement
+			f_core.VerifyProperties(body);
+		}
+			
+		// this._groupName=undefined;
+		
 		
 		var head=this._head;
 		if (head) {
-			this._head=undefined;
+			this._head=undefined; // HtmlLiElement
 			
 			head.onmouseover=null;
 			head.onmouseout=null;
-			head._link=undefined;
-			head._className=undefined;
+			head._link=undefined; // f_expandBar
+			// head._className=undefined;
 			
 			f_core.VerifyProperties(head);
 		}
 
 		var text=this._text;
 		if (text) {
-			this._text=undefined;			
-			text._link=undefined;
+			this._text=undefined; // HtmlLabelElement		
+			text._link=undefined; // f_expandBar
 			text.onclick=null;
 
 			f_core.VerifyProperties(text);
@@ -123,10 +118,10 @@ var __prototype = {
 
 		var button=this._button;
 		if (button) {
-			this._button=undefined;
+			this._button=undefined; // HtmlInputElement
 			
 			button.onclick=null;
-			button.f_link=undefined;
+			button.f_link=undefined; // f_expandBar
 			
 			f_core.VerifyProperties(button);
 		}
@@ -134,7 +129,7 @@ var __prototype = {
 		this.f_super(arguments);
 	},
 	f_setDomEvent: function(type, target) {
-		var link=this._button;
+		var link=this.f_getButton();
 		if (link) {
 			switch(type) {
 			case f_event.SELECTION: 
@@ -148,6 +143,25 @@ var __prototype = {
 		}
 						
 		this.f_super(arguments, type, target);
+	},
+	/**
+	 * @method protected
+	 */
+	f_getButton: function() {
+		var button=this._button;
+		if (button!==undefined) {
+			return button;
+		}
+		
+		button=f_core.GetFirstElementByTagName(this, "INPUT");
+		if (button) {
+			button.f_link=this;
+		} else {
+			button=null;
+		}
+		
+		this._button=button;
+		return button;
 	},
 	f_clearDomEvent: function(type, target) {
 		var link=this._button;
@@ -217,45 +231,20 @@ var __prototype = {
 			return;
 		}
 		
-		var button=this._button;
-		if (button) {
-			var imageURL=f_env.GetStyleSheetBase()+ this.f_getButtonImageURL(set);
+		this.className=this._className+(set?"_collapsed":"");
 		
-			button.src=imageURL;	
-		}
-		
-		var effect=this._effect;
-		if (effect===undefined) {
-			effect = f_core.GetAttribute(this, "v:effect");
-			if (effect) {
-				effect=f_core.CreateEffectByName(effect, body, function(value) {
-					var display=body._oldDisplay;
-					if (value==0) {
-						display="none";
-					}
-					
-					var parent=body.parentNode;
-					if (display==parent.style.display) {
-						return;
-					}
-					
-					parent.style.display=display;
-				});
-			}
-			if (!effect) {
-				effect=false;
-			}
-			this._effect=effect;
-		}
+		var effect=this.f_getEffect();
 		
 		if (effect) {
 			effect.f_performEffect(set);
 
 		} else if (set) {
-			body.style.display="none";
+			body.className="f_expandBar_body_collapsed";
+			body.parentNode.style.display="none";
 			
 		} else  {
-			body.style.display="block";
+			body.className="f_expandBar_body";
+			body.parentNode.style.display="block";
 		}
 		
 		if (!set && this._groupName) {
@@ -278,23 +267,88 @@ var __prototype = {
 	},
 	/**
 	 * @method protected
+	 * @return f_effect;
 	 */
-	f_getButtonImageURL: function(collapsed) {
-		if (collapsed) {
-			return f_expandBar._COLLAPSED_IMAGE_URL;
+	f_getEffect: function() {
+		var effect=this._effect;
+		if (effect!==undefined) {
+			return effect;
 		}
 		
-		return f_expandBar._EXPANDED_IMAGE_URL;
+		var body=this._body;
+		
+		effect = f_core.GetAttribute(this, "v:effect");
+		if (effect) {
+			effect=f_core.CreateEffectByName(effect, body, function(value) {
+				var display=body._oldDisplay;
+				var className="f_expandBar_body_effect";
+				if (value==0) {
+					display="none";
+					className="f_expandBar_body_collapsed";
+					
+				} else if (value==1) {
+					className="f_expandBar_body";				
+				}
+				
+				if (body.className!=className) {
+					body.className=className;
+				}
+				
+				var parent=body.parentNode;
+				if (display==parent.style.display) {
+					return;
+				}
+				
+				parent.style.display=display;
+			});
+		}
+		if (!effect) {
+			effect=null;
+		}
+		this._effect=effect;
+		
+		return effect;
 	},
 	/**
 	 * Returns the group name of this expandBar, or <code>null</code> if it is not defined !
 	 *
 	 * @method public
-	 * @return string The group name.
+	 * @return String The group name.
 	 */
 	f_getGroupName: function() {
 		return this._groupName;
 	},
-	fa_getRadioScope: fa_groupName.GlobalScope	
+	fa_getRadioScope: fa_groupName.GlobalScope,
+	/**
+	 * @method public
+	 * @param String text Text to change.
+	 * @return void
+	 */
+	f_setText: function(text) {
+		f_core.Assert(typeof(text)=="string", "Invalid text parameter ! ('"+text+"')");
+		var textLabel=this._text;
+		if (!textLabel) {
+			return;
+		}
+
+		if (this.f_getText() == text) {
+			return;
+		}
+		f_core.SetTextNode(textLabel, text);
+		
+		this.f_setProperty(f_prop.TEXT,text);
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getText: function() {
+		var textLabel=this._text;
+		if (!textLabel) {
+			return;
+		}
+
+		return f_core.GetTextNode(textLabel);
+	}	
 }
 var f_expandBar=new f_class("f_expandBar", null, __static, __prototype, f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName);

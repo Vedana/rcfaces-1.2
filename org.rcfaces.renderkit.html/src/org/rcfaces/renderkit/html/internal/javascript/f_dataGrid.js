@@ -69,12 +69,12 @@ var __static = {
 	/** 
 	 * @field private static final number	
 	 */
-	_TEXT_RIGHT_PADDING: 4,
+	_TEXT_RIGHT_PADDING: 8,
 	
 	/** 
 	 * @field private static final number	
 	 */
-	_SORT_PADDING: 10,
+	_SORT_PADDING: 18,
 	
 	/** 
 	 * @field private static 	
@@ -893,6 +893,15 @@ var __static = {
 			column._label.style.width=(w-f_dataGrid._TEXT_RIGHT_PADDING+twidth)+"px";
 			
 
+			var totalCols=0;
+			var cols=col.parentNode.childNodes;
+			for(var i=0;i<cols.length;i++) {
+				if (cols[i].tagName!="COL") {
+					continue;
+				}
+				totalCols+=parseInt(cols[i].style.width);
+			}
+
 			// Ca a peut etre changé !
 			tableOffsetWidth=dataGrid._table.offsetWidth;
 			
@@ -901,7 +910,7 @@ var __static = {
 				var tw=tableOffsetWidth+dw;
 				dataGrid._table.style.width=tw+"px";
 			}
-			dataGrid._title.style.width=(dataGrid._title.offsetWidth+dw)+"px";
+			dataGrid._title.style.width=totalCols+"px";
 		}
 		
 //		window.status="deltaTitle="+(dataGrid._title.offsetWidth-dataGrid._table.offsetWidth)+"pixels ";
@@ -978,8 +987,8 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param string text1
-	 * @param string text2
+	 * @param String text1
+	 * @param String text2
 	 * @return number
 	 */
 	Sort_Alpha: function(text1, text2) {
@@ -993,8 +1002,8 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param string text1
-	 * @param string text2
+	 * @param String text1
+	 * @param String text2
 	 * @return number
 	 */
 	Sort_AlphaIgnoreCase: function(text1, text2) {
@@ -1008,8 +1017,8 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param string text1
-	 * @param string text2
+	 * @param String text1
+	 * @param String text2
 	 * @return number
 	 */
 	Sort_Integer: function(text1, text2) {
@@ -1022,8 +1031,8 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param string text1
-	 * @param string text2
+	 * @param String text1
+	 * @param String text2
 	 * @return number
 	 */
 	Sort_Number: function(text1, text2) {
@@ -1036,8 +1045,8 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param string text1
-	 * @param string text2
+	 * @param String text1
+	 * @param String text2
 	 * @return number
 	 */
 	Sort_Date: function(text1, text2) {
@@ -1065,8 +1074,8 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param string text1
-	 * @param string text2
+	 * @param String text1
+	 * @param String text2
 	 * @return number
 	 */
 	Sort_Time: function(text1, text2) {
@@ -1094,8 +1103,8 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param string text1
-	 * @param string text2
+	 * @param String text1
+	 * @param String text2
 	 * @return number
 	 */
 	Sort_Server: function(text1, text2) {
@@ -1728,8 +1737,8 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param any value The value of the new row
-	 * @param string columnValue1 A parameter for each column 
-	 * @param string columnValue2 A parameter for each column 
+	 * @param String columnValue1 A parameter for each column 
+	 * @param String columnValue2 A parameter for each column 
 	 * @return Object
 	 */
 	f_addRow: function(value, columnValue1, columnValue2) {
@@ -2150,7 +2159,7 @@ var __prototype = {
 	 * @method public
 	 * @param any rowValue Row value, a row object, or the index of row into the table.
 	 * @param boolean onlyVisible Keey only visible columns.
-	 * @return string[] 
+	 * @return String[] 
 	 */
 	f_getRowValues: function(rowValue, onlyVisible) {
 		f_core.Assert(rowValue, "Invalid rowValue parameter ! ("+rowValue+")");
@@ -2251,7 +2260,7 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param any rowIndex Row object.
-	 * @return string the key of the row.
+	 * @return String the key of the row.
 	 */
 	f_getRowValueAtIndex: function(rowIndex) {
 		var row=this._getRow(rowIndex, true, true);
@@ -2266,7 +2275,7 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param any rowIndex Row object.
-	 * @return string the key of the row.
+	 * @return String the key of the row.
 	 */
 	f_getRowValue: function(rowIndex) {
 		var row=this._getRow(rowIndex, true);
@@ -2783,7 +2792,10 @@ var __prototype = {
 
 		this.f_performPagedComponentInitialized();
 	},
-	_cancelServerRequest: function() {
+	/**
+	 * @method hidden
+	 */
+	fa_cancelFilterRequest: function() {
 		// Appeler par la génération du serveur !
 	},
 	_releaseColumns: function() {
@@ -3556,7 +3568,7 @@ var __prototype = {
 	 * @method public
 	 * @param number row
 	 * @param number columnIndex
-	 * @param string imageURL 
+	 * @param String imageURL 
 	 * @return void
 	 */
 	f_setCellImageURL: function(row, columnIndex, imageURL) {
@@ -3608,7 +3620,7 @@ var __prototype = {
 	},
 	/**
 	 * @XXX
-	 * @return string
+	 * @return String
 	 */
 	f_getCellImageURL: function(row, columnIndex) {
 	},

@@ -19,6 +19,13 @@ var __prototype = {
 	},
 	*/
 	/**
+	 * 
+	 * @method protected
+	 */
+	f_getMainClassName: function() {
+		return "f_imageRadioButton";
+	},
+	/**
 	 * @method protected
 	 */
 	_onSelect: function() {
@@ -38,9 +45,10 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_parseAttributes: function() {
-    	var v_groupName=f_core.GetAttribute(this, "v:groupName");
-		if (v_groupName) {
-			this.f_setGroupName(v_groupName);
+    	var groupName=f_core.GetAttribute(this, "v:groupName");
+    	
+ 		if (groupName) {
+			this.f_setGroupName(groupName);
 		}
 
 		this.f_super(arguments);
@@ -70,7 +78,7 @@ var __prototype = {
 	 * Returns the group name of the button
 	 * 
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getGroupName: function() {
 		return this._groupName;
@@ -79,9 +87,9 @@ var __prototype = {
 	 * Set the group name of the button.
 	 *
 	 * @method hiden
-	 * @param string group
+	 * @param String group
 	 * @return void
-	 *
+	 */
 	f_setGroupName: function(group) {
 		this.f_changeGroup(this._groupName, group, this);
 		this._groupName = group;

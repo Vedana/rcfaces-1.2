@@ -315,7 +315,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @param string s 
+	 * @param String s 
 	 * @return void
 	 */
 	f_append: function(s) {
@@ -333,7 +333,7 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_toHexMd5: function() {
 		var s=this._buffer;
@@ -343,7 +343,7 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_toBase64Md5: function() { 
 		var s=this._buffer;
@@ -353,7 +353,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_toMd5: function() { 
 		var s=this._buffer;
@@ -363,8 +363,8 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @param string key
-	 * @return string
+	 * @param String key
+	 * @return String
 	 */
 	f_toHexHmacMd5: function(key) {
 		var data=this._buffer;
@@ -374,8 +374,8 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @param string key
-	 * @return string
+	 * @param String key
+	 * @return String
 	 */
 	f_toBase64HmacMd5: function(key) {
 		var data=this._buffer;
@@ -385,8 +385,8 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @param string key
-	 * @return string
+	 * @param String key
+	 * @return String
 	 */
 	f_toHmacMd5: function(key) { 
 		var data=this._buffer;

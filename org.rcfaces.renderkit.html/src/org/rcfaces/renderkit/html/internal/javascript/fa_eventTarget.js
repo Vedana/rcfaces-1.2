@@ -186,7 +186,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
-	 * @param string type Type of event.
+	 * @param String type Type of event.
 	 * @param any action An object of type string or function.
 	 * @return void
 	 */
@@ -202,7 +202,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method hidden
-	 * @param string type Type of event.
+	 * @param String type Type of event.
 	 * @param any action An object of type string or function.
 	 * @return void
 	 */
@@ -218,7 +218,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
-	 * @param string type Type of event.
+	 * @param String type Type of event.
 	 * @param any action An object of type string or function.
 	 * @return void
 	 */

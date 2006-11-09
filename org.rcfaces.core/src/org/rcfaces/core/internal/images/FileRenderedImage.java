@@ -1,39 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.5  2006/10/04 12:31:59  oeuillot
- * Stabilisation
- *
- * Revision 1.4  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.3  2006/09/05 08:57:21  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.2  2006/09/01 15:24:28  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.3  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.2  2006/06/19 17:22:19  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.1  2006/05/11 16:34:19  oeuillot
- * Correction du calendar
- * Ajout de DateChooser
- * Ajout du moteur de filtre d'images
- * Ajout de l'evt   loadListener pour le AsyncManager
- *
  */
 package org.rcfaces.core.internal.images;
 
@@ -62,7 +28,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
-import org.rcfaces.core.internal.images.ImageOperationsServlet.IBufferedImage;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 

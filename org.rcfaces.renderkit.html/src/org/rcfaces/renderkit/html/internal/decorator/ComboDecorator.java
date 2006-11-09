@@ -1,50 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.6  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.5  2006/07/18 17:06:30  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.4  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.3  2006/02/03 11:37:33  oeuillot
- * Calcule les classes pour le Javascript, plus les fichiers !
- *
- * Revision 1.2  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.1  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.1  2005/12/28 11:12:48  oeuillot
- * Ajout des writer de Menu et ImageButton
- * Split de l'aspect fa_menu
- * Gestion de l'heritage d'aspect !
- *
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
@@ -66,7 +21,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.model.IClientDataSelectItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-
 
 /**
  * 
@@ -162,7 +116,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
                 writer.startElement("OPTGROUP");
 
                 if (text != null) {
-                    writer.writeAttribute("label", text);
+                    writer.writeLabel(text);
                 }
 
                 return EVAL_NODE;
@@ -170,20 +124,20 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
 
             writer.startElement("OPTION");
 
-            writer.writeAttribute("value", value);
+            writer.writeValue(value);
 
             if (getContext().isValueSelected(selectItem, selectItemValue)) {
-                writer.writeAttribute("selected");
+                writer.writeSelected();
                 selectionCount++;
             }
 
             if (selectItem.isDisabled()) {
-                writer.writeAttribute("disabled");
+                writer.writeDisabled();
             }
 
             String description = selectItem.getDescription();
             if (selectItem.getDescription() != null) {
-                writer.writeAttribute("title", description);
+                writer.writeTitle(description);
             }
 
             if (selectItem instanceof IClientDataSelectItem) {

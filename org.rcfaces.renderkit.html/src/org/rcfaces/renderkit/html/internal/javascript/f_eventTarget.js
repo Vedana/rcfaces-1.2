@@ -5,7 +5,7 @@
 /**
  * f_eventTarget class
  *
- * @class public f_eventTarget extends f_object, fa_eventTarget
+ * @class public f_eventTarget extends f_object, HTMLElement, fa_eventTarget
  * @author Joel Merlin & Olivier Oeuillot
  * @version $Revision$ $Date$
  */
@@ -113,7 +113,11 @@ var __prototype = {
 		if (this.tagName) {
 			this.f_initEventAtts(f_eventTarget._EVENTS);
 		}
-	},
+	},	
+	/**
+	 * 
+	 * @method protected
+	 */
 	/*
 	f_finalize: function() {
 		this._returnOnSelect=undefined; // boolean

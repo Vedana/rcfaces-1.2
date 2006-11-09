@@ -13,7 +13,7 @@
 	 * Retourne <code>true</code> if the component is value
 	 *
 	 * @method public
-	 * @return string Or <code>null</code> if not defined !
+	 * @return String Or <code>null</code> if not defined !
 	 */
 	f_getValue: function() {
 		return this.value;
@@ -22,7 +22,7 @@
 	 * Set value state.
 	 *
 	 * @method public
-	 * @param optional string value
+	 * @param optional String value
 	 * @return void
 	 */
 	f_setValue: function(value) {

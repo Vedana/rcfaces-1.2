@@ -4,8 +4,10 @@ import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.CardComponent;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.TabbedPaneComponent;
@@ -14,13 +16,12 @@ import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 public class TabComponent extends CardComponent implements 
 	ITextCapability,
 	IFontCapability,
 	IDisabledCapability,
-	IImageCapability,
 	IStatesImageCapability,
 	IAccessKeyCapability,
 	IMenuCapability {
@@ -35,6 +36,13 @@ public class TabComponent extends CardComponent implements
 	public TabComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
 	}
 
 	public final TabbedPaneComponent getTabbedPane() {
@@ -156,22 +164,6 @@ public class TabComponent extends CardComponent implements
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
-	public final java.lang.String getImageURL() {
-		return getImageURL(null);
-	}
-
-	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
-	}
-
-	public final void setImageURL(java.lang.String imageURL) {
-		engine.setProperty(Properties.IMAGE_URL, imageURL);
-	}
-
-	public final void setImageURL(ValueBinding imageURL) {
-		engine.setProperty(Properties.IMAGE_URL, imageURL);
-	}
-
 	public final java.lang.String getDisabledImageURL() {
 		return getDisabledImageURL(null);
 	}
@@ -218,6 +210,29 @@ public class TabComponent extends CardComponent implements
 
 	public final void setSelectedImageURL(ValueBinding selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
+	}
+
+	public final java.lang.String getImageURL() {
+		return getImageURL(null);
+	}
+
+	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
+	}
+
+	public final void setImageURL(java.lang.String imageURL) {
+		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	public final void setImageURL(ValueBinding imageURL) {
+		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	public final IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
+		
 	}
 
 	public final java.lang.String getAccessKey() {

@@ -3,6 +3,9 @@
  */
 package org.rcfaces.core.converter;
 
+import javax.faces.convert.Converter;
+import javax.faces.convert.NumberConverter;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -11,6 +14,8 @@ package org.rcfaces.core.converter;
 public class AbstractNumberConverter extends
         javax.faces.convert.NumberConverter {
     private static final String REVISION = "$Revision$";
+
+    public static final Converter SINGLETON = new NumberConverter();
 
     private Object defaultValue;
 

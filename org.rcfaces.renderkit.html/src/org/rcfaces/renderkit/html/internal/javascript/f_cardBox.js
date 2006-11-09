@@ -130,11 +130,11 @@ var __prototype={
 			var id=cardComponent;
 			cardComponent=f_core.GetElementById(id, this.ownerDocument);
 	
-			f_core.Assert(cardComponent, "Can not find car '"+id+"'.");
+			f_core.Assert(cardComponent, "Can not find card '"+id+"'.");
 		}
 
 		var card=cardComponent._vcard;
-		f_core.Assert(card && card._cardBox==this , "Invalid tab object ("+tab+")");
+		f_core.Assert(card && card._cardBox==this , "Invalid card object ("+card+")");
 		
 		if (!card) {
 			return false;

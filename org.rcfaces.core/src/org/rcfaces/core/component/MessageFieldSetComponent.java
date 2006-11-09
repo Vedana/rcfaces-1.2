@@ -6,6 +6,7 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.FieldSetComponent;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IForCapability;
 
 public class MessageFieldSetComponent extends FieldSetComponent implements 

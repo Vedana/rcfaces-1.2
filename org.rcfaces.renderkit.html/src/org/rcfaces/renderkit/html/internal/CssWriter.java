@@ -22,6 +22,8 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
     protected static final String BACKGROUND = "background";
 
+    protected static final String BACKGROUND_COLOR = "background-color";
+
     protected static final String BORDER_STYLE = "border-style";
 
     protected static final String COLOR = "color";
@@ -72,6 +74,8 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
     private boolean needSpace = false;
 
+    private boolean done = false;
+
     public CssWriter(IHtmlWriter htmlWriter) {
         this.htmlWriter = htmlWriter;
     }
@@ -82,7 +86,13 @@ public class CssWriter extends FastWriter implements ICssWriter {
         this.htmlWriter = htmlWriter;
     }
 
-    public void close() throws WriterException {
+    public void done() throws WriterException {
+        if (done) {
+            return;
+        }
+        done = true;
+        close();
+
         if (this.getSize() < 1) {
             return;
         }
@@ -100,7 +110,6 @@ public class CssWriter extends FastWriter implements ICssWriter {
         write(name).write(':');
 
         return this;
-
     }
 
     public ICssWriter writeProperty(String name, String value) {
@@ -541,6 +550,10 @@ public class CssWriter extends FastWriter implements ICssWriter {
         write(url).write("')");
 
         return this;
+    }
+
+    public ICssWriter writeBackgroundColor(String backgroundColor) {
+        return writeProperty(BACKGROUND_COLOR, backgroundColor);
     }
 
 }

@@ -130,7 +130,7 @@ var __prototype={
 	
 	/**
 	 * @method hidden
-	 * @return string
+	 * @return String
 	 */
 	f_getCharacter: function() {
 		return this._character;
@@ -151,14 +151,14 @@ var __prototype={
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getFor: function() {
 		return this._forComponentId;
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getForItemValue: function() {
 		return this._forItemValue;

@@ -21,10 +21,10 @@ f_dateFormat._DEFAULT_TWO_DIGIT_YEAR_START=1960;
 /**
  * @method public static final 
  * @param Date date Date to format.
- * @param string format Expression of format.
+ * @param String format Expression of format.
  * @param Date twoDigitYearStart 
  * @param optional f_locale locale Locale used by format.
- * @return string Formatted date.
+ * @return String Formatted date.
  */
 f_dateFormat.FormatDate=function(date, format, twoDigitYearStart, locale) {
 	if (!locale) {
@@ -168,8 +168,8 @@ f_dateFormat.FormatDate=function(date, format, twoDigitYearStart, locale) {
 
 /**
  * @method public static final 
- * @param string text Text to parse.
- * @param string format Expression of parsing.
+ * @param String text Text to parse.
+ * @param String format Expression of parsing.
  * @param Date twoDigitYearStart 
  * @param optional f_locale locale Locale used by parsing.
  * @return Date Date parsed.
@@ -342,6 +342,7 @@ f_dateFormat.FormatStringDate=function(date, onlyDay) {
 
 /**
  * @method hidden static final
+ * @return Date
  */
 f_dateFormat.ParseStringDate=function(value) {
 	if (value.length<1) {

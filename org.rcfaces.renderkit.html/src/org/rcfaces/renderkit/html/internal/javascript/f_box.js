@@ -35,7 +35,7 @@ var __prototype = {
 	 * Specify the default menu identifier.
 	 *
 	 * @method public
-	 * @param string menuId Identifier of the menu.
+	 * @param String menuId Identifier of the menu.
 	 * @return void
 	 */
 	f_setDefaultMenuId: function(menuId) {

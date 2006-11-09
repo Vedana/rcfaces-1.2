@@ -1,39 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.3  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.2  2006/09/01 15:24:28  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.1  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.2  2006/02/06 16:47:04  oeuillot
- * Renomme le logger commons.log en LOG
- * Ajout du composant focusManager
- * Renomme vfc-all.xml en repository.xml
- * Ajout de la gestion de __Vversion et __Llocale
- *
- * Revision 1.1  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
  */
 package org.rcfaces.core.internal.config;
 
@@ -66,7 +32,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
     private static final Class[] PARENT_PROVIDER_PARAMETER_TYPES = new Class[] { IProvider.class };
 
-    private final Map providersRepository = new HashMap(64);
+    private final Map providersById = new HashMap(64);
 
     private Digester digester;
 
@@ -74,7 +40,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
     }
 
     public IProvider getProvider(String providerId) {
-        return (IProvider) providersRepository.get(providerId);
+        return (IProvider) providersById.get(providerId);
     }
 
     public void addProvider(ProviderBean providerBean) {
@@ -152,7 +118,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
                 + providerId + "', classname='" + className + "'");
 
         if (parameters != null) {
-            parameters[0] = providersRepository.get(providerId);
+            parameters[0] = providersById.get(providerId);
         }
 
         IProvider provider;
@@ -168,7 +134,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
         LOG.trace("addProvider(" + providerId + "," + provider + ")");
 
-        providersRepository.put(providerId, provider);
+        providersById.put(providerId, provider);
     }
 
     public void configureRules(Digester digester) {
@@ -242,10 +208,10 @@ public class ProvidersRegistry implements IProvidersRegistry {
         return digester;
     }
 
-    public void completeConfiguration(IProvidersConfigurator configurator) {
+    public void loadProvidersConfiguration(IProvidersConfigurator configurator) {
         Digester digester = new Digester();
 
-        for (Iterator it = providersRepository.entrySet().iterator(); it
+        for (Iterator it = providersById.entrySet().iterator(); it
                 .hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
@@ -259,5 +225,32 @@ public class ProvidersRegistry implements IProvidersRegistry {
         }
 
         configurator.parseConfiguration(digester);
+    }
+
+    public void startupProviders(FacesContext facesContext) {
+        for (Iterator it = providersById.entrySet().iterator(); it
+                .hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            String providerId = (String) entry.getKey();
+            IProvider provider = (IProvider) entry.getValue();
+
+            try {
+                LOG.debug("Start provider '" + providerId + "' ...");
+
+                provider.startup(facesContext);
+
+                LOG.debug("Start provider '" + providerId + "' done");
+
+            } catch (RuntimeException ex) {
+                it.remove();
+
+                LOG.error("Exception when starting up provider '" + providerId
+                        + "'", ex);
+
+                throw ex;
+            }
+        }
+
     }
 }

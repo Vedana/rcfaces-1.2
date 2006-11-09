@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/09 19:09:09  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -53,8 +56,8 @@ public class ComponentIterators {
     public static int indexOf(IContainerManager parent, UIComponent child,
             Class childClass) {
 
-        if (Constants.CACHED_ITERATOR_ENABLED
-                && Constants.STATE_CHILDREN_LIST_ENABLED) {
+        if (Constants.CACHED_COMPONENT_ITERATOR
+                && Constants.STATED_COMPONENT_CHILDREN_LIST) {
             UIComponent aos[] = CachedChildrenList.getArray(parent, childClass);
             for (int i = 0; i < aos.length; i++) {
                 if (child == aos[i] || child.equals(aos[i])) {
@@ -87,8 +90,8 @@ public class ComponentIterators {
 
     public static UIComponent componentAt(IContainerManager parent,
             Class childClass, int position) {
-        if (Constants.CACHED_ITERATOR_ENABLED
-                && Constants.STATE_CHILDREN_LIST_ENABLED) {
+        if (Constants.CACHED_COMPONENT_ITERATOR
+                && Constants.STATED_COMPONENT_CHILDREN_LIST) {
             UIComponent elements[] = CachedChildrenList.getArray(parent,
                     childClass);
             if (position < 0 || position >= elements.length) {
@@ -122,8 +125,8 @@ public class ComponentIterators {
     }
 
     public static int count(IContainerManager parent, Class childClass) {
-        if (Constants.CACHED_ITERATOR_ENABLED
-                && Constants.STATE_CHILDREN_LIST_ENABLED) {
+        if (Constants.CACHED_COMPONENT_ITERATOR
+                && Constants.STATED_COMPONENT_CHILDREN_LIST) {
             return CachedChildrenList.getCount(parent, childClass);
         }
 
@@ -161,8 +164,8 @@ public class ComponentIterators {
 
     public static List list(IContainerManager parent, Class childClass) {
 
-        if (Constants.CACHED_ITERATOR_ENABLED
-                && Constants.STATE_CHILDREN_LIST_ENABLED) {
+        if (Constants.CACHED_COMPONENT_ITERATOR
+                && Constants.STATED_COMPONENT_CHILDREN_LIST) {
             return CachedChildrenList.getList(parent, childClass);
         }
 

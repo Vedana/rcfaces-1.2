@@ -5,287 +5,292 @@
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.accelerator</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.AcceleratorRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.AcceleratorRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.box</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.BoxRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.BoxRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.button</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.checkButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.CheckButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CheckButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.checkButton3States</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.CheckButton3StatesRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CheckButton3StatesRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.combo</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ComboRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ComboRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.customButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.CustomButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CustomButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.pager</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.PagerRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.PagerRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.dataGrid</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.DataGridRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.componentsGrid</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ComponentsGridRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ComponentsGridRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.componentsList</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ComponentsListRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ComponentsListRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.calendar</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.CalendarRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CalendarRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.dateEntry</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.DateEntryRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.DateEntryRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.dateChooser</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.DateChooserRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.DateChooserRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.expandBar</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ExpandBarRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ExpandBarRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.fieldSet</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.FieldSetRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.FieldSetRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.helpButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.HelpButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.HelpButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imageSubmitButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ImageSubmitButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageSubmitButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.helpMessageZone</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.HelpMessageZoneRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.HelpMessageZoneRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.hyperLink</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.HyperLinkRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.HyperLinkRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.image</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ImageRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imageButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ImageButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.hiddenValue</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.HiddenValueRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.HiddenValueRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imageCheckButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ImageCheckButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageCheckButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imageCombo</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ImageComboRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageComboRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imagePagerButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ImagePagerButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImagePagerButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imageRadioButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ImageRadioButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageRadioButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imageResetButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ImageResetButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageResetButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.lineBreak</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.LineBreakRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.LineBreakRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.list</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ListRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ListRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.message</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.MessageRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.MessageRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.messageFieldSet</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.MessageFieldSetRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.MessageFieldSetRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.messages</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.MessagesRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.MessagesRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.menuBar</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.MenuBarRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.MenuBarRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.numberEntry</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.NumberEntryRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.passwordEntry</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.PasswordEntryRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.PasswordEntryRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.progressBar</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ProgressBarRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ProgressBarRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.progressIndicator</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ProgressIndicatorRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ProgressIndicatorRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.suggestTextEntry</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.SuggestTextEntryRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.SuggestTextEntryRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.radioButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.RadioButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.RadioButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.resetButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ResetButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ResetButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.ruler</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.RulerRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.RulerRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.submitButton</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.SubmitButtonRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.SubmitButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.spinner</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.SpinnerRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.SpinnerRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.styledMessage</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.StyledMessageRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.StyledMessageRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.styledText</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.StyledTextRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.StyledTextRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.cardBox</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.CardBoxRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CardBoxRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.card</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.CardRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CardRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.tabbedPane</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.TabbedPaneRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TabbedPaneRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.tab</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.TabRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TabRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.text</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.TextRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.textEntry</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.TextEntryRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextEntryRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.textArea</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.TextAreaRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextAreaRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.timeEntry</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.TimeEntryRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TimeEntryRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.toolBar</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ToolBarRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.tree</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.TreeRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TreeRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.focusManager</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.FocusManagerRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.FocusManagerRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.service</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.ServiceRenderer</renderer-class>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ServiceRenderer</renderer-class>
 		</renderer>
 	</render-kit>
 </faces-config>

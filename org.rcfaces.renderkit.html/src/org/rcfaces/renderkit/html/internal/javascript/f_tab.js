@@ -26,14 +26,14 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getText: function() {
 		return this._text;
 	},
 	/**
 	 * @method public
-	 * @param string text The text.
+	 * @param String text The text.
 	 * @return void
 	 */
 	f_setText: function(text) {
@@ -50,7 +50,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setImageURL: function(imageURL) {
@@ -63,7 +63,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setDisabledImageURL: function(imageURL) {
@@ -76,7 +76,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setHoverImageURL: function(imageURL) {
@@ -89,7 +89,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string imageURL
+	 * @param String imageURL
 	 * @return void
 	 */
 	f_setSelectedImageURL: function(imageURL) {
@@ -150,7 +150,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getAccessKey: function() {
 		return this._accessKey;

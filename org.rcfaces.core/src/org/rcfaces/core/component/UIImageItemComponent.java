@@ -4,16 +4,17 @@ import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.AbstractItemComponent;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 public class UIImageItemComponent extends AbstractItemComponent implements 
 	IVisibilityCapability,
 	IToolTipCapability,
-	IImageCapability,
 	IStatesImageCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.UIImageItem";
@@ -26,6 +27,13 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 	public UIImageItemComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
 	}
 
 	public final void setToolTip(String text) {
@@ -104,22 +112,6 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
-	public final java.lang.String getImageURL() {
-		return getImageURL(null);
-	}
-
-	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
-	}
-
-	public final void setImageURL(java.lang.String imageURL) {
-		engine.setProperty(Properties.IMAGE_URL, imageURL);
-	}
-
-	public final void setImageURL(ValueBinding imageURL) {
-		engine.setProperty(Properties.IMAGE_URL, imageURL);
-	}
-
 	public final java.lang.String getDisabledImageURL() {
 		return getDisabledImageURL(null);
 	}
@@ -166,6 +158,29 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 	public final void setSelectedImageURL(ValueBinding selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
+	}
+
+	public final java.lang.String getImageURL() {
+		return getImageURL(null);
+	}
+
+	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
+	}
+
+	public final void setImageURL(java.lang.String imageURL) {
+		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	public final void setImageURL(ValueBinding imageURL) {
+		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	public final IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
+		
 	}
 
 	public void release() {

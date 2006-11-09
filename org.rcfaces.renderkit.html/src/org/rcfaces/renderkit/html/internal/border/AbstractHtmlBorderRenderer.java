@@ -1,9 +1,11 @@
+/*
+ * $Id$
+ */
 package org.rcfaces.renderkit.html.internal.border;
 
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.AbstractBorderRenderer;
-import org.rcfaces.renderkit.html.internal.CssWriter;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -111,7 +113,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
     protected IHtmlWriter writeTopBorder(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TR");
-        writer.writeAttribute("height", "4");
+        writer.writeHeight(4);
 
         writeCellBorderNorthWest(writer);
 
@@ -153,19 +155,20 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         String className = getClassName();
         if (className != null) {
-            String tableClassName = getTableClassName();
+            String tableClassName = getTableClassName(writer, disabled,
+                    selected);
 
-            writer.writeAttribute("class", tableClassName);
+            writer.writeClass(tableClassName);
 
             if (tableClassName != className) {
                 writer.writeAttribute("v:className", className);
             }
         }
-        writer.writeAttribute("cellspacing", "0");
-        writer.writeAttribute("cellpadding", "0");
+        writer.writeCellPadding(0);
+        writer.writeCellSpacing(0);
 
         if (width != null || height != null) {
-            ICssWriter cssWriter = new CssWriter(writer, 64);
+            ICssWriter cssWriter = writer.writeStyle(64);
 
             if (width != null) {
                 if (onlyDigit(width)) {
@@ -175,12 +178,10 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             }
             if (height != null) {
                 if (onlyDigit(height)) {
-                    width += "px";
+                    height += "px";
                 }
                 cssWriter.writeHeight(height);
             }
-
-            cssWriter.close();
         }
 
         this.writeTopBorder = hasBorder();
@@ -225,89 +226,109 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
     protected IHtmlWriter writeCellBorderNorthWest(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TD");
-        writer.writeAttribute("width", getWestBorderWidth());
-        writer.writeAttribute("class", getClassName() + BORDER_NW);
+        writer.writeWidth(getWestBorderWidth());
+        writer.writeClass(getWestBorderClassName(writer));
 
         writer.startElement("IMG");
-        writer.writeAttribute("width", getWestBorderWidth());
-        writer.writeAttribute("height", getNorthBorderHeight());
-        writer.writeAttribute("src", getBlankImageURL(writer));
+        writer.writeWidth(getWestBorderWidth());
+        writer.writeHeight(getNorthBorderHeight());
+        writer.writeSrc(getBlankImageURL(writer));
 
         writer.endElement("TD");
 
         return writer;
     }
 
-    protected int getWestBorderWidth() {
+    protected String getWestBorderClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_NW;
+    }
+
+    public int getWestBorderWidth() {
         return 4;
     }
 
-    protected int getEastBorderWidth() {
+    public int getEastBorderWidth() {
         return 4;
     }
 
-    protected int getNorthBorderHeight() {
+    public int getNorthBorderHeight() {
         return 4;
     }
 
-    protected int getSouthBorderHeight() {
+    public int getSouthBorderHeight() {
         return 4;
     }
 
     protected IHtmlWriter writeCellBorderNorthEast(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TD");
-        writer.writeAttribute("width", getEastBorderWidth());
-        writer.writeAttribute("class", getClassName() + BORDER_NE);
+        writer.writeWidth(getEastBorderWidth());
+        writer.writeClass(getEastBorderClassName(writer));
 
         writer.startElement("IMG");
-        writer.writeAttribute("width", getEastBorderWidth());
-        writer.writeAttribute("height", getNorthBorderHeight());
-        writer.writeAttribute("src", getBlankImageURL(writer));
+        writer.writeWidth(getEastBorderWidth());
+        writer.writeHeight(getNorthBorderHeight());
+        writer.writeSrc(getBlankImageURL(writer));
 
         writer.endElement("TD");
 
         return writer;
+    }
+
+    protected String getEastBorderClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_NE;
     }
 
     protected IHtmlWriter writeCellBorderSouthWest(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TD");
-        writer.writeAttribute("class", getClassName() + BORDER_SW);
+        writer.writeClass(getSouthBorderClassName(writer));
         writer.endElement("TD");
 
         return writer;
+    }
+
+    protected String getSouthBorderClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_SW;
     }
 
     protected IHtmlWriter writeCellBorderSouthEast(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TD");
-        writer.writeAttribute("class", getClassName() + BORDER_SE);
+        writer.writeClass(getSouthEastBorderClassName(writer));
         writer.endElement("TD");
 
         return writer;
     }
 
+    protected String getSouthEastBorderClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_SE;
+    }
+
     protected IHtmlWriter writeCellBorderWest(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TD");
-        writer.writeAttribute("class", getClassName() + BORDER_W);
+        writer.writeClass(getBorderWestClassName(writer));
 
         if (verticalSpan > 1) {
-            writer.writeAttribute("rowspan", verticalSpan);
+            writer.writeRowSpan(verticalSpan);
         }
         writer.endElement("TD");
 
         return writer;
     }
 
+    protected String getBorderWestClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_W;
+    }
+
     protected IHtmlWriter writeCellBorderEast(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TD");
-        writer.writeAttribute("class", getClassName() + BORDER_E);
+        writer.writeClass(getBorderEastClassName(writer));
 
         if (verticalSpan > 1) {
-            writer.writeAttribute("rowspan", verticalSpan);
+            writer.writeRowSpan(verticalSpan);
             skipVerticalRow = verticalSpan - 1;
         }
 
@@ -316,29 +337,41 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         return writer;
     }
 
+    protected String getBorderEastClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_E;
+    }
+
     protected IHtmlWriter writeCellBorderSouth(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TD");
-        writer.writeAttribute("class", getClassName() + BORDER_S);
+        writer.writeClass(getBorderSouthClassName(writer));
 
         if (horizontalSpan > 1) {
-            writer.writeAttribute("colspan", horizontalSpan);
+            writer.writeColSpan(horizontalSpan);
         }
         writer.endElement("TD");
 
         return writer;
     }
 
+    protected String getBorderSouthClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_S;
+    }
+
     protected IHtmlWriter writeCellBorderNorth(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TD");
-        writer.writeAttribute("class", getClassName() + BORDER_N);
+        writer.writeClass(getBorderNorthClassName(writer));
         if (horizontalSpan > 1) {
-            writer.writeAttribute("colspan", horizontalSpan);
+            writer.writeColSpan(horizontalSpan);
         }
         writer.endElement("TD");
 
         return writer;
+    }
+
+    protected String getBorderNorthClassName(IHtmlWriter writer) {
+        return getClassName() + BORDER_N;
     }
 
     public IHtmlWriter endComposite(IHtmlWriter writer) throws WriterException {
@@ -350,7 +383,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             verifyTopBorder(writer);
 
             writer.startElement("TR");
-            writer.writeAttribute("height", getSouthBorderHeight());
+            writer.writeHeight(getSouthBorderHeight());
 
             writeCellBorderSouthWest(writer);
 
@@ -382,25 +415,25 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         String className = getClassName();
         if (className != null) {
-            writer.writeAttribute("class", className + classSuffix);
+            writer.writeClass(className + classSuffix);
         }
         if (halign != null) {
-            writer.writeAttribute("align", halign);
+            writer.writeAlign(halign);
         }
         if (valign != null) {
-            writer.writeAttribute("valign", valign);
+            writer.writeVAlign(valign);
         }
         if (width != null) {
-            writer.writeAttribute("width", width);
+            writer.writeWidth(width);
         }
         if (height != null) {
-            writer.writeAttribute("height", height);
+            writer.writeHeight(height);
         }
         if (colspan > 1) {
-            writer.writeAttribute("colspan", colspan);
+            writer.writeColSpan(colspan);
         }
         if (rowspan > 1) {
-            writer.writeAttribute("rowspan", rowspan);
+            writer.writeRowSpan(rowspan);
         }
 
         return writer;
@@ -420,7 +453,8 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected abstract String getClassName();
 
-    protected String getTableClassName() {
+    protected String getTableClassName(IHtmlWriter htmlWriter,
+            boolean disabled, boolean selected) {
         String tableClassName = getClassName();
 
         if (disabled) {
@@ -445,13 +479,18 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         String imageURL = htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetURI(MARKER_IMAGEURL);
-        writer.writeAttribute("class", componentClassName + "_marker");
-        writer.writeAttribute("src", imageURL);
-        writer.writeAttribute("width", 5);
-        writer.writeAttribute("height", 3);
-        writer.writeAttribute("valign", getComboImageVerticalAlign(writer));
+        writer.writeClass(getMarkerClassName(writer, componentClassName));
+        writer.writeSrc(imageURL);
+        writer.writeWidth(5);
+        writer.writeHeight(3);
+        writer.writeVAlign(getComboImageVerticalAlign(writer));
 
         writer.endElement("IMG");
+    }
+
+    private String getMarkerClassName(IHtmlWriter writer,
+            String componentClassName) {
+        return componentClassName + "_marker";
     }
 
     protected String getComboImageVerticalAlign(IHtmlWriter writer) {

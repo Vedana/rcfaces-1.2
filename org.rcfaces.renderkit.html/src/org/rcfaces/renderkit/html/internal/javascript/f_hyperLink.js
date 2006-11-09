@@ -30,7 +30,7 @@ var __prototype = {
 	 * Returns the text of the link.
 	 *
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getText: function() {
 		return f_core.GetTextNode(this);
@@ -39,7 +39,7 @@ var __prototype = {
 	 * Set the text of the link.
 	 *
 	 * @method public
-	 * @param string text
+	 * @param String text
 	 * @return void
 	 */
 	f_setText: function(text) {

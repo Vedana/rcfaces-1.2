@@ -17,7 +17,6 @@ import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
-import org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -25,7 +24,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.SelectItemMappers;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.model.IImagesSelectItem;
-import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -359,126 +357,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         javaScriptWriter.writeln(");");
 
         if (selectItem instanceof IImagesSelectItem) {
-            IImagesSelectItem imagesSelectItem = (IImagesSelectItem) selectItem;
-            String varImageURL = null;
-            String varExpandedImageURL = null;
-            String varSelectedImageURL = null;
-            String varDisabledImageURL = null;
-            String varHoverImageURL = null;
-
-            String imageURL = imagesSelectItem.getImageURL();
-            String expandedImageURL = imagesSelectItem.getExpandedImageURL();
-            String selectedImageURL = imagesSelectItem.getSelectedImageURL();
-            String disabledImageURL = imagesSelectItem.getDisabledImageURL();
-            String hoverImageURL = null;
-
-            IComponentRenderContext componentContext = javaScriptWriter
-                    .getComponentRenderContext();
-
-            String originalImageURL = imageURL;
-            if (imageURL != null) {
-                imageURL = AbstractCameliaRenderer.rewriteURL(componentContext,
-                        IURLRewritingProvider.IMAGE_URL_TYPE, "imageURL",
-                        imageURL, null, null);
-            }
-            if (disabledImageURL != null) {
-                disabledImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "disabledImageURL", disabledImageURL, originalImageURL, null);
-            }
-            if (expandedImageURL != null) {
-                expandedImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "expandedImageURL", expandedImageURL, originalImageURL, null);
-            }
-            if (selectedImageURL != null) {
-                selectedImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "selectedImageURL", selectedImageURL, selectedImageURL, null);
-            }
-            if (hoverImageURL != null) {
-                hoverImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "hoverImageURL", hoverImageURL, originalImageURL, null);
-            }
-
-            if (imageURL != null) {
-                varImageURL = javaScriptWriter.allocateString(imageURL);
-            }
-
-            if (expandedImageURL != null) {
-                varExpandedImageURL = javaScriptWriter
-                        .allocateString(expandedImageURL);
-            }
-
-            if (selectedImageURL != null) {
-                varSelectedImageURL = javaScriptWriter
-                        .allocateString(selectedImageURL);
-            }
-
-            if (disabledImageURL != null) {
-                varDisabledImageURL = javaScriptWriter
-                        .allocateString(disabledImageURL);
-            }
-
-            if (hoverImageURL != null) {
-                varHoverImageURL = javaScriptWriter
-                        .allocateString(hoverImageURL);
-            }
-
-            if (varImageURL != null || varExpandedImageURL != null
-                    || varSelectedImageURL != null
-                    || varDisabledImageURL != null || varHoverImageURL != null) {
-                javaScriptWriter.writeMethodCall("_setImages").write(varId);
-                pred = 0;
-
-                if (varImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeBoolean(false);
-                    }
-                    javaScriptWriter.write(',').write(varImageURL);
-                } else {
-                    pred++;
-                }
-
-                if (varExpandedImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeBoolean(false);
-                    }
-                    javaScriptWriter.write(',').write(varExpandedImageURL);
-                } else {
-                    pred++;
-                }
-
-                if (varSelectedImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeBoolean(false);
-                    }
-                    javaScriptWriter.write(',').write(varSelectedImageURL);
-                } else {
-                    pred++;
-                }
-
-                if (varDisabledImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeBoolean(false);
-                    }
-                    javaScriptWriter.write(',').write(varDisabledImageURL);
-                } else {
-                    pred++;
-                }
-
-                if (varHoverImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeBoolean(false);
-                    }
-                    javaScriptWriter.write(',').write(varHoverImageURL);
-                } else {
-                    pred++;
-                }
-
-                javaScriptWriter.writeln(");");
-            }
+            writeSelectItemImages((IImagesSelectItem) selectItem,
+                    javaScriptWriter, null, "_setImages", varId, false);
         }
 
         return EVAL_NODE;

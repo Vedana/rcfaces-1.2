@@ -112,7 +112,7 @@ var __prototype = {
 	*/
 	/**
 	 * @method public 
-	 * @return string
+	 * @return String
 	 */
 	f_getFatalStyleClass: function() {
 		if (this._fatalStyleClass===undefined) {
@@ -123,7 +123,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public 
-	 * @return string
+	 * @return String
 	 */
 	f_getErrorStyleClass: function() {
 		if (this._errorStyleClass===undefined) {
@@ -134,7 +134,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public 
-	 * @return string
+	 * @return String
 	 */
 	f_getWarnStyleClass: function() {
 		if (this._warnStyleClass===undefined) {
@@ -144,7 +144,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public 
-	 * @return string
+	 * @return String
 	 */
 	f_getInfoStyleClass: function() {
 		if (this._infoStyleClass===undefined) {
@@ -182,7 +182,7 @@ var __prototype = {
 	/**
 	 * @method protected final
 	 * @param number severity
-	 * @return string style class name.
+	 * @return String style class name.
 	 */
 	f_getStyleClassFromSeverity: function(severity) {
 		f_core.Assert(typeof(severity)=="number", "Invalid severity parameter ('"+severity+"')");

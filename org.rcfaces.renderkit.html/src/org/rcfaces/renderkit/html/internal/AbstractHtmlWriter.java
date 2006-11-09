@@ -1,3 +1,6 @@
+/**
+ * $Id$
+ */
 package org.rcfaces.renderkit.html.internal;
 
 import java.io.IOException;
@@ -27,6 +30,8 @@ public abstract class AbstractHtmlWriter extends
     private final ResponseWriter responseWriter;
 
     protected final AbstractRenderContext renderContext;
+
+    private ICssWriter cssWriter;
 
     public AbstractHtmlWriter(FacesContext facesContext,
             AbstractRenderContext renderContext) {
@@ -62,12 +67,9 @@ public abstract class AbstractHtmlWriter extends
         return renderContext;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#write(java.lang.String)
-     */
     public ISgmlWriter write(String s) throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.write(s);
 
@@ -80,6 +82,8 @@ public abstract class AbstractHtmlWriter extends
 
     public ISgmlWriter write(char buf[], int offset, int length)
             throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.write(buf, offset, length);
 
@@ -90,12 +94,19 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#encodeAndWrite(java.lang.String)
-     */
+    protected void closeCssWriter() throws WriterException {
+        if (cssWriter == null) {
+            return;
+        }
+
+        cssWriter.done();
+
+        cssWriter = null;
+    }
+
     public ISgmlWriter writeText(String s) throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.writeText(s, null);
 
@@ -106,12 +117,9 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#write(char)
-     */
     public ISgmlWriter write(char c) throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.write(c);
 
@@ -122,32 +130,17 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#write(int)
-     */
     public ISgmlWriter write(int value) throws WriterException {
         return write(String.valueOf(value));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#write(int)
-     */
     public ISgmlWriter writeln() throws WriterException {
         return write(LF);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#writeAttribute(java.lang.String,
-     *      java.lang.String)
-     */
     public ISgmlWriter writeAttribute(String name, String value)
             throws WriterException {
+  
         try {
             responseWriter.writeAttribute(name, value, null);
 
@@ -164,6 +157,8 @@ public abstract class AbstractHtmlWriter extends
     }
 
     public ISgmlWriter writeAttribute(String name) throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.writeAttribute(name, Boolean.TRUE, null);
 
@@ -174,12 +169,9 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#writeComment(java.lang.String)
-     */
     public ISgmlWriter writeComment(String comment) throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.writeComment(comment);
 
@@ -190,14 +182,10 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#writeStartElement(java.lang.String,
-     *      javax.faces.component.UIComponent)
-     */
     public ISgmlWriter startElement(String name, UIComponent component)
             throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.startElement(name, component);
 
@@ -212,12 +200,9 @@ public abstract class AbstractHtmlWriter extends
         return startElement(name, this.getComponent());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#writeEndElement(java.lang.String)
-     */
     public ISgmlWriter endElement(String name) throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.endElement(name);
 
@@ -228,14 +213,10 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#writeURIAttribute(java.lang.String,
-     *      java.lang.Object)
-     */
     public ISgmlWriter writeURIAttribute(String name, Object value)
             throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.writeURIAttribute(name, value, null);
 
@@ -246,12 +227,9 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IWriter#flushElement()
-     */
     public IComponentWriter flush() throws WriterException {
+        closeCssWriter();
+
         try {
             responseWriter.flush();
 
@@ -261,4 +239,213 @@ public abstract class AbstractHtmlWriter extends
 
         return this;
     }
+
+    public final IHtmlWriter writeMaxLength(int maxLength)
+            throws WriterException {
+        writeAttribute("maxlength", maxLength);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeSize(int size) throws WriterException {
+        writeAttribute("size", size);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeType(String type) throws WriterException {
+        writeAttribute("type", type);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeId(String id) throws WriterException {
+        writeAttribute("id", id);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeName(String name) throws WriterException {
+        writeAttribute("name", name);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeClass(String className)
+            throws WriterException {
+        writeAttribute("class", className);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeDisabled() throws WriterException {
+        writeAttribute("DISABLED");
+
+        return this;
+    }
+
+    public final IHtmlWriter writeReadOnly() throws WriterException {
+        writeAttribute("READONLY");
+
+        return this;
+    }
+
+    public final IHtmlWriter writeValue(String value) throws WriterException {
+        writeAttribute("value", value);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeAccessKey(String accessKey)
+            throws WriterException {
+        writeAttribute("accessKey", accessKey);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeTabIndex(int tabIndex) throws WriterException {
+        writeAttribute("tabIndex", tabIndex);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeChecked() throws WriterException {
+        writeAttribute("CHECKED");
+
+        return this;
+    }
+
+    public final IHtmlWriter writeFor(String id) throws WriterException {
+        writeAttribute("for", id);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeHeight(int height) throws WriterException {
+        writeAttribute("height", height);
+
+        return this;
+    }
+
+    public IHtmlWriter writeHeight(String height) throws WriterException {
+        writeAttribute("height", height);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeStyle(String style) throws WriterException {
+        writeAttribute("style", style);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeTitle(String title) throws WriterException {
+        writeAttribute("title", title);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeWidth(int width) throws WriterException {
+        writeAttribute("width", width);
+
+        return this;
+    }
+
+    public final IHtmlWriter writeWidth(String width) throws WriterException {
+        writeAttribute("width", width);
+
+        return this;
+    }
+
+    public IHtmlWriter writeAlign(String align) throws WriterException {
+        writeAttribute("align", align);
+
+        return this;
+    }
+
+    public IHtmlWriter writeVAlign(String valign) throws WriterException {
+        writeAttribute("valign", valign);
+
+        return this;
+    }
+
+    public IHtmlWriter writeCellPadding(int cellPadding) throws WriterException {
+        writeAttribute("cellpadding", cellPadding);
+
+        return this;
+    }
+
+    public IHtmlWriter writeCellSpacing(int cellSpacing) throws WriterException {
+        writeAttribute("cellspacing", cellSpacing);
+
+        return this;
+    }
+
+    public IHtmlWriter writeSrc(String src) throws WriterException {
+        writeAttribute("src", src);
+
+        return this;
+    }
+
+    public IHtmlWriter writeMultiple() throws WriterException {
+        writeAttribute("multiple");
+
+        return this;
+    }
+
+    public ICssWriter writeStyle() {
+        if (cssWriter != null) {
+            return cssWriter;
+        }
+        cssWriter = new CssWriter(this);
+
+        return cssWriter;
+    }
+
+    public ICssWriter writeStyle(int size) {
+        if (cssWriter != null) {
+            return cssWriter;
+        }
+
+        cssWriter = new CssWriter(this, size);
+
+        return cssWriter;
+    }
+
+    public IHtmlWriter writeColSpan(int colspan) throws WriterException {
+        writeAttribute("colspan", colspan);
+
+        return this;
+    }
+
+    public IHtmlWriter writeRowSpan(int rowspan) throws WriterException {
+        writeAttribute("rowspan", rowspan);
+
+        return this;
+    }
+
+    public IHtmlWriter writeCols(int cols) throws WriterException {
+        writeAttribute("cols", cols);
+
+        return this;
+    }
+
+    public IHtmlWriter writeRows(int rows) throws WriterException {
+        writeAttribute("rows", rows);
+
+        return this;
+    }
+
+    public IHtmlWriter writeLabel(String label) throws WriterException {
+        writeAttribute("label", label);
+
+        return this;
+    }
+
+    public IHtmlWriter writeSelected() throws WriterException {
+        writeAttribute("SELECTED");
+
+        return this;
+    }
+
 }

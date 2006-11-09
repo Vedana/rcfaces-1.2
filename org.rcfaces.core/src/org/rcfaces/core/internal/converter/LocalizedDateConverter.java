@@ -1,32 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/06/28 17:48:28  oeuillot
- * Ajout de dateEntry
- * Ajout D'une constante g�n�rale de sp�cification de l'attributesLocale
- * Ajout d'un attribut <v:init attributesLocale='' />
- *
- * Revision 1.1  2006/05/16 13:58:18  oeuillot
- * Suite de l'impl�mentation du Calendar
- * D�but d'implementation de dateChooser
- * Creation du CalendarObject
- * R�vision et optimisation du modele de chargement des classes
- * Gestion complete des f_bundle
- * Ajout des DatesItems pour la gestion de jours f�riers
- *
- * Revision 1.1  2006/05/11 16:34:19  oeuillot
- * Correction du calendar
- * Ajout de DateChooser
- * Ajout du moteur de filtre d'images
- * Ajout de l'evt   loadListener pour le AsyncManager
- *
  */
 package org.rcfaces.core.internal.converter;
 

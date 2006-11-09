@@ -100,7 +100,7 @@ var __prototype={
 	},
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getFocusId: function() {
 		if (f_core.IsInternetExplorer()) {
@@ -128,7 +128,7 @@ var __prototype={
 	
 	/**
 	 * @method public
-	 * @param string focus Focus identifier, or a component.
+	 * @param String focus Focus identifier, or a component.
 	 * @return boolean
 	 */
 	f_setFocus: function(focus) {

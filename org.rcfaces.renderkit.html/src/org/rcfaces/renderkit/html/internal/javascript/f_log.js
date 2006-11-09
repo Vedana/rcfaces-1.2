@@ -87,7 +87,7 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param string logName Name of the log.
+	 * @param String logName Name of the log.
 	 * @return f_log Log object.
 	 */
 	GetLog: function(logName) {
@@ -105,7 +105,7 @@ var __static = {
 		}
 		
 		var level=f_log._DEFAULT;
-		if (f_core && f_core.Debug_Mode) {
+		if (f_core && f_core.DebugMode) {
 			level=f_log.DEBUG;
 		}
 		
@@ -220,7 +220,7 @@ var __prototype = {
 	*/
 	/**
 	 * @method public
-	 * @param string message The message.
+	 * @param String message The message.
 	 * @param Error exception
 	 * @param Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
@@ -230,7 +230,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string message The message.
+	 * @param String message The message.
 	 * @param Error exception
 	 * @param Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
@@ -240,7 +240,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string message The message.
+	 * @param String message The message.
 	 * @param Error exception
 	 * @param Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
@@ -250,7 +250,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string message The message.
+	 * @param String message The message.
 	 * @param Error exception
 	 * @param Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
@@ -260,7 +260,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string message The message.
+	 * @param String message The message.
 	 * @param Error exception
 	 * @param Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
@@ -270,7 +270,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param string message The message.
+	 * @param String message The message.
 	 * @param Error exception
 	 * @param Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.

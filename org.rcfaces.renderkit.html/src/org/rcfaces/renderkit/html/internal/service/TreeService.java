@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.6  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.5  2006/10/04 12:31:43  oeuillot
  * Stabilisation
  *
@@ -116,9 +119,9 @@ import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.TreeRenderer;
 import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
 import org.rcfaces.renderkit.html.internal.decorator.SelectItemsContext;
+import org.rcfaces.renderkit.html.internal.renderer.TreeRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
@@ -146,6 +149,10 @@ public class TreeService extends AbstractHtmlService {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
                 facesContext).getServicesRegistry();
+        if (serviceRegistry == null) {
+            // Designer mode
+            return null;
+        }
 
         return (TreeService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
@@ -237,12 +244,12 @@ public class TreeService extends AbstractHtmlService {
 
             throw new FacesException(
                     "Can not write dataGrid javascript rows !", ex);
-            
+
         } catch (RuntimeException ex) {
             LOG.error("Catch runtime exception !", ex);
 
             throw ex;
-            
+
         } finally {
             if (printWriter != null) {
                 printWriter.close();
@@ -274,7 +281,7 @@ public class TreeService extends AbstractHtmlService {
                     "GetElementById").writeString(treeId).writeln(
                     ", document);");
 
-            jsWriter.writeMethodCall("_cancelServerRequest").writeString(
+            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeString(
                     waitingId).write(");");
 
         } catch (IOException ex) {

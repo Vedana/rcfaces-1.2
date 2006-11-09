@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/04 12:31:42  oeuillot
  * Stabilisation
  *
@@ -86,7 +89,6 @@ import org.rcfaces.core.component.MenuSeparatorComponent;
 import org.rcfaces.core.component.capability.ICheckedCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.internal.listener.IScriptListener;
-import org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -100,7 +102,6 @@ import org.rcfaces.core.model.IImagesSelectItem;
 import org.rcfaces.core.model.IStyledSelectItem;
 import org.rcfaces.core.model.IVisibleSelectItem;
 import org.rcfaces.core.model.SeparatorSelectItem;
-import org.rcfaces.core.provider.IURLRewritingProvider;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
@@ -396,95 +397,9 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         }
 
         if (selectItem instanceof IImagesSelectItem) {
-            IImagesSelectItem iim = (IImagesSelectItem) selectItem;
-
-            String imageURL = iim.getImageURL();
-            String disabledImageURL = iim.getDisabledImageURL();
-            String hoverImageURL = iim.getHoverImageURL();
-            String selectedImageURL = iim.getSelectedImageURL();
-
-            String originalImageURL = imageURL;
-            if (imageURL != null) {
-                imageURL = AbstractCameliaRenderer.rewriteURL(componentContext,
-                        IURLRewritingProvider.IMAGE_URL_TYPE, "imageURL",
-                        imageURL, null, null);
-            }
-            if (disabledImageURL != null) {
-                disabledImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "disabledImageURL", disabledImageURL, originalImageURL, null);
-            }
-            if (hoverImageURL != null) {
-                hoverImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "hoverImageURL", hoverImageURL, originalImageURL, null);
-            }
-            if (selectedImageURL != null) {
-                selectedImageURL = AbstractCameliaRenderer.rewriteURL(
-                        componentContext, IURLRewritingProvider.IMAGE_URL_TYPE,
-                        "selectedImageURL", selectedImageURL, originalImageURL, null);
-            }
-
-            if (imageURL != null || disabledImageURL != null
-                    || hoverImageURL != null || selectedImageURL != null) {
-
-                if (imageURL != null) {
-                    imageURL = javaScriptWriter.allocateString(imageURL);
-                }
-                if (disabledImageURL != null) {
-                    disabledImageURL = javaScriptWriter
-                            .allocateString(disabledImageURL);
-                }
-                if (hoverImageURL != null) {
-                    hoverImageURL = javaScriptWriter
-                            .allocateString(hoverImageURL);
-                }
-                if (selectedImageURL != null) {
-                    selectedImageURL = javaScriptWriter
-                            .allocateString(selectedImageURL);
-                }
-
-                javaScriptWriter.writeCall(managerVarId, "_setItemImages")
-                        .write(varId);
-                pred = 0;
-
-                if (imageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeNull();
-                    }
-                    javaScriptWriter.write(',').write(imageURL);
-                } else {
-                    pred++;
-                }
-
-                if (disabledImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeNull();
-                    }
-                    javaScriptWriter.write(',').write(disabledImageURL);
-                } else {
-                    pred++;
-                }
-                if (hoverImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeNull();
-                    }
-                    javaScriptWriter.write(',').write(hoverImageURL);
-                } else {
-                    pred++;
-                }
-
-                if (selectedImageURL != null) {
-                    for (; pred > 0; pred--) {
-                        javaScriptWriter.write(',').writeNull();
-                    }
-                    javaScriptWriter.write(',').write(selectedImageURL);
-                } else {
-                    pred++;
-                }
-
-                javaScriptWriter.writeln(");");
-            }
+            writeSelectItemImages((IImagesSelectItem) selectItem,
+                    javaScriptWriter, managerVarId, "_setItemImages", varId,
+                    true);
         }
         if (hasChild == false) {
             return;
@@ -513,8 +428,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         String parentVarId = menuContext.peekVarId();
         String managerVarId = menuContext.getManagerVarId();
 
-        javaScriptWriter.writeCall(managerVarId, "f_appendSeparatorItem").write(
-                parentVarId).writeln(");");
+        javaScriptWriter.writeCall(managerVarId, "f_appendSeparatorItem")
+                .write(parentVarId).writeln(");");
     }
 
     /*

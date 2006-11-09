@@ -1,34 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.3  2006/09/20 17:55:20  oeuillot
- * Tri multiple des tables
- * Dialogue modale en JS
- *
- * Revision 1.2  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.1  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.3  2006/03/23 19:12:40  oeuillot
- * Ajout des marges
- * Ajout des processors
- * Amelioration des menus
- *
- * Revision 1.2  2006/02/03 11:37:33  oeuillot
- * Calcule les classes pour le Javascript, plus les fichiers !
- *
- * Revision 1.1  2005/11/17 10:04:55  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
  */
 package org.rcfaces.core.internal.config;
 

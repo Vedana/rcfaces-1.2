@@ -17,7 +17,6 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
@@ -27,9 +26,9 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         implements ICssRenderer {
 
-    private static final Log LOG = LogFactory.getLog(AbstractCssRenderer.class);
-
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(AbstractCssRenderer.class);
 
     private static final int DEFAULT_RENDERED_HIDDEN_MODE = IVisibilityCapability.IGNORE_HIDDEN_MODE;
 
@@ -43,57 +42,40 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     protected static final int CSS_SIZE_MASK = 2;
 
-    protected String getDefaultCssClassName() {
+    protected String getComponentStyleClassName() {
+        return getMainStyleClassName();
+    }
+
+    public final String getMainStyleClassName() {
         return getJavaScriptClassName();
     }
 
     protected IHtmlWriter writeStyleClass(IHtmlWriter writer, String classSuffix)
             throws WriterException {
 
-        String cssClass = getStyleClassName(writer.getComponentRenderContext(),
-                writer.getComponentRenderContext().getComponent());
+        String cssClass = getStyleClassName(writer.getComponentRenderContext()
+                .getComponent());
         if (cssClass != null) {
             if (classSuffix != null && classSuffix.length() > 0) {
                 cssClass += classSuffix;
             }
-            writer.writeAttribute("class", cssClass);
+            writer.writeClass(cssClass);
         }
 
         return writer;
     }
 
-    public final String getStyleClassName(
-            IComponentRenderContext componentRenderContext) {
-        return getStyleClassName(componentRenderContext, componentRenderContext
-                .getComponent(), null);
-    }
-
-    public final String getStyleClassName(
-            IComponentRenderContext componentRenderContext,
-            UIComponent component) {
-        return getStyleClassName(componentRenderContext, component, null);
-    }
-
-    public String getStyleClassName(
-            IComponentRenderContext componentRenderContext,
-            UIComponent component, String suffix) {
+    public String getStyleClassName(UIComponent component) {
         if (component instanceof IStyleClassCapability) {
             IStyleClassCapability styleClassCapability = (IStyleClassCapability) component;
 
             String cssClass = styleClassCapability.getStyleClass();
             if (cssClass != null) {
-                if (suffix == null) {
-                    return cssClass;
-                }
-                return cssClass + suffix;
+                return cssClass;
             }
         }
 
-        String cssClass = getDefaultCssClassName();
-        if (suffix == null) {
-            return cssClass;
-        }
-        return cssClass + suffix;
+        return getComponentStyleClassName();
     }
 
     protected final IHtmlWriter writeCssAttributes(IHtmlWriter writer)
@@ -108,7 +90,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         writeStyleClass(writer, classSuffix);
 
-        ICssWriter cssWriter = new CssWriter(writer);
+        ICssWriter cssWriter = writer.writeStyle();
 
         int hiddenMode = DEFAULT_RENDERED_HIDDEN_MODE;
 
@@ -166,8 +148,6 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         }
 
         writeCustomCss(writer, cssWriter);
-
-        cssWriter.close();
 
         if (hiddenMode != DEFAULT_RENDERED_HIDDEN_MODE) {
             writer.writeAttribute("v:hiddenMode", hiddenMode);

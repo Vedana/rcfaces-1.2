@@ -71,6 +71,8 @@ var __prototype = {
 			this._errorImageURL=f_core.GetAttribute(this, "v:errorImageURL");
 			this._fatalImageURL=f_core.GetAttribute(this, "v:fatalImageURL");
 		}
+
+		this._showIfMessage=f_core.GetAttribute(this, "v:showIfMessage");
 	},
 	
 	f_finalize: function() {
@@ -87,6 +89,7 @@ var __prototype = {
 		// this._warnImageURL=undefined; // string
 		// this._errorImageURL=undefined; // string
 		// this._fatalImageURL=undefined; // string
+		// this._showIfMessage=undefined; // boolean
 
 		this.f_super(arguments);
 	},
@@ -94,10 +97,12 @@ var __prototype = {
 	/**
 	 * @method hidden
 	 */
-	f_registerMessageObject: function(componentId, messageObject) {
+	f_registerMessageObject: function(componentClientId, messageObject) {
 		var ctx=f_messageContext.Get(this);
 		
-		return ctx.f_addMessageObject(componentId, messageObject, false);
+		var component=f_core.GetElementById(componentClientId);
+		
+		return ctx.f_addMessageObject(component, messageObject, false);
 	},
 	fa_updateMessages: function() {
 		var summaryLabel=this._summaryLabel;
@@ -121,6 +126,10 @@ var __prototype = {
 			
 			if (image) {
 				this._changeImageURL(image, this._imageURL);
+			}
+							
+			if (this._showIfMessage) {
+				this.f_setVisible(false);
 			}
 			
 			return;
@@ -187,6 +196,10 @@ var __prototype = {
 			}
 			
 			this._changeImageURL(image, imageURL);
+							
+			if (this._showIfMessage) {
+				this.f_setVisible(true);
+			}
 		}
 	},
 	/**

@@ -1220,7 +1220,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @param Date maxDate
+	 * @param Date minDate
 	 * @return void
 	 */
 	f_setMinDate: function(minDate) {
@@ -1250,7 +1250,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Date homeDate
-	 * @param string homeDateLabel
+	 * @param String homeDateLabel
 	 * @return void
 	 */
 	f_setHomeDate: function(homeDate, homeDateLabel) {

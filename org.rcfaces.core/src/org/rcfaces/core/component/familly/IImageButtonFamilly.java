@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.3  2006/11/09 19:09:07  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.2  2006/09/14 14:34:52  oeuillot
  * Version avec ClientBundle et correction de findBugs
  *
@@ -42,7 +45,6 @@ import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -75,4 +77,6 @@ public interface IImageButtonFamilly extends IImageCapability,
     int getImageWidth(FacesContext facesContext);
 
     int getImageHeight(FacesContext facesContext);
+
+    IContentAccessors getImageAccessors(FacesContext facesContext);
 }

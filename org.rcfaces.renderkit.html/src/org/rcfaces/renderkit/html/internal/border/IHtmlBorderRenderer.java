@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/09 19:08:57  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/10/04 12:31:43  oeuillot
  * Stabilisation
  *
@@ -64,4 +67,12 @@ public interface IHtmlBorderRenderer {
     IHtmlWriter endChild(IHtmlWriter writer) throws WriterException;
 
     void writeComboImage(IHtmlWriter writer, String componentClassName) throws WriterException;
+
+    int getWestBorderWidth();
+
+    int getEastBorderWidth();
+
+    int getNorthBorderHeight();
+
+    int getSouthBorderHeight();
 }

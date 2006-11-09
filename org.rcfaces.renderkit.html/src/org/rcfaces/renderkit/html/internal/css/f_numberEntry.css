@@ -1,0 +1,31 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_numberEntry
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_numberEntry {
+	margin: 0;
+	border: 1px solid #7F9DB9;
+	text-align: left;
+}
+
+.f_numberEntry INPUT {
+	border: 0;
+	background-color: transparent;
+	margin: 0;
+}
+
+.f_numberEntry_I {
+	text-align: right;
+} 
+
+.f_numberEntry_D {
+	text-align: left;
+}

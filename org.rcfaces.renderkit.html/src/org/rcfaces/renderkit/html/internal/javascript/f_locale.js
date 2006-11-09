@@ -53,7 +53,7 @@ var __static = {
 	/**
 	 * @method private static final
 	 * @param number idx
-	 * @return string
+	 * @return String
 	 */
 	_GetLocaleNamePart: function(idx) {
 		var seps=f_env.GetLocaleName().split("_");
@@ -105,7 +105,7 @@ var __prototype = {
 	 * @method public 
 	 * @param number n Month number (0 to 11)
 	 * @param number form  Form of name (SHORT, MEDIUM, LONG)
-	 * @return string
+	 * @return String
 	 * @see #LONG
 	 * @see #SHORT
 	 * @see #MEDIUM
@@ -134,7 +134,7 @@ var __prototype = {
 	 * @method public 
 	 * @param number n Day number (0 to 6)
 	 * @param number form  Form of name (SHORT, MEDIUM, LONG)
-	 * @return string
+	 * @return String
 	 * @see #LONG
 	 * @see #SHORT
 	 * @see #MEDIUM
@@ -175,7 +175,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param number form Form of date (SHORT, MEDIUM, LONG)
-	 * @return string
+	 * @return String
 	 * @see #LONG
 	 * @see #SHORT
 	 * @see #MEDIUM

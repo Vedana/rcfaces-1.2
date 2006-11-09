@@ -13,14 +13,14 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @return string
+	 * @return String
 	 */
 	f_getText: function() {
 		return f_core.GetTextNode(this);
 	},
 	/**
 	 * @method public
-	 * @param string text
+	 * @param String text
 	 * @return void
 	 */
 	f_setText: function(text) {

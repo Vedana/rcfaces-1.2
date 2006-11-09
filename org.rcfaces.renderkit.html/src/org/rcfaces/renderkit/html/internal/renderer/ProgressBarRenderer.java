@@ -1,0 +1,211 @@
+/*
+ * $Id$
+ */
+package org.rcfaces.renderkit.html.internal.renderer;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
+import org.rcfaces.core.component.ProgressBarComponent;
+import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
+import org.rcfaces.core.internal.renderkit.ISgmlWriter;
+import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+
+/**
+ * 
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
+ */
+public class ProgressBarRenderer extends AbstractCssRenderer {
+    private static final String REVISION = "$Revision$";
+
+    private static final int BORDER_LEFT_WIDTH = 4;
+
+    private static final int BORDER_RIGHT_WIDTH = 4;
+
+    private static final int BORDER_HEIGHT = 16;
+
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.PROGRESS_BAR;
+    }
+
+    // On le met sur le end, car des clientsDatas ... et autres peuvent survenir
+    // ...
+    public void encodeEnd(IComponentWriter writer) throws WriterException {
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        encodeComponent(htmlWriter);
+
+        super.encodeEnd(htmlWriter);
+    }
+
+    protected void encodeComponent(IHtmlWriter htmlWriter)
+            throws WriterException {
+        ProgressBarComponent progressBar = (ProgressBarComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
+                .getRenderContext();
+
+        String blankImageURL = htmlRenderContext.getHtmlProcessContext()
+                .getStyleSheetURI(BLANK_IMAGE_URL);
+
+        htmlWriter.startElement("TABLE");
+
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter);
+
+        writeProgressBarAttributes(htmlWriter, progressBar);
+
+        htmlWriter.writeCellPadding(0);
+        htmlWriter.writeCellSpacing(0);
+
+        htmlWriter.startElement("COL");
+        htmlWriter.writeWidth(BORDER_LEFT_WIDTH);
+        htmlWriter.endElement("COL");
+
+        htmlWriter.startElement("COL");
+        htmlWriter.writeWidth("*");
+        htmlWriter.endElement("COL");
+
+        htmlWriter.startElement("COL");
+        htmlWriter.writeWidth(BORDER_RIGHT_WIDTH);
+        htmlWriter.endElement("COL");
+
+        htmlWriter.writeln();
+
+        htmlWriter.startElement("TBODY");
+
+        htmlWriter.startElement("TR");
+
+        htmlWriter.startElement("TD");
+        htmlWriter.writeAttribute("class", getLeftCellClassName(htmlWriter));
+
+        htmlWriter.startElement("IMG");
+        htmlWriter.writeWidth(BORDER_LEFT_WIDTH);
+        htmlWriter.writeHeight(BORDER_HEIGHT);
+        htmlWriter.writeSrc(blankImageURL);
+        htmlWriter.endElement("IMG");
+
+        htmlWriter.endElement("TD");
+
+        htmlWriter.startElement("TD");
+        htmlWriter.writeClass(getMidCellClassName(htmlWriter));
+        htmlWriter.writeText(ISgmlWriter.NBSP);
+        htmlWriter.endElement("TD");
+
+        htmlWriter.startElement("TD");
+        htmlWriter.writeClass(getRightCellClassName(htmlWriter));
+
+        htmlWriter.startElement("IMG");
+        htmlWriter.writeWidth(BORDER_RIGHT_WIDTH);
+        htmlWriter.writeHeight(BORDER_HEIGHT);
+        htmlWriter.writeSrc(blankImageURL);
+        htmlWriter.endElement("IMG");
+
+        htmlWriter.endElement("TD");
+
+        htmlWriter.endElement("TR");
+
+        htmlWriter.endElement("TBODY");
+
+        htmlWriter.endElement("TABLE");
+    }
+
+    protected String getLeftCellClassName(IHtmlWriter htmlWriter) {
+        return getMainStyleClassName() + "_left";
+    }
+
+    protected String getRightCellClassName(IHtmlWriter htmlWriter) {
+        return getMainStyleClassName() + "_right";
+    }
+
+    protected String getMidCellClassName(IHtmlWriter htmlWriter) {
+        return getMainStyleClassName() + "_mid";
+    }
+
+    protected void writeProgressBarAttributes(IHtmlWriter htmlWriter,
+            ProgressBarComponent progressBar) throws WriterException {
+
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        double minValue = progressBar.getMinimum(facesContext);
+        if (minValue != 0.0) {
+            htmlWriter.writeAttribute("v:min", Double.toString(minValue));
+        }
+
+        double maxValue = progressBar.getMaximum(facesContext);
+        if (maxValue != 0.0) {
+            htmlWriter.writeAttribute("v:max", Double.toString(maxValue));
+        }
+
+        Object value = progressBar.getValue();
+        if (value instanceof String) {
+            String svalue = (String) value;
+
+            if (svalue.length() > 0 && Character.isDigit(svalue.charAt(0))) {
+                value = new Double(svalue);
+            }
+        }
+        if (value instanceof Number) {
+            Number num = (Number) value;
+
+            if (num.doubleValue() != 0.0) {
+                htmlWriter.writeAttribute("v:value", num.toString());
+            }
+        }
+    }
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
+
+        ProgressBarComponent progressBar = (ProgressBarComponent) component;
+
+        Number value = componentData.getNumberProperty("value");
+        if (value != null) {
+            progressBar.setValue(value);
+        }
+
+        Number min = componentData.getNumberProperty("min");
+        if (min != null) {
+            double old = progressBar.getMinimum(facesContext);
+
+            if (min.doubleValue() != old) {
+                progressBar.setMinimum(min.doubleValue());
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.MINIMUM, new Double(old), min));
+            }
+        }
+
+        Number max = componentData.getNumberProperty("max");
+        if (max != null) {
+            double old = progressBar.getMaximum(facesContext);
+
+            if (max.doubleValue() != old) {
+                progressBar.setMaximum(max.doubleValue());
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.MAXIMUM, new Double(old), max));
+            }
+        }
+
+    }
+}

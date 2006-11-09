@@ -1,15 +1,18 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
+import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
 
 public class FieldSetComponent extends AbstractOutputComponent implements 
 	IFontCapability,
@@ -30,6 +33,13 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 	public FieldSetComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
 	}
 
 	public final java.lang.Boolean getFontBold() {
@@ -190,6 +200,13 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	public final void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	public final IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
+		
 	}
 
 	public final int getImageHeight() {

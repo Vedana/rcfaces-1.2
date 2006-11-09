@@ -37,9 +37,9 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private String propertyChangeListeners;
 	private String initListeners;
 	private String forVal;
-	private String showDetail;
 	private String showSummary;
 	private String margins;
+	private String showDetail;
 	public final String getHeight() {
 		return height;
 	}
@@ -224,14 +224,6 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.forVal = forVal;
 	}
 
-	public final String getShowDetail() {
-		return showDetail;
-	}
-
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
-	}
-
 	public final String getShowSummary() {
 		return showSummary;
 	}
@@ -246,6 +238,14 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 
 	public final void setMargins(String margins) {
 		this.margins = margins;
+	}
+
+	public final String getShowDetail() {
+		return showDetail;
+	}
+
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -268,9 +268,9 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  forVal='"+forVal+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -481,15 +481,6 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (showDetail != null) {
-			if (isValueReference(showDetail)) {
-				ValueBinding vb = application.createValueBinding(showDetail);
-				component.setShowDetail(vb);
-			} else {
-				component.setShowDetail(getBool(showDetail));
-			}
-		}
-
 		if (showSummary != null) {
 			if (isValueReference(showSummary)) {
 				ValueBinding vb = application.createValueBinding(showSummary);
@@ -504,6 +495,15 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
 			}
 				component.setMargins(margins);
+		}
+
+		if (showDetail != null) {
+			if (isValueReference(showDetail)) {
+				ValueBinding vb = application.createValueBinding(showDetail);
+				component.setShowDetail(vb);
+			} else {
+				component.setShowDetail(getBool(showDetail));
+			}
 		}
 	}
 
@@ -531,9 +531,9 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		initListeners = null;
 		forVal = null;
-		showDetail = null;
 		showSummary = null;
 		margins = null;
+		showDetail = null;
 
 		super.release();
 	}

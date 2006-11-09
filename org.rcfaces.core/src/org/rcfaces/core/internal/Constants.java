@@ -1,26 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.5  2006/09/20 17:55:20  oeuillot
- * Tri multiple des tables
- * Dialogue modale en JS
- *
- * Revision 1.4  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.3  2006/09/05 08:57:21  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.2  2006/09/01 15:24:29  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.1  2006/08/28 16:03:55  oeuillot
- * Version avant migation en org.rcfaces
- *
  */
 package org.rcfaces.core.internal;
 
@@ -47,11 +26,11 @@ public class Constants {
 
     public static final boolean TEMPLATE_SUPPORT = true;
 
-    public static final boolean URL_REWRITING_SUPPORT = true;
+    public static final boolean RESOURCE_CONTENT_VERSION_SUPPORT = true;
 
-    public static final boolean CACHED_ITERATOR_ENABLED = true;
+    public static final boolean CACHED_COMPONENT_ITERATOR = true;
 
-    public static final boolean STATE_CHILDREN_LIST_ENABLED = true;
+    public static final boolean STATED_COMPONENT_CHILDREN_LIST = true;
 
     public static final boolean ENCODE_URI = false;
 
@@ -87,7 +66,9 @@ public class Constants {
 
     private static final String CONSTANT_PREFIX;
     static {
-        String name = Constants.class.getPackage().getName();
+        Package _package = Constants.class.getPackage();
+
+        String name = _package.getName();
         if (name.endsWith(".internal")) {
             name = name.substring(0, name.lastIndexOf('.'));
         }
@@ -99,17 +80,27 @@ public class Constants {
 
     public static final IImageLoaderFactory IMAGE_LOADER_FACTORY = null;
 
+    public static final boolean CACHED_LOCALE_FORMAT = true;
+
+    public static final boolean COMPACTED_PROPERTY_NAME = true;
+
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
                 + READ_ONLY_COLLECTION_LOCK_ENABLED);
 
         LOG.info("TEMPLATE_SUPPORT=" + TEMPLATE_SUPPORT);
 
-        LOG.info("URL_REWRITING_SUPPORT=" + URL_REWRITING_SUPPORT);
+        LOG.info("RESOURCE_CONTENT_VERSION_SUPPORT="
+                + RESOURCE_CONTENT_VERSION_SUPPORT);
 
-        LOG.info("STATE_CHILDREN_LIST_ENABLED=" + STATE_CHILDREN_LIST_ENABLED);
+        LOG.info("STATED_COMPONENT_CHILDREN_LIST="
+                + STATED_COMPONENT_CHILDREN_LIST);
 
-        LOG.info("CACHED_ITERATOR_ENABLED=" + CACHED_ITERATOR_ENABLED);
+        LOG.info("CACHED_COMPONENT_ITERATOR=" + CACHED_COMPONENT_ITERATOR);
+
+        LOG.info("CACHED_LOCALE_FORMAT=" + CACHED_LOCALE_FORMAT);
+
+        LOG.info("COMPACTED_PROPERTY_NAME=" + COMPACTED_PROPERTY_NAME);
 
         LOG.info("DEFAULT_ETAG_SUPPORT=" + DEFAULT_ETAG_SUPPORT);
 
@@ -178,18 +169,21 @@ public class Constants {
             LOG.debug(th);
         }
 
-        try {
-            String version = clazz.getPackage().getImplementationVersion();
-            if (version != null) {
-                LOG.info(versionName + " version: " + version);
+        Package clazzPackage = clazz.getPackage();
+        if (clazzPackage != null) {
+            try {
+                String version = clazzPackage.getImplementationVersion();
+                if (version != null) {
+                    LOG.info(versionName + " version: " + version);
 
-                return version;
+                    return version;
+                }
+
+            } catch (Throwable th) {
+                LOG.error("Can not get " + versionName
+                        + " version by package API ! ("
+                        + clazzPackage.getName() + ")", th);
             }
-
-        } catch (Throwable th) {
-            LOG.error("Can not get " + versionName
-                    + " version by package API ! ("
-                    + clazz.getPackage().getName() + ")", th);
         }
 
         String version = "0." + String.valueOf(System.currentTimeMillis());

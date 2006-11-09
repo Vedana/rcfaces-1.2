@@ -1,76 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.4  2006/10/13 18:04:38  oeuillot
- * Ajout de:
- * DateEntry
- * StyledMessage
- * MessageFieldSet
- * xxxxConverter
- * Adapter
- *
- * Revision 1.3  2006/10/04 12:31:42  oeuillot
- * Stabilisation
- *
- * Revision 1.2  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:28  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.8  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.7  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.6  2006/05/16 13:58:18  oeuillot
- * Suite de l'impl�mentation du Calendar
- * D�but d'implementation de dateChooser
- * Creation du CalendarObject
- * R�vision et optimisation du modele de chargement des classes
- * Gestion complete des f_bundle
- * Ajout des DatesItems pour la gestion de jours f�riers
- *
- * Revision 1.5  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.4  2006/03/15 13:53:04  oeuillot
- * Stabilisation
- * Ajout des bundles pour le javascript
- * R�organisation de l'arborescence de GridData qui n'herite plus de UIData
- *
- * Revision 1.3  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.2  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.1  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.1  2005/12/28 11:12:48  oeuillot
- * Ajout des writer de Menu et ImageButton
- * Split de l'aspect fa_menu
- * Gestion de l'heritage d'aspect !
- *
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
@@ -83,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
@@ -94,6 +22,9 @@ import javax.faces.model.SelectItemGroup;
 import javax.faces.render.Renderer;
 
 import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.decorator.ISelectItemMapper;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -103,9 +34,9 @@ import org.rcfaces.core.model.BasicImagesSelectItem;
 import org.rcfaces.core.model.BasicSelectItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
+import org.rcfaces.core.model.IImagesSelectItem;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.ICssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 
@@ -191,21 +122,18 @@ public abstract class AbstractSelectItemsDecorator extends
         }
     }
 
-    protected final String getClassName() {
-        if ((renderer instanceof ICssRenderer) == false) {
-            throw new FacesException("Can not compute className !");
-        }
-
-        if (className != null) {
-            return className;
-        }
-
-        className = ((ICssRenderer) renderer).getStyleClassName(writer
-                .getComponentRenderContext());
-
-        return className;
-    }
-
+    /*
+     * protected final String getClassName() { if ((renderer instanceof
+     * ICssRenderer) == false) { throw new FacesException("Can not compute
+     * className !"); }
+     * 
+     * if (className != null) { return className; }
+     * 
+     * className = ((ICssRenderer) renderer).getStyleClassName(writer
+     * .getComponentRenderContext());
+     * 
+     * return className; }
+     */
     protected void preEncodeContainerEnd() throws WriterException {
     }
 
@@ -467,6 +395,12 @@ public abstract class AbstractSelectItemsDecorator extends
             int depth, boolean visible) throws WriterException {
 
         if (value == null) {
+            if (getComponentRenderContext().getRenderContext()
+                    .getProcessContext().isDesignerMode()) {
+
+                // En mode Designer ... on reste discret :-)
+                return;
+            }
             throw new WriterException("UISelectItems value is null !", null,
                     component);
         }
@@ -739,5 +673,185 @@ public abstract class AbstractSelectItemsDecorator extends
 
     protected Converter getConverter() {
         return null;
+    }
+
+    protected static void writeSelectItemImages(IImagesSelectItem iim,
+            IJavaScriptWriter javaScriptWriter, String managerVarId,
+            String methodName, String varId, boolean ignoreExpand)
+            throws WriterException {
+
+        String imageURL = iim.getImageURL();
+        String disabledImageURL = iim.getDisabledImageURL();
+        String hoverImageURL = iim.getHoverImageURL();
+        String selectedImageURL = iim.getSelectedImageURL();
+        String expandedImageURL = null;
+        if (ignoreExpand == false) {
+            expandedImageURL = iim.getExpandedImageURL();
+        }
+
+        IContentAccessor imageAccessor = null;
+        if (imageURL != null) {
+            imageAccessor = ContentAccessorFactory.createFromWebResource(
+                    imageURL, IContentType.IMAGE);
+        }
+
+        IContentAccessor disabledImageAccessor = null;
+        if (disabledImageURL != null) {
+            if (imageAccessor == null) {
+                disabledImageAccessor = ContentAccessorFactory
+                        .createFromWebResource(disabledImageURL,
+                                IContentType.IMAGE);
+            } else {
+                disabledImageAccessor = ContentAccessorFactory
+                        .createFromWebResource(disabledImageURL, imageAccessor);
+            }
+        }
+
+        IContentAccessor hoverImageAccessor = null;
+        if (hoverImageURL != null) {
+            if (imageAccessor == null) {
+                hoverImageAccessor = ContentAccessorFactory
+                        .createFromWebResource(hoverImageURL,
+                                IContentType.IMAGE);
+            } else {
+                hoverImageAccessor = ContentAccessorFactory
+                        .createFromWebResource(hoverImageURL, imageAccessor);
+            }
+        }
+
+        IContentAccessor selectedImageAccessor = null;
+        if (selectedImageURL != null) {
+            if (imageAccessor == null) {
+                selectedImageAccessor = ContentAccessorFactory
+                        .createFromWebResource(selectedImageURL,
+                                IContentType.IMAGE);
+            } else {
+                selectedImageAccessor = ContentAccessorFactory
+                        .createFromWebResource(selectedImageURL, imageAccessor);
+            }
+        }
+
+        IContentAccessor expandedImageAccessor = null;
+        if (expandedImageURL != null) {
+            if (imageAccessor == null) {
+                expandedImageAccessor = ContentAccessorFactory
+                        .createFromWebResource(expandedImageURL,
+                                IContentType.IMAGE);
+            } else {
+                expandedImageAccessor = ContentAccessorFactory
+                        .createFromWebResource(expandedImageURL, imageAccessor);
+            }
+        }
+
+        if (imageAccessor == null && disabledImageAccessor == null
+                && hoverImageAccessor == null && selectedImageAccessor == null
+                && expandedImageURL == null) {
+            return;
+        }
+
+        FacesContext facesContext = javaScriptWriter.getFacesContext();
+
+        String imageVar = null;
+        if (imageAccessor != null) {
+            imageURL = imageAccessor.resolveURL(facesContext, null, null);
+            if (imageURL != null) {
+                imageVar = javaScriptWriter.allocateString(imageURL);
+            }
+        }
+
+        String disabledVar = null;
+        if (disabledImageAccessor != null) {
+            disabledImageURL = disabledImageAccessor.resolveURL(facesContext,
+                    null, null);
+            if (disabledImageURL != null) {
+                disabledVar = javaScriptWriter.allocateString(disabledImageURL);
+            }
+        }
+
+        String hoverVar = null;
+        if (hoverImageAccessor != null) {
+            hoverImageURL = hoverImageAccessor.resolveURL(facesContext, null, null);
+            if (hoverImageURL != null) {
+                hoverVar = javaScriptWriter.allocateString(hoverImageURL);
+            }
+        }
+
+        String selectedVar = null;
+        if (selectedImageAccessor != null) {
+            selectedImageURL = selectedImageAccessor.resolveURL(facesContext,
+                    null, null);
+            if (selectedImageURL != null) {
+                selectedVar = javaScriptWriter.allocateString(selectedImageURL);
+            }
+        }
+
+        String expandVar = null;
+        if (expandedImageAccessor != null) {
+            expandedImageURL = expandedImageAccessor.resolveURL(facesContext,
+                    null, null);
+            if (expandedImageURL != null) {
+                expandVar = javaScriptWriter.allocateString(expandedImageURL);
+            }
+        }
+
+        if (managerVarId != null) {
+            javaScriptWriter.writeCall(managerVarId, "_setItemImages").write(
+                    varId);
+
+        } else {
+            javaScriptWriter.writeMethodCall("_setItemImages").write(varId);
+        }
+
+        int pred = 0;
+
+        if (imageVar != null) {
+            for (; pred > 0; pred--) {
+                javaScriptWriter.write(',').writeNull();
+            }
+            javaScriptWriter.write(',').write(imageVar);
+        } else {
+            pred++;
+        }
+
+        if (ignoreExpand == false) {
+            if (expandVar != null) {
+                for (; pred > 0; pred--) {
+                    javaScriptWriter.write(',').writeNull();
+                }
+                javaScriptWriter.write(',').write(expandVar);
+            } else {
+                pred++;
+            }
+
+        }
+
+        if (disabledVar != null) {
+            for (; pred > 0; pred--) {
+                javaScriptWriter.write(',').writeNull();
+            }
+            javaScriptWriter.write(',').write(disabledVar);
+        } else {
+            pred++;
+        }
+        if (hoverVar != null) {
+            for (; pred > 0; pred--) {
+                javaScriptWriter.write(',').writeNull();
+            }
+            javaScriptWriter.write(',').write(hoverVar);
+        } else {
+            pred++;
+        }
+
+        if (selectedVar != null) {
+            for (; pred > 0; pred--) {
+                javaScriptWriter.write(',').writeNull();
+            }
+            javaScriptWriter.write(',').write(selectedVar);
+        } else {
+            pred++;
+        }
+
+        javaScriptWriter.writeln(");");
+
     }
 }
