@@ -358,7 +358,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         if (selectItem instanceof IImagesSelectItem) {
             writeSelectItemImages((IImagesSelectItem) selectItem,
-                    javaScriptWriter, null, "_setImages", varId, false);
+                    javaScriptWriter, null, "f_setItemImages", varId, false);
         }
 
         return EVAL_NODE;

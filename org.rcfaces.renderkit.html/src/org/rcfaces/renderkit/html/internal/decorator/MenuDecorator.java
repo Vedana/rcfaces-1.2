@@ -330,7 +330,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         if (selectItem instanceof IImagesSelectItem) {
             writeSelectItemImages((IImagesSelectItem) selectItem,
-                    javaScriptWriter, managerVarId, "_setItemImages", varId,
+                    javaScriptWriter, managerVarId, "f_setItemImages", varId,
                     true);
         }
         if (hasChild == false) {

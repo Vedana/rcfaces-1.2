@@ -88,9 +88,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                 }
 
                 if (resolvedContent == null) {
-                    RcfacesContext rcfacesContext = RcfacesContext
-                            .getInstance(facesContext);
-
                     resolvedContent = (IResolvedContent) adapterManager
                             .getAdapter(wrappedData, IResolvedContent.class,
                                     parameters);
@@ -258,7 +255,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         public String getResourceKey() {
             if (isProcessAtRequest()) {
                 // C'est traité sur la requete !
-                
+
                 if (contentModel instanceof IResourceKey) {
                     // L'objet peut tout de même savoir sa clef ???
                     return ((IResourceKey) contentModel).getResourceKey();

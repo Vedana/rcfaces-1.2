@@ -286,7 +286,7 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
 
         if (selectItem instanceof IImagesSelectItem) {
             writeSelectItemImages((IImagesSelectItem) selectItem,
-                    javaScriptWriter, null, "_setItemImages", varId, true);
+                    javaScriptWriter, null, "f_setItemImages", varId, true);
         }
 
     }

@@ -31,4 +31,8 @@ public interface IResolvedContent extends IResourceKey, Serializable {
     String getHash();
 
     String getETag();
+
+    boolean isVersioned();
+
+    void setVersioned(boolean versioned);
 }

@@ -795,11 +795,11 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         if (managerVarId != null) {
-            javaScriptWriter.writeCall(managerVarId, "_setItemImages").write(
+            javaScriptWriter.writeCall(managerVarId, "f_setItemImages").write(
                     varId);
 
         } else {
-            javaScriptWriter.writeMethodCall("_setItemImages").write(varId);
+            javaScriptWriter.writeMethodCall("f_setItemImages").write(varId);
         }
 
         int pred = 0;

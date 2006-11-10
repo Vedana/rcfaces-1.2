@@ -11,6 +11,8 @@ package org.rcfaces.core.internal.contentStorage;
 public abstract class AbstractResolvedContent implements IResolvedContent {
     private static final String REVISION = "$Revision$";
 
+    private boolean versioned;
+
     public String getETag() {
         return null;
     }
@@ -42,4 +44,13 @@ public abstract class AbstractResolvedContent implements IResolvedContent {
     public String getResourceKey() {
         return null;
     }
+
+    public boolean isVersioned() {
+        return versioned;
+    }
+
+    public void setVersioned(boolean versioned) {
+        this.versioned = versioned;
+    }
+
 }

@@ -68,7 +68,11 @@ var __prototype = {
 		}
 	},
 	
-	_setItemImages: function(item, imageURL, disabledImageURL, hoverImageURL, selectedImageURL) {
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_setItemImages: function(item, imageURL, disabledImageURL, hoverImageURL, selectedImageURL) {
 		if (imageURL) {
 			this.f_setItemImageURL(item, imageURL);
 		}

@@ -49,8 +49,6 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
 
     private boolean noCache;
 
-    private boolean isVersioned;
-
     public void init(ServletConfig config) throws ServletException {
 
         super.init(config);
@@ -150,7 +148,6 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
         if (exceptionRef[0] != null) {
             throw exceptionRef[0];
         }
-
     }
 
     protected void sendContent(HttpServletRequest request,
@@ -165,6 +162,8 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
         if (modificationDate > 0) {
             modificationDate -= (modificationDate % 1000);
         }
+
+        boolean isVersioned = resolvedContent.isVersioned();
 
         if (noCache) {
             setNoCache(response);

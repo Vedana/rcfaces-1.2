@@ -547,7 +547,7 @@ var __prototype = {
 			
 			var imageURL=result._imageURL;
 			if (imageURL) {
-				menu._setItemImages(item, imageURL);
+				menu.f_setItemImages(item, imageURL);
 			}
 		}
 		

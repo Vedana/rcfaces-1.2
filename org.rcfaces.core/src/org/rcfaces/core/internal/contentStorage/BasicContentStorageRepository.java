@@ -72,6 +72,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
                 sa.append(suffix);
             }
 
+            content.setVersioned(true);
             return sa.toString();
         }
 
@@ -87,6 +88,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
             key += "." + suffix;
         }
 
+        content.setVersioned(false);
         return key;
     }
 

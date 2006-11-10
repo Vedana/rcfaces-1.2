@@ -57,7 +57,11 @@ var __prototype = {
 	f_appendItem: function(toolFolder, id, label, value, accessKey, tooltip, disabled, selected, groupName) {
 	},
 	
-	_setItemImages: function(item) {
+	
+	/**
+	 * @method hidden
+	 */
+	f_setItemImages: function(item) {
 	},
 	
 	f_appendSeparatorItem: function(toolFolder) {

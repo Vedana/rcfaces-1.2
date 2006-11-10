@@ -125,6 +125,8 @@ class ImageOperationContentModel extends BasicContentModel implements
 
     private transient IImageOperation imageOperation;
 
+    private boolean versioned;
+
     public ImageOperationContentModel(String resourceURL, String contentType,
             String urlSuffix, String versionId, String operationId,
             String filterParametersToParse, Map attributes,
@@ -539,6 +541,14 @@ class ImageOperationContentModel extends BasicContentModel implements
 
     public String getResourceKey() {
         return resourceKey;
+    }
+
+    public boolean isVersioned() {
+        return versioned;
+    }
+
+    public void setVersioned(boolean versioned) {
+        this.versioned = versioned;
     }
 
 }

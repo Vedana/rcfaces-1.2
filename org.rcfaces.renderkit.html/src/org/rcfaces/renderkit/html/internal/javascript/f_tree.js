@@ -1498,7 +1498,10 @@ var __prototype = {
 		}
 		
 	},
-	_setImages: function() {
+	/**
+	 * @method hidden
+	 */
+	f_setItemImages: function() {
 		var atts=0;
 		var node=arguments[atts++];
 		
