@@ -78,7 +78,7 @@ public class ImageRenderer extends AbstractCssRenderer {
 
         if (url == null) {
             url = componentRenderContext.getHtmlRenderContext()
-                    .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL);
+                    .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL, true);
 
             htmlWriter.writeAttribute("v:blank", "true");
         }

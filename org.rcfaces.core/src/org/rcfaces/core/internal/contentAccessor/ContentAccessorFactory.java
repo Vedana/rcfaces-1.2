@@ -66,8 +66,6 @@ public class ContentAccessorFactory {
 
     };
 
-    private static final IContentVersionHandler FRAMEWORK_CONTENT_VERSION_HANDLER = null;
-
     public static IContentAccessor createFromWebResource(Object value,
             IContentType type) {
 
@@ -78,8 +76,8 @@ public class ContentAccessorFactory {
     public static IContentAccessor createFromWebResource(Object value,
             IContentAccessor parent) {
 
-        return createAccessor(value, null, parent,
-                RESOURCE_CONTENT_VERSION_HANDLER);
+        return createAccessor(value, null, parent, parent
+                .getContentVersionHandler());
     }
 
     public static IContentAccessor createAccessor(Object value,
@@ -113,18 +111,12 @@ public class ContentAccessorFactory {
         return new BasicContentAccessor(value, type, contentVersionHandler);
     }
 
-    public static IContentAccessor createFromFrameworkStyleSheet(String url,
-            IContentType type) {
-        return new BasicContentAccessor(url, type,
-                FRAMEWORK_CONTENT_VERSION_HANDLER);
-    }
-
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class BasicContentAccessor extends AbstractContentAccessor {
+    protected static class BasicContentAccessor extends AbstractContentAccessor {
         private static final String REVISION = "$Revision$";
 
         private final Object value;
@@ -172,7 +164,7 @@ public class ContentAccessorFactory {
                 Map value = contentModel.getAttributes();
                 if (value != null && value.size() > 0) {
                     attributes = new HashMap(attributes);
-                    
+
                     attributes.putAll(value);
                 }
             }
@@ -186,7 +178,7 @@ public class ContentAccessorFactory {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class SimpleImageAccessor extends BasicContentAccessor
+    protected static class SimpleImageAccessor extends BasicContentAccessor
             implements IImageAccessors {
         private static final String REVISION = "$Revision$";
 

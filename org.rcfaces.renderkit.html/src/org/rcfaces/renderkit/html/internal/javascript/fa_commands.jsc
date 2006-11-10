@@ -1,9 +1,0 @@
-var _e={f_finalize:function(){var e
-this._2n=e},ci:function(e){var t=this
-if(!t._Y){e.call(t,t)
-return}t._2n=e},ri:function(){var n,r=this,e=r._2n
-if(!e)return!1
-r._2n=n
-try{e.call(r,r)}catch(t){f_core.error(fa_commands,"Call of callback: "+e+" throws exception.",t)
-return!1}return!0}}
-var fa_commands=new f_aspect("fa_commands",null,_e);

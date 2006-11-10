@@ -226,7 +226,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
     protected String getButtonImage(IHtmlWriter htmlWriter, boolean collapsed) {
 
         return getHtmlRenderContext(htmlWriter).getHtmlProcessContext()
-                .getStyleSheetURI(BLANK_IMAGE_URL);
+                .getStyleSheetURI(BLANK_IMAGE_URL, true);
         /*
          * String imageURL; if (collapsed) { imageURL =
          * COLLAPSED_BUTTON_IMAGE_URL; } else { imageURL =

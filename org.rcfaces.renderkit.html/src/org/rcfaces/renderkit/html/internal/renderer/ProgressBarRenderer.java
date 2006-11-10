@@ -60,7 +60,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
                 .getRenderContext();
 
         String blankImageURL = htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetURI(BLANK_IMAGE_URL);
+                .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
         htmlWriter.startElement("TABLE");
 

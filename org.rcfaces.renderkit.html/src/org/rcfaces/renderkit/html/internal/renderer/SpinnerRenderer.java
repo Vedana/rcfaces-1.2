@@ -68,7 +68,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(htmlWriter);
         String blankImageURL = htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetURI(BLANK_IMAGE_URL);
+                .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
         htmlWriter.startElement("IMG");
         htmlWriter.writeClass(getUpButtonClassName(htmlWriter, disabled));

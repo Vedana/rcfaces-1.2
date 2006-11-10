@@ -268,7 +268,7 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
                 }
 
                 String styleSheetURI = htmlProcessContext
-                        .getStyleSheetURI(cssConfig.getStyleSheetFileName());
+                        .getStyleSheetURI(cssConfig.getStyleSheetFileName(), true);
 
                 writer.print(" href=\"");
                 URLFormCodec.writeURL(writer, styleSheetURI);

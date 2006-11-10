@@ -29,7 +29,7 @@ public class ContentAccessorEngine {
             IFilterProperties filterProperties) {
 
         Object initContentRef = contentAccessor.getContentRef();
-        
+
         RcfacesContext rcfacesContext = RcfacesContext
                 .getInstance(facesContext);
 
@@ -79,7 +79,7 @@ public class ContentAccessorEngine {
             }
         }
 
-        if (url.equals(initContentRef)) {
+        if (url.equals(initContentRef) && url.charAt(0) != '/') {
             // Pas de version ... rien du tout !
             return url;
         }

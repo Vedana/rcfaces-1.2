@@ -197,7 +197,14 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                 IncludeHttpServletResponse response = IncludeHttpServletResponse
                         .create(servletResponse, output, DEFAULT_CHARSET);
 
-                String requestURI = "/" + uri;
+                String requestURI;
+                if (uri.charAt(0) != '/') {
+                    requestURI = "/" + uri;
+
+                } else {
+                    requestURI = uri;
+                }
+
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Send request to get image content of '"
                             + requestURI + "'.");

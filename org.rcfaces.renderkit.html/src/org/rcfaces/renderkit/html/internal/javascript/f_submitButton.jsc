@@ -1,3 +1,0 @@
-var _e={f_submitButton:function(){this.f_super(arguments)
-this._ai=!1}}
-var f_submitButton=new f_class("f_submitButton",null,null,_e,f_button);
