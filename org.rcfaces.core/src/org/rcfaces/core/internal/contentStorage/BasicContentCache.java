@@ -1,8 +1,9 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.images;
+package org.rcfaces.core.internal.contentStorage;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,16 +12,17 @@ import java.util.WeakHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class BasicImagesCache implements IImagesCache {
+public class BasicContentCache {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(BasicImagesCache.class);
+    private static final Log LOG = LogFactory.getLog(BasicContentCache.class);
 
     // Il faut un cache des erreurs .... et des autres !
 
@@ -32,14 +34,14 @@ public class BasicImagesCache implements IImagesCache {
 
     private List cacheList = new LinkedList();
 
-    public BasicImagesCache(int maxCacheSize) {
+    public BasicContentCache(int maxCacheSize) {
         this.maxCacheSize = maxCacheSize;
 
         caches = new HashMap(maxCacheSize + 2);
 
         LOG.debug("Set max cache size to " + maxCacheSize + ".");
 
-        if (Constants.IMAGES_WEAK_MAP_CACHE_ENABLED) {
+        if (Constants.BASIC_CONTENT_WEAK_CACHE_ENABLED) {
             weakCache = new WeakHashMap(maxCacheSize);
             LOG.debug("Create a weak map initialized with size " + maxCacheSize
                     + ".");
@@ -50,17 +52,10 @@ public class BasicImagesCache implements IImagesCache {
 
     }
 
-    public synchronized IBufferedImage searchInCache(String cmd, String url) {
-        String key = computeKey(cmd, url);
-
+    public synchronized Serializable get(String key) {
         Cache cache = (Cache) caches.get(key);
         if (cache == null && weakCache != null) {
             cache = (Cache) weakCache.get(key);
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Search image cmd='" + cmd + "' url='" + url + "' => "
-                    + ((cache != null) ? "FOUND" : "FAILED"), null);
         }
 
         if (cache == null) {
@@ -72,21 +67,18 @@ public class BasicImagesCache implements IImagesCache {
             cacheList.add(0, cache);
         }
 
-        return cache.bufferedImage;
+        return cache.serializable;
     }
 
-    public synchronized void storeIntoCache(String cmd, String url,
-            IBufferedImage bufferedImage) {
-        String key = computeKey(cmd, url);
-
+    public synchronized void put(String key, Serializable serializable) {
         Cache cache = (Cache) caches.get(key);
         if (cache != null) {
-            cache.bufferedImage = bufferedImage;
+            cache.serializable = serializable;
 
             cacheList.remove(cache);
 
         } else {
-            cache = new Cache(key, bufferedImage);
+            cache = new Cache(key, serializable);
             caches.put(key, cache);
         }
 
@@ -95,8 +87,9 @@ public class BasicImagesCache implements IImagesCache {
         int cacheSize = caches.size();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Register image cmd='" + cmd + "' url='" + url
-                    + "' cacheSize=" + cacheSize + ".");
+            LOG
+                    .debug("Register key='" + key + "' cacheSize=" + cacheSize
+                            + ".");
         }
 
         if (cacheSize > maxCacheSize) {
@@ -109,7 +102,7 @@ public class BasicImagesCache implements IImagesCache {
             }
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Remove the oldest cached imageBuffered.");
+                LOG.debug("Remove the oldest cached.");
             }
         }
     }
@@ -127,11 +120,11 @@ public class BasicImagesCache implements IImagesCache {
 
         final String key;
 
-        IBufferedImage bufferedImage;
+        Serializable serializable;
 
-        public Cache(String key, IBufferedImage bufferedImage) {
+        public Cache(String key, Serializable serializable) {
             this.key = key;
-            this.bufferedImage = bufferedImage;
+            this.serializable = serializable;
         }
     }
 }

@@ -34,9 +34,9 @@ public class Constants {
 
     public static final boolean ENCODE_URI = false;
 
-    public static final boolean DEFAULT_HASH_SUPPORT = true;
+    public static final boolean HASH_SUPPORT = true;
 
-    public static final boolean DEFAULT_ETAG_SUPPORT = true;
+    public static final boolean ETAG_SUPPORT = true;
 
     public static final boolean DEFAULT_GZIP_SUPPORT = true;
 
@@ -56,6 +56,14 @@ public class Constants {
     public static final boolean DEFAULT_CLIENT_LOCALE_SUPPORT = true;
 
     public static final String RESOURCE_VERSION_DIGEST_ALGORITHM = "SHA-1";
+
+    public static final String ETAG_DIGEST_ALGORITHM = "SHA-1";
+
+    public static final String HASH_DIGEST_ALGORITHM = "MD5";
+
+    public static final boolean BASIC_CONTENT_WEAK_CACHE_ENABLED = true;
+
+    public static final int BASIC_CONTENT_CACHE_SIZE = 256;
 
     private static final String version;
     static {
@@ -102,11 +110,13 @@ public class Constants {
 
         LOG.info("COMPACTED_PROPERTY_NAME=" + COMPACTED_PROPERTY_NAME);
 
-        LOG.info("DEFAULT_ETAG_SUPPORT=" + DEFAULT_ETAG_SUPPORT);
+        LOG.info("ETAG_SUPPORT=" + ETAG_SUPPORT + " (algorithm: "
+                + ETAG_DIGEST_ALGORITHM + ")");
+
+        LOG.info("HASH_SUPPORT=" + HASH_SUPPORT + " (algorithm: "
+                + HASH_DIGEST_ALGORITHM + ")");
 
         LOG.info("DEFAULT_GZIP_SUPPORT=" + DEFAULT_GZIP_SUPPORT);
-
-        LOG.info("DEFAULT_HASH_SUPPORT=" + DEFAULT_HASH_SUPPORT);
 
         LOG.info("DEFAULT_EXPIRATION_DELAY=" + DEFAULT_EXPIRATION_DELAY + " ("
                 + Delay.format(DEFAULT_EXPIRATION_DELAY) + ")");

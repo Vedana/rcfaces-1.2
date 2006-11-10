@@ -102,11 +102,17 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
 
             if (wait != null && wait.length() > 0) {
 
-                synchronized (wait) {
-                    System.out.println("WAIT ...");
-                    try {
-                        wait.wait(Integer.parseInt(wait));
-                    } catch (Exception ex) {
+                int w = Integer.parseInt(wait);
+
+                if (w > 0) {
+                    synchronized (wait) {
+                        LOG.debug("WAIT ...");
+                        try {
+                            wait.wait(w);
+
+                        } catch (Exception ex) {
+                            LOG.debug(ex);
+                        }
                     }
                 }
             }

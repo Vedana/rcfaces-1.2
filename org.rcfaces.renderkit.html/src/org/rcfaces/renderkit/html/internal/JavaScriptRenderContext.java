@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.9  2006/11/10 14:00:03  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.8  2006/11/09 19:08:57  oeuillot
  * *** empty log message ***
  *
@@ -633,7 +636,7 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
                     "false);");
 
         } else {
-            if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT) {
+            if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
                 String separator = processContext.getNamingSeparator();
 
                 if (separator != null) {

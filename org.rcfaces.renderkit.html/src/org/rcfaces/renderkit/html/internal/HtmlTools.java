@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.6  2006/11/10 14:00:03  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.5  2006/11/09 19:08:57  oeuillot
  * *** empty log message ***
  *
@@ -550,7 +553,7 @@ public class HtmlTools {
     public static UIComponent getForComponent(FacesContext context,
             String forComponent, UIComponent component) {
 
-        if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT) {
+        if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
             IHtmlProcessContext processContext = HtmlProcessContextImpl
                     .getHtmlProcessContext(context);
 
@@ -566,7 +569,7 @@ public class HtmlTools {
     public static String computeGroupName(IHtmlProcessContext processContext,
             UIComponent component, String groupName) {
 
-        if (Constants.CLIENT_GROUP_NAME_SUPPORT == false) {
+        if (Constants.GROUP_NAME_NAMESPACE_SUPPORT == false) {
             return groupName;
         }
 

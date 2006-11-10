@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/10 14:00:05  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/10/04 12:31:59  oeuillot
  * Stabilisation
  *
@@ -368,11 +371,11 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
     }
 
     protected boolean getDefaultHashSupport() {
-        return Constants.DEFAULT_HASH_SUPPORT;
+        return Constants.HASH_SUPPORT;
     }
 
     protected boolean getDefaultETagSupport() {
-        return Constants.DEFAULT_ETAG_SUPPORT;
+        return Constants.ETAG_SUPPORT;
     }
 
     protected boolean getDefaultGZipSupport() {

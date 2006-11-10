@@ -16,11 +16,7 @@ public class Constants {
 
     private static final Log LOG = LogFactory.getLog(Constants.class);
 
-    public static final boolean IMAGES_WEAK_MAP_CACHE_ENABLED = true;
-
     private static final boolean USE_INCLUDE_IMAGE_LOADER_FACTORY = true;
-
-    public static final int DEFAULT_MAX_IMAGE_CACHE_SIZE = 256;
 
     private static final String CONSTANT_PREFIX;
     static {
@@ -35,8 +31,6 @@ public class Constants {
     private static final IImageLoaderFactory IMAGE_LOADER_FACTORY;
 
     static {
-        LOG.info("IMAGES_WEAK_MAP_CACHE_ENABLED="
-                + IMAGES_WEAK_MAP_CACHE_ENABLED);
 
         if (USE_INCLUDE_IMAGE_LOADER_FACTORY) {
             IMAGE_LOADER_FACTORY = new IncludeImageLoaderFactory();

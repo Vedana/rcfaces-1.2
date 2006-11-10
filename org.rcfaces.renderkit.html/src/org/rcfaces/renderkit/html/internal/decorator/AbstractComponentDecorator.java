@@ -1,20 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:28  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/03/28 12:22:47  oeuillot
- * Split du IWriter, ISgmlWriter, IHtmlWriter et IComponentWriter
- * Ajout du hideRootNode
- *
- * Revision 1.1  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 

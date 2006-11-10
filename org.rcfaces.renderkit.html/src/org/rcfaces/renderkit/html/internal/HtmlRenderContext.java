@@ -274,7 +274,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
         String brotherComponentId = brotherComponent.getClientId(facesContext);
 
-        if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT) {
+        if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
             String separatorChar = htmlExternalContext.getNamingSeparator();
 
             if (separatorChar != null) {

@@ -18,6 +18,8 @@ public class BasicContentInformation implements IContentInformation {
 
     private Map attributes;
 
+    private boolean filtredModel;
+
     public final String getContentType() {
         return contentType;
     }
@@ -40,6 +42,14 @@ public class BasicContentInformation implements IContentInformation {
         }
 
         return attributes.put(attributeName, attributeValue);
+    }
+
+    public boolean isFiltredModel() {
+        return filtredModel;
+    }
+
+    public void setFiltredModel(boolean filtredModel) {
+        this.filtredModel = filtredModel;
     }
 
 }

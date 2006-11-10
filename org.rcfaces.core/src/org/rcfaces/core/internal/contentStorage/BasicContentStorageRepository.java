@@ -3,9 +3,7 @@
  */
 package org.rcfaces.core.internal.contentStorage;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.version.HashCodeTools;
 import org.rcfaces.core.model.IContentModel;
@@ -20,7 +18,12 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
 
     private static int id;
 
-    private final Map resolvedContentByKey = new HashMap(64);
+    private final BasicContentCache resolvedContentByKey;
+
+    public BasicContentStorageRepository() {
+        resolvedContentByKey = new BasicContentCache(
+                Constants.BASIC_CONTENT_CACHE_SIZE);
+    }
 
     public IResolvedContent load(String key) {
         synchronized (resolvedContentByKey) {
@@ -29,7 +32,6 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
     }
 
     public String save(IResolvedContent content, IContentModel contentModel) {
-
         String key = contentModel.getContentEngineId();
 
         if (key == null) {
@@ -39,10 +41,6 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
         }
 
         synchronized (resolvedContentByKey) {
-            if (resolvedContentByKey.containsKey(key)) {
-                return key;
-            }
-
             resolvedContentByKey.put(key, content);
         }
 

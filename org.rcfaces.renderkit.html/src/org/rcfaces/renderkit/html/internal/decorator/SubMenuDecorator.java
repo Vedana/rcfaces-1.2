@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/10 14:00:03  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/13 18:04:38  oeuillot
  * Ajout de:
  * DateEntry
@@ -92,7 +95,7 @@ public class SubMenuDecorator extends MenuDecorator {
 
         if (suffixMenuId != null) {
 
-            if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT) {
+            if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
                 IProcessContext processContext = getComponentRenderContext()
                         .getRenderContext().getProcessContext();
 

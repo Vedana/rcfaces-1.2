@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.5  2006/11/10 14:00:03  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.4  2006/10/13 18:04:38  oeuillot
  * Ajout de:
  * DateEntry
@@ -68,15 +71,15 @@ public class Constants {
 
     public static final String CSS_DEFAULT_CHARSET = "UTF-8";
 
-    public static final boolean FRAMEWORK_VERSIONED_URL_SUPPORT = true;
+    public static final boolean VERSIONED_FRAMEWORK_URL_SUPPORT = true;
 
-    public static final boolean CLIENT_BUNDLE_VERSIONED_SUPPORT = true;
+    public static final boolean VERSIONED_CLIENT_BUNDLE_SUPPORT = true;
 
-    public static final boolean PARAMETERIZED_SEPARATOR_SUPPORT = true;
+    public static final boolean CLIENT_NAMING_SEPARATOR_SUPPORT = true;
 
-    public static final boolean CLIENT_GROUP_NAME_SUPPORT = true;
+    public static final boolean GROUP_NAME_NAMESPACE_SUPPORT = true;
 
-    public static final boolean NORMALIZE_MARGINS = true;
+    public static final boolean NORMALIZE_STYLE_MARGINS = true;
 
     public static final boolean DISABLE_IE_IMAGEBAR_DEFAULT_VALUE = true;
 
@@ -99,18 +102,20 @@ public class Constants {
         LOG.info("INTERACTIVE_RENDER_GZIP_DEFAULT_VALUE="
                 + INTERACTIVE_RENDER_GZIP_DEFAULT_VALUE);
 
-        LOG.info("FRAMEWORK_VERSIONED_URL_SUPPORT="
-                + FRAMEWORK_VERSIONED_URL_SUPPORT);
+        LOG.info("VERSIONED_FRAMEWORK_URL_SUPPORT="
+                + VERSIONED_FRAMEWORK_URL_SUPPORT);
 
-        LOG.info("CLIENT_BUNDLE_VERSIONED_SUPPORT="
-                + CLIENT_BUNDLE_VERSIONED_SUPPORT);
+        LOG.info("VERSIONED_CLIENT_BUNDLE_SUPPORT="
+                + VERSIONED_CLIENT_BUNDLE_SUPPORT);
 
-        LOG.info("PARAMETERIZED_SEPARATOR_SUPPORT="
-                + PARAMETERIZED_SEPARATOR_SUPPORT);
+        LOG.info("CLIENT_NAMING_SEPARATOR_SUPPORT="
+                + CLIENT_NAMING_SEPARATOR_SUPPORT);
 
-        LOG.info("CLIENT_GROUP_NAME_SUPPORT=" + CLIENT_GROUP_NAME_SUPPORT);
+        LOG
+                .info("GROUP_NAME_NAMESPACE_SUPPORT="
+                        + GROUP_NAME_NAMESPACE_SUPPORT);
 
-        LOG.info("NORMALIZE_MARGINS=" + NORMALIZE_MARGINS);
+        LOG.info("NORMALIZE_STYLE_MARGINS=" + NORMALIZE_STYLE_MARGINS);
 
         LOG.debug("DISABLE_IE_IMAGEBAR_DEFAULT_VALUE="
                 + DISABLE_IE_IMAGEBAR_DEFAULT_VALUE);

@@ -231,7 +231,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
     protected static String normalizeMarginValue(String value) {
         value = value.trim();
 
-        if (Constants.NORMALIZE_MARGINS == false) {
+        if (Constants.NORMALIZE_STYLE_MARGINS == false) {
             if (value.length() < 1) {
                 return null;
             }

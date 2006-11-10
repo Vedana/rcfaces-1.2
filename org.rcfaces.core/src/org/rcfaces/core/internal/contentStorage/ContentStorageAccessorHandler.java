@@ -60,8 +60,15 @@ public class ContentStorageAccessorHandler extends AbstractProvider implements
         if (ref instanceof IContentModel) {
             IContentModel contentModel = (IContentModel) ref;
 
+            boolean filtred = false;
             if (contentModel instanceof IFiltredModel) {
                 ((IFiltredModel) contentModel).setFilter(filterProperties);
+
+                filtred = (contentInformationRef[0] != null);
+            }
+
+            if (filtred) {
+                contentInformationRef[0].setFiltredModel(filtred);
             }
 
             return handleContentModel(facesContext, contentModel,

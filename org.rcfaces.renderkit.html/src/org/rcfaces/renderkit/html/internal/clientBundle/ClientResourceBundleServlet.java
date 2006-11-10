@@ -60,7 +60,7 @@ public class ClientResourceBundleServlet extends RepositoryServlet {
     }
 
     protected boolean getVersionSupport() {
-        return Constants.CLIENT_BUNDLE_VERSIONED_SUPPORT;
+        return Constants.VERSIONED_CLIENT_BUNDLE_SUPPORT;
     }
 
     public static IClientBundleRepository getBundleRepository(

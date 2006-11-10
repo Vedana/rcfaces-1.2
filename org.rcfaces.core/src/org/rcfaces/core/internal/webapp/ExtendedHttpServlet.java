@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.4  2006/11/10 14:00:05  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.3  2006/09/20 17:55:20  oeuillot
  * Tri multiple des tables
  * Dialogue modale en JS
@@ -32,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
 
@@ -78,10 +82,6 @@ public class ExtendedHttpServlet extends HttpServlet {
             new SimpleDateFormat("EEEEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US),
             new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US) };
 
-    private static final String ETAG_DIGEST_ALGORITHM = "SHA-1";
-
-    private static final String HASH_DIGEST_ALGORITHM = "MD5";
-
     public static boolean hasGzipSupport(FacesContext facesContext) {
         Map requestMap = facesContext.getExternalContext()
                 .getRequestHeaderMap();
@@ -113,10 +113,9 @@ public class ExtendedHttpServlet extends HttpServlet {
     }
 
     public static final String computeETag(byte[] buffer) {
-
         try {
             MessageDigest messageDigest = MessageDigest
-                    .getInstance(ETAG_DIGEST_ALGORITHM);
+                    .getInstance(Constants.ETAG_DIGEST_ALGORITHM);
 
             byte digest[] = messageDigest.digest(buffer);
 
@@ -137,9 +136,8 @@ public class ExtendedHttpServlet extends HttpServlet {
             return sb.toString();
 
         } catch (NoSuchAlgorithmException ex) {
-            LOG.error(
-                    "Can not find algorithm '" + ETAG_DIGEST_ALGORITHM + "'.",
-                    ex);
+            LOG.error("Can not find algorithm '"
+                    + Constants.ETAG_DIGEST_ALGORITHM + "'.", ex);
 
             return null;
         }
@@ -149,7 +147,7 @@ public class ExtendedHttpServlet extends HttpServlet {
 
         try {
             MessageDigest messageDigest = MessageDigest
-                    .getInstance(HASH_DIGEST_ALGORITHM);
+                    .getInstance(Constants.HASH_DIGEST_ALGORITHM);
 
             // messageDigest.update(buffer);
             byte digest[] = messageDigest.digest(buffer);
@@ -157,9 +155,8 @@ public class ExtendedHttpServlet extends HttpServlet {
             return Base64.encodeBytes(digest);
 
         } catch (NoSuchAlgorithmException ex) {
-            LOG.error(
-                    "Can not find algorithm '" + HASH_DIGEST_ALGORITHM + "'.",
-                    ex);
+            LOG.error("Can not find algorithm '"
+                    + Constants.HASH_DIGEST_ALGORITHM + "'.", ex);
 
             return null;
         }

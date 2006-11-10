@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.7  2006/11/10 14:00:03  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.6  2006/11/09 19:08:57  oeuillot
  * *** empty log message ***
  *
@@ -1042,7 +1045,7 @@ abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
     }
 
     public String convertClientId(FacesContext context, String clientId) {
-        if (Constants.PARAMETERIZED_SEPARATOR_SUPPORT == false) {
+        if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT == false) {
             return super.convertClientId(context, clientId);
         }
 

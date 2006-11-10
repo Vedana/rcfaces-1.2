@@ -16,4 +16,8 @@ public interface IContentInformation {
     String getContentType();
 
     void setContentType(String contentType);
+
+    boolean isFiltredModel();
+
+    void setFiltredModel(boolean filtredModel);
 }

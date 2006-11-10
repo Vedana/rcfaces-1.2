@@ -12,7 +12,9 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
+import org.rcfaces.core.internal.images.ImageAdapterFactory;
 import org.rcfaces.core.model.IAdaptable;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.provider.AbstractProvider;
@@ -30,6 +32,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
     private String indirectionURL;
 
+    private IAdapterManager adapterManager;
+
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
 
@@ -43,6 +47,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         indirectionURL = ContentStorageServlet
                 .getContentStorageBaseURI(facesContext.getExternalContext()
                         .getApplicationMap());
+
+        adapterManager = rcfacesContext.getAdapterManager();
     }
 
     public IContentStorageRepository getRepository() {
@@ -51,9 +57,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
     public String registerContentModel(FacesContext facesContext,
             IContentModel contentModel, IContentInformation information) {
-
-        RcfacesContext rcfacesContext = RcfacesContext
-                .getInstance(facesContext);
 
         IContentStorageRepository repository = getRepository();
 
@@ -64,7 +67,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             if (contentModel.checkNotModified()) {
                 resolvedContent = repository.load(contentEngineId);
             }
-            
+
             if (resolvedContent == null) {
                 contentModel.setContentEngineId(null);
             }
@@ -85,9 +88,12 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                 }
 
                 if (resolvedContent == null) {
-                    resolvedContent = (IResolvedContent) rcfacesContext
-                            .getAdapterManager().getAdapter(wrappedData,
-                                    IResolvedContent.class, parameters);
+                    RcfacesContext rcfacesContext = RcfacesContext
+                            .getInstance(facesContext);
+
+                    resolvedContent = (IResolvedContent) adapterManager
+                            .getAdapter(wrappedData, IResolvedContent.class,
+                                    parameters);
                 }
 
                 if (resolvedContent == null) {
@@ -105,9 +111,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     public String registerRaw(FacesContext facesContext, Object ref,
             IContentInformation information) {
 
-        RcfacesContext rcfacesContext = RcfacesContext
-                .getInstance(facesContext);
-
         IResolvedContent resolvedContent = null;
         if (ref instanceof IAdaptable) {
             resolvedContent = (IResolvedContent) ((IAdaptable) ref).getAdapter(
@@ -115,9 +118,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         if (resolvedContent == null) {
-            resolvedContent = (IResolvedContent) rcfacesContext
-                    .getAdapterManager().getAdapter(ref,
-                            IResolvedContent.class, null);
+            resolvedContent = (IResolvedContent) adapterManager.getAdapter(ref,
+                    IResolvedContent.class, null);
         }
 
         if (resolvedContent == null) {
@@ -147,20 +149,26 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         private final String suffix;
 
-        private IResolvedContent resolvedContent;
+        private final Map parameters;
 
-        private boolean errorState;
+        private transient IResolvedContent resolvedContent;
 
-        private Map parameters;
+        private transient boolean errorState;
 
         public ResolvedContentAtRequest(IContentModel contentModel) {
             this.contentModel = contentModel;
 
             this.contentType = (String) contentModel
                     .getAttribute(IContentModel.CONTENT_TYPE_PROPERTY);
-            this.suffix = (String) contentModel
+            String suffix = (String) contentModel
                     .getAttribute(IContentModel.URL_SUFFIX_PROPERTY);
 
+            if (suffix == null && contentType != null) {
+                suffix = ImageAdapterFactory
+                        .getSuffixByContentType(contentType);
+            }
+
+            this.suffix = suffix;
             this.parameters = contentModel.getAttributes();
         }
 
@@ -194,8 +202,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             }
 
             try {
-                RcfacesContext rcfacesContext = RcfacesContext
-                        .getCurrentInstance();
 
                 Object wrappedData = contentModel.getWrappedData();
 
@@ -207,6 +213,9 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                         return resolvedContent;
                     }
                 }
+
+                RcfacesContext rcfacesContext = RcfacesContext
+                        .getCurrentInstance();
 
                 resolvedContent = (IResolvedContent) rcfacesContext
                         .getAdapterManager().getAdapter(wrappedData,
@@ -247,6 +256,16 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         public String getResourceKey() {
+            if (isProcessAtRequest()) {
+                // C'est traité sur la requete !
+                
+                if (contentModel instanceof IResourceKey) {
+                    // L'objet peut tout de même savoir sa clef ???
+                    return ((IResourceKey) contentModel).getResourceKey();
+                }
+                return null;
+            }
+
             return getResolvedContent().getResourceKey();
         }
 

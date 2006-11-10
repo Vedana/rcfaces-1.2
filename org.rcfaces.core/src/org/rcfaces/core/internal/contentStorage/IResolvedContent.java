@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IResolvedContent extends Serializable {
+public interface IResolvedContent extends IResourceKey, Serializable {
 
     boolean isErrored();
 
@@ -31,6 +31,4 @@ public interface IResolvedContent extends Serializable {
     String getHash();
 
     String getETag();
-
-    String getResourceKey();
 }

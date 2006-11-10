@@ -6,11 +6,16 @@ package org.rcfaces.core.internal.images;
 import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -24,9 +29,12 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.adapter.IAdapterFactory;
 import org.rcfaces.core.internal.contentStorage.AbstractResolvedContent;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
+import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.util.Base64;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.model.ImageContentModel;
 
@@ -159,10 +167,10 @@ public class ImageAdapterFactory implements IAdapterFactory {
             suffix = getSuffixByContentType(contentType);
         }
 
-        FileResolvedContent resolvedContent = createTempResolvedContent(
-                contentType, (suffix != null) ? suffix : "unknown");
+        File file = createTempFile(contentType, (suffix != null) ? suffix
+                : "unknown");
 
-        FileOutputStream fout = new FileOutputStream(resolvedContent.getFile());
+        FileOutputStream fout = new FileOutputStream(file);
         try {
             ImageOutputStream imageOutputStream = ImageIO
                     .createImageOutputStream(fout);
@@ -203,15 +211,15 @@ public class ImageAdapterFactory implements IAdapterFactory {
             fout.close();
         }
 
-        return resolvedContent;
+        return new FileResolvedContent(contentType, suffix, file);
     }
 
-    public FileResolvedContent createTempResolvedContent(String contentType,
-            String suffix) throws IOException {
+    public File createTempFile(String contentType, String suffix)
+            throws IOException {
         File file = File.createTempFile(TEMP_PREFIX, "." + suffix);
         file.deleteOnExit();
 
-        return new FileResolvedContent(contentType, suffix, file);
+        return file;
     }
 
     /**
@@ -219,24 +227,38 @@ public class ImageAdapterFactory implements IAdapterFactory {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private class FileResolvedContent extends AbstractResolvedContent {
+    private class FileResolvedContent extends AbstractResolvedContent implements
+            Serializable {
 
         private static final long serialVersionUID = 2045867975901327708L;
 
-        private File file;
+        private final String contentType;
 
-        private String contentType;
+        private final String suffix;
 
-        private String suffix;
+        private final int length;
 
-        public FileResolvedContent() {
-            // Pour la serialization !
-        }
+        private final long lastModificationDate;
+
+        private String etag;
+
+        private String hashCode;
+
+        private byte fileSerialized[];
+
+        private transient File file;
 
         public FileResolvedContent(String contentType, String suffix, File file) {
             this.file = file;
             this.contentType = contentType;
             this.suffix = suffix;
+
+            this.length = (int) file.length();
+            this.lastModificationDate = file.lastModified();
+
+            if (Constants.ETAG_SUPPORT || Constants.HASH_SUPPORT) {
+                computeHashCodes();
+            }
         }
 
         public String getContentType() {
@@ -248,19 +270,176 @@ public class ImageAdapterFactory implements IAdapterFactory {
         }
 
         public InputStream getInputStream() throws IOException {
+            if (fileSerialized != null) {
+                return new ByteArrayInputStream(fileSerialized);
+            }
+
             return new FileInputStream(file);
         }
 
         public long getModificationDate() {
-            return file.lastModified();
+            return lastModificationDate;
         }
 
         public int getLength() {
-            return (int) file.length();
+            return length;
         }
 
-        public File getFile() {
-            return file;
+        public String getETag() {
+            return etag;
+        }
+
+        public String getHash() {
+            return hashCode;
+        }
+
+        protected void finalize() throws Throwable {
+            if (file != null) {
+                try {
+                    file.delete();
+                    file = null;
+
+                } catch (Throwable ex) {
+                    LOG.error("Can not delete file '" + file + "'.", ex);
+                }
+            }
+            super.finalize();
+        }
+
+        protected void computeHashCodes() {
+            MessageDigest etagMessageDigest = null;
+            MessageDigest hashMessageDigest = null;
+
+            if (Constants.ETAG_SUPPORT) {
+                try {
+                    etagMessageDigest = MessageDigest
+                            .getInstance(Constants.ETAG_DIGEST_ALGORITHM);
+
+                } catch (NoSuchAlgorithmException ex) {
+                    LOG.error("Can not find algorithm '"
+                            + Constants.HASH_DIGEST_ALGORITHM + "'.", ex);
+                }
+            }
+
+            if (Constants.HASH_SUPPORT) {
+                try {
+                    hashMessageDigest = MessageDigest
+                            .getInstance(Constants.HASH_DIGEST_ALGORITHM);
+
+                } catch (NoSuchAlgorithmException ex) {
+                    LOG.error("Can not find algorithm '"
+                            + Constants.HASH_DIGEST_ALGORITHM + "'.", ex);
+                }
+            }
+
+            if (hashMessageDigest == null && etagMessageDigest == null) {
+                return;
+            }
+
+            FileInputStream fileInputStream;
+            try {
+                fileInputStream = new FileInputStream(file);
+
+            } catch (FileNotFoundException e) {
+                LOG.error("Can not compute Etag and Hashcode for file '" + file
+                        + "'." + e);
+                return;
+            }
+
+            try {
+                byte buffer[] = new byte[4096];
+
+                for (;;) {
+                    int ret = fileInputStream.read(buffer);
+                    if (ret < 1) {
+                        break;
+                    }
+
+                    if (etagMessageDigest != null) {
+                        etagMessageDigest.update(buffer, 0, ret);
+                    }
+
+                    if (hashMessageDigest != null) {
+                        hashMessageDigest.update(buffer, 0, ret);
+                    }
+                }
+
+                if (etagMessageDigest != null) {
+                    byte etagDigest[] = etagMessageDigest.digest();
+
+                    StringAppender sb = new StringAppender(
+                            etagDigest.length * 2 + 16);
+                    sb.append("\"cm:");
+                    for (int i = 0; i < etagDigest.length; i++) {
+                        int v = etagDigest[i] & 0xff;
+                        if (v < 16) {
+                            sb.append('0');
+                        }
+                        sb.append(Integer.toHexString(v));
+                    }
+
+                    sb.append(':');
+                    sb.append(Integer.toHexString(length));
+
+                    sb.append('\"');
+                    etag = sb.toString();
+
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Etag for file '" + file + "' = " + etag);
+                    }
+                }
+
+                if (hashMessageDigest != null) {
+                    byte hashDigest[] = hashMessageDigest.digest();
+
+                    hashCode = Base64.encodeBytes(hashDigest);
+
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Hashcode for file '" + file + "' = "
+                                + hashCode);
+                    }
+                }
+
+            } catch (IOException e) {
+                LOG.error("Can not compute Etag and Hashcode for file '" + file
+                        + "'.", e);
+
+            } finally {
+                try {
+                    fileInputStream.close();
+
+                } catch (IOException e) {
+                    LOG.error(e);
+                }
+            }
+        }
+
+        private void writeObject(java.io.ObjectOutputStream s)
+                throws java.io.IOException {
+
+            if (file != null) {
+                fileSerialized = new byte[length];
+
+                FileInputStream fin = new FileInputStream(file);
+                try {
+                    fin.read(fileSerialized);
+
+                } catch (IOException ex) {
+                    LOG.error(ex);
+
+                } finally {
+                    try {
+                        fin.close();
+
+                    } catch (IOException ex) {
+                        LOG.error(ex);
+                    }
+                }
+
+                file = null;
+            }
+
+            s.defaultWriteObject();
         }
     }
 }

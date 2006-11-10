@@ -170,7 +170,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
             String uri = styleSheetURI;
 
-            if (Constants.FRAMEWORK_VERSIONED_URL_SUPPORT) {
+            if (Constants.VERSIONED_FRAMEWORK_URL_SUPPORT) {
                 if (version != null) {
                     uri += "/" + version;
                 }
@@ -302,7 +302,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         if (repositoryVersion != null) {
             String version = null;
-            if (Constants.FRAMEWORK_VERSIONED_URL_SUPPORT) {
+            if (Constants.VERSIONED_FRAMEWORK_URL_SUPPORT) {
                 idx = url.indexOf('/');
                 if (idx < 0) {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);

@@ -195,7 +195,7 @@ class ClientBundleRepository extends AbstractRepository implements
 
             sa.append(servletURI);
 
-            if (Constants.CLIENT_BUNDLE_VERSIONED_SUPPORT) {
+            if (Constants.VERSIONED_CLIENT_BUNDLE_SUPPORT) {
                 sa.append('/');
 
                 String hashCode = computeHashCode(locale);

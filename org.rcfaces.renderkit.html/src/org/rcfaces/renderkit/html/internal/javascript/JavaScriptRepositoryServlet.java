@@ -2,6 +2,9 @@
  * $Id$
  * 
  * $Log$
+ * Revision 1.8  2006/11/10 14:00:03  oeuillot
+ * *** empty log message ***
+ *
  * Revision 1.7  2006/10/13 18:04:37  oeuillot
  * Ajout de:
  * DateEntry
@@ -274,7 +277,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     }
 
     protected boolean getVersionSupport() {
-        return Constants.FRAMEWORK_VERSIONED_URL_SUPPORT;
+        return Constants.VERSIONED_FRAMEWORK_URL_SUPPORT;
     }
 
     protected String getParameterPrefix() {
@@ -308,7 +311,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             throws IOException {
         ServletContext servletContext = config.getServletContext();
 
-        if (Constants.FRAMEWORK_VERSIONED_URL_SUPPORT) {
+        if (Constants.VERSIONED_FRAMEWORK_URL_SUPPORT) {
             if (htmlRCFacesBuildId == null) {
                 throw new FacesException(
                         "Can not enable \"Repository version\", rcfaces buildId is not detected !");
