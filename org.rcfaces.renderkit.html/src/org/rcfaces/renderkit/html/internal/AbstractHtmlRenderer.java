@@ -71,8 +71,8 @@ import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer implements
-        IJavaScriptComponent {
+public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
+        implements IJavaScriptComponent {
 
     private static final String REVISION = "$Revision$";
 

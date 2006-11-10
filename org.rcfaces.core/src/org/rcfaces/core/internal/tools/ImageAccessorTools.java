@@ -7,6 +7,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.internal.component.IComponentEngine;
@@ -175,7 +176,7 @@ public class ImageAccessorTools {
     }
 
     public static IContentAccessors createImageAccessors(
-            FacesContext facesContext, ISeverityImageAccessors component,
+            FacesContext facesContext, ISeverityImagesCapability component,
             IComponentEngine engine) {
         if (facesContext == null) {
             facesContext = FacesContext.getCurrentInstance();
