@@ -1,32 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.4  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.3  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.2  2005/10/28 14:41:50  oeuillot
- * InteractiveRenderer, CardBox, Card
- * Corrections de validations
- * PasswordEntry
- *
- * Revision 1.1  2005/10/05 14:34:19  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
  */
 package org.rcfaces.renderkit.html.internal;
 

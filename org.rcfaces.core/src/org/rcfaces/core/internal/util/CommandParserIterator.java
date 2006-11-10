@@ -1,17 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.1  2004/12/30 17:24:19  oeuillot
- * Gestion des validateurs
- * Debuggage des composants
- *
  */
 package org.rcfaces.core.internal.util;
 

@@ -1,44 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/06/27 09:23:09  oeuillot
- * Mise � jour du calendrier de dateChooser
- *
- * Revision 1.1  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.4  2006/01/31 16:04:24  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.3  2005/11/17 10:04:56  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
- * Revision 1.2  2005/09/16 09:54:42  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
- * Revision 1.1  2005/02/21 17:33:06  oeuillot
- * Reorganisation du JAVASCRIPT
- * Reorganisation des ImageXxxxButton
- * Reorganise le ComponentTools => Converters
- *
  */
 package org.rcfaces.core.internal.converter;
 

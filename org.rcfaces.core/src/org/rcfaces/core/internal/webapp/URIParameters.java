@@ -1,25 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/09/01 15:24:29  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.1  2006/02/06 16:47:04  oeuillot
- * Renomme le logger commons.log en LOG
- * Ajout du composant focusManager
- * Renomme vfc-all.xml en repository.xml
- * Ajout de la gestion de __Vversion et __Llocale
- *
  */
 package org.rcfaces.core.internal.webapp;
 

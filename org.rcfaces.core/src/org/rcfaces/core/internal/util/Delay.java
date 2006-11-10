@@ -1,45 +1,6 @@
 /*
  * $Id$
  *
- * $Log$
- * Revision 1.3  2006/10/13 18:04:51  oeuillot
- * Ajout de:
- * DateEntry
- * StyledMessage
- * MessageFieldSet
- * xxxxConverter
- * Adapter
- *
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.3  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.2  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.1  2004/08/12 14:21:07  oeuillot
- * *** empty log message ***
- *
- * Revision 1.2  2003/01/20 14:01:25  oeuillot
- * Documentation JAVADOC
- * Supprime Parser pour le mettre dans Delay.
- *
- * Revision 1.1  2002/12/16 10:13:19  oeuillot
- * Nettoyage du code
- * Retire les setters finaux pour l'implementation
- * Ajout de methodes dans ElementTools
- *
  */
 package org.rcfaces.core.internal.util;
 

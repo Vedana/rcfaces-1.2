@@ -1,45 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.5  2006/11/09 19:08:57  oeuillot
- * *** empty log message ***
- *
- * Revision 1.4  2006/10/04 12:31:43  oeuillot
- * Stabilisation
- *
- * Revision 1.3  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.2  2006/09/05 08:57:14  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.4  2006/08/28 16:03:55  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.3  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.2  2006/01/31 16:04:24  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.1  2005/09/16 09:54:41  oeuillot
- * Ajout de fonctionnalit�s AJAX
- * Ajout du JavaScriptRenderContext
- * Renomme les classes JavaScript
- *
  */
 package org.rcfaces.renderkit.html.internal.taglib;
 

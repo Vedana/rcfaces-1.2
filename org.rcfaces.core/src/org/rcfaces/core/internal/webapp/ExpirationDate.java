@@ -1,39 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.4  2006/10/13 18:04:51  oeuillot
- * Ajout de:
- * DateEntry
- * StyledMessage
- * MessageFieldSet
- * xxxxConverter
- * Adapter
- *
- * Revision 1.3  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.1  2006/09/01 15:24:29  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.1  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
  */
 package org.rcfaces.core.internal.webapp;
 

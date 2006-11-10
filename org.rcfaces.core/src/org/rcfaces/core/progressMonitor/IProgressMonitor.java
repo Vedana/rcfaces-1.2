@@ -1,13 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.1  2006/08/28 16:03:55  oeuillot
- * Version avant migation en org.rcfaces
- *
  */
 /*******************************************************************************
  * Copyright (c) 2000, 2004 IBM Corporation and others.

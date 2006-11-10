@@ -1,45 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.3  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.2  2006/09/01 15:24:34  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.6  2006/02/06 16:47:05  oeuillot
- * Renomme le logger commons.log en LOG
- * Ajout du composant focusManager
- * Renomme vfc-all.xml en repository.xml
- * Ajout de la gestion de __Vversion et __Llocale
- *
- * Revision 1.5  2005/11/08 12:16:28  oeuillot
- * Ajout de  Preferences
- * Stabilisation de imageXXXButton
- * Ajout de la validation cot� client
- * Ajout du hash MD5 pour les servlets
- * Ajout des accelerateurs
- *
- * Revision 1.4  2005/10/05 14:34:20  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.3  2004/12/30 17:24:20  oeuillot
- * Gestion des validateurs
- * Debuggage des composants
- *
- * Revision 1.2  2004/09/24 14:01:36  oeuillot
- * *** empty log message ***
- *
- * Revision 1.1  2004/08/30 12:52:48  oeuillot
- * *** empty log message ***
- *
- * Revision 1.1  2004/08/20 16:00:54  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.renderkit.html.internal.css;
 

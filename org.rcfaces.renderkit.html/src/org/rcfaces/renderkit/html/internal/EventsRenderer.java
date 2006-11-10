@@ -1,57 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.3  2006/11/09 19:08:57  oeuillot
- * *** empty log message ***
- *
- * Revision 1.2  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.7  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.6  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.5  2006/05/19 20:40:42  oeuillot
- * Ajout de la gestion du disabled pour le treeNode
- * Generalisation du fa_cardinality
- * Ajout de la cardinalit� de selection pour l'arbre
- * Correction des Sets javascript
- * Optimisation importante des perfs du javascript
- *
- * Revision 1.4  2006/05/11 16:34:19  oeuillot
- * Correction du calendar
- * Ajout de DateChooser
- * Ajout du moteur de filtre d'images
- * Ajout de l'evt   loadListener pour le AsyncManager
- *
- * Revision 1.3  2006/03/15 13:53:04  oeuillot
- * Stabilisation
- * Ajout des bundles pour le javascript
- * R�organisation de l'arborescence de GridData qui n'herite plus de UIData
- *
- * Revision 1.2  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.1  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
  */
 package org.rcfaces.renderkit.html.internal;
 

@@ -1,28 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.5  2006/11/10 14:00:03  oeuillot
- * *** empty log message ***
- *
- * Revision 1.4  2006/10/13 18:04:38  oeuillot
- * Ajout de:
- * DateEntry
- * StyledMessage
- * MessageFieldSet
- * xxxxConverter
- * Adapter
- *
- * Revision 1.3  2006/09/20 17:55:24  oeuillot
- * Tri multiple des tables
- * Dialogue modale en JS
- *
- * Revision 1.2  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  */
 package org.rcfaces.renderkit.html.internal;
 

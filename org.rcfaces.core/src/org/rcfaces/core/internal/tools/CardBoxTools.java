@@ -1,34 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.1  2005/10/28 14:41:50  oeuillot
- * InteractiveRenderer, CardBox, Card
- * Corrections de validations
- * PasswordEntry
- *
- * Revision 1.5  2005/10/05 14:34:20  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.4  2004/12/24 15:10:04  oeuillot
- * Refonte des tabbedPanes
- * Correction de problemes de value sur FieldSet nottament
- *
- * Revision 1.3  2004/09/24 14:01:36  oeuillot
- * *** empty log message ***
- *
- * Revision 1.2  2004/08/26 17:16:33  oeuillot
- * *** empty log message ***
- *
- * Revision 1.1  2004/08/19 15:44:31  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.core.internal.tools;
 

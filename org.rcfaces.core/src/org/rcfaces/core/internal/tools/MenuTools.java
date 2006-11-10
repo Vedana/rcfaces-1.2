@@ -1,42 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.8  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.7  2006/03/23 19:12:40  oeuillot
- * Ajout des marges
- * Ajout des processors
- * Amelioration des menus
- *
- * Revision 1.6  2006/01/03 15:21:40  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.5  2005/11/17 10:04:56  oeuillot
- * Support des BorderRenderers
- * Gestion de camelia-config
- * Ajout des stubs de Operation
- * Refactoring de ICssWriter
- *
- * Revision 1.4  2005/10/05 14:34:20  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.3  2005/03/18 14:42:50  oeuillot
- * Support de la table des symbols pour le javascript compress�
- * Menu du style XP et pas Office !
- *
- * Revision 1.2  2004/09/24 14:01:36  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.core.internal.tools;
 

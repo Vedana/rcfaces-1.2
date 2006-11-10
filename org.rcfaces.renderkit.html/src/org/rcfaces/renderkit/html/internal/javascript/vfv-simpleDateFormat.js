@@ -1,10 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  *
  * @authors J.Merlin
  * @date
@@ -25,7 +20,7 @@
  * @method F_SimpleDateFormat
  * @decl public
  *
- * Constructeur par défaut
+ * Constructeur par dï¿½faut
  *
  * @param
  * @return
@@ -106,10 +101,10 @@ F_SimpleDateFormat.prototype.f_setStatus = F_SimpleDateFormat_setStatus;
  * @method _init
  * @decl private
  *
- * Cette méthode est appelée par le constructeur et évalue les paramètres
+ * Cette mï¿½thode est appelï¿½e par le constructeur et ï¿½value les paramï¿½tres
  *
- * @param pattern La chaîne de caractères du format
- * @param locale La localisation à utiliser pour ce format
+ * @param pattern La chaï¿½ne de caractï¿½res du format
+ * @param locale La localisation ï¿½ utiliser pour ce format
  * @return
  * @see F_DateFormatSymbols, F_Locale, F_Calendar
  */
@@ -547,9 +542,9 @@ function F_SimpleDateFormat__subFormat(patternCharIndex, count) {
  * @method f_parse
  * @decl public
  *
- * Analyse une chaîne de caractères représentant une date dans le format précisé
+ * Analyse une chaï¿½ne de caractï¿½res reprï¿½sentant une date dans le format prï¿½cisï¿½
  *
- * @param strdate Une chaîne de caractères
+ * @param strdate Une chaï¿½ne de caractï¿½res
  * @return
  * @see F_SimpleDateFormat constructeur avec pattern
  */

@@ -1,9 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
  *
  *
  * @file adonis_string.js

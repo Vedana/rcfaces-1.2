@@ -1,66 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.3  2006/09/14 14:34:51  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.2  2006/09/05 08:57:21  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.1  2006/08/29 16:13:13  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.10  2006/07/18 17:06:30  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.9  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.8  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.7  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.6  2005/02/18 14:46:08  oeuillot
- * Corrections importantes pour stabilisation
- * R�ecriture du noyau JAVASCRIPT pour ameliorer performances.
- * Ajout de IValueLockedCapability
- *
- * Revision 1.5  2005/01/04 13:02:51  oeuillot
- * Amelioration des tables. (Ajout des tris, scrollbars ...)
- *
- * Revision 1.4  2004/12/24 15:10:04  oeuillot
- * Refonte des tabbedPanes
- * Correction de problemes de value sur FieldSet nottament
- *
- * Revision 1.3  2004/12/22 12:16:15  oeuillot
- * Refonte globale de l'arborescence des composants ....
- * Int�gration des corrections de Didier
- *
- * Revision 1.2  2004/08/16 10:20:00  oeuillot
- * Ajout de immediate
- *
- * Revision 1.1  2004/08/16 08:00:08  oeuillot
- * Gestion des listeners
- *
  */
 package org.rcfaces.core.internal.listener;
 

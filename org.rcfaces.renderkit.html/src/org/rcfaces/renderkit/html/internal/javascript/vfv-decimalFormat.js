@@ -1,10 +1,5 @@
 /*
  * $Id$
- * 
- * $Log$
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
  */
 
 /**
@@ -20,7 +15,7 @@
  * Class constructor
  *
  * @method hidden
- * @param pattern Chaîne de caractères facultatif
+ * @param pattern Chaï¿½ne de caractï¿½res facultatif
  * @param symbols F_DecimalFormatSymbols facultatif
  * @return
  * @see
@@ -52,7 +47,7 @@ F_DecimalFormat._PATTERN_DIGIT				= '#';
 F_DecimalFormat._PATTERN_SEPARATOR			= ';';
 F_DecimalFormat._PATTERN_EXPONENT				= 'E';
 F_DecimalFormat._PATTERN_MINUS				= '-';
-F_DecimalFormat._CURRENCY_SIGN				= '\u00A4'; // ¤
+F_DecimalFormat._CURRENCY_SIGN				= '\u00A4'; // ï¿½
 F_DecimalFormat._QUOTE						= '\'';
     // Upper limit on integer and fraction digits for a Java double
 F_DecimalFormat._DOUBLE_INTEGER_DIGITS		= 309;
@@ -113,9 +108,9 @@ F_DecimalFormat.prototype.f_formatDouble = F_DecimalFormat_formatDouble;
  * @method _init
  * @decl private
  *
- * Ceci est le constructeur gérant la surcharge
+ * Ceci est le constructeur gï¿½rant la surcharge
  *
- * @param args Le tableau d'arguments passés au constructeur
+ * @param args Le tableau d'arguments passï¿½s au constructeur
  * @return
  * @see F_DecimalFormat()
  */

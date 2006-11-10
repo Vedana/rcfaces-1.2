@@ -1,43 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:28  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.4  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.3  2006/07/18 17:06:30  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.2  2006/06/27 09:23:09  oeuillot
- * Mise � jour du calendrier de dateChooser
- *
- * Revision 1.1  2006/05/16 13:58:18  oeuillot
- * Suite de l'impl�mentation du Calendar
- * D�but d'implementation de dateChooser
- * Creation du CalendarObject
- * R�vision et optimisation du modele de chargement des classes
- * Gestion complete des f_bundle
- * Ajout des DatesItems pour la gestion de jours f�riers
- *
- * Revision 1.1  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 

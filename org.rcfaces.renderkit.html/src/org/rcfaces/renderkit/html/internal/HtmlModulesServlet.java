@@ -1,22 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.4  2006/09/14 14:34:38  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.3  2006/09/05 08:57:14  oeuillot
- * Derni�res corrections pour la migration Rcfaces
- *
- * Revision 1.2  2006/09/01 15:24:34  oeuillot
- * Gestion des ICOs
- *
- * Revision 1.1  2006/08/29 16:14:27  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.1  2004/09/24 14:01:35  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.renderkit.html.internal;
 

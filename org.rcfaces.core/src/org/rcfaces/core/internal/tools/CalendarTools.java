@@ -1,65 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.5  2006/11/09 19:09:07  oeuillot
- * *** empty log message ***
- *
- * Revision 1.4  2006/10/13 18:04:51  oeuillot
- * Ajout de:
- * DateEntry
- * StyledMessage
- * MessageFieldSet
- * xxxxConverter
- * Adapter
- *
- * Revision 1.3  2006/10/04 12:31:59  oeuillot
- * Stabilisation
- *
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.7  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.6  2006/07/18 17:06:30  oeuillot
- * Ajout du frameSetConsole
- * Amelioration de l'ImageButton avec du support d'un mode SPAN s'il n'y a pas de texte.
- * Corrections de bugs JS d�tect�s par l'analyseur JS
- * Ajout des items clientDatas pour les dates et items de combo/list
- * Ajout du styleClass pour les items des dates
- *
- * Revision 1.5  2006/06/28 17:48:28  oeuillot
- * Ajout de dateEntry
- * Ajout D'une constante g�n�rale de sp�cification de l'attributesLocale
- * Ajout d'un attribut <v:init attributesLocale='' />
- *
- * Revision 1.4  2006/06/27 09:23:09  oeuillot
- * Mise � jour du calendrier de dateChooser
- *
- * Revision 1.3  2006/05/16 13:58:18  oeuillot
- * Suite de l'impl�mentation du Calendar
- * D�but d'implementation de dateChooser
- * Creation du CalendarObject
- * R�vision et optimisation du modele de chargement des classes
- * Gestion complete des f_bundle
- * Ajout des DatesItems pour la gestion de jours f�riers
- *
- * Revision 1.2  2006/05/11 16:34:19  oeuillot
- * Correction du calendar
- * Ajout de DateChooser
- * Ajout du moteur de filtre d'images
- * Ajout de l'evt   loadListener pour le AsyncManager
- *
- * Revision 1.1  2005/12/22 11:48:08  oeuillot
- * Ajout de :
- * - JS:  calendar, locale, dataList, log
- * - Evenement User
- * - ClientData  multi-directionnel (+TAG)
- *
  */
 package org.rcfaces.core.internal.tools;
 

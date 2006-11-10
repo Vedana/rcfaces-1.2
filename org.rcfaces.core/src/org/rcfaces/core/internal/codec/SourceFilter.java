@@ -1,16 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.4  2004/09/13 08:34:26  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.core.internal.codec;
 

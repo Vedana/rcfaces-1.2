@@ -1,59 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:39  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:14:28  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.5  2006/06/19 17:22:18  oeuillot
- * JS: Refonte de fa_selectionManager et fa_checkManager
- * Ajout de l'accelerator Key
- * v:accelerator prend un keyBinding desormais.
- * Ajout de  clientSelectionFullState et clientCheckFullState
- * Ajout de la progression pour les suggestions
- * Fusions des servlets de ressources Javascript/css
- *
- * Revision 1.4  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.3  2006/03/02 15:31:56  oeuillot
- * Ajout de ExpandBar
- * Ajout des services
- * Ajout de HiddenValue
- * Ajout de SuggestTextEntry
- * Ajout de f_bundle
- * Ajout de f_md5
- * Debut de f_xmlDigester
- *
- * Revision 1.2  2006/01/31 16:04:25  oeuillot
- * Ajout :
- * Decorator pour les listes, tree, menus, ...
- * Ajax (filtres) pour les combo et liste
- * Renomme interactiveRenderer par AsyncRender
- * Ajout du composant Paragraph
- *
- * Revision 1.1  2006/01/03 15:21:38  oeuillot
- * Refonte du systeme de menuPopup !
- *
- * Revision 1.4  2005/12/28 11:12:48  oeuillot
- * Ajout des writer de Menu et ImageButton
- * Split de l'aspect fa_menu
- * Gestion de l'heritage d'aspect !
- *
- * Revision 1.3  2005/10/05 14:34:19  oeuillot
- * Version avec decode/validation/update des propri�t�s des composants
- *
- * Revision 1.2  2004/11/19 18:01:30  oeuillot
- * Version debut novembre
- *
- * Revision 1.1  2004/09/24 14:01:35  oeuillot
- * *** empty log message ***
- *
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 

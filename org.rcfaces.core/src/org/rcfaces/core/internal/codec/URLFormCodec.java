@@ -1,33 +1,6 @@
 /*
  * $Id$
  * 
- * $Log$
- * Revision 1.2  2006/09/14 14:34:52  oeuillot
- * Version avec ClientBundle et correction de findBugs
- *
- * Revision 1.1  2006/08/29 16:13:14  oeuillot
- * Renommage  en rcfaces
- *
- * Revision 1.2  2006/08/28 16:03:56  oeuillot
- * Version avant migation en org.rcfaces
- *
- * Revision 1.1  2006/04/27 13:49:48  oeuillot
- * Ajout de ImageSubmitButton
- * Refactoring des composants internes (dans internal.*)
- * Corrections diverses
- *
- * Revision 1.2  2004/08/06 14:07:06  oeuillot
- * *** empty log message ***
- *
- * Revision 1.1  2004/08/06 14:03:57  jmerlin
- * Vedana Faces
- *
- * Revision 1.2  2004/08/06 09:35:14  oeuillot
- * *** empty log message ***
- *
- * Revision 1.1  2004/08/04 16:28:11  oeuillot
- * Premier jet !
- *
  */
 package org.rcfaces.core.internal.codec;
 
