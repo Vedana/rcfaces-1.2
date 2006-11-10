@@ -37,7 +37,7 @@ public interface IHtmlProcessContext extends IProcessContext {
 
     boolean isFlatIdentifierEnabled();
 
-    String getStyleSheetURI(String uri);
+    String getStyleSheetURI(String uri, boolean containsContextPath);
 
     boolean useMetaContentScriptType();
 

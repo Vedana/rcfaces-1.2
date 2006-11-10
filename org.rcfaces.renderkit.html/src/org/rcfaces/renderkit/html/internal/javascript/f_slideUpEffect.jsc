@@ -1,0 +1,15 @@
+var _r={Initializer:function(){f_effect.gs("slideUp",this)}}
+var _e={f_slideUpEffect:function(e,t){var r=this
+r.f_super(arguments,e,t)
+if(e.style.display=="none")r._6o=0;else r._6o=1},f_performEffect:function(e){var r=this,t
+r._it=(e)?0:1
+t=r._d
+if(r._6o!=r._it&&r._6o==0){t.style.display="block"
+t.style.height="1"}if(r._0n)r._0n(r._6o)
+r.f_wakeUpTimer()},f_getStepMs:function(){return 50},f_getStep:function(){return 0.3},f_performTick:function(e,t,r){if(this._0n)this._0n(t)
+if(t<0.00001){e.style.display="none"
+return}var n=e.scrollHeight,f=Math.floor(n*t)
+if(t>=1)f="auto"
+e.style.height=f
+e.scrollTop=n-f}}
+var f_slideUpEffect=new f_class("f_slideUpEffect",null,_r,_e,f_timerEffect);

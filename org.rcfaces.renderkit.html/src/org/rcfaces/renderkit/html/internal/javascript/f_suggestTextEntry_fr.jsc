@@ -1,0 +1,2 @@
+var _g={MORE_RELEVANT_RESULTS:"-- Tous les résultats ne sont pas affichés --"}
+f_resourceBundle.rt(f_suggestTextEntry,_g);

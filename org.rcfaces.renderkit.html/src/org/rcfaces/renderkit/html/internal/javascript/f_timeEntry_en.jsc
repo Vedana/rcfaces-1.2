@@ -1,0 +1,2 @@
+var _g={REQUIRED_ERROR_SUMMARY:"Horaire requis",INVALIDTIME_ERROR_SUMMARY:"Horaire invalide",MINTIME_ERROR_SUMMARY:"Horaire inférieur au minimum",MAXTIME_ERROR_SUMMARY:"Horaire supérieur au maximum"}
+f_resourceBundle.rt(f_timeEntry,_g);

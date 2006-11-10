@@ -1,0 +1,41 @@
+function f_resourceBundle(e){this._k=e}
+f_resourceBundle.prototype.f_get=function(e,t){var a="??",o="'.",i,f=this,r=f._4o,n
+if(!r){if(t!==i)return t
+f_core.Error(f_resourceBundle,"No keys for resourceBundle '"+f._k+o)
+return a+e+a}n=r[e]
+if(n===i){if(t!==i)return t
+f_core.Error(f_resourceBundle,"Unknown key '"+e+"' for resourceBundle '"+f._k+o)
+return a+e+a}return n}
+f_resourceBundle.prototype.f_format=function(e,t){if(arguments.length<2)return this.f_formatParams(e)
+var r=f_core.io(null,arguments,1)
+return this.f_formatParams(e,r)}
+f_resourceBundle.prototype.f_formatParams=function(e,t,r){var o="??",i,f=this,n=f.f_get(e,r)
+if(n===i){if(r===i){f_core.Error(f_resourceBundle,"Unknown key '"+e+"' for resourceBundle '"+f._k+"'.")
+return o+e+o}n=r}if(!n)return n
+return f_core.va(n,t)}
+f_resourceBundle.prototype._p9=function(e){var t={},r
+this._4o=t
+for(r in e)t[r]=e[r];}
+f_resourceBundle.Get=function(e,t){var f=null,r,n
+if((e instanceof f_class)||(e instanceof f_aspect)||typeof(e.f_getName)=="function")e=e.f_getName()
+if(!e)return f
+r=f_resourceBundle.M
+if(!r){r={}
+f_resourceBundle.M=r}n=r[e]
+if(n)return n
+if(!t)return f
+n=new f_resourceBundle(e)
+r[e]=n
+return n}
+f_resourceBundle.rt=function(e,t){var r=f_resourceBundle.Get(e,!0)
+r._p9(t)}
+f_resourceBundle.wf=function(e,t){var f,r=f_resourceBundle.O,n=r[e]
+r[e]=f
+f_resourceBundle.rt(n,t)}
+f_resourceBundle.dw=function(e,t,r){var n=f_resourceBundle.O
+if(!n){n=[]
+f_resourceBundle.O=n}n[t]=e
+document.write('<SCRIPT type="text/javascript" charset="UTF-8" src="'+r+'"></SCRIPT>')}
+f_resourceBundle.Finalizer=function(){var e
+f_resourceBundle.M=e}
+f_resourceBundle.f_getName=function(){return"f_resourceBundle"};

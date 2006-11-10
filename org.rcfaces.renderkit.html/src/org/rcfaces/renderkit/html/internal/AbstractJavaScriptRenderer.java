@@ -149,7 +149,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
         writeJsInitComponent(writer);
 
-        String componentVarName = writer.getComponentVarName();
+      //  String componentVarName = writer.getComponentVarName();
 
         // writer.write("with(").write(componentVarName).writeln("){");
 

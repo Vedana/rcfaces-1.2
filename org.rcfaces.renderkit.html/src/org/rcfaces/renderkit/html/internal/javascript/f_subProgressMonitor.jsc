@@ -1,0 +1,29 @@
+var _r={SUPPRESS_SUBTASK_LABEL:2,PREPEND_MAIN_LABEL_TO_SUBTASK:4}
+var _e={f_subProgressMonitor:function(e,t,r){var n=this
+n.f_super(arguments)
+n._8f=e
+n._s8=(t)?t:0
+n._3n=(r)?r:0
+n._cu=n._2o=n._a0=0
+n._g7=!1},f_finalize:function(){var e
+this._8f=e
+this.f_super(arguments)},f_beginTask:function(e,t){var r=this
+r._a0++
+if(r._a0>1)return
+r._2o=(t<=0)?0:r._s8/t
+if(r._3n&4)r._a_=e},f_done:function(){var t=this,e
+if(!t._a0||(--t._a0)>0)return
+e=t._s8-t._cu
+if(e>0)t._8f.st(e)
+t.f_subTask("")
+t._cu=0},st:function(e){var r=this,t
+if(r._g7||r._a0!=1)return
+t=r._2o*e
+r._8f.st(t)
+r._cu+=t
+if(r._cu>=r._s8)r._g7=!0},f_isCanceled:function(){return this._8f.f_isCanceled()},f_cancel:function(){this._8f.f_cancel()},f_setTaskName:function(e){this._8f.f_setTaskName(e)},f_subTask:function(e){var r=this,t
+if(r._3n&2)return
+t=e
+if((r._3n&4)&&r._a_&&r._a_.length>0)t=r._a_+" "+t
+r._8f.f_subTask(t)}}
+var f_subProgressMonitor=new f_class("f_subProgressMonitor",null,_r,_e,f_progressMonitor);

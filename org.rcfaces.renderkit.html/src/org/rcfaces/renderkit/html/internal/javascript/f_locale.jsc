@@ -1,0 +1,27 @@
+var _r={SHORT:0,MEDIUM:1,LONG:2,Get:function(){if(!f_locale.O)f_locale.O=f_locale.f_newInstance()
+return f_locale.O},Finalizer:function(){var e
+f_locale.O=e},M:function(e){var t=f_env.vh().split("_")
+if(t.length<=e)return null
+return t[e]}}
+var _e={f_locale:function(){var t=this,e
+t.f_super(arguments)
+e=f_resourceBundle.Get(f_locale)
+t._p1=e.f_get("MONTH_SHORT_NAMES")
+t._dc=e.f_get("MONTH_MED_NAMES")
+t._ma=e.f_get("MONTH_LONG_NAMES")
+t._ed=e.f_get("DAY_SHORT_NAMES")
+t._td=e.f_get("DAY_MED_NAMES")
+t._tp=e.f_get("DAY_LONG_NAMES")
+t._r3=e.f_get("FIRST_DAY_OF_WEEK")
+t._o6=e.f_get("TWO_DIGIT_YEAR_START")
+t._ad=e.f_get("DATE_FORMATS")},f_getMonthName:function(e,t){var n=this,r=n._dc
+switch(t){case 2:r=n._ma
+break;case 0:r=n._p1
+break;}if(e<0||e>=r.length)return null
+return r[e]},f_getDayName:function(e,t){var n=this,r=n._td
+switch(t){case 2:r=n._tp
+break;case 0:r=n._ed
+break;}if(e<0||e>=r.length)return null
+return r[e]},f_getFirstDayOfWeek:function(){return this._r3},f_getTwoDigitYearStart:function(){return this._o6},f_getDateFormat:function(e){var t=this._ad
+switch(e){case 2:return t[2];case 1:return t[1];}return t[0]},f_getName:function(){return f_env.vh()},f_getLanguage:function(){return f_locale.M(0)},f_getCountry:function(){return f_locale.M(1)},f_getVariant:function(){return f_locale.M(2)}}
+var f_locale=new f_class("f_locale",null,_r,_e);

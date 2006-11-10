@@ -1,0 +1,10 @@
+var _e={f_compositeNumEntry:function(){var t=this,e
+t.f_super(arguments)
+e=f_core.R(t,"v:clientValidatorParams")
+if(e)t._oy=f_core.vf(e)
+if(window.f_messageContext)f_core.lr(t,t)},f_performCheckValue:function(){},uv:function(e,t){var u=null,c=this,r=u,n=u,f=2,i=c._oy,o,a
+if(i){r=i[t+".summary"]
+if(r)n=i[t+".detail"];else r=i[t]}if(!r){o=f_resourceBundle.Get(e)
+r=o.f_get(t.toUpperCase().replace(/\./g,"_")+"_SUMMARY")}a=new f_messageObject(f,r,n)
+messageContext.f_addMessageObject(c,a)}}
+var f_compositeNumEntry=new f_class("f_compositeNumEntry",null,null,_e,f_component,fa_compositeNumEntry,fa_required);

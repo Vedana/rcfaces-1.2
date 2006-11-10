@@ -220,7 +220,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
                 .getRenderContext();
 
         return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
-                BORDER_BLANK_IMAGEURL);
+                BORDER_BLANK_IMAGEURL, true);
     }
 
     protected IHtmlWriter writeCellBorderNorthWest(IHtmlWriter writer)
@@ -478,7 +478,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
                 .getRenderContext();
 
         String imageURL = htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetURI(MARKER_IMAGEURL);
+                .getStyleSheetURI(MARKER_IMAGEURL, true);
         writer.writeClass(getMarkerClassName(writer, componentClassName));
         writer.writeSrc(imageURL);
         writer.writeWidth(5);

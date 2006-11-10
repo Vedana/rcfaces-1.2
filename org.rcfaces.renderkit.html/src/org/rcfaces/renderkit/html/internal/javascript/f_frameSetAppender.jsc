@@ -1,0 +1,21 @@
+var _r={Initializer:function(){var e=window.parent,t,r,n,f,i,o,a
+for(;e.parent&&e.parent!=e;)e=e.parent;if(!e||!e._2m){t=null
+r=document.getElementsByTagName("LINK")
+for(n=0;n<r.length;n++){f=r[n]
+if(f.rel!="stylesheet")continue
+i=f.href.indexOf("rcfaces.css")
+if(i<0)continue
+t=f.href.substring(0,i)}if(!t)return
+t+="frameSetAppender/base.html?url="+encodeURI(window.document.location)
+if(!e)e=window
+window.document.location=t
+return}o=e._2m
+o.call(window,"newPage")
+a=this.f_newInstance(o)
+f_frameSetAppender._0n=o}}
+var _e={f_frameSetAppender:function(e){this.f_super(arguments)
+f_log.uf(this)},f_finalize:function(){this.f_super(arguments)},f_doAppend:function(e){var t=f_frameSetAppender._0n
+if(!t)return
+try{t.call(window,"console",e)}catch(r){alert(r)
+t=null}}}
+var f_frameSetAppender=new f_class("f_frameSetAppender",null,_r,_e);

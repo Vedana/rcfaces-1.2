@@ -1,0 +1,2 @@
+var _g={LOADING_MESSAGE:"Loading ...",RECEIVING_MESSAGE:"Receiving ..."}
+f_resourceBundle.rt(f_waiting,_g);

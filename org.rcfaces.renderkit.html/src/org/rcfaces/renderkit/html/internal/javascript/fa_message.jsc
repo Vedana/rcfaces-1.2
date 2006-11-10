@@ -1,0 +1,27 @@
+var _e={fa_message:function(){var t=this,e=f_messageContext.Get(t)
+t._t=f_core.R(t,"v:styleClass")
+if(!t._t)t._t=t.className
+e.pg(t)},f_isShowSummary:function(){var r,t=this,e
+if(t._l1===r){e=f_core.R(t,"v:showSummary")
+t._l1=(e)?!0:!1}return t._l1},f_isShowDetail:function(){var r,t=this,e
+if(t._gn===r){e=f_core.R(t,"v:showDetail")
+t._gn=(e)?!0:!1}return t._gn},f_getFatalStyleClass:function(){var t,e=this
+if(e._g4===t)e._g4=e._cn("v:fatalStyleClass","_fatal")
+return e._g4},f_getErrorStyleClass:function(){var t,e=this
+if(e._lc===t)e._lc=e._cn("v:errorStyleClass","_error")
+return e._lc},f_getWarnStyleClass:function(){var t,e=this
+if(e._ov===t)e._ov=e._cn("v:warnStyleClass","_warn")
+return e._ov},f_getInfoStyleClass:function(){var t,e=this
+if(e._l3===t)e._l3=e._cn("v:infoStyleClass","_info")
+return e._l3},_cn:function(e,t){var i,f=this,r=f_core.R(f,e),n
+if(r)return r
+n=f._3m
+if(n===i){n=(f_core.R(f,"v:fatalStyleClass")||f_core.R(f,"v:errorStyleClass")||f_core.R(f,"v:warnStyleClass")||f_core.R(f,"v:infoStyleClass"))?!0:!1
+f._3m=n}if(n)return null
+return f._t+t},su:function(e){var n=null,r=this,t=n
+switch(e){case 3:t=r.f_getFatalStyleClass()
+if(t)return t;case 2:t=r.f_getErrorStyleClass()
+if(t)return t;case 1:t=r.f_getWarnStyleClass()
+if(t)return t;case 0:t=r.f_getInfoStyleClass()
+if(t)return t;}return n}}
+var fa_message=new f_aspect("fa_message",null,_e);

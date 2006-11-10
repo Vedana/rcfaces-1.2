@@ -1,0 +1,5 @@
+var _r={Initializer:function(){f_effect.gs("slideUpTrans",this)}}
+var _e={f_performTick:function(e,t,r){this.f_super(arguments,e,t,r)
+if(t==0)return
+f_core.dp(e,t)}}
+var f_slideUpTransEffect=new f_class("f_slideUpTransEffect",null,_r,_e,f_slideUpEffect);

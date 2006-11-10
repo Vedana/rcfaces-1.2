@@ -1,0 +1,2 @@
+var _g={OPEN_WINDOW_ERROR_MESSAGE:"Your browser has blocked the opening of a popup."}
+f_resourceBundle.rt(f_env,_g);

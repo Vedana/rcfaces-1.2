@@ -1,0 +1,36 @@
+var _r={FATAL:0,ERROR:1,WARN:2,INFO:3,DEBUG:4,TRACE:5,Initializer:function(){var e=window.f_logCB
+if(!e)return
+f_log.uf({f_doAppend:e})},Finalizer:function(){var e
+f_log.O=f_log.F=e},GetLog:function(e){var t=f_log._9h,r,n,f,i,o
+if(!t){t={}
+f_log._9h=t}r=t[e]
+if(r)return r
+n=0
+if(f_core&&f_core.ae)n=4
+f=f_log.O
+if(f){for(o in f){if(o.length>0&&e.indexOf(o)!=0)continue
+if(i&&i.length>o)continue
+i=o
+n=f[o]}}r=f_log.um(e,n)
+t[e]=r
+return r},py:function(){var e=f_log.O,t,r,n
+if(!e){e={}
+f_log.O=e}for(t=0;t<arguments.length;){r=arguments[t++]
+n=arguments[t++]
+e[r]=n}},M:function(e){var i,t=f_log.F,r,n
+if(!t||!t.length)return!1
+try{window._ue=!0
+for(r=0;r<t.length;r++){n=t[r]
+if(typeof(n.f_doAppend)!="function")continue
+try{n.f_doAppend(e)}catch(f){alert("Append log event exception:\n"+f)}}}finally{window._ue=i}return!0},uf:function(){var e=f_log.F
+if(!e){e=[]
+f_log.F=e}f_core.io(e,arguments)}}
+var _e={f_log:function(e,t){var r=this
+r.f_super(arguments)
+if(typeof(t)!="number")t=1
+r._n1=t
+r._k=e},f_fatal:function(e,t,r){return this._0o(0,e,t,r)},f_error:function(e,t,r){return this._0o(1,e,t,r)},f_warn:function(e,t,r){return this._0o(2,e,t,r)},f_info:function(e,t,r){return this._0o(3,e,t,r)},f_debug:function(e,t,r){return this._0o(4,e,t,r)},f_trace:function(e,t,r){return this._0o(5,e,t,r)},_0o:function(e,t,r,n){if(!n)n=window
+if(this._n1<e)return!1
+var f={name:this._k,level:e,message:t,exception:r,window:n,date:new Date()}
+return f_log.M(f)},f_isFatalEnabled:function(){return(this._n1>=0)},f_isErrorEnabled:function(){return(this._n1>=1)},f_isWarnEnabled:function(){return(this._n1>=2)},f_isInfoEnabled:function(){return(this._n1>=3)},f_isDebugEnabled:function(){return(this._n1>=4)},f_isTraceEnabled:function(){return(this._n1>=5)}}
+var f_log=new f_class("f_log",null,_r,_e);

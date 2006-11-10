@@ -1,0 +1,27 @@
+function f_time(e,t,r,n){var i=this,f
+if(arguments.length==1){if(e instanceof Date){f=e
+i._a3=f.getHours()
+i._9i=f.getMinutes()
+i._8a=f.getSeconds()
+i._i2=f.getMilliseconds()
+return}if(typeof(e)=="number"){i._a3=Math.floor((e/(60*60*1000)))
+i._9i=Math.floor((e/(60*1000))%60)
+i._8a=Math.floor((e/1000)%60)
+i._i2=Math.floor(e%1000)
+return}}i._a3=e
+i._9i=i._8a=i._i2=0
+if(t){i._9i=t
+if(r){i._y9=r
+if(n)i._i2=n}}}
+f_time.prototype.f_getHours=function(){return this._a3}
+f_time.prototype.f_getMinutes=function(){return this._9i}
+f_time.prototype.f_getSeconds=function(){return this._8a}
+f_time.prototype.f_getMilliseconds=function(){return this._i2}
+f_time.prototype.toString=function(){var e=this
+return"[f_time "+e._a3+":"+e._9i+":"+e._8a+"."+e._i2+"]"}
+f_time.prototype.f_toDate=function(){var e=this
+return new Date(1,0,2000,e._yy,e._yg,e._6y,e._i2)}
+f_time.prototype.f_getTime=function(){var e=this
+return((((e._a3*60)+e._9i)*60)+e._8a)*1000+e._i2}
+f_time.toString=function(){return"[class f_time]"}
+f_time.f_getName=function(){return"f_time"};

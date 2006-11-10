@@ -171,7 +171,7 @@ var __prototype={
 	 * @return void
 	 */
 	f_setDate: function(date) {
-		f_core.Assert(date===nulll || (date instanceof Date), "Invalid date parameter '"+date+"'");
+		f_core.Assert(date===null || (date instanceof Date), "Invalid date parameter '"+date+"'");
 		
 		var inputs=this._inputs;
 		for(var i=0;i<inputs.length;i++) {

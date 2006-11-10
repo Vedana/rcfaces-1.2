@@ -1,0 +1,22 @@
+var _r={M:{init:f_event.INIT,keyPress:f_event.KEYPRESS,propertyChange:f_event.PROPERTY_CHANGE,user:f_event.USER},Finalizer:function(){var e
+f_accelerator.O=e}}
+var _e={f_accelerator:function(){var f=this,e,t,r,n
+f.f_super(arguments)
+e=f_core.R(f,"v:character")
+if(e)f._c7=e
+t=f_core.R(f,"v:virtualKey")
+if(t)f._4c=[parseInt(t)]
+r=f_core.R(f,"v:keyFlags")
+if(r)f._nu=parseInt(r)
+f_key.ma(f._c7,f._4c,f._nu,f,f._mg)
+f.tp(f_accelerator.M)
+n=f_core.R(f,"v:for")
+if(n&&n.length>0){f._v2=fa_namingContainer.c_(f,n)
+f._fp=f_core.R(f,"v:forItemValue")
+f.f_addEventListener("keypress",f._d6)}},_mg:function(e){return this.f_fireEvent("keypress",e)},_d6:function(e){var i=this,t=i._v2,r=f_core.GetElementById(t,i.ownerDocument),n
+if(!r)return!1
+n=r.oc
+if(!n)return!1
+try{return n.call(r)}catch(f){f_core.Error(f_accelerator,"Call onSelect on component '"+t+"' throws exception.",f)
+throw f}},ay:function(){return this._c7},yw:function(){return this._4c},f_getKeyFlags:function(){return this._nu},f_getFor:function(){return this._v2},f_getForItemValue:function(){return this._fp}}
+var f_accelerator=new f_class("f_accelerator",null,_r,_e,f_object,fa_immediate,fa_eventTarget);

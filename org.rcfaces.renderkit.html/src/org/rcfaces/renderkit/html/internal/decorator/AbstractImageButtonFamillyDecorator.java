@@ -706,7 +706,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 .getRenderContext();
 
         return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
-                EMPTY_IMAGE_URL);
+                EMPTY_IMAGE_URL, true);
     }
 
     protected void writeComboImage(int nextRowCount) throws WriterException {

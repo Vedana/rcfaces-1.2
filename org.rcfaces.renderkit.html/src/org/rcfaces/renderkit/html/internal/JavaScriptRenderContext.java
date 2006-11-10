@@ -578,7 +578,7 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             pred++;
         }
 
-        String styleSheetURI = renderExternalContext.getStyleSheetURI(null);
+        String styleSheetURI = renderExternalContext.getStyleSheetURI(null, true);
         if (styleSheetURI != null && styleSheetURI.equals(jsBaseURI) == false) {
             for (; pred > 0; pred--) {
                 writer.write(',').writeNull();

@@ -1,0 +1,8 @@
+var _e={f_styledMessage:function(){var e=this
+e.f_super(arguments)
+e._ci=f_core.R(e,"v:showIfMessage")},fc:function(){var r=this,e,t=r._f1
+if(t)e=r.su(t.f_getSeverity())
+if(!e)e=r._t
+if(r.className!=e)r.className=e
+if(r._ci)r.f_setVisible(t!=null)}}
+var f_styledMessage=new f_class("f_styledMessage",null,_r,_e,f_component,fa_message1);

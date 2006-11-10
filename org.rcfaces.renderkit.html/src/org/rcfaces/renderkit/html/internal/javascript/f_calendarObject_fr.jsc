@@ -1,0 +1,2 @@
+var _g={UNIT_NAMES:["Semaine","Jour","J/S","Mois","Année"],GOTO_DATE:"Choisir le ",WEEK:"Semaine ",PREVIOUS_UNIT:"Préc.",NEXT_UNIT:"Suivant"}
+f_resourceBundle.rt(f_calendarObject,_g);

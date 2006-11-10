@@ -1,0 +1,41 @@
+var _r={Initializer:function(){this.f_newInstance()}}
+var _e={f_serverAppender:function(){var e=this
+e.f_super(arguments)
+e._hn=!0
+f_log.uf(e)},f_finalize:function(){var r,t=this,e
+t._hn=r
+e=t._Q
+if(e){t._Q=r
+window.clearTimeout(e)}t._ce=r},f_doAppend:function(e){var r=this,t
+if(!r._hn)return
+t=r._ce
+if(!t){t=[]
+r._ce=t}t.push(e)
+r.__7()},_ud:function(){var u,c=this,e,t,r,n,f,i,o,a
+c._Q=u
+e=c._ce
+if(!e||e.length<1)return
+c._ce=[]
+t={}
+for(r=0;r<e.length;r++){n=e[r]
+if(n.name)t["name"+r]=n.name
+if(n.level)t["level"+r]=n.level
+if(n.message)t["message"+r]=n.message
+if(n.fileName)t["fileName"+r]=n.fileName
+if(n.lineNumber)t["lineNumber"+r]=n.lineNumber
+if(n.date)t["date"+r]=n.date.getTime()
+f=n.exception
+if(f){if(typeof(f)!="string")f=f.toString()
+t["exception"+r]=f}}try{c.__o=window._ue=!0
+i=f_env.ot()
+o=f_httpRequest.f_newInstance(document,i,null,!0)
+a=c
+o.f_setListener({onError:function(){a.__o=u
+a.__7()},onLoad:function(){a.__o=u
+a.__7()}})
+o.f_setRequestHeader("X-Camelia","log.append")
+o.f_doFormRequest(t)}finally{window._ue=u}},__7:function(){var n,r=this,e=r._ce,t
+if(!e||e.length<1||r._Q!==n||r.__o)return
+t=r
+r._Q=window.setTimeout(function(){t._ud.call(t)},500)}}
+var f_serverAppender=new f_class("f_serverAppender",null,_r,_e);

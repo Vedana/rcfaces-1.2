@@ -31,6 +31,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private String styleSheetURI;
 
+    private String styleSheetURIWithContextPath;
+
     private final boolean useScriptCData;
 
     private final boolean useFlatIdentifier;
@@ -76,8 +78,9 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
         ICssConfig cssConfig = StylesheetsServlet.getConfig(this);
 
-        styleSheetURI = externalContext.getRequestContextPath()
-                + cssConfig.getDefaultStyleSheetURI();
+        styleSheetURI = cssConfig.getDefaultStyleSheetURI();
+        styleSheetURIWithContextPath = externalContext.getRequestContextPath()
+                + styleSheetURI;
 
         if (LOG.isDebugEnabled()) {
             LOG
@@ -92,11 +95,19 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         }
     }
 
-    public final String getStyleSheetURI(String uri) {
+    public final String getStyleSheetURI(String uri, boolean containsContextPath) {
         String ret = null;
         if (uri != null) {
-            StringAppender u = new StringAppender(styleSheetURI,
-                    uri.length() + 2);
+            StringAppender u = new StringAppender(styleSheetURIWithContextPath
+                    .length()
+                    + uri.length() + 2);
+
+            if (containsContextPath) {
+                u.append(styleSheetURIWithContextPath);
+
+            } else {
+                u.append(styleSheetURI);
+            }
 
             if (uri != null && uri.length() > 0) {
                 if (uri.startsWith("/") == false) {
@@ -111,12 +122,18 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
             }
 
             ret = u.toString();
+
+        } else if (containsContextPath) {
+            ret = styleSheetURIWithContextPath;
+
         } else {
             ret = styleSheetURI;
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Compute stylesheet uri '" + uri + "' => '" + ret + "'.");
+            LOG.debug("Compute stylesheet uri '" + uri
+                    + "' (containsContextPath=" + containsContextPath
+                    + ") => '" + ret + "'.");
         }
 
         return ret;

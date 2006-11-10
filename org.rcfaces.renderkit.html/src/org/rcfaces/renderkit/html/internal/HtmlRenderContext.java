@@ -105,10 +105,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return new JavaScriptRenderContext(facesContext);
     }
 
-    static final IRenderContext getRenderContext(FacesContext context) {
+    static final IHtmlRenderContext getRenderContext(FacesContext context) {
         Map requestMap = context.getExternalContext().getRequestMap();
 
-        IRenderContext renderContext = (IRenderContext) requestMap
+        IHtmlRenderContext renderContext = (IHtmlRenderContext) requestMap
                 .get(RENDER_CONTEXT);
         if (renderContext != null) {
             return renderContext;
@@ -168,7 +168,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
      * requestMap.remove(RENDER_CONTEXT); }
      */
 
-    static final IRenderContext createRenderContext(FacesContext context) {
+    static final IHtmlRenderContext createRenderContext(FacesContext context) {
         HtmlRenderContext hrc = new HtmlRenderContext();
         hrc.initialize(context);
 
