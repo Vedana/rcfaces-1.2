@@ -10,6 +10,8 @@ import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorEngine;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
@@ -62,33 +64,41 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
             return null;
         }
 
-        String url = (String) content;
+        if (isProviderEnabled() == false) {
+            return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
+        }
 
-        int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
+        String url = (String) content;
 
         ImageContentInformation imageInformation = null;
         IContentInformation contentInformation = contentInformationRef[0];
         if (contentInformation instanceof ImageContentInformation) {
             imageInformation = (ImageContentInformation) contentInformation;
-        }
 
-        if (isProviderEnabled() == false) {
-            return null;
+        } else {
+            imageInformation = new ImageContentInformation();
+
+            contentInformationRef[0] = imageInformation;
         }
 
         IFiltredImageAccessor modifiedContentAccessor = null;
+
+        int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
+        String filter = url.substring(0, idx);
+
         if (idx == url.length() - 2) { // Filtre tout seul !
-            if (contentAccessor.getRootAccessor() == null) {
+            IContentAccessor parentAccessor = contentAccessor
+                    .getParentAccessor();
+
+            if (parentAccessor == null) {
                 throw new FacesException("Can not get main image of '" + url
                         + "'.");
             }
 
-            String filter = url.substring(0, idx);
             modifiedContentAccessor = new FiltredImageAccessor(filter,
-                    contentAccessor.getRootAccessor());
+                    parentAccessor);
 
         } else {
-            String filter = url.substring(0, idx);
             String newURL = url.substring(idx
                     + IContentAccessor.FILTER_SEPARATOR.length());
 
@@ -96,14 +106,6 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
                     new BasicContentAccessor(facesContext, newURL,
                             contentAccessor,
                             IContentAccessor.UNDEFINED_PATH_TYPE));
-        }
-
-        if (imageInformation == null) {
-            imageInformation = new ImageContentInformation();
-
-            if (contentInformationRef[0] == null) {
-                contentInformationRef[0] = imageInformation;
-            }
         }
 
         return formatImageURL(facesContext, modifiedContentAccessor,
@@ -127,8 +129,8 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         private final String filter;
 
-        public FiltredImageAccessor(String filter, IContentAccessor accessor) {
-            super(accessor);
+        public FiltredImageAccessor(String filter, IContentAccessor parentAccessor) {
+            super(parentAccessor);
             this.filter = filter;
 
             setPathType(IContentAccessor.FILTER_PATH_TYPE);
@@ -146,8 +148,8 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
             return "[FiltredContentAccessor filter='" + filter
                     + "' contentType=" + getType() + " pathType="
                     + getPathTypeName(getPathType()) + " versionHandler="
-                    + getContentVersionHandler() + " root=" + getRootAccessor()
-                    + "]";
+                    + getContentVersionHandler() + " root="
+                    + getParentAccessor() + "]";
         }
 
     }

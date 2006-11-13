@@ -268,8 +268,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     String disabledImageURL = disabledImageAccessor.resolveURL(
                             facesContext, null, null);
 
-                    writer.writeAttribute("v:disabledImageURL",
-                            disabledImageURL);
+                    if (disabledImageURL != null) {
+                        writer.writeAttribute("v:disabledImageURL",
+                                disabledImageURL);
+                    }
                 }
             }
 

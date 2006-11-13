@@ -109,6 +109,6 @@ public class BasicContentAccessor extends AbstractContentAccessor {
         return "[AbstractContentAccessor contentType=" + getType()
                 + " pathType=" + getPathTypeName(getPathType())
                 + " versionHandler=" + getContentVersionHandler()
-                + " content='" + value + "' root=" + getRootAccessor() + "]";
+                + " content='" + value + "' root=" + getParentAccessor() + "]";
     }
 }

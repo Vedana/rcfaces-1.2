@@ -239,7 +239,7 @@ public class ImageContentAccessorHandlerImpl extends
         int resourcePathType = contentAccessor.getPathType();
 
         if (resourceURL == null) {
-            IContentAccessor rootAccessor = contentAccessor.getRootAccessor();
+            IContentAccessor rootAccessor = contentAccessor.getParentAccessor();
             resourceURL = (String) rootAccessor.getContentRef();
             resourcePathType = rootAccessor.getPathType();
 
@@ -268,7 +268,7 @@ public class ImageContentAccessorHandlerImpl extends
                         + "' for url '" + contentAccessor + "'.");
             }
 
-            if (contentAccessor.getRootAccessor() == null) {
+            if (contentAccessor.getParentAccessor() == null) {
                 return null;
             }
         }

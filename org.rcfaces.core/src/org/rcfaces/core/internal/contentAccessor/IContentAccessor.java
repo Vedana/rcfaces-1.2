@@ -46,7 +46,7 @@ public interface IContentAccessor {
             IContentInformation contentInformation,
             IFilterProperties filterProperties);
 
-    IContentAccessor getRootAccessor();
+    IContentAccessor getParentAccessor();
 
     IContentVersionHandler getContentVersionHandler();
 

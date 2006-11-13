@@ -3,6 +3,8 @@
  */
 package org.rcfaces.core.internal.contentAccessor;
 
+import java.util.Map;
+
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
@@ -11,6 +13,7 @@ import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.component.IImageAccessors;
+import org.rcfaces.core.model.IFilterProperties;
 
 /**
  * 
@@ -22,6 +25,60 @@ public class ContentAccessorFactory {
 
     private static final Log LOG = LogFactory
             .getLog(ContentAccessorFactory.class);
+
+    public static final IContentAccessor UNSUPPORTED_CONTENT_ACCESSOR = new IContentAccessor() {
+        private static final String REVISION = "$Revision$";
+
+        public Object getAttribute(String attributeName) {
+            return null;
+        }
+
+        public Map getAttributes() {
+            return null;
+        }
+
+        public Object getContentRef() {
+            return null;
+        }
+
+        public IContentVersionHandler getContentVersionHandler() {
+            return null;
+        }
+
+        public int getPathType() {
+            return 0;
+        }
+
+        public IContentAccessor getParentAccessor() {
+            return null;
+        }
+
+        public IContentType getType() {
+            return null;
+        }
+
+        public String resolveURL(FacesContext facesContext,
+                IContentInformation contentInformation,
+                IFilterProperties filterProperties) {
+            return null;
+        }
+
+        public void setContentVersionHandler(
+                IContentVersionHandler contentVersionHandler) {
+        }
+
+        public void setPathType(int pathType) {
+        }
+
+        public boolean equals(Object obj) {
+            return obj == this;
+        }
+
+        public int hashCode() {
+            return 0;
+        }
+
+    };
 
     private static final IContentVersionHandler RESOURCE_CONTENT_VERSION_HANDLER = new AbstractContentVersionHandler() {
         private static final String REVISION = "$Revision$";

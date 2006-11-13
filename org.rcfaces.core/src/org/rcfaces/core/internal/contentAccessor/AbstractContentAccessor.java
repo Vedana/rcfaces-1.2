@@ -24,7 +24,7 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
     private static final Log LOG = LogFactory
             .getLog(AbstractContentAccessor.class);
 
-    private final IContentAccessor rootContentAccessor;
+    private final IContentAccessor parentContentAccessor;
 
     private final IContentType type;
 
@@ -45,13 +45,13 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
     protected AbstractContentAccessor(IContentType type,
             IContentAccessor contentAccessor,
             IContentVersionHandler contentVersionHandler) {
-        this.rootContentAccessor = contentAccessor;
+        this.parentContentAccessor = contentAccessor;
         this.type = type;
         this.contentVersionHandler = contentVersionHandler;
     }
 
-    public IContentAccessor getRootAccessor() {
-        return rootContentAccessor;
+    public IContentAccessor getParentAccessor() {
+        return parentContentAccessor;
     }
 
     public final IContentType getType() {
@@ -105,16 +105,16 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
     }
 
     public Object getAttribute(String attributeName) {
-        if (rootContentAccessor != null) {
-            return rootContentAccessor.getAttribute(attributeName);
+        if (parentContentAccessor != null) {
+            return parentContentAccessor.getAttribute(attributeName);
         }
 
         return null;
     }
 
     public Map getAttributes() {
-        if (rootContentAccessor != null) {
-            return rootContentAccessor.getAttributes();
+        if (parentContentAccessor != null) {
+            return parentContentAccessor.getAttributes();
         }
 
         return Collections.EMPTY_MAP;
@@ -125,8 +125,8 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
             return pathType;
         }
 
-        if (rootContentAccessor != null) {
-            return rootContentAccessor.getPathType();
+        if (parentContentAccessor != null) {
+            return parentContentAccessor.getPathType();
         }
 
         return 0;
@@ -219,7 +219,8 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
     public String toString() {
         return "[AbstractContentAccessor contentType=" + type + " pathType="
                 + getPathTypeName(pathType) + " versionHandler="
-                + contentVersionHandler + " root=" + rootContentAccessor + "]";
+                + contentVersionHandler + " root=" + parentContentAccessor
+                + "]";
     }
 
     public static final String getPathTypeName(int pathType) {
