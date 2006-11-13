@@ -115,8 +115,10 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
             }
         }
 
+        final String contentKey = url;
+
         final IResolvedContent resolvedContent = contentStorageRepository
-                .load(url);
+                .load(contentKey);
 
         if (resolvedContent == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -138,6 +140,13 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                         try {
                             sendContent(request, response, resolvedContent);
 
+                            if (resolvedContent instanceof IResolvedContentWrapper) {
+                                IResolvedContent wrapped = ((IResolvedContentWrapper) resolvedContent)
+                                        .getResolvedContent();
+
+                                contentStorageRepository.saveWrapped(
+                                        contentKey, wrapped);
+                            }
                         } catch (IOException e) {
                             exceptionRef[0] = e;
                         }

@@ -34,7 +34,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 					value=getValueBinding("value");
 				}
 			
-				return ImageAccessorTools.createImageAccessor(value);
+				return ImageAccessorTools.createImageAccessor(null, value);
 			
 	}
 

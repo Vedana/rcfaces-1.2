@@ -12,6 +12,8 @@ import org.rcfaces.core.component.ExpandBarComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -167,7 +169,15 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         boolean collapsed = expandBarComponent.isCollapsed(facesContext);
 
-        htmlWriter.writeAttribute("src", getButtonImage(htmlWriter, collapsed));
+        IContentAccessor buttonImageAccessor = getButtonImage(htmlWriter,
+                collapsed);
+        if (buttonImageAccessor != null) {
+            String url = buttonImageAccessor.resolveURL(facesContext, null,
+                    null);
+            if (url != null) {
+                htmlWriter.writeAttribute("src", url);
+            }
+        }
 
         htmlWriter.writeWidth(getButtonImageWidth(htmlWriter));
         htmlWriter.writeHeight(getButtonImageHeight(htmlWriter));
@@ -223,10 +233,12 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         return DEFAULT_BUTTON_IMAGE_HEIGHT;
     }
 
-    protected String getButtonImage(IHtmlWriter htmlWriter, boolean collapsed) {
+    protected IContentAccessor getButtonImage(IHtmlWriter htmlWriter,
+            boolean collapsed) {
 
         return getHtmlRenderContext(htmlWriter).getHtmlProcessContext()
-                .getStyleSheetURI(BLANK_IMAGE_URL, true);
+                .getStyleSheetContentAccessor(BLANK_IMAGE_URL,
+                        IContentType.IMAGE);
         /*
          * String imageURL; if (collapsed) { imageURL =
          * COLLAPSED_BUTTON_IMAGE_URL; } else { imageURL =

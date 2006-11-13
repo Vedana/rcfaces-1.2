@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
@@ -56,6 +56,10 @@ public class ImageContentAccessorHandlerImpl extends
 
     public ImageContentAccessorHandlerImpl() {
         fileNameMap = URLConnection.getFileNameMap();
+    }
+
+    public String getId() {
+        return "ImageContentAccessorHandler";
     }
 
     public void startup(FacesContext facesContext) {
@@ -232,9 +236,13 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         String resourceURL = (String) contentAccessor.getContentRef();
+        int resourcePathType = contentAccessor.getPathType();
+
         if (resourceURL == null) {
-            resourceURL = (String) contentAccessor.getRootAccessor()
-                    .getContentRef();
+            IContentAccessor rootAccessor = contentAccessor.getRootAccessor();
+            resourceURL = (String) rootAccessor.getContentRef();
+            resourcePathType = rootAccessor.getPathType();
+
         }
 
         String externalContentType = null;
@@ -271,10 +279,37 @@ public class ImageContentAccessorHandlerImpl extends
         IContentStorageEngine contentStorageEngine = rcfacesContext
                 .getContentStorageEngine();
 
-        IProcessContext processContext = AbstractProcessContext
-                .getProcessContext(facesContext);
+        // Il nous faut un path en relatif !
+        switch (resourcePathType) {
+        case IContentAccessor.EXTERNAL_PATH_TYPE:
+            throw new FacesException(
+                    "Can not make operation on an external URL !");
 
-        resourceURL = processContext.getAbsolutePath(resourceURL, false);
+        case IContentAccessor.CONTEXT_PATH_TYPE:
+            break;
+
+        case IContentAccessor.ABSOLUTE_PATH_TYPE:
+            String relativeURL = AbstractContentAccessor.removeContextPath(
+                    facesContext, resourceURL);
+
+            if (relativeURL == null) {
+                throw new FacesException(
+                        "Can not transform Absolute path to Context path !");
+            }
+
+            resourceURL = relativeURL;
+            break;
+
+        case IContentAccessor.RELATIVE_PATH_TYPE:
+            IProcessContext processContext = AbstractProcessContext
+                    .getProcessContext(facesContext);
+
+            resourceURL = processContext.getAbsolutePath(resourceURL, false);
+            break;
+
+        default:
+            throw new FacesException("Invalid state !");
+        }
 
         String versionId = null;
         if (Constants.RESOURCE_CONTENT_VERSION_SUPPORT) {
@@ -282,16 +317,18 @@ public class ImageContentAccessorHandlerImpl extends
                     .getResourceVersion(facesContext, resourceURL, null);
         }
 
-        String ret = contentStorageEngine.registerContentModel(facesContext,
-                new ImageOperationContentModel(resourceURL,
-                        externalContentType, imageOperation.getForceSuffix(),
-                        versionId, operationId, parameters, contentAccessor
-                                .getAttributes(), imageOperation),
-                imageContentInformation);
+        IContentAccessor newContentAccessor = contentStorageEngine
+                .registerContentModel(facesContext,
+                        new ImageOperationContentModel(resourceURL,
+                                externalContentType, imageOperation
+                                        .getForceSuffix(), versionId,
+                                operationId, parameters, contentAccessor
+                                        .getAttributes(), imageOperation),
+                        imageContentInformation, contentAccessor.getType());
 
-        // retire le versionning ...
-        return ContentAccessorFactory
-                .createAccessor(ret, contentAccessor, null);
+        // pas de versionning dans ce content Accessor !
+
+        return newContentAccessor;
     }
 
     public String getContentType(String url) {

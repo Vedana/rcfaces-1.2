@@ -8,8 +8,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
-import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.model.IFilterProperties;
 
 /**
@@ -23,12 +21,10 @@ public class ContentAccessorEngine {
     private static final Log LOG = LogFactory
             .getLog(ContentAccessorEngine.class);
 
-    public static String resolveURL(FacesContext facesContext,
-            IContentAccessor contentAccessor,
-            IContentInformation contentInformation,
-            IFilterProperties filterProperties) {
-
-        Object initContentRef = contentAccessor.getContentRef();
+    public static IContentAccessor resolveURL(FacesContext facesContext,
+            final IContentAccessor contentAccessor,
+            final IContentInformation contentInformation,
+            final IFilterProperties filterProperties) {
 
         RcfacesContext rcfacesContext = RcfacesContext
                 .getInstance(facesContext);
@@ -39,54 +35,59 @@ public class ContentAccessorEngine {
         IContentAccessorHandler handlers[] = registry
                 .listContentAccessorHandlers(contentAccessor.getType());
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Try to resolve URL '" + contentAccessor + "'");
+        }
+
+        IContentAccessor returnContentAccessor = contentAccessor;
+
         IContentInformation contentInformationRef[] = new IContentInformation[] { contentInformation };
         for (int i = 0; i < handlers.length; i++) {
             IContentAccessorHandler handler = handlers[i];
 
             IContentAccessor newContentAccessor = handler.handleContent(
-                    facesContext, contentAccessor, contentInformationRef,
+                    facesContext, returnContentAccessor, contentInformationRef,
                     filterProperties);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ContentAccessorHandler(" + handler.getId()
+                        + ") returns " + newContentAccessor);
+            }
+
             if (newContentAccessor != null) {
-                contentAccessor = newContentAccessor;
+                returnContentAccessor = newContentAccessor;
                 break;
             }
         }
 
-        Object result = contentAccessor.getContentRef();
+        Object result = returnContentAccessor.getContentRef();
         if (result == null) {
             return null;
         }
 
-        if ((result instanceof String) == false) {
-            LOG.error("Invalid url '" + result + "'.");
-
-            return null;
-        }
-
-        String url = (String) result;
-
-        contentInformation = contentInformationRef[0];
-        IContentVersionHandler contentVersionHandler = contentAccessor
+        IContentVersionHandler contentVersionHandler = returnContentAccessor
                 .getContentVersionHandler();
         if (contentVersionHandler != null) {
-            // On calcule la position absolue ....
-            String versionnedURL = contentVersionHandler.getVersionPath(
-                    rcfacesContext, facesContext, url, contentAccessor,
-                    contentInformation);
 
-            if (versionnedURL != null) {
-                url = versionnedURL;
+            IContentAccessor versionedContentAccessor = contentVersionHandler
+                    .getVersionedContentAccessor(rcfacesContext, facesContext,
+                            returnContentAccessor, contentInformationRef);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("contentVersionHandler("
+                        + contentVersionHandler.getId() + ") returns "
+                        + versionedContentAccessor);
+            }
+
+            if (versionedContentAccessor != null) {
+                returnContentAccessor = versionedContentAccessor;
             }
         }
 
-        if (url.equals(initContentRef) && url.charAt(0) != '/') {
-            // Pas de version ... rien du tout !
-            return url;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("ResolveURL '" + contentAccessor + "' returns '"
+                    + returnContentAccessor + "'");
         }
-
-        IProcessContext processContext = AbstractProcessContext
-                .getProcessContext(facesContext);
-
-        return processContext.getAbsolutePath(url, true);
+        return returnContentAccessor;
     }
 }

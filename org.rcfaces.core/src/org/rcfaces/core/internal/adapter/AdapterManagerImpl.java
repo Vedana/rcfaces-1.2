@@ -53,6 +53,10 @@ public class AdapterManagerImpl extends AbstractProvider implements
         }
     }
 
+    public String getId() {
+        return "AdapterManager";
+    }
+
     public void configureRules(Digester digester) {
         super.configureRules(digester);
 
@@ -99,16 +103,10 @@ public class AdapterManagerImpl extends AbstractProvider implements
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         /*
-        int dimension = 0;
-        for (;;) {
-            int dim = adapterClassName.lastIndexOf('[');
-            if (dim < 0) {
-                break;
-            }
-            dimension++;
-            adapterClassName = adapterClassName.substring(0, dim);
-        }
-        */
+         * int dimension = 0; for (;;) { int dim =
+         * adapterClassName.lastIndexOf('['); if (dim < 0) { break; }
+         * dimension++; adapterClassName = adapterClassName.substring(0, dim); }
+         */
 
         Class adapterClass;
         try {
@@ -120,7 +118,7 @@ public class AdapterManagerImpl extends AbstractProvider implements
                     + "', ignore adapter !", e);
             return;
         }
-        
+
         Class factoryClass;
         try {
             factoryClass = ClassLocator.load(factoryClassName, this,

@@ -13,10 +13,12 @@ import org.rcfaces.core.internal.RcfacesContext;
  * @version $Revision$ $Date$
  */
 public interface IContentVersionHandler {
-    String getVersionPath(RcfacesContext rcfacesContext,
-            FacesContext facesContext, String relativeUrl,
-            IContentAccessor contentAccessor,
-            IContentInformation contentInformation);
+
+    String getId();
+
+    IContentAccessor getVersionedContentAccessor(RcfacesContext rcfacesContext,
+            FacesContext facesContext, IContentAccessor contentAccessor,
+            IContentInformation[] contentInformation);
 
     String getVersionTag(RcfacesContext rcfacesContext,
             FacesContext facesContext, String relativeUrl,

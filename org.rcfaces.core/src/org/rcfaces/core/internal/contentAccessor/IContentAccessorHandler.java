@@ -13,6 +13,8 @@ import org.rcfaces.core.model.IFilterProperties;
  * @version $Revision$ $Date$
  */
 public interface IContentAccessorHandler {
+    String getId();
+
     IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
             IContentInformation contentInformation[],

@@ -149,7 +149,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
         writeJsInitComponent(writer);
 
-      //  String componentVarName = writer.getComponentVarName();
+        // String componentVarName = writer.getComponentVarName();
 
         // writer.write("with(").write(componentVarName).writeln("){");
 
@@ -365,11 +365,6 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
         writer.writeln(");");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.CameliaRenderer#encodeEnd(org.rcfaces.core.internal.renderkit.IRenderContext)
-     */
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         super.encodeEnd(writer);
 

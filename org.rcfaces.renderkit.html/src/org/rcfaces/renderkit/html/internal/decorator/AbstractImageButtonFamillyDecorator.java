@@ -398,8 +398,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return contentAccessor;
         }
 
-        return ContentAccessorFactory.createFromWebResource(HoverOperation.ID
-                + ImageContentAccessorHandler.URL_REWRITING_SEPARATOR,
+        return ContentAccessorFactory.createFromWebResource(null,
+                HoverOperation.ID + IContentAccessor.FILTER_SEPARATOR,
                 getImageAccessor(htmlWriter));
 
     }
@@ -411,9 +411,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return contentAccessor;
         }
 
-        return ContentAccessorFactory.createFromWebResource(
-                SelectedOperation.ID
-                        + ImageContentAccessorHandler.URL_REWRITING_SEPARATOR,
+        return ContentAccessorFactory.createFromWebResource(null,
+                SelectedOperation.ID + IContentAccessor.FILTER_SEPARATOR,
                 getImageAccessor(htmlWriter));
 
     }
@@ -425,8 +424,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return contentAccessor;
         }
 
-        return ContentAccessorFactory.createFromWebResource(DisableOperation.ID
-                + ImageContentAccessorHandler.URL_REWRITING_SEPARATOR,
+        return ContentAccessorFactory.createFromWebResource(null,
+                DisableOperation.ID + IContentAccessor.FILTER_SEPARATOR,
                 getImageAccessor(htmlWriter));
 
     }

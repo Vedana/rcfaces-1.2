@@ -36,7 +36,10 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
         if (rcfacesContext.getContentAccessorRegistry() == null) {
             rcfacesContext.setContentAccessorRegistry(this);
         }
+    }
 
+    public String getId() {
+        return "ContentAccessorsRegistry";
     }
 
     public IContentAccessorHandler[] listContentAccessorHandlers(

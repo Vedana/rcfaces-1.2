@@ -105,6 +105,7 @@
 				org.rcfaces.core.internal.images.ImageAdapterFactory
 			</adapterFactory-class>
 		</adapter>
+		<!--
 		<adapter>
 			<adaptable-class>
 				java.awt.image.RenderedImage[]
@@ -113,5 +114,6 @@
 				org.rcfaces.core.internal.images.ImageAdapterFactory
 			</adapterFactory-class>
 		</adapter>
+		-->
 	</adapters>
 </rcfaces-config>

@@ -4,6 +4,8 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 
 /**
@@ -21,6 +23,7 @@ public interface IHtmlProcessContext extends IProcessContext {
 
     String USE_META_CONTENT_SCRIPT_TYPE_PARAMETER = Constants
             .getPackagePrefix()
+
             + ".USE_META_CONTENT_SCRIPT_TYPE";
 
     String USE_META_CONTENT_STYLE_TYPE_PARAMETER = Constants.getPackagePrefix()
@@ -38,6 +41,9 @@ public interface IHtmlProcessContext extends IProcessContext {
     boolean isFlatIdentifierEnabled();
 
     String getStyleSheetURI(String uri, boolean containsContextPath);
+
+    IContentAccessor getStyleSheetContentAccessor(String uri,
+            IContentType contentType);
 
     boolean useMetaContentScriptType();
 

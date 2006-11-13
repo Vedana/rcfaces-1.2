@@ -47,6 +47,12 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
         return key;
     }
 
+    public void saveWrapped(String key, IResolvedContent content) {
+        synchronized (resolvedContentByKey) {
+            resolvedContentByKey.put(key, content);
+        }
+    }
+
     private String computeURL(IResolvedContent content) {
 
         String resourceKey = content.getResourceKey();

@@ -13,5 +13,7 @@ import org.rcfaces.core.model.IContentModel;
 public interface IContentStorageRepository {
     String save(IResolvedContent content, IContentModel contentModel);
 
+    void saveWrapped(String key, IResolvedContent wrappedContent);
+
     IResolvedContent load(String key);
 }

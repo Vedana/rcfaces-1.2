@@ -14,10 +14,12 @@ import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
-import org.rcfaces.renderkit.html.internal.HtmlContentAccessorFactory;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyDecorator;
@@ -76,9 +78,12 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
     protected IContentAccessor getDateChooserImageAccessor(
             IHtmlWriter htmlWriter) {
 
-        return HtmlContentAccessorFactory.createFromStyleSheet(htmlWriter
-                .getHtmlComponentRenderContext().getHtmlRenderContext(),
-                DATE_CHOOSER_IMAGEURL, IContentType.IMAGE);
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
+
+        return htmlRenderContext.getHtmlProcessContext()
+                .getStyleSheetContentAccessor(DATE_CHOOSER_IMAGEURL,
+                        IContentType.IMAGE);
     }
 
     /**

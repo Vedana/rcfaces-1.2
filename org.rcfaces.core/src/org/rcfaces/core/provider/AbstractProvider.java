@@ -21,4 +21,20 @@ public abstract class AbstractProvider implements IProvider {
 
     public void startup(FacesContext facesContext) {
     }
+
+    public boolean equals(Object obj) {
+        if (obj == null || (obj instanceof AbstractProvider) == false) {
+            return false;
+        }
+
+        return getId().equals(((AbstractProvider) obj).getId());
+    }
+
+    public int hashCode() {
+        return getId().hashCode();
+    }
+
+    public String toString() {
+        return "[AbstractProvider '" + getId() + "']";
+    }
 }

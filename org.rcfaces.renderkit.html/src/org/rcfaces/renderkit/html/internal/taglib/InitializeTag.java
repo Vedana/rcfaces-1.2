@@ -30,7 +30,6 @@ import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
-import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.taglib.AbstractInitializeTag;
@@ -267,8 +266,8 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
                     writer.print(" type=\"text/css\"");
                 }
 
-                String styleSheetURI = htmlProcessContext
-                        .getStyleSheetURI(cssConfig.getStyleSheetFileName(), true);
+                String styleSheetURI = htmlProcessContext.getStyleSheetURI(
+                        cssConfig.getStyleSheetFileName(), true);
 
                 writer.print(" href=\"");
                 URLFormCodec.writeURL(writer, styleSheetURI);
@@ -426,7 +425,8 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
         ImageContentInformation favoriteImageOperation = new ImageContentInformation();
 
         IContentAccessor favoriteContentAccessor = ContentAccessorFactory
-                .createFromWebResource(favoriteImageURL, IContentType.IMAGE);
+                .createFromWebResource(facesContext, favoriteImageURL,
+                        IContentType.IMAGE);
 
         String favoriteImageURL = favoriteContentAccessor.resolveURL(
                 facesContext, favoriteImageOperation, null);
@@ -438,8 +438,8 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
         ImageContentInformation favoriteIcoImageInformation = new ImageContentInformation();
 
         IContentAccessor favoriteIcoContentAccessor = ContentAccessorFactory
-                .createFromWebResource(IEFavoriteIconOperation.ID
-                        + ImageContentAccessorHandler.URL_REWRITING_SEPARATOR,
+                .createFromWebResource(null, IEFavoriteIconOperation.ID
+                        + IContentAccessor.FILTER_SEPARATOR,
                         favoriteContentAccessor);
 
         String favoriteIcoImageURL = favoriteIcoContentAccessor.resolveURL(

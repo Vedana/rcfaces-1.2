@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
@@ -52,6 +53,10 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
     private Map hashCodeByURL = null;
 
     public ResourceVersionHandlerImpl() {
+    }
+
+    public String getId() {
+        return "ResourceVersionHandler";
     }
 
     public void startup(FacesContext facesContext) {
@@ -132,49 +137,60 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         return getResourceVersion(facesContext, absoluteURLWithoutPrefix, null);
     }
 
-    public String getVersionPath(RcfacesContext rcfacesContext,
-            FacesContext facesContext, String relativeUrl,
+    public IContentAccessor getVersionedContentAccessor(
+            RcfacesContext rcfacesContext, FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IContentInformation contentInformation) {
+            IContentInformation[] contentInformation) {
 
         if (prefixURI == null) {
             return null;
         }
 
-        if (hashCodeByURL == null) {
-            return version;
+        String url = (String) contentAccessor.getContentRef();
+        int pathType = contentAccessor.getPathType();
+        switch (pathType) {
+
+        case IContentAccessor.RELATIVE_PATH_TYPE:
+            IProcessContext processContext = AbstractProcessContext
+                    .getProcessContext(facesContext);
+
+            url = processContext.getAbsolutePath(url, false);
+            break;
+
+        case IContentAccessor.CONTEXT_PATH_TYPE:
+            break;
+
+        default:
+            return null;
         }
-
-        IProcessContext processContext = AbstractProcessContext
-                .getProcessContext(facesContext);
-
-        String absoluteURLWithoutPrefix = processContext.getAbsolutePath(
-                relativeUrl, false);
 
         if (hashCodeByURL == null) {
             // Le prefixURI contient la version !
             StringAppender sa = new StringAppender(prefixURI, 1
-                    + version.length() + absoluteURLWithoutPrefix.length());
+                    + version.length() + url.length());
             sa.append('/');
             sa.append(version);
-            sa.append(absoluteURLWithoutPrefix);
-            return sa.toString();
+            sa.append(url);
+
+            return new BasicContentAccessor(
+                    facesContext, sa.toString(), contentAccessor,
+                    IContentAccessor.CONTEXT_PATH_TYPE);
         }
 
         StringAppender sa = new StringAppender(prefixURI, 1
-                + Constants.VERSIONED_URI_HASHCODE_MAX_SIZE
-                + absoluteURLWithoutPrefix.length() + 4); // 4=sécurité
+                + Constants.VERSIONED_URI_HASHCODE_MAX_SIZE + url.length() + 4); // 4=sécurité
         // !
 
-        String etag = getResourceVersion(facesContext,
-                absoluteURLWithoutPrefix, null);
+        String etag = getResourceVersion(facesContext, url, null);
 
         sa.append('/');
         sa.append(etag);
 
-        sa.append(absoluteURLWithoutPrefix);
+        sa.append(url);
 
-        return sa.toString();
+        return new BasicContentAccessor(facesContext, sa
+                .toString(), contentAccessor,
+                IContentAccessor.CONTEXT_PATH_TYPE);
     }
 
     public String getResourceVersion(FacesContext facesContext,

@@ -252,9 +252,11 @@ public class JavaScriptTag extends BodyTagSupport implements Tag {
 
                     if (src != null) {
                         IContentAccessor contentAccessor = ContentAccessorFactory
-                                .createFromWebResource(src, IContentType.SCRIPT);
+                                .createFromWebResource(facesContext, src,
+                                        IContentType.SCRIPT);
 
-                        src = contentAccessor.resolveURL(facesContext, null, null);
+                        src = contentAccessor.resolveURL(facesContext, null,
+                                null);
 
                         if (src != null) {
                             src = reformatSource(src);

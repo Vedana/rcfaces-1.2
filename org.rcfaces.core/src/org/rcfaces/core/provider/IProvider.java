@@ -14,6 +14,8 @@ import org.apache.commons.digester.Digester;
  */
 public interface IProvider {
 
+    String getId();
+
     void configureRules(Digester digester);
 
     void startup(FacesContext facesContext);

@@ -84,13 +84,14 @@ public class ImageAccessorTools {
 
     };
 
-    public static IContentAccessors createImageAccessor(Object value) {
+    public static IContentAccessors createImageAccessor(
+            FacesContext facesContext, Object value) {
         if (value == null) {
             return NO_IMAGE_ACCESSORS;
         }
 
-        return ContentAccessorFactory.createSingleImageWebResource(value,
-                IContentType.IMAGE);
+        return ContentAccessorFactory.createSingleImageWebResource(
+                facesContext, value, IContentType.IMAGE);
     }
 
     public static IContentAccessors createImageAccessors(
@@ -112,7 +113,7 @@ public class ImageAccessorTools {
                     facesContext);
         }
 
-        return createImageAccessor(imageContent);
+        return createImageAccessor(facesContext, imageContent);
     }
 
     public static IContentAccessors createImageAccessors(
@@ -253,11 +254,11 @@ public class ImageAccessorTools {
         }
 
         if (rootImageContentAccessor != null) {
-            return ContentAccessorFactory.createFromWebResource(imageContent,
-                    rootImageContentAccessor);
+            return ContentAccessorFactory.createFromWebResource(facesContext,
+                    imageContent, rootImageContentAccessor);
         }
 
-        return ContentAccessorFactory.createFromWebResource(imageContent,
-                IContentType.IMAGE);
+        return ContentAccessorFactory.createFromWebResource(facesContext,
+                imageContent, IContentType.IMAGE);
     }
 }

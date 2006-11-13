@@ -70,7 +70,8 @@ public abstract class AbstractContentModel implements IContentModel {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         IContentAccessor contentAccessor = ContentAccessorFactory
-                .createFromWebResource(contentModel, IContentType.USER);
+                .createFromWebResource(facesContext, contentModel,
+                        IContentType.USER);
 
         if (contentAccessor == null) {
             return null;

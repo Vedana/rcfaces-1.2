@@ -11,6 +11,9 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
@@ -93,6 +96,21 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
                             + ", separatorChar='"
                             + separatorChar + "'.");
         }
+    }
+
+    public IContentAccessor getStyleSheetContentAccessor(String uri,
+            IContentType contentType) {
+        String url = getStyleSheetURI(uri, false);
+        if (url == null) {
+            return null;
+        }
+
+        IContentAccessor contentAccessor = new BasicContentAccessor(
+                getFacesContext(), url, contentType, null);
+
+        contentAccessor.setPathType(IContentAccessor.CONTEXT_PATH_TYPE);
+
+        return contentAccessor;
     }
 
     public final String getStyleSheetURI(String uri, boolean containsContextPath) {

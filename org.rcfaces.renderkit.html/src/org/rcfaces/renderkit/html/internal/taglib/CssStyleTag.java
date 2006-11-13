@@ -74,7 +74,8 @@ public class CssStyleTag extends BodyTagSupport implements Tag {
                 }
 
                 IContentAccessor contentAccessor = ContentAccessorFactory
-                        .createFromWebResource(src, IContentType.STYLE);
+                        .createFromWebResource(facesContext, src,
+                                IContentType.STYLE);
 
                 src = contentAccessor.resolveURL(facesContext, null, null);
 

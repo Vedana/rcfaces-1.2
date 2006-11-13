@@ -13,7 +13,10 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
+import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.images.ImageAdapterFactory;
 import org.rcfaces.core.model.IAdaptable;
 import org.rcfaces.core.model.IContentModel;
@@ -29,6 +32,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     private static final String REVISION = "$Revision$";
 
     private final IContentStorageRepository indirectContentRepository = new BasicContentStorageRepository();
+
+    private int indirectionPathType;
 
     private String indirectionURL;
 
@@ -47,6 +52,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         indirectionURL = ContentStorageServlet
                 .getContentStorageBaseURI(facesContext.getExternalContext()
                         .getApplicationMap());
+        indirectionPathType = IContentAccessor.CONTEXT_PATH_TYPE;
 
         adapterManager = rcfacesContext.getAdapterManager();
     }
@@ -55,8 +61,13 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         return indirectContentRepository;
     }
 
-    public String registerContentModel(FacesContext facesContext,
-            IContentModel contentModel, IContentInformation information) {
+    public String getId() {
+        return "ContentStorageEngine";
+    }
+
+    public IContentAccessor registerContentModel(FacesContext facesContext,
+            IContentModel contentModel, IContentInformation information,
+            IContentType contentType) {
 
         IContentStorageRepository repository = getRepository();
 
@@ -102,11 +113,20 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         String url = repository.save(resolvedContent, contentModel);
 
-        return indirectionURL + '/' + url;
+        if (contentType == null) {
+            contentType = IContentType.USER;
+        }
+
+        IContentAccessor contentAccessor = new BasicContentAccessor(null,
+                indirectionURL + '/' + url, contentType, null);
+
+        contentAccessor.setPathType(indirectionPathType);
+
+        return contentAccessor;
     }
 
-    public String registerRaw(FacesContext facesContext, Object ref,
-            IContentInformation information) {
+    public IContentAccessor registerRaw(FacesContext facesContext, Object ref,
+            IContentInformation information, IContentType contentType) {
 
         IResolvedContent resolvedContent = null;
         if (ref instanceof IAdaptable) {
@@ -126,7 +146,16 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         String url = getRepository().save(resolvedContent, null);
 
-        return indirectionURL + '/' + url;
+        if (contentType == null) {
+            contentType = IContentType.USER;
+        }
+
+        IContentAccessor contentAccessor = new BasicContentAccessor(
+                facesContext, indirectionURL + '/' + url, contentType, null);
+
+        contentAccessor.setPathType(indirectionPathType);
+
+        return contentAccessor;
     }
 
     /**
@@ -135,7 +164,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
      * @version $Revision$ $Date$
      */
     public static class ResolvedContentAtRequest extends
-            AbstractResolvedContent implements Serializable {
+            AbstractResolvedContent implements IResolvedContentWrapper,
+            Serializable {
         private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = -7807317078965658005L;
@@ -189,7 +219,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             return getResolvedContent().getLength();
         }
 
-        protected synchronized IResolvedContent getResolvedContent() {
+        public synchronized IResolvedContent getResolvedContent() {
             if (errorState) {
                 return null;
             }

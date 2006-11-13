@@ -680,6 +680,8 @@ public abstract class AbstractSelectItemsDecorator extends
             String methodName, String varId, boolean ignoreExpand)
             throws WriterException {
 
+        FacesContext facesContext = javaScriptWriter.getFacesContext();
+
         String imageURL = iim.getImageURL();
         String disabledImageURL = iim.getDisabledImageURL();
         String hoverImageURL = iim.getHoverImageURL();
@@ -692,18 +694,19 @@ public abstract class AbstractSelectItemsDecorator extends
         IContentAccessor imageAccessor = null;
         if (imageURL != null) {
             imageAccessor = ContentAccessorFactory.createFromWebResource(
-                    imageURL, IContentType.IMAGE);
+                    facesContext, imageURL, IContentType.IMAGE);
         }
 
         IContentAccessor disabledImageAccessor = null;
         if (disabledImageURL != null) {
             if (imageAccessor == null) {
                 disabledImageAccessor = ContentAccessorFactory
-                        .createFromWebResource(disabledImageURL,
+                        .createFromWebResource(facesContext, disabledImageURL,
                                 IContentType.IMAGE);
             } else {
                 disabledImageAccessor = ContentAccessorFactory
-                        .createFromWebResource(disabledImageURL, imageAccessor);
+                        .createFromWebResource(facesContext, disabledImageURL,
+                                imageAccessor);
             }
         }
 
@@ -711,11 +714,12 @@ public abstract class AbstractSelectItemsDecorator extends
         if (hoverImageURL != null) {
             if (imageAccessor == null) {
                 hoverImageAccessor = ContentAccessorFactory
-                        .createFromWebResource(hoverImageURL,
+                        .createFromWebResource(facesContext, hoverImageURL,
                                 IContentType.IMAGE);
             } else {
                 hoverImageAccessor = ContentAccessorFactory
-                        .createFromWebResource(hoverImageURL, imageAccessor);
+                        .createFromWebResource(facesContext, hoverImageURL,
+                                imageAccessor);
             }
         }
 
@@ -723,11 +727,12 @@ public abstract class AbstractSelectItemsDecorator extends
         if (selectedImageURL != null) {
             if (imageAccessor == null) {
                 selectedImageAccessor = ContentAccessorFactory
-                        .createFromWebResource(selectedImageURL,
+                        .createFromWebResource(facesContext, selectedImageURL,
                                 IContentType.IMAGE);
             } else {
                 selectedImageAccessor = ContentAccessorFactory
-                        .createFromWebResource(selectedImageURL, imageAccessor);
+                        .createFromWebResource(facesContext, selectedImageURL,
+                                imageAccessor);
             }
         }
 
@@ -735,11 +740,12 @@ public abstract class AbstractSelectItemsDecorator extends
         if (expandedImageURL != null) {
             if (imageAccessor == null) {
                 expandedImageAccessor = ContentAccessorFactory
-                        .createFromWebResource(expandedImageURL,
+                        .createFromWebResource(facesContext, expandedImageURL,
                                 IContentType.IMAGE);
             } else {
                 expandedImageAccessor = ContentAccessorFactory
-                        .createFromWebResource(expandedImageURL, imageAccessor);
+                        .createFromWebResource(facesContext, expandedImageURL,
+                                imageAccessor);
             }
         }
 
@@ -748,8 +754,6 @@ public abstract class AbstractSelectItemsDecorator extends
                 && expandedImageURL == null) {
             return;
         }
-
-        FacesContext facesContext = javaScriptWriter.getFacesContext();
 
         String imageVar = null;
         if (imageAccessor != null) {
@@ -770,7 +774,8 @@ public abstract class AbstractSelectItemsDecorator extends
 
         String hoverVar = null;
         if (hoverImageAccessor != null) {
-            hoverImageURL = hoverImageAccessor.resolveURL(facesContext, null, null);
+            hoverImageURL = hoverImageAccessor.resolveURL(facesContext, null,
+                    null);
             if (hoverImageURL != null) {
                 hoverVar = javaScriptWriter.allocateString(hoverImageURL);
             }

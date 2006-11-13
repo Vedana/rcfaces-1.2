@@ -511,11 +511,15 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         String helpURL = helpComponent.getHelpURL();
         if (helpURL != null) {
 
-            IContentAccessor contentAccessor = ContentAccessorFactory
-                    .createFromWebResource(helpURL, IContentType.HELP);
+            FacesContext facesContext = writer.getComponentRenderContext()
+                    .getFacesContext();
 
-            String resolvedHelpURL = contentAccessor.resolveURL(writer
-                    .getComponentRenderContext().getFacesContext(), null, null);
+            IContentAccessor contentAccessor = ContentAccessorFactory
+                    .createFromWebResource(facesContext, helpURL,
+                            IContentType.HELP);
+
+            String resolvedHelpURL = contentAccessor.resolveURL(facesContext,
+                    null, null);
 
             if (resolvedHelpURL != null) {
                 writer.writeAttribute("v:helpURL", resolvedHelpURL);

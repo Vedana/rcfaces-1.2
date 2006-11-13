@@ -9,7 +9,7 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
@@ -27,8 +27,6 @@ import org.rcfaces.core.provider.AbstractProvider;
 public abstract class ImageContentAccessorHandler extends AbstractProvider
         implements IContentAccessorHandler {
     private static final String REVISION = "$Revision$";
-
-    public static final String URL_REWRITING_SEPARATOR = "::";
 
     public abstract IImageOperation getImageOperation(String operationId);
 
@@ -55,6 +53,10 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
             IContentInformation[] contentInformationRef,
             IFilterProperties filterProperties) {
 
+        if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
+            return null;
+        }
+
         Object content = contentAccessor.getContentRef();
         if ((content instanceof String) == false) {
             return null;
@@ -62,20 +64,12 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         String url = (String) content;
 
-        int idx = url.indexOf(URL_REWRITING_SEPARATOR);
+        int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
 
         ImageContentInformation imageInformation = null;
         IContentInformation contentInformation = contentInformationRef[0];
         if (contentInformation instanceof ImageContentInformation) {
             imageInformation = (ImageContentInformation) contentInformation;
-        }
-
-        if (idx < 0) {
-            if (imageInformation != null) {
-                imageInformation.setContentType(getContentType(url));
-            }
-
-            return contentAccessor;
         }
 
         if (isProviderEnabled() == false) {
@@ -90,17 +84,18 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
             }
 
             String filter = url.substring(0, idx);
-            modifiedContentAccessor = new FiltredImageAccessor(filter, null,
+            modifiedContentAccessor = new FiltredImageAccessor(filter,
                     contentAccessor.getRootAccessor());
 
         } else {
             String filter = url.substring(0, idx);
             String newURL = url.substring(idx
-                    + URL_REWRITING_SEPARATOR.length());
+                    + IContentAccessor.FILTER_SEPARATOR.length());
 
-            modifiedContentAccessor = new FiltredImageAccessor(filter, newURL,
-                    ContentAccessorFactory.createAccessor(newURL,
-                            contentAccessor));
+            modifiedContentAccessor = new FiltredImageAccessor(filter,
+                    new BasicContentAccessor(facesContext, newURL,
+                            contentAccessor,
+                            IContentAccessor.UNDEFINED_PATH_TYPE));
         }
 
         if (imageInformation == null) {
@@ -132,21 +127,28 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         private final String filter;
 
-        private final String url;
-
-        public FiltredImageAccessor(String filter, String url,
-                IContentAccessor accessor) {
+        public FiltredImageAccessor(String filter, IContentAccessor accessor) {
             super(accessor);
             this.filter = filter;
-            this.url = url;
+
+            setPathType(IContentAccessor.FILTER_PATH_TYPE);
         }
 
         public Object getContentRef() {
-            return url;
+            return null;
         }
 
         public String getFilter() {
             return filter;
         }
+
+        public String toString() {
+            return "[FiltredContentAccessor filter='" + filter
+                    + "' contentType=" + getType() + " pathType="
+                    + getPathTypeName(getPathType()) + " versionHandler="
+                    + getContentVersionHandler() + " root=" + getRootAccessor()
+                    + "]";
+        }
+
     }
 }
