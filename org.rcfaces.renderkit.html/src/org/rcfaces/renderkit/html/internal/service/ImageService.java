@@ -31,6 +31,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.model.ImageContentInformation;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -140,14 +141,16 @@ public class ImageService extends AbstractHtmlService {
             IContentAccessor imageAccessor = contentAccessors
                     .getImageAccessor();
 
+            ImageContentInformation contentInformation = new ImageContentInformation();
+
             String url = null;
             if (imageAccessor != null) {
-                url = imageAccessor.resolveURL(facesContext, null,
-                        filterProperties);
+                url = imageAccessor.resolveURL(facesContext,
+                        contentInformation, filterProperties);
             }
 
             writeJs(facesContext, printWriter, imageComponent, componentId,
-                    url, filterProperties);
+                    url, contentInformation);
 
         } catch (IOException ex) {
 
@@ -199,7 +202,7 @@ public class ImageService extends AbstractHtmlService {
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             IFilterCapability component, String componentId, String imageURL,
-            IFilterProperties filterProperties) throws IOException {
+            ImageContentInformation imageContentInformation) throws IOException {
 
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;
@@ -216,6 +219,13 @@ public class ImageService extends AbstractHtmlService {
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
                 "GetElementById").writeString(componentId).writeln(
                 ", document);");
+
+        int width = imageContentInformation.getImageWidth();
+        int height = imageContentInformation.getImageHeight();
+        if (width > 0 && height > 0) {
+            jsWriter.writeMethodCall("f_setImageSize").writeInt(width).write(
+                    ',').writeInt(height).writeln(");");
+        }
 
         jsWriter.writeMethodCall("f_setImageURL").writeString(imageURL)
                 .writeln(");");

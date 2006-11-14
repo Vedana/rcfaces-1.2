@@ -170,6 +170,19 @@ var __prototype = {
 	 * @method hidden
 	 */
 	fa_cancelFilterRequest: function() {
+	},
+	/**
+	 * @method hidden
+	 */
+	f_setImageSize: function(width, height) {
+		f_core.Assert(typeof(width)=="number", "f_image.f_setImageSize: Invalid width parameter ("+width+")");
+		f_core.Assert(typeof(height)=="number", "f_image.f_setImageSize: Invalid height parameter ("+height+")");
+		
+		this.width=width;
+		this.height=height;
+		
+		this.f_setProperty(f_prop.WIDTH, width);
+		this.f_setProperty(f_prop.HEIGHT, height);
 	}
 }
  

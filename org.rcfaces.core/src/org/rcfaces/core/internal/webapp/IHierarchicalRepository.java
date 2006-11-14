@@ -63,6 +63,10 @@ public interface IHierarchicalRepository extends IRepository {
 
         void setGroupAllFiles(boolean enable);
 
+        boolean isDefaultCoreModule();
+
+        void setDefaultCoreModule();
+
         IHierarchicalFile[] listExternalDependencies();
 
         IModule[] listExternalModules();

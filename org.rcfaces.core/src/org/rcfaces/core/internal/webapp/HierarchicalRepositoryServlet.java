@@ -82,8 +82,10 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
 
         String bootSet = config.getInitParameter(getParameterPrefix()
                 + ".BOOT_SET");
+        boolean defaultSettings = false;
         if (bootSet == null) {
             bootSet = getBootSetDefaultValue();
+            defaultSettings = true;
         }
 
         if (bootSet != null) {
@@ -98,13 +100,20 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
             String bootSetName = getParameterPrefix() + SET_PREFIX + "."
                     + bootSet;
             String parameterValue = config.getInitParameter(bootSetName);
-            if (parameterValue == null) {
+
+            IHierarchicalRepository.ISet set;
+
+            if (parameterValue != null) {
+                set = initializeModuleSet(bootSet, parameterValue);
+
+            } else if (defaultSettings) {
+                set = initializeDefaultSet();
+
+            } else {
                 throw new ServletException("Set specified by " + bootSetName
                         + " is not defined !");
             }
 
-            IHierarchicalRepository.ISet set = initializeModuleSet(bootSet,
-                    parameterValue);
             if (set == null) {
                 throw new IllegalArgumentException("Can not find boot set '"
                         + bootSet + "'.");
@@ -166,6 +175,10 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
 
         return getHierarchicalRepository().declareSet(setName, uri,
                 (String[]) l.toArray(new String[l.size()]));
+    }
+
+    protected ISet initializeDefaultSet() {
+        return null;
     }
 
     protected abstract String getSetURI(String setName);

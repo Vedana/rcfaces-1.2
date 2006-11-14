@@ -4,7 +4,6 @@
 package org.rcfaces.core.internal.contentStorage;
 
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
@@ -24,6 +23,9 @@ import org.rcfaces.core.provider.AbstractProvider;
 public class ContentStorageAccessorHandler extends AbstractProvider implements
         IContentAccessorHandler {
     private static final String REVISION = "$Revision$";
+
+    private static final String COPY_ATTRIBUTES[] = {
+            IContentModel.WIDTH_PROPERTY, IContentModel.HEIGHT_PROPERTY };
 
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
@@ -59,16 +61,27 @@ public class ContentStorageAccessorHandler extends AbstractProvider implements
 
         if (ref instanceof IContentModel) {
             IContentModel contentModel = (IContentModel) ref;
+            IContentInformation contentInformation = contentInformationRef[0];
 
-            boolean filtred = false;
             if (contentModel instanceof IFiltredModel) {
                 ((IFiltredModel) contentModel).setFilter(filterProperties);
 
-                filtred = (contentInformationRef[0] != null);
+                if (contentAccessor != null) {
+                    contentInformation.setFiltredModel(true);
+                }
             }
 
-            if (filtred) {
-                contentInformationRef[0].setFiltredModel(filtred);
+            if (contentInformation != null) {
+                for (int i = 0; i < COPY_ATTRIBUTES.length; i++) {
+                    String attributeName = COPY_ATTRIBUTES[i];
+
+                    Object value = contentModel.getAttribute(attributeName);
+                    if (value == null) {
+                        continue;
+                    }
+
+                    contentInformation.setAttribute(attributeName, value);
+                }
             }
 
             return rcfacesContext

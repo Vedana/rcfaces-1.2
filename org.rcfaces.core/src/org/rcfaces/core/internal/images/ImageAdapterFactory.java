@@ -14,6 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -63,6 +65,9 @@ public class ImageAdapterFactory implements IAdapterFactory {
         suffixByContentType.put("image/png", "png");
     }
 
+    private static final FileNameMap fileNameMap = URLConnection
+            .getFileNameMap();
+
     public Object getAdapter(Object adaptableObject, Class adapterType,
             Map parameters) {
         if (adaptableObject instanceof RenderedImage) {
@@ -102,6 +107,16 @@ public class ImageAdapterFactory implements IAdapterFactory {
 
         String contentType = (String) parameters
                 .get(IContentModel.CONTENT_TYPE_PROPERTY);
+
+        if (contentType == null) {
+            String suffix = (String) parameters
+                    .get(IContentModel.URL_SUFFIX_PROPERTY);
+            
+            if (suffix != null) {
+                contentType = fileNameMap.getContentTypeFor("x." + suffix);
+            }
+        }
+
         if (contentType == null) {
             contentType = defaultContentType;
         }

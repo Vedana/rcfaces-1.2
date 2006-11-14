@@ -39,7 +39,7 @@ var __prototype={
 	 * @param optional hidden number timeType Type of time. (min, max, default)
 	 * @return number
 	 */
-	f_getNumber: function(timeType) {
+	f_getNumber: function(numberType) {
 		var raddix=-1;
 		var decimal=0;
 		
@@ -52,7 +52,7 @@ var __prototype={
 			var max=input._max;
 			
 			var v=undefined;
-			switch(timeType) {
+			switch(numberType) {
 				
 			case fa_compositeEntry.DEFAULT_TYPE:
 				v=input._default;

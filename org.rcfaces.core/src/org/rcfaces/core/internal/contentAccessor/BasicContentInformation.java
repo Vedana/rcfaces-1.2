@@ -6,6 +6,8 @@ package org.rcfaces.core.internal.contentAccessor;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.rcfaces.core.model.IContentModel;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -14,18 +16,16 @@ import java.util.Map;
 public class BasicContentInformation implements IContentInformation {
     private static final String REVISION = "$Revision$";
 
-    private String contentType;
+    protected static final String FILTRED_MODEL_PROPERTY = "org.rcfaces.org.FILTRED_MODEL";
 
     private Map attributes;
 
-    private boolean filtredModel;
-
     public final String getContentType() {
-        return contentType;
+        return (String) getAttribute(IContentModel.CONTENT_TYPE_PROPERTY);
     }
 
     public final void setContentType(String contentType) {
-        this.contentType = contentType;
+        setAttribute(IContentModel.CONTENT_TYPE_PROPERTY, contentType);
     }
 
     public Object getAttribute(String attributeName) {
@@ -45,11 +45,16 @@ public class BasicContentInformation implements IContentInformation {
     }
 
     public boolean isFiltredModel() {
-        return filtredModel;
+        Boolean val = (Boolean) getAttribute(FILTRED_MODEL_PROPERTY);
+        if (val == null) {
+            return false;
+        }
+
+        return val.booleanValue();
     }
 
     public void setFiltredModel(boolean filtredModel) {
-        this.filtredModel = filtredModel;
+        setAttribute(FILTRED_MODEL_PROPERTY, Boolean.valueOf(filtredModel));
     }
 
 }

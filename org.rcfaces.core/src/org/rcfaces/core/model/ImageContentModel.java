@@ -22,7 +22,7 @@ public class ImageContentModel extends BasicContentModel {
     public ImageWriteParam getImageWriteParam() {
         ImageWriteParam imageWriteParam = (ImageWriteParam) getAttribute(IMAGE_WRITE_PARAM_PROPERTY);
         if (imageWriteParam != null) {
-            return null;
+            return imageWriteParam;
         }
 
         String contentType = getContentType();
@@ -64,5 +64,67 @@ public class ImageContentModel extends BasicContentModel {
         }
 
         return null;
+    }
+
+    public boolean setCompressionQuality(float quality) {
+        ImageWriteParam imageWriteParam = getImageWriteParam();
+        if (imageWriteParam == null) {
+            return false;
+        }
+
+        if (imageWriteParam.canWriteCompressed() == false) {
+            return false;
+        }
+
+        imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        imageWriteParam.setCompressionQuality(quality);
+
+        return true;
+    }
+
+    public boolean setCompressionMode(int mode) {
+        ImageWriteParam imageWriteParam = getImageWriteParam();
+        if (imageWriteParam == null) {
+            return false;
+        }
+
+        if (imageWriteParam.canWriteCompressed() == false) {
+            return false;
+        }
+
+        imageWriteParam.setCompressionMode(mode);
+
+        return true;
+    }
+
+    public boolean setCompressionType(String compressionType) {
+        ImageWriteParam imageWriteParam = getImageWriteParam();
+        if (imageWriteParam == null) {
+            return false;
+        }
+
+        if (imageWriteParam.canWriteCompressed() == false) {
+            return false;
+        }
+
+        imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        imageWriteParam.setCompressionType(compressionType);
+        return true;
+    }
+
+    public boolean setProgressiveMode(boolean progressiveMode) {
+        ImageWriteParam imageWriteParam = getImageWriteParam();
+        if (imageWriteParam == null) {
+            return false;
+        }
+        if (imageWriteParam.canWriteProgressive() == false) {
+            return false;
+        }
+
+        imageWriteParam
+                .setProgressiveMode((progressiveMode) ? ImageWriteParam.MODE_COPY_FROM_METADATA
+                        : ImageWriteParam.MODE_DISABLED);
+
+        return true;
     }
 }

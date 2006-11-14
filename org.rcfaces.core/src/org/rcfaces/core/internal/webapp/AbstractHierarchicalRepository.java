@@ -116,6 +116,11 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
                 String rid = "m:" + id;
 
                 IModule m = new Module(rid, filename, uri, groupAllFiles);
+
+                if ("true".equals(attributes.getValue("defaultCoreModule"))) {
+                    m.setDefaultCoreModule();
+                }
+
                 filesByURI.put(uri, m);
                 modulesByName.put(id, m);
                 resourcesByName.put(rid, m);
@@ -716,11 +721,21 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
 
         private IModule externalModules[];
 
+        private boolean isDefaultCoreModule;
+
         public Module(String name, String filename, String uri,
                 boolean groupAllFiles) {
             super(null, name, filename, uri, null, null, null);
 
             this.groupAllFiles = groupAllFiles;
+        }
+
+        public boolean isDefaultCoreModule() {
+            return isDefaultCoreModule;
+        }
+
+        public void setDefaultCoreModule() {
+            isDefaultCoreModule = true;
         }
 
         public void setGroupAllFiles(boolean enable) {

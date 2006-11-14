@@ -136,8 +136,8 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         }
 
         writeClientValidatorParams(htmlWriter);
-        encodeSubComponents(htmlWriter, numberEntryComponent, numberFormat,
-                decimalFormatSymbols, locale);
+        encodeSubComponents(htmlWriter, numberEntryComponent, number,
+                numberFormat, decimalFormatSymbols, locale);
 
         htmlWriter.endElement("SPAN");
 
@@ -150,9 +150,9 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
     }
 
     protected void encodeSubComponents(IHtmlWriter htmlWriter,
-            NumberEntryComponent numberEntryComponent, String numberFormat,
-            DecimalFormatSymbols decimalFormatSymbols, Locale locale)
-            throws WriterException {
+            NumberEntryComponent numberEntryComponent, Number number,
+            String numberFormat, DecimalFormatSymbols decimalFormatSymbols,
+            Locale locale) throws WriterException {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
         FacesContext facesContext = componentRenderContext.getFacesContext();
@@ -163,17 +163,15 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         boolean disabled = numberEntryComponent.isDisabled(facesContext);
         boolean readOnly = numberEntryComponent.isReadOnly(facesContext);
 
-        Number number = numberEntryComponent.getNumber();
-
         StringAppender sb = new StringAppender(128);
 
         char chs[] = numberFormat.toCharArray();
 
         char decimalSeparator = '.';
-        char groupingSeparator = ',';
+        //char groupingSeparator = ',';
         if (decimalFormatSymbols != null) {
             decimalSeparator = decimalFormatSymbols.getDecimalSeparator();
-            groupingSeparator = decimalFormatSymbols.getGroupingSeparator();
+          //  groupingSeparator = decimalFormatSymbols.getGroupingSeparator();
         }
 
         int nbSub = 0;
@@ -181,7 +179,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         int nb = 0;
         int optional = 0;
         int decimalPart = 0;
-        boolean hasGroupingSeparator = false;
+       // boolean hasGroupingSeparator = false;
         for (int i = 0; i <= chs.length; i++) {
             char c = 0;
             char originalChar = 0;
@@ -191,7 +189,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
                 originalChar = c;
 
                 if (c == ',') {
-                    hasGroupingSeparator = true;
+                //    hasGroupingSeparator = true;
                     continue;
                 }
                 if (c == '#') {
@@ -294,11 +292,13 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
                     if (number != null) {
                         curValue = new StringAppender(16);
 
-                        curValue.append(number.longValue());
-
-                        if (optional < nb) {
-                            curValue.append('0', nb - optional);
+                        String svalue = String.valueOf(number.longValue());
+                        int valueLength = svalue.length();
+                        if (nb - optional > valueLength) {
+                            curValue.append('0', nb - optional - valueLength);
                         }
+
+                        curValue.append(svalue);
                     }
                 } else if (decimalPart == 1) {
                     lastChar = 'D';
@@ -316,12 +316,17 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
 
                         double d = number.doubleValue() - number.longValue();
 
+                        int valueLength = 0;
                         if (d != 0.0) {
                             String s = String.valueOf(Math.abs(d));
-                            curValue.append(s.substring(s.indexOf('.') + 1));
+                            s = s.substring(s.indexOf('.') + 1);
+
+                            valueLength = s.length();
+                            curValue.append(s);
                         }
-                        if (optional < nb) {
-                            curValue.insert(0, '0', nb - optional);
+                        if (nb - optional > valueLength) {
+                            curValue
+                                    .insert(0, '0', nb - optional - valueLength);
                         }
                     }
                 } else {

@@ -11,25 +11,32 @@ import org.rcfaces.core.internal.contentAccessor.BasicContentInformation;
  * @version $Revision$ $Date$
  */
 public class ImageContentInformation extends BasicContentInformation {
-
-    private int imageWidth;
-
-    private int imageHeight;
+    private static final String REVISION = "$Revision$";
 
     public final int getImageHeight() {
-        return imageHeight;
+        Integer i = (Integer) getAttribute(IContentModel.HEIGHT_PROPERTY);
+        if (i == null) {
+            return 0;
+        }
+
+        return i.intValue();
     }
 
     public final void setImageHeight(int imageHeight) {
-        this.imageHeight = imageHeight;
+        setAttribute(IContentModel.HEIGHT_PROPERTY, new Integer(imageHeight));
     }
 
     public final int getImageWidth() {
-        return imageWidth;
+        Integer i = (Integer) getAttribute(IContentModel.WIDTH_PROPERTY);
+        if (i == null) {
+            return 0;
+        }
+
+        return i.intValue();
     }
 
     public final void setImageWidth(int imageWidth) {
-        this.imageWidth = imageWidth;
+        setAttribute(IContentModel.WIDTH_PROPERTY, new Integer(imageWidth));
     }
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <repository id="javascript">
-	<module id="core">
+	<module id="core" coreModule="true">
 		<file name="f_bundle.js">
 			<class name="f_bundle" />
 		</file>
@@ -80,7 +80,7 @@
 	-->
 	
 <!-- Les Aspects par défaut  -->
-	<module id="aspect">
+	<module id="aspect" defaultCoreModule="true">
 		<file name="fa_readOnly.js">
 			<class name="fa_readOnly">
 				<required-class name="f_aspect" />
@@ -186,7 +186,7 @@
 	</module>
 	
 <!-- Components -->
-	<module id="component">
+	<module id="component" defaultCoreModule="true">
 		<file name="f_focusManager.js">
 			<class name="f_focusManager">
 				<required-class name="f_object" />
@@ -245,7 +245,7 @@
 	</module>
 
 <!-- CORE Module components (pas obligatoire !) -->
-	<module id="basicComponent">
+	<module id="basicComponent" defaultCoreModule="true">
 		<file name="f_button.js">
 			<class name="f_button">
 				<required-class name="f_input" />

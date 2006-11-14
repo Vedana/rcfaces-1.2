@@ -6,14 +6,19 @@ package org.rcfaces.core.internal.contentStorage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
@@ -31,11 +36,17 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         IContentStorageEngine {
     private static final String REVISION = "$Revision$";
 
-    private final IContentStorageRepository indirectContentRepository = new BasicContentStorageRepository();
+    private static final Log LOG = LogFactory
+            .getLog(ContentStorageEngineImpl.class);
 
-    private int indirectionPathType;
+    private static final FileNameMap fileNameMap = URLConnection
+            .getFileNameMap();
 
-    private String indirectionURL;
+    private final IContentStorageRepository contentStorageRepository = new BasicContentStorageRepository();
+
+    private int contentStorageServletPathType;
+
+    private String contentStorageServletURL;
 
     private IAdapterManager adapterManager;
 
@@ -49,16 +60,22 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             rcfacesContext.setContentStorageEngine(this);
         }
 
-        indirectionURL = ContentStorageServlet
+        contentStorageServletURL = ContentStorageServlet
                 .getContentStorageBaseURI(facesContext.getExternalContext()
                         .getApplicationMap());
-        indirectionPathType = IContentAccessor.CONTEXT_PATH_TYPE;
+
+        if (contentStorageServletURL == null) {
+            LOG
+                    .info("Content storage engine is disabled. (No started Content Storage Servlet)");
+        }
+
+        contentStorageServletPathType = IContentAccessor.CONTEXT_PATH_TYPE;
 
         adapterManager = rcfacesContext.getAdapterManager();
     }
 
     public IContentStorageRepository getRepository() {
-        return indirectContentRepository;
+        return contentStorageRepository;
     }
 
     public String getId() {
@@ -69,6 +86,13 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             IContentModel contentModel, IContentInformation information,
             IContentType contentType) {
 
+        if (contentStorageServletURL == null) {
+            LOG
+                    .info("ContentStorage is not initialized. (Servlet path is invalid)");
+
+            return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
+        }
+
         IContentStorageRepository repository = getRepository();
 
         IResolvedContent resolvedContent = null;
@@ -76,6 +100,10 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         String contentEngineId = contentModel.getContentEngineId();
         if (contentEngineId != null) {
             if (contentModel.checkNotModified()) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("ContentModel '" + contentModel
+                            + "' is not modified !");
+                }
                 resolvedContent = repository.load(contentEngineId);
             }
 
@@ -106,7 +134,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
                 if (resolvedContent == null) {
                     throw new FacesException("Can not transform raw object '"
-                            + contentModel.getClass() + "' !");
+                            + contentModel.getClass()
+                            + "' to IResolvedContentModel !");
                 }
             }
         }
@@ -118,15 +147,22 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         IContentAccessor contentAccessor = new BasicContentAccessor(null,
-                indirectionURL + '/' + url, contentType, null);
+                contentStorageServletURL + '/' + url, contentType, null);
 
-        contentAccessor.setPathType(indirectionPathType);
+        contentAccessor.setPathType(contentStorageServletPathType);
 
         return contentAccessor;
     }
 
     public IContentAccessor registerRaw(FacesContext facesContext, Object ref,
             IContentInformation information, IContentType contentType) {
+
+        if (contentStorageServletURL == null) {
+            LOG
+                    .info("ContentStorage is not initialized. (Servlet path is invalid)");
+
+            return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
+        }
 
         IResolvedContent resolvedContent = null;
         if (ref instanceof IAdaptable) {
@@ -141,7 +177,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         if (resolvedContent == null) {
             throw new FacesException("Can not transform raw object '"
-                    + ref.getClass() + "' !");
+                    + ref.getClass() + "' to IResolvedContent !");
         }
 
         String url = getRepository().save(resolvedContent, null);
@@ -151,9 +187,10 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         IContentAccessor contentAccessor = new BasicContentAccessor(
-                facesContext, indirectionURL + '/' + url, contentType, null);
+                facesContext, contentStorageServletURL + '/' + url,
+                contentType, null);
 
-        contentAccessor.setPathType(indirectionPathType);
+        contentAccessor.setPathType(contentStorageServletPathType);
 
         return contentAccessor;
     }
@@ -176,7 +213,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         private final String suffix;
 
-        private final Map parameters;
+        // private final Map parameters;
 
         private transient IResolvedContent resolvedContent;
 
@@ -185,18 +222,23 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         public ResolvedContentAtRequest(IContentModel contentModel) {
             this.contentModel = contentModel;
 
-            this.contentType = (String) contentModel
+            String contentType = (String) contentModel
                     .getAttribute(IContentModel.CONTENT_TYPE_PROPERTY);
+
             String suffix = (String) contentModel
                     .getAttribute(IContentModel.URL_SUFFIX_PROPERTY);
 
             if (suffix == null && contentType != null) {
                 suffix = ImageAdapterFactory
                         .getSuffixByContentType(contentType);
+
+            } else if (contentType == null && suffix != null) {
+                contentType = fileNameMap.getContentTypeFor("x." + suffix);
             }
 
             this.suffix = suffix;
-            this.parameters = contentModel.getAttributes();
+            this.contentType = contentType;
+            // this.parameters = contentModel.getAttributes();
         }
 
         public String getContentType() {
@@ -229,8 +271,9 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             }
 
             try {
-
                 Object wrappedData = contentModel.getWrappedData();
+
+                Map parameters = contentModel.getAttributes();
 
                 if (wrappedData instanceof IAdaptable) {
                     resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
