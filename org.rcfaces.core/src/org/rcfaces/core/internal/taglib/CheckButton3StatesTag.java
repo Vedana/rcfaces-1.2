@@ -104,7 +104,7 @@ public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (readOnly != null) {

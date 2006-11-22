@@ -74,7 +74,8 @@ public class CardinalityConverter extends AbstractConverter {
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 
-        if (value == null || value.length() < 1 || "default".equals(value)) {
+        if (value == null || value.length() < 1
+                || "default".equalsIgnoreCase(value)) {
             return DEFAULT_CARDINALITY;
         }
 

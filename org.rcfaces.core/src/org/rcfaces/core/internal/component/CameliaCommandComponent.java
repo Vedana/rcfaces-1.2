@@ -19,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IRCFacesComponent;
@@ -215,16 +214,6 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		if (isRendered()==false) {
             return;
         }
-
-		if (this instanceof IValueLockedCapability) {
-			IValueLockedCapability valueLocked = (IValueLockedCapability) this;
-
-			if (valueLocked.isValueLocked()) {
-				// Pas de validation !
-				return;
-			}
-		}
-		
 
 		super.processValidators(context);
 	}

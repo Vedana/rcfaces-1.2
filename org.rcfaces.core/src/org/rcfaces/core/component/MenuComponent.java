@@ -71,44 +71,44 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
 	}
 
-	public final Object[] getSelectionValues() {
-		return getSelectionValues(null);
+	public final Object[] getSelectedValues() {
+		return getSelectedValues(null);
 	}
 
-	public final Object[] getSelectionValues(javax.faces.context.FacesContext facesContext) {
-		return (Object[])engine.getValue(Properties.SELECTION_VALUES, facesContext);
+	public final Object[] getSelectedValues(javax.faces.context.FacesContext facesContext) {
+		return (Object[])engine.getValue(Properties.SELECTED_VALUES, facesContext);
 	}
 
-	public final void setSelectionValues(Object[] selectionValues) {
-		engine.setProperty(Properties.SELECTION_VALUES, selectionValues);
+	public final void setSelectedValues(Object[] selectedValues) {
+		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
 	}
 
-	public final void setSelectionValues(ValueBinding selectionValues) {
-		engine.setValueBinding(Properties.SELECTION_VALUES, selectionValues);
+	public final void setSelectedValues(ValueBinding selectedValues) {
+		engine.setValueBinding(Properties.SELECTED_VALUES, selectedValues);
 	}
 
-	public final boolean isSelectionValuesSetted() {
-		return engine.isPropertySetted(Properties.SELECTION_VALUES);
+	public final boolean isSelectedValuesSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_VALUES);
 	}
 
-	public final Object[] getCheckValues() {
-		return getCheckValues(null);
+	public final Object[] getCheckedValues() {
+		return getCheckedValues(null);
 	}
 
-	public final Object[] getCheckValues(javax.faces.context.FacesContext facesContext) {
-		return (Object[])engine.getValue(Properties.CHECK_VALUES, facesContext);
+	public final Object[] getCheckedValues(javax.faces.context.FacesContext facesContext) {
+		return (Object[])engine.getValue(Properties.CHECKED_VALUES, facesContext);
 	}
 
-	public final void setCheckValues(Object[] checkValues) {
-		engine.setProperty(Properties.CHECK_VALUES, checkValues);
+	public final void setCheckedValues(Object[] checkedValues) {
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
-	public final void setCheckValues(ValueBinding checkValues) {
-		engine.setValueBinding(Properties.CHECK_VALUES, checkValues);
+	public final void setCheckedValues(ValueBinding checkedValues) {
+		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
 	}
 
-	public final boolean isCheckValuesSetted() {
-		return engine.isPropertySetted(Properties.CHECK_VALUES);
+	public final boolean isCheckedValuesSetted() {
+		return engine.isPropertySetted(Properties.CHECKED_VALUES);
 	}
 
 	public final String getMenuId() {

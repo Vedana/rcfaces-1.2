@@ -3,14 +3,11 @@
  */
 package org.rcfaces.core.internal.contentAccessor;
 
-import java.util.Map;
-
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.model.IFilterProperties;
 
 /**

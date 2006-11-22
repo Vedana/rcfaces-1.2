@@ -24,7 +24,7 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 	private String mouseOutListeners;
 	private String mouseOverListeners;
 	private String disabled;
-	private String valueLocked;
+	private String unlockedClientAttributeNames;
 	private String tabIndex;
 	private String lookId;
 	private String x;
@@ -131,12 +131,12 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.disabled = disabled;
 	}
 
-	public final String getValueLocked() {
-		return valueLocked;
+	public final String getUnlockedClientAttributeNames() {
+		return unlockedClientAttributeNames;
 	}
 
-	public final void setValueLocked(String valueLocked) {
-		this.valueLocked = valueLocked;
+	public final void setUnlockedClientAttributeNames(String unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
 	public final String getTabIndex() {
@@ -357,7 +357,7 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  disabled='"+disabled+"'");
-			LOG.debug("  valueLocked='"+valueLocked+"'");
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  x='"+x+"'");
@@ -459,11 +459,11 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		}
 
 		if (mouseOutListeners != null) {
-			parseActionListener(application, component, MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			parseActionListener(application, component, MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (disabled != null) {
@@ -476,13 +476,13 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (valueLocked != null) {
-			if (isValueReference(valueLocked)) {
-				ValueBinding vb = application.createValueBinding(valueLocked);
+		if (unlockedClientAttributeNames != null) {
+			if (isValueReference(unlockedClientAttributeNames)) {
+				ValueBinding vb = application.createValueBinding(unlockedClientAttributeNames);
 
-				component.setValueLocked(vb);
+				component.setUnlockedClientAttributeNames(vb);
 			} else {
-				component.setValueLocked(getBool(valueLocked));
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames);
 			}
 		}
 
@@ -527,11 +527,11 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		}
 
 		if (blurListeners != null) {
-			parseActionListener(application, component, BLUR_LISTENER_TYPE, blurListeners);
+			Listeners.parseListener(facesContext, component, Listeners.BLUR_LISTENER_TYPE, blurListeners);
 		}
 
 		if (focusListeners != null) {
-			parseActionListener(application, component, FOCUS_LISTENER_TYPE, focusListeners);
+			Listeners.parseListener(facesContext, component, Listeners.FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
 		if (marginBottom != null) {
@@ -615,11 +615,11 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		}
 
 		if (userEventListeners != null) {
-			parseActionListener(application, component, USER_EVENT_LISTENER_TYPE, userEventListeners);
+			Listeners.parseListener(facesContext, component, Listeners.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (propertyChangeListeners != null) {
-			parseActionListener(application, component, PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (fontBold != null) {
@@ -683,7 +683,7 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		}
 
 		if (initListeners != null) {
-			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
+			Listeners.parseListener(facesContext, component, Listeners.INIT_LISTENER_TYPE, initListeners);
 		}
 
 		if (margins != null) {
@@ -723,7 +723,7 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		mouseOutListeners = null;
 		mouseOverListeners = null;
 		disabled = null;
-		valueLocked = null;
+		unlockedClientAttributeNames = null;
 		tabIndex = null;
 		lookId = null;
 		x = null;

@@ -5,20 +5,20 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * Cette interface sp�cifie le status de s�lection de l'�l�ment.
+ * 
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface ISelectedCapability {
 
-	/**
-	 * Retourne si l'�l�ment est s�lectionn� ou pas.
-	 */
-	boolean isSelected();
+    /**
+     * 
+     */
+    boolean isSelected();
 
-	/**
-	 * Sp�cifie si l'�l�ment est s�lectionn� ou pas.
-	 */
-	void setSelected(boolean selected);
+    /**
+     * 
+     */
+    void setSelected(boolean selected);
 }

@@ -226,11 +226,11 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (propertyChangeListeners != null) {
-			parseActionListener(application, component, PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (userEventListeners != null) {
-			parseActionListener(application, component, USER_EVENT_LISTENER_TYPE, userEventListeners);
+			Listeners.parseListener(facesContext, component, Listeners.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (x != null) {

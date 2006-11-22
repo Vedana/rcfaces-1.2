@@ -302,7 +302,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (selectable != null) {
@@ -326,7 +326,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		}
 
 		if (checkListeners != null) {
-			parseActionListener(application, component, CHECK_LISTENER_TYPE, checkListeners);
+			Listeners.parseListener(facesContext, component, Listeners.CHECK_LISTENER_TYPE, checkListeners);
 		}
 
 		if (checkable != null) {
@@ -350,7 +350,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		}
 
 		if (doubleClickListeners != null) {
-			parseActionListener(application, component, DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+			Listeners.parseListener(facesContext, component, Listeners.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
 		}
 
 		if (required != null) {
@@ -512,11 +512,11 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		}
 
 		if (action != null) {
-			parseAction(application, component, SELECTION_LISTENER_TYPE, action, true);
+			Listeners.parseAction(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, actionListeners, true);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, actionListeners, true);
 		}
 	}
 

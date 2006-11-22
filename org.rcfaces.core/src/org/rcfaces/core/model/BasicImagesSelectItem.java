@@ -42,6 +42,7 @@ public class BasicImagesSelectItem extends BasicSelectItem implements
 
         IContentAccessors contentAccessors = null;
 
+        FacesContext facesContext = null;
         if (component instanceof IImageCapability) {
             contentAccessors = ((IImageCapability) component)
                     .getImageAccessors();
@@ -50,7 +51,9 @@ public class BasicImagesSelectItem extends BasicSelectItem implements
         if (contentAccessors instanceof IImageAccessors) {
             IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
 
-            FacesContext facesContext = FacesContext.getCurrentInstance();
+            if (facesContext == null) {
+                facesContext = FacesContext.getCurrentInstance();
+            }
 
             IContentAccessor ca = imageAccessors.getImageAccessor();
             if (ca != null) {
@@ -80,7 +83,8 @@ public class BasicImagesSelectItem extends BasicSelectItem implements
 
                     ca = ei.getExpandedImageAccessor();
                     if (ca != null) {
-                        expandedImageURL = ca.resolveURL(facesContext, null, null);
+                        expandedImageURL = ca.resolveURL(facesContext, null,
+                                null);
                     }
                 }
             }

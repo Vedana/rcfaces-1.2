@@ -223,7 +223,7 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (valueChangeListeners != null) {
-			parseActionListener(application, component, VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
 		}
 
 		if (focusStyleClass != null) {
@@ -247,7 +247,7 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (maxTextLength != null) {
@@ -278,11 +278,11 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (action != null) {
-			parseAction(application, component, SELECTION_LISTENER_TYPE, action, true);
+			Listeners.parseAction(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, actionListeners, true);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, actionListeners, true);
 		}
 	}
 

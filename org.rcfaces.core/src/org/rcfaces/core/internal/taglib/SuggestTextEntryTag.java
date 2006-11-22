@@ -149,11 +149,11 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		}
 
 		if (suggestionListeners != null) {
-			parseActionListener(application, component, SUGGESTION_LISTENER_TYPE, suggestionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SUGGESTION_LISTENER_TYPE, suggestionListeners);
 		}
 
 		if (menuListeners != null) {
-			parseActionListener(application, component, MENU_LISTENER_TYPE, menuListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MENU_LISTENER_TYPE, menuListeners);
 		}
 
 		if (suggestionDelayMs != null) {

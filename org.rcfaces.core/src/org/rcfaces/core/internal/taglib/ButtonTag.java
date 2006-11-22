@@ -94,7 +94,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (readOnly != null) {
@@ -108,11 +108,11 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		}
 
 		if (action != null) {
-			parseAction(application, component, SELECTION_LISTENER_TYPE, action, true);
+			Listeners.parseAction(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, actionListeners, true);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, actionListeners, true);
 		}
 	}
 

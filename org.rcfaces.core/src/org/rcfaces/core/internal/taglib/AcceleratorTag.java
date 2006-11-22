@@ -112,7 +112,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (keyPressListeners != null) {
-			parseActionListener(application, component, KEY_PRESS_LISTENER_TYPE, keyPressListeners);
+			Listeners.parseListener(facesContext, component, Listeners.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
 		}
 
 		if (forValue != null) {
@@ -144,11 +144,11 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		}
 
 		if (action != null) {
-			parseAction(application, component, KEY_PRESS_LISTENER_TYPE, action, true);
+			Listeners.parseAction(facesContext, component, Listeners.KEY_PRESS_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			parseActionListener(application, component, KEY_PRESS_LISTENER_TYPE, actionListeners, true);
+			Listeners.parseListener(facesContext, component, Listeners.KEY_PRESS_LISTENER_TYPE, actionListeners, true);
 		}
 
 		if (immediate != null) {

@@ -252,15 +252,15 @@ public class StyledMessageTag extends AbstractBasicTag implements Tag {
 		}
 
 		if (mouseOutListeners != null) {
-			parseActionListener(application, component, MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			parseActionListener(application, component, MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (initListeners != null) {
-			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
+			Listeners.parseListener(facesContext, component, Listeners.INIT_LISTENER_TYPE, initListeners);
 		}
 
 		if (forValue != null) {

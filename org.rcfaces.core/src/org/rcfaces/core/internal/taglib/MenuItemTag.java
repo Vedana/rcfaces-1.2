@@ -94,7 +94,7 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 		}
 
 		if (menuListeners != null) {
-			parseActionListener(application, component, MENU_LISTENER_TYPE, menuListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MENU_LISTENER_TYPE, menuListeners);
 		}
 
 		if (removeAllWhenShown != null) {

@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.AbstractReleasable;
+import org.rcfaces.core.internal.Constants;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -22,15 +24,42 @@ public abstract class AbstractRequestContext extends AbstractReleasable
 
     protected static final String EMPTY_PROPERTIES[] = new String[0];
 
+    private static final String LOCKED_CLIENT_ATTRIBUTES_PROPERTY = "org.rcfaces.core.LOCKED_CLIENT_ATTRIBUTES";
+
+    private static final String LOCKED_CLIENT_ATTRIBUTES_ENABLED = LOCKED_CLIENT_ATTRIBUTES_PROPERTY;
+
     private final Map componentDatas = new HashMap(32);
 
     private IComponentData emptyComponentData;
 
     private FacesContext facesContext;
 
+    private boolean lockedClientAttributes = Constants.LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE;
+
     public void setFacesContext(FacesContext facesContext) {
         this.facesContext = facesContext;
         this.componentDatas.clear(); // On ne sait jamais ....
+
+        boolean configFound = false;
+
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        if (viewRoot != null) {
+            Boolean enabled = (Boolean) viewRoot.getAttributes().get(
+                    LOCKED_CLIENT_ATTRIBUTES_ENABLED);
+            if (enabled != null) {
+                lockedClientAttributes = enabled.booleanValue();
+                configFound = true;
+            }
+        }
+
+        if (configFound == false) {
+            String enable = facesContext.getExternalContext().getInitParameter(
+                    LOCKED_CLIENT_ATTRIBUTES_PROPERTY);
+            if (enable != null) {
+                lockedClientAttributes = Boolean.valueOf(enable).booleanValue();
+                configFound = true;
+            }
+        }
     }
 
     /*
@@ -44,6 +73,17 @@ public abstract class AbstractRequestContext extends AbstractReleasable
 
     protected final void putComponentData(String key, Object data) {
         componentDatas.put(key, data);
+    }
+
+    public boolean isLockedClientAttributes() {
+        return lockedClientAttributes;
+    }
+
+    public static void setLockedAttributes(FacesContext facesContext,
+            boolean lock) {
+
+        facesContext.getViewRoot().getAttributes().put(
+                LOCKED_CLIENT_ATTRIBUTES_ENABLED, Boolean.valueOf(lock));
     }
 
     /*

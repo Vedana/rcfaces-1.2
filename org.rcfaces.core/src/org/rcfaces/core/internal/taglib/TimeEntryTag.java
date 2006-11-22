@@ -223,7 +223,7 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (valueChangeListeners != null) {
-			parseActionListener(application, component, VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
 		}
 
 		if (focusStyleClass != null) {
@@ -237,7 +237,7 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (readOnly != null) {

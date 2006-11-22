@@ -66,11 +66,11 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 		Application application = facesContext.getApplication();
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (checkListeners != null) {
-			parseActionListener(application, component, CHECK_LISTENER_TYPE, checkListeners);
+			Listeners.parseListener(facesContext, component, Listeners.CHECK_LISTENER_TYPE, checkListeners);
 		}
 
 		if (readOnly != null) {

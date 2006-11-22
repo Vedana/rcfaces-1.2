@@ -10,7 +10,13 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface ICaptionCapability {
+    /**
+     * 
+     */
     String getCaption();
 
+    /**
+     * 
+     */
     void setCaption(String caption);
 }

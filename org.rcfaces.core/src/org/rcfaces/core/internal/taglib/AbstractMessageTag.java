@@ -36,9 +36,9 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String forVal;
 	private String showSummary;
 	private String margins;
+	private String forVal;
 	private String showDetail;
 	public final String getHeight() {
 		return height;
@@ -216,14 +216,6 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final String getFor() {
-		return forVal;
-	}
-
-	public final void setFor(String forVal) {
-		this.forVal = forVal;
-	}
-
 	public final String getShowSummary() {
 		return showSummary;
 	}
@@ -238,6 +230,14 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 
 	public final void setMargins(String margins) {
 		this.margins = margins;
+	}
+
+	public final String getFor() {
+		return forVal;
+	}
+
+	public final void setFor(String forVal) {
+		this.forVal = forVal;
 	}
 
 	public final String getShowDetail() {
@@ -267,9 +267,9 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  forVal='"+forVal+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  forVal='"+forVal+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
@@ -323,11 +323,11 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		}
 
 		if (mouseOutListeners != null) {
-			parseActionListener(application, component, MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			parseActionListener(application, component, MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (helpMessage != null) {
@@ -461,24 +461,15 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		}
 
 		if (userEventListeners != null) {
-			parseActionListener(application, component, USER_EVENT_LISTENER_TYPE, userEventListeners);
+			Listeners.parseListener(facesContext, component, Listeners.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (propertyChangeListeners != null) {
-			parseActionListener(application, component, PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (initListeners != null) {
-			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
-		}
-
-		if (forVal != null) {
-			if (isValueReference(forVal)) {
-				ValueBinding vb = application.createValueBinding(forVal);
-				component.setFor(vb);
-			} else {
-				component.setFor(forVal);
-			}
+			Listeners.parseListener(facesContext, component, Listeners.INIT_LISTENER_TYPE, initListeners);
 		}
 
 		if (showSummary != null) {
@@ -495,6 +486,15 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
 			}
 				component.setMargins(margins);
+		}
+
+		if (forVal != null) {
+			if (isValueReference(forVal)) {
+				ValueBinding vb = application.createValueBinding(forVal);
+				component.setFor(vb);
+			} else {
+				component.setFor(forVal);
+			}
 		}
 
 		if (showDetail != null) {
@@ -530,9 +530,9 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		forVal = null;
 		showSummary = null;
 		margins = null;
+		forVal = null;
 		showDetail = null;
 
 		super.release();

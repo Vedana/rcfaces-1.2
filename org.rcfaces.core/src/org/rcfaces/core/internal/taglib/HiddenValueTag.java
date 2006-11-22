@@ -72,7 +72,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (propertyChangeListeners != null) {
-			parseActionListener(application, component, PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (immediate != null) {

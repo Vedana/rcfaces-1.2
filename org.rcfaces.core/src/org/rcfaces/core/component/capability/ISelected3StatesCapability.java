@@ -5,30 +5,30 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * Cette interface sp�cifie le status de s�lection de l'�l�ment.
+ * 
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface ISelected3StatesCapability {
 
-	String NOT_SELECTED_STATE = "notSelected";
+    String NOT_SELECTED_STATE = "notSelected";
 
-	String SELECTED_STATE = "selected";
+    String SELECTED_STATE = "selected";
 
-	String UNDETERMINATED_STATE = "undeterminated";
+    String UNDETERMINATED_STATE = "undeterminated";
 
-	/**
-	 * Retourne si l'�l�ment est s�lectionn� ou pas.
-	 */
-	String getSelectedState();
+    /**
+     * 
+     */
+    String getSelectedState();
 
-	/**
-	 * Sp�cifie si l'�l�ment est s�lectionn� ou pas.
-	 */
-	void setSelectedState(String selectedState);
+    /**
+     * 
+     */
+    void setSelectedState(String selectedState);
 
-	boolean isSelected();
+    boolean isSelected();
 
-	boolean isUndeterminated();
+    boolean isUndeterminated();
 }

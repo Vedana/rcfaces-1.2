@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -19,6 +20,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.renderkit.AbstractRequestContext;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
@@ -175,10 +177,55 @@ class HtmlRequestContext extends AbstractRequestContext implements
             return emptyComponentData();
         }
 
+        if (isLockedClientAttributes()) {
+            if (component instanceof IUnlockedClientAttributesCapability) {
+                properties = filterProperties(
+                        (IUnlockedClientAttributesCapability) component, properties);
+
+            } else {
+                properties = Collections.EMPTY_MAP;
+            }
+        }
+
         HtmlComponentData hcd = new HtmlComponentData();
         hcd.set(parameters, component, componentId, eventComponent, properties);
 
         return hcd;
+    }
+
+    private Map filterProperties(IUnlockedClientAttributesCapability component,
+            Map properties) {
+        String unlockedAttributes = component.getUnlockedClientAttributeNames();
+        if (unlockedAttributes == null) {
+            return Collections.EMPTY_MAP;
+        }
+        unlockedAttributes = unlockedAttributes.trim();
+        if ("*".equals(unlockedAttributes)) {
+            return properties;
+        }
+
+        Map ret = null;
+
+        StringTokenizer st = new StringTokenizer(unlockedAttributes, ", ");
+        for (; st.hasMoreTokens();) {
+            String attributeName = st.nextToken();
+
+            Object value = properties.get(attributeName);
+            if (value == null) {
+                continue;
+            }
+
+            if (ret == null) {
+                ret = new HashMap(properties.size());
+            }
+            ret.put(attributeName, value);
+        }
+
+        if (ret == null) {
+            return Collections.EMPTY_MAP;
+        }
+
+        return ret;
     }
 
     private static final String getStringParameter(Map parameters, String name) {

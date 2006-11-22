@@ -334,7 +334,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		}
 
 		if (sortListeners != null) {
-			parseActionListener(application, component, SORT_LISTENER_TYPE, sortListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SORT_LISTENER_TYPE, sortListeners);
 		}
 
 		if (styleClass != null) {

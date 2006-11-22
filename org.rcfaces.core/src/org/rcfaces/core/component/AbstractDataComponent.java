@@ -3,7 +3,6 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import java.lang.Object;
@@ -31,6 +30,7 @@ import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
@@ -41,7 +41,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	IMouseEventCapability,
 	IHelpCapability,
 	IClientDataCapability,
-	IValueLockedCapability,
+	IUnlockedClientAttributesCapability,
 	ILookAndFeelCapability,
 	IFocusBlurEventCapability,
 	IPositionCapability,
@@ -366,20 +366,20 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		
 	}
 
-	public final boolean isValueLocked() {
-		return isValueLocked(null);
+	public final java.lang.String getUnlockedClientAttributeNames() {
+		return getUnlockedClientAttributeNames(null);
 	}
 
-	public final boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VALUE_LOCKED, false, facesContext);
+	public final java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
 	}
 
-	public final void setValueLocked(boolean valueLocked) {
-		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
+	public final void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
-	public final void setValueLocked(ValueBinding valueLocked) {
-		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
+	public final void setUnlockedClientAttributeNames(ValueBinding unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
 	public final java.lang.String getLookId() {

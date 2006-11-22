@@ -1394,6 +1394,7 @@ var __prototype = {
 				}
 			}
 
+// ????? C'est possible ca ????  (leaf expanded ???)
 			if (node._opened) {
 				imageURL=this._defaultExpandedLeafImageURL;
 				if (imageURL) { 

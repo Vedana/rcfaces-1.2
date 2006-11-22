@@ -69,7 +69,6 @@ public class Constants {
     static {
         version = searchVersion(Constants.class,
                 RCFACES_VERSION_SYSTEM_PARAMETER, "RCFaces Core");
-
     }
 
     private static final String CONSTANT_PREFIX;
@@ -92,9 +91,14 @@ public class Constants {
 
     public static final boolean COMPACTED_PROPERTY_NAME = true;
 
+    public static final boolean LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE = false;
+
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
                 + READ_ONLY_COLLECTION_LOCK_ENABLED);
+
+        LOG.info("LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE="
+                + LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE);
 
         LOG.info("TEMPLATE_SUPPORT=" + TEMPLATE_SUPPORT);
 

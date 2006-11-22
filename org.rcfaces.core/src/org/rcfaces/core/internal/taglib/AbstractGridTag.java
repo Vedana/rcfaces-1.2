@@ -23,7 +23,7 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private String toolTipText;
 	private String mouseOutListeners;
 	private String mouseOverListeners;
-	private String valueLocked;
+	private String unlockedClientAttributeNames;
 	private String lookId;
 	private String blurListeners;
 	private String focusListeners;
@@ -44,9 +44,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private String propertyChangeListeners;
 	private String initListeners;
 	private String rows;
+	private String first;
 	private String margins;
 	private String var;
-	private String first;
 	private String value;
 	public final String getHiddenMode() {
 		return hiddenMode;
@@ -120,12 +120,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final String getValueLocked() {
-		return valueLocked;
+	public final String getUnlockedClientAttributeNames() {
+		return unlockedClientAttributeNames;
 	}
 
-	public final void setValueLocked(String valueLocked) {
-		this.valueLocked = valueLocked;
+	public final void setUnlockedClientAttributeNames(String unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
 	public final String getLookId() {
@@ -288,6 +288,14 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.rows = rows;
 	}
 
+	public final String getFirst() {
+		return first;
+	}
+
+	public final void setFirst(String first) {
+		this.first = first;
+	}
+
 	public final String getMargins() {
 		return margins;
 	}
@@ -302,14 +310,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 	public final void setVar(String var) {
 		this.var = var;
-	}
-
-	public final String getFirst() {
-		return first;
-	}
-
-	public final void setFirst(String first) {
-		this.first = first;
 	}
 
 	public final String getValue() {
@@ -329,7 +329,7 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  helpMessage='"+helpMessage+"'");
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
-			LOG.debug("  valueLocked='"+valueLocked+"'");
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
@@ -341,9 +341,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  rows='"+rows+"'");
+			LOG.debug("  first='"+first+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  var='"+var+"'");
-			LOG.debug("  first='"+first+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -426,20 +426,20 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		}
 
 		if (mouseOutListeners != null) {
-			parseActionListener(application, component, MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			parseActionListener(application, component, MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
-		if (valueLocked != null) {
-			if (isValueReference(valueLocked)) {
-				ValueBinding vb = application.createValueBinding(valueLocked);
+		if (unlockedClientAttributeNames != null) {
+			if (isValueReference(unlockedClientAttributeNames)) {
+				ValueBinding vb = application.createValueBinding(unlockedClientAttributeNames);
 
-				component.setValueLocked(vb);
+				component.setUnlockedClientAttributeNames(vb);
 			} else {
-				component.setValueLocked(getBool(valueLocked));
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames);
 			}
 		}
 
@@ -454,11 +454,11 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		}
 
 		if (blurListeners != null) {
-			parseActionListener(application, component, BLUR_LISTENER_TYPE, blurListeners);
+			Listeners.parseListener(facesContext, component, Listeners.BLUR_LISTENER_TYPE, blurListeners);
 		}
 
 		if (focusListeners != null) {
-			parseActionListener(application, component, FOCUS_LISTENER_TYPE, focusListeners);
+			Listeners.parseListener(facesContext, component, Listeners.FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
 		if (x != null) {
@@ -542,19 +542,19 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		}
 
 		if (keyPressListeners != null) {
-			parseActionListener(application, component, KEY_PRESS_LISTENER_TYPE, keyPressListeners);
+			Listeners.parseListener(facesContext, component, Listeners.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
 		}
 
 		if (keyDownListeners != null) {
-			parseActionListener(application, component, KEY_DOWN_LISTENER_TYPE, keyDownListeners);
+			Listeners.parseListener(facesContext, component, Listeners.KEY_DOWN_LISTENER_TYPE, keyDownListeners);
 		}
 
 		if (keyUpListeners != null) {
-			parseActionListener(application, component, KEY_UP_LISTENER_TYPE, keyUpListeners);
+			Listeners.parseListener(facesContext, component, Listeners.KEY_UP_LISTENER_TYPE, keyUpListeners);
 		}
 
 		if (resetListeners != null) {
-			parseActionListener(application, component, RESET_LISTENER_TYPE, resetListeners);
+			Listeners.parseListener(facesContext, component, Listeners.RESET_LISTENER_TYPE, resetListeners);
 		}
 
 		if (styleClass != null) {
@@ -568,15 +568,15 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		}
 
 		if (userEventListeners != null) {
-			parseActionListener(application, component, USER_EVENT_LISTENER_TYPE, userEventListeners);
+			Listeners.parseListener(facesContext, component, Listeners.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (propertyChangeListeners != null) {
-			parseActionListener(application, component, PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (initListeners != null) {
-			parseActionListener(application, component, INIT_LISTENER_TYPE, initListeners);
+			Listeners.parseListener(facesContext, component, Listeners.INIT_LISTENER_TYPE, initListeners);
 		}
 
 		if (rows != null) {
@@ -585,6 +585,15 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				component.setRows(vb);
 			} else {
 				component.setRows(getInt(rows));
+			}
+		}
+
+		if (first != null) {
+			if (isValueReference(first)) {
+				ValueBinding vb = application.createValueBinding(first);
+				component.setFirst(vb);
+			} else {
+				component.setFirst(getInt(first));
 			}
 		}
 
@@ -601,15 +610,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				component.setVar(vb);
 			} else {
 				component.setVar(var);
-			}
-		}
-
-		if (first != null) {
-			if (isValueReference(first)) {
-				ValueBinding vb = application.createValueBinding(first);
-				component.setFirst(vb);
-			} else {
-				component.setFirst(getInt(first));
 			}
 		}
 
@@ -633,7 +633,7 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		toolTipText = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
-		valueLocked = null;
+		unlockedClientAttributeNames = null;
 		lookId = null;
 		blurListeners = null;
 		focusListeners = null;
@@ -654,9 +654,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		initListeners = null;
 		rows = null;
+		first = null;
 		margins = null;
 		var = null;
-		first = null;
 		value = null;
 
 		super.release();

@@ -5,7 +5,7 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * Sp�cifie le type d'ordre g�r� par l'�l�ment.
+ * 
  * 
  * @author Joel Merlin, Olivier Oeuillot
  * @version $Revision$ $Date$

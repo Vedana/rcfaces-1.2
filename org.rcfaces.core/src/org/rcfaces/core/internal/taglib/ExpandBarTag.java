@@ -381,19 +381,19 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		}
 
 		if (blurListeners != null) {
-			parseActionListener(application, component, BLUR_LISTENER_TYPE, blurListeners);
+			Listeners.parseListener(facesContext, component, Listeners.BLUR_LISTENER_TYPE, blurListeners);
 		}
 
 		if (focusListeners != null) {
-			parseActionListener(application, component, FOCUS_LISTENER_TYPE, focusListeners);
+			Listeners.parseListener(facesContext, component, Listeners.FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (loadListeners != null) {
-			parseActionListener(application, component, LOAD_LISTENER_TYPE, loadListeners);
+			Listeners.parseListener(facesContext, component, Listeners.LOAD_LISTENER_TYPE, loadListeners);
 		}
 
 		if (collapseEffect != null) {

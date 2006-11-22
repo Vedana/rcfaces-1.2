@@ -5,8 +5,7 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * Un élement qui implemente l'interface VisibilityCapability peut d'etre
- * visible ou invisible.
+ * 
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -14,30 +13,27 @@ package org.rcfaces.core.component.capability;
 public interface IVisibilityCapability {
 
     /**
-     * Type d'invisibilité 'SERVER' (c'est a dire que le serveur n'envoie pas le
-     * composant, le client ne connait meme pas son existance !).
+     * 
      */
     int SERVER_HIDDEN_MODE = 1;
 
     /**
-     * Type d'invisibilité 'PHANTOM' (c'est a dire que le client doit afficher
-     * une zone vide à la place du composant visible).
+     * 
      */
     int PHANTOM_HIDDEN_MODE = 2;
 
     /**
-     * Type d'invisibilité 'IGNORE' (c'est a dire que le client n'en tient pas
-     * compte pour le Layout de la vue).
+     * 
      */
     int IGNORE_HIDDEN_MODE = 4;
 
     /**
-     * Valeur par defaut du HiddenMode.
+     * 
      */
     int DEFAULT_HIDDEN_MODE = IGNORE_HIDDEN_MODE;
 
     /**
-     * Valeur par defaut du HiddenMode.
+     * 
      */
     int CLIENT_HIDDEN_MODE = IGNORE_HIDDEN_MODE;
 

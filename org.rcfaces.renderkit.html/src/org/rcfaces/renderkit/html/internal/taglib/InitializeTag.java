@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -31,6 +32,7 @@ import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
+import org.rcfaces.core.internal.renderkit.AbstractRequestContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.taglib.AbstractInitializeTag;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
@@ -113,6 +115,10 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
 
     private boolean renderBaseTag = true;
 
+    private boolean lockedClientAttributes = false;
+
+    private boolean lockedClientAttributesSetted = false;
+
     private String base;
 
     private String favoriteImageURL;
@@ -168,6 +174,11 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
             disableContextMenu = appParams.disableContextMenu;
         }
 
+        if (lockedClientAttributesSetted) {
+            AbstractRequestContext.setLockedAttributes(facesContext,
+                    lockedClientAttributes);
+        }
+
         setScriptType(IHtmlRenderContext.JAVASCRIPT_TYPE);
 
         try {
@@ -178,16 +189,12 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
 
             if (appParams.metaContentType) {
                 ServletResponse response = pageContext.getResponse();
-                if (response instanceof HttpServletResponse) {
-                    HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-
-                    String contentType = httpServletResponse.getContentType();
-                    if (contentType != null) {
-                        writer
-                                .print("<META http-equiv=\"Content-Type\" content=\"");
-                        writer.print(contentType);
-                        writer.println("\" />");
-                    }
+                String contentType = response.getContentType();
+                if (contentType != null) {
+                    writer
+                            .print("<META http-equiv=\"Content-Type\" content=\"");
+                    writer.print(contentType);
+                    writer.println("\" />");
                 }
             }
 
@@ -238,6 +245,27 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
                 }
 
                 if (renderBaseTag) {
+                    ServletRequest request = pageContext.getRequest();
+                    String scheme = request.getScheme();
+                    if (scheme != null) {
+                        writer.print(scheme);
+                        writer.print(":\\");
+                        writer.print(request.getServerName());
+
+                        int port = request.getServerPort();
+                        if (port == 80 && "http".equals(scheme)) {
+                            port = -1;
+
+                        } else if (port == 443 && "https".equals(scheme)) {
+                            port = -1;
+                        }
+
+                        if (port > 0) {
+                            writer.print(':');
+                            writer.print(String.valueOf(port));
+                        }
+                    }
+
                     URLFormCodec.writeURL(writer, base);
                     if (base.endsWith("/") == false) {
                         writer.print('/');
@@ -719,6 +747,9 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
         disableContextMenu = false;
         disableIEImageBar = false;
 
+        lockedClientAttributes = false;
+        lockedClientAttributesSetted = false;
+
         disableCache = false;
 
         htmlProcessContext = null;
@@ -839,6 +870,11 @@ public class InitializeTag extends AbstractInitializeTag implements Tag {
 
     public final void setDisableContextMenu(boolean disableContextMenu) {
         this.disableContextMenu = disableContextMenu;
+    }
+
+    public final void setLockedClientAttributes(boolean lockedClientAttributes) {
+        this.lockedClientAttributes = lockedClientAttributes;
+        this.lockedClientAttributesSetted = true;
     }
 
     /**

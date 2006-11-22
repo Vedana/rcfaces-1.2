@@ -136,7 +136,7 @@ public class ImageService extends AbstractHtmlService {
                     .decodeFilterExpression(component, filterExpression);
 
             IImageAccessors contentAccessors = (IImageAccessors) imageComponent
-                    .getImageAccessors();
+                    .getImageAccessors(facesContext);
 
             IContentAccessor imageAccessor = contentAccessors
                     .getImageAccessor();

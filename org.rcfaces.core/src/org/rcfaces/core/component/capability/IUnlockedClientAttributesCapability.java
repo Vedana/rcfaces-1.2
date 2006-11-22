@@ -8,16 +8,16 @@ package org.rcfaces.core.component.capability;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IValueLockedCapability {
+public interface IUnlockedClientAttributesCapability {
 	
 	/**
 	 * @TODO
 	 */
-	boolean isValueLocked();
+	String getUnlockedClientAttributeNames();
 
 	/**
 	 * @TODO
 	 */
-	void setValueLocked(boolean lock);
+	void setUnlockedClientAttributeNames(String lock);
 
 }

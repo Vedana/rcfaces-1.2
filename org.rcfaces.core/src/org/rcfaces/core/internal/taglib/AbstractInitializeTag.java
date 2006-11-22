@@ -90,9 +90,9 @@ public abstract class AbstractInitializeTag extends TagSupport {
         pageContext.getRequest().setAttribute(SCRIPT_TYPE_PROPERTY, scriptType);
     }
 
-    static final String getScriptType(PageContext pageContext) {
-        String scriptType = (String) pageContext.getRequest().getAttribute(
-                SCRIPT_TYPE_PROPERTY);
+    static final String getScriptType(FacesContext facesContext) {
+        String scriptType = (String) facesContext.getExternalContext()
+                .getRequestMap().get(SCRIPT_TYPE_PROPERTY);
 
         if (scriptType != null) {
             return scriptType;

@@ -74,7 +74,7 @@ public class ListTag extends ComboTag implements Tag {
 		}
 
 		if (doubleClickListeners != null) {
-			parseActionListener(application, component, DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+			Listeners.parseListener(facesContext, component, Listeners.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
 		}
 
 		if (rowNumber != null) {

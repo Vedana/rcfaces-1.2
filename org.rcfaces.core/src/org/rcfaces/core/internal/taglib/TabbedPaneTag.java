@@ -54,7 +54,7 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (closeListeners != null) {
-			parseActionListener(application, component, CLOSE_LISTENER_TYPE, closeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.CLOSE_LISTENER_TYPE, closeListeners);
 		}
 
 		if (closable != null) {

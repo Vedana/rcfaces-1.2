@@ -284,7 +284,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		}
 
 		if (valueChangeListeners != null) {
-			parseActionListener(application, component, VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
+			Listeners.parseListener(facesContext, component, Listeners.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
 		}
 
 		if (forValue != null) {

@@ -49,7 +49,7 @@ public class ImageRenderer extends AbstractCssRenderer {
 
         ImageContentInformation imageContentInformation = null;
         IImageAccessors imageAccessors = (IImageAccessors) image
-                .getImageAccessors();
+                .getImageAccessors(facesContext);
         String url = null;
         IContentAccessor contentAccessor = imageAccessors.getImageAccessor();
         if (contentAccessor != null) {
@@ -78,7 +78,8 @@ public class ImageRenderer extends AbstractCssRenderer {
 
         if (url == null) {
             url = componentRenderContext.getHtmlRenderContext()
-                    .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL, true);
+                    .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL,
+                            true);
 
             htmlWriter.writeAttribute("v:blank", "true");
         }

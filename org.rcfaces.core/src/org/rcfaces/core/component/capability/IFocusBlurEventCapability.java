@@ -11,8 +11,6 @@ import org.rcfaces.core.event.IFocusListener;
 
 
 /**
- * Un �lement heritant de cette interface poss�de la possibilit� d'accepter le
- * focus de l'utilisateur.
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$

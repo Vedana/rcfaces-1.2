@@ -4,8 +4,7 @@
  */
 package org.rcfaces.core.component.capability;
 
-/*
- * @author Jo�l Merlin
+/**
  * 
  * @version $Revision$ $Date$
  */

@@ -54,7 +54,7 @@ public class ToolBarTag extends AbstractInputTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (readOnly != null) {

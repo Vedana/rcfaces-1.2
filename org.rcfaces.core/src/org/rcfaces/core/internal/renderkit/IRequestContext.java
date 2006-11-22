@@ -19,6 +19,8 @@ public interface IRequestContext extends IReleasable {
 
     FacesContext getFacesContext();
 
+    boolean isLockedClientAttributes();
+
     IComponentData getComponentData(UIComponent component, String componentId);
 
     String getComponentId(UIComponent component);

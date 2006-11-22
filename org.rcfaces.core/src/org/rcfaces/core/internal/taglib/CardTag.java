@@ -84,7 +84,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		}
 
 		if (loadListeners != null) {
-			parseActionListener(application, component, LOAD_LISTENER_TYPE, loadListeners);
+			Listeners.parseListener(facesContext, component, Listeners.LOAD_LISTENER_TYPE, loadListeners);
 		}
 	}
 

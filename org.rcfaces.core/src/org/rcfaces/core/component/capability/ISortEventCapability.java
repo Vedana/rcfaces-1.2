@@ -10,8 +10,6 @@ import org.rcfaces.core.event.ISortListener;
 
 
 /**
- * L'�lement qui impl�mente cette interface g�n�re un �v�nement d�s que
- * l'utilisateur interagit avec lui.
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$

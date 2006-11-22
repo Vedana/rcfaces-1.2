@@ -17,8 +17,8 @@ public class MenuTag extends CameliaTag implements Tag {
 	private String menuListeners;
 	private String selectionListeners;
 	private String checkListeners;
-	private String selectionValues;
-	private String checkValues;
+	private String selectedValues;
+	private String checkedValues;
 	private String menuId;
 	private String removeAllWhenShown;
 	private String converter;
@@ -51,20 +51,20 @@ public class MenuTag extends CameliaTag implements Tag {
 		this.checkListeners = checkListeners;
 	}
 
-	public final String getSelectionValues() {
-		return selectionValues;
+	public final String getSelectedValues() {
+		return selectedValues;
 	}
 
-	public final void setSelectionValues(String selectionValues) {
-		this.selectionValues = selectionValues;
+	public final void setSelectedValues(String selectedValues) {
+		this.selectedValues = selectedValues;
 	}
 
-	public final String getCheckValues() {
-		return checkValues;
+	public final String getCheckedValues() {
+		return checkedValues;
 	}
 
-	public final void setCheckValues(String checkValues) {
-		this.checkValues = checkValues;
+	public final void setCheckedValues(String checkedValues) {
+		this.checkedValues = checkedValues;
 	}
 
 	public final String getMenuId() {
@@ -104,8 +104,8 @@ public class MenuTag extends CameliaTag implements Tag {
 			if (MenuComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  selectionValues='"+selectionValues+"'");
-			LOG.debug("  checkValues='"+checkValues+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
+			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  menuId='"+menuId+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
 			LOG.debug("  converter='"+converter+"'");
@@ -121,32 +121,32 @@ public class MenuTag extends CameliaTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (menuListeners != null) {
-			parseActionListener(application, component, MENU_LISTENER_TYPE, menuListeners);
+			Listeners.parseListener(facesContext, component, Listeners.MENU_LISTENER_TYPE, menuListeners);
 		}
 
 		if (selectionListeners != null) {
-			parseActionListener(application, component, SELECTION_LISTENER_TYPE, selectionListeners);
+			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (checkListeners != null) {
-			parseActionListener(application, component, CHECK_LISTENER_TYPE, checkListeners);
+			Listeners.parseListener(facesContext, component, Listeners.CHECK_LISTENER_TYPE, checkListeners);
 		}
 
-		if (selectionValues != null) {
-			if (isValueReference(selectionValues)) {
-				ValueBinding vb = application.createValueBinding(selectionValues);
-				component.setSelectionValues(vb);
+		if (selectedValues != null) {
+			if (isValueReference(selectedValues)) {
+				ValueBinding vb = application.createValueBinding(selectedValues);
+				component.setSelectedValues(vb);
 			} else {
-				throw new javax.faces.FacesException("Attribute 'selectionValues' accept only a binding expression !");
+				throw new javax.faces.FacesException("Attribute 'selectedValues' accept only a binding expression !");
 			}
 		}
 
-		if (checkValues != null) {
-			if (isValueReference(checkValues)) {
-				ValueBinding vb = application.createValueBinding(checkValues);
-				component.setCheckValues(vb);
+		if (checkedValues != null) {
+			if (isValueReference(checkedValues)) {
+				ValueBinding vb = application.createValueBinding(checkedValues);
+				component.setCheckedValues(vb);
 			} else {
-				throw new javax.faces.FacesException("Attribute 'checkValues' accept only a binding expression !");
+				throw new javax.faces.FacesException("Attribute 'checkedValues' accept only a binding expression !");
 			}
 		}
 
@@ -191,8 +191,8 @@ public class MenuTag extends CameliaTag implements Tag {
 		menuListeners = null;
 		selectionListeners = null;
 		checkListeners = null;
-		selectionValues = null;
-		checkValues = null;
+		selectedValues = null;
+		checkedValues = null;
 		menuId = null;
 		removeAllWhenShown = null;
 		converter = null;

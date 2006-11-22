@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractOutputComponent;
@@ -29,12 +30,19 @@ public class ImageComponent extends AbstractOutputComponent implements
 	public final IContentAccessors getImageAccessors() {
 
 
+				return getImageAccessors(null);
+			
+	}
+
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
 				Object value=getLocalValue();
 				if (value==null) {
 					value=getValueBinding("value");
 				}
 			
-				return ImageAccessorTools.createImageAccessor(null, value);
+				return ImageAccessorTools.createImageAccessor(facesContext, value);
 			
 	}
 
