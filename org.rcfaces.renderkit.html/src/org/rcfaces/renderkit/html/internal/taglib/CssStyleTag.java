@@ -1,143 +1,131 @@
-/*
- * $Id$
- * 
- */
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import java.io.IOException;
-
-import javax.faces.context.FacesContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.BodyContent;
-import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
+import javax.servlet.jsp.JspException;
+import org.rcfaces.core.internal.taglib.CameliaTag;
+import org.rcfaces.renderkit.html.component.CssStyleComponent;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.ITextCapability;
+import javax.faces.component.UIViewRoot;
 
-import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
-import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
-import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
-import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+public class CssStyleTag extends CameliaTag implements Tag {
 
-/**
- * 
- * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$
- */
-public class CssStyleTag extends BodyTagSupport implements Tag {
-    private static final String REVISION = "$Revision$";
 
-    private static final long serialVersionUID = -7885621747032242759L;
+	private static final Log LOG=LogFactory.getLog(CssStyleTag.class);
 
-    private String src;
+	private String text;
+	private String src;
+	private String srcCharSet;
+	public String getComponentType() {
+		return CssStyleComponent.COMPONENT_TYPE;
+	}
 
-    private boolean componentRules;
+	public final String getText() {
+		return text;
+	}
 
-    private IHtmlProcessContext htmlRenderContext;
+	public final void setText(String text) {
+		this.text = text;
+	}
 
-    public final String getSrc() {
-        return src;
-    }
+	public final String getSrc() {
+		return src;
+	}
 
-    public final void setSrc(String src) {
-        this.src = src;
-    }
+	public final void setSrc(String src) {
+		this.src = src;
+	}
 
-    public void release() {
-        super.release();
+	public final String getSrcCharSet() {
+		return srcCharSet;
+	}
 
-        src = null;
-        htmlRenderContext = null;
-    }
+	public final void setSrcCharSet(String srcCharSet) {
+		this.srcCharSet = srcCharSet;
+	}
 
-    public int doStartTag() throws JspException {
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (CssStyleComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  src='"+src+"'");
+			LOG.debug("  srcCharSet='"+srcCharSet+"'");
+		}
+		super.setProperties(uiComponent);
 
-        JspWriter writer = pageContext.getOut();
+		if ((uiComponent instanceof CssStyleComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'CssStyleComponent'.");
+		}
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+		CssStyleComponent component = (CssStyleComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-        htmlRenderContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(facesContext);
+		if (text != null) {
+			if (isValueReference(text)) {
+				ValueBinding vb = application.createValueBinding(text);
 
-        boolean useMetaContentStyleType = htmlRenderContext
-                .useMetaContentStyleType()
-                && InitializeTag.isMetaDataInitialized(pageContext);
+				component.setText(vb);
+			} else {
+				component.setText(text);
+			}
+		}
 
-        try {
-            if (src != null) {
-                writer.write("<LINK rel=\"stylesheet\"");
-                if (useMetaContentStyleType == false) {
-                    writer.write(" type=\"");
-                    writer.write(IHtmlRenderContext.CSS_TYPE);
-                    writer.write('\"');
-                }
+		if (src != null) {
+			if (isValueReference(src)) {
+				ValueBinding vb = application.createValueBinding(src);
+				component.setSrc(vb);
+			} else {
+				component.setSrc(src);
+			}
+		}
 
-                IContentAccessor contentAccessor = ContentAccessorFactory
-                        .createFromWebResource(facesContext, src,
-                                IContentType.STYLE);
+		if (srcCharSet != null) {
+			if (isValueReference(srcCharSet)) {
+				ValueBinding vb = application.createValueBinding(srcCharSet);
+				component.setSrcCharSet(vb);
+			} else {
+				component.setSrcCharSet(srcCharSet);
+			}
+		}
+	}
 
-                src = contentAccessor.resolveURL(facesContext, null, null);
+	public void release() {
+		text = null;
+		src = null;
+		srcCharSet = null;
 
-                if (componentRules) {
-                    writer.write(" v:rules=\"true\"");
-                }
+		super.release();
+	}
 
-                writer.write(" href=\"");
-                writer.write(src);
-                writer.write("\" />");
+	protected int getDoStartValue() {
+		return EVAL_BODY_BUFFERED;
+	}
 
-                return SKIP_BODY;
-            }
-
-            return EVAL_BODY_INCLUDE;
-
-        } catch (IOException ex) {
-            throw new JspException(ex);
-        }
-    }
-
-    public int doEndTag() throws JspException {
-        JspWriter writer = pageContext.getOut();
-
-        BodyContent bodyContent = getBodyContent();
-        if (bodyContent != null && src == null) {
-            try {
-
-                boolean useMetaContentStyleType = htmlRenderContext
-                        .useMetaContentStyleType()
-                        && InitializeTag.isMetaDataInitialized(pageContext);
-
-                writer.print("<STYLE");
-                if (useMetaContentStyleType == false) {
-                    writer.write(" type=\"");
-                    writer.write(IHtmlRenderContext.CSS_TYPE);
-                    writer.write('\"');
-                }
-
-                if (componentRules) {
-                    writer.write(" v:rules=\"true\"");
-                }
-                writer.println(">");
-
-                bodyContent.writeOut(writer);
-
-                writer.println("</STYLE>");
-
-            } catch (IOException ex) {
-                throw new JspException(ex);
-            }
-        }
-
-        return super.doEndTag();
-    }
-
-    public final boolean isComponentRules() {
-        return componentRules;
-    }
-
-    public final void setComponentRules(boolean componentRules) {
-        this.componentRules = componentRules;
-    }
-
+	public int doEndTag() throws JspException {
+		if (text == null && getBodyContent() != null) {
+			String content = getBodyContent().getString();
+			if (content != null && content.length() > 0) {
+				content = content.trim();
+				if (content.length() > 0) {
+					if (LOG.isDebugEnabled()) {
+						LOG.debug("  [body of tag] text='"+content+"'");
+					}
+					((ITextCapability)getComponentInstance()).setText(content);
+				}
+			}
+		}
+		return super.doEndTag();
+	}
 }

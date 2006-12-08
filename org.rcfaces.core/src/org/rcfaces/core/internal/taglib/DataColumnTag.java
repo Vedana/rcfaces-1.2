@@ -1,10 +1,12 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.component.DataColumnComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
@@ -256,6 +258,9 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof DataColumnComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'DataColumnComponent'.");
 		}
 
@@ -279,7 +284,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 
 				component.setVisible(vb);
 			} else {
-				component.setVisible(getBoolean(visible));
+				component.setVisible(getBool(visible));
 			}
 		}
 
@@ -334,7 +339,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		}
 
 		if (sortListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.SORT_LISTENER_TYPE, sortListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SORT_LISTENER_TYPE, sortListeners);
 		}
 
 		if (styleClass != null) {

@@ -8,13 +8,16 @@ import org.rcfaces.core.component.capability.IAlignmentCapability;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.internal.converter.OrderConverter;
-import org.rcfaces.core.component.capability.ISortEventCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ISortEventCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IToolTipCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.internal.component.CameliaColumnComponent;
 import javax.faces.component.ValueHolder;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -35,6 +38,10 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dataColumn";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","value","maxWidth","width","toolTipText","alignment","ascending","hiddenMode","cellImageURL","foregroundColor","cellToolTipText","minWidth","styleClass","text","sortListener","resizable","verticalAlign","sortComparator","cellStyleClass","visible","backgroundColor","autoFilter"}));
+	}
 
 	public DataColumnComponent() {
 		setRendererType(null);
@@ -48,8 +55,8 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 	public final Converter getConverter() {
 
 
-		return getConverter(null);
-		
+            	return (Converter)engine.getProperty("converter", null);
+			
 	}
 
 	public final Object getValue() {
@@ -80,22 +87,44 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 	public final void setConverter(Converter converter) {
 
 
-		engine.setConverter(converter);
-		
+            	engine.setProperty("converter", converter);
+			
 	}
 
 	public final void setConverter(String converterId) {
 
 
-		engine.setConverterId(converterId);
-		
+				 setConverter(null, converterId);
+			
 	}
 
-	public final void setConverter(ValueBinding converter) {
+	public final void setConverter(FacesContext facesContext, String converterId) {
 
 
-			engine.setConverterId(converter);
-		
+				if (facesContext==null) {
+					facesContext=FacesContext.getCurrentInstance();
+				}
+				Converter converter = facesContext.getApplication().createConverter(converterId);
+                this.setConverter(converter);
+			
+	}
+
+	public final void setConverter(ValueBinding valueBinding) {
+
+
+                  this.setValueBinding("converter", valueBinding);
+			
+	}
+
+	public final Boolean getVisibleState(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+					return null;
+				}
+				
+				return Boolean.valueOf(isVisible(facesContext));
+			
 	}
 
 	public final Object getValue(FacesContext context) {
@@ -142,20 +171,27 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public final java.lang.Boolean getVisible() {
-		return getVisible(null);
+	public final boolean isVisible() {
+		return isVisible(null);
 	}
 
-	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
+	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
 
-	public final void setVisible(java.lang.Boolean visible) {
+	public final void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final Boolean getVisibleState() {
+
+
+				return getVisibleState(null);
+			
 	}
 
 	public final java.lang.String getText() {
@@ -496,5 +532,8 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

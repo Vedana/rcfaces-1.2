@@ -14,7 +14,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
@@ -25,7 +30,14 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 public final class ComponentTools {
     private static final String REVISION = "$Revision$";
 
+    private static final Log LOG = LogFactory.getLog(ComponentTools.class);
+
     public static final String[] STRING_EMPTY_ARRAY = new String[0];
+
+    private static final String VARIABLE_SCOPE_VALUE = "org.rcfaces.core.internal.VARIABLE_SCOPE_VALUE";
+
+    private static final String NONE_VARIABLE_SCOPE = "##~NONE~"
+            + System.currentTimeMillis();
 
     public static final boolean isAnonymousComponentId(String componentId) {
         if (componentId == null) {
@@ -227,6 +239,108 @@ public final class ComponentTools {
 
         public Object setValue(Object value) {
             throw new UnsupportedOperationException("Not implemented !");
+        }
+    }
+
+    public static UIComponent findComponent(UIComponent startPoint, Class clazz) {
+        UIComponent retComp = null;
+        List children = startPoint.getChildren();
+
+        int size = children.size();
+        for (int i = 0; i < size; i++) {
+            UIComponent comp = (UIComponent) children.get(i);
+
+            if (clazz.isInstance(comp)) {
+                return comp;
+            }
+
+            if (comp.getChildCount() > 0) {
+                retComp = findComponent(comp, clazz);
+                if (retComp != null) {
+                    return retComp;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static IVarScope processVariableScope(FacesContext facesContext,
+            IVariableScopeCapability variableScopeCapability) {
+        String var = variableScopeCapability.getScopeVar();
+        if (var == null || var.length() < 1) {
+            return null;
+        }
+
+        ITransientAttributesManager manager = (ITransientAttributesManager) variableScopeCapability;
+        Object ret = manager.getTransientAttribute(VARIABLE_SCOPE_VALUE);
+        if (ret != null) {
+            if (ret == NONE_VARIABLE_SCOPE) {
+                ret = null;
+            }
+
+            Map requestMap = facesContext.getExternalContext().getRequestMap();
+
+            Object old = requestMap.put(var, ret);
+
+            return new VarScope(var, old);
+        }
+
+        ValueBinding valueBinding = variableScopeCapability.getScopeValue();
+        if (valueBinding == null) {
+            return null;
+        }
+
+        Map requestMap = facesContext.getExternalContext().getRequestMap();
+
+        ret = valueBinding.getValue(facesContext);
+        if (ret == null) {
+            manager.setTransientAttribute(VARIABLE_SCOPE_VALUE,
+                    NONE_VARIABLE_SCOPE);
+
+        } else {
+            manager.setTransientAttribute(VARIABLE_SCOPE_VALUE, ret);
+        }
+
+        Object old = requestMap.put(var, ret);
+        return new VarScope(var, old);
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public interface IVarScope {
+        void popVar(FacesContext facesContext);
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static class VarScope implements IVarScope {
+        private static final String REVISION = "$Revision$";
+
+        private final String var;
+
+        private final Object previousObject;
+
+        public VarScope(String var, Object previousObject) {
+            this.var = var;
+            this.previousObject = previousObject;
+        }
+
+        public void popVar(FacesContext facesContext) {
+            Map requestMap = facesContext.getExternalContext().getRequestMap();
+
+            if (previousObject == null) {
+                requestMap.remove(var);
+                return;
+            }
+
+            requestMap.put(var, previousObject);
         }
     }
 }

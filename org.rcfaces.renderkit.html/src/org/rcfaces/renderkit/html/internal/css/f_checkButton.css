@@ -15,6 +15,7 @@
 	user-select: none;
 	text-align: left;
 	vertical-align: baseline;
+	display: inline;
 }
  
 .f_checkButton_input {

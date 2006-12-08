@@ -1,11 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractMessagesComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -36,10 +38,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
+	private String showDetail;
 	private String globalOnly;
 	private String showSummary;
 	private String margins;
-	private String showDetail;
 	public final String getHeight() {
 		return height;
 	}
@@ -216,6 +218,14 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
+	public final String getShowDetail() {
+		return showDetail;
+	}
+
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
+	}
+
 	public final String getGlobalOnly() {
 		return globalOnly;
 	}
@@ -240,14 +250,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.margins = margins;
 	}
 
-	public final String getShowDetail() {
-		return showDetail;
-	}
-
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
-	}
-
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  height='"+height+"'");
@@ -267,14 +269,17 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractMessagesComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractMessagesComponent'.");
 		}
 
@@ -318,16 +323,16 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
 				component.setVisible(vb);
 			} else {
-				component.setVisible(getBoolean(visible));
+				component.setVisible(getBool(visible));
 			}
 		}
 
 		if (mouseOutListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (helpMessage != null) {
@@ -461,15 +466,24 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		}
 
 		if (userEventListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.USER_EVENT_LISTENER_TYPE, userEventListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (propertyChangeListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (initListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.INIT_LISTENER_TYPE, initListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
+		}
+
+		if (showDetail != null) {
+			if (isValueReference(showDetail)) {
+				ValueBinding vb = application.createValueBinding(showDetail);
+				component.setShowDetail(vb);
+			} else {
+				component.setShowDetail(getBool(showDetail));
+			}
 		}
 
 		if (globalOnly != null) {
@@ -496,15 +510,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			}
 				component.setMargins(margins);
 		}
-
-		if (showDetail != null) {
-			if (isValueReference(showDetail)) {
-				ValueBinding vb = application.createValueBinding(showDetail);
-				component.setShowDetail(vb);
-			} else {
-				component.setShowDetail(getBool(showDetail));
-			}
-		}
 	}
 
 	public void release() {
@@ -530,10 +535,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
+		showDetail = null;
 		globalOnly = null;
 		showSummary = null;
 		margins = null;
-		showDetail = null;
 
 		super.release();
 	}

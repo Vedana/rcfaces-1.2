@@ -37,6 +37,23 @@ public class BasicImagesSelectItem extends BasicSelectItem implements
     public BasicImagesSelectItem() {
     }
 
+    public BasicImagesSelectItem(Object value) {
+        super(value);
+    }
+
+    public BasicImagesSelectItem(Object value, String label) {
+        super(value, label);
+    }
+
+    public BasicImagesSelectItem(Object value, String label, String description) {
+        super(value, label, description);
+    }
+
+    public BasicImagesSelectItem(Object value, String label,
+            String description, boolean disabled) {
+        super(value, label, description, disabled);
+    }
+
     public BasicImagesSelectItem(UISelectItem component) {
         super(component);
 

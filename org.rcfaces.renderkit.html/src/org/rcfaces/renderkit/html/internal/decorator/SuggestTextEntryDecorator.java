@@ -60,7 +60,7 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
      */
     protected SelectItemsContext createJavaScriptContext() {
         IComponentRenderContext componentRenderContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         SuggestTextEntryComponent input = (SuggestTextEntryComponent) getComponent();
 

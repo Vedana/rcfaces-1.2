@@ -4,9 +4,12 @@ import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 
 public class TextComponent extends AbstractOutputComponent implements 
@@ -18,6 +21,10 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.text";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","text","type","textAlignment","fontSize","accessKey","fontName","fontItalic","for"}));
+	}
 
 	public TextComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -194,5 +201,8 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

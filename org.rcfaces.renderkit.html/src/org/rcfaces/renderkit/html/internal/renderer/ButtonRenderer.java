@@ -14,6 +14,7 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -49,8 +50,11 @@ public class ButtonRenderer extends AbstractInputRenderer {
         writeCssAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
 
-        String txt = button.getText();
+        String txt = button.getText(htmlWriter.getComponentRenderContext()
+                .getFacesContext());
         if (txt != null) {
+            txt = ParamUtils.formatMessage(button, txt);
+
             htmlWriter.writeValue(txt);
         }
 

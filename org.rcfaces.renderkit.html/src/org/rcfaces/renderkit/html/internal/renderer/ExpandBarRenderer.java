@@ -20,6 +20,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -100,24 +101,26 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement("LI").writeln();
 
-        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(htmlWriter);
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
 
         boolean asyncRenderEnable = htmlRenderContext.isAsyncRenderEnable();
         if (asyncRenderEnable == false) {
             // ??? return;
         }
 
-        boolean asyncRender = false;
-
+        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
         if (collapsed) {
             if (asyncRenderEnable) {
-                if (expandBarComponent.getAsyncRenderMode(facesContext) != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                asyncRender = expandBarComponent
+                        .getAsyncRenderMode(facesContext);
+
+                if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlWriter.writeAttribute("v:asyncRender", "true");
 
-                    getHtmlRenderContext(htmlWriter)
+                    htmlWriter.getHtmlComponentRenderContext()
+                            .getHtmlRenderContext()
                             .pushInteractiveRenderComponent(htmlWriter);
-
-                    asyncRender = true;
                 }
             }
         }
@@ -192,24 +195,25 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.writeClass(getLabelClassName(htmlWriter));
 
         String text = expandBarComponent.getText(facesContext);
-        if (text != null && text.length() > 0) {
-            HtmlTools.writeSpanAccessKey(htmlWriter, expandBarComponent, text,
-                    false);
+        if (text != null) {
+            text = ParamUtils.formatMessage(expandBarComponent, text);
         }
+        HtmlTools.writeSpanAccessKey(htmlWriter, expandBarComponent, text,
+                false);
 
         htmlWriter.endElement("LABEL");
 
         UIComponent component = expandBarComponent.getFacet(HEAD_FACET_NAME);
         if (component != null) {
 
-            htmlWriter.startElement("SPAN");
+            htmlWriter.startElement("DIV");
             htmlWriter.writeClass(getFacetClassName(htmlWriter));
 
             htmlWriter.flush();
 
             ComponentTools.encodeRecursive(facesContext, component);
 
-            htmlWriter.endElement("SPAN");
+            htmlWriter.endElement("DIV");
         }
     }
 
@@ -236,7 +240,8 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
     protected IContentAccessor getButtonImage(IHtmlWriter htmlWriter,
             boolean collapsed) {
 
-        return getHtmlRenderContext(htmlWriter).getHtmlProcessContext()
+        return htmlWriter.getHtmlComponentRenderContext()
+                .getHtmlRenderContext().getHtmlProcessContext()
                 .getStyleSheetContentAccessor(BLANK_IMAGE_URL,
                         IContentType.IMAGE);
         /*
@@ -309,8 +314,9 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         if (expandBarComponent.getCollapseEffect(componentRenderContext
                 .getFacesContext()) != null) {
 
-            IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
-                    htmlWriter).getJavaScriptRenderContext();
+            IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
+                    .getHtmlComponentRenderContext().getHtmlRenderContext()
+                    .getJavaScriptRenderContext();
 
             javaScriptRenderContext.appendRequiredClasses(classes,
                     JavaScriptClasses.EXPAND_BAR, "effect");

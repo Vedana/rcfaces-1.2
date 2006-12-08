@@ -1,28 +1,31 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.internal.converter.CardinalityConverter;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.internal.util.ComponentIterators;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
 import javax.faces.component.UISelectItem;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.lang.String;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.internal.util.ComponentIterators;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class TreeComponent extends AbstractInputComponent implements 
@@ -41,6 +44,10 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tree";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","selectable","defaultExpandedLeafImageURL","expansionValues","checkable","defaultSelectedImageURL","checkedValues","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","clientCheckFullState","clientSelectionFullState","checkListener","preloadedLevelDepth","userExpandable","selectionCardinality","readOnly","selectedValues"}));
+	}
 
 	public TreeComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -641,5 +648,8 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

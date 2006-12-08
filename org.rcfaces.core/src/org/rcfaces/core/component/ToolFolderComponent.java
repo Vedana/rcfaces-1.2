@@ -4,12 +4,19 @@ import org.rcfaces.core.internal.tools.ToolBarTools;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.AbstractItemComponent;
 import org.rcfaces.core.component.iterator.IToolItemIterator;
+import java.util.Arrays;
 import org.rcfaces.core.component.ToolBarComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ToolFolderComponent extends AbstractItemComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolFolder";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
+	}
 
 	public ToolFolderComponent() {
 		setRendererType(null);
@@ -36,5 +43,8 @@ public class ToolFolderComponent extends AbstractItemComponent {
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

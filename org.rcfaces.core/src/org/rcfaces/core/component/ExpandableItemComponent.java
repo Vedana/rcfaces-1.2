@@ -3,9 +3,12 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IExpandImageCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.UIImageItemComponent;
 
 public abstract class ExpandableItemComponent extends UIImageItemComponent implements 
@@ -13,6 +16,10 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 	ITextCapability,
 	IExpandImageCapability {
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hoverImageURL","imageURL","text","expandedImageURL","disabledImageURL","selectedImageURL","foregroundColor","backgroundColor"}));
+	}
 
 
 	public final void setText(String text) {
@@ -86,5 +93,8 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

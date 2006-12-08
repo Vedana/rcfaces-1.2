@@ -10,7 +10,6 @@ import java.io.IOException;
 import javax.faces.component.UIComponent;
 
 /**
- * Probleme de g�n�ration de l'aspect graphique d'un composant.
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -23,21 +22,16 @@ public class WriterException extends IOException {
 
     private final UIComponent component;
 
-    private final Throwable throwable;
-
     public WriterException(String message, Throwable throwable,
             UIComponent component) {
         super(message);
 
-        this.throwable = throwable;
+        initCause(throwable);
+
         this.component = component;
     }
 
     public UIComponent getUIComponent() {
         return component;
-    }
-
-    public final Throwable getRootCause() {
-        return throwable;
     }
 }

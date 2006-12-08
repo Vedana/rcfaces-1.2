@@ -1,10 +1,12 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.component.AbstractBasicComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
@@ -218,6 +220,9 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractBasicComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractBasicComponent'.");
 		}
 
@@ -226,11 +231,11 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (propertyChangeListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (userEventListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.USER_EVENT_LISTENER_TYPE, userEventListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (x != null) {
@@ -379,7 +384,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 				component.setVisible(vb);
 			} else {
-				component.setVisible(getBoolean(visible));
+				component.setVisible(getBool(visible));
 			}
 		}
 

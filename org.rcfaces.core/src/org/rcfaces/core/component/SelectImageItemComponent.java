@@ -5,14 +5,21 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.component.CameliaItemComponent;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 public class SelectImageItemComponent extends CameliaItemComponent implements 
 	IImageCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.selectImageItem";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemDescription","imageURL","itemLabel","itemDisabled","itemValue"}));
+	}
 
 	public SelectImageItemComponent() {
 		setRendererType(null);
@@ -55,5 +62,8 @@ public class SelectImageItemComponent extends CameliaItemComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

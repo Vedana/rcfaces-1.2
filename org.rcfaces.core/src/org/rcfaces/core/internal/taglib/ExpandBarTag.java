@@ -1,11 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ExpandBarComponent;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -33,6 +35,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private String focusListeners;
 	private String selectionListeners;
 	private String loadListeners;
+	private String scopeValue;
+	private String scopeVar;
 	private String collapseEffect;
 	public String getComponentType() {
 		return ExpandBarComponent.COMPONENT_TYPE;
@@ -190,6 +194,22 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.loadListeners = loadListeners;
 	}
 
+	public final String getScopeValue() {
+		return scopeValue;
+	}
+
+	public final void setScopeValue(String scopeValue) {
+		this.scopeValue = scopeValue;
+	}
+
+	public final String getScopeVar() {
+		return scopeVar;
+	}
+
+	public final void setScopeVar(String scopeVar) {
+		this.scopeVar = scopeVar;
+	}
+
 	public final String getCollapseEffect() {
 		return collapseEffect;
 	}
@@ -218,11 +238,16 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  groupName='"+groupName+"'");
+			LOG.debug("  scopeValue='"+scopeValue+"'");
+			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  collapseEffect='"+collapseEffect+"'");
 		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ExpandBarComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ExpandBarComponent'.");
 		}
 
@@ -381,19 +406,35 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		}
 
 		if (blurListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.BLUR_LISTENER_TYPE, blurListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.BLUR_LISTENER_TYPE, blurListeners);
 		}
 
 		if (focusListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.FOCUS_LISTENER_TYPE, focusListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
 		if (selectionListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (loadListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.LOAD_LISTENER_TYPE, loadListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+		}
+
+		if (scopeValue != null) {
+				ValueBinding vb = application.createValueBinding(scopeValue);
+
+				component.setScopeValue(vb);
+		}
+
+		if (scopeVar != null) {
+			if (isValueReference(scopeVar)) {
+				ValueBinding vb = application.createValueBinding(scopeVar);
+
+				component.setScopeVar(vb);
+			} else {
+				component.setScopeVar(scopeVar);
+			}
 		}
 
 		if (collapseEffect != null) {
@@ -426,6 +467,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		focusListeners = null;
 		selectionListeners = null;
 		loadListeners = null;
+		scopeValue = null;
+		scopeVar = null;
 		collapseEffect = null;
 
 		super.release();

@@ -21,6 +21,7 @@ import org.rcfaces.core.component.TreeNodeComponent;
  * @version $Revision$ $Date$
  */
 public class TreeTools {
+    private static final String REVISION = "$Revision$";
 
 	private static final Object OBJECT_EMPTY_ARRAY[] = new Object[0];
 

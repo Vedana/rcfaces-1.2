@@ -3,8 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
-import java.io.ObjectInputStream.GetField;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -20,17 +18,17 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.images.operation.DisableOperation;
 import org.rcfaces.core.internal.images.operation.HoverOperation;
 import org.rcfaces.core.internal.images.operation.SelectedOperation;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
+import org.rcfaces.core.internal.util.ParamUtils;
+import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.ICssRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -61,8 +59,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     private static final String TEXT_CLASSNAME_SUFFIX = "_text";
 
     private static final String NONE_BORDER_ID = "none";
-
-    private static final String EMPTY_IMAGE_URL = "imageButton/blank.gif";
 
     protected final IImageButtonFamilly imageButtonFamilly;
 
@@ -126,6 +122,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             }
 
             text = imageButtonFamilly.getText(facesContext);
+            text = ParamUtils.formatMessage((UIComponent) imageButtonFamilly, text);
+            
             textPosition = imageButtonFamilly.getTextPosition(facesContext);
 
             if (htmlBorderWriter == null && (text != null)) {
@@ -166,19 +164,22 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             String mainComponent = null;
             if (htmlBorderWriter == null) {
+                boolean displayInline = true;
                 if (isCompositeComponent()) {
                     if (width == null && height == null) {
-                        mainComponent = "SPAN";
-
-                    } else {
-                        mainComponent = "DIV";
+                        displayInline = true;
                     }
+                    mainComponent = "DIV";
 
                 } else {
                     mainComponent = "INPUT";
                 }
 
                 writer.startElement(mainComponent);
+
+                if (displayInline) {
+                    writer.writeStyle().writeDisplay("inline");
+                }
 
             } else {
                 mainComponent = "DIV";
@@ -215,7 +216,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             IContentAccessor selectedImageAccessor = getSelectedImageAccessor(writer);
             IContentAccessor hoverImageAccessor = getHoverImageAccessor(writer);
 
-            imageSrc = imageAccessor.resolveURL(facesContext, null, null);
+            if (imageAccessor != null) {
+                imageSrc = imageAccessor.resolveURL(facesContext, null, null);
+            }
 
             if (disabled) {
                 if (disabledImageAccessor != null) {
@@ -277,6 +280,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             if (htmlBorderWriter == null && mainComponent.equals("INPUT")) {
                 writer.writeType("image");
+
+                if (imageSrc == null) {
+                    imageSrc = computeBlankImageURL();
+                }
 
                 if (imageSrc != null) {
                     writer.writeSrc(imageSrc);
@@ -698,16 +705,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     }
 
     protected String computeBlankImageURL() {
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
 
-        // FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
-                .getRenderContext();
+        IHtmlRenderContext htmlRenderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
 
         return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
-                EMPTY_IMAGE_URL, true);
+                AbstractCssRenderer.BLANK_IMAGE_URL, true);
     }
 
     protected void writeComboImage(int nextRowCount) throws WriterException {

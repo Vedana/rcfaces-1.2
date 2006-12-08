@@ -92,18 +92,21 @@ var __static = {
 	 */
 	WAIT_IMAGE_HEIGHT: 16,
 	
-	Create: function(parentElement, lookId, message, alignment, marginH, marginV) {
+	/**
+	 * @method public static
+	 */
+	Create: function(parentElement, lookId, inlineMode, message, alignment, marginH, marginV) {
 	
 		if (alignment===undefined) {
 			alignment=f_waiting._DEFAULT_ALIGNMENT;
 		}
 	
-		var doc=parentElement.ownerDocument;
-		f_core.Assert(doc, "parent is not a DOM element !");
-		var node=doc.createElement("DIV");
+		f_core.Assert(parentElement.tagName, "parent is not a DOM element !");
+		var node=document.createElement("DIV");
 		
-		node.className="f_waiting";
-		node.setAttribute("v:class", node.className);
+		var className="f_waiting";
+		node.className=className+((inlineMode)?"_inline":"_absolute");
+		node.setAttribute("v:class", className);
 		if (lookId) {
 			node.setAttribute("v:lookId", lookId);
 		}
@@ -114,7 +117,7 @@ var __static = {
 			message=f_waiting.GetLoadingMessage();
 		}
 		
-		node.appendChild(doc.createTextNode(message));
+		node.appendChild(document.createTextNode(message));
 		
 		if (parentElement.tagName.toUpperCase()=="SELECT") {
 			parentElement=parentElement.parentNode;
@@ -136,14 +139,24 @@ var __static = {
 		
 		return f_waiting._classLoader._init(node);
 	},
+	/**
+	 * @method hidden static
+	 * @return String
+	 */
 	GetLoadingMessage: function() {
 		return f_resourceBundle.Get(f_waiting).f_get("LOADING_MESSAGE");
 	},
+	/**
+	 * @method hidden static
+	 * @return String
+	 */
 	GetReceivingMessage: function() {
 		return f_resourceBundle.Get(f_waiting).f_get("RECEIVING_MESSAGE");
 	},
 	/**
 	 * @method private static
+	 * @param HTMLElement node
+	 * @return void
 	 */
 	_Layout: function(node) {
 		var parentElement=node._parentElement;
@@ -223,6 +236,7 @@ var __static = {
 	},
 	/**
 	 * @method private static
+	 * @return void
 	 */
 	_TimeOut: function(waiting) {
 		var cur=waiting._opacity;
@@ -285,18 +299,21 @@ var __static = {
 	},
 	/**
 	 * @method hidden static 
+	 * @return String
 	 */
 	 GetWaitingImageURL: function() {
 		return f_waiting._GetImageURL(f_waiting._WAITING_IMAGE_URL);
 	 },
 	/**
 	 * @method hidden static 
+	 * @return String
 	 */
 	 GetWaitingErrorImageURL: function() {
 		return f_waiting._GetImageURL(f_waiting._WAITING_ERROR_IMAGE_URL);
 	 },
 	/**
-	 * @method hidden static 
+	 * @method private static 
+	 * @return String
 	 */
 	 _GetImageURL: function(imageURL) {
 		var styleSheetBase=f_env.GetStyleSheetBase();
@@ -337,11 +354,18 @@ var __prototype = {
 		this.f_super(arguments);
 	},
 	
+	/**
+	 * @method public
+	 */
 	f_getText: function() {
 		return this._text;
 	},
 	
+	/**
+	 * @method public
+	 */
 	f_setText: function(text) {
+		f_core.Assert(typeof(text)=="string", "f_waiting.f_setText: invalid text parameter ("+text+")");
 		this._text=text;
 		text=f_core.EncodeHtml(text);
 		
@@ -353,12 +377,19 @@ var __prototype = {
 		this.innerHTML=text;
 	},
 	
+	/**
+	 * @method public
+	 */
 	f_close: function() {
 		var parent=this.parentNode;
 		f_core.Assert(parent && parent.tagName, "No parent ! Already closed ?");
 		
 		parent.removeChild(this);
 	},
+	
+	/**
+	 * @method public
+	 */
 	f_show: function() {
 		if (!this._parentElementOldCursor) {
 			var cursor=this._parentElement.style.cursor;
@@ -371,6 +402,10 @@ var __prototype = {
 			
 		this._installTimer(1);
 	},
+	
+	/**
+	 * @method public
+	 */
 	f_hide: function(immediately) {
 		this._installTimer(0, immediately);
 		
@@ -381,6 +416,10 @@ var __prototype = {
 			this._parentElementOldCursor=undefined;
 		}
 	},
+	
+	/**
+	 * @method private
+	 */
 	_installTimer: function(level, immediately) {
 		if (level<0) {
 			level=0;

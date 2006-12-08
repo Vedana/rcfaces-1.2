@@ -9,11 +9,11 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.HyperLinkComponent;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
-
 
 /**
  * 
@@ -48,6 +48,10 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
         String text = component.getText(facesContext);
         if (text != null) {
+            if (text != null) {
+                text = ParamUtils.formatMessage(component, text);
+            }
+
             htmlWriter.writeText(text);
         }
 

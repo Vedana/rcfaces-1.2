@@ -1,10 +1,12 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.component.DataGridComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
@@ -30,6 +32,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 	private String filterProperties;
 	private String preference;
 	private String headerVisible;
+	private String paged;
 	private String selectedValues;
 	private String checkedValues;
 	private String sortedColumnIds;
@@ -173,6 +176,14 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		this.headerVisible = headerVisible;
 	}
 
+	public final String getPaged() {
+		return paged;
+	}
+
+	public final void setPaged(String paged) {
+		this.paged = paged;
+	}
+
 	public final String getSelectedValues() {
 		return selectedValues;
 	}
@@ -279,6 +290,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  preference='"+preference+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
+			LOG.debug("  paged='"+paged+"'");
 			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  sortedColumnIds='"+sortedColumnIds+"'");
@@ -294,6 +306,9 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof DataGridComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'DataGridComponent'.");
 		}
 
@@ -302,7 +317,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (selectionListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (selectable != null) {
@@ -326,7 +341,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		}
 
 		if (checkListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.CHECK_LISTENER_TYPE, checkListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
 		}
 
 		if (checkable != null) {
@@ -350,7 +365,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		}
 
 		if (doubleClickListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
 		}
 
 		if (required != null) {
@@ -434,6 +449,15 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (paged != null) {
+			if (isValueReference(paged)) {
+				ValueBinding vb = application.createValueBinding(paged);
+				component.setPaged(vb);
+			} else {
+				component.setPaged(getBool(paged));
+			}
+		}
+
 		if (selectedValues != null) {
 			if (isValueReference(selectedValues)) {
 				ValueBinding vb = application.createValueBinding(selectedValues);
@@ -512,11 +536,11 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		}
 
 		if (action != null) {
-			Listeners.parseAction(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, action);
+			ListenersTools.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, actionListeners, true);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
 		}
 	}
 
@@ -537,6 +561,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		filterProperties = null;
 		preference = null;
 		headerVisible = null;
+		paged = null;
 		selectedValues = null;
 		checkedValues = null;
 		sortedColumnIds = null;

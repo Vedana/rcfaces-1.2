@@ -45,4 +45,12 @@ public interface IHtmlRenderContext extends IRenderContext {
     boolean canUseLazyTag();
 
     boolean isAsyncRenderEnable();
+
+    boolean isDisabledContextMenu();
+
+    void setDisabledContextMenu(boolean state);
+
+    String getInvalidBrowserURL();
+
+    void setInvalidBrowserURL(String invalidBrowserURL);
 }

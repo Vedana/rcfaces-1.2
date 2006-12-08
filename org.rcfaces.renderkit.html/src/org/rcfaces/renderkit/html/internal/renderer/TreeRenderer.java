@@ -16,7 +16,6 @@ import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -39,17 +38,21 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     private static final String NODE_ROW_ID = "#node";
 
-    protected void encodeBegin(IComponentWriter writer) throws WriterException {
-        IComponentRenderContext componentContext = writer
+    protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
+            IComponentDecorator componentDecorator) throws WriterException {
+        super.encodeBeforeDecorator(htmlWriter, componentDecorator);
+
+        IComponentRenderContext componentContext = htmlWriter
                 .getComponentRenderContext();
 
         TreeComponent treeComponent = (TreeComponent) componentContext
                 .getComponent();
         FacesContext facesContext = componentContext.getFacesContext();
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
         htmlWriter.startElement("UL");
+
+        htmlWriter.writeRole("tree");
+
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -93,8 +96,6 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         if (depthLevel > 0) {
             htmlWriter.writeAttribute("v:preloadedLevelDepth", depthLevel);
         }
-
-        super.encodeBegin(htmlWriter);
     }
 
     protected void encodeAfterDecorator(IHtmlWriter htmlWriter,
@@ -111,8 +112,9 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
-                htmlWriter).getJavaScriptRenderContext();
+        IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext();
 
         TreeComponent treeComponent = (TreeComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
@@ -212,7 +214,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             int depth, String containerVarId) throws WriterException {
 
         TreeDecorator selectItemNodeWriter = (TreeDecorator) getComponentDecorator(jsWriter
-                .getComponentRenderContext());
+                .getHtmlComponentRenderContext());
 
         selectItemNodeWriter.encodeNodes(jsWriter, treeComponent, nodeRenderer,
                 depth, containerVarId);

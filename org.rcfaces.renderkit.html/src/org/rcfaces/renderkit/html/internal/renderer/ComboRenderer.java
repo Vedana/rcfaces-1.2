@@ -13,7 +13,6 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
@@ -42,10 +41,11 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         return nameSpace.getSelectionEventName();
     }
 
-    public void encodeBegin(IComponentWriter writer) throws WriterException {
-        UIComponent combo = writer.getComponentRenderContext().getComponent();
+    protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
+            IComponentDecorator componentDecorator) throws WriterException {
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        UIComponent combo = htmlWriter.getComponentRenderContext()
+                .getComponent();
 
         htmlWriter.startElement("SELECT");
         writeHtmlAttributes(htmlWriter);
@@ -80,8 +80,14 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
                 htmlWriter.writeAttribute("v:filtred", "true");
             }
         }
+    }
 
-        super.encodeBegin(htmlWriter);
+    protected void encodeAfterDecorator(IHtmlWriter htmlWriter,
+            IComponentDecorator componentDecorator) throws WriterException {
+
+        htmlWriter.endElement("SELECT");
+
+        super.encodeAfterDecorator(htmlWriter, componentDecorator);
     }
 
     private boolean hasFilteredCollections(UIComponent combo) {
@@ -106,14 +112,6 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         return false;
     }
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        htmlWriter.endElement("SELECT");
-
-        super.encodeEnd(htmlWriter);
-    }
-
     protected boolean isMultipleSelect(UIComponent component) {
         return false;
     }
@@ -133,8 +131,9 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         if (htmlWriter.getComponentRenderContext().containsAttribute(
                 FILTRED_COLLECTION_PROPERTY)) {
 
-            IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
-                    htmlWriter).getJavaScriptRenderContext();
+            IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
+                    .getHtmlComponentRenderContext().getHtmlRenderContext()
+                    .getJavaScriptRenderContext();
 
             // On prend .COMBO en dure, car le filter n'est pas defini pour les
             // classes qui en héritent !

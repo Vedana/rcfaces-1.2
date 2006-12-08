@@ -1,34 +1,23 @@
-/*
- * $Id$
- */
 package org.rcfaces.renderkit.html.internal.facelets;
 
-import java.io.IOException;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.core.internal.tools.ListenersTools.IListenerType;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
+import com.sun.facelets.tag.jsf.ComponentConfig;
+import com.sun.facelets.FaceletContext;
 import javax.faces.component.UIComponent;
 
-import com.sun.facelets.FaceletContext;
-import com.sun.facelets.FaceletException;
-import com.sun.facelets.tag.TagConfig;
-import com.sun.facelets.tag.TagHandler;
+public class JavaScriptHandler extends org.rcfaces.core.internal.facelets.CameliaComponentHandler {
 
-/**
- * 
- * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$
- */
-public class JavaScriptHandler extends TagHandler {
-    private static final String REVISION = "$Revision$";
+	public JavaScriptHandler(ComponentConfig config) {
+		super(config);
+	}
 
-    public JavaScriptHandler(TagConfig config) {
-        super(config);
-    }
+	protected void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
+		setTextBody(ctx, c);
+	}
 
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
-
-    }
+	protected void applyNextHandler(FaceletContext ctx, UIComponent c) {
+	}
 
 }

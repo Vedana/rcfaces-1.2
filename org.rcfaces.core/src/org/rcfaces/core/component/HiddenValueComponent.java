@@ -7,6 +7,9 @@ import java.util.Map;
 import java.lang.Object;
 import javax.faces.el.ValueBinding;
 import java.util.Collections;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.component.CameliaInputComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -28,6 +31,10 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.hiddenValue";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","propertyChangeListener"}));
+	}
 
 	public HiddenValueComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -269,5 +276,8 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

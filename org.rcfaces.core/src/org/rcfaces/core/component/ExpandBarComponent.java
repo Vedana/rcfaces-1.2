@@ -3,21 +3,25 @@ package org.rcfaces.core.component;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ICollapsableCapability;
+import java.util.Set;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
@@ -36,10 +40,15 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	IFocusBlurEventCapability,
 	ISelectionEventCapability,
 	ILoadEventCapability,
+	IVariableScopeCapability,
 	IAsyncRenderComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.expandBar";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","focusListener","collapseEffect","asyncRenderMode","disabled","fontSize","accessKey","groupName","fontItalic","fontBold","loadListener","text","scopeVar","textAlignment","collapsed","border","readOnly","blurListener","tabIndex","fontName"}));
+	}
 
 	public ExpandBarComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -345,6 +354,34 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
+	public final javax.faces.el.ValueBinding getScopeValue() {
+		return getScopeValue(null);
+	}
+
+	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
+	}
+
+	public final void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
+	}
+
+	public final java.lang.String getScopeVar() {
+		return getScopeVar(null);
+	}
+
+	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
+	}
+
+	public final void setScopeVar(java.lang.String scopeVar) {
+		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
+	public final void setScopeVar(ValueBinding scopeVar) {
+		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
 	public final String getCollapseEffect() {
 		return getCollapseEffect(null);
 	}
@@ -367,5 +404,8 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

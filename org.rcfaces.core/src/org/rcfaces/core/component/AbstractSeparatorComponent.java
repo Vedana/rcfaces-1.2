@@ -3,16 +3,35 @@ package org.rcfaces.core.component;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
 import org.rcfaces.core.component.ISeparatorComponent;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 public abstract class AbstractSeparatorComponent extends CameliaBaseComponent implements 
 	IVisibilityCapability,
 	ISeparatorComponent {
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","hiddenMode"}));
+	}
 
+
+	public final Boolean getVisibleState(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+					return null;
+				}
+				
+				return Boolean.valueOf(isVisible(facesContext));
+			
+	}
 
 	public final void setHiddenMode(String hiddenMode) {
 
@@ -37,15 +56,15 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public final java.lang.Boolean getVisible() {
-		return getVisible(null);
+	public final boolean isVisible() {
+		return isVisible(null);
 	}
 
-	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
+	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
 
-	public final void setVisible(java.lang.Boolean visible) {
+	public final void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
@@ -53,7 +72,17 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
+	public final Boolean getVisibleState() {
+
+
+				return getVisibleState(null);
+			
+	}
+
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

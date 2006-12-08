@@ -48,20 +48,22 @@ public interface IVisibilityCapability {
      * @param visible
      *            the new visibility state.
      */
-    void setVisible(Boolean visible);
+    void setVisible(boolean visible);
 
-    /**
-     * Returns <code>{@link Boolean#TRUE TRUE}</code> if the receiver is
-     * visible, <code>{@link Boolean#FALSE FALSE}</code> if the receiver is
-     * specified "not visible", and <code>null</code> otherwise. <br>
-     * If one of the receiver's ancestors is not visible or some other condition
-     * makes the receiver not visible, this method may still indicate that it is
-     * considered visible even though it may not actually be showing.
-     * 
-     * @return the receiver's visibility state
-     */
-    Boolean getVisible();
+     boolean isVisible();
 
+     /**
+      * Returns <code>{@link Boolean#TRUE TRUE}</code> if the receiver is
+      * visible, <code>{@link Boolean#FALSE FALSE}</code> if the receiver is
+      * specified "not visible", and <code>null</code> otherwise. <br>
+      * If one of the receiver's ancestors is not visible or some other condition
+      * makes the receiver not visible, this method may still indicate that it is
+      * considered visible even though it may not actually be showing.
+      * 
+      * @return the receiver's visibility state
+      */
+    Boolean getVisibleState();
+    
     /*
      * Returns <code>true</code> if the receiver is visible and all ancestors
      * up to and including the receiver's nearest ancestor view are visible.

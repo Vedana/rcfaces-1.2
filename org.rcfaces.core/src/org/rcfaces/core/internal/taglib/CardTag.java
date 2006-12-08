@@ -1,11 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.CardComponent;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -16,6 +18,8 @@ public class CardTag extends AbstractOutputTag implements Tag {
 
 	private String textAlignment;
 	private String verticalAlignment;
+	private String scopeValue;
+	private String scopeVar;
 	private String loadListeners;
 	public String getComponentType() {
 		return CardComponent.COMPONENT_TYPE;
@@ -37,6 +41,22 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		this.verticalAlignment = verticalAlignment;
 	}
 
+	public final String getScopeValue() {
+		return scopeValue;
+	}
+
+	public final void setScopeValue(String scopeValue) {
+		this.scopeValue = scopeValue;
+	}
+
+	public final String getScopeVar() {
+		return scopeVar;
+	}
+
+	public final void setScopeVar(String scopeVar) {
+		this.scopeVar = scopeVar;
+	}
+
 	public final String getLoadListener() {
 		return loadListeners;
 	}
@@ -52,10 +72,15 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			}
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
+			LOG.debug("  scopeValue='"+scopeValue+"'");
+			LOG.debug("  scopeVar='"+scopeVar+"'");
 		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof CardComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CardComponent'.");
 		}
 
@@ -83,14 +108,32 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
+		if (scopeValue != null) {
+				ValueBinding vb = application.createValueBinding(scopeValue);
+
+				component.setScopeValue(vb);
+		}
+
+		if (scopeVar != null) {
+			if (isValueReference(scopeVar)) {
+				ValueBinding vb = application.createValueBinding(scopeVar);
+
+				component.setScopeVar(vb);
+			} else {
+				component.setScopeVar(scopeVar);
+			}
+		}
+
 		if (loadListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.LOAD_LISTENER_TYPE, loadListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
 	}
 
 	public void release() {
 		textAlignment = null;
 		verticalAlignment = null;
+		scopeValue = null;
+		scopeVar = null;
 		loadListeners = null;
 
 		super.release();

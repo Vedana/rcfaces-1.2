@@ -20,6 +20,7 @@ import javax.faces.component.UIComponent;
 
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.tools.LocaleTools.LocaleDateTimeFormatNormalizer;
 
 /**
@@ -229,8 +230,10 @@ public class CalendarTools {
         }
     }
 
-    public static Calendar getAttributesCalendar(UIComponent component) {
-        Locale locale = ContextTools.getAttributesLocale(component);
+    public static Calendar getAttributesCalendar(
+            IProcessContext processContext, UIComponent component) {
+        Locale locale = PageConfiguration.getAttributesLocale(processContext,
+                component);
 
         return Calendar.getInstance(locale);
     }
@@ -315,7 +318,7 @@ public class CalendarTools {
 
         // Il n'y a que l'année de specifier !
 
-        Calendar calendar = getAttributesCalendar(component);
+        Calendar calendar = getAttributesCalendar(null, component);
 
         int year = Integer.parseInt(value);
         if (year < 1000) {
@@ -328,8 +331,7 @@ public class CalendarTools {
     }
 
     private static DateFormat getShortDateFormat(UIComponent component) {
-        return (DateFormat) LocaleTools.getDefaultFormat(component,
-                LocaleTools.DATE_TYPE);
+        return (DateFormat) LocaleTools.getDefaultFormat(component, LocaleTools.DATE_TYPE);
     }
 
     public static String getDateFormatPattern(Locale locale, int style) {

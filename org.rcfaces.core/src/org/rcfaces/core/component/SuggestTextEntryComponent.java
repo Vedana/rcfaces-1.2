@@ -2,14 +2,17 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.TextEntryComponent;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
-import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 
 public class SuggestTextEntryComponent extends TextEntryComponent implements 
 	IFilterCapability,
@@ -19,6 +22,10 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.suggestTextEntry";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"caseSensitive","suggestionDelayMs","filterProperties","suggestionConverter","suggestionListener","suggestionValue","forceProposal","maxResultNumber","menuListener","suggestionMinChars"}));
+	}
 
 	public SuggestTextEntryComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -223,5 +230,8 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

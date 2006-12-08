@@ -13,9 +13,6 @@
 .f_pager {
 	-moz-user-select: none;
 	user-select: none;
-}
-
-DIV.f_pager {
 	border: 1px dotted #999999;
 	background-color: #EEEEEE;
 	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif; 

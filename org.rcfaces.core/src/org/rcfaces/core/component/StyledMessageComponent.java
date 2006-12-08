@@ -4,7 +4,10 @@ import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
@@ -20,6 +23,10 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.styledMessage";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","fatalStyleClass","mouseOverListener","backgroundImageVerticalPosition","warnStyleClass","showIfMessage","styleClass","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","infoStyleClass","backgroundImageHorizontalRepeat","initListener","backgroundImageURL","border","mouseOutListener","setFocusIfMessage","for"}));
+	}
 
 	public StyledMessageComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -284,5 +291,8 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

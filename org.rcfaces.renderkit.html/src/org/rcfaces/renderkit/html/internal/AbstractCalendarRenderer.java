@@ -47,8 +47,9 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 .getTwoDigitYearStart(facesContext);
 
         if (maxDate != null || minDate != null || twoDigitYearStart != null) {
-            Calendar calendar = CalendarTools
-                    .getAttributesCalendar(calendarComponent);
+            Calendar calendar = CalendarTools.getAttributesCalendar(
+                    componentRenderContext.getRenderContext()
+                            .getProcessContext(), calendarComponent);
 
             StringAppender sb = new StringAppender(12);
 
@@ -255,8 +256,8 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
 
         AbstractCalendarComponent calendarComponent = (AbstractCalendarComponent) component;
 
-        Calendar calendar = CalendarTools
-                .getAttributesCalendar(calendarComponent);
+        Calendar calendar = CalendarTools.getAttributesCalendar(null,
+                calendarComponent);
 
         return new CalendarDecorator(component, calendar, dayOnly,
                 filterProperties, maxResultNumber);
@@ -272,8 +273,9 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         AbstractCalendarComponent calendarComponent = (AbstractCalendarComponent) writer
                 .getComponentRenderContext().getComponent();
 
-        IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
-                writer).getJavaScriptRenderContext();
+        IJavaScriptRenderContext javaScriptRenderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext();
 
         int clientDatesStrategy = calendarComponent
                 .getClientDatesStrategy(facesContext);

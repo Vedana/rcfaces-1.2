@@ -6,15 +6,22 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.CheckButtonComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ImageCheckButtonComponent extends CheckButtonComponent implements 
 	IImageButtonFamilly {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imageCheckButton";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CheckButtonComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition"}));
+	}
 
 	public ImageCheckButtonComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -176,5 +183,8 @@ public class ImageCheckButtonComponent extends CheckButtonComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

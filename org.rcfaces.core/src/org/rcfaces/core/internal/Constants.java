@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.component.ComponentsFactory;
 import org.rcfaces.core.internal.component.IFactory;
 import org.rcfaces.core.internal.images.IImageLoaderFactory;
@@ -21,6 +22,18 @@ public class Constants {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(Constants.class);
+
+    private static final String CONSTANT_PREFIX;
+    static {
+        Package _package = Constants.class.getPackage();
+
+        String name = _package.getName();
+        if (name.endsWith(".internal")) {
+            name = name.substring(0, name.lastIndexOf('.'));
+        }
+
+        CONSTANT_PREFIX = name;
+    }
 
     public static final boolean READ_ONLY_COLLECTION_LOCK_ENABLED = true;
 
@@ -71,18 +84,6 @@ public class Constants {
                 RCFACES_VERSION_SYSTEM_PARAMETER, "RCFaces Core");
     }
 
-    private static final String CONSTANT_PREFIX;
-    static {
-        Package _package = Constants.class.getPackage();
-
-        String name = _package.getName();
-        if (name.endsWith(".internal")) {
-            name = name.substring(0, name.lastIndexOf('.'));
-        }
-
-        CONSTANT_PREFIX = name;
-    }
-
     private static final IFactory defaultFactory;
 
     public static final IImageLoaderFactory IMAGE_LOADER_FACTORY = null;
@@ -92,6 +93,18 @@ public class Constants {
     public static final boolean COMPACTED_PROPERTY_NAME = true;
 
     public static final boolean LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE = false;
+
+    private static final String FACELET_CLASSNAME = "com.sun.facelets.Facelet";
+
+    public static final int DEFAULT_ASYNC_MODE = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
+
+    public static final int ENABLE_ASYNC_MODE_VALUE = IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE;
+
+    public static final boolean FACELETS_SUPPORT = true;
+
+    public static final boolean FLUSH_AFTER_ENCODE_CHILDREN = false;
+
+    public static final boolean FLUSH_AFTER_ENCODE_END = false;
 
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
@@ -134,6 +147,36 @@ public class Constants {
 
         LOG.info("VERSIONED_URI_HASHCODE_MAX_SIZE="
                 + VERSIONED_URI_HASHCODE_MAX_SIZE);
+
+        LOG.info("FACELETS_SUPPORT=" + FACELETS_SUPPORT);
+
+        switch (DEFAULT_ASYNC_MODE) {
+        case IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE:
+            LOG.info("DEFAULT_ASYNC_MODE=tree");
+            break;
+
+        case IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE:
+            LOG.info("DEFAULT_ASYNC_MODE=buffer");
+            break;
+
+        default:
+            LOG.info("DEFAULT_ASYNC_MODE=none");
+            break;
+        }
+
+        switch (ENABLE_ASYNC_MODE_VALUE) {
+        case IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE:
+            LOG.info("ENABLE_ASYNC_MODE_VALUE=tree");
+            break;
+
+        case IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE:
+            LOG.info("ENABLE_ASYNC_MODE_VALUE=buffer");
+            break;
+
+        default:
+            LOG.info("ENABLE_ASYNC_MODE_VALUE=unknown");
+            break;
+        }
 
         defaultFactory = ComponentsFactory.getCameliaFactory(null);
         LOG.info("Default components factory: " + defaultFactory.getName());

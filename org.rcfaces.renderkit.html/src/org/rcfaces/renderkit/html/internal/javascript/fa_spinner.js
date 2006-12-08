@@ -224,9 +224,73 @@ var __prototype = {
 	/**
 	 * @method private
 	 */
+	_performSpinnerKeyPress: function(cevt) {
+		var jsEvent=cevt.f_getJsEvent();
+		var button=this._getKeyButton(cevt);
+		if (button) {
+			this.f_performStep(button._scale, jsEvent);
+			return;
+		}
+		
+		var keyCode = jsEvent.keyCode;
+		var charCode = jsEvent.charCode;
+
+/*		
+		var keyChar;
+		
+		if (!charCode) {
+			keyChar = String.fromCharCode(keyCode);
+
+		} else {
+			keyChar = String.fromCharCode(charCode);
+		}
+				
+		f_core.Debug(fa_spinner, "KeyPress: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+")");
+*/	
+	
+		if (f_core.IsInternetExplorer()) {
+			if (keyCode < 32) {
+				return true;
+			}
+		} else if (f_core.IsGecko()) {
+			if (keyCode>0) {
+				return true;
+			}
+			keyCode=charCode;
+		}
+		
+		if (keyCode==44 || keyCode==46) {
+			var v=this.f_getValue();
+			if (v.indexOf('.')>=0 || v.indexOf(',')>=0) {
+				return false;
+			}
+			
+			return true;
+		}
+		if (keyCode==45) {
+			var v=this.f_getValue();
+			
+			var selection=f_core.GetTextSelection(this.f_getInput());
+			
+			if (selection[0]>0 || v.indexOf('-')>=0) {
+				return false;
+			}
+			
+			return true;
+		}
+		
+		if (keyCode>=48 && keyCode<=58) {
+			return true;
+		}
+		
+		return false;
+	},
+	/**
+	 * @method private
+	 */
 	_performSpinnerKeyDown: function(cevt) {
 		var button=this._getKeyButton(cevt);
-		if (!button) {
+		if (!button) {		
 			return;
 		}
 		
@@ -260,18 +324,6 @@ var __prototype = {
 		}
 		
 		return null;
-	},
-	/**
-	 * @method private
-	 */
-	_performSpinnerKeyPress: function(cevt) {
-		var button=this._getKeyButton(cevt);
-		if (!button) {
-			return;
-		}
-		
-		var evt=cevt.f_getJsEvent();
-		this.f_performStep(button._scale, evt);
 	},
 	/**
 	 * @method private

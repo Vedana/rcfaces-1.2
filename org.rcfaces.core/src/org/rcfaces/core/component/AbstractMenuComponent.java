@@ -8,6 +8,9 @@ import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractConverterCommandComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public abstract class AbstractMenuComponent extends AbstractConverterCommandComponent implements 
@@ -16,6 +19,10 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 	IReadOnlyCapability,
 	IMenuComponent {
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractConverterCommandComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","checkListener","removeAllWhenShown","readOnly"}));
+	}
 
 
 	public final IMenuItemIterator listMenuItems() {
@@ -87,5 +94,8 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

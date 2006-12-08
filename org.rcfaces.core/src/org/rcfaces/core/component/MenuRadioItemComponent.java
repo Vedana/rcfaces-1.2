@@ -3,13 +3,20 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.MenuCheckItemComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 public class MenuRadioItemComponent extends MenuCheckItemComponent implements 
 	IRadioValueCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuRadioItem";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(MenuCheckItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"radioValue","groupName"}));
+	}
 
 	public MenuRadioItemComponent() {
 		setRendererType(null);
@@ -54,5 +61,8 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

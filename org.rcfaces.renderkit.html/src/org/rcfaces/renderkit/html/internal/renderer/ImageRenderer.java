@@ -116,8 +116,9 @@ public class ImageRenderer extends AbstractCssRenderer {
         if (htmlWriter.getComponentRenderContext().containsAttribute(
                 FILTRED_CONTENT_PROPERTY)) {
 
-            IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
-                    htmlWriter).getJavaScriptRenderContext();
+            IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
+                    .getHtmlComponentRenderContext().getHtmlRenderContext()
+                    .getJavaScriptRenderContext();
 
             // On prend .COMBO en dure, car le filter n'est pas defini pour les
             // classes qui en héritent !

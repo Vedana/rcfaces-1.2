@@ -329,7 +329,7 @@ public abstract class AbstractSelectItemsDecorator extends
             return writer.getComponentRenderContext();
         }
 
-        return javaScriptWriter.getComponentRenderContext();
+        return javaScriptWriter.getHtmlComponentRenderContext();
     }
 
     protected void encodeNodes(UIComponent component) throws WriterException {
@@ -497,6 +497,24 @@ public abstract class AbstractSelectItemsDecorator extends
 
                 encodeSelectItem(component, selectItem, depth, visible);
             }
+            
+            return;
+        }
+
+        if (getComponentRenderContext().getRenderContext().getProcessContext()
+                .isDesignerMode()
+                && (value instanceof String[])) {
+            String vs[] = (String[]) value;
+            if (vs != null) {
+                SelectItem sis[] = new SelectItem[vs.length];
+                for (int i = 0; i < sis.length; i++) {
+                    SelectItem selectItem = new SelectItem("idx" + i, vs[i]);
+
+                    encodeSelectItem(component, selectItem, depth, visible);
+                }
+            }
+            
+            return;
         }
 
         throw new WriterException("Illegal uiSelectItems value type ! (class='"

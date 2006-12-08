@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Globals;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
@@ -44,7 +45,11 @@ public class ResourcesServlet extends HttpServlet {
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        String url = request.getRequestURI();
+        String url = (String) request
+                .getAttribute(Globals.INCLUDE_REQUEST_URI_ATTR);
+        if (url == null) {
+            url = request.getRequestURI();
+        }
 
         if (url.endsWith(".js")) {
             javascriptServlet.service(request, response);

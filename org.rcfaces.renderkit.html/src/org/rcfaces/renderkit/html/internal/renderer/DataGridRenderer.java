@@ -42,6 +42,7 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IEventData;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -50,6 +51,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.DataGridServerSort;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
@@ -142,8 +144,9 @@ public class DataGridRenderer extends AbstractCssRenderer {
         DataGridComponent dataGridComponent = (DataGridComponent) writer
                 .getComponentRenderContext().getComponent();
 
-        IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
-                writer).getJavaScriptRenderContext();
+        IJavaScriptRenderContext javaScriptRenderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext();
 
         IMenuIterator menuIterator = dataGridComponent.listMenus();
         if (menuIterator.hasNext()) {
@@ -187,7 +190,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
             preference.loadPreference(facesContext, dg);
         }
 
-        TableRenderContext tableContext = createTableContext(facesContext, dg);
+        TableRenderContext tableContext = createTableContext(writer
+                .getComponentRenderContext());
 
         boolean scrollBars = false;
 
@@ -250,6 +254,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.startElement("DIV", dg);
+        htmlWriter.writeRole("grid");
+
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter, cssClassNameSuffix, CSS_ALL_MASK);
@@ -259,7 +265,6 @@ public class DataGridRenderer extends AbstractCssRenderer {
         if (cssClassNameSuffix != null) {
             htmlWriter.writeAttribute("v:className", className);
         }
-
         if (tableContext.selectable) {
             htmlWriter.writeAttribute("v:selectionCardinality",
                     tableContext.selectionCardinality);
@@ -268,7 +273,6 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 htmlWriter.writeAttribute("v:clientSelectionFullState", "true");
             }
         }
-
         if (tableContext.checkable) {
             htmlWriter.writeAttribute("v:checkCardinality",
                     tableContext.checkCardinality);
@@ -285,17 +289,19 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 htmlWriter.writeAttribute("v:clientCheckFullState", "true");
             }
         }
-
+        
         if (dg.isReadOnly(facesContext)) {
             htmlWriter.writeAttribute("v:readOnly", "true");
         }
+        
         if (tableContext.isDisabled()) {
             htmlWriter.writeAttribute("v:disabled", "true");
         }
+        
         if (dg.isRequired(facesContext)) {
             htmlWriter.writeAttribute("v:required", "true");
         }
-
+        
         if (resizable) {
             htmlWriter.writeAttribute("v:resizable", "true");
         }
@@ -325,6 +331,9 @@ public class DataGridRenderer extends AbstractCssRenderer {
         int first = tableContext.getFirst();
         if (first > 0) {
             htmlWriter.writeAttribute("v:first", first);
+        }
+        if (tableContext.isPaged() == false) {
+            htmlWriter.writeAttribute("v:paged", "false");
         }
 
         int dataGridPixelWidth = getPixelSize(dg.getWidth(), -1);
@@ -542,6 +551,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         String toolTip = dc.getToolTipText(facesContext);
         if (toolTip != null) {
+            toolTip = ParamUtils.formatMessage(dc, toolTip);
+
             htmlWriter.writeTitle(toolTip);
         }
 
@@ -643,17 +654,18 @@ public class DataGridRenderer extends AbstractCssRenderer {
         super.encodeJavaScript(htmlWriter);
 
         TableRenderContext tableContext = (TableRenderContext) htmlWriter
-                .getComponentRenderContext().setAttribute(TABLE_CONTEXT, null);
+                .getHtmlComponentRenderContext().setAttribute(TABLE_CONTEXT,
+                        null);
 
         encodeJsHeader(htmlWriter, tableContext);
         encodeJsBody(htmlWriter, tableContext);
         encodeJsFooter(htmlWriter, tableContext);
     }
 
-    public TableRenderContext createTableContext(FacesContext facesContext,
-            DataGridComponent dg) {
-        TableRenderContext tableContext = new TableRenderContext(facesContext,
-                dg);
+    public TableRenderContext createTableContext(
+            IComponentRenderContext componentRenderContext) {
+        TableRenderContext tableContext = new TableRenderContext(
+                componentRenderContext);
 
         return tableContext;
     }
@@ -757,6 +769,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         String toolTip = dc.getToolTipText();
         if (toolTip != null) {
+            toolTip = ParamUtils.formatMessage(dc, toolTip);
+
             htmlWriter.writeTitle(toolTip);
         }
 
@@ -783,8 +797,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         /* Si le tableau n'est pas visible ! */
 
         if (ENABLE_SERVER_REQUEST) {
-            String interactiveComponentClientId = getHtmlRenderContext(
-                    htmlWriter.getWriter())
+            String interactiveComponentClientId = htmlWriter
+                    .getHtmlComponentRenderContext().getHtmlRenderContext()
                     .getCurrentInteractiveRenderComponentClientId();
 
             if (interactiveComponentClientId != null) {
@@ -796,7 +810,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
 
         IJavaScriptRenderContext javascriptRenderContext = ((IHtmlRenderContext) htmlWriter
-                .getComponentRenderContext().getRenderContext())
+                .getHtmlComponentRenderContext().getRenderContext())
                 .getJavaScriptRenderContext();
 
         String rowVarName = javascriptRenderContext.allocateVarName();
@@ -1477,6 +1491,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         String rowIndexVar = tableContext.getRowIndexVar();
 
+        boolean designerMode = tableContext.isDesignerMode();
         try {
             boolean selected = false;
             boolean checked = false;
@@ -1484,6 +1499,21 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
             DataColumnComponent rowValueColumn = tableContext
                     .getRowValueColumn();
+
+            int rowValueColumnIndex = -1;
+            if (designerMode && rowValueColumn != null) {
+                IDataColumnIterator it2 = dataGridComponent.listColumns();
+                for (int i = 0; it2.hasNext(); i++) {
+                    DataColumnComponent dataColumnComponent = it2.next();
+                    if (dataColumnComponent != rowValueColumn) {
+                        continue;
+                    }
+
+                    rowValueColumnIndex = i;
+                    break;
+                }
+
+            }
 
             for (int i = 0;; i++) {
                 if (searchEnd == false) {
@@ -1572,11 +1602,27 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 }
 
                 if (rowValueColumn != null) {
-                    Object value = rowValueColumn.getValue(facesContext);
-                    if (value != null) {
+                    Object value;
+
+                    if (designerMode) {
+                        String sd[] = (String[]) dataGridComponent.getRowData();
+                        if (sd != null && sd.length > rowValueColumnIndex) {
+                            value = sd[rowValueColumnIndex];
+
+                        } else {
+                            value = String.valueOf(i);
+                        }
+
+                        rowId = (String) value;
+
+                    } else {
+                        value = rowValueColumn.getValue(facesContext);
+
                         rowId = convertValue(facesContext, rowValueColumn,
                                 value);
+                    }
 
+                    if (value != null) {
                         if (checkedObjects != null) {
                             checked = checkedObjects.contains(value);
                         }
@@ -1703,6 +1749,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
         int ciIndex = 0;
         int csIndex = 0;
         int ctIndex = 0;
+        boolean designerMode = tableContext.isDesignerMode();
+        String designerData[] = null;
+        if (designerMode) {
+            designerData = (String[]) tableContext.getDataGridComponent()
+                    .getRowData();
+        }
+
         for (int i = 0; i < columnNumber; i++) {
             DataColumnComponent dc = dcs[i];
 
@@ -1714,9 +1767,17 @@ public class DataGridRenderer extends AbstractCssRenderer {
             if (rowId == null || tableContext.getRowValueColumn() != dc) {
                 String svalue = null;
 
-                Object value = dc.getValue(facesContext);
-                if (value != null) {
-                    svalue = convertValue(facesContext, dc, value);
+                if (designerMode) {
+                    if (designerData.length > i) {
+                        svalue = designerData[i];
+                    }
+
+                } else {
+                    Object value = dc.getValue(facesContext);
+
+                    if (value != null) {
+                        svalue = convertValue(facesContext, dc, value);
+                    }
                 }
 
                 if (values != null) {
@@ -2288,6 +2349,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         private final int columnStates[];
 
+        private final boolean paged;
+
         private String rowVarName;
 
         private boolean hasColumnImages;
@@ -2320,11 +2383,16 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         private int totalSize;
 
+        private boolean designerMode;
+
         private TableRenderContext(FacesContext facesContext,
                 DataGridComponent dataGridComponent,
-                ISortedComponent sortedComponents[]) {
+                ISortedComponent sortedComponents[],
+                IProcessContext processContext) {
             this.dataGridComponent = dataGridComponent;
             this.sortedComponents = sortedComponents;
+
+            paged = dataGridComponent.isPaged(facesContext);
 
             selectable = dataGridComponent.isSelectable(facesContext);
             if (selectable) {
@@ -2437,7 +2505,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     columnIds[i] = columnId;
                 }
 
-                Boolean v = dc.getVisible(facesContext);
+                Boolean v = dc.getVisibleState();
                 if (v != null && v.booleanValue() == false) {
                     // Pas visible du tout !
 
@@ -2500,7 +2568,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
                             }
 
                             if (IHtmlRenderContext.JAVASCRIPT_TYPE
-                                    .equals(scriptListener.getScriptType())) {
+                                    .equals(scriptListener
+                                            .getScriptType(processContext))) {
 
                                 if (rows > 0) {
                                     // Script en mode ROW !
@@ -2546,6 +2615,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
             // elles n'ont pas besoin de publier un model !
         }
 
+        public boolean isDesignerMode() {
+            return designerMode;
+        }
+
         public String getRowIndexVar() {
             return rowIndexVar;
         }
@@ -2579,22 +2652,30 @@ public class DataGridRenderer extends AbstractCssRenderer {
             return columns;
         }
 
-        public TableRenderContext(FacesContext facesContext,
-                DataGridComponent dataGridComponent) {
-            this(facesContext, dataGridComponent, dataGridComponent
-                    .listSortedComponents(facesContext));
+        public TableRenderContext(IComponentRenderContext componentRenderContext) {
+            this(componentRenderContext.getFacesContext(),
+                    (DataGridComponent) componentRenderContext.getComponent(),
+                    ((DataGridComponent) componentRenderContext.getComponent())
+                            .listSortedComponents(componentRenderContext
+                                    .getFacesContext()), componentRenderContext
+                            .getRenderContext().getProcessContext());
+
+            designerMode = componentRenderContext.getRenderContext()
+                    .getProcessContext().isDesignerMode();
 
             first = dataGridComponent.getFirst();
 
             rowCount = -2;
 
-            filtersMap = dataGridComponent.getFilterProperties(facesContext);
+            filtersMap = dataGridComponent
+                    .getFilterProperties(componentRenderContext
+                            .getFacesContext());
         }
 
         public TableRenderContext(FacesContext facesContext,
                 DataGridComponent dg, int rowIndex,
                 ISortedComponent sortedComponents[], String filterExpression) {
-            this(facesContext, dg, sortedComponents);
+            this(facesContext, dg, sortedComponents, null);
 
             first = rowIndex;
             this.filtersMap = HtmlTools.decodeFilterExpression(dg,
@@ -2631,6 +2712,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         public final int getFirst() {
             return first;
+        }
+
+        public final boolean isPaged() {
+            return paged;
         }
 
         public final ISortedComponent[] listSortedComponents() {

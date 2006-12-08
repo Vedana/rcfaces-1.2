@@ -5,7 +5,10 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractCommandComponent;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class ButtonComponent extends AbstractCommandComponent implements 
@@ -15,6 +18,10 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.button";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","text","readOnly"}));
+	}
 
 	public ButtonComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -103,5 +110,8 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

@@ -6,10 +6,14 @@ import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
+import javax.faces.FacesException;
 import java.util.Date;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.internal.converter.TwoDigitYearConverter;
-import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
+import java.util.HashSet;
 import java.util.Locale;
+import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.tools.CalendarTools;
@@ -22,6 +26,10 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	ILocalizedAttributesCapability,
 	IClientDatesStrategyCapability {
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","maxDate","clientDatesStrategy","readOnly","disabledWeekDays","attributesLocale","twoDigitYearStart","minDate"}));
+	}
 
 
 	public final void setValue(Object value) {
@@ -32,6 +40,25 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 				}
 				
 				super.setValue(value);
+			
+	}
+
+	public final Date getDate() {
+
+
+				Object value=getValue();
+				if (value==null || (value instanceof Date)) {
+					return (Date)value;
+				}
+
+				throw new FacesException("Value of AbstractCalendar is not a date ! ("+value+")");
+			
+	}
+
+	public final void setDate(Date date) {
+
+
+				setValue(date);
 			
 	}
 
@@ -219,5 +246,8 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

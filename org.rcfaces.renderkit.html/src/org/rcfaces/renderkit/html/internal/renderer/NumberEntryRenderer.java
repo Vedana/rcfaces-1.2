@@ -23,8 +23,8 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.tools.NumberTools;
+import org.rcfaces.core.internal.tools.PageConfiguration;
 import org.rcfaces.renderkit.html.internal.AbstractCompositeRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -61,14 +61,17 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         NumberEntryComponent numberEntryComponent = (NumberEntryComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement("SPAN");
+        htmlWriter.startElement("DIV");
 
+        htmlWriter.writeRole("textfield");
+        
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
         DecimalFormatSymbols decimalFormatSymbols = null;
-        Locale locale = ContextTools.getAttributesLocale(numberEntryComponent);
+        Locale locale = PageConfiguration.getAttributesLocale(componentRenderContext
+                .getRenderContext().getProcessContext(), numberEntryComponent);
         if (locale == null) {
             locale = htmlWriter.getComponentRenderContext().getRenderContext()
                     .getProcessContext().getUserLocale();
@@ -139,7 +142,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         encodeSubComponents(htmlWriter, numberEntryComponent, number,
                 numberFormat, decimalFormatSymbols, locale);
 
-        htmlWriter.endElement("SPAN");
+        htmlWriter.endElement("DIV");
 
         htmlWriter.enableJavaScript();
     }
@@ -168,10 +171,10 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         char chs[] = numberFormat.toCharArray();
 
         char decimalSeparator = '.';
-        //char groupingSeparator = ',';
+        // char groupingSeparator = ',';
         if (decimalFormatSymbols != null) {
             decimalSeparator = decimalFormatSymbols.getDecimalSeparator();
-          //  groupingSeparator = decimalFormatSymbols.getGroupingSeparator();
+            // groupingSeparator = decimalFormatSymbols.getGroupingSeparator();
         }
 
         int nbSub = 0;
@@ -179,7 +182,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         int nb = 0;
         int optional = 0;
         int decimalPart = 0;
-       // boolean hasGroupingSeparator = false;
+        // boolean hasGroupingSeparator = false;
         for (int i = 0; i <= chs.length; i++) {
             char c = 0;
             char originalChar = 0;
@@ -189,7 +192,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
                 originalChar = c;
 
                 if (c == ',') {
-                //    hasGroupingSeparator = true;
+                    // hasGroupingSeparator = true;
                     continue;
                 }
                 if (c == '#') {

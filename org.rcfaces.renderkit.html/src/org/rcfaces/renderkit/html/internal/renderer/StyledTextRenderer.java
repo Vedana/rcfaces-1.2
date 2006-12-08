@@ -5,6 +5,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -19,12 +20,17 @@ public class StyledTextRenderer extends TextRenderer {
     protected boolean writeText(IHtmlWriter writer, TextComponent textComponent)
             throws WriterException {
 
-        String text = textComponent.getText();
+        String text = textComponent.getText(writer.getComponentRenderContext()
+                .getFacesContext());
+
         if (text == null || text.length() < 1) {
             return false;
         }
+        text = ParamUtils.formatMessage(textComponent, text);
 
-        writer.write(text);
+        if (text.length() > 0) {
+            writer.write(text);
+        }
 
         return false;
     }

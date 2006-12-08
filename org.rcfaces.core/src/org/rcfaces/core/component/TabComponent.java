@@ -10,6 +10,9 @@ import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.TabbedPaneComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
@@ -28,6 +31,10 @@ public class TabComponent extends CardComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tab";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","hoverImageURL","fontUnderline","imageURL","text","disabledImageURL","selectedImageURL","disabled","fontSize","accessKey","fontName","fontItalic"}));
+	}
 
 	public TabComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -274,5 +281,8 @@ public class TabComponent extends CardComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

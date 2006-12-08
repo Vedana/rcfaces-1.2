@@ -211,6 +211,10 @@
 		<component-class>org.rcfaces.core.component.RulerComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.scope</component-type>
+		<component-class>org.rcfaces.core.component.ScopeComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.submitButton</component-type>
 		<component-class>org.rcfaces.core.component.SubmitButtonComponent</component-class>
 	</component>
@@ -314,8 +318,8 @@
 		<converter-id>org.rcfaces.Double</converter-id>
 		<converter-class>org.rcfaces.core.converter.DoubleConverter</converter-class>
 	</converter>
-<lifecycle>
-	<phase-listener>org.rcfaces.core.internal.config.ServicesRegistryImpl</phase-listener>
-	<phase-listener>org.rcfaces.core.internal.component.TemplatesEngine</phase-listener>
-</lifecycle>
+	<lifecycle>
+		<phase-listener>org.rcfaces.core.internal.config.ServicesRegistryImpl</phase-listener>
+		<phase-listener>org.rcfaces.core.internal.component.TemplatesEngine</phase-listener>
+	</lifecycle>
 </faces-config>

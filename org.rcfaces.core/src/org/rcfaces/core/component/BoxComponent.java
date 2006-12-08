@@ -5,7 +5,10 @@ import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
@@ -13,6 +16,7 @@ import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 
@@ -24,10 +28,15 @@ public class BoxComponent extends AbstractBasicComponent implements
 	ILoadEventCapability,
 	IMenuCapability,
 	IAsyncRenderModeCapability,
+	IVariableScopeCapability,
 	IAsyncRenderComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.box";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","asyncRenderMode","mouseOverListener","backgroundImageVerticalPosition","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
+	}
 
 	public BoxComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -226,6 +235,34 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
+	public final javax.faces.el.ValueBinding getScopeValue() {
+		return getScopeValue(null);
+	}
+
+	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
+	}
+
+	public final void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
+	}
+
+	public final java.lang.String getScopeVar() {
+		return getScopeVar(null);
+	}
+
+	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
+	}
+
+	public final void setScopeVar(java.lang.String scopeVar) {
+		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
+	public final void setScopeVar(ValueBinding scopeVar) {
+		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
 	public final boolean isHorizontalScroll() {
 		return isHorizontalScroll(null);
 	}
@@ -268,5 +305,8 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

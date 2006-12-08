@@ -25,7 +25,9 @@ public interface IJavaScriptWriter {
     /*
      * Peut ne pas être implementée !
      */
-    IHtmlComponentRenderContext getComponentRenderContext();
+    IHtmlComponentRenderContext getHtmlComponentRenderContext();
+
+    IHtmlRenderContext getHtmlRenderContext();
 
     /*
      * Peut ne pas �tre implement�e !

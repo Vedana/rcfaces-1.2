@@ -108,7 +108,7 @@ public class BasicSelectItem extends SelectItem implements
         }
 
         if (component instanceof IVisibilityCapability) {
-            Boolean b = ((IVisibilityCapability) component).getVisible();
+            Boolean b = ((IVisibilityCapability) component).getVisibleState();
 
             visible = (Boolean.FALSE.equals(b) == false);
 

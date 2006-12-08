@@ -18,7 +18,6 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.log.LogService;
 import org.rcfaces.core.internal.tools.ContextTools;
@@ -29,7 +28,6 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 import org.rcfaces.renderkit.html.internal.renderer.MessagesRepository;
 import org.rcfaces.renderkit.html.internal.service.LogHtmlService;
-import org.rcfaces.renderkit.html.internal.taglib.InitializeTag;
 
 /**
  * 
@@ -408,13 +406,7 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         }
         initialized = true;
 
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
-        IHtmlRenderContext renderContext = (IHtmlRenderContext) componentRenderContext
-                .getRenderContext();
-
-        initializeJavaScript(writer, repository, renderContext
-                .getHtmlProcessContext());
+        initializeJavaScript(writer, repository);
     }
 
     public void restoreState(Object state) {
@@ -459,11 +451,10 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
     }
 
     public static void initializeJavaScript(IJavaScriptWriter writer,
-            IJavaScriptRepository repository,
-            IHtmlProcessContext renderExternalContext) throws WriterException {
+            IJavaScriptRepository repository) throws WriterException {
 
-        Map requestMap = renderExternalContext.getFacesContext()
-                .getExternalContext().getRequestMap();
+        Map requestMap = writer.getFacesContext().getExternalContext()
+                .getRequestMap();
         if (requestMap.containsKey(JAVASCRIPT_INITIALIZED_PROPERTY)) {
             return;
         }
@@ -499,14 +490,15 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             writer.writeCall("f_core", "SetDesignerMode").writeln(");");
         }
 
-        String invalidBrowserURL = InitializeTag
-                .getInvalidBrowserURL(facesContext);
+        IHtmlRenderContext htmlRenderContext = writer.getHtmlRenderContext();
+
+        String invalidBrowserURL = htmlRenderContext.getInvalidBrowserURL();
         if (invalidBrowserURL != null) {
             writer.writeCall("f_core", "VerifyBrowserCompatibility")
                     .writeString(invalidBrowserURL).writeln(");");
         }
 
-        if (InitializeTag.isDisableContextMenu(facesContext)) {
+        if (htmlRenderContext.isDisabledContextMenu()) {
             writer.writeCall("f_core", "DisableContextMenu").writeln(");");
         }
 
@@ -578,7 +570,9 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             pred++;
         }
 
-        String styleSheetURI = renderExternalContext.getStyleSheetURI(null, true);
+        String styleSheetURI = writer.getWriter()
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getHtmlProcessContext().getStyleSheetURI(null, true);
         if (styleSheetURI != null && styleSheetURI.equals(jsBaseURI) == false) {
             for (; pred > 0; pred--) {
                 writer.write(',').writeNull();

@@ -6,46 +6,64 @@ import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractCommandComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.internal.component.IConvertValueHolder;
 
 public abstract class AbstractConverterCommandComponent extends AbstractCommandComponent implements 
 	IConvertValueHolder {
 
-
-
-	public final Converter getConverter(FacesContext facesContext) {
-
-
-		return engine.getConverter(facesContext);
-		
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"converter"}));
 	}
+
 
 	public final void setConverter(String converterId) {
 
 
-		engine.setConverterId(converterId);
-		
+				 setConverter(null, converterId);
+			
 	}
 
-	public final void setConverter(ValueBinding converter) {
+	public final void setConverter(FacesContext facesContext, String converterId) {
 
 
-			engine.setConverterId(converter);
-		
+				if (facesContext==null) {
+					facesContext=FacesContext.getCurrentInstance();
+				}
+				Converter converter = facesContext.getApplication().createConverter(converterId);
+                this.setConverter(converter);
+			
+	}
+
+	public final void setConverter(ValueBinding valueBinding) {
+
+
+                  this.setValueBinding("converter", valueBinding);
+			
 	}
 
 	public final void setConverter(Converter converter) {
 
 
-		engine.setConverter(converter);
-		
+            	engine.setProperty("converter", converter);
+			
 	}
 
 	public final Converter getConverter() {
 
 
-		return getConverter(null);
-		
+            	return (Converter)engine.getProperty("converter", null);
+			
+	}
+
+	public final Converter getConverter(FacesContext facesContext) {
+
+
+            	return (Converter)engine.getProperty("converter", facesContext);
+			
 	}
 
 	public final Object getLocalValue() {
@@ -57,5 +75,8 @@ public abstract class AbstractConverterCommandComponent extends AbstractCommandC
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

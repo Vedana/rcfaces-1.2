@@ -37,8 +37,8 @@ import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorRegistry;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
-import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.contentStorage.ContentStorageAccessorHandler;
+import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandlerImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.service.IServicesRegistry;
@@ -123,7 +123,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
         initializeConfigs(facesContext);
     }
-
+    
     protected void initializeRegistries(FacesContext facesContext) {
 
         if (designerMode) {

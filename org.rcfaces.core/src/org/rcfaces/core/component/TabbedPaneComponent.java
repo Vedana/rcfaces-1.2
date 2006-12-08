@@ -7,8 +7,11 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IClosableCapability;
 import org.rcfaces.core.component.iterator.ITabIterator;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.component.TabComponent;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
+import java.util.HashSet;
 
 public class TabbedPaneComponent extends CardBoxComponent implements 
 	ICloseEventCapability,
@@ -16,6 +19,10 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tabbedPane";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardBoxComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"closable","closeListener"}));
+	}
 
 	public TabbedPaneComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -84,5 +91,8 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

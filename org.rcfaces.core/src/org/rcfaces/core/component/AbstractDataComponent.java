@@ -4,11 +4,12 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import java.lang.Object;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Collections;
+import java.util.Arrays;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -18,7 +19,6 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.component.CameliaDataComponent;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.tools.VisibilityTools;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IResetEventCapability;
@@ -28,8 +28,10 @@ import javax.faces.context.FacesContext;
 import java.util.Map;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
@@ -56,6 +58,10 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	IServerDataManager,
 	IClientDataManager {
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","resetListener","focusListener","toolTipText","mouseOverListener","userEventListener","helpURL","marginBottom","visible","y","lookId","marginLeft","marginTop","backgroundColor","x"}));
+	}
 
 
 	public final Map getServerDataMap(FacesContext facesContext) {
@@ -89,13 +95,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		
 	}
 
-	public final boolean isVisible() {
-
-
-		return VisibilityTools.isVisible(this);
-		
-	}
-
 	public final void setServerData(String name, ValueBinding value) {
 
 
@@ -122,6 +121,17 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, null, hiddenMode)).intValue());
 		
+	}
+
+	public final Boolean getVisibleState(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+					return null;
+				}
+				
+				return Boolean.valueOf(isVisible(facesContext));
+			
 	}
 
 	public final void setClientData(String name, ValueBinding value) {
@@ -192,20 +202,27 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public final java.lang.Boolean getVisible() {
-		return getVisible(null);
+	public final boolean isVisible() {
+		return isVisible(null);
 	}
 
-	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
+	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
 
-	public final void setVisible(java.lang.Boolean visible) {
+	public final void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final Boolean getVisibleState() {
+
+
+				return getVisibleState(null);
+			
 	}
 
 	public final java.lang.String getHeight() {
@@ -675,5 +692,8 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

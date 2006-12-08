@@ -63,6 +63,8 @@ public class Constants {
 
     public static final boolean STAT_RESOURCES_HTTP_RESPONSE = false;
 
+    public static final boolean ACCESSIBILITY_ROLE_SUPPORT = true;
+
     private static final String version;
 
     private static final String buildId;
@@ -100,6 +102,8 @@ public class Constants {
 
         LOG.debug("STAT_RESOURCES_HTTP_RESPONSE="
                 + STAT_RESOURCES_HTTP_RESPONSE);
+
+        LOG.debug("ACCESSIBILITY_ROLE_SUPPORT=" + ACCESSIBILITY_ROLE_SUPPORT);
     }
 
     public static final String getVersion() {

@@ -73,13 +73,16 @@ var __prototype = {
 			this._interactiveShow=true;
 		}
 		
-		var rows=f_core.GetAttribute(this, "v:rows");
+		var rows=f_core.GetAttribute(this, "v:rows"); // Nombre ligne a afficher
 		this._rows=(rows)?parseInt(rows):0;
 		
-		var first=f_core.GetAttribute(this, "v:first");
+		var first=f_core.GetAttribute(this, "v:first");  // La premiere ligne
 		this._first=(first)?parseInt(first):0;
 
-		this._rowCount=f_core.GetAttribute(this, "v:rowCount");
+		var paged=f_core.GetAttribute(this, "v:paged");
+		this._paged=(paged!="false");
+
+		this._rowCount=f_core.GetAttribute(this, "v:rowCount"); // Nombre ligne au total
 		if (!this._rowCount) {
 			this._rowCount=-1;
 			this._maxRows=this._first+this._rows;
@@ -95,6 +98,7 @@ var __prototype = {
 		// this._rowCount=undefined; // number
 		// this._first=undefined; // number
 		// this._interactive=undefined; // boolean
+		// this._paged=undefined; // boolean
 
 		// this._interactiveShow=undefined; // boolean
 	},

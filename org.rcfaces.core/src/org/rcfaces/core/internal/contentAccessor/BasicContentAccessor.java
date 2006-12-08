@@ -99,10 +99,7 @@ public class BasicContentAccessor extends AbstractContentAccessor {
             return url;
         }
 
-        String surl = (String) url;
-        setPathType(computePathType(facesContext, surl));
-
-        return surl;
+        return resolvePath(facesContext, (String)url);
     }
 
     public String toString() {

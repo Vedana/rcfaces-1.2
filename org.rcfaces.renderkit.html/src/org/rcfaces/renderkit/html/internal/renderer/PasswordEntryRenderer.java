@@ -16,11 +16,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 public class PasswordEntryRenderer extends TextEntryRenderer {
     private static final String REVISION = "$Revision$";
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
     protected String getInputType(UIComponent component) {
         return PASSWORD_TYPE;
     }

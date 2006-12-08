@@ -36,6 +36,8 @@ public class CardBoxRenderer extends AbstractCssRenderer {
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
 
+        super.encodeBegin(writer);
+        
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
@@ -56,6 +58,8 @@ public class CardBoxRenderer extends AbstractCssRenderer {
         htmlWriter.enableJavaScript();
 
         htmlWriter.startElement("DIV");
+        htmlWriter.writeRole("tabpanel");
+
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -67,7 +71,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
                     .getComponentRenderContext().getRenderContext();
 
             String cardComponentId = htmlRenderContext.getComponentClientId(
-                    facesContext, cardComponent);
+                    cardComponent);
 
             htmlWriter.writeAttribute("v:selectedCard", cardComponentId);
         }

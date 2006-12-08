@@ -1,11 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.BoxComponent;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -25,6 +27,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private String initListeners;
 	private String loadListeners;
 	private String asyncRenderMode;
+	private String scopeValue;
+	private String scopeVar;
 	private String horizontalScroll;
 	private String verticalScroll;
 	public String getComponentType() {
@@ -119,6 +123,22 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
+	public final String getScopeValue() {
+		return scopeValue;
+	}
+
+	public final void setScopeValue(String scopeValue) {
+		this.scopeValue = scopeValue;
+	}
+
+	public final String getScopeVar() {
+		return scopeVar;
+	}
+
+	public final void setScopeVar(String scopeVar) {
+		this.scopeVar = scopeVar;
+	}
+
 	public final String getHorizontalScroll() {
 		return horizontalScroll;
 	}
@@ -147,12 +167,17 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  scopeValue='"+scopeValue+"'");
+			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
 			LOG.debug("  verticalScroll='"+verticalScroll+"'");
 		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof BoxComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'BoxComponent'.");
 		}
 
@@ -221,19 +246,19 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		}
 
 		if (mouseOutListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (initListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.INIT_LISTENER_TYPE, initListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
 		if (loadListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.LOAD_LISTENER_TYPE, loadListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
 
 		if (asyncRenderMode != null) {
@@ -243,6 +268,22 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 				component.setAsyncRenderMode(vb);
 			} else {
 				component.setAsyncRenderMode(asyncRenderMode);
+			}
+		}
+
+		if (scopeValue != null) {
+				ValueBinding vb = application.createValueBinding(scopeValue);
+
+				component.setScopeValue(vb);
+		}
+
+		if (scopeVar != null) {
+			if (isValueReference(scopeVar)) {
+				ValueBinding vb = application.createValueBinding(scopeVar);
+
+				component.setScopeVar(vb);
+			} else {
+				component.setScopeVar(scopeVar);
 			}
 		}
 
@@ -277,6 +318,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		initListeners = null;
 		loadListeners = null;
 		asyncRenderMode = null;
+		scopeValue = null;
+		scopeVar = null;
 		horizontalScroll = null;
 		verticalScroll = null;
 

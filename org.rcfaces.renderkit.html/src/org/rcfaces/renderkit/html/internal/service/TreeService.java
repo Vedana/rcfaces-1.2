@@ -254,7 +254,7 @@ public class TreeService extends AbstractHtmlService {
         jsWriter.setComponentVarName(varId);
 
         ISelectItemNodeWriter nodeWriter = treeRenderer
-                .getSelectItemNodeWriter(jsWriter.getComponentRenderContext());
+                .getSelectItemNodeWriter(jsWriter.getHtmlComponentRenderContext());
 
         FilterNodeRenderer nodeRenderer = new FilterNodeRenderer(node,
                 nodeWriter);

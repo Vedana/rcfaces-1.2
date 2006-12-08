@@ -41,6 +41,7 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
     }
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
 
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
@@ -129,7 +130,7 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
         IRenderContext renderContext = getRenderContext(facesContext);
 
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
-                .getComponentWriter(facesContext);
+                .getComponentWriter();
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();

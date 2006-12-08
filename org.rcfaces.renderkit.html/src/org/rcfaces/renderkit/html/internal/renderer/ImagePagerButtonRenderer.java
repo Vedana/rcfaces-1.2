@@ -35,7 +35,7 @@ public class ImagePagerButtonRenderer extends ImageButtonRenderer {
 
         imagePagerButtonComponent.setDisabled(true);
         if (imagePagerButtonComponent.isHideIfDisabled(facesContext)) {
-            imagePagerButtonComponent.setVisible(Boolean.FALSE);
+            imagePagerButtonComponent.setVisible(false);
         }
 
         super.encodeEnd(writer);

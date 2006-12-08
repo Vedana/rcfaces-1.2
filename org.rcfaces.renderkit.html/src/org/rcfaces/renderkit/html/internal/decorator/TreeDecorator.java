@@ -195,7 +195,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         }
 
         IComponentRenderContext componentRenderContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         jsWriter.writeMethodCall(jsCommand).write('[');
         int i = 0;
@@ -282,7 +282,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         Object selectItemValue = selectItem.getValue();
 
         String value = convertItemValue(javaScriptWriter
-                .getComponentRenderContext(), selectItemValue);
+                .getHtmlComponentRenderContext(), selectItemValue);
         if (value != null) {
             for (; pred > 0; pred--) {
                 javaScriptWriter.write(',').writeBoolean(false);
@@ -392,7 +392,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
      */
     protected SelectItemsContext createJavaScriptContext() {
         IComponentRenderContext componentRenderContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
         TreeComponent treeComponent = (TreeComponent) componentRenderContext
                 .getComponent();
 
@@ -415,7 +415,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         this.javaScriptWriter = javaScriptWriter;
         try {
             SelectItemsContext selectItemsContext = createContext(
-                    javaScriptWriter.getComponentRenderContext(),
+                    javaScriptWriter.getHtmlComponentRenderContext(),
                     treeComponent, nodeRenderer, depth, false, containerVarId);
 
             this.selectItemsContext = selectItemsContext;
@@ -432,7 +432,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             throws WriterException {
 
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) javaScriptWriter
-                .getComponentRenderContext().getRenderContext();
+                .getHtmlComponentRenderContext().getRenderContext();
 
         String interactiveComponentClientId = htmlRenderContext
                 .getCurrentInteractiveRenderComponentClientId();

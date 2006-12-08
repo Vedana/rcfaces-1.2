@@ -375,7 +375,7 @@ public class ToolBarDecorator extends AbstractSelectItemsDecorator {
      */
     protected SelectItemsContext createJavaScriptContext() {
         IComponentRenderContext componentRenderContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         ToolBarComponent toolBarComponent = (ToolBarComponent) componentRenderContext
                 .getComponent();

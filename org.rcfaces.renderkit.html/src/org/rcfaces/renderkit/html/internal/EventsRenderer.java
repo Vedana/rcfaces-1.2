@@ -12,6 +12,8 @@ import javax.faces.event.FacesListener;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.AbstractScriptListener;
 import org.rcfaces.core.internal.listener.IScriptListener;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
@@ -67,6 +69,9 @@ public class EventsRenderer {
 
         boolean first = true;
 
+        IProcessContext processContext = js.getHtmlRenderContext()
+                .getProcessContext();
+
         for (int i = 0; i < facesListeners.length; i++) {
             FacesListener fl = facesListeners[i];
 
@@ -77,7 +82,7 @@ public class EventsRenderer {
             IScriptListener scriptListener = (IScriptListener) fl;
 
             if (IHtmlRenderContext.JAVASCRIPT_TYPE.equals(scriptListener
-                    .getScriptType()) == false) {
+                    .getScriptType(processContext)) == false) {
                 continue;
             }
 
@@ -122,13 +127,16 @@ public class EventsRenderer {
         js.writeString(command);
     }
 
-    public static void encodeAttributeEventListeners(StringAppender sb,
+    public static void encodeAttributeEventListeners(
+            IRenderContext renderContext, StringAppender sb,
             String listenerType, FacesListener[] facesListeners) {
 
         int cnt = 0;
 
         boolean clientSubmit = false;
         boolean needSubmit = false;
+
+        IProcessContext processContext = renderContext.getProcessContext();
 
         for (int i = 0; i < facesListeners.length; i++) {
             FacesListener fl = facesListeners[i];
@@ -155,7 +163,7 @@ public class EventsRenderer {
             IScriptListener scriptListener = (IScriptListener) fl;
 
             if (IHtmlRenderContext.JAVASCRIPT_TYPE.equals(scriptListener
-                    .getScriptType()) == false) {
+                    .getScriptType(processContext)) == false) {
                 continue;
             }
 

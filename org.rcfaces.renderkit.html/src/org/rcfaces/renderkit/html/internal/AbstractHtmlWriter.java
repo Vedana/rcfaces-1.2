@@ -6,7 +6,6 @@ package org.rcfaces.renderkit.html.internal;
 import java.io.IOException;
 
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
@@ -33,14 +32,13 @@ public abstract class AbstractHtmlWriter extends
 
     private ICssWriter cssWriter;
 
-    public AbstractHtmlWriter(FacesContext facesContext,
-            AbstractRenderContext renderContext) {
-        super(facesContext, renderContext.getComponent(), renderContext
+    public AbstractHtmlWriter(AbstractRenderContext renderContext) {
+        super(renderContext.getFacesContext(), renderContext.getComponent(), renderContext
                 .getComponentClientId());
 
         this.renderContext = renderContext;
 
-        this.responseWriter = facesContext.getResponseWriter();
+        this.responseWriter = getFacesContext().getResponseWriter();
     }
 
     public final IComponentRenderContext getComponentRenderContext() {
@@ -140,7 +138,7 @@ public abstract class AbstractHtmlWriter extends
 
     public ISgmlWriter writeAttribute(String name, String value)
             throws WriterException {
-  
+
         try {
             responseWriter.writeAttribute(name, value, null);
 
@@ -444,6 +442,44 @@ public abstract class AbstractHtmlWriter extends
 
     public IHtmlWriter writeSelected() throws WriterException {
         writeAttribute("SELECTED");
+
+        return this;
+    }
+
+    public IHtmlWriter writeHRef(String url) throws WriterException {
+        writeAttribute("href", url);
+
+        return this;
+    }
+
+    public IHtmlWriter writeRel(String rel) throws WriterException {
+        writeAttribute("rel", rel);
+
+        return this;
+    }
+
+    public IHtmlWriter writeCharset(String charset) throws WriterException {
+        writeAttribute("charset", charset);
+
+        return this;
+    }
+
+    public IHtmlWriter writeHttpEquiv(String equiv, String content)
+            throws WriterException {
+        writeAttribute("http-equiv", equiv);
+
+        writeAttribute("content", content);
+
+        return this;
+    }
+
+
+    public IHtmlWriter writeRole(String role) throws WriterException {
+        if (Constants.ACCESSIBILITY_ROLE_SUPPORT==false) {
+            return this;
+        }
+        
+        writeAttribute("role", role);
 
         return this;
     }

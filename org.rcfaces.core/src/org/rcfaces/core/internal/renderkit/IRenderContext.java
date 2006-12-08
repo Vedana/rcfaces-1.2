@@ -5,6 +5,7 @@ package org.rcfaces.core.internal.renderkit;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -14,19 +15,20 @@ public interface IRenderContext {
 
     // Pas de FacesContext car en cas de traitement à la Tiles ca marche plus !
 
+    FacesContext getFacesContext();
+
     IProcessContext getProcessContext();
 
     IScriptRenderContext getScriptRenderContext();
 
-    String getComponentClientId(FacesContext facesContext, UIComponent component);
+    String getComponentClientId(UIComponent component);
 
-    String computeBrotherComponentClientId(FacesContext facesContext,
-            UIComponent brotherComponent, String componentId);
-
-    IComponentWriter getComponentWriter(FacesContext facesContext);
-
-    void pushComponent(FacesContext facesContext, UIComponent component,
+    String computeBrotherComponentClientId(UIComponent brotherComponent,
             String componentId);
+
+    IComponentWriter getComponentWriter();
+
+    void pushComponent(UIComponent component, String componentId);
 
     void popComponent(UIComponent component);
 
@@ -40,6 +42,9 @@ public interface IRenderContext {
 
     UIComponent getComponent();
 
-    void encodeEnd(FacesContext facesContext, UIComponent component);
+    void encodeEnd(UIComponent component);
 
+    void pushScopeVar(String varName, ValueBinding value);
+
+    void popScopeVar(String varName);
 }

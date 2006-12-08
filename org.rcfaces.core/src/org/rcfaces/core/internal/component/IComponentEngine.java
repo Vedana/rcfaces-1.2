@@ -5,7 +5,6 @@
 package org.rcfaces.core.internal.component;
 
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.IReleasable;
@@ -52,13 +51,13 @@ public interface IComponentEngine extends IReleasable,
 
     ValueBinding getValueBindingProperty(String propertyName);
 
-    Converter getConverter(FacesContext facesContext);
+    //Converter getConverter(FacesContext facesContext);
 
-    void setConverter(Converter converter);
+    //void setConverter(Converter converter);
 
-    void setConverterId(ValueBinding converter);
+    //void setConverterId(ValueBinding converter);
 
-    void setConverterId(String converterId);
+    //void setConverterId(String converterId);
 
     boolean isPropertySetted(String propertyName);
 

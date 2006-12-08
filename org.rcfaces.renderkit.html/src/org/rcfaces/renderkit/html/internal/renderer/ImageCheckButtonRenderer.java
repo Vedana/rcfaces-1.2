@@ -65,6 +65,10 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
             super(imageButtonFamilly);
         }
 
+        protected String getRole() {
+           return "checkbox";
+        }
+ 
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
             super.encodeAttributes(facesContext);

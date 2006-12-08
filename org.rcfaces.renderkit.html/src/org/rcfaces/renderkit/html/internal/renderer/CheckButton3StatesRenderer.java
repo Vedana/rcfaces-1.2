@@ -22,9 +22,13 @@ public class CheckButton3StatesRenderer extends AbstractInputRenderer {
     private static final String REVISION = "$Revision$";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
+        
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.writeText("Composant: checkButton3States");
+        
+        htmlWriter.writeRole("checkboxtristate");
     }
 
     protected String getInputType(UIComponent component) {

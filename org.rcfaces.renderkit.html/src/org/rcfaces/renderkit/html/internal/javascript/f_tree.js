@@ -777,6 +777,7 @@ var __prototype = {
 			divNode._node=li;
 			divNode.className=this.className+"_depth"+depth;
 			
+			divNode.role="treeitem";
 			divNode.onmouseover=f_tree._DivNode_mouseOver;
 			divNode.onmouseout=f_tree._DivNode_mouseOut;
 			divNode.onmousedown=f_tree._DivNode_mouseDown;
@@ -883,12 +884,14 @@ var __prototype = {
 				// On peut etre un container sans posseder (encore) d'enfants.
 				
 				var ul=document.createElement("UL");
+				ul.role="treegroup";				
 				ul.style.display="none";
+				ul.className=this.className+"_parent";
+
 				li.appendChild(ul);
 				
 				li._nodes=ul;
 				
-				ul.className=this.className+"_parent";
 			}
 			
 			if (node._nodes) {
@@ -997,6 +1000,7 @@ var __prototype = {
 			if (!ul) {
 				ul=document.createElement("UL");
 				ul.className=this.className+"_parent";
+				ul.role="treegroup";
 			
 				li.appendChild(ul);
 			

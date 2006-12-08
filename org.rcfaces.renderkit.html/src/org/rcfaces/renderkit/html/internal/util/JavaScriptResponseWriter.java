@@ -206,7 +206,7 @@ public class JavaScriptResponseWriter extends
      * 
      * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#getComponentRenderContext()
      */
-    public final IHtmlComponentRenderContext getComponentRenderContext() {
+    public final IHtmlComponentRenderContext getHtmlComponentRenderContext() {
         return this;
     }
 

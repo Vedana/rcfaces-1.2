@@ -19,6 +19,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
@@ -64,6 +65,7 @@ import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 
@@ -71,8 +73,7 @@ import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
-        implements IJavaScriptComponent {
+public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
 
     private static final String REVISION = "$Revision$";
 
@@ -291,10 +292,6 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                 });
     }
 
-    protected static IHtmlRenderContext getHtmlRenderContext(IHtmlWriter writer) {
-        return writer.getHtmlComponentRenderContext().getHtmlRenderContext();
-    }
-
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
 
@@ -340,6 +337,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         if (title == null) {
             return writer;
         }
+
+        title = ParamUtils.formatMessage((UIComponent) element, title);
 
         writer.writeTitle(title);
 
@@ -528,6 +527,9 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
         String helpMessage = helpComponent.getHelpMessage();
         if (helpMessage != null) {
+            helpMessage = ParamUtils.formatMessage((UIComponent) helpComponent,
+                    helpMessage);
+
             writer.writeAttribute("v:helpMessage", helpMessage);
         }
 
@@ -625,10 +627,10 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             if (hp != null) {
                 IVisibilityCapability visibilityCapability = (IVisibilityCapability) component;
 
-                Boolean old = visibilityCapability.getVisible();
+                Boolean old = visibilityCapability.getVisibleState();
 
                 if (hp.equals(old) == false) {
-                    visibilityCapability.setVisible(hp);
+                    visibilityCapability.setVisible(hp.booleanValue());
 
                     component.queueEvent(new PropertyChangeEvent(component,
                             Properties.VISIBLE, old, hp));
@@ -820,7 +822,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     }
 
     protected final void setAsyncRenderer(IHtmlWriter writer,
-            UIComponent component, boolean enableAsyncRender) {
+            UIComponent component, int asyncRenderMode) {
 
         IHtmlRenderContext renderContext = (IHtmlRenderContext) writer
                 .getComponentRenderContext().getRenderContext();
@@ -829,7 +831,12 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             return;
         }
 
-        AsyncRenderService.setAsyncRenderer(component, enableAsyncRender);
+        AsyncRenderService.setAsyncRenderer(writer
+                .getHtmlComponentRenderContext(), asyncRenderMode);
+        if (asyncRenderMode == IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE) {
+            hideChildren(writer.getComponentRenderContext());
+
+        }
     }
 
     protected final IComponentDecorator getComponentDecorator(

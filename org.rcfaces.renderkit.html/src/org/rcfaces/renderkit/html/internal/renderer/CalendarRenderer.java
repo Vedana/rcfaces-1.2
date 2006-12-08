@@ -97,8 +97,9 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
             htmlWriter.writeAttribute("v:mode", mode);
         }
 
-        Calendar calendar = CalendarTools
-                .getAttributesCalendar(calendarComponent);
+        Calendar calendar = CalendarTools.getAttributesCalendar(
+                componentRenderContext.getRenderContext().getProcessContext(),
+                calendarComponent);
 
         Object value = calendarComponent.getValue();
         String s_value = null;

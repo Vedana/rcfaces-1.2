@@ -10,8 +10,8 @@
  * @version $Revision$ $Date$ 
  */
  
-.f_imageButton_text,
 .f_imageButton, 
+.f_imageButton_text,
 .f_imageButton_hover, 
 .f_imageButton_pushed, 
 .f_imageButton_selected, 
@@ -48,6 +48,7 @@
 .f_imageButton_selected_hover {
 	cursor: pointer;
 	cursor: hand;
+	display: inline;
 }
 
 .f_imageButton_disabled,

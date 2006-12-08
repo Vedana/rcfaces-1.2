@@ -23,6 +23,7 @@ import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.KeyTools;
@@ -145,7 +146,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         }
 
         IComponentRenderContext componentContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         javaScriptWriter.write("var ").write(varId).write('=');
 
@@ -285,6 +286,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             FacesListener facesListeners[] = menuItemComponent
                     .listMenuListeners();
 
+            IProcessContext processContext = javaScriptWriter
+                    .getHtmlRenderContext().getProcessContext();
             List l = null;
             for (int i = 0; i < facesListeners.length; i++) {
                 FacesListener facesListener = facesListeners[i];
@@ -296,7 +299,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
                 IScriptListener scriptListener = (IScriptListener) facesListener;
 
                 if (IHtmlRenderContext.JAVASCRIPT_TYPE.equals(scriptListener
-                        .getScriptType()) == false) {
+                        .getScriptType(processContext)) == false) {
                     continue;
                 }
                 if (l == null) {
@@ -429,7 +432,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     protected SelectItemsContext createJavaScriptContext()
             throws WriterException {
         IComponentRenderContext componentRenderContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         Object value = null;
 

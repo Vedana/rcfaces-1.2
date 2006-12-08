@@ -5,7 +5,10 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.ExpandableItemComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.component.TreeComponent;
+import java.util.HashSet;
 import org.rcfaces.core.internal.tools.TreeTools;
 
 public class TreeNodeComponent extends ExpandableItemComponent implements 
@@ -13,6 +16,10 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.treeNode";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"inputType","groupName"}));
+	}
 
 	public TreeNodeComponent() {
 		setRendererType(null);
@@ -96,5 +103,8 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

@@ -136,27 +136,45 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
         this.pathType = pathType;
     }
 
-    public static int computePathType(FacesContext facesContext, String url) {
+    protected final String resolvePath(FacesContext facesContext, String url) {
         if (url == null || url.length() < 1) {
             throw new FacesException("Invalid url '" + url + "'.");
         }
 
         int slash = url.indexOf('/');
-        if (slash == 0) {
-            // C'est soit absolute, soit context
+        if (url.length() > 1 && url.charAt(0) == '$') {
+            if (url.startsWith("$context") && (slash < 0 || slash == 8)) {
+                setPathType(CONTEXT_PATH_TYPE);
 
-            // Mais on supporte pas le calcule depuis le contexte
-            /*
-             * String contextPath = facesContext.getExternalContext()
-             * .getRequestContextPath();
-             * 
-             * if (url.startsWith(contextPath)) { }
-             */
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Macro $context for url '" + url + "'.");
+                }
+
+                if (slash > 0) {
+                    return url.substring(slash + 1);
+                }
+
+                return "";
+            }
+
+            // Invalid macro
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Invalid macro type for '" + url + "'.");
+            }
+
+            setPathType(UNDEFINED_PATH_TYPE);
+            return "";
+        }
+
+        // C'est soit absolute, soit context
+        if (slash == 0) {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Return absolute path type for '" + url + "'.");
             }
-            return ABSOLUTE_PATH_TYPE;
+            setPathType(ABSOLUTE_PATH_TYPE);
+
+            return url;
         }
 
         int colon = url.indexOf(':');
@@ -165,14 +183,18 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Return relative path type for '" + url + "'.");
             }
-            return RELATIVE_PATH_TYPE;
+
+            setPathType(RELATIVE_PATH_TYPE);
+            return url;
         }
         if (colon == 0) {
             // Invalide
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Invalid path type for '" + url + "'.");
             }
-            return UNDEFINED_PATH_TYPE;
+            setPathType(UNDEFINED_PATH_TYPE);
+
+            return url;
         }
 
         int doubleColon = url.indexOf("::", colon);
@@ -185,20 +207,24 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Filter path type for '" + url + "'.");
             }
-            return FILTER_PATH_TYPE;
+            setPathType(FILTER_PATH_TYPE);
+            return url;
         }
 
         if (colon > 0 && (slash < 0 || slash > colon)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("External path type for '" + url + "'.");
             }
-            return EXTERNAL_PATH_TYPE;
+            setPathType(EXTERNAL_PATH_TYPE);
+
+            return url;
         }
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Relative path type (default) for '" + url + "'.");
         }
-        return RELATIVE_PATH_TYPE;
+        setPathType(RELATIVE_PATH_TYPE);
+        return url;
     }
 
     public static String removeContextPath(FacesContext facesContext, String url) {

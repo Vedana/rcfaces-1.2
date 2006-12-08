@@ -1,11 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractInputComponent;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -418,6 +420,9 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof AbstractInputComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractInputComponent'.");
 		}
 
@@ -461,16 +466,16 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 				component.setVisible(vb);
 			} else {
-				component.setVisible(getBoolean(visible));
+				component.setVisible(getBool(visible));
 			}
 		}
 
 		if (mouseOutListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (helpMessage != null) {
@@ -564,11 +569,11 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		}
 
 		if (blurListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.BLUR_LISTENER_TYPE, blurListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.BLUR_LISTENER_TYPE, blurListeners);
 		}
 
 		if (focusListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.FOCUS_LISTENER_TYPE, focusListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
 		if (marginBottom != null) {
@@ -632,15 +637,15 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		}
 
 		if (keyPressListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
 		}
 
 		if (keyDownListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.KEY_DOWN_LISTENER_TYPE, keyDownListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_DOWN_LISTENER_TYPE, keyDownListeners);
 		}
 
 		if (keyUpListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.KEY_UP_LISTENER_TYPE, keyUpListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_UP_LISTENER_TYPE, keyUpListeners);
 		}
 
 		if (textAlignment != null) {
@@ -664,7 +669,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		}
 
 		if (userEventListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.USER_EVENT_LISTENER_TYPE, userEventListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (styleClass != null) {
@@ -678,7 +683,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		}
 
 		if (propertyChangeListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (fontBold != null) {
@@ -742,7 +747,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		}
 
 		if (initListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.INIT_LISTENER_TYPE, initListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
 		if (margins != null) {

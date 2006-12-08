@@ -68,7 +68,7 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
      */
     protected SelectItemsContext createJavaScriptContext() {
         IComponentRenderContext componentRenderContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         return new SelectItemsJsContext(this, componentRenderContext, null,
                 null);

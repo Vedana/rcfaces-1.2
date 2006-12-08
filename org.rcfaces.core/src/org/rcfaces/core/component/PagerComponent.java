@@ -2,6 +2,9 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
 
@@ -10,6 +13,10 @@ public class PagerComponent extends AbstractBasicComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.pager";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"manyResultsMessage","oneResultMessage","message","noPagedMessage","zeroResultMessage","for"}));
+	}
 
 	public PagerComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -138,5 +145,8 @@ public class PagerComponent extends AbstractBasicComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

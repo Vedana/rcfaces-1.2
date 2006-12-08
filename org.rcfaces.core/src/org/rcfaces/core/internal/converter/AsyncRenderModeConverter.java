@@ -13,6 +13,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.model.AbstractConverter;
 
 /**
@@ -29,7 +31,10 @@ public class AsyncRenderModeConverter extends AbstractConverter {
     private static final String TREE_ASYNC_RENDER_MODE_NAME = "tree";
 
     private static final Integer DEFAULT_ASYNC_RENDER_MODE = new Integer(
-            IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE);
+            Constants.DEFAULT_ASYNC_MODE);
+
+    private static final Integer ASYNC_MODE_ENABLE_VALUE = new Integer(
+            Constants.ENABLE_ASYNC_MODE_VALUE);
 
     public static final Converter SINGLETON = new AsyncRenderModeConverter();
 
@@ -43,12 +48,6 @@ public class AsyncRenderModeConverter extends AbstractConverter {
                 IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent, java.lang.String)
-     */
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 
@@ -67,16 +66,18 @@ public class AsyncRenderModeConverter extends AbstractConverter {
             return DEFAULT_ASYNC_RENDER_MODE;
         }
 
+        if ("enabled".equalsIgnoreCase(value)) {
+            if (Constants.FACELETS_SUPPORT) {
+                return new Integer(AsyncModeTools.getEnableValue(context));
+            }
+
+            return ASYNC_MODE_ENABLE_VALUE;
+        }
+
         throw new IllegalArgumentException("Keyword '" + value
                 + "' is not supported for a async-render type !");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent, java.lang.Object)
-     */
     public String getAsString(FacesContext context, UIComponent component,
             Object value) {
 

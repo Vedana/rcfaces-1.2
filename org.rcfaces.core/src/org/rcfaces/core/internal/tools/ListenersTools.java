@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.taglib;
+package org.rcfaces.core.internal.tools;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 import javax.faces.webapp.UIComponentTag;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
@@ -71,7 +73,10 @@ import org.rcfaces.core.internal.util.ForwardMethodBinding;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class Listeners {
+public class ListenersTools {
+    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(ListenersTools.class);
 
     /**
      * 
@@ -150,7 +155,7 @@ public class Listeners {
         }
     };
 
-    protected static final IListenerType DOUBLE_CLICK_LISTENER_TYPE = new AbstractListenerType() {
+    public static final IListenerType DOUBLE_CLICK_LISTENER_TYPE = new AbstractListenerType() {
         private static final String REVISION = "$Revision$";
 
         public void addScriptListener(UIComponent component, String scriptType,
@@ -530,7 +535,7 @@ public class Listeners {
          * 
          * command.setActionListener(vb); return; }
          */
-        String scriptType = null;
+        String scriptType = getScriptType(facesContext);
 
         char chs[] = expression.toCharArray();
         int par = 0;
@@ -609,18 +614,12 @@ public class Listeners {
                 continue;
             }
 
-            if (scriptType == null) {
-                scriptType = AbstractInitializeTag.getScriptType(facesContext);
-            }
             parseFunction(chs, lastStart, offset - 1, expression, facesContext,
                     component, listenerType, scriptType);
             lastStart = offset + 1;
         }
 
         if (lastStart < offset) {
-            if (scriptType == null) {
-                scriptType = AbstractInitializeTag.getScriptType(facesContext);
-            }
             parseFunction(chs, lastStart, offset - 1, expression, facesContext,
                     component, listenerType, scriptType);
         }
@@ -646,12 +645,22 @@ public class Listeners {
                 vb = new ForwardMethodBinding(expression);
             }
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Set command action to component '"
+                        + component.getId() + "' : " + expression);
+            }
+
             command.setAction(vb);
             return;
         }
 
         if (UIComponentTag.isValueReference(expression) == false) {
             expression = "#[" + expression + "]";
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add server listener to component '" + component.getId()
+                    + "' : " + expression);
         }
 
         listenerType.addActionListener(component, application, expression);
@@ -684,10 +693,20 @@ public class Listeners {
         if (start + 4 < end) {
             if (UIComponentTag.isValueReference(s) || isForwardReference(s)) {
                 // Value reference � ajouter !
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Add server listener to component '"
+                            + component.getId() + "' : " + s);
+                }
+
                 listenerType.addActionListener(component, facesContext
                         .getApplication(), s);
                 return;
             }
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add script listener (type=" + scriptType
+                    + ") to component '" + component.getId() + "' : " + s);
         }
 
         listenerType.addScriptListener(component, scriptType, s);
@@ -705,4 +724,7 @@ public class Listeners {
         return true;
     }
 
+    public static final String getScriptType(FacesContext facesContext) {
+        return PageConfiguration.getScriptType(facesContext);
+    }
 }

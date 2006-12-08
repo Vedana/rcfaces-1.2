@@ -293,10 +293,12 @@ public class ComponentsListService extends AbstractHtmlService {
             IRenderContext renderContext = HtmlRenderContext
                     .restoreRenderContext(facesContext, state, true);
 
-            renderContext.pushComponent(facesContext, dgc, componentClientId);
+            renderContext.pushComponent(dgc, componentClientId);
 
             IComponentWriter writer = renderContext
-                    .getComponentWriter(facesContext);
+                    .getComponentWriter();
+            
+//            IComponentTreeRenderProcessor componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
 
             dgr.encodeChildren(writer, listContext);
 

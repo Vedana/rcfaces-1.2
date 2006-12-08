@@ -53,10 +53,13 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         DateEntryComponent dateEntryComponent = (DateEntryComponent) componentRenderContext
                 .getComponent();
 
-        Calendar calendar = CalendarTools
-                .getAttributesCalendar(dateEntryComponent);
+        Calendar calendar = CalendarTools.getAttributesCalendar(
+                componentRenderContext.getRenderContext().getProcessContext(),
+                dateEntryComponent);
 
-        htmlWriter.startElement("SPAN");
+        htmlWriter.startElement("DIV");
+
+        htmlWriter.writeRole("textfield");
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -108,7 +111,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeAfterDecorator(htmlWriter, componentDecorator);
 
-        htmlWriter.endElement("SPAN");
+        htmlWriter.endElement("DIV");
     }
 
     protected void encodeSubComponents(IHtmlWriter htmlWriter,
@@ -136,10 +139,8 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         int defaultDay = -1;
         int curDay = -1;
 
-        Object currentValue = dateEntryComponent.getValue();
-        if (currentValue instanceof Date) {
-            Date curDate = (Date) currentValue;
-
+        Date curDate = dateEntryComponent.getDate();
+        if (curDate!=null) {
             calendar.setTime(curDate);
             curYear = calendar.get(Calendar.YEAR);
             curMonth = calendar.get(Calendar.MONTH) + 1;
@@ -423,8 +424,8 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
 
         String dateValue = componentData.getStringProperty("value");
         if (dateValue != null) {
-            Calendar calendar = CalendarTools
-                    .getAttributesCalendar(dateEntryComponent);
+            Calendar calendar = CalendarTools.getAttributesCalendar(context
+                    .getProcessContext(), dateEntryComponent);
 
             Date date = parseDate(calendar, dateValue, true);
 

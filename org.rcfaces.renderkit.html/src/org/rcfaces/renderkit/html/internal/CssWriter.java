@@ -488,12 +488,12 @@ public class CssWriter extends FastWriter implements ICssWriter {
     }
 
     public final ICssWriter writeVisibility(IVisibilityCapability visibility) {
-        Boolean visible = visibility.getVisible();
+        Boolean visible = visibility.getVisibleState();
         if (visible == null) {
             return this;
         }
 
-        if (visible == Boolean.TRUE || visible.booleanValue()) {
+        if (visible.booleanValue()) {
             writeVisibility(INHERIT);
             return this;
         }

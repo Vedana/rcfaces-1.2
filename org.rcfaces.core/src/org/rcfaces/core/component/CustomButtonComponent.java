@@ -4,8 +4,11 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractCommandComponent;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
@@ -18,6 +21,10 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.customButton";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","doubleClickListener","border","readOnly","borderType"}));
+	}
 
 	public CustomButtonComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -120,5 +127,8 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

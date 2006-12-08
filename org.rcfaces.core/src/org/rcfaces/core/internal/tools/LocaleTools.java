@@ -52,7 +52,7 @@ public class LocaleTools {
         }
     }
 
-    private static final int DEFAULT_STYLE_BY_TYPE[] = new int[MAX_TYPE+1];
+    private static final int DEFAULT_STYLE_BY_TYPE[] = new int[MAX_TYPE + 1];
     static {
         DEFAULT_STYLE_BY_TYPE[0] = DateFormat.SHORT;
         DEFAULT_STYLE_BY_TYPE[1] = DateFormat.MEDIUM;
@@ -229,7 +229,7 @@ public class LocaleTools {
         public CachedLocale(Locale locale) {
             this.locale = locale;
 
-            this.defaultFormats = new Format[MAX_TYPE+1];
+            this.defaultFormats = new Format[MAX_TYPE + 1];
         }
 
         public Locale getLocale() {
@@ -272,6 +272,14 @@ public class LocaleTools {
                     patternsByType[type] = patterns;
                 }
 
+                boolean dateFormat = (type == DATE_TYPE);
+                if (dateFormat && style == DateFormat.MEDIUM) {
+                    // Remplace les 2 yy par 4 yyyy
+                    // On retourne au format SHORT pour transformer ensuite le
+                    // yy en yyyy
+                    style = DateFormat.SHORT;
+                }
+
                 Format format;
                 if (style == DEFAULT_STYLE_BY_TYPE[type]) {
                     format = getDefaultFormat(type);
@@ -283,6 +291,17 @@ public class LocaleTools {
                 String pattern;
                 synchronized (format) {
                     pattern = LocaleTools.getPattern(format);
+                }
+
+                if (dateFormat) {
+                    // Remplace les 2 yy en 4 yyyy
+                    if (pattern.indexOf("yyy") < 0) {
+                        int idx = pattern.indexOf("yy");
+                        if (idx >= 0) {
+                            pattern = pattern.substring(0, idx) + "yy"
+                                    + pattern.substring(idx);
+                        }
+                    }
                 }
 
                 patterns[style] = pattern;
@@ -305,7 +324,7 @@ public class LocaleTools {
 
     public static Format getDefaultFormat(UIComponent component, int type) {
 
-        Locale locale = ContextTools.getAttributesLocale(component);
+        Locale locale = PageConfiguration.getAttributesLocale(null, component);
 
         if (Constants.CACHED_LOCALE_FORMAT == false) {
             return getFormatByType(locale, type, -1);

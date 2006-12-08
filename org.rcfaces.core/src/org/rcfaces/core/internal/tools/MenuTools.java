@@ -53,7 +53,8 @@ public class MenuTools {
 
     private static IMenuItemIterator listMenuItems(IContainerManager manager) {
 
-        List list = ComponentIterators.list(manager, UISelectItem.class);
+        List list = ComponentIterators.list((UIComponent) manager,
+                UISelectItem.class);
         if (list.isEmpty()) {
             return EMPTY_MENU_ITEM_ITERATOR;
         }
@@ -185,7 +186,8 @@ public class MenuTools {
             return new MenuListIterator(popups);
         }
 
-        List list = ComponentIterators.list(component, MenuComponent.class);
+        List list = ComponentIterators.list((UIComponent) component,
+                MenuComponent.class);
         if (list.isEmpty()) {
             return EMPTY_MENU_ITERATOR;
         }

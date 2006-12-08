@@ -1,10 +1,12 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.ImageComponent;
 import javax.faces.application.Application;
@@ -67,6 +69,9 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ImageComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImageComponent'.");
 		}
 

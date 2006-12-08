@@ -8,6 +8,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -61,9 +62,8 @@ public class TextRenderer extends AbstractCssRenderer {
             IRenderContext renderContext = componentRenderContext
                     .getRenderContext();
 
-            String forId = renderContext
-                    .computeBrotherComponentClientId(componentRenderContext
-                            .getFacesContext(), textComponent, ac);
+            String forId = renderContext.computeBrotherComponentClientId(
+                    textComponent, ac);
 
             if (forId != null) {
                 htmlWriter.writeFor(forId);
@@ -97,6 +97,8 @@ public class TextRenderer extends AbstractCssRenderer {
         if (text == null || text.trim().length() < 1) {
             return false;
         }
+        
+        text = ParamUtils.formatMessage(textComponent, text);
 
         return HtmlTools.writeSpanAccessKey(htmlWriter, textComponent, text,
                 true);

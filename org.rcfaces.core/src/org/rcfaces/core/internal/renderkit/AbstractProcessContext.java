@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
+import org.rcfaces.core.internal.tools.PageConfiguration;
 
 /**
  * 
@@ -45,6 +46,12 @@ public abstract class AbstractProcessContext implements IProcessContext {
     private Locale userLocale;
 
     private boolean designerMode;
+
+    private boolean pageConfiguratorInitialized;
+
+    private Locale defaultAttributesLocale;
+
+    private String scriptType;
 
     protected AbstractProcessContext(FacesContext facesContext) {
         this.facesContext = facesContext;
@@ -324,5 +331,37 @@ public abstract class AbstractProcessContext implements IProcessContext {
         Map requestMap = externalContext.getRequestMap();
         return (IProcessContext) requestMap.get(EXTERNAL_CONTEXT_PROPERTY);
 
+    }
+
+    public final String getScriptType() {
+        initializePageConfigurator();
+
+        return scriptType;
+    }
+
+    public final Locale getDefaultAttributesLocale() {
+        initializePageConfigurator();
+
+        return defaultAttributesLocale;
+    }
+
+    private void initializePageConfigurator() {
+        if (pageConfiguratorInitialized) {
+            return;
+        }
+
+        pageConfiguratorInitialized = true;
+
+        scriptType = PageConfiguration.getScriptType(getFacesContext());
+        defaultAttributesLocale = PageConfiguration
+                .getDefaultAttributesLocale(getFacesContext());
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Page configurator of view "
+                    + facesContext.getViewRoot().getId() + ": scriptType="
+                    + scriptType + " defaultAttributesLocale="
+                    + defaultAttributesLocale);
+
+        }
     }
 }

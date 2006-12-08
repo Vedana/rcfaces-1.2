@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -474,20 +475,28 @@ public class HtmlTools {
         return sa.toString();
     }
 
-    public static UIComponent getForComponent(FacesContext context,
-            String forComponent, UIComponent component) {
+    public static final String computeComponentId(FacesContext context,
+            String componentId) {
 
         if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
-            IHtmlProcessContext processContext = HtmlProcessContextImpl
+            IProcessContext processContext = HtmlProcessContextImpl
                     .getHtmlProcessContext(context);
 
             String separator = processContext.getNamingSeparator();
             if (separator != null) {
-                forComponent = convertToNamingSeparator(forComponent, separator);
+                return convertToNamingSeparator(componentId, separator);
             }
         }
 
-        return ComponentTools.getForComponent(context, forComponent, component);
+        return componentId;
+    }
+
+    public static UIComponent getForComponent(FacesContext context,
+            String componentId, UIComponent component) {
+
+        componentId = computeComponentId(context, componentId);
+
+        return ComponentTools.getForComponent(context, componentId, component);
     }
 
     public static String computeGroupName(IHtmlProcessContext processContext,

@@ -34,6 +34,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private static final Log LOG = LogFactory.getLog(HtmlRenderContext.class);
 
+    private static final String META_DATA_INITIALIZED_PROPERTY = "org.rcfaces.renderkit.html.META_DATA_INITIALIZED";
+
     protected static final String RENDER_CONTEXT = "camelia.render.html.context";
 
     private static final String JAVASCRIPT_CONTEXT = "camelia.html.javascript.context";
@@ -55,6 +57,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     private boolean javaScriptEnabled = false;
 
     private IHtmlProcessContext htmlExternalContext;
+
+    private String invalidBrowserURL;
+
+    private boolean disabledContentMenu;
 
     public void initialize(FacesContext facesContext) {
         super.initialize(facesContext);
@@ -106,6 +112,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     }
 
     static final IHtmlRenderContext getRenderContext(FacesContext context) {
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+        }
+
         Map requestMap = context.getExternalContext().getRequestMap();
 
         IHtmlRenderContext renderContext = (IHtmlRenderContext) requestMap
@@ -133,23 +143,27 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return renderContext;
     }
 
-    protected void restoreState(Object state) {
+    public void restoreState(Object state) {
         Object ret[] = (Object[]) state;
         if (ret == null) {
             return;
         }
 
-        if (ret[0] != null) {
+        super.restoreState(ret[0]);
+
+        if (ret[1] != null) {
             IJavaScriptRenderContext javaScriptRenderContext = getJavaScriptRenderContext();
-            javaScriptRenderContext.restoreState(ret[0]);
+            javaScriptRenderContext.restoreState(ret[1]);
         }
     }
 
     public Object saveRenderContextState() {
         Object ret[] = new Object[2];
 
+        ret[0] = super.saveRenderContextState();
+
         if (javascriptRenderContext != null) {
-            ret[0] = javascriptRenderContext.saveState();
+            ret[1] = javascriptRenderContext.saveState();
         }
 
         return ret;
@@ -227,7 +241,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return lastInteractiveRenderComponentClientId;
     }
 
-    public void encodeEnd(FacesContext facesContext, UIComponent component) {
+    public void encodeEnd(UIComponent component) {
         if (lastInteractiveRenderComponent != null) {
             if (lastInteractiveRenderComponent == component) {
 
@@ -240,7 +254,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             }
         }
 
-        super.encodeEnd(facesContext, component);
+        super.encodeEnd(component);
     }
 
     public boolean canUseLazyTag() {
@@ -251,28 +265,28 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return getCurrentInteractiveRenderComponent() == null;
     }
 
-    public String getComponentClientId(FacesContext facesContext,
-            UIComponent component) {
+    public String getComponentClientId(UIComponent component) {
         if (htmlExternalContext.isFlatIdentifierEnabled()) {
             String id = component.getId();
 
             if (id == null || id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
-                return component.getClientId(facesContext);
+                return component.getClientId(getFacesContext());
             }
 
             return id;
         }
 
-        return component.getClientId(facesContext);
+        return component.getClientId(getFacesContext());
     }
 
-    public String computeBrotherComponentClientId(FacesContext facesContext,
-            UIComponent brotherComponent, String componentId) {
+    public String computeBrotherComponentClientId(UIComponent brotherComponent,
+            String componentId) {
         if (htmlExternalContext.isFlatIdentifierEnabled()) {
             return componentId;
         }
 
-        String brotherComponentId = brotherComponent.getClientId(facesContext);
+        String brotherComponentId = brotherComponent
+                .getClientId(getFacesContext());
 
         if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
             String separatorChar = htmlExternalContext.getNamingSeparator();
@@ -315,9 +329,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
      * 
      * return id; }
      */
-    protected IComponentWriter createWriter(FacesContext facesContext,
-            UIComponent component) {
-        return new HtmlWriterImpl(facesContext, this);
+    protected IComponentWriter createWriter(UIComponent component) {
+        return new HtmlWriterImpl(this);
     }
 
     /**
@@ -330,9 +343,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
         private static final String ENABLE_JAVASCRIPT = "camelia.html.javascript.enable";
 
-        public HtmlWriterImpl(FacesContext facesContext,
-                HtmlRenderContext context) {
-            super(facesContext, context);
+        public HtmlWriterImpl(HtmlRenderContext context) {
+            super(context);
         }
 
         public void enableJavaScript() {
@@ -363,4 +375,26 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     public boolean isAsyncRenderEnable() {
         return asyncRenderer;
     }
+
+    public static void setMetaDataInitialized(FacesContext facesContext) {
+        facesContext.getExternalContext().getRequestMap().put(
+                META_DATA_INITIALIZED_PROPERTY, Boolean.TRUE);
+    }
+
+    public String getInvalidBrowserURL() {
+        return invalidBrowserURL;
+    }
+
+    public boolean isDisabledContextMenu() {
+        return disabledContentMenu;
+    }
+
+    public void setDisabledContextMenu(boolean state) {
+        this.disabledContentMenu = state;
+    }
+
+    public void setInvalidBrowserURL(String invalidBrowserURL) {
+        this.invalidBrowserURL = invalidBrowserURL;
+    }
+
 }

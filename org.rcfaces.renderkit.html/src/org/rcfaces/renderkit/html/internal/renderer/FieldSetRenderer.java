@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.renderkit.border.ITitledBorderRenderer;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -82,8 +83,13 @@ public class FieldSetRenderer extends AbstractCssRenderer {
                     false);
 
             if (borderRenderer instanceof ITitledBorderRenderer) {
-                ((ITitledBorderRenderer) borderRenderer).setText(htmlWriter,
-                        fieldSetComponent.getText(facesContext));
+                String text = fieldSetComponent.getText(facesContext);
+                if (text != null) {
+                    text = ParamUtils.formatMessage(fieldSetComponent, text);
+
+                    ((ITitledBorderRenderer) borderRenderer).setText(
+                            htmlWriter, text);
+                }
             }
 
             borderRenderer.startComposite(htmlWriter);

@@ -18,9 +18,7 @@ public interface IProcessContext {
     String getNamingSeparator();
 
     FacesContext getFacesContext();
-/*
-    void setChangeFacesContext(FacesContext facesContext);
-*/
+
     boolean getDebugMode();
 
     boolean getProfilerMode();
@@ -36,4 +34,8 @@ public interface IProcessContext {
     void changeBaseHREF(String base);
 
     String getBaseHREF();
+
+    String getScriptType();
+
+    Locale getDefaultAttributesLocale();
 }

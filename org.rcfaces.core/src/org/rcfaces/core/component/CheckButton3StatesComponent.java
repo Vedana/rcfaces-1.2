@@ -3,13 +3,16 @@ package org.rcfaces.core.component;
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
-import org.rcfaces.core.component.capability.ISelected3StatesCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.ISelected3StatesCapability;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class CheckButton3StatesComponent extends AbstractInputComponent implements 
@@ -21,6 +24,10 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.checkButton3States";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","text","selectedState","readOnly","textPosition"}));
+	}
 
 	public CheckButton3StatesComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -137,5 +144,8 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

@@ -19,6 +19,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -56,7 +57,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement("SPAN");
+        htmlWriter.startElement("DIV");
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -88,7 +89,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
             writeLabel(htmlWriter, button, labelClassName, buttonId);
         }
 
-        htmlWriter.endElement("SPAN");
+        htmlWriter.endElement("DIV");
     }
 
     protected String getInputClassName(IHtmlWriter htmlWriter) {
@@ -155,6 +156,9 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         htmlWriter.writeFor(inputId);
 
         String text = button.getText(facesContext);
+        if (text != null) {
+            text = ParamUtils.formatMessage(button, text);
+        }
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
         htmlWriter.endElement("LABEL");

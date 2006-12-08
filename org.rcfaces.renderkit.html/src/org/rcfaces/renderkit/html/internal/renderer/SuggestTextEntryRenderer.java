@@ -100,7 +100,7 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         FacesContext facesContext = writer.getFacesContext();
 
         SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) writer
-                .getComponentRenderContext().getComponent();
+                .getHtmlComponentRenderContext().getComponent();
 
         IFilterProperties filterProperties = suggestTextEntryComponent
                 .getFilterProperties(facesContext);

@@ -3,9 +3,12 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 public class HelpMessageZoneComponent extends AbstractOutputComponent implements 
 	ITextCapability,
@@ -14,6 +17,10 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.helpMessageZone";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","text","textAlignment","fontSize","fontName","fontItalic"}));
+	}
 
 	public HelpMessageZoneComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -138,5 +145,8 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

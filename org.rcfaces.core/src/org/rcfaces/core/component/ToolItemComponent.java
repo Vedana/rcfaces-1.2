@@ -4,6 +4,9 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.ToolFolderComponent;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.UIImageItemComponent;
 
@@ -13,6 +16,10 @@ public class ToolItemComponent extends UIImageItemComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolItem";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","readOnly"}));
+	}
 
 	public ToolItemComponent() {
 		setRendererType(null);
@@ -60,5 +67,8 @@ public class ToolItemComponent extends UIImageItemComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

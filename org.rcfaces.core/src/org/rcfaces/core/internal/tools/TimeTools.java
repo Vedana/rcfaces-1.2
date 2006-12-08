@@ -22,6 +22,7 @@ import org.rcfaces.core.model.Time;
  * @version $Revision$ $Date$
  */
 public class TimeTools {
+    private static final String REVISION = "$Revision$";
 
     public static Object parseValue(FacesContext context,
             UIComponent component, String value) {
@@ -52,8 +53,7 @@ public class TimeTools {
     }
 
     private static DateFormat getShortTimeFormat(UIComponent component) {
-        return (DateFormat) LocaleTools.getDefaultFormat(component,
-                LocaleTools.TIME_TYPE);
+        return (DateFormat) LocaleTools.getDefaultFormat(component, LocaleTools.TIME_TYPE);
     }
 
     public static String getDefaultTimeFormatPattern(Locale locale) {

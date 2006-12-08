@@ -1,11 +1,11 @@
 /*
  * $Id$
- * 
  */
 package org.rcfaces.core.internal.renderkit;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.IReleasable;
 

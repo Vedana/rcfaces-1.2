@@ -18,7 +18,6 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
-import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -118,13 +117,16 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
                 throws WriterException {
             writeCalendarAttributes(writer);
 
-            DateChooserComponent dateChooserComponent = (DateChooserComponent) writer
-                    .getComponentRenderContext().getComponent();
+            IComponentRenderContext componentRenderContext = writer
+                    .getComponentRenderContext();
+            DateChooserComponent dateChooserComponent = (DateChooserComponent) componentRenderContext
+                    .getComponent();
 
             Date homeDate = dateChooserComponent.getHomeDate(facesContext);
             if (homeDate != null) {
-                Calendar calendar = CalendarTools
-                        .getAttributesCalendar(dateChooserComponent);
+                Calendar calendar = CalendarTools.getAttributesCalendar(
+                        componentRenderContext.getRenderContext()
+                                .getProcessContext(), dateChooserComponent);
 
                 StringAppender sb = new StringAppender(16);
                 appendDate(calendar, homeDate, sb, true);

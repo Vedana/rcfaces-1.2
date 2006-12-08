@@ -7,6 +7,7 @@ import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Collections;
+import java.util.Arrays;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -17,10 +18,11 @@ import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.internal.tools.VisibilityTools;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.internal.Constants;
@@ -43,6 +45,10 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 	IServerDataManager,
 	IClientDataManager {
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","toolTipText","hiddenMode","foregroundColor","userEventListener","helpMessage","marginBottom","helpURL","styleClass","height","margins","visible","y","propertyChangeListener","lookId","marginLeft","marginTop","backgroundColor","x"}));
+	}
 
 
 	public final void setClientData(String name, ValueBinding value) {
@@ -67,13 +73,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, null, hiddenMode)).intValue());
-		
-	}
-
-	public final boolean isVisible() {
-
-
-		return VisibilityTools.isVisible(this);
 		
 	}
 
@@ -161,6 +160,17 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		}
 		return map;
 		
+	}
+
+	public final Boolean getVisibleState(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+					return null;
+				}
+				
+				return Boolean.valueOf(isVisible(facesContext));
+			
 	}
 
 	public final Map getClientDataMap() {
@@ -524,20 +534,27 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public final java.lang.Boolean getVisible() {
-		return getVisible(null);
+	public final boolean isVisible() {
+		return isVisible(null);
 	}
 
-	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
+	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
 
-	public final void setVisible(java.lang.Boolean visible) {
+	public final void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final Boolean getVisibleState() {
+
+
+				return getVisibleState(null);
+			
 	}
 
 	public final java.lang.String getLookId() {
@@ -574,5 +591,8 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

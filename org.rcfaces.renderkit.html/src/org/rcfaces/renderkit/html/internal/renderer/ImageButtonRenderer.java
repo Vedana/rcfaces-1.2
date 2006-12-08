@@ -76,6 +76,8 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
 
         protected void writeAttributes(String classSuffix)
                 throws WriterException {
+            
+            writer.writeRole(getRole());
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
             writeCssAttributes(writer, classSuffix, ~CSS_FONT_MASK);
@@ -85,6 +87,10 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             encodeAttributes(facesContext);
         }
 
+        protected String getRole() {
+           return "button";
+        }
+        
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
             if (imageButtonFamilly.isDisabled(facesContext)) {

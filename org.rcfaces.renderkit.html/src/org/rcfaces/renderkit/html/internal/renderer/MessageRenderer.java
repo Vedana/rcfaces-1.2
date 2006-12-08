@@ -19,6 +19,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.tools.MessageTools;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -39,6 +40,8 @@ public class MessageRenderer extends AbstractCssRenderer {
     // private static final String STYLE_CLASS_PROPERTY = "message.style.class";
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
+
         IComponentRenderContext componentContext = writer
                 .getComponentRenderContext();
 
@@ -53,12 +56,12 @@ public class MessageRenderer extends AbstractCssRenderer {
             Iterator iterator = MessageTools.listMessages(facesContext,
                     forValue, messageComponent);
 
-            messageComponent.setVisible(Boolean.valueOf(iterator.hasNext()));
+            messageComponent.setVisible(iterator.hasNext());
         }
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("SPAN");
+        htmlWriter.startElement("DIV");
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -121,6 +124,9 @@ public class MessageRenderer extends AbstractCssRenderer {
 
         String noMessageText = messageComponent.getText(facesContext);
         if (noMessageText != null) {
+            noMessageText = ParamUtils.formatMessage(messageComponent,
+                    noMessageText);
+
             htmlWriter.startElement("LABEL");
 
             htmlWriter.writeClass(getNoMessageClassName(htmlWriter));
@@ -129,7 +135,7 @@ public class MessageRenderer extends AbstractCssRenderer {
             htmlWriter.endElement("LABEL");
         }
 
-        htmlWriter.endElement("SPAN");
+        htmlWriter.endElement("DIV");
 
         htmlWriter.enableJavaScript();
     }

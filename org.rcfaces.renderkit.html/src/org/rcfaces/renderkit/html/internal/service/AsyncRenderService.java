@@ -4,6 +4,7 @@
  */
 package org.rcfaces.renderkit.html.internal.service;
 
+import java.io.CharArrayWriter;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,34 +14,40 @@ import java.io.ObjectOutput;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
-import javax.faces.application.StateManager;
-import javax.faces.application.StateManager.SerializedView;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.tagext.BodyContent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.renderkit.tools.ComponentTreeRenderProcessorFactory;
+import org.rcfaces.core.internal.renderkit.tools.IComponentTreeRenderProcessor;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
-import org.rcfaces.core.internal.tools.StateFieldMarkerTools;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
+import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
@@ -60,6 +67,14 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
     private static final String INTERACTIVE_RENDERER_PARAMETER = Constants
             .getPackagePrefix()
             + ".INTERACTIVE_RENDER";
+
+    // private static final Integer TREE_ASYNC_MODE = new
+    // Integer(IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE);
+
+    private static final Integer BUFFER_ASYNC_RENDER_MODE = new Integer(
+            IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE);
+
+    private static final int TREE_BUFFER_INITIAL_SIZE = 8000;
 
     private transient boolean interactiveRender;
 
@@ -121,8 +136,10 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
             UIViewRoot viewRoot = facesContext.getViewRoot();
 
-            UIComponent component = HtmlTools.getForComponent(facesContext,
-                    componentId, viewRoot);
+            componentId = HtmlTools.computeComponentId(facesContext,
+                    componentId);
+            UIComponent component = ComponentTools.getForComponent(
+                    facesContext, componentId, viewRoot);
             if (component == null) {
                 AbstractHtmlService.sendJsError(facesContext,
                         "Can not find component '" + componentId + "'.");
@@ -138,33 +155,52 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             }
 
             Object object = component.getAttributes().remove(INTERACTIVE_KEY);
-            if ((object instanceof InteractiveBuffer) == false) {
-                AbstractHtmlService.sendJsError(facesContext,
-                        "Object is not ready ! (id='" + componentId + "').");
-                return;
-            }
+            if (object instanceof InteractiveBuffer) {
+                InteractiveBuffer interactiveBuffer = (InteractiveBuffer) object;
 
-            InteractiveBuffer content = (InteractiveBuffer) object;
-            if (content == null) {
+                ServletResponse response = (ServletResponse) facesContext
+                        .getExternalContext().getResponse();
+
+                AbstractHtmlService.setNoCache(response);
+                response.setContentType(IHtmlRenderContext.HTML_TYPE
+                        + "; charset=" + AbstractHtmlService.RESPONSE_CHARSET);
+
+                try {
+                    interactiveBuffer.sendBuffer(facesContext);
+
+                } catch (IOException ex) {
+                    throw new FacesException(
+                            "Can not write async content of component id='"
+                                    + componentId + "'.", ex);
+                }
+
+            } else if (object instanceof InteractiveContext) {
+                InteractiveContext interactiveContext = (InteractiveContext) object;
+
+                ServletResponse response = (ServletResponse) facesContext
+                        .getExternalContext().getResponse();
+
+                AbstractHtmlService.setNoCache(response);
+                response.setContentType(IHtmlRenderContext.HTML_TYPE
+                        + "; charset=" + AbstractHtmlService.RESPONSE_CHARSET);
+
+                try {
+                    InteractiveBuffer interactiveBuffer = interactiveContext
+                            .renderTree(facesContext, component, componentId);
+
+                    interactiveBuffer.sendBuffer(facesContext);
+
+                } catch (IOException ex) {
+                    throw new FacesException(
+                            "Can not write async content of component id='"
+                                    + componentId + "'.", ex);
+                }
+
+            } else {
                 AbstractHtmlService.sendJsError(facesContext,
                         "No content for component id='" + componentId + "'.");
+
                 return;
-            }
-
-            ServletResponse response = (ServletResponse) facesContext
-                    .getExternalContext().getResponse();
-
-            AbstractHtmlService.setNoCache(response);
-            response.setContentType(IHtmlRenderContext.HTML_TYPE + "; charset="
-                    + AbstractHtmlService.RESPONSE_CHARSET);
-
-            try {
-                content.sendBuffer(facesContext);
-
-            } catch (IOException ex) {
-                throw new FacesException(
-                        "Can not write async content of component id='"
-                                + componentId + "'.", ex);
             }
 
         } catch (RuntimeException ex) {
@@ -176,10 +212,13 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
         facesContext.responseComplete();
     }
 
-    public static void setAsyncRenderer(UIComponent component,
-            boolean enableAsyncRender) {
+    public static void setAsyncRenderer(
+            IHtmlComponentRenderContext htmlComponentRenderContext,
+            int asyncRender) {
+        UIComponent component = htmlComponentRenderContext.getComponent();
         Map map = component.getAttributes();
-        if (enableAsyncRender == false) {
+
+        if (asyncRender == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
             if (map.remove(INTERACTIVE_KEY) != null) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Disable asyncRender for component '"
@@ -194,7 +233,12 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                     + "'.");
         }
 
-        map.put(INTERACTIVE_KEY, Boolean.TRUE);
+        if (asyncRender == IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE) {
+            map.put(INTERACTIVE_KEY, new InteractiveContext(
+                    htmlComponentRenderContext.getHtmlRenderContext()));
+            return;
+        }
+        map.put(INTERACTIVE_KEY, BUFFER_ASYNC_RENDER_MODE);
     }
 
     public boolean isAsyncRendererEnabled(FacesContext facesContext,
@@ -211,6 +255,11 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
     public void setContent(FacesContext facesContext, UIComponent component,
             BodyContent writer) {
         Map map = component.getAttributes();
+
+        Object key = map.get(INTERACTIVE_KEY);
+        if (key instanceof InteractiveContext) {
+            return;
+        }
 
         map.put(INTERACTIVE_KEY, new InteractiveBuffer(facesContext, writer));
     }
@@ -233,8 +282,83 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public static final class InteractiveBuffer implements StateHolder,
-            Externalizable {
+    protected static abstract class AbstractInteractive implements StateHolder {
+
+        private transient boolean transientState;
+
+        public boolean isTransient() {
+            return transientState;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+            this.transientState = newTransientValue;
+        }
+
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static final class InteractiveContext extends AbstractInteractive
+            implements Serializable {
+
+        private static final long serialVersionUID = -2686265776202582083L;
+
+        private Object contextState;
+
+        public InteractiveContext() {
+        }
+
+        public InteractiveContext(IHtmlRenderContext htmlRenderContext) {
+            contextState = htmlRenderContext.saveRenderContextState();
+        }
+
+        private InteractiveBuffer renderTree(FacesContext facesContext,
+                UIComponent component, String componentId)
+                throws WriterException {
+
+            Writer buffer = new CharArrayWriter(TREE_BUFFER_INITIAL_SIZE);
+
+            ResponseWriter newWriter = facesContext.getRenderKit()
+                    .createResponseWriter(buffer, null,
+                            AbstractHtmlService.RESPONSE_CHARSET);
+
+            facesContext.setResponseWriter(newWriter);
+
+            IComponentTreeRenderProcessor processor = ComponentTreeRenderProcessorFactory
+                    .get(facesContext);
+
+            HtmlRenderContext.restoreRenderContext(facesContext, contextState,
+                    true);
+            processor.encodeChildrenRecursive(component, componentId);
+
+            String myBuffer = buffer.toString();
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Render tree render mode : buffer=" + myBuffer
+                        + " bytes");
+            }
+
+            return new InteractiveBuffer(facesContext, myBuffer);
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+            this.contextState = state;
+        }
+
+        public Object saveState(FacesContext context) {
+            return contextState;
+        }
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static final class InteractiveBuffer extends AbstractInteractive
+            implements Externalizable {
 
         private static final String REVISION = "$Revision$";
 
@@ -242,10 +366,10 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
         private static final byte[] NO_GZIPPED_CONTENT = new byte[0];
 
+        private static final int GZIP_MINIMUM_SIZE = 128;
+
         // Pour debug !
         private transient int id;
-
-        private transient boolean transientValue;
 
         private String content;
 
@@ -262,24 +386,23 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
         public InteractiveBuffer(FacesContext facesContext,
                 BodyContent bodyContent) {
+            this(facesContext, bodyContent.getString());
+        }
+
+        public InteractiveBuffer(FacesContext facesContext, String content) {
             this();
 
             if (LOG.isTraceEnabled()) {
-                LOG.trace("New interactiveBuffer[" + id + "]=\n"
-                        + bodyContent.getString());
+                LOG.trace("New interactiveBuffer[" + id + "]=\n" + content);
             }
 
-            this.content = bodyContent.getString();
+            this.content = content;
 
-            String saveStateFieldMarker = StateFieldMarkerTools
-                    .getStateFieldMarker(facesContext);
-            if (saveStateFieldMarker != null
-                    && saveStateFieldMarker.length() > 0) {
+            IComponentTreeRenderProcessor componentTreeRenderProcessor = ComponentTreeRenderProcessorFactory
+                    .get(facesContext);
 
-                if (content.indexOf(saveStateFieldMarker) >= 0) {
-                    this.hasSaveStateFieldMarker = true;
-                }
-            }
+            this.hasSaveStateFieldMarker = componentTreeRenderProcessor
+                    .hasSaveStateFieldMarker(content);
 
             /*
              * String content = null; byte gzipped[] = null; try {
@@ -366,7 +489,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             }
 
             ByteBufferOutputStream bos = null;
-            if (useGzip) {
+            if (useGzip && content.length() > GZIP_MINIMUM_SIZE) {
                 ConfiguredHttpServlet
                         .setGzipContentEncoding((HttpServletResponse) response);
 
@@ -401,40 +524,8 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 writer.write(content);
 
             } else {
-                String saveStateFieldMarker = StateFieldMarkerTools
-                        .getStateFieldMarker(facesContext);
-                if (saveStateFieldMarker == null) {
-                    throw new FacesException(
-                            "Save state field marker is null !");
-                }
-
-                StateManager stateManager = facesContext.getApplication()
-                        .getStateManager();
-
-                SerializedView serializedView = stateManager
-                        .saveSerializedView(facesContext);
-
-                String saveValue = StateFieldMarkerTools.getStateValue(
-                        facesContext, serializedView);
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Save value=" + saveValue);
-                }
-
-                for (int start = 0;;) {
-                    int offset = content.indexOf(saveStateFieldMarker, start);
-                    if (offset < 0) {
-                        if (start < content.length()) {
-                            writer.write(content.substring(start));
-                        }
-                        break;
-                    }
-                    if (offset > start) {
-                        writer.write(content.substring(start, offset));
-                    }
-                    writer.write(saveValue);
-                    start = offset + saveStateFieldMarker.length();
-                }
+                ComponentTreeRenderProcessorFactory.get(facesContext)
+                        .writeFilteredContent(writer, content);
             }
 
             writer.close();
@@ -525,14 +616,6 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             }
 
             return new Object[] { content, hasObject };
-        }
-
-        public boolean isTransient() {
-            return transientValue;
-        }
-
-        public void setTransient(boolean newTransientValue) {
-            transientValue = newTransientValue;
         }
 
         public void readExternal(ObjectInput in) {

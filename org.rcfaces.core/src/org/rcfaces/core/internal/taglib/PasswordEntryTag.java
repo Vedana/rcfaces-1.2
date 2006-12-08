@@ -1,9 +1,11 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.PasswordEntryComponent;
 import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
 
 public class PasswordEntryTag extends TextEntryTag implements Tag {
 

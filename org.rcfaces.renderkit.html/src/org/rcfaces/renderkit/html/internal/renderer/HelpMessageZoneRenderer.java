@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import org.rcfaces.core.component.HelpMessageZoneComponent;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -28,6 +29,8 @@ public class HelpMessageZoneRenderer extends AbstractCssRenderer {
     }
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
+
         HelpMessageZoneComponent component = (HelpMessageZoneComponent) writer
                 .getComponentRenderContext().getComponent();
 
@@ -38,9 +41,14 @@ public class HelpMessageZoneRenderer extends AbstractCssRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        String text = component.getText();
+        String text = component.getText(htmlWriter.getComponentRenderContext()
+                .getFacesContext());
         if (text != null) {
-            htmlWriter.writeText(text);
+            text = ParamUtils.formatMessage(component, text);
+
+            if (text.length() > 0) {
+                htmlWriter.writeText(text);
+            }
         }
 
         htmlWriter.endElement("DIV");

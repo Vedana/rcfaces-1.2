@@ -4,7 +4,10 @@ import org.rcfaces.core.internal.component.CameliaCommandComponent;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IKeyPressEventCapability;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 
 public class AcceleratorComponent extends CameliaCommandComponent implements 
@@ -14,6 +17,10 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.accelerator";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaCommandComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"forItemValue","keyBinding","immediate","keyPressListener","for"}));
+	}
 
 	public AcceleratorComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -94,5 +101,8 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

@@ -1,11 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.component.TimeEntryComponent;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -195,6 +197,9 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof TimeEntryComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TimeEntryComponent'.");
 		}
 
@@ -223,7 +228,7 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (valueChangeListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
 		}
 
 		if (focusStyleClass != null) {
@@ -237,7 +242,7 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (readOnly != null) {

@@ -3,6 +3,8 @@
 package org.rcfaces.core.internal.component;
 
 import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 import java.io.IOException;
 
 import javax.faces.context.FacesContext;
@@ -16,12 +18,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.convert.Converter;
+import java.util.Arrays;
+import java.util.HashSet;
 import org.rcfaces.core.internal.component.IConvertValueHolder;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IRCFacesComponent;
 import org.rcfaces.core.internal.component.CameliaComponents;
@@ -33,6 +38,7 @@ import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IRendererExtension;
+import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
  * @author Olivier Oeuillot
@@ -42,6 +48,8 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory.getLog(CameliaOutputComponent.class);
+
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value","converter"}));
 
 	protected final transient IComponentEngine engine;
 
@@ -124,17 +132,22 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return states;
 	}
 
-	/*
-	 *
 	public final void setValueBinding(String name, ValueBinding binding) {
-		engine.setProperty(name, binding);
+		if (getCameliaFields().contains(name)) {
+			engine.setProperty(name, binding);
+			return;
+		}
+		
+		super.setValueBinding(name, binding);
 	}
-	*/
+
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 
 	public final ValueBinding getValueBinding(String name) {
-		ValueBinding valueBinding = engine.getValueBindingProperty(name);
-		if (valueBinding != null) {
-			return valueBinding;
+		if (getCameliaFields().contains(name)) {
+			return engine.getValueBindingProperty(name);
 		}
 
 		return super.getValueBinding(name);
@@ -193,18 +206,24 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 			return;
 		}
 
+        ComponentTools.IVarScope varScope = null;
+        if (this instanceof IVariableScopeCapability) {
+            varScope=ComponentTools.processVariableScope(context, (IVariableScopeCapability)this);
+        }
+
 		engine.startDecodes(context);
+		
 		Renderer renderer = getRenderer(context);
         if ((renderer instanceof IRendererExtension) == false) {
             super.processDecodes(context);
-            return;
-        }
 
-        CameliaComponents.processDecodes(context, this, renderer);
-		
-		// Attention !
-		// Le fait de detourner le processDecodes peut poser de nombreux problemes,
-		// nottament dans le cas d'un UIInput, UIData, ... !
+        } else  {
+	        CameliaComponents.processDecodes(context, this, renderer);
+	    }
+       
+        if (varScope!=null) {
+            varScope.popVar(context);
+        }
 	}
 
 	public void processValidators(FacesContext context) {
@@ -217,7 +236,16 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
             return;
         }
 
+        ComponentTools.IVarScope varScope = null;
+        if (this instanceof IVariableScopeCapability) {
+            varScope=ComponentTools.processVariableScope(context, (IVariableScopeCapability)this);
+        }
+
 		super.processValidators(context);
+       
+        if (varScope!=null) {
+            varScope.popVar(context);
+        }
 	}
 
     public void processUpdates(FacesContext context) {
@@ -225,10 +253,19 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
  		if (isRendered()==false) {
             return;
         }
- 
+
+		ComponentTools.IVarScope varScope = null;
+        if (this instanceof IVariableScopeCapability) {
+            varScope=ComponentTools.processVariableScope(context, (IVariableScopeCapability)this);
+        }
+
         engine.processUpdates(context);
 
         super.processUpdates(context);
+        
+        if (varScope!=null) {
+            varScope.popVar(context);
+        }
     }
 
 	/*
@@ -279,7 +316,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		
 		IVisibilityCapability visibilityCapability=(IVisibilityCapability)this;
 		
-		Boolean visible=visibilityCapability.getVisible();
+		Boolean visible=visibilityCapability.getVisibleState();
 		if (visible==null || visible.booleanValue()) {
 			return true;
 		}
@@ -299,6 +336,11 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		
 		return isClientRendered();
 	}
+	
+	public final void setRendered(ValueBinding binding) {
+		setValueBinding("rendered", binding);
+	}
+	
 	
 	public final IAsyncRenderer getAsyncRenderer(FacesContext facesContext) {
 		Renderer renderer=getRenderer(facesContext);
@@ -328,39 +370,29 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		super.queueEvent(e);
     }
 	
-	public final Converter getConverter() {
-
-
-		return getConverter(null);
-		
-	}
-
-	public final Converter getConverter(FacesContext facesContext) {
-
-
-		return engine.getConverter(facesContext);
-		
-	}
-
 	public final void setConverter(String converterId) {
 
 
-		engine.setConverterId(converterId);
-		
+				 setConverter(null, converterId);
+			
 	}
 
-	public final void setConverter(ValueBinding converter) {
+	public final void setConverter(ValueBinding valueBinding) {
 
 
-			engine.setConverterId(converter);
-		
+                  this.setValueBinding("converter", valueBinding);
+			
 	}
 
-	public final void setConverter(Converter converter) {
+	public final void setConverter(FacesContext facesContext, String converterId) {
 
 
-		engine.setConverter(converter);
-		
+				if (facesContext==null) {
+					facesContext=FacesContext.getCurrentInstance();
+				}
+				Converter converter = facesContext.getApplication().createConverter(converterId);
+                this.setConverter(converter);
+			
 	}
 
 	public final void setValue(ValueBinding value) {

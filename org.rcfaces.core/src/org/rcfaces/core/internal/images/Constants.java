@@ -28,6 +28,8 @@ public class Constants {
         CONSTANT_PREFIX = name;
     }
 
+    private static final IImageLoaderFactory DESIGNER_IMAGE_LOADER_FACTORY = new ResourceImageLoaderFactory();
+
     private static final IImageLoaderFactory IMAGE_LOADER_FACTORY;
 
     static {
@@ -36,7 +38,7 @@ public class Constants {
             IMAGE_LOADER_FACTORY = new IncludeImageLoaderFactory();
 
         } else {
-            IMAGE_LOADER_FACTORY = new ResourceImageLoaderFactory();
+            IMAGE_LOADER_FACTORY = DESIGNER_IMAGE_LOADER_FACTORY;
         }
 
         LOG.info("USE_INCLUDE_IMAGE_LOADER_FACTORY="
@@ -50,5 +52,9 @@ public class Constants {
 
     public static final IImageLoaderFactory getImageLoaderFactory() {
         return IMAGE_LOADER_FACTORY;
+    }
+
+    public static final IImageLoaderFactory getDesignerImageLoaderFactory() {
+        return DESIGNER_IMAGE_LOADER_FACTORY;
     }
 }

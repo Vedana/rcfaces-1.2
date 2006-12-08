@@ -288,8 +288,11 @@ class ImageOperationContentModel extends BasicContentModel implements
                 .getResponse();
         ServletContext context = (ServletContext) externalContext.getContext();
 
-        IImageLoader imageDownloader = getImageDownloader(resourceURL, context,
-                request, response);
+        RcfacesContext rcfacesContext = RcfacesContext
+                .getInstance(facesContext);
+
+        IImageLoader imageDownloader = getImageDownloader(rcfacesContext,
+                resourceURL, context, request, response);
 
         String downloadedContentType = imageDownloader.getContentType();
         if (downloadedContentType == null
@@ -325,6 +328,13 @@ class ImageOperationContentModel extends BasicContentModel implements
         }
 
         Iterator it = ImageIO.getImageWritersByMIMEType(internalContentType);
+        if (it.hasNext() == false) {
+            LOG.error("Can not write image format '" + internalContentType
+                    + "'.");
+
+            return INVALID_BUFFERED_IMAGE;
+        }
+
         ImageWriter imageWriter = (ImageWriter) it.next();
 
         BufferedImage image;
@@ -408,12 +418,17 @@ class ImageOperationContentModel extends BasicContentModel implements
         return new FileRenderedImage(imageName);
     }
 
-    private IImageLoader getImageDownloader(String url,
+    private IImageLoader getImageDownloader(RcfacesContext context, String url,
             ServletContext servletContext, HttpServletRequest request,
             HttpServletResponse response) {
 
-        IImageLoaderFactory imageLoaderFactory = Constants
-                .getImageLoaderFactory();
+        IImageLoaderFactory imageLoaderFactory;
+        if (context.isDesignerMode()) {
+            imageLoaderFactory = Constants.getDesignerImageLoaderFactory();
+
+        } else {
+            imageLoaderFactory = Constants.getImageLoaderFactory();
+        }
 
         return imageLoaderFactory.loadImage(servletContext, request, response,
                 url);

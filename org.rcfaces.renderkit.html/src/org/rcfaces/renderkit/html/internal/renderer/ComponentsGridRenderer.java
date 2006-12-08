@@ -55,6 +55,7 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
     private static final String LIST_CONTEXT = "dataList.listContext";
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
 
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
@@ -86,8 +87,9 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
 
             /* Si le tableau n'est pas visible ! */
 
-            String interactiveComponentClientId = getHtmlRenderContext(
-                    htmlWriter).getCurrentInteractiveRenderComponentClientId();
+            String interactiveComponentClientId = htmlWriter
+                    .getHtmlComponentRenderContext().getHtmlRenderContext()
+                    .getCurrentInteractiveRenderComponentClientId();
 
             if (interactiveComponentClientId != null) {
                 // Pas de donn�es si nous sommes dans un scope interactif !
@@ -172,7 +174,7 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
         IRenderContext renderContext = getRenderContext(facesContext);
 
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
-                .getComponentWriter(facesContext);
+                .getComponentWriter();
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -282,8 +284,8 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
                     // Render the beginning of this row
                     htmlWriter.startElement("TR");
 
-                    String rowId = htmlRenderContext.getComponentClientId(
-                            facesContext, dataListComponent);
+                    String rowId = htmlRenderContext
+                            .getComponentClientId(dataListComponent);
                     if (rowId != null) {
                         htmlWriter.writeId(rowId);
                     }
@@ -621,8 +623,9 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
         ComponentsListComponent dataListComponent = (ComponentsListComponent) writer
                 .getComponentRenderContext().getComponent();
 
-        IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
-                writer).getJavaScriptRenderContext();
+        IJavaScriptRenderContext javaScriptRenderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext();
 
         IMenuIterator menuIterator = dataListComponent.listMenus();
         if (menuIterator.hasNext()) {

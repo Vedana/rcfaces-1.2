@@ -1,11 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.FieldSetComponent;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -26,6 +28,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private String imageURL;
 	private String imageHeight;
 	private String imageWidth;
+	private String scopeValue;
+	private String scopeVar;
 	public String getComponentType() {
 		return FieldSetComponent.COMPONENT_TYPE;
 	}
@@ -126,6 +130,22 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		this.imageWidth = imageWidth;
 	}
 
+	public final String getScopeValue() {
+		return scopeValue;
+	}
+
+	public final void setScopeValue(String scopeValue) {
+		this.scopeValue = scopeValue;
+	}
+
+	public final String getScopeVar() {
+		return scopeVar;
+	}
+
+	public final void setScopeVar(String scopeVar) {
+		this.scopeVar = scopeVar;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (FieldSetComponent.COMPONENT_TYPE==getComponentType()) {
@@ -143,10 +163,15 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
+			LOG.debug("  scopeValue='"+scopeValue+"'");
+			LOG.debug("  scopeVar='"+scopeVar+"'");
 		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof FieldSetComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'FieldSetComponent'.");
 		}
 
@@ -273,6 +298,22 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 				component.setImageWidth(getInt(imageWidth));
 			}
 		}
+
+		if (scopeValue != null) {
+				ValueBinding vb = application.createValueBinding(scopeValue);
+
+				component.setScopeValue(vb);
+		}
+
+		if (scopeVar != null) {
+			if (isValueReference(scopeVar)) {
+				ValueBinding vb = application.createValueBinding(scopeVar);
+
+				component.setScopeVar(vb);
+			} else {
+				component.setScopeVar(scopeVar);
+			}
+		}
 	}
 
 	public void release() {
@@ -288,6 +329,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		imageURL = null;
 		imageHeight = null;
 		imageWidth = null;
+		scopeValue = null;
+		scopeVar = null;
 
 		super.release();
 	}

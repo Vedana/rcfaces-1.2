@@ -2,13 +2,16 @@ package org.rcfaces.core.component;
 
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IBorderCapability;
 
@@ -20,6 +23,10 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.componentsList";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalScrollPosition","var","value","rows","horizontalScrollPosition","columnStyleClass","first","rowStyleClass","columnNumber","rowIndexVar","rowCountVar","border","borderType"}));
+	}
 
 	public ComponentsListComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -246,5 +253,8 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

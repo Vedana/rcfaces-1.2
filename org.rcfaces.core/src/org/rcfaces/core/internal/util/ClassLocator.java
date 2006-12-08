@@ -37,9 +37,15 @@ public class ClassLocator {
         }
 
         if (fallback != null) {
+            Class cls;
+            if (fallback instanceof Class) {
+                cls = (Class) fallback;
+            } else {
+                cls = fallback.getClass();
+            }
+            
             try {
-                return fallback.getClass().getClassLoader()
-                        .loadClass(className);
+                return cls.getClassLoader().loadClass(className);
 
             } catch (ClassNotFoundException ex) {
                 if (thOrigin == null) {

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN" "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 <faces-config>
+	<component>
+		<component-type>org.rcfaces.html.init</component-type>
+		<component-class>org.rcfaces.renderkit.html.component.InitComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.html.javaScript</component-type>
+		<component-class>org.rcfaces.renderkit.html.component.JavaScriptComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.html.cssStyle</component-type>
+		<component-class>org.rcfaces.renderkit.html.component.CssStyleComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.html.loadClientBundle</component-type>
+		<component-class>org.rcfaces.renderkit.html.component.LoadClientBundleComponent</component-class>
+	</component>
 	<render-kit>
 		<renderer>
 			<component-family>rcfaces</component-family>
@@ -214,6 +230,11 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.scope</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ScopeRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.submitButton</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.SubmitButtonRenderer</renderer-class>
 		</renderer>
@@ -291,6 +312,26 @@
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.service</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ServiceRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.html.init</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.InitRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.html.javaScript</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.JavaScriptRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.html.cssStyle</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CssStyleRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.html.loadClientBundle</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.LoadClientBundleRenderer</renderer-class>
 		</renderer>
 	</render-kit>
 </faces-config>

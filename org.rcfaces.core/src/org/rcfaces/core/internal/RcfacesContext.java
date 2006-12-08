@@ -210,5 +210,4 @@ public abstract class RcfacesContext {
 
     public abstract void setContentStorageEngine(
             IContentStorageEngine indirectContentRepository);
-
 }

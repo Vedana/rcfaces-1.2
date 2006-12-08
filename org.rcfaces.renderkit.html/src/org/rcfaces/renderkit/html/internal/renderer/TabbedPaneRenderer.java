@@ -30,37 +30,40 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
         return JavaScriptClasses.TABBED_PANE;
     }
 
-    protected void renderTabHeader(IHtmlWriter writer) throws WriterException {
+    protected void renderTabHeader(IHtmlWriter htmlWriter) throws WriterException {
 
-        IComponentRenderContext componentRenderContext = writer
+        IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
         TabbedPaneComponent tabbedPaneComponent = (TabbedPaneComponent) componentRenderContext
                 .getComponent();
 
-        FacesContext facesContext = writer.getComponentRenderContext()
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        writer.startElement("TABLE");
-        writer.writeClass(getTitleClassName(writer));
-        writer.writeCellPadding(0);
-        writer.writeCellSpacing(0);
-        writer.writeln();
+        htmlWriter.startElement("TABLE");
+        
+        htmlWriter.writeRole("tab");
 
-        writer.startElement("TR");
-        writer.endElement("TR");
+        htmlWriter.writeClass(getTitleClassName(htmlWriter));
+        htmlWriter.writeCellPadding(0);
+        htmlWriter.writeCellSpacing(0);
+        htmlWriter.writeln();
 
-        writer.startElement("TR");
-        writer.endElement("TR");
+        htmlWriter.startElement("TR");
+        htmlWriter.endElement("TR");
 
-        writer.endElement("TABLE");
+        htmlWriter.startElement("TR");
+        htmlWriter.endElement("TR");
 
-        writer.startElement("DIV");
+        htmlWriter.endElement("TABLE");
+
+        htmlWriter.startElement("DIV");
         /*
          * String w = tabbedPaneComponent.getWidth(); if (w != null) {
          * htmlWriter.writeAttribute("width", w); }
          */
-        writer.writeClass(getContentClassName(writer));
+        htmlWriter.writeClass(getContentClassName(htmlWriter));
 
         String width = tabbedPaneComponent.getWidth(facesContext);
         String height = tabbedPaneComponent.getHeight(facesContext);
@@ -73,7 +76,7 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
          * enable without settings of attributes width and height !", null); } }
          */
 
-        ICssWriter cssWriter = writer.writeStyle(16);
+        ICssWriter cssWriter = htmlWriter.writeStyle(16);
         if (width != null) {
             cssWriter.writeWidth("100%");
         }

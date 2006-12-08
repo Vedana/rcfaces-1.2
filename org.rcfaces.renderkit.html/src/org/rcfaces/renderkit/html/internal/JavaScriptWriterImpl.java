@@ -28,8 +28,6 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
     private static final Log LOG = LogFactory
             .getLog(JavaScriptWriterImpl.class);
 
-    private static final String SCRIPT_END = "</SCRIPT>";
-
     private IHtmlWriter writer;
 
     private boolean start = false;
@@ -55,10 +53,10 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
     }
 
     public final FacesContext getFacesContext() {
-        return getComponentRenderContext().getFacesContext();
+        return getHtmlComponentRenderContext().getFacesContext();
     }
 
-    public final IHtmlComponentRenderContext getComponentRenderContext() {
+    public final IHtmlComponentRenderContext getHtmlComponentRenderContext() {
         return (IHtmlComponentRenderContext) writer.getComponentRenderContext();
     }
 
@@ -206,15 +204,12 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         }
         start = true;
 
-        write("<SCRIPT");
+        writer.startElement("SCRIPT");
 
         if (useMetaContentScriptType == false) {
-            write(" type=\"");
-            write(IHtmlRenderContext.JAVASCRIPT_TYPE);
-            write('\"');
+            writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
         }
 
-        write(">");
         if (useScriptCData) {
             write(IHtmlRenderContext.JAVASCRIPT_CDATA_BEGIN);
         }
@@ -227,9 +222,9 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         }
 
         if (useScriptCData) {
-            writeln(IHtmlRenderContext.JAVASCRIPT_CDATA_END);
+            write(IHtmlRenderContext.JAVASCRIPT_CDATA_END);
         }
-        write(SCRIPT_END);
+        writer.endElement("SCRIPT");
         start = false;
     }
 
@@ -308,7 +303,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
 
     public void setComponentVarName(String varName) {
         if (LOG.isDebugEnabled()) {
-            IComponentRenderContext componentRenderContext = getComponentRenderContext();
+            IComponentRenderContext componentRenderContext = getHtmlComponentRenderContext();
             if (componentRenderContext != null) {
                 LOG.debug("Set component (id='"
                         + componentRenderContext.getComponentClientId()

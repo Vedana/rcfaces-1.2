@@ -2,9 +2,10 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IMenuCapability;
 import java.lang.Object;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Arrays;
 import java.util.Collections;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.AbstractInputComponent;
@@ -17,10 +18,12 @@ import org.rcfaces.core.component.capability.IClientValidationCapability;
 import java.lang.String;
 import java.util.Map;
 import javax.faces.context.FacesContext;
+import java.util.HashMap;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.HashMap;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IEmptyMessageCapability;
+import java.util.HashSet;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.tools.MenuTools;
@@ -41,6 +44,10 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.textEntry";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","clientValidator","autoCompletion","text","required","maxTextLength","valueChangeListener","readOnly","focusStyleClass","columnNumber","emptyMessage","autoTab"}));
+	}
 
 	public TextEntryComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -458,5 +465,8 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

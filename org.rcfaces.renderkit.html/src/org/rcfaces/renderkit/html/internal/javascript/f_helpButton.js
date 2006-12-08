@@ -42,6 +42,13 @@ var __prototype = {
 		}
 	},
 	f_onSelect: function() {
+		var component=this;
+		
+		var forId=f_core.GetAttribute(this, "v:for");
+		if (forId) {
+			
+		}	
+	
 		f_help._Open(this);
 		return false;
 	}

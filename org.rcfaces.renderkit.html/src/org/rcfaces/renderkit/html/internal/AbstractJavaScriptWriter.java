@@ -140,6 +140,10 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
         return JavascriptCodec.writeJavaScript(this, s, sep).write(sep);
     }
 
+    public IHtmlRenderContext getHtmlRenderContext() {
+        return getHtmlComponentRenderContext().getHtmlRenderContext();
+    }
+
     protected abstract String convertSymbol(String symbol);
 
 }

@@ -30,16 +30,11 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 public class MessagesRenderer extends AbstractCssRenderer {
     public static final String REVISION = "$Revision$";
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#encodeBegin(org.rcfaces.core.internal.renderkit.IWriter)
-     */
-    protected void encodeBegin(IComponentWriter writer) throws WriterException {
-        IComponentRenderContext componentContext = writer
-                .getComponentRenderContext();
+     protected void encodeBegin(IComponentWriter writer) throws WriterException {
+         super.encodeBegin(writer);
 
-        FacesContext facesContext = componentContext.getFacesContext();
+         IComponentRenderContext componentContext = writer
+                .getComponentRenderContext();
 
         MessagesComponent messagesComponent = (MessagesComponent) componentContext
                 .getComponent();
@@ -77,7 +72,7 @@ public class MessagesRenderer extends AbstractCssRenderer {
 
         FacesContext facesContext = js.getFacesContext();
         IComponentRenderContext componentRenderContext = js
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
         MessagesComponent messagesComponent = (MessagesComponent) componentRenderContext
                 .getComponent();
 

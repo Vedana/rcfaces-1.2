@@ -4,7 +4,10 @@ import org.rcfaces.core.component.capability.IMultipleSelectCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.ComboComponent;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ListComponent extends ComboComponent implements 
 	IMultipleSelectCapability,
@@ -12,6 +15,10 @@ public class ListComponent extends ComboComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.list";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ComboComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"rowNumber","doubleClickListener","multipleSelect"}));
+	}
 
 	public ListComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -72,5 +79,8 @@ public class ListComponent extends ComboComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

@@ -66,7 +66,7 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
             Iterator iterator = MessageTools.listMessages(facesContext,
                     forValue, messageComponent);
 
-            messageComponent.setVisible(Boolean.valueOf(iterator.hasNext()));
+            messageComponent.setVisible(iterator.hasNext());
         }
 
         writeHtmlAttributes(htmlWriter);

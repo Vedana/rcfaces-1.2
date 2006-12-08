@@ -743,6 +743,7 @@ var __prototype = {
 
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
 		
+		item.role="menuitemradio";
 		item._style=fa_menuCore._AS_RADIO_BUTTON;
 		if (groupName) {
 			this.f_setItemGroupName(item, groupName);
@@ -770,6 +771,7 @@ var __prototype = {
 	f_appendCheckItem: function(parentItem, id, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
 
+		item.role="menuitemcheckbox";
 		item._style=fa_menuCore._AS_CHECK_BOX;
 		if (checked) {
 			this.f_setItemChecked(item, checked);
@@ -817,6 +819,7 @@ var __prototype = {
 		menuItem.id=id;
 		menuItem.className=this._menuClassName+"_item";
 		menuItem._style=fa_menuCore._AS_PUSH_BUTTON;
+		menuItem.role="menuitem";
 		
 		table.appendChild(menuItem);
 		

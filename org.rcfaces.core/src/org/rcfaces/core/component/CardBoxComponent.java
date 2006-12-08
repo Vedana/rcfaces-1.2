@@ -2,24 +2,33 @@ package org.rcfaces.core.component;
 
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.iterator.ICardIterator;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.CardComponent;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.CardBoxTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IPreferenceCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.iterator.ICardIterator;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.internal.tools.CardBoxTools;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
 
 public class CardBoxComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,
 	IAsyncRenderModeCapability,
-	IPreferenceCapability {
+	IPreferenceCapability,
+	IVariableScopeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.cardBox";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeValue","scopeVar","asyncRenderMode","preference"}));
+	}
 
 	public CardBoxComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -109,7 +118,38 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
 
+	public final javax.faces.el.ValueBinding getScopeValue() {
+		return getScopeValue(null);
+	}
+
+	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
+	}
+
+	public final void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
+	}
+
+	public final java.lang.String getScopeVar() {
+		return getScopeVar(null);
+	}
+
+	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
+	}
+
+	public final void setScopeVar(java.lang.String scopeVar) {
+		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
+	public final void setScopeVar(ValueBinding scopeVar) {
+		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

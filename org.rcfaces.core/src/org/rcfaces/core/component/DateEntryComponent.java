@@ -2,13 +2,16 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
 import javax.faces.context.FacesContext;
+import java.util.Map;
 import java.util.HashMap;
 import javax.faces.el.ValueBinding;
 import java.util.Date;
 import java.util.Collections;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.manager.IValidationParameters;
@@ -26,6 +29,10 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateEntry";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"autoCompletion","required","dateFormat","valueChangeListener","focusStyleClass","showCalendarOnFocus","autoTab","defaultDate"}));
+	}
 
 	public DateEntryComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -373,5 +380,8 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

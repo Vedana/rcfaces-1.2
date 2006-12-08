@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import java.util.Arrays;
 import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.converter.CardinalityConverter;
@@ -21,7 +22,9 @@ import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IPreferenceCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
@@ -48,6 +51,10 @@ public class DataGridComponent extends AbstractGridComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dataGrid";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","rowValueColumnId","horizontalScrollPosition","doubleClickListener","sortedColumnIds","rowIndexVar","selectable","filterProperties","checkable","checkedValues","preference","border","checkCardinality","verticalScrollPosition","paged","columnsOrder","required","disabled","clientCheckFullState","headerVisible","rowCountVar","clientSelectionFullState","checkListener","readOnly","selectionCardinality","selectedValues"}));
+	}
 
 	public DataGridComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -418,6 +425,26 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return engine.isPropertySetted(Properties.HEADER_VISIBLE);
 	}
 
+	public final boolean isPaged() {
+		return isPaged(null);
+	}
+
+	public final boolean isPaged(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PAGED, true, facesContext);
+	}
+
+	public final void setPaged(boolean paged) {
+		engine.setProperty(Properties.PAGED, paged);
+	}
+
+	public final void setPaged(ValueBinding paged) {
+		engine.setProperty(Properties.PAGED, paged);
+	}
+
+	public final boolean isPagedSetted() {
+		return engine.isPropertySetted(Properties.PAGED);
+	}
+
 	public final Object getSelectedValues() {
 		return getSelectedValues(null);
 	}
@@ -600,5 +627,8 @@ public class DataGridComponent extends AbstractGridComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

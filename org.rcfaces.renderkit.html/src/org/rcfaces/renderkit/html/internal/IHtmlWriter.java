@@ -82,4 +82,15 @@ public interface IHtmlWriter extends ISgmlWriter {
     IHtmlWriter writeLabel(String text) throws WriterException;
 
     IHtmlWriter writeSelected() throws WriterException;
+
+    IHtmlWriter writeRel(String rel) throws WriterException;
+
+    IHtmlWriter writeHRef(String url) throws WriterException;
+
+    IHtmlWriter writeHttpEquiv(String equiv, String content)
+            throws WriterException;
+
+    IHtmlWriter writeCharset(String charset) throws WriterException;
+
+    IHtmlWriter writeRole(String role) throws WriterException;
 }

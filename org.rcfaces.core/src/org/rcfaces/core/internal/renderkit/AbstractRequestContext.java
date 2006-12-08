@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.AbstractReleasable;
 import org.rcfaces.core.internal.Constants;
@@ -153,4 +154,13 @@ public abstract class AbstractRequestContext extends AbstractReleasable
 
         super.release();
     }
+
+    /*
+    public void pushScopeVar(String var, ValueBinding valueBinding) {
+        Object value = valueBinding.getValue(getFacesContext());
+
+        facesContext.getExternalContext().getRequestMap().put(var, value);
+    }
+    */
+
 }

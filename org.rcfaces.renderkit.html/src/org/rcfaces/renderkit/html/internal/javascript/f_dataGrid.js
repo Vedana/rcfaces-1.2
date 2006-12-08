@@ -707,14 +707,25 @@ var __static = {
 		}
 
 		var dataGrid=this._dataGrid;
+		var scrollBody=dataGrid._scrollBody;
 		
-		var scrollTitle=dataGrid._scrollTitle.scrollLeft;
-		var scrollBody=dataGrid._scrollBody.scrollLeft;
-		
-		if (scrollTitle!=scrollBody) {
-			dataGrid._scrollTitle.scrollLeft=scrollBody;
+		if (dataGrid._scrollTitle) {		
+			var scrollTitleLeft=dataGrid._scrollTitle.scrollLeft;
+			var scrollBodyLeft=scrollBody.scrollLeft;
+			
+			if (scrollTitleLeft!=scrollBodyLeft) {
+				dataGrid._scrollTitle.scrollLeft=scrollBodyLeft;
+			}
 		}
-
+		
+		if (dataGrid._paged===false && dataGrid._waitingRow && dataGrid._waitingLoading===false) {
+			var pos=dataGrid._waitingRow.offsetTop-scrollBody.scrollTop-scrollBody.offsetHeight;
+			
+			if (pos<0) {
+				dataGrid._performPagedLoading(evt);
+			}
+		}
+		
 		return true;
 	},
 	/**
@@ -1206,37 +1217,39 @@ var __prototype = {
 			this._table.appendChild(focus);
 		}
 
+		var scrollBody=this;
+		var catchScrollEvent=false;
 		this._title=f_core.GetChildByCssClass(this,this._className+"_fttitle");
 		if (this._title) {
 			this._scrollTitle=f_core.GetChildByCssClass(this,this._className+"_dataTitle_scroll");
-			if (!this._scrollTitle) {
-				this._scrollBody=this;
-				
-			} else {
+			if (this._scrollTitle) {
 				var dataBodyClassName=this._className+"_dataBody_scroll";
+
+				scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
 				
-				var scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
-				if (scrollBody) {
-					this._scrollBody=scrollBody;
-					scrollBody.onscroll=f_dataGrid._OnScroll;
-					scrollBody._dataGrid=this;
-				}
-				
+				catchScrollEvent=true;
+				/*
 				if (!f_core.IsGecko()) {
 					// Sous GECKO on peut avoir un probleme de layout !
 					//f_dataGrid._InitializeScrollbars(this);
-				}
+				}*/
 			}			
-			
-		} else {
-			this._scrollBody=this;
-		}	
-		
-		this.f_addEventListener(f_event.KEYDOWN, this._performKeyDown);
-		
-		if (f_core.IsGecko()) {
-			this._scrollBody.addEventListener("DOMMouseScroll", f_dataGrid._Link_onmousewheel, false);
 		}
+		
+		if (scrollBody) {
+			this._scrollBody=scrollBody;
+			scrollBody._dataGrid=this;
+		
+			if (catchScrollEvent) {								
+				scrollBody.onscroll=f_dataGrid._OnScroll;
+			}
+
+			if (f_core.IsGecko()) {
+				scrollBody.addEventListener("DOMMouseScroll", f_dataGrid._Link_onmousewheel, false);
+			}
+		}
+		
+		this.f_addEventListener(f_event.KEYDOWN, this._performKeyDown);		
 		
 		var styleSheetBase=f_env.GetStyleSheetBase();
 
@@ -1265,6 +1278,7 @@ var __prototype = {
 		}
 	*/	
 	
+//		this._visibleColumnsCount=undefined; // number
 //		this._titleLayout=undefined; // boolean
 //		this._documentComplete=undefined; // boolean
 
@@ -1274,7 +1288,10 @@ var __prototype = {
 //		this._waitingSelection=undefined; // number
 
 // 		this._loading=undefined; // boolean
-		this._waiting=undefined;
+		this._waiting=undefined; // 
+		this._waitingRow=undefined; // HTMLTrElement
+//		this._waitingLoading=undefined; // boolean
+		this._pagedWaiting=undefined; // 
 
 		this._currentSorts=undefined; // HTMLColElement
 //		this._columnCanBeSorted=undefined; // boolean
@@ -1339,7 +1356,9 @@ var __prototype = {
 			scrollBody.onclick=null;
 			scrollBody._dataGrid=undefined;
 			
-			f_core.VerifyProperties(scrollBody);
+			if (scrollBody!=this) {
+				f_core.VerifyProperties(scrollBody);
+			}
 		}
 
 		if (this._title) {
@@ -1501,7 +1520,6 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_performComponentVisible: function() {
-//		if (f_core.IsInternetExplorer()) {
 		f_dataGrid._UpdateTitle(this);
 
 		if (f_core.IsGecko()) {				
@@ -1511,11 +1529,87 @@ var __prototype = {
 			}
 		}
 
+		if (this._rows>0 && !this._paged) {
+			// Pas de mode page, pourtout il y a une limite ....
+			// On affiche une wait !
+			
+			this._addPagedWait();
+		}
+
 		f_dataGrid._InitializeScrollbars(this);		
 
 		if (this._interactiveShow) {
 			this.f_setFirst(this._first, this._cursor);			
 		}
+	},
+	
+	/**
+	 * @method private
+	 */
+	_removePagedWait: function() {
+		var waiting=this._pagedWaiting;
+		if (waiting) {
+			this._pagedWaiting=undefined;
+			
+			// Pas de destroy car des références peuvent trainer ...
+			// f_classLoader.Destroy(waiting);
+		}
+							
+		var waitingRow=this._waitingRow;
+		if (waitingRow) {
+			this._waitingRow=undefined;
+			
+			waitingRow.parentNode.removeChild(waitingRow);
+		}
+	},
+	/**
+	 * @method private
+	 */
+	_addPagedWait: function() {
+	
+		f_core.Debug(f_dataGrid, "AddPagedWait: rowCount="+this._rowCount+" rows="+this._rows);
+		
+		if (this._rowCount<0 || (this._rows==this._rowCount)) {
+//		alert("RowCount="+this._rowCount+"/"+this._rows);
+			return;
+		}
+		
+		this._removePagedWait();
+		
+		var tbody=this._tbody;
+		f_core.Assert(tbody, "f_dataGrid._addPagedWait: No Tbody for dataGrid ???");
+	
+		var waitTR=document.createElement("TR");
+		tbody.appendChild(waitTR);
+		this._waitingRow=waitTR;
+		this._waitingLoading=false;
+		
+		var rowIdx=tbody.childNodes.length;
+		if (rowIdx % 2) {
+			waitTR.className=this._className+"_row_odd";
+		} else {
+			waitTR.className=this._className+"_row_even";
+		}
+		
+		var td=document.createElement("TD");
+		waitTR.appendChild(td);
+		td.colSpan=this._visibleColumnsCount;
+	
+		var waiting=f_waiting.Create(td, null, true);
+ 		this._pagedWaiting=waiting;
+ 		
+ 		waiting.f_show();
+	},
+	
+	/**
+	 * @method private
+	 */
+	_performPagedLoading: function(evt, cursorIndex) {
+		this._waitingLoading=true;
+	
+		this.f_appendCommand(function(dataGrid) {			
+			dataGrid._callServer(dataGrid._rows, cursorIndex, undefined, true);
+		});		
 	},
 	
 	/* ****************************************************************** */
@@ -1609,8 +1703,9 @@ var __prototype = {
 			}
 			
 			this._columns.push(column);
-			
 		}
+		
+		this._visibleColumnsCount=v;
 	},
 	/**
 	 * @method public
@@ -2508,7 +2603,7 @@ var __prototype = {
 
 		return true;
 	},
-	_callServer: function(firstIndex, cursorIndex, selection) {
+	_callServer: function(firstIndex, cursorIndex, selection, waitingPage) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
 			selection=0;
@@ -2533,7 +2628,7 @@ var __prototype = {
 		
 		f_core.Debug(f_dataGrid, "Call server  firstIndex="+firstIndex+" cursorIndex="+cursorIndex+" selection="+selection);
 
-		if (true) {
+		if (!waitingPage) {
 			var tbody=this._tbody;
 			
 			var scrollBody=this._scrollBody;
@@ -2554,12 +2649,18 @@ var __prototype = {
 					
 					this._table.removeChild(tbody);
 				}
+
+				if (this._pagedWaiting) {
+					this._removePagedWait();
+				}
 	
 				while (tbody.hasChildNodes()) {
 					tbody.removeChild(tbody.lastChild);
 				}
 			}
-		}		
+		}
+		
+		var waitingObject=(waitingPage)?this._pagedWaiting:this._waiting;
 
 		var url=f_env.GetViewURI();
 		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
@@ -2569,15 +2670,16 @@ var __prototype = {
 			 * @method public
 			 */
 	 		onInit: function(request) {
-	 			var waiting=dataGrid._waiting;
-	 			if (!waiting) {	
-		 			waiting=f_waiting.Create(dataGrid);
-	 				dataGrid._waiting=waiting
+	 			if (!waitingObject) {
+	 				waitingObject=f_waiting.Create(dataGrid);
+	 				dataGrid._waiting=waitingObject;
 	 			}
 	 			
-	 			waiting.f_setText(f_waiting.GetLoadingMessage());
-	 			waiting.f_show();
-	 		},
+	 			if (waitingObject) {
+		 			waitingObject.f_setText(f_waiting.GetLoadingMessage());
+		 			waitingObject.f_show();
+			 	}
+		 	},
 			/**
 			 * @method public
 			 */
@@ -2589,19 +2691,17 @@ var __prototype = {
 				}
 	 		
 				dataGrid._loading=false;		
-				
-				var waiting=dataGrid._waiting;
-				if (waiting) {
-					waiting.f_hide();
+
+				if (waitingObject) {
+					waitingObject.f_hide();
 				}
 	 		},
 			/**
 			 * @method public
 			 */
 	 		onProgress: function(request, content, length, contentType) {
-	 			var waiting=dataGrid._waiting;
-				if (waiting) {
-	 				waiting.f_setText(f_waiting.GetReceivingMessage());
+				if (waitingObject) {
+	 				waitingObject.f_setText(f_waiting.GetReceivingMessage());
 				}	 			
 	 		},
 			/**
@@ -2612,7 +2712,6 @@ var __prototype = {
 					return;
 				}
 	 				
-				var waiting=dataGrid._waiting;
 				try {
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
 						f_core.Error(f_dataGrid, "Bad Status ! ("+request.f_getStatusText()+")");
@@ -2627,14 +2726,24 @@ var __prototype = {
 				
 					var ret=request.f_getResponse();
 					
+					if (dataGrid._waitingLoading) {
+						dataGrid._removePagedWait();
+					}
+					
 					//alert("ret="+ret);
 					eval(ret);
 
 				} finally {
 					dataGrid._loading=undefined;
-	
-					if (waiting) {
-						waiting.f_hide(true);
+					
+					if (waitingObject) {
+						waitingObject.f_hide(true);					
+					}
+					
+					if (dataGrid._rows>0 && !dataGrid._paged) {
+						dataGrid._waitingLoading=false;
+						
+						dataGrid._addPagedWait();
 					}
 				}
 	
@@ -2681,39 +2790,40 @@ var __prototype = {
 				}	
 			}
 		}
-				
-		this._first=rowIndex;
 
-		if (this._selectable) {
-			var oldCurrentSelection=(this._currentSelection.length>0);
-			this._currentSelection=new Array;
-			this._lastSelectedElement=undefined;
-			
-			// Reset des lignes selectionnées ...
-			if (oldCurrentSelection) {
-				// On avait des selections !
+		if (!this._waitingLoading) {
+			this._first=rowIndex;
+
+			if (this._selectable) {
+				var oldCurrentSelection=(this._currentSelection.length>0);
+				this._currentSelection=new Array;
+				this._lastSelectedElement=undefined;
 				
-				if (!this._selectionFullState) {
-					// Pas de fullstate: elles sont perdues !
-					this._fireSelectionChangedEvent();
+				// Reset des lignes selectionnées ...
+				if (oldCurrentSelection) {
+					// On avait des selections !
+					
+					if (!this._selectionFullState) {
+						// Pas de fullstate: elles sont perdues !
+						this._fireSelectionChangedEvent();
+					}
 				}
 			}
-		}
-		if (this._checkable) {
-			var oldCurrentChecks=(this._currentChecks.length>0);
-			this._currentChecks=new Array;
-			
-			// Reset des lignes selectionnées ...
-			if (oldCurrentChecks) {
-				// On avait des selections !
+			if (this._checkable) {
+				var oldCurrentChecks=(this._currentChecks.length>0);
+				this._currentChecks=new Array;
 				
-				if (!this._checkFullState) {
-					// Pas de fullstate: elles sont perdues !
-					this._fireSelectionChangedEvent();
-				}
-			}			
-		}
-		
+				// Reset des lignes selectionnées ...
+				if (oldCurrentChecks) {
+					// On avait des selections !
+					
+					if (!this._checkFullState) {
+						// Pas de fullstate: elles sont perdues !
+						this._fireSelectionChangedEvent();
+					}
+				}			
+			}
+		}		
 		this.fa_componentUpdated=false;
 	},
 	_updateNewPage: function() {
@@ -2728,12 +2838,13 @@ var __prototype = {
 		}
 
 		var cursorRow=undefined;
-		if (this._tbody) {
-			f_core.Assert(this._tbody.parentNode!=this._table, "Tbody has not been detached !");
+		var tbody=this._tbody;
+		if (tbody && !this._waitingLoading) {
+			f_core.Assert(tbody.parentNode!=this._table, "Tbody has not been detached !");
 			
-			this._table.appendChild(this._tbody);
+			this._table.appendChild(tbody);
 			
-			var rows=this._tbody.childNodes;
+			var rows=tbody.childNodes;
 			//alert("rows="+rows.length);
 					
 			for(var i=0;i<rows.length;i++) {
@@ -2748,7 +2859,7 @@ var __prototype = {
 				}
 			}
 			
-			this._table.appendChild(this._tbody);
+			this._table.appendChild(tbody);
 		
 			if (f_core.IsGecko()) {
 				// On a un probleme de layout avec le DIV ! arg !
@@ -2766,6 +2877,13 @@ var __prototype = {
 					this._table.parentNode.style.height=h+"px";
 				}
 			}
+		
+			if (this._rows>=0 && !this._paged) {
+				this._rows=rows.length;
+			}
+
+		} else {
+			this._rows=tbody.childNodes.length;
 		}
 	
 		this.fa_componentUpdated=true;
@@ -3096,8 +3214,22 @@ var __prototype = {
 			// Pas de page
 			return;
 		}
-		
+			
 		var nextFirst=this._first+this._rows;
+		
+		if (!this._paged) { // Rows est défini, mais nous ne sommes pas en mode page !
+			var waitingRow=this._waitingRow;
+			if (waitingRow) {
+				this._performPagedLoading(evt, nextFirst);
+
+				var scrollBody=this._scrollBody;
+				
+				var pos=waitingRow.offsetTop+waitingRow.offsetHeight-scrollBody.offsetHeight;
+				scrollBody.scrollTop=pos;
+			}
+			
+			return;
+		}
 		
 		if (this._rowCount>=0) {
 			if (nextFirst>=this._rowCount) {
@@ -3152,7 +3284,7 @@ var __prototype = {
 		}
 		
 		// Page pr?cedente ?
-		if (!this._rows) {
+		if (!this._rows || !this._paged) {
 			// Pas de page
 			return;
 		}
@@ -3200,7 +3332,7 @@ var __prototype = {
 			return;			
 		}
 		
-		if (this._rows) {
+		if (this._rows && this._paged) {
 			// Table Page par Page
 			var bottom;
 			for(var i=0;i<trs.length;i++) {
@@ -3245,7 +3377,7 @@ var __prototype = {
 			return;	
 		}
 		
-		// On recherche la position du suivant !
+		// On recherche notre index, et la hauteur d'une ligne
 		var trh=0;
 		var idx=-1;
 		for(var i=0;i<trs.length;i++) {
@@ -3264,28 +3396,69 @@ var __prototype = {
 			}
 			
 			if (idx>=0 && trh>0) {
-				break;
+				break; // On a trouvé l'index et la hauteur d'une ligne
 			}
 		}
 		if (trh<=0 || idx<0) {
+			// On a pas trouvé notre index, ou la hauteur d'une ligne
 			return;
 		}
+		
 		var h=this._scrollBody.clientHeight;
 
+		// 
 		var pos=Math.floor(idx+h/trh);
-		if (pos>=this._rowCount) {
-			pos=this._rowCount-1;
+		
+		f_core.Debug(f_dataGrid, "Pos="+pos+" idx="+idx+" h="+h+" trh="+trh+" rowCount="+this._rowCount+" trs="+trs.length);
+		
+		if (pos>=trs.length) {
+			pos=trs.length-1;
 		}		
+//		f_core.Assert(pos>=trs.length, "Invalid position !");
 
-		var row;
-		for(var i=0;pos>=0;i++) {
-			row=trs[i];
+		var row=null;
+		
+		// On cherche juste apres !
+		for(var i=pos;i<trs.length;i++) {
+			var r=trs[i];
 			
-			if (!row._dataGrid) {
+			if (!r._dataGrid) {
 				continue;
 			}
 			
-			pos--;
+			row=r;
+			f_core.Debug(f_dataGrid, "Found #"+i+" pos="+pos+" next row="+row);
+			break;
+		}
+		
+		f_core.Debug(f_dataGrid, "Found next row="+row);
+		
+		if (!row) {
+			// Pas trouvé, alors on cherche juste avant !
+			for(var i=pos-1;i>=0;i--) {
+				var r=trs[i];
+				
+				if (r._dataGrid) {
+					row=r;
+					break;
+				}			
+			}
+
+			f_core.Debug(f_dataGrid, "Found previous row="+row);
+		}
+				
+		if (!this._paged && pos==trs.length-1) {		
+			var waitingRow=this._waitingRow;
+
+			//f_core.Debug(f_dataGrid, "Waiting row="+waitingRow);
+			if (waitingRow) {
+				this._performPagedLoading(evt, pos);
+
+				var scrollBody=this._scrollBody;
+				
+				var pos=waitingRow.offsetTop+waitingRow.offsetHeight-scrollBody.offsetHeight;
+				scrollBody.scrollTop=pos;
+			}
 		}
 		
 		this._moveCursor(row, true, evt, selection);
@@ -3317,7 +3490,7 @@ var __prototype = {
 			return;			
 		}
 
-		if (this._rows) {
+		if (this._rows && this._paged) {
 			// Page pr?c?dante ...
 	
 			if (this._first<=0) {
@@ -3405,18 +3578,21 @@ var __prototype = {
 			this._moveCursor(last, true, evt, selection);
 			return;
 		}
-		// Le meme .... ben on va ? la derniere page
-			
-		if (this._rowCount<this._rows || this._rows<1) {
+		
+		var rowCount=this._rowCount; // Nombre total 
+		var rows=this._rows; // Nombre a afficher  (0= pas de mode page)
+		
+		// Le meme .... ben on va à la derniere page			
+		if (rowCount<rows || rows<1 || !this._paged) {
 			return;
 		}
 		
-		var nextFirst=this._rowCount-((this._rowCount+this._rows-1) % this._rows)-1;
+		var nextFirst=rowCount-((rowCount+rows-1) % rows)-1;
 		if (nextFirst<=this._first) {
 			return;
 		}
 		
-		var nextPos=this._rowCount-1;
+		var nextPos=rowCount-1;
 		
 		this.f_setFirst(nextFirst, nextPos, selection);
 	},
@@ -3443,7 +3619,7 @@ var __prototype = {
 		
 		// Le meme .... ben on va ? la premiere page
 			
-		if (this._first<1) {
+		if (this._first<1 || !this._paged) {
 			return;
 		}
 		
@@ -4174,6 +4350,7 @@ var __prototype = {
 	
 		return this.fa_isElementValueChecked(row);
 	},
+	
 	/**
 	 * Returns <code>true</code> if the receiver is checked, and <code>false</code> otherwise
 	 *

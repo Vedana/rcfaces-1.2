@@ -258,6 +258,9 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
     }
 
     public boolean isPropertySetted(String propertyName) {
+        if (properties==null) {
+            return false;
+        }
         return properties.containsKey(propertyName);
     }
 

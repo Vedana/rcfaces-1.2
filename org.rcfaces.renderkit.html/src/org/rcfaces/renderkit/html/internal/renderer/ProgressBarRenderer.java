@@ -64,6 +64,8 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.startElement("TABLE");
 
+        htmlWriter.writeRole("progressbar");
+
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);

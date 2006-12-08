@@ -34,6 +34,7 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.CommandParserIterator;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.internal.util.CommandParserIterator.ICommand;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
@@ -114,6 +115,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         String helpMessage = textEntryComponent.getHelpMessage(facesContext);
         if (helpMessage != null) {
+            helpMessage = ParamUtils.formatMessage(textEntryComponent,
+                    helpMessage);
+
             htmlWriter.writeAttribute("v:helpMessage", helpMessage);
 
             htmlWriter.enableJavaScript();
@@ -121,6 +125,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         String emptyMessage = textEntryComponent.getEmptyMessage(facesContext);
         if (emptyMessage != null) {
+            emptyMessage = ParamUtils.formatMessage(textEntryComponent,
+                    emptyMessage);
+
             htmlWriter.writeAttribute("v:emptyMessage", emptyMessage);
 
             htmlWriter.enableJavaScript();
@@ -253,8 +260,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         IClientValidatorsRegistry clientValidatorManager = RcfacesContext
                 .getInstance(facesContext).getClientValidatorsRegistry();
         if (clientValidatorManager == null) {
-          //  throw new FacesException("Can not get descriptorManager from faces context !");
-            
+            // throw new FacesException("Can not get descriptorManager from
+            // faces context !");
+
             // Designer mode
             return false;
         }
@@ -467,7 +475,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             throws WriterException {
 
         IComponentRenderContext componentRenderContext = htmlWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         CommandParserIterator.ICommand command = (ICommand) componentRenderContext
                 .getAttribute(VALIDATOR_COMMAND);
@@ -600,8 +608,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             Set classes) {
         super.addRequiredJavaScriptClassNames(htmlWriter, classes);
 
-        IJavaScriptRenderContext javaScriptRenderContext = getHtmlRenderContext(
-                htmlWriter).getJavaScriptRenderContext();
+        IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext();
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();

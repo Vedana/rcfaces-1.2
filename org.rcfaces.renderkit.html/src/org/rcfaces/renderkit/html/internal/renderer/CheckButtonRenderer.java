@@ -16,6 +16,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -53,7 +54,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement("SPAN");
+        htmlWriter.startElement("DIV");
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -87,7 +88,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
             writeLabel(htmlWriter, button, className, buttonId);
         }
 
-        htmlWriter.endElement("SPAN");
+        htmlWriter.endElement("DIV");
     }
 
     protected void writeInput(IHtmlWriter htmlWriter,
@@ -140,6 +141,10 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         htmlWriter.writeAttribute("for", inputId);
 
         String text = button.getText(facesContext);
+        if (text != null) {
+            text = ParamUtils.formatMessage(button, text);
+        }
+
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
         htmlWriter.endElement("LABEL");

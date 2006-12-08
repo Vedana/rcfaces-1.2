@@ -3,12 +3,15 @@ package org.rcfaces.core.component;
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.component.CameliaItemComponent;
 import java.lang.Object;
 import java.util.Map;
-import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import java.util.Collections;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.Constants;
@@ -24,6 +27,10 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	IServerDataManager,
 	IClientDataManager {
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemDescription","itemLabel","disabled","itemDisabled","itemValue"}));
+	}
 
 
 	public final void setServerData(String name, ValueBinding value) {
@@ -259,5 +266,8 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

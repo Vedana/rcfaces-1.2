@@ -173,7 +173,7 @@ public class SelectItemsContext {
                 .getRenderContext();
 
         cachedComponentClientId = renderContext.getComponentClientId(
-                componentRenderContext.getFacesContext(), component);
+                component);
 
         return cachedComponentClientId;
     }

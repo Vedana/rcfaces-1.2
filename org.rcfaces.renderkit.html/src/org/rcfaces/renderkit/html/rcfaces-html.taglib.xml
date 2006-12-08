@@ -4,26 +4,34 @@
 	<namespace>http://rcfaces.org/html</namespace>
 	<tag>
 		<tag-name>init</tag-name>
-		<handler-class>
-			org.rcfaces.renderkit.html.internal.facelets.InitHandler
-		</handler-class>
-	</tag>
-	<tag>
-		<tag-name>cssStyle</tag-name>
-		<handler-class>
-			org.rcfaces.renderkit.html.internal.facelets.CssStyleHandler
-		</handler-class>
-	</tag>
-	<tag>
-		<tag-name>loadClientBundle</tag-name>
-		<handler-class>
-			org.rcfaces.renderkit.html.internal.facelets.LoadClientBundleHandler
-		</handler-class>
+		<component>
+			<component-type>org.rcfaces.html.init</component-type>
+			<renderer-type>org.rcfaces.html.init</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
 	</tag>
 	<tag>
 		<tag-name>javaScript</tag-name>
-		<handler-class>
-			org.rcfaces.renderkit.html.internal.facelets.JavaScriptHandler
-		</handler-class>
+		<component>
+			<component-type>org.rcfaces.html.javaScript</component-type>
+			<renderer-type>org.rcfaces.html.javaScript</renderer-type>
+			<handler-class>org.rcfaces.renderkit.html.internal.facelets.JavaScriptHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>cssStyle</tag-name>
+		<component>
+			<component-type>org.rcfaces.html.cssStyle</component-type>
+			<renderer-type>org.rcfaces.html.cssStyle</renderer-type>
+			<handler-class>org.rcfaces.renderkit.html.internal.facelets.CssStyleHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>loadClientBundle</tag-name>
+		<component>
+			<component-type>org.rcfaces.html.loadClientBundle</component-type>
+			<renderer-type>org.rcfaces.html.loadClientBundle</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
 	</tag>
 </facelet-taglib>

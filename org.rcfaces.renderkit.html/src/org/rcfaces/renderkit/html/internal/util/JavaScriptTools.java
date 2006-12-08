@@ -30,7 +30,7 @@ public class JavaScriptTools {
 
     public static void writeFirstMessage(IJavaScriptWriter js)
             throws WriterException {
-        IHtmlRenderContext htmlRenderContext = js.getComponentRenderContext()
+        IHtmlRenderContext htmlRenderContext = js.getHtmlComponentRenderContext()
                 .getHtmlRenderContext();
         IForCapability messageComponent = (IForCapability) htmlRenderContext
                 .getComponent();
@@ -83,7 +83,7 @@ public class JavaScriptTools {
             String bundleVar) throws WriterException {
 
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) js
-                .getComponentRenderContext().getRenderContext();
+                .getHtmlComponentRenderContext().getRenderContext();
 
         IJavaScriptRenderContext javascriptRenderContext = htmlRenderContext
                 .getJavaScriptRenderContext();
@@ -91,9 +91,8 @@ public class JavaScriptTools {
         FacesContext facesContext = js.getFacesContext();
 
         String componentClientId = htmlRenderContext
-                .computeBrotherComponentClientId(facesContext, js.getWriter()
-                        .getComponentRenderContext().getComponent(),
-                        componentId);
+                .computeBrotherComponentClientId(js.getWriter()
+                        .getComponentRenderContext().getComponent(), componentId);
 
         boolean declare[] = new boolean[1];
         String key = javascriptRenderContext.allocateFacesMessage(facesMessage,

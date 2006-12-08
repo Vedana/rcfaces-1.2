@@ -10,23 +10,31 @@
  * @version $Revision$ $Date$ 
  */
  
-DIV.f_waiting {
-	text-align: left;
-	vertical-align: middle;
+.f_waiting_inline,
+.f_waiting_absolute {
+	display: none;
+	overflow: hidden;
+
 	width: 100px;
 	height: 24px;
-	position: absolute;
-	display: none;
-	background: transparent url("waiting/waiting2.gif") no-repeat left center;
 	padding-left: 24px;
+	line-height: 24px;
+
+	background: transparent url("waiting/waiting2.gif") no-repeat left center;
+
+	vertical-align: middle;
+	text-align: left;
+	
 	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
 	font-size: 8pt;
 	font-weight: normal;
 	font-stretch: normal;
 	font-style: normal;
-	line-height: 24px;
+}
+
+.f_waiting_absolute {
+	position: absolute;
 	z-index: 999;
-	overflow: hidden;
 }
 
 .f_waiting_error {

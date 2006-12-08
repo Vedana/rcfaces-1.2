@@ -73,9 +73,14 @@ class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
 
         private void openURLConnection() {
 
+            String url = this.url;
+            if (url.startsWith("/") == false) {
+                url = "/" + url;
+            }
+
             URL imageURL;
             try {
-                imageURL = servletContext.getResource("/" + url);
+                imageURL = servletContext.getResource(url);
 
             } catch (MalformedURLException ex) {
                 LOG.error("Malformed url '" + url + "'.", ex);

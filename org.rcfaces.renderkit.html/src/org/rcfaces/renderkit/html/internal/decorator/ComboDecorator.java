@@ -60,27 +60,26 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
 
         UIInput input = (UIInput) getComponent();
 
+        Object selectionValue = input.getValue();
+  
         return new SelectItemsContext(this, componentRenderContext, input,
-                input.getValue());
+                selectionValue);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
-     */
     protected SelectItemsContext createJavaScriptContext() {
         if (jsVersion == false) {
             return null;
         }
 
         IComponentRenderContext componentRenderContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         UIInput input = (UIInput) getComponent();
 
+        Object selectionValue = input.getValue();
+  
         return new SelectItemsJsContext(this, componentRenderContext, input,
-                input.getValue());
+                selectionValue);
     }
 
     /*

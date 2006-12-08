@@ -67,6 +67,7 @@
 .f_expandBar_hfacet {
 	vertical-align: middle;
 	margin-left: 8px;
+	display: inline;
 }
 
 .f_expandBar_head_over {

@@ -122,7 +122,7 @@ public class ValuesTools {
         Converter converter = null;
 
         if (component instanceof IConvertValueHolder) {
-            converter = ((IConvertValueHolder) component).getConverter(context);
+            converter = ((IConvertValueHolder) component).getConverter();
 
         } else if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
@@ -182,7 +182,7 @@ public class ValuesTools {
         Converter converter = null;
 
         if (component instanceof IConvertValueHolder) {
-            converter = ((IConvertValueHolder) component).getConverter(context);
+            converter = ((IConvertValueHolder) component).getConverter();
 
         } else if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
@@ -249,7 +249,7 @@ public class ValuesTools {
         Converter converter = null;
         if (component instanceof IConvertValueHolder) {
             converter = ((IConvertValueHolder) component)
-                    .getConverter(facesContext);
+                    .getConverter();
 
         } else if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
@@ -299,7 +299,7 @@ public class ValuesTools {
         Converter converter = null;
         if (component instanceof IConvertValueHolder) {
             converter = ((IConvertValueHolder) component)
-                    .getConverter(facesContext);
+                    .getConverter();
 
         } else if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
@@ -415,7 +415,7 @@ public class ValuesTools {
         Converter converter = null;
         if (component instanceof IConvertValueHolder) {
             converter = ((IConvertValueHolder) component)
-                    .getConverter(facesContext);
+                    .getConverter();
 
         } else if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();

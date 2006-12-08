@@ -5,6 +5,9 @@ import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 
 public class ComboComponent extends AbstractInputComponent implements 
@@ -14,6 +17,10 @@ public class ComboComponent extends AbstractInputComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.combo";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","filterProperties","required"}));
+	}
 
 	public ComboComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -54,5 +61,8 @@ public class ComboComponent extends AbstractInputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

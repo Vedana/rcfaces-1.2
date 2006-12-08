@@ -1,11 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.component.ServiceComponent;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
@@ -18,6 +20,7 @@ public class ServiceTag extends CameliaTag implements Tag {
 	private String serviceEventListeners;
 	private String filterProperties;
 	private String serviceId;
+	private String enableViewState;
 	public String getComponentType() {
 		return ServiceComponent.COMPONENT_TYPE;
 	}
@@ -54,6 +57,14 @@ public class ServiceTag extends CameliaTag implements Tag {
 		this.serviceId = serviceId;
 	}
 
+	public final String getEnableViewState() {
+		return enableViewState;
+	}
+
+	public final void setEnableViewState(String enableViewState) {
+		this.enableViewState = enableViewState;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ServiceComponent.COMPONENT_TYPE==getComponentType()) {
@@ -61,10 +72,14 @@ public class ServiceTag extends CameliaTag implements Tag {
 			}
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  serviceId='"+serviceId+"'");
+			LOG.debug("  enableViewState='"+enableViewState+"'");
 		}
 		super.setProperties(uiComponent);
 
 		if ((uiComponent instanceof ServiceComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ServiceComponent'.");
 		}
 
@@ -73,11 +88,11 @@ public class ServiceTag extends CameliaTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (propertyChangeListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (serviceEventListeners != null) {
-			Listeners.parseListener(facesContext, component, Listeners.SERVICE_EVENT_LISTENER_TYPE, serviceEventListeners);
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SERVICE_EVENT_LISTENER_TYPE, serviceEventListeners);
 		}
 
 		if (filterProperties != null) {
@@ -94,6 +109,15 @@ public class ServiceTag extends CameliaTag implements Tag {
 				component.setServiceId(serviceId);
 			}
 		}
+
+		if (enableViewState != null) {
+			if (isValueReference(enableViewState)) {
+				ValueBinding vb = application.createValueBinding(enableViewState);
+				component.setEnableViewState(vb);
+			} else {
+				component.setEnableViewState(getBool(enableViewState));
+			}
+		}
 	}
 
 	public void release() {
@@ -101,6 +125,7 @@ public class ServiceTag extends CameliaTag implements Tag {
 		serviceEventListeners = null;
 		filterProperties = null;
 		serviceId = null;
+		enableViewState = null;
 
 		super.release();
 	}

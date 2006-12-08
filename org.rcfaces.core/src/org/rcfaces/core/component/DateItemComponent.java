@@ -4,7 +4,10 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.AbstractItemComponent;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 public class DateItemComponent extends AbstractItemComponent implements 
 	ITextCapability,
@@ -12,6 +15,10 @@ public class DateItemComponent extends AbstractItemComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateItem";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","text","date"}));
+	}
 
 	public DateItemComponent() {
 		setRendererType(null);
@@ -82,5 +89,8 @@ public class DateItemComponent extends AbstractItemComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

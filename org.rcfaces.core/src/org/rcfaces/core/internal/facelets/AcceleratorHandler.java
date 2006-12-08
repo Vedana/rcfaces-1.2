@@ -1,7 +1,7 @@
 package org.rcfaces.core.internal.facelets;
 
-import org.rcfaces.core.internal.taglib.Listeners;
-import org.rcfaces.core.internal.taglib.Listeners.IListenerType;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.core.internal.tools.ListenersTools.IListenerType;
 
 import com.sun.facelets.tag.jsf.ComponentConfig;
 
@@ -12,6 +12,7 @@ public class AcceleratorHandler extends CameliaComponentHandler {
 	}
 
 	protected IListenerType getDefaultListenerType() {
-		return Listeners.KEY_PRESS_LISTENER_TYPE;
+		return ListenersTools.KEY_PRESS_LISTENER_TYPE;
 	}
+
 }

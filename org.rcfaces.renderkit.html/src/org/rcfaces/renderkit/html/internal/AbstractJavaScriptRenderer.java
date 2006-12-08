@@ -27,6 +27,7 @@ import org.rcfaces.core.internal.component.IRCFacesComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -37,7 +38,8 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
+public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
+        implements IJavaScriptComponent {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
@@ -93,7 +95,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
             throws WriterException {
 
         IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         String componentId = componentRenderContext.getComponentClientId();
 
@@ -154,7 +156,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
         // writer.write("with(").write(componentVarName).writeln("){");
 
         IHtmlComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         if (componentRenderContext.hasClientDatas(true)) {
             encodeClientData(writer);
@@ -164,7 +166,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
     public void releaseJavaScript(IJavaScriptWriter writer)
             throws WriterException {
         IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
         IHtmlRenderContext renderContext = (IHtmlRenderContext) componentRenderContext
                 .getRenderContext();
 
@@ -215,7 +217,8 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
                     }
 
                     // Il y a des nouveaux clientDatas ?
-                    if (writer.getComponentRenderContext().hasClientDatas(true)) {
+                    if (writer.getHtmlComponentRenderContext().hasClientDatas(
+                            true)) {
                         writeClientData(w,
                                 (IClientDataCapability) componentRenderContext
                                         .getComponent());
@@ -304,6 +307,8 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
         if (listenersByType.isEmpty() == false) {
             StringAppender sb = new StringAppender(128);
 
+            IRenderContext renderContext = writer.getComponentRenderContext()
+                    .getRenderContext();
             for (Iterator it = listenersByType.entrySet().iterator(); it
                     .hasNext();) {
                 Map.Entry entry = (Map.Entry) it.next();
@@ -311,8 +316,8 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
                 String listenerType = (String) entry.getKey();
                 FacesListener listeners[] = (FacesListener[]) entry.getValue();
 
-                EventsRenderer.encodeAttributeEventListeners(sb, listenerType,
-                        listeners);
+                EventsRenderer.encodeAttributeEventListeners(renderContext, sb,
+                        listenerType, listeners);
             }
 
             if (sb.length() > 0) {
@@ -335,7 +340,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
     protected void encodeClientData(IJavaScriptWriter writer)
             throws WriterException {
         IClientDataCapability clientDataCapability = (IClientDataCapability) writer
-                .getComponentRenderContext().getComponent();
+                .getHtmlComponentRenderContext().getComponent();
 
         String keys[] = clientDataCapability.listClientDataKeys();
         if (keys == null || keys.length < 1) {
@@ -373,7 +378,8 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer {
 
     protected void encodeEndJavaScript(IHtmlWriter writer)
             throws WriterException {
-        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(writer);
+        IHtmlRenderContext htmlRenderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
         UIComponent component = htmlRenderContext.getComponent();
 
         IJavaScriptWriter js = htmlRenderContext.removeJavaScriptWriter(writer);

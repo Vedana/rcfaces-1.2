@@ -17,6 +17,7 @@
 .f_message_fatal {
 	-moz-user-select: none;
 	user-select: none;
+	display: inline;
 }
 
 .f_message_summary {

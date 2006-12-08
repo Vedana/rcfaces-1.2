@@ -8,6 +8,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import java.util.Date;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
 import org.rcfaces.core.internal.converter.DateConverter;
@@ -22,6 +25,10 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateChooser";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","valueChangeListener","homeDate","homeDateLabel","text","imageWidth","selectedImageURL","border","forValueFormat","borderType","readOnly","textPosition","for"}));
+	}
 
 	public DateChooserComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -317,5 +324,8 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

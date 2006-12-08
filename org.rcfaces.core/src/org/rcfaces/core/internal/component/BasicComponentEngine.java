@@ -438,6 +438,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         converterSetted = false;
     }
 
+    /*
     public final String getConverterId(FacesContext facesContext) {
         return getStringProperty(CONVERTER_ID_PROPERTY, facesContext);
     }
@@ -453,6 +454,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         this.converter = null;
         this.converterSetted = false;
     }
+    */
 
     public final Converter getConverter(FacesContext facesContext) {
         if (converterSetted) {

@@ -29,6 +29,9 @@ public class SpinnerRenderer extends TextEntryRenderer {
                 .getComponentRenderContext().getComponent();
 
         htmlWriter.startElement("TABLE");
+
+        htmlWriter.writeRole("spinbutton");
+
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);
 
@@ -66,7 +69,8 @@ public class SpinnerRenderer extends TextEntryRenderer {
         boolean disabled = spinner.isDisabled(htmlWriter
                 .getComponentRenderContext().getFacesContext());
 
-        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(htmlWriter);
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
         String blankImageURL = htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
@@ -138,6 +142,13 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
             htmlWriter.writeAttribute("v:maximum", String.valueOf(maximum));
         }
+
+        /*
+         * if (spinnerComponent.isDefaultValueSetted()) { double defaultValue =
+         * spinnerComponent.getDefaultValue(facesContext);
+         * 
+         * htmlWriter.writeAttribute("v:maximum", String.valueOf(maximum)); }
+         */
 
         if (spinnerComponent.isStepSetted()) {
             String step = spinnerComponent.getStep(facesContext);

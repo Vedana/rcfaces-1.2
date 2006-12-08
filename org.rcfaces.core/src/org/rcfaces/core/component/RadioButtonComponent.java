@@ -10,7 +10,10 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
 import org.rcfaces.core.component.iterator.IRadioButtonIterator;
 import org.rcfaces.core.internal.tools.RadioButtonTools;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -28,6 +31,10 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.radioButton";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","selected","text","required","radioValue","groupName","readOnly","textPosition"}));
+	}
 
 	public RadioButtonComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -176,5 +183,8 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

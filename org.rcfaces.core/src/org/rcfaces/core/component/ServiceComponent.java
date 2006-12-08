@@ -5,9 +5,12 @@ import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 import java.lang.Object;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IServiceEventCapability;
+import javax.faces.el.ValueBinding;
 import java.util.Collections;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -30,6 +33,10 @@ public class ServiceComponent extends CameliaBaseComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.service";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"serviceId","filterProperties","enableViewState","propertyChangeListener","serviceEventListener"}));
+	}
 
 	public ServiceComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -310,7 +317,30 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		return engine.isPropertySetted(Properties.SERVICE_ID);
 	}
 
+	public final boolean isEnableViewState() {
+		return isEnableViewState(null);
+	}
+
+	public final boolean isEnableViewState(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.ENABLE_VIEW_STATE, true, facesContext);
+	}
+
+	public final void setEnableViewState(boolean enableViewState) {
+		engine.setProperty(Properties.ENABLE_VIEW_STATE, enableViewState);
+	}
+
+	public final void setEnableViewState(ValueBinding enableViewState) {
+		engine.setProperty(Properties.ENABLE_VIEW_STATE, enableViewState);
+	}
+
+	public final boolean isEnableViewStateSetted() {
+		return engine.isPropertySetted(Properties.ENABLE_VIEW_STATE);
+	}
+
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

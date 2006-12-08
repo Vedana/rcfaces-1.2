@@ -54,7 +54,9 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
         TimeEntryComponent timeEntryComponent = (TimeEntryComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement("SPAN");
+        htmlWriter.startElement("DIV");
+
+        htmlWriter.writeRole("textfield");
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -92,7 +94,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
         encodeSubComponents(htmlWriter, timeEntryComponent, timeFormat);
 
-        htmlWriter.endElement("SPAN");
+        htmlWriter.endElement("DIV");
 
         htmlWriter.enableJavaScript();
     }

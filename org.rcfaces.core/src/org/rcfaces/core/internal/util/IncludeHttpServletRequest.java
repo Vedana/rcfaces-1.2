@@ -78,4 +78,12 @@ public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
         return super.getParameterValues(parameterName);
     }
 
+    public String getMethod() {
+        return "GET";
+    }
+
+    public String getScheme() {
+        return "http";
+    }
+
 }

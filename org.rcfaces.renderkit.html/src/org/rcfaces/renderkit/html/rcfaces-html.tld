@@ -7,96 +7,281 @@
 	<uri>http://rcfaces.org/html</uri>
 	<tag>
 		<name>init</name>
-		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitializeTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
+		<body-content>JSP</body-content>
+<description><![CDATA[
+Mandatory. It holds the included javascript and css files.
+]]></description>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
 		<attribute>
 			<name>base</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string indicating the base HRef. If the key word "context" is used the base HRef is calculated from teh context.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>title</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the title for the component.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>favoriteImageURL</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to the image used for a bookmark.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>disabledScriptPageURL</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to a page shown if scripts are not enabled on the browser.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>disabledCookiesPageURL</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value that inhibits cookies for the page or not.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>invalidBrowserPageURL</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url pointing to the page to show if the browser is not supported.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>attributesLocale</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string the indicates the locale associated with the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>disabledIEImageBar</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value specifying wether the "image Bar" (contextual menu for images) in Internet Explorer should be hidden.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>disableCache</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value that force disabled cache for the page or not.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>disableContextMenu</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value that hide context menu for the page or not.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>renderBaseTag</name>
 			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
-	<tag>
-		<name>cssStyle</name>
-		<tag-class>org.rcfaces.renderkit.html.internal.taglib.CssStyleTag</tag-class>
-		<body-content>JSP</body-content>
-		<attribute>
-			<name>src</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>componentRules</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
-	<tag>
-		<name>loadClientBundle</name>
-		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadClientBundleTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>bundleName</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>baseName</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>serverSide</name>
-			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the HTML base.
+]]></description>
 		</attribute>
 	</tag>
 	<tag>
 		<name>javaScript</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.JavaScriptTag</tag-class>
 		<body-content>JSP</body-content>
+<description><![CDATA[
+Specifies includes and required javascript classes.
+]]></description>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the text (literal or binding) to be shown.
+]]></description>
+		</attribute>
 		<attribute>
 			<name>src</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url value pointing to the file to be included.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>srcCharSet</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value sprecifying the charset associated to the "src" files.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>requiredFiles</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying a list of javascript files to include.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>requiredClasses</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying a list of javascript classes to include.
+]]></description>
+		</attribute>
+	</tag>
+	<tag>
+		<name>cssStyle</name>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.CssStyleTag</tag-class>
+		<body-content>JSP</body-content>
+<description><![CDATA[
+Css style
+]]></description>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the text (literal or binding) to be shown.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>src</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url value pointing to the file to be included.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>srcCharSet</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value sprecifying the charset associated to the "src" files.
+]]></description>
+		</attribute>
+	</tag>
+	<tag>
+		<name>loadClientBundle</name>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadClientBundleTag</tag-class>
+		<body-content>JSP</body-content>
+<description><![CDATA[
+Loads a property bundle on the client side.
+]]></description>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>bundleName</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string specifying the name to be used on the client side to access the resource bundle.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>baseName</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Base name of the resource bundle to be loaded.
+		A string indicating the fully qualified name of a resources bundle (property file).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>serverSide</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the resource is available on the server side.
+]]></description>
 		</attribute>
 	</tag>
 </taglib>

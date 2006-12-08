@@ -10,8 +10,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
+import javax.faces.el.ValueBinding;
 import javax.faces.render.Renderer;
 
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 
 /**
@@ -21,6 +25,10 @@ import org.rcfaces.core.internal.tools.ValuesTools;
 public abstract class AbstractCameliaRenderer extends Renderer {
     private static final String REVISION = "$Revision$";
 
+    private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
+
+    private static final String VARIABLE_SCOPE_PROPERTY = "camelia.VARIABLE_SCOPE";
+
     public final void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
 
@@ -28,12 +36,11 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         IRenderContext renderContext = getRenderContext(context);
 
-        String clientId = renderContext
-                .getComponentClientId(context, component);
+        String clientId = renderContext.getComponentClientId(component);
 
-        renderContext.pushComponent(context, component, clientId);
+        renderContext.pushComponent(component, clientId);
 
-        IComponentWriter writer = renderContext.getComponentWriter(context);
+        IComponentWriter writer = renderContext.getComponentWriter();
         try {
             encodeBegin(writer);
 
@@ -45,18 +52,85 @@ public abstract class AbstractCameliaRenderer extends Renderer {
     }
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
+        UIComponent component = writer.getComponentRenderContext()
+                .getComponent();
+        if ((component instanceof IVariableScopeCapability) == false) {
+            return;
+        }
+
+        IVariableScopeCapability variableScopeCapability = (IVariableScopeCapability) component;
+
+        String var = variableScopeCapability.getScopeVar();
+        if (var == null || var.length() < 1) {
+            return;
+        }
+
+        ValueBinding valueBinding = variableScopeCapability.getScopeValue();
+        if (valueBinding == null) {
+            return;
+        }
+
+        writer.getComponentRenderContext().getRenderContext().pushScopeVar(var,
+                valueBinding);
+
+        writer.getComponentRenderContext().setAttribute(
+                VARIABLE_SCOPE_PROPERTY, var);
     }
 
     protected abstract IRenderContext getRenderContext(FacesContext context);
+
+    protected void hideChildren(IComponentRenderContext componentRenderContext) {
+        componentRenderContext.setAttribute(HIDE_CHILDREN_PROPERTY,
+                Boolean.TRUE);
+    }
+
+    public void encodeChildren(FacesContext facesContext, UIComponent component)
+            throws IOException {
+        if ((this instanceof IAsyncRenderer) == false) {
+            super.encodeChildren(facesContext, component);
+            return;
+        }
+
+        IRenderContext renderContext = getRenderContext(facesContext);
+
+        IComponentWriter componentWriter = renderContext.getComponentWriter();
+
+        IComponentRenderContext componentRenderContext = componentWriter
+                .getComponentRenderContext();
+
+        if (componentRenderContext.containsAttribute(HIDE_CHILDREN_PROPERTY)) {
+            return;
+        }
+
+        super.encodeChildren(facesContext, component);
+    }
+
+    public boolean getRendersChildren() {
+        if ((this instanceof IAsyncRenderer) == false) {
+            return false;
+        }
+
+        if (AsyncModeTools.isTagProcessor(null)) {
+            // Nous sommes en mode TAG, c'est le tag qui détourne le flux.
+            return false;
+        }
+
+        // Nous sommes en mode de rendu par parcours d'arbre ...
+        return true;
+    }
 
     public void encodeEnd(FacesContext context, UIComponent component)
             throws IOException {
 
         IRenderContext renderContext = getRenderContext(context);
 
-        IComponentWriter writer = renderContext.getComponentWriter(context);
+        IComponentWriter writer = renderContext.getComponentWriter();
 
-        renderContext.encodeEnd(context, component);
+        if (Constants.FLUSH_AFTER_ENCODE_CHILDREN) {
+            writer.flush();
+        }
+
+        renderContext.encodeEnd(component);
         try {
             encodeEnd(writer);
 
@@ -64,25 +138,30 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             throw new WriterException("RuntimeException", e, component);
         }
 
-        writer.flush();
-
         super.encodeEnd(context, component);
+
+        if (Constants.FLUSH_AFTER_ENCODE_END) {
+            writer.flush();
+        }
 
         renderContext.popComponent(component);
 
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
+
+        String scopeVar = (String) writer.getComponentRenderContext()
+                .getAttribute(VARIABLE_SCOPE_PROPERTY);
+        if (scopeVar == null) {
+            return;
+        }
+
+        writer.getComponentRenderContext().getRenderContext().popScopeVar(
+                scopeVar);
     }
 
     protected abstract IRequestContext getRequestContext(FacesContext context);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.render.Renderer#decode(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent)
-     */
     public final void decode(FacesContext context, UIComponent component) {
 
         IRequestContext requestContext = getRequestContext(context);
@@ -109,12 +188,6 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             IEventData eventData) {
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IRendererExtension#decodeChildren(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent)
-     */
     public void decodeChildren(FacesContext context, UIComponent component) {
         Iterator kids = component.getFacetsAndChildren();
         while (kids.hasNext()) {
@@ -129,20 +202,9 @@ public abstract class AbstractCameliaRenderer extends Renderer {
         child.processDecodes(context);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IRendererExtension#decodeEnd(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent)
-     */
     public void decodeEnd(FacesContext context, UIComponent component) {
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IRendererExtension#getDecodesChildren()
-     */
     public boolean getDecodesChildren() {
         return false;
     }
@@ -168,36 +230,4 @@ public abstract class AbstractCameliaRenderer extends Renderer {
         return ValuesTools.convertStringToValue(context, component,
                 submittedValue);
     }
-
-    /*
-    public static final String resolveContentURL(
-            IComponentRenderContext componentRenderContext, int type,
-            String attributeName, IContentAccessor url,
-            IURLRewritingInformation rewritingInformation) {
-        FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        if (Constants.URL_REWRITING_SUPPORT == false) {
-            return url.resolveURL(facesContext, null);
-        }
-
-        IURLRewritingProvider urlRewritingProvider;
-        IRenderContext renderContext = componentRenderContext
-                .getRenderContext();
-        if (renderContext != null) {
-            urlRewritingProvider = renderContext.getURLRewritingProvider();
-
-        } else {
-            urlRewritingProvider = AbstractURLRewritingProvider
-                    .getInstance(facesContext.getExternalContext());
-        }
-
-        if (urlRewritingProvider == null) {
-            return url.resolveURL(facesContext, null);
-        }
-
-        return urlRewritingProvider.resolveContentURL(facesContext,
-                componentRenderContext.getComponent(), attributeName, url,
-                rewritingInformation);
-    }
-    */
 }

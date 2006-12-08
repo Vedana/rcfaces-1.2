@@ -273,20 +273,13 @@ public class ConvertNumberTag extends ConverterTag {
             if (defaultValue != null) {
                 Object defValue = defaultValue;
 
-                if (UIComponentTag.isValueReference(locale)) {
+                if (UIComponentTag.isValueReference(defaultValue)) {
                     defValue = evaluateValueExpression(facesContext,
                             defaultValue);
                 }
 
-                if (defValue instanceof Number) {
-                    ((AbstractNumberConverter) result)
-                            .setDefaultValue((String) defValue);
-
-                } else {
-                    ((AbstractNumberConverter) result).setDefaultValue(String
-                            .valueOf(defValue));
-
-                }
+                ((AbstractNumberConverter) result).setDefaultValue(String
+                        .valueOf(defValue));
             }
         }
 

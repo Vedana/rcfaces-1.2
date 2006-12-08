@@ -10,11 +10,11 @@ import org.rcfaces.core.component.TabComponent;
 import org.rcfaces.core.component.TabbedPaneComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -37,7 +37,7 @@ public class TabRenderer extends CardRenderer {
         return JavaScriptClasses.TAB;
     }
 
-    protected boolean declareCard(IJavaScriptWriter js,
+    protected int declareCard(IJavaScriptWriter js,
             CardComponent cardComponent, String var, boolean selected)
             throws WriterException {
 
@@ -46,7 +46,8 @@ public class TabRenderer extends CardRenderer {
 
         IHtmlWriter writer = js.getWriter();
 
-        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(writer);
+        IHtmlRenderContext htmlRenderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
 
         FacesContext facesContext = js.getFacesContext();
 
@@ -89,6 +90,8 @@ public class TabRenderer extends CardRenderer {
 
         String text = tab.getText(facesContext);
         if (text != null) {
+            text = ParamUtils.formatMessage(tab, text);
+
             for (; pred > 0; pred--) {
                 js.write(',').writeNull();
             }
@@ -107,15 +110,14 @@ public class TabRenderer extends CardRenderer {
             pred++;
         }
 
-        boolean asyncRender = false;
+        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
 
         if (selected == false) {
             if (htmlRenderContext.isAsyncRenderEnable()) {
-                if (tabbedPane.getAsyncRenderMode(facesContext) != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                    getHtmlRenderContext(writer)
-                            .pushInteractiveRenderComponent(writer);
+                asyncRender = tabbedPane.getAsyncRenderMode(facesContext);
 
-                    asyncRender = true;
+                if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                    htmlRenderContext.pushInteractiveRenderComponent(writer);
                 }
             }
         }

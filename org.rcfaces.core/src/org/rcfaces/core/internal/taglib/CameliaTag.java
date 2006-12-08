@@ -7,13 +7,9 @@ package org.rcfaces.core.internal.taglib;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.faces.FacesException;
-import javax.faces.application.Application;
-import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.el.MethodBinding;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -24,14 +20,12 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
-import org.rcfaces.core.internal.taglib.Listeners.IListenerType;
-import org.rcfaces.core.internal.util.ForwardMethodBinding;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-abstract class CameliaTag extends UIComponentBodyTag {
+public abstract class CameliaTag extends UIComponentBodyTag {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CameliaTag.class);
@@ -206,8 +200,5 @@ abstract class CameliaTag extends UIComponentBodyTag {
 
     public boolean enableLazyDownload() {
         return false;
-    }
-
-    public void setBody(String content) {
     }
 }

@@ -6,9 +6,12 @@ import org.rcfaces.core.component.capability.IImageSizeCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ImageComponent extends AbstractOutputComponent implements 
 	IImageCapability,
@@ -17,6 +20,10 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.image";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","imageURL","filterProperties","imageWidth"}));
+	}
 
 	public ImageComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -112,5 +119,8 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

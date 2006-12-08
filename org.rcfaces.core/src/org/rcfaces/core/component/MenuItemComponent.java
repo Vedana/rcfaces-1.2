@@ -1,6 +1,5 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
@@ -10,15 +9,21 @@ import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 public class MenuItemComponent extends ExpandableItemComponent implements 
 	IAccessKeyCapability,
 	IAcceleratorKeyCapability,
-	IVisibilityCapability,
 	IMenuEventCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuItem";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"acceleratorKey","removeAllWhenShown","accessKey","menuListener"}));
+	}
 
 	public MenuItemComponent() {
 		setRendererType(null);
@@ -109,5 +114,8 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

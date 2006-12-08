@@ -6,7 +6,10 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.FieldSetComponent;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
+import java.util.Arrays;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 
 public class MessageFieldSetComponent extends FieldSetComponent implements 
@@ -17,6 +20,10 @@ public class MessageFieldSetComponent extends FieldSetComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messageFieldSet";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(FieldSetComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","warnImageURL","styleClass","infoStyleClass","infoImageURL","bundleVar","fatalImageURL","setFocusIfMessage","for"}));
+	}
 
 	public MessageFieldSetComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -209,5 +216,8 @@ public class MessageFieldSetComponent extends FieldSetComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

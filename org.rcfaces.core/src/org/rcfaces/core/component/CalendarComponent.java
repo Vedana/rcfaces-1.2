@@ -4,6 +4,9 @@ import org.rcfaces.core.component.capability.ICalendarModeCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.CalendarModeConverter;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 
@@ -13,6 +16,10 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.calendar";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"mode","border"}));
+	}
 
 	public CalendarComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -64,5 +71,8 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

@@ -3,6 +3,9 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.ImageButtonComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 
 public class ImagePagerButtonComponent extends ImageButtonComponent implements 
@@ -10,6 +13,10 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imagePagerButton";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageButtonComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"type","hideIfDisabled","for"}));
+	}
 
 	public ImagePagerButtonComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -78,5 +85,8 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

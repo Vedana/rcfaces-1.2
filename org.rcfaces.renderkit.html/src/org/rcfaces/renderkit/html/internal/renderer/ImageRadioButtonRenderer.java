@@ -85,6 +85,10 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
             super(imageButtonFamilly);
         }
 
+        protected String getRole() {
+           return "radio";
+        }
+ 
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
             super.encodeAttributes(facesContext);

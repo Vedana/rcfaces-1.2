@@ -1,15 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.AbstractItemComponent;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IToolTipCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
 public class UIImageItemComponent extends AbstractItemComponent implements 
@@ -19,6 +22,10 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.UIImageItem";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hoverImageURL","imageURL","disabledImageURL","selectedImageURL","toolTipText","visible","hiddenMode","rendered"}));
+	}
 
 	public UIImageItemComponent() {
 		setRendererType(null);
@@ -34,6 +41,17 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
+	}
+
+	public final Boolean getVisibleState(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+					return null;
+				}
+				
+				return Boolean.valueOf(isVisible(facesContext));
+			
 	}
 
 	public final void setToolTip(String text) {
@@ -80,20 +98,27 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public final java.lang.Boolean getVisible() {
-		return getVisible(null);
+	public final boolean isVisible() {
+		return isVisible(null);
 	}
 
-	public final java.lang.Boolean getVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.VISIBLE, facesContext);
+	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
 
-	public final void setVisible(java.lang.Boolean visible) {
+	public final void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final Boolean getVisibleState() {
+
+
+				return getVisibleState(null);
+			
 	}
 
 	public final java.lang.String getToolTipText() {
@@ -185,5 +210,8 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

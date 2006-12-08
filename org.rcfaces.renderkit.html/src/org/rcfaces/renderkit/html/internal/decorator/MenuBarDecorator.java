@@ -39,7 +39,7 @@ public class MenuBarDecorator extends MenuDecorator {
             SelectItem selectItem, boolean hasChild) throws WriterException {
 
         IComponentRenderContext componentContext = javaScriptWriter
-                .getComponentRenderContext();
+                .getHtmlComponentRenderContext();
 
         String varId = javaScriptWriter.getJavaScriptRenderContext()
                 .allocateVarName();

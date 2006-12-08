@@ -30,6 +30,23 @@ var __prototype = {
 		}
 		var value=this.f_getValue();
 		
+		var max=this.f_getMaximum();
+		var min=this.f_getMinimum();
+
+		if (value=="") {
+			if (scale>0) {
+				if (typeof(max)=="number") {
+					this.f_setValue(max);
+				}
+				return;
+			}
+			
+			if (typeof(min)=="number") {
+				this.f_setValue(min);
+			}
+			return;
+		}
+		
 		if (typeof(value)!="number") {
 			value=parseFloat(this.f_getText());
 		}
@@ -57,13 +74,10 @@ var __prototype = {
 		
 		} else {
 			var s=parseFloat(step);
-			if (!isNan(s)) {
+			if (!isNaN(s)) {
 				newValue+=scale*s;
 			}
 		}
-		
-		var max=this.f_getMaximum();
-		var min=this.f_getMinimum();
 
 		if (typeof(max)=="number" && max<newValue) {
 			if (this._cycleValue && typeof(min)=="number") {

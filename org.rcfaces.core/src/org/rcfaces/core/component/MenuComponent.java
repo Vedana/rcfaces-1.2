@@ -9,6 +9,9 @@ import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 public class MenuComponent extends CameliaSelectManyComponent implements 
 	IMenuEventCapability,
@@ -18,6 +21,10 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menu";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","menuId","converter","checkedValues","checkListener","removeAllWhenShown","menuListener","selectedValues"}));
+	}
 
 	public MenuComponent() {
 		setRendererType(null);
@@ -153,5 +160,8 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

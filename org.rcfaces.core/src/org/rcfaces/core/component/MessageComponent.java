@@ -1,14 +1,17 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IBundleVarCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractMessageComponent;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBundleVarCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
@@ -21,6 +24,10 @@ public class MessageComponent extends AbstractMessageComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.message";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessageComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","imageHeight","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","showIfMessage","warnImageURL","styleClass","text","imageWidth","infoStyleClass","infoImageURL","bundleVar","setFocusIfMessage","fatalImageURL"}));
+	}
 
 	public MessageComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -295,5 +302,8 @@ public class MessageComponent extends AbstractMessageComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

@@ -4,7 +4,10 @@ import org.rcfaces.core.component.capability.IBundleVarCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.AbstractMessagesComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 public class MessagesComponent extends AbstractMessagesComponent implements 
 	ISeverityStyleClassCapability,
@@ -12,6 +15,10 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messages";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessagesComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","styleClass","fatalStyleClass","infoStyleClass","bundleVar","warnStyleClass"}));
+	}
 
 	public MessagesComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -104,5 +111,8 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 
 	public void release() {
 		super.release();
+	}
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
 	}
 }

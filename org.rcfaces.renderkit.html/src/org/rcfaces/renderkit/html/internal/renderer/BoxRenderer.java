@@ -59,19 +59,18 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
 
         BoxComponent box = (BoxComponent) componentRenderContext.getComponent();
 
-        boolean asyncRender = false;
+        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
 
-        boolean hidden = Boolean.FALSE.equals(box.getVisible(facesContext));
+        boolean hidden = Boolean.FALSE.equals(box.getVisibleState());
 
         if (hidden) {
             if (htmlRenderContext.isAsyncRenderEnable()) {
-                if (box.getAsyncRenderMode(facesContext) != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                asyncRender = box.getAsyncRenderMode(facesContext);
+                if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlWriter.writeAttribute("v:asyncRender", "true");
 
                     htmlRenderContext
                             .pushInteractiveRenderComponent(htmlWriter);
-
-                    asyncRender = true;
                 }
             }
         }
@@ -146,7 +145,8 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
                 .getComponentRenderContext().getComponent();
         IMenuIterator menuIterator = boxComponent.listMenus();
         if (menuIterator.hasNext()) {
-            IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(writer);
+            IHtmlRenderContext htmlRenderContext = writer
+                    .getHtmlComponentRenderContext().getHtmlRenderContext();
 
             IJavaScriptRenderContext javaScriptRenderContext = htmlRenderContext
                     .getJavaScriptRenderContext();

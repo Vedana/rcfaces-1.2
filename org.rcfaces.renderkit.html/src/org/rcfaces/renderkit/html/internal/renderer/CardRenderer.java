@@ -14,6 +14,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptComponent;
@@ -27,6 +28,8 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  */
 public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer {
     private static final String REVISION = "$Revision$";
+
+    private static final String CARD_SUFFIX = "_card";
 
     private static final IJavaScriptComponent CARD_JAVASCRIPT_COMPONENT = new IJavaScriptComponent() {
         private static final String REVISION = "$Revision$";
@@ -48,9 +51,8 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         }
     };
 
-    private static final String CARD_SUFFIX = "_card";
-
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
+        // super.encodeBegin(writer); // ???
 
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
@@ -73,7 +75,8 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(htmlWriter);
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
 
         htmlRenderContext.removeJavaScriptWriter(htmlWriter);
 
@@ -88,8 +91,8 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         initializePendingComponents(js);
 
-        String cardBoxVarId = htmlRenderContext.getComponentClientId(
-                facesContext, cardBoxComponent);
+        String cardBoxVarId = htmlRenderContext
+                .getComponentClientId(cardBoxComponent);
 
         String var;
         boolean declare[] = new boolean[1];
@@ -101,20 +104,21 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
                     ", document, true);");
         }
 
-        boolean asyncRender = declareCard(js, cardComponent, var, selected);
+        int asyncRender = declareCard(js, cardComponent, var, selected);
 
         js.end();
 
         htmlWriter.writeln();
 
         htmlWriter.startElement("DIV");
+        htmlWriter.writeRole("tabcontent");
 
         /*
          * String w = tabbedPane.getWidth(); if (w != null) {
          * writer.writeAttribute("width", w); }
          */
 
-        if (asyncRender) {
+        if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
             htmlWriter.writeAttribute("v:asyncRender", "true");
         }
 
@@ -174,7 +178,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         return CARD_SUFFIX;
     }
 
-    protected boolean declareCard(IJavaScriptWriter js,
+    protected int declareCard(IJavaScriptWriter js,
             CardComponent cardComponent, String var, boolean selected)
             throws WriterException {
 
@@ -182,11 +186,15 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         IHtmlWriter writer = js.getWriter();
 
-        IHtmlRenderContext htmlRenderContext = getHtmlRenderContext(writer);
+        IHtmlComponentRenderContext componentRenderContext = writer
+                .getHtmlComponentRenderContext();
+
+        IHtmlRenderContext htmlRenderContext = componentRenderContext
+                .getHtmlRenderContext();
         FacesContext facesContext = js.getFacesContext();
 
         js.writeCall(var, "f_declareCard").writeString(
-                writer.getComponentRenderContext().getComponentClientId());
+                componentRenderContext.getComponentClientId());
 
         int pred = 0;
         if (selected) {
@@ -199,14 +207,15 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
             pred++;
         }
 
-        boolean asyncRender = false;
+        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
         if (selected == false) {
             if (htmlRenderContext.isAsyncRenderEnable()) {
-                if (cardBoxComponent.getAsyncRenderMode(facesContext) != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                    getHtmlRenderContext(writer)
-                            .pushInteractiveRenderComponent(writer);
+                asyncRender = cardBoxComponent.getAsyncRenderMode(facesContext);
 
-                    asyncRender = true;
+                if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                    writer.getHtmlComponentRenderContext()
+                            .getHtmlRenderContext()
+                            .pushInteractiveRenderComponent(writer);
                 }
             }
         }

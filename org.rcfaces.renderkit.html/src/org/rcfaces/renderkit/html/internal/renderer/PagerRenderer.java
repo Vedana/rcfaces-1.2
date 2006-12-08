@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.PagerComponent;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -35,13 +36,12 @@ public class PagerRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        String componentTag = "SPAN";
-        if (pagerComponent.getWidth(facesContext) != null
-                || pagerComponent.getHeight(facesContext) != null) {
-            componentTag = "DIV";
+        htmlWriter.startElement("DIV");
+        if (pagerComponent.getWidth(facesContext) == null
+                && pagerComponent.getHeight(facesContext) == null) {
+            htmlWriter.writeStyle().writeDisplay("inline");
         }
 
-        htmlWriter.startElement(componentTag);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -56,11 +56,16 @@ public class PagerRenderer extends AbstractCssRenderer {
 
         String message = pagerComponent.getMessage(facesContext);
         if (message != null) {
+            message = ParamUtils.formatMessage(pagerComponent, message);
+
             htmlWriter.writeAttribute("v:message", message);
 
             String zeroResultMessage = pagerComponent
                     .getZeroResultMessage(facesContext);
             if (zeroResultMessage != null) {
+                zeroResultMessage = ParamUtils.formatMessage(pagerComponent,
+                        zeroResultMessage);
+
                 htmlWriter.writeAttribute("v:zeroResultMessage",
                         zeroResultMessage);
             }
@@ -68,6 +73,9 @@ public class PagerRenderer extends AbstractCssRenderer {
             String oneResultMessage = pagerComponent
                     .getOneResultMessage(facesContext);
             if (oneResultMessage != null) {
+                oneResultMessage = ParamUtils.formatMessage(pagerComponent,
+                        oneResultMessage);
+
                 htmlWriter.writeAttribute("v:oneResultMessage",
                         oneResultMessage);
             }
@@ -75,6 +83,9 @@ public class PagerRenderer extends AbstractCssRenderer {
             String manyResultsMessage = pagerComponent
                     .getManyResultsMessage(facesContext);
             if (manyResultsMessage != null) {
+                manyResultsMessage = ParamUtils.formatMessage(pagerComponent,
+                        manyResultsMessage);
+
                 htmlWriter.writeAttribute("v:manyResultMessage",
                         manyResultsMessage);
             }
@@ -82,10 +93,13 @@ public class PagerRenderer extends AbstractCssRenderer {
 
         String noPagedMessage = pagerComponent.getNoPagedMessage(facesContext);
         if (noPagedMessage != null) {
+            noPagedMessage = ParamUtils.formatMessage(pagerComponent,
+                    noPagedMessage);
+
             htmlWriter.writeAttribute("v:noPagedMessage", noPagedMessage);
         }
 
-        htmlWriter.endElement(componentTag);
+        htmlWriter.endElement("DIV");
 
         htmlWriter.enableJavaScript();
     }

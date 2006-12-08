@@ -62,7 +62,6 @@
 		<tag-name>dataColumn</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.dataColumn</component-type>
-			<renderer-type>org.rcfaces.core.dataColumn</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -102,7 +101,6 @@
 		<tag-name>dateItem</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.dateItem</component-type>
-			<renderer-type>org.rcfaces.core.dateItem</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -142,7 +140,6 @@
 		<tag-name>selectImageItem</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.selectImageItem</component-type>
-			<renderer-type>org.rcfaces.core.selectImageItem</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -150,7 +147,6 @@
 		<tag-name>uiImageItem</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.UIImageItem</component-type>
-			<renderer-type>org.rcfaces.core.UIImageItem</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -302,7 +298,6 @@
 		<tag-name>menu</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.menu</component-type>
-			<renderer-type>org.rcfaces.core.menu</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -318,7 +313,6 @@
 		<tag-name>menuCheckItem</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.menuCheckItem</component-type>
-			<renderer-type>org.rcfaces.core.menuCheckItem</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -326,7 +320,6 @@
 		<tag-name>menuItem</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.menuItem</component-type>
-			<renderer-type>org.rcfaces.core.menuItem</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -334,7 +327,6 @@
 		<tag-name>menuSeparator</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.menuSeparator</component-type>
-			<renderer-type>org.rcfaces.core.menuSeparator</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -342,7 +334,6 @@
 		<tag-name>menuRadioItem</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.menuRadioItem</component-type>
-			<renderer-type>org.rcfaces.core.menuRadioItem</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -411,6 +402,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>scope</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.scope</component-type>
+			<renderer-type>org.rcfaces.core.scope</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>submitButton</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.submitButton</component-type>
@@ -439,7 +438,7 @@
 		<component>
 			<component-type>org.rcfaces.core.styledText</component-type>
 			<renderer-type>org.rcfaces.core.styledText</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+			<handler-class>org.rcfaces.core.internal.facelets.TextHandler</handler-class>
 		</component>
 	</tag>
 	<tag>
@@ -479,7 +478,7 @@
 		<component>
 			<component-type>org.rcfaces.core.text</component-type>
 			<renderer-type>org.rcfaces.core.text</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+			<handler-class>org.rcfaces.core.internal.facelets.TextHandler</handler-class>
 		</component>
 	</tag>
 	<tag>
@@ -518,7 +517,6 @@
 		<tag-name>toolFolder</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.toolFolder</component-type>
-			<renderer-type>org.rcfaces.core.toolFolder</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -526,7 +524,6 @@
 		<tag-name>toolItem</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.toolItem</component-type>
-			<renderer-type>org.rcfaces.core.toolItem</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -534,7 +531,6 @@
 		<tag-name>toolItemSeparator</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.toolItemSeparator</component-type>
-			<renderer-type>org.rcfaces.core.toolItemSeparator</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -550,7 +546,6 @@
 		<tag-name>treeNode</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.treeNode</component-type>
-			<renderer-type>org.rcfaces.core.treeNode</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -573,37 +568,43 @@
 	<tag>
 		<tag-name>convertByte</tag-name>
 		<converter>
-			<converter-id>org.rcfaces.ByteConverter</converter-class>
+			<converter-id>org.rcfaces.Byte</converter-id>
+			<handler-class>org.rcfaces.core.internal.facelets.ByteConverterHandler</handler-class>
 		</converter>
 	</tag>
 	<tag>
 		<tag-name>convertShort</tag-name>
 		<converter>
-			<converter-id>org.rcfaces.ShortConverter</converter-class>
+			<converter-id>org.rcfaces.Short</converter-id>
+			<handler-class>org.rcfaces.core.internal.facelets.ShortConverterHandler</handler-class>
 		</converter>
 	</tag>
 	<tag>
 		<tag-name>convertInteger</tag-name>
 		<converter>
-			<converter-id>org.rcfaces.IntegerConverter</converter-class>
+			<converter-id>org.rcfaces.Integer</converter-id>
+			<handler-class>org.rcfaces.core.internal.facelets.IntegerConverterHandler</handler-class>
 		</converter>
 	</tag>
 	<tag>
 		<tag-name>convertLong</tag-name>
 		<converter>
-			<converter-id>org.rcfaces.LongConverter</converter-class>
+			<converter-id>org.rcfaces.Long</converter-id>
+			<handler-class>org.rcfaces.core.internal.facelets.LongConverterHandler</handler-class>
 		</converter>
 	</tag>
 	<tag>
 		<tag-name>convertFloat</tag-name>
 		<converter>
-			<converter-id>org.rcfaces.FloatConverter</converter-class>
+			<converter-id>org.rcfaces.Float</converter-id>
+			<handler-class>org.rcfaces.core.internal.facelets.FloatConverterHandler</handler-class>
 		</converter>
 	</tag>
 	<tag>
 		<tag-name>convertDouble</tag-name>
 		<converter>
-			<converter-id>org.rcfaces.DoubleConverter</converter-class>
+			<converter-id>org.rcfaces.Double</converter-id>
+			<handler-class>org.rcfaces.core.internal.facelets.DoubleConverterHandler</handler-class>
 		</converter>
 	</tag>
 	<tag>

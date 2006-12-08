@@ -128,7 +128,7 @@ public class ComponentIterators {
             return false;
         }
 
-        List rev = list(parent, childClass);
+        List rev = list((UIComponent) parent, childClass);
 
         if (rev == null || rev.isEmpty()) {
             return false;
@@ -137,11 +137,14 @@ public class ComponentIterators {
         return parent.getChildren().removeAll(rev);
     }
 
-    public static List list(IContainerManager parent, Class childClass) {
+    public static List list(UIComponent parent, Class childClass) {
 
         if (Constants.CACHED_COMPONENT_ITERATOR
                 && Constants.STATED_COMPONENT_CHILDREN_LIST) {
-            return CachedChildrenList.getList(parent, childClass);
+            if (parent instanceof IContainerManager) {
+                return CachedChildrenList.getList((IContainerManager) parent,
+                        childClass);
+            }
         }
 
         List components = parent.getChildren();

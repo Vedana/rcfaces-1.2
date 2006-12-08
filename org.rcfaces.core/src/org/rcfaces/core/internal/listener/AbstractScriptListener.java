@@ -4,8 +4,11 @@
  */
 package org.rcfaces.core.internal.listener;
 
+import javax.faces.FacesException;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
+
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -21,7 +24,7 @@ public abstract class AbstractScriptListener implements IScriptListener,
     private int hashCode = 0;
 
     public AbstractScriptListener(String scriptType, String command) {
-        if (scriptType == null || command == null) {
+        if (command == null) {
             throw new NullPointerException(
                     "Can not create AbstractScriptListener: parameter is null.");
         }
@@ -34,7 +37,16 @@ public abstract class AbstractScriptListener implements IScriptListener,
     public AbstractScriptListener() {
     }
 
-    public final String getScriptType() {
+    public final String getScriptType(IProcessContext processContext) {
+        if (scriptType == null) {
+            scriptType = processContext.getScriptType();
+
+            if (scriptType == null) {
+                throw new FacesException(
+                        "No script type defined ! (You may use an init tag to resolve this problem)");
+            }
+
+        }
         return scriptType;
     }
 
