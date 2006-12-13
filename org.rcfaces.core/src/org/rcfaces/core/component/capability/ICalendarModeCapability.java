@@ -60,14 +60,14 @@ public interface ICalendarModeCapability {
     String DEFAULT_CALENDAR_MODE_NAME = "default";
 
     /**
-     * Returns a string specifying the selection mode.
+     * Returns a int value specifying the selection mode.
      * 
      * @return 0:date|1:period|2:periods
      */
     int getMode();
 
     /**
-     * Sets a string specifying the selection mode.
+     * Sets a int value specifying the selection mode.
      * 
      * @param mode 0:date|1:period|2:periods
      */

@@ -18,9 +18,24 @@ import org.rcfaces.core.event.ICloseListener;
  */
 public interface ICloseEventCapability {
 
+	/**
+	 * Adds a listener to the component for the close event
+	 * 
+	 * @param facesListener the close listener to add
+	 */
 	void addCloseListener(ICloseListener facesListener);
 
+	/**
+	 * Removes a listener from the component for the close event
+	 * 
+	 * @param facesListener the close listener to remove
+	 */
 	void removeCloseListener(ICloseListener facesListener);
 
+	/**
+	 * Returns a list of close listener for the component
+	 * 
+	 * @return close listeners' list
+	 */
 	FacesListener [] listCloseListeners();
 }

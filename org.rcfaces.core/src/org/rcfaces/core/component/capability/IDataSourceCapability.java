@@ -5,8 +5,8 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * Un �l�ment qui implemente cette interface accepte les references d'une
- * DataSource pour remplir ses donn�es.
+ * A component that implements this interface would accept a dataSource reference as a supply of data.
+ * 
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -14,12 +14,16 @@ package org.rcfaces.core.component.capability;
 public interface IDataSourceCapability {
 
 	/**
-	 * Sp�cifie la DataSource de l'�l�ment.
+	 * Sets a dataSource for the component.
+	 * 
+	 * @param dataSource reference to a dataSource
 	 */
 	void setDataSource(String dataSource);
 
 	/**
-	 * Retourne la DataSource de l'�l�ment.
+	 * Returns the component's dataSource.
+	 * 
+	 * @return a reference to the dataSource
 	 */
 	String getDataSource();
 }
