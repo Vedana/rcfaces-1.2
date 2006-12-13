@@ -6,6 +6,15 @@ package org.rcfaces.core.component.capability;
 
 /**
  * 
+ * A string specifying the selection mode :
+ *		<ul><li>
+ *		date: one day per selection
+ *		</li><li>
+ *		period: a continuous period of time
+ *		</li><li>
+ *		periods: several non-continuous period of time (for example every wednesday)
+ *		</li></ul>
+ * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -51,12 +60,16 @@ public interface ICalendarModeCapability {
     String DEFAULT_CALENDAR_MODE_NAME = "default";
 
     /**
+     * Returns a string specifying the selection mode.
      * 
+     * @return 0:date|1:period|2:periods
      */
     int getMode();
 
     /**
+     * Sets a string specifying the selection mode.
      * 
+     * @param mode 0:date|1:period|2:periods
      */
     void setMode(int mode);
 }

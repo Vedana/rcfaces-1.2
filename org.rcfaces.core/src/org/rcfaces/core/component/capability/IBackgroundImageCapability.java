@@ -4,59 +4,81 @@
 package org.rcfaces.core.component.capability;
 
 /**
- *
+ * Everything concerning background image.
+ * 
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface IBackgroundImageCapability {
-    /**
-     * 
-     */
+
+	/**
+	 * Returns an url string pointing to the background image.
+	 * 
+	 * @return image url
+	 */
 	String getBackgroundImageURL();
 
     /**
-     * 
-     */
+	 * Sets an url string pointing to the background image.
+	 * 
+	 * @param backgroundImageURL image url
+	 */
 	void setBackgroundImageURL(String backgroundImageURL);
 
 	/**
+	 * Returns a string indicating the horizontal positionning for the background image.
 	 * 
+	 * @return horizontal position
 	 */
 	String getBackgroundImageHorizontalPosition();
 
 	/**
+	 * Sets a string indicating the horizontal positionning for the background image.
 	 * 
+	 * @param position horizontal position
 	 */
 	void setBackgroundImageHorizontalPosition(String position);
 
 	/**
-	 *
+	 * Returns a string indicating the vertical positionning for the background image.
+	 * 
+	 * @return vertical position
 	 */
     String getBackgroundImageVerticalPosition();
 
 	/**
-	 *
+	 * Sets a string indicating the vertical positionning for the background image.
+	 * 
+	 * @param vertical position
 	 */
 	void setBackgroundImageVerticalPosition(String position);
 
 	/**
-	 *
+	 * Returns a boolean value indicating wether the background image should be repeated horizontally or not.
+	 * 
+	 * @return repeat
 	 */
 	boolean isBackgroundImageHorizontalRepeat();
 
 	/**
+	 * Sets a boolean value indicating wether the background image should be repeated horizontally or not.
 	 * 
+	 * @param repeat boolean
 	 */
 	void setBackgroundImageHorizontalRepeat(boolean repeat);
 
 	/**
+	 * Returns a boolean value indicating wether the background image should be repeated vertically or not.
 	 * 
+	 * @return repeat
 	 */
 	boolean isBackgroundImageVerticalRepeat();
 
 	/**
+	 * Sets a boolean value indicating wether the background image should be repeated vertically or not.
 	 * 
+	 * @param repeat boolean
 	 */
 	void setBackgroundImageVerticalRepeat(boolean repeat);
 }
