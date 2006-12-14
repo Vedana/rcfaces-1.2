@@ -19,7 +19,7 @@ public interface IClientDataCapability {
 	 * 
 	 * @param name the variable to associate data to
 	 * @param data the data to associate to the variable
-	 * @return the data provided
+	 * @return the data previously associated with the variable (empty if none)
 	 */
 	String setClientData(String name, String data);
 
@@ -54,7 +54,7 @@ public interface IClientDataCapability {
     int getClientDataCount();
 
     /**
-     * Returns a map containing the couples vraiable-data
+     * Returns a map containing the couples variable-data
      * 
      * @return a map
      */

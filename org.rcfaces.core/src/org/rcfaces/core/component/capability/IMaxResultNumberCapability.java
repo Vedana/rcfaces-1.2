@@ -10,7 +10,16 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface IMaxResultNumberCapability {
-    void setMaxResultNumber(int maximum);
+    
+	/**
+	 * Sets an int value specifying the maximum number of rows for the result.
+	 * @param maximum max number of rows
+	 */
+	void setMaxResultNumber(int maximum);
 
-    int getMaxResultNumber();
+    /**
+     * Returns an int value specifying the maximum number of rows for the result.
+     * @return max number of rows
+     */
+	int getMaxResultNumber();
 }

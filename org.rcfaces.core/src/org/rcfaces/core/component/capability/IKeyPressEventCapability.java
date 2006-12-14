@@ -16,9 +16,24 @@ import org.rcfaces.core.event.IKeyPressListener;
  */
 public interface IKeyPressEventCapability {
 
+	/**
+	 * Adds a listener to the component for the keyPress event
+	 * 
+	 * @param facesListener the keyPress listener to add 
+	 */
     void addKeyPressListener(IKeyPressListener facesListener);
 
+	/**
+	 * Removes a listener from the component for the keyPress event
+	 * 
+	 * @param facesListener the keyPress listener to remove
+	 */
     void removeKeyPressListener(IKeyPressListener facesListener);
 
+	/**
+	 * Returns a list of keyPress listener for the component
+	 * 
+	 * @return keyPress listeners' list
+	 */
     FacesListener[] listKeyPressListeners();
 }

@@ -16,9 +16,24 @@ import org.rcfaces.core.event.IKeyUpListener;
  */
 public interface IKeyUpEventCapability {
 
+	/**
+	 * Adds a listener to the component for the keyUp event
+	 * 
+	 * @param facesListener the keyUp listener to add 
+	 */
     void addKeyUpListener(IKeyUpListener facesListener);
 
+	/**
+	 * Removes a listener from the component for the keyUp event
+	 * 
+	 * @param facesListener the keyUp listener to remove
+	 */
     void removeKeyUpListener(IKeyUpListener facesListener);
 
+	/**
+	 * Returns a list of keyUp listener for the component
+	 * 
+	 * @return keyUp listeners' list
+	 */
     FacesListener[] listKeyUpListeners();
 }

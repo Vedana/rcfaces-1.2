@@ -22,6 +22,7 @@ public interface IForegroundBackgroundColorCapability {
 	/**
 	 * Sets the receiver's background color to the color specified by the argument, 
 	 * or to the default system color for the control if the argument is null.
+	 * @param color background color
 	 */
 	void setBackgroundColor(String color);
 
@@ -35,6 +36,7 @@ public interface IForegroundBackgroundColorCapability {
 	/**
 	 * Sets the receiver's foreground color to the color specified by the argument, 
 	 * or to the default system color for the control if the argument is null.
+	 * @param color foreground color
 	 */
 	void setForegroundColor(String color);
 }
