@@ -24,8 +24,7 @@ public interface IToolTipCapability {
 	 * Sets the receiver's tool tip text to the argument, which may be
 	 * <code>null</code> indicating that no tool tip text should be shown.
 	 * 
-	 * @param text
-	 *            the new tool tip text (or <code>null</code>)
+	 * @param text the new tool tip text (or <code>null</code>)
 	 */
 	void setToolTipText(String text);
 }

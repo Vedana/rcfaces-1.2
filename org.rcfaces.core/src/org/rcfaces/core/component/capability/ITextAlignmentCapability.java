@@ -14,11 +14,13 @@ public interface ITextAlignmentCapability {
 
 	/**
 	 * Returns horizontal alignment.
+	 * @return alignment
 	 */
 	String getTextAlignment();
 
 	/**
 	 * Specifies horizontal alignment.
+	 * @param textAlignment text alignment
 	 */
 	void setTextAlignment(String textAlignment);
 }

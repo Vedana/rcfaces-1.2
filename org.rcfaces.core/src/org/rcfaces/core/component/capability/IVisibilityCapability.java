@@ -77,12 +77,14 @@ public interface IVisibilityCapability {
      */
 
     /**
-     * Set the visibility mode in client side.
+     * Set the hidden mode in client side.
+     * @param hiddenMode hidden mode
      */
     void setHiddenMode(int hiddenMode);
 
     /**
-     * Returns the visibility mode in client side.
+     * Returns the hidden mode in client side.
+     * @return hidden mode
      */
     int getHiddenMode();
 }

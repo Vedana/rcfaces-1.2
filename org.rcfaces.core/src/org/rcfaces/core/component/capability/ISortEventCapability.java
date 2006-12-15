@@ -30,9 +30,24 @@ public interface ISortEventCapability {
 
 	String SORT_SERVER = "server";
 
+	/**
+	 * Adds a listener to the component for the sort event
+	 * 
+	 * @param facesListener the sort listener to add 
+	 */
 	void addSortListener(ISortListener facesListener);
 
+	/**
+	 * Removes a listener from the component for the sort event
+	 * 
+	 * @param facesListener the sort listener to remove
+	 */
 	void removeSortListener(ISortListener facesListener);
 
+	/**
+	 * Returns a list of sort listener for the component
+	 * 
+	 * @return sort listeners' list
+	 */
 	FacesListener[] listSortListeners();
 }
