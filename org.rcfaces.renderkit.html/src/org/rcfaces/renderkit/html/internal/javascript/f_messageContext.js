@@ -424,12 +424,12 @@ f_messageContext.AppendMessages=function(clientId, messages) {
 }
 
 /**
- * @field private static final 
+ * @field private static 
  */
 f_messageContext._Root=undefined;
  
 /**
- * @method public static final
+ * @method public static
  */
 f_messageContext.f_getName=function() {
 	return "f_messageContext";
