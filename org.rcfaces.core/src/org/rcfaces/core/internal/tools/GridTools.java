@@ -34,8 +34,8 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.IIndexesModel;
+import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.model.IndexesModels;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -52,6 +52,8 @@ public class GridTools {
     private static final String ALL_INDEX = "all";
 
     private static final ISortedComponent[] SORTED_COMPONENTS_EMPTY_ARRAY = new ISortedComponent[0];
+
+    private static final boolean SORT_INDICES = true;
 
     public static IDataColumnIterator listColumns(DataGridComponent component) {
         List list = ComponentIterators.list(component,
@@ -364,7 +366,7 @@ public class GridTools {
         return new ScalarDataModel(current);
     }
 
-    public static boolean select(DataGridComponent component, Object rowValue) {
+    public static void select(DataGridComponent component, Object rowValue) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         Object selectedValues = component.getSelectedValues(facesContext);
@@ -374,13 +376,21 @@ public class GridTools {
             component.setSelectedValues(selectedValues);
         }
 
-        Object value = component.getValue();
-
         if (selectedValues instanceof IIndexesModel) {
-            // IndexesModels.select((IIndexesModel) selectedValues);
+            // Il nous faut l'index ...
+
+            int index = searchIndexIntoDataModel(facesContext, component, rowValue);
+
+            if (index < 0) {
+                return;
+            }
+
+            ((IIndexesModel) selectedValues).addIndex(index);
+
+            return;
         }
 
-        return false;
+        select(component, selectedValues, Collections.singletonList(rowValue));
     }
 
     public static void select(DataGridComponent component, int index) {
@@ -394,8 +404,14 @@ public class GridTools {
         }
 
         if (selectedValues instanceof IIndexesModel) {
-            IndexesModels.select((IIndexesModel) selectedValues, index, 1);
+            ((IIndexesModel) selectedValues).addIndex(index);
             return;
+        }
+
+        DataModel dataModel = component.getDataModel(facesContext);
+
+        if (dataModel instanceof IRangeDataModel) {
+            ((IRangeDataModel) dataModel).setRowRange(index, 1);
         }
 
         Object rowData = null;
@@ -408,7 +424,8 @@ public class GridTools {
         }
 
         if (rowData == null) {
-            LOG.error("Invalid rowData for index='" + index + "'.");
+            LOG.error("No rowData for index='" + index + "'.");
+            return;
         }
 
         if (LOG.isDebugEnabled()) {
@@ -417,6 +434,457 @@ public class GridTools {
         }
 
         select(component, selectedValues, Collections.singleton(rowData));
+    }
+
+    public static void select(DataGridComponent component, int indices[]) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            selectedValues = new ArrayIndexesModel();
+            component.setSelectedValues(selectedValues);
+        }
+
+        if (selectedValues instanceof IIndexesModel) {
+            for (int i = 0; i < indices.length; i++) {
+                ((IIndexesModel) selectedValues).addIndex(indices[i]);
+            }
+
+            return;
+        }
+
+        int rowCount = component.getRowCount();
+        if (rowCount > 0) {
+            DataModel dataModel = component.getDataModel(facesContext);
+
+            if (dataModel instanceof IRangeDataModel) {
+                ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
+            }
+        }
+
+        if (SORT_INDICES) {
+            indices = (int[]) indices.clone();
+            Arrays.sort(indices);
+        }
+
+        List rowDatas = new ArrayList(indices.length);
+        try {
+            for (int i = 0; i < indices.length; i++) {
+                int index = indices[i];
+                component.setRowIndex(index);
+
+                Object rowData = component.getRowData();
+
+                if (rowData == null) {
+                    LOG.error("No rowData for index='" + index + "'.");
+                    break;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Select index=" + index + " => " + rowData);
+                }
+
+                rowDatas.add(rowData);
+            }
+
+        } finally {
+            component.setRowIndex(-1);
+        }
+
+        if (rowDatas.isEmpty()) {
+            return;
+        }
+
+        select(component, selectedValues, rowDatas);
+    }
+
+    public static void select(DataGridComponent component, int start, int end) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            selectedValues = new ArrayIndexesModel();
+            component.setSelectedValues(selectedValues);
+        }
+
+        if (selectedValues instanceof IIndexesModel) {
+            for (; start < end; start++) {
+                ((IIndexesModel) selectedValues).addIndex(start);
+            }
+
+            return;
+        }
+
+        DataModel dataModel = component.getDataModel(facesContext);
+
+        if (dataModel instanceof IRangeDataModel) {
+            ((IRangeDataModel) dataModel).setRowRange(start, end - start + 1);
+        }
+
+        List rowDatas = new ArrayList(end - start + 1);
+        try {
+            for (int index = start; index <= end; index++) {
+                component.setRowIndex(index);
+
+                Object rowData = component.getRowData();
+
+                if (rowData == null) {
+                    LOG.error("No rowData for index='" + index + "'.");
+                    break;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Select index=" + index + " => " + rowData);
+                }
+            }
+
+        } finally {
+            component.setRowIndex(-1);
+        }
+
+        if (rowDatas.isEmpty()) {
+            return;
+        }
+
+        select(component, selectedValues, rowDatas);
+    }
+
+    public static void selectAll(DataGridComponent component) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            selectedValues = new ArrayIndexesModel();
+            component.setSelectedValues(selectedValues);
+        }
+
+        if (selectedValues instanceof IIndexesModel) {
+            int index = component.getRowCount();
+
+            if (index < 0) {
+                try {
+                    for (;;) {
+                        component.setRowIndex(index);
+                        Object rowData = component.getRowData();
+
+                        if (rowData == null) {
+                            break;
+                        }
+
+                        index++;
+                    }
+                } finally {
+                    component.setRowIndex(-1);
+                }
+            }
+
+            if (index > 0) {
+                for (int i = 0; i < index; i++) {
+                    ((IIndexesModel) selectedValues).addIndex(i);
+                }
+            }
+
+            return;
+        }
+
+        int rowCount = component.getRowCount();
+        if (rowCount > 0) {
+            DataModel dataModel = component.getDataModel(facesContext);
+
+            if (dataModel instanceof IRangeDataModel) {
+                ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
+            }
+        }
+
+        if (rowCount < 8) {
+            rowCount = 8;
+        }
+
+        List rowDatas = new ArrayList(rowCount);
+        try {
+            for (int index = 0;; index++) {
+                component.setRowIndex(index);
+
+                Object rowData = component.getRowData();
+
+                if (rowData == null) {
+                    break;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Select index=" + index + " => " + rowData);
+                }
+            }
+
+        } finally {
+            component.setRowIndex(-1);
+        }
+
+        if (rowDatas.isEmpty()) {
+            return;
+        }
+
+        select(component, selectedValues, rowDatas);
+    }
+
+    public static void deselectAll(DataGridComponent component) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            return;
+        }
+
+        if (selectedValues instanceof IIndexesModel) {
+            ((IIndexesModel) selectedValues).clearIndexes();
+
+            return;
+        }
+
+        if (selectedValues instanceof Collection) {
+            ((Collection) selectedValues).clear();
+            return;
+        }
+
+        if (selectedValues instanceof Object[]) {
+            Class type = selectedValues.getClass().getComponentType();
+
+            selectedValues = Array.newInstance(type, 0);
+
+            component.setSelectedValues(selectedValues);
+            return;
+        }
+
+        throw new FacesException(
+                "Deselect all is not implemented for selectedValues="
+                        + selectedValues);
+    }
+
+    public static void deselect(DataGridComponent component, Object rowValue) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            return;
+        }
+
+        if (selectedValues instanceof IIndexesModel) {
+            // IndexesModels.select((IIndexesModel) selectedValues);
+
+            // Il nous faut l'index ...
+
+            int index = searchIndexIntoDataModel(facesContext, component, rowValue);
+
+            if (index < 0) {
+                return;
+            }
+
+            ((IIndexesModel) selectedValues).removeIndex(index);
+
+            return;
+        }
+
+        deselect(component, selectedValues, Collections.singletonList(rowValue));
+    }
+
+    private static int searchIndexIntoDataModel(FacesContext facesContext,
+            DataGridComponent component, Object rowValue) {
+        int rowCount = component.getRowCount();
+        if (rowCount > 0) {
+            DataModel dataModel = component.getDataModel(facesContext);
+
+            if (dataModel instanceof IRangeDataModel) {
+                ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
+            }
+        }
+
+        try {
+            for (int index = 0;; index++) {
+                component.setRowIndex(index);
+
+                Object rowData = component.getRowData();
+
+                if (rowData == null) {
+                    LOG.info("No rowData for index='" + index + "'.");
+                    break;
+                }
+
+                if (rowData.equals(rowValue) == false) {
+                    continue;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find " + rowData + " => index=" + index);
+                }
+
+                return index;
+            }
+
+        } finally {
+            component.setRowIndex(-1);
+        }
+
+        return -1;
+    }
+
+    public static void deselect(DataGridComponent component, int index) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            return;
+        }
+
+        if (selectedValues instanceof IIndexesModel) {
+            ((IIndexesModel) selectedValues).removeIndex(index);
+            return;
+        }
+
+        DataModel dataModel = component.getDataModel(facesContext);
+
+        if (dataModel instanceof IRangeDataModel) {
+            ((IRangeDataModel) dataModel).setRowRange(index, 1);
+        }
+
+        Object rowData = null;
+        component.setRowIndex(index);
+        try {
+            rowData = component.getRowData();
+
+        } finally {
+            component.setRowIndex(-1);
+        }
+
+        if (rowData == null) {
+            LOG.error("No rowData for index='" + index + "'.");
+            return;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Select index=" + index + " => " + rowData
+                    + "   selectedValues=" + selectedValues);
+        }
+
+        deselect(component, selectedValues, Collections.singleton(rowData));
+    }
+
+    public static void deselect(DataGridComponent component, int indices[]) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            return;
+        }
+
+        if (selectedValues instanceof IIndexesModel) {
+            for (int i = 0; i < indices.length; i++) {
+                ((IIndexesModel) selectedValues).removeIndex(indices[i]);
+            }
+
+            return;
+        }
+
+        int rowCount = component.getRowCount();
+        if (rowCount > 0) {
+            DataModel dataModel = component.getDataModel(facesContext);
+
+            if (dataModel instanceof IRangeDataModel) {
+                ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
+            }
+        }
+
+        if (SORT_INDICES) {
+            indices = (int[]) indices.clone();
+            Arrays.sort(indices);
+        }
+
+        List rowDatas = new ArrayList(indices.length);
+        try {
+            for (int i = 0; i < indices.length; i++) {
+                int index = indices[i];
+                component.setRowIndex(index);
+
+                Object rowData = component.getRowData();
+
+                if (rowData == null) {
+                    LOG.error("No rowData for index='" + index + "'.");
+                    break;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Select index=" + index + " => " + rowData);
+                }
+
+                rowDatas.add(rowData);
+            }
+
+        } finally {
+            component.setRowIndex(-1);
+        }
+
+        if (rowDatas.isEmpty()) {
+            return;
+        }
+
+        deselect(component, selectedValues, rowDatas);
+    }
+
+    public static void deselect(DataGridComponent component, int start, int end) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            return;
+        }
+
+        if (selectedValues instanceof IIndexesModel) {
+            for (; start < end; start++) {
+                ((IIndexesModel) selectedValues).removeIndex(start);
+            }
+
+            return;
+        }
+
+        DataModel dataModel = component.getDataModel(facesContext);
+
+        if (dataModel instanceof IRangeDataModel) {
+            ((IRangeDataModel) dataModel).setRowRange(start, end - start + 1);
+        }
+
+        List rowDatas = new ArrayList(end - start + 1);
+        try {
+            for (int index = start; index <= end; index++) {
+                component.setRowIndex(index);
+
+                Object rowData = component.getRowData();
+
+                if (rowData == null) {
+                    LOG.error("No rowData for index='" + index + "'.");
+                    break;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Select index=" + index + " => " + rowData);
+                }
+            }
+
+        } finally {
+            component.setRowIndex(-1);
+        }
+
+        if (rowDatas.isEmpty()) {
+            return;
+        }
+
+        deselect(component, selectedValues, rowDatas);
     }
 
     private static void select(DataGridComponent component,
@@ -434,8 +902,12 @@ public class GridTools {
                     continue;
                 }
 
+                if (changed == false) {
+                    l = new ArrayList(l);
+                    changed = true;
+                }
+
                 l.add(rowData);
-                changed = true;
             }
 
             if (changed == false) {
@@ -457,7 +929,7 @@ public class GridTools {
 
             for (Iterator it = rowDatas.iterator(); it.hasNext();) {
                 Object rowData = it.next();
-                
+
                 if (collection.contains(rowData)) {
                     return;
                 }
@@ -473,44 +945,61 @@ public class GridTools {
                         + selectedValues);
     }
 
-    public static boolean select(DataGridComponent component, int indices[]) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+    private static void deselect(DataGridComponent component,
+            Object selectedValues, Collection rowDatas) {
 
-    public static Object select(DataGridComponent component, int start, int end) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        if (selectedValues instanceof Object[]) {
+            List l = Arrays.asList((Object[]) selectedValues);
 
-    public static Object selectAll(DataGridComponent component) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+            boolean changed = false;
 
-    public static boolean deselect(DataGridComponent component, Object rowValue) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+                Object rowData = it.next();
 
-    public static boolean deselect(DataGridComponent component, int index) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+                if (l.contains(rowData)) {
+                    continue;
+                }
 
-    public static boolean deselect(DataGridComponent component, int indices[]) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+                if (changed == false) {
+                    l = new ArrayList(l);
+                    changed = true;
+                }
 
-    public static Object deselect(DataGridComponent component, int start,
-            int end) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+                l.remove(rowData);
+            }
 
-    public static Object deselectAll(DataGridComponent component) {
-        // TODO Auto-generated method stub
-        return null;
+            if (changed == false) {
+                return;
+            }
+
+            Class type = selectedValues.getClass().getComponentType();
+
+            selectedValues = l.toArray((Object[]) Array.newInstance(type, l
+                    .size()));
+
+            component.setSelectedValues(selectedValues);
+
+            return;
+        }
+
+        if (selectedValues instanceof Collection) {
+            Collection collection = (Collection) selectedValues;
+
+            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+                Object rowData = it.next();
+
+                if (collection.contains(rowData)) {
+                    return;
+                }
+
+                collection.remove(rowData);
+            }
+
+            return;
+        }
+
+        throw new FacesException(
+                "Deselect index is not implemented for selectedValues="
+                        + selectedValues);
     }
 }

@@ -44,11 +44,6 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
         setIndexes(indexes, false);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.model.ISelectionModel#listSelections()
-     */
     public int[] listSortedIndexes() {
         if (count == 0) {
             return EMPTY_SELECTION;

@@ -5,6 +5,10 @@
 	<jsp-version>1.2</jsp-version>
 	<short-name>vh</short-name>
 	<uri>http://rcfaces.org/html</uri>
+	<display-name>RCFaces HTML components</display-name>
+	<description><![CDATA[
+A set of components specific to the html render-kit.
+]]></description>
 	<tag>
 		<name>init</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
