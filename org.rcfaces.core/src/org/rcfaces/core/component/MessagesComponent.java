@@ -45,6 +45,9 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		return getErrorStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
+	 */
 	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
 	}
@@ -53,6 +56,9 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
+	/**
+	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
+	 */
 	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
@@ -61,6 +67,9 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		return getFatalStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
+	 */
 	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
 	}
@@ -69,6 +78,9 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
+	/**
+	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
+	 */
 	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
@@ -77,6 +89,9 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		return getInfoStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
+	 */
 	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
 	}
@@ -85,6 +100,9 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
+	/**
+	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
+	 */
 	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
@@ -93,6 +111,9 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		return getWarnStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
+	 */
 	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
 	}
@@ -101,6 +122,9 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
+	/**
+	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
+	 */
 	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}

@@ -68,6 +68,9 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
@@ -76,6 +79,9 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.TEXT, text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
@@ -84,6 +90,9 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		return getTextPosition(null);
 	}
 
+	/**
+	 * See {@link #getTextPosition() getTextPosition()} for more details
+	 */
 	public final int getTextPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
 	}
@@ -92,6 +101,9 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
 
+	/**
+	 * See {@link #setTextPosition(int) setTextPosition(int)} for more details
+	 */
 	public final void setTextPosition(ValueBinding textPosition) {
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
@@ -112,6 +124,9 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -120,6 +135,9 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
@@ -128,6 +146,9 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		return isSelected(null);
 	}
 
+	/**
+	 * See {@link #isSelected() isSelected()} for more details
+	 */
 	public final boolean isSelected(javax.faces.context.FacesContext facesContext) {
 		return org.rcfaces.core.internal.tools.ValuesTools.valueToBool(this);
 	}
@@ -136,6 +157,9 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		setValue(Boolean.valueOf(selected));
 	}
 
+	/**
+	 * See {@link #setSelected(boolean) setSelected(boolean)} for more details
+	 */
 	public final void setSelected(ValueBinding selected) {
 		setValue(selected);
 	}

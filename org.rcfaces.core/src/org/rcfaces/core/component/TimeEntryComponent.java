@@ -348,6 +348,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		return isAutoTab(null);
 	}
 
+	/**
+	 * See {@link #isAutoTab() isAutoTab()} for more details
+	 */
 	public final boolean isAutoTab(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_TAB, false, facesContext);
 	}
@@ -356,6 +359,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.AUTO_TAB, autoTab);
 	}
 
+	/**
+	 * See {@link #setAutoTab(boolean) setAutoTab(boolean)} for more details
+	 */
 	public final void setAutoTab(ValueBinding autoTab) {
 		engine.setProperty(Properties.AUTO_TAB, autoTab);
 	}
@@ -376,6 +382,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		return getFocusStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getFocusStyleClass() getFocusStyleClass()} for more details
+	 */
 	public final java.lang.String getFocusStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOCUS_STYLE_CLASS, facesContext);
 	}
@@ -384,6 +393,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
+	/**
+	 * See {@link #setFocusStyleClass(String) setFocusStyleClass(String)} for more details
+	 */
 	public final void setFocusStyleClass(ValueBinding focusStyleClass) {
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
@@ -404,6 +416,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -412,6 +427,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
@@ -420,6 +438,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		return getAttributesLocale(null);
 	}
 
+	/**
+	 * See {@link #getAttributesLocale() getAttributesLocale()} for more details
+	 */
 	public final java.util.Locale getAttributesLocale(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Locale)engine.getProperty(Properties.ATTRIBUTES_LOCALE, facesContext);
 	}
@@ -428,6 +449,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
 	}
 
+	/**
+	 * See {@link #setAttributesLocale(java.util.Locale) setAttributesLocale(java.util.Locale)} for more details
+	 */
 	public final void setAttributesLocale(ValueBinding attributesLocale) {
 		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
 	}

@@ -69,6 +69,9 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 		return getFilterProperties(null);
 	}
 
+	/**
+	 * See {@link #getFilterProperties() getFilterProperties()} for more details
+	 */
 	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
@@ -77,6 +80,9 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
+	/**
+	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
+	 */
 	public final void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
@@ -85,6 +91,9 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 		return getMaxResultNumber(null);
 	}
 
+	/**
+	 * See {@link #getMaxResultNumber() getMaxResultNumber()} for more details
+	 */
 	public final int getMaxResultNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.MAX_RESULT_NUMBER,0, facesContext);
 	}
@@ -93,6 +102,9 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 		engine.setProperty(Properties.MAX_RESULT_NUMBER, maxResultNumber);
 	}
 
+	/**
+	 * See {@link #setMaxResultNumber(int) setMaxResultNumber(int)} for more details
+	 */
 	public final void setMaxResultNumber(ValueBinding maxResultNumber) {
 		engine.setProperty(Properties.MAX_RESULT_NUMBER, maxResultNumber);
 	}

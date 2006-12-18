@@ -281,6 +281,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return isAutoTab(null);
 	}
 
+	/**
+	 * See {@link #isAutoTab() isAutoTab()} for more details
+	 */
 	public final boolean isAutoTab(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_TAB, false, facesContext);
 	}
@@ -289,6 +292,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.AUTO_TAB, autoTab);
 	}
 
+	/**
+	 * See {@link #setAutoTab(boolean) setAutoTab(boolean)} for more details
+	 */
 	public final void setAutoTab(ValueBinding autoTab) {
 		engine.setProperty(Properties.AUTO_TAB, autoTab);
 	}
@@ -297,6 +303,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
 	}
@@ -305,6 +314,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		setValue(text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		setValue(text);
 	}
@@ -313,6 +325,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getEmptyMessage(null);
 	}
 
+	/**
+	 * See {@link #getEmptyMessage() getEmptyMessage()} for more details
+	 */
 	public final java.lang.String getEmptyMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.EMPTY_MESSAGE, facesContext);
 	}
@@ -321,6 +336,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.EMPTY_MESSAGE, emptyMessage);
 	}
 
+	/**
+	 * See {@link #setEmptyMessage(String) setEmptyMessage(String)} for more details
+	 */
 	public final void setEmptyMessage(ValueBinding emptyMessage) {
 		engine.setProperty(Properties.EMPTY_MESSAGE, emptyMessage);
 	}
@@ -329,6 +347,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -337,6 +358,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
@@ -378,6 +402,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getFocusStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getFocusStyleClass() getFocusStyleClass()} for more details
+	 */
 	public final java.lang.String getFocusStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOCUS_STYLE_CLASS, facesContext);
 	}
@@ -386,6 +413,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
+	/**
+	 * See {@link #setFocusStyleClass(String) setFocusStyleClass(String)} for more details
+	 */
 	public final void setFocusStyleClass(ValueBinding focusStyleClass) {
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
@@ -394,6 +424,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getErrorStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
+	 */
 	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
 	}
@@ -402,6 +435,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
+	/**
+	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
+	 */
 	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
@@ -410,6 +446,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getFatalStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
+	 */
 	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
 	}
@@ -418,6 +457,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
+	/**
+	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
+	 */
 	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
@@ -426,6 +468,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getInfoStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
+	 */
 	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
 	}
@@ -434,6 +479,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
+	/**
+	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
+	 */
 	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
@@ -442,6 +490,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getWarnStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
+	 */
 	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
 	}
@@ -450,6 +501,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
+	/**
+	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
+	 */
 	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
@@ -458,6 +512,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getClientValidator(null);
 	}
 
+	/**
+	 * See {@link #getClientValidator() getClientValidator()} for more details
+	 */
 	public final java.lang.String getClientValidator(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CLIENT_VALIDATOR, facesContext);
 	}
@@ -466,6 +523,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
 	}
 
+	/**
+	 * See {@link #setClientValidator(String) setClientValidator(String)} for more details
+	 */
 	public final void setClientValidator(ValueBinding clientValidator) {
 		engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
 	}

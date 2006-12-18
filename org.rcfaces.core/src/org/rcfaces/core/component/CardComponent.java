@@ -51,6 +51,9 @@ public class CardComponent extends AbstractOutputComponent implements
 		return getTextAlignment(null);
 	}
 
+	/**
+	 * See {@link #getTextAlignment() getTextAlignment()} for more details
+	 */
 	public final java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
 	}
@@ -59,6 +62,9 @@ public class CardComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
+	/**
+	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
+	 */
 	public final void setTextAlignment(ValueBinding textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
@@ -67,6 +73,9 @@ public class CardComponent extends AbstractOutputComponent implements
 		return getVerticalAlignment(null);
 	}
 
+	/**
+	 * See {@link #getVerticalAlignment() getVerticalAlignment()} for more details
+	 */
 	public final java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
 	}
@@ -75,6 +84,9 @@ public class CardComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
+	/**
+	 * See {@link #setVerticalAlignment(String) setVerticalAlignment(String)} for more details
+	 */
 	public final void setVerticalAlignment(ValueBinding verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
@@ -83,6 +95,9 @@ public class CardComponent extends AbstractOutputComponent implements
 		return getScopeValue(null);
 	}
 
+	/**
+	 * See {@link #getScopeValue() getScopeValue()} for more details
+	 */
 	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
 	}
@@ -95,6 +110,9 @@ public class CardComponent extends AbstractOutputComponent implements
 		return getScopeVar(null);
 	}
 
+	/**
+	 * See {@link #getScopeVar() getScopeVar()} for more details
+	 */
 	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
 	}
@@ -103,6 +121,9 @@ public class CardComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
+	/**
+	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
+	 */
 	public final void setScopeVar(ValueBinding scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}

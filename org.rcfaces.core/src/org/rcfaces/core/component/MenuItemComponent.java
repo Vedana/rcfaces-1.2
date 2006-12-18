@@ -55,6 +55,9 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 		return getAccessKey(null);
 	}
 
+	/**
+	 * See {@link #getAccessKey() getAccessKey()} for more details
+	 */
 	public final java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
 	}
@@ -63,6 +66,9 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
+	/**
+	 * See {@link #setAccessKey(String) setAccessKey(String)} for more details
+	 */
 	public final void setAccessKey(ValueBinding accessKey) {
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
@@ -71,6 +77,9 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 		return getAcceleratorKey(null);
 	}
 
+	/**
+	 * See {@link #getAcceleratorKey() getAcceleratorKey()} for more details
+	 */
 	public final java.lang.String getAcceleratorKey(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ACCELERATOR_KEY, facesContext);
 	}
@@ -79,6 +88,9 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 		engine.setProperty(Properties.ACCELERATOR_KEY, acceleratorKey);
 	}
 
+	/**
+	 * See {@link #setAcceleratorKey(String) setAcceleratorKey(String)} for more details
+	 */
 	public final void setAcceleratorKey(ValueBinding acceleratorKey) {
 		engine.setProperty(Properties.ACCELERATOR_KEY, acceleratorKey);
 	}

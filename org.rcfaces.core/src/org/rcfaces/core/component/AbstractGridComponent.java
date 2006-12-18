@@ -244,6 +244,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getHiddenMode(null);
 	}
 
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
 	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
@@ -252,6 +255,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
 	public final void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
@@ -260,6 +266,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return isVisible(null);
 	}
 
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
@@ -268,6 +277,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
+	/**
+	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
+	 */
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
@@ -283,6 +295,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getHeight(null);
 	}
 
+	/**
+	 * See {@link #getHeight() getHeight()} for more details
+	 */
 	public final java.lang.String getHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HEIGHT, facesContext);
 	}
@@ -291,6 +306,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.HEIGHT, height);
 	}
 
+	/**
+	 * See {@link #setHeight(String) setHeight(String)} for more details
+	 */
 	public final void setHeight(ValueBinding height) {
 		engine.setProperty(Properties.HEIGHT, height);
 	}
@@ -299,6 +317,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getWidth(null);
 	}
 
+	/**
+	 * See {@link #getWidth() getWidth()} for more details
+	 */
 	public final java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WIDTH, facesContext);
 	}
@@ -307,6 +328,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
+	/**
+	 * See {@link #setWidth(String) setWidth(String)} for more details
+	 */
 	public final void setWidth(ValueBinding width) {
 		engine.setProperty(Properties.WIDTH, width);
 	}
@@ -315,6 +339,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getHelpMessage(null);
 	}
 
+	/**
+	 * See {@link #getHelpMessage() getHelpMessage()} for more details
+	 */
 	public final java.lang.String getHelpMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HELP_MESSAGE, facesContext);
 	}
@@ -323,6 +350,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.HELP_MESSAGE, helpMessage);
 	}
 
+	/**
+	 * See {@link #setHelpMessage(String) setHelpMessage(String)} for more details
+	 */
 	public final void setHelpMessage(ValueBinding helpMessage) {
 		engine.setProperty(Properties.HELP_MESSAGE, helpMessage);
 	}
@@ -331,6 +361,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getHelpURL(null);
 	}
 
+	/**
+	 * See {@link #getHelpURL() getHelpURL()} for more details
+	 */
 	public final java.lang.String getHelpURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HELP_URL, facesContext);
 	}
@@ -339,6 +372,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.HELP_URL, helpURL);
 	}
 
+	/**
+	 * See {@link #setHelpURL(String) setHelpURL(String)} for more details
+	 */
 	public final void setHelpURL(ValueBinding helpURL) {
 		engine.setProperty(Properties.HELP_URL, helpURL);
 	}
@@ -347,6 +383,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getToolTipText(null);
 	}
 
+	/**
+	 * See {@link #getToolTipText() getToolTipText()} for more details
+	 */
 	public final java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
 	}
@@ -355,6 +394,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
+	/**
+	 * See {@link #setToolTipText(String) setToolTipText(String)} for more details
+	 */
 	public final void setToolTipText(ValueBinding toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
@@ -441,6 +483,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getUnlockedClientAttributeNames(null);
 	}
 
+	/**
+	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
+	 */
 	public final java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
 	}
@@ -449,6 +494,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
+	/**
+	 * See {@link #setUnlockedClientAttributeNames(String) setUnlockedClientAttributeNames(String)} for more details
+	 */
 	public final void setUnlockedClientAttributeNames(ValueBinding unlockedClientAttributeNames) {
 		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
@@ -457,6 +505,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getLookId(null);
 	}
 
+	/**
+	 * See {@link #getLookId() getLookId()} for more details
+	 */
 	public final java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
 	}
@@ -465,6 +516,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
+	/**
+	 * See {@link #setLookId(String) setLookId(String)} for more details
+	 */
 	public final void setLookId(ValueBinding lookId) {
 		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
@@ -497,6 +551,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getX(null);
 	}
 
+	/**
+	 * See {@link #getX() getX()} for more details
+	 */
 	public final java.lang.String getX(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.X, facesContext);
 	}
@@ -505,6 +562,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.X, x);
 	}
 
+	/**
+	 * See {@link #setX(String) setX(String)} for more details
+	 */
 	public final void setX(ValueBinding x) {
 		engine.setProperty(Properties.X, x);
 	}
@@ -513,6 +573,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getY(null);
 	}
 
+	/**
+	 * See {@link #getY() getY()} for more details
+	 */
 	public final java.lang.String getY(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.Y, facesContext);
 	}
@@ -521,6 +584,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.Y, y);
 	}
 
+	/**
+	 * See {@link #setY(String) setY(String)} for more details
+	 */
 	public final void setY(ValueBinding y) {
 		engine.setProperty(Properties.Y, y);
 	}
@@ -529,6 +595,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getMarginBottom(null);
 	}
 
+	/**
+	 * See {@link #getMarginBottom() getMarginBottom()} for more details
+	 */
 	public final java.lang.String getMarginBottom(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_BOTTOM, facesContext);
 	}
@@ -537,6 +606,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
 
+	/**
+	 * See {@link #setMarginBottom(String) setMarginBottom(String)} for more details
+	 */
 	public final void setMarginBottom(ValueBinding marginBottom) {
 		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
@@ -545,6 +617,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getMarginLeft(null);
 	}
 
+	/**
+	 * See {@link #getMarginLeft() getMarginLeft()} for more details
+	 */
 	public final java.lang.String getMarginLeft(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_LEFT, facesContext);
 	}
@@ -553,6 +628,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
 
+	/**
+	 * See {@link #setMarginLeft(String) setMarginLeft(String)} for more details
+	 */
 	public final void setMarginLeft(ValueBinding marginLeft) {
 		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
@@ -561,6 +639,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getMarginRight(null);
 	}
 
+	/**
+	 * See {@link #getMarginRight() getMarginRight()} for more details
+	 */
 	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
 	}
@@ -569,6 +650,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
 	}
 
+	/**
+	 * See {@link #setMarginRight(String) setMarginRight(String)} for more details
+	 */
 	public final void setMarginRight(ValueBinding marginRight) {
 		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
 	}
@@ -577,6 +661,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getMarginTop(null);
 	}
 
+	/**
+	 * See {@link #getMarginTop() getMarginTop()} for more details
+	 */
 	public final java.lang.String getMarginTop(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_TOP, facesContext);
 	}
@@ -585,6 +672,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
+	/**
+	 * See {@link #setMarginTop(String) setMarginTop(String)} for more details
+	 */
 	public final void setMarginTop(ValueBinding marginTop) {
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
@@ -593,6 +683,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getBackgroundColor(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
+	 */
 	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
 	}
@@ -601,6 +694,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
+	/**
+	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
+	 */
 	public final void setBackgroundColor(ValueBinding backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
@@ -609,6 +705,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getForegroundColor(null);
 	}
 
+	/**
+	 * See {@link #getForegroundColor() getForegroundColor()} for more details
+	 */
 	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
 	}
@@ -617,6 +716,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
+	/**
+	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
+	 */
 	public final void setForegroundColor(ValueBinding foregroundColor) {
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
@@ -673,6 +775,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 */
 	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
@@ -681,6 +786,9 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
+	/**
+	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
+	 */
 	public final void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}

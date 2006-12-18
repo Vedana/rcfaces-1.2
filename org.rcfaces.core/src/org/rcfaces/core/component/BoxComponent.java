@@ -76,6 +76,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getBackgroundImageHorizontalPosition(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundImageHorizontalPosition() getBackgroundImageHorizontalPosition()} for more details
+	 */
 	public final java.lang.String getBackgroundImageHorizontalPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, facesContext);
 	}
@@ -84,6 +87,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, backgroundImageHorizontalPosition);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageHorizontalPosition(String) setBackgroundImageHorizontalPosition(String)} for more details
+	 */
 	public final void setBackgroundImageHorizontalPosition(ValueBinding backgroundImageHorizontalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, backgroundImageHorizontalPosition);
 	}
@@ -92,6 +98,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return isBackgroundImageHorizontalRepeat(null);
 	}
 
+	/**
+	 * See {@link #isBackgroundImageHorizontalRepeat() isBackgroundImageHorizontalRepeat()} for more details
+	 */
 	public final boolean isBackgroundImageHorizontalRepeat(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, false, facesContext);
 	}
@@ -100,6 +109,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, backgroundImageHorizontalRepeat);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageHorizontalRepeat(boolean) setBackgroundImageHorizontalRepeat(boolean)} for more details
+	 */
 	public final void setBackgroundImageHorizontalRepeat(ValueBinding backgroundImageHorizontalRepeat) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, backgroundImageHorizontalRepeat);
 	}
@@ -108,6 +120,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getBackgroundImageURL(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundImageURL() getBackgroundImageURL()} for more details
+	 */
 	public final java.lang.String getBackgroundImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_URL, facesContext);
 	}
@@ -116,6 +131,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_URL, backgroundImageURL);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageURL(String) setBackgroundImageURL(String)} for more details
+	 */
 	public final void setBackgroundImageURL(ValueBinding backgroundImageURL) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_URL, backgroundImageURL);
 	}
@@ -124,6 +142,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getBackgroundImageVerticalPosition(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundImageVerticalPosition() getBackgroundImageVerticalPosition()} for more details
+	 */
 	public final java.lang.String getBackgroundImageVerticalPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, facesContext);
 	}
@@ -132,6 +153,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, backgroundImageVerticalPosition);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageVerticalPosition(String) setBackgroundImageVerticalPosition(String)} for more details
+	 */
 	public final void setBackgroundImageVerticalPosition(ValueBinding backgroundImageVerticalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, backgroundImageVerticalPosition);
 	}
@@ -140,6 +164,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return isBackgroundImageVerticalRepeat(null);
 	}
 
+	/**
+	 * See {@link #isBackgroundImageVerticalRepeat() isBackgroundImageVerticalRepeat()} for more details
+	 */
 	public final boolean isBackgroundImageVerticalRepeat(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, false, facesContext);
 	}
@@ -148,6 +175,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, backgroundImageVerticalRepeat);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageVerticalRepeat(boolean) setBackgroundImageVerticalRepeat(boolean)} for more details
+	 */
 	public final void setBackgroundImageVerticalRepeat(ValueBinding backgroundImageVerticalRepeat) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, backgroundImageVerticalRepeat);
 	}
@@ -156,6 +186,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return isBorder(null);
 	}
 
+	/**
+	 * See {@link #isBorder() isBorder()} for more details
+	 */
 	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
@@ -164,6 +197,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BORDER, border);
 	}
 
+	/**
+	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
+	 */
 	public final void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
@@ -241,6 +277,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getAsyncRenderMode(null);
 	}
 
+	/**
+	 * See {@link #getAsyncRenderMode() getAsyncRenderMode()} for more details
+	 */
 	public final int getAsyncRenderMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ASYNC_RENDER_MODE,0, facesContext);
 	}
@@ -249,6 +288,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
+	/**
+	 * See {@link #setAsyncRenderMode(int) setAsyncRenderMode(int)} for more details
+	 */
 	public final void setAsyncRenderMode(ValueBinding asyncRenderMode) {
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
@@ -257,6 +299,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getScopeValue(null);
 	}
 
+	/**
+	 * See {@link #getScopeValue() getScopeValue()} for more details
+	 */
 	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
 	}
@@ -269,6 +314,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getScopeVar(null);
 	}
 
+	/**
+	 * See {@link #getScopeVar() getScopeVar()} for more details
+	 */
 	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
 	}
@@ -277,6 +325,9 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
+	/**
+	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
+	 */
 	public final void setScopeVar(ValueBinding scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}

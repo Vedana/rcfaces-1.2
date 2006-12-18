@@ -34,6 +34,9 @@ public class MenuCheckItemComponent extends MenuItemComponent implements
 		return isChecked(null);
 	}
 
+	/**
+	 * See {@link #isChecked() isChecked()} for more details
+	 */
 	public final boolean isChecked(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CHECKED, false, facesContext);
 	}
@@ -42,6 +45,9 @@ public class MenuCheckItemComponent extends MenuItemComponent implements
 		engine.setProperty(Properties.CHECKED, checked);
 	}
 
+	/**
+	 * See {@link #setChecked(boolean) setChecked(boolean)} for more details
+	 */
 	public final void setChecked(ValueBinding checked) {
 		engine.setProperty(Properties.CHECKED, checked);
 	}

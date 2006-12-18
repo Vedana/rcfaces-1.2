@@ -120,6 +120,9 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -128,6 +131,9 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
@@ -136,6 +142,9 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		return getAttributesLocale(null);
 	}
 
+	/**
+	 * See {@link #getAttributesLocale() getAttributesLocale()} for more details
+	 */
 	public final java.util.Locale getAttributesLocale(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Locale)engine.getProperty(Properties.ATTRIBUTES_LOCALE, facesContext);
 	}
@@ -144,6 +153,9 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
 	}
 
+	/**
+	 * See {@link #setAttributesLocale(java.util.Locale) setAttributesLocale(java.util.Locale)} for more details
+	 */
 	public final void setAttributesLocale(ValueBinding attributesLocale) {
 		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
 	}
@@ -152,6 +164,9 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		return getClientDatesStrategy(null);
 	}
 
+	/**
+	 * See {@link #getClientDatesStrategy() getClientDatesStrategy()} for more details
+	 */
 	public final int getClientDatesStrategy(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.CLIENT_DATES_STRATEGY,0, facesContext);
 	}
@@ -160,6 +175,9 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		engine.setProperty(Properties.CLIENT_DATES_STRATEGY, clientDatesStrategy);
 	}
 
+	/**
+	 * See {@link #setClientDatesStrategy(int) setClientDatesStrategy(int)} for more details
+	 */
 	public final void setClientDatesStrategy(ValueBinding clientDatesStrategy) {
 		engine.setProperty(Properties.CLIENT_DATES_STRATEGY, clientDatesStrategy);
 	}

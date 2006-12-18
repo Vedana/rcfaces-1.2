@@ -162,6 +162,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getHiddenMode(null);
 	}
 
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
 	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
@@ -170,6 +173,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
 	public final void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
@@ -178,6 +184,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return isVisible(null);
 	}
 
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
@@ -186,6 +195,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
+	/**
+	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
+	 */
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
@@ -201,6 +213,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
@@ -209,6 +224,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.TEXT, text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
@@ -217,6 +235,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getToolTipText(null);
 	}
 
+	/**
+	 * See {@link #getToolTipText() getToolTipText()} for more details
+	 */
 	public final java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
 	}
@@ -225,6 +246,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
+	/**
+	 * See {@link #setToolTipText(String) setToolTipText(String)} for more details
+	 */
 	public final void setToolTipText(ValueBinding toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
@@ -233,6 +257,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getAlignment(null);
 	}
 
+	/**
+	 * See {@link #getAlignment() getAlignment()} for more details
+	 */
 	public final java.lang.String getAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ALIGNMENT, facesContext);
 	}
@@ -241,6 +268,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.ALIGNMENT, alignment);
 	}
 
+	/**
+	 * See {@link #setAlignment(String) setAlignment(String)} for more details
+	 */
 	public final void setAlignment(ValueBinding alignment) {
 		engine.setProperty(Properties.ALIGNMENT, alignment);
 	}
@@ -249,6 +279,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getBackgroundColor(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
+	 */
 	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
 	}
@@ -257,6 +290,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
+	/**
+	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
+	 */
 	public final void setBackgroundColor(ValueBinding backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
@@ -265,6 +301,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getForegroundColor(null);
 	}
 
+	/**
+	 * See {@link #getForegroundColor() getForegroundColor()} for more details
+	 */
 	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
 	}
@@ -273,6 +312,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
+	/**
+	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
+	 */
 	public final void setForegroundColor(ValueBinding foregroundColor) {
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
@@ -293,6 +335,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 */
 	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
@@ -301,6 +346,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
+	/**
+	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
+	 */
 	public final void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
@@ -309,6 +357,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return isAscending(null);
 	}
 
+	/**
+	 * See {@link #isAscending() isAscending()} for more details
+	 */
 	public final boolean isAscending(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.ASCENDING, false, facesContext);
 	}
@@ -317,6 +368,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.ASCENDING, ascending);
 	}
 
+	/**
+	 * See {@link #setAscending(boolean) setAscending(boolean)} for more details
+	 */
 	public final void setAscending(ValueBinding ascending) {
 		engine.setProperty(Properties.ASCENDING, ascending);
 	}
@@ -325,6 +379,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getSortComparator(null);
 	}
 
+	/**
+	 * See {@link #getSortComparator() getSortComparator()} for more details
+	 */
 	public final java.util.Comparator getSortComparator(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Comparator)engine.getProperty(Properties.SORT_COMPARATOR, facesContext);
 	}
@@ -333,6 +390,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.SORT_COMPARATOR, sortComparator);
 	}
 
+	/**
+	 * See {@link #setSortComparator(java.util.Comparator) setSortComparator(java.util.Comparator)} for more details
+	 */
 	public final void setSortComparator(ValueBinding sortComparator) {
 		engine.setProperty(Properties.SORT_COMPARATOR, sortComparator);
 	}
@@ -341,6 +401,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return isResizable(null);
 	}
 
+	/**
+	 * See {@link #isResizable() isResizable()} for more details
+	 */
 	public final boolean isResizable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.RESIZABLE, false, facesContext);
 	}
@@ -349,6 +412,9 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.RESIZABLE, resizable);
 	}
 
+	/**
+	 * See {@link #setResizable(boolean) setResizable(boolean)} for more details
+	 */
 	public final void setResizable(ValueBinding resizable) {
 		engine.setProperty(Properties.RESIZABLE, resizable);
 	}

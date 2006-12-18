@@ -90,6 +90,9 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 		return isClosable(null);
 	}
 
+	/**
+	 * See {@link #isClosable() isClosable()} for more details
+	 */
 	public final boolean isClosable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLOSABLE, false, facesContext);
 	}
@@ -98,6 +101,9 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 		engine.setProperty(Properties.CLOSABLE, closable);
 	}
 
+	/**
+	 * See {@link #setClosable(boolean) setClosable(boolean)} for more details
+	 */
 	public final void setClosable(ValueBinding closable) {
 		engine.setProperty(Properties.CLOSABLE, closable);
 	}

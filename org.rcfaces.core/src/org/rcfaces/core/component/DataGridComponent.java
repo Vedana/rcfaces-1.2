@@ -296,6 +296,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return isSelectable(null);
 	}
 
+	/**
+	 * See {@link #isSelectable() isSelectable()} for more details
+	 */
 	public final boolean isSelectable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SELECTABLE, false, facesContext);
 	}
@@ -304,6 +307,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.SELECTABLE, selectable);
 	}
 
+	/**
+	 * See {@link #setSelectable(boolean) setSelectable(boolean)} for more details
+	 */
 	public final void setSelectable(ValueBinding selectable) {
 		engine.setProperty(Properties.SELECTABLE, selectable);
 	}
@@ -312,6 +318,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getSelectionCardinality(null);
 	}
 
+	/**
+	 * See {@link #getSelectionCardinality() getSelectionCardinality()} for more details
+	 */
 	public final int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
 	}
@@ -320,6 +329,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
 	}
 
+	/**
+	 * See {@link #setSelectionCardinality(int) setSelectionCardinality(int)} for more details
+	 */
 	public final void setSelectionCardinality(ValueBinding selectionCardinality) {
 		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
 	}
@@ -340,6 +352,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return isCheckable(null);
 	}
 
+	/**
+	 * See {@link #isCheckable() isCheckable()} for more details
+	 */
 	public final boolean isCheckable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CHECKABLE, false, facesContext);
 	}
@@ -348,6 +363,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.CHECKABLE, checkable);
 	}
 
+	/**
+	 * See {@link #setCheckable(boolean) setCheckable(boolean)} for more details
+	 */
 	public final void setCheckable(ValueBinding checkable) {
 		engine.setProperty(Properties.CHECKABLE, checkable);
 	}
@@ -356,6 +374,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getCheckCardinality(null);
 	}
 
+	/**
+	 * See {@link #getCheckCardinality() getCheckCardinality()} for more details
+	 */
 	public final int getCheckCardinality(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.CHECK_CARDINALITY,0, facesContext);
 	}
@@ -364,6 +385,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
 	}
 
+	/**
+	 * See {@link #setCheckCardinality(int) setCheckCardinality(int)} for more details
+	 */
 	public final void setCheckCardinality(ValueBinding checkCardinality) {
 		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
 	}
@@ -384,6 +408,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return isRequired(null);
 	}
 
+	/**
+	 * See {@link #isRequired() isRequired()} for more details
+	 */
 	public final boolean isRequired(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.REQUIRED, false, facesContext);
 	}
@@ -392,6 +419,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.REQUIRED, required);
 	}
 
+	/**
+	 * See {@link #setRequired(boolean) setRequired(boolean)} for more details
+	 */
 	public final void setRequired(ValueBinding required) {
 		engine.setProperty(Properties.REQUIRED, required);
 	}
@@ -400,6 +430,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return isBorder(null);
 	}
 
+	/**
+	 * See {@link #isBorder() isBorder()} for more details
+	 */
 	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
@@ -408,6 +441,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.BORDER, border);
 	}
 
+	/**
+	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
+	 */
 	public final void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
@@ -416,6 +452,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -424,6 +463,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
@@ -432,6 +474,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return isDisabled(null);
 	}
 
+	/**
+	 * See {@link #isDisabled() isDisabled()} for more details
+	 */
 	public final boolean isDisabled(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
 	}
@@ -440,6 +485,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
+	/**
+	 * See {@link #setDisabled(boolean) setDisabled(boolean)} for more details
+	 */
 	public final void setDisabled(ValueBinding disabled) {
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
@@ -469,6 +517,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getHorizontalScrollPosition(null);
 	}
 
+	/**
+	 * See {@link #getHorizontalScrollPosition() getHorizontalScrollPosition()} for more details
+	 */
 	public final java.lang.String getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HORIZONTAL_SCROLL_POSITION, facesContext);
 	}
@@ -477,6 +528,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
+	/**
+	 * See {@link #setHorizontalScrollPosition(String) setHorizontalScrollPosition(String)} for more details
+	 */
 	public final void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
@@ -485,6 +539,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getVerticalScrollPosition(null);
 	}
 
+	/**
+	 * See {@link #getVerticalScrollPosition() getVerticalScrollPosition()} for more details
+	 */
 	public final java.lang.String getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VERTICAL_SCROLL_POSITION, facesContext);
 	}
@@ -493,6 +550,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
+	/**
+	 * See {@link #setVerticalScrollPosition(String) setVerticalScrollPosition(String)} for more details
+	 */
 	public final void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
@@ -501,6 +561,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getFilterProperties(null);
 	}
 
+	/**
+	 * See {@link #getFilterProperties() getFilterProperties()} for more details
+	 */
 	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
@@ -509,6 +572,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
+	/**
+	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
+	 */
 	public final void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
@@ -517,6 +583,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getPreference(null);
 	}
 
+	/**
+	 * See {@link #getPreference() getPreference()} for more details
+	 */
 	public final org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.preference.IComponentPreference)engine.getProperty(Properties.PREFERENCE, facesContext);
 	}
@@ -525,6 +594,9 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
 
+	/**
+	 * See {@link #setPreference(org.rcfaces.core.preference.IComponentPreference) setPreference(org.rcfaces.core.preference.IComponentPreference)} for more details
+	 */
 	public final void setPreference(ValueBinding preference) {
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}

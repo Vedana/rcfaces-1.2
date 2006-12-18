@@ -72,6 +72,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getFontBold(null);
 	}
 
+	/**
+	 * See {@link #getFontBold() getFontBold()} for more details
+	 */
 	public final java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
 	}
@@ -80,6 +83,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
 
+	/**
+	 * See {@link #setFontBold(Boolean) setFontBold(Boolean)} for more details
+	 */
 	public final void setFontBold(ValueBinding fontBold) {
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
@@ -88,6 +94,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getFontItalic(null);
 	}
 
+	/**
+	 * See {@link #getFontItalic() getFontItalic()} for more details
+	 */
 	public final java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
 	}
@@ -96,6 +105,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
 
+	/**
+	 * See {@link #setFontItalic(Boolean) setFontItalic(Boolean)} for more details
+	 */
 	public final void setFontItalic(ValueBinding fontItalic) {
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
@@ -104,6 +116,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getFontName(null);
 	}
 
+	/**
+	 * See {@link #getFontName() getFontName()} for more details
+	 */
 	public final java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_NAME, facesContext);
 	}
@@ -112,6 +127,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
 
+	/**
+	 * See {@link #setFontName(String) setFontName(String)} for more details
+	 */
 	public final void setFontName(ValueBinding fontName) {
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
@@ -120,6 +138,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getFontSize(null);
 	}
 
+	/**
+	 * See {@link #getFontSize() getFontSize()} for more details
+	 */
 	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
 	}
@@ -128,6 +149,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
 
+	/**
+	 * See {@link #setFontSize(String) setFontSize(String)} for more details
+	 */
 	public final void setFontSize(ValueBinding fontSize) {
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
@@ -136,6 +160,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getFontUnderline(null);
 	}
 
+	/**
+	 * See {@link #getFontUnderline() getFontUnderline()} for more details
+	 */
 	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
 	}
@@ -144,6 +171,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
+	/**
+	 * See {@link #setFontUnderline(Boolean) setFontUnderline(Boolean)} for more details
+	 */
 	public final void setFontUnderline(ValueBinding fontUnderline) {
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
@@ -152,6 +182,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
 	}
@@ -160,6 +193,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		setValue(text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		setValue(text);
 	}
@@ -168,6 +204,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getTextAlignment(null);
 	}
 
+	/**
+	 * See {@link #getTextAlignment() getTextAlignment()} for more details
+	 */
 	public final java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
 	}
@@ -176,6 +215,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
+	/**
+	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
+	 */
 	public final void setTextAlignment(ValueBinding textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
@@ -184,6 +226,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getVerticalAlignment(null);
 	}
 
+	/**
+	 * See {@link #getVerticalAlignment() getVerticalAlignment()} for more details
+	 */
 	public final java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
 	}
@@ -192,6 +237,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
+	/**
+	 * See {@link #setVerticalAlignment(String) setVerticalAlignment(String)} for more details
+	 */
 	public final void setVerticalAlignment(ValueBinding verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
@@ -200,6 +248,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getBorderType(null);
 	}
 
+	/**
+	 * See {@link #getBorderType() getBorderType()} for more details
+	 */
 	public final java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
 	}
@@ -208,6 +259,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
+	/**
+	 * See {@link #setBorderType(String) setBorderType(String)} for more details
+	 */
 	public final void setBorderType(ValueBinding borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
@@ -216,6 +270,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getImageURL(null);
 	}
 
+	/**
+	 * See {@link #getImageURL() getImageURL()} for more details
+	 */
 	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
@@ -224,6 +281,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
+	/**
+	 * See {@link #setImageURL(String) setImageURL(String)} for more details
+	 */
 	public final void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
@@ -239,6 +299,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getImageHeight(null);
 	}
 
+	/**
+	 * See {@link #getImageHeight() getImageHeight()} for more details
+	 */
 	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
 	}
@@ -247,6 +310,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
+	/**
+	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
+	 */
 	public final void setImageHeight(ValueBinding imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
@@ -255,6 +321,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getImageWidth(null);
 	}
 
+	/**
+	 * See {@link #getImageWidth() getImageWidth()} for more details
+	 */
 	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
 	}
@@ -263,6 +332,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
+	/**
+	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
+	 */
 	public final void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
@@ -271,6 +343,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getScopeValue(null);
 	}
 
+	/**
+	 * See {@link #getScopeValue() getScopeValue()} for more details
+	 */
 	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
 	}
@@ -283,6 +358,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return getScopeVar(null);
 	}
 
+	/**
+	 * See {@link #getScopeVar() getScopeVar()} for more details
+	 */
 	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
 	}
@@ -291,6 +369,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
+	/**
+	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
+	 */
 	public final void setScopeVar(ValueBinding scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}

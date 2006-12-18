@@ -47,6 +47,9 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 		return getBackgroundColor(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
+	 */
 	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
 	}
@@ -55,6 +58,9 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
+	/**
+	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
+	 */
 	public final void setBackgroundColor(ValueBinding backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
@@ -63,6 +69,9 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 		return getForegroundColor(null);
 	}
 
+	/**
+	 * See {@link #getForegroundColor() getForegroundColor()} for more details
+	 */
 	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
 	}
@@ -71,6 +80,9 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
+	/**
+	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
+	 */
 	public final void setForegroundColor(ValueBinding foregroundColor) {
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
@@ -79,6 +91,9 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 		return getExpandedImageURL(null);
 	}
 
+	/**
+	 * See {@link #getExpandedImageURL() getExpandedImageURL()} for more details
+	 */
 	public final java.lang.String getExpandedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.EXPANDED_IMAGE_URL, facesContext);
 	}
@@ -87,6 +102,9 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 		engine.setProperty(Properties.EXPANDED_IMAGE_URL, expandedImageURL);
 	}
 
+	/**
+	 * See {@link #setExpandedImageURL(String) setExpandedImageURL(String)} for more details
+	 */
 	public final void setExpandedImageURL(ValueBinding expandedImageURL) {
 		engine.setProperty(Properties.EXPANDED_IMAGE_URL, expandedImageURL);
 	}

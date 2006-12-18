@@ -78,6 +78,9 @@ public class DateItemComponent extends AbstractItemComponent implements
 		return getStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 */
 	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
@@ -86,6 +89,9 @@ public class DateItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
+	/**
+	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
+	 */
 	public final void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}

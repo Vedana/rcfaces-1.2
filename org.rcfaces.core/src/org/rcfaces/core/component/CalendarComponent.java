@@ -56,6 +56,9 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 		return isBorder(null);
 	}
 
+	/**
+	 * See {@link #isBorder() isBorder()} for more details
+	 */
 	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
@@ -64,6 +67,9 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.BORDER, border);
 	}
 
+	/**
+	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
+	 */
 	public final void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
@@ -72,6 +78,9 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 		return getMode(null);
 	}
 
+	/**
+	 * See {@link #getMode() getMode()} for more details
+	 */
 	public final int getMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.MODE,0, facesContext);
 	}
@@ -80,6 +89,9 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.MODE, mode);
 	}
 
+	/**
+	 * See {@link #setMode(int) setMode(int)} for more details
+	 */
 	public final void setMode(ValueBinding mode) {
 		engine.setProperty(Properties.MODE, mode);
 	}

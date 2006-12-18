@@ -50,6 +50,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getBackgroundImageHorizontalPosition(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundImageHorizontalPosition() getBackgroundImageHorizontalPosition()} for more details
+	 */
 	public final java.lang.String getBackgroundImageHorizontalPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, facesContext);
 	}
@@ -58,6 +61,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, backgroundImageHorizontalPosition);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageHorizontalPosition(String) setBackgroundImageHorizontalPosition(String)} for more details
+	 */
 	public final void setBackgroundImageHorizontalPosition(ValueBinding backgroundImageHorizontalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, backgroundImageHorizontalPosition);
 	}
@@ -66,6 +72,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return isBackgroundImageHorizontalRepeat(null);
 	}
 
+	/**
+	 * See {@link #isBackgroundImageHorizontalRepeat() isBackgroundImageHorizontalRepeat()} for more details
+	 */
 	public final boolean isBackgroundImageHorizontalRepeat(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, false, facesContext);
 	}
@@ -74,6 +83,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, backgroundImageHorizontalRepeat);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageHorizontalRepeat(boolean) setBackgroundImageHorizontalRepeat(boolean)} for more details
+	 */
 	public final void setBackgroundImageHorizontalRepeat(ValueBinding backgroundImageHorizontalRepeat) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, backgroundImageHorizontalRepeat);
 	}
@@ -82,6 +94,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getBackgroundImageURL(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundImageURL() getBackgroundImageURL()} for more details
+	 */
 	public final java.lang.String getBackgroundImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_URL, facesContext);
 	}
@@ -90,6 +105,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_URL, backgroundImageURL);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageURL(String) setBackgroundImageURL(String)} for more details
+	 */
 	public final void setBackgroundImageURL(ValueBinding backgroundImageURL) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_URL, backgroundImageURL);
 	}
@@ -98,6 +116,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getBackgroundImageVerticalPosition(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundImageVerticalPosition() getBackgroundImageVerticalPosition()} for more details
+	 */
 	public final java.lang.String getBackgroundImageVerticalPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, facesContext);
 	}
@@ -106,6 +127,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, backgroundImageVerticalPosition);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageVerticalPosition(String) setBackgroundImageVerticalPosition(String)} for more details
+	 */
 	public final void setBackgroundImageVerticalPosition(ValueBinding backgroundImageVerticalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, backgroundImageVerticalPosition);
 	}
@@ -114,6 +138,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return isBackgroundImageVerticalRepeat(null);
 	}
 
+	/**
+	 * See {@link #isBackgroundImageVerticalRepeat() isBackgroundImageVerticalRepeat()} for more details
+	 */
 	public final boolean isBackgroundImageVerticalRepeat(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, false, facesContext);
 	}
@@ -122,6 +149,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, backgroundImageVerticalRepeat);
 	}
 
+	/**
+	 * See {@link #setBackgroundImageVerticalRepeat(boolean) setBackgroundImageVerticalRepeat(boolean)} for more details
+	 */
 	public final void setBackgroundImageVerticalRepeat(ValueBinding backgroundImageVerticalRepeat) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, backgroundImageVerticalRepeat);
 	}
@@ -130,6 +160,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return isBorder(null);
 	}
 
+	/**
+	 * See {@link #isBorder() isBorder()} for more details
+	 */
 	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
@@ -138,6 +171,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.BORDER, border);
 	}
 
+	/**
+	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
+	 */
 	public final void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
@@ -182,6 +218,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getFor(null);
 	}
 
+	/**
+	 * See {@link #getFor() getFor()} for more details
+	 */
 	public final java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR, facesContext);
 	}
@@ -190,6 +229,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
+	/**
+	 * See {@link #setFor(String) setFor(String)} for more details
+	 */
 	public final void setFor(ValueBinding forValue) {
 		engine.setProperty(Properties.FOR, forValue);
 	}
@@ -198,6 +240,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getErrorStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
+	 */
 	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
 	}
@@ -206,6 +251,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
+	/**
+	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
+	 */
 	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
@@ -214,6 +262,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getFatalStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
+	 */
 	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
 	}
@@ -222,6 +273,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
+	/**
+	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
+	 */
 	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
@@ -230,6 +284,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getInfoStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
+	 */
 	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
 	}
@@ -238,6 +295,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
+	/**
+	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
+	 */
 	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
@@ -246,6 +306,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getWarnStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
+	 */
 	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
 	}
@@ -254,6 +317,9 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
+	/**
+	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
+	 */
 	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}

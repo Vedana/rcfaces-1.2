@@ -34,6 +34,9 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 		return getRadioValue(null);
 	}
 
+	/**
+	 * See {@link #getRadioValue() getRadioValue()} for more details
+	 */
 	public final java.lang.Object getRadioValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getProperty(Properties.RADIO_VALUE, facesContext);
 	}
@@ -42,6 +45,9 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 		engine.setProperty(Properties.RADIO_VALUE, radioValue);
 	}
 
+	/**
+	 * See {@link #setRadioValue(Object) setRadioValue(Object)} for more details
+	 */
 	public final void setRadioValue(ValueBinding radioValue) {
 		engine.setProperty(Properties.RADIO_VALUE, radioValue);
 	}
@@ -50,6 +56,9 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 		return getGroupName(null);
 	}
 
+	/**
+	 * See {@link #getGroupName() getGroupName()} for more details
+	 */
 	public final java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
 	}
@@ -58,6 +67,9 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
+	/**
+	 * See {@link #setGroupName(String) setGroupName(String)} for more details
+	 */
 	public final void setGroupName(ValueBinding groupName) {
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}

@@ -57,6 +57,9 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 		return getFor(null);
 	}
 
+	/**
+	 * See {@link #getFor() getFor()} for more details
+	 */
 	public final java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR, facesContext);
 	}
@@ -65,6 +68,9 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
+	/**
+	 * See {@link #setFor(String) setFor(String)} for more details
+	 */
 	public final void setFor(ValueBinding forValue) {
 		engine.setProperty(Properties.FOR, forValue);
 	}

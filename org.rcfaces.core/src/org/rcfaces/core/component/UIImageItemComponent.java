@@ -89,6 +89,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		return getHiddenMode(null);
 	}
 
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
 	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
@@ -97,6 +100,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
 	public final void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
@@ -105,6 +111,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		return isVisible(null);
 	}
 
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
@@ -113,6 +122,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
+	/**
+	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
+	 */
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
@@ -128,6 +140,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		return getToolTipText(null);
 	}
 
+	/**
+	 * See {@link #getToolTipText() getToolTipText()} for more details
+	 */
 	public final java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
 	}
@@ -136,6 +151,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
+	/**
+	 * See {@link #setToolTipText(String) setToolTipText(String)} for more details
+	 */
 	public final void setToolTipText(ValueBinding toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
@@ -144,6 +162,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		return getDisabledImageURL(null);
 	}
 
+	/**
+	 * See {@link #getDisabledImageURL() getDisabledImageURL()} for more details
+	 */
 	public final java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DISABLED_IMAGE_URL, facesContext);
 	}
@@ -152,6 +173,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
 
+	/**
+	 * See {@link #setDisabledImageURL(String) setDisabledImageURL(String)} for more details
+	 */
 	public final void setDisabledImageURL(ValueBinding disabledImageURL) {
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
@@ -160,6 +184,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		return getHoverImageURL(null);
 	}
 
+	/**
+	 * See {@link #getHoverImageURL() getHoverImageURL()} for more details
+	 */
 	public final java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOVER_IMAGE_URL, facesContext);
 	}
@@ -168,6 +195,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
 
+	/**
+	 * See {@link #setHoverImageURL(String) setHoverImageURL(String)} for more details
+	 */
 	public final void setHoverImageURL(ValueBinding hoverImageURL) {
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
@@ -176,6 +206,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		return getSelectedImageURL(null);
 	}
 
+	/**
+	 * See {@link #getSelectedImageURL() getSelectedImageURL()} for more details
+	 */
 	public final java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SELECTED_IMAGE_URL, facesContext);
 	}
@@ -184,6 +217,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
 
+	/**
+	 * See {@link #setSelectedImageURL(String) setSelectedImageURL(String)} for more details
+	 */
 	public final void setSelectedImageURL(ValueBinding selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
@@ -192,6 +228,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		return getImageURL(null);
 	}
 
+	/**
+	 * See {@link #getImageURL() getImageURL()} for more details
+	 */
 	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
@@ -200,6 +239,9 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
+	/**
+	 * See {@link #setImageURL(String) setImageURL(String)} for more details
+	 */
 	public final void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}

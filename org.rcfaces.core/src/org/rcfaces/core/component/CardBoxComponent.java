@@ -102,6 +102,9 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		return getAsyncRenderMode(null);
 	}
 
+	/**
+	 * See {@link #getAsyncRenderMode() getAsyncRenderMode()} for more details
+	 */
 	public final int getAsyncRenderMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ASYNC_RENDER_MODE,0, facesContext);
 	}
@@ -110,6 +113,9 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
+	/**
+	 * See {@link #setAsyncRenderMode(int) setAsyncRenderMode(int)} for more details
+	 */
 	public final void setAsyncRenderMode(ValueBinding asyncRenderMode) {
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
@@ -118,6 +124,9 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		return getPreference(null);
 	}
 
+	/**
+	 * See {@link #getPreference() getPreference()} for more details
+	 */
 	public final org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.preference.IComponentPreference)engine.getProperty(Properties.PREFERENCE, facesContext);
 	}
@@ -126,6 +135,9 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
 
+	/**
+	 * See {@link #setPreference(org.rcfaces.core.preference.IComponentPreference) setPreference(org.rcfaces.core.preference.IComponentPreference)} for more details
+	 */
 	public final void setPreference(ValueBinding preference) {
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
@@ -134,6 +146,9 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		return getScopeValue(null);
 	}
 
+	/**
+	 * See {@link #getScopeValue() getScopeValue()} for more details
+	 */
 	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
 	}
@@ -146,6 +161,9 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		return getScopeVar(null);
 	}
 
+	/**
+	 * See {@link #getScopeVar() getScopeVar()} for more details
+	 */
 	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
 	}
@@ -154,6 +172,9 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
+	/**
+	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
+	 */
 	public final void setScopeVar(ValueBinding scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}

@@ -63,6 +63,9 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		return getStyleClass(null);
 	}
 
+	/**
+	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 */
 	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
@@ -71,6 +74,9 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
+	/**
+	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
+	 */
 	public final void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
@@ -79,6 +85,9 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		return getHiddenMode(null);
 	}
 
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
 	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
@@ -87,6 +96,9 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
 	public final void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
@@ -95,6 +107,9 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		return isVisible(null);
 	}
 
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
@@ -103,6 +118,9 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
+	/**
+	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
+	 */
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}

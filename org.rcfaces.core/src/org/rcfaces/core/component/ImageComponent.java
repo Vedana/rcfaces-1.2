@@ -71,6 +71,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 		return getImageURL(null);
 	}
 
+	/**
+	 * See {@link #getImageURL() getImageURL()} for more details
+	 */
 	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
 	}
@@ -79,6 +82,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 		setValue(imageURL);
 	}
 
+	/**
+	 * See {@link #setImageURL(String) setImageURL(String)} for more details
+	 */
 	public final void setImageURL(ValueBinding imageURL) {
 		setValue(imageURL);
 	}
@@ -87,6 +93,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 		return getImageHeight(null);
 	}
 
+	/**
+	 * See {@link #getImageHeight() getImageHeight()} for more details
+	 */
 	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
 	}
@@ -95,6 +104,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
+	/**
+	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
+	 */
 	public final void setImageHeight(ValueBinding imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
@@ -103,6 +115,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 		return getImageWidth(null);
 	}
 
+	/**
+	 * See {@link #getImageWidth() getImageWidth()} for more details
+	 */
 	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
 	}
@@ -111,6 +126,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
+	/**
+	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
+	 */
 	public final void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
@@ -119,6 +137,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 		return getFilterProperties(null);
 	}
 
+	/**
+	 * See {@link #getFilterProperties() getFilterProperties()} for more details
+	 */
 	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
@@ -127,6 +148,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
+	/**
+	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
+	 */
 	public final void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}

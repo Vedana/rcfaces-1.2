@@ -64,6 +64,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getImageURL(null);
 	}
 
+	/**
+	 * See {@link #getImageURL() getImageURL()} for more details
+	 */
 	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
@@ -72,6 +75,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
+	/**
+	 * See {@link #setImageURL(String) setImageURL(String)} for more details
+	 */
 	public final void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
@@ -80,6 +86,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getDisabledImageURL(null);
 	}
 
+	/**
+	 * See {@link #getDisabledImageURL() getDisabledImageURL()} for more details
+	 */
 	public final java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DISABLED_IMAGE_URL, facesContext);
 	}
@@ -88,6 +97,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
 
+	/**
+	 * See {@link #setDisabledImageURL(String) setDisabledImageURL(String)} for more details
+	 */
 	public final void setDisabledImageURL(ValueBinding disabledImageURL) {
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
@@ -96,6 +108,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getHoverImageURL(null);
 	}
 
+	/**
+	 * See {@link #getHoverImageURL() getHoverImageURL()} for more details
+	 */
 	public final java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOVER_IMAGE_URL, facesContext);
 	}
@@ -104,6 +119,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
 
+	/**
+	 * See {@link #setHoverImageURL(String) setHoverImageURL(String)} for more details
+	 */
 	public final void setHoverImageURL(ValueBinding hoverImageURL) {
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
@@ -112,6 +130,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getSelectedImageURL(null);
 	}
 
+	/**
+	 * See {@link #getSelectedImageURL() getSelectedImageURL()} for more details
+	 */
 	public final java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SELECTED_IMAGE_URL, facesContext);
 	}
@@ -120,6 +141,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
 
+	/**
+	 * See {@link #setSelectedImageURL(String) setSelectedImageURL(String)} for more details
+	 */
 	public final void setSelectedImageURL(ValueBinding selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
@@ -128,6 +152,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return isBorder(null);
 	}
 
+	/**
+	 * See {@link #isBorder() isBorder()} for more details
+	 */
 	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
@@ -136,6 +163,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.BORDER, border);
 	}
 
+	/**
+	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
+	 */
 	public final void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
@@ -144,6 +174,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getBorderType(null);
 	}
 
+	/**
+	 * See {@link #getBorderType() getBorderType()} for more details
+	 */
 	public final java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
 	}
@@ -152,6 +185,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
+	/**
+	 * See {@link #setBorderType(String) setBorderType(String)} for more details
+	 */
 	public final void setBorderType(ValueBinding borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
@@ -160,6 +196,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
@@ -168,6 +207,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.TEXT, text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
@@ -176,6 +218,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getTextPosition(null);
 	}
 
+	/**
+	 * See {@link #getTextPosition() getTextPosition()} for more details
+	 */
 	public final int getTextPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
 	}
@@ -184,6 +229,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
 
+	/**
+	 * See {@link #setTextPosition(int) setTextPosition(int)} for more details
+	 */
 	public final void setTextPosition(ValueBinding textPosition) {
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
@@ -192,6 +240,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getImageHeight(null);
 	}
 
+	/**
+	 * See {@link #getImageHeight() getImageHeight()} for more details
+	 */
 	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
 	}
@@ -200,6 +251,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
+	/**
+	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
+	 */
 	public final void setImageHeight(ValueBinding imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
@@ -208,6 +262,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		return getImageWidth(null);
 	}
 
+	/**
+	 * See {@link #getImageWidth() getImageWidth()} for more details
+	 */
 	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
 	}
@@ -216,6 +273,9 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
+	/**
+	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
+	 */
 	public final void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}

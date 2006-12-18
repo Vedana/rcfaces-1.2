@@ -87,6 +87,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getAsyncRenderMode(null);
 	}
 
+	/**
+	 * See {@link #getAsyncRenderMode() getAsyncRenderMode()} for more details
+	 */
 	public final int getAsyncRenderMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ASYNC_RENDER_MODE,0, facesContext);
 	}
@@ -95,6 +98,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
+	/**
+	 * See {@link #setAsyncRenderMode(int) setAsyncRenderMode(int)} for more details
+	 */
 	public final void setAsyncRenderMode(ValueBinding asyncRenderMode) {
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
@@ -103,6 +109,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getFontBold(null);
 	}
 
+	/**
+	 * See {@link #getFontBold() getFontBold()} for more details
+	 */
 	public final java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
 	}
@@ -111,6 +120,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
 
+	/**
+	 * See {@link #setFontBold(Boolean) setFontBold(Boolean)} for more details
+	 */
 	public final void setFontBold(ValueBinding fontBold) {
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
@@ -119,6 +131,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getFontItalic(null);
 	}
 
+	/**
+	 * See {@link #getFontItalic() getFontItalic()} for more details
+	 */
 	public final java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
 	}
@@ -127,6 +142,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
 
+	/**
+	 * See {@link #setFontItalic(Boolean) setFontItalic(Boolean)} for more details
+	 */
 	public final void setFontItalic(ValueBinding fontItalic) {
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
@@ -135,6 +153,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getFontName(null);
 	}
 
+	/**
+	 * See {@link #getFontName() getFontName()} for more details
+	 */
 	public final java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_NAME, facesContext);
 	}
@@ -143,6 +164,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
 
+	/**
+	 * See {@link #setFontName(String) setFontName(String)} for more details
+	 */
 	public final void setFontName(ValueBinding fontName) {
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
@@ -151,6 +175,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getFontSize(null);
 	}
 
+	/**
+	 * See {@link #getFontSize() getFontSize()} for more details
+	 */
 	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
 	}
@@ -159,6 +186,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
 
+	/**
+	 * See {@link #setFontSize(String) setFontSize(String)} for more details
+	 */
 	public final void setFontSize(ValueBinding fontSize) {
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
@@ -167,6 +197,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getFontUnderline(null);
 	}
 
+	/**
+	 * See {@link #getFontUnderline() getFontUnderline()} for more details
+	 */
 	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
 	}
@@ -175,6 +208,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
+	/**
+	 * See {@link #setFontUnderline(Boolean) setFontUnderline(Boolean)} for more details
+	 */
 	public final void setFontUnderline(ValueBinding fontUnderline) {
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
@@ -183,6 +219,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return isDisabled(null);
 	}
 
+	/**
+	 * See {@link #isDisabled() isDisabled()} for more details
+	 */
 	public final boolean isDisabled(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
 	}
@@ -191,6 +230,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
+	/**
+	 * See {@link #setDisabled(boolean) setDisabled(boolean)} for more details
+	 */
 	public final void setDisabled(ValueBinding disabled) {
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
@@ -199,6 +241,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -207,6 +252,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
@@ -215,6 +263,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
 	}
@@ -223,6 +274,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		setValue(text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		setValue(text);
 	}
@@ -231,6 +285,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getTextAlignment(null);
 	}
 
+	/**
+	 * See {@link #getTextAlignment() getTextAlignment()} for more details
+	 */
 	public final java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
 	}
@@ -239,6 +296,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
+	/**
+	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
+	 */
 	public final void setTextAlignment(ValueBinding textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
@@ -247,6 +307,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return isCollapsed(null);
 	}
 
+	/**
+	 * See {@link #isCollapsed() isCollapsed()} for more details
+	 */
 	public final boolean isCollapsed(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.COLLAPSED, false, facesContext);
 	}
@@ -255,6 +318,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.COLLAPSED, collapsed);
 	}
 
+	/**
+	 * See {@link #setCollapsed(boolean) setCollapsed(boolean)} for more details
+	 */
 	public final void setCollapsed(ValueBinding collapsed) {
 		engine.setProperty(Properties.COLLAPSED, collapsed);
 	}
@@ -263,6 +329,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return isBorder(null);
 	}
 
+	/**
+	 * See {@link #isBorder() isBorder()} for more details
+	 */
 	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
@@ -271,6 +340,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.BORDER, border);
 	}
 
+	/**
+	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
+	 */
 	public final void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
@@ -279,6 +351,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getAccessKey(null);
 	}
 
+	/**
+	 * See {@link #getAccessKey() getAccessKey()} for more details
+	 */
 	public final java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
 	}
@@ -287,6 +362,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
+	/**
+	 * See {@link #setAccessKey(String) setAccessKey(String)} for more details
+	 */
 	public final void setAccessKey(ValueBinding accessKey) {
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
@@ -295,6 +373,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getTabIndex(null);
 	}
 
+	/**
+	 * See {@link #getTabIndex() getTabIndex()} for more details
+	 */
 	public final java.lang.Integer getTabIndex(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntegerProperty(Properties.TAB_INDEX, facesContext);
 	}
@@ -303,6 +384,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
 
+	/**
+	 * See {@link #setTabIndex(Integer) setTabIndex(Integer)} for more details
+	 */
 	public final void setTabIndex(ValueBinding tabIndex) {
 		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
@@ -311,6 +395,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getGroupName(null);
 	}
 
+	/**
+	 * See {@link #getGroupName() getGroupName()} for more details
+	 */
 	public final java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
 	}
@@ -319,6 +406,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
+	/**
+	 * See {@link #setGroupName(String) setGroupName(String)} for more details
+	 */
 	public final void setGroupName(ValueBinding groupName) {
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
@@ -375,6 +465,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getScopeValue(null);
 	}
 
+	/**
+	 * See {@link #getScopeValue() getScopeValue()} for more details
+	 */
 	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
 	}
@@ -387,6 +480,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getScopeVar(null);
 	}
 
+	/**
+	 * See {@link #getScopeVar() getScopeVar()} for more details
+	 */
 	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
 	}
@@ -395,6 +491,9 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
+	/**
+	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
+	 */
 	public final void setScopeVar(ValueBinding scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}

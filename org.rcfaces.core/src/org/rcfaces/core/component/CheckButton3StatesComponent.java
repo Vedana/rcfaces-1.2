@@ -84,6 +84,9 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
@@ -92,6 +95,9 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		engine.setProperty(Properties.TEXT, text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
@@ -100,6 +106,9 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		return getTextPosition(null);
 	}
 
+	/**
+	 * See {@link #getTextPosition() getTextPosition()} for more details
+	 */
 	public final int getTextPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
 	}
@@ -108,6 +117,9 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
 
+	/**
+	 * See {@link #setTextPosition(int) setTextPosition(int)} for more details
+	 */
 	public final void setTextPosition(ValueBinding textPosition) {
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
@@ -128,6 +140,9 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -136,6 +151,9 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
@@ -144,6 +162,9 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		return getSelectedState(null);
 	}
 
+	/**
+	 * See {@link #getSelectedState() getSelectedState()} for more details
+	 */
 	public final java.lang.String getSelectedState(javax.faces.context.FacesContext facesContext) {
 		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
 	}
@@ -152,6 +173,9 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		setValue(selectedState);
 	}
 
+	/**
+	 * See {@link #setSelectedState(String) setSelectedState(String)} for more details
+	 */
 	public final void setSelectedState(ValueBinding selectedState) {
 		setValue(selectedState);
 	}

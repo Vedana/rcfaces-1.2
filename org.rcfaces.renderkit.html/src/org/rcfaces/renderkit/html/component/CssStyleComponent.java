@@ -34,6 +34,9 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
@@ -42,6 +45,9 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.TEXT, text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}

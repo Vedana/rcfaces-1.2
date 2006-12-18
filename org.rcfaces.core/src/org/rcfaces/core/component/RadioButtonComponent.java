@@ -90,6 +90,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
@@ -98,6 +101,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.TEXT, text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
@@ -106,6 +112,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		return getTextPosition(null);
 	}
 
+	/**
+	 * See {@link #getTextPosition() getTextPosition()} for more details
+	 */
 	public final int getTextPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
 	}
@@ -114,6 +123,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
 
+	/**
+	 * See {@link #setTextPosition(int) setTextPosition(int)} for more details
+	 */
 	public final void setTextPosition(ValueBinding textPosition) {
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
@@ -134,6 +146,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -142,6 +157,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
@@ -150,6 +168,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		return isSelected(null);
 	}
 
+	/**
+	 * See {@link #isSelected() isSelected()} for more details
+	 */
 	public final boolean isSelected(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SELECTED, false, facesContext);
 	}
@@ -158,6 +179,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.SELECTED, selected);
 	}
 
+	/**
+	 * See {@link #setSelected(boolean) setSelected(boolean)} for more details
+	 */
 	public final void setSelected(ValueBinding selected) {
 		engine.setProperty(Properties.SELECTED, selected);
 	}
@@ -166,6 +190,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		return getRadioValue(null);
 	}
 
+	/**
+	 * See {@link #getRadioValue() getRadioValue()} for more details
+	 */
 	public final java.lang.Object getRadioValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getProperty(Properties.RADIO_VALUE, facesContext);
 	}
@@ -174,6 +201,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.RADIO_VALUE, radioValue);
 	}
 
+	/**
+	 * See {@link #setRadioValue(Object) setRadioValue(Object)} for more details
+	 */
 	public final void setRadioValue(ValueBinding radioValue) {
 		engine.setProperty(Properties.RADIO_VALUE, radioValue);
 	}
@@ -182,6 +212,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		return getGroupName(null);
 	}
 
+	/**
+	 * See {@link #getGroupName() getGroupName()} for more details
+	 */
 	public final java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
 	}
@@ -190,6 +223,9 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
+	/**
+	 * See {@link #setGroupName(String) setGroupName(String)} for more details
+	 */
 	public final void setGroupName(ValueBinding groupName) {
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}

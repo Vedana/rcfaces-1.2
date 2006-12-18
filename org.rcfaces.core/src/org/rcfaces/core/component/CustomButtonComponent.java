@@ -60,6 +60,9 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 		return getBorderType(null);
 	}
 
+	/**
+	 * See {@link #getBorderType() getBorderType()} for more details
+	 */
 	public final java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
 	}
@@ -68,6 +71,9 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
+	/**
+	 * See {@link #setBorderType(String) setBorderType(String)} for more details
+	 */
 	public final void setBorderType(ValueBinding borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
@@ -76,6 +82,9 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 		return isBorder(null);
 	}
 
+	/**
+	 * See {@link #isBorder() isBorder()} for more details
+	 */
 	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
@@ -84,6 +93,9 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 		engine.setProperty(Properties.BORDER, border);
 	}
 
+	/**
+	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
+	 */
 	public final void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
@@ -116,6 +128,9 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 		return isReadOnly(null);
 	}
 
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
 	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
@@ -124,6 +139,9 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}

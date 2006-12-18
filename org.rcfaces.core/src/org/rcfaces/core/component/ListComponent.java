@@ -46,6 +46,9 @@ public class ListComponent extends ComboComponent implements
 		return isMultipleSelect(null);
 	}
 
+	/**
+	 * See {@link #isMultipleSelect() isMultipleSelect()} for more details
+	 */
 	public final boolean isMultipleSelect(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.MULTIPLE_SELECT, false, facesContext);
 	}
@@ -54,6 +57,9 @@ public class ListComponent extends ComboComponent implements
 		engine.setProperty(Properties.MULTIPLE_SELECT, multipleSelect);
 	}
 
+	/**
+	 * See {@link #setMultipleSelect(boolean) setMultipleSelect(boolean)} for more details
+	 */
 	public final void setMultipleSelect(ValueBinding multipleSelect) {
 		engine.setProperty(Properties.MULTIPLE_SELECT, multipleSelect);
 	}

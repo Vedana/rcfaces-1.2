@@ -44,6 +44,9 @@ public class SelectImageItemComponent extends CameliaItemComponent implements
 		return getImageURL(null);
 	}
 
+	/**
+	 * See {@link #getImageURL() getImageURL()} for more details
+	 */
 	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
@@ -52,6 +55,9 @@ public class SelectImageItemComponent extends CameliaItemComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
+	/**
+	 * See {@link #setImageURL(String) setImageURL(String)} for more details
+	 */
 	public final void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}

@@ -72,6 +72,9 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 		return getGroupName(null);
 	}
 
+	/**
+	 * See {@link #getGroupName() getGroupName()} for more details
+	 */
 	public final java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
 	}
@@ -80,6 +83,9 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
+	/**
+	 * See {@link #setGroupName(String) setGroupName(String)} for more details
+	 */
 	public final void setGroupName(ValueBinding groupName) {
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}

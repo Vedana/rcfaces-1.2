@@ -94,6 +94,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		return isBorder(null);
 	}
 
+	/**
+	 * See {@link #isBorder() isBorder()} for more details
+	 */
 	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
@@ -102,6 +105,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.BORDER, border);
 	}
 
+	/**
+	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
+	 */
 	public final void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
@@ -110,6 +116,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		return getBorderType(null);
 	}
 
+	/**
+	 * See {@link #getBorderType() getBorderType()} for more details
+	 */
 	public final java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
 	}
@@ -118,6 +127,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
+	/**
+	 * See {@link #setBorderType(String) setBorderType(String)} for more details
+	 */
 	public final void setBorderType(ValueBinding borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
@@ -126,6 +138,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		return getHorizontalScrollPosition(null);
 	}
 
+	/**
+	 * See {@link #getHorizontalScrollPosition() getHorizontalScrollPosition()} for more details
+	 */
 	public final java.lang.String getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HORIZONTAL_SCROLL_POSITION, facesContext);
 	}
@@ -134,6 +149,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
+	/**
+	 * See {@link #setHorizontalScrollPosition(String) setHorizontalScrollPosition(String)} for more details
+	 */
 	public final void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
@@ -142,6 +160,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		return getVerticalScrollPosition(null);
 	}
 
+	/**
+	 * See {@link #getVerticalScrollPosition() getVerticalScrollPosition()} for more details
+	 */
 	public final java.lang.String getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VERTICAL_SCROLL_POSITION, facesContext);
 	}
@@ -150,6 +171,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
+	/**
+	 * See {@link #setVerticalScrollPosition(String) setVerticalScrollPosition(String)} for more details
+	 */
 	public final void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}

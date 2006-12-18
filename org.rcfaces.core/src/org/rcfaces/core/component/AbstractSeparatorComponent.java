@@ -44,6 +44,9 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 		return getHiddenMode(null);
 	}
 
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
 	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
@@ -52,6 +55,9 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
 	public final void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
@@ -60,6 +66,9 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 		return isVisible(null);
 	}
 
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
@@ -68,6 +77,9 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
+	/**
+	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
+	 */
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}

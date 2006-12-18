@@ -86,6 +86,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getX(null);
 	}
 
+	/**
+	 * See {@link #getX() getX()} for more details
+	 */
 	public final java.lang.String getX(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.X, facesContext);
 	}
@@ -94,6 +97,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.X, x);
 	}
 
+	/**
+	 * See {@link #setX(String) setX(String)} for more details
+	 */
 	public final void setX(ValueBinding x) {
 		engine.setProperty(Properties.X, x);
 	}
@@ -102,6 +108,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getY(null);
 	}
 
+	/**
+	 * See {@link #getY() getY()} for more details
+	 */
 	public final java.lang.String getY(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.Y, facesContext);
 	}
@@ -110,6 +119,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.Y, y);
 	}
 
+	/**
+	 * See {@link #setY(String) setY(String)} for more details
+	 */
 	public final void setY(ValueBinding y) {
 		engine.setProperty(Properties.Y, y);
 	}
@@ -118,6 +130,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getMarginBottom(null);
 	}
 
+	/**
+	 * See {@link #getMarginBottom() getMarginBottom()} for more details
+	 */
 	public final java.lang.String getMarginBottom(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_BOTTOM, facesContext);
 	}
@@ -126,6 +141,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
 
+	/**
+	 * See {@link #setMarginBottom(String) setMarginBottom(String)} for more details
+	 */
 	public final void setMarginBottom(ValueBinding marginBottom) {
 		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
@@ -134,6 +152,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getMarginLeft(null);
 	}
 
+	/**
+	 * See {@link #getMarginLeft() getMarginLeft()} for more details
+	 */
 	public final java.lang.String getMarginLeft(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_LEFT, facesContext);
 	}
@@ -142,6 +163,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
 
+	/**
+	 * See {@link #setMarginLeft(String) setMarginLeft(String)} for more details
+	 */
 	public final void setMarginLeft(ValueBinding marginLeft) {
 		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
@@ -150,6 +174,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getMarginRight(null);
 	}
 
+	/**
+	 * See {@link #getMarginRight() getMarginRight()} for more details
+	 */
 	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
 	}
@@ -158,6 +185,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
 	}
 
+	/**
+	 * See {@link #setMarginRight(String) setMarginRight(String)} for more details
+	 */
 	public final void setMarginRight(ValueBinding marginRight) {
 		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
 	}
@@ -166,6 +196,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getMarginTop(null);
 	}
 
+	/**
+	 * See {@link #getMarginTop() getMarginTop()} for more details
+	 */
 	public final java.lang.String getMarginTop(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_TOP, facesContext);
 	}
@@ -174,6 +207,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
+	/**
+	 * See {@link #setMarginTop(String) setMarginTop(String)} for more details
+	 */
 	public final void setMarginTop(ValueBinding marginTop) {
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
@@ -182,6 +218,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getHeight(null);
 	}
 
+	/**
+	 * See {@link #getHeight() getHeight()} for more details
+	 */
 	public final java.lang.String getHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HEIGHT, facesContext);
 	}
@@ -190,6 +229,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.HEIGHT, height);
 	}
 
+	/**
+	 * See {@link #setHeight(String) setHeight(String)} for more details
+	 */
 	public final void setHeight(ValueBinding height) {
 		engine.setProperty(Properties.HEIGHT, height);
 	}
@@ -198,6 +240,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getWidth(null);
 	}
 
+	/**
+	 * See {@link #getWidth() getWidth()} for more details
+	 */
 	public final java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WIDTH, facesContext);
 	}
@@ -206,6 +251,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
+	/**
+	 * See {@link #setWidth(String) setWidth(String)} for more details
+	 */
 	public final void setWidth(ValueBinding width) {
 		engine.setProperty(Properties.WIDTH, width);
 	}
@@ -214,6 +262,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getHiddenMode(null);
 	}
 
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
 	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
@@ -222,6 +273,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
 	public final void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
@@ -230,6 +284,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return isVisible(null);
 	}
 
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
 	}
@@ -238,6 +295,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
+	/**
+	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
+	 */
 	public final void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
@@ -253,6 +313,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getLookId(null);
 	}
 
+	/**
+	 * See {@link #getLookId() getLookId()} for more details
+	 */
 	public final java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
 	}
@@ -261,6 +324,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
+	/**
+	 * See {@link #setLookId(String) setLookId(String)} for more details
+	 */
 	public final void setLookId(ValueBinding lookId) {
 		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
@@ -269,6 +335,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getOrientation(null);
 	}
 
+	/**
+	 * See {@link #getOrientation() getOrientation()} for more details
+	 */
 	public final java.lang.String getOrientation(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ORIENTATION, facesContext);
 	}
@@ -277,6 +346,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.ORIENTATION, orientation);
 	}
 
+	/**
+	 * See {@link #setOrientation(String) setOrientation(String)} for more details
+	 */
 	public final void setOrientation(ValueBinding orientation) {
 		engine.setProperty(Properties.ORIENTATION, orientation);
 	}
@@ -285,6 +357,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getBackgroundColor(null);
 	}
 
+	/**
+	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
+	 */
 	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
 	}
@@ -293,6 +368,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
+	/**
+	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
+	 */
 	public final void setBackgroundColor(ValueBinding backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
@@ -301,6 +379,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getForegroundColor(null);
 	}
 
+	/**
+	 * See {@link #getForegroundColor() getForegroundColor()} for more details
+	 */
 	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
 	}
@@ -309,6 +390,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
+	/**
+	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
+	 */
 	public final void setForegroundColor(ValueBinding foregroundColor) {
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
@@ -317,6 +401,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return getAlignment(null);
 	}
 
+	/**
+	 * See {@link #getAlignment() getAlignment()} for more details
+	 */
 	public final java.lang.String getAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ALIGNMENT, facesContext);
 	}
@@ -325,6 +412,9 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.ALIGNMENT, alignment);
 	}
 
+	/**
+	 * See {@link #setAlignment(String) setAlignment(String)} for more details
+	 */
 	public final void setAlignment(ValueBinding alignment) {
 		engine.setProperty(Properties.ALIGNMENT, alignment);
 	}

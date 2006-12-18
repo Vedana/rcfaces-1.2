@@ -60,6 +60,9 @@ public class ComboComponent extends AbstractInputComponent implements
 		return getFilterProperties(null);
 	}
 
+	/**
+	 * See {@link #getFilterProperties() getFilterProperties()} for more details
+	 */
 	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
@@ -68,6 +71,9 @@ public class ComboComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
+	/**
+	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
+	 */
 	public final void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}

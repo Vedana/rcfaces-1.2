@@ -49,6 +49,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		return getText(null);
 	}
 
+	/**
+	 * See {@link #getText() getText()} for more details
+	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
@@ -57,6 +60,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.TEXT, text);
 	}
 
+	/**
+	 * See {@link #setText(String) setText(String)} for more details
+	 */
 	public final void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
@@ -65,6 +71,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		return getFontBold(null);
 	}
 
+	/**
+	 * See {@link #getFontBold() getFontBold()} for more details
+	 */
 	public final java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
 	}
@@ -73,6 +82,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
 
+	/**
+	 * See {@link #setFontBold(Boolean) setFontBold(Boolean)} for more details
+	 */
 	public final void setFontBold(ValueBinding fontBold) {
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
@@ -81,6 +93,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		return getFontItalic(null);
 	}
 
+	/**
+	 * See {@link #getFontItalic() getFontItalic()} for more details
+	 */
 	public final java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
 	}
@@ -89,6 +104,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
 
+	/**
+	 * See {@link #setFontItalic(Boolean) setFontItalic(Boolean)} for more details
+	 */
 	public final void setFontItalic(ValueBinding fontItalic) {
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
@@ -97,6 +115,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		return getFontName(null);
 	}
 
+	/**
+	 * See {@link #getFontName() getFontName()} for more details
+	 */
 	public final java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_NAME, facesContext);
 	}
@@ -105,6 +126,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
 
+	/**
+	 * See {@link #setFontName(String) setFontName(String)} for more details
+	 */
 	public final void setFontName(ValueBinding fontName) {
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
@@ -113,6 +137,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		return getFontSize(null);
 	}
 
+	/**
+	 * See {@link #getFontSize() getFontSize()} for more details
+	 */
 	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
 	}
@@ -121,6 +148,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
 
+	/**
+	 * See {@link #setFontSize(String) setFontSize(String)} for more details
+	 */
 	public final void setFontSize(ValueBinding fontSize) {
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
@@ -129,6 +159,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		return getFontUnderline(null);
 	}
 
+	/**
+	 * See {@link #getFontUnderline() getFontUnderline()} for more details
+	 */
 	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
 	}
@@ -137,6 +170,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
+	/**
+	 * See {@link #setFontUnderline(Boolean) setFontUnderline(Boolean)} for more details
+	 */
 	public final void setFontUnderline(ValueBinding fontUnderline) {
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
@@ -145,6 +181,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		return getTextAlignment(null);
 	}
 
+	/**
+	 * See {@link #getTextAlignment() getTextAlignment()} for more details
+	 */
 	public final java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
 	}
@@ -153,6 +192,9 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
+	/**
+	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
+	 */
 	public final void setTextAlignment(ValueBinding textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
