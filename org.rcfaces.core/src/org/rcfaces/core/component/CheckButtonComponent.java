@@ -127,9 +127,6 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		setValue(selected);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

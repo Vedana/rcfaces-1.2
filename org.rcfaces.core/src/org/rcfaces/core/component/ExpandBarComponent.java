@@ -47,7 +47,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","focusListener","collapseEffect","asyncRenderMode","disabled","fontSize","accessKey","groupName","fontItalic","fontBold","loadListener","text","scopeVar","textAlignment","collapsed","border","readOnly","blurListener","tabIndex","fontName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","focusListener","collapseEffect","asyncRenderMode","disabled","fontSize","accessKey","groupName","fontItalic","fontBold","loadListener","text","scopeVar","textAlignment","collapsed","collapsedText","border","readOnly","blurListener","tabIndex","fontName"}));
 	}
 
 	public ExpandBarComponent() {
@@ -382,29 +382,86 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
+	/**
+	 * Returns a string value indicating the effect to use when transionning from one state to the other.
+	 * @return the effect : slideUp|slideUpTrans
+	 */
 	public final String getCollapseEffect() {
 		return getCollapseEffect(null);
 	}
 
+	/**
+	 * Returns a string value indicating the effect to use when transionning from one state to the other.
+	 * @return the effect : slideUp|slideUpTrans
+	 */
 	public final String getCollapseEffect(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.COLLAPSE_EFFECT, facesContext);
 	}
 
+	/**
+	 * Sets a string value indicating the effect to use when transionning from one state to the other.
+	 * @param collapseEffect the effect : slideUp|slideUpTrans
+	 */
 	public final void setCollapseEffect(String collapseEffect) {
 		engine.setProperty(Properties.COLLAPSE_EFFECT, collapseEffect);
 	}
 
+	/**
+	 * Sets a string value indicating the effect to use when transionning from one state to the other.
+	 * @param collapseEffect the effect : slideUp|slideUpTrans
+	 */
 	public final void setCollapseEffect(ValueBinding collapseEffect) {
 		engine.setProperty(Properties.COLLAPSE_EFFECT, collapseEffect);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "collapseEffect" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isCollapseEffectSetted() {
 		return engine.isPropertySetted(Properties.COLLAPSE_EFFECT);
 	}
 
-	public void release() {
-		super.release();
+	/**
+	 * Returns a string value specifying the text to show when the component is collapsed.
+	 * @return text
+	 */
+	public final String getCollapsedText() {
+		return getCollapsedText(null);
 	}
+
+	/**
+	 * Returns a string value specifying the text to show when the component is collapsed.
+	 * @return text
+	 */
+	public final String getCollapsedText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.COLLAPSED_TEXT, facesContext);
+	}
+
+	/**
+	 * Sets a string value specifying the text to show when the component is collapsed.
+	 * @param collapsedText text
+	 */
+	public final void setCollapsedText(String collapsedText) {
+		engine.setProperty(Properties.COLLAPSED_TEXT, collapsedText);
+	}
+
+	/**
+	 * Sets a string value specifying the text to show when the component is collapsed.
+	 * @param collapsedText text
+	 */
+	public final void setCollapsedText(ValueBinding collapsedText) {
+		engine.setProperty(Properties.COLLAPSED_TEXT, collapsedText);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "collapsedText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCollapsedTextSetted() {
+		return engine.isPropertySetted(Properties.COLLAPSED_TEXT);
+	}
+
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

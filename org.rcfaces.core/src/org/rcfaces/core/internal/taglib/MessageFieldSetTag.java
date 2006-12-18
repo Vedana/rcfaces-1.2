@@ -25,7 +25,6 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 	private String fatalImageURL;
 	private String infoImageURL;
 	private String warnImageURL;
-	private String bundleVar;
 	private String setFocusIfMessage;
 	public String getComponentType() {
 		return MessageFieldSetComponent.COMPONENT_TYPE;
@@ -103,14 +102,6 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 		this.warnImageURL = warnImageURL;
 	}
 
-	public final String getBundleVar() {
-		return bundleVar;
-	}
-
-	public final void setBundleVar(String bundleVar) {
-		this.bundleVar = bundleVar;
-	}
-
 	public final String getSetFocusIfMessage() {
 		return setFocusIfMessage;
 	}
@@ -133,7 +124,6 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 			LOG.debug("  fatalImageURL='"+fatalImageURL+"'");
 			LOG.debug("  infoImageURL='"+infoImageURL+"'");
 			LOG.debug("  warnImageURL='"+warnImageURL+"'");
-			LOG.debug("  bundleVar='"+bundleVar+"'");
 			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
 		}
 		super.setProperties(uiComponent);
@@ -239,16 +229,6 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 			}
 		}
 
-		if (bundleVar != null) {
-			if (isValueReference(bundleVar)) {
-				ValueBinding vb = application.createValueBinding(bundleVar);
-
-				component.setBundleVar(vb);
-			} else {
-				component.setBundleVar(bundleVar);
-			}
-		}
-
 		if (setFocusIfMessage != null) {
 			if (isValueReference(setFocusIfMessage)) {
 				ValueBinding vb = application.createValueBinding(setFocusIfMessage);
@@ -269,7 +249,6 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 		fatalImageURL = null;
 		infoImageURL = null;
 		warnImageURL = null;
-		bundleVar = null;
 		setFocusIfMessage = null;
 
 		super.release();

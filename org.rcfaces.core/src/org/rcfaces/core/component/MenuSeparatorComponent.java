@@ -24,9 +24,6 @@ public class MenuSeparatorComponent extends AbstractSeparatorComponent {
 		setId(componentId);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

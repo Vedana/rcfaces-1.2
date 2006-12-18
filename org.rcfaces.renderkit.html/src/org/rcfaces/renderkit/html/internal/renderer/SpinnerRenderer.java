@@ -7,6 +7,7 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.SpinnerComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -30,7 +31,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         htmlWriter.startElement("TABLE");
 
-        htmlWriter.writeRole("spinbutton");
+        htmlWriter.writeRole(IAccessibilityRoles.SPIN_BUTTON);
 
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);

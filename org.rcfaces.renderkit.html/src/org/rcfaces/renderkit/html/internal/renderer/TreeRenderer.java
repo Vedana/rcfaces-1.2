@@ -18,6 +18,7 @@ import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
@@ -51,7 +52,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
         htmlWriter.startElement("UL");
 
-        htmlWriter.writeRole("tree");
+        htmlWriter.writeRole(IAccessibilityRoles.TREE);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);

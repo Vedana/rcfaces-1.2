@@ -91,9 +91,6 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 		engine.setProperty(Properties.EXPANDED_IMAGE_URL, expandedImageURL);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

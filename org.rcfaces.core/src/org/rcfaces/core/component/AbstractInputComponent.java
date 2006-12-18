@@ -878,9 +878,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

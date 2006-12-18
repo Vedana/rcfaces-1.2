@@ -5,6 +5,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -155,7 +156,20 @@ public class InitRenderer extends AbstractHtmlRenderer {
         if (appParams.metaContentType) {
             ServletResponse response = (ServletResponse) facesContext
                     .getExternalContext().getResponse();
-            String contentType = response.getContentType();
+            String contentType = null;
+
+            try {
+                // getContentType appears into 2.4 spec
+                Method getContentTypeMethod = response.getClass().getMethod(
+                        "getContentType", null);
+
+                contentType = (String) getContentTypeMethod.invoke(response,
+                        null);
+
+            } catch (Throwable ex) {
+                LOG.debug("Can not get contentType of response object !", ex);
+            }
+
             if (contentType != null) {
                 htmlWriter.startElement("META");
                 htmlWriter.writeHttpEquiv("Content-Type", contentType);

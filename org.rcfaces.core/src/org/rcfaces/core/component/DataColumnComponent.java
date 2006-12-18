@@ -350,189 +350,366 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.RESIZABLE, resizable);
 	}
 
+	/**
+	 * Returns a string value (as specified by CSS) for the width of the component.
+	 * @return width
+	 */
 	public final String getWidth() {
 		return getWidth(null);
 	}
 
+	/**
+	 * Returns a string value (as specified by CSS) for the width of the component.
+	 * @return width
+	 */
 	public final String getWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WIDTH, facesContext);
 	}
 
+	/**
+	 * Sets a string value (as specified by CSS) for the width of the component.
+	 * @param width width
+	 */
 	public final void setWidth(String width) {
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
+	/**
+	 * Sets a string value (as specified by CSS) for the width of the component.
+	 * @param width width
+	 */
 	public final void setWidth(ValueBinding width) {
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "width" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isWidthSetted() {
 		return engine.isPropertySetted(Properties.WIDTH);
 	}
 
+	/**
+	 * Returns an int value specifying the maximum width in pixels (if resizeable).
+	 * @return max width
+	 */
 	public final int getMaxWidth() {
 		return getMaxWidth(null);
 	}
 
+	/**
+	 * Returns an int value specifying the maximum width in pixels (if resizeable).
+	 * @return max width
+	 */
 	public final int getMaxWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.MAX_WIDTH, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the maximum width in pixels (if resizeable).
+	 * @return maxWidth max width
+	 */
 	public final void setMaxWidth(int maxWidth) {
 		engine.setProperty(Properties.MAX_WIDTH, maxWidth);
 	}
 
+	/**
+	 * Sets an int value specifying the maximum width in pixels (if resizeable).
+	 * @return maxWidth max width
+	 */
 	public final void setMaxWidth(ValueBinding maxWidth) {
 		engine.setProperty(Properties.MAX_WIDTH, maxWidth);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "maxWidth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMaxWidthSetted() {
 		return engine.isPropertySetted(Properties.MAX_WIDTH);
 	}
 
+	/**
+	 * Returns an int value specifying the minimum width in pixels (if resizeable).
+	 * @return min width
+	 */
 	public final int getMinWidth() {
 		return getMinWidth(null);
 	}
 
+	/**
+	 * Returns an int value specifying the minimum width in pixels (if resizeable).
+	 * @return min width
+	 */
 	public final int getMinWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.MIN_WIDTH, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the minimum width in pixels (if resizeable).
+	 * @return minWidth min width
+	 */
 	public final void setMinWidth(int minWidth) {
 		engine.setProperty(Properties.MIN_WIDTH, minWidth);
 	}
 
+	/**
+	 * Sets an int value specifying the minimum width in pixels (if resizeable).
+	 * @return minWidth min width
+	 */
 	public final void setMinWidth(ValueBinding minWidth) {
 		engine.setProperty(Properties.MIN_WIDTH, minWidth);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "minWidth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMinWidthSetted() {
 		return engine.isPropertySetted(Properties.MIN_WIDTH);
 	}
 
+	/**
+	 * Returns a string that represent the vertical alignement of the data in the component.
+	 * @return vertical alignement : top|center|bottom
+	 */
 	public final String getVerticalAlign() {
 		return getVerticalAlign(null);
 	}
 
+	/**
+	 * Returns a string that represent the vertical alignement of the data in the component.
+	 * @return vertical alignement : top|center|bottom
+	 */
 	public final String getVerticalAlign(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VERTICAL_ALIGN, facesContext);
 	}
 
+	/**
+	 * Sets a string that represent the vertical alignement of the data in the component.
+	 * @param verticalAlign vertical alignement : top|center|bottom
+	 */
 	public final void setVerticalAlign(String verticalAlign) {
 		engine.setProperty(Properties.VERTICAL_ALIGN, verticalAlign);
 	}
 
+	/**
+	 * Sets a string that represent the vertical alignement of the data in the component.
+	 * @param verticalAlign vertical alignement : top|center|bottom
+	 */
 	public final void setVerticalAlign(ValueBinding verticalAlign) {
 		engine.setProperty(Properties.VERTICAL_ALIGN, verticalAlign);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "verticalAlign" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isVerticalAlignSetted() {
 		return engine.isPropertySetted(Properties.VERTICAL_ALIGN);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image.
+	 * @return image url
+	 */
 	public final String getDefaultCellImageURL() {
 		return getDefaultCellImageURL(null);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image.
+	 * @return image url
+	 */
 	public final String getDefaultCellImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_CELL_IMAGE_URL, facesContext);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image.
+	 * @param defaultCellImageURL image url
+	 */
 	public final void setDefaultCellImageURL(String defaultCellImageURL) {
 		engine.setProperty(Properties.DEFAULT_CELL_IMAGE_URL, defaultCellImageURL);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image.
+	 * @param defaultCellImageURL image url
+	 */
 	public final void setDefaultCellImageURL(ValueBinding defaultCellImageURL) {
 		engine.setProperty(Properties.DEFAULT_CELL_IMAGE_URL, defaultCellImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultCellImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultCellImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_CELL_IMAGE_URL);
 	}
 
+	/**
+	 * Returns an url string pointing to the image.
+	 * @return image url
+	 */
 	public final String getCellImageURL() {
 		return getCellImageURL(null);
 	}
 
+	/**
+	 * Returns an url string pointing to the image.
+	 * @return image url
+	 */
 	public final String getCellImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CELL_IMAGE_URL, facesContext);
 	}
 
+	/**
+	 * Sets an url string pointing to the image.
+	 * @param cellImageURL image url for the cell
+	 */
 	public final void setCellImageURL(String cellImageURL) {
 		engine.setProperty(Properties.CELL_IMAGE_URL, cellImageURL);
 	}
 
+	/**
+	 * Sets an url string pointing to the image.
+	 * @param cellImageURL image url for the cell
+	 */
 	public final void setCellImageURL(ValueBinding cellImageURL) {
 		engine.setProperty(Properties.CELL_IMAGE_URL, cellImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "cellImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isCellImageURLSetted() {
 		return engine.isPropertySetted(Properties.CELL_IMAGE_URL);
 	}
 
+	/**
+	 * Returns a space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
+	 * @return list of CSS style classes
+	 */
 	public final String getCellStyleClass() {
 		return getCellStyleClass(null);
 	}
 
+	/**
+	 * Returns a space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
+	 * @return list of CSS style classes
+	 */
 	public final String getCellStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CELL_STYLE_CLASS, facesContext);
 	}
 
+	/**
+	 * Sets a space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
+	 * @param cellStyleClass list of CSS style classes
+	 */
 	public final void setCellStyleClass(String cellStyleClass) {
 		engine.setProperty(Properties.CELL_STYLE_CLASS, cellStyleClass);
 	}
 
+	/**
+	 * Sets a space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
+	 * @param cellStyleClass list of CSS style classes
+	 */
 	public final void setCellStyleClass(ValueBinding cellStyleClass) {
 		engine.setProperty(Properties.CELL_STYLE_CLASS, cellStyleClass);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "cellStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isCellStyleClassSetted() {
 		return engine.isPropertySetted(Properties.CELL_STYLE_CLASS);
 	}
 
+	/**
+	 * Returns a string value containing the text that will appear when the pointer hover the component.
+	 * @return tool tip text
+	 */
 	public final String getCellToolTipText() {
 		return getCellToolTipText(null);
 	}
 
+	/**
+	 * Returns a string value containing the text that will appear when the pointer hover the component.
+	 * @return tool tip text
+	 */
 	public final String getCellToolTipText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CELL_TOOL_TIP_TEXT, facesContext);
 	}
 
+	/**
+	 * Sets a string value containing the text that will appear when the pointer hover the component.
+	 * @param cellToolTipText tool tip text
+	 */
 	public final void setCellToolTipText(String cellToolTipText) {
 		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
 	}
 
+	/**
+	 * Sets a string value containing the text that will appear when the pointer hover the component.
+	 * @param cellToolTipText tool tip text
+	 */
 	public final void setCellToolTipText(ValueBinding cellToolTipText) {
 		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "cellToolTipText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isCellToolTipTextSetted() {
 		return engine.isPropertySetted(Properties.CELL_TOOL_TIP_TEXT);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should apply filter automatically.
+	 * @return true if the component should apply filter
+	 */
 	public final boolean isAutoFilter() {
 		return isAutoFilter(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should apply filter automatically.
+	 * @return true if the component should apply filter
+	 */
 	public final boolean isAutoFilter(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_FILTER, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should apply filter automatically.
+	 * @param autoFilter true if the component should apply filter
+	 */
 	public final void setAutoFilter(boolean autoFilter) {
 		engine.setProperty(Properties.AUTO_FILTER, autoFilter);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should apply filter automatically.
+	 * @param autoFilter true if the component should apply filter
+	 */
 	public final void setAutoFilter(ValueBinding autoFilter) {
 		engine.setProperty(Properties.AUTO_FILTER, autoFilter);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "autoFilter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isAutoFilterSetted() {
 		return engine.isPropertySetted(Properties.AUTO_FILTER);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

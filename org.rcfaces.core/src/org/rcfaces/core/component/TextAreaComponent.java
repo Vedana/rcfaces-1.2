@@ -25,29 +25,46 @@ public class TextAreaComponent extends TextEntryComponent {
 		setId(componentId);
 	}
 
+	/**
+	 * Returns an int value specifying the number of rows to be displayed.
+	 * @return number of rows
+	 */
 	public final int getRowNumber() {
 		return getRowNumber(null);
 	}
 
+	/**
+	 * Returns an int value specifying the number of rows to be displayed.
+	 * @return number of rows
+	 */
 	public final int getRowNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ROW_NUMBER, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the number of rows to be displayed.
+	 * @param rowNumber number of rows
+	 */
 	public final void setRowNumber(int rowNumber) {
 		engine.setProperty(Properties.ROW_NUMBER, rowNumber);
 	}
 
+	/**
+	 * Sets an int value specifying the number of rows to be displayed.
+	 * @param rowNumber number of rows
+	 */
 	public final void setRowNumber(ValueBinding rowNumber) {
 		engine.setProperty(Properties.ROW_NUMBER, rowNumber);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "rowNumber" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isRowNumberSetted() {
 		return engine.isPropertySetted(Properties.ROW_NUMBER);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

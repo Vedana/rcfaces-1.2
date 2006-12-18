@@ -41,53 +41,94 @@ public class ProgressBarComponent extends AbstractOutputComponent {
 		engine.setProperty(Properties.MINIMUM, minimum);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "minimum" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMinimumSetted() {
 		return engine.isPropertySetted(Properties.MINIMUM);
 	}
 
+	/**
+	 * Returns an int value specifying the upper limit for the value of the component.
+	 * @return maximum
+	 */
 	public final double getMaximum() {
 		return getMaximum(null);
 	}
 
+	/**
+	 * Returns an int value specifying the upper limit for the value of the component.
+	 * @return maximum
+	 */
 	public final double getMaximum(javax.faces.context.FacesContext facesContext) {
 		return engine.getDoubleProperty(Properties.MAXIMUM, 0.0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the upper limit for the value of the component.
+	 * @param maximum maximum
+	 */
 	public final void setMaximum(double maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
+	/**
+	 * Sets an int value specifying the upper limit for the value of the component.
+	 * @param maximum maximum
+	 */
 	public final void setMaximum(ValueBinding maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "maximum" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMaximumSetted() {
 		return engine.isPropertySetted(Properties.MAXIMUM);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the value is not determinated.
+	 * @return true if not determinated
+	 */
 	public final boolean isIndeterminate() {
 		return isIndeterminate(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the value is not determinated.
+	 * @return true if not determinated
+	 */
 	public final boolean isIndeterminate(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.INDETERMINATE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the value is not determinated.
+	 * @param indeterminate true if not determinated
+	 */
 	public final void setIndeterminate(boolean indeterminate) {
 		engine.setProperty(Properties.INDETERMINATE, indeterminate);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the value is not determinated.
+	 * @param indeterminate true if not determinated
+	 */
 	public final void setIndeterminate(ValueBinding indeterminate) {
 		engine.setProperty(Properties.INDETERMINATE, indeterminate);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "indeterminate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isIndeterminateSetted() {
 		return engine.isPropertySetted(Properties.INDETERMINATE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

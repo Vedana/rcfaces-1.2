@@ -59,9 +59,6 @@ public class ComboComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

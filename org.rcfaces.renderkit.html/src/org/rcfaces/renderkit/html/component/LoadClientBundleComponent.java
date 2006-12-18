@@ -25,69 +25,126 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 		setId(componentId);
 	}
 
+	/**
+	 * Returns a string value specifying the name to be used on the client side to access the resource bundle.
+	 * @return bundle name
+	 */
 	public final String getBundleName() {
 		return getBundleName(null);
 	}
 
+	/**
+	 * Returns a string value specifying the name to be used on the client side to access the resource bundle.
+	 * @return bundle name
+	 */
 	public final String getBundleName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BUNDLE_NAME, facesContext);
 	}
 
+	/**
+	 * Sets a string value specifying the name to be used on the client side to access the resource bundle.
+	 * @param bundleName bundle name
+	 */
 	public final void setBundleName(String bundleName) {
 		engine.setProperty(Properties.BUNDLE_NAME, bundleName);
 	}
 
+	/**
+	 * Sets a string value specifying the name to be used on the client side to access the resource bundle.
+	 * @param bundleName bundle name
+	 */
 	public final void setBundleName(ValueBinding bundleName) {
 		engine.setProperty(Properties.BUNDLE_NAME, bundleName);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "bundleName" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isBundleNameSetted() {
 		return engine.isPropertySetted(Properties.BUNDLE_NAME);
 	}
 
+	/**
+	 * Returns a string indicating the fully qualified name of a resources bundle (property file).
+	 * @return base name of the resource bundle to be loaded.
+	 */
 	public final String getBaseName() {
 		return getBaseName(null);
 	}
 
+	/**
+	 * Returns a string indicating the fully qualified name of a resources bundle (property file).
+	 * @return base name of the resource bundle to be loaded.
+	 */
 	public final String getBaseName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BASE_NAME, facesContext);
 	}
 
+	/**
+	 * Sets a string indicating the fully qualified name of a resources bundle (property file).
+	 * @param baseName base name of the resource bundle to be loaded.
+	 */
 	public final void setBaseName(String baseName) {
 		engine.setProperty(Properties.BASE_NAME, baseName);
 	}
 
+	/**
+	 * Sets a string indicating the fully qualified name of a resources bundle (property file).
+	 * @param baseName base name of the resource bundle to be loaded.
+	 */
 	public final void setBaseName(ValueBinding baseName) {
 		engine.setProperty(Properties.BASE_NAME, baseName);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "baseName" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isBaseNameSetted() {
 		return engine.isPropertySetted(Properties.BASE_NAME);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the resource is available on the server side.
+	 * @return true if the resource is available on the server side
+	 */
 	public final boolean isServerSide() {
 		return isServerSide(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the resource is available on the server side.
+	 * @return true if the resource is available on the server side
+	 */
 	public final boolean isServerSide(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SERVER_SIDE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the resource is available on the server side.
+	 * @param serverSide true if the resource is available on the server side
+	 */
 	public final void setServerSide(boolean serverSide) {
 		engine.setProperty(Properties.SERVER_SIDE, serverSide);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the resource is available on the server side.
+	 * @param serverSide true if the resource is available on the server side
+	 */
 	public final void setServerSide(ValueBinding serverSide) {
 		engine.setProperty(Properties.SERVER_SIDE, serverSide);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "serverSide" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isServerSideSetted() {
 		return engine.isPropertySetted(Properties.SERVER_SIDE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

@@ -26,6 +26,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.NumberTools;
 import org.rcfaces.core.internal.tools.PageConfiguration;
 import org.rcfaces.renderkit.html.internal.AbstractCompositeRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
@@ -63,15 +64,16 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
 
         htmlWriter.startElement("DIV");
 
-        htmlWriter.writeRole("textfield");
-        
+        htmlWriter.writeRole(IAccessibilityRoles.TEXT_FIELD);
+
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
         DecimalFormatSymbols decimalFormatSymbols = null;
-        Locale locale = PageConfiguration.getAttributesLocale(componentRenderContext
-                .getRenderContext().getProcessContext(), numberEntryComponent);
+        Locale locale = PageConfiguration.getAttributesLocale(
+                componentRenderContext.getRenderContext().getProcessContext(),
+                numberEntryComponent);
         if (locale == null) {
             locale = htmlWriter.getComponentRenderContext().getRenderContext()
                     .getProcessContext().getUserLocale();

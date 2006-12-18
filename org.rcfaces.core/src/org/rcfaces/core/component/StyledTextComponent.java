@@ -24,9 +24,6 @@ public class StyledTextComponent extends TextComponent {
 		setId(componentId);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

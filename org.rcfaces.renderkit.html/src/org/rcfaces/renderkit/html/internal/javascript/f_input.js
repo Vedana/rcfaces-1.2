@@ -298,7 +298,6 @@ var __prototype = {
 		
 		return validator.f_isValidValue();		
 	}
-	
 }
 
 var f_input=new f_class("f_input", null, null, __prototype, f_component);

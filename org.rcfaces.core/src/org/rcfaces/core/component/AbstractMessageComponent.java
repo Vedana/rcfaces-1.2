@@ -56,7 +56,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","initListener","margins","propertyChangeListener","mouseOutListener","for","toolTipText","mouseOverListener","showDetail","userEventListener","marginBottom","helpURL","showSummary","y","visible","lookId","marginLeft","marginTop","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","initListener","margins","propertyChangeListener","mouseOutListener","for","toolTipText","mouseOverListener","userEventListener","showDetail","marginBottom","helpURL","showSummary","y","visible","lookId","marginLeft","marginTop","backgroundColor","x"}));
 	}
 
 
@@ -634,9 +634,6 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

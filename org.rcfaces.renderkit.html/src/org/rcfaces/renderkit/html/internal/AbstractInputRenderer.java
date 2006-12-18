@@ -17,6 +17,8 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
     private static final String REVISION = "$Revision$";
 
+    private static final String INPUT_MESSAGES_PROPERTY = "org.rcfaces.html.INPUT_MESSAGES";
+
     public static final String BUTTON_TYPE = "button";
 
     public static final String RADIO_TYPE = "radio";
@@ -35,6 +37,39 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
     protected abstract String getInputType(UIComponent component);
 
+    /*
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        if (htmlWriter.isJavaScriptEnabled() == false) {
+            Iterator it = writer.getComponentRenderContext().getFacesContext()
+                    .getMessages(
+                            writer.getComponentRenderContext()
+                                    .getComponentClientId());
+            if (it.hasNext()) {
+                ((IHtmlWriter) writer).enableJavaScript();
+
+                writer.getComponentRenderContext().setAttribute(
+                        INPUT_MESSAGES_PROPERTY, Boolean.TRUE);
+            }
+        }
+
+        super.encodeEnd(writer);
+    }
+
+    protected void encodeJavaScript(IJavaScriptWriter js)
+            throws WriterException {
+        super.encodeJavaScript(js);
+
+        if (JavaScriptTools.writeMessages(js)) {
+            js.getHtmlComponentRenderContext().setAttribute(
+                    INPUT_MESSAGES_PROPERTY, Boolean.TRUE);
+
+        }
+    }
+    */
+
     protected IHtmlWriter writeInputAttributes(IHtmlWriter writer)
             throws WriterException {
         UIComponent component = writer.getComponentRenderContext()
@@ -43,11 +78,24 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
         return writeInputAttributes(writer, component.getId());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#writeAttributes(org.rcfaces.core.internal.renderkit.IWriter)
-     */
+    /*   
+    protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+            Set classes) {
+        super.addRequiredJavaScriptClassNames(writer, classes);
+
+        if (writer.getComponentRenderContext().containsAttribute(
+                INPUT_MESSAGES_PROPERTY)) {
+
+            IJavaScriptRenderContext javaScriptRenderContext = writer
+                    .getHtmlComponentRenderContext().getHtmlRenderContext()
+                    .getJavaScriptRenderContext();
+
+            javaScriptRenderContext.appendRequiredClasses(classes,
+                    JavaScriptClasses.INPUT, "message");
+        }
+    }
+    */
+
     protected final IHtmlWriter writeInputAttributes(IHtmlWriter writer,
             String id) throws WriterException {
 

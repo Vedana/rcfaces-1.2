@@ -5,7 +5,7 @@
 /**
  * f_textEntry class
  *
- * @class f_textEntry extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass
+ * @class f_textEntry extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass, fa_message
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -345,7 +345,10 @@ var __prototype = {
 		}
 		
 		validator.f_addBehavior(f_vb.Behavior_required);		
+	},
+	
+	f_performMessageChanges: function(messageContext) {	
 	}
 }
 
-var f_textEntry=new f_class("f_textEntry", null, __static, __prototype, f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass);
+var f_textEntry=new f_class("f_textEntry", null, __static, __prototype, f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass, fa_message);

@@ -164,89 +164,166 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		engine.setProperty(Properties.CLIENT_DATES_STRATEGY, clientDatesStrategy);
 	}
 
+	/**
+	 * Returns a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
+	 * @return pivot year
+	 */
 	public final Date getTwoDigitYearStart() {
 		return getTwoDigitYearStart(null);
 	}
 
+	/**
+	 * Returns a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
+	 * @return pivot year
+	 */
 	public final Date getTwoDigitYearStart(javax.faces.context.FacesContext facesContext) {
 		return (Date)engine.getValue(Properties.TWO_DIGIT_YEAR_START, facesContext);
 	}
 
+	/**
+	 * Sets a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
+	 * @param twoDigitYearStart pivot year
+	 */
 	public final void setTwoDigitYearStart(Date twoDigitYearStart) {
 		engine.setProperty(Properties.TWO_DIGIT_YEAR_START, twoDigitYearStart);
 	}
 
+	/**
+	 * Sets a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
+	 * @param twoDigitYearStart pivot year
+	 */
 	public final void setTwoDigitYearStart(ValueBinding twoDigitYearStart) {
 		engine.setProperty(Properties.TWO_DIGIT_YEAR_START, twoDigitYearStart);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "twoDigitYearStart" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isTwoDigitYearStartSetted() {
 		return engine.isPropertySetted(Properties.TWO_DIGIT_YEAR_START);
 	}
 
+	/**
+	 * Returns a date value indicating the minimum acceptable date for the component. the first accepted value is minDate plus one day.
+	 * @return min date
+	 */
 	public final java.util.Date getMinDate() {
 		return getMinDate(null);
 	}
 
+	/**
+	 * Returns a date value indicating the minimum acceptable date for the component. the first accepted value is minDate plus one day.
+	 * @return min date
+	 */
 	public final java.util.Date getMinDate(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Date)engine.getValue(Properties.MIN_DATE, facesContext);
 	}
 
+	/**
+	 * Sets a date value indicating the minimum acceptable date for the component. the first accepted value is minDate plus one day.
+	 * @param minDate min date
+	 */
 	public final void setMinDate(java.util.Date minDate) {
 		engine.setProperty(Properties.MIN_DATE, minDate);
 	}
 
+	/**
+	 * Sets a date value indicating the minimum acceptable date for the component. the first accepted value is minDate plus one day.
+	 * @param minDate min date
+	 */
 	public final void setMinDate(ValueBinding minDate) {
 		engine.setProperty(Properties.MIN_DATE, minDate);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "minDate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMinDateSetted() {
 		return engine.isPropertySetted(Properties.MIN_DATE);
 	}
 
+	/**
+	 * Returns a date value indicating the maximum acceptable date for the component. The last accepted value is maxDate minus one day.
+	 * @return max date
+	 */
 	public final java.util.Date getMaxDate() {
 		return getMaxDate(null);
 	}
 
+	/**
+	 * Returns a date value indicating the maximum acceptable date for the component. The last accepted value is maxDate minus one day.
+	 * @return max date
+	 */
 	public final java.util.Date getMaxDate(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Date)engine.getValue(Properties.MAX_DATE, facesContext);
 	}
 
+	/**
+	 * Sets a date value indicating the maximum acceptable date for the component. The last accepted value is maxDate minus one day.
+	 * @param maxDate max date
+	 */
 	public final void setMaxDate(java.util.Date maxDate) {
 		engine.setProperty(Properties.MAX_DATE, maxDate);
 	}
 
+	/**
+	 * Sets a date value indicating the maximum acceptable date for the component. The last accepted value is maxDate minus one day.
+	 * @param maxDate max date
+	 */
 	public final void setMaxDate(ValueBinding maxDate) {
 		engine.setProperty(Properties.MAX_DATE, maxDate);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "maxDate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMaxDateSetted() {
 		return engine.isPropertySetted(Properties.MAX_DATE);
 	}
 
+	/**
+	 * Returns a list of disabled week days (depending on the locale specified for the component).
+	 * @return list of days
+	 */
 	public final int getDisabledWeekDays() {
 		return getDisabledWeekDays(null);
 	}
 
+	/**
+	 * Returns a list of disabled week days (depending on the locale specified for the component).
+	 * @return list of days
+	 */
 	public final int getDisabledWeekDays(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.DISABLED_WEEK_DAYS, 0, facesContext);
 	}
 
+	/**
+	 * Sets a list of disabled week days (depending on the locale specified for the component).
+	 * @param disabledWeekDays list of days
+	 */
 	public final void setDisabledWeekDays(int disabledWeekDays) {
 		engine.setProperty(Properties.DISABLED_WEEK_DAYS, disabledWeekDays);
 	}
 
+	/**
+	 * Sets a list of disabled week days (depending on the locale specified for the component).
+	 * @param disabledWeekDays list of days
+	 */
 	public final void setDisabledWeekDays(ValueBinding disabledWeekDays) {
 		engine.setProperty(Properties.DISABLED_WEEK_DAYS, disabledWeekDays);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "disabledWeekDays" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDisabledWeekDaysSetted() {
 		return engine.isPropertySetted(Properties.DISABLED_WEEK_DAYS);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

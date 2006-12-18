@@ -92,29 +92,46 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IMenuListener.class);
 	}
 
+	/**
+	 * Returns a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
+	 * @return true if content is removed when shown
+	 */
 	public final boolean isRemoveAllWhenShown() {
 		return isRemoveAllWhenShown(null);
 	}
 
+	/**
+	 * Returns a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
+	 * @return true if content is removed when shown
+	 */
 	public final boolean isRemoveAllWhenShown(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.REMOVE_ALL_WHEN_SHOWN, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
+	 * @param removeAllWhenShown true if content is to be removed when shown
+	 */
 	public final void setRemoveAllWhenShown(boolean removeAllWhenShown) {
 		engine.setProperty(Properties.REMOVE_ALL_WHEN_SHOWN, removeAllWhenShown);
 	}
 
+	/**
+	 * Sets a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
+	 * @param removeAllWhenShown true if content is to be removed when shown
+	 */
 	public final void setRemoveAllWhenShown(ValueBinding removeAllWhenShown) {
 		engine.setProperty(Properties.REMOVE_ALL_WHEN_SHOWN, removeAllWhenShown);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "removeAllWhenShown" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isRemoveAllWhenShownSetted() {
 		return engine.isPropertySetted(Properties.REMOVE_ALL_WHEN_SHOWN);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

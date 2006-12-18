@@ -632,9 +632,6 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

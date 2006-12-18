@@ -24,7 +24,7 @@ public class NumberTools {
 
     private static final Map decimalFormatSymbolsByLocale;
     static {
-        if (Constants.CACHED_LOCALE_FORMAT) {
+        if (Constants.CACHED_LOCALE_FORMATS) {
             decimalFormatSymbolsByLocale = new HashMap(32);
         }
     }
@@ -56,7 +56,7 @@ public class NumberTools {
     }
 
     public static DecimalFormatSymbols getDecimalFormatSymbols(Locale locale) {
-        if (Constants.CACHED_LOCALE_FORMAT == false) {
+        if (Constants.CACHED_LOCALE_FORMATS == false) {
             NumberFormat decimalFormat = DecimalFormat.getInstance(locale);
 
             if ((decimalFormat instanceof DecimalFormat) == false) {

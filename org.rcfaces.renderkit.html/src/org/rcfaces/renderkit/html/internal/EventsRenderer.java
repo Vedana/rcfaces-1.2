@@ -27,7 +27,8 @@ public class EventsRenderer {
 
     static final String DEFAULT_SUBMIT = "submit";
 
-    private static final String DEFAULT_SUBMIT_JAVA_SCRIPT = "f_core.Submit()";
+    // On conserve le mot clef coté client !
+    private static final String DEFAULT_SUBMIT_JAVA_SCRIPT = "submit";
 
     private static final String ADD_EVENT_LISTENERS = "f_addEventListener";
 

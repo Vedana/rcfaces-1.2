@@ -41,9 +41,6 @@ public class ToolFolderComponent extends AbstractItemComponent {
 		
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

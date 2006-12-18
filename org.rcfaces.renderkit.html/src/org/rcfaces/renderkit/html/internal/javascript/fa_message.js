@@ -12,22 +12,62 @@
 
 var __prototype = {
 	fa_message: function() {
-		var messageContext=f_messageContext.Get(this);
+		this._styleClass=f_core.GetAttribute(this, "v:styleClass");
+		if (!this._styleClass) {
+			this._styleClass=this.className;
+		}
+
+		if (window.f_messageContext) {
+			var messageContext=f_messageContext.Get(this);
+			
+			var messages=messageContext.f_listMessages(this);
+			
+			messageContext.f_addMessageListener(this);
+			
+			if (messages.length) {
+				this.f_performMessageChanges(messageContext);
+			}
+		}
+	},
+	
+	/**
+	 * @method protected
+	 * @return boolean
+	 */
+	f_hasSeverityClassName: function() {
+
+		var classSpecified=this._classSpecified;
 		
-		this._className=f_core.GetAttribute(this, "v:styleClass");
-		if (!this._className) {
-			this._className=this.className;
+		if (classSpecified!==undefined) {
+			return classSpecified;
 		}
 		
-		messageContext.f_addMessageListener(this);
+		this._fatalStyleClass=f_core.GetAttribute(this, "v:fatalStyleClass");
+		this._errorStyleClass=f_core.GetAttribute(this, "v:errorStyleClass");
+		this._warnStyleClass=f_core.GetAttribute(this, "v:warnStyleClass");
+		this._infoStyleClass=f_core.GetAttribute(this, "v:infoStyleClass");
+		
+		classSpecified=this._fatalStyleClass || this._errorStyleClass || this._warnStyleClass || this._infoStyleClass;
+		this._classSpecified=classSpecified;
+
+		if (classSpecified) {
+			return true;
+		}
+		
+		var styleClass=this._styleClass;
+		
+		this._fatalStyleClass=styleClass+"_fatal";
+		this._errorStyleClass=styleClass+"_error";
+		this._warnStyleClass=styleClass+"_warn";
+		this._infoStyleClass=styleClass+"_info";
+
+		return false;
 	},
 	
 	/*
 	f_finalize: function() {
 		// this._classSpecified=undefined; // boolean
-		// this._className=undefined; // string
-		// this._showSummary=undefined; // boolean
-		// this._showDetail=undefined; // boolean
+		// this._styleClass=undefined; // string
 		
 		// this._fatalStyleClass=undefined;  // string
 		// this._errorStyleClass=undefined; // string
@@ -38,86 +78,10 @@ var __prototype = {
 
 	/**
 	 * @method public 
-	 * @return boolean
-	 */
-	f_isShowSummary: function() {
-		if (this._showSummary===undefined) {
-			var b=f_core.GetAttribute(this, "v:showSummary");			
-			this._showSummary=(b)?true:false;			
-		}
-		
-		return this._showSummary;
-	},
-	/* PAS DE MODIF
-	 * @method public 
-	 * @param boolean showSummary
-	 * @return void
-	 *
-	f_setShowSummary: function(showSummary) {
-		var old=this.f_isShowSummary();
-		showSummary=(showSummary)?true:false;
-		
-		if (showSummary==old) {
-			return;
-		}
-		
-		this._showSummary=showSummary;
-		
-		if (!this.fa_componentUpdated) {
-			return;
-		}
-
-		this.f_setProperty(f_message.SHOW_SUMMARY, showSummary);
-				
-		this.fa_updateMessages();
-	},
-	*/
-	/**
-	 * @method public 
-	 * @return boolean
-	 */
-	f_isShowDetail: function() {
-		if (this._showDetail===undefined) {
-			var b=f_core.GetAttribute(this, "v:showDetail");
-			this._showDetail=(b)?true:false;
-		}
-		
-		return this._showDetail;
-	},
-	/*  Pas de MODIF
-	 * @method public 
-	 * @param boolean showDetail
-	 * @return void
-	 *
-	f_setShowDetail: function(showDetail) {
-		f_core.Assert(typeof(showDetail)=="boolean", "Invalid showDetail parameter ('"+showDetail+"')");
-
-		var old=this.f_isShowDetail();
-		showDetail=(showDetail)?true:false;
-		
-		if (showDetail==old) {
-			return;
-		}
-		
-		this._showDetail=showDetail;
-		
-		if (!this.fa_componentUpdated) {
-			return;
-		}
-
-		this.f_setProperty(f_message.SHOW_DETAIL, showDetail);
-		
-		this.fa_updateMessages();
-	},
-	*/
-	/**
-	 * @method public 
 	 * @return String
 	 */
 	f_getFatalStyleClass: function() {
-		if (this._fatalStyleClass===undefined) {
-			this._fatalStyleClass=this._computeStyleClass("v:fatalStyleClass", "_fatal");
-		}
+		this.f_hasSeverityClassName();
 
 		return this._fatalStyleClass;
 	},
@@ -126,9 +90,7 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getErrorStyleClass: function() {
-		if (this._errorStyleClass===undefined) {
-			this._errorStyleClass=this._computeStyleClass("v:errorStyleClass", "_error");
-		}
+		this.f_hasSeverityClassName();
 
 		return this._errorStyleClass;
 	},
@@ -137,9 +99,8 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getWarnStyleClass: function() {
-		if (this._warnStyleClass===undefined) {
-			this._warnStyleClass=this._computeStyleClass("v:warnStyleClass", "_warn");
-		}
+		this.f_hasSeverityClassName();
+		
 		return this._warnStyleClass;
 	},
 	/**
@@ -147,37 +108,9 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getInfoStyleClass: function() {
-		if (this._infoStyleClass===undefined) {
-			this._infoStyleClass=this._computeStyleClass("v:infoStyleClass", "_info");
-		}
+		this.f_hasSeverityClassName();
 		
 		return this._infoStyleClass;
-	},
-	/**
-	 * @method private
-	 */
-	_computeStyleClass: function(attributeName, suffix) {
-		var style=f_core.GetAttribute(this, attributeName);
-		if (style) {
-			return style;
-		}
-	
-		var classSpecified=this._classSpecified;
-		
-		if (classSpecified===undefined) {
-			classSpecified=(f_core.GetAttribute(this, "v:fatalStyleClass") ||
-				f_core.GetAttribute(this, "v:errorStyleClass") ||
-				f_core.GetAttribute(this, "v:warnStyleClass") ||
-				f_core.GetAttribute(this, "v:infoStyleClass"))?true:false;
-			
-			this._classSpecified=classSpecified;
-		}
-		
-		if (classSpecified) {
-			return null;
-		}	
-		
-		return this._className+suffix;
 	},
 	/**
 	 * @method protected final
@@ -218,14 +151,7 @@ var __prototype = {
 		return null;
 	},
 	
-	f_performMessageChanges: f_class.ABSTRACT,
-	
-	/**
-	 * @method protected abstract
-	 * @return void
-	 */
-	fa_updateMessages: f_class.ABSTRACT
-	
+	f_performMessageChanges: f_class.ABSTRACT	
 }
 
 var fa_message=new f_aspect("fa_message", null, __prototype);

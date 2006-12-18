@@ -1,6 +1,5 @@
 /*
  * $Id$
- * 
  */
 package org.rcfaces.core.internal.component;
 
@@ -19,10 +18,15 @@ public class TemplatesEngine implements PhaseListener {
 
     private static final long serialVersionUID = -6370096499604012889L;
 
-    private static final ThreadLocal templateConstructPhase = new ThreadLocal();
+    private static final ThreadLocal templateConstructPhase;
+    static {
+        if (Constants.TEMPLATE_ENGINE_SUPPORT) {
+            templateConstructPhase = new ThreadLocal();
+        }
+    }
 
     public void afterPhase(PhaseEvent event) {
-        if (Constants.TEMPLATE_SUPPORT == false) {
+        if (Constants.TEMPLATE_ENGINE_SUPPORT == false) {
             return;
         }
 
@@ -30,7 +34,7 @@ public class TemplatesEngine implements PhaseListener {
     }
 
     public void beforePhase(PhaseEvent event) {
-        if (Constants.TEMPLATE_SUPPORT == false) {
+        if (Constants.TEMPLATE_ENGINE_SUPPORT == false) {
             return;
         }
 
@@ -42,7 +46,7 @@ public class TemplatesEngine implements PhaseListener {
     }
 
     public static boolean isConstructPhase() {
-        if (Constants.TEMPLATE_SUPPORT == false) {
+        if (Constants.TEMPLATE_ENGINE_SUPPORT == false) {
             return false;
         }
 

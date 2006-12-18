@@ -274,9 +274,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

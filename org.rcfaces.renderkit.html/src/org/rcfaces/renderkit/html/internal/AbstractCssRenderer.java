@@ -13,6 +13,7 @@ import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
@@ -42,6 +43,8 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     protected static final int CSS_SIZE_MASK = 2;
 
+    protected static final int SEVERITY_CLASSES_MASK = 4;
+
     protected String getComponentStyleClassName() {
         return getMainStyleClassName();
     }
@@ -53,7 +56,9 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
     protected IHtmlWriter writeStyleClass(IHtmlWriter writer, String classSuffix)
             throws WriterException {
 
-        String cssClass = getStyleClassName(writer.getComponentRenderContext()
+        String cssClass = null;
+
+        cssClass = getStyleClassName(writer.getComponentRenderContext()
                 .getComponent());
         if (cssClass != null) {
             if (classSuffix != null && classSuffix.length() > 0) {
@@ -90,6 +95,13 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         writeStyleClass(writer, classSuffix);
 
+        if ((attributesMask & SEVERITY_CLASSES_MASK) != 0) {
+            if (component instanceof ISeverityStyleClassCapability) {
+                writeSeverityStyleClasses(writer,
+                        (ISeverityStyleClassCapability) component);
+            }
+        }
+
         ICssWriter cssWriter = writer.writeStyle();
 
         int hiddenMode = DEFAULT_RENDERED_HIDDEN_MODE;
@@ -105,7 +117,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
             }
         }
 
-        if ((attributesMask & CSS_FONT_MASK) > 0) {
+        if ((attributesMask & CSS_FONT_MASK) != 0) {
             if (component instanceof IFontCapability) {
                 cssWriter.writeFont((IFontCapability) component);
             }
@@ -119,7 +131,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
             cssWriter.writePosition((IPositionCapability) component);
         }
 
-        if ((attributesMask & CSS_SIZE_MASK) > 0) {
+        if ((attributesMask & CSS_SIZE_MASK) != 0) {
             if (component instanceof ISizeCapability) {
                 cssWriter.writeSize((ISizeCapability) component);
             }

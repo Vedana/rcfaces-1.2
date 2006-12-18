@@ -298,89 +298,166 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the associated <a href="/comps/dateCHooserComponent.html">dateChooser Component</a> should be automatically opened when the component gets the focus.
+	 * @return true if calendar is to be shown
+	 */
 	public final boolean isShowCalendarOnFocus() {
 		return isShowCalendarOnFocus(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the associated <a href="/comps/dateCHooserComponent.html">dateChooser Component</a> should be automatically opened when the component gets the focus.
+	 * @return true if calendar is to be shown
+	 */
 	public final boolean isShowCalendarOnFocus(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SHOW_CALENDAR_ON_FOCUS, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the associated <a href="/comps/dateCHooserComponent.html">dateChooser Component</a> should be automatically opened when the component gets the focus.
+	 * @param showCalendarOnFocus true if calendar is shown
+	 */
 	public final void setShowCalendarOnFocus(boolean showCalendarOnFocus) {
 		engine.setProperty(Properties.SHOW_CALENDAR_ON_FOCUS, showCalendarOnFocus);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the associated <a href="/comps/dateCHooserComponent.html">dateChooser Component</a> should be automatically opened when the component gets the focus.
+	 * @param showCalendarOnFocus true if calendar is shown
+	 */
 	public final void setShowCalendarOnFocus(ValueBinding showCalendarOnFocus) {
 		engine.setProperty(Properties.SHOW_CALENDAR_ON_FOCUS, showCalendarOnFocus);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "showCalendarOnFocus" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isShowCalendarOnFocusSetted() {
 		return engine.isPropertySetted(Properties.SHOW_CALENDAR_ON_FOCUS);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @return true if the user entry must completed
+	 */
 	public final boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @return true if the user entry must completed
+	 */
 	public final boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_COMPLETION, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @param autoCompletion true if the user entry must completed
+	 */
 	public final void setAutoCompletion(boolean autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @param autoCompletion true if the user entry must completed
+	 */
 	public final void setAutoCompletion(ValueBinding autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "autoCompletion" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
 	}
 
+	/**
+	 * Returns a string specifying the format to apply to the date value.
+	 * @return date format
+	 */
 	public final String getDateFormat() {
 		return getDateFormat(null);
 	}
 
+	/**
+	 * Returns a string specifying the format to apply to the date value.
+	 * @return date format
+	 */
 	public final String getDateFormat(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DATE_FORMAT, facesContext);
 	}
 
+	/**
+	 * Sets a string specifying the format to apply to the date value.
+	 * @param date format
+	 */
 	public final void setDateFormat(String dateFormat) {
 		engine.setProperty(Properties.DATE_FORMAT, dateFormat);
 	}
 
+	/**
+	 * Sets a string specifying the format to apply to the date value.
+	 * @param date format
+	 */
 	public final void setDateFormat(ValueBinding dateFormat) {
 		engine.setProperty(Properties.DATE_FORMAT, dateFormat);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "dateFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDateFormatSetted() {
 		return engine.isPropertySetted(Properties.DATE_FORMAT);
 	}
 
+	/**
+	 * Returns the date selected by default.
+	 * @return default date
+	 */
 	public final java.util.Date getDefaultDate() {
 		return getDefaultDate(null);
 	}
 
+	/**
+	 * Returns the date selected by default.
+	 * @return default date
+	 */
 	public final java.util.Date getDefaultDate(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Date)engine.getValue(Properties.DEFAULT_DATE, facesContext);
 	}
 
+	/**
+	 * Sets the date to select by default.
+	 * @param defaultDate default date
+	 */
 	public final void setDefaultDate(java.util.Date defaultDate) {
 		engine.setProperty(Properties.DEFAULT_DATE, defaultDate);
 	}
 
+	/**
+	 * Sets the date to select by default.
+	 * @param defaultDate default date
+	 */
 	public final void setDefaultDate(ValueBinding defaultDate) {
 		engine.setProperty(Properties.DEFAULT_DATE, defaultDate);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultDate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultDateSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_DATE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

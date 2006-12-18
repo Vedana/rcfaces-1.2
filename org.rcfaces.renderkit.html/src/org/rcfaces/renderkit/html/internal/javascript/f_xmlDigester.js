@@ -44,7 +44,7 @@ var __static = {
 		}
 
        	var realClass = parameters[0];
-       	var attClass = parameters[1];       	
+       	var attClass = parameters[1]; // Potentiellement, un attribut peut specifier la classe !
         if (attClass) {
   			var attributes=xmlNode.attributes;
   			
@@ -52,25 +52,33 @@ var __static = {
   			if (att) {
 	           	var value = att.nodeValue;
 	            if (value) {
-    	            realClass = window[value];
-        	    }
+    	            value = window[value];
+    	            if (value) {
+	    	            realClass = value;	    	            
+
+		   	            f_core.Debug(f_xmlDigester, "Attribute '"+attClass+"' specifies class name: "+value);
+    	            }
+        	    }        	    
 			}
         }
 
 		if (!realClass) {
-			f_core.Error(f_xmlDigester, "Can not get class to instanciate for rule.");
+			f_core.Error(f_xmlDigester, "Can not get class to instanciate specified by rule.");
 			return;
 		}
 
 		var instance;
-		if (realClass.f_getName) {
+		if (realClass.f_newInstance) {
 			instance=realClass.f_newInstance();
 			
 		} else {
 			instance=new Object;
 			instance.prototype=realClass.prototype;
 		}
-        
+		
+		f_core.Debug(f_xmlDigester, "Create object from class '"+realClass+"'.");
+
+		var digester=this; // et oui ...        
         digester.f_push(instance);
 	},
 	
@@ -82,32 +90,39 @@ var __static = {
 			return;
 		}
 
-		var name=parameters[0];
-		var value=parameters[1];
-
-       	var actualName;
-        var actualValue;
-
-		var attributes=xmlNode.attributes;
-        for(var i = 0; i < attributes.length; i++) {
-        	var attribute=attributes[i];
-        	
-            var attName = attribute.nodeName;
-            var attValue = attribute.nodeValue;
-            if (attName==name) {
-                actualName = attValue;
-                continue;
-            }
-                
-            if (attName==value) {
-                actualValue = attValue;
-                continue;
-            }
-        }
-		
+		var digester=this; // et oui ...        
 		var top=digester.f_peek();
-		
-		digester._setProperty(top, actualName, actualValue);
+
+		for(var j=0;j<parameters.length;) {
+			var name=parameters[j++];
+			var value=parameters[j++];
+	
+	       	var actualName=null;
+	        var actualValue=null;
+	
+			var attributes=xmlNode.attributes;
+	        for(var i = 0; i < attributes.length; i++) {
+	        	var attribute=attributes[i];
+	        	
+	            var attName = attribute.nodeName;
+	            var attValue = attribute.nodeValue;
+	            if (attName==name) {
+	                actualName = attValue;
+	                continue;
+	            }
+	                
+	            if (attName==value) {
+	                actualValue = attValue;
+	                continue;
+	            }
+	        }
+	        
+	        if (!actualName) {
+	        	continue;
+	        }
+			
+			digester._setProperty(top, actualName, actualValue);
+		}
 	},
 	
 	/**
@@ -123,27 +138,82 @@ var __static = {
 	 * @method private static
 	 */
 	_AddSetNextRule: function(xmlNode, mode, parameters) {
+		var digester=this; // et oui ...        
+	
+		var child=digester.peek(0);
+		var parent=digester.peek(1);
+		
+		var methodName=parameters[0];
+		
+		if (typeof(parent)!="object") {
+			f_core.Error(f_xmlDigester, "Invalid parent in the stack ! ("+parent+")");
+			return;
+		}
+		
+		var method=parent[methodName];
+		if (typeof(method)!="function") {
+			f_core.Error(f_xmlDigester, "Invalid methodName '"+methodName+"' for parent '"+parent+"'");
+			return;
+		}
+		
+		try {
+			method.call(parent, child);
+			
+		} catch (x) {
+			f_core.Error(f_xmlDigester, "Call of method '"+method+"' of object '"+parent+"' with parameter '"+child+"' throws an exception !", x);
+			
+			throw x;
+		}
 	},
 	
 	/**
 	 * @method private static
 	 */
 	_AddSetTopRule: function(xmlNode, mode, parameters) {
+		var digester=this; // et oui ...        
+	
+		var child=digester.peek(0);
+		var parent=digester.peek(1);
+		
+		var methodName=parameters[0];
+		if (methodName) {
+			var method=child[methodName];
+			
+			if (typeof(method)!="function") {
+				f_core.Error(f_xmlDigester, "Invalid methodName '"+methodName+"' for object '"+child+"'.");
+				return;
+			}
+			
+			f_core.Debug(f_xmlDigester, "Call method '"+method+"' to object '"+child+"' with parameter '"+parent+"'.");
+			try {
+				method.call(child, parent);
+
+			} catch (x) {
+				f_core.Error(f_xmlDigester, "Call of method '"+method+"' of object '"+parent+"' with parameter '"+child+"' throws an exception !", x);
+				
+				throw x;
+			}
+				
+			return;			
+		}
+		
+		digester._setProperty(child, "parent", parent);		
 	}
 }
 
 var __prototype = {
-/*
 	f_xmlDigester: function() {
 		this.f_super(arguments);
 
+		this._rules=new Array;
+		this._stacks=new Object;
 	},
-*/
+
 	f_finalize: function() {
-		this._tree=undefined;
-		this._rules=undefined;
-		this._root=undefined;
-		this._stacks=undefined;
+		this._tree=undefined; // object[]
+		this._rules=undefined; // any[]
+		this._root=undefined; // any
+		this._stacks=undefined; // any[][]
 		
 		this.f_super(arguments);
 	},
@@ -220,15 +290,12 @@ var __prototype = {
 	},
 	
 	/**
-	 * @method private
+	 * @method private	 
 	 */
 	_addRule: function(pattern, method, parameters) {
-		var rules=this._rules;
-		if (!rules) {
-			rules=new Array;
-			this._rules=rules;
-		}
-				
+		f_core.Assert(typeof(pattern)=="string", "Pattern parameter is invalid ("+pattern+")");
+		f_core.Assert(typeof(method)=="function", "Pattern parameter is invalid ("+pattern+")");
+		
 		if (arguments.length>2) {
 			parameters=f_core.PushArguments(null, arguments, 2);
 		}
@@ -239,7 +306,7 @@ var __prototype = {
 			_parameters: parameters
 		};
 		
-		rules.push(rule);
+		this._rules.push(rule);
 		
 		this._tree=undefined;
 		
@@ -346,11 +413,10 @@ var __prototype = {
 					break;
 					
 				case 3: // Text Node
-				case 4: // CDATA 
-					body+=xmlChild.data;
+				case 4: // CDATA
+					body += xmlChild.data;
 					break;
 				}
-				
 			}
 		}
 
@@ -414,21 +480,12 @@ var __prototype = {
 	 * Push a new object onto the top of the object stack.
 	 *
 	 * @method public
-	 * @param optional String name Name of stack
 	 * @param any object The new object
+	 * @param optional String name Name of stack
 	 * @return void
 	 */
-	f_push: function(name, object) {
-		if (arguments.length==1) {
-			object=name;
-			name=undefined;
-		}
-		
+	f_push: function(object, name) {
 		var stacks=this._stacks;
-		if (!stacks) {
-			stacks=new Object;
-			this._stacks=stacks;
-		}
 		
 		if (!name) {
 			name=f_xmlDigester._MAIN_STACK_NAME;
@@ -462,16 +519,11 @@ var __prototype = {
 	 * Return the n'th object down the stack, where 0 is the top element and [getCount()-1] is the bottom element. If the specified index is out of range, return null.
 	 * 
 	 * @method public
-	 * @param optional String name Name of stack
 	 * @param optional number Index of the desired element, where 0 is the top of the stack, 1 is the next element down, and so on.
+	 * @param optional String name Name of stack
 	 * @return any
 	 */
-	f_peek: function(name, index) {
-		if (typeof(name)=="number") {
-			index=name;
-			name=undefined;
-		}
-		
+	f_peek: function(index, name) {
 		var stack=this._getStack(name);
 		if (!stack) {
 			return null;
@@ -481,7 +533,11 @@ var __prototype = {
 			index=0;
 		}
 		
-		return stack[stack.length-index-1];
+		if (index>=stack.length) {
+			return null;
+		}
+		
+		return stack[stack.length-1-index];
 	},
 	
 	/**
@@ -492,12 +548,7 @@ var __prototype = {
 			name=f_xmlDigester._MAIN_STACK_NAME;
 		}
 		
-		var stacks=this._stacks;
-		if (!stacks) {
-			return null;
-		}
-		
-		return stacks[name];
+		return this._stacks[name];
 	},
 	
 	/**
@@ -537,19 +588,17 @@ var __prototype = {
 	 * @return any Root object
 	 */
 	f_parse: function(source) {
-		var document=source;
+		var xmlDocument=source;
 		if (typeof(source)=="string") {
 			// convertir en document
 			// Si URL, telecharger le document !
 			
-			document=f_xml.FromString(source);
+			xmlDocument=f_xml.FromString(source);
 		}
 		
 		var tree=this._computeTree();
 		
-		var stack=new Array;
-		var root=document.rootElement;
-		var currentPath=root.tagName;
+		var root=xmlDocument.rootElement;
 		
 		this._parseNode(root, tree);
 		
@@ -568,7 +617,41 @@ var __prototype = {
 	 * @return void
 	 */
 	f_clear: function() {
-		this._stacks=undefined;
+		this._stacks=new Array;
+	},
+	
+	/** 
+	 * @method private
+	 * @return void
+	 */
+	_setProperty: function(object, attributeName, attributeValue) {
+		f_core.Assert(typeof(attributeName)=="string", "Attribute name is not a string ! ("+attributeName+")");
+		f_core.Assert(typeof(object)=="object", "Object parameter is not an object ! ("+object+")");
+
+		var setterName="set"+attributeName.charAt(0).toUpperCase()+attributeName.substring(1);
+		
+		var f=object[setterName];
+		if (typeof(f)=="function") {
+			try {
+				f.call(object, attributeValue);
+				
+			} catch (x) {
+				f_core.Error(f_xmlDigester, "Setter '"+setterName+"' of object '"+object+"' throws exception (value='"+attributeValue+"')");
+				
+				throw x;
+			}
+			
+			return;
+		}
+		
+		try {
+			object[attributeName]=attributeValue;
+			
+		} catch (x) {
+			f_core.Error(f_xmlDigester, "Set field '"+setterName+"' of object '"+object+"' with value '"+attributeValue+"' throws exception (value='"+attributeValue+"')");
+			
+			throw x;
+		}
 	}
 }
 var f_xmlDigester=new f_class("f_xmlDigester", null, __static, __prototype);

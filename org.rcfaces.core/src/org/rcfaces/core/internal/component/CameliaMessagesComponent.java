@@ -61,7 +61,7 @@ public abstract class CameliaMessagesComponent extends javax.faces.component.UIM
     }
 
     protected void initializeComponent() {
-    	if (Constants.TEMPLATE_SUPPORT) {
+    	if (Constants.TEMPLATE_ENGINE_SUPPORT) {
 	        if (isTemplateComponent() && TemplatesEngine.isConstructPhase()) {
 	            constructTemplate();
 	        }
@@ -149,12 +149,13 @@ public abstract class CameliaMessagesComponent extends javax.faces.component.UIM
 		return super.getValueBinding(name);
 	}
 
+/*
 	public void release() {
 		if (engine != null) {
 			engine.release();
 		}
 	}
-
+*/
 /*
     public void encodeBegin(FacesContext context) throws IOException {
 		if (context == null) {

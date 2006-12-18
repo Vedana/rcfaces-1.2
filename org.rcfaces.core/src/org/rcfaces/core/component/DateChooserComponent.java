@@ -262,22 +262,42 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
+	/**
+	 * Returns a string specifying the format to use for the value that will be send to the component specified in the <b>for</b> property.
+	 * @return value format
+	 */
 	public final String getForValueFormat() {
 		return getForValueFormat(null);
 	}
 
+	/**
+	 * Returns a string specifying the format to use for the value that will be send to the component specified in the <b>for</b> property.
+	 * @return value format
+	 */
 	public final String getForValueFormat(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR_VALUE_FORMAT, facesContext);
 	}
 
+	/**
+	 * Sets a string specifying the format to use for the value that will be send to the component specified in the <b>for</b> property.
+	 * @param forValueFormat value format
+	 */
 	public final void setForValueFormat(String forValueFormat) {
 		engine.setProperty(Properties.FOR_VALUE_FORMAT, forValueFormat);
 	}
 
+	/**
+	 * Sets a string specifying the format to use for the value that will be send to the component specified in the <b>for</b> property.
+	 * @param forValueFormat value format
+	 */
 	public final void setForValueFormat(ValueBinding forValueFormat) {
 		engine.setProperty(Properties.FOR_VALUE_FORMAT, forValueFormat);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "forValueFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isForValueFormatSetted() {
 		return engine.isPropertySetted(Properties.FOR_VALUE_FORMAT);
 	}
@@ -298,33 +318,54 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.HOME_DATE, homeDate);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "homeDate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isHomeDateSetted() {
 		return engine.isPropertySetted(Properties.HOME_DATE);
 	}
 
+	/**
+	 * Returns a string specifying the label associated with the home button.
+	 * @return the label used
+	 */
 	public final String getHomeDateLabel() {
 		return getHomeDateLabel(null);
 	}
 
+	/**
+	 * Returns a string specifying the label associated with the home button.
+	 * @return the label used
+	 */
 	public final String getHomeDateLabel(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOME_DATE_LABEL, facesContext);
 	}
 
+	/**
+	 * Sets a string specifying the label associated with the home button.
+	 * @param homeDateLabel the label to use
+	 */
 	public final void setHomeDateLabel(String homeDateLabel) {
 		engine.setProperty(Properties.HOME_DATE_LABEL, homeDateLabel);
 	}
 
+	/**
+	 * Sets a string specifying the label associated with the home button.
+	 * @param homeDateLabel the label to use
+	 */
 	public final void setHomeDateLabel(ValueBinding homeDateLabel) {
 		engine.setProperty(Properties.HOME_DATE_LABEL, homeDateLabel);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "homeDateLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isHomeDateLabelSetted() {
 		return engine.isPropertySetted(Properties.HOME_DATE_LABEL);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

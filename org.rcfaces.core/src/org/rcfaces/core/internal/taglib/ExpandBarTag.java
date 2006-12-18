@@ -38,6 +38,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private String scopeValue;
 	private String scopeVar;
 	private String collapseEffect;
+	private String collapsedText;
 	public String getComponentType() {
 		return ExpandBarComponent.COMPONENT_TYPE;
 	}
@@ -218,6 +219,14 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.collapseEffect = collapseEffect;
 	}
 
+	public final String getCollapsedText() {
+		return collapsedText;
+	}
+
+	public final void setCollapsedText(String collapsedText) {
+		this.collapsedText = collapsedText;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ExpandBarComponent.COMPONENT_TYPE==getComponentType()) {
@@ -241,6 +250,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  collapseEffect='"+collapseEffect+"'");
+			LOG.debug("  collapsedText='"+collapsedText+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -445,6 +455,15 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 				component.setCollapseEffect(collapseEffect);
 			}
 		}
+
+		if (collapsedText != null) {
+			if (isValueReference(collapsedText)) {
+				ValueBinding vb = application.createValueBinding(collapsedText);
+				component.setCollapsedText(vb);
+			} else {
+				component.setCollapsedText(collapsedText);
+			}
+		}
 	}
 
 	public void release() {
@@ -470,6 +489,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		scopeValue = null;
 		scopeVar = null;
 		collapseEffect = null;
+		collapsedText = null;
 
 		super.release();
 	}

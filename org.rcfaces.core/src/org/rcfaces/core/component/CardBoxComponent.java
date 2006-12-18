@@ -146,9 +146,6 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

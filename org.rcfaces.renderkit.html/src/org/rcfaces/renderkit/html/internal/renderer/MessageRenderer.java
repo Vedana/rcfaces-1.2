@@ -3,8 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.Iterator;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -18,13 +16,10 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ContextTools;
-import org.rcfaces.core.internal.tools.MessageTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -53,10 +48,10 @@ public class MessageRenderer extends AbstractCssRenderer {
         boolean showIfMessage = messageComponent.isShowIfMessage(facesContext);
         String forValue = messageComponent.getFor();
         if (showIfMessage && forValue != null) {
-            Iterator iterator = MessageTools.listMessages(facesContext,
-                    forValue, messageComponent);
+            //Iterator iterator = MessageTools.listMessages(facesContext,forValue, messageComponent);
 
-            messageComponent.setVisible(iterator.hasNext());
+            // L'affiche ne se fera que coté client !
+            messageComponent.setVisible(false) ;//iterator.hasNext());
         }
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
@@ -85,8 +80,6 @@ public class MessageRenderer extends AbstractCssRenderer {
         if (messageComponent.isShowDetail()) {
             htmlWriter.writeAttribute("v:showDetail", "true");
         }
-
-        writeSeverityStyleClasses(htmlWriter, messageComponent);
 
         ISeverityImageAccessors accessors = (ISeverityImageAccessors) messageComponent
                 .getImageAccessors(facesContext);
@@ -165,12 +158,14 @@ public class MessageRenderer extends AbstractCssRenderer {
         htmlWriter.writeText(text);
     }
 
+    /*
     protected void encodeJavaScript(IJavaScriptWriter js)
             throws WriterException {
         super.encodeJavaScript(js);
 
         JavaScriptTools.writeFirstMessage(js);
     }
+    */
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MESSAGE;

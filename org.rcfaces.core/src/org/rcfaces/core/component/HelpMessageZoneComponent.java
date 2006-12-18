@@ -143,9 +143,6 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

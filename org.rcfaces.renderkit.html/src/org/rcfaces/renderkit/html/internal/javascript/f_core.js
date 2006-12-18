@@ -164,7 +164,7 @@ var f_core = {
 	/**
 	 * Throws a message if the expression is true.
 	 *
-	 * @method public static final
+	 * @method public static
 	 * @param boolean expr Expression.
 	 * @param String message The message.
 	 * @return void
@@ -182,7 +182,7 @@ var f_core = {
 		throw ex;
 	},
 	/**
-	 * @method private static final
+	 * @method private static
 	 */
 	_AddLog: function(level, name, message, exception, win) {
 		if (f_core._Logging) {
@@ -296,7 +296,7 @@ var f_core = {
 		}
 	},
 	/**
-	 * @method private static final
+	 * @method private static
 	 */
 	_FlushLogs: function() {		
 		if (!window.f_log) {
@@ -308,7 +308,7 @@ var f_core = {
 		f_core._AddLog();	
 	},
 	/**
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
@@ -324,7 +324,7 @@ var f_core = {
      * (for example, <code>String</code> concatenation)
      * when the log level is more than debug. </p>
 	 *
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @return boolean <code>true</code> if debug logging  is enabled.
 	 */
@@ -337,7 +337,7 @@ var f_core = {
 		return f_log.GetLog(name).f_isDebugEnabled();
 	},
 	/**
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
@@ -366,7 +366,7 @@ var f_core = {
 		return f_log.GetLog(name).f_isTraceEnabled();
 	},
 	/**
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
@@ -382,7 +382,7 @@ var f_core = {
      * (for example, <code>String</code> concatenation)
      * when the log level is more than info. </p>
  	 *
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @return boolean <code>true</code> if info logging  is enabled.
 	 */
@@ -393,7 +393,7 @@ var f_core = {
 	},
 	/**
 	/**
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
@@ -409,7 +409,7 @@ var f_core = {
      * (for example, <code>String</code> concatenation)
      * when the log level is more than info. </p>
  	 *
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @return boolean <code>true</code> if info logging  is enabled.
 	 */
@@ -419,7 +419,7 @@ var f_core = {
 		return f_log.GetLog(name).f_isWarnEnabled();
 	},
 	/**
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param Error exception An exception if any.	 
@@ -466,7 +466,7 @@ var f_core = {
      * (for example, <code>String</code> concatenation)
      * when the log level is more than error. </p>
  	 *
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @return boolean <code>true</code> if error logging  is enabled.
 	 */
@@ -476,7 +476,7 @@ var f_core = {
 		return f_log.GetLog(name).f_isErrorEnabled();
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @return void
 	 */
 	SetDebugMode: function(debugMode) {
@@ -544,7 +544,7 @@ var f_core = {
 		f_core.AddEventListener(window, "unload", f_core._OnExit);
 
 		if (f_core.IsInternetExplorer()) {
-			f_core.AddEventListener(document, "selectstart", f_core._IeOnSelectStart);
+			f_core.AddEventListener(document, "selectstart", f_core.IeOnSelectStart);
 		}
 	},
 	/**
@@ -647,6 +647,9 @@ var f_core = {
 			f_core._LoggingProfile=undefined;
 		}
 	},
+	/**
+	 * @method private static
+	 */
 	_OnInit: function() {
 		var now=new Date();
 		f_core.Profile("f_core.onInit.enter", now);
@@ -682,7 +685,7 @@ var f_core = {
 			for (var i=0; i<forms.length; i++) {
 				var f = forms[i];
 	
-				f_core._InitializeForm(f);
+				f_core.InitializeForm(f);
 			}
 			
 			// Les objets non encore initializés		
@@ -697,7 +700,10 @@ var f_core = {
 			f_core.Profile("f_core.onInit.exit");
 		}
 	},
-	_InitializeForm: function(f) {
+	/** 
+	 * @method hidden static
+	 */
+	InitializeForm: function(f) {
 		if (f._initialized) {
 			return;
 		}
@@ -751,7 +757,7 @@ var f_core = {
 				f_core._DesinstallModalWindow();
 				
 				if (f_core.IsInternetExplorer()) {
-					f_core.RemoveEventListener(document, "selectstart", f_core._IeOnSelectStart);
+					f_core.RemoveEventListener(document, "selectstart", f_core.IeOnSelectStart);
 				}
 				
 				var timeoutID=f_core._FocusTimeoutID;
@@ -808,7 +814,7 @@ var f_core = {
 		}
 	},
 	/**
-	 * @method final static hidden
+	 * @method static hidden
 	 */
 	SetInputHidden: function(form, name, val) {
 		f_core.Assert(form && form.tagName.toUpperCase()=="FORM", "f_core.SetInputHidden: Invalid form component ! "+form);
@@ -899,9 +905,10 @@ var f_core = {
 	},
 	/**
 	 * @method static hidden
+	 * @return f_component
 	 */
 	GetParentComponent: function(comp) {
-		for(var comp=comp.f_getParent();comp;comp=comp.parentNode) {
+		for(comp=comp.f_getParent();comp;comp=comp.parentNode) {
 			if (!f_class.IsObjectInitialized(comp)) {
 				continue;
 			}
@@ -913,20 +920,50 @@ var f_core = {
 	},
 	/**
 	 * @method static hidden
+	 * @return void
 	 */
-	SetTextNode: function(component, text) {
+	SetTextNode: function(component, text, accessKey) {
 		f_core.Assert(component && component.nodeType==1, "f_core.SetTextNode: Invalid component ! ("+component+")");
-		var children=component.childNodes;
+		f_core.Assert(text===null || typeof(text)=="string", "f_core.SetTextNode: Invalid text parameter ("+text+")");
+		f_core.Assert(accessKey===undefined || accessKey===null || typeof(accessKey)=="string", "f_core.SetTextNode: Invalid accessKey parameter ("+accessKey+")");
+		
+		var doc=component.ownerDocument;
+		
+		if (text && accessKey && accessKey.length>0) {
+			var idx=text.toLowerCase().indexOf(accessKey.toLowerCase());
+			if (idx>=0) {
+				for(;component.firstChild;) {
+					component.removeChild(component.firstChild);
+				}
 
-		for(var i=0;i<children.length;i++) {
+				component.appendChild(doc.createTextNode(text.substring(0, idx)));
+
+				var ul=doc.createElement("UL");
+				component.appendChild(ul);
+				
+				ul.appendChild(doc.createTextNode(text.charAt(idx)));
+			
+				if (idx<text.length-1) {
+					component.appendChild(doc.createTextNode(text.substring(idx+1)));
+				}
+				
+				return;
+			}
+		}
+
+		var children=component.childNodes;
+		for(var i=0;i<children.length;) {
 			var child=children[i];
 			if (child.nodeType!=3) {
+				//i++;
+				component.removeChild(child);
 				continue;
 			}
 			
 			if (text!==undefined) {
 				child.data=text;
-				text=null;
+				text=undefined;
+				i++;
 				continue;
 			}
 			
@@ -934,13 +971,13 @@ var f_core = {
 		}
 		
 		if (text) {
-			component.appendChild(component.ownerDocument.createTextNode(text));
+			component.appendChild(doc.createTextNode(text));
 		}
 	},
 	/**
 	 * @method static hidden
 	 */
-	GetTextNode: function(component) {
+	GetTextNode: function(component, concatChildren) {
 		f_core.Assert(component && component.nodeType==1, "f_core.GetTextNode: Invalid component ! ("+component+")");
 
 		var children=component.childNodes;
@@ -948,14 +985,27 @@ var f_core = {
 		var text="";
 		for(var i=0;i<children.length;i++) {
 			var child=children[i];
-			if (child.nodeType!=3) {
-				continue;
+			
+			switch(child.nodeType) {
+			case 3:
+			case 4:
+				text+=child.data;
+				break;
+				
+			case 1:
+				if (concatChildren) {
+					text+=f_core.GetTextNode(child);
+				}
+				break;
 			}
-			text+=child.data;
+			
 		}
 		
 		return text;
 	},
+	/**
+	 * @method private static
+	 */
 	_OnReset: function(evt) {
 		if (!evt) {
 			evt = window.event;
@@ -999,12 +1049,18 @@ var f_core = {
 			f_core._CallFormCheckListeners(form);
 		}
 	},
+	/**
+	 * @method private static
+	 */
 	_OnSubmit: function(evt) {
 		f_core.Profile("f_core.SubmitEvent");
 
 		if (!evt) {
 			evt = window.event;
 		}
+
+		// f_core.Assert(evt, "f_core._OnSubmit: Event is not known ?");
+		// evt peut être null !
 
 		if (!window._submitting && f_env.GetCancelExternalSubmit()) {
 			return f_core.CancelEvent(evt);
@@ -1055,7 +1111,7 @@ var f_core = {
 			// XXX Il faut peut etre attendre QUE TOUTS LES OBJETS soient initialisés ?
 			
 			// On initialize la form !				
-			f_core._InitializeForm(form); 
+			f_core.InitializeForm(form); 
 		}
 		
 		var immediate;
@@ -1088,6 +1144,9 @@ var f_core = {
 			
 		return true;
 	},
+	/**
+	 * @method private static
+	 */
 	_Submit: function(form, elt, event, url, target, createWindowParameters, closeWindow, modal) {
 		f_core.Assert(createWindowParameters===undefined || createWindowParameters===null || typeof(createWindowParameters)=="object", "Submit: createWindowParameters parameter must be undefined or an object.");
 		f_core.Assert(closeWindow===undefined || closeWindow===null || typeof(closeWindow)=="boolean", "Submit: closeWindow parameter must be undefined or a boolean.");
@@ -1615,6 +1674,9 @@ var f_core = {
 	},
 	/**
 	 * @method private static final
+	 * @param HTMLFormElement form
+	 * @param Event event
+	 * @return boolean
 	 */
 	_CallFormResetListeners: function(form, event) {
 		var resetListeners=form._resetListeners;
@@ -1699,6 +1761,10 @@ var f_core = {
 	 * @return boolean <code>true</code> if success.
 	 */
 	Submit: function(url, dest, elt, event, createWindowParameters, closeWindow, modal) {
+		if (!event && (url instanceof f_event)) {
+			event=url;
+			url=null;
+		}
 		return f_core._Submit(null, elt, event, url, dest, createWindowParameters, closeWindow, modal);
 	},
 	/**
@@ -1770,7 +1836,11 @@ var f_core = {
 		
 		return doc.parentWindow;
 	},
-	_InstanceOf: function(elt,claz,css) {
+	/**
+	 * @method private static
+	 * @return boolean
+	 */
+	_InstanceOf: function(elt, claz, css) {
 		if (css) {
 			return (elt.className && elt.className==claz)? elt:null;
 		}
@@ -1933,6 +2003,10 @@ var f_core = {
 		
 		return true;
 	},
+	/**
+	 * @method hidden static
+	 * @return boolean
+	 */
 	ForceComponentVisibility: function(component) {
 		if (f_core.IsComponentVisible(component)) {
 			return true;
@@ -2246,12 +2320,20 @@ var f_core = {
 		return f_core.CancelEvent(evt);
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	CancelEvent: function(evt) {
 		if (!evt) {
 			evt=window.event;
-		}
+
+			// Lorsque l'évenement est "USER" il n'y a pas d'evt !
+			// f_core.Assert(evt, "f_core.CancelEvent: Event is not known ?");
+			if (!evt) {
+				// On peut rien faire, sinon de retourner false
+				return false;		
+			}
+		}		
+
 
 		evt.cancelBubble = true;
 
@@ -2265,7 +2347,7 @@ var f_core = {
 		return false;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static 
 	 */
 	CancelEventHandlerTrue: function(evt) {
 		if (f_event.GetEventLocked(false)) {
@@ -2277,7 +2359,7 @@ var f_core = {
 	/**
 	 * Returns the size of the View.
 	 *
-	 * @method public static final
+	 * @method public static 
 	 * @param optional Document doc
 	 * @return Object Object which defines 2 fields: width and height 
 	 */
@@ -2304,7 +2386,7 @@ var f_core = {
 	/**
 	 * Returns the position of the Window.
 	 *
-	 * @method public static final
+	 * @method public static 
 	 * @param optional Document doc
 	 * @return Object Object which defines 2 fields: x and y 
 	 */
@@ -2330,7 +2412,7 @@ var f_core = {
 	/**
 	 * Returns the position of event
 	 *
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param Event event
 	 * @param optional Document doc
 	 * @return number[]
@@ -2355,7 +2437,7 @@ var f_core = {
 	/**
 	 * Returns if the event has been performed into a component.
 	 *
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param HTMLElement component
 	 * @param f_event event
 	 * @return boolean
@@ -2374,7 +2456,7 @@ var f_core = {
 		return true;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static 
 	 */
 	VerifyProperties: function(object) {
 		if (!f_core.DebugMode) {
@@ -2488,7 +2570,7 @@ var f_core = {
 		}
 	},
 	/**
-	 * @method public static final
+	 * @method public static 
 	 * @param HTMLElement component
 	 * @param hidden boolean asyncMode
 	 * @return boolean <code>true</code> is success !
@@ -2566,7 +2648,7 @@ var f_core = {
 		f_core.SetFocus(component);
 	},	
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	GetFirstElementByTagName: function(parent, tagName, assertIfNotFound) {
 		f_core.Assert(parent && parent.nodeType, "Parent '"+parent+"' is not a Dom node !");
@@ -2582,7 +2664,7 @@ var f_core = {
 		return components[0];
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */	
 	GetDefaultDisplayMode: function(component) {
 		var tagName=component.tagName;
@@ -2615,7 +2697,7 @@ var f_core = {
 		return false;
 	},
 	/**
-	 * @method hidden
+	 * @method hidden static
 	 */
 	GetCurrentStyleProperty: function(component, attributeId) {
 		if (f_core.IsInternetExplorer()) {
@@ -2629,7 +2711,7 @@ var f_core = {
 		f_core.Assert(false, "Browser not supported !");
 	},
 	/**
-	 * @method hidden
+	 * @method hidden static 
 	 */
 	EncodeObject: function(p, sep) {
 		if (!sep) {
@@ -2705,7 +2787,7 @@ var f_core = {
 		return d;
 	},
 	/**
-	 * @method hidden
+	 * @method hidden static
 	 */
 	DecodeObject: function(string, emptyReturnsNull, sep) {
 		var obj=new Object;
@@ -2786,17 +2868,20 @@ var f_core = {
 		return obj;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	IeBlockSelectStart: function(evt) {
 		return f_core.CancelEvent(evt);
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	IeGetEvent: function(component) {		
 		return component.ownerDocument.parentWindow.event;
 	},
+	/**
+	 * @method private static
+	 */
 	_IeOnSelectStop: function() {
 				//document.title="STOP bookmark ! "+window._acceptedSelection;
 		//window._acceptedSelection=undefined;
@@ -2804,6 +2889,9 @@ var f_core = {
 		f_core.RemoveEventListener(document.body, "mouseover", f_core._IeOnSelectOver);
 		f_core.RemoveEventListener(document.body, "mouseout", f_core._IeOnSelectOver);
 	},
+	/**
+	 * @method private static
+	 */
 	_IeOnSelectOver: function() {
 		var component=window.event.srcElement;
 		
@@ -2845,7 +2933,10 @@ var f_core = {
 		document.title="Set bookmark ! "+window._acceptedSelection;	
 			
 	},
-	_IeOnSelectStart: function() {
+	/**
+	 * @method hidden static
+	 */
+	IeOnSelectStart: function() {
 		if (true) {
 			return;
 		}
@@ -2859,7 +2950,7 @@ var f_core = {
 		return true;
 	},
 	/**
-	 * @method public static final
+	 * @method public static 
 	 * @param String cookieName
 	 * @param optional HTMLDocument doc Html document.
 	 * @return String value associated to the cookie, or <code>null</code>.
@@ -2911,7 +3002,7 @@ var f_core = {
         return unescape(value);
 	},
 	/**
-	 * @method public static final
+	 * @method public static 
 	 * @param String cookieName
 	 * @param optional String cookieValue Value to associate with cookie, or <code>null</code> to delete cookie !
 	 * @param optional HTMLDocument doc Html document
@@ -3103,7 +3194,7 @@ var f_core = {
 	/**
 	 * List all components of a document.
 	 *
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param Document doc
 	 * @return HTMLElement[] A list of HTMLElements
 	 */
@@ -3168,7 +3259,7 @@ var f_core = {
 	 * caractéristiques suivantes:<br>
 	 *		<b>NOT VISIBLE, DISABLED, HIDDEN TYPE, NO FOCUS METHOD</b>
 	 *
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param HTMLElement component composant précédant dans l'ordre de tabulation
 	 * @return HTMLElement composant suivant dans l'ordre de tabulation
 	 */
@@ -3303,7 +3394,7 @@ var f_core = {
 		return getNextAvailable(utabs, -1);
 	},
 	/**
-	 * @method hidden static final 
+	 * @method hidden static
 	 */
 	ComputePopupPosition: function(popup, positions) {
 		var body=popup.ownerDocument.body;
@@ -3321,7 +3412,7 @@ var f_core = {
 		}
 	},
 	/**
-	 * @method public static final 
+	 * @method public static
 	 */
 	ComputeDialogPosition: function(parameters) {
 		var x=0;
@@ -3380,7 +3471,8 @@ var f_core = {
 		parameters.screenY=posY;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
+	 * @return string
 	 */
 	FormatMessage: function(message, parameters) {
 		f_core.Assert(typeof(message)=="string", "Message parameter is invalid '"+message+"'.");
@@ -3436,7 +3528,7 @@ var f_core = {
 		return ret;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param String params 
 	 * @param optional Object object Map or Array
 	 * @return Object Map or Array
@@ -3477,7 +3569,7 @@ var f_core = {
 		return object;
 	},	 
 	/**
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param String url 
 	 * @param any data
 	 * @return any Data
@@ -3504,7 +3596,7 @@ var f_core = {
 		}, data);
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param String url 
 	 * @param any data
 	 * @return any Data
@@ -3513,7 +3605,7 @@ var f_core = {
 		f_core._AjaxParametersUpdater=callback;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param HTMLFormElement form
 	 * @param String pattern
 	 * @param any data
@@ -3561,7 +3653,7 @@ var f_core = {
 		return data;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param String text Text to encode to HTML form
 	 * @return String Html form of text.
 	 */
@@ -3569,7 +3661,7 @@ var f_core = {
 		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 	},
 	/** 
-	 * @method hidden static final
+	 * @method hidden static 
 	 * @param Array dest
 	 * @param Array args
 	 * @param optional number index

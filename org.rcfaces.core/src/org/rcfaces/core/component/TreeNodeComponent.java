@@ -81,29 +81,46 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
+	/**
+	 * Experimental:	Returns a string value specifying the type of input to show radio button or check box.
+	 * @return radio|check
+	 */
 	public final String getInputType() {
 		return getInputType(null);
 	}
 
+	/**
+	 * Experimental:	Returns a string value specifying the type of input to show radio button or check box.
+	 * @return radio|check
+	 */
 	public final String getInputType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INPUT_TYPE, facesContext);
 	}
 
+	/**
+	 * Experimental:	Sets a string value specifying the type of input to show radio button or check box.
+	 * @param inputType radio|check
+	 */
 	public final void setInputType(String inputType) {
 		engine.setProperty(Properties.INPUT_TYPE, inputType);
 	}
 
+	/**
+	 * Experimental:	Sets a string value specifying the type of input to show radio button or check box.
+	 * @param inputType radio|check
+	 */
 	public final void setInputType(ValueBinding inputType) {
 		engine.setProperty(Properties.INPUT_TYPE, inputType);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "inputType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isInputTypeSetted() {
 		return engine.isPropertySetted(Properties.INPUT_TYPE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

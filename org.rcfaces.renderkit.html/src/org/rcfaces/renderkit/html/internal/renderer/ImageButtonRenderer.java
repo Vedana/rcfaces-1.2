@@ -10,6 +10,7 @@ import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyDecorator;
@@ -40,7 +41,8 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         }
 
         // Il faut activer le Javascript
-        // car l'attribut SELECTED doit être envoyé a chaque requete du client vers le serveur !
+        // car l'attribut SELECTED doit être envoyé a chaque requete du client
+        // vers le serveur !
         ((IHtmlWriter) writer).enableJavaScript();
 
         super.encodeEnd(writer);
@@ -76,7 +78,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
 
         protected void writeAttributes(String classSuffix)
                 throws WriterException {
-            
+
             writer.writeRole(getRole());
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
@@ -88,9 +90,9 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         }
 
         protected String getRole() {
-           return "button";
+            return IAccessibilityRoles.BUTTON;
         }
-        
+
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
             if (imageButtonFamilly.isDisabled(facesContext)) {

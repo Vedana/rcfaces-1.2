@@ -10,6 +10,7 @@ import org.rcfaces.core.component.TabbedPaneComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -30,7 +31,8 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
         return JavaScriptClasses.TABBED_PANE;
     }
 
-    protected void renderTabHeader(IHtmlWriter htmlWriter) throws WriterException {
+    protected void renderTabHeader(IHtmlWriter htmlWriter)
+            throws WriterException {
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -42,8 +44,8 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
                 .getFacesContext();
 
         htmlWriter.startElement("TABLE");
-        
-        htmlWriter.writeRole("tab");
+
+        htmlWriter.writeRole(IAccessibilityRoles.TAB);
 
         htmlWriter.writeClass(getTitleClassName(htmlWriter));
         htmlWriter.writeCellPadding(0);

@@ -46,7 +46,10 @@ var __prototype = {
 			this.f_addToGroup(groupName, this);
 		}
 
-		var head=f_core.GetFirstElementByTagName(this, "LI");
+
+		var lis=this.getElementsByTagName("LI");
+
+		var head=lis[0];
 		if (head) {
 			this._head=head;
 			head._link=this;
@@ -63,33 +66,54 @@ var __prototype = {
 			text.onclick=f_expandBar._OnHeadClick;
 		}
 
-		var body=f_core.GetFirstElementByTagName(this, "DIV");
+		var body=lis[1];
 		if (body) {
 			this._body=body;
-			body._oldDisplay=body.style.display;
-			if (body.parentNode.style.display=="none") {
-				body.style.display="none";
+			
+			var content=f_core.GetFirstElementByTagName(body, "DIV");
+			if (content) {
+				this._content=content;
+				content._oldDisplay=content.style.display;
+				if (body.style.display=="none") {
+					content.style.display="none";
+				}
 			}
 		}
+			
+		this._normalText=f_core.GetAttribute(this, "v:text");
+		this._collapsedText=f_core.GetAttribute(this, "v:collapsedText");
+		
+		var txt=this.f_getText();
+		if (this._normalText) {
+			this._collapsedText=txt;
+			
+		} else {
+			this._normalText=txt;
+		}
+			
 	
 	//	this._returnOnSelect=false;
 		this.f_addEventListener(f_event.SELECTION, this._onSelect);
 	},
 	f_finalize: function() {
 		// this._className=undefined;
+		// this._normalText=undefined;
+		// this._collapsedText=undefined;
 	
 		var effect=this._effect;
 		if (effect) {
+			this._effect=undefined;
+		
 			// On force la destruction !
 			f_classLoader.Destroy(effect);
-			
-			this._effect=undefined;
 		}
 	
-		var body=this._body;
-		if (body) {
-			this._body=undefined; // HTMLDivElement
-			f_core.VerifyProperties(body);
+		this._body=undefined;
+		
+		var content=this._content;
+		if (content) {
+			this._content=undefined; // HTMLDivElement
+			f_core.VerifyProperties(content);
 		}
 			
 		// this._groupName=undefined;
@@ -179,6 +203,9 @@ var __prototype = {
 				
 		this.f_super(arguments, type, target);
 	},
+	/** 
+	 * @method private
+	 */
 	_onSelect: function() {
 		if (!this._focus)  {
 			this.f_setFocus();
@@ -230,6 +257,7 @@ var __prototype = {
 		if (!body) {	
 			return;
 		}
+		var content=this._content;
 		
 		this.className=this._className+(set?"_collapsed":"");
 		
@@ -239,12 +267,12 @@ var __prototype = {
 			effect.f_performEffect(set);
 
 		} else if (set) {
-			body.className="f_expandBar_body_collapsed";
-			body.parentNode.style.display="none";
+			content.className="f_expandBar_body_collapsed";
+			body.style.display="none";
 			
 		} else  {
-			body.className="f_expandBar_body";
-			body.parentNode.style.display="block";
+			content.className="f_expandBar_body";
+			body.style.display="block";
 		}
 		
 		if (!set && this._groupName) {
@@ -275,31 +303,31 @@ var __prototype = {
 			return effect;
 		}
 		
-		var body=this._body;
+		var content=this._content;
 		
 		effect = f_core.GetAttribute(this, "v:effect");
 		if (effect) {
-			effect=f_core.CreateEffectByName(effect, body, function(value) {
-				var display=body._oldDisplay;
-				var className="f_expandBar_body_effect";
+			effect=f_core.CreateEffectByName(effect, content, function(value) {
+				var display=content._oldDisplay;
+				var className="f_expandBar_body";
+				
 				if (value==0) {
 					display="none";
-					className="f_expandBar_body_collapsed";
+					className+="_collapsed";
 					
-				} else if (value==1) {
-					className="f_expandBar_body";				
+				} else if (value!=1) {
+					className+="_effect";				
 				}
 				
-				if (body.className!=className) {
-					body.className=className;
+				if (content.className!=className) {
+					content.className=className;
 				}
 				
-				var parent=body.parentNode;
-				if (display==parent.style.display) {
+				if (display==body.style.display) {
 					return;
 				}
 				
-				parent.style.display=display;
+				body.style.display=display;
 			});
 		}
 		if (!effect) {
@@ -334,9 +362,11 @@ var __prototype = {
 		if (this.f_getText() == text) {
 			return;
 		}
-		f_core.SetTextNode(textLabel, text);
+
+		// AccessKey ?
+		f_core.SetTextNode(textLabel, text, this._accessKey);
 		
-		this.f_setProperty(f_prop.TEXT,text);
+		this.f_setProperty(f_prop.TEXT, text);
 	},
 	/**
 	 * @method public
@@ -348,7 +378,8 @@ var __prototype = {
 			return;
 		}
 
-		return f_core.GetTextNode(textLabel);
+		// Pas de <u> de l'accessKey ?
+		return f_core.GetTextNode(textLabel, true);
 	}	
 }
 var f_expandBar=new f_class("f_expandBar", null, __static, __prototype, f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName);

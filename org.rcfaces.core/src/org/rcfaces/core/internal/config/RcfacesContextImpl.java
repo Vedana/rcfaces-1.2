@@ -31,6 +31,7 @@ import javax.faces.lifecycle.LifecycleFactory;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.AdapterManagerImpl;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
@@ -79,6 +80,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     private static final String DESIGNER_MODE_PROPERTY = "com.vedana.nodus3.designer";
 
+    private static final String RCFACES_VERSION_PROPERTY = "org_rcfaces_VERSION";
+
     private transient ServicesRegistryImpl servicesRegistry;
 
     private transient ClientValidatorsRegistryImpl clientValidatorsRegistry;
@@ -117,13 +120,16 @@ public class RcfacesContextImpl extends RcfacesContext implements
             LOG.info("Designer MODE  detected.");
         }
 
+        facesContext.getExternalContext().getApplicationMap().put(
+                RCFACES_VERSION_PROPERTY, Constants.getVersion());
+
         initializeRegistries(null);
 
         loadConfigs(facesContext);
 
         initializeConfigs(facesContext);
     }
-    
+
     protected void initializeRegistries(FacesContext facesContext) {
 
         if (designerMode) {

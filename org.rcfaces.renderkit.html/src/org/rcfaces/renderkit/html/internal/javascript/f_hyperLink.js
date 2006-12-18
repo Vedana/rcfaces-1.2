@@ -33,7 +33,7 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getText: function() {
-		return f_core.GetTextNode(this);
+		return f_core.GetTextNode(this, true);
 	},
 	/**
 	 * Set the text of the link.
@@ -43,7 +43,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setText: function(text) {
-		f_core.SetTextNode(this, text);
+		f_core.SetTextNode(this, text, this._accessKey);
 		
 		this.f_setProperty(f_prop.TEXT,text);
 	}

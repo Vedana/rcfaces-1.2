@@ -69,9 +69,6 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.MODE, mode);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

@@ -20,7 +20,6 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 	private String fatalStyleClass;
 	private String infoStyleClass;
 	private String warnStyleClass;
-	private String bundleVar;
 	public String getComponentType() {
 		return MessagesComponent.COMPONENT_TYPE;
 	}
@@ -57,14 +56,6 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final String getBundleVar() {
-		return bundleVar;
-	}
-
-	public final void setBundleVar(String bundleVar) {
-		this.bundleVar = bundleVar;
-	}
-
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (MessagesComponent.COMPONENT_TYPE==getComponentType()) {
@@ -74,7 +65,6 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
 			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
-			LOG.debug("  bundleVar='"+bundleVar+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -128,16 +118,6 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 				component.setWarnStyleClass(warnStyleClass);
 			}
 		}
-
-		if (bundleVar != null) {
-			if (isValueReference(bundleVar)) {
-				ValueBinding vb = application.createValueBinding(bundleVar);
-
-				component.setBundleVar(vb);
-			} else {
-				component.setBundleVar(bundleVar);
-			}
-		}
 	}
 
 	public void release() {
@@ -145,7 +125,6 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		fatalStyleClass = null;
 		infoStyleClass = null;
 		warnStyleClass = null;
-		bundleVar = null;
 
 		super.release();
 	}

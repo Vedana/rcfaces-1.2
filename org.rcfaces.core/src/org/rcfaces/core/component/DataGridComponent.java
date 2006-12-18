@@ -156,6 +156,114 @@ public class DataGridComponent extends AbstractGridComponent implements
 			
 	}
 
+	/**
+
+	 */
+	public final void select(Object rowValue) {
+
+
+				GridTools.select(this, rowValue);
+			
+	}
+
+	/**
+	 * Selects the item at the given zero-relative index in the receiver. If the item at the index was already selected, it remains selected. Indices that are out of range are ignored.
+	 * @param index the index of the item to select
+	 */
+	public final void select(int index) {
+
+
+				GridTools.select(this, index);
+			
+	}
+
+	/**
+	 * Selects the items at the given zero-relative indices in the receiver. The current selection is not cleared before the new items are selected.
+	 * If the item at a given index is not selected, it is selected. If the item at a given index was already selected, it remains selected. Indices that are out of range and duplicate indices are ignored. If the receiver is single-select and multiple indices are specified, then all indices are ignored.
+	 * @param indices the array of indices for the items to select
+	 */
+	public final void select(int[] indices) {
+
+
+				GridTools.select(this, indices);
+			
+	}
+
+	/**
+	 * Selects the items in the range specified by the given zero-relative indices in the receiver. The range of indices is inclusive. The current selection is not cleared before the new items are selected.
+	 * If an item in the given range is not selected, it is selected. If an item in the given range was already selected, it remains selected. Indices that are out of range are ignored and no items will be selected if start is greater than end. If the receiver is single-select and there is more than one item in the given range, then all indices are ignored.
+	 * @param start the start of the range
+	 * @param end the end of the range
+	 */
+	public final void select(int start, int end) {
+
+
+				GridTools.select(this, start, end);
+			
+	}
+
+	/**
+	 * Selects all of the items in the receiver.
+	 * If the receiver is single-select, do nothing.
+	 */
+	public final void selectAll() {
+
+
+				GridTools.selectAll(this);
+			
+	}
+
+	public final void deselect(Object rowValue) {
+
+
+				GridTools.deselect(this, rowValue);
+			
+	}
+
+	/**
+	 * Deselects the item at the given zero-relative index in the receiver. If the item at the index was already deselected, it remains deselected. Indices that are out of range are ignored.
+	 * @param index the index of the item to deselect
+	 */
+	public final void deselect(int index) {
+
+
+				GridTools.deselect(this, index);
+			
+	}
+
+	/**
+	 * Deselects the items at the given zero-relative indices in the receiver. If the item at the given zero-relative index in the receiver is selected, it is deselected. If the item at the index was not selected, it remains deselected. Indices that are out of range and duplicate indices are ignored.
+	 * @param indices the array of indices for the items to deselect
+	 */
+	public final void deselect(int[] indices) {
+
+
+				GridTools.deselect(this, indices);
+			
+	}
+
+	/**
+	 * Deselects the items at the given zero-relative indices in the receiver. If the item at the given zero-relative index in the receiver is selected, it is deselected. If the item at the index was not selected, it remains deselected. The range of the indices is inclusive. Indices that are out of range are ignored.
+	 * @param start the start index of the items to deselect
+	 * @param end the end index of the items to deselect
+	 */
+	public final void deselect(int start, int end) {
+
+
+				GridTools.deselect(this, start, end);
+			
+	}
+
+	/**
+	 * Deselects all selected items in the receiver.
+	 */
+	public final void deselectAll() {
+
+
+				GridTools.deselectAll(this);
+			
+	}
+
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
 		addFacesListener(listener);
 	}
@@ -405,62 +513,134 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the header should be visible.
+	 * @return true if the header is visible
+	 */
 	public final boolean isHeaderVisible() {
 		return isHeaderVisible(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the header should be visible.
+	 * @return true if the header is visible
+	 */
 	public final boolean isHeaderVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.HEADER_VISIBLE, true, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the header should be visible.
+	 * @param headerVisible true if the header should be visible
+	 */
 	public final void setHeaderVisible(boolean headerVisible) {
 		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the header should be visible.
+	 * @param headerVisible true if the header should be visible
+	 */
 	public final void setHeaderVisible(ValueBinding headerVisible) {
 		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "headerVisible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isHeaderVisibleSetted() {
 		return engine.isPropertySetted(Properties.HEADER_VISIBLE);
 	}
 
+	/**
+	 * Returns a boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
+	 * It is ignored if the attribute "rows" is undefined.
+	 * The default value is true.
+	 * If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
+	 * @return true if display by page
+	 */
 	public final boolean isPaged() {
 		return isPaged(null);
 	}
 
+	/**
+	 * Returns a boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
+	 * It is ignored if the attribute "rows" is undefined.
+	 * The default value is true.
+	 * If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
+	 * @return true if display by page
+	 */
 	public final boolean isPaged(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.PAGED, true, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
+	 * It is ignored if the attribute "rows" is undefined.
+	 * The default value is true.
+	 * If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
+	 * @param paged true if display by page
+	 */
 	public final void setPaged(boolean paged) {
 		engine.setProperty(Properties.PAGED, paged);
 	}
 
+	/**
+	 * Sets a boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
+	 * It is ignored if the attribute "rows" is undefined.
+	 * The default value is true.
+	 * If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
+	 * @param paged true if display by page
+	 */
 	public final void setPaged(ValueBinding paged) {
 		engine.setProperty(Properties.PAGED, paged);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "paged" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isPagedSetted() {
 		return engine.isPropertySetted(Properties.PAGED);
 	}
 
+	/**
+	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
+	 * @return table of values
+	 */
 	public final Object getSelectedValues() {
 		return getSelectedValues(null);
 	}
 
+	/**
+	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
+	 * @return table of values
+	 */
 	public final Object getSelectedValues(javax.faces.context.FacesContext facesContext) {
 		return engine.getValue(Properties.SELECTED_VALUES, facesContext);
 	}
 
+	/**
+	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
+	 * @param selectedValues table of values
+	 */
 	public final void setSelectedValues(Object selectedValues) {
 		engine.setValue(Properties.SELECTED_VALUES, selectedValues);
 	}
 
+	/**
+	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
+	 * @param selectedValues table of values
+	 */
 	public final void setSelectedValues(ValueBinding selectedValues) {
 		engine.setValueBinding(Properties.SELECTED_VALUES, selectedValues);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "selectedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSelectedValuesSetted() {
 		return engine.isPropertySetted(Properties.SELECTED_VALUES);
 	}
@@ -481,153 +661,292 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "checkedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isCheckedValuesSetted() {
 		return engine.isPropertySetted(Properties.CHECKED_VALUES);
 	}
 
+	/**
+	 * Returns a string value giving the ordered list of the sorted column ids. read-only
+	 * @return ordered list of the sorted column ids
+	 */
 	public final String getSortedColumnIds() {
 		return getSortedColumnIds(null);
 	}
 
+	/**
+	 * Returns a string value giving the ordered list of the sorted column ids. read-only
+	 * @return ordered list of the sorted column ids
+	 */
 	public final String getSortedColumnIds(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SORTED_COLUMN_IDS, facesContext);
 	}
 
+	/**
+	 * read-only
+	 */
 	public final void setSortedColumnIds(String sortedColumnIds) {
 		engine.setProperty(Properties.SORTED_COLUMN_IDS, sortedColumnIds);
 	}
 
+	/**
+	 * read-only
+	 */
 	public final void setSortedColumnIds(ValueBinding sortedColumnIds) {
 		engine.setProperty(Properties.SORTED_COLUMN_IDS, sortedColumnIds);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "sortedColumnIds" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSortedColumnIdsSetted() {
 		return engine.isPropertySetted(Properties.SORTED_COLUMN_IDS);
 	}
 
+	/**
+	 * Returns a list of the columns' id which represents their order from left to right.
+	 * @return ordered list of columns' id
+	 */
 	public final String getColumnsOrder() {
 		return getColumnsOrder(null);
 	}
 
+	/**
+	 * Returns a list of the columns' id which represents their order from left to right.
+	 * @return ordered list of columns' id
+	 */
 	public final String getColumnsOrder(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.COLUMNS_ORDER, facesContext);
 	}
 
+	/**
+	 * Sets a list of the columns' id which represents their order from left to right.
+	 * @param columnsOrder ordered list of columns' id
+	 */
 	public final void setColumnsOrder(String columnsOrder) {
 		engine.setProperty(Properties.COLUMNS_ORDER, columnsOrder);
 	}
 
+	/**
+	 * Sets a list of the columns' id which represents their order from left to right.
+	 * @param columnsOrder ordered list of columns' id
+	 */
 	public final void setColumnsOrder(ValueBinding columnsOrder) {
 		engine.setProperty(Properties.COLUMNS_ORDER, columnsOrder);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "columnsOrder" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isColumnsOrderSetted() {
 		return engine.isPropertySetted(Properties.COLUMNS_ORDER);
 	}
 
+	/**
+	 * Returns the id for the column containing the key for the row.
+	 * @return column id
+	 */
 	public final String getRowValueColumnId() {
 		return getRowValueColumnId(null);
 	}
 
+	/**
+	 * Returns the id for the column containing the key for the row.
+	 * @return column id
+	 */
 	public final String getRowValueColumnId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
 	}
 
+	/**
+	 * Sets the id for the column containing the key for the row.
+	 * @param rowValueColumnId column id
+	 */
 	public final void setRowValueColumnId(String rowValueColumnId) {
 		engine.setProperty(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
 	}
 
+	/**
+	 * Sets the id for the column containing the key for the row.
+	 * @param rowValueColumnId column id
+	 */
 	public final void setRowValueColumnId(ValueBinding rowValueColumnId) {
 		engine.setProperty(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "rowValueColumnId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isRowValueColumnIdSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE_COLUMN_ID);
 	}
 
+	/**
+	 * Returns a string value specifying the name of the variable receiving the number of rows.
+	 * @return variable name
+	 */
 	public final String getRowCountVar() {
 		return getRowCountVar(null);
 	}
 
+	/**
+	 * Returns a string value specifying the name of the variable receiving the number of rows.
+	 * @return variable name
+	 */
 	public final String getRowCountVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
 	}
 
+	/**
+	 * Sets a string value specifying the name of the variable receiving the number of rows.
+	 * @param rowCountVar variable name
+	 */
 	public final void setRowCountVar(String rowCountVar) {
 		engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
 	}
 
+	/**
+	 * Sets a string value specifying the name of the variable receiving the number of rows.
+	 * @param rowCountVar variable name
+	 */
 	public final void setRowCountVar(ValueBinding rowCountVar) {
 		engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "rowCountVar" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isRowCountVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_COUNT_VAR);
 	}
 
+	/**
+	 * Returns a string value specifying the name of the variable receiving the index of the current row.
+	 * @return variable name
+	 */
 	public final String getRowIndexVar() {
 		return getRowIndexVar(null);
 	}
 
+	/**
+	 * Returns a string value specifying the name of the variable receiving the index of the current row.
+	 * @return variable name
+	 */
 	public final String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
 	}
 
+	/**
+	 * Sets a string value specifying the name of the variable receiving the index of the current row.
+	 * @param rowIndexVar variable name
+	 */
 	public final void setRowIndexVar(String rowIndexVar) {
 		engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
 	}
 
+	/**
+	 * Sets a string value specifying the name of the variable receiving the index of the current row.
+	 * @param rowIndexVar variable name
+	 */
 	public final void setRowIndexVar(ValueBinding rowIndexVar) {
 		engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "rowIndexVar" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isRowIndexVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_INDEX_VAR);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @return boolean
+	 */
 	public final boolean isClientSelectionFullState() {
 		return isClientSelectionFullState(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @return boolean
+	 */
 	public final boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @param clientSelectionFullState boolean
+	 */
 	public final void setClientSelectionFullState(boolean clientSelectionFullState) {
 		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @param clientSelectionFullState boolean
+	 */
 	public final void setClientSelectionFullState(ValueBinding clientSelectionFullState) {
 		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "clientSelectionFullState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isClientSelectionFullStateSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @return boolean
+	 */
 	public final boolean isClientCheckFullState() {
 		return isClientCheckFullState(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @return boolean
+	 */
 	public final boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @param clientCheckFullState boolean
+	 */
 	public final void setClientCheckFullState(boolean clientCheckFullState) {
 		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @param clientCheckFullState boolean
+	 */
 	public final void setClientCheckFullState(ValueBinding clientCheckFullState) {
 		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "clientCheckFullState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isClientCheckFullStateSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

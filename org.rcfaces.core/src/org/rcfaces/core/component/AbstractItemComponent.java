@@ -264,9 +264,6 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 		
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

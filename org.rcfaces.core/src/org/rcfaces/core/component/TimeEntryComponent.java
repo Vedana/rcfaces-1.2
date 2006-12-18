@@ -417,82 +417,162 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @return true if the user entry must completed
+	 */
 	public final boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @return true if the user entry must completed
+	 */
 	public final boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_COMPLETION, true, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @param autoCompletion true if the user entry must completed
+	 */
 	public final void setAutoCompletion(boolean autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @param autoCompletion true if the user entry must completed
+	 */
 	public final void setAutoCompletion(ValueBinding autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "autoCompletion" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
 	}
 
+	/**
+	 * Returns a time value indicating the minimum acceptable time for the component. The first accepted value is greater than minTime.
+	 * @return min Time
+	 */
 	public final Time getMinTime() {
 		return getMinTime(null);
 	}
 
+	/**
+	 * Returns a time value indicating the minimum acceptable time for the component. The first accepted value is greater than minTime.
+	 * @return min Time
+	 */
 	public final Time getMinTime(javax.faces.context.FacesContext facesContext) {
 		return (Time)engine.getValue(Properties.MIN_TIME, facesContext);
 	}
 
+	/**
+	 * Sets a time value indicating the minimum acceptable time for the component. The first accepted value is greater than minTime.
+	 * @param minTime min Time
+	 */
 	public final void setMinTime(Time minTime) {
 		engine.setProperty(Properties.MIN_TIME, minTime);
 	}
 
+	/**
+	 * Sets a time value indicating the minimum acceptable time for the component. The first accepted value is greater than minTime.
+	 * @param minTime min Time
+	 */
 	public final void setMinTime(ValueBinding minTime) {
 		engine.setProperty(Properties.MIN_TIME, minTime);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "minTime" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMinTimeSetted() {
 		return engine.isPropertySetted(Properties.MIN_TIME);
 	}
 
+	/**
+	 * Returns the default value.
+	 * @return default value
+	 */
 	public final Time getDefaultTime() {
 		return getDefaultTime(null);
 	}
 
+	/**
+	 * Returns the default value.
+	 * @return default value
+	 */
 	public final Time getDefaultTime(javax.faces.context.FacesContext facesContext) {
 		return (Time)engine.getValue(Properties.DEFAULT_TIME, facesContext);
 	}
 
+	/**
+	 * Sets the default value.
+	 * @param defaultTime default value
+	 */
 	public final void setDefaultTime(Time defaultTime) {
 		engine.setProperty(Properties.DEFAULT_TIME, defaultTime);
 	}
 
+	/**
+	 * Sets the default value.
+	 * @param defaultTime default value
+	 */
 	public final void setDefaultTime(ValueBinding defaultTime) {
 		engine.setProperty(Properties.DEFAULT_TIME, defaultTime);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultTime" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultTimeSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_TIME);
 	}
 
+	/**
+	 * Returns a time value indicating the maximum acceptable time for the component. The last accepted value is lesser than maxTime.
+	 * @return max time
+	 */
 	public final Time getMaxTime() {
 		return getMaxTime(null);
 	}
 
+	/**
+	 * Returns a time value indicating the maximum acceptable time for the component. The last accepted value is lesser than maxTime.
+	 * @return max time
+	 */
 	public final Time getMaxTime(javax.faces.context.FacesContext facesContext) {
 		return (Time)engine.getValue(Properties.MAX_TIME, facesContext);
 	}
 
+	/**
+	 * Sets a time value indicating the maximum acceptable time for the component. The last accepted value is lesser than maxTime.
+	 * @param maxTime max time
+	 */
 	public final void setMaxTime(Time maxTime) {
 		engine.setProperty(Properties.MAX_TIME, maxTime);
 	}
 
+	/**
+	 * Sets a time value indicating the maximum acceptable time for the component. The last accepted value is lesser than maxTime.
+	 * @param maxTime max time
+	 */
 	public final void setMaxTime(ValueBinding maxTime) {
 		engine.setProperty(Properties.MAX_TIME, maxTime);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "maxTime" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMaxTimeSetted() {
 		return engine.isPropertySetted(Properties.MAX_TIME);
 	}
@@ -513,93 +593,174 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.TIME_FORMAT, timeFormat);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "timeFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isTimeFormatSetted() {
 		return engine.isPropertySetted(Properties.TIME_FORMAT);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the hour field when increasing/decreasing the value with the up/down arrows.
+	 * @return step used
+	 */
 	public final String getHourStep() {
 		return getHourStep(null);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the hour field when increasing/decreasing the value with the up/down arrows.
+	 * @return step used
+	 */
 	public final String getHourStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOUR_STEP, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the step used for the hour field when increasing/decreasing the value with the up/down arrows.
+	 * @param hourStep stop to use
+	 */
 	public final void setHourStep(String hourStep) {
 		engine.setProperty(Properties.HOUR_STEP, hourStep);
 	}
 
+	/**
+	 * Sets an int value specifying the step used for the hour field when increasing/decreasing the value with the up/down arrows.
+	 * @param hourStep stop to use
+	 */
 	public final void setHourStep(ValueBinding hourStep) {
 		engine.setProperty(Properties.HOUR_STEP, hourStep);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "hourStep" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isHourStepSetted() {
 		return engine.isPropertySetted(Properties.HOUR_STEP);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the minute field when increasing/decreasing the value with the up/down arrows.
+	 * @return step
+	 */
 	public final String getMinuteStep() {
 		return getMinuteStep(null);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the minute field when increasing/decreasing the value with the up/down arrows.
+	 * @return step
+	 */
 	public final String getMinuteStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
 	}
 
+	/**
+	 * Steps an int value specifying the step used for the minute field when increasing/decreasing the value with the up/down arrows.
+	 * @param minuteStep step
+	 */
 	public final void setMinuteStep(String minuteStep) {
 		engine.setProperty(Properties.MINUTE_STEP, minuteStep);
 	}
 
+	/**
+	 * Steps an int value specifying the step used for the minute field when increasing/decreasing the value with the up/down arrows.
+	 * @param minuteStep step
+	 */
 	public final void setMinuteStep(ValueBinding minuteStep) {
 		engine.setProperty(Properties.MINUTE_STEP, minuteStep);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "minuteStep" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMinuteStepSetted() {
 		return engine.isPropertySetted(Properties.MINUTE_STEP);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the second field when increasing/decreasing the value with the up/down arrows.
+	 * @return step
+	 */
 	public final String getSecondStep() {
 		return getSecondStep(null);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the second field when increasing/decreasing the value with the up/down arrows.
+	 * @return step
+	 */
 	public final String getSecondStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SECOND_STEP, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the step used for the second field when increasing/decreasing the value with the up/down arrows.
+	 * @param secondStep step
+	 */
 	public final void setSecondStep(String secondStep) {
 		engine.setProperty(Properties.SECOND_STEP, secondStep);
 	}
 
+	/**
+	 * Sets an int value specifying the step used for the second field when increasing/decreasing the value with the up/down arrows.
+	 * @param secondStep step
+	 */
 	public final void setSecondStep(ValueBinding secondStep) {
 		engine.setProperty(Properties.SECOND_STEP, secondStep);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "secondStep" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSecondStepSetted() {
 		return engine.isPropertySetted(Properties.SECOND_STEP);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the millisecond field when increasing/decreasing the value with the up/down arrows.
+	 * @return step
+	 */
 	public final String getMillisStep() {
 		return getMillisStep(null);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the millisecond field when increasing/decreasing the value with the up/down arrows.
+	 * @return step
+	 */
 	public final String getMillisStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the step used for the millisecond field when increasing/decreasing the value with the up/down arrows.
+	 * @param millisStep step
+	 */
 	public final void setMillisStep(String millisStep) {
 		engine.setProperty(Properties.MILLIS_STEP, millisStep);
 	}
 
+	/**
+	 * Sets an int value specifying the step used for the millisecond field when increasing/decreasing the value with the up/down arrows.
+	 * @param millisStep step
+	 */
 	public final void setMillisStep(ValueBinding millisStep) {
 		engine.setProperty(Properties.MILLIS_STEP, millisStep);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "millisStep" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMillisStepSetted() {
 		return engine.isPropertySetted(Properties.MILLIS_STEP);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

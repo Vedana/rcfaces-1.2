@@ -64,6 +64,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -254,7 +255,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.startElement("DIV", dg);
-        htmlWriter.writeRole("grid");
+        htmlWriter.writeRole(IAccessibilityRoles.GRID);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -289,19 +290,19 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 htmlWriter.writeAttribute("v:clientCheckFullState", "true");
             }
         }
-        
+
         if (dg.isReadOnly(facesContext)) {
             htmlWriter.writeAttribute("v:readOnly", "true");
         }
-        
+
         if (tableContext.isDisabled()) {
             htmlWriter.writeAttribute("v:disabled", "true");
         }
-        
+
         if (dg.isRequired(facesContext)) {
             htmlWriter.writeAttribute("v:required", "true");
         }
-        
+
         if (resizable) {
             htmlWriter.writeAttribute("v:resizable", "true");
         }
@@ -2254,7 +2255,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
     protected void setCheckedIndexes(FacesContext facesContext,
             DataGridComponent dg, int[] indexes, int uindexes[], boolean all) {
-        IIndexesModel model = (IIndexesModel) dg.getCheckedValues(facesContext);
+        Object m = dg.getCheckedValues(facesContext);
+        if (m != null && (m instanceof IIndexesModel) == false) {
+            throw new FacesException(
+                    "'CheckedValues' attribute must contain an IIndexesModel if you do not specify 'rowValueColumnId' attribute !");
+        }
+
+        IIndexesModel model = (IIndexesModel) m;
         if (model == null) {
             model = new ArrayIndexesModel();
 
@@ -2280,8 +2287,14 @@ public class DataGridRenderer extends AbstractCssRenderer {
     protected void setSelectedIndexes(FacesContext facesContext,
             DataGridComponent dg, int[] indexes, int dindexes[],
             boolean deselectAll) {
-        IIndexesModel model = (IIndexesModel) dg
-                .getSelectedValues(facesContext);
+
+        Object m = dg.getSelectedValues(facesContext);
+        if (m != null && (m instanceof IIndexesModel) == false) {
+            throw new FacesException(
+                    "'SelectedValues' attribute must contain an IIndexesModel if you do not specify 'rowValueColumnId' attribute !");
+        }
+
+        IIndexesModel model = (IIndexesModel) m;
         if (model == null) {
             model = new ArrayIndexesModel();
 

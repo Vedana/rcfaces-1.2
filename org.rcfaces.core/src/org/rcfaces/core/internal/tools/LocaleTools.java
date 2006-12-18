@@ -47,7 +47,7 @@ public class LocaleTools {
 
     private static final Map dateFormatByLocale;
     static {
-        if (Constants.CACHED_LOCALE_FORMAT) {
+        if (Constants.CACHED_LOCALE_FORMATS) {
             dateFormatByLocale = new HashMap(32);
         }
     }
@@ -313,7 +313,7 @@ public class LocaleTools {
 
     public static String getFormatPattern(Locale locale, int style, int type) {
 
-        if (Constants.CACHED_LOCALE_FORMAT == false) {
+        if (Constants.CACHED_LOCALE_FORMATS == false) {
             Format format = getFormatByType(locale, type, style);
 
             return getPattern(format);
@@ -326,7 +326,7 @@ public class LocaleTools {
 
         Locale locale = PageConfiguration.getAttributesLocale(null, component);
 
-        if (Constants.CACHED_LOCALE_FORMAT == false) {
+        if (Constants.CACHED_LOCALE_FORMATS == false) {
             return getFormatByType(locale, type, -1);
         }
 
@@ -335,7 +335,7 @@ public class LocaleTools {
 
     public static String getDefaultPattern(Locale locale, int type) {
 
-        if (Constants.CACHED_LOCALE_FORMAT == false) {
+        if (Constants.CACHED_LOCALE_FORMATS == false) {
             Format format = getFormatByType(locale, type, -1);
 
             return getPattern(format);

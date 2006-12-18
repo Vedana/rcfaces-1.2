@@ -62,6 +62,11 @@ var __prototype = {
 			
 			f_core.Debug("f_eventTarget", "Register event '"+eventName+"' on component '"+this.id+"' => "+commands);
 
+			if (commands.length==2 && commands[1]=="submit") {
+				this.f_addEventListener(eventType, f_core.Submit);
+				continue;
+			}
+
 			for(var i=1;i<commands.length;i++) {
 				var command=commands[i];
 				

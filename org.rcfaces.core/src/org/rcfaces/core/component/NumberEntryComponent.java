@@ -451,122 +451,238 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @return true if the user entry must completed
+	 */
 	public final boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @return true if the user entry must completed
+	 */
 	public final boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_COMPLETION, true, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @param autoCompletion true if the user entry must completed
+	 */
 	public final void setAutoCompletion(boolean autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @param autoCompletion true if the user entry must completed
+	 */
 	public final void setAutoCompletion(ValueBinding autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "autoCompletion" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
 	}
 
+	/**
+	 * Returns an int value indicating the number of digits to show before the decimal separator.
+	 * @return number of integer digits
+	 */
 	public final int getIntegerDigits() {
 		return getIntegerDigits(null);
 	}
 
+	/**
+	 * Returns an int value indicating the number of digits to show before the decimal separator.
+	 * @return number of integer digits
+	 */
 	public final int getIntegerDigits(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.INTEGER_DIGITS, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value indicating the number of digits to show before the decimal separator.
+	 * @param integerDigits number of integer digits
+	 */
 	public final void setIntegerDigits(int integerDigits) {
 		engine.setProperty(Properties.INTEGER_DIGITS, integerDigits);
 	}
 
+	/**
+	 * Sets an int value indicating the number of digits to show before the decimal separator.
+	 * @param integerDigits number of integer digits
+	 */
 	public final void setIntegerDigits(ValueBinding integerDigits) {
 		engine.setProperty(Properties.INTEGER_DIGITS, integerDigits);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "integerDigits" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isIntegerDigitsSetted() {
 		return engine.isPropertySetted(Properties.INTEGER_DIGITS);
 	}
 
+	/**
+	 * Returns an int value indicating the number of digits to show after the decimal separator.
+	 * @return number of fraction digits
+	 */
 	public final int getFractionDigits() {
 		return getFractionDigits(null);
 	}
 
+	/**
+	 * Returns an int value indicating the number of digits to show after the decimal separator.
+	 * @return number of fraction digits
+	 */
 	public final int getFractionDigits(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.FRACTION_DIGITS, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value indicating the number of digits to show after the decimal separator.
+	 * @param fractionDigits number of fraction digits
+	 */
 	public final void setFractionDigits(int fractionDigits) {
 		engine.setProperty(Properties.FRACTION_DIGITS, fractionDigits);
 	}
 
+	/**
+	 * Sets an int value indicating the number of digits to show after the decimal separator.
+	 * @param fractionDigits number of fraction digits
+	 */
 	public final void setFractionDigits(ValueBinding fractionDigits) {
 		engine.setProperty(Properties.FRACTION_DIGITS, fractionDigits);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "fractionDigits" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isFractionDigitsSetted() {
 		return engine.isPropertySetted(Properties.FRACTION_DIGITS);
 	}
 
+	/**
+	 * Returns a string value specifying the format to use (compliant with java format).
+	 * @return number format
+	 */
 	public final String getNumberFormat() {
 		return getNumberFormat(null);
 	}
 
+	/**
+	 * Returns a string value specifying the format to use (compliant with java format).
+	 * @return number format
+	 */
 	public final String getNumberFormat(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.NUMBER_FORMAT, facesContext);
 	}
 
+	/**
+	 * Sets a string value specifying the format to use (compliant with java format).
+	 * @param numberFormat number format
+	 */
 	public final void setNumberFormat(String numberFormat) {
 		engine.setProperty(Properties.NUMBER_FORMAT, numberFormat);
 	}
 
+	/**
+	 * Sets a string value specifying the format to use (compliant with java format).
+	 * @param numberFormat number format
+	 */
 	public final void setNumberFormat(ValueBinding numberFormat) {
 		engine.setProperty(Properties.NUMBER_FORMAT, numberFormat);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "numberFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isNumberFormatSetted() {
 		return engine.isPropertySetted(Properties.NUMBER_FORMAT);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the integer field when increasing/decreasing the value with the up/down arrows.
+	 * @return step
+	 */
 	public final String getIntegerStep() {
 		return getIntegerStep(null);
 	}
 
+	/**
+	 * Returns an int value specifying the step used for the integer field when increasing/decreasing the value with the up/down arrows.
+	 * @return step
+	 */
 	public final String getIntegerStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INTEGER_STEP, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the step used for the integer field when increasing/decreasing the value with the up/down arrows.
+	 * @param integerStep step
+	 */
 	public final void setIntegerStep(String integerStep) {
 		engine.setProperty(Properties.INTEGER_STEP, integerStep);
 	}
 
+	/**
+	 * Sets an int value specifying the step used for the integer field when increasing/decreasing the value with the up/down arrows.
+	 * @param integerStep step
+	 */
 	public final void setIntegerStep(ValueBinding integerStep) {
 		engine.setProperty(Properties.INTEGER_STEP, integerStep);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "integerStep" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isIntegerStepSetted() {
 		return engine.isPropertySetted(Properties.INTEGER_STEP);
 	}
 
+	/**
+	 * Experimental Do not use.
+	 */
 	public final String getFractionStep() {
 		return getFractionStep(null);
 	}
 
+	/**
+	 * Experimental Do not use.
+	 */
 	public final String getFractionStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FRACTION_STEP, facesContext);
 	}
 
+	/**
+	 * Experimental Do not use.
+	 */
 	public final void setFractionStep(String fractionStep) {
 		engine.setProperty(Properties.FRACTION_STEP, fractionStep);
 	}
 
+	/**
+	 * Experimental Do not use.
+	 */
 	public final void setFractionStep(ValueBinding fractionStep) {
 		engine.setProperty(Properties.FRACTION_STEP, fractionStep);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "fractionStep" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isFractionStepSetted() {
 		return engine.isPropertySetted(Properties.FRACTION_STEP);
 	}
@@ -587,53 +703,94 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.MINIMUM, minimum);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "minimum" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMinimumSetted() {
 		return engine.isPropertySetted(Properties.MINIMUM);
 	}
 
+	/**
+	 * Returns the default value.
+	 * @return default value
+	 */
 	public final Number getDefaultNumber() {
 		return getDefaultNumber(null);
 	}
 
+	/**
+	 * Returns the default value.
+	 * @return default value
+	 */
 	public final Number getDefaultNumber(javax.faces.context.FacesContext facesContext) {
 		return (Number)engine.getValue(Properties.DEFAULT_NUMBER, facesContext);
 	}
 
+	/**
+	 * Sets the default value.
+	 * @param defaultNumber default value
+	 */
 	public final void setDefaultNumber(Number defaultNumber) {
 		engine.setProperty(Properties.DEFAULT_NUMBER, defaultNumber);
 	}
 
+	/**
+	 * Sets the default value.
+	 * @param defaultNumber default value
+	 */
 	public final void setDefaultNumber(ValueBinding defaultNumber) {
 		engine.setProperty(Properties.DEFAULT_NUMBER, defaultNumber);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultNumber" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultNumberSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_NUMBER);
 	}
 
+	/**
+	 * Returns an int value specifying the upper limit for the value of the component.
+	 * @return maximum
+	 */
 	public final Number getMaximum() {
 		return getMaximum(null);
 	}
 
+	/**
+	 * Returns an int value specifying the upper limit for the value of the component.
+	 * @return maximum
+	 */
 	public final Number getMaximum(javax.faces.context.FacesContext facesContext) {
 		return (Number)engine.getValue(Properties.MAXIMUM, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the upper limit for the value of the component.
+	 * @param maximum maximum
+	 */
 	public final void setMaximum(Number maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
+	/**
+	 * Sets an int value specifying the upper limit for the value of the component.
+	 * @param maximum maximum
+	 */
 	public final void setMaximum(ValueBinding maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "maximum" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMaximumSetted() {
 		return engine.isPropertySetted(Properties.MAXIMUM);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

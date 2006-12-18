@@ -6,8 +6,6 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.Collection;
 
-import javax.faces.application.FacesMessage;
-
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
@@ -42,8 +40,6 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
     boolean isUnitializedComponentsPending();
 
     void pushUnitializedComponent(String componentId);
-
-    String allocateFacesMessage(FacesMessage message, boolean mustDeclare[]);
 
     String allocateString(String text, boolean mustDeclare[]);
 

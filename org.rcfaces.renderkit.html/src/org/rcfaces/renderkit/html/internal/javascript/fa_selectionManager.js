@@ -146,7 +146,7 @@ var __prototype = {
 				this.f_setProperty(f_prop.SELECTED_ITEMS, selectedElementValues, true);
 			}
 			
-			if (this._clearAllSelected) {
+			if (this._clearAllSelectedElements) {
 				this.f_setProperty(f_prop.DESELECTED_ITEMS, f_prop.ALL_VALUE);
 
 			} else {

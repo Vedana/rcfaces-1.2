@@ -93,17 +93,6 @@ var __prototype = {
 
 		this.f_super(arguments);
 	},
-	
-	/**
-	 * @method hidden
-	 */
-	f_registerMessageObject: function(componentClientId, messageObject) {
-		var ctx=f_messageContext.Get(this);
-		
-		var component=f_core.GetElementById(componentClientId);
-		
-		return ctx.f_addMessageObject(component, messageObject, false);
-	},
 	fa_updateMessages: function() {
 		var summaryLabel=this._summaryLabel;
 		var detailLabel=this._detailLabel;

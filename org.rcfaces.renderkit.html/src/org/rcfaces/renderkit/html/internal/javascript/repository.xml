@@ -71,6 +71,16 @@
 				<required-class name="f_aspect" />
 			</class>
 		</file>
+		<file name="f_messageObject.js">
+			<class name="f_messageObject">
+				<required-class name="f_object" />
+			</class>
+		</file>
+		<file name="f_messageContext.js">
+			<class name="f_messageContext">
+				<required-class name="f_messageObject" />
+			</class>
+		</file>
 	</module>
 
 <!-- Pas besoin ! Car on envoie tous les inputs hidden de la form !
@@ -223,11 +233,6 @@
 				<required-class name="fa_eventTarget" />
 			</class>
 		</file>
-		<file name="f_input.js">
-			<class name="f_input">
-				<required-class name="f_component" />
-			</class>
-		</file>
 	</module>
 
 <!-- VALIDATOR Components -->
@@ -243,9 +248,25 @@
 			</class>
 		</file>
 	</module>
+	
+	<!-- Messages features -->
+	<module id="message">
+		<file name="fa_message.js">
+			<class name="fa_message">
+				<required-class name="f_aspect" />
+				<required-class name="f_messageContext" />
+			</class>
+		</file>
+	</module>
 
 <!-- CORE Module components (pas obligatoire !) -->
 	<module id="basicComponent" defaultCoreModule="true">
+		<file name="f_input.js">
+			<class name="f_input">
+				<required-class name="f_component" /> 
+				<required-class id="validator" name="f_clientValidator" />
+			</class>
+		</file>
 		<file name="f_button.js">
 			<class name="f_button">
 				<required-class name="f_input" />
@@ -491,10 +512,12 @@
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_focusStyleClass" />
 				<required-class name="fa_selectionProvider" />
+				<required-class name="fa_message" />
 				<required-class id="validator" name="f_clientValidator" />
 				<required-class id="features" name="f_clientValidator" />
 				<required-class id="features" name="f_vb" />
 				<required-class id="menu" name="f_menu" />
+				<required-class id="message" name="f_messageContext" />
 			</class>
 		</file>
 		<file name="f_passwordEntry.js">
@@ -667,33 +690,21 @@
 	-->
 	
 <!-- Messages features -->
-	<module id="message">
-		<file name="f_messageObject.js">
-			<class name="f_messageObject">
-				<required-class name="f_object" />
-			</class>
-		</file>
-		<file name="f_messageContext.js">
-			<class name="f_messageContext">
-				<required-class name="f_messageObject" />
-			</class>
-		</file>
-		<file name="fa_message.js">
-			<class name="fa_message">
-				<required-class name="f_aspect" />
-				<required-class name="f_messageContext" />
+	<module id="messageComponents">
+		<file name="fa_messageText.js">
+			<class name="fa_messageText">
+				<required-class name="fa_message" />
 			</class>
 		</file>
 		<file name="fa_message1.js">
 			<class name="fa_message1">
-				<required-class name="f_aspect" />
-				<required-class name="fa_message" />
+				<required-class name="fa_messageText" />
 			</class>
 		</file>
 		<file name="f_messages.js">
 			<class name="f_messages">
 				<required-class name="f_component" />
-				<required-class name="fa_message" />
+				<required-class name="fa_messageText" />
 			</class>
 		</file>
 		<file name="f_message.js">

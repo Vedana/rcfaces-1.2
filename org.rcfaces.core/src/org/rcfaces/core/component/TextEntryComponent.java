@@ -4,9 +4,9 @@ import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
-import java.util.Collections;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.IMenuComponent;
@@ -16,6 +16,7 @@ import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IClientValidationCapability;
 import java.lang.String;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	IValueChangeEventCapability,
 	IMenuCapability,
 	IFocusStyleClassCapability,
+	ISeverityStyleClassCapability,
 	IClientValidationCapability,
 	ISelectionEventCapability,
 	IValidationParameters {
@@ -46,7 +48,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","clientValidator","autoCompletion","text","required","maxTextLength","valueChangeListener","readOnly","focusStyleClass","columnNumber","emptyMessage","autoTab"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","errorStyleClass","clientValidator","autoCompletion","fatalStyleClass","required","maxTextLength","valueChangeListener","columnNumber","warnStyleClass","styleClass","text","infoStyleClass","readOnly","focusStyleClass","autoTab","emptyMessage"}));
 	}
 
 	public TextEntryComponent() {
@@ -375,6 +377,70 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
+	public final java.lang.String getErrorStyleClass() {
+		return getErrorStyleClass(null);
+	}
+
+	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
+	}
+
+	public final void setErrorStyleClass(java.lang.String errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	public final java.lang.String getFatalStyleClass() {
+		return getFatalStyleClass(null);
+	}
+
+	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
+	}
+
+	public final void setFatalStyleClass(java.lang.String fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	public final java.lang.String getInfoStyleClass() {
+		return getInfoStyleClass(null);
+	}
+
+	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
+	}
+
+	public final void setInfoStyleClass(java.lang.String infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	public final java.lang.String getWarnStyleClass() {
+		return getWarnStyleClass(null);
+	}
+
+	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
+	}
+
+	public final void setWarnStyleClass(java.lang.String warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+	}
+
+	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+	}
+
 	public final java.lang.String getClientValidator() {
 		return getClientValidator(null);
 	}
@@ -403,69 +469,126 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
+	/**
+	 * Returns an int value specifying the maximum number of characters that the user can enter in the component.
+	 * @return maximum number of characters
+	 */
 	public final int getMaxTextLength() {
 		return getMaxTextLength(null);
 	}
 
+	/**
+	 * Returns an int value specifying the maximum number of characters that the user can enter in the component.
+	 * @return maximum number of characters
+	 */
 	public final int getMaxTextLength(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.MAX_TEXT_LENGTH, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the maximum number of characters that the user can enter in the component.
+	 * @param maxTextLength maximum number of characters
+	 */
 	public final void setMaxTextLength(int maxTextLength) {
 		engine.setProperty(Properties.MAX_TEXT_LENGTH, maxTextLength);
 	}
 
+	/**
+	 * Sets an int value specifying the maximum number of characters that the user can enter in the component.
+	 * @param maxTextLength maximum number of characters
+	 */
 	public final void setMaxTextLength(ValueBinding maxTextLength) {
 		engine.setProperty(Properties.MAX_TEXT_LENGTH, maxTextLength);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "maxTextLength" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMaxTextLengthSetted() {
 		return engine.isPropertySetted(Properties.MAX_TEXT_LENGTH);
 	}
 
+	/**
+	 * Returns an int value holding the width of the component in characters : x characters translates into y pixels width.
+	 * @return width in characters
+	 */
 	public final int getColumnNumber() {
 		return getColumnNumber(null);
 	}
 
+	/**
+	 * Returns an int value holding the width of the component in characters : x characters translates into y pixels width.
+	 * @return width in characters
+	 */
 	public final int getColumnNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.COLUMN_NUMBER, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value holding the width of the component in characters : x characters translates into y pixels width.
+	 * @param columnNumber width in characters
+	 */
 	public final void setColumnNumber(int columnNumber) {
 		engine.setProperty(Properties.COLUMN_NUMBER, columnNumber);
 	}
 
+	/**
+	 * Sets an int value holding the width of the component in characters : x characters translates into y pixels width.
+	 * @param columnNumber width in characters
+	 */
 	public final void setColumnNumber(ValueBinding columnNumber) {
 		engine.setProperty(Properties.COLUMN_NUMBER, columnNumber);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "columnNumber" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isColumnNumberSetted() {
 		return engine.isPropertySetted(Properties.COLUMN_NUMBER);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @return true if the user entry must completed
+	 */
 	public final boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @return true if the user entry must completed
+	 */
 	public final boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_COMPLETION, true, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @param autoCompletion true if the user entry must completed
+	 */
 	public final void setAutoCompletion(boolean autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
+	 * @param autoCompletion true if the user entry must completed
+	 */
 	public final void setAutoCompletion(ValueBinding autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "autoCompletion" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

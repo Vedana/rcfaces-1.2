@@ -3,7 +3,7 @@
  */
 
 /**
- * @class public f_messages extends f_component, fa_message
+ * @class public f_messages extends f_component, fa_messageText
  */
  
 var __static = {
@@ -66,14 +66,6 @@ var __prototype = {
 		var b=f_core.GetAttribute(this, "v:globalOnly")?true:false;
 		this._globalOnly=b;
 		return b;
-	},
-	/**
-	 * @method hidden
-	 */
-	f_registerMessageObject: function(global, messageObject) {			
-		var ctx=f_messageContext.Get(this);
-		
-		return ctx.f_addMessageObject(global, messageObject, false);
 	},
 	f_performMessageChanges: function(messageContext) {	
 		var messages=messageContext.f_listMessages(null, this.f_isGlobalOnly());
@@ -155,4 +147,4 @@ var __prototype = {
 	}
 }
 
-var f_messages=new f_class("f_messages", null, __static, __prototype, f_component, fa_message);
+var f_messages=new f_class("f_messages", null, __static, __prototype, f_component, fa_messageText);

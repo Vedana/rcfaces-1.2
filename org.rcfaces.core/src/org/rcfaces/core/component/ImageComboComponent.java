@@ -221,29 +221,42 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		
 	}
 
+	/**
+	 * Experimental : do not use!
+	 */
 	public final int getPopupRowNumber() {
 		return getPopupRowNumber(null);
 	}
 
+	/**
+	 * Experimental : do not use!
+	 */
 	public final int getPopupRowNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.POPUP_ROW_NUMBER, 0, facesContext);
 	}
 
+	/**
+	 * Experimental : do not use!
+	 */
 	public final void setPopupRowNumber(int popupRowNumber) {
 		engine.setProperty(Properties.POPUP_ROW_NUMBER, popupRowNumber);
 	}
 
+	/**
+	 * Experimental : do not use!
+	 */
 	public final void setPopupRowNumber(ValueBinding popupRowNumber) {
 		engine.setProperty(Properties.POPUP_ROW_NUMBER, popupRowNumber);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "popupRowNumber" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isPopupRowNumberSetted() {
 		return engine.isPropertySetted(Properties.POPUP_ROW_NUMBER);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

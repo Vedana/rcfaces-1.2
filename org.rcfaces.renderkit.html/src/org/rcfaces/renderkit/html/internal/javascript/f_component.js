@@ -94,11 +94,11 @@ var __prototype = {
 		this.fa_componentUpdated = false;
 		
 		var accessKey=f_core.GetAttribute(this, "v:accessKey");
-		if (accessKey) {
-			this._accessKey=accessKey;
-			
-		} else {
+		if (!accessKey) {
 			accessKey=this.accessKey;
+		}
+		if (accessKey) {		
+			this._accessKey=accessKey;
 		}
 		
 		if (accessKey) {
@@ -132,7 +132,19 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getX: function() {
-		return this.style.left;
+		return this._getSize(this.style.left);
+	},
+	
+	/**
+	 * @method private
+	 * @return number
+	 */
+	_getSize: function(size) {
+		if (!size) {
+			return null;
+		}
+		
+		return parseInt(size);
 	},
 	/**
 	 * @method public
@@ -142,7 +154,7 @@ var __prototype = {
 	f_setX: function(x) {
 		f_core.Assert(typeof(x)=="number", "x parameter must be a number ! ("+x+")");
 		
-		this.style.left = x;
+		this.style.left = x+"px";
 		this.f_setProperty(f_prop.X,x);
 	},
 	/**
@@ -150,7 +162,7 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getY: function() {
-		return this.style.top;
+		return this._getSize(this.style.top);
 	},
 	/**
 	 * @method public
@@ -160,7 +172,7 @@ var __prototype = {
 	f_setY: function(y) {
 		f_core.Assert(typeof(y)=="number", "y parameter must be a number ! ("+y+")");
 
-		this.style.top = y;
+		this.style.top = y+"px";
 		this.f_setProperty(f_prop.Y,y);
 	},
 	/**
@@ -168,7 +180,7 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getWidth: function() {
-		return this.style.width;
+		return this._getSize(this.style.width);
 	},
 	/**
 	 * @method public
@@ -178,7 +190,7 @@ var __prototype = {
 	f_setWidth: function(w) {
 		f_core.Assert(typeof(w)=="number", "w parameter must be a number ! ("+w+")");
 
-		this.style.width = w;
+		this.style.width = w+"px";
 		this.f_setProperty(f_prop.WIDTH,w);
 	},
 	/**
@@ -186,7 +198,7 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getHeight: function() {
-		return this.style.height;
+		return this._getSize(this.style.height);
 	},
 	/**
 	 * @method public
@@ -196,7 +208,7 @@ var __prototype = {
 	f_setHeight: function(h) {
 		f_core.Assert(typeof(h)=="number", "h parameter must be a number ! ("+h+")");
 
-		this.style.height = h;
+		this.style.height = h+"px";
 		this.f_setProperty(f_prop.HEIGHT,h);
 	},
 	/**

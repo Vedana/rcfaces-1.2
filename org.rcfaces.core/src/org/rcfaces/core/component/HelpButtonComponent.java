@@ -43,9 +43,6 @@ public class HelpButtonComponent extends ImageButtonComponent implements
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

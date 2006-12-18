@@ -265,6 +265,10 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.SHOW_IF_MESSAGE, showIfMessage);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "showIfMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isShowIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SHOW_IF_MESSAGE);
 	}
@@ -285,13 +289,14 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.SET_FOCUS_IF_MESSAGE, setFocusIfMessage);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "setFocusIfMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSetFocusIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SET_FOCUS_IF_MESSAGE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

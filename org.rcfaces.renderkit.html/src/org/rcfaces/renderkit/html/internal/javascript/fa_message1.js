@@ -5,7 +5,7 @@
 /**
  * Aspect Message1
  *
- * @aspect fa_message1 extends fa_message
+ * @aspect fa_message1 extends fa_messageText
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -152,4 +152,4 @@ var __prototype = {
 	}
 }
 
-var fa_message1=new f_aspect("fa_message1", null, __prototype, fa_message);
+var fa_message1=new f_aspect("fa_message1", null, __prototype, fa_messageText);

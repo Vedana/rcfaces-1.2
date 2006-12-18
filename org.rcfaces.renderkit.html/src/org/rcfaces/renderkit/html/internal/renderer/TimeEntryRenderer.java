@@ -21,6 +21,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.TimeTools;
 import org.rcfaces.core.model.Time;
 import org.rcfaces.renderkit.html.internal.AbstractCompositeRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
@@ -56,7 +57,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
         htmlWriter.startElement("DIV");
 
-        htmlWriter.writeRole("textfield");
+        htmlWriter.writeRole(IAccessibilityRoles.TEXT_FIELD);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);

@@ -108,129 +108,246 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IMenuListener.class);
 	}
 
+	/**
+	 * Returns an int value specifying the delay in milliseconds before showing the suggestion list.
+	 * @return delay in milliseconds
+	 */
 	public final int getSuggestionDelayMs() {
 		return getSuggestionDelayMs(null);
 	}
 
+	/**
+	 * Returns an int value specifying the delay in milliseconds before showing the suggestion list.
+	 * @return delay in milliseconds
+	 */
 	public final int getSuggestionDelayMs(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SUGGESTION_DELAY_MS, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the delay in milliseconds before showing the suggestion list.
+	 * @param suggestionDelayMs delay in milliseconds
+	 */
 	public final void setSuggestionDelayMs(int suggestionDelayMs) {
 		engine.setProperty(Properties.SUGGESTION_DELAY_MS, suggestionDelayMs);
 	}
 
+	/**
+	 * Sets an int value specifying the delay in milliseconds before showing the suggestion list.
+	 * @param suggestionDelayMs delay in milliseconds
+	 */
 	public final void setSuggestionDelayMs(ValueBinding suggestionDelayMs) {
 		engine.setProperty(Properties.SUGGESTION_DELAY_MS, suggestionDelayMs);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "suggestionDelayMs" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSuggestionDelayMsSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_DELAY_MS);
 	}
 
+	/**
+	 * Returns an int value specifying the minimum number of characters before the suggestion is calculated.
+	 * @return minimum number of characters
+	 */
 	public final int getSuggestionMinChars() {
 		return getSuggestionMinChars(null);
 	}
 
+	/**
+	 * Returns an int value specifying the minimum number of characters before the suggestion is calculated.
+	 * @return minimum number of characters
+	 */
 	public final int getSuggestionMinChars(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SUGGESTION_MIN_CHARS, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the minimum number of characters before the suggestion is calculated.
+	 * @param suggestionMinChars minimum number of characters
+	 */
 	public final void setSuggestionMinChars(int suggestionMinChars) {
 		engine.setProperty(Properties.SUGGESTION_MIN_CHARS, suggestionMinChars);
 	}
 
+	/**
+	 * Sets an int value specifying the minimum number of characters before the suggestion is calculated.
+	 * @param suggestionMinChars minimum number of characters
+	 */
 	public final void setSuggestionMinChars(ValueBinding suggestionMinChars) {
 		engine.setProperty(Properties.SUGGESTION_MIN_CHARS, suggestionMinChars);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "suggestionMinChars" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSuggestionMinCharsSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_MIN_CHARS);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should consider the case of the user input when using the data.
+	 * @return true if case sensitive
+	 */
 	public final boolean isCaseSensitive() {
 		return isCaseSensitive(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the component should consider the case of the user input when using the data.
+	 * @return true if case sensitive
+	 */
 	public final boolean isCaseSensitive(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CASE_SENSITIVE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should consider the case of the user input when using the data.
+	 * @param true if case sensitive
+	 */
 	public final void setCaseSensitive(boolean caseSensitive) {
 		engine.setProperty(Properties.CASE_SENSITIVE, caseSensitive);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the component should consider the case of the user input when using the data.
+	 * @param true if case sensitive
+	 */
 	public final void setCaseSensitive(ValueBinding caseSensitive) {
 		engine.setProperty(Properties.CASE_SENSITIVE, caseSensitive);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "caseSensitive" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isCaseSensitiveSetted() {
 		return engine.isPropertySetted(Properties.CASE_SENSITIVE);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the first proposed value must be automatically appended to the current entry.
+	 * @return true if proposal is forced
+	 */
 	public final boolean isForceProposal() {
 		return isForceProposal(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating if the first proposed value must be automatically appended to the current entry.
+	 * @return true if proposal is forced
+	 */
 	public final boolean isForceProposal(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.FORCE_PROPOSAL, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the first proposed value must be automatically appended to the current entry.
+	 * @param forceProposal if proposal has to be forced
+	 */
 	public final void setForceProposal(boolean forceProposal) {
 		engine.setProperty(Properties.FORCE_PROPOSAL, forceProposal);
 	}
 
+	/**
+	 * Sets a boolean value indicating if the first proposed value must be automatically appended to the current entry.
+	 * @param forceProposal if proposal has to be forced
+	 */
 	public final void setForceProposal(ValueBinding forceProposal) {
 		engine.setProperty(Properties.FORCE_PROPOSAL, forceProposal);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "forceProposal" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isForceProposalSetted() {
 		return engine.isPropertySetted(Properties.FORCE_PROPOSAL);
 	}
 
+	/**
+	 * Returns a string value containing the value for the selected select item object.
+	 * @return value selected
+	 */
 	public final Object getSuggestionValue() {
 		return getSuggestionValue(null);
 	}
 
+	/**
+	 * Returns a string value containing the value for the selected select item object.
+	 * @return value selected
+	 */
 	public final Object getSuggestionValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValue(Properties.SUGGESTION_VALUE, facesContext);
 	}
 
+	/**
+	 * Sets a string value containing the value for the selected select item object.
+	 * @param suggestionValue value selected
+	 */
 	public final void setSuggestionValue(Object suggestionValue) {
 		engine.setValue(Properties.SUGGESTION_VALUE, suggestionValue);
 	}
 
+	/**
+	 * Sets a string value containing the value for the selected select item object.
+	 * @param suggestionValue value selected
+	 */
 	public final void setSuggestionValue(ValueBinding suggestionValue) {
 		engine.setValueBinding(Properties.SUGGESTION_VALUE, suggestionValue);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "suggestionValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSuggestionValueSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_VALUE);
 	}
 
+	/**
+	 * Returns a string specifying a converter id or a binding to a converter object. This converter will be used for the values of the list items.
+	 * @return converter id
+	 */
 	public final javax.faces.convert.Converter getSuggestionConverter() {
 		return getSuggestionConverter(null);
 	}
 
+	/**
+	 * Returns a string specifying a converter id or a binding to a converter object. This converter will be used for the values of the list items.
+	 * @return converter id
+	 */
 	public final javax.faces.convert.Converter getSuggestionConverter(javax.faces.context.FacesContext facesContext) {
 		return (javax.faces.convert.Converter)engine.getValue(Properties.SUGGESTION_CONVERTER, facesContext);
 	}
 
+	/**
+	 * Sets a string specifying a converter id or a binding to a converter object. This converter will be used for the values of the list items.
+	 * @param suggestionConverter converter id
+	 */
 	public final void setSuggestionConverter(javax.faces.convert.Converter suggestionConverter) {
 		engine.setProperty(Properties.SUGGESTION_CONVERTER, suggestionConverter);
 	}
 
+	/**
+	 * Sets a string specifying a converter id or a binding to a converter object. This converter will be used for the values of the list items.
+	 * @param suggestionConverter converter id
+	 */
 	public final void setSuggestionConverter(ValueBinding suggestionConverter) {
 		engine.setProperty(Properties.SUGGESTION_CONVERTER, suggestionConverter);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "suggestionConverter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSuggestionConverterSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_CONVERTER);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

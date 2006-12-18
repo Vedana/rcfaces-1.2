@@ -12,6 +12,7 @@ import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
@@ -66,9 +67,9 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
         }
 
         protected String getRole() {
-           return "checkbox";
+            return IAccessibilityRoles.CHECK_BOX;
         }
- 
+
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
             super.encodeAttributes(facesContext);

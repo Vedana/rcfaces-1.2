@@ -60,9 +60,6 @@ public class SelectImageItemComponent extends CameliaItemComponent implements
 		
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

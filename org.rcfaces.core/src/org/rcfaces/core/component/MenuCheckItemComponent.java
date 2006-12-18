@@ -43,9 +43,6 @@ public class MenuCheckItemComponent extends MenuItemComponent implements
 		engine.setProperty(Properties.CHECKED, checked);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

@@ -79,9 +79,6 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 			
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

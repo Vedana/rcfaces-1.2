@@ -59,9 +59,6 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

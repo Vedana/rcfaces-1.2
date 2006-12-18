@@ -10,16 +10,57 @@
  * @version $Revision$ $Date$
  */
 
+
 function f_messageContext(form) {
+
+	this._messages=new Object;
+
+	if (!arguments.length) {
+		this._listeners=new Array;
+		f_core.Assert(f_messageContext._Root===undefined, "Root messageContext is already defined !");
+		return;
+	}
+
+	f_core.Assert(form && form.tagName && form.tagName.toUpperCase()=="FORM", "Form parameter is not a form ! ("+form+")");
+
 	this._form=form;
+	var parent=f_messageContext.Get();
+	this._parent=parent;
+	this._listeners=parent._listeners;
+	
+	// Il faut recuperer les messages du root !
+	var rootMessages=parent._messages;
+	if (rootMessages) {
+		var formClientId=form.id;
+		
+		var messages=this._messages;
+	
+		for(var i in rootMessages) {
+			if (i.indexOf(formClientId)) {
+				 // Commence pas par notre clientId !
+				continue;
+			}
+			
+			messages[i]=rootMessages[i];
+			rootMessages[i]=undefined;
+		}	
+	}	
 	
 	f_core.AddCheckListener(form, this);
 }
 	
 f_messageContext.prototype.f_finalize=function() {
-	this._listeners=undefined; // function[]
-	this._messages=undefined;  // f_messageObject[]
-	this._form=undefined; // HTMLFormElement
+	var parent=this._parent;
+	if (parent) {
+		this._parent=undefined; // f_messageContext
+		this._form._messageContext=undefined; // f_messageContext
+		this._form=undefined; // HTMLFormElement
+		
+	} else {
+		this._listeners=undefined; // function[]
+	}
+	
+	// this._messages=undefined;  // f_messageObject[]	
 }
 
 /**
@@ -28,8 +69,7 @@ f_messageContext.prototype.f_finalize=function() {
  * @return void
  */
 f_messageContext.prototype.f_performCheckPre=function(form) {
-	this._blockEvent=true;
-	this.f_clearMessages();
+	this._clearMessages(false);
 }
 
 /**
@@ -40,7 +80,6 @@ f_messageContext.prototype.f_performCheckPre=function(form) {
  */
 f_messageContext.prototype.f_performCheckPost=function(result, form) {
 	// Methode appelée lors du check de la form !
-	this._blockEvent=undefined;
 	
 	this._fireMessageEvent();
 	
@@ -50,19 +89,20 @@ f_messageContext.prototype.f_performCheckPost=function(result, form) {
 	}
 	
 	var messages=this._messages;
-	if (!messages) {
-		return true;
-	}
 	
 	// On bloque si il y a des erreurs !
-	for(var i=0;i<messages.length;i++) {
-		var message=messages[i];
+	for(var clientId in messages) {
+		var ms=messages[clientId];
 		
-		if (message.f_getSeverity()<f_messageObject.SEVERITY_ERROR) {
-			continue;
+		for(var i=0;i<ms.length;i++) {
+			var message=ms[i];
+			
+			if (message.f_getSeverity()<f_messageObject.SEVERITY_ERROR) {
+				continue;
+			}
+				
+			return false;
 		}
-		
-		return false;
 	}
 	
 	return true;
@@ -76,10 +116,6 @@ f_messageContext.prototype.f_performCheckPost=function(result, form) {
  */
 f_messageContext.prototype.f_addMessageListener=function(listener) {
 	var l=this._listeners;
-	if (!l) {
-		l=new Array;
-		this._listeners=l;
-	}
 
 	f_core.Debug("f_messageContext", "Add a new message event listener !");
 	
@@ -94,36 +130,49 @@ f_messageContext.prototype.f_addMessageListener=function(listener) {
  */
 f_messageContext.prototype.f_removeMessageListener=function(listener) {
 	var l=this._listeners;
-	if (!l) {
-		return false;
-	}
 	
 	return l.f_removeElement(listener);
 }
 
 /**
- * 
+ * @method public
+ * @param String componentId Identifiant of component, or an array of identifiants.  (<code>null</code> specified ALL messages)
+ * @param boolean globalOnly
+ * @return f_messageObject[]
  */
 f_messageContext.prototype.f_listMessages=function(componentId, globalOnly) {
-	var msgs=this._messages;
-	if (!msgs) {
-		return [];
-	}
-	
+
 	if (globalOnly) {
-		componentId=f_messageContext._GLOBAL_COMPONENT_ID;	
+		if (this._parent) {
+			return this._parent.f_listMessages(null, true);
+		}
+	
+		componentId=f_messageContext._GLOBAL_COMPONENT_ID;
 	}
 	
+	var messages=this._messages;
+
 	if (typeof(componentId)=="string") {
-		var l=msgs[componentId];
+		if (!messages) {
+			return [];
+		}
+
+		var l=messages[componentId];
 		return (l)?l:[];
 	}
-	
+
+	// Tous les messages
+
 	var l=new Array;
-	for(var cid in msgs) {		
-		l.push.apply(l, msgs[cid]);
-	}
 	
+	for(var clientId in messages) {
+		l.push.apply(l, messages[clientId]);
+	}
+		
+	if (this._parent) {
+		l.push.apply(l, this._parent.f_listMessages(null, true));
+	}
+
 	return l;
 }
 
@@ -136,18 +185,17 @@ f_messageContext.prototype.f_listMessages=function(componentId, globalOnly) {
  * @return void
  */
 f_messageContext.prototype.f_addMessageObject=function(component, message, performEvent) {	
-	f_core.Assert(component===null || component===false || component.id, "Component parameter must be a component or an id !");
-	f_core.Assert(typeof(component)!="string" || component.length, "Parameter componentId is invalid ! ('"+component+"')"); 
+	f_core.Assert(component===null || component===false || component.id || typeof(component)=="string", "f_messageContext.f_addMessageObject: Component parameter must be a component or an id !");
+	f_core.Assert(typeof(component)!="string" || component.length, "f_messageContext.f_addMessageObject: Parameter componentId is invalid ! ('"+component+"')"); 
 
 	var id=component;
 	if (component && component.id) {
 		id=component.id;
 	}
-
-	var l=this._messages;
-	if (!l) {
-		l=new Object;
-		this._messages=l;
+	
+	if (id===null && this._parent) {
+		this._parent.f_addMessageObject(null, message, performEvent);
+		return;
 	}
 	
 	if (id===false) {
@@ -157,10 +205,11 @@ f_messageContext.prototype.f_addMessageObject=function(component, message, perfo
 		id=f_messageContext._GLOBAL_COMPONENT_ID;
 	}
 
-	var l2=l[id];
+	var messages=this._messages;
+	var l2=messages[id];
 	if (!l2) {
 		l2=new Array;
-		l[id]=l2;
+		messages[id]=l2;
 	}
 
 	f_core.Info(f_messageContext, "Add message object to component '"+id
@@ -185,9 +234,9 @@ f_messageContext.prototype.f_addMessageObject=function(component, message, perfo
  * @return f_messageObject
  */
 f_messageContext.prototype.f_addMessage=function(component, severity, summary, detail) {
-	f_core.Assert(typeof(severity)=="number", "Bad type of severity !");
-	f_core.Assert(summary, "Summary is null !");
-	f_core.Assert(component===null || (component instanceof Array) || component.id, "Component parameter must be a component or an id or null !");
+	f_core.Assert(typeof(severity)=="number", "f_messageContext.f_addMessage: Bad type of severity !");
+	f_core.Assert(summary, "f_messageContext.f_addMessage: Summary is null !");
+	f_core.Assert(component===null || (component instanceof Array) || component.id, "f_messageContext.f_addMessage: Component parameter must be a component or an id or null !");
 	
 	var message=new f_messageObject(severity, summary, detail);
 	
@@ -214,49 +263,86 @@ f_messageContext.prototype.f_addMessage=function(component, severity, summary, d
  * @return boolean Returns <code>true</code> if some messages have been removed.
  */
 f_messageContext.prototype.f_clearMessages=function(component, component2) {
-	var l=this._messages;
-	if (!l) {
-		f_core.Debug(f_messageContext, "Nothing to clear.");
-		return false;
-	}
-	
-	if (component===undefined) {		
-		this._messages=undefined;
+	return this._clearMessages(true, arguments);
+}
 
-		f_core.Info(f_messageContext, "Clear all messages.");
+/**
+ * @method private
+ * @param HTMLElement component (or an id)
+ * @return boolean Returns <code>true</code> if some messages have been removed.
+ */
+f_messageContext.prototype._clearMessages=function(performEvent, components) {
+
+	var parent=this._parent;
+	if (!components || !components.length) {
+		// Aucun arguments !
 		
-		this._fireMessageEvent();
+		var changed=false;
+		
+		if (parent) {
+			changed=parent._clearMessages(false);
+		}
+		
+		for(var i in this._messages) {
+			this._messages=new Object;
+			changed=true;
+			break;
+		}
+	
+		if (!changed) {
+			f_core.Info(f_messageContext, "["+this._form+"] No messages to clear.");
+			return false;
+		}	
+
+		f_core.Info(f_messageContext,  "["+this._form+"] Clear all messages.");
+		
+		if (performEvent) {
+			this._fireMessageEvent();
+		}
 		return true;
 	}
 	
+	var messages=this._messages;
+	
 	var changed=false;
-	for(var i=0;i<arguments.length;i++) {
-		var componentId=arguments[i];
+	for(var i=0;i<components.length;i++) {
+		var componentId=components[i];
 		if (componentId===null) {
+			if (parent) {
+				if (parent._clearMessages(false)) {
+					changed=true;
+				}
+				continue;
+			}
+			
 			componentId=f_messageContext._GLOBAL_COMPONENT_ID;
-		} else {
+
+		} else if (typeof(componentId)!="string") {
 			componentId=componentId.id;			
 		}
 		
 		f_core.Assert(typeof(componentId)=="string", "f_messageContext.f_clearMessages: Invalid parameter #"+i+" ("+arguments[i]+").");
 
-		var l2=l[componentId];
+		var l2=messages[componentId];
 		if (!l2) {
-			f_core.Debug(f_messageContext, "Nothing to clear for component '"+componentId+"'.");
+			f_core.Debug(f_messageContext,  "["+this._form+"] Nothing to clear for component '"+componentId+"'.");
 			continue;
 		}
 		
-		l[componentId]=undefined;
+		delete messages[componentId];
 		changed=true;
 	
-		f_core.Info(f_messageContext, "Clear "+(l2.length)+" messages associated to the component '"+componentId+"'.");
+		f_core.Info(f_messageContext,  "["+this._form+"] Clear "+(l2.length)+" messages associated to the component '"+componentId+"'.");
 	}
 	
 	if (!changed) {
 		return false;
 	}
 	
-	this._fireMessageEvent();
+	if (performEvent) {
+		this._fireMessageEvent();
+	}
+	
 	return true;
 }
 
@@ -265,15 +351,13 @@ f_messageContext.prototype.f_clearMessages=function(component, component2) {
  * @return void
  */
 f_messageContext.prototype._fireMessageEvent=function() {
+
 	var l=this._listeners;
 	if (!l) {
+		f_core.Debug("f_messageContext", "["+this._forms+"] No listeners...");
 		return;
 	}
 	
-	if (this._blockEvent) {
-		return;
-	}
-
 	f_core.Debug("f_messageContext", "Fire event message modifications to "+l.length+" listeners...");
 
 	for(var i=0;i<l.length;i++) {
@@ -295,9 +379,21 @@ f_messageContext._UNKNOWN_COMPONENT_ID="?";
 
 
 /**
- * @method public static final
+ * @method public static
  */
 f_messageContext.Get=function(component) {
+	if (!component) {
+		var root=f_messageContext._Root;
+		if (root) {
+			return root;
+		}
+		
+		root=new f_messageContext();	
+		f_messageContext._Root=root;
+		
+		return root;	
+	}
+
 	f_core.Assert(component && component.nodeType, "f_messageContext.Get: Bad component parameter ! ("+component+")");
 	
 	var form=f_core.GetParentForm(component);
@@ -316,6 +412,22 @@ f_messageContext.Get=function(component) {
 	return ctx;	
 }
 
+/**
+ * @method hidden static
+ */
+f_messageContext.AppendMessages=function(clientId, messages) {
+	var root=f_messageContext.Get();
+	
+	for(var i=1;i<arguments.length;i++) {
+		root.f_addMessageObject(clientId, arguments[i]);
+	}
+}
+
+/**
+ * @field private static final 
+ */
+f_messageContext._Root=undefined;
+ 
 /**
  * @method public static final
  */

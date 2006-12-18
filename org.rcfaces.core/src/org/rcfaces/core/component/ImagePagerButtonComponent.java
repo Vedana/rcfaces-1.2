@@ -43,22 +43,42 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
+	/**
+	 * Returns a string value specifying the type of data (Java) to convert to or from.
+	 * @return type of data
+	 */
 	public final String getType() {
 		return getType(null);
 	}
 
+	/**
+	 * Returns a string value specifying the type of data (Java) to convert to or from.
+	 * @return type of data
+	 */
 	public final String getType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TYPE, facesContext);
 	}
 
+	/**
+	 * Sets a string value specifying the type of data (Java) to convert to or from.
+	 * @param type type of data
+	 */
 	public final void setType(String type) {
 		engine.setProperty(Properties.TYPE, type);
 	}
 
+	/**
+	 * Sets a string value specifying the type of data (Java) to convert to or from.
+	 * @param type type of data
+	 */
 	public final void setType(ValueBinding type) {
 		engine.setProperty(Properties.TYPE, type);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "type" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isTypeSetted() {
 		return engine.isPropertySetted(Properties.TYPE);
 	}
@@ -79,13 +99,14 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 		engine.setProperty(Properties.HIDE_IF_DISABLED, hideIfDisabled);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "hideIfDisabled" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isHideIfDisabledSetted() {
 		return engine.isPropertySetted(Properties.HIDE_IF_DISABLED);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

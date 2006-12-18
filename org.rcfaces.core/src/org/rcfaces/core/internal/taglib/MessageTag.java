@@ -28,7 +28,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 	private String infoImageURL;
 	private String warnImageURL;
 	private String imageURL;
-	private String bundleVar;
 	private String setFocusIfMessage;
 	private String showIfMessage;
 	public String getComponentType() {
@@ -131,14 +130,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		this.imageURL = imageURL;
 	}
 
-	public final String getBundleVar() {
-		return bundleVar;
-	}
-
-	public final void setBundleVar(String bundleVar) {
-		this.bundleVar = bundleVar;
-	}
-
 	public final String getSetFocusIfMessage() {
 		return setFocusIfMessage;
 	}
@@ -172,7 +163,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			LOG.debug("  infoImageURL='"+infoImageURL+"'");
 			LOG.debug("  warnImageURL='"+warnImageURL+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
-			LOG.debug("  bundleVar='"+bundleVar+"'");
 			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
 			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 		}
@@ -309,16 +299,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			}
 		}
 
-		if (bundleVar != null) {
-			if (isValueReference(bundleVar)) {
-				ValueBinding vb = application.createValueBinding(bundleVar);
-
-				component.setBundleVar(vb);
-			} else {
-				component.setBundleVar(bundleVar);
-			}
-		}
-
 		if (setFocusIfMessage != null) {
 			if (isValueReference(setFocusIfMessage)) {
 				ValueBinding vb = application.createValueBinding(setFocusIfMessage);
@@ -351,7 +331,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		infoImageURL = null;
 		warnImageURL = null;
 		imageURL = null;
-		bundleVar = null;
 		setFocusIfMessage = null;
 		showIfMessage = null;
 

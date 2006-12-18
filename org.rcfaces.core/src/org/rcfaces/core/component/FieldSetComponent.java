@@ -278,9 +278,6 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

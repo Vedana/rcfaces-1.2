@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.log.LogService;
 import org.rcfaces.core.internal.tools.ContextTools;
@@ -28,6 +30,7 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 import org.rcfaces.renderkit.html.internal.renderer.MessagesRepository;
 import org.rcfaces.renderkit.html.internal.service.LogHtmlService;
+import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 
 /**
  * 
@@ -570,9 +573,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             pred++;
         }
 
-        String styleSheetURI = writer.getWriter()
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getHtmlProcessContext().getStyleSheetURI(null, true);
+        String styleSheetURI = htmlRenderContext.getHtmlProcessContext()
+                .getStyleSheetURI(null, true);
         if (styleSheetURI != null && styleSheetURI.equals(jsBaseURI) == false) {
             for (; pred > 0; pred--) {
                 writer.write(',').writeNull();
@@ -610,6 +612,45 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
                     writer.writeln(");");
                 }
             }
+        }
+
+        Map messages = new HashMap();
+        Iterator messageClientIds = facesContext.getClientIdsWithMessages();
+        StringAppender sa = null;
+
+        for (; messageClientIds.hasNext();) {
+            String clientId = (String) messageClientIds.next();
+
+            Iterator it = facesContext.getMessages(clientId);
+            for (; it.hasNext();) {
+                FacesMessage facesMessage = (FacesMessage) it.next();
+
+                String varName = (String) messages.get(facesMessage);
+                if (varName == null) {
+                    varName = JavaScriptTools.writeMessage(facesContext,
+                            writer, facesMessage);
+
+                    messages.put(facesMessage, varName);
+
+                }
+                if (sa == null) {
+                    sa = new StringAppender(32);
+                }
+
+                if (sa.length() > 0) {
+                    sa.append(',');
+                }
+                sa.append(varName);
+            }
+
+            if (sa == null || sa.length() < 1) {
+                continue;
+            }
+
+            writer.writeCall("f_messageContext", "AppendMessages").writeString(
+                    clientId).write(',').write(sa.toString()).writeln(");");
+
+            sa.setLength(0);
         }
 
         LOG.debug("Javascript initialized.");

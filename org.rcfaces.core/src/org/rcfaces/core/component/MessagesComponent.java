@@ -1,6 +1,5 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IBundleVarCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.el.ValueBinding;
@@ -10,14 +9,13 @@ import java.util.Set;
 import java.util.HashSet;
 
 public class MessagesComponent extends AbstractMessagesComponent implements 
-	ISeverityStyleClassCapability,
-	IBundleVarCapability {
+	ISeverityStyleClassCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messages";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessagesComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","styleClass","fatalStyleClass","infoStyleClass","bundleVar","warnStyleClass"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","styleClass","fatalStyleClass","infoStyleClass","warnStyleClass"}));
 	}
 
 	public MessagesComponent() {
@@ -93,25 +91,6 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
-	public final java.lang.String getBundleVar() {
-		return getBundleVar(null);
-	}
-
-	public final java.lang.String getBundleVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BUNDLE_VAR, facesContext);
-	}
-
-	public final void setBundleVar(java.lang.String bundleVar) {
-		engine.setProperty(Properties.BUNDLE_VAR, bundleVar);
-	}
-
-	public final void setBundleVar(ValueBinding bundleVar) {
-		engine.setProperty(Properties.BUNDLE_VAR, bundleVar);
-	}
-
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

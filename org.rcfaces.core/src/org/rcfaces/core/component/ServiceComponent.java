@@ -297,22 +297,42 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
+	/**
+	 * Returns the service id.
+	 * @return service id
+	 */
 	public final String getServiceId() {
 		return getServiceId(null);
 	}
 
+	/**
+	 * Returns the service id.
+	 * @return service id
+	 */
 	public final String getServiceId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SERVICE_ID, facesContext);
 	}
 
+	/**
+	 * Sets the service id.
+	 * @param serviceId service id
+	 */
 	public final void setServiceId(String serviceId) {
 		engine.setProperty(Properties.SERVICE_ID, serviceId);
 	}
 
+	/**
+	 * Sets the service id.
+	 * @param serviceId service id
+	 */
 	public final void setServiceId(ValueBinding serviceId) {
 		engine.setProperty(Properties.SERVICE_ID, serviceId);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "serviceId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isServiceIdSetted() {
 		return engine.isPropertySetted(Properties.SERVICE_ID);
 	}
@@ -333,13 +353,14 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.ENABLE_VIEW_STATE, enableViewState);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "enableViewState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isEnableViewStateSetted() {
 		return engine.isPropertySetted(Properties.ENABLE_VIEW_STATE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

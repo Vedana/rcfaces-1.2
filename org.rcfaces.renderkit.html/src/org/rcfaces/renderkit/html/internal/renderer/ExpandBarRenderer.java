@@ -48,6 +48,8 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
     private static final int DEFAULT_BUTTON_IMAGE_HEIGHT = 16;
 
+    private static final String TITLE_TEXT_ATTRIBUTE = "org.rcfaces.html.EXPAND_BAR_TITLE";
+
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
 
@@ -73,11 +75,37 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         writeCssAttributes(htmlWriter, (collapsed) ? "_collapsed" : null,
                 CSS_ALL_MASK);
 
+        String normalText = expandBarComponent.getText(facesContext);
+        if (normalText != null) {
+            normalText = ParamUtils.formatMessage(expandBarComponent,
+                    normalText);
+        }
+
+        String collapsedText = expandBarComponent
+                .getCollapsedText(facesContext);
+        if (collapsedText != null) {
+            collapsedText = ParamUtils.formatMessage(expandBarComponent,
+                    collapsedText);
+        }
+
+        String text = normalText;
         if (collapsed) {
             htmlWriter.writeAttribute("v:collapsed", "true");
             htmlWriter.writeAttribute("v:className",
                     getStyleClassName(expandBarComponent));
+
+            if (collapsedText != null) {
+                text = collapsedText;
+
+                if (normalText != null) {
+                    htmlWriter.writeAttribute("v:text", normalText);
+                }
+            }
+        } else if (collapsedText != null) {
+            htmlWriter.writeAttribute("v:collapsedText", collapsedText);
         }
+
+        componentContext.setAttribute(TITLE_TEXT_ATTRIBUTE, text);
 
         String accessKey = expandBarComponent.getAccessKey(facesContext);
         if (accessKey != null && accessKey.length() > 0) {
@@ -194,12 +222,12 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.writeFor(buttonId);
         htmlWriter.writeClass(getLabelClassName(htmlWriter));
 
-        String text = expandBarComponent.getText(facesContext);
+        String text = (String) htmlWriter.getComponentRenderContext()
+                .getAttribute(TITLE_TEXT_ATTRIBUTE);
         if (text != null) {
-            text = ParamUtils.formatMessage(expandBarComponent, text);
+            HtmlTools.writeSpanAccessKey(htmlWriter, expandBarComponent, text,
+                    false);
         }
-        HtmlTools.writeSpanAccessKey(htmlWriter, expandBarComponent, text,
-                false);
 
         htmlWriter.endElement("LABEL");
 

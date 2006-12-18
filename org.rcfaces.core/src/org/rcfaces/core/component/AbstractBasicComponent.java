@@ -589,9 +589,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

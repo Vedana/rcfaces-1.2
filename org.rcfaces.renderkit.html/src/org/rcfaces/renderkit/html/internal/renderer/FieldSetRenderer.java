@@ -152,10 +152,10 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         writeJavaScriptAttributes(htmlWriter);
 
         ICssWriter cssWriter = htmlWriter.writeStyle(32);
-        writeFiledSetCss(cssWriter, fieldSetComponent);
+        writeFieldSetCss(cssWriter, fieldSetComponent);
     }
 
-    protected void writeFiledSetCss(ICssWriter cssWriter,
+    protected void writeFieldSetCss(ICssWriter cssWriter,
             FieldSetComponent fieldSetComponent) {
         cssWriter.writePosition(fieldSetComponent);
         cssWriter.writeSize(fieldSetComponent);

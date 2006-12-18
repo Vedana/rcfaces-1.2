@@ -125,9 +125,6 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

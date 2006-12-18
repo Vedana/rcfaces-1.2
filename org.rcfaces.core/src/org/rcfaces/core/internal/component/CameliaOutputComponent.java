@@ -65,7 +65,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
     }
 
     protected void initializeComponent() {
-    	if (Constants.TEMPLATE_SUPPORT) {
+    	if (Constants.TEMPLATE_ENGINE_SUPPORT) {
 	        if (isTemplateComponent() && TemplatesEngine.isConstructPhase()) {
 	            constructTemplate();
 	        }
@@ -153,12 +153,13 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return super.getValueBinding(name);
 	}
 
+/*
 	public void release() {
 		if (engine != null) {
 			engine.release();
 		}
 	}
-
+*/
 /*
     public void encodeBegin(FacesContext context) throws IOException {
 		if (context == null) {

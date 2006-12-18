@@ -37,7 +37,7 @@ public class Constants {
 
     public static final boolean READ_ONLY_COLLECTION_LOCK_ENABLED = true;
 
-    public static final boolean TEMPLATE_SUPPORT = true;
+    public static final boolean TEMPLATE_ENGINE_SUPPORT = true;
 
     public static final boolean RESOURCE_CONTENT_VERSION_SUPPORT = true;
 
@@ -51,7 +51,12 @@ public class Constants {
 
     public static final boolean ETAG_SUPPORT = true;
 
-    public static final boolean DEFAULT_GZIP_SUPPORT = true;
+    public static final boolean GZIP_SUPPORT_DEFAULT_VALUE = true;
+
+    /**
+     * Collection can be converted to DataModel  (JSF spec extension)
+     */
+    public static final boolean COLLECTION_DATAMODEL_SUPPORT = true;
 
     public static final long DEFAULT_EXPIRATION_DELAY = Delay.WEEK;
 
@@ -66,7 +71,7 @@ public class Constants {
     public static final String SAVE_STATE_FIELD_MARKER_PARAMETER = getPackagePrefix()
             + ".SAVE_STATE_FIELD_MARKER";
 
-    public static final boolean DEFAULT_CLIENT_LOCALE_SUPPORT = true;
+    public static final boolean CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE = true;
 
     public static final String RESOURCE_VERSION_DIGEST_ALGORITHM = "SHA-1";
 
@@ -88,7 +93,7 @@ public class Constants {
 
     public static final IImageLoaderFactory IMAGE_LOADER_FACTORY = null;
 
-    public static final boolean CACHED_LOCALE_FORMAT = true;
+    public static final boolean CACHED_LOCALE_FORMATS = true;
 
     public static final boolean COMPACTED_PROPERTY_NAME = true;
 
@@ -113,7 +118,7 @@ public class Constants {
         LOG.info("LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE="
                 + LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE);
 
-        LOG.info("TEMPLATE_SUPPORT=" + TEMPLATE_SUPPORT);
+        LOG.info("TEMPLATE_ENGINE_SUPPORT=" + TEMPLATE_ENGINE_SUPPORT);
 
         LOG.info("RESOURCE_CONTENT_VERSION_SUPPORT="
                 + RESOURCE_CONTENT_VERSION_SUPPORT);
@@ -123,7 +128,7 @@ public class Constants {
 
         LOG.info("CACHED_COMPONENT_ITERATOR=" + CACHED_COMPONENT_ITERATOR);
 
-        LOG.info("CACHED_LOCALE_FORMAT=" + CACHED_LOCALE_FORMAT);
+        LOG.info("CACHED_LOCALE_FORMATS=" + CACHED_LOCALE_FORMATS);
 
         LOG.info("COMPACTED_PROPERTY_NAME=" + COMPACTED_PROPERTY_NAME);
 
@@ -133,7 +138,7 @@ public class Constants {
         LOG.info("HASH_SUPPORT=" + HASH_SUPPORT + " (algorithm: "
                 + HASH_DIGEST_ALGORITHM + ")");
 
-        LOG.info("DEFAULT_GZIP_SUPPORT=" + DEFAULT_GZIP_SUPPORT);
+        LOG.info("GZIP_SUPPORT_DEFAULT_VALUE=" + GZIP_SUPPORT_DEFAULT_VALUE);
 
         LOG.info("DEFAULT_EXPIRATION_DELAY=" + DEFAULT_EXPIRATION_DELAY + " ("
                 + Delay.format(DEFAULT_EXPIRATION_DELAY) + ")");
@@ -142,8 +147,8 @@ public class Constants {
                 + DEFAULT_VERSIONED_EXPIRATION_DELAY + " ("
                 + Delay.format(DEFAULT_VERSIONED_EXPIRATION_DELAY) + ")");
 
-        LOG.info("DEFAULT_CLIENT_LOCALE_SUPPORT="
-                + DEFAULT_CLIENT_LOCALE_SUPPORT);
+        LOG.info("CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE="
+                + CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE);
 
         LOG.info("VERSIONED_URI_HASHCODE_MAX_SIZE="
                 + VERSIONED_URI_HASHCODE_MAX_SIZE);

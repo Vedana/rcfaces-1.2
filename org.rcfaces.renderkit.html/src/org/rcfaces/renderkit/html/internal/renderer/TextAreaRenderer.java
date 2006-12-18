@@ -7,7 +7,6 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TextAreaComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 

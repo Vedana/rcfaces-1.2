@@ -63,7 +63,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
     }
 
     protected void initializeComponent() {
-    	if (Constants.TEMPLATE_SUPPORT) {
+    	if (Constants.TEMPLATE_ENGINE_SUPPORT) {
 	        if (isTemplateComponent() && TemplatesEngine.isConstructPhase()) {
 	            constructTemplate();
 	        }
@@ -151,12 +151,13 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		return super.getValueBinding(name);
 	}
 
+/*
 	public void release() {
 		if (engine != null) {
 			engine.release();
 		}
 	}
-
+*/
 /*
     public void encodeBegin(FacesContext context) throws IOException {
 		if (context == null) {

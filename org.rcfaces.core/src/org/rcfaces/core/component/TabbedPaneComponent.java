@@ -89,9 +89,6 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 		engine.setProperty(Properties.CLOSABLE, closable);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

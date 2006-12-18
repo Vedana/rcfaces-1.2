@@ -306,102 +306,202 @@ public class TreeComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image.
+	 * @return image url
+	 */
 	public final String getDefaultImageURL() {
 		return getDefaultImageURL(null);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image.
+	 * @return image url
+	 */
 	public final String getDefaultImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image.
+	 * @param defaultImageURL image url
+	 */
 	public final void setDefaultImageURL(String defaultImageURL) {
 		engine.setProperty(Properties.DEFAULT_IMAGE_URL, defaultImageURL);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image.
+	 * @param defaultImageURL image url
+	 */
 	public final void setDefaultImageURL(ValueBinding defaultImageURL) {
 		engine.setProperty(Properties.DEFAULT_IMAGE_URL, defaultImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_IMAGE_URL);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image for the selected state.
+	 * @return selected image url
+	 */
 	public final String getDefaultSelectedImageURL() {
 		return getDefaultSelectedImageURL(null);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image for the selected state.
+	 * @return selected image url
+	 */
 	public final String getDefaultSelectedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image for the selected state.
+	 * @param defaultSelectedImageURL selected image url
+	 */
 	public final void setDefaultSelectedImageURL(String defaultSelectedImageURL) {
 		engine.setProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, defaultSelectedImageURL);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image for the selected state.
+	 * @param defaultSelectedImageURL selected image url
+	 */
 	public final void setDefaultSelectedImageURL(ValueBinding defaultSelectedImageURL) {
 		engine.setProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, defaultSelectedImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultSelectedImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultSelectedImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_SELECTED_IMAGE_URL);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image for an expanded node.
+	 * @return expanded image url
+	 */
 	public final String getDefaultExpandedImageURL() {
 		return getDefaultExpandedImageURL(null);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image for an expanded node.
+	 * @return expanded image url
+	 */
 	public final String getDefaultExpandedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, facesContext);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image for an expanded node.
+	 * @param defaultExpandedImageURL expanded image url
+	 */
 	public final void setDefaultExpandedImageURL(String defaultExpandedImageURL) {
 		engine.setProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, defaultExpandedImageURL);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image for an expanded node.
+	 * @param defaultExpandedImageURL expanded image url
+	 */
 	public final void setDefaultExpandedImageURL(ValueBinding defaultExpandedImageURL) {
 		engine.setProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, defaultExpandedImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultExpandedImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultExpandedImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_EXPANDED_IMAGE_URL);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image for the disabled state.
+	 * @return disabled image url
+	 */
 	public final String getDefaultDisabledImageURL() {
 		return getDefaultDisabledImageURL(null);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image for the disabled state.
+	 * @return disabled image url
+	 */
 	public final String getDefaultDisabledImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image for the disabled state.
+	 * @param defaultDisabledImageURL disabled image url
+	 */
 	public final void setDefaultDisabledImageURL(String defaultDisabledImageURL) {
 		engine.setProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, defaultDisabledImageURL);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image for the disabled state.
+	 * @param defaultDisabledImageURL disabled image url
+	 */
 	public final void setDefaultDisabledImageURL(ValueBinding defaultDisabledImageURL) {
 		engine.setProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, defaultDisabledImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultDisabledImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultDisabledImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_DISABLED_IMAGE_URL);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image for a leaf.
+	 * @return leaf image url
+	 */
 	public final String getDefaultLeafImageURL() {
 		return getDefaultLeafImageURL(null);
 	}
 
+	/**
+	 * Returns an url string pointing to the default image for a leaf.
+	 * @return leaf image url
+	 */
 	public final String getDefaultLeafImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_LEAF_IMAGE_URL, facesContext);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image for a leaf.
+	 * @param defaultLeafImageURL leaf image url
+	 */
 	public final void setDefaultLeafImageURL(String defaultLeafImageURL) {
 		engine.setProperty(Properties.DEFAULT_LEAF_IMAGE_URL, defaultLeafImageURL);
 	}
 
+	/**
+	 * Sets an url string pointing to the default image for a leaf.
+	 * @param defaultLeafImageURL leaf image url
+	 */
 	public final void setDefaultLeafImageURL(ValueBinding defaultLeafImageURL) {
 		engine.setProperty(Properties.DEFAULT_LEAF_IMAGE_URL, defaultLeafImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultLeafImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultLeafImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_LEAF_IMAGE_URL);
 	}
@@ -422,6 +522,10 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, defaultSelectedLeafImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultSelectedLeafImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultSelectedLeafImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL);
 	}
@@ -442,6 +546,10 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, defaultExpandedLeafImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultExpandedLeafImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultExpandedLeafImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL);
 	}
@@ -462,86 +570,170 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, defaultDisabledLeafImageURL);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "defaultDisabledLeafImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isDefaultDisabledLeafImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the user can expand the component.
+	 * @return true if the user can expand the component
+	 */
 	public final boolean isUserExpandable() {
 		return isUserExpandable(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the user can expand the component.
+	 * @return true if the user can expand the component
+	 */
 	public final boolean isUserExpandable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.USER_EXPANDABLE, true, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the user can expand the component.
+	 * @param userExpandable true if the user can expand the component
+	 */
 	public final void setUserExpandable(boolean userExpandable) {
 		engine.setProperty(Properties.USER_EXPANDABLE, userExpandable);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the user can expand the component.
+	 * @param userExpandable true if the user can expand the component
+	 */
 	public final void setUserExpandable(ValueBinding userExpandable) {
 		engine.setProperty(Properties.USER_EXPANDABLE, userExpandable);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "userExpandable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isUserExpandableSetted() {
 		return engine.isPropertySetted(Properties.USER_EXPANDABLE);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the expand sign should be visible for the topmost node.
+	 * @return true if the head node's expand sign is hidden
+	 */
 	public final boolean isHideRootExpandSign() {
 		return isHideRootExpandSign(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the expand sign should be visible for the topmost node.
+	 * @return true if the head node's expand sign is hidden
+	 */
 	public final boolean isHideRootExpandSign(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.HIDE_ROOT_EXPAND_SIGN, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the expand sign should be visible for the topmost node.
+	 * @param hideRootExpandSign true if the head node's expand sign is to be hidden
+	 */
 	public final void setHideRootExpandSign(boolean hideRootExpandSign) {
 		engine.setProperty(Properties.HIDE_ROOT_EXPAND_SIGN, hideRootExpandSign);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the expand sign should be visible for the topmost node.
+	 * @param hideRootExpandSign true if the head node's expand sign is to be hidden
+	 */
 	public final void setHideRootExpandSign(ValueBinding hideRootExpandSign) {
 		engine.setProperty(Properties.HIDE_ROOT_EXPAND_SIGN, hideRootExpandSign);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "hideRootExpandSign" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isHideRootExpandSignSetted() {
 		return engine.isPropertySetted(Properties.HIDE_ROOT_EXPAND_SIGN);
 	}
 
+	/**
+	 * Returns an int value specifying the number of levels that should be preloaded when a node is displayed.
+	 * @return number of preloaded levels
+	 */
 	public final int getPreloadedLevelDepth() {
 		return getPreloadedLevelDepth(null);
 	}
 
+	/**
+	 * Returns an int value specifying the number of levels that should be preloaded when a node is displayed.
+	 * @return number of preloaded levels
+	 */
 	public final int getPreloadedLevelDepth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.PRELOADED_LEVEL_DEPTH, 0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the number of levels that should be preloaded when a node is displayed.
+	 * @param preloadedLevelDepth number of levels to preload
+	 */
 	public final void setPreloadedLevelDepth(int preloadedLevelDepth) {
 		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
 	}
 
+	/**
+	 * Sets an int value specifying the number of levels that should be preloaded when a node is displayed.
+	 * @param preloadedLevelDepth number of levels to preload
+	 */
 	public final void setPreloadedLevelDepth(ValueBinding preloadedLevelDepth) {
 		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "preloadedLevelDepth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isPreloadedLevelDepthSetted() {
 		return engine.isPropertySetted(Properties.PRELOADED_LEVEL_DEPTH);
 	}
 
+	/**
+	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
+	 * @return table of values
+	 */
 	public final Object getSelectedValues() {
 		return getSelectedValues(null);
 	}
 
+	/**
+	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
+	 * @return table of values
+	 */
 	public final Object getSelectedValues(javax.faces.context.FacesContext facesContext) {
 		return engine.getValue(Properties.SELECTED_VALUES, facesContext);
 	}
 
+	/**
+	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
+	 * @param selectedValues table of values
+	 */
 	public final void setSelectedValues(Object selectedValues) {
 		engine.setValue(Properties.SELECTED_VALUES, selectedValues);
 	}
 
+	/**
+	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
+	 * @param selectedValues table of values
+	 */
 	public final void setSelectedValues(ValueBinding selectedValues) {
 		engine.setValueBinding(Properties.SELECTED_VALUES, selectedValues);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "selectedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSelectedValuesSetted() {
 		return engine.isPropertySetted(Properties.SELECTED_VALUES);
 	}
@@ -562,6 +754,10 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "checkedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isCheckedValuesSetted() {
 		return engine.isPropertySetted(Properties.CHECKED_VALUES);
 	}
@@ -582,73 +778,134 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setValueBinding(Properties.EXPANSION_VALUES, expansionValues);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "expansionValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isExpansionValuesSetted() {
 		return engine.isPropertySetted(Properties.EXPANSION_VALUES);
 	}
 
+	/**
+	 * Returns a boolean value that indicates wether a node is identified by it's value or by a complete path.
+	 * @return true if node identification use node value
+	 */
 	public final boolean isExpansionUseValue() {
 		return isExpansionUseValue(null);
 	}
 
+	/**
+	 * Returns a boolean value that indicates wether a node is identified by it's value or by a complete path.
+	 * @return true if node identification use node value
+	 */
 	public final boolean isExpansionUseValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.EXPANSION_USE_VALUE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value that indicates wether a node is identified by it's value or by a complete path.
+	 * @param expansionUseValue true if node identification should use node value
+	 */
 	public final void setExpansionUseValue(boolean expansionUseValue) {
 		engine.setProperty(Properties.EXPANSION_USE_VALUE, expansionUseValue);
 	}
 
+	/**
+	 * Sets a boolean value that indicates wether a node is identified by it's value or by a complete path.
+	 * @param expansionUseValue true if node identification should use node value
+	 */
 	public final void setExpansionUseValue(ValueBinding expansionUseValue) {
 		engine.setProperty(Properties.EXPANSION_USE_VALUE, expansionUseValue);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "expansionUseValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isExpansionUseValueSetted() {
 		return engine.isPropertySetted(Properties.EXPANSION_USE_VALUE);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @return boolean
+	 */
 	public final boolean isClientSelectionFullState() {
 		return isClientSelectionFullState(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @return boolean
+	 */
 	public final boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @param clientSelectionFullState boolean
+	 */
 	public final void setClientSelectionFullState(boolean clientSelectionFullState) {
 		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @param clientSelectionFullState boolean
+	 */
 	public final void setClientSelectionFullState(ValueBinding clientSelectionFullState) {
 		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "clientSelectionFullState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isClientSelectionFullStateSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @return boolean
+	 */
 	public final boolean isClientCheckFullState() {
 		return isClientCheckFullState(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @return boolean
+	 */
 	public final boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @param clientCheckFullState boolean
+	 */
 	public final void setClientCheckFullState(boolean clientCheckFullState) {
 		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+	 * @param clientCheckFullState boolean
+	 */
 	public final void setClientCheckFullState(ValueBinding clientCheckFullState) {
 		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "clientCheckFullState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isClientCheckFullStateSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

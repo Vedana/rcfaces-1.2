@@ -142,9 +142,6 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 		setValue(selectedState);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

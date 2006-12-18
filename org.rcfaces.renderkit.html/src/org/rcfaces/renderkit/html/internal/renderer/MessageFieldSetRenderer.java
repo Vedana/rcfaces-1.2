@@ -10,9 +10,7 @@ import org.rcfaces.core.component.MessageFieldSetComponent;
 import org.rcfaces.core.internal.component.ISeverityImageAccessors;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 
 /**
  * 
@@ -35,8 +33,6 @@ public class MessageFieldSetRenderer extends FieldSetRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        writeSeverityStyleClasses(htmlWriter, messageFieldSetComponent);
-
         ISeverityImageAccessors accessors = (ISeverityImageAccessors) messageFieldSetComponent
                 .getImageAccessors(facesContext);
 
@@ -50,11 +46,13 @@ public class MessageFieldSetRenderer extends FieldSetRenderer {
         htmlWriter.enableJavaScript();
     }
 
+    /*
     protected void encodeJavaScript(IJavaScriptWriter js)
             throws WriterException {
         super.encodeJavaScript(js);
 
         JavaScriptTools.writeFirstMessage(js);
     }
+    */
 
 }

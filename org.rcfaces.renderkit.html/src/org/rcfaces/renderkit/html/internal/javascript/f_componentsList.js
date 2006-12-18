@@ -53,15 +53,15 @@ var __prototype = {
 	f_finalize: function() {
 		this._scrollBody=undefined;
 		this._tbody=undefined;
-		this._className=undefined;  // string
+		// this._className=undefined;  // string
 
 		this._nextCommand=undefined; // function
 
-		this._loading=undefined;
+		// this._loading=undefined; // boolean
 		this._waiting=undefined;
 
-		this._oldHeight=undefined;
-		this._oldHeightStyle=undefined;
+		// this._oldHeight=undefined; // boolean 
+		// this._oldHeightStyle=undefined; // string
 		
 		this.f_super(arguments);
 	},
@@ -121,6 +121,10 @@ var __prototype = {
 			
 		return false;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_appendCommand: function(callBack) {
 		if (!this._loading) {
 			callBack.call(this, this);
@@ -129,6 +133,10 @@ var __prototype = {
 		
 		this._nextCommand=callBack;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_processNextCommand: function() {
 		var nextCommand=this._nextCommand;
 		if (!nextCommand) {
@@ -139,6 +147,10 @@ var __prototype = {
 		
 		nextCommand.call(this, this);
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_callServer: function(firstIndex, cursorIndex) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		
@@ -263,6 +275,10 @@ var __prototype = {
 		request.f_setRequestHeader("X-Camelia", "componentsList.update");
 		request.f_doFormRequest(params);
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_startNewPage: function(rowIndex) {
 		// Appeler par la génération du serveur !
 
@@ -284,6 +300,10 @@ var __prototype = {
 		
 		this.fa_componentUpdated=false;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_updateNewPage: function(rowCount, buffer) {
 		// Appeler par la génération du serveur !
 

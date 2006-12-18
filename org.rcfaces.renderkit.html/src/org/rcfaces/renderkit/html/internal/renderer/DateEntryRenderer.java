@@ -22,6 +22,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractCompositeRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -59,7 +60,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
 
         htmlWriter.startElement("DIV");
 
-        htmlWriter.writeRole("textfield");
+        htmlWriter.writeRole(IAccessibilityRoles.TEXT_FIELD);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -140,7 +141,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         int curDay = -1;
 
         Date curDate = dateEntryComponent.getDate();
-        if (curDate!=null) {
+        if (curDate != null) {
             calendar.setTime(curDate);
             curYear = calendar.get(Calendar.YEAR);
             curMonth = calendar.get(Calendar.MONTH) + 1;

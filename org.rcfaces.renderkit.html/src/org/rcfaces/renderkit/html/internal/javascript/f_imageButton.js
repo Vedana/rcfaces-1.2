@@ -538,7 +538,8 @@ var __prototype = {
 			return;
 		}
 		
-		f_core.SetTextNode(this._text, text);
+		f_core.SetTextNode(this._text, text, this._accessKey);
+		
 		this.f_setProperty(f_prop.TEXT,text);
 	},
 	/**
@@ -552,7 +553,7 @@ var __prototype = {
 			return null;
 		}
 		
-		return f_core.GetTextNode(this._text);
+		return f_core.GetTextNode(this._text, true);
 	},
 	/**
 	 * Set the focus to this component.

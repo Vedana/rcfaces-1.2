@@ -174,7 +174,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 		for(var i=0;i<forms.length;i++) {
 			var f=forms[i];
 			
-			f_core._InitializeForm(f);
+			f_core.InitializeForm(f);
 		}
 	}
 	

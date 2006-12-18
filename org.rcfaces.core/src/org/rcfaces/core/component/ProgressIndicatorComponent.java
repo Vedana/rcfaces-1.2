@@ -24,7 +24,7 @@ public class ProgressIndicatorComponent extends AbstractBasicComponent implement
 
 	public ProgressIndicatorComponent() {
 		setRendererType(COMPONENT_TYPE);
-		if (Constants.TEMPLATE_SUPPORT==false) {
+		if (Constants.TEMPLATE_ENGINE_SUPPORT==false) {
 			throw new FacesException("Template Support must be enabled to use this component !");
 		}
 	}
@@ -49,29 +49,46 @@ public class ProgressIndicatorComponent extends AbstractBasicComponent implement
 			
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the value is not determinated.
+	 * @return true if not determinated
+	 */
 	public final boolean isIndeterminate() {
 		return isIndeterminate(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the value is not determinated.
+	 * @return true if not determinated
+	 */
 	public final boolean isIndeterminate(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.INDETERMINATE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the value is not determinated.
+	 * @param indeterminate true if not determinated
+	 */
 	public final void setIndeterminate(boolean indeterminate) {
 		engine.setProperty(Properties.INDETERMINATE, indeterminate);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the value is not determinated.
+	 * @param indeterminate true if not determinated
+	 */
 	public final void setIndeterminate(ValueBinding indeterminate) {
 		engine.setProperty(Properties.INDETERMINATE, indeterminate);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "indeterminate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isIndeterminateSetted() {
 		return engine.isPropertySetted(Properties.INDETERMINATE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

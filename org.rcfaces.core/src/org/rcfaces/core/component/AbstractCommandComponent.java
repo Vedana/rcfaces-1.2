@@ -832,9 +832,6 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

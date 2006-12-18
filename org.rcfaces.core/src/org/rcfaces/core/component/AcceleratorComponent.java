@@ -59,49 +59,86 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
+	/**
+	 * Returns a string specifying a value to select in the component identified in the <b>for</b> property.
+	 * @return value to selected
+	 */
 	public final String getForItemValue() {
 		return getForItemValue(null);
 	}
 
+	/**
+	 * Returns a string specifying a value to select in the component identified in the <b>for</b> property.
+	 * @return value to selected
+	 */
 	public final String getForItemValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR_ITEM_VALUE, facesContext);
 	}
 
+	/**
+	 * Sets a string specifying a value to select in the component identified in the <b>for</b> property.
+	 * @param forItemValue value to select
+	 */
 	public final void setForItemValue(String forItemValue) {
 		engine.setProperty(Properties.FOR_ITEM_VALUE, forItemValue);
 	}
 
+	/**
+	 * Sets a string specifying a value to select in the component identified in the <b>for</b> property.
+	 * @param forItemValue value to select
+	 */
 	public final void setForItemValue(ValueBinding forItemValue) {
 		engine.setProperty(Properties.FOR_ITEM_VALUE, forItemValue);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "forItemValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isForItemValueSetted() {
 		return engine.isPropertySetted(Properties.FOR_ITEM_VALUE);
 	}
 
+	/**
+	 * Returns a string value specifying the key associated to the component. for example "Alt+F1"
+	 * @return key
+	 */
 	public final String getKeyBinding() {
 		return getKeyBinding(null);
 	}
 
+	/**
+	 * Returns a string value specifying the key associated to the component. for example "Alt+F1"
+	 * @return key
+	 */
 	public final String getKeyBinding(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.KEY_BINDING, facesContext);
 	}
 
+	/**
+	 * Sets a string value specifying the key associated to the component. for example "Alt+F1"
+	 * @param keyBinding key
+	 */
 	public final void setKeyBinding(String keyBinding) {
 		engine.setProperty(Properties.KEY_BINDING, keyBinding);
 	}
 
+	/**
+	 * Sets a string value specifying the key associated to the component. for example "Alt+F1"
+	 * @param keyBinding key
+	 */
 	public final void setKeyBinding(ValueBinding keyBinding) {
 		engine.setProperty(Properties.KEY_BINDING, keyBinding);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "keyBinding" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isKeyBindingSetted() {
 		return engine.isPropertySetted(Properties.KEY_BINDING);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

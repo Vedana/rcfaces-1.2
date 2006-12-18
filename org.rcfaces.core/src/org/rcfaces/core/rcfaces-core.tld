@@ -360,7 +360,7 @@ A boolean value indicating wether the background image should be repeated vertic
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -422,10 +422,18 @@ A string that indicates the rendering mode for asynchronous capable component.
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>horizontalScroll</name>
@@ -583,14 +591,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -986,14 +994,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -1428,14 +1436,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -1869,14 +1877,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -2272,14 +2280,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -2496,7 +2504,7 @@ A string that indicates the type of border the component should show.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -2626,7 +2634,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>alignment</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string that represent the alignement of the data in the component.
+A string that represents the alignement of the data in the component.
 		<ul><li>
 		left
 		</li><li>
@@ -2672,7 +2680,7 @@ A space-separated list of CSS style class(es) to be applied to the component. Th
 			<name>ascending</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates the sorting direction for the component
+A boolean value that indicates the sorting direction for the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -2771,7 +2779,7 @@ A space-separated list of CSS style class(es) to be applied when this cell is re
 			<name>cellToolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string containing the text that will appear when the pointer hover the component.
+A string value containing the text that will appear when the pointer hover the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3241,7 +3249,7 @@ Executed when the pointer hover the component's area.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3414,12 +3422,10 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>var</name>
+			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+A number identifying the row to be displayed at the top of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3439,10 +3445,12 @@ A string value specifying the margins for the component (compliant to CSS margin
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>first</name>
+			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3473,7 +3481,7 @@ A string value specifying the type of multiple selection authorized:
 		</li><li>
 		one|1: one and only one selection
 		</li><li>
-		onemany|+ : one or more selection
+		onemany|+: one or more selection
 		</li><li>
 		optionnal|?: none or one selection
 		</li></ul>
@@ -3527,7 +3535,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3550,14 +3558,14 @@ A boolean value that represents the disabled state of the component.
 			<name>horizontalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the position of the horizontal scroolbar.
+A string value specifying the position of the horizontal scroolbar.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>verticalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the position of the vertical scroolbar.
+A string value specifying the position of the vertical scroolbar (Browser dependant).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3571,7 +3579,7 @@ A binded object that hold the filters to use on the server side. This property i
 			<name>preference</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A binded object that hold the preferences for the component.
+A binded object that holds the preferences for the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3588,7 +3596,7 @@ A boolean value indicating wether the header should be visible.
 A boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
 		It is ignored if the attribute "rows" is undefined.
 		The default value is true. 
-		If "rows" is defined and "paged"s value is set to false, pages are downloaded automatically when the last displayed row is selected.
+		If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3601,6 +3609,9 @@ A table of the values associated with selected nodes for the component. (Binding
 		<attribute>
 			<name>checkedValues</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A table of the values associated with checked nodes for the component. (Binding only)
+]]></description>
 		</attribute>
 		<attribute>
 			<name>sortedColumnIds</name>
@@ -3777,7 +3788,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3927,7 +3938,7 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3942,14 +3953,14 @@ A string that indicates the type of border the component should show.
 			<name>horizontalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the position of the horizontal scroolbar.
+A string value specifying the position of the horizontal scroolbar.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>verticalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the position of the vertical scroolbar.
+A string value specifying the position of the vertical scroolbar (Browser dependant).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4120,7 +4131,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4270,7 +4281,7 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4285,14 +4296,14 @@ A string that indicates the type of border the component should show.
 			<name>horizontalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the position of the horizontal scroolbar.
+A string value specifying the position of the horizontal scroolbar.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>verticalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the position of the vertical scroolbar.
+A string value specifying the position of the vertical scroolbar (Browser dependant).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4475,7 +4486,7 @@ A space-separated list of CSS style class(es) to be applied to the component. Th
 			<name>date</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-The date value.
+The date value. (format : according the the declared locale)
 ]]></description>
 		</attribute>
 	</tag>
@@ -4619,14 +4630,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -4888,7 +4899,7 @@ A boolean value indicating that this component will prohibit
 			<name>attributesLocale</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string the indicates the locale associated with the component.
+A string value that indicates the locale associated with the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4924,14 +4935,14 @@ A date value indicating the maximum acceptable date for the component. The last 
 			<name>disabledWeekDays</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A list of disabled week days.
+A list of disabled week days (depending on the locale specified for the component).
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5089,14 +5100,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -5358,7 +5369,7 @@ A boolean value indicating that this component will prohibit
 			<name>attributesLocale</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string the indicates the locale associated with the component.
+A string value that indicates the locale associated with the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5394,7 +5405,7 @@ A date value indicating the maximum acceptable date for the component. The last 
 			<name>disabledWeekDays</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A list of disabled week days.
+A list of disabled week days (depending on the locale specified for the component).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5409,7 +5420,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>autoTab</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the focus should move automatically to the next element when the entry is completed
+A boolean value indicating if the focus should move automatically to the next element when the entry is completed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5441,14 +5452,14 @@ A boolean value indicating wether the associated <a href="/comps/dateCHooserComp
 			<name>autoCompletion</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component should complete automaticcaly the user entry.
+A boolean value indicating if the component should complete automaticaly the user entry.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>dateFormat</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string sepcifying the format to apply to the date value.
+A string specifying the format to apply to the date value.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5617,14 +5628,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -5886,7 +5897,7 @@ A boolean value indicating that this component will prohibit
 			<name>attributesLocale</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string the indicates the locale associated with the component.
+A string value that indicates the locale associated with the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5922,7 +5933,7 @@ A date value indicating the maximum acceptable date for the component. The last 
 			<name>disabledWeekDays</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A list of disabled week days.
+A list of disabled week days (depending on the locale specified for the component).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5957,7 +5968,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -6079,6 +6090,9 @@ A string indicating the date selected when the "home" button is pressed.
 		<attribute>
 			<name>homeDateLabel</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string specifying the label associated with the home button.
+]]></description>
 		</attribute>
 	</tag>
 	<tag>
@@ -6216,7 +6230,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -6432,14 +6446,14 @@ A string value specifying the alignement for the text in the component :
 			<name>collapsed</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating wether the state of the component.
+A boolean value indicating wether the component is collapsed.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -6453,7 +6467,7 @@ A string that indicates the alphanumeric key used to execute an action from the 
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -6512,17 +6526,32 @@ Executed when the component is fully loaded (similar to init for AJAX).
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>collapseEffect</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string indicating the effect to use when transionning from one state to the other. 
+A string value indicating the effect to use when transionning from one state to the other. 
 		The provided effects are slideUp and slideUpTrans but the list can be augmented.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>collapsedText</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the text to show when the component is collapsed.
 ]]></description>
 		</attribute>
 	</tag>
@@ -6917,7 +6946,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -7141,10 +7170,18 @@ An int value specifying the width (in pixels) to use for the image shown.
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 	</tag>
 	<tag>
@@ -7290,14 +7327,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -7586,7 +7623,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -7811,14 +7848,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -8107,7 +8144,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -8315,7 +8352,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -8628,14 +8665,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -9025,7 +9062,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -9316,14 +9353,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -9612,7 +9649,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -9898,14 +9935,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -10232,7 +10269,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -10449,14 +10486,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -10703,7 +10740,7 @@ A boolean value indicating that this component will prohibit
 			<name>removeAllWhenShown</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value specifying wether the content of the component must be remove before the listener is aclled and the component displayed.
+A boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -10738,7 +10775,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -10974,14 +11011,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -11270,7 +11307,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -11506,14 +11543,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -11855,7 +11892,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -12073,14 +12110,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -12369,7 +12406,7 @@ An url string pointing to the image used when the component is selected.
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -12658,14 +12695,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -12933,7 +12970,7 @@ A binded object that hold the filters to use on the server side. This property i
 			<name>multipleSelect</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating wether multiple selection is permitted
+A boolean value indicating wether multiple selection is permitted.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -12951,7 +12988,7 @@ Executed when the component is double-clicked.
 			<name>rowNumber</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A int value specifying the number of rows to be displayed.
+An int value specifying the number of rows to be displayed.
 ]]></description>
 		</attribute>
 	</tag>
@@ -13181,6 +13218,14 @@ A boolean value indicating whether the summary portion of displayed messages
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>showDetail</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
+]]></description>
+		</attribute>
+		<attribute>
 			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -13192,14 +13237,6 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A component's id that express the link between the two components.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>showDetail</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
 ]]></description>
 		</attribute>
 		<attribute>
@@ -13291,13 +13328,6 @@ An url string pointing to the image used for a warning message.
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 An url string pointing to the image used by the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>bundleVar</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-Name of a request scope attribute under which the resource bundle will be exposed as a Map.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -13450,7 +13480,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -13674,10 +13704,18 @@ An int value specifying the width (in pixels) to use for the image shown.
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>for</name>
@@ -13755,13 +13793,6 @@ An url string pointing to the image used for a warning message.
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 An url string pointing to the image used by the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>bundleVar</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-Name of a request scope attribute under which the resource bundle will be exposed as a Map.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -14054,13 +14085,6 @@ A space-separated list of CSS style class(es) to be applied for warning messages
 A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
 ]]></description>
 		</attribute>
-		<attribute>
-			<name>bundleVar</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-Name of a request scope attribute under which the resource bundle will be exposed as a Map.
-]]></description>
-		</attribute>
 	</tag>
 	<tag>
 		<name>menu</name>
@@ -14159,6 +14183,9 @@ A table of the values associated with selected nodes for the component. (Binding
 		<attribute>
 			<name>checkedValues</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A table of the values associated with checked nodes for the component. (Binding only)
+]]></description>
 		</attribute>
 		<attribute>
 			<name>menuId</name>
@@ -14171,7 +14198,7 @@ An id used to retreive a specific menu. For example, "#node" is used to call a m
 			<name>removeAllWhenShown</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value specifying wether the content of the component must be remove before the listener is aclled and the component displayed.
+A boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -14313,14 +14340,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -14567,7 +14594,7 @@ A boolean value indicating that this component will prohibit
 			<name>removeAllWhenShown</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value specifying wether the content of the component must be remove before the listener is aclled and the component displayed.
+A boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 ]]></description>
 		</attribute>
 	</tag>
@@ -14816,7 +14843,7 @@ Executed when a menu is activated.
 			<name>removeAllWhenShown</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value specifying wether the content of the component must be remove before the listener is aclled and the component displayed.
+A boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15072,7 +15099,7 @@ Executed when a menu is activated.
 			<name>removeAllWhenShown</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value specifying wether the content of the component must be remove before the listener is aclled and the component displayed.
+A boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 ]]></description>
 		</attribute>
 	</tag>
@@ -15374,7 +15401,7 @@ Executed when a menu is activated.
 			<name>removeAllWhenShown</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value specifying wether the content of the component must be remove before the listener is aclled and the component displayed.
+A boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15527,14 +15554,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -15784,7 +15811,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>autoTab</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the focus should move automatically to the next element when the entry is completed
+A boolean value indicating if the focus should move automatically to the next element when the entry is completed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15845,14 +15872,14 @@ A string value specifying the data type :
 			<name>attributesLocale</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string the indicates the locale associated with the component.
+A string value that indicates the locale associated with the component.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>autoCompletion</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component should complete automaticcaly the user entry.
+A boolean value indicating if the component should complete automaticaly the user entry.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15894,7 +15921,7 @@ Experimental Do not use.
 			<name>number</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A number value.
+A number typed value.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16057,14 +16084,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -16314,7 +16341,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>autoTab</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the focus should move automatically to the next element when the entry is completed
+A boolean value indicating if the focus should move automatically to the next element when the entry is completed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16335,7 +16362,7 @@ A string value specifying the text (literal or binding) to be shown.
 			<name>emptyMessage</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string conatining the message shown when there is no message.
+A string containing the message shown when there is no result.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16366,6 +16393,41 @@ A space-separated list of CSS style classes to be applied when this component ge
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>clientValidator</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -16387,7 +16449,7 @@ Executed when the component is selected.
 			<name>maxTextLength</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the maximum number of caracters that the user can enter in the component.
+An int value specifying the maximum number of characters that the user can enter in the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16401,7 +16463,7 @@ An int value holding the width of the component in characters : x characters tra
 			<name>autoCompletion</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component should complete automaticcaly the user entry.
+A boolean value indicating if the component should complete automaticaly the user entry.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16554,7 +16616,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -17031,14 +17093,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -17288,7 +17350,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>autoTab</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the focus should move automatically to the next element when the entry is completed
+A boolean value indicating if the focus should move automatically to the next element when the entry is completed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -17309,7 +17371,7 @@ A string value specifying the text (literal or binding) to be shown.
 			<name>emptyMessage</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string conatining the message shown when there is no message.
+A string containing the message shown when there is no result.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -17340,6 +17402,41 @@ A space-separated list of CSS style classes to be applied when this component ge
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>clientValidator</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -17361,7 +17458,7 @@ Executed when the component is selected.
 			<name>maxTextLength</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the maximum number of caracters that the user can enter in the component.
+An int value specifying the maximum number of characters that the user can enter in the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -17375,7 +17472,7 @@ An int value holding the width of the component in characters : x characters tra
 			<name>autoCompletion</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component should complete automaticcaly the user entry.
+A boolean value indicating if the component should complete automaticaly the user entry.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -17443,12 +17540,15 @@ An int value specifying the delay in milliseconds before showing the suggestion 
 			<name>suggestionMinChars</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the minimum number of chars before the suggestion is calculated.
+An int value specifying the minimum number of characters before the suggestion is calculated.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>caseSensitive</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating if the component should consider the case of the user input when using the data.
+]]></description>
 		</attribute>
 		<attribute>
 			<name>forceProposal</name>
@@ -17610,14 +17710,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -18069,14 +18169,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -18488,7 +18588,7 @@ A color value (as specified by CSS) for the text.
 			<name>alignment</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string that represent the alignement of the data in the component.
+A string that represents the alignement of the data in the component.
 		<ul><li>
 		left
 		</li><li>
@@ -18545,10 +18645,18 @@ A boolean value indicating whether or not this component should be rendered
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 	</tag>
 	<tag>
@@ -18692,14 +18800,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -19096,14 +19204,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -19353,7 +19461,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>autoTab</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the focus should move automatically to the next element when the entry is completed
+A boolean value indicating if the focus should move automatically to the next element when the entry is completed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -19374,7 +19482,7 @@ A string value specifying the text (literal or binding) to be shown.
 			<name>emptyMessage</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string conatining the message shown when there is no message.
+A string containing the message shown when there is no result.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -19405,6 +19513,41 @@ A space-separated list of CSS style classes to be applied when this component ge
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>clientValidator</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -19426,7 +19569,7 @@ Executed when the component is selected.
 			<name>maxTextLength</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the maximum number of caracters that the user can enter in the component.
+An int value specifying the maximum number of characters that the user can enter in the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -19440,7 +19583,7 @@ An int value holding the width of the component in characters : x characters tra
 			<name>autoCompletion</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component should complete automaticcaly the user entry.
+A boolean value indicating if the component should complete automaticaly the user entry.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -19721,7 +19864,7 @@ A boolean value indicating wether the background image should be repeated vertic
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -19942,7 +20085,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -20279,14 +20422,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -20557,16 +20700,24 @@ A string that indicates the rendering mode for asynchronous capable component.
 			<name>preference</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A binded object that hold the preferences for the component.
+A binded object that holds the preferences for the component.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 	</tag>
 	<tag>
@@ -20690,7 +20841,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -20834,10 +20985,18 @@ A string that represent the vertical alignement of the data in the component.
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>loadListener</name>
@@ -20989,14 +21148,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -21267,16 +21426,24 @@ A string that indicates the rendering mode for asynchronous capable component.
 			<name>preference</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A binded object that hold the preferences for the component.
+A binded object that holds the preferences for the component.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>closeListener</name>
@@ -21418,7 +21585,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -21562,10 +21729,18 @@ A string that represent the vertical alignement of the data in the component.
 		<attribute>
 			<name>scopeValue</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the binding associated to a variable representing a shortcut. (cf. scopeVar)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>scopeVar</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of a variable representing a shortcut to a binding. (cf. scopeValue)
+		ex: if scopeVar "bat" is associated to scopeValue "bean.attribute1.attribute2" then the use of "bat.attribute3" will be equivalente to "bean.attribute1.attribute2.attribute3"
+]]></description>
 		</attribute>
 		<attribute>
 			<name>loadListener</name>
@@ -21798,7 +21973,7 @@ A string value specifying the tooltip for the component (shown when the pointe h
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22136,14 +22311,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -22393,7 +22568,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>autoTab</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the focus should move automatically to the next element when the entry is completed
+A boolean value indicating if the focus should move automatically to the next element when the entry is completed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22414,7 +22589,7 @@ A string value specifying the text (literal or binding) to be shown.
 			<name>emptyMessage</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string conatining the message shown when there is no message.
+A string containing the message shown when there is no result.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22445,6 +22620,41 @@ A space-separated list of CSS style classes to be applied when this component ge
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>clientValidator</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -22466,7 +22676,7 @@ Executed when the component is selected.
 			<name>maxTextLength</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the maximum number of caracters that the user can enter in the component.
+An int value specifying the maximum number of characters that the user can enter in the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22480,7 +22690,7 @@ An int value holding the width of the component in characters : x characters tra
 			<name>autoCompletion</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component should complete automaticcaly the user entry.
+A boolean value indicating if the component should complete automaticaly the user entry.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22640,14 +22850,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -22897,7 +23107,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>autoTab</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the focus should move automatically to the next element when the entry is completed
+A boolean value indicating if the focus should move automatically to the next element when the entry is completed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22918,7 +23128,7 @@ A string value specifying the text (literal or binding) to be shown.
 			<name>emptyMessage</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string conatining the message shown when there is no message.
+A string containing the message shown when there is no result.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22949,6 +23159,41 @@ A space-separated list of CSS style classes to be applied when this component ge
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>clientValidator</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -22970,7 +23215,7 @@ Executed when the component is selected.
 			<name>maxTextLength</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the maximum number of caracters that the user can enter in the component.
+An int value specifying the maximum number of characters that the user can enter in the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22984,7 +23229,7 @@ An int value holding the width of the component in characters : x characters tra
 			<name>autoCompletion</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component should complete automaticcaly the user entry.
+A boolean value indicating if the component should complete automaticaly the user entry.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -23009,7 +23254,7 @@ Executed when the the component is activated by the user.
 			<name>rowNumber</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A int value specifying the number of rows to be displayed.
+An int value specifying the number of rows to be displayed.
 ]]></description>
 		</attribute>
 	</tag>
@@ -23153,14 +23398,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -23410,7 +23655,7 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>autoTab</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the focus should move automatically to the next element when the entry is completed
+A boolean value indicating if the focus should move automatically to the next element when the entry is completed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -23455,14 +23700,14 @@ A boolean value indicating that this component will prohibit
 			<name>attributesLocale</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string the indicates the locale associated with the component.
+A string value that indicates the locale associated with the component.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>autoCompletion</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component should complete automaticcaly the user entry.
+A boolean value indicating if the component should complete automaticaly the user entry.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -23657,14 +23902,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -24394,14 +24639,14 @@ A boolean value that represents the disabled state of the component.
 			<name>unlockedClientAttributeNames</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string values holding a comma separated list of the client modifiable properties.
+A string value holding a comma separated list of the client modifiable properties.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>tabIndex</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the osition of this element in the tabbing order
+An int value specifying the position of this element in the tabbing order
           for the current document.  This value must be
           an integer between 0 and 32767.
 ]]></description>
@@ -24662,21 +24907,21 @@ A boolean value indicating that the user is required to provide a submitted
 			<name>horizontalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the position of the horizontal scroolbar.
+A string value specifying the position of the horizontal scroolbar.
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>verticalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the position of the vertical scroolbar.
+A string value specifying the position of the vertical scroolbar (Browser dependant).
 ]]></description>
 		</attribute>
 		<attribute>
 			<name>border</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value that indicates if the component should show a border or nt.
+A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -24730,7 +24975,7 @@ A string value specifying the type of multiple selection authorized:
 		</li><li>
 		one|1: one and only one selection
 		</li><li>
-		onemany|+ : one or more selection
+		onemany|+: one or more selection
 		</li><li>
 		optionnal|?: none or one selection
 		</li></ul>
@@ -24834,6 +25079,9 @@ A table of the values associated with selected nodes for the component. (Binding
 		<attribute>
 			<name>checkedValues</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A table of the values associated with checked nodes for the component. (Binding only)
+]]></description>
 		</attribute>
 		<attribute>
 			<name>expansionValues</name>
@@ -25207,6 +25455,9 @@ An id for the service.
 		<attribute>
 			<name>enableViewState</name>
 			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+TODO
+]]></description>
 		</attribute>
 	</tag>
 	<tag>

@@ -562,6 +562,9 @@ var __prototype = {
 
 		return false;
 	},
+	/**
+	 * @method private
+	 */
 	_onReset: function() {
 		f_core.Debug(f_clientValidator, "Reset component '"+this._component.id+"' (value='"+this._initialValue+"')");
 	

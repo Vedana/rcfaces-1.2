@@ -28,7 +28,7 @@ public abstract class AbstractBufferedImageOperation extends
     private static final Log LOG = LogFactory
             .getLog(AbstractBufferedImageOperation.class);
 
-    RasterOp imageOperation;
+    /* packaged */RasterOp imageOperation;
 
     public void configure(Map configuration) {
         this.imageOperation = getImageOperation(null, configuration);

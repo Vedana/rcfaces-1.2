@@ -205,9 +205,6 @@ public class ImageButtonComponent extends ButtonComponent implements
 		
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

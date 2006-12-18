@@ -15,6 +15,7 @@ import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
@@ -86,9 +87,9 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
         }
 
         protected String getRole() {
-           return "radio";
+            return IAccessibilityRoles.RADIO;
         }
- 
+
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
             super.encodeAttributes(facesContext);

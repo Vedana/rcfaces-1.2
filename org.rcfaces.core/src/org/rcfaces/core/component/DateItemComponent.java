@@ -87,9 +87,6 @@ public class DateItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

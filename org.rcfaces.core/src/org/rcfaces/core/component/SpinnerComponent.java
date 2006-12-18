@@ -41,46 +41,90 @@ public class SpinnerComponent extends TextEntryComponent {
 		engine.setProperty(Properties.MINIMUM, minimum);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "minimum" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMinimumSetted() {
 		return engine.isPropertySetted(Properties.MINIMUM);
 	}
 
+	/**
+	 * Returns an int value specifying the upper limit for the value of the component.
+	 * @return maximum
+	 */
 	public final double getMaximum() {
 		return getMaximum(null);
 	}
 
+	/**
+	 * Returns an int value specifying the upper limit for the value of the component.
+	 * @return maximum
+	 */
 	public final double getMaximum(javax.faces.context.FacesContext facesContext) {
 		return engine.getDoubleProperty(Properties.MAXIMUM, 0.0, facesContext);
 	}
 
+	/**
+	 * Sets an int value specifying the upper limit for the value of the component.
+	 * @param maximum maximum
+	 */
 	public final void setMaximum(double maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
+	/**
+	 * Sets an int value specifying the upper limit for the value of the component.
+	 * @param maximum maximum
+	 */
 	public final void setMaximum(ValueBinding maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "maximum" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isMaximumSetted() {
 		return engine.isPropertySetted(Properties.MAXIMUM);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether to start from the beginning when reaching the end or not. And vice versa.
+	 * @return true if the component should cycle
+	 */
 	public final boolean isCycleValue() {
 		return isCycleValue(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether to start from the beginning when reaching the end or not. And vice versa.
+	 * @return true if the component should cycle
+	 */
 	public final boolean isCycleValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CYCLE_VALUE, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether to start from the beginning when reaching the end or not. And vice versa.
+	 * @param cycleValue true if the component should cycle
+	 */
 	public final void setCycleValue(boolean cycleValue) {
 		engine.setProperty(Properties.CYCLE_VALUE, cycleValue);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether to start from the beginning when reaching the end or not. And vice versa.
+	 * @param cycleValue true if the component should cycle
+	 */
 	public final void setCycleValue(ValueBinding cycleValue) {
 		engine.setProperty(Properties.CYCLE_VALUE, cycleValue);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "cycleValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isCycleValueSetted() {
 		return engine.isPropertySetted(Properties.CYCLE_VALUE);
 	}
@@ -101,13 +145,14 @@ public class SpinnerComponent extends TextEntryComponent {
 		engine.setProperty(Properties.STEP, step);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "step" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isStepSetted() {
 		return engine.isPropertySetted(Properties.STEP);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

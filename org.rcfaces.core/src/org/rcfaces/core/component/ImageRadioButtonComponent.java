@@ -181,9 +181,6 @@ public class ImageRadioButtonComponent extends RadioButtonComponent implements
 		
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

@@ -45,10 +45,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String var;
+	private String first;
 	private String rows;
 	private String margins;
-	private String first;
+	private String var;
 	private String value;
 	public final String getHiddenMode() {
 		return hiddenMode;
@@ -282,12 +282,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final String getVar() {
-		return var;
+	public final String getFirst() {
+		return first;
 	}
 
-	public final void setVar(String var) {
-		this.var = var;
+	public final void setFirst(String first) {
+		this.first = first;
 	}
 
 	public final String getRows() {
@@ -306,12 +306,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.margins = margins;
 	}
 
-	public final String getFirst() {
-		return first;
+	public final String getVar() {
+		return var;
 	}
 
-	public final void setFirst(String first) {
-		this.first = first;
+	public final void setVar(String var) {
+		this.var = var;
 	}
 
 	public final String getValue() {
@@ -342,10 +342,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  var='"+var+"'");
+			LOG.debug("  first='"+first+"'");
 			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  first='"+first+"'");
+			LOG.debug("  var='"+var+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -584,12 +584,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (var != null) {
-			if (isValueReference(var)) {
-				ValueBinding vb = application.createValueBinding(var);
-				component.setVar(vb);
+		if (first != null) {
+			if (isValueReference(first)) {
+				ValueBinding vb = application.createValueBinding(first);
+				component.setFirst(vb);
 			} else {
-				component.setVar(var);
+				component.setFirst(getInt(first));
 			}
 		}
 
@@ -609,12 +609,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				component.setMargins(margins);
 		}
 
-		if (first != null) {
-			if (isValueReference(first)) {
-				ValueBinding vb = application.createValueBinding(first);
-				component.setFirst(vb);
+		if (var != null) {
+			if (isValueReference(var)) {
+				ValueBinding vb = application.createValueBinding(var);
+				component.setVar(vb);
 			} else {
-				component.setFirst(getInt(first));
+				component.setVar(var);
 			}
 		}
 
@@ -658,10 +658,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		var = null;
+		first = null;
 		rows = null;
 		margins = null;
-		first = null;
+		var = null;
 		value = null;
 
 		super.release();

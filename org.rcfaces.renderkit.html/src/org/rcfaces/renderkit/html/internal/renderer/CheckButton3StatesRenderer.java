@@ -9,9 +9,9 @@ import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-
 
 /**
  * 
@@ -23,12 +23,12 @@ public class CheckButton3StatesRenderer extends AbstractInputRenderer {
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
-        
+
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.writeText("Composant: checkButton3States");
-        
-        htmlWriter.writeRole("checkboxtristate");
+
+        htmlWriter.writeRole(IAccessibilityRoles.CHECK_BOX_3_STATE);
     }
 
     protected String getInputType(UIComponent component) {

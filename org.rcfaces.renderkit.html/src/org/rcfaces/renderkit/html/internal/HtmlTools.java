@@ -329,7 +329,7 @@ public class HtmlTools {
         int end = idx + accessKey.length();
 
         writer.startElement("U");
-        writer.writeAttribute("class", ACCESSKEY_CLASSNAME);
+        writer.writeClass(ACCESSKEY_CLASSNAME);
         writer.writeText(text.substring(idx, end));
         writer.endElement("U");
 

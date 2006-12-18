@@ -3,14 +3,13 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.AbstractMessageComponent;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IBundleVarCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
@@ -19,14 +18,13 @@ public class MessageComponent extends AbstractMessageComponent implements
 	IImageSizeCapability,
 	ITextCapability,
 	ISeverityStyleClassCapability,
-	ISeverityImagesCapability,
-	IBundleVarCapability {
+	ISeverityImagesCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.message";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","imageHeight","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","showIfMessage","warnImageURL","styleClass","text","imageWidth","infoStyleClass","infoImageURL","bundleVar","setFocusIfMessage","fatalImageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","imageHeight","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","showIfMessage","warnImageURL","styleClass","text","imageWidth","infoStyleClass","infoImageURL","setFocusIfMessage","fatalImageURL"}));
 	}
 
 	public MessageComponent() {
@@ -244,22 +242,6 @@ public class MessageComponent extends AbstractMessageComponent implements
 		
 	}
 
-	public final java.lang.String getBundleVar() {
-		return getBundleVar(null);
-	}
-
-	public final java.lang.String getBundleVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BUNDLE_VAR, facesContext);
-	}
-
-	public final void setBundleVar(java.lang.String bundleVar) {
-		engine.setProperty(Properties.BUNDLE_VAR, bundleVar);
-	}
-
-	public final void setBundleVar(ValueBinding bundleVar) {
-		engine.setProperty(Properties.BUNDLE_VAR, bundleVar);
-	}
-
 	public final boolean isSetFocusIfMessage() {
 		return isSetFocusIfMessage(null);
 	}
@@ -276,6 +258,10 @@ public class MessageComponent extends AbstractMessageComponent implements
 		engine.setProperty(Properties.SET_FOCUS_IF_MESSAGE, setFocusIfMessage);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "setFocusIfMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSetFocusIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SET_FOCUS_IF_MESSAGE);
 	}
@@ -296,13 +282,14 @@ public class MessageComponent extends AbstractMessageComponent implements
 		engine.setProperty(Properties.SHOW_IF_MESSAGE, showIfMessage);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "showIfMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isShowIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SHOW_IF_MESSAGE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

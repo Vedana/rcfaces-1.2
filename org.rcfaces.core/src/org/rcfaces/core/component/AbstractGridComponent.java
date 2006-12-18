@@ -780,26 +780,28 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final String getVar() {
-		return getVar(null);
+	public final int getFirst() {
+		return getFirst(null);
 	}
 
-	public final String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
+	public final int getFirst(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
 	}
 
-	public final void setVar(String var) {
-		engine.setProperty(Properties.VAR, var);
-		this.var=var;
+	public final void setFirst(int first) {
+		engine.setProperty(Properties.FIRST, first);
 	}
 
-	public final void setVar(ValueBinding var) {
-		engine.setProperty(Properties.VAR, var);
-		this.var=null;
+	public final void setFirst(ValueBinding first) {
+		engine.setProperty(Properties.FIRST, first);
 	}
 
-	public final boolean isVarSetted() {
-		return engine.isPropertySetted(Properties.VAR);
+	/**
+	 * Returns <code>true</code> if the attribute "first" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFirstSetted() {
+		return engine.isPropertySetted(Properties.FIRST);
 	}
 
 	public final int getRows() {
@@ -818,33 +820,40 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.ROWS, rows);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isRowsSetted() {
 		return engine.isPropertySetted(Properties.ROWS);
 	}
 
-	public final int getFirst() {
-		return getFirst(null);
+	public final String getVar() {
+		return getVar(null);
 	}
 
-	public final int getFirst(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
+	public final String getVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VAR, facesContext);
 	}
 
-	public final void setFirst(int first) {
-		engine.setProperty(Properties.FIRST, first);
+	public final void setVar(String var) {
+		engine.setProperty(Properties.VAR, var);
+		this.var=var;
 	}
 
-	public final void setFirst(ValueBinding first) {
-		engine.setProperty(Properties.FIRST, first);
+	public final void setVar(ValueBinding var) {
+		engine.setProperty(Properties.VAR, var);
+		this.var=null;
 	}
 
-	public final boolean isFirstSetted() {
-		return engine.isPropertySetted(Properties.FIRST);
+	/**
+	 * Returns <code>true</code> if the attribute "var" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVarSetted() {
+		return engine.isPropertySetted(Properties.VAR);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

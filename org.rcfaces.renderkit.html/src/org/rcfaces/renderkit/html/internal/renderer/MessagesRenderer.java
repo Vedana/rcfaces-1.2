@@ -3,13 +3,7 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.MessagesComponent;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -19,9 +13,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -30,10 +22,10 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 public class MessagesRenderer extends AbstractCssRenderer {
     public static final String REVISION = "$Revision$";
 
-     protected void encodeBegin(IComponentWriter writer) throws WriterException {
-         super.encodeBegin(writer);
+    protected void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
 
-         IComponentRenderContext componentContext = writer
+        IComponentRenderContext componentContext = writer
                 .getComponentRenderContext();
 
         MessagesComponent messagesComponent = (MessagesComponent) componentContext
@@ -59,13 +51,12 @@ public class MessagesRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:showDetail", "true");
         }
 
-        writeSeverityStyleClasses(htmlWriter, messagesComponent);
-
         htmlWriter.endElement("TABLE");
 
         htmlWriter.enableJavaScript();
     }
 
+    /*
     protected void encodeJavaScript(IJavaScriptWriter js)
             throws WriterException {
         super.encodeJavaScript(js);
@@ -104,6 +95,7 @@ public class MessagesRenderer extends AbstractCssRenderer {
                     bundleVar);
         }
     }
+    */
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MESSAGES;

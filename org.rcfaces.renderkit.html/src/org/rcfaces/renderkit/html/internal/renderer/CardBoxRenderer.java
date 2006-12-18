@@ -16,6 +16,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.preference.IComponentPreference;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -37,7 +38,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
     public void encodeBegin(IComponentWriter writer) throws WriterException {
 
         super.encodeBegin(writer);
-        
+
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
@@ -58,7 +59,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
         htmlWriter.enableJavaScript();
 
         htmlWriter.startElement("DIV");
-        htmlWriter.writeRole("tabpanel");
+        htmlWriter.writeRole(IAccessibilityRoles.TAB_PANEL);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -70,8 +71,8 @@ public class CardBoxRenderer extends AbstractCssRenderer {
             IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) htmlWriter
                     .getComponentRenderContext().getRenderContext();
 
-            String cardComponentId = htmlRenderContext.getComponentClientId(
-                    cardComponent);
+            String cardComponentId = htmlRenderContext
+                    .getComponentClientId(cardComponent);
 
             htmlWriter.writeAttribute("v:selectedCard", cardComponentId);
         }

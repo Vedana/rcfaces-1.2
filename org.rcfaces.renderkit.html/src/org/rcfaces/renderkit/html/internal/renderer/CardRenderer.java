@@ -13,6 +13,7 @@ import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -111,7 +112,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         htmlWriter.writeln();
 
         htmlWriter.startElement("DIV");
-        htmlWriter.writeRole("tabcontent");
+        htmlWriter.writeRole(IAccessibilityRoles.TAB_CONTENT);
 
         /*
          * String w = tabbedPane.getWidth(); if (w != null) {

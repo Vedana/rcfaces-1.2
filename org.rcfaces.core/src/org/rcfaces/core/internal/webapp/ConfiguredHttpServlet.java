@@ -275,7 +275,7 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
     }
 
     protected boolean getDefaultLocaleSupport() {
-        return Constants.DEFAULT_CLIENT_LOCALE_SUPPORT;
+        return Constants.CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE;
     }
 
     protected long getDefaultExpirationDelay() {
@@ -291,7 +291,7 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
     }
 
     protected boolean getDefaultGZipSupport() {
-        return Constants.DEFAULT_GZIP_SUPPORT;
+        return Constants.GZIP_SUPPORT_DEFAULT_VALUE;
     }
 
     protected ExpirationDate getDefaultExpirationDate(boolean versioned) {

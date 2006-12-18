@@ -16,6 +16,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -64,7 +65,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.startElement("TABLE");
 
-        htmlWriter.writeRole("progressbar");
+        htmlWriter.writeRole(IAccessibilityRoles.PROGRESS_BAR);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);

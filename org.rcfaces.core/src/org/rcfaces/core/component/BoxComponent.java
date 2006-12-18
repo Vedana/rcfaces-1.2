@@ -263,49 +263,86 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the horizontal scroll is shown.
+	 * @return true if the horizontal scrollbar is shown
+	 */
 	public final boolean isHorizontalScroll() {
 		return isHorizontalScroll(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the horizontal scroll is shown.
+	 * @return true if the horizontal scrollbar is shown
+	 */
 	public final boolean isHorizontalScroll(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.HORIZONTAL_SCROLL, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the horizontal scroll is shown.
+	 * @param horizontalScroll true if the horizontal scrollbar is to be shown
+	 */
 	public final void setHorizontalScroll(boolean horizontalScroll) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL, horizontalScroll);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the horizontal scroll is shown.
+	 * @param horizontalScroll true if the horizontal scrollbar is to be shown
+	 */
 	public final void setHorizontalScroll(ValueBinding horizontalScroll) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL, horizontalScroll);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalScroll" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isHorizontalScrollSetted() {
 		return engine.isPropertySetted(Properties.HORIZONTAL_SCROLL);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the vertical scroll is shown.
+	 * @return true if vertical scrollbar is shown
+	 */
 	public final boolean isVerticalScroll() {
 		return isVerticalScroll(null);
 	}
 
+	/**
+	 * Returns a boolean value indicating wether the vertical scroll is shown.
+	 * @return true if vertical scrollbar is shown
+	 */
 	public final boolean isVerticalScroll(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VERTICAL_SCROLL, false, facesContext);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the vertical scroll is shown.
+	 * @param verticalScroll true if vertical scrollbar is to be shown
+	 */
 	public final void setVerticalScroll(boolean verticalScroll) {
 		engine.setProperty(Properties.VERTICAL_SCROLL, verticalScroll);
 	}
 
+	/**
+	 * Sets a boolean value indicating wether the vertical scroll is shown.
+	 * @param verticalScroll true if vertical scrollbar is to be shown
+	 */
 	public final void setVerticalScroll(ValueBinding verticalScroll) {
 		engine.setProperty(Properties.VERTICAL_SCROLL, verticalScroll);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "verticalScroll" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isVerticalScrollSetted() {
 		return engine.isPropertySetted(Properties.VERTICAL_SCROLL);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

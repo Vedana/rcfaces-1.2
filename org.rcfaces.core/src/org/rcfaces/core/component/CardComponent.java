@@ -116,9 +116,6 @@ public class CardComponent extends AbstractOutputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

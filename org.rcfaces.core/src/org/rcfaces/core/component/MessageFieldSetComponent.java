@@ -1,6 +1,5 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IBundleVarCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.el.ValueBinding;
@@ -15,14 +14,13 @@ import org.rcfaces.core.component.capability.IForCapability;
 public class MessageFieldSetComponent extends FieldSetComponent implements 
 	IForCapability,
 	ISeverityStyleClassCapability,
-	ISeverityImagesCapability,
-	IBundleVarCapability {
+	ISeverityImagesCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messageFieldSet";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(FieldSetComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","warnImageURL","styleClass","infoStyleClass","infoImageURL","bundleVar","fatalImageURL","setFocusIfMessage","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","warnImageURL","styleClass","imageURL","fatalStyleClass","infoStyleClass","infoImageURL","errorImageURL","setFocusIfMessage","fatalImageURL","warnStyleClass","for"}));
 	}
 
 	public MessageFieldSetComponent() {
@@ -178,22 +176,6 @@ public class MessageFieldSetComponent extends FieldSetComponent implements
 		engine.setProperty(Properties.WARN_IMAGE_URL, warnImageURL);
 	}
 
-	public final java.lang.String getBundleVar() {
-		return getBundleVar(null);
-	}
-
-	public final java.lang.String getBundleVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BUNDLE_VAR, facesContext);
-	}
-
-	public final void setBundleVar(java.lang.String bundleVar) {
-		engine.setProperty(Properties.BUNDLE_VAR, bundleVar);
-	}
-
-	public final void setBundleVar(ValueBinding bundleVar) {
-		engine.setProperty(Properties.BUNDLE_VAR, bundleVar);
-	}
-
 	public final boolean isSetFocusIfMessage() {
 		return isSetFocusIfMessage(null);
 	}
@@ -210,13 +192,14 @@ public class MessageFieldSetComponent extends FieldSetComponent implements
 		engine.setProperty(Properties.SET_FOCUS_IF_MESSAGE, setFocusIfMessage);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "setFocusIfMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isSetFocusIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SET_FOCUS_IF_MESSAGE);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

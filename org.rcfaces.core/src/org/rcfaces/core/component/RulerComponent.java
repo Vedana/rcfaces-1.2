@@ -317,9 +317,6 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.ALIGNMENT, alignment);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

@@ -4,13 +4,12 @@
  */
 package org.rcfaces.core.internal.tools;
 
-import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
@@ -26,14 +25,13 @@ import javax.servlet.jsp.jstl.sql.Result;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.ComponentIterators;
-import org.rcfaces.core.model.CollectionIndexesModel;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.IndexesModels;
-import org.rcfaces.core.model.MapIndexesModel;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -78,60 +76,43 @@ public class GridTools {
 
     }
 
-    public static final IIndexesModel getIndexesModel(Object object,
-            DataModel dataModel) {
-        if (object == null) {
-            return new ArrayIndexesModel();
-        }
-
-        if (object instanceof IIndexesModel) {
-            return (IIndexesModel) object;
-        }
-
-        if (ALL_INDEX.equals(object)) {
-            Object value = dataModel;
-
-            if (value == null) {
-                return new ArrayIndexesModel();
-            }
-
-            Class valueClass = value.getClass();
-            if (valueClass.isArray()) {
-                int size = Array.getLength(value);
-
-                return IndexesModels.selectAll(size);
-            }
-
-            if (value instanceof Collection) {
-                Collection collection = (Collection) value;
-
-                return IndexesModels.selectAll(collection.size());
-            }
-
-            if (value instanceof Map) {
-                Map collection = (Map) value;
-
-                return IndexesModels.selectAll(collection.size());
-            }
-
-            throw new FacesException(
-                    "'all' keyword for index model, does not support value type: '"
-                            + value.getClass() + "'.");
-        }
-
-        if (object instanceof Collection) {
-            return new CollectionIndexesModel((Collection) object);
-        }
-
-        if (object instanceof Map) {
-            return new MapIndexesModel((Map) object);
-        }
-
-        List l = new ArrayList(1);
-        l.add(object);
-
-        return new CollectionIndexesModel(l);
-    }
+    /*
+     * public static final IIndexesModel getIndexesModel(Object object,
+     * DataModel dataModel) { if (object == null) { return new
+     * ArrayIndexesModel(); }
+     * 
+     * if (object instanceof IIndexesModel) { return (IIndexesModel) object; }
+     * 
+     * if (ALL_INDEX.equals(object)) { Object value = dataModel;
+     * 
+     * if (value == null) { return new ArrayIndexesModel(); }
+     * 
+     * Class valueClass = value.getClass(); if (valueClass.isArray()) { int size =
+     * Array.getLength(value);
+     * 
+     * return IndexesModels.selectAll(size); }
+     * 
+     * if (value instanceof Collection) { Collection collection = (Collection)
+     * value;
+     * 
+     * return IndexesModels.selectAll(collection.size()); }
+     * 
+     * if (value instanceof Map) { Map collection = (Map) value;
+     * 
+     * return IndexesModels.selectAll(collection.size()); }
+     * 
+     * throw new FacesException( "'all' keyword for index model, does not
+     * support value type: '" + value.getClass() + "'."); }
+     * 
+     * if (object instanceof Collection) { return new
+     * CollectionIndexesModel((Collection) object); }
+     * 
+     * if (object instanceof Map) { return new MapIndexesModel((Map) object); }
+     * 
+     * List l = new ArrayList(1); l.add(object);
+     * 
+     * return new CollectionIndexesModel(l); }
+     */
 
     public static final Object getFirst(DataModel dataModel, Object selection) {
         if (selection == null) {
@@ -355,6 +336,7 @@ public class GridTools {
         if (current instanceof List) {
             return new ListDataModel((List) current);
         }
+
         if (Object[].class.isAssignableFrom(current.getClass())) {
             return new ArrayDataModel((Object[]) current);
         }
@@ -367,6 +349,96 @@ public class GridTools {
             return new ResultDataModel((Result) current);
         }
 
+        if (Constants.COLLECTION_DATAMODEL_SUPPORT) {
+            if (current instanceof Collection) {
+                return new ArrayDataModel(((Collection) current).toArray());
+            }
+        }
+
         return new ScalarDataModel(current);
+    }
+
+    public static boolean select(DataGridComponent component, Object rowValue) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            selectedValues = new ArrayIndexesModel();
+            component.setSelectedValues(selectedValues);
+        }
+
+        Object value = component.getValue();
+
+        if (selectedValues instanceof IIndexesModel) {
+           // IndexesModels.select((IIndexesModel) selectedValues);
+        }
+
+        return false;
+    }
+
+    public static boolean select(DataGridComponent component, int index) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Object selectedValues = component.getSelectedValues(facesContext);
+
+        if (selectedValues == null) {
+            selectedValues = new ArrayIndexesModel();
+            component.setSelectedValues(selectedValues);
+        }
+
+        Object value = component.getValue();
+
+        if (selectedValues instanceof IIndexesModel) {
+            IndexesModels.select((IIndexesModel) selectedValues, index, 1);
+            return true;
+        }
+        
+        if (value instanceof Object[]) {
+            
+        }
+
+        return false;
+    }
+
+    public static boolean select(DataGridComponent component, int indices[]) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public static Object select(DataGridComponent component, int start, int end) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public static Object selectAll(DataGridComponent component) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public static boolean deselect(DataGridComponent component, Object rowValue) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public static boolean deselect(DataGridComponent component, int index) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public static boolean deselect(DataGridComponent component, int indices[]) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public static Object deselect(DataGridComponent component, int start,
+            int end) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public static Object deselectAll(DataGridComponent component) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

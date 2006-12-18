@@ -3,20 +3,15 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.Iterator;
-
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.StyledMessageComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.MessageTools;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 
 /**
  * 
@@ -63,10 +58,10 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
         boolean showIfMessage = messageComponent.isShowIfMessage(facesContext);
         String forValue = messageComponent.getFor(facesContext);
         if (showIfMessage && forValue != null) {
-            Iterator iterator = MessageTools.listMessages(facesContext,
-                    forValue, messageComponent);
+     //       Iterator iterator = MessageTools.listMessages(facesContext, forValue, messageComponent);
 
-            messageComponent.setVisible(iterator.hasNext());
+            // On masque, on affichera une fois le message traité !
+            messageComponent.setVisible(false);
         }
 
         writeHtmlAttributes(htmlWriter);
@@ -109,10 +104,12 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
         }
     }
 
+    /*
     protected void encodeJavaScript(IJavaScriptWriter js)
             throws WriterException {
         super.encodeJavaScript(js);
 
         JavaScriptTools.writeFirstMessage(js);
     }
+    */
 }

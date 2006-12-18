@@ -25,29 +25,46 @@ public class FocusManagerComponent extends CameliaBaseComponent {
 		setId(componentId);
 	}
 
+	/**
+	 * Returns a component's id. This component will get the focus.
+	 * @return id
+	 */
 	public final String getFocusId() {
 		return getFocusId(null);
 	}
 
+	/**
+	 * Returns a component's id. This component will get the focus.
+	 * @return id
+	 */
 	public final String getFocusId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOCUS_ID, facesContext);
 	}
 
+	/**
+	 * Sets a component's id. This component will get the focus.
+	 * @param focusId id
+	 */
 	public final void setFocusId(String focusId) {
 		engine.setProperty(Properties.FOCUS_ID, focusId);
 	}
 
+	/**
+	 * Sets a component's id. This component will get the focus.
+	 * @param focusId id
+	 */
 	public final void setFocusId(ValueBinding focusId) {
 		engine.setProperty(Properties.FOCUS_ID, focusId);
 	}
 
+	/**
+	 * Returns <code>true</code> if the attribute "focusId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
 	public final boolean isFocusIdSetted() {
 		return engine.isPropertySetted(Properties.FOCUS_ID);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

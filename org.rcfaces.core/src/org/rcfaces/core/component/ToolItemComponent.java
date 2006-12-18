@@ -65,9 +65,6 @@ public class ToolItemComponent extends UIImageItemComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public void release() {
-		super.release();
-	}
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}

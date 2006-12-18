@@ -14,7 +14,7 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getText: function() {
-		return f_core.GetTextNode(this);
+		return f_core.GetTextNode(this, true);
 	},
 	/**
 	 * @method public
@@ -26,7 +26,8 @@ var __prototype = {
 		if (this.f_getText() == text) {
 			return;
 		}
-		f_core.SetTextNode(this, text);
+		
+		f_core.SetTextNode(this, text, this._accessKey);
 		
 		this.f_setProperty(f_prop.TEXT,text);
 	},
