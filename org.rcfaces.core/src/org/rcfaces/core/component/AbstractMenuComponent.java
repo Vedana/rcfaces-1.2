@@ -13,6 +13,9 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * Technical component, used as a basis for building new RCFaces components.
+ */
 public abstract class AbstractMenuComponent extends AbstractConverterCommandComponent implements 
 	ISelectionEventCapability,
 	ICheckEventCapability,

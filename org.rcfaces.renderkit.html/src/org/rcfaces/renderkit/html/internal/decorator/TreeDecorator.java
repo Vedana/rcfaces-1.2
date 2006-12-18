@@ -24,6 +24,8 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.SelectItemMappers;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.model.IImagesSelectItem;
+import org.rcfaces.core.model.ITreeNode;
+import org.rcfaces.core.model.TreeNode;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -600,6 +602,16 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         throw new FacesException(
                 "Bad type of value for attribute selectedValues/checkedValues !");
+    }
+
+    protected SelectItem convertToSelectItem(Object value) {
+        if (value instanceof ITreeNode) {
+            ITreeNode treeNode = (ITreeNode) value;
+
+            return new TreeNode(treeNode);
+        }
+
+        return super.convertToSelectItem(value);
     }
 
 }

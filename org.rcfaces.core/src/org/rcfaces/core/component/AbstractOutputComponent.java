@@ -35,6 +35,9 @@ import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.component.CameliaOutputComponent;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
+/**
+ * Technical component, used as a basis for building new RCFaces components.
+ */
 public abstract class AbstractOutputComponent extends CameliaOutputComponent implements 
 	ISizeCapability,
 	IVisibilityCapability,

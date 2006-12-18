@@ -29,6 +29,9 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
+/**
+ * Technical component, used as a basis for building new RCFaces components.
+ */
 public abstract class AbstractBasicComponent extends CameliaBaseComponent implements 
 	IClientDataCapability,
 	IServerDataCapability,

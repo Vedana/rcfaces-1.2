@@ -23,7 +23,7 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class BasicSelectItem extends SelectItem implements
+public class BasicSelectItem extends SelectItem implements ISelectItem,
         IAccessKeySelectItem, IAcceleratorKeySelectItem, IGroupSelectItem,
         ICheckSelectItem, IStyledSelectItem, IVisibleSelectItem,
         IServerDataSelectItem, IClientDataSelectItem, IStyleClassItem {
@@ -69,6 +69,11 @@ public class BasicSelectItem extends SelectItem implements
     public BasicSelectItem(Object value, String label, String description,
             boolean disabled) {
         super(value, label, description, disabled);
+    }
+
+    public BasicSelectItem(ISelectItem selectItem) {
+        super(selectItem.getValue(), selectItem.getLabel(), selectItem
+                .getDescription(), selectItem.isDisabled());
     }
 
     public BasicSelectItem(UISelectItem component) {

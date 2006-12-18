@@ -44,6 +44,9 @@ import org.rcfaces.core.internal.component.CameliaOutputComponent;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
+/**
+ * Technical component, used as a basis for building new RCFaces components.
+ */
 public abstract class AbstractInputComponent extends CameliaInputComponent implements 
 	ISizeCapability,
 	IVisibilityCapability,

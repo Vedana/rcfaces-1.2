@@ -12,6 +12,9 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * Technical component, used as a basis for building new RCFaces components.
+ */
 public abstract class AbstractSeparatorComponent extends CameliaBaseComponent implements 
 	IVisibilityCapability,
 	ISeparatorComponent {

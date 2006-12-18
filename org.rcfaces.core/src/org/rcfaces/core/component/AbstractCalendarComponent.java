@@ -20,6 +20,9 @@ import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.converter.DateConverter;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * Technical component, used as a basis for building new RCFaces components.
+ */
 public abstract class AbstractCalendarComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,
 	IReadOnlyCapability,

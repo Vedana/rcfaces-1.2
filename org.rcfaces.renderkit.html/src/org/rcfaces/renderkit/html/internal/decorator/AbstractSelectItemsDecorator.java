@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
@@ -22,6 +23,8 @@ import javax.faces.model.SelectItemGroup;
 import javax.faces.render.Renderer;
 
 import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
@@ -32,9 +35,12 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.model.BasicImagesSelectItem;
 import org.rcfaces.core.model.BasicSelectItem;
+import org.rcfaces.core.model.IAdaptable;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
 import org.rcfaces.core.model.IImagesSelectItem;
+import org.rcfaces.core.model.ISelectItem;
+import org.rcfaces.core.model.ISelectItemGroup;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -168,7 +174,17 @@ public abstract class AbstractSelectItemsDecorator extends
             if (component instanceof UISelectItem) {
                 UISelectItem uiSelectItem = (UISelectItem) component;
 
-                SelectItem si = (SelectItem) uiSelectItem.getValue();
+                Object value = uiSelectItem.getValue();
+                if ((value instanceof SelectItem) == false) {
+                    value = convertToSelectItem(value);
+                }
+
+                if ((value instanceof SelectItem) == false) {
+                    throw new FacesException("Value is not a SelectItem ("
+                            + value + ")");
+                }
+
+                SelectItem si = (SelectItem) value;
                 if (si == null) {
                     si = createSelectItem(uiSelectItem);
                 }
@@ -196,10 +212,21 @@ public abstract class AbstractSelectItemsDecorator extends
     private boolean mapSelectItems(ISelectItemMapper mapper,
             UISelectItems uiSelectItems) {
         Object value = uiSelectItems.getValue();
+
         if (value instanceof SelectItem) {
             SelectItem si = (SelectItem) value;
 
             return mapSelectItem(mapper, si);
+        }
+
+        if (value instanceof ISelectItem) {
+            ISelectItem si = (ISelectItem) value;
+
+            value = convertToSelectItem(si);
+        }
+
+        if (mapper.acceptCollections()) {
+            return true;
         }
 
         if (value != null) {
@@ -217,10 +244,6 @@ public abstract class AbstractSelectItemsDecorator extends
 
                 return true;
             }
-        }
-
-        if (mapper.acceptCollections()) {
-            return true;
         }
 
         if (value instanceof Collection) {
@@ -263,6 +286,51 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         return true;
+    }
+
+    protected SelectItem convertToSelectItem(Object value) {
+        if (value instanceof ISelectItem) {
+            if (value instanceof ISelectItemGroup) {
+                ISelectItemGroup selectItemGroup = (ISelectItemGroup) value;
+
+                SelectItemGroup sig = new SelectItemGroup(selectItemGroup
+                        .getLabel(), selectItemGroup.getDescription(),
+                        selectItemGroup.isDisabled(), selectItemGroup
+                                .getSelectItems());
+
+                sig.setValue(selectItemGroup.getValue());
+
+                return sig;
+            }
+
+            ISelectItem selectItem = (ISelectItem) value;
+
+            return new SelectItem(selectItem.getValue(), selectItem.getLabel(),
+                    selectItem.getDescription(), selectItem.isDisabled());
+        }
+
+        if (value instanceof IAdaptable) {
+            IAdaptable adaptable = (IAdaptable) value;
+
+            SelectItem selectItem = (SelectItem) adaptable.getAdapter(
+                    SelectItem.class, null);
+            if (selectItem != null) {
+                return selectItem;
+            }
+        }
+
+        if (Constants.ADAPT_SELECT_ITEMS) {
+            RcfacesContext rcfacesContext = RcfacesContext
+                    .getInstance(getComponentRenderContext().getFacesContext());
+            SelectItem selectItem = (SelectItem) rcfacesContext
+                    .getAdapterManager().getAdapter(value, SelectItem.class,
+                            null);
+            if (selectItem != null) {
+                return selectItem;
+            }
+        }
+
+        return null;
     }
 
     private boolean mapSelectItem(ISelectItemMapper mapper, SelectItem si) {
@@ -497,7 +565,13 @@ public abstract class AbstractSelectItemsDecorator extends
 
                 encodeSelectItem(component, selectItem, depth, visible);
             }
-            
+
+            return;
+        }
+
+        SelectItem convertedSelectItem = convertToSelectItem(value);
+        if (convertedSelectItem != null) {
+            encodeUISelectItems(component, convertedSelectItem, depth, visible);
             return;
         }
 
@@ -513,7 +587,7 @@ public abstract class AbstractSelectItemsDecorator extends
                     encodeSelectItem(component, selectItem, depth, visible);
                 }
             }
-            
+
             return;
         }
 

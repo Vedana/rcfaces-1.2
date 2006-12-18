@@ -54,7 +54,7 @@ public class Constants {
     public static final boolean GZIP_SUPPORT_DEFAULT_VALUE = true;
 
     /**
-     * Collection can be converted to DataModel  (JSF spec extension)
+     * Collection can be converted to DataModel (JSF spec extension)
      */
     public static final boolean COLLECTION_DATAMODEL_SUPPORT = true;
 
@@ -110,6 +110,8 @@ public class Constants {
     public static final boolean FLUSH_AFTER_ENCODE_CHILDREN = false;
 
     public static final boolean FLUSH_AFTER_ENCODE_END = false;
+
+    public static final boolean ADAPT_SELECT_ITEMS = true;
 
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="

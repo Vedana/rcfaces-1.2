@@ -11,6 +11,9 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.internal.component.IConvertValueHolder;
 
+/**
+ * Technical component, used as a basis for building new RCFaces components.
+ */
 public abstract class AbstractConverterCommandComponent extends AbstractCommandComponent implements 
 	IConvertValueHolder {
 
