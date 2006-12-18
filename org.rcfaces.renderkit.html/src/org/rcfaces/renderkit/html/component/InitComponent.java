@@ -12,6 +12,9 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * Mandatory. It holds the included javascript and css files.
+ */
 public class InitComponent extends CameliaBaseComponent implements 
 	IPageConfigurator {
 

@@ -30,6 +30,19 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <p>The textEntry Component is based on the standard HTML tag &lt;INPUT TYPE="text"&gt;.</p>
+ * <p>The textEntry Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class TextEntryComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
 	IAutoTabCapability,

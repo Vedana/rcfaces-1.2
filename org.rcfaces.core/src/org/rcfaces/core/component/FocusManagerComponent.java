@@ -7,6 +7,10 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The focusManager Component is a non-visual component.</p>
+ * <p>It allows to deal with the focus on the current page.</p>
+ */
 public class FocusManagerComponent extends CameliaBaseComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.focusManager";

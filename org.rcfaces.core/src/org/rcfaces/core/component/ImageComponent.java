@@ -13,6 +13,20 @@ import org.rcfaces.core.component.capability.IImageCapability;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
+ * <p>The image Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Image</li>
+ * <li>Margin</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class ImageComponent extends AbstractOutputComponent implements 
 	IImageCapability,
 	IImageSizeCapability,

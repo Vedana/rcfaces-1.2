@@ -17,6 +17,18 @@ import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 
+/**
+ * <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>
+ * <p>The cardBox Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class CardBoxComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,
 	IAsyncRenderModeCapability,

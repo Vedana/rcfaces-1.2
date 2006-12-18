@@ -12,6 +12,15 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The lineBreak Component is the &lt;BR&gt; HTML equivalent.</p>
+ * <p>It is used often when simple HTML is not desirable : for example if a part of a page is loaded via AJAX it might be easier to have only a jsf tree memory represantation.</p>
+ * <p>The lineBreak Component has the following capability :
+ * <ul>
+ * <li>Visibility</li>
+ * </ul>
+ * </p>
+ */
 public class LineBreakComponent extends CameliaBaseComponent implements 
 	IStyleClassCapability,
 	IVisibilityCapability {

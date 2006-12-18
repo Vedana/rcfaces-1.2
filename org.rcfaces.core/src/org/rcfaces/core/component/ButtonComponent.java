@@ -11,6 +11,19 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
+ * <p>The button Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class ButtonComponent extends AbstractCommandComponent implements 
 	ITextCapability,
 	ISelectionEventCapability,

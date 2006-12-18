@@ -14,6 +14,19 @@ import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <p>The checkButton Component is equivalent to the &lt;INPUT TYPE="checkbox"&gt; HTML tag.</p>
+ * <p>The checkButton Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class CheckButtonComponent extends AbstractInputComponent implements 
 	ITextCapability,
 	IHorizontalTextPositionCapability,

@@ -21,6 +21,9 @@ import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
+/**
+ * An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> and holding the components.
+ */
 public class TabComponent extends CardComponent implements 
 	ITextCapability,
 	IFontCapability,

@@ -9,6 +9,9 @@ import org.rcfaces.core.component.capability.ITextCapability;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * An item specialized for date values.
+ */
 public class DateItemComponent extends AbstractItemComponent implements 
 	ITextCapability,
 	IStyleClassCapability {

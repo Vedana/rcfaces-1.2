@@ -6,6 +6,9 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.AbstractMenuComponent;
 
+/**
+ * Describes a top-level menu bar.
+ */
 public class MenuBarComponent extends AbstractMenuComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuBar";

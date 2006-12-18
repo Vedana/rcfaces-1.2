@@ -14,6 +14,19 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
 
+/**
+ * <p>The suggestTextEntry is a <a href="/comps/textEntryCOmponent.html">textEntry Component</a> with an autosuggestion feature that shows in the form of a dropdown list.</p>
+ * <p>The suggestTextEntry Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class SuggestTextEntryComponent extends TextEntryComponent implements 
 	IFilterCapability,
 	IMaxResultNumberCapability,

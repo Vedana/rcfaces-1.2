@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * A separator Menu item
+ */
 public class MenuSeparatorComponent extends AbstractSeparatorComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuSeparator";

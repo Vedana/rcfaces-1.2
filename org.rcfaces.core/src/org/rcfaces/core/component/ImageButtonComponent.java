@@ -14,6 +14,20 @@ import org.rcfaces.core.component.ButtonComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
+/**
+ * <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
+ * <p>The imageButton Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class ImageButtonComponent extends ButtonComponent implements 
 	IImageButtonFamilly {
 

@@ -12,6 +12,19 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.AbstractBasicComponent;
 
+/**
+ * <p>The progressIndicator Component indicates the evolution of a task. It uses the <a href="/comps/progressBarComponent.html">porgressBar Component</a> and add text information to it.</p>
+ * <p>The progressIndicator Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * </ul>
+ * </p>
+ */
 public class ProgressIndicatorComponent extends AbstractBasicComponent implements 
 	NamingContainer {
 

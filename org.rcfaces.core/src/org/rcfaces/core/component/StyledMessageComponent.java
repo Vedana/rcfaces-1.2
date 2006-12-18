@@ -13,6 +13,15 @@ import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 
+/**
+ * An englobing tag that changes the style class surronuding a component when a particular message is emitted for a component.
+ * ex :
+ * &lt;v:styledMessage errorStyleClass="formErreur" for="ef1"&gt;
+ * &lt;v:textEntry
+ * id="ef1"
+ * ... /&gt;
+ * &lt;/v:styledMessage&gt;
+ */
 public class StyledMessageComponent extends AbstractBasicComponent implements 
 	IBackgroundImageCapability,
 	IBorderCapability,

@@ -20,6 +20,24 @@ import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 
+/**
+ * <p>The Box Component is a container.</p>
+ * <p>It can have a graphical representation or not; But it is mainly used to apply a collective treatment to a set of component, for example show or hide a group of component.</p>
+ * <p>The Box Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Margin</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Background Image</li>
+ * <li>Border</li>
+ * <li>Events Handling</li>
+ * <li>Contextual Menu</li>
+ * <li>Async Render (AJAX)</li>
+ * </ul>
+ * </p>
+ */
 public class BoxComponent extends AbstractBasicComponent implements 
 	IBackgroundImageCapability,
 	IBorderCapability,

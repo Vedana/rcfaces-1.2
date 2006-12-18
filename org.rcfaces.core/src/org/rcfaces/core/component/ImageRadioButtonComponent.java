@@ -13,6 +13,19 @@ import org.rcfaces.core.component.familly.IContentAccessors;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The imageRadioButton Component is a <a href="/comps/radioButtonComponent.html">radioButton Component</a> with an image instead of the rounded box.</p>
+ * <p>The imageRadioButton Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class ImageRadioButtonComponent extends RadioButtonComponent implements 
 	IImageButtonFamilly {
 

@@ -14,6 +14,9 @@ import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 
+/**
+ * An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.
+ */
 public class CardComponent extends AbstractOutputComponent implements 
 	ITextAlignmentCapability,
 	IVerticalAlignmentCapability,

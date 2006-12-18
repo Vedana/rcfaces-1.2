@@ -15,6 +15,9 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
+/**
+ * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
+ */
 public class UIImageItemComponent extends AbstractItemComponent implements 
 	IVisibilityCapability,
 	IToolTipCapability,

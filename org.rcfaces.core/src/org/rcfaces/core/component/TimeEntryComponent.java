@@ -27,6 +27,21 @@ import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.converter.TimeConverter;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <p>The timeEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a time.</p>
+ * <p>The timeEntry Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; separators</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Calendar functions</li>
+ * </ul>
+ * </p>
+ */
 public class TimeEntryComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
 	IAutoTabCapability,

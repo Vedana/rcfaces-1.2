@@ -10,6 +10,21 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 
+/**
+ * <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
+ * <p>The calendar Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Calendar functions</li>
+ * </ul>
+ * </p>
+ */
 public class CalendarComponent extends AbstractCalendarComponent implements 
 	IBorderCapability,
 	ICalendarModeCapability {

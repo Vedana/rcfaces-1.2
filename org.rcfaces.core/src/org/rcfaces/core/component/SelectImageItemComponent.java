@@ -11,6 +11,9 @@ import org.rcfaces.core.component.capability.IImageCapability;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * A select item (member of a selectable list) that shows an image.
+ */
 public class SelectImageItemComponent extends CameliaItemComponent implements 
 	IImageCapability {
 

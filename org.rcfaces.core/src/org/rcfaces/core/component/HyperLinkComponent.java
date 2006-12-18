@@ -6,6 +6,19 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The hyperLink Component translates into a classic hyperlink and is a <A href="/comps/buttonComponent.html">button</A>.</p>
+ * <p>The hyperLink Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class HyperLinkComponent extends ButtonComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.hyperLink";

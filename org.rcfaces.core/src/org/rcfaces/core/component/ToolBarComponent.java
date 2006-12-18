@@ -16,6 +16,9 @@ import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <b>EXPERIMENTAL</b>
+ */
 public class ToolBarComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,
 	IReadOnlyCapability,

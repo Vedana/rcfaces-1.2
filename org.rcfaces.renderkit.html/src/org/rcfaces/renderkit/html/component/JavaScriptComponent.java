@@ -8,6 +8,9 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * Specifies includes and required javascript classes.
+ */
 public class JavaScriptComponent extends CameliaBaseComponent implements 
 	ITextCapability {
 

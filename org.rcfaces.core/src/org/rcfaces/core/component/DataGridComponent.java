@@ -32,6 +32,22 @@ import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
+ * <p>The dataGrid Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; images</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Contextual actions in cell, row or table scope</li>
+ * <li>...</li>
+ * </ul>
+ * </p>
+ */
 public class DataGridComponent extends AbstractGridComponent implements 
 	ISelectionEventCapability,
 	ISelectableCapability,

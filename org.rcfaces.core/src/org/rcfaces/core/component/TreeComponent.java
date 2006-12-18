@@ -28,6 +28,23 @@ import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <p>The tree Component shows informations in an arborescent view.
+ * It can be compared to the tree found in most modern file explorer.
+ * It allows contextual menus ...</p>
+ * <p>The tree Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; images</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Contextual actions in node or tree scope</li>
+ * </ul>
+ * </p>
+ */
 public class TreeComponent extends AbstractInputComponent implements 
 	IDoubleClickEventCapability,
 	IRequiredCapability,

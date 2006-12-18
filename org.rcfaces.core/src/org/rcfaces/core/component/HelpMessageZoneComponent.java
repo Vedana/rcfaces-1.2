@@ -10,6 +10,20 @@ import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The helpMessageZone Component is a placeholder for help messages. The messages are shown when the pointer hover a component and this component has a "helpMessage" property.</p>
+ * <p>The helpMessageZone Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; position</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class HelpMessageZoneComponent extends AbstractOutputComponent implements 
 	ITextCapability,
 	IFontCapability,

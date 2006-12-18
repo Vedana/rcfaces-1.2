@@ -8,6 +8,9 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * Css style
+ */
 public class CssStyleComponent extends CameliaBaseComponent implements 
 	ITextCapability {
 

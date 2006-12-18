@@ -20,6 +20,19 @@ import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 
+/**
+ * <p>The radioButton Component is based on the standard HTML tag &lt;INPUT TYPE="radio"&gt;. It can interoperate automatically with other radioButtons from the same group.</p>
+ * <p>The radioButton Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class RadioButtonComponent extends AbstractInputComponent implements 
 	ITextCapability,
 	IHorizontalTextPositionCapability,

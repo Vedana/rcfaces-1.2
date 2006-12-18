@@ -11,6 +11,9 @@ import org.rcfaces.core.component.TreeComponent;
 import java.util.HashSet;
 import org.rcfaces.core.internal.tools.TreeTools;
 
+/**
+ * A node belonging to a tree.
+ */
 public class TreeNodeComponent extends ExpandableItemComponent implements 
 	IRadioGroupCapability {
 

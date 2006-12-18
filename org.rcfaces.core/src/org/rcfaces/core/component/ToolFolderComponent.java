@@ -9,6 +9,9 @@ import org.rcfaces.core.component.ToolBarComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <b>EXPERIMENTAL</b>
+ */
 public class ToolFolderComponent extends AbstractItemComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolFolder";

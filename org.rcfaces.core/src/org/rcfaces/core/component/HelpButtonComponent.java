@@ -8,6 +8,21 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 
+/**
+ * <p>The helpButton Component is an <A href="/comps/imageButtonComponent.html">ImageButton</A>. It opens a new page showing the url specified in the "helpUrl" property of a component linked by the "for" property.</p>
+ * <p>The helpButton Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Association with another component</li>
+ * </ul>
+ * </p>
+ */
 public class HelpButtonComponent extends ImageButtonComponent implements 
 	IForCapability {
 

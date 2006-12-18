@@ -23,6 +23,9 @@ import javax.faces.component.ValueHolder;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 
+/**
+ * Specify a column.
+ */
 public class DataColumnComponent extends CameliaColumnComponent implements 
 	IVisibilityCapability,
 	ITextCapability,

@@ -22,6 +22,15 @@ import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
+/**
+ * <p>The service Component is a non-visual component.</p>
+ * <p>It allows to (synchronously or asynchronously) call AJAX services from the client.</p>
+ * <p>The service Component has the following capability :
+ * <ul>
+ * <li>Property changed Event handling</li>
+ * </ul>
+ * </p>
+ */
 public class ServiceComponent extends CameliaBaseComponent implements 
 	IClientDataCapability,
 	IServerDataCapability,

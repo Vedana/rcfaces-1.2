@@ -12,6 +12,9 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * A button Component highly customizable through its API.
+ */
 public class CustomButtonComponent extends AbstractCommandComponent implements 
 	IBorderTypeCapability,
 	IBorderCapability,

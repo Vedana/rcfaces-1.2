@@ -13,6 +13,19 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The menu Component provides a way of creating desktop style menus on web pages. It allows sub-menus, check and radio menu items and image menus. It also provides pop-up menus.</p>
+ * <p>The menu Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; images</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class MenuComponent extends CameliaSelectManyComponent implements 
 	IMenuEventCapability,
 	ISelectionEventCapability,

@@ -18,6 +18,23 @@ import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 
+/**
+ * <p>The fieldSet Component is a container with a title (text and/or picture).</p>
+ * <p>The fieldSet Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Background Image</li>
+ * <li>Events Handling</li>
+ * <li>Contextual Menu</li>
+ * <li>Async Render (AJAX)</li>
+ * </ul>
+ * </p>
+ */
 public class FieldSetComponent extends AbstractOutputComponent implements 
 	IFontCapability,
 	ITextCapability,

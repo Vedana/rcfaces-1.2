@@ -14,6 +14,19 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
+/**
+ * <p>The imageCombo Component is a <a href="/comps/comboComponent.html">combo Component</a> with an image added to the text.</p>
+ * <p>The imageCombo Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class ImageComboComponent extends AbstractMenuComponent implements 
 	IImageButtonFamilly {
 

@@ -10,6 +10,9 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.UIImageItemComponent;
 
+/**
+ * <b>EXPERIMENTAL</b>
+ */
 public class ToolItemComponent extends UIImageItemComponent implements 
 	ISelectionEventCapability,
 	IReadOnlyCapability {

@@ -18,6 +18,21 @@ import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IForCapability;
 
+/**
+ * <p>The dateChooser Component is a button that shows a calendar and help the user to choose a date. It can be associated to a entry field, the choosen date is then automatically entered in the field. It works like an <a href="/comps/imageButtonComponent.html">Image Button Component</a>. The dateChooser Component does <b>not</b> provide an Entry field.</p>
+ * <p>The dateChooser Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Association with another component</li>
+ * </ul>
+ * </p>
+ */
 public class DateChooserComponent extends AbstractCalendarComponent implements 
 	IImageButtonFamilly,
 	IValueChangeEventCapability,

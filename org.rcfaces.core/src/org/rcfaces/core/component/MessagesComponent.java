@@ -8,6 +8,20 @@ import org.rcfaces.core.component.AbstractMessagesComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The messages Component is a placeholder for error messages (several messages can be shown simultaneously).</p>
+ * <p>The messages Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class MessagesComponent extends AbstractMessagesComponent implements 
 	ISeverityStyleClassCapability {
 

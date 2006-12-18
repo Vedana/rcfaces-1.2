@@ -25,6 +25,23 @@ import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <p>The expandBar Component is a container that can be collapsed to show only a title bar. Expand Bars can be managed by group : only one element of the group is expanded.</p>
+ * <p>The expandBar Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Background Image</li>
+ * <li>Events Handling</li>
+ * <li>Contextual Menu</li>
+ * <li>Async Render (AJAX)</li>
+ * </ul>
+ * </p>
+ */
 public class ExpandBarComponent extends AbstractOutputComponent implements 
 	IAsyncRenderModeCapability,
 	IFontCapability,

@@ -4,11 +4,13 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -22,6 +24,8 @@ import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 import javax.servlet.jsp.jstl.sql.Result;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
@@ -39,6 +43,8 @@ import org.rcfaces.core.model.IndexesModels;
  */
 public class GridTools {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(GridTools.class);
 
     private static final IDataColumnIterator EMPTY_COMPONENT_ITERATOR = new DataColumnListIterator(
             Collections.EMPTY_LIST);
@@ -371,13 +377,13 @@ public class GridTools {
         Object value = component.getValue();
 
         if (selectedValues instanceof IIndexesModel) {
-           // IndexesModels.select((IIndexesModel) selectedValues);
+            // IndexesModels.select((IIndexesModel) selectedValues);
         }
 
         return false;
     }
 
-    public static boolean select(DataGridComponent component, int index) {
+    public static void select(DataGridComponent component, int index) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         Object selectedValues = component.getSelectedValues(facesContext);
@@ -387,18 +393,84 @@ public class GridTools {
             component.setSelectedValues(selectedValues);
         }
 
-        Object value = component.getValue();
-
         if (selectedValues instanceof IIndexesModel) {
             IndexesModels.select((IIndexesModel) selectedValues, index, 1);
-            return true;
-        }
-        
-        if (value instanceof Object[]) {
-            
+            return;
         }
 
-        return false;
+        Object rowData = null;
+        component.setRowIndex(index);
+        try {
+            rowData = component.getRowData();
+
+        } finally {
+            component.setRowIndex(-1);
+        }
+
+        if (rowData == null) {
+            LOG.error("Invalid rowData for index='" + index + "'.");
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Select index=" + index + " => " + rowData
+                    + "   selectedValues=" + selectedValues);
+        }
+
+        select(component, selectedValues, Collections.singleton(rowData));
+    }
+
+    private static void select(DataGridComponent component,
+            Object selectedValues, Collection rowDatas) {
+
+        if (selectedValues instanceof Object[]) {
+            List l = Arrays.asList((Object[]) selectedValues);
+
+            boolean changed = false;
+
+            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+                Object rowData = it.next();
+
+                if (l.contains(rowData)) {
+                    continue;
+                }
+
+                l.add(rowData);
+                changed = true;
+            }
+
+            if (changed == false) {
+                return;
+            }
+
+            Class type = selectedValues.getClass().getComponentType();
+
+            selectedValues = l.toArray((Object[]) Array.newInstance(type, l
+                    .size()));
+
+            component.setSelectedValues(selectedValues);
+
+            return;
+        }
+
+        if (selectedValues instanceof Collection) {
+            Collection collection = (Collection) selectedValues;
+
+            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+                Object rowData = it.next();
+                
+                if (collection.contains(rowData)) {
+                    return;
+                }
+
+                collection.add(rowData);
+            }
+
+            return;
+        }
+
+        throw new FacesException(
+                "Select index is not implemented for selectedValues="
+                        + selectedValues);
     }
 
     public static boolean select(DataGridComponent component, int indices[]) {

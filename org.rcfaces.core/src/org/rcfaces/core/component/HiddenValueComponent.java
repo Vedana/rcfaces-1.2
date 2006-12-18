@@ -21,6 +21,15 @@ import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
+/**
+ * <p>The hiddenValue Component is a non-visual component. It is equivalent to and Input hidden type HTML tag.</p>
+ * <p>It allows to access and store value on the client and on the server while keeping it concealed. The clientData Component can also be used.</p>
+ * <p>The hiddenValue Component has the following capability :
+ * <ul>
+ * <li>Property changed Event handling</li>
+ * </ul>
+ * </p>
+ */
 public class HiddenValueComponent extends CameliaInputComponent implements 
 	IClientDataCapability,
 	IServerDataCapability,

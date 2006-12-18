@@ -10,6 +10,16 @@ import org.rcfaces.core.component.capability.IImmediateCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 
+/**
+ * <p>The accelerator Component is a non-visual component.</p>
+ * <p>It allows to associate an accelerator key to an action or another component.</p>
+ * <p>The accelerator Component has the following capabilities :
+ * <ul>
+ * <li>Key pressed</li>
+ * <li>Association to another component</li>
+ * </ul>
+ * </p>
+ */
 public class AcceleratorComponent extends CameliaCommandComponent implements 
 	IKeyPressEventCapability,
 	IImmediateCapability,

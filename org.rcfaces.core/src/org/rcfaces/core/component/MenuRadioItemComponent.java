@@ -8,6 +8,9 @@ import org.rcfaces.core.component.MenuCheckItemComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * A menu item with a radiobutton (see attribute GroupName)
+ */
 public class MenuRadioItemComponent extends MenuCheckItemComponent implements 
 	IRadioValueCapability {
 

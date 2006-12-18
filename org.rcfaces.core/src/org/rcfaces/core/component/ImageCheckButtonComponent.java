@@ -13,6 +13,19 @@ import org.rcfaces.core.component.CheckButtonComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The imageCheckButton Component is a <a href="/comps/checkButtonComponent.html">checkButton Component</a> with an image instead of the checkBox.</p>
+ * <p>The imageCheckButton Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class ImageCheckButtonComponent extends CheckButtonComponent implements 
 	IImageButtonFamilly {
 

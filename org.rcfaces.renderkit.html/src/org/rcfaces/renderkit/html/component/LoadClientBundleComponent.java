@@ -7,6 +7,9 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * Loads a property bundle on the client side.
+ */
 public class LoadClientBundleComponent extends CameliaBaseComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.html.loadClientBundle";

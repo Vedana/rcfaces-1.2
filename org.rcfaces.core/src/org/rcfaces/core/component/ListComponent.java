@@ -9,6 +9,19 @@ import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The list Component is based on the standard HTML tag &lt;SELECT&gt;.</p>
+ * <p>The list Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text ,&amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class ListComponent extends ComboComponent implements 
 	IMultipleSelectCapability,
 	IDoubleClickEventCapability {

@@ -15,6 +15,20 @@ import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <p>The checkButton3States Component is a <a href="/comps/checkButtonComponent.html">CheckButton</a> with 3 states : Check, unchecked and undefined. It is often used to show the state of a group of checkButtons</p>
+ * <p>This component is <b>experimental</b>.</p>
+ * <p>The checkButton3States Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class CheckButton3StatesComponent extends AbstractInputComponent implements 
 	ITextCapability,
 	IHorizontalTextPositionCapability,

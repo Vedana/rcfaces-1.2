@@ -7,6 +7,19 @@ import org.rcfaces.core.component.AbstractOutputComponent;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * <p>The progressBar Component indicates the evolution of a task.</p>
+ * <p>The progressBar Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * </ul>
+ * </p>
+ */
 public class ProgressBarComponent extends AbstractOutputComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.progressBar";

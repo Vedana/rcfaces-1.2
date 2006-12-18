@@ -15,6 +15,9 @@ import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IBorderCapability;
 
+/**
+ * Shows the components for each data with pagination.
+ */
 public class ComponentsListComponent extends AbstractDataComponent implements 
 	IMenuCapability,
 	IBorderCapability,

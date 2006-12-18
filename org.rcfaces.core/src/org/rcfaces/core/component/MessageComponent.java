@@ -14,6 +14,20 @@ import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
+/**
+ * <p>The message Component is a placeholder for error messages (only one is shown).</p>
+ * <p>The message Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Events Handling</li>
+ * </ul>
+ * </p>
+ */
 public class MessageComponent extends AbstractMessageComponent implements 
 	IImageSizeCapability,
 	ITextCapability,

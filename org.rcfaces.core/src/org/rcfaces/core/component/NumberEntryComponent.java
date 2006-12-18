@@ -28,6 +28,9 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
+/**
+ * <b>NOT COMPLETE</b>
+ */
 public class NumberEntryComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
 	IAutoTabCapability,

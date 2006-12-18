@@ -8,6 +8,9 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.MenuItemComponent;
 
+/**
+ * A menu item with a check.
+ */
 public class MenuCheckItemComponent extends MenuItemComponent implements 
 	ICheckedCapability {
 

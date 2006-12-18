@@ -8,6 +8,22 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
 
+/**
+ * <p>The pager Component is linked to the <a href="/comps/dataGridComponent.html">dataGrid Component</a>.
+ * It shows informations about the result set (ex: number of available pages)
+ * and can give direct access to a specific page ("a la Google").</p>
+ * <p>The pager Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Association with another component</li>
+ * </ul>
+ * </p>
+ */
 public class PagerComponent extends AbstractBasicComponent implements 
 	IForCapability {
 

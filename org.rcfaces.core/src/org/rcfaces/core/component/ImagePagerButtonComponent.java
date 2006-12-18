@@ -8,6 +8,31 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 
+/**
+ * <p>The imagePagerButton Component is an <a href="/comps/imageButtonComponent.html">imageButton Component</a> that works like the keyword in the <a href="/comps/pagerComponent.html">pager Component</a> and is linked to the <a href="/comps/dataGridComponent.html">dataGrid Component</a>.
+ * It shows informations about the result set (ex: number of available pages)
+ * and can give direct access to a specific page ("a la Google").</p>
+ * <p>The imagePagerButton Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Association with another component</li>
+ * </ul>
+ * </p>
+ * <p>The authorized types are :
+ * <ul>
+ * <li>first</li>
+ * <li>prev</li>
+ * <li>next</li>
+ * <li>last</li>
+ * <li>&lt;number&gt; where number is a page number</li>
+ * </ul>
+ * </p>
+ */
 public class ImagePagerButtonComponent extends ImageButtonComponent implements 
 	IForCapability {
 

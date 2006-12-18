@@ -15,6 +15,9 @@ import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IBorderCapability;
 
+/**
+ * Reserved for future use
+ */
 public class ComponentsGridComponent extends AbstractDataComponent implements 
 	IMenuCapability,
 	IBorderCapability,
