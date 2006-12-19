@@ -1,11 +1,9 @@
 package org.rcfaces.renderkit.html.internal.facelets;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.internal.tools.ListenersTools.IListenerType;
-
-import com.sun.facelets.tag.jsf.ComponentConfig;
-import com.sun.facelets.FaceletContext;
 import javax.faces.component.UIComponent;
+
+import com.sun.facelets.FaceletContext;
+import com.sun.facelets.tag.jsf.ComponentConfig;
 
 public class JavaScriptHandler extends org.rcfaces.core.internal.facelets.CameliaComponentHandler {
 

@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.AbstractReleasable;
 import org.rcfaces.core.internal.Constants;

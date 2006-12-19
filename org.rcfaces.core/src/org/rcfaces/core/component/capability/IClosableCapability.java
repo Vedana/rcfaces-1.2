@@ -14,7 +14,7 @@ public interface IClosableCapability {
 	
 	/**
 	 * Experimental : Do not use !
-	 * @return
+	 * @return <code>true</code> is the component can be closed.
 	 */
 	boolean isClosable();
 

@@ -758,8 +758,8 @@ var __prototype = {
 		
 		f_core.Debug(f_tabbedPane, "Destroy tab: "+tab+"  component="+ccard);
 		
-		tab._next=undefined;
-		tab._prev=undefined;
+		tab._next=undefined; // f_tab
+		tab._prev=undefined; // f_tab
 		
 		f_core.VerifyProperties(tab._leftTitle);	
 		tab._leftTitle=undefined; // HTMLTDElement

@@ -5,7 +5,7 @@
 /**
  * XML Digester
  * 
- * @class f_xmlDigester extends f_object
+ * @class public f_xmlDigester extends f_object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

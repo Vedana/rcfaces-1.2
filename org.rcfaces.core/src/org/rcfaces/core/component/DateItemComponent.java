@@ -1,13 +1,14 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.AbstractItemComponent;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * An item specialized for date values.

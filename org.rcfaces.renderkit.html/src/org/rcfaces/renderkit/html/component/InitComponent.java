@@ -1,16 +1,17 @@
 package org.rcfaces.renderkit.html.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import java.util.Locale;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.core.internal.component.IPageConfigurator;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.component.IPageConfigurator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
  * Mandatory. It holds the included javascript and css files.

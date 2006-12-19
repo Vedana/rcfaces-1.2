@@ -6,6 +6,8 @@
  * Focus manager class.
  *
  * @class public f_focusManager extends f_object, fa_serializable
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __static={
@@ -21,8 +23,11 @@ var __static={
 	Get: function() {
 		return f_focusManager._Instance;
 	},
+	/**
+	 * @method public static
+	 */
 	Finalizer: function() {
-		f_focusManager._Instance=undefined;
+		f_focusManager._Instance=undefined; // f_focusManager
 	}
 }
 
@@ -43,31 +48,43 @@ var __prototype={
 		if (f_core.IsGecko()) {
 			var focusManager=this;
 			this._onFocus=function(event) {
-				var source=event.target;
-				if (source.f_link) {
-					source=source.f_link;
-					
-				} else if (!f_class.IsObjectInitialized(source) && source.nodeType==1) {
-				  var containerId=f_core.GetAttribute(source, "v:container");
-					
-					if (containerId) {
-						source=document.getElementById(containerId);
-						if (!source) {
-							f_core.Error(f_focusManager, "Can not find containerId '"+containerId+"'.");
+			
+				try {
+					var source=event.target;
+					if (source.f_link) {
+						source=source.f_link;
+						
+					} else if (!f_class.IsObjectInitialized(source) && source.nodeType==1) {
+						var containerId=f_core.GetAttribute(source, "v:container");
+						
+						if (containerId) {
+							source=document.getElementById(containerId);
+							if (!source) {
+								f_core.Error(f_focusManager, "Can not find containerId '"+containerId+"'.");
+							}
 						}
 					}
+	
+					f_core.Debug(f_focusManager, "OnFocus: target="+event.target+" currentTarget="+event.currentTarget+" source="+source+" ");
+					
+					var id=source.id;
+					if (!id) {
+						id=null;
+					}
+					
+					focusManager._recordFocus(id);
+				} catch (x) {
+					f_core.Error(f_focusManager, "Exception on onFocus()",x);
 				}
-				
-				var id=source.id;
-				if (!id) {
-					id=null;
-				}
-				
-				focusManager._recordFocus(id);
 			}
 		
 			this._onBlur=function(event) {
-				focusManager._recordFocus(null);
+				try {
+					focusManager._recordFocus(null);
+					
+				} catch (x) {
+					f_core.Error(f_focusManager, "Exception on onBlur()", x);
+				}
 			}
 			
 		
@@ -129,10 +146,13 @@ var __prototype={
 	/**
 	 * @method public
 	 * @param String focus Focus identifier, or a component.
+	 * @param optional boolean Set focus in async mode.
 	 * @return boolean
 	 */
-	f_setFocus: function(focus) {
-		f_core.Assert(focus, "Focus component parameter is not defined.");
+	f_setFocus: function(focus, async) {
+		f_core.Assert(focus.nodeType==1, "Focus component parameter is not defined.");
+		
+		f_core.Debug(f_focusManager, "f_setFocus to '"+focus.id+"' async='"+async+"'.");
 		var component;
 		
 		if (typeof(focus)=="string") {
@@ -159,7 +179,7 @@ var __prototype={
 
 		f_core.Debug(f_focusManager, "Set focus to component '"+component.id+"'.");
 		
-		if (!f_core.SetFocus(component)) {
+		if (!f_core.SetFocus(component, async)) {
 			return false;
 		}
 		
@@ -175,10 +195,9 @@ var __prototype={
 			focusId=null;
 		}
 		
-		this._focusId=focusId;
-
 		f_core.Debug(f_focusManager, "Focus changed to component '"+focusId+"'.");
 
+		this._focusId=focusId;
 		this.f_setProperty(f_prop.FOCUS_ID, focusId);
 	},
 	f_serialize: function() {

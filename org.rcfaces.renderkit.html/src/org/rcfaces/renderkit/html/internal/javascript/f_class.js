@@ -13,7 +13,7 @@
 /**
  * f_class package
  *
- * @class public f_class
+ * @class public final f_class
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
@@ -50,93 +50,98 @@ function f_class(className, lookId, staticMembers, members, parentClass) {
 			for(var i=0;i<aspects.length;i++) {
 				var aspect=aspects[i];
 				
-				f_core.Assert(aspect instanceof f_aspect, "Not an aspect ("+aspect+") for className '"+className+"' lookId='"+lookId+"' ?");
+				f_core.Assert(aspect instanceof f_aspect, "f_class: Not an aspect ("+aspect+") for className '"+className+"' lookId='"+lookId+"' ?");
 			}
 		}
 	}
 	
 	this._classLoader._declareClass(this);
 }
-/**
- * @method public final
- * @return String
- */
-f_class.prototype.f_getName=function() {
-	return this._name;
-}
-/**
- * @method public final
- * @return String
- */
-f_class.prototype.f_getLookId=function() {
-	return this._look;
-}
-/**
- * Returns super class of this class.
- *
- * @method public final
- * @return f_class
- */
-f_class.prototype.f_getParent=function() {
-	return this._parent;
-}
-/**
- * @method public final
- * @return Object
- */
-f_class.prototype.f_newInstance=function() {
-	var obj = new Object;
-	
-	return f_class.Init(obj, this, arguments);
-}
-/**
- * @method hidden final
- * @return Object
- */
-f_class.prototype.f_newSystemInstance=function() {
-	var obj = new Object;
-	
-	return f_class.Init(obj, this, arguments, true);
-}
-/**
- * Returns the classes loader of this class.
- * 
- * @method public final
- * @return f_classLoader
- */
-f_class.prototype.f_getClassLoader=function() {
-	return this._classLoader;
-}
-/**
- * @method hidden final
- * @return f_classLoader
- */
-f_class.prototype.f_localize=function(staticMembers, instanceMembers) {
-	if (staticMembers) {
-		var sms=this._staticMembers;
-		for(var memberName in staticMembers) {
-			sms[memberName] = staticMembers[memberName];
-		}
-	}
-	
-	if (instanceMembers) {
-		var ims=this._instanceMembers;
-		for(var memberName in instanceMembers) {
-			ims[memberName] = instanceMembers[memberName];
-		}
-	}
-}
 
-f_class.f_getName=function() {
-	return "f_class";
-}
-
-/**
- * @method public final
- * @return String
- */
-f_class.prototype.toString=function() {
-	return "[f_class "+this._name+"]";
+f_class.prototype = {
+	/**
+	 * @method public final
+	 * @return String
+	 */
+	f_getName: function() {
+		return this._name;
+	},
+	
+	/**
+	 * @method public final
+	 * @return String
+	 */
+	f_getLookId: function() {
+		return this._look;
+	},
+	
+	/**
+	 * Returns super class of this class.
+	 *
+	 * @method public final
+	 * @return f_class
+	 */
+	f_getParent: function() {
+		return this._parent;
+	},
+	
+	/**
+	 * @method public final
+	 * @return Object
+	 */
+	f_newInstance: function() {
+		var obj = new Object;
+		
+		return f_class.Init(obj, this, arguments);
+	},
+	
+	/**
+	 * @method hidden final
+	 * @return Object
+	 */
+	f_newSystemInstance: function() {
+		var obj = new Object;
+		
+		return f_class.Init(obj, this, arguments, true);
+	},
+	
+	/**
+	 * Returns the classes loader of this class.
+	 * 
+	 * @method public final
+	 * @return f_classLoader
+	 */
+	f_getClassLoader: function() {
+		return this._classLoader;
+	},
+	
+	/**
+	 * @method hidden final
+	 * @return f_classLoader
+	 */
+	f_localize: function(staticMembers, instanceMembers) {
+		if (staticMembers) {
+			var sms=this._staticMembers;
+			for(var memberName in staticMembers) {
+				sms[memberName] = staticMembers[memberName];
+			}
+		}
+		
+		if (instanceMembers) {
+			var ims=this._instanceMembers;
+			for(var memberName in instanceMembers) {
+				ims[memberName] = instanceMembers[memberName];
+			}
+		}
+	},
+	
+	/**
+	 * @method public final
+	 * @return String
+	 */
+	toString: function() {
+		return "[f_class "+this._name+"]";
+	}
 }
 
 var __static = {
@@ -202,10 +207,10 @@ var __static = {
 		if (!ksuper) {
 			var name=callee._kname;
 			var cls=callee._kclass;
-			f_core.Assert(cls instanceof f_class, "_Super: Can not find class of object '"+caller+"'\n["+caller.callee+"'\nclass='"+cls+"'\nname='"+name+"' !");
+			f_core.Assert(cls instanceof f_class, "f_class._Super: Can not find class of object '"+caller+"'\n["+caller.callee+"'\nclass='"+cls+"'\nname='"+name+"' !");
 	
 			var p = cls._parent;
-			f_core.Assert(p instanceof f_class, "_Super: No parent class ! (className='"+cls._name+", method='"+name+"')");
+			f_core.Assert(p instanceof f_class, "f_class._Super: No parent class ! (className='"+cls._name+", method='"+name+"')");
 		
 			if (callee._constructor) {
 				for (;p && !ksuper;p = p._parent) {
@@ -274,7 +279,7 @@ var __static = {
 				
 		var staticInitializer=claz.Initializer;
 		if (staticInitializer) {
-			f_core.Assert(typeof(staticInitializer)=="function", "Invalid 'Initializer' field, it must be a function ! value="+staticInitializer);
+			f_core.Assert(typeof(staticInitializer)=="function", "f_class.InitializeStaticMembers: Invalid 'Initializer' field, it must be a function ! value="+staticInitializer);
 			try {	
 				staticInitializer.call(claz);
 				
@@ -338,12 +343,12 @@ var __static = {
 
 			var type=typeof(member);
 
-			f_core.Assert(type!="undefined", "InitializeClassMembers: Type undefined for "+claz._name+"."+memberName);
+			f_core.Assert(type!="undefined", "f_class._InitializeClassMembers: Type undefined for "+claz._name+"."+memberName);
 			if (type=="undefined") {
 				continue;
 			}		
 
-			f_core.Assert(type!="object", "InitializeClassMembers: Type Object for "+claz._name+"."+memberName);
+			f_core.Assert(type!="object", "f_class._InitializeClassMembers: Type Object for "+claz._name+"."+memberName);
 		
 			if (type=="function") {
 				member._kname = memberName;
@@ -461,11 +466,11 @@ var __static = {
 							continue;
 						}
 						
-						f_core.Assert(false, "Aspect: Bad function type '"+typeof(m2)+"' for member '"+mname+"' of aspect '"+aspect._name+"'.");
+						f_core.Assert(false, "f_class._InstallAspects: Bad function type '"+typeof(m2)+"' for member '"+mname+"' of aspect '"+aspect._name+"'.");
 						continue;
 					}
 					
-					f_core.Assert(false, "Aspect: Bad keyword '"+mname+"' defined in aspect '"+aspect._name+"'.");
+					f_core.Assert(false, "f_class._InstallAspects: Bad keyword '"+mname+"' defined in aspect '"+aspect._name+"'.");
 				}
 				
 				continue;
@@ -603,7 +608,7 @@ var __static = {
 			constructor=kls._constructor;
 		}				
 		
-		f_core.Assert(typeof(constructor)=="function", "No constructor for class '"+cls._name+"'.");
+		f_core.Assert(typeof(constructor)=="function", "f_class.Init: No constructor for class '"+cls._name+"'.");
 
 		try {
 			f_class._Call(obj, constructor, args);
@@ -662,11 +667,19 @@ var __static = {
 	 * @method hidden static final 
 	 */
 	IsObjectInitialized: function(object) {
-		f_core.Assert(object, "Object is NULL");
+		f_core.Assert(object && typeof(object)=="object", "f_class.IsObjectInitialized: Object is invalid ("+object+")");
 
 		return (object._kclass)?true:false;
 	},
 	_remapContext: function() {
+	},
+
+	/**
+	 * @method public final
+	 * @return String
+	 */
+	f_getName: function() {
+		return "f_class";
 	}
 }
 for(var p in __static) {

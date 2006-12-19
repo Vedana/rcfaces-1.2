@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.internal.component.IRCFacesComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -32,7 +31,6 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
-import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 

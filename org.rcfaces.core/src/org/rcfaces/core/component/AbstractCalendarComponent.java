@@ -1,24 +1,25 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.converter.WeekDaysConverter;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
-import javax.faces.FacesException;
-import java.util.Date;
 import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.internal.converter.TwoDigitYearConverter;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
-import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.tools.CalendarTools;
-import org.rcfaces.core.internal.converter.DateConverter;
+import java.util.Set;
+
+import javax.faces.FacesException;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
+import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
+import org.rcfaces.core.internal.converter.DateConverter;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.TwoDigitYearConverter;
+import org.rcfaces.core.internal.converter.WeekDaysConverter;
+import org.rcfaces.core.internal.tools.CalendarTools;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.

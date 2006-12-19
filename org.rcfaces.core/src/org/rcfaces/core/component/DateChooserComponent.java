@@ -1,22 +1,22 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Date;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.Date;
 import java.util.HashSet;
-import org.rcfaces.core.component.AbstractCalendarComponent;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.internal.converter.DateConverter;
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.DateConverter;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * <p>The dateChooser Component is a button that shows a calendar and help the user to choose a date. It can be associated to a entry field, the choosen date is then automatically entered in the field. It works like an <a href="/comps/imageButtonComponent.html">Image Button Component</a>. The dateChooser Component does <b>not</b> provide an Entry field.</p>

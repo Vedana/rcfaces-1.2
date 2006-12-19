@@ -1,19 +1,19 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import java.util.Set;
+
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.ISelected3StatesCapability;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelected3StatesCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 
 /**
  * <p>The checkButton3States Component is a <a href="/comps/checkButtonComponent.html">CheckButton</a> with 3 states : Check, unchecked and undefined. It is often used to show the state of a group of checkButtons</p>

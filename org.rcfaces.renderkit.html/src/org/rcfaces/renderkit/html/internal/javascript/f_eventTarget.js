@@ -35,12 +35,16 @@ var __static = {
 			selection: f_event.SELECTION,
 			user: f_event.USER
 	},
+	
 	/**
 	 * @field private static
 	 */
 	_Callbacks: undefined,
 	
 	
+	/**
+	 * @method public static
+	 */
 	Initializer: function() {
 		var cb={};
 		this._Callbacks=cb;
@@ -71,6 +75,7 @@ var __static = {
 	
 	/**
 	 * @method private static
+	 * @return boolean
 	 */
 	_Generic: function(elt, jsEvent, type, lock, custom) {
 		
@@ -110,7 +115,7 @@ var __prototype = {
 	f_eventTarget: function() {
 		this.f_super(arguments);
 		
-		if (this.tagName) {
+		if (this.nodeType==1) {
 			this.f_initEventAtts(f_eventTarget._EVENTS);
 		}
 	},	
@@ -128,6 +133,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onCheck: function(evt) {
 		return f_eventTarget._Generic(this,evt,f_event.CHECK,true,false); 
@@ -135,6 +142,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onSelect: function(evt) {
 		return f_eventTarget._Generic(this, evt, f_event.SELECTION, true, false); 
@@ -142,6 +151,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onFocus: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.FOCUS,false); 
@@ -149,6 +160,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onBlur: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.BLUR,false); 
@@ -156,6 +169,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onChange: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.CHANGE,true); 
@@ -163,6 +178,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onKeyUp: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.KEYUP,true); 
@@ -170,6 +187,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onKeyDown: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.KEYDOWN,true); 
@@ -177,6 +196,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onKeyPress: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.KEYPRESS,true); 
@@ -184,6 +205,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onMouseOver: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.MOUSEOVER,false); 
@@ -191,6 +214,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onMouseOut: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.MOUSEOUT,false); 
@@ -198,6 +223,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onDblClick: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.DBLCLICK,true); 
@@ -205,6 +232,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onMouseDown: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.MOUSEDOWN,true);
@@ -212,6 +241,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onMouseUp: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.MOUSEUP,false);
@@ -219,6 +250,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onPrepareSuggestion: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.PREPAGESUGGESTION,false);
@@ -226,6 +259,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onPropertyChange: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.PROPERTY_CHANGE,false);
@@ -233,6 +268,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onMenu: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.MENU,false);
@@ -240,6 +277,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onReset: function(evt) { 
 		return f_eventTarget._Generic(this, evt, f_event.RESET, false);
@@ -247,13 +286,16 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
 	 */
 	f_onUserEvent: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.USER,false);
 	},
 	/**
 	 * 
-	 * @method hidden
+	 * @method protected
+	 * @return boolean
 	 */
 	f_onInitEvent: function() { 
 		return this.f_fireEvent(f_event.INIT);
@@ -261,6 +303,9 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param String type
+	 * @param HTMLElement target
+	 * @return boolean
 	 */
 	f_setDomEvent: function(type, target) {
 		f_core.Assert(typeof(type)=="string", "f_eventTarget.f_setDomEvent: Type of event is incorrect ! ("+type+")");
@@ -286,6 +331,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method hidden
+	 * @return boolean
 	 */
 	f_callOnInit: function() {
 		return this.f_fireEvent(f_event.INIT,null);
@@ -293,6 +339,9 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param String type
+	 * @param HTMLElement target
+	 * @return void
 	 */
 	f_clearDomEvent: function(type, target) {
 		f_core.Assert(typeof(type)=="string", "f_eventTarget.f_clearDomEvent: Type of event is incorrect ! ("+type+")");

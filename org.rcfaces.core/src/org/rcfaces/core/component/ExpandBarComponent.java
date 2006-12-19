@@ -1,29 +1,29 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ICollapsableCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.internal.component.IAsyncRenderComponent;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
-import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.ICollapsableCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.component.IAsyncRenderComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 
 /**
  * <p>The expandBar Component is a container that can be collapsed to show only a title bar. Expand Bars can be managed by group : only one element of the group is expanded.</p>

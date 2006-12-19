@@ -46,7 +46,11 @@ public interface IJavaScriptWriter {
 
     IJavaScriptWriter write(char c) throws WriterException;
 
-    IJavaScriptWriter writeInt(int value) throws WriterException;
+    IJavaScriptWriter writeInt(long value) throws WriterException;
+
+    IJavaScriptWriter writeDouble(double value) throws WriterException;
+
+    IJavaScriptWriter writeNumber(Number value) throws WriterException;
 
     IJavaScriptWriter writeRaw(char[] dst, int pos, int length)
             throws WriterException;

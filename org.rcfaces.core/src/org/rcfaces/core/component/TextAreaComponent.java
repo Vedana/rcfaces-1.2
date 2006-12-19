@@ -1,11 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.TextEntryComponent;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The textAreaEntry Component is based on the standard HTML tag &lt;TEXTAREA&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>

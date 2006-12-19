@@ -20,6 +20,9 @@ var __static = {
 	 */
 	_STEP: 0.3,
 
+	/**
+	 * @method public static
+	 */
 	Initializer: function() {
 		f_effect.Declare("slideUp", this);
 	}
@@ -29,7 +32,7 @@ var __prototype = {
 	f_slideUpEffect: function(component, callback) {
 		this.f_super(arguments, component, callback);
 		
-		if (component.style.display=="none") {
+		if (!component.offsetHeight) {
 			this._current=0;
 			
 		} else {

@@ -36,17 +36,27 @@ function f_bundle(name)  {
 	classLoader._declareBundle(this);
 }
 
-f_bundle.prototype.f_finalize=function() {
-	this._classLoader=undefined;
-	this._classes=undefined;
-}
-
-f_bundle.prototype.f_listClasses=function() {
-	return this._classes;
-}
-
-f_bundle.prototype.f_getName=function() {
-	return this._name;
+f_bundle.prototype = {
+	f_finalize: function() {
+		this._classLoader=undefined; // f_classLoader
+		this._classes=undefined; // f_class[]
+	},
+	
+	/**
+	 * @method public
+	 * @return f_class[]
+	 */
+	f_listClasses: function() {
+		return this._classes;
+	},
+	
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getName: function() {
+		return this._name;
+	}
 }
 
 f_bundle.f_getName=function() {

@@ -40,15 +40,30 @@ function f_aspect(aspectName, staticMembers, members) {
 	
 	this._classLoader._declareAspect(this);
 }
-f_aspect.prototype.f_getName=function() {
-	return this._name;
+f_aspect.prototype = {
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getName: function() {
+		return this._name;
+	},
+	/**
+	 * @method public
+	 * @return f_classLoader
+	 */
+	f_getClassLoader: function() {
+		return this._classLoader;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	toString: function() {
+		return "[Aspect "+this._name+"]";
+	}
 }
-f_aspect.prototype.f_getClassLoader=function() {
-	return this._classLoader;
-}
-f_aspect.prototype.toString=function() {
-	return "[Aspect "+this._name+"]";
-}
+
 f_aspect.f_getName=function() {
 	return "f_aspect";
 }

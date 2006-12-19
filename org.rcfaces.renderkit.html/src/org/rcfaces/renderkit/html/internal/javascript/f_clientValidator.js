@@ -354,6 +354,8 @@ var __static = {
 		var message=new f_messageObject(severity, lastError.summary, lastError.detail);
 		messageContext.f_addMessageObject(component, message);
 
+		f_core.SetFocus(component, true);
+
 		return true; // On arrete la, les messages ...
 	},
 	/**
@@ -473,7 +475,7 @@ var __static = {
 		}
 		if (useFocus && setFoc) {
 //			alert("Set focus !");
-			f_core.SetFocus(component);
+			f_core.SetFocus(component, true);
 		}
 		return true;
 	}
@@ -539,11 +541,11 @@ var __prototype = {
 		this._processors = undefined; // function[]
 		this._converter = undefined; // object
 		
-		this._onerror=undefined;  // function
-		this._onerrorArguments=undefined;  // object[]
+		this._onError=undefined;  // function
+		this._onErrorArguments=undefined;  // object[]
 		
-		this._oncheckerror=undefined;  // function 
-		this._oncheckerrorArguments=undefined; // object[]
+		this._onCheckError=undefined;  // function 
+		this._onCheckErrorArguments=undefined; // object[]
 	},
 	f_performCheckPre: function() {		
 		// On applique pour générer les erreurs !
@@ -558,7 +560,7 @@ var __prototype = {
 			return true;
 		}
 		
-		f_core.SetFocus(this._component);
+		//f_core.SetFocus(this._component, true);
 
 		return false;
 	},
@@ -853,8 +855,8 @@ var __prototype = {
 	_applyAutoCheck: function(curVal, check) {
 		var bRet = true;
 		var bValid;
-		var fError = (check)? this._oncheckerror:this._onerror;
-		var fErrorArguments = (check)? this._oncheckerrorArguments:this._onerrorArguments;
+		var fError = (check)? this._onCheckError:this._onError;
+		var fErrorArguments = (check)? this._onCheckErrorArguments:this._onErrorArguments;
 		var handled;
 		
 		if (!fError && check) {
@@ -1112,7 +1114,7 @@ var __prototype = {
 		f_core.Debug(f_clientValidator, "Set onError function to validator attached to component '"+this._component.id+"' :\n"
 		+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
-		this._onerror = expr;
+		this._onError = expr;
 		
 		if (arguments.length<2) {
 			return;
@@ -1120,7 +1122,7 @@ var __prototype = {
 		
 		var l=f_core.PushArguments(null, arguments, 1);
 		
-		this._onerrorArguments=l;
+		this._onErrorArguments=l;
 	},
 	/**
 	 * @method hidden final
@@ -1131,7 +1133,7 @@ var __prototype = {
 		f_core.Debug(f_clientValidator, "Set onCheckError function to validator attached to component '"+this._component.id+"' :\n"
 			+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
-		this._oncheckerror = expr;
+		this._onCheckError = expr;
 		
 		if (arguments.length<2) {
 			return;
@@ -1139,7 +1141,7 @@ var __prototype = {
 		
 		var l=f_core.PushArguments(null, arguments, 1);
 		
-		this._oncheckErrorArguments=l;
+		this._onCheckErrorArguments=l;
 	},
 	/**
 	 * @method hidden final

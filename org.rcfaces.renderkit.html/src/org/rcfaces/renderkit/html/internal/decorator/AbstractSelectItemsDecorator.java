@@ -36,6 +36,7 @@ import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.model.BasicImagesSelectItem;
 import org.rcfaces.core.model.BasicSelectItem;
 import org.rcfaces.core.model.IAdaptable;
+import org.rcfaces.core.model.IClientDataSelectItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
 import org.rcfaces.core.model.IImagesSelectItem;
@@ -175,11 +176,11 @@ public abstract class AbstractSelectItemsDecorator extends
                 UISelectItem uiSelectItem = (UISelectItem) component;
 
                 Object value = uiSelectItem.getValue();
-                if ((value instanceof SelectItem) == false) {
+                if (value != null && (value instanceof SelectItem) == false) {
                     value = convertToSelectItem(value);
                 }
 
-                if ((value instanceof SelectItem) == false) {
+                if (value != null && ((value instanceof SelectItem) == false)) {
                     throw new FacesException("Value is not a SelectItem ("
                             + value + ")");
                 }
@@ -187,6 +188,12 @@ public abstract class AbstractSelectItemsDecorator extends
                 SelectItem si = (SelectItem) value;
                 if (si == null) {
                     si = createSelectItem(uiSelectItem);
+                }
+
+                if (si == null) {
+                    throw new FacesException(
+                            "Can not create SelectItem from value (" + value
+                                    + ")");
                 }
 
                 if (mapSelectItem(mapper, si) == false) {
@@ -289,6 +296,10 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected SelectItem convertToSelectItem(Object value) {
+        if (value == null) {
+            return null;
+        }
+
         if (value instanceof ISelectItem) {
             if (value instanceof ISelectItemGroup) {
                 ISelectItemGroup selectItemGroup = (ISelectItemGroup) value;
@@ -767,6 +778,47 @@ public abstract class AbstractSelectItemsDecorator extends
         return null;
     }
 
+    protected static void writeItemClientDatas(IClientDataSelectItem iim,
+            IJavaScriptWriter javaScriptWriter, String managerVarId,
+            String methodName, String varId) throws WriterException {
+
+        if (managerVarId != null) {
+            javaScriptWriter.writeCall(managerVarId, "f_setItemClientDatas");
+
+        } else {
+            javaScriptWriter.writeMethodCall("f_setItemClientDatas");
+        }
+
+        javaScriptWriter.write(varId).write(", {");
+
+        Map map = iim.getClientDataMap();
+
+        for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            String key = (String) entry.getKey();
+            Object data = entry.getValue();
+
+            javaScriptWriter.write(',').write(key).write(':');
+
+            if (data instanceof Integer) {
+                javaScriptWriter.writeInt(((Integer) data).intValue());
+                continue;
+            }
+            if (data instanceof Boolean) {
+                javaScriptWriter.writeBoolean(((Boolean) data).booleanValue());
+                continue;
+            }
+            if (data != null) {
+                data = String.valueOf(data);
+            }
+
+            javaScriptWriter.writeString((String) data);
+        }
+
+        javaScriptWriter.writeln("});");
+    }
+
     protected static void writeSelectItemImages(IImagesSelectItem iim,
             IJavaScriptWriter javaScriptWriter, String managerVarId,
             String methodName, String varId, boolean ignoreExpand)
@@ -892,12 +944,13 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         if (managerVarId != null) {
-            javaScriptWriter.writeCall(managerVarId, "f_setItemImages").write(
-                    varId);
+            javaScriptWriter.writeCall(managerVarId, "f_setItemImages");
 
         } else {
-            javaScriptWriter.writeMethodCall("f_setItemImages").write(varId);
+            javaScriptWriter.writeMethodCall("f_setItemImages");
         }
+
+        javaScriptWriter.write(varId);
 
         int pred = 0;
 

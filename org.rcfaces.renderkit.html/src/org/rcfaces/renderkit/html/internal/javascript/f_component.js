@@ -521,6 +521,7 @@ var __prototype = {
 	 */	 
 	f_show: function(scroll) {
 		if (!this.f_parentShow()) {
+			f_core.Debug(f_component, "f_show of '"+this.id+"' returns false");
 			return false;
 		}
 		
@@ -535,18 +536,12 @@ var __prototype = {
 	 * @return void
 	 */	 
 	f_parentShow: function() {
-		for(var comp=this;;) {
-			var parent=f_core.GetParentComponent(comp);
-			if (!parent) {
-				return true;
-			}
-			
-			if (parent.f_parentShow) {
-				return parent.f_parentShow();
-			}
-			
-			comp=parent;
+		var parent=f_core.GetParentComponent(this);
+		if (!parent) {
+			return true;
 		}
+		
+		return parent.f_parentShow();
 	},
 	/**
 	 * @method public

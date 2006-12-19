@@ -5,7 +5,7 @@
 /**
  * f_event class
  *
- * @class public f_event extends Object
+ * @class public final f_event extends Object
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
@@ -26,108 +26,109 @@ function f_event(component, type, jsEvent, item, value, selectionProvider, detai
 	this._detail = detail;
 }
 
-/**
- * @method public
- * @return String
- */
-f_event.prototype.f_getType=function() {
-	return this._type;
-}
-
-/**
- * @method public
- * @return Event
- */
-f_event.prototype.f_getJsEvent=function() {
-	return this._jsEvent;
-}
-
-/**
- * @method public
- * @return Object
- */
-f_event.prototype.f_getItem=function() {
-	return this._item;
-}
-
-/**
- * @method public
- * @return f_component
- */
-f_event.prototype.f_getComponent=function() {
-	return this._component;
-}
-
-/**
- * @method public
- * @return any
- */
-f_event.prototype.f_getValue=function() {
-	return this._value;
-}
-
-/**
- * @method public
- * @return any
- */
-f_event.prototype.f_getSelectionProvider=function() {
-	return this._selectionProvider;
-}
-
-/**
- * @method public
- * @return any
- */
-f_event.prototype.f_getDetail=function() {
-	return this._detail;
-}
-
-/**
- * @method public
- * @param String id Identifier of component.
- * @return f_component
- * @see f_component#f_findComponent
- */
-f_event.prototype.f_findComponent=function(id) {
-	var component=this._component;
+f_event.prototype= {
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getType: function() {
+		return this._type;
+	},
 	
-	f_core.Assert(component.f_findComponent, "f_event.f_findComponent: Component '"+component+"' has no f_findComponent method.");
+	/**
+	 * @method public
+	 * @return Event
+	 */
+	f_getJsEvent: function() {
+		return this._jsEvent;
+	},
 	
-	return component.f_findComponent.apply(component, arguments);
-}
-
-/**
- * @method public
- * @return boolean <code>false</code> value.
- */
-f_event.prototype.f_preventDefault=function() {
-	var evt=this._jsEvent;
-	f_core.Assert(evt, "Javascript Event is null !");
-
-	f_core.CancelEvent(evt);
+	/**
+	 * @method public
+	 * @return Object
+	 */
+	f_getItem: function() {
+		return this._item;
+	},
 	
-	return false;
-}
-
-/**
- * @method hidden
- */
-f_event.prototype.f_finalize=function() {
-//	this._type = undefined;  // string
-	this._component = undefined; // component 
-	this._jsEvent = undefined; // jsEvent
-	this._item = undefined; // any
-	this._value = undefined; // any
-	this._detail = undefined; // any
-	this._selectionProvider = undefined; // fa_selectionProvider
-}
- 
-f_event.prototype.toString=function() {
-	return "[f_event type='"+this._type+"' component='"+this._component+"' value='"+this._value+"' item='"+this._item+"' jsEvent='"+this._jsEvent+"']";
+	/**
+	 * @method public
+	 * @return f_component
+	 */
+	f_getComponent: function() {
+		return this._component;
+	},
+	
+	/**
+	 * @method public
+	 * @return any
+	 */
+	f_getValue: function() {
+		return this._value;
+	},
+	
+	/**
+	 * @method public
+	 * @return any
+	 */
+	f_getSelectionProvider: function() {
+		return this._selectionProvider;
+	},
+	
+	/**
+	 * @method public
+	 * @return any
+	 */
+	f_getDetail: function() {
+		return this._detail;
+	},
+	
+	/**
+	 * @method public
+	 * @param String id Identifier of component.
+	 * @return f_component
+	 * @see f_component#f_findComponent
+	 */
+	f_findComponent: function(id) {
+		var component=this._component;
+		
+		f_core.Assert(component.f_findComponent, "f_event.f_findComponent: Component '"+component+"' has no f_findComponent method.");
+		
+		return component.f_findComponent.apply(component, arguments);
+	},
+	
+	/**
+	 * @method public
+	 * @return boolean <code>false</code> value.
+	 */
+	f_preventDefault: function() {
+		var evt=this._jsEvent;
+		f_core.Assert(evt, "Javascript Event is null !");
+	
+		f_core.CancelEvent(evt);
+		
+		return false;
+	},
+	
+	/**
+	 * @method hidden
+	 */
+	f_finalize: function() {
+	//	this._type = undefined;  // string
+		this._component = undefined; // component 
+		this._jsEvent = undefined; // jsEvent
+		this._item = undefined; // any
+		this._value = undefined; // any
+		this._detail = undefined; // any
+		this._selectionProvider = undefined; // fa_selectionProvider
+	},
+	 
+	toString: function() {
+		return "[f_event type='"+this._type+"' component='"+this._component+"' value='"+this._value+"' item='"+this._item+"' jsEvent='"+this._jsEvent+"']";
+	}
 }
  
 var __static = {
-	
 	/**
 	 * @field private static final string
 	 */

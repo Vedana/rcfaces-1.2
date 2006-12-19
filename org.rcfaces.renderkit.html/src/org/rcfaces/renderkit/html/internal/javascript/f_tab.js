@@ -161,6 +161,10 @@ var __prototype = {
 			cardBox.f_performTabAccessKey(this, evt);
 		}
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */	 
 	f_parentShow: function() {
 		if (this.f_isDisabled()) {
 			return false;
@@ -168,8 +172,12 @@ var __prototype = {
 		
 		this._cardBox.f_selectCard(this, false);
 		
-		this.f_super(arguments);		
+		return this.f_super(arguments);		
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_forceChildVisibility: function(component) {
 		//alert("Test: "+component);
 		return false;

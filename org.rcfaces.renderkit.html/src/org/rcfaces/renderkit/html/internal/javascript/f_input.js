@@ -97,10 +97,10 @@ var __prototype = {
 		if (!this.tabIndex) {
 			this.tabIndex = 0;	// Default tabbing
 		}
-
-		f_core.Debug("f_imageButton", "f_setFocus of input");
 		
 		var input=this.f_getInput();
+	
+		f_core.Debug(f_input, "f_input.f_setFocus: of input '"+this.id+"' component="+input+" componentId="+input.id);
 		
 		try {
 			input.focus();

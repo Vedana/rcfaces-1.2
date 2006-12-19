@@ -16,186 +16,188 @@ function f_actionList(component,type) {
 	this._type = type;
 }
 
-f_actionList.prototype.f_finalize=function() {
-	this._link=undefined;  // object
-//	this._type=undefined; // string
-	this._actions=undefined;  // function[]
-}
-
-/**
- * 
- * @method public
- * @return f_component 
- */
-f_actionList.prototype.f_getElement=function() {
-	return this._link;
-}
-
-/**
- * 
- * @method public
- * @return String 
- */
-f_actionList.prototype.f_getType=function() {
-	return this._type;
-}
-
-/**
- * 
- * @method hidden
- */
-f_actionList.prototype.f_addAction=function(action) {
-	var as=this._actions
-	if (!as) {
-		as = new Array;
-		this._actions = as;
-	}
+f_actionList.prototype= {
+	f_finalize: function() {
+		this._link=undefined;  // object
+	//	this._type=undefined; // string
+		this._actions=undefined;  // function[]
+	},
 	
-	f_core.PushArguments(as, arguments);
+	/**
+	 * 
+	 * @method public
+	 * @return f_component 
+	 */
+	f_getElement: function() {
+		return this._link;
+	},
 	
-	if (f_core.IsDebugEnabled("f_actionList")) {
-		for(var i=0;i<as.length;i++) {
-			var a=as[i];
-			
-			f_core.Assert(typeof(a)=="string" || typeof(a)=="function", "Bad action type ! ("+a+").");
+	/**
+	 * 
+	 * @method public
+	 * @return String 
+	 */
+	f_getType: function() {
+		return this._type;
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
+	f_addAction: function(action) {
+		var as=this._actions
+		if (!as) {
+			as = new Array;
+			this._actions = as;
 		}
-	}
-}
-
-/**
- * 
- * @method hidden
- */
-f_actionList.prototype.f_addActions=function(actions) {	
-	this.f_addAction.apply(this, actions);
-}
-
-/**
- * 
- * @method hidden
- */
-f_actionList.prototype.f_removeAction=function(actions) {
-	var as=this._actions
-	if (!as) {
-		return;
-	}
-	
-	for(var i=0;i<arguments.length;i++) {
-		var action=arguments[i];
 		
-		f_core.Assert(typeof(action)=="string" || typeof(action)=="function", "Bad action type ! ("+action+").");
+		f_core.PushArguments(as, arguments);
 		
-		as.f_removeElement(action);
-	}
-}
-
-/**
- * 
- * @method hidden
- */
-f_actionList.prototype.f_removeActions=function(actions) {
-	this.f_removeAction.apply(this, actions);
-}
-
-/**
- * 
- * @method hidden
- */
-f_actionList.prototype.f_isEmpty=function() {
-	return !this._actions;
-}
-
-/**
- * 
- * @method hidden
- */
-f_actionList.prototype.f_addActionFirst=function(actions) {
-	var as=this._actions
-	if (!as) {
-		as = new Array;
-		this._actions = as;
-	}
-	
-	for(var i=0;i<arguments.length;i++) {
-		var action=arguments[i];
-		
-		f_core.Assert(typeof(action)=="string" || typeof(action)=="function", "Bad action type ! ("+action+").");
-		as.unshift(action);
-	}
-}
-
-/**
- * 
- * @method hidden
- */
-f_actionList.prototype.f_callActions=function(evt) {
-	f_core.Assert(this._link, "No linked component for this actionList !");
-	
-	var ret = true;
-	if (!this._actions) {
-		f_core.Debug(f_actionList, "No actions '"+this._type+"' returns true.");
-		return ret;
-	}
-
-	var link=this._link;
-	
-	// Remet dans le context de la window de l'objet !
-	var actions = this._actions;
-	for(var i=0;i<actions.length;i++) {
-		var fct = actions[i];
-		if (!fct) {
-			continue;
-		}
-
-		var oldEvent=null;
-		try {
-			oldEvent=f_event.SetEvent(evt);
-			
-			if (typeof(fct) == "string") {
-				// Le commande est transformée en fonction !
-				fct=new Function("event", fct);
-				actions[i]=fct;
-			}
-
-			ret = fct.call(link, evt);
-			
-		} catch (ex) {
-			f_actionList._ShowEventException(i, this._type, link, evt, fct, ex);
-			ret=false;
-			
-		} finally {
-			if (f_event && f_event.SetEvent) {
-				f_event.SetEvent(oldEvent);
+		if (f_core.IsDebugEnabled("f_actionList")) {
+			for(var i=0;i<as.length;i++) {
+				var a=as[i];
+				
+				f_core.Assert(typeof(a)=="string" || typeof(a)=="function", "Bad action type ! ("+a+").");
 			}
 		}
-
-		if (f_core) {
-			var fn=String(fct._kclass?(fct._kclass._name+"."+fct._kname):(fct.name?fct.name:fct));
-			if (fn.length>64) {
-				var idx=fn.indexOf('\n', 64);
-				if (idx>0) {
-					fn=fn.substring(0, idx)+"   ...";
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
+	f_addActions: function(actions) {	
+		this.f_addAction.apply(this, actions);
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
+	f_removeAction: function(actions) {
+		var as=this._actions
+		if (!as) {
+			return;
+		}
+		
+		for(var i=0;i<arguments.length;i++) {
+			var action=arguments[i];
+			
+			f_core.Assert(typeof(action)=="string" || typeof(action)=="function", "Bad action type ! ("+action+").");
+			
+			as.f_removeElement(action);
+		}
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
+	f_removeActions: function(actions) {
+		this.f_removeAction.apply(this, actions);
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
+	f_isEmpty: function() {
+		return !this._actions;
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
+	f_addActionFirst: function(actions) {
+		var as=this._actions
+		if (!as) {
+			as = new Array;
+			this._actions = as;
+		}
+		
+		for(var i=0;i<arguments.length;i++) {
+			var action=arguments[i];
+			
+			f_core.Assert(typeof(action)=="string" || typeof(action)=="function", "Bad action type ! ("+action+").");
+			as.unshift(action);
+		}
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
+	f_callActions: function(evt) {
+		f_core.Assert(this._link, "No linked component for this actionList !");
+		
+		var ret = true;
+		if (!this._actions) {
+			f_core.Debug(f_actionList, "No actions '"+this._type+"' returns true.");
+			return ret;
+		}
+	
+		var link=this._link;
+		
+		// Remet dans le context de la window de l'objet !
+		var actions = this._actions;
+		for(var i=0;i<actions.length;i++) {
+			var fct = actions[i];
+			if (!fct) {
+				continue;
+			}
+	
+			var oldEvent=null;
+			try {
+				oldEvent=f_event.SetEvent(evt);
+				
+				if (typeof(fct) == "string") {
+					// Le commande est transformée en fonction !
+					fct=new Function("event", fct);
+					actions[i]=fct;
+				}
+	
+				ret = fct.call(link, evt);
+				
+			} catch (ex) {
+				f_actionList._ShowEventException(i, this._type, link, evt, fct, ex);
+				ret=false;
+				
+			} finally {
+				if (f_event && f_event.SetEvent) {
+					f_event.SetEvent(oldEvent);
 				}
 			}
+	
+			if (f_core) {
+				var fn=String(fct._kclass?(fct._kclass._name+"."+fct._kname):(fct.name?fct.name:fct));
+				if (fn.length>64) {
+					var idx=fn.indexOf('\n', 64);
+					if (idx>0) {
+						fn=fn.substring(0, idx)+"   ...";
+					}
+				}
+				
+				f_core.Debug(f_actionList, "callActions("+this._type+":"+link.id+"): "+fn+"\n=> returns "+ret);
+			}
 			
-			f_core.Debug(f_actionList, "callActions("+this._type+":"+link.id+"): "+fn+"\n=> returns "+ret);
+			if (ret===false) {
+				break;
+			}
 		}
 		
-		if (ret===false) {
-			break;
-		}
-	}
+		// Attention un submit a pu survenir, et nous sommes plus dans un contexte camelia sain !
+		// => Plus d'appels aux méthodes !
 	
-	// Attention un submit a pu survenir, et nous sommes plus dans un contexte camelia sain !
-	// => Plus d'appels aux méthodes !
-
-	if (evt && evt._eventReturn!==undefined) {
-		f_core.Debug(f_actionList, "Call actions: eventReturn is forced to "+evt._eventReturn);
-		return evt._eventReturn;
+		if (evt && evt._eventReturn!==undefined) {
+			f_core.Debug(f_actionList, "Call actions: eventReturn is forced to "+evt._eventReturn);
+			return evt._eventReturn;
+		}
+	
+		f_core.Debug(f_actionList, "Call actions returns "+ret);
+		return ret;
 	}
-
-	f_core.Debug(f_actionList, "Call actions returns "+ret);
-	return ret;
 }
 
 /**

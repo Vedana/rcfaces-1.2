@@ -1,14 +1,14 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.ExpandableItemComponent;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.TreeComponent;
-import java.util.HashSet;
+
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.TreeTools;
 
 /**

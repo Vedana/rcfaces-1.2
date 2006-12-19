@@ -1,13 +1,11 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.tools.ToolBarTools;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.AbstractItemComponent;
-import org.rcfaces.core.component.iterator.IToolItemIterator;
 import java.util.Arrays;
-import org.rcfaces.core.component.ToolBarComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import org.rcfaces.core.component.iterator.IToolItemIterator;
+import org.rcfaces.core.internal.tools.ToolBarTools;
 
 /**
  * <b>EXPERIMENTAL</b>

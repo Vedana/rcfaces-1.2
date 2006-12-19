@@ -117,7 +117,15 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
         return write(LF);
     }
 
-    public IJavaScriptWriter writeInt(int value) throws WriterException {
+    public IJavaScriptWriter writeInt(long value) throws WriterException {
+        return write(String.valueOf(value));
+    }
+
+    public IJavaScriptWriter writeDouble(double value) throws WriterException {
+        return write(String.valueOf(value));
+    }
+
+    public IJavaScriptWriter writeNumber(Number value) throws WriterException {
         return write(String.valueOf(value));
     }
 

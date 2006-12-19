@@ -1,24 +1,23 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.component.CameliaItemComponent;
-import java.lang.Object;
-import java.util.Map;
-import javax.faces.el.ValueBinding;
-import java.util.Collections;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.Collections;
 import java.util.HashSet;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.tools.ComponentTools;
+import java.util.Map;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaItemComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.

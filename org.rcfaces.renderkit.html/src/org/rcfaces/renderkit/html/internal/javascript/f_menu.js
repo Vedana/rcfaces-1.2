@@ -36,6 +36,10 @@ var __static = {
 	 */
 	HEIGHT_COMPONENT: 8,
 
+	/**
+	 * @method private static
+	 * @return void
+	 */
 	_ClosePopup: function(menu, jsEvt) {	
 		if (!menu._popupOpened || !menu._menuPopup) {
 			return;
@@ -74,6 +78,10 @@ var __static = {
 			}			
 		}
 	},
+	/**
+	 * @method private static
+	 * @return void
+	 */
 	_OpenPopup: function(menu, position, offsetX, offsetY, offsetWidth, autoSelect) {
 		if (menu._popupOpened) {
 			return;
@@ -427,6 +435,10 @@ var __prototype = {
 		this._catchOnlyPopupKeys=true;
 	},
 	
+	/**
+	 * @method private
+	 * @return boolean
+	 */
 	_filterKey: function(phase, evt) {
 		f_core.Debug(f_menu, "Filter key '"+evt.keyCode+"'.");
 		if (!this._catchOnlyPopupKeys) {

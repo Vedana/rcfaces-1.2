@@ -29,9 +29,15 @@
 	background-position: -16px 0;
 }
 
-.f_expandBar_tbody {
+.f_expandBar_body,
+.f_expandBar_body_collapsed {
 	padding: 0;
 	text-align: left;
+}
+
+.f_expandBar_body_collapsed {
+	display: none;
+	overflow: hidden;
 }
 
 .f_expandBar_head,
@@ -80,18 +86,13 @@
 }
 
 
-.f_expandBar_body,
-.f_expandBar_body_effect {
+.f_expandBar_content,
+.f_expandBar_content_effect {
 	background: white;
 	padding: 2px;
 }
 
-.f_expandBar_body_effect {
+.f_expandBar_content_effect {
 	overflow: hidden;
 }
 
-.f_expandBar_body_collapsed {
-	display: none;
-	padding: 0;
-	overflow: hidden;
-}

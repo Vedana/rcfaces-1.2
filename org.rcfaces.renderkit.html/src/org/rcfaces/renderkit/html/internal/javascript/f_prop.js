@@ -50,6 +50,11 @@ var f_prop = {
 	/**
 	 * @field hidden static final
 	 */
+	COLLAPSED_TEXT:			"collapsedText",
+
+	/**
+	 * @field hidden static final
+	 */
 	COLUMN_WIDTHS:			"columnWidths",
 	
 	/**

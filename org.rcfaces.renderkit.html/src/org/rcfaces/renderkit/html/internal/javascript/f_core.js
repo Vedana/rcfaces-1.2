@@ -938,7 +938,7 @@ var f_core = {
 
 				component.appendChild(doc.createTextNode(text.substring(0, idx)));
 
-				var ul=doc.createElement("UL");
+				var ul=doc.createElement("U");
 				component.appendChild(ul);
 				
 				ul.appendChild(doc.createTextNode(text.charAt(idx)));
@@ -994,7 +994,7 @@ var f_core = {
 				
 			case 1:
 				if (concatChildren) {
-					text+=f_core.GetTextNode(child);
+					text+=f_core.GetTextNode(child, true);
 				}
 				break;
 			}
@@ -1340,6 +1340,8 @@ var f_core = {
 	 * @method private static
 	 */
 	_FocusWindow: function(win) {
+		f_core.Debug(f_core, "_FocusWindow: focus window "+win);
+		
 		try {
 			win.focus();
 
@@ -2577,7 +2579,9 @@ var f_core = {
 	 */
 	SetFocus: function(component, asyncMode) {
 		f_core.Assert(component, "Component is NULL");
-		f_core.Assert(component.tagName, "Parameter is not a component.");
+		f_core.Assert(component.nodeType==1, "Parameter is not a component.");
+
+		f_core.Debug(f_core, "SetFocus: component="+component.id+" asyncMode="+asyncMode);
 
 		if (f_core._FocusTimeoutID) {
 			f_core._FocusComponent=component;
@@ -2591,12 +2595,21 @@ var f_core = {
 			return;
 		}
 
-		if (!f_core.ForceComponentVisibility(component)) {
-			f_core.Info("f_core", "Can not set focus to a not visible component");
-			return;
+		if (typeof(component.f_show)=="function") {
+			try {
+				if (!component.f_show()) {
+					f_core.Info("f_core", "Can not set focus to a not visible component");
+					return;
+				}
+				
+			} catch (ex) {
+				f_core.Error(f_core, "Exception while calling f_show() of '"+component.id+"' [camelia method].", ex);
+				
+				return false;
+			}
 		}
 
-		if (component.f_setFocus) {
+		if (typeof(component.f_setFocus)=="function") {
 			f_core.Debug(f_core, "Try to call f_setFocus() method to set the focus. (componentId="+component.id+"/tagName="+component.tagName+")");
 			try {
 				component.f_setFocus();
@@ -2645,7 +2658,7 @@ var f_core = {
 			return;
 		}
 		f_core._FocusComponent=undefined;
-		f_core.SetFocus(component);
+		f_core.SetFocus(component, false);
 	},	
 	/**
 	 * @method hidden static
@@ -3071,7 +3084,7 @@ var f_core = {
 	 * @method hidden static 
 	 * @param String effectName Name of effect
 	 * @param HTMLElement body Component which be applied the effect.
-	 * @param optional Function callback Callback which be called when the effect changes properties.
+	 * @param optional boolean reverse Inverse of the effect
 	 * @return f_effect An f_effect object. 
 	 */
 	CreateEffectByName: function(effectName, body, callback) {

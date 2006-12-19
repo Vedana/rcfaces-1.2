@@ -134,30 +134,27 @@ public class JavaScriptResponseWriter extends
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#write(int)
-     */
-    public IJavaScriptWriter writeInt(int value) {
+    public IJavaScriptWriter writeInt(long value) {
         write(String.valueOf(value));
 
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#end()
-     */
+    public IJavaScriptWriter writeDouble(double value) {
+        write(String.valueOf(value));
+
+        return this;
+    }
+
+    public IJavaScriptWriter writeNumber(Number value) {
+        write(value.toString());
+
+        return this;
+    }
+
     public void end() {
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#isOpened()
-     */
     public boolean isOpened() {
         return true;
     }

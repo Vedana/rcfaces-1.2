@@ -5,7 +5,7 @@
 /**
  * f_time class
  *
- * @class public f_time extends Object
+ * @class public final f_time extends Object
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
@@ -57,68 +57,62 @@ function f_time(hours, minutes, seconds, millis) {
 	}
 }
 
-/**
- * @method public
- * @return number
- */
-f_time.prototype.f_getHours=function() {
-	return this._hours;
-}
-
-/**
- * @method public
- * @return number
- */
-f_time.prototype.f_getMinutes=function() {
-	return this._minutes;
-}
-
-/**
- * @method public
- * @return number
- */
-f_time.prototype.f_getSeconds=function() {
-	return this._seconds;
-}
-
-/**
- * @method public
- * @return number
- */
-f_time.prototype.f_getMilliseconds=function() {
-	return this._millis;
-}
- 
-/**
- * @method public
- * @return String
- */
-f_time.prototype.toString=function() {
-	return "[f_time "+this._hours+":"+this._minutes+":"+this._seconds+"."+this._millis+"]";
-}
-
-/**
- * @method public
- * @return Date
- */
-f_time.prototype.f_toDate=function() {
-	return new Date(1, 0, 2000, this._hour, this._minute, this._second, this._millis);
-}
-
-/**
- * @method public
- * @return number
- */
-f_time.prototype.f_getTime=function() {
-	return ((((this._hours*60)+ this._minutes)*60)+ this._seconds)*1000+ this._millis;
-}
-
-/**
- * @method public static
- * @return String
- */
-f_time.toString=function() {
-	return "[class f_time]";
+f_time.prototype = {
+	/**
+	 * @method public
+	 * @return number
+	 */
+	f_getHours: function() {
+		return this._hours;
+	},
+	
+	/**
+	 * @method public
+	 * @return number
+	 */
+	f_getMinutes: function() {
+		return this._minutes;
+	},
+	
+	/**
+	 * @method public
+	 * @return number
+	 */
+	f_getSeconds: function() {
+		return this._seconds;
+	},
+	
+	/**
+	 * @method public
+	 * @return number
+	 */
+	f_getMilliseconds: function() {
+		return this._millis;
+	},
+	 
+	/**
+	 * @method public
+	 * @return String
+	 */
+	toString: function() {
+		return "[f_time "+this._hours+":"+this._minutes+":"+this._seconds+"."+this._millis+"]";
+	},
+	
+	/**
+	 * @method public
+	 * @return Date
+	 */
+	f_toDate: function() {
+		return new Date(1, 0, 2000, this._hour, this._minute, this._second, this._millis);
+	},
+	
+	/**
+	 * @method public
+	 * @return number
+	 */
+	f_getTime: function() {
+		return ((((this._hours*60)+ this._minutes)*60)+ this._seconds)*1000+ this._millis;
+	}
 }
 
 /**

@@ -5,7 +5,7 @@
 /**
  * 
  *
- * @class public f_env extends Object
+ * @class public final f_env extends Object
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */

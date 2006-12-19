@@ -23,6 +23,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.SelectItemMappers;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.model.IClientDataSelectItem;
 import org.rcfaces.core.model.IImagesSelectItem;
 import org.rcfaces.core.model.ITreeNode;
 import org.rcfaces.core.model.TreeNode;
@@ -361,6 +362,15 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         if (selectItem instanceof IImagesSelectItem) {
             writeSelectItemImages((IImagesSelectItem) selectItem,
                     javaScriptWriter, null, "f_setItemImages", varId, false);
+        }
+
+        if (selectItem instanceof IClientDataSelectItem) {
+            IClientDataSelectItem clientDataItem = (IClientDataSelectItem) selectItem;
+
+            if (clientDataItem.isClientDataEmpty() == false) {
+                writeItemClientDatas(clientDataItem, javaScriptWriter,
+                        null, "f_setItemClientDatas", varId);
+            }
         }
 
         return EVAL_NODE;

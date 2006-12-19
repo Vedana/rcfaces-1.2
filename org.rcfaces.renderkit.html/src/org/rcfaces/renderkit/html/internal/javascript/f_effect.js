@@ -45,6 +45,7 @@ var __static = {
 	 * @method public static final
 	 * @param String name Name of the effect.
 	 * @param HTMLElement component Component which be affected by the effect.
+	 * @param optional Function callback Callback which be called when the effect changes properties.
 	 * @return f_effect An instance of f_effect class.
 	 */
 	Create: function(name, component, callback) {

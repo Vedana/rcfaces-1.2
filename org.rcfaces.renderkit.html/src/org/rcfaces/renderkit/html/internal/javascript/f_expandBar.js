@@ -14,18 +14,21 @@ var __static = {
 
 	/**
 	 * @method private static
+	 * @document this.ownerDocument
 	 */
 	_OnHeadOver: function() {
 		this.className=this._className+"_over";
 	},
 	/**
 	 * @method private static
+	 * @document this.ownerDocument
 	 */
 	_OnHeadOut: function() {
 		this.className=this._className;
 	},
 	/**
 	 * @method private static
+	 * @document this.ownerDocument
 	 */
 	_OnHeadClick: function(evt) {
 		var expandBar=this._link;
@@ -46,9 +49,8 @@ var __prototype = {
 			this.f_addToGroup(groupName, this);
 		}
 
-
+		var txt=null;
 		var lis=this.getElementsByTagName("LI");
-
 		var head=lis[0];
 		if (head) {
 			this._head=head;
@@ -57,48 +59,34 @@ var __prototype = {
 			head.onmouseover=f_expandBar._OnHeadOver;
 			head.onmouseout=f_expandBar._OnHeadOut;
 			head._className=head.className;
+		
+			var text=f_core.GetFirstElementByTagName(head, "LABEL");
+			if (text) {
+				this._text=text;
+				text._link=this;
+				text.onclick=f_expandBar._OnHeadClick;
+				
+				txt=f_core.GetTextNode(text, true);
+			}
 		}
 		
-		var text=f_core.GetFirstElementByTagName(this, "LABEL");
-		if (text) {
-			this._text=text;
-			text._link=this;
-			text.onclick=f_expandBar._OnHeadClick;
-		}
-
 		var body=lis[1];
 		if (body) {
 			this._body=body;
 			
-			var content=f_core.GetFirstElementByTagName(body, "DIV");
-			if (content) {
-				this._content=content;
-				content._oldDisplay=content.style.display;
-				if (body.style.display=="none") {
-					content.style.display="none";
-				}
-			}
+			this._content=f_core.GetFirstElementByTagName(body, "DIV");
 		}
 			
-		this._normalText=f_core.GetAttribute(this, "v:text");
-		this._collapsedText=f_core.GetAttribute(this, "v:collapsedText");
-		
-		var txt=this.f_getText();
-		if (this._normalText) {
-			this._collapsedText=txt;
-			
-		} else {
-			this._normalText=txt;
-		}
-			
+		this._normalText=f_core.GetAttribute(this, "v:text", txt);
+		this._collapsedText=f_core.GetAttribute(this, "v:collapsedText", txt);
 	
 	//	this._returnOnSelect=false;
 		this.f_addEventListener(f_event.SELECTION, this._onSelect);
 	},
 	f_finalize: function() {
-		// this._className=undefined;
-		// this._normalText=undefined;
-		// this._collapsedText=undefined;
+		// this._className=undefined; // String
+		// this._normalText=undefined; // String
+		// this._collapsedText=undefined; // String
 	
 		var effect=this._effect;
 		if (effect) {
@@ -116,8 +104,7 @@ var __prototype = {
 			f_core.VerifyProperties(content);
 		}
 			
-		// this._groupName=undefined;
-		
+		// this._groupName=undefined; // String		
 		
 		var head=this._head;
 		if (head) {
@@ -237,6 +224,7 @@ var __prototype = {
 			cmp=this;
 		}
 		
+		f_core.Debug(f_expandBar, "f_expandBar.f_setFocus of component '"+cmp+"' for expandBar '"+this.id+"'.");
 		cmp.focus();
 	},
 	f_performAccessKey: function(evt) {
@@ -251,7 +239,6 @@ var __prototype = {
 		return ret;
 	},
 	fa_updateCollapsed: function(set) {
-	
 		var body=this._body;
 		
 		if (!body) {	
@@ -263,16 +250,29 @@ var __prototype = {
 		
 		var effect=this.f_getEffect();
 		
+		var collapsedText=this._collapsedText;
+		if (collapsedText && this._text) {
+			if (!set) {
+				collapsedText=this._normalText;
+			}
+			
+			f_core.Debug(f_expandBar, "Change text to '"+collapsedText+"'.");
+			
+			f_core.SetTextNode(this._text, collapsedText, this._accessKey);
+		}
+		
+		f_core.Debug(f_expandBar, "Call effect '"+effect+"'.");
+		
 		if (effect) {
 			effect.f_performEffect(set);
 
 		} else if (set) {
-			content.className="f_expandBar_body_collapsed";
-			body.style.display="none";
+			content.className="f_expandBar_content_collapsed";
+			body.className="f_expandBar_body_collapsed";
 			
 		} else  {
-			content.className="f_expandBar_body";
-			body.style.display="block";
+			content.className="f_expandBar_content";
+			body.className="f_expandBar_body";
 		}
 		
 		if (!set && this._groupName) {
@@ -304,30 +304,29 @@ var __prototype = {
 		}
 		
 		var content=this._content;
+		var body=this._body;		
 		
 		effect = f_core.GetAttribute(this, "v:effect");
 		if (effect) {
 			effect=f_core.CreateEffectByName(effect, content, function(value) {
-				var display=content._oldDisplay;
-				var className="f_expandBar_body";
+				var contentClassName="f_expandBar_content";
+				var bodyClassName="f_expandBar_body";
 				
 				if (value==0) {
 					display="none";
-					className+="_collapsed";
+					contentClassName+="_collapsed";
+					bodyClassName+="_collapsed";
 					
 				} else if (value!=1) {
-					className+="_effect";				
+					contentClassName+="_effect";				
 				}
 				
-				if (content.className!=className) {
-					content.className=className;
+				if (content.className!=contentClassName) {
+					content.className=contentClassName;
 				}
-				
-				if (display==body.style.display) {
-					return;
-				}
-				
-				body.style.display=display;
+				if (body.className!=bodyClassName) {
+					body.className=bodyClassName;
+				}				
 			});
 		}
 		if (!effect) {
@@ -354,18 +353,19 @@ var __prototype = {
 	 */
 	f_setText: function(text) {
 		f_core.Assert(typeof(text)=="string", "Invalid text parameter ! ('"+text+"')");
-		var textLabel=this._text;
-		if (!textLabel) {
+
+		if (this._normalText == text) {
 			return;
 		}
+		this._normalText=text;
 
-		if (this.f_getText() == text) {
-			return;
+		if (!this.f_isCollapsed() && this._collapsedText) {
+			var textLabel=this._text;
+			if (textLabel) {
+				f_core.SetTextNode(textLabel, text, this._accessKey);
+			}
 		}
-
-		// AccessKey ?
-		f_core.SetTextNode(textLabel, text, this._accessKey);
-		
+				
 		this.f_setProperty(f_prop.TEXT, text);
 	},
 	/**
@@ -373,13 +373,45 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getText: function() {
-		var textLabel=this._text;
-		if (!textLabel) {
+		return this._normalText;
+	},
+	/**
+	 * @method public
+	 * @param String text Text to change.
+	 * @return void
+	 */
+	f_setCollapsedText: function(text) {
+		f_core.Assert(typeof(text)=="string", "Invalid text parameter ! ('"+text+"')");
+
+		if (this._collapsedText == text) {
 			return;
 		}
+		this._collapsedText=text;
 
-		// Pas de <u> de l'accessKey ?
-		return f_core.GetTextNode(textLabel, true);
-	}	
+		if (this.f_isCollapsed()) {
+			var textLabel=this._text;
+			if (textLabel) {
+				f_core.SetTextNode(textLabel, text, this._accessKey);
+			}
+		}
+				
+		this.f_setProperty(f_prop.COLLAPSED_TEXT, text);
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getCollapsedText: function() {
+		return this._collapsedText;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */	 
+	f_parentShow: function() {
+		this.f_setCollapsed(false);
+		
+		return this.f_super(arguments);		
+	}
 }
 var f_expandBar=new f_class("f_expandBar", null, __static, __prototype, f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName);

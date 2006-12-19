@@ -1079,7 +1079,7 @@ var f_vb = {
 		}
 
 		// Give focus activation and selection
-		f_core.SetFocus(next);
+		f_core.SetFocus(next, true);
 
 		return false;
 	},
