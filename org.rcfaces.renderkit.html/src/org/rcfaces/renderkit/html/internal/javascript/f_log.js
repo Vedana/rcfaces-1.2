@@ -5,7 +5,7 @@
 /**
  * f_log
  *
- * @class public f_log
+ * @class public final f_log extends f_object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -71,6 +71,10 @@ var __static = {
 	 */
 	_Appenders: undefined,
 	
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Initializer: function() {
 		var cb=window.f_logCB;
 		if (!cb) {
@@ -81,6 +85,10 @@ var __static = {
 			f_doAppend: cb
 		});
 	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		f_log._Levels=undefined;
 		f_log._Appenders=undefined;

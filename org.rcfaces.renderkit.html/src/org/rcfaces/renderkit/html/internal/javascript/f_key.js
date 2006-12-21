@@ -4,7 +4,7 @@
 
 /**
  *
- * @class f_key extends f_object
+ * @class f_key extends Object
  * @version $Revision$ $Date$
  */
 var __static = {
@@ -208,6 +208,7 @@ var __static = {
 
 	/**
 	 * @method public static
+	 * @return boolean
 	 */
 	IsPrintable: function(code) {
 		if (f_key.IsLetterOrDigit(code) ||
@@ -223,6 +224,7 @@ var __static = {
 	},
 	/**
 	 * @method public static
+	 * @return boolean
 	 */
 	IsLetterOrDigit: function(code) {
 		if ((code >= 48 && code <= 57) ||	// keyboard digits
@@ -232,6 +234,10 @@ var __static = {
 		
 		return false;
 	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		//var document=this.f_getClassLoader().f_getDocument();
 		

@@ -64,6 +64,10 @@ var __static = {
 		f_core.Info(f_effect, "Create an effect '"+name+"' for component '"+component.id+"'.");
 		return claz.f_newInstance(component, callback);
 	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		f_effect._EffectClasses=undefined;
 	}

@@ -793,13 +793,20 @@ public abstract class AbstractSelectItemsDecorator extends
 
         Map map = iim.getClientDataMap();
 
+        boolean first = true;
         for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
             String key = (String) entry.getKey();
             Object data = entry.getValue();
 
-            javaScriptWriter.write(',').write(key).write(':');
+            if (first) {
+                first = false;
+            } else {
+                javaScriptWriter.write(',');
+            }
+
+            javaScriptWriter.write(key).write(':');
 
             if (data instanceof Integer) {
                 javaScriptWriter.writeInt(((Integer) data).intValue());

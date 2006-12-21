@@ -87,6 +87,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
+	 * @return void
 	 */
 	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail) {
 		if (!fa_eventTarget._EventId) {

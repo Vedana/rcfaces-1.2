@@ -103,6 +103,8 @@ var __static = {
 	},
 
 	/**
+	 * Create an empty XML Document.
+	 *
 	 * @method public static
 	 * @return Object Empty XML DOM document.
 	 */

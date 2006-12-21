@@ -14,7 +14,9 @@ A set of components specific to the html render-kit.
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
 		<body-content>JSP</body-content>
 <description><![CDATA[
-Mandatory. It holds the included javascript and css files.
+<p><b>Mandatory</b>.</p>
+		<p>It holds the included javascript and css files. It is responsible for initializing RCFaces javascript engine.</p>
+		<p>It <b>must</b> be the first tag for a page.</p>
 ]]></description>
 		<attribute>
 			<name>id</name>
@@ -113,7 +115,7 @@ A boolean value that hide context menu for the page or not.
 			<name>renderBaseTag</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string value specifying the HTML base.
+A boolean value specifying if the HTML BASE tag must be generated.
 ]]></description>
 		</attribute>
 	</tag>

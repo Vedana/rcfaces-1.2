@@ -3,7 +3,7 @@
  */
 
 /**
- * Classe Image.
+ * Class f_image.
  *
  * @class f_image extends f_component, fa_filterProperties, fa_commands,
  * @author Olivier Oeuillot (latest modification by $Author$)

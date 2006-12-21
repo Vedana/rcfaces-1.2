@@ -7,7 +7,7 @@
  * Distributed under the BSD License
  * See http://pajhome.org.uk/crypt/md5 for more info
  * 
- * @class f_md5 extends f_object
+ * @class public final f_md5 extends Object
  * @author Paul Johnston and other contributors
  */
 
@@ -277,33 +277,32 @@ var __static = {
 	}
 }
 
-var __prototype = {
+/**
+ * @method public
+ */
+function f_md5(s) {
+	this.f_reset();
+	
+	if (typeof(s)=="string") {
+		this.f_append(s);
+	}
+}
+
+f_md5.prototype = {
 	/**
 	 * hex output format. 0 - lowercase; 1 - uppercase
 	 * 
-	 * @field private final number
+	 * @field private number
 	 */
 	_hexcase: 0,
 	
 	/**
 	 * base-64 pad character. "=" for strict RFC compliance
 	 * 
-	 * @field private final string
+	 * @field private string
 	 */
 	_b64pad: "",
 
-	/**
-	 * @method public
-	 */
-	f_md5: function(s) {
-		this.f_super(arguments);
-
-		this.f_reset();
-		
-		if (typeof(s)=="string") {
-			this.f_append(s);
-		}
-	},
 
 	/*
 	f_finalize: function(s) {
@@ -403,4 +402,6 @@ var __prototype = {
 	}
 }
 
-var f_md5=new f_class("f_md5", null, __static, __prototype);
+for(var p in __static) {
+	f_md5[p]=__static[p];
+}

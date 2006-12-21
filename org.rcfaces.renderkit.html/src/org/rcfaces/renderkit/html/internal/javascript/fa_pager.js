@@ -13,6 +13,7 @@ var __prototype = {
 	
 	/**
 	 * @method public abstract
+	 * @return void
 	 */
 	fa_pagedComponentInitialized: f_class.ABSTRACT
 	

@@ -44,6 +44,10 @@ var __static={
 	},
 	*/
 	
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		f_accelerator._AcceleratorsByFor=undefined;
 	}

@@ -13,7 +13,7 @@
 /**
  * f_class package
  *
- * @class public final f_class
+ * @class public final f_class extends Object
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */

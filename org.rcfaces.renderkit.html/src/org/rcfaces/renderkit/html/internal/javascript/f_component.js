@@ -654,9 +654,8 @@ var __prototype = {
      *
      * @method public 
      *
- 	 * @param String id Identifier of component.
-	 * @param optional String id2 Identifier of the child of the found component. (optional)
-      *
+ 	 * @param String... id Identifier of component.
+     *
      * @return f_component the found {@link f_component}, or <code>null</code>
      *  if the component was not found.
      *
@@ -664,7 +663,7 @@ var __prototype = {
      *  in a search expression identifies a {@link f_component} that is
      *  not a {@link f_namingContainer}
      */
-	f_findComponent: function(id, id2) {
+	f_findComponent: function(id) {
 		return fa_namingContainer.FindComponents(this, arguments);
 	}
 }

@@ -188,6 +188,10 @@ var __static = {
 		}
 		f_help._HelpZone = f_core.GetChildByClass(document,f_helpMessageZone.f_getName());
 	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		f_help._FocusElement=undefined;
 		f_help._HelpZone=undefined;

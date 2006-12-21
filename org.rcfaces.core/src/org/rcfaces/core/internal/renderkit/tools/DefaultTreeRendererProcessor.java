@@ -38,7 +38,7 @@ public class DefaultTreeRendererProcessor extends AbstractTreeRendererProcessor 
 
         String saveStateFieldMarker = StateFieldMarkerTools
                 .getStateFieldMarker(facesContext);
-        if (saveStateFieldMarker == null && saveStateFieldMarker.length() < 1) {
+        if (saveStateFieldMarker == null || saveStateFieldMarker.length() < 1) {
             return false;
         }
 
@@ -49,7 +49,8 @@ public class DefaultTreeRendererProcessor extends AbstractTreeRendererProcessor 
         return true;
     }
 
-    public void writeFilteredContent(Writer writer, String content) throws IOException {
+    public void writeFilteredContent(Writer writer, String content)
+            throws IOException {
 
         String saveStateFieldMarker = StateFieldMarkerTools
                 .getStateFieldMarker(facesContext);
@@ -84,7 +85,6 @@ public class DefaultTreeRendererProcessor extends AbstractTreeRendererProcessor 
             writer.write(saveValue);
             start = offset + saveStateFieldMarker.length();
         }
-
     }
 
     public void encodeChildrenRecursive(UIComponent component,

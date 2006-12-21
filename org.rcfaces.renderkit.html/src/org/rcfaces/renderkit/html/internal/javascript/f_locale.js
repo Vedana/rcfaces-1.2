@@ -3,9 +3,10 @@
  */
  
 /**
- * @class f_locale
+ * @class public final f_locale extends f_object
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __static = {
@@ -47,8 +48,12 @@ var __static = {
 		
 		return f_locale._Instance;
 	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
-		f_locale._Instance=undefined;
+		f_locale._Instance=undefined; // f_locale
 	},
 	/**
 	 * @method private static final
@@ -222,6 +227,5 @@ var __prototype = {
 		return f_locale._GetLocaleNamePart(2);
 	}
 }
-
 
 var f_locale=new f_class("f_locale", null, __static, __prototype);

@@ -21,7 +21,8 @@ var __static = {
 	_STEP: 0.3,
 
 	/**
-	 * @method public static
+	 * @method hidden static
+	 * @return void
 	 */
 	Initializer: function() {
 		f_effect.Declare("slideUp", this);

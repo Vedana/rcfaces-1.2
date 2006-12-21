@@ -6,7 +6,7 @@
  *
  * Moteur des aspects !
  *
- * @class public f_aspect
+ * @class public f_aspect extends Object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

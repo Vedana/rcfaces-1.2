@@ -43,7 +43,8 @@ var __static = {
 	
 	
 	/**
-	 * @method public static
+	 * @method hidden static
+	 * @return void
 	 */
 	Initializer: function() {
 		var cb={};

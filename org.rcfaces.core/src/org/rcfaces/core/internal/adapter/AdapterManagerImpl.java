@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.util.ClassLocator;
+import org.rcfaces.core.model.IAdapterFactory;
 import org.rcfaces.core.provider.AbstractProvider;
 import org.xml.sax.Attributes;
 

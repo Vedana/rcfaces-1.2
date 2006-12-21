@@ -295,7 +295,7 @@ var __prototype = {
 	},
 	/**
 	 * @method protected
-	 * @return f_effect;
+	 * @return f_effect
 	 */
 	f_getEffect: function() {
 		var effect=this._effect;

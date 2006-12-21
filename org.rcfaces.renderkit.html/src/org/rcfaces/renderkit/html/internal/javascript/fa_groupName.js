@@ -17,6 +17,10 @@ var __static = {
 		return window;
 	},
 	
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		window._Groups=undefined;
 	}

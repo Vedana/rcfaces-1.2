@@ -139,7 +139,7 @@ var __prototype={
 	},
 	/**
 	 * @method protected final
-	 * @param string type
+	 * @param String type
 	 * @return HTMLInputElement
 	 */
 	fa_getInputByType: function(type) {

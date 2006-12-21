@@ -5,7 +5,7 @@
 /**
  * Class Message Object
  *
- * @class final f_messageObject extends Object
+ * @class public final f_messageObject extends Object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -30,6 +30,10 @@ var __static = {
 	 */
     SEVERITY_FATAL: 3,
     
+    /**
+     * @method public static
+     * @return String
+     */
 	f_getName: function() {
 		return "f_messageObject";
 	}
@@ -55,7 +59,11 @@ f_messageObject.prototype = {
 	
 	/**
 	 * @method public 
-	 * @return number Severity
+	 * @return number Severity level
+	 * @see #SEVERITY_INFO
+	 * @see #SEVERITY_WARN
+	 * @see #SEVERITY_ERROR
+	 * @see #SEVERITY_FATAL
 	 */
 	f_getSeverity: function() {
 		return this._severity;
@@ -63,7 +71,7 @@ f_messageObject.prototype = {
 	
 	/**
 	 * @method public 
-	 * @return String Summary
+	 * @return String The summary
 	 */
 	f_getSummary: function() {
 		return this._summary;

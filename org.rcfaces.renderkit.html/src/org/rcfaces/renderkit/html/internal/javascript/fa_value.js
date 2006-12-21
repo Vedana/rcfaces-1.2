@@ -16,10 +16,10 @@ var __prototype = {
 	},
 	*/
 	/**
-	 * Retourne <code>true</code> if the component is value
+	 * Returns <code>true</code> if the component is value
 	 *
 	 * @method public
-	 * @return String Or <code>null</code> if not defined !
+	 * @return String or <code>null</code> if not defined !
 	 */
 	f_getValue: function() {
 		if (this._value===undefined) {

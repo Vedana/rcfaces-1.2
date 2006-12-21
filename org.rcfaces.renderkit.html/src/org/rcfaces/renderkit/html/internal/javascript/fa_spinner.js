@@ -36,7 +36,8 @@ var __static = {
 	_LastTimerType: undefined,
 	
 	/**
-	 * @method public static
+	 * @method hidden static
+	 * @return void
 	 */
 	Finalizer: function() {
 		// fa_spinner._LastTimerType=undefined;
@@ -397,7 +398,7 @@ var __prototype = {
 		}
 		return minimum;
 	},
-	/**
+	/*
 	 * @method public
 	 * @param number minimum Minimum value.
 	 * @return void

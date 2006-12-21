@@ -187,7 +187,7 @@ f_messageContext.prototype = {
 	/**
 	 * @method public
 	 *
-	 * @param HTMLElement componentOrId Component to add the message.
+	 * @param HTMLElement component componentOrId Component to add the message.
 	 * @param f_messageObject message
 	 * @param hidden boolean performEvent
 	 * @return void
@@ -267,10 +267,10 @@ f_messageContext.prototype = {
 	
 	/**
 	 * @method public
-	 * @param HTMLElement component (or an id)
+	 * @param HTMLElement... component (or an id)
 	 * @return boolean Returns <code>true</code> if some messages have been removed.
 	 */
-	f_clearMessages: function(component, component2) {
+	f_clearMessages: function(component) {
 		return this._clearMessages(true, arguments);
 	},
 	
@@ -395,6 +395,8 @@ var __static = {
 	
 	/**
 	 * @method public static
+	 * @param HTMLElement component
+	 * @return f_messageContext
 	 */
 	Get: function(component) {
 		if (!component) {
@@ -440,6 +442,7 @@ var __static = {
 	 
 	/**
 	 * @method public static
+	 * @return String
 	 */
 	f_getName: function() {
 		return "f_messageContext";

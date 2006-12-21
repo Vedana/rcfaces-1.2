@@ -11,6 +11,10 @@
  */
 var __static = {
 
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Initializer: function() {
 		f_effect.Declare("slideUpTrans", this);
 	}

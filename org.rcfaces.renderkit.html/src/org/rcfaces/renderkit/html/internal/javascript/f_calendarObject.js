@@ -2739,7 +2739,7 @@ var __prototype = {
 				cd[arguments[i++]]==arguments[i++];
 			}
 			
-			this.f_setItemClientData(item, cd);
+			this.f_setItemClientDatas(item, cd);
 		}
 		
 		this.f_addItem(this, item);

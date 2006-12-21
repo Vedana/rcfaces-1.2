@@ -54,6 +54,10 @@ var __prototype = {
 	fa_getItemsWrapper: function() {
 		return this._calendar;
 	},
+	/**
+	 * @method public
+	 * @return f_calendarObject
+	 */
 	f_getCalendarObject: function() {
 		return this._calendar;
 	}

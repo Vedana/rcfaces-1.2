@@ -6,7 +6,7 @@
 /**
  * f_classLoader
  *
- * @class public final f_classLoader
+ * @class public final f_classLoader extends Object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -846,7 +846,7 @@ f_classLoader.prototype = {
  * @method hidden static
  * @param Object object
  * @param optional Object object2
- * @return void;
+ * @return void
  */
 f_classLoader.Destroy=function(object1, object2) {
 

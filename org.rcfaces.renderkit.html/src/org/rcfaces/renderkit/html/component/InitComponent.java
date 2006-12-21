@@ -14,7 +14,9 @@ import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
- * Mandatory. It holds the included javascript and css files.
+ * <p><b>Mandatory</b>.</p>
+ * <p>It holds the included javascript and css files. It is responsible for initializing RCFaces javascript engine.</p>
+ * <p>It <b>must</b> be the first tag for a page.</p>
  */
 public class InitComponent extends CameliaBaseComponent implements 
 	IPageConfigurator {

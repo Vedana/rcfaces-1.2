@@ -203,6 +203,10 @@ var __static = {
 		
 		return url;
 	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Initializer: function() {
 		f_tabbedPane._PrepareImages(
 			f_tabbedPane._BLANK_IMAGE_URL,

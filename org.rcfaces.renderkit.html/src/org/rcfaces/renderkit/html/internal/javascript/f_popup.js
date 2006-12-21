@@ -55,6 +55,10 @@ var __static = {
 	 */
 	_LockPopupEvents: undefined,
 	
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		f_popup.Callbacks=undefined; // Map of functions
 		f_popup.Popup=undefined; // HTMLComponent

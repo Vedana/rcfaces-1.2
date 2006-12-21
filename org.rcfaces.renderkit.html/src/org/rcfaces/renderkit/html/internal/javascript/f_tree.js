@@ -520,8 +520,8 @@ var __prototype = {
 // 		this._opened=undefined;  // boolean
 //		this._interactive=undefined; // boolean
 
-		if (this._cfocus) {
-			var cfocus=this._cfocus;
+		var cfocus=this._cfocus;
+		if (cfocus) {
 			this._cfocus=undefined;
 			
 			cfocus.onfocus=null;
@@ -619,6 +619,7 @@ var __prototype = {
 		li._divNode=undefined; // HtmlDivElement
 		// li.title=null;
 //		li._over=undefined; // boolean
+//		li._clientDatas=undefined; // Map<String, String>
 		
 		var divNode=li._divNode;
 		if (divNode) {
@@ -1502,6 +1503,16 @@ var __prototype = {
 			}
 		}
 		
+	},
+	/**
+	 * @method hidden
+	 */
+	f_setItemClientDatas: function(node, datas) {
+		f_core.Assert(typeof(datas)=="object", "f_tree.f_setItemClientDatas: Invalid datas parameter '"+datas+"'.");
+		var atts=0;
+		var node=arguments[atts++];
+		
+		node._clientDatas=datas;
 	},
 	/**
 	 * @method hidden

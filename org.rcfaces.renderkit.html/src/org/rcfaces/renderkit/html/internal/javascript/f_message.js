@@ -226,6 +226,7 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param String text Text if no message is shown.
+	 * @return void
 	 */
 	f_setText: function(text) {
 		f_core.Assert(typeof(text)=="string", "f_message.f_setText: Invalid text parameter ('"+text+"').");

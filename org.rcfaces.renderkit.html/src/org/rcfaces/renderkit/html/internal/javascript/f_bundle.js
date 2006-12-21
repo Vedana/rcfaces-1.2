@@ -6,7 +6,7 @@
 /**
  * class f_bundle
  *
- * @class public f_bundle extends Object
+ * @class hidden f_bundle extends Object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

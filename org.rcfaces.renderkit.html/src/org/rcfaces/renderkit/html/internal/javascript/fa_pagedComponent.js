@@ -58,6 +58,10 @@ var __static = {
 
 		f_core.Debug(fa_pagedComponent, "Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Waiting initialization ! ");
 	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		fa_pagedComponent._DataPagers=undefined;
 	}

@@ -10,7 +10,7 @@
  
  var __prototype = {
 	/**
-	 * Retourne <code>true</code> if the component is value
+	 * Returns the value.
 	 *
 	 * @method public
 	 * @return String Or <code>null</code> if not defined !
@@ -19,7 +19,7 @@
 		return this.value;
 	},
 	/**
-	 * Set value state.
+	 * Set the value.
 	 *
 	 * @method public
 	 * @param optional String value

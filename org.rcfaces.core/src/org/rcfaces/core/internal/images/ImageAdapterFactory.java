@@ -32,11 +32,11 @@ import javax.imageio.stream.ImageOutputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.adapter.IAdapterFactory;
 import org.rcfaces.core.internal.contentStorage.AbstractResolvedContent;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
+import org.rcfaces.core.model.IAdapterFactory;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.model.ImageContentModel;
 

@@ -16,6 +16,10 @@ var __static={
 	 */
 	_TIMER: 500,
 	
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Initializer: function() {	
  		// this est la classe !
 		this.f_newInstance();

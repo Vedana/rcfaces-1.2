@@ -45,6 +45,10 @@ var __static = {
 	 */
 	_Expressions: undefined,
 	
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		f_clientValidator._Expressions=undefined;
 	},

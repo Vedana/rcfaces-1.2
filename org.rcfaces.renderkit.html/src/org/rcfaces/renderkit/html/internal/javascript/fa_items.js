@@ -534,7 +534,6 @@ var __prototype = {
 	 * @return String Value associated to the specified property.
 	 */
 	f_getItemClientData: function(item, key) {
-		f_core.Assert(item._dates!==undefined, "fa_items.f_getItemClientData: Invalid item parameter '"+item+"'.");
 		f_core.Assert(typeof(key)=="string", "fa_items.f_getItemClientData: Invalid key parameter ! ("+key+")");
 		
 		var clientDatas=item._clientDatas;
@@ -545,12 +544,35 @@ var __prototype = {
 		return clientDatas[key];
 	},
 	/**
+	 * @method public
+	 * @param Object item Item object.
+	 * @param String key Key of property.
+	 * @param String value Value of property.
+	 * @return String old value
+	 */
+	f_setItemClientData: function(item, key, value) {
+		f_core.Assert(typeof(key)=="string", "fa_items.f_setItemClientData: Invalid key parameter ! ("+key+")");
+		f_core.Assert(value===undefined || value===null || typeof(value)=="string", "fa_items.f_setItemClientData: Invalid value parameter ! ("+value+")");
+		
+		var clientDatas=item._clientDatas;
+		if (!clientDatas) {
+			clientDatas=new Object;
+			item._clientDatas=clientDatas;
+		}
+		
+		var old=clientDatas[key];
+		clientDatas[key]=value;
+		
+		return old;
+	},
+	/**
 	 * @method protected
 	 */
-	f_setItemClientData: function(item, clientDatas) {
+	f_setItemClientDatas: function(item, clientDatas) {
+		f_core.Assert(typeof(clientDatas)=="object", "fa_items.f_setItemClientDatas: Invalid clientDatas parameter ! ("+clientDatas+")");
+		
 		item._clientDatas=clientDatas;
 	},
-
 	/**
 	 * @method abstract protected
 	 * @return void

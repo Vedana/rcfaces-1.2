@@ -3,9 +3,9 @@
  */
 
 /** 
- * class f_radioButton
+ * Class f_radioButton
  *
- * @class f_radioButton extends f_checkButton, fa_groupName, fa_required
+ * @class public f_radioButton extends f_checkButton, fa_groupName, fa_required
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

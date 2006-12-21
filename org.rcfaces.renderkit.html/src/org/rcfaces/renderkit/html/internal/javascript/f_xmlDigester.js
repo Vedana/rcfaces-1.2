@@ -519,7 +519,7 @@ var __prototype = {
 	 * Return the n'th object down the stack, where 0 is the top element and [getCount()-1] is the bottom element. If the specified index is out of range, return null.
 	 * 
 	 * @method public
-	 * @param optional number Index of the desired element, where 0 is the top of the stack, 1 is the next element down, and so on.
+	 * @param optional number index Index of the desired element, where 0 is the top of the stack, 1 is the next element down, and so on.
 	 * @param optional String name Name of stack
 	 * @return any
 	 */

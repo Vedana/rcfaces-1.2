@@ -6,7 +6,7 @@
 /**
  * This class provides a method to load any images if not loaded yet.
  *
- * @class public f_imageRepository
+ * @class public final f_imageRepository extends f_object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -85,6 +85,10 @@ var __static = {
 		f_imageRepository._Images[this.src]=false;
 		f_imageRepository._ImagesPool.push(this);
 	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		var images=f_imageRepository._Images;
 		if (!images) {

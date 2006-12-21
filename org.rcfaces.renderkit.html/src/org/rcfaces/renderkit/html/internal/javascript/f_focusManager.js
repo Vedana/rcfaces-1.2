@@ -26,6 +26,10 @@ var __static={
 	/**
 	 * @method public static
 	 */
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		f_focusManager._Instance=undefined; // f_focusManager
 	}
@@ -146,7 +150,7 @@ var __prototype={
 	/**
 	 * @method public
 	 * @param String focus Focus identifier, or a component.
-	 * @param optional boolean Set focus in async mode.
+	 * @param optional boolean async Set focus in async mode.
 	 * @return boolean
 	 */
 	f_setFocus: function(focus, async) {

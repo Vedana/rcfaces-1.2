@@ -18,7 +18,7 @@ var __static = {
 	NONE_BORDER_TYPE: "none",
 
 	/** 
-	 * @field private static f_borderType
+	 * @field private static fa_borderType
 	 */
 	_LastFlatBorder: undefined,
 
@@ -29,6 +29,10 @@ var __static = {
 		return fa_borderType._LastFlatBorder;
 	},
 
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		fa_borderType._LastFlatBorder=undefined;
 	}

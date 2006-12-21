@@ -99,7 +99,7 @@ public class StateFieldMarkerTools {
             return marker;
 
         } catch (IOException e) {
-            LOG.debug("Can not get state marker.", e);
+            LOG.info("Can not get state marker.", e);
 
             return "";
 

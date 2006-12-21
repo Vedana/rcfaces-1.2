@@ -170,7 +170,7 @@ var __prototype = {
 	 * Returns the value of item specified by an index.
 	 *
 	 * @method public
-	 * @param number Index of the item.
+	 * @param number idx Index of the item.
 	 * @return String Value of the item.
 	 */
 	f_getValueFromIndex: function(idx) {

@@ -36,7 +36,7 @@ var __prototype={
 	},
 	/**
 	 * @method public
-	 * @param optional hidden number timeType Type of time. (min, max, default)
+	 * @param optional hidden number numberType Type of number. (min, max, default)
 	 * @return number
 	 */
 	f_getNumber: function(numberType) {

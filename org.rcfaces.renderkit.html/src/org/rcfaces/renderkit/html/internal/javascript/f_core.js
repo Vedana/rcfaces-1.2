@@ -311,7 +311,8 @@ var f_core = {
 	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
-	 * @param Error exception An exception if any.	 
+	 * @param optional Error exception An exception if any.
+	 * @param optional Window win	 
 	 * @return void
 	 */
 	Debug: function(name, message, exception, win) {
@@ -340,7 +341,8 @@ var f_core = {
 	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
-	 * @param Error exception An exception if any.	 
+	 * @param optional Error exception An exception if any.
+	 * @param optional Window win	 
 	 * @return void
 	 */
 	Trace: function(name, message, exception, win) {
@@ -369,7 +371,8 @@ var f_core = {
 	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
-	 * @param Error exception An exception if any.	 
+	 * @param optional Error exception An exception if any.
+	 * @param optional Window win	 
 	 * @return void
 	 */
 	Info: function(name, message, exception, win) {
@@ -391,7 +394,6 @@ var f_core = {
 		
 		return f_log.GetLog(name).f_isInfoEnabled();
 	},
-	/**
 	/**
 	 * @method public static
 	 * @param String name Log name.
@@ -422,7 +424,8 @@ var f_core = {
 	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
-	 * @param Error exception An exception if any.	 
+	 * @param optional Error exception An exception if any.
+	 * @param optional Window win	 
 	 * @return void
 	 */
 	Error: function(name, message, exception, win) {
@@ -874,6 +877,8 @@ var f_core = {
 	},
 	/**
 	 * @method public static
+	 * @param HTMLElement elt
+	 * @return HTMLFormElement
 	 */
 	GetParentForm: function(elt) {
 		f_core.Assert(elt.ownerDocument, "f_core.GetParentForm: Invalid parameter element ("+elt+")");
@@ -1903,11 +1908,10 @@ var f_core = {
 	 * Find component
 	 *
 	 * @method public static final
-	 * @param String id1 Identifier
-	 * @param optional String id2 Identifier
+	 * @param String... id Identifier
 	 * @return HTMLElement
 	 */
-	FindComponent: function(id1, id2) {
+	FindComponent: function(id) {
 		var component=document.body;
 		f_core.Assert(component && component.tagName, "f_core.FindComponent: Invalid body component !");
 		
@@ -3485,7 +3489,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @return string
+	 * @return String
 	 */
 	FormatMessage: function(message, parameters) {
 		f_core.Assert(typeof(message)=="string", "Message parameter is invalid '"+message+"'.");

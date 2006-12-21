@@ -3,7 +3,7 @@
  */
  
 /**
- * @class public final f_resourceBundle extends f_object
+ * @class public final f_resourceBundle extends Object
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  */
@@ -219,10 +219,18 @@ var __static = {
 		document.write("<SCRIPT type=\"text/javascript\" charset=\"UTF-8\" src=\""+url+"\"></SCRIPT>");
 	},
 	
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Finalizer: function() {
 		f_resourceBundle._Resources=undefined;
 	},
 	
+	/**
+	 * @method public static
+	 * @return String
+	 */
 	f_getName: function() {
 		return "f_resourceBundle";
 	}
