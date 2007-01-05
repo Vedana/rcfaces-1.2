@@ -1,27 +1,28 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IResizableCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IAlignmentCapability;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.IOrderCapability;
-import org.rcfaces.core.internal.converter.OrderConverter;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ISortEventCapability;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import java.util.Set;
+
 import javax.faces.component.ValueHolder;
-import org.rcfaces.core.component.capability.ITextCapability;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.component.capability.IResizableCapability;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
+import org.rcfaces.core.component.capability.ISortEventCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.converter.OrderConverter;
 
 /**
  * Specify a column.

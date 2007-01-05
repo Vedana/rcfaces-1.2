@@ -21,7 +21,6 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.taglib.CalendarTag;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.model.BasicDateItem;
 import org.rcfaces.core.model.BasicSelectItem;

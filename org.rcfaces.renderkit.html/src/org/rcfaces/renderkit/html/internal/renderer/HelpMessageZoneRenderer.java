@@ -6,7 +6,6 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.component.FieldSetComponent;
 import org.rcfaces.core.component.HelpMessageZoneComponent;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;

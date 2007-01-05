@@ -1,24 +1,23 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.RadioButtonComponent;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ISelectedCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.IRadioValueCapability;
-import org.rcfaces.core.component.iterator.IRadioButtonIterator;
-import org.rcfaces.core.internal.tools.RadioButtonTools;
 import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import java.util.HashSet;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
-import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Set;
+
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import org.rcfaces.core.component.capability.IRadioValueCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectedCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.iterator.IRadioButtonIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import org.rcfaces.core.internal.tools.RadioButtonTools;
 
 /**
  * <p>The radioButton Component is based on the standard HTML tag &lt;INPUT TYPE="radio"&gt;. It can interoperate automatically with other radioButtons from the same group.</p>

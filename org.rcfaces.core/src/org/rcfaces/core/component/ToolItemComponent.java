@@ -1,14 +1,14 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.ToolFolderComponent;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.UIImageItemComponent;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <b>EXPERIMENTAL</b>
