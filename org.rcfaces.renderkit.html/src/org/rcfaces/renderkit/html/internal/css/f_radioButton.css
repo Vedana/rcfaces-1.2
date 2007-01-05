@@ -24,19 +24,17 @@
 }
 
 
-.f_radioButton_text, 
-.f_radioButton_text_disabled {
+.f_radioButton_text {
 	vertical-align: middle;
 	display: inline;
 	-moz-user-select: none;
 	user-select: none;
-}
 
-.f_radioButton_text {
 	cursor: pointer;
 	cursor: hand;
 }
 
 .f_radioButton_text_disabled {
 	color: #A1A192;
+	cursor: default;
 }

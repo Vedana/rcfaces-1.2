@@ -1,19 +1,20 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.iterator.IToolFolderIterator;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.internal.tools.ToolBarTools;
+import org.rcfaces.core.component.iterator.IToolFolderIterator;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <b>EXPERIMENTAL</b>

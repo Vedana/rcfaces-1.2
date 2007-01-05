@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -97,6 +100,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
     public static final Object META_CONTENT_TYPE_PARAMETER = Constants
             .getPackagePrefix()
             + ".META_CONTENT_TYPE_PARAMETER";
+
+    public static final Object CLIENT_MESSAGE_ID_FILTER_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".CLIENT_MESSAGE_ID_FILTER";
 
     private static final String APPLICATION_PARAMETERS_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.APPLICATION_PARAMETERS";
 
@@ -198,9 +205,23 @@ public class InitRenderer extends AbstractHtmlRenderer {
             htmlWriter.endElement("META");
         }
 
+        HtmlRenderContext htmlRenderContext = (HtmlRenderContext) htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
         if (disableContextMenu) {
-            htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .setDisabledContextMenu(true);
+            htmlRenderContext.setDisabledContextMenu(true);
+        }
+
+        if (appParams.clientMessageIdFilter != null) {
+            htmlRenderContext
+                    .setClientMessageId(appParams.clientMessageIdFilter);
+        }
+        String clientMessageIdFilter = initComponent
+                .getClientMessageIdFilter(facesContext);
+        if (clientMessageIdFilter != null
+                && clientMessageIdFilter.trim().length() > 0) {
+            Set clientMessageIds = parseClientMessageIdFilter(clientMessageIdFilter);
+
+            htmlRenderContext.addClientMessageIds(clientMessageIds);
         }
 
         String base = initComponent.getBase(facesContext);
@@ -369,9 +390,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
             return;
         }
 
+        HtmlRenderContext htmlRenderContext = (HtmlRenderContext) writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
         if (invalidBrowserPageURL != null) {
-            writer.getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .setInvalidBrowserURL(invalidBrowserPageURL);
+            htmlRenderContext.setInvalidBrowserURL(invalidBrowserPageURL);
         }
 
         // IJavaScriptWriter jsWriter = new
@@ -664,6 +686,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         String favoriteImageURL;
 
+        Set clientMessageIdFilter;
+
         private boolean symbolsInitialized;
 
         public ApplicationParameters() {
@@ -736,6 +760,13 @@ public class InitRenderer extends AbstractHtmlRenderer {
                     .get(MULTI_WINDOW_PARAMETER));
 
             symbols = JavaScriptRepositoryServlet.getSymbols(facesContext);
+
+            String clientMessageIdFilterParam = (String) initParameters
+                    .get(CLIENT_MESSAGE_ID_FILTER_PARAMETER);
+
+            if (clientMessageIdFilterParam != null) {
+                clientMessageIdFilter = parseClientMessageIdFilter(clientMessageIdFilterParam);
+            }
 
             if (LOG.isInfoEnabled()) {
 
@@ -814,6 +845,23 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
 
         writer.endElement("SCRIPT");
+    }
+
+    static Set parseClientMessageIdFilter(String filter) {
+        Set set = null;
+
+        StringTokenizer st = new StringTokenizer(filter, ", ");
+        for (; st.hasMoreTokens();) {
+            if (set == null) {
+                set = new HashSet(st.countTokens());
+            }
+
+            String clientId = st.nextToken();
+
+            set.add(clientId);
+        }
+
+        return set;
     }
 
     /**

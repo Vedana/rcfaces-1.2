@@ -363,18 +363,24 @@ var __prototype = {
 	f_updateSpinnerButton: function(button) {
 		var cname=button._className;
 		
+		var suffix="";
 		if (this.f_isDisabled()) {
-			cname+="_disabled";
+			suffix+="_disabled";
 		
 		} else if (button._keyPress) {
-			cname+="_pushed";
+			suffix+="_pushed";
 			
 		} else if (button._hover) {
 			if (button._pushed) {
-				cname+="_pushed";
+				suffix+="_pushed";
+				
 			} else {
-				cname+="_hover";
+				suffix+="_hover";
 			}
+		}
+		
+		if (suffix) {
+			cname+=" "+cname+suffix;
 		}
 		
 		if (button.className==cname) {

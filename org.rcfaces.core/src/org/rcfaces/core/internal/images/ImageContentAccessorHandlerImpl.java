@@ -273,9 +273,6 @@ public class ImageContentAccessorHandlerImpl extends
             }
         }
 
-        RcfacesContext rcfacesContext = RcfacesContext
-                .getInstance(facesContext);
-
         IContentStorageEngine contentStorageEngine = rcfacesContext
                 .getContentStorageEngine();
 

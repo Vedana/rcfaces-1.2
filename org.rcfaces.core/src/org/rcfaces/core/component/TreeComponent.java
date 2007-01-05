@@ -1,31 +1,32 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.IMenuComponent;
 import javax.faces.component.UISelectItem;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.lang.String;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.CardinalityConverter;
-import org.rcfaces.core.internal.tools.MenuTools;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.internal.util.ComponentIterators;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The tree Component shows informations in an arborescent view.
@@ -62,7 +63,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","selectable","defaultExpandedLeafImageURL","expansionValues","checkable","defaultSelectedImageURL","checkedValues","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","clientCheckFullState","clientSelectionFullState","checkListener","preloadedLevelDepth","userExpandable","selectionCardinality","readOnly","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","selectable","defaultExpandedLeafImageURL","expansionValues","checkable","defaultSelectedImageURL","checkedValues","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","clientSelectionFullState","checkListener","preloadedLevelDepth","userExpandable","selectionCardinality","readOnly","selectedValues"}));
 	}
 
 	public TreeComponent() {
@@ -77,14 +78,14 @@ public class TreeComponent extends AbstractInputComponent implements
 	public final void setSelectionCardinality(String cardinality) {
 
 
-			setSelectionCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, null, cardinality)).intValue());
+			setSelectionCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
 		
 	}
 
 	public final void setCheckCardinality(String cardinality) {
 
 
-			setCheckCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, null, cardinality)).intValue());
+			setCheckCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
 		
 	}
 
@@ -149,45 +150,45 @@ public class TreeComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
 	}
 
-	public final java.lang.String getHorizontalScrollPosition() {
+	public final int getHorizontalScrollPosition() {
 		return getHorizontalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getHorizontalScrollPosition() getHorizontalScrollPosition()} for more details
 	 */
-	public final java.lang.String getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HORIZONTAL_SCROLL_POSITION, facesContext);
+	public final int getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HORIZONTAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setHorizontalScrollPosition(java.lang.String horizontalScrollPosition) {
+	public final void setHorizontalScrollPosition(int horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
 	/**
-	 * See {@link #setHorizontalScrollPosition(String) setHorizontalScrollPosition(String)} for more details
+	 * See {@link #setHorizontalScrollPosition(int) setHorizontalScrollPosition(int)} for more details
 	 */
 	public final void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
-	public final java.lang.String getVerticalScrollPosition() {
+	public final int getVerticalScrollPosition() {
 		return getVerticalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getVerticalScrollPosition() getVerticalScrollPosition()} for more details
 	 */
-	public final java.lang.String getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VERTICAL_SCROLL_POSITION, facesContext);
+	public final int getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.VERTICAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setVerticalScrollPosition(java.lang.String verticalScrollPosition) {
+	public final void setVerticalScrollPosition(int verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
 	/**
-	 * See {@link #setVerticalScrollPosition(String) setVerticalScrollPosition(String)} for more details
+	 * See {@link #setVerticalScrollPosition(int) setVerticalScrollPosition(int)} for more details
 	 */
 	public final void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
@@ -848,6 +849,30 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public final boolean isExpansionValuesSetted() {
 		return engine.isPropertySetted(Properties.EXPANSION_VALUES);
+	}
+
+	public final Object getCursorValue() {
+		return getCursorValue(null);
+	}
+
+	public final Object getCursorValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getValue(Properties.CURSOR_VALUE, facesContext);
+	}
+
+	public final void setCursorValue(Object cursorValue) {
+		engine.setValue(Properties.CURSOR_VALUE, cursorValue);
+	}
+
+	public final void setCursorValue(ValueBinding cursorValue) {
+		engine.setValueBinding(Properties.CURSOR_VALUE, cursorValue);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "cursorValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCursorValueSetted() {
+		return engine.isPropertySetted(Properties.CURSOR_VALUE);
 	}
 
 	/**

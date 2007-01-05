@@ -3,9 +3,13 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -61,6 +65,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     private String invalidBrowserURL;
 
     private boolean disabledContentMenu;
+
+    private Set clientMessageIdFilter;
+
+    private boolean clientMessageIdFilterReadOnly;
 
     public void initialize(FacesContext facesContext) {
         super.initialize(facesContext);
@@ -397,4 +405,41 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         this.invalidBrowserURL = invalidBrowserURL;
     }
 
+    public Set getClientMessageIdFilters() {
+        if (clientMessageIdFilter == null) {
+            return Collections.EMPTY_SET;
+        }
+
+        return clientMessageIdFilter;
+    }
+
+    public void setClientMessageId(Set ids) {
+        clientMessageIdFilter = ids;
+        clientMessageIdFilterReadOnly = true;
+    }
+
+    public void addClientMessageIds(Set ids) {
+        if (ids==null || ids.isEmpty()) {
+            return;
+        }
+
+        if (clientMessageIdFilter == null) {
+            clientMessageIdFilter = new HashSet(ids.size());
+
+        } else if (clientMessageIdFilterReadOnly) {
+            clientMessageIdFilter = new HashSet(clientMessageIdFilter);
+            clientMessageIdFilterReadOnly = false;
+        }
+
+        for (Iterator it = ids.iterator(); it.hasNext();) {
+            String id = (String) it.next();
+
+            if (ALL_CLIENT_MESSAGES.equals(id)) {
+                clientMessageIdFilter.remove(NO_CLIENT_MESSAGES);
+                return;
+            }
+
+            clientMessageIdFilter.add(id);
+        }
+    }
 }

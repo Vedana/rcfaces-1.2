@@ -61,7 +61,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
         UIInput input = (UIInput) getComponent();
 
         Object selectionValue = input.getValue();
-  
+
         return new SelectItemsContext(this, componentRenderContext, input,
                 selectionValue);
     }
@@ -77,7 +77,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
         UIInput input = (UIInput) getComponent();
 
         Object selectionValue = input.getValue();
-  
+
         return new SelectItemsJsContext(this, componentRenderContext, input,
                 selectionValue);
     }
@@ -307,7 +307,8 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
                 }
 
                 filterCapability.setFilterProperties(HtmlTools
-                        .decodeFilterExpression(component, filterExpression));
+                        .decodeFilterExpression(context.getProcessContext(),
+                                component, filterExpression));
             }
         }
     }

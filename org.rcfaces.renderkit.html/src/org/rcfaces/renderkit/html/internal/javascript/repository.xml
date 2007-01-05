@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <repository id="javascript">
-	<module id="core" coreModule="true">
+	<module id="core" defaultCoreModule="true">
 		<file name="f_bundle.js">
 			<class name="f_bundle" />
 		</file>
@@ -183,6 +183,12 @@
 				<required-class name="f_aspect" />
 			</class>
 		</file>
+
+		<file name="fa_scrollPositions.js">
+			<class name="fa_scrollPositions">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
 		
 	</module>
 
@@ -234,20 +240,6 @@
 			</class>
 		</file>
 	</module>
-
-<!-- VALIDATOR Components -->
-	<module id="validator">
-		<file name="f_clientValidator.js">
-			<class name="f_clientValidator">
-				<required-class name="f_component" />
-			</class>
-		</file>
-		<file name="f_vb.js">
-			<class name="f_vb">
-				<required-class name="f_clientValidator" />
-			</class>
-		</file>
-	</module>
 	
 	<!-- Messages features -->
 	<module id="message">
@@ -264,7 +256,6 @@
 		<file name="f_input.js">
 			<class name="f_input">
 				<required-class name="f_component" /> 
-				<required-class id="validator" name="f_clientValidator" />
 			</class>
 		</file>
 		<file name="f_button.js">
@@ -380,10 +371,16 @@
 	
 <!-- Items Aspect -->
 	<module id="itemAspect">
+		<file name="fa_itemClientDatas.js">
+			<class name="fa_itemClientDatas">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
 		<file name="fa_items.js">
 			<class name="fa_items">
 				<required-class name="f_aspect" />
 				<required-class name="f_imageRepository" />
+				<required-class name="fa_itemClientDatas" />
 			</class>
 		</file>
 		<file name="fa_itemsWrapper.js">
@@ -449,6 +446,7 @@
 			<class name="fa_selectionManager">
 				<required-class name="f_aspect" />
 				<required-class name="fa_cardinality" />
+				<required-class name="fa_selectionProvider" />
 			</class>
 		</file>
 		<file name="fa_checkManager.js">
@@ -504,30 +502,45 @@
 		</file>
 	</module>
 
+
+	<!-- VALIDATOR Components -->
+	<module id="validator">
+		<file name="f_clientValidator.js">
+			<class name="f_clientValidator">
+				<required-class name="f_component" />
+			</class>
+		</file>
+		<file name="f_vb.js">
+			<class name="f_vb">
+				<required-class name="f_clientValidator" />
+			</class>
+		</file>
+	</module>
+
 	<module id="popupComponent">
-		<file name="f_textEntry.js">
-			<class name="f_textEntry">
+		<file name="f_textArea.js">
+			<class name="f_textArea">
 				<required-class name="f_input" />
 				<required-class name="fa_required" />
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_focusStyleClass" />
 				<required-class name="fa_selectionProvider" />
 				<required-class name="fa_message" />
+				<required-class id="menu" name="f_menu" />
+			</class>
+		</file>
+		<file name="f_textEntry.js">
+			<class name="f_textEntry">
+				<required-class name="f_textArea" />
 				<required-class id="validator" name="f_clientValidator" />
 				<required-class id="features" name="f_clientValidator" />
 				<required-class id="features" name="f_vb" />
 				<required-class id="menu" name="f_menu" />
-				<required-class id="message" name="f_messageContext" />
 			</class>
 		</file>
 		<file name="f_passwordEntry.js">
 			<class name="f_passwordEntry">
 				<required-class name="f_input" />
-			</class>
-		</file>
-		<file name="f_textArea.js">
-			<class name="f_textArea">
-				<required-class name="f_textEntry" />
 			</class>
 		</file>
 	</module>
@@ -804,6 +817,7 @@
 				<required-class name="fa_commands" />
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_checkManager" />
+				<required-class name="fa_scrollPositions" />
 				<required-class id="menu" name="f_menu" />
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
@@ -818,10 +832,12 @@
 				<required-class name="f_component" />
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_disabled" />
-				<required-class name="f_imageRepository" />
-				<required-class name="fa_selectionProvider" />
+				<required-class name="fa_immediate" />
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_checkManager" />
+				<required-class name="fa_itemClientDatas" />
+				<required-class name="fa_scrollPositions" />
+				<required-class name="f_imageRepository" />
 				<required-class id="menu" name="f_menu" />
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
@@ -990,6 +1006,14 @@
 			<class name="f_serverAppender">
 				<required-class name="f_log" />
 				<required-class name="f_httpRequest" />
+			</class>
+		</file>
+	</module>
+
+	<module id="fireBugLog">
+		<file name="f_fireBugAppender.js">
+			<class name="f_fireBugAppender">
+				<required-class name="f_log" />
 			</class>
 		</file>
 	</module>

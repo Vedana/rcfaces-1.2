@@ -178,6 +178,7 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_updateDisabled: function(disabled) {
+		this.f_updateStyleClass();
 	},
 	/**
 	 * Returns the read only state.
@@ -200,6 +201,31 @@ var __prototype = {
 		}
 		input.readOnly = set;
 		this.f_setProperty(f_prop.READONLY,set);
+		
+		this.f_updateStyleClass();
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_updateStyleClass: function(postSuffix) {
+		var suffix="";
+
+		if (this.f_isDisabled()) {
+			suffix+="_disabled";
+
+		} else if (this.f_isReadOnly()) {
+			suffix+="_readOnly";
+		}
+		
+		if (postSuffix) {
+			suffix+=postSuffix;
+		}
+	
+		var claz=this.f_computeStyleClass(suffix);
+		if (this.className!=claz) {
+			this.className=claz;
+		}
 	},
 	/*
 	f_update: function() {

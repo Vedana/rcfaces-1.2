@@ -58,6 +58,11 @@ public class Constants {
      */
     public static final boolean COLLECTION_DATAMODEL_SUPPORT = true;
 
+    /**
+     * Adaptable object can be converted to DataModel (JSF spec extension)
+     */
+    public static final boolean ADAPTABLE_DATAMODEL_SUPPORT = true;
+
     public static final long DEFAULT_EXPIRATION_DELAY = Delay.WEEK;
 
     public static final long DEFAULT_VERSIONED_EXPIRATION_DELAY = Delay.YEAR;

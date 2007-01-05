@@ -34,7 +34,7 @@ public interface ISeverityStyleClassCapability extends IStyleClassCapability {
 	/**
 	 * Sets a space-separated list of CSS style class(es) to be applied for warning messages. 
 	 * This value will be passed through as the "class" attribute on generated markup.
-	 * @param infoStyleClass list of CSS style classes
+	 * @param warnStyleClass list of CSS style classes
 	 */
     void setWarnStyleClass(String warnStyleClass);
 
@@ -48,7 +48,7 @@ public interface ISeverityStyleClassCapability extends IStyleClassCapability {
 	/**
 	 * Sets a space-separated list of CSS style class(es) to be applied for error messages. 
 	 * This value will be passed through as the "class" attribute on generated markup.
-	 * @param infoStyleClass list of CSS style classes
+	 * @param errorStyleClass list of CSS style classes
 	 */
     void setErrorStyleClass(String errorStyleClass);
 
@@ -62,7 +62,7 @@ public interface ISeverityStyleClassCapability extends IStyleClassCapability {
 	/**
 	 * Sets a space-separated list of CSS style class(es) to be applied for fatal messages. 
 	 * This value will be passed through as the "class" attribute on generated markup.
-	 * @param infoStyleClass list of CSS style classes
+	 * @param fatalStyleClass list of CSS style classes
 	 */
     void setFatalStyleClass(String fatalStyleClass);
 

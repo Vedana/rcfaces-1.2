@@ -11,7 +11,14 @@
  */
 
 /**
- * @method hidden
+ * @method public
+ * @param f_object component
+ * @param String type
+ * @param optional Event jsEvent
+ * @param optional Object item
+ * @param optional any value
+ * @param optional fa_selectionProvider selectionProvider
+ * @param optional any detail
  */
 function f_event(component, type, jsEvent, item, value, selectionProvider, detail) {
 	f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
@@ -53,7 +60,7 @@ f_event.prototype= {
 	
 	/**
 	 * @method public
-	 * @return f_component
+	 * @return f_object
 	 */
 	f_getComponent: function() {
 		return this._component;
@@ -69,7 +76,7 @@ f_event.prototype= {
 	
 	/**
 	 * @method public
-	 * @return any
+	 * @return fa_selectionProvider
 	 */
 	f_getSelectionProvider: function() {
 		return this._selectionProvider;
@@ -85,7 +92,7 @@ f_event.prototype= {
 	
 	/**
 	 * @method public
-	 * @param String id Identifier of component.
+	 * @param String... id Identifier of component.
 	 * @return f_component
 	 * @see f_component#f_findComponent f_component.f_findComponent()
 	 */
@@ -130,7 +137,7 @@ f_event.prototype= {
  
 var __static = {
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_LOCK_MESSAGE: "Window has been locked.",
 
@@ -172,154 +179,154 @@ var __static = {
 	/**
 	 * Blur event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	BLUR:		"blur",
 
 	/**
 	 * Change event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	CHANGE:		"change",
 
 	/**
 	 * Check event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	CHECK:		"check",
 
 	/**
 	 * Close event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	CLOSE:		"close",
 
 	/**
 	 * Double-click event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	DBLCLICK:	"dblclick",
 
 	/**
  	 * Focus event name.
  	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	FOCUS:		"focus",
 
 	/**
 	 * Initialize event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	INIT:		"init",
 
 	/**
 	 * Key down event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	KEYDOWN:	"keydown",
 
 	/**
 	 * Key press event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	KEYPRESS:	"keypress",
 
 	/**
 	 * Key up event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	KEYUP:		"keyup",
 
 	/**
 	 * Load event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	LOAD:	 	"load",
 
 	/**
 	 * Menu event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	MENU:	 	"menu",
 
 	/**
 	 * Mouse button down event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	MOUSEDOWN:	"mousedown",
 
 	/**
 	 * Mouse out event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	MOUSEOUT:	"mouseout",
 
 	/**
 	 * Mouse over event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	MOUSEOVER:	"mouseover",
 	
 	/**
 	 * Mouse button up event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	MOUSEUP:	"mouseup",
 	
 	/**
 	 * Property Change event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	PROPERTY_CHANGE:	"propertyChange",
 
 	/**
 	 * Reset event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	RESET:	"reset",
 
 	/**
 	 * Selection event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	SELECTION:	"selection",
 
 	/**
 	 * Submit event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	SUBMIT:		"submit",
 	
 	/**
 	 * Suggestion event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	SUGGESTION:	"suggestion",
 
 	/**
 	 * User event name.
 	 *
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	USER:	"user",
 
@@ -330,7 +337,7 @@ var __static = {
 
 	/**
 	 * @method public static
-	 * @return f_component
+	 * @return f_object
 	 */
 	GetComponent: function() { 
 		var event=f_event.GetEvent();
@@ -468,6 +475,10 @@ var __static = {
 			}
 		}
 		
+		if (window.console && console.trace) {
+			console.trace();
+		}
+		
 		alert(s);
 
 		return true;
@@ -507,6 +518,12 @@ var __static = {
 	toString: function() {
 		return "[class f_event]";
 	},
+	/**
+	 * Returns the name of the class.
+	 *
+	 * @method public static
+	 * @return String
+	 */
 	f_getName: function() {
 		return "f_event";
 	}

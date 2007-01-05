@@ -280,7 +280,7 @@ class ClientBundleRepository extends AbstractRepository implements
         try {
             javaScriptWriter.writeCall("f_resourceBundle", "DefineLoaded");
             javaScriptWriter.writeString(baseName);
-            javaScriptWriter.write(", {").writeln();
+            javaScriptWriter.write(", [").writeln();
 
             int idx = 0;
             Enumeration en = resourceBundle.getKeys();
@@ -296,8 +296,8 @@ class ClientBundleRepository extends AbstractRepository implements
                 if (VERIFY_BUNDLE_KEY) {
                     verifyBundleKey(key);
                 }
-                javaScriptWriter.write(key);
-                javaScriptWriter.write(": ");
+                javaScriptWriter.writeString(key);
+                javaScriptWriter.write(',');
                 if (value == null) {
                     javaScriptWriter.writeNull();
                     continue;
@@ -306,7 +306,7 @@ class ClientBundleRepository extends AbstractRepository implements
                 javaScriptWriter.writeString(value);
             }
 
-            javaScriptWriter.write(" });");
+            javaScriptWriter.write(" ]});");
 
             javaScriptWriter.end();
 
@@ -326,21 +326,25 @@ class ClientBundleRepository extends AbstractRepository implements
 
     private void verifyBundleKey(String key) {
         if (key.length() < 1) {
-            throw new FacesException("Key of bundle can not be null !");
+            throw new FacesException("Key of bundle can not be empty !");
         }
 
-        char cs[] = key.toCharArray();
+        if (false) {
+            // On passe les clefs en "" plutot qu'en field !
+            
+            char cs[] = key.toCharArray();
 
-        if (Character.isJavaIdentifierStart(cs[0]) == false) {
-            throw new FacesException(
-                    "Invalid key of bundle !  (first char is refused) (key='"
-                            + key + "')");
-        }
+            if (Character.isJavaIdentifierStart(cs[0]) == false) {
+                throw new FacesException(
+                        "Invalid key of bundle !  (first char is refused) (key='"
+                                + key + "')");
+            }
 
-        for (int i = 1; i < cs.length; i++) {
-            if (Character.isJavaIdentifierPart(cs[i]) == false) {
-                throw new FacesException("Invalid key of bundle ! (char #"
-                        + (i + 1) + " is refused) (key='" + key + "')");
+            for (int i = 1; i < cs.length; i++) {
+                if (Character.isJavaIdentifierPart(cs[i]) == false) {
+                    throw new FacesException("Invalid key of bundle ! (char #"
+                            + (i + 1) + " is refused) (key='" + key + "')");
+                }
             }
         }
     }

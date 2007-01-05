@@ -135,7 +135,7 @@ var __prototype = {
 				tr.appendChild(detailLabel);
 			}
 			
-			f_message.FillComponent(this.className, tr, null, summaryLabel, detailLabel, message, styleMessage);
+			f_message.FillComponent(this.f_computeStyleClass(), tr, null, summaryLabel, detailLabel, message, styleMessage);
 			
 			tbody.appendChild(tr);
 		}

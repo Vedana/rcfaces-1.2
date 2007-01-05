@@ -1,25 +1,24 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
+import java.util.Map;
+import java.util.HashMap;
 import javax.faces.el.ValueBinding;
-
+import java.util.Date;
+import java.util.Collections;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.AbstractCalendarComponent;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.DateConverter;
-import org.rcfaces.core.internal.manager.IValidationParameters;
 
 /**
  * <p>The dateEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a date.</p>
@@ -130,7 +129,19 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	public final void setDefaultDate(String date) {
 
 
-			setDefaultDate((Date)DateConverter.SINGLETON.getAsObject(null, this, date));
+			engine.setProperty(Properties.DEFAULT_DATE, date);
+		
+	}
+
+	public final Date getDefaultDate(FacesContext facesContext) {
+
+
+			Object value=engine.getProperty(Properties.DEFAULT_DATE, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
 		
 	}
 
@@ -424,7 +435,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 
 	/**
 	 * Sets a string specifying the format to apply to the date value.
-	 * @param date format
+	 * @param dateFormat format
 	 */
 	public final void setDateFormat(String dateFormat) {
 		engine.setProperty(Properties.DATE_FORMAT, dateFormat);
@@ -432,7 +443,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 
 	/**
 	 * Sets a string specifying the format to apply to the date value.
-	 * @param date format
+	 * @param dateFormat format
 	 */
 	public final void setDateFormat(ValueBinding dateFormat) {
 		engine.setProperty(Properties.DATE_FORMAT, dateFormat);
@@ -452,14 +463,6 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 */
 	public final java.util.Date getDefaultDate() {
 		return getDefaultDate(null);
-	}
-
-	/**
-	 * Returns the date selected by default.
-	 * @return default date
-	 */
-	public final java.util.Date getDefaultDate(javax.faces.context.FacesContext facesContext) {
-		return (java.util.Date)engine.getValue(Properties.DEFAULT_DATE, facesContext);
 	}
 
 	/**

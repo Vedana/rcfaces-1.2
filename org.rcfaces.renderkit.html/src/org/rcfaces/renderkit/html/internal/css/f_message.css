@@ -10,11 +10,7 @@
  * @version $Revision$ $Date$ 
  */
  
-.f_message,
-.f_message_info,
-.f_message_warn,
-.f_message_error,
-.f_message_fatal {
+.f_message {
 	-moz-user-select: none;
 	user-select: none;
 	display: inline;

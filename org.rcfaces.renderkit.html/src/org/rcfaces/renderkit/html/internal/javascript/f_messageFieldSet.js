@@ -27,14 +27,14 @@ var __prototype = {
 	 * @method protected
 	 */
 	fa_updateMessages: function() {
-		var className;
+		var className=this.f_computeStyleClass();
+		
 		var currentMessage=this._currentMessage;
 		if (currentMessage) {
-			className=this.f_getStyleClassFromSeverity(currentMessage.f_getSeverity());	
-		}
-		
-		if (!className) {
-			className=this._className;
+			var cl=this.f_getStyleClassFromSeverity(currentMessage.f_getSeverity());	
+			if (cl) {
+				className+=" "+cl;
+			}
 		}
 		
 		if (this.className!=className) {

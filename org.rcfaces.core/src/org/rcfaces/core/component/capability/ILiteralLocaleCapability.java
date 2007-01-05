@@ -12,17 +12,17 @@ import java.util.Locale;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface ILocalizedAttributesCapability {
+public interface ILiteralLocaleCapability {
 	
 	/**
-	 * Returns the locale defined for the component or its parents
+	 * Returns the locale defined for literal attributes. (date, number)
 	 * @return the defined locale
 	 */
-    Locale getAttributesLocale();
+    Locale getLiteralLocale();
 
     /**
-     * Sets the locale for the component and its children
+     * Sets the locale for literal attributes. (date, number)
      * @param locale locale to define
      */
-    void setAttributesLocale(Locale locale);
+    void setLiteralLocale(Locale locale);
 }

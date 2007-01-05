@@ -3,7 +3,7 @@
  */
  
 /**
- * Aspect Disabled
+ * Disable state.
  *
  * @aspect fa_disabled
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -16,10 +16,10 @@ var __prototype = {
 	},
 	*/
 	/**
-	 * Returns <code>true</code> if the component is disabled
+	 * Returns the disable state.
 	 *
 	 * @method public
-	 * @return boolean
+	 * @return boolean <code>true</code> if the component is disabled.
 	 */
 	f_isDisabled: function() {
 		if (this._disabled===undefined) {
@@ -32,7 +32,7 @@ var __prototype = {
 		return this._disabled;
 	},
 	/**
-	 * Set disabled state.
+	 * Set the disabled state.
 	 *
 	 * @method public
 	 * @param optional boolean set <code>true</code> to disable the component

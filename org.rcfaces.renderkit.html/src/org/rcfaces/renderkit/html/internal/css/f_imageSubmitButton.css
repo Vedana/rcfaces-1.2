@@ -12,14 +12,7 @@
  
 .f_imageSubmitButton_image,
 .f_imageSubmitButton_text,
-.f_imageSubmitButton, 
-.f_imageSubmitButton_hover, 
-.f_imageSubmitButton_pushed, 
-.f_imageSubmitButton_selected, 
-.f_imageSubmitButton_focus,
-.f_imageSubmitButton_selected_focus, 
-.f_imageSubmitButton_selected_hover, 
-.f_imageSubmitButton_disabled {
+.f_imageSubmitButton {
 	border: 0;
 	padding: 0;
 	margin: 0;
@@ -32,13 +25,7 @@
 	vertical-align: baseline;
 }
 
-.f_imageSubmitButton, 
-.f_imageSubmitButton_hover, 
-.f_imageSubmitButton_pushed, 
-.f_imageSubmitButton_selected, 
-.f_imageSubmitButton_focus,
-.f_imageSubmitButton_selected_focus, 
-.f_imageSubmitButton_selected_hover {
+.f_imageSubmitButton {
 	cursor: pointer;
 	cursor: hand;
 }

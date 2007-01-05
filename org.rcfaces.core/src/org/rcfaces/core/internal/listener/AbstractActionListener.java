@@ -4,6 +4,7 @@
  */
 package org.rcfaces.core.internal.listener;
 
+import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.StateHolder;
@@ -17,7 +18,6 @@ import javax.faces.event.FacesEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.util.ForwardMethodBinding;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -78,26 +78,32 @@ abstract class AbstractActionListener implements StateHolder,
         }
 
         if (forwardNameMethodBinding != null) {
-            MethodNotFoundException th = tryMethodBinding(facesContext,
+            Exception th = tryMethodBinding(facesContext,
                     forwardNameMethodBinding, null, event);
 
             if (th == null) {
                 return;
             }
 
-            throw th;
+            if (th instanceof RuntimeException) {
+                throw (RuntimeException) th;
+            }
+
+            throw new FacesException(
+                    "Exception when calling forward name method '" + expression
+                            + "'.", th);
         }
 
         Object parameters[] = new Object[] { event };
-        MethodNotFoundException firstThrowable = null;
+        Exception firstThrowable = null;
 
         if (argsMethodBindingInitialized == false) {
             argsMethodBindingInitialized = true;
             argsMethodBinding = getArgumentsMethodBinding(application);
         }
         if (argsMethodBinding != null) {
-            MethodNotFoundException th = tryMethodBinding(facesContext,
-                    argsMethodBinding, parameters, event);
+            Exception th = tryMethodBinding(facesContext, argsMethodBinding,
+                    parameters, event);
             if (th == null) {
                 return;
             }
@@ -109,7 +115,7 @@ abstract class AbstractActionListener implements StateHolder,
             facesArgsMethodBinding = getFacesArgumentsMethodBinding(application);
         }
         if (facesArgsMethodBinding != null) {
-            MethodNotFoundException th = tryMethodBinding(facesContext,
+            Exception th = tryMethodBinding(facesContext,
                     facesArgsMethodBinding, parameters, event);
             if (th == null) {
                 return;
@@ -124,8 +130,8 @@ abstract class AbstractActionListener implements StateHolder,
             noArgsMethodBinding = getNoArgsMethodBinding(application);
         }
         if (noArgsMethodBinding != null) {
-            MethodNotFoundException th = tryMethodBinding(facesContext,
-                    noArgsMethodBinding, null, event);
+            Exception th = tryMethodBinding(facesContext, noArgsMethodBinding,
+                    null, event);
             if (th == null) {
                 return;
             }
@@ -133,9 +139,12 @@ abstract class AbstractActionListener implements StateHolder,
                 firstThrowable = th;
             }
         }
+
+        LOG.error("Can not find method associated to expression '" + expression
+                + "'.", firstThrowable);
     }
 
-    private MethodNotFoundException tryMethodBinding(FacesContext facesContext,
+    private Exception tryMethodBinding(FacesContext facesContext,
             MethodBinding methodBinding, Object parameters[], FacesEvent event) {
 
         try {
@@ -163,6 +172,13 @@ abstract class AbstractActionListener implements StateHolder,
 
             if (cause instanceof AbortProcessingException) {
                 throw (AbortProcessingException) cause;
+            }
+
+            if (cause instanceof MethodNotFoundException) {
+                return (Exception) cause;
+            }
+            if (cause instanceof NoSuchMethodException) {
+                return (Exception) cause;
             }
 
             throw ex;
@@ -213,38 +229,16 @@ abstract class AbstractActionListener implements StateHolder,
         return FacesContext.getCurrentInstance();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * 
-     * ee javax.faces.component.StateHolder#isTransient()
-     */
     public boolean isTransient() {
         return transientValue;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * 
-     * ee javax.faces.component.StateHolder#setTransient(boolean)
-     */
     public void setTransient(boolean newTransientValue) {
         this.transientValue = newTransientValue;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * 
-     * ee
-     * javax.faces.component.StateHolder#restoreState(javax.faces.context.FacesContext,
-     * java.lang.Object)
-     */
     public final void restoreState(FacesContext context, Object state) {
-        Object objects[] = (Object[]) state;
-
-        expression = (String) objects[0];
+        expression = (String) state;
         if (expression == null) {
             throw new NullPointerException("Expression is null !");
         }
@@ -252,27 +246,25 @@ abstract class AbstractActionListener implements StateHolder,
         forwarNameMethodInitialized = false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * 
-     * ee
-     * javax.faces.component.StateHolder#saveState(javax.faces.context.FacesContext)
-     */
     public final Object saveState(FacesContext context) {
-        Object objects[] = new Object[1];
+        // Object objects[] = new Object[1];
 
-        objects[0] = expression;
-        if (expression == null) {
-            throw new NullPointerException("Expression is NULL");
-        }
-
-        return objects;
+        return expression;
     }
 
     protected void processReturn(FacesContext facesContext,
             MethodBinding binding, FacesEvent event, Object ret) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Call of method binding='" + binding + "' event='"
+                    + event + "' returns " + ret);
+        }
+
         if ((ret instanceof String) == false) {
+            if (LOG.isInfoEnabled() && ret != null) {
+                LOG.info("Return of method binding='" + binding + "' event='"
+                        + event + "' is not a String !");
+            }
             return;
         }
 

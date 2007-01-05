@@ -52,7 +52,7 @@ A string value indicating the base HRef. If the key word "context" is used the b
 			<name>title</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string value specifying the title for the component.
+A string value specifying the title for the document.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -84,11 +84,12 @@ An url pointing to the page to show if the browser is not supported.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>attributesLocale</name>
+			<name>literalLocale</name>
 			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value that indicates the locale associated with the component.
-]]></description>
+		</attribute>
+		<attribute>
+			<name>literalTimeZone</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>disabledIEImageBar</name>
@@ -117,6 +118,10 @@ A boolean value that hide context menu for the page or not.
 <description><![CDATA[
 A boolean value specifying if the HTML BASE tag must be generated.
 ]]></description>
+		</attribute>
+		<attribute>
+			<name>clientMessageIdFilter</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	<tag>

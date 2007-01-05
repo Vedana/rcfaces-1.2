@@ -3,92 +3,30 @@
  */
  
 /**
- * @class public final f_locale extends f_object
+ * @class public final f_locale extends Object
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
  
-var __static = {
+function f_locale() {
+	var resourceBundle=f_resourceBundle.Get(f_locale);
 
-	/**
-	 * Short form.
-	 *
-	 * @field public static final number
-	 */
-	SHORT: 0,
+	this._monthShortNames=resourceBundle.f_get("MONTH_SHORT_NAMES");
+	this._monthMedNames=resourceBundle.f_get("MONTH_MED_NAMES");
+	this._monthLongNames=resourceBundle.f_get("MONTH_LONG_NAMES");
 
-	/**
-	 * Medium form.
-	 *
-	 * @field public static final number
-	 */
-	MEDIUM: 1,
+	this._dayShortNames=resourceBundle.f_get("DAY_SHORT_NAMES");
+	this._dayMedNames=resourceBundle.f_get("DAY_MED_NAMES");
+	this._dayLongNames=resourceBundle.f_get("DAY_LONG_NAMES");
+	
+	this._firstDayOfWeek=resourceBundle.f_get("FIRST_DAY_OF_WEEK");
+	this._twoDigitYearStart=resourceBundle.f_get("TWO_DIGIT_YEAR_START");
 
-	/**
-	 * Long form.
-	 *
-	 * @field public static final number
-	 */
-	LONG: 2,
-
-	/**
-	 * @field private static
-	 */
-	_Instance: undefined,
-	 
-	/**
-	 * @method public static final
-	 * @return f_locale
-	 */
-	Get: function() {
-		if (!f_locale._Instance) {
-			f_locale._Instance=f_locale.f_newInstance();
-		}
-		
-		return f_locale._Instance;
-	},
-	/**
-	 * @method hidden static
-	 * @return void
-	 */
-	Finalizer: function() {
-		f_locale._Instance=undefined; // f_locale
-	},
-	/**
-	 * @method private static final
-	 * @param number idx
-	 * @return String
-	 */
-	_GetLocaleNamePart: function(idx) {
-		var seps=f_env.GetLocaleName().split("_");
-		if (seps.length<=idx) {
-			return null;
-		}
-		
-		return seps[idx];
-	}
+	this._dateFormats=resourceBundle.f_get("DATE_FORMATS");
 }
 
-var __prototype = {
-	f_locale: function() {
-		this.f_super(arguments);
-
-		var resourceBundle=f_resourceBundle.Get(f_locale);
-
-		this._monthShortNames=resourceBundle.f_get("MONTH_SHORT_NAMES");
-		this._monthMedNames=resourceBundle.f_get("MONTH_MED_NAMES");
-		this._monthLongNames=resourceBundle.f_get("MONTH_LONG_NAMES");
-	
-		this._dayShortNames=resourceBundle.f_get("DAY_SHORT_NAMES");
-		this._dayMedNames=resourceBundle.f_get("DAY_MED_NAMES");
-		this._dayLongNames=resourceBundle.f_get("DAY_LONG_NAMES");
-		
-		this._firstDayOfWeek=resourceBundle.f_get("FIRST_DAY_OF_WEEK");
-		this._twoDigitYearStart=resourceBundle.f_get("TWO_DIGIT_YEAR_START");
-
-		this._dateFormats=resourceBundle.f_get("DATE_FORMATS");
-	},
+f_locale.prototype = {
 	/*
 	f_finalize: function() {
 		this._monthShortNames=undefined; // string[]
@@ -228,4 +166,71 @@ var __prototype = {
 	}
 }
 
-var f_locale=new f_class("f_locale", null, __static, __prototype);
+var __static = {
+
+	/**
+	 * Short form.
+	 *
+	 * @field public static final number
+	 */
+	SHORT: 0,
+
+	/**
+	 * Medium form.
+	 *
+	 * @field public static final number
+	 */
+	MEDIUM: 1,
+
+	/**
+	 * Long form.
+	 *
+	 * @field public static final number
+	 */
+	LONG: 2,
+
+	/**
+	 * @field private static
+	 */
+	_Instance: undefined,
+	 
+	/**
+	 * @method public static final
+	 * @return f_locale
+	 */
+	Get: function() {
+		if (!f_locale._Instance) {
+			f_locale._Instance=new f_locale();
+		}
+		
+		return f_locale._Instance;
+	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
+	Finalizer: function() {
+		f_locale._Instance=undefined; // f_locale
+	},
+	/**
+	 * @method private static final
+	 * @param number idx
+	 * @return String
+	 */
+	_GetLocaleNamePart: function(idx) {
+		var seps=f_env.GetLocaleName().split("_");
+		if (seps.length<=idx) {
+			return null;
+		}
+		
+		return seps[idx];
+	},
+	f_getName: function() {
+		return "f_getName";
+	}
+}
+
+for(var p in __static) {
+	f_locale[p]=__static[p];
+}
+

@@ -6,8 +6,13 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.component.ImageButtonComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
@@ -61,6 +66,26 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
 
     protected String getActionEventName(INameSpace nameSpace) {
         return nameSpace.getSelectionEventName();
+    }
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
+
+        ImageButtonComponent imageButtonRenderer = (ImageButtonComponent) component;
+
+        String text = componentData.getStringProperty("text");
+        if (text != null) {
+            String old = imageButtonRenderer.getText(facesContext);
+            if (text.equals(old) == false) {
+                imageButtonRenderer.setText(text);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.TEXT, old, text));
+            }
+        }
     }
 
     /**

@@ -41,14 +41,6 @@ var __prototype = {
 		this.f_super(arguments);
 		this._returnOnSelect = false;
 				
-		var v_className=f_core.GetAttribute(this, "v:className");
-		if (v_className) {
-			this._className=v_className;
-			
-		} else {
-			this._className=this.className;
-		}
-	
 		var installSelectionListener=false;
 	
 		var border=this.f_getBorderComponent();
@@ -88,8 +80,7 @@ var __prototype = {
 		}
 	},
 	f_finalize: function() {
-		this._className=undefined; // string
-		this._focus=undefined; // String
+//		this._focus=undefined; // String
 		this._tabIndex=undefined;
 		
 		var links=this._links;

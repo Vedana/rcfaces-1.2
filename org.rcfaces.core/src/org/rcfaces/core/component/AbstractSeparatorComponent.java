@@ -1,16 +1,16 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.lang.String;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.component.ISeparatorComponent;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -28,18 +28,18 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 	public final Boolean getVisibleState(FacesContext facesContext) {
 
 
-				if (engine.isPropertySetted(Properties.VISIBLE)==false) {
-					return null;
-				}
-				
-				return Boolean.valueOf(isVisible(facesContext));
+			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+				return null;
+			}
 			
+			return Boolean.valueOf(isVisible(facesContext));
+		
 	}
 
 	public final void setHiddenMode(String hiddenMode) {
 
 
-			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, null, hiddenMode)).intValue());
+			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
 	}
 
@@ -90,8 +90,8 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 	public final Boolean getVisibleState() {
 
 
-				return getVisibleState(null);
-			
+			return getVisibleState(null);
+		
 	}
 
 	protected Set getCameliaFields() {

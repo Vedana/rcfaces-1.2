@@ -10,7 +10,7 @@
  
 var __static = {
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_BODY_MENU_ID: "#body"
 }

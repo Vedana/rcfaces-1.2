@@ -17,20 +17,26 @@ var __static = {
 	 * @document this.ownerDocument
 	 */
 	_OnHeadOver: function() {
-		this.className=this._className+"_over";
+		// this = head
+		var cls="f_expandBar_head";
+		this.className=cls+" "+cls+"_over";
 	},
 	/**
 	 * @method private static
 	 * @document this.ownerDocument
 	 */
 	_OnHeadOut: function() {
-		this.className=this._className;
+		// this = head
+
+		this.className="f_expandBar_head";
 	},
 	/**
 	 * @method private static
 	 * @document this.ownerDocument
 	 */
 	_OnHeadClick: function(evt) {
+		// this = head
+
 		var expandBar=this._link;
 		
 		expandBar.f_onSelect(evt);
@@ -40,8 +46,6 @@ var __static = {
 var __prototype = {
 	f_expandBar: function() {
 		this.f_super(arguments);
-		
-		this._className=f_core.GetAttribute(this, "v:className", this.className);
 		
 		var groupName=f_core.GetAttribute(this, "v:groupName");
 		if (groupName) {
@@ -58,7 +62,6 @@ var __prototype = {
 			
 			head.onmouseover=f_expandBar._OnHeadOver;
 			head.onmouseout=f_expandBar._OnHeadOut;
-			head._className=head.className;
 		
 			var text=f_core.GetFirstElementByTagName(head, "LABEL");
 			if (text) {
@@ -84,7 +87,6 @@ var __prototype = {
 		this.f_addEventListener(f_event.SELECTION, this._onSelect);
 	},
 	f_finalize: function() {
-		// this._className=undefined; // String
 		// this._normalText=undefined; // String
 		// this._collapsedText=undefined; // String
 	
@@ -113,7 +115,6 @@ var __prototype = {
 			head.onmouseover=null;
 			head.onmouseout=null;
 			head._link=undefined; // f_expandBar
-			// head._className=undefined;
 			
 			f_core.VerifyProperties(head);
 		}
@@ -245,8 +246,16 @@ var __prototype = {
 			return;
 		}
 		var content=this._content;
+
+		var suffix="";
+		if (set) {
+			suffix+="_collapsed";
+		}	
 		
-		this.className=this._className+(set?"_collapsed":"");
+		var cls=this.f_computeStyleClass(suffix);
+		if (cls!=this.className) {
+			this.className=cls;
+		}
 		
 		var effect=this.f_getEffect();
 		
@@ -263,18 +272,31 @@ var __prototype = {
 		
 		f_core.Debug(f_expandBar, "Call effect '"+effect+"'.");
 		
+		var suffix="";
 		if (effect) {
 			effect.f_performEffect(set);
+			suffix=false;
 
 		} else if (set) {
-			content.className="f_expandBar_content_collapsed";
-			body.className="f_expandBar_body_collapsed";
-			
-		} else  {
-			content.className="f_expandBar_content";
-			body.className="f_expandBar_body";
+			suffix+="_collapsed";
 		}
 		
+		if (suffix!==false) {
+			var contentClassName="f_expandBar_content";
+			var bodyClassName="f_expandBar_body";
+			if (suffix) {
+				contentClassName+=" "+contentClassName+"_collapsed";
+				bodyClassName+=" "+bodyClassName+"_collapsed";
+			}
+			
+			if (content.className!=contentClassName) {
+				content.className=contentClassName;
+			}
+			if (body.className!=bodyClassName) {
+				body.className=bodyClassName;
+			}
+		}
+				
 		if (!set && this._groupName) {
 			var p=this;
 			
@@ -309,16 +331,21 @@ var __prototype = {
 		effect = f_core.GetAttribute(this, "v:effect");
 		if (effect) {
 			effect=f_core.CreateEffectByName(effect, content, function(value) {
-				var contentClassName="f_expandBar_content";
-				var bodyClassName="f_expandBar_body";
 				
+				var suffix="";
 				if (value==0) {
 					display="none";
-					contentClassName+="_collapsed";
-					bodyClassName+="_collapsed";
+					suffix+="_collapsed";
 					
 				} else if (value!=1) {
-					contentClassName+="_effect";				
+					suffix+="_effect";				
+				}
+				
+				var contentClassName="f_expandBar_content";
+				var bodyClassName="f_expandBar_body";
+				if (suffix) {
+					contentClassName+=" "+contentClassName+suffix;
+					bodyClassName+=" "+bodyClassName+suffix;
 				}
 				
 				if (content.className!=contentClassName) {
@@ -352,7 +379,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setText: function(text) {
-		f_core.Assert(typeof(text)=="string", "Invalid text parameter ! ('"+text+"')");
+		f_core.Assert(typeof(text)=="string", "f_expandBar.f_setText: Invalid text parameter ! ('"+text+"')");
 
 		if (this._normalText == text) {
 			return;
@@ -381,7 +408,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setCollapsedText: function(text) {
-		f_core.Assert(typeof(text)=="string", "Invalid text parameter ! ('"+text+"')");
+		f_core.Assert(typeof(text)=="string", "f_expandBar.f_setCollapsedText: Invalid text parameter ! ('"+text+"')");
 
 		if (this._collapsedText == text) {
 			return;

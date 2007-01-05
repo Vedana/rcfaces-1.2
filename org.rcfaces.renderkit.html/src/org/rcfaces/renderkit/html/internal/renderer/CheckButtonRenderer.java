@@ -13,7 +13,6 @@ import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
@@ -35,14 +34,6 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
     public static final String INPUT = "_input";
 
     public static final String TEXT = "_text";
-
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        encodeComponent(htmlWriter);
-
-        super.encodeEnd(writer);
-    }
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {

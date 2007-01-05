@@ -15,29 +15,25 @@
 	user-select: none;
 	border: 1px dotted #999999;
 	background-color: #EEEEEE;
-	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif; 
-	font-size: 11px;
+	font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
 	text-align: left;
 	vertical-align: baseline;
 }
 
-.f_pager_pgoto_disabled {
+.f_pager_button {
+	color: #666;
+	text-decoration: none;
+}
+
+.f_pager_button_goto_disabled {
 	font-weight: bold;
 	color: black;
 }
 
-.f_pager_pfirst_disabled, 
-.f_pager_plast_disabled, 
-.f_pager_pprev_disabled, 
-.f_pager_pnext_disabled {
+.f_pager_button_first_disabled, 
+.f_pager_button_last_disabled, 
+.f_pager_button_prev_disabled, 
+.f_pager_button_next_disabled {
 	color: #AAA;
 }
 
-.f_pager_pfirst, 
-.f_pager_plast, 
-.f_pager_pprev, 
-.f_pager_pnext,
-.f_pager_pgoto {
-	color: #666;
-	text-decoration: none;
-}

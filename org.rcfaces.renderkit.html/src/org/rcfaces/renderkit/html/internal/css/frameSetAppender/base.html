@@ -8,9 +8,16 @@ window._Camelia_frameSetAppend=function() {
 
 	window._logAppender.apply(this, arguments);
 }
-window.f_profilerCB=function(name, date) {
+window.f_profilerCB=function(timeEnd, name, date) {
 	if (!window._logAppender) {
 		return;
+	}
+	
+	if (timeEnd===false) {
+		name="ENTER: "+name;
+		
+	} else if (timeEnd===true) {
+		name="EXIT: "+name;
 	}
 
 	window._logAppender.call(this, "profiler", name, date);

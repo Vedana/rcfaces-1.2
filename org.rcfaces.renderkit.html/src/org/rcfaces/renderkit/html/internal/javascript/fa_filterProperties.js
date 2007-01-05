@@ -54,9 +54,10 @@ var __prototype = {
 	 * @method public
 	 * @param String name1
 	 * @param String value1
+	 * @param String... name2
 	 * @return void
 	 */
-	f_setFilterProperty: function(name1, value1) {
+	f_setFilterProperty: function(name1, value1, name2) {
 		var properties=this._filterProperties;
 		if (!properties) {
 			properties=new Object;

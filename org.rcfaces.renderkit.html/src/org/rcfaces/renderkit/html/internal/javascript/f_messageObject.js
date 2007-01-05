@@ -41,7 +41,7 @@ var __static = {
 
 function f_messageObject(severity, summary, detail) {
 	f_core.Assert(typeof(severity)=="number", "Bad type of severity");
-	f_core.Assert(summary, "Bad summary");
+//	f_core.Assert(summary, "Bad summary"); // Summary can be null
 
 	this._severity=severity;
 	this._summary=summary;

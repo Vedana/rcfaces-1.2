@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ExpandBarComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.capability.ICollapsableCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -71,8 +72,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         writeJavaScriptAttributes(htmlWriter);
 
         boolean collapsed = expandBarComponent.isCollapsed(facesContext);
-        writeCssAttributes(htmlWriter, (collapsed) ? "_collapsed" : null,
-                CSS_ALL_MASK);
+        writeCssAttributes(htmlWriter);
 
         String normalText = expandBarComponent.getText(facesContext);
         if (normalText != null) {
@@ -90,8 +90,6 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         String text = normalText;
         if (collapsed) {
             htmlWriter.writeAttribute("v:collapsed", "true");
-            htmlWriter.writeAttribute("v:className",
-                    getStyleClassName(expandBarComponent));
 
             if (collapsedText != null) {
                 text = collapsedText;
@@ -164,6 +162,19 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.enableJavaScript();
+    }
+
+    protected String computeComponentStyleClass(UIComponent component,
+            String classSuffix) {
+        classSuffix = super.computeComponentStyleClass(component, classSuffix);
+
+        if (component instanceof ICollapsableCapability) {
+            if (((ICollapsableCapability) component).isCollapsed()) {
+                classSuffix += "_collapsed";
+            }
+        }
+
+        return classSuffix;
     }
 
     protected String getContentClassName(IHtmlWriter writer, boolean collapsed) {

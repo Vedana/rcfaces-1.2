@@ -482,18 +482,26 @@
 		</component>
 	</tag>
 	<tag>
-		<tag-name>textEntry</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.textEntry</component-type>
-			<renderer-type>org.rcfaces.core.textEntry</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.TextEntryHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
 		<tag-name>textArea</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.textArea</component-type>
 			<renderer-type>org.rcfaces.core.textArea</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.TextAreaHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>textEditor</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.textEditor</component-type>
+			<renderer-type>org.rcfaces.core.textEditor</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.TextEditorHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>textEntry</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.textEntry</component-type>
+			<renderer-type>org.rcfaces.core.textEntry</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.TextEntryHandler</handler-class>
 		</component>
 	</tag>
@@ -608,6 +616,12 @@
 		</converter>
 	</tag>
 	<tag>
+		<tag-name>selectionListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.SelectionListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
 		<tag-name>validationParameter</tag-name>
 		<handler-class>
 			org.rcfaces.core.internal.facelets.ValidationParameterHandler
@@ -617,6 +631,30 @@
 		<tag-name>serverData</tag-name>
 		<handler-class>
 			org.rcfaces.core.internal.facelets.ServerDataHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>checkListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.CheckListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>doubleClickListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.DoubleClickListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>propertyChangeListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.PropertyChangeListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>userEventListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.UserEventListenerHandler
 		</handler-class>
 	</tag>
 	<tag>

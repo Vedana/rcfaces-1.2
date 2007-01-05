@@ -308,11 +308,15 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
         private Object contextState;
 
+        private String contentType;
+
         public InteractiveContext() {
         }
 
         public InteractiveContext(IHtmlRenderContext htmlRenderContext) {
             contextState = htmlRenderContext.saveRenderContextState();
+            contentType = htmlRenderContext.getFacesContext()
+                    .getResponseWriter().getContentType();
         }
 
         private InteractiveBuffer renderTree(FacesContext facesContext,
@@ -322,7 +326,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             Writer buffer = new CharArrayWriter(TREE_BUFFER_INITIAL_SIZE);
 
             ResponseWriter newWriter = facesContext.getRenderKit()
-                    .createResponseWriter(buffer, null,
+                    .createResponseWriter(buffer, contentType,
                             AbstractHtmlService.RESPONSE_CHARSET);
 
             facesContext.setResponseWriter(newWriter);
@@ -344,11 +348,14 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
         }
 
         public void restoreState(FacesContext context, Object state) {
-            this.contextState = state;
+            Object states[] = (Object[]) state;
+
+            this.contextState = states[0];
+            this.contentType = (String) states[1];
         }
 
         public Object saveState(FacesContext context) {
-            return contextState;
+            return new Object[] { contextState, contentType };
         }
     }
 
@@ -618,19 +625,25 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             return new Object[] { content, hasObject };
         }
 
-        public void readExternal(ObjectInput in) {
-            // Pas de serialization !
+        public void readExternal(ObjectInput in) throws ClassNotFoundException,
+                IOException {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("readExternal of interactive buffer.");
             }
+
+            Object external = in.readObject();
+
+            restoreState(null, external);
         }
 
-        public void writeExternal(ObjectOutput out) {
-            // Pas de serialization !
+        public void writeExternal(ObjectOutput out) throws IOException {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("writeExternal of interactive buffer.");
             }
 
+            Object external = saveState(null);
+
+            out.writeObject(external);
         }
     }
 }

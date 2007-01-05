@@ -5,7 +5,7 @@
 /**
  * Aspect GroupName
  *
- * @aspect hidden fa_groupName
+ * @aspect public fa_groupName
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

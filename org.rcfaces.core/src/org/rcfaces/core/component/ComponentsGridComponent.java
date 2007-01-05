@@ -1,18 +1,19 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.component.capability.IBorderCapability;
 
 /**
  * Reserved for future use
@@ -133,45 +134,45 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
-	public final java.lang.String getHorizontalScrollPosition() {
+	public final int getHorizontalScrollPosition() {
 		return getHorizontalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getHorizontalScrollPosition() getHorizontalScrollPosition()} for more details
 	 */
-	public final java.lang.String getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HORIZONTAL_SCROLL_POSITION, facesContext);
+	public final int getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HORIZONTAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setHorizontalScrollPosition(java.lang.String horizontalScrollPosition) {
+	public final void setHorizontalScrollPosition(int horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
 	/**
-	 * See {@link #setHorizontalScrollPosition(String) setHorizontalScrollPosition(String)} for more details
+	 * See {@link #setHorizontalScrollPosition(int) setHorizontalScrollPosition(int)} for more details
 	 */
 	public final void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
-	public final java.lang.String getVerticalScrollPosition() {
+	public final int getVerticalScrollPosition() {
 		return getVerticalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getVerticalScrollPosition() getVerticalScrollPosition()} for more details
 	 */
-	public final java.lang.String getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VERTICAL_SCROLL_POSITION, facesContext);
+	public final int getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.VERTICAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setVerticalScrollPosition(java.lang.String verticalScrollPosition) {
+	public final void setVerticalScrollPosition(int verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
 	/**
-	 * See {@link #setVerticalScrollPosition(String) setVerticalScrollPosition(String)} for more details
+	 * See {@link #setVerticalScrollPosition(int) setVerticalScrollPosition(int)} for more details
 	 */
 	public final void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);

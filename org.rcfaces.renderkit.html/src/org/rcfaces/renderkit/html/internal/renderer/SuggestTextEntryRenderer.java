@@ -12,7 +12,6 @@ import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
@@ -32,6 +31,13 @@ import org.rcfaces.renderkit.html.internal.decorator.SuggestTextEntryDecorator;
 public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         IFilteredItemsRenderer {
     private static final String REVISION = "$Revision$";
+
+    protected void encodeComponent(IHtmlWriter htmlWriter)
+            throws WriterException {
+        htmlWriter.enableJavaScript();
+
+        super.encodeComponent(htmlWriter);
+    }
 
     protected IHtmlWriter writeInputAttributes(IHtmlWriter writer)
             throws WriterException {
@@ -85,12 +91,6 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         }
 
         return writer;
-    }
-
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        ((IHtmlWriter) writer).enableJavaScript();
-
-        super.encodeEnd(writer);
     }
 
     protected void encodeJavaScript(IJavaScriptWriter writer)

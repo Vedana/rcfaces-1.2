@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_dataGrid extends f_component, fa_readOnly, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_checkManager
+ * @class public f_dataGrid extends f_component, fa_readOnly, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_checkManager, fa_scrollPositions
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -47,22 +47,22 @@ var __static = {
 	_USE_BACKGROUND_IMAGE: false,
 	
 	/** 
-	 * @field private static final string	
+	 * @field private static final String	
 	 */
 	_BLANK_IMAGE_URL: "/blank.gif",
 	
 	/** 
-	 * @field private static final string	
+	 * @field private static final String	
 	 */
 	_ROW_MENU_ID: "#row",	
 
 	/** 
-	 * @field private static final string	
+	 * @field private static final String	
 	 */
 	_BODY_MENU_ID: "#body",
 
 	/** 
-	 * @field private static final string	
+	 * @field private static final String	
 	 */
 	_HEAD_MENU_ID: "#head",
 	
@@ -77,6 +77,21 @@ var __static = {
 	_SORT_PADDING: 18,
 	
 	/** 
+	 * @field private static final number	
+	 */
+	_FULL_WAITING: 0,
+
+	/** 
+	 * @field private static final number	
+	 */
+	_END_WAITING: 1,
+
+	/** 
+	 * @field private static final number	
+	 */
+	_ROWS_WAITING: 2,	
+	
+	/** 
 	 * @field private static 	
 	 */
 	_DragOldCursor: undefined,
@@ -85,7 +100,7 @@ var __static = {
 	 * @field private static	
 	 */
 	_DragColumn: undefined,
-	
+		
 	/**
 	 * @method private static
 	 */
@@ -172,7 +187,7 @@ var __static = {
 		var menuId=f_dataGrid._BODY_MENU_ID;
 		
 		// S'il y a une seule selection, on bascule en popup de ligne !
-		if (this._selectable && dataGrid._currentSelection.length>0) {
+		if (this._selectable && dataGrid._currentSelection.length) {
 			menuId=f_dataGrid._ROW_MENU_ID;	
 		}
 		
@@ -296,9 +311,9 @@ var __static = {
 			}
 		
 			var th=document.createElement("TH");
-			var thClassName=dataGrid._className+"_tcell";
+			var thClassName="f_dataGrid_tcell";
 			if (dataGrid.f_isDisabled()) {
-				thClassName+="_disabled";
+				thClassName+=" "+thClassName+"_disabled";
 			}
 			th.className=thClassName;
 			th.innerHTML="&nbsp;";
@@ -401,7 +416,7 @@ var __static = {
 		
 			if (!dataGrid._cursor && this._selectable) {
 				var currentSelection=dataGrid._currentSelection;
-				if (currentSelection.length>0) {
+				if (currentSelection.length) {
 					dataGrid._cursor=currentSelection[0];
 				}
 	
@@ -480,7 +495,7 @@ var __static = {
 	_Link_onkeydown: function(evt) {
 		var dataGrid=this._dataGrid;
 		// On peut vouloir faire PAGE-DOWN/UP avec un repeat ! => pas de boite d'alerte !
-		if (dataGrid.f_getEventLocked()) {
+		if (dataGrid.f_getEventLocked(!dataGrid._waitingLoading)) {
 			return false;
 		}
 		if (!evt) evt = window.event;
@@ -718,11 +733,48 @@ var __static = {
 			}
 		}
 		
-		if (dataGrid._paged===false && dataGrid._waitingRow && dataGrid._waitingLoading===false) {
-			var pos=dataGrid._waitingRow.offsetTop-scrollBody.scrollTop-scrollBody.offsetHeight;
+		var waitingRow=dataGrid._waitingRow;
+		if (waitingRow && waitingRow.parentNode) {
+			var sbTop=scrollBody.scrollTop+scrollBody.offsetHeight;
+		
+			var pos=waitingRow.offsetTop-sbTop;
 			
 			if (pos<0) {
-				dataGrid._performPagedLoading(evt);
+				if (dataGrid._waitingMode==f_dataGrid._END_WAITING) {
+					if (!dataGrid._waitingLoading) {
+						dataGrid._performPagedLoading(evt);
+					}
+
+				} else {				
+					// Recherche le dernier index visible !
+					
+					var nodes=waitingRow.parentNode.childNodes;
+					
+					var i=0;
+					for(;i<nodes.length;i++) {
+						var node=nodes[i];
+						
+						if (node.offsetTop>sbTop) {
+							break;
+						}
+					}
+			
+//					document.title="Last="+i;
+					
+					if (dataGrid._waitingLoading) {
+						dataGrid._performRowsLoading(evt, i);
+						
+					} else { // Pour eviter que l'on lance le download, on attend que ca se stabilise
+						dataGrid._waitingLoading=true;
+						
+						i+=dataGrid._rows/2; // On prend une petite marge ...
+						
+						window.setTimeout(function() {
+							dataGrid._performRowsLoading(evt, i);
+						}, 100);
+					}
+				}
+			
 			}
 		}
 		
@@ -859,7 +911,7 @@ var __static = {
 		if (w<24) {
 			if (column._ascendingOrder!==undefined && !column._restoreClass) {
 				column._restoreClass=column._label.className;
-				column._label.className=dataGrid._className+"_ttext";
+				column._label.className="f_dataGrid_ttext";
 			}
 			
 		} else if (column._restoreClass) {
@@ -965,30 +1017,6 @@ var __static = {
 		dataGrid._dragDeltaX=undefined;
 		dataGrid._dragOriginX=undefined;
 		dataGrid._dragMousePosition=undefined;
-	},
-	/**
-	 * @method private static
-	 */
-	_InitializeScrollbars: function(dataGrid) {
-		if (!dataGrid._scrollBody) {
-			return;
-		}
-		
-		var pos=dataGrid._initialHorizontalScrollPosition;
-		if (pos) {
-			dataGrid._scrollBody.scrollLeft=pos;
-			if (dataGrid._scrollTitle) {
-				dataGrid._scrollTitle.scrollLeft=pos;
-			}
-		}
-		
-		pos=dataGrid._initialVerticalScrollPosition;
-		if (pos) {
-			dataGrid._scrollBody.scrollTop=pos;
-			if (dataGrid._scrollTitle) {
-				dataGrid._scrollTitle.scrollTop=pos;
-			}
-		}
 	},
 	/**
 	 * @method private static
@@ -1135,38 +1163,20 @@ var __prototype = {
 		if (f_core.GetAttribute(this, "v:resizable")) {
 			this._resizable=true;
 		}
-			
-		var hsp=f_core.GetAttribute(this, "v:hsp");
-		if (hsp) {
-			this._initialHorizontalScrollPosition=hsp;
-		}
-			
-		var vsp=f_core.GetAttribute(this, "v:vsp");
-		if (vsp) {
-			this._initialVerticalScrollPosition=vsp;
-		}
 
-		this._className=f_core.GetAttribute(this, "v:className");
-		if (!this._className) {
-			this._className=this.className;
-		}
-
-		var tableClass=this._className;
-		tableClass+="_table";
+		var tableClass="f_dataGrid_table";
 		// C'est un Aspect ! aussi la variable est initializée aprés le constructeur !
-		if (f_core.GetAttribute(this, "v:disabled")) {
-			tableClass+="_disabled";
-		}
-		this._table = f_core.GetChildByCssClass(this, tableClass);
-		if (this._table) {
-			this._table._dataGrid=this;	
+		
+		var table = f_core.GetChildByCssClass(this, tableClass);
+		f_core.Assert(table, "Can not find table '"+tableClass+"'");
+		this._table = table;
+		table._dataGrid=this;	
 
-			var bodies=this._table.getElementsByTagName("TBODY");
-			f_core.Assert(bodies.length==1, "Too many TBODY !");
-			this._tbody=bodies[0];
-			
-			this._table.removeChild(this._tbody);
-		}
+		var bodies=table.getElementsByTagName("TBODY");
+		f_core.Assert(bodies.length==1, "Too many TBODY !");
+		this._tbody=bodies[0];
+		
+		table.removeChild(this._tbody);
 		
 		this.f_openActionList(f_event.MOUSEDOWN);
 		this.f_openActionList(f_event.MOUSEUP);
@@ -1188,7 +1198,7 @@ var __prototype = {
 			this._dataGrid=this;
 			
 		} else if (f_core.IsGecko()) {
-			focus=f_core.GetChildByCssClass(this,this._className+"_dataBody_scroll");
+			focus=f_core.GetChildByCssClass(this,"f_dataGrid_dataBody_scroll");
 			if (focus) {
 				focus.onfocus=f_dataGrid._Link_onfocus;
 				focus.onblur=f_dataGrid._Link_onblur;
@@ -1201,7 +1211,7 @@ var __prototype = {
 		} else {
 			focus=document.createElement("A");
 			this._cfocus=focus;
-			focus.className=this._className+"_focus";
+			focus.className="f_dataGrid_focus";
 			focus.onfocus=f_dataGrid._Link_onfocus;
 			focus.onblur=f_dataGrid._Link_onblur;
 			focus.onkeydown=f_dataGrid._Link_onkeydown;
@@ -1214,16 +1224,16 @@ var __prototype = {
 				focus.tabIndex=this.tabIndex;
 			}
 			
-			this._table.appendChild(focus);
+			table.appendChild(focus);
 		}
 
 		var scrollBody=this;
 		var catchScrollEvent=false;
-		this._title=f_core.GetChildByCssClass(this,this._className+"_fttitle");
+		this._title=f_core.GetChildByCssClass(this,"f_dataGrid_fttitle");
 		if (this._title) {
-			this._scrollTitle=f_core.GetChildByCssClass(this,this._className+"_dataTitle_scroll");
+			this._scrollTitle=f_core.GetChildByCssClass(this,"f_dataGrid_dataTitle_scroll");
 			if (this._scrollTitle) {
-				var dataBodyClassName=this._className+"_dataBody_scroll";
+				var dataBodyClassName="f_dataGrid_dataBody_scroll";
 
 				scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
 				
@@ -1231,7 +1241,8 @@ var __prototype = {
 				/*
 				if (!f_core.IsGecko()) {
 					// Sous GECKO on peut avoir un probleme de layout !
-					//f_dataGrid._InitializeScrollbars(this);
+
+					this.fa_initializeScrollBars();
 				}*/
 			}			
 		}
@@ -1278,6 +1289,9 @@ var __prototype = {
 		}
 	*/	
 	
+//		this._endRowIndex=undefined; // number
+		this._shadowRows=undefined; // HtmlTRElement[]
+//		this._waitingMode=undefined; // number
 //		this._visibleColumnsCount=undefined; // number
 //		this._titleLayout=undefined; // boolean
 //		this._documentComplete=undefined; // boolean
@@ -1287,6 +1301,7 @@ var __prototype = {
 //		this._waitingIndex=undefined; // number
 //		this._waitingSelection=undefined; // number
 
+//		this._partialWaiting=undefined; // boolean
 // 		this._loading=undefined; // boolean
 		this._waiting=undefined; // 
 		this._waitingRow=undefined; // HTMLTrElement
@@ -1319,7 +1334,6 @@ var __prototype = {
 			this._releaseColumns();
 			this._columns=undefined;
 		}
-//		this._className=undefined;  // string
 		this._columnOver=undefined; // HTMLColElement
 		this._columnSelected=undefined;  // HTMLColElement
 //		this._rowValueColumnIndex=undefined; // string
@@ -1381,11 +1395,8 @@ var __prototype = {
 			f_core.VerifyProperties(cfocus);
 		}
 		
-		this._cursor=undefined;
+		// this._cursor=undefined; // fait dans f_releaseRows()
 
-		
-//		this._initialHorizontalScrollPosition=undefined; // string
-//		this._initialVerticalScrollPosition=undefined; // string
 		
 //		this._initSort=undefined;  // boolean
 //		this._resizable=undefined; // boolean
@@ -1447,7 +1458,7 @@ var __prototype = {
 					continue;
 				}
 
-				if (v.length>0) {
+				if (v.length) {
 					v+=",";
 				}
 				
@@ -1456,21 +1467,21 @@ var __prototype = {
 			this.f_setProperty(f_prop.COLUMN_WIDTHS, v);
 		}
 		
-		if (this._scrollBody) {
-			var body=this._scrollBody;
-			
-			this.f_setProperty(f_prop.HORZSCROLLPOS, body.scrollLeft);
-			this.f_setProperty(f_prop.VERTSCROLLPOS, body.scrollTop);
+		var cursor=this._cursor;
+		if (cursor) {
+			cursor=this.fa_getElementValue(cursor);
 		}
-
+		this.f_setProperty(f_prop.CURSOR, cursor);
+	
 		return this.f_super(arguments);
 	},
 
 	f_update: function() {
-	
 		if (this._tbody) {
 			f_core.Assert(this._tbody.parentNode!=this._table, "Tbody has not been detached !");
-			this._table.appendChild(this._tbody);			
+			this._table.appendChild(this._tbody);
+
+			this.fa_initializeScrollBars();
 		}
 		
 		this.f_super(arguments);
@@ -1496,7 +1507,7 @@ var __prototype = {
 			this.f_getClass().f_getClassLoader().addVisibleComponentListener(this);
 			
 		} else {
-			// Visible !
+			// Visible !			
 	
 	/* On le fait sur le onload !
 			if (!f_core.IsInternetExplorer()) {
@@ -1520,6 +1531,8 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_performComponentVisible: function() {
+		f_core.Debug(f_dataGrid, "f_performComponentVisible: rows="+this._rows+" paged="+this._paged+" rowCount="+this._rowCount);
+
 		f_dataGrid._UpdateTitle(this);
 
 		if (f_core.IsGecko()) {				
@@ -1528,15 +1541,29 @@ var __prototype = {
 				this._table.parentNode.style.height=this._table.offsetHeight+"px";
 			}
 		}
-
+		
 		if (this._rows>0 && !this._paged) {
 			// Pas de mode page, pourtout il y a une limite ....
-			// On affiche une wait !
+			// On affiche un wait !
 			
-			this._addPagedWait();
+			if (this._rowCount>=0) {
+				// On affiche des lignes vides ....
+				
+				this._waitingMode=f_dataGrid._ROWS_WAITING;
+				
+				this._addWaitingRows();
+				
+			} else {
+				this._waitingMode=f_dataGrid._END_WAITING;
+
+				this._addPagedWait();
+			}
+			
+		} else {
+			this._waitingMode=f_dataGrid._FULL_WAITING
 		}
 
-		f_dataGrid._InitializeScrollbars(this);		
+		this.fa_initializeScrollBars();
 
 		if (this._interactiveShow) {
 			this.f_setFirst(this._first, this._cursor);			
@@ -1547,6 +1574,8 @@ var __prototype = {
 	 * @method private
 	 */
 	_removePagedWait: function() {
+		f_core.Assert(this._waitingMode==f_dataGrid._END_WAITING, "f_dataGrid._removePagedWait: Invalid waiting mode !");
+		
 		var waiting=this._pagedWaiting;
 		if (waiting) {
 			this._pagedWaiting=undefined;
@@ -1565,12 +1594,54 @@ var __prototype = {
 	/**
 	 * @method private
 	 */
-	_addPagedWait: function() {
-	
-		f_core.Debug(f_dataGrid, "AddPagedWait: rowCount="+this._rowCount+" rows="+this._rows);
+	_addWaitingRows: function() {
+		f_core.Debug(f_dataGrid, "_addWaitingRows: rowCount="+this._rowCount+" rows="+this._rows);
 		
-		if (this._rowCount<0 || (this._rows==this._rowCount)) {
+		if (this._rows==this._rowCount) {
 //		alert("RowCount="+this._rowCount+"/"+this._rows);
+			this._waitingRow=undefined;
+			return;			
+		}		
+		
+		var shadows=this._shadowRows;
+		if (shadows) {
+		 	// Deja installé ! On repositionne juste le curseur
+		 	this._waitingRow=shadows[0];
+			return;
+		}
+		
+		shadows=new Array;
+		this._shadowRows=shadows;
+		
+		var body=this._tbody;
+		
+		for (var i=this._rows;i<this._rowCount;i++) {
+			var tr=document.createElement("TR");
+			shadows.push(tr);
+			body.appendChild(tr);
+			
+			var td=document.createElement("TD");
+			td.colSpan=this._visibleColumnsCount;
+			td.className="f_dataGrid_shadowCell";
+
+			tr.appendChild(td);
+			
+			td.innerHTML="&nbsp;"; // #"+i;
+		}
+		
+		this._waitingRow=shadows[0];
+	},
+	/**
+	 * @method private
+	 */
+	_addPagedWait: function() {
+		f_core.Assert(this._waitingMode==f_dataGrid._END_WAITING, "f_dataGrid._addPagedWait: Invalid waiting mode !");
+	
+		f_core.Debug(f_dataGrid, "_addPagedWait: rowCount="+this._rowCount+" rows="+this._rows);
+		
+		var poolSize=this._rowsPool.length;
+		if (poolSize==this._rowCount) {
+		//alert("RowCount="+this._rowCount+"/"+this._rows);
 			return;
 		}
 		
@@ -1582,13 +1653,13 @@ var __prototype = {
 		var waitTR=document.createElement("TR");
 		tbody.appendChild(waitTR);
 		this._waitingRow=waitTR;
-		this._waitingLoading=false;
+		this._waitingLoading=undefined;
 		
-		var rowIdx=tbody.childNodes.length;
+		var rowIdx=this._rowsPool.length;
 		if (rowIdx % 2) {
-			waitTR.className=this._className+"_row_odd";
+			waitTR.className="f_dataGrid_row_odd";
 		} else {
-			waitTR.className=this._className+"_row_even";
+			waitTR.className="f_dataGrid_row_even";
 		}
 		
 		var td=document.createElement("TD");
@@ -1606,9 +1677,55 @@ var __prototype = {
 	 */
 	_performPagedLoading: function(evt, cursorIndex) {
 		this._waitingLoading=true;
+		
+		this.f_appendCommand(function(dataGrid) {
+			var poolSize=dataGrid._rowsPool.length;
+		
+			dataGrid._callServer(poolSize, 0, cursorIndex, undefined, true);
+		});	
+	},
+
+	/**
+	 * @method private
+	 */
+	_performRowsLoading: function(evt, endIndex) {
+		this._waitingLoading=true;
+		
+		var index=this._endRowIndex;
+
+		f_core.Debug(f_dataGrid, "_performRowsLoading: endIndex="+endIndex+" cur="+index);
+
+		if (index && endIndex<index) {
+			return;
+		}
+	
+		this._endRowIndex=endIndex;
 	
 		this.f_appendCommand(function(dataGrid) {			
-			dataGrid._callServer(dataGrid._rows, cursorIndex, undefined, true);
+			var index=this._endRowIndex;
+			var poolSize=dataGrid._rowsPool.length;
+
+			if (!index || index<poolSize) {
+				f_core.Debug(f_dataGrid, "_performRowsLoading.appendCommand: Ignore index="+index+" poolSize="+poolSize);
+				
+				dataGrid.f_processNextCommand();
+				return;
+			}
+			
+			this._endRowIndex=undefined;
+		
+			var length=index-poolSize;
+			if (length<this._rows) {
+				length=this._rows;
+			}
+			
+			if (poolSize+length>=this._rowCount) {
+				length=this._rowCount-poolSize;
+			}
+			
+			f_core.Debug(f_dataGrid, "_performRowsLoading.appendCommand: Call server poolSize="+poolSize+" length="+length+" end="+index+" rows="+this._rows);
+			
+			dataGrid._callServer(poolSize, length, index, undefined, true);
 		});		
 	},
 	
@@ -1632,7 +1749,7 @@ var __prototype = {
 		}
 		
 		if (this.f_isDisabled()) {
-			var className=this._className+"_tcell_disabled";
+			var className="f_dataGrid_tcell f_dataGrid_tcell_disabled";
 		
 			for(var i=0;i<heads.length;i++) {
 				heads[i].className=className;
@@ -1685,7 +1802,7 @@ var __prototype = {
 							
 							var cursor=document.createElement("DIV");
 							cursor.title="Maintenez appuyer pour redimensionner la colonne";
-							cursor.className=this._className+"_colCursor";
+							cursor.className="f_dataGrid_colCursor";
 							column._box.appendChild(cursor);
 							column._cursor=cursor;
 							cursor._column=column;
@@ -1715,10 +1832,15 @@ var __prototype = {
 	f_isRowSelected: function(row) {
 		return (row._selected)?true:false;
 	},
+	/**
+	 * @method protected
+	 */
 	fa_updateElementStyle: function(row) {
 		var className;
+		var rowClassName=row._className;
+		
 		if (this.f_isDisabled()) {
-			className=row._className+"_disabled";
+			className=rowClassName+"_disabled";
 
 			if (row._selected) {	
 				className+="_selected";
@@ -1727,16 +1849,16 @@ var __prototype = {
 		} else if (row._selected) {
 			// Pas de classe avec parité !
 			
-			className=this._className+"_row_selected";
+			className="f_dataGrid_row_selected";
 			if (this._focus) {
 				className+="_focus";
 			}
 
 		} else if (this._selectable) {
-			className=row._className+"_normal";
+			className=rowClassName+"_normal";
 			
 		} else {
-			className=row._className;
+			className=rowClassName;
 		}
 		
 		if (row.className!=className) {
@@ -1759,66 +1881,86 @@ var __prototype = {
 			}
 		}
 		
-		var cursorStyle;
 		if (this._cursor==row) {
 			if (!row._hasCursor) {
 				row._hasCursor=true;
-				cursorStyle="_cell_cursor";
 			}
-		} else if (row._hasCursor) {			
-			row._hasCursor=undefined;
-			cursorStyle="_cell";
-		}
-		
-		
-		if (cursorStyle) {
-			var td=f_core.GetFirstElementByTagName(row, "TD");
-			if (td) {
-				td.id=this._className+cursorStyle;
-			}
-		}
-	},
-	_updateColumnsStyle: function(row) {
-		var cols=this._columns;
-		var tds=row.getElementsByTagName("TD");
-
-		if (!row._selected) {
-			var idx=0;
 			
-			for(var i=0;i<cols.length;i++) {
-				var col=cols[i];
-				if (!col._visibility) {
-					continue;
-				}
-
-				var td=tds[idx++];
-				var className=td._cellStyleClass;
-				
-				if (!className) {
-					if (row._index % 2) {
-						className=col._userClassOdd;
-	
-					} else {
-						className=col._userClassEven;
-					}
-				}
-								
-				if (!className) {
-					continue;
-				}
-				
-				if (td.className==className) {
-					continue;
-				}
-				
-				td.className=className;
-			}
-
-			return;			
+		} else if (row._hasCursor) {	
+			row._hasCursor=undefined;
 		}
 		
-		for(var i=0;i<tds.length;i++) {
-			tds[i].className=null;
+		this._updateColumnsStyle(row, true);
+	},
+	/**
+	 * @method private
+	 */
+	_updateColumnsStyle: function(row, firstOnly) {
+		var tds=row.getElementsByTagName("TD");
+		var tdsLength=(firstOnly)?1:tds.length;
+
+		if (row._selected) {
+			var className="f_dataGrid_cell f_dataGrid_cell_selected";
+			
+			var firstClassName=className+" f_dataGrid_cell_left";
+			if (row._hasCursor) {
+				firstClassName=className+" f_dataGrid_cell_cursor";
+			}
+
+			for(var i=0;i<tdsLength;i++) {
+				if (!i) {
+					tds[i].className=firstClassName;
+					continue;
+				}
+				
+				tds[i].className=className;
+			}
+			
+			return;
+		}
+		
+		var cols=this._columns;
+		var idx=0;
+		
+		for(var i=0;i<cols.length;i++) {
+			var col=cols[i];
+			if (!col._visibility) {
+				continue;
+			}
+			
+			if (idx>=tdsLength) {
+				break;
+			}
+
+			var td=tds[idx++];
+			var cclassName=td._cellStyleClass;
+			
+			if (!cclassName) {
+				if (row._index % 2) {
+					cclassName=col._userClassOdd;
+
+				} else {
+					cclassName=col._userClassEven;
+				}
+			}
+			
+			className="f_dataGrid_cell";
+			if (cclassName) {
+				className+=" "+cclassName;
+			}
+
+			if (idx==1) {
+				className+=" f_dataGrid_cell_left";
+				if (this._cursor==row) {
+					className+=" f_dataGrid_cell_cursor";
+				}
+			}
+			
+			if (td.className==className) {
+				continue;
+			}
+			
+			td.className=className;
 		}
 	},
 	/**
@@ -1869,31 +2011,42 @@ var __prototype = {
 	 * @method hidden
 	 */
 	_addRow: function() {
-		var idx=0;
-		
 		f_core.Assert(this._tbody, "No table body !");
 		
-		var row=document.createElement("TR");
-		this._tbody.appendChild(row);
+		var row;
+		var firstCell;
+		var shadowRows=this._shadowRows;
+		if (shadowRows && shadowRows.length) {
+			row=shadowRows.shift();
+			firstCell=row.firstChild;
+			
+			while (firstCell.hasChildNodes()) {
+				firstCell.removeChild(firstCell.lastChild);
+			}
+			
+			f_core.Assert(row.tagName=="TR", "Invalid row ! "+row);
+			
+		} else {
+			row=document.createElement("TR");
+			this._tbody.appendChild(row);
+		}
 		this._rowsPool.push(row);
 		row._dataGrid=this;
 		
-		var rowIdx=this._tbody.childNodes.length;
+		var rowIdx=this._rowsPool.length;
 		
+		var idx=0;
 		row._index=arguments[idx++];
 		row.id="row"+row._index;
-		if (rowIdx % 2) {
-			row.className=this._className+"_row_odd";
-		} else {
-			row.className=this._className+"_row_even";
-		}
-		row._className=row.className;
+		
+		var className=((rowIdx % 2)?"f_dataGrid_row_odd":"f_dataGrid_row_even");
+		row.className=className;
+		row._className=className;
 		
 		if (this._selectable || this._checkable) {
 			row.onmousedown=f_dataGrid._RowMouseDown;
 			row.onmouseup=f_core.CancelEventHandler;
 			row.onclick=f_core.CancelEventHandler;
-//						td.onmouseup=f_dataGrid._ReturnFalse;
 			row.ondblclick=f_dataGrid._RowMouseDblClick;
 			row.onfocus=f_dataGrid._GotFocus;
 		}
@@ -1940,18 +2093,27 @@ var __prototype = {
 				}
 		
 				if (col._visibility) {
-					td=document.createElement("TD");
-					row.appendChild(td);
+					if (firstCell) {
+						td=firstCell;
+						td.colSpan=1; // pour le shadow
+						td.className="";
+						firstCell=undefined;
+						
+					} else {
+						td=document.createElement("TD");
+						row.appendChild(td);
+					}
+					
 					this._cellsPool.push(td);
 					
-					var className=this._className+"_cell";
-					if (countTd===0) {
-						className+="_left";
+					var className="f_dataGrid_cell";
+					if (!countTd) {
+						className+=" "+className+"_left";
 	
 						td._className=className;
 					}
 					
-					td.id=className;
+					td.className=className;
 					td.valign="top";
 					td.noWrap=true;
 					td._text=cellText;
@@ -1966,7 +2128,7 @@ var __prototype = {
 					var cellImage=null;
 					if (col._cellImage || col._defaultCellImage) {
 						cellImage=document.createElement("IMG");
-						cellImage.className=this._className+"_imageCell";
+						cellImage.className="f_dataGrid_imageCell";
 						cellImage.width=f_dataGrid._IMAGE_WIDTH;
 						cellImage.height=f_dataGrid._IMAGE_HEIGHT;
 
@@ -2005,7 +2167,7 @@ var __prototype = {
 					}
 								
 					if (this._checkable) {
-						if (countTd==0) {
+						if (!countTd) {
 							var input=document.createElement("INPUT");
 							row._input=input;
 							
@@ -2028,7 +2190,7 @@ var __prototype = {
 							input.onfocus=f_dataGrid._GotFocus;
 							input._row=row;
 							input.tabIndex=-1;
-							input.className=this._className+"_input";
+							input.className="f_dataGrid_input";
 							
 							if (this.f_isDisabled()) {
 								input.disabled=true;
@@ -2040,24 +2202,25 @@ var __prototype = {
 								td.appendChild(cellImage);
 							}
 
-							row._label=document.createElement("LABEL");
-							if (cellText && cellText.length>0) {
-								row._label.appendChild(document.createTextNode(cellText));
+							var label=document.createElement("LABEL");
+							row._label=label;
+							if (cellText && cellText.length) {
+								label.appendChild(document.createTextNode(cellText));
 							}
-							row._label.className=this._className+"_label";
-							td.appendChild(row._label);
+							label.className="f_dataGrid_label";
+							td.appendChild(label);
 							
 							this.fa_updateElementCheck(row, checked);
 						}
 					}
 					
-					if (countTd>0 || !row._input) {
+					if (countTd || !row._input) {
 						if (cellImage) {
 							td.appendChild(cellImage);
 						}
 						
 						var span=document.createElement("LABEL");
-						span.className=this._className+"_label";
+						span.className="f_dataGrid_label";
 						td.appendChild(span);
 						
 						if (!cellText) {
@@ -2134,7 +2297,7 @@ var __prototype = {
 		this.f_performPagedComponentInitialized();
 
 		if (selectionChanged) {
-			this._fireSelectionChangedEvent();
+			this.fa_fireSelectionChangedEvent();
 		}
 		if (checkChanged) {
 			this.fa_fireCheckChangedEvent();
@@ -2155,13 +2318,19 @@ var __prototype = {
 		if (!this.fa_componentUpdated) {
 			return;
 		}
-		var suffix=(disabled)?"_disabled":"";
+		var suffix=(disabled)?"_disabled":null;
 		
-		this.className=this._className+suffix;
-		if (!this._table) {
+		this.className=this.f_computeStyleClass(suffix);
+		
+		var table=this._table;
+		if (!table) {
 			return;
 		}
-		this._table.className=this._className+"_table"+suffix;
+		var className="f_dataGrid_table";
+		if (disabled) {
+			className+=" "+className+"_disabled";
+		}
+		table.className=className;
 	
 		var rows=this._table.rows;
 		for(var i=0;i<rows.length;i++) {
@@ -2171,19 +2340,25 @@ var __prototype = {
 				continue;
 			}
 			
-			if (row._input) {
-				row._input.disabled=disabled;
+			var input=row._input;
+			if (row && row.disabled!=disabled) {
+				row.disabled=disabled;
 			}
 			
 			this.fa_updateElementStyle(row);
 		}
+		
+		className="f_dataGrid_tcell";
+		if (disabled) {
+			className+=" "+className+"_disabled";
+		}
 
 		var ths=this._listTitleCells();
-		if (ths && ths.length>0) {
+		if (ths && ths.length) {
 			for(var i=0;i<ths.length;i++) {
 				var th=ths[i];
 				
-				th.className=this._className+"_tcell"+suffix;
+				th.className=className;
 			}
 		}			
 	},
@@ -2462,9 +2637,10 @@ var __prototype = {
 		var cells=row._cells;
 		var index=0;
 		
+		var columns=this._columns;
 		if (typeof(columnIndex)=="number") {
-			for(var i=0;i<this._columns.length;i++) {
-				var col=this._columns[i];
+			for(var i=0;i<columns.length;i++) {
+				var col=columns[i];
 	
 				if (col._visibility===null) {
 					if (columnIndex==i) {
@@ -2483,8 +2659,8 @@ var __prototype = {
 			return null;
 		}
 		
-		for(var i=0;i<this._columns.length;i++) {
-			var col=this._columns[i];
+		for(var i=0;i<columns.length;i++) {
+			var col=columns[i];
 
 			if (col._visibility===null) {
 				if (col._id==columnIndex) {
@@ -2582,7 +2758,7 @@ var __prototype = {
 	
 		if (this._interactive) {
 			this.f_appendCommand(function(dataGrid) {			
-				dataGrid._callServer(index, cursorIndex, selection);
+				dataGrid._callServer(index, 0, cursorIndex, selection);
 			});
 			
 			return false;
@@ -2603,7 +2779,7 @@ var __prototype = {
 
 		return true;
 	},
-	_callServer: function(firstIndex, cursorIndex, selection, waitingPage) {
+	_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
 			selection=0;
@@ -2612,6 +2788,9 @@ var __prototype = {
 		var params=new Object;
 		params.dataGridId=this.id;
 		params.index=firstIndex;
+		if (length>0) {
+			params.rows=length;
+		}
 
 		var orderColumnIndex=this.f_getProperty(f_prop.SORT_INDEX);
 		if (orderColumnIndex) {
@@ -2625,10 +2804,11 @@ var __prototype = {
 
 		this._waitingIndex=cursorIndex;
 		this._waitingSelection=selection;
+		this._partialWaiting=partialWaiting;
 		
 		f_core.Debug(f_dataGrid, "Call server  firstIndex="+firstIndex+" cursorIndex="+cursorIndex+" selection="+selection);
 
-		if (!waitingPage) {
+		if (!partialWaiting) {
 			var tbody=this._tbody;
 			
 			var scrollBody=this._scrollBody;
@@ -2650,9 +2830,11 @@ var __prototype = {
 					this._table.removeChild(tbody);
 				}
 
-				if (this._pagedWaiting) {
+				if (this._waitingMode==f_dataGrid._END_WAITING) {
 					this._removePagedWait();
 				}
+				this._shadowRows=undefined;
+				this._endRowIndex=undefined;
 	
 				while (tbody.hasChildNodes()) {
 					tbody.removeChild(tbody.lastChild);
@@ -2660,7 +2842,7 @@ var __prototype = {
 			}
 		}
 		
-		var waitingObject=(waitingPage)?this._pagedWaiting:this._waiting;
+		var waitingObject=(partialWaiting && !length)?this._pagedWaiting:this._waiting;
 
 		var url=f_env.GetViewURI();
 		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
@@ -2690,7 +2872,7 @@ var __prototype = {
 					return;
 				}
 	 		
-				dataGrid._loading=false;		
+				dataGrid._loading=undefined;		
 
 				if (waitingObject) {
 					waitingObject.f_hide();
@@ -2727,7 +2909,9 @@ var __prototype = {
 					var ret=request.f_getResponse();
 					
 					if (dataGrid._waitingLoading) {
-						dataGrid._removePagedWait();
+						if (dataGrid._waitingMode==f_dataGrid._END_WAITING) {
+							dataGrid._removePagedWait();
+						}
 					}
 					
 					//alert("ret="+ret);
@@ -2738,12 +2922,15 @@ var __prototype = {
 					
 					if (waitingObject) {
 						waitingObject.f_hide(true);					
-					}
+					}					
 					
-					if (dataGrid._rows>0 && !dataGrid._paged) {
-						dataGrid._waitingLoading=false;
-						
+					dataGrid._waitingLoading=undefined;
+
+					if (dataGrid._waitingMode==f_dataGrid._END_WAITING) {						
 						dataGrid._addPagedWait();
+						
+					} else if (dataGrid._waitingMode==f_dataGrid._ROWS_WAITING) {
+						dataGrid._addWaitingRows();
 					}
 				}
 	
@@ -2805,7 +2992,7 @@ var __prototype = {
 					
 					if (!this._selectionFullState) {
 						// Pas de fullstate: elles sont perdues !
-						this._fireSelectionChangedEvent();
+						this.fa_fireSelectionChangedEvent();
 					}
 				}
 			}
@@ -2819,7 +3006,7 @@ var __prototype = {
 					
 					if (!this._checkFullState) {
 						// Pas de fullstate: elles sont perdues !
-						this._fireSelectionChangedEvent();
+						this.fa_fireSelectionChangedEvent();
 					}
 				}			
 			}
@@ -2832,14 +3019,15 @@ var __prototype = {
 		f_core.Debug(f_dataGrid, "Update new page _rowCount='"+this._rowCount+"' _maxRows="+this._maxRows+"' _rows='"+this._rows+"'.");
 
 		if (this._rowCount<0) {
-			if (this._maxRows<this._first+this._rows) {
-				this._maxRows=this._first+this._rows;
+			var poolSize=this._rowsPool.length;
+			if (this._maxRows<poolSize) {
+				this._maxRows=poolSize;
 			}
 		}
 
 		var cursorRow=undefined;
 		var tbody=this._tbody;
-		if (tbody && !this._waitingLoading) {
+		if (tbody && !this._partialWaiting) {
 			f_core.Assert(tbody.parentNode!=this._table, "Tbody has not been detached !");
 			
 			this._table.appendChild(tbody);
@@ -2877,13 +3065,17 @@ var __prototype = {
 					this._table.parentNode.style.height=h+"px";
 				}
 			}
+			
 		
-			if (this._rows>=0 && !this._paged) {
-				this._rows=rows.length;
+			switch(this._waitingMode) {
+			case f_dataGrid._ROWS_WAITING:
+				this._addWaitingRows();
+				break;
+				
+			case f_dataGrid._END_WAITING:
+				this._addPagedWait();
+				break;
 			}
-
-		} else {
-			this._rows=tbody.childNodes.length;
 		}
 	
 		this.fa_componentUpdated=true;
@@ -3795,7 +3987,9 @@ var __prototype = {
 		}
 	},
 	/**
-	 * @XXX
+	 * Not implemented
+	 *
+	 * @method public 
 	 * @return String
 	 */
 	f_getCellImageURL: function(row, columnIndex) {
@@ -3850,9 +4044,14 @@ var __prototype = {
 			}
 
 			var td=tds[tdIdx++];
+
+			var cls=arguments[argIdx++];
+			if (!cls) {
+				continue;
+			}
 					
-			td._cellStyleClass=arguments[argIdx++];
-			td.className=td._cellStyleClass;
+			td._cellStyleClass=cls;
+			td.className="f_dataGrid_cell "+cls;
 		}
 	},
 	/**
@@ -4049,13 +4248,13 @@ var __prototype = {
 		this._sortTable();
 	},
 	_updateTitleStyle: function(column) {
-		var className=this._className+"_tcell";
+		var className="f_dataGrid_tcell";
 
 		if (this._columnSelected==column) {
-			className+="_selected";
+			className+=" "+className+"_selected";
 
 		} else if (this._columnOver==column) {
-			className+="_over";
+			className+=" "+className+"_over";
 		}
 
 		var head=column._head;
@@ -4063,9 +4262,9 @@ var __prototype = {
 			head.className=className;
 		}
 	
-		className=this._className+"_ttext";
+		className="f_dataGrid_ttext";
 		
-		var stextClassName=this._className+"_stext";
+		var stextClassName="f_dataGrid_stext";
 		
 		var suffix="";
 		var wc=className;
@@ -4076,10 +4275,9 @@ var __prototype = {
 			} else {
 				suffix="_descending";
 			}
+			className+=" "+className+suffix;
+			stextClassName+=" "+stextClassName+suffix;
 		}
-		
-		className+=suffix;
-		stextClassName+=suffix;
 		
 		var cw=column._col.style.width;
 		var swidth;
@@ -4249,8 +4447,8 @@ var __prototype = {
 			body.appendChild(row);
 		}
 
-		var odd=this._className+"_row_odd";
-		var even=this._className+"_row_even";
+		var odd="f_dataGrid_row_odd";
+		var even="f_dataGrid_row_even";
 
 		for(var i=0;i<trs.length;i++) {
 			var row=trs[i];
@@ -4364,6 +4562,10 @@ var __prototype = {
 		return this._isElementValueSelected(row); 
 	},
 
+	fa_getElementItem: function(row) {
+		return row;
+	},
+
 	fa_getElementValue: function(row) {
 		f_core.Assert(row && row.tagName=="TR", "f_dataGrid.fa_getElementValue: Invalid element parameter ! ("+row+")");
 
@@ -4412,7 +4614,16 @@ var __prototype = {
 		f_core.Assert(row && row.tagName=="TR", "f_dataGrid.fa_setElementChecked: Invalid element parameter ! ("+row+")");
 
 		row._checked=checked;
-	}	
+	},
+	fa_getScrolledComponent: function() {
+		return this._scrollBody;
+	},
+	fa_getScrolledHorizontalTitle: function() {
+		return this._scrollTitle;
+	},
+	fa_getScrolledVerticalTitle: function() {
+		return null;
+	}
 }
  
-var f_dataGrid=new f_class("f_dataGrid", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_checkManager);
+var f_dataGrid=new f_class("f_dataGrid", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_checkManager, fa_scrollPositions);

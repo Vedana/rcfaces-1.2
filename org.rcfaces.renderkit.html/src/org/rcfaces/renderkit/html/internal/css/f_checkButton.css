@@ -35,4 +35,5 @@
 
 .f_checkButton_text_disabled {
 	color: #A1A192;
+	cursor: default;
 }

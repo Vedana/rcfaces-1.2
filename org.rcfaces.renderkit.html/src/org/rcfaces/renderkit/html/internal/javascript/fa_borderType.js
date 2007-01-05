@@ -13,7 +13,7 @@
 var __static = {
 	
 	/** 
-	 * @field hidden static final string 
+	 * @field hidden static final String 
 	 */
 	NONE_BORDER_TYPE: "none",
 

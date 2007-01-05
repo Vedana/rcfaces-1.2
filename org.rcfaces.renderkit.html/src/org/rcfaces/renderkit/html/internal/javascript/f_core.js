@@ -18,38 +18,38 @@ var __SYMBOL=function(x) { return x };
  * f_core class
  *
  * @class public f_core extends Object
- * @author Joel Merlin + Olivier Oeuillot
+ * @author Olivier Oeuillot + Joel Merlin
  * @version $Revision$ $Date$
  */
 var f_core = {
 
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	SERIALIZED_DATA: 	"VFC_SERIAL",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_COMPONENT:	"VFC_COMPONENT",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_EVENT: 	"VFC_EVENT",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_VALUE:		"VFC_VALUE",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_ITEM:		"VFC_ITEM",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_DETAIL:	"VFC_DETAIL",
 		
@@ -59,32 +59,32 @@ var f_core = {
 	_FOCUS_TIMEOUT_DELAY: 100,
 	
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	FIREFOX_1_0: "firefox.1.0",
 		
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	FIREFOX_1_5: "firefox.1.5",
 
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	FIREFOX_2_0: "firefox.2.0",
 
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	INTERNET_EXPLORER_6: "iexplorer.6",
 
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	INTERNET_EXPLORER_7: "iexplorer.7",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_UNKNOWN_BROWER: "unknown",
 
@@ -96,7 +96,7 @@ var f_core = {
 	_POPUP_BUTTON: 2,
 
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	JAVASCRIPT_VOID: "javascript:void(0)",
 
@@ -106,7 +106,8 @@ var f_core = {
 	_BLOCK_TAGS: new RegExp(
 		"^(ADDRESS|APPLET|BLOCKQUOTE|BODY|CAPTION|CENTER|COL|COLGROUP|DD|DIR|DIV|" +
 		"DL|DT|FIELDSET|FORM|FRAME|FRAMESET|H1|H2|H3|H4|H5|H6|HR|IFRAME|LI|MENU|" +
-		"NOSCRIPT|NOFRAMES|OBJECT|OL|P|PRE|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|UL){1}$"
+		"NOSCRIPT|NOFRAMES|OBJECT|OL|P|PRE|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|UL){1}$", 
+		"i"
 	),
 
 	/**
@@ -297,6 +298,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @return void
 	 */
 	_FlushLogs: function() {		
 		if (!window.f_log) {
@@ -312,7 +314,7 @@ var f_core = {
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param optional Error exception An exception if any.
-	 * @param optional Window win	 
+	 * @param optional hidden Window win	 
 	 * @return void
 	 */
 	Debug: function(name, message, exception, win) {
@@ -330,6 +332,12 @@ var f_core = {
 	 * @return boolean <code>true</code> if debug logging  is enabled.
 	 */
 	IsDebugEnabled: function(name) {
+		if (typeof(name)!="string" && name.f_getName) {
+			var className=name.f_getName();
+			f_core.Assert(typeof(className)=="string", "Invalid class name of object '"+name+"'.");
+			name=className;
+		}
+
 		f_core.Assert(typeof(name)=="string", "f_core.IsDebugEnabled: name parameter is invalid. ('"+name+"')");
 		if (!window.f_log) {
 			return (f_core.DebugMode);
@@ -342,7 +350,7 @@ var f_core = {
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param optional Error exception An exception if any.
-	 * @param optional Window win	 
+	 * @param optional hidden Window win	 
 	 * @return void
 	 */
 	Trace: function(name, message, exception, win) {
@@ -355,7 +363,7 @@ var f_core = {
      * (for example, <code>String</code> concatenation)
      * when the log level is more than trace. </p>
 	 *
-	 * @method public static final
+	 * @method public static
 	 * @param String name Log name.
 	 * @return boolean <code>true</code> if debug logging  is enabled.
 	 */
@@ -372,7 +380,7 @@ var f_core = {
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param optional Error exception An exception if any.
-	 * @param optional Window win	 
+	 * @param optional hidden Window win	 
 	 * @return void
 	 */
 	Info: function(name, message, exception, win) {
@@ -398,7 +406,8 @@ var f_core = {
 	 * @method public static
 	 * @param String name Log name.
 	 * @param String message The message.
-	 * @param Error exception An exception if any.	 
+	 * @param optional Error exception An exception if any.	 
+	 * @param optional hidden Window win	 
 	 * @return void
 	 */
 	Warn: function(name, message, exception, win) {
@@ -425,12 +434,12 @@ var f_core = {
 	 * @param String name Log name.
 	 * @param String message The message.
 	 * @param optional Error exception An exception if any.
-	 * @param optional Window win	 
+	 * @param optional hidden Window win	 
 	 * @return void
 	 */
 	Error: function(name, message, exception, win) {
 	
-		f_core.Profile("f_core.Error("+name+") "+message+"\n"+exception);
+//		f_core.Profile(null, "f_core.Error("+name+") "+message+"\n"+exception);
 	
 		if (f_core.DebugMode) {
 			if (!exception) {
@@ -489,7 +498,7 @@ var f_core = {
 		f_core.DebugMode=debugMode;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @return void
 	 */
 	SetProfilerMode: function(profilerMode) {
@@ -501,14 +510,14 @@ var f_core = {
 		}
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @return void
 	 */
 	SetDesignerMode: function(designerMode) {
 		f_core.DesignerMode=designerMode;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @return void
 	 */
 	_InitLibrary: function(window) {
@@ -535,8 +544,7 @@ var f_core = {
 		if (profilerCB) {
 			f_core.Info("f_core", "Enable profiler mode");
 			
-			f_core.Profile("f_core.loading", initDate);
-			f_core.Profile("f_core.initializing");
+			f_core.Profile(null, "f_core.initializing", initDate);
 		}
 			
 		if (window.cameliaVersion) {
@@ -551,7 +559,7 @@ var f_core = {
 		}
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @param HTMLElement component
 	 * @param String name Event name
 	 * @param function Called callback.
@@ -574,7 +582,7 @@ var f_core = {
 	    component.addEventListener(name, fct, capture);
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @param HTMLElement component
 	 * @param String name Event name
 	 * @param function Called callback.
@@ -599,12 +607,19 @@ var f_core = {
 	    component.removeEventListener(name, fct, capture);
 	},
 	/**
-	 * @method hidden static final
+	 * @method private static
+	 * @return void
+	 */
+	_NoProfile: function() {		
+	},
+	/**
+	 * @method hidden static
+	 * @param boolean timeEnd
 	 * @param String name of profile point.
 	 * @param optional any Date of profile point. (Can be 'Date' or numer)
 	 * @return void
 	 */
-	Profile: function(name, date) {
+	Profile: function(timeEnd, name, date) {
 		if (f_core._LoggingProfile) {
 			return;
 		}
@@ -638,6 +653,13 @@ var f_core = {
 				date=date.getTime();
 			}
 		
+			if (timeEnd===false) {
+				name="ENTER: "+name;
+				
+			} else if (timeEnd===true) {
+				name="EXIT: "+name;
+			}
+		
 			var diff=date-window._f_core_initLibraryDate;
 			if (diff<1) {
 				f_core.Debug("f_core.profile", "Profiler: "+name+"  "+date);
@@ -655,7 +677,7 @@ var f_core = {
 	 */
 	_OnInit: function() {
 		var now=new Date();
-		f_core.Profile("f_core.onInit.enter", now);
+		f_core.Profile(false, "f_core.onInit", now);
 		try {		
 			f_core._FlushLogs();	
 	
@@ -694,13 +716,13 @@ var f_core = {
 			// Les objets non encore initializés		
 			window._classLoader._initializeObjects();
 	
-			f_core.Profile("f_core.onInit.objects");
+			f_core.Profile(null, "f_core.onInit.objects");
 
 			// Initialize packages here
 			window._classLoader._onDocumentComplete();
 	
 		} finally {
-			f_core.Profile("f_core.onInit.exit");
+			f_core.Profile(true, "f_core.onInit");
 		}
 	},
 	/** 
@@ -735,7 +757,7 @@ var f_core = {
 		f_core.Debug("f_core", "Hook Html FORM tag id=\""+f.id+"\".");
 	},
 	/**
-	 * @method private static final
+	 * @method private static
 	 */
 	_FormFindComponent: function() {
 		// Nous sommes dans le scope d'un formulaire !
@@ -743,7 +765,7 @@ var f_core = {
 		return fa_namingContainer.FindComponents(this, arguments);
 	},
 	/**
-	 * @method private static final
+	 * @method private static
 	 */
 	_OnExit: function() {
 		var win=this;
@@ -752,7 +774,7 @@ var f_core = {
 		try {		
 			var document=win.document;
 	
-			f_core.Profile("f_core.onExit.enter");
+			f_core.Profile(false, "f_core.onExit");
 			try {
 				
 				f_core.RemoveEventListener(win, "load", f_core._OnInit);
@@ -810,7 +832,7 @@ var f_core = {
 				}
 				
 			} finally {
-				f_core.Profile("f_core.onExit.exit");
+				f_core.Profile(true, "f_core.onExit");
 			}
 		} finally {
 			win._f_exiting=undefined;
@@ -838,7 +860,8 @@ var f_core = {
 			}
 		}
 		
-		var inputs=form.getElementsByTagName("INPUT");
+		var inputs=f_core.GetElementsByTagName(form, "INPUT");
+				
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
 			
@@ -934,21 +957,24 @@ var f_core = {
 		
 		var doc=component.ownerDocument;
 		
-		if (text && accessKey && accessKey.length>0) {
+		if (text && accessKey && accessKey.length) {
 			var idx=text.toLowerCase().indexOf(accessKey.toLowerCase());
 			if (idx>=0) {
 				for(;component.firstChild;) {
 					component.removeChild(component.firstChild);
 				}
 
-				component.appendChild(doc.createTextNode(text.substring(0, idx)));
+				if (idx) {
+					component.appendChild(doc.createTextNode(text.substring(0, idx)));
+				}
 
 				var ul=doc.createElement("U");
 				component.appendChild(ul);
+				ul.className="f_accessKey";
 				
 				ul.appendChild(doc.createTextNode(text.charAt(idx)));
 			
-				if (idx<text.length-1) {
+				if (idx+1<text.length) {
 					component.appendChild(doc.createTextNode(text.substring(idx+1)));
 				}
 				
@@ -1058,96 +1084,99 @@ var f_core = {
 	 * @method private static
 	 */
 	_OnSubmit: function(evt) {
-		f_core.Profile("f_core.SubmitEvent");
-
-		if (!evt) {
-			evt = window.event;
-		}
-
-		// f_core.Assert(evt, "f_core._OnSubmit: Event is not known ?");
-		// evt peut être null !
-
-		if (!window._submitting && f_env.GetCancelExternalSubmit()) {
-			return f_core.CancelEvent(evt);
-		}
+		f_core.Profile(false, "f_core.SubmitEvent");
+		try {
+			if (!evt) {
+				evt = window.event;
+			}
 	
-		var win;
-		var form;
+			// f_core.Assert(evt, "f_core._OnSubmit: Event is not known ?");
+			// evt peut être null !
+	
+			if (!window._submitting && f_env.GetCancelExternalSubmit()) {
+				return f_core.CancelEvent(evt);
+			}
 		
-		if (!this.tagName || this.tagName.toUpperCase()!="FORM") {
-			// C'est une window ?
-
-			if (evt.relatedTarget) {
-				form = evt.relatedTarget;
+			var win;
+			var form;
+			
+			if (!this.tagName || this.tagName.toUpperCase()!="FORM") {
+				// C'est une window ?
+	
+				if (evt.relatedTarget) {
+					form = evt.relatedTarget;
+					
+				} else if (evt.srcElement) {
+					form = evt.srcElement;
+				}
+				win=window;
 				
-			} else if (evt.srcElement) {
-				form = evt.srcElement;
-			}
-			win=window;
-			
-		} else {		
-			form=this;	
-			win=f_core.GetWindow(form);
-		}
-		
-		f_core.Assert(form && form.tagName.toUpperCase()=="FORM", "Can not identify form ! ("+form+")");
-		f_core.Assert(win, "Can not identify window !");
-
-		f_core.Info("f_core", "Catch submit event from form '"+form.id+"'.");
-
-		if (win.f_event) {
-			if (win.f_event.GetEventLocked(true)) {
-				return f_core.CancelEvent(evt);
-			}
-		}
-
-		if (!form._initialized) {
-			//f_core.Assert(form._initialized, "Not initialized form '"+form.id+"'.");
-
-			// Cas ou l'utilisateur va plus vite que la musique ! (avant le onload de la page)
-			
-			if (f_env.IsSubmitUntilPageCompleteLocked()) {
-				return f_core.CancelEvent(evt);
+			} else {		
+				form=this;	
+				win=f_core.GetWindow(form);
 			}
 			
-			// On essaye d'initialiser les objets qui ne sont pas encore initializés
-			window._classLoader._initializeObjects();
-			
-			// XXX Il faut peut etre attendre QUE TOUTS LES OBJETS soient initialisés ?
-			
-			// On initialize la form !				
-			f_core.InitializeForm(form); 
-		}
-		
-		var immediate;
-		var component=win.f_event.GetComponent();
-
-		f_core.Debug("f_core", "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
-		if (component && component.f_isImmediate) {
-			immediate=component.f_isImmediate();
-
-			f_core.Debug("f_core", "Test immediate property of '"+component.id+"' = "+immediate);
-		}
-		
-		if (immediate!==true && f_env.GetCheckValidation()) {
-			var valid=f_core._CallFormCheckListeners(form);
-			
-			f_core.Profile("f_core.SubmitEvent.checkListeners");
-			
-			f_core.Debug(f_core, "Validation of checkers returns: "+valid);
-			if (!valid) {
-				return f_core.CancelEvent(evt);
+			f_core.Assert(form && form.tagName.toUpperCase()=="FORM", "Can not identify form ! ("+form+")");
+			f_core.Assert(win, "Can not identify window !");
+	
+			f_core.Info("f_core", "Catch submit event from form '"+form.id+"'.");
+	
+			if (win.f_event) {
+				if (win.f_event.GetEventLocked(true)) {
+					return f_core.CancelEvent(evt);
+				}
 			}
-		}
-		
-		var classLoader=win._classLoader;
-		if (classLoader) {
-			classLoader.serialize(form);
+	
+			if (!form._initialized) {
+				//f_core.Assert(form._initialized, "Not initialized form '"+form.id+"'.");
+	
+				// Cas ou l'utilisateur va plus vite que la musique ! (avant le onload de la page)
+				
+				if (f_env.IsSubmitUntilPageCompleteLocked()) {
+					return f_core.CancelEvent(evt);
+				}
+				
+				// On essaye d'initialiser les objets qui ne sont pas encore initializés
+				window._classLoader._initializeObjects();
+				
+				// XXX Il faut peut etre attendre QUE TOUTS LES OBJETS soient initialisés ?
+				
+				// On initialize la form !				
+				f_core.InitializeForm(form); 
+			}
 			
-			f_core.Profile("f_core.SubmitEvent.serialized");
-		}
+			var immediate;
+			var component=win.f_event.GetComponent();
+	
+			f_core.Debug("f_core", "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
+			if (component && component.f_isImmediate) {
+				immediate=component.f_isImmediate();
+	
+				f_core.Debug("f_core", "Test immediate property of '"+component.id+"' = "+immediate);
+			}
 			
-		return true;
+			if (immediate!==true && f_env.GetCheckValidation()) {
+				var valid=f_core._CallFormCheckListeners(form);
+				
+				f_core.Profile(null, "f_core.SubmitEvent.checkListeners");
+				
+				f_core.Debug(f_core, "Validation of checkers returns: "+valid);
+				if (!valid) {
+					return f_core.CancelEvent(evt);
+				}
+			}
+			
+			var classLoader=win._classLoader;
+			if (classLoader) {
+				classLoader.serialize(form);
+				
+				f_core.Profile(null, "f_core.SubmitEvent.serialized");
+			}
+				
+			return true;
+		} finally {
+			f_core.Profile(true, "f_core.SubmitEvent");
+		}
 	},
 	/**
 	 * @method private static
@@ -1158,7 +1187,7 @@ var f_core = {
 		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "Submit: modal parameter must be undefined or a boolean.");
 		
 		
-		f_core.Profile("f_core.submit.enter("+url+")");
+		f_core.Profile(false, "f_core._submit("+url+")");
 
 		try {
 			// Check if we get called from the form itself and use it if none specified
@@ -1216,7 +1245,7 @@ var f_core = {
 				win._submitting=undefined;
 			}
 
-			f_core.Profile("f_core.submit.onSubmit.called");
+			f_core.Profile(null, "f_core._submit.called");
 			
 			// Serialize element if found
 			var id=null;
@@ -1284,12 +1313,12 @@ var f_core = {
 					}
 				}
 	
-				f_core.Profile("f_core.submit.preSubmit");
+				f_core.Profile(null, "f_core._submit.preSubmit");
 					
 				// Don't replace the current handler form.submit() and call the previous
 				form._oldSubmit();
 	
-				f_core.Profile("f_core.submit.postSubmit");
+				f_core.Profile(null, "f_core._submit.postSubmit");
 		
 				if (closeWindow) {
 					win._f_closeWindow=true;
@@ -1338,7 +1367,7 @@ var f_core = {
 
 			return true;
 		} finally {		
-			f_core.Profile("f_core.submit.exit("+url+")");
+			f_core.Profile(true, "f_core._submit("+url+")");
 		}
 	},
 	/**
@@ -1588,7 +1617,7 @@ var f_core = {
 		return newWindow;
 	},
 	/**
-	 * @method private static final
+	 * @method private static
 	 */
 	_CallFormCheckListeners: function(form) {
 		var checkListeners=form._checkListeners;
@@ -1680,7 +1709,7 @@ var f_core = {
 		return ret;
 	},
 	/**
-	 * @method private static final
+	 * @method private static
 	 * @param HTMLFormElement form
 	 * @param Event event
 	 * @return boolean
@@ -1757,7 +1786,7 @@ var f_core = {
 		return resetListeners.f_removeElement(component);
 	},
 	/**
-	 * @method public static final
+	 * @method public static
 	 * @param optional String url
 	 * @param optional String dest Window name.
 	 * @param optional HTMLElement elt
@@ -1777,7 +1806,7 @@ var f_core = {
 	/**
 	 * Submit the page, and open a new window to show the response.
 	 * 
-	 * @method public static final
+	 * @method public static
 	 * @param optional String dest Window name.
 	 * @param optional Object createWindowParameters
 	 * @param optional boolean modal
@@ -1790,7 +1819,7 @@ var f_core = {
 	/**
 	 * Submit the page, and open a new window to show the response.
 	 * 
-	 * @method public static final
+	 * @method public static
 	 * @param optional String dest Window name.
 	 * @param optional Object createWindowParameters
 	 * @param optional f_event event Event if any.
@@ -1807,7 +1836,7 @@ var f_core = {
 	/**
 	 * Submit the page, and close the window.
 	 *
-	 * @method public static final
+	 * @method public static
 	 * @param optional f_event event 
 	 * @return boolean <code>true</code> if success.
 	 */
@@ -1817,29 +1846,35 @@ var f_core = {
 	/**
 	 * Returns the window associated to the specified element.
 	 *
-	 * @method hidden static final
+	 * @method hidden static
 	 * @param HTMLElement elt HTML element.
 	 * @return Window Window associated to the element.
 	 */
 	GetWindow: function(elt) {		
+		f_core.Assert(elt && (elt.nodeType==1 || elt.nodeType==9), "f_core.GetWindow: Invalid elt parameter ("+elt+")");
+
 		// Cas de IE, si elt est déjà un Document !
-		if (elt.window) {
-			return elt.window;
+		var view=elt.window;
+		if (view) {
+			return view;
 		}
 		
 		var doc;
-		if (elt.nodeType && elt.nodeType==9) { // 9=document
+		if (elt.nodeType==9) { // nodeType=9 => Document
 			doc=elt;
 	
-		} else {
+		} else { // nodeType=1 => Element
 			doc=elt.ownerDocument;
 		}
 		
-		f_core.Assert(doc, "Can not find window of component '"+elt+"'.");
+		f_core.Assert(doc, "f_core.GetWindow: Can not find window of component '"+elt+"'.");
 		
-		if (doc.defaultView) { // DOM Level 2
-			return doc.defaultView;
+		view=doc.defaultView; // DOM Level 2
+		if (view) { 
+			return view;
 		}
+		
+		f_core.Assert(doc.parentWindow, "f_core.GetWindow: Invalid document: "+doc);
 		
 		return doc.parentWindow;
 	},
@@ -1849,9 +1884,27 @@ var f_core = {
 	 */
 	_InstanceOf: function(elt, claz, css) {
 		if (css) {
-			return (elt.className && elt.className==claz)? elt:null;
+			var cs=elt.className;
+			if (!cs) {
+				return null;
+			}
+			
+			// Pas de classes composite ?
+			if (cs.indexOf(' ')<0) {
+				return (cs==claz)?elt:null;
+			}
+			
+			var classes=cs.split(" ");
+			for(var i=0;i<classes.length;i++) {
+				if (classes[i]==claz) {
+					return elt;
+				}
+			}
+			
+			return null;
 		}
-		if (elt._kclass && elt._kclass._name==claz) {
+		var kclass=elt._kclass;
+		if (kclass && kclass._name==claz) {
 			return elt;
 		}
 		if (elt.nodeType==1 && f_core.GetAttribute(elt, "v:class")==claz) {
@@ -1862,7 +1915,7 @@ var f_core = {
 	/**
 	 * Find a child with a specified css class.
 	 *
-	 * @method public static final
+	 * @method public static
 	 * @param HTMLElement elt Start node.
 	 * @param String claz Css class name. 
 	 * @return HTMLElement
@@ -1871,12 +1924,47 @@ var f_core = {
 		return f_core.GetChildByClass(elt,claz,true);
 	},
 	/**
+	 * @method hidden static
+	 * @param HTMLElement elt Root of the search.
+	 * @param String tagName Tag name.
+	 * @return HTMLElement[]
+	 */
+	GetElementsByTagName: function(elt, tagName) {
+		f_core.Assert(typeof(elt)=="object" && elt.nodeType, "f_core.GetElementsByTagName: Invalid element parameter ("+elt+").");
+		f_core.Assert(typeof(tagName)=="string" && tagName.length, "f_core.GetElementsByTagName: Invalid tagName parameter ("+tagName+").");
+
+		if (!f_env._SensitiveCaseTagName) {
+			return elt.getElementsByTagName(tagName);
+		}
+
+		var tags=elt.getElementsByTagName("*");
+		if (tagName=="*") {
+			return tags;
+		}
+
+		var ret=new Array;
+		tagName=tagName.toLowerCase();
+	
+		for(var i=0;i<tags.length;i++) {
+			var tag=tags[i];
+			
+			if (tag.tagName.toLowerCase()!=tagName) {
+				continue;
+			}	
+			
+			ret.push(tag);
+		}
+		
+		return ret;
+	},
+	
+	/**
 	 * Find a child with a specified class.
 	 *
-	 * @method public static final
+	 * @method public static
 	 * @param HTMLElement elt Start node.
 	 * @param String claz Class name.
-	 * @param boolean css Search Css class.
+	 * @param hidden boolean css Search Css class.
 	 * @return HTMLElement
 	 */
 	GetChildByClass: function(elt,claz,css) {
@@ -1907,7 +1995,7 @@ var f_core = {
 	/**
 	 * Find component
 	 *
-	 * @method public static final
+	 * @method public static
 	 * @param String... id Identifier
 	 * @return HTMLElement
 	 */
@@ -1924,9 +2012,9 @@ var f_core = {
 	/**
 	 * Find a child by its identifier.
 	 *
-	 * @method public static final
+	 * @method public static
 	 * @param String id Identifier
-	 * @param Document doc Document.
+	 * @param optional Document doc Document.
 	 * @param hidden boolean noCompleteComponent Dont complete component !
 	 * @return HTMLElement
 	 */
@@ -1957,14 +2045,14 @@ var f_core = {
 		
 		// Notre composant est trouvé mais il n'était pas initialisé !
 		if (noCompleteComponent!==true) {
-			if (typeof(obj._completeComponent)=="function") {
-				obj._completeComponent();
+			if (typeof(obj.f_completeComponent)=="function") {
+				obj.f_completeComponent();
 			}
 		}
 		return obj;
 	},
 	/** 
-	 * @method hidden static final
+	 * @method hidden static
 	 * @param Element 
 	 */
 	GetAttribute: function(object, attributeName, defaultValue) {
@@ -1986,7 +2074,7 @@ var f_core = {
 	/** 
 	 * Returns true if component (and its ancestors) is visible.
 	 *
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	IsComponentVisible: function(component) {
 		f_core.Assert(component, "Component is null !");
@@ -2075,7 +2163,7 @@ var f_core = {
 	/**
 	 * Returns absolute position.
 	 *
-	 * @method hidden static final
+	 * @method hidden static
 	 * @param HTMLElement obj
 	 * @return Object 
 	 */
@@ -2104,7 +2192,7 @@ var f_core = {
 		return { x: curLeft, y: curTop };
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @param optional String version
 	 * @return boolean 
 	 */
@@ -2127,7 +2215,7 @@ var f_core = {
 		return false;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	IsGeckoDisableDispatchKeyEvent: function() {
 		if (!f_core.IsGecko()) {
@@ -2144,7 +2232,7 @@ var f_core = {
 		return false;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 * @param optional String version
 	 * @return boolean 
 	 */
@@ -2164,7 +2252,7 @@ var f_core = {
 		return false;
 	},
 	/**
-	 * @method private static final
+	 * @method private static
 	 */
 	_SearchBrowser: function() {
 		var agt=window.navigator.userAgent.toLowerCase();
@@ -2284,7 +2372,7 @@ var f_core = {
 		f_core.Assert(false, "Unknown browser '"+agt+"'.");
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	RemoveElement: function(list, value) {
 		if (!list || !list.length) {
@@ -2301,7 +2389,7 @@ var f_core = {
 		return false;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	AddElement: function(list, value) {
 		for(var i=0;i<list.length;i++) {
@@ -2316,7 +2404,7 @@ var f_core = {
 		return true;
 	},
 	/**
-	 * @method hidden static final
+	 * @method hidden static
 	 */
 	CancelEventHandler: function(evt) {
 		if (f_event.GetEventLocked(false)) {
@@ -2649,6 +2737,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @return void
 	 */
 	_FocusTimeout: function() {
 		// On sait jamais !
@@ -2671,7 +2760,7 @@ var f_core = {
 		f_core.Assert(parent && parent.nodeType, "Parent '"+parent+"' is not a Dom node !");
 		
 		var components=parent.getElementsByTagName(tagName);
-		if (!components || components.length<1) {
+		if (!components || !components.length) {
 			if (assertIfNotFound) {
 				f_core.Assert(false, "Component '"+tagName+"' not found !");
 			}
@@ -2682,6 +2771,8 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param HTMLElement component
+	 * @return String
 	 */	
 	GetDefaultDisplayMode: function(component) {
 		var tagName=component.tagName;
@@ -2695,6 +2786,9 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param HTMLElement component
+	 * @param Function listener
+	 * @return boolean
 	 */
 	AddResizeEventListener: function(component, listener) {
 		if (f_core.IsInternetExplorer()) {
@@ -2715,6 +2809,9 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param HTMLElement component
+	 * @param String attributeId
+	 * @return String
 	 */
 	GetCurrentStyleProperty: function(component, attributeId) {
 		if (f_core.IsInternetExplorer()) {
@@ -2726,6 +2823,7 @@ var f_core = {
 		}
 		
 		f_core.Assert(false, "Browser not supported !");
+		return null;
 	},
 	/**
 	 * @method hidden static 
@@ -3429,7 +3527,11 @@ var f_core = {
 		}
 	},
 	/**
+	 * Compute the popup position. (centred horizontaly and verticaly)
+	 *
 	 * @method public static
+	 * @param Object parameters
+	 * @return void Fill fields "x" and "y" into the "parameters" object.
 	 */
 	ComputeDialogPosition: function(parameters) {
 		var x=0;
@@ -3597,7 +3699,7 @@ var f_core = {
 		if (forms.length==1 || !component || component.nodeType==9) {
 			form=forms[0];
 
-		} else if (component.tagName!="FORM") {
+		} else if (component.tagName.toUpperCase()!="FORM") {
 			form=f_core.GetParentForm(component);
 		}
 		
@@ -3630,7 +3732,7 @@ var f_core = {
 	 * @return any
 	 */
 	AddFacesHiddenInputParameters: function(form, acceptFunction, data, onlyOne) {
-		var inputs=form.getElementsByTagName("INPUT");
+		var inputs=f_core.GetElementsByTagName(form, "INPUT");
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
 			
@@ -3783,6 +3885,25 @@ var f_core = {
 		}
 	},
 	/**
+	 * @method static hidden
+	 * @param Object object
+	 * @return Object
+	 */
+	CopyObject: function(object) {
+		f_core.Assert(object===null || object===undefined || typeof(object)=="object", "f_core.CopyObject: Invalid object parameter ("+object+")");
+
+		if (object===null || object===undefined) {
+			return object;
+		}
+				
+		var obj=new Object;
+		for (var p in object) {
+			obj[p]=object[p];
+		}
+		
+		return obj;
+	},
+	/**
 	 * @method public static
 	 * @return String
 	 */
@@ -3790,7 +3911,7 @@ var f_core = {
 		return "f_core";
 	},
 	/**
-	 * @method public string
+	 * @method public
 	 * @return String
 	 */
 	toString: function() {

@@ -10,42 +10,42 @@
  */
 var __static = {
 	/**
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	POST_METHOD: "POST",
 	
 	/**
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	GET_METHOD: "GET",
 	
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	URLENCODED_MIME_TYPE: "application/x-www-form-urlencoded; charset=UTF-8",
 	
 	/**
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	TEXT_HTML_MIME_TYPE: "text/html",
 	
 	/**
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	TEXT_PLAIN_MIME_TYPE: "text/plain",
 	
 	/**
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	TEXT_XML_MIME_TYPE: "text/xml",
 	
 	/**
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	JAVASCRIPT_MIME_TYPE: "text/javascript",
 	
 	/**
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	ANY_MIME_TYPE: "*/*",
 		
@@ -55,7 +55,7 @@ var __static = {
 	OK_STATUS: 200,
 	
 	/**
-	 * @field public static final string
+	 * @field public static final String
 	 */
 	 HTTP_CONTENT_TYPE: "Content-Type"
 } 
@@ -115,9 +115,10 @@ var __prototype = {
 	},
 
 	/**
+	 * Returns ready state.
 	 *
 	 * @method public
-	 * @return boolean
+	 * @return boolean Ready state.
 	 */
 	f_getReady: function() {
 		return this._ready;
@@ -130,11 +131,12 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getStatus: function() {
-		if (!this._request) {
+		var request=this._request;
+		if (!request) {
 			return null;
 		}
 		
-		return this._request.status;
+		return request.status;
 	},
 
 	/**
@@ -144,10 +146,11 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getStatusText: function() {
-		if (!this._request) {
+		var request=this._request;
+		if (!request) {
 			return null;
 		}
-		return this._request.statusText;
+		return request.statusText;
 	},
 	
 	/**
@@ -157,11 +160,12 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getResponse: function() {
-		if (this._response===false) {
-			throw "HTTP Request is not an plain text request !";
+		var response=this._response;
+		if (response===false) {
+			throw new Error("HTTP Request is not an plain text request !");
 		}
 		
-		return this._response;
+		return response;
 	},
 
 	/**
@@ -172,11 +176,12 @@ var __prototype = {
 	 * @throws Error If the response is not a xml document.
 	 */
 	f_getXmlResponse: function() {
-		if (this._responseXML===false) {
+		var responseXML=this._responseXML;
+		if (responseXML===false) {
 			throw new Error("HTTP Request is not an XML request !");
 		}
 		
-		return this._responseXML;
+		return responseXML;
 	},
 	/**
 	 * Returns <code>true</code> if the response is a Xml document.
@@ -185,7 +190,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_isXmlResponse: function() {
-		return this._responseXML;
+		return typeof(this._responseXML)=="object";
 	},
 	
 	/**
@@ -330,7 +335,7 @@ var __prototype = {
 	 * @method private
 	 */
 	_doRequest: function(method, data, contentType, progressMonitor) {
-		f_core.Profile("f_httpRequest.doRequest.enter("+this._url+")");
+		f_core.Profile(false, "f_httpRequest.doRequest("+this._url+")");
 		try {
 			// Check if pending request		
 			if (!this._ready) {
@@ -502,7 +507,7 @@ var __prototype = {
 			return true;
 
 		} finally {
-			f_core.Profile("f_httpRequest.doRequest.exit("+this._url+")");			
+			f_core.Profile(true, "f_httpRequest.doRequest("+this._url+")");			
 		}
 	},
 
@@ -576,7 +581,7 @@ var __prototype = {
 	
 			// LOADING, Object created, send not called
 			case 1: {
-				f_core.Profile("f_httpRequest.stateChange.loading("+url+")");
+				f_core.Profile(null, "f_httpRequest.stateChange.loading("+url+")");
 
 				if (this._initialized) {
 					return;
@@ -601,7 +606,7 @@ var __prototype = {
 	
 			// LOADED, Send called, status and headers available but no response
 			case 2: {
-				f_core.Profile("f_httpRequest.stateChange.loaded("+url+")");
+				f_core.Profile(null, "f_httpRequest.stateChange.loaded("+url+")");
 
 				if (f_core.IsInternetExplorer()) {
 					// Inutile de tester qq chose !
@@ -680,7 +685,7 @@ var __prototype = {
 	
 			// COMPLETE, All data received headers and status updated
 			case 4: {
-				f_core.Profile("f_httpRequest.stateChange.complete("+url+")");
+				f_core.Profile(null, "f_httpRequest.stateChange.complete("+url+")");
 				
 				if (this._error) {
 					// On peut continuer a recevoir des infos, meme si il y a eu des problemes !

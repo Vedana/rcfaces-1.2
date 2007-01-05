@@ -229,8 +229,8 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param String message The message.
-	 * @param Error exception
-	 * @param Window window Window which was performed the log.
+	 * @param optional Error exception
+	 * @param optional Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
 	 */
 	f_fatal: function(message, exception, window) {
@@ -239,8 +239,8 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param String message The message.
-	 * @param Error exception
-	 * @param Window window Window which was performed the log.
+	 * @param optional Error exception
+	 * @param optional Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
 	 */
 	f_error: function(message, exception, window) {
@@ -249,8 +249,8 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param String message The message.
-	 * @param Error exception
-	 * @param Window window Window which was performed the log.
+	 * @param optional Error exception
+	 * @param optional Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
 	 */
 	f_warn: function(message, exception, window) {
@@ -259,8 +259,8 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param String message The message.
-	 * @param Error exception
-	 * @param Window window Window which was performed the log.
+	 * @param optional Error exception
+	 * @param optional Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
 	 */
 	f_info: function(message, exception, window) {
@@ -269,8 +269,8 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param String message The message.
-	 * @param Error exception
-	 * @param Window window Window which was performed the log.
+	 * @param optional Error exception
+	 * @param optional Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
 	 */
 	f_debug: function(message, exception, window) {
@@ -279,8 +279,8 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param String message The message.
-	 * @param Error exception
-	 * @param Window window Window which was performed the log.
+	 * @param optional Error exception
+	 * @param optional Window window Window which was performed the log.
 	 * @return boolean <code>true</code> if log has been processed.
 	 */
 	f_trace: function(message, exception, window) {

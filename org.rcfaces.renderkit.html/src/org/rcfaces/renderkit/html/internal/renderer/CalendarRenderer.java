@@ -47,7 +47,8 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        writeCalendarAttributes(htmlWriter);
+        Calendar componentCalendar = CalendarTools.getCalendar(htmlWriter);
+        writeCalendarAttributes(htmlWriter, componentCalendar);
 
         htmlWriter.enableJavaScript();
 
@@ -77,15 +78,15 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         }
     }
 
-    protected void writeCalendarAttributes(IHtmlWriter htmlWriter)
-            throws WriterException {
-        super.writeCalendarAttributes(htmlWriter);
+    protected void writeCalendarAttributes(IHtmlWriter htmlWriter,
+            Calendar componentCalendar) throws WriterException {
+        super.writeCalendarAttributes(htmlWriter, componentCalendar);
 
-        writeCalendarMode(htmlWriter);
+        writeCalendarMode(htmlWriter, componentCalendar);
     }
 
-    protected void writeCalendarMode(IHtmlWriter htmlWriter)
-            throws WriterException {
+    protected void writeCalendarMode(IHtmlWriter htmlWriter,
+            Calendar componentCalendar) throws WriterException {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
@@ -97,10 +98,6 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
             htmlWriter.writeAttribute("v:mode", mode);
         }
 
-        Calendar calendar = CalendarTools.getAttributesCalendar(
-                componentRenderContext.getRenderContext().getProcessContext(),
-                calendarComponent);
-
         Object value = calendarComponent.getValue();
         String s_value = null;
 
@@ -111,7 +108,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
                 Date d = (Date) value;
 
                 sb.setLength(0);
-                appendDate(calendar, d, sb, true);
+                appendDate(componentCalendar, d, sb, true);
 
                 s_value = sb.toString();
 
@@ -133,7 +130,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
                 }
 
                 if (ds.length > 0) {
-                    s_value = convertDate(calendar, ds[0], true);
+                    s_value = convertDate(componentCalendar, ds[0], true);
                 }
 
             } else if (value != null) {

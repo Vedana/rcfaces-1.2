@@ -12,7 +12,7 @@
 var __static = {
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_EMPTY_IMAGE_URL: "/imageButton/blank.gif",
 
@@ -78,20 +78,12 @@ var __prototype = {
 			}
 		}
 		
-		var v_className=f_core.GetAttribute(this, "v:className");
-		if (v_className) {
-			this._className=v_className;
-			
-		} else {
-			this._className=this.className;
-		}
-		
 		this.onselectstart=f_core.IeBlockSelectStart;
 		
 		if (!this._image) {
 			var images=this.getElementsByTagName("IMG");
 			if (images.length>0) {
-				var cl=this.f_getMainClassName()+"_image";
+				var cl=this.f_getMainStyleClass()+"_image";
 				var image;
 				for(var i=0;i<images.length;i++) {
 					var img=images[i];
@@ -111,7 +103,7 @@ var __prototype = {
 		
 		var texts=this.getElementsByTagName("SPAN");
 		if (texts.length>0) {
-			var cl=this.f_getMainClassName()+"_text";
+			var cl=this.f_getMainStyleClass()+"_text";
 			var text;
 			for(var i=0;i<texts.length;i++) {
 				var txt=texts[i];
@@ -168,7 +160,6 @@ var __prototype = {
 		}
 	},
 	f_finalize: function() {
-		// this._className=undefined; // string
 		// this._focus=undefined; // boolean
 		// this._tabIndex=undefined; // number
 		
@@ -217,13 +208,6 @@ var __prototype = {
 		if (image && image!=this) {
 			f_core.VerifyProperties(image);
 		}		
-	},
-	/**
-	 * 
-	 * @method protected
-	 */
-	f_getMainClassName: function() {
-		return "f_imageButton";
 	},
 	/**
 	 * 
@@ -405,7 +389,7 @@ var __prototype = {
 //			suffix="";
 		}
 		
-		var className=this._className+suffix;
+		var className=this.f_computeStyleClass(suffix);
 		
 		if (this.className!=className) {
 			this.className=className;
@@ -414,7 +398,7 @@ var __prototype = {
 /*		
 		var text=this._text;
 		if (text) {
-			className=this.f_getMainClassName()+"_text"+suffix;
+			className=this.f_getMainStyleClass()+"_text"+suffix;
 		
 			if (text.className!=className) {
 				text.className=className;

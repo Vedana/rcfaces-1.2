@@ -17,7 +17,7 @@
 	display: inline;
 }
 
-.f_dateEntry INPUT {
+.f_dateEntry_input {
 	border: 0;
 	background-color: transparent;
 	text-align: right;

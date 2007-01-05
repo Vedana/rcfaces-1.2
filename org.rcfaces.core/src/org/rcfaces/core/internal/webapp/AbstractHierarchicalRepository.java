@@ -464,6 +464,11 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
         }
 
         IModule ms[] = (IModule[]) l.toArray(new IModule[l.size()]);
+
+        return declareSet(name, uri, ms);
+    }
+
+    public ISet declareSet(String name, String uri, IModule[] ms) {
         for (int i = 0; i < ms.length; i++) {
             ms[i].setGroupAllFiles(true);
         }

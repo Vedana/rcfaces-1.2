@@ -3,8 +3,16 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
+import org.rcfaces.core.component.FieldSetComponent;
 import org.rcfaces.core.component.HelpMessageZoneComponent;
+import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -57,15 +65,23 @@ public class HelpMessageZoneRenderer extends AbstractCssRenderer {
         // enableJavaScript(htmlWriter);
     }
 
-    /*
-     * Pour le client lourd...
-     * 
-     * protected void encodeJavaScript(IJavaScriptWriter htmlWriter) throws
-     * WriterException {
-     * 
-     * super.encodeJavaScript(htmlWriter); UIComponent component =
-     * htmlWriter.getWriter().getComponent(); htmlWriter.write("if (F_HELP)
-     * F_HELP.SetHelpMessageZone(");
-     * htmlWriter.write(htmlWriter.getComponentVarName()).writeln(");"); }
-     */
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
+
+        HelpMessageZoneComponent helpMessageZoneComponent = (HelpMessageZoneComponent) component;
+
+        String text = componentData.getStringProperty("text");
+        if (text != null) {
+            String old = helpMessageZoneComponent.getText(facesContext);
+            if (text.equals(old) == false) {
+                helpMessageZoneComponent.setText(text);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.TEXT, old, text));
+            }
+        }
+    }
 }

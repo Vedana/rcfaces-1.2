@@ -215,7 +215,8 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
                 }
 
                 filterCapability.setFilterProperties(HtmlTools
-                        .decodeFilterExpression(component, filterExpression));
+                        .decodeFilterExpression(context.getProcessContext(),
+                                component, filterExpression));
             }
         }
     }

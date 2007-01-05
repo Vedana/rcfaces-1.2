@@ -30,7 +30,7 @@ var __prototype = {
 		if (input) {
 			return input;
 		}
-		input=f_core.GetChildByCssClass(this, this.className+"_input");
+		input=f_core.GetChildByCssClass(this, this.f_getMainStyleClass()+"_input");
 		if (input) {
 			return input;
 		}
@@ -135,18 +135,20 @@ var __prototype = {
 	 * @return void
 	 */
 	f_updateDisabled: function(disabled) {
-		if (!this._label) {
+		var label=this._label;
+		if (!label) {
 			return;
 		}
-		var clz=this.className+"_text";
+		var clz=this.f_getMainStyleClass()+"_text";
 		
 		if (disabled) {
-			clz+="_disabled";
+			clz+=" "+clz+"_disabled";
 		}
 		
-		this._label.className=clz;
+		if (label.className!=clz) {
+			label.className=clz;
+		}
 	},
-
 	/**
 	 * @method protected
 	 */

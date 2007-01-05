@@ -12,7 +12,7 @@
 var __static={	
 
 	/**
-	 * @field protected static final string
+	 * @field protected static final String
 	 */
 	DEFAULT_TYPE: "default"
 	

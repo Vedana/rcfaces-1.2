@@ -11,10 +11,14 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -26,6 +30,8 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
  */
 public class LocaleTools {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(LocaleTools.class);
 
     public static final boolean NORMALIZE_LOCALE_PARAMETER_SUPPORT = false;
 
@@ -170,19 +176,25 @@ public class LocaleTools {
         }
     }
 
-    private static Format getFormatByType(Locale locale, int type, int style) {
+    private static Format getFormatByType(Locale locale, TimeZone timeZone,
+            int type, int style) {
         if (style < 0) {
             style = DEFAULT_STYLE_BY_TYPE[type];
         }
+
+        Format format;
         switch (type) {
         case DATE_TYPE:
-            return DateFormat.getDateInstance(style, locale);
+            format = DateFormat.getDateInstance(style, locale);
+            break;
 
         case TIME_TYPE:
-            return DateFormat.getTimeInstance(style, locale);
+            format = DateFormat.getTimeInstance(style, locale);
+            break;
 
         case DATE_TIME_TYPE:
-            return DateFormat.getDateTimeInstance(style, style, locale);
+            format = DateFormat.getDateTimeInstance(style, style, locale);
+            break;
 
         case NUMBER_TYPE:
             return NumberFormat.getNumberInstance(locale);
@@ -195,9 +207,21 @@ public class LocaleTools {
 
         case CURRENCY_TYPE:
             return NumberFormat.getCurrencyInstance(locale);
+
+        default:
+            LOG.error("Invalid format type=" + type);
+            return null;
         }
 
-        return null;
+        if (timeZone != null && (format instanceof DateFormat)) {
+            DateFormat dateFormat = (DateFormat) format;
+
+            if (dateFormat.getCalendar().getTimeZone().equals(timeZone) == false) {
+                dateFormat.setTimeZone(timeZone);
+            }
+        }
+
+        return format;
     }
 
     private static String getPattern(Format format) {
@@ -242,7 +266,7 @@ public class LocaleTools {
             synchronized (defaultFormats) {
                 format = defaultFormats[type];
                 if (format == null) {
-                    format = getFormatByType(locale, type, -1);
+                    format = getFormatByType(locale, null, type, -1);
                     defaultFormats[type] = format;
                 }
             }
@@ -285,7 +309,7 @@ public class LocaleTools {
                     format = getDefaultFormat(type);
 
                 } else {
-                    format = getFormatByType(locale, type, style);
+                    format = getFormatByType(locale, null, type, style);
                 }
 
                 String pattern;
@@ -314,7 +338,7 @@ public class LocaleTools {
     public static String getFormatPattern(Locale locale, int style, int type) {
 
         if (Constants.CACHED_LOCALE_FORMATS == false) {
-            Format format = getFormatByType(locale, type, style);
+            Format format = getFormatByType(locale, null, type, style);
 
             return getPattern(format);
         }
@@ -322,12 +346,28 @@ public class LocaleTools {
         return LocaleTools.getCachedLocale(locale).getPattern(type, style);
     }
 
-    public static Format getDefaultFormat(UIComponent component, int type) {
+    public static Format getDefaultFormat(UIComponent component, int type,
+            boolean literalValue) {
 
-        Locale locale = PageConfiguration.getAttributesLocale(null, component);
+        Locale locale = null;
+        if (literalValue) {
+            locale = PageConfiguration.getLiteralLocale(null, component);
+
+        } else {
+            if (locale == null) {
+                if (component instanceof IComponentLocaleCapability) {
+                    locale = ((IComponentLocaleCapability) component)
+                            .getComponentLocale();
+                }
+            }
+
+            if (locale == null) {
+                locale = ContextTools.getUserLocale(null);
+            }
+        }
 
         if (Constants.CACHED_LOCALE_FORMATS == false) {
-            return getFormatByType(locale, type, -1);
+            return getFormatByType(locale, null, type, -1);
         }
 
         return LocaleTools.getCachedLocale(locale).getDefaultFormat(type);
@@ -336,7 +376,7 @@ public class LocaleTools {
     public static String getDefaultPattern(Locale locale, int type) {
 
         if (Constants.CACHED_LOCALE_FORMATS == false) {
-            Format format = getFormatByType(locale, type, -1);
+            Format format = getFormatByType(locale, null, type, -1);
 
             return getPattern(format);
         }

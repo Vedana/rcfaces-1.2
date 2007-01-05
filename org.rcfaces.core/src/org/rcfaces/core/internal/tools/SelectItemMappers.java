@@ -31,7 +31,7 @@ public class SelectItemMappers {
         }
 
         public boolean acceptCollections() {
-            return false;
+            return true;
         }
 
     };

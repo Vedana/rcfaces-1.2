@@ -87,6 +87,12 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
+	 * @param String type
+	 * @param optional Event jsEvt
+	 * @param optional Object item
+	 * @param optional any value
+	 * @param optional fa_selectionProvider selectionProvider
+	 * @param optional any detail
 	 * @return void
 	 */
 	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail) {
@@ -103,7 +109,7 @@ var __prototype = {
 			event._eventId=eventId;
 		}
 
-//		f_core.Profile("fa_eventTarget.fireEvent.enter(#"+eventId+","+type+","+this.id+")");
+//		f_core.Profile(false, "fa_eventTarget.fireEvent(#"+eventId+","+type+","+this.id+")");
 
 		try {				
 			var al=this.f_getActionList(type);
@@ -151,7 +157,7 @@ var __prototype = {
 			
 			return ret;
 		} finally {
-//			f_core.Profile("fa_eventTarget.fireEvent.exit(#"+eventId+")");
+//			f_core.Profile(true, "fa_eventTarget.fireEvent(#"+eventId+")");
 		}
 	},
 	/**
@@ -193,11 +199,11 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param String type Type of event.
-	 * @param any action An object of type string or function.
+	 * @param Function... listener An object of type string or function.
 	 * @return void
 	 */
-	f_addEventListener: function(type, action) {
-		f_core.Assert(type && typeof(type)=="string", "Bad type of event '"+type+"'");
+	f_addEventListener: function(type, listener) {
+		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
 	
 		var al=this.f_openActionList(type);
 		
@@ -209,11 +215,11 @@ var __prototype = {
 	 * 
 	 * @method hidden
 	 * @param String type Type of event.
-	 * @param any action An object of type string or function.
+	 * @param Function... listener An object of type string or function.
 	 * @return void
 	 */
-	f_insertEventListenerFirst: function(type, action) {
-		f_core.Assert(type && typeof(type)=="string", "Bad type of event '"+type+"'");
+	f_insertEventListenerFirst: function(type, listener) {
+		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
 	
 		var al=this.f_openActionList(type);
 		
@@ -225,11 +231,11 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param String type Type of event.
-	 * @param any action An object of type string or function.
+	 * @param Function... listener An object of type string or function.
 	 * @return void
 	 */
-	f_removeEventListener: function(type, action) {
-		f_core.Assert(type && typeof(type)=="string", "Bad type of event '"+type+"'");
+	f_removeEventListener: function(type, listener) {
+		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
 
 		var al=this.f_getActionList(type);
 		if (!al) {

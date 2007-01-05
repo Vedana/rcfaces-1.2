@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
@@ -456,8 +457,10 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
     public static void initializeJavaScript(IJavaScriptWriter writer,
             IJavaScriptRepository repository) throws WriterException {
 
-        Map requestMap = writer.getFacesContext().getExternalContext()
-                .getRequestMap();
+        FacesContext facesContext = writer.getFacesContext();
+        ExternalContext externalContext = facesContext.getExternalContext();
+
+        Map requestMap = externalContext.getRequestMap();
         if (requestMap.containsKey(JAVASCRIPT_INITIALIZED_PROPERTY)) {
             return;
         }
@@ -466,17 +469,16 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
         requestMap.put(JAVASCRIPT_INITIALIZED_PROPERTY, Boolean.TRUE);
 
-        FacesContext facesContext = writer.getFacesContext();
-
-        Map initParameter = facesContext.getExternalContext()
-                .getInitParameterMap();
+        Map initParameter = externalContext.getInitParameterMap();
         if ("false".equalsIgnoreCase((String) initParameter
                 .get(ENABLE_SCRIPT_VERIFY_PARAMETER)) == false) {
             writer.writeln(SCRIPT_VERIFY);
         }
 
-        IHtmlProcessContext processContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(facesContext);
+        IHtmlRenderContext htmlRenderContext = writer.getHtmlRenderContext();
+
+        IHtmlProcessContext processContext = htmlRenderContext
+                .getHtmlProcessContext();
 
         boolean debugMode = processContext.getDebugMode();
         if (debugMode) {
@@ -492,8 +494,6 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         if (designerMode) {
             writer.writeCall("f_core", "SetDesignerMode").writeln(");");
         }
-
-        IHtmlRenderContext htmlRenderContext = writer.getHtmlRenderContext();
 
         String invalidBrowserURL = htmlRenderContext.getInvalidBrowserURL();
         if (invalidBrowserURL != null) {
@@ -522,8 +522,7 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             }
         }
 
-        String baseURI = processContext.getFacesContext().getExternalContext()
-                .getRequestContextPath();
+        String baseURI = externalContext.getRequestContextPath();
         writer.writeCall("f_env", "Initialize").writeString(baseURI);
 
         int pred = 0;
@@ -614,43 +613,59 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             }
         }
 
-        Map messages = new HashMap();
-        Iterator messageClientIds = facesContext.getClientIdsWithMessages();
-        StringAppender sa = null;
+        Map messages = null;
+        Set clientMessageIdFilters = htmlRenderContext
+                .getClientMessageIdFilters();
 
-        for (; messageClientIds.hasNext();) {
-            String clientId = (String) messageClientIds.next();
+        if (clientMessageIdFilters
+                .contains(IHtmlRenderContext.NO_CLIENT_MESSAGES) == false) {
+            StringAppender sa = null;
+            Iterator messageClientIds = facesContext.getClientIdsWithMessages();
 
-            Iterator it = facesContext.getMessages(clientId);
-            for (; it.hasNext();) {
-                FacesMessage facesMessage = (FacesMessage) it.next();
+            for (; messageClientIds.hasNext();) {
+                String clientId = (String) messageClientIds.next();
 
-                String varName = (String) messages.get(facesMessage);
-                if (varName == null) {
-                    varName = JavaScriptTools.writeMessage(facesContext,
-                            writer, facesMessage);
-
-                    messages.put(facesMessage, varName);
-
-                }
-                if (sa == null) {
-                    sa = new StringAppender(32);
+                if (clientMessageIdFilters.isEmpty() == false
+                        && clientMessageIdFilters.contains(clientId) == false) {
+                    continue;
                 }
 
-                if (sa.length() > 0) {
-                    sa.append(',');
+                if (messages == null) {
+                    messages = new HashMap();
                 }
-                sa.append(varName);
+
+                Iterator it = facesContext.getMessages(clientId);
+                for (; it.hasNext();) {
+                    FacesMessage facesMessage = (FacesMessage) it.next();
+
+                    String varName = (String) messages.get(facesMessage);
+                    if (varName == null) {
+                        varName = JavaScriptTools.writeMessage(facesContext,
+                                writer, facesMessage);
+
+                        messages.put(facesMessage, varName);
+
+                    }
+                    if (sa == null) {
+                        sa = new StringAppender(32);
+                    }
+
+                    if (sa.length() > 0) {
+                        sa.append(',');
+                    }
+                    sa.append(varName);
+                }
+
+                if (sa == null || sa.length() < 1) {
+                    continue;
+                }
+
+                writer.writeCall("f_messageContext", "AppendMessages")
+                        .writeString(clientId).write(',').write(sa.toString())
+                        .writeln(");");
+
+                sa.setLength(0);
             }
-
-            if (sa == null || sa.length() < 1) {
-                continue;
-            }
-
-            writer.writeCall("f_messageContext", "AppendMessages").writeString(
-                    clientId).write(',').write(sa.toString()).writeln(");");
-
-            sa.setLength(0);
         }
 
         LOG.debug("Javascript initialized.");

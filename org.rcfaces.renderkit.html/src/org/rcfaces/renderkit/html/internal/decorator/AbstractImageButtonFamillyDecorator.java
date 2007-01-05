@@ -108,8 +108,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             if (imageButtonFamilly.isBorder(facesContext)) {
                 borderType = imageButtonFamilly.getBorderType(facesContext);
 
-                IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
-                        .getInstance(facesContext).getBorderRenderersRegistry();
+                IBorderRenderersRegistry borderRendererRegistry = componentRenderContext
+                        .getRenderContext().getProcessContext()
+                        .getRcfacesContext().getBorderRenderersRegistry();
 
                 UIComponent cmp = (UIComponent) imageButtonFamilly;
 
@@ -122,8 +123,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             }
 
             text = imageButtonFamilly.getText(facesContext);
-            text = ParamUtils.formatMessage((UIComponent) imageButtonFamilly, text);
-            
+            text = ParamUtils.formatMessage((UIComponent) imageButtonFamilly,
+                    text);
+
             textPosition = imageButtonFamilly.getTextPosition(facesContext);
 
             if (htmlBorderWriter == null && (text != null)) {
@@ -197,10 +199,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             String classSuffix = null;
             if (disabled) {
-                classSuffix = "_disabled";
+                classSuffix = getComponentClassName()+"_disabled";
 
             } else if (selected) {
-                classSuffix = "_selected";
+                classSuffix = getComponentClassName()+"_selected";
             }
 
             writeAttributes(classSuffix);
@@ -456,8 +458,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return className;
         }
 
-        className = ((ICssRenderer) renderer).getStyleClassName(writer
-                .getComponentRenderContext().getComponent());
+        className = ((ICssRenderer) renderer).getComponentStyleClassName();
 
         if (className == null) {
             throw new NullPointerException("Component className is null !");

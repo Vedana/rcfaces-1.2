@@ -17,7 +17,7 @@
 	display: inline;
 }
 
-.f_timeEntry INPUT {
+.f_timeEntry_input {
 	border: 0;
 	background-color: transparent;
 	text-align: right;

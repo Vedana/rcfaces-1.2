@@ -477,7 +477,7 @@ var __prototype = {
 	 * @method public
 	 * @param String id Identifier of component.
 	 * @return f_component
-	 * @see f_component.f_findComponent
+	 * @see f_component#f_findComponent
 	 */
 	f_findComponent: function(id) {
 		return fa_namingContainer.FindComponents(this._parentComponent, arguments);

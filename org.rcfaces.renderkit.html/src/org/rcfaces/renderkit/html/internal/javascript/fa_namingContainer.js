@@ -13,27 +13,27 @@
 var __static = {
 	
 	/** 
-	 * @field private static string
+	 * @field private static String
 	 */
 	PageSeparator:		":",
 
 	/** 
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_NAMING_CONTAINER_ATTRIBUTE:		"v:nc",
 	
 	/** 
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_NAMING_CONTAINER_COMPONENT:		"v:namingContainer",
 	
 	/** 
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_SEPARATOR_CHAR:		":",
 
 	/** 
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_SEPARATOR_CHAR_REGEXP:	new RegExp(":", "g"),
 	

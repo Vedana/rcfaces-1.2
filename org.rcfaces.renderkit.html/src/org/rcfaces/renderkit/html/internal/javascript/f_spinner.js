@@ -8,15 +8,13 @@
  * @class f_spinner extends f_textEntry, fa_spinner
  */
 var __prototype = {
+	/*
 	f_spinner: function() {
 		this.f_super(arguments);
-		
-		this._className=this.className;
 	},
+	*/
 	/*
 	f_finalize: function() {
-		
-		// this._className=undefined; // string
 		
 		this.f_super(arguments);
 	},

@@ -251,12 +251,16 @@
 		<component-class>org.rcfaces.core.component.TextComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.textEntry</component-type>
-		<component-class>org.rcfaces.core.component.TextEntryComponent</component-class>
-	</component>
-	<component>
 		<component-type>org.rcfaces.core.textArea</component-type>
 		<component-class>org.rcfaces.core.component.TextAreaComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.textEditor</component-type>
+		<component-class>org.rcfaces.core.component.TextEditorComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.textEntry</component-type>
+		<component-class>org.rcfaces.core.component.TextEntryComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.timeEntry</component-type>

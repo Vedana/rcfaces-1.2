@@ -17,19 +17,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 
 import org.rcfaces.core.component.IClientValidator;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.TextEntryComponent;
-import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
-import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.config.ClientValidatorsRegistryImpl.ClientValidator;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -45,8 +40,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
-import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -66,16 +59,6 @@ public class TextEntryRenderer extends AbstractInputRenderer {
     private static final boolean ALLOCATE_VALIDATOR_PARAMETERS = false;
 
     // private static final boolean ATTRIBUTE_VALIDATOR = true;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.render.Renderer#encodeBegin(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent)
-     * 
-     * public void encodeBegin(IWriter writer) throws WriterException {
-     * super.encodeBegin(writer); }
-     */
 
     protected void writeTextEntryAttributes(IHtmlWriter htmlWriter)
             throws WriterException {
@@ -207,12 +190,19 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
+        TextEntryComponent textEntryComponent = (TextEntryComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
 
         htmlWriter.startElement("INPUT");
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
+
         writeCssAttributes(htmlWriter);
+
         writeInputAttributes(htmlWriter);
         writeTextEntryAttributes(htmlWriter);
         writeValidatorAttributes(htmlWriter);
@@ -223,22 +213,6 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
     protected boolean isNameEqualsId() {
         return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#encodeEnd(org.rcfaces.core.internal.renderkit.IWriter)
-     */
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
-
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        // Il faut ecrire la VALUE à la fin, car des converters peuvent être
-        // insérés entre le tag !
-        encodeComponent(htmlWriter);
-
-        super.encodeEnd(htmlWriter);
     }
 
     protected boolean installValidator(IComponentRenderContext renderContext,
@@ -257,8 +231,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         FacesContext facesContext = renderContext.getFacesContext();
 
-        IClientValidatorsRegistry clientValidatorManager = RcfacesContext
-                .getInstance(facesContext).getClientValidatorsRegistry();
+        IClientValidatorsRegistry clientValidatorManager = renderContext
+                .getRenderContext().getProcessContext().getRcfacesContext()
+                .getClientValidatorsRegistry();
         if (clientValidatorManager == null) {
             // throw new FacesException("Can not get descriptorManager from
             // faces context !");
@@ -425,12 +400,6 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         return TEXT_TYPE;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.CameliaRenderer#decode(javax.faces.component.UIComponent,
-     *      org.rcfaces.core.internal.renderkit.IComponentData)
-     */
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
@@ -639,60 +608,19 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             javaScriptRenderContext.appendRequiredClasses(classes,
                     JavaScriptClasses.TEXT_ENTRY, "features");
         }
-
-        IMenuIterator menuIterator = component.listMenus();
-        if (menuIterator.hasNext()) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
-                    JavaScriptClasses.BOX, "menu");
-        }
     }
 
     protected boolean hasComponenDecoratorSupport() {
         return true;
     }
 
-    protected IComponentDecorator createComponentDecorator(
-            FacesContext facesContext, UIComponent component) {
-
-        IComponentDecorator decorator = null;
-
-        TextEntryComponent textEntryComponent = (TextEntryComponent) component;
-
-        IMenuIterator menuIterator = textEntryComponent.listMenus();
-        for (; menuIterator.hasNext();) {
-            MenuComponent menuComponent = menuIterator.next();
-
-            IComponentDecorator menuDecorator = new SubMenuDecorator(
-                    menuComponent, menuComponent.getMenuId(), null,
-                    menuComponent.isRemoveAllWhenShown(facesContext),
-                    getItemImageWidth(menuComponent),
-                    getItemImageHeight(menuComponent));
-
-            if (decorator == null) {
-                decorator = menuDecorator;
-                continue;
-            }
-
-            menuDecorator.addChildDecorator(decorator);
-            decorator = menuDecorator;
-        }
-
-        return decorator;
-    }
-
-    protected int getItemImageHeight(IMenuComponent menuComponent) {
-        return -1;
-    }
-
-    protected int getItemImageWidth(IMenuComponent menuComponent) {
-        return -1;
-    }
-
     private void appendValidators(FacesContext facesContext,
             IHtmlWriter writer, Validator[] validators) throws WriterException {
 
-        IClientValidatorsRegistry clientValidatorManager = RcfacesContext
-                .getInstance(facesContext).getClientValidatorsRegistry();
+        IClientValidatorsRegistry clientValidatorManager = writer
+                .getComponentRenderContext().getRenderContext()
+                .getProcessContext().getRcfacesContext()
+                .getClientValidatorsRegistry();
         if (clientValidatorManager == null) {
             // throw new FacesException("Can not get validator registry from
             // faces context !");

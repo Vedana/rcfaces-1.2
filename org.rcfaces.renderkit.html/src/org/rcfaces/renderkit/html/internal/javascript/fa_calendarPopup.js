@@ -11,7 +11,7 @@
 
 var __static={
 	/** 
-	 * @field private static final string 
+	 * @field private static final String 
 	 */
 	_CALENDAR_KEY_SCOPE_ID: "#calendarPopup",
 	
@@ -93,7 +93,7 @@ var __static={
 					pdoc.body.innerHTML="";
 					
 					body=pdoc.createElement("DIV");
-					body.className=dateChooser._className+"_popup";
+					body.className="f_dateChooser_popup";
 					body.style.visibility="inherit";
 	
 					pdoc.body.appendChild(body);
@@ -102,7 +102,7 @@ var __static={
 								
 			} else {
 				popup=dateChooser.ownerDocument.createElement("DIV");
-				popup.className=dateChooser._className+"_popup";
+				popup.className="f_dateChooser_popup";
 	
 				popup.onclick=f_core.CancelEventHandlerTrue;
 				popup.onmousedown=f_core.CancelEventHandlerTrue;
@@ -283,7 +283,7 @@ var __static={
 
 		if (component.f_setValue) {
 			f_core.Debug(fa_calendarPopup, "_SetDateToComponent: call f_setValue of component '"+component.id+"' with date '"+date+"' and format '"+format+"'.");
-			if (component.f_setValue(date)) {
+			if (component.f_setValue(date)!==false) {
 				return;
 			}
 		}
@@ -308,6 +308,7 @@ var __static={
 
 	/**
 	 * @method private static
+	 * @return Date
 	 */
 	_GetDateFromComponent: function(component, format, calendarObject) {
 		if (component.f_getDate) {
@@ -388,7 +389,9 @@ var __prototype={
 			
 			if (component) {
 				try {
-					var date=fa_calendarPopup._GetDateFromComponent(component, this._forValueFormat, this._calendar);
+					var forValueFormat=this._forValueFormat;					
+				
+					var date=fa_calendarPopup._GetDateFromComponent(component, forValueFormat, this._calendar);
 					
 					if (date) {
 						this.f_setSelection(date);
@@ -417,8 +420,13 @@ var __prototype={
 		return false;
 	},
 	_appendDateItem: function(date, label, disabled, styleClass) {
-		this._calendar.f_appendDateItem.apply(this._calendar, arguments);
+		var calendar=this._calendar;
+		calendar.f_appendDateItem.apply(calendar, arguments);
 	},
+	/**
+	 * @method public
+	 * @return f_calendarObject
+	 */
 	f_getCalendarObject: function() {
 		return this._calendar;
 	},
@@ -428,6 +436,10 @@ var __prototype={
 		fa_calendarPopup._ClosePopup(this, jsEvt);
 		return false;
 	},
+	/**
+	 * @method public
+	 * @return Date
+	 */
 	f_getSelection: function() {
 		var calendar=this._calendar;
 		if (!calendar) {
@@ -441,6 +453,11 @@ var __prototype={
 		
 		return selection[0][0];
 	},
+	/**
+	 * @method public
+	 * @param Date selection
+	 * @return void
+	 */
 	f_setSelection: function(selection) {
 		var calendar=this._calendar;
 		if (!calendar) {

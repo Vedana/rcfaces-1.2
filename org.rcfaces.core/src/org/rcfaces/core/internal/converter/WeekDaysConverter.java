@@ -15,7 +15,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.model.AbstractConverter;
 
@@ -50,10 +50,10 @@ public class WeekDaysConverter extends AbstractConverter {
         }
 
         Locale locale = null;
-        if (component instanceof ILocalizedAttributesCapability) {
-            ILocalizedAttributesCapability localizedAttributesCapability = (ILocalizedAttributesCapability) component;
+        if (component instanceof ILiteralLocaleCapability) {
+            ILiteralLocaleCapability localizedAttributesCapability = (ILiteralLocaleCapability) component;
 
-            locale = localizedAttributesCapability.getAttributesLocale();
+            locale = localizedAttributesCapability.getLiteralLocale();
         }
 
         if (locale == null) {
@@ -147,10 +147,10 @@ public class WeekDaysConverter extends AbstractConverter {
         }
 
         Locale locale = null;
-        if (component instanceof ILocalizedAttributesCapability) {
-            ILocalizedAttributesCapability localizedAttributesCapability = (ILocalizedAttributesCapability) component;
+        if (component instanceof ILiteralLocaleCapability) {
+            ILiteralLocaleCapability localizedAttributesCapability = (ILiteralLocaleCapability) component;
 
-            locale = localizedAttributesCapability.getAttributesLocale();
+            locale = localizedAttributesCapability.getLiteralLocale();
         }
 
         if (locale == null) {

@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.internal.component.IConvertValueHolder;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.convert.Converter;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractCommandComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.component.IConvertValueHolder;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -26,47 +26,47 @@ public abstract class AbstractConverterCommandComponent extends AbstractCommandC
 	public final void setConverter(String converterId) {
 
 
-				 setConverter(null, converterId);
-			
+			 setConverter(null, converterId);
+		
 	}
 
 	public final void setConverter(FacesContext facesContext, String converterId) {
 
 
-				if (facesContext==null) {
-					facesContext=FacesContext.getCurrentInstance();
-				}
-				Converter converter = facesContext.getApplication().createConverter(converterId);
-                this.setConverter(converter);
-			
+			if (facesContext==null) {
+				facesContext=FacesContext.getCurrentInstance();
+			}
+			Converter converter = facesContext.getApplication().createConverter(converterId);
+            this.setConverter(converter);
+		
 	}
 
 	public final void setConverter(ValueBinding valueBinding) {
 
 
-                  this.setValueBinding("converter", valueBinding);
-			
+              this.setValueBinding("converter", valueBinding);
+		
 	}
 
 	public final void setConverter(Converter converter) {
 
 
-            	engine.setProperty("converter", converter);
-			
+        	engine.setProperty("converter", converter);
+		
 	}
 
 	public final Converter getConverter() {
 
 
-            	return (Converter)engine.getProperty("converter", null);
-			
+        	return (Converter)engine.getProperty("converter", null);
+		
 	}
 
 	public final Converter getConverter(FacesContext facesContext) {
 
 
-            	return (Converter)engine.getProperty("converter", facesContext);
-			
+        	return (Converter)engine.getProperty("converter", facesContext);
+		
 	}
 
 	public final Object getLocalValue() {

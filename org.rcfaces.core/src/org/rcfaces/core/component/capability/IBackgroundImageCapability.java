@@ -36,9 +36,9 @@ public interface IBackgroundImageCapability {
 	/**
 	 * Sets a string indicating the horizontal positionning for the background image.
 	 * 
-	 * @param position horizontal position
+	 * @param horizontalPosition horizontal position
 	 */
-	void setBackgroundImageHorizontalPosition(String position);
+	void setBackgroundImageHorizontalPosition(String horizontalPosition);
 
 	/**
 	 * Returns a string indicating the vertical positionning for the background image.
@@ -50,9 +50,9 @@ public interface IBackgroundImageCapability {
 	/**
 	 * Sets a string indicating the vertical positionning for the background image.
 	 * 
-	 * @param vertical position
+	 * @param verticalPosition position
 	 */
-	void setBackgroundImageVerticalPosition(String position);
+	void setBackgroundImageVerticalPosition(String verticalPosition);
 
 	/**
 	 * Returns a boolean value indicating wether the background image should be repeated horizontally or not.

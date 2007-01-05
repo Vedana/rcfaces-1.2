@@ -3,6 +3,7 @@
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,6 +23,8 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import javax.faces.render.Renderer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
@@ -55,6 +58,9 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 public abstract class AbstractSelectItemsDecorator extends
         AbstractComponentDecorator implements ISelectItemNodeWriter {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(AbstractSelectItemsDecorator.class);
 
     // private static final String CONTEXT_ATTRIBUTE =
     // "camelia.selectItems.context";
@@ -176,16 +182,8 @@ public abstract class AbstractSelectItemsDecorator extends
                 UISelectItem uiSelectItem = (UISelectItem) component;
 
                 Object value = uiSelectItem.getValue();
-                if (value != null && (value instanceof SelectItem) == false) {
-                    value = convertToSelectItem(value);
-                }
 
-                if (value != null && ((value instanceof SelectItem) == false)) {
-                    throw new FacesException("Value is not a SelectItem ("
-                            + value + ")");
-                }
-
-                SelectItem si = (SelectItem) value;
+                SelectItem si = convertToSelectItem(value);
                 if (si == null) {
                     si = createSelectItem(uiSelectItem);
                 }
@@ -236,21 +234,28 @@ public abstract class AbstractSelectItemsDecorator extends
             return true;
         }
 
-        if (value != null) {
-            Class cls = value.getClass();
-            if (cls.isArray()
-                    && SelectItem.class
-                            .isAssignableFrom(cls.getComponentType())) {
-                Object sis[] = (Object[]) value;
+        if (value != null && value.getClass().isArray()) {
+            int length = Array.getLength(value);
 
-                for (int i = 0; i < sis.length; i++) {
-                    if (mapSelectItem(mapper, (SelectItem) sis[i]) == false) {
-                        return false;
+            for (int i = 0; i < length; i++) {
+                Object item = Array.get(value, i);
+
+                SelectItem si = convertToSelectItem(item);
+                if (si == null) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Can not convert '" + item
+                                + "' to SelectItem !");
                     }
+
+                    continue;
                 }
 
-                return true;
+                if (mapSelectItem(mapper, si) == false) {
+                    return false;
+                }
             }
+
+            return true;
         }
 
         if (value instanceof Collection) {
@@ -260,7 +265,16 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             for (Iterator it2 = c.iterator(); it2.hasNext();) {
-                SelectItem si = (SelectItem) it2.next();
+                Object item = it2.next();
+
+                SelectItem si = convertToSelectItem(item);
+                if (si == null) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Can not convert '" + item
+                                + "' to SelectItem !");
+                    }
+                    continue;
+                }
 
                 if (mapSelectItem(mapper, si) == false) {
                     return false;
@@ -279,6 +293,7 @@ public abstract class AbstractSelectItemsDecorator extends
 
             for (Iterator it2 = map.keySet().iterator(); it2.hasNext();) {
                 String itemLabel = (String) it2.next();
+                // Pas de entrieSet pour garder l'ordre !
 
                 Object itemValue = map.get(itemLabel);
 
@@ -292,12 +307,16 @@ public abstract class AbstractSelectItemsDecorator extends
             return true;
         }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Can not convert '" + value + "' to SelectItem !");
+        }
+
         return true;
     }
 
     protected SelectItem convertToSelectItem(Object value) {
-        if (value == null) {
-            return null;
+        if ((value == null) || (value instanceof SelectItem)) {
+            return (SelectItem) value;
         }
 
         if (value instanceof ISelectItem) {
@@ -331,8 +350,8 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         if (Constants.ADAPT_SELECT_ITEMS) {
-            RcfacesContext rcfacesContext = RcfacesContext
-                    .getInstance(getComponentRenderContext().getFacesContext());
+            RcfacesContext rcfacesContext = getComponentRenderContext()
+                    .getRenderContext().getProcessContext().getRcfacesContext();
             SelectItem selectItem = (SelectItem) rcfacesContext
                     .getAdapterManager().getAdapter(value, SelectItem.class,
                             null);
@@ -519,7 +538,16 @@ public abstract class AbstractSelectItemsDecorator extends
                 int sic = 0;
 
                 for (; it.hasNext();) {
-                    SelectItem si = (SelectItem) it.next();
+                    Object item = it.next();
+
+                    SelectItem si = convertToSelectItem(item);
+                    if (si == null) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Can not convert '" + item
+                                    + "' to SelectItem !");
+                        }
+                        continue;
+                    }
 
                     encodeSelectItem(component, si, depth, visible);
 
@@ -543,6 +571,28 @@ public abstract class AbstractSelectItemsDecorator extends
             return;
         }
 
+        if (value.getClass().isArray()) {
+            int length = Array.getLength(value);
+
+            for (int i = 0; i < length; i++) {
+                Object item = Array.get(value, i);
+
+                SelectItem si = convertToSelectItem(item);
+                if (si == null) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Can not convert '" + item
+                                + "' to SelectItem !");
+                    }
+
+                    continue;
+                }
+
+                encodeSelectItem(component, si, depth, visible);
+            }
+
+            return;
+        }
+
         if (value instanceof Collection) {
             Collection l = (Collection) value;
             if (l.isEmpty()) {
@@ -550,7 +600,16 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             for (Iterator it = l.iterator(); it.hasNext();) {
-                SelectItem si = (SelectItem) it.next();
+                Object item = it.next();
+
+                SelectItem si = convertToSelectItem(item);
+                if (si == null) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Can not convert '" + item
+                                + "' to SelectItem !");
+                    }
+                    continue;
+                }
 
                 encodeSelectItem(component, si, depth, visible);
             }

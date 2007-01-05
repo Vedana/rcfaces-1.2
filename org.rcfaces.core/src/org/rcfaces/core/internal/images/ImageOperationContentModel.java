@@ -214,7 +214,7 @@ class ImageOperationContentModel extends BasicContentModel implements
         return filterParameters;
     }
 
-    public Object getAdapter(Class adapter, Map parameters) {
+    public Object getAdapter(Class adapter, Object parameter) {
         if (IResolvedContent.class.equals(adapter)) {
             return this;
         }

@@ -18,6 +18,7 @@ import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -69,9 +70,9 @@ public class ImageAdapterFactory implements IAdapterFactory {
             .getFileNameMap();
 
     public Object getAdapter(Object adaptableObject, Class adapterType,
-            Map parameters) {
+            Object parameter) {
         if (adaptableObject instanceof RenderedImage) {
-            return adaptBufferedImage(adaptableObject, parameters);
+            return adaptBufferedImage(adaptableObject, parameter);
         }
 
         if (adaptableObject instanceof RenderedImage[]) {
@@ -81,7 +82,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
                 return null;
             }
 
-            return adaptBufferedImage(renderedImages, parameters);
+            return adaptBufferedImage(renderedImages, parameter);
         }
 
         return null;
@@ -95,7 +96,11 @@ public class ImageAdapterFactory implements IAdapterFactory {
         return new Class[] { IResolvedContent.class };
     }
 
-    private IResolvedContent adaptBufferedImage(Object image, Map parameters) {
+    private IResolvedContent adaptBufferedImage(Object image, Object parameter) {
+        Map parameters = Collections.EMPTY_MAP;
+        if (parameter instanceof Map) {
+            parameters = (Map) parameter;
+        }
 
         String defaultContentType = RGB_DEFAULT_CONTENT_TYPE;
         if (image instanceof RenderedImage) {
@@ -111,7 +116,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
         if (contentType == null) {
             String suffix = (String) parameters
                     .get(IContentModel.URL_SUFFIX_PROPERTY);
-            
+
             if (suffix != null) {
                 contentType = fileNameMap.getContentTypeFor("x." + suffix);
             }

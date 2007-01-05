@@ -27,12 +27,12 @@ var __static = {
 	_STEP_MS: 100,
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_WAITING_IMAGE_URL: "/waiting/waiting2.gif",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_WAITING_ERROR_IMAGE_URL: "/waiting/error.gif",
 	
@@ -105,7 +105,7 @@ var __static = {
 		var node=document.createElement("DIV");
 		
 		var className="f_waiting";
-		node.className=className+((inlineMode)?"_inline":"_absolute");
+		node.className=className+((inlineMode)?" f_waiting_inline":" f_waiting_absolute");
 		node.setAttribute("v:class", className);
 		if (lookId) {
 			node.setAttribute("v:lookId", lookId);
@@ -356,6 +356,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
+	 * @return String
 	 */
 	f_getText: function() {
 		return this._text;
@@ -363,6 +364,8 @@ var __prototype = {
 	
 	/**
 	 * @method public
+	 * @param String text
+	 * @return void
 	 */
 	f_setText: function(text) {
 		f_core.Assert(typeof(text)=="string", "f_waiting.f_setText: invalid text parameter ("+text+")");
@@ -379,6 +382,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
+	 * @return void
 	 */
 	f_close: function() {
 		var parent=this.parentNode;
@@ -389,6 +393,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
+	 * @return void
 	 */
 	f_show: function() {
 		if (!this._parentElementOldCursor) {
@@ -405,6 +410,8 @@ var __prototype = {
 	
 	/**
 	 * @method public
+	 * @param optional boolean immediately
+	 * @return void
 	 */
 	f_hide: function(immediately) {
 		this._installTimer(0, immediately);
@@ -419,6 +426,9 @@ var __prototype = {
 	
 	/**
 	 * @method private
+	 * @param number level
+	 * @param optional boolean immediately
+	 * @return void
 	 */
 	_installTimer: function(level, immediately) {
 		if (level<0) {

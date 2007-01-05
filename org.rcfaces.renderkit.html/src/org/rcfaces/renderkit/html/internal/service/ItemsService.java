@@ -148,7 +148,7 @@ public class ItemsService extends AbstractHtmlService {
             }
 
             IFilterProperties filterProperties = HtmlTools
-                    .decodeFilterExpression(component, filterExpression);
+                    .decodeFilterExpression(null, component, filterExpression);
 
             writeJs(facesContext, printWriter, filterCapability, componentId,
                     filtredItemsRenderer, filterProperties, maxResultNumber);

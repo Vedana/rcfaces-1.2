@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.TreeComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TreeTag extends AbstractInputTag implements Tag {
 
@@ -43,6 +42,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String selectedValues;
 	private String checkedValues;
 	private String expansionValues;
+	private String cursorValue;
 	private String expansionUseValue;
 	private String clientSelectionFullState;
 	private String clientCheckFullState;
@@ -258,6 +258,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.expansionValues = expansionValues;
 	}
 
+	public final String getCursorValue() {
+		return cursorValue;
+	}
+
+	public final void setCursorValue(String cursorValue) {
+		this.cursorValue = cursorValue;
+	}
+
 	public final String getExpansionUseValue() {
 		return expansionUseValue;
 	}
@@ -310,6 +318,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  expansionValues='"+expansionValues+"'");
+			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
@@ -347,7 +356,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 				component.setHorizontalScrollPosition(vb);
 			} else {
-				component.setHorizontalScrollPosition(horizontalScrollPosition);
+				component.setHorizontalScrollPosition(getInt(horizontalScrollPosition));
 			}
 		}
 
@@ -357,7 +366,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 				component.setVerticalScrollPosition(vb);
 			} else {
-				component.setVerticalScrollPosition(verticalScrollPosition);
+				component.setVerticalScrollPosition(getInt(verticalScrollPosition));
 			}
 		}
 
@@ -555,6 +564,15 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (cursorValue != null) {
+			if (isValueReference(cursorValue)) {
+				ValueBinding vb = application.createValueBinding(cursorValue);
+				component.setCursorValue(vb);
+			} else {
+				component.setCursorValue(cursorValue);
+			}
+		}
+
 		if (expansionUseValue != null) {
 			if (isValueReference(expansionUseValue)) {
 				ValueBinding vb = application.createValueBinding(expansionUseValue);
@@ -610,6 +628,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		selectedValues = null;
 		checkedValues = null;
 		expansionValues = null;
+		cursorValue = null;
 		expansionUseValue = null;
 		clientSelectionFullState = null;
 		clientCheckFullState = null;

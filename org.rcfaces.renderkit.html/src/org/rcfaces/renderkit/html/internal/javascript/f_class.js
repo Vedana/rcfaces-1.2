@@ -41,10 +41,10 @@ function f_class(className, lookId, staticMembers, members, parentClass) {
 	this._members = members;
 	this._parent = parentClass;
 	
+	var aspects;
 	if (arguments.length>5) {
 		// Aspects
-		var aspects=f_core.PushArguments(null, arguments, 5);
-		this._aspects=aspects;
+		aspects=f_core.PushArguments(null, arguments, 5);
 		
 		if (f_core.IsDebugEnabled("f_class")) {
 			for(var i=0;i<aspects.length;i++) {
@@ -54,6 +54,7 @@ function f_class(className, lookId, staticMembers, members, parentClass) {
 			}
 		}
 	}
+	this._aspects=aspects;
 	
 	this._classLoader._declareClass(this);
 }
@@ -81,15 +82,29 @@ f_class.prototype = {
 	 * @method public final
 	 * @return f_class
 	 */
-	f_getParent: function() {
+	f_getSuperClass: function() {
 		return this._parent;
 	},
 	
 	/**
+	 * Returns all aspects extended by this class.
+	 *
 	 * @method public final
+	 * @return f_aspect[]
+	 */
+	f_getAspects: function() {
+		if (!this._aspects) {
+			this._aspects=new Array;
+		}
+		return this._aspects;
+	},
+	
+	/**
+	 * @method public final
+	 * @param any... args Arguments of constructor.
 	 * @return Object
 	 */
-	f_newInstance: function() {
+	f_newInstance: function(args) {
 		var obj = new Object;
 		
 		return f_class.Init(obj, this, arguments);
@@ -147,32 +162,32 @@ f_class.prototype = {
 var __static = {
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_LOOK: "~",
 	
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	ABSTRACT: "f_abstract",
 	
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	OPTIONAL_ABSTRACT: "f_optionalAbstract",
 	
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	BEFORE_ASPECT: "before",
 
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	AFTER_ASPECT: "after",
 
 	/**
-	 * @field hidden static final string
+	 * @field hidden static final String
 	 */
 	THROWING_ASPECT: "throwing",
 	
@@ -199,7 +214,7 @@ var __static = {
 	 * @method private static final string
 	 */
 	_Super: function(caller) {
-		f_core.Assert(caller && caller.callee, "f_class._Super: First parameter must be an arugments object !");
+		f_core.Assert(caller && caller.callee, "f_class._Super: First parameter must be an argument object ! (caller="+caller+")");
 		
 		var callee=caller.callee;
 
@@ -597,7 +612,7 @@ var __static = {
 			return obj;
 		}
 					
-		// f_core.Profile("f_class.init.enter("+obj.id+" / "+cls._name+")");
+		// f_core.Profile("f_class.init(false, "+obj.id+" / "+cls._name+")");
 					
 		obj._kclass = cls;
 		
@@ -621,7 +636,7 @@ var __static = {
 							
 		cls._classLoader._newInstance(obj, systemClass);
 		
-		// f_core.Profile("f_class.init.exit("+obj.id+" / "+cls._name+")");
+		// f_core.Profile("f_class.init(true, "+obj.id+" / "+cls._name+")");
 		
 		return obj;
 	},

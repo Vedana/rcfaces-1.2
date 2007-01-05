@@ -12,14 +12,7 @@
  
 .f_imageRadioButton_image,
 .f_imageRadioButton_text,
-.f_imageRadioButton, 
-.f_imageRadioButton_hover, 
-.f_imageRadioButton_pushed, 
-.f_imageRadioButton_selected, 
-.f_imageRadioButton_focus,
-.f_imageRadioButton_selected_focus, 
-.f_imageRadioButton_selected_hover, 
-.f_imageRadioButton_disabled {
+.f_imageRadioButton {
 	border: 0;
 	padding: 0;
 	margin: 0;
@@ -32,13 +25,7 @@
 	vertical-align: baseline;
 }
 
-.f_imageRadioButton, 
-.f_imageRadioButton_hover, 
-.f_imageRadioButton_pushed, 
-.f_imageRadioButton_selected, 
-.f_imageRadioButton_focus,
-.f_imageRadioButton_selected_focus, 
-.f_imageRadioButton_selected_hover {
+.f_imageRadioButton {
 	cursor: pointer;
 	cursor: hand;
 }

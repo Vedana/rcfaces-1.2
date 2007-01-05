@@ -28,7 +28,7 @@ public class TimeConverter extends AbstractConverter {
             return null;
         }
 
-        return TimeTools.parseValue(context, component, value);
+        return TimeTools.parseValue(context, component, value, isLiteral());
     }
 
     public String getAsString(FacesContext context, UIComponent component,
@@ -37,6 +37,10 @@ public class TimeConverter extends AbstractConverter {
             return null;
         }
 
-        return TimeTools.formatValue(component, (Time) value);
+        return TimeTools.formatValue(component, (Time) value, isLiteral());
+    }
+
+    protected boolean isLiteral() {
+        return false;
     }
 }

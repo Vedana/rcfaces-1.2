@@ -5,6 +5,7 @@ package org.rcfaces.core.internal.tools;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -13,10 +14,11 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IPageConfigurator;
 import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 
 /**
@@ -31,11 +33,11 @@ public class PageConfiguration {
 
     private static final String SCRIPT_TYPE_PROPERTY = "org.rcfaces.core.internal.PageConfiguration.SCRIPT_TYPE";
 
-    private static final String ATTRIBUTES_LOCALE_PROPERTY = "org.rcfaces.core.internal.PageConfiguration.ATTRIBUTES_LOCALE";
+    private static final String LITERAL_LOCALE_PROPERTY = "org.rcfaces.core.internal.PageConfiguration.LITERAL_LOCALE";
 
-    private static final String ATTRIBUTES_LOCALE_PARAMETER = Constants
+    private static final String LITERAL_LOCALE_PARAMETER = Constants
             .getPackagePrefix()
-            + ".ATTRIBUTES_LOCALE";
+            + ".LITERAL_LOCALE";
 
     public static void setPageConfigurator(FacesContext facesContext,
             IPageConfigurator pageConfigurator) {
@@ -45,9 +47,9 @@ public class PageConfiguration {
             setAttribute(facesContext, SCRIPT_TYPE_PROPERTY, pageScriptType);
         }
 
-        Locale locale = pageConfigurator.getAttributesLocale();
+        Locale locale = pageConfigurator.getLiteralLocale();
         if (locale != null) {
-            setAttribute(facesContext, ATTRIBUTES_LOCALE_PROPERTY, locale);
+            setAttribute(facesContext, LITERAL_LOCALE_PROPERTY, locale);
         }
     }
 
@@ -135,16 +137,18 @@ public class PageConfiguration {
         return null;
     }
 
-    public static Locale getAttributesLocale(IProcessContext processContext,
-            UIComponent component) {
+    public static Locale getLiteralLocale(IProcessContext processContext,
+            UIComponent original) {
+
+        UIComponent component = original;
 
         Locale locale = null;
         for (; component != null; component = component.getParent()) {
 
-            if (component instanceof ILocalizedAttributesCapability) {
+            if (component instanceof ILiteralLocaleCapability) {
 
-                locale = ((ILocalizedAttributesCapability) component)
-                        .getAttributesLocale();
+                locale = ((ILiteralLocaleCapability) component)
+                        .getLiteralLocale();
                 if (locale != null) {
                     return locale;
                 }
@@ -153,39 +157,43 @@ public class PageConfiguration {
             }
         }
 
-        FacesContext facesContext = null;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        if (processContext != null) {
-            locale = processContext.getDefaultAttributesLocale();
-            if (locale != null) {
-                return locale;
-            }
-            facesContext = processContext.getFacesContext();
+        if (processContext == null) {
+            processContext = AbstractProcessContext
+                    .getProcessContext(facesContext);
         }
 
-        if (facesContext == null) {
-            facesContext = FacesContext.getCurrentInstance();
-        }
-
-        locale = (Locale) getAttribute(facesContext, ATTRIBUTES_LOCALE_PROPERTY);
+        locale = processContext.getDefaultAttributesLocale();
         if (locale != null) {
             return locale;
         }
 
-        locale = getDefaultAttributesLocale(facesContext);
+        locale = (Locale) getAttribute(facesContext, LITERAL_LOCALE_PROPERTY);
         if (locale != null) {
-            setAttribute(facesContext, ATTRIBUTES_LOCALE_PROPERTY, locale);
             return locale;
+        }
+
+        locale = getDefaultLiteralLocale(facesContext);
+        if (locale != null) {
+            setAttribute(facesContext, LITERAL_LOCALE_PROPERTY, locale);
+            return locale;
+        }
+
+        if (original == null) {
+            throw new FacesException(
+                    "You must specify a default locale for literals !");
         }
 
         throw new FacesException(
-                "You must specify a default locale for attributes !");
+                "You must specify a default locale for literals for component: "
+                        + original.getId());
     }
 
-    public static Locale getDefaultAttributesLocale(FacesContext facesContext) {
+    public static Locale getDefaultLiteralLocale(FacesContext facesContext) {
         IPageConfigurator scriptTypeConfigurator = getPageConfiguration(facesContext);
         if (scriptTypeConfigurator != null) {
-            Locale locale = scriptTypeConfigurator.getAttributesLocale();
+            Locale locale = scriptTypeConfigurator.getLiteralLocale();
 
             if (locale != null) {
                 if (LOG.isDebugEnabled()) {
@@ -199,7 +207,7 @@ public class PageConfiguration {
         Map applicationInitMap = facesContext.getExternalContext()
                 .getInitParameterMap();
         String value = (String) applicationInitMap
-                .get(ATTRIBUTES_LOCALE_PARAMETER);
+                .get(LITERAL_LOCALE_PARAMETER);
         if (value == null) {
             return null;
         }
@@ -212,5 +220,11 @@ public class PageConfiguration {
 
         throw new FacesException("Unknown locale name '" + value
                 + "' defined into application init parameters. (web.xml)");
+    }
+
+    public static TimeZone getLiteralTimeZone(IProcessContext processContext,
+            UIComponent component) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

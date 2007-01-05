@@ -21,12 +21,15 @@ f_dateFormat._DEFAULT_TWO_DIGIT_YEAR_START=1960;
 /**
  * @method public static final 
  * @param Date date Date to format.
- * @param String format Expression of format.
- * @param Date twoDigitYearStart 
+ * @param optional String format Expression of format.
  * @param optional f_locale locale Locale used by format.
  * @return String Formatted date.
  */
-f_dateFormat.FormatDate=function(date, format, twoDigitYearStart, locale) {
+f_dateFormat.FormatDate=function(date, format, locale) {
+	f_core.Assert(date instanceof Date, "f_dateFormat.FormatDate: Invalid date parameter '"+date+"'.");
+	f_core.Assert(format===undefined || format===null || typeof(format)=="string", "f_dateFormat.FormatDate: Invalid format parameter '"+format+"'.");
+	f_core.Assert(locale===undefined || (locale instanceof f_locale), "f_dateFormat.FormatDate: Invalid locale parameter '"+locale+"'.");
+
 	if (!locale) {
 		locale=f_locale.Get();
 	}
@@ -169,12 +172,17 @@ f_dateFormat.FormatDate=function(date, format, twoDigitYearStart, locale) {
 /**
  * @method public static final 
  * @param String text Text to parse.
- * @param String format Expression of parsing.
- * @param Date twoDigitYearStart 
+ * @param optional String format Expression of parsing.
+ * @param optional Date twoDigitYearStart 
  * @param optional f_locale locale Locale used by parsing.
  * @return Date Date parsed.
  */
 f_dateFormat.ParseDate=function(text, format, twoDigitYearStart, locale) {
+	f_core.Assert(typeof(text)=="string", "f_dateFormat.ParseDate: Invalid text parameter '"+text+"'.");
+	f_core.Assert(format===undefined || format===null || typeof(format)=="string", "f_dateFormat.ParseDate: Invalid format parameter '"+format+"'.");
+	f_core.Assert(twoDigitYearStart===undefined || (twoDigitYearStart instanceof Date), "f_dateFormat.ParseDate: Invalid twoDigitYearStart parameter '"+twoDigitYearStart+"'.");
+	f_core.Assert(locale===undefined || (locale instanceof f_locale), "f_dateFormat.ParseDate: Invalid locale parameter '"+locale+"'.");
+
 	if (!format) {
 		if (!locale) {
 			locale=f_locale.Get();
@@ -287,8 +295,20 @@ f_dateFormat.ParseDate=function(text, format, twoDigitYearStart, locale) {
 }
 /**
  * @method public static final
+ * @param number year
+ * @param number month
+ * @param number date
+ * @param optional Date twoDigitYearStart
+ * @param optional f_locale locale
+ * @return number
  */
 f_dateFormat.ResolveYear=function(year, month, date, twoDigitYearStart, locale) {
+	f_core.Assert(typeof(year)=="number", "f_dateFormat.ResolveYear: Invalid year parameter '"+year+"'.");
+	f_core.Assert(typeof(month)=="number", "f_dateFormat.ResolveYear: Invalid month parameter '"+month+"'.");
+	f_core.Assert(typeof(date)=="number", "f_dateFormat.ResolveYear: Invalid date parameter '"+date+"'.");
+	f_core.Assert(twoDigitYearStart===undefined || (twoDigitYearStart instanceof Date), "f_dateFormat.ResolveYear: Invalid twoDigitYearStart parameter '"+twoDigitYearStart+"'.");
+	f_core.Assert(locale===undefined || (locale instanceof f_locale), "f_dateFormat.ResolveYear: Invalid locale parameter '"+locale+"'.");
+
 	if (year>=100) {
 		return year;
 	}

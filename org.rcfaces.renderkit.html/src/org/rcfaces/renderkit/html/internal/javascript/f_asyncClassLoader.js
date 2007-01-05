@@ -39,7 +39,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 				for(;;) {
 					var loads=this._loads;
 					
-					if (loads.length>0) {	
+					if (loads.length) {	
 						var bundleName=loads.shift();
 						
 	//					alert("Load bundle "+bundleName);
@@ -109,15 +109,35 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 						return;
 					}
 					
-					if (this._scripts.length>0) {
-						var script=this._scripts.shift();
+					var scripts=this._scripts;
+					if (scripts.length) {
+						var script=scripts.shift();
 						
 	//					alert("Eval script: "+script);
+						
+						if (typeof(script)=="object") {
+							var scriptElement=document.createElement("SCRIPT");
+							scriptElement.src=script.src;
+							
+							if (script.type) {
+								scriptElement.type=script.type;
+							} else {
+								scriptElement.type=f_httpRequest.JAVASCRIPT_MIME_TYPE;
+							}
+							if (script.charset) {
+								scriptElement.charset=script.charset;
+							}							
+							scriptElement.defer=false;
+							
+							document.body.appendChild(scriptElement);
+							
+							continue;
+						}
 						
 						script=f_core.Trim(script);
 						
 						// Pour eviter un anti-virus plutot indelicat !
-						if (script.indexOf("<!--")==0) {
+						if (!script.indexOf("<!--")) {
 							var v=script.indexOf("//-->");
 							if (v>0) {
 								var newScript=script.substring(5, v);
@@ -131,7 +151,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 											
 						f_core.Debug("f_asyncClassLoader", "Eval script '"+script+"'.");
 						
-						if (script.length>0) {
+						if (script.length) {
 							try {
 								eval(script);
 								
@@ -167,8 +187,8 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 		f_core.Debug("f_asyncClassLoader", "Exception when setting innerHTML for component id='"+component.id+"' htmlNode='"+htmlNode.tagName+"':\n"+content, x);
 	}
 	
-	var forms=htmlNode.getElementsByTagName("FORM");
-	if (forms.length>0) {
+	var forms=f_core.GetElementsByTagName(htmlNode, "FORM");	
+	if (forms.length) {
 		f_core.Debug("f_asyncClassLoader", forms.length+" form(s) detected !");
 		
 		for(var i=0;i<forms.length;i++) {
@@ -177,24 +197,37 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 			f_core.InitializeForm(f);
 		}
 	}
-	
-	var scripts=htmlNode.getElementsByTagName("SCRIPT");
 
+	var scripts=f_core.GetElementsByTagName(htmlNode, "SCRIPT");
 	f_core.Debug("f_asyncClassLoader", scripts.length+" script(s) detected !");
 	
+	var interactiveScripts=interactiveMode._scripts;
 	for(var i=0;i<scripts.length;i++) {
 		var script=scripts[i];
-		
+		var src=script.src;
 		var type=script.type;
-		if (typeof(type)=="string" && type.length>0 && type.toLowerCase()!="text/javascript") {
-			f_core.Error("f_asyncClassLoader", "Unknown script type: "+script.type);
+		
+		if (src) {
+			var js= { src: src, 
+					type: type, 
+					charset: script.charset };
+
+			f_core.Debug("f_asyncClassLoader", "Add element script: src="+src+" type="+type+" charset="+script.charset);
+
+			interactiveScripts.push(js);
 			continue;
 		}
 		
+		if (typeof(type)=="string" && type.length>0 && type.toLowerCase().indexOf("text/javascript")) {
+			f_core.Error("f_asyncClassLoader", "Unknown script type: "+script.type);
+			continue;
+		}
+
 		var js=script.text;
 
-		f_core.Debug("f_asyncClassLoader", "Add script: "+js);
-		interactiveMode._scripts.push(js);
+		f_core.Debug("f_asyncClassLoader", "Add text script: "+js);
+		
+		interactiveScripts.push(js);
 	}
 	
 	interactiveMode.run();

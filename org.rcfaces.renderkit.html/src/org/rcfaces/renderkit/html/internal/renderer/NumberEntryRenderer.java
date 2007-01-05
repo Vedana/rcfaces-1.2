@@ -71,7 +71,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         writeCssAttributes(htmlWriter);
 
         DecimalFormatSymbols decimalFormatSymbols = null;
-        Locale locale = PageConfiguration.getAttributesLocale(
+        Locale locale = PageConfiguration.getLiteralLocale(
                 componentRenderContext.getRenderContext().getProcessContext(),
                 numberEntryComponent);
         if (locale == null) {

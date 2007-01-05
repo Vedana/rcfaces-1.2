@@ -15,41 +15,41 @@ function f_env() {
 
 var __static = {
 	/**
-	 * @field private static final string 
+	 * @field private static final String 
 	 */
 	_STYLESHEET_BASE: "styleSheet.base",
 	/**
-	 * @field private static final string 
+	 * @field private static final String 
 	 */
 	_DEFAULT_STYLESHEET_BASE: "stylesheets",
 	
 	/**
-	 * @field private static final string 
+	 * @field private static final String 
 	 */
 	_CANCEL_EXTERNAL_SUBMIT: "cancel.external.submit",
 	
 	/**
-	 * @field private static string
+	 * @field private static String
 	 */
 	 _StyleSheetBase: undefined,
 	
 	/**
-	 * @field private static string
+	 * @field private static String
 	 */
 	_BaseURI: undefined,
 	
 	/**
-	 * @field private static string
+	 * @field private static String
 	 */
 	_JsBaseURI: undefined,
 	
 	/**
-	 * @field private static string
+	 * @field private static String
 	 */
 	_ViewURI: undefined,
 
 	/**
-	 * @field private static string
+	 * @field private static String
 	 */
 	_LocaleName: undefined,
 
@@ -57,6 +57,11 @@ var __static = {
 	 * @field private static boolean
 	 */
 	_LockSubmitUntilPageComplete: undefined,
+		
+	/**
+	 * @field hidden static boolean
+	 */
+	_SensitiveCaseTagName: undefined,
 	
 	/*
 	Initializer: function() {
@@ -176,12 +181,26 @@ var __static = {
 			styleSheetBaseURI=jsBaseURI;
 		}
 		f_env._StyleSheetBase=styleSheetBaseURI;
+		
+		if (viewURI.charAt(0)=="/") {
+			// On ajoute le protocole, le host et le port
+			
+			var url=window.location.toString();
+			var idx=url.indexOf("//");
+			if (idx>0) {
+				idx=url.indexOf("/", idx+2);
+				if (idx>0) {
+					viewURI=url.substring(0, idx)+viewURI;
+				}
+			}
+		}
+		
 		f_env._ViewURI=viewURI;
 		
-		f_core.Debug("f_env", "Set Page base URI to '"+baseURI+"'.");
-		f_core.Debug("f_env", "Set View base URI to '"+viewURI+"'.");
-		f_core.Debug("f_env", "Set Javascript base URI to '"+jsBaseURI+"'.");
-		f_core.Debug("f_env", "Set Css base URI to '"+styleSheetBaseURI+"'.");
+		f_core.Debug(f_env, "Set Page base URI to '"+baseURI+"'.");
+		f_core.Debug(f_env, "Set View base URI to '"+viewURI+"'.");
+		f_core.Debug(f_env, "Set Javascript base URI to '"+jsBaseURI+"'.");
+		f_core.Debug(f_env, "Set Css base URI to '"+styleSheetBaseURI+"'.");
 	},
 	
 	/**
@@ -222,6 +241,16 @@ var __static = {
 	 */
 	GetCheckValidation: function() {
 		return true;
+	},
+	
+	/**
+	 * @method public static final
+	 */
+	EnableSensitiveCaseTagName: function() {
+		if (f_core.IsGecko()) { // Gecko n'est pas sensitive case !
+			return;
+		}
+		f_env._SensitiveCaseTagName=true;
 	},
 	
 	/**

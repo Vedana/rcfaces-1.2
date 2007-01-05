@@ -25,9 +25,9 @@ public class TimeTools {
     private static final String REVISION = "$Revision$";
 
     public static Object parseValue(FacesContext context,
-            UIComponent component, String value) {
+            UIComponent component, String value, boolean literalValue) {
 
-        DateFormat dateFormat = getShortTimeFormat(component);
+        DateFormat dateFormat = getShortTimeFormat(component, literalValue);
 
         Date d;
         try {
@@ -42,8 +42,9 @@ public class TimeTools {
         }
     }
 
-    public static String formatValue(UIComponent component, Time time) {
-        DateFormat dateFormat = getShortTimeFormat(component);
+    public static String formatValue(UIComponent component, Time time,
+            boolean literalValue) {
+        DateFormat dateFormat = getShortTimeFormat(component, literalValue);
 
         synchronized (dateFormat) {
             Date date = time.getDate(dateFormat.getCalendar());
@@ -52,8 +53,10 @@ public class TimeTools {
         }
     }
 
-    private static DateFormat getShortTimeFormat(UIComponent component) {
-        return (DateFormat) LocaleTools.getDefaultFormat(component, LocaleTools.TIME_TYPE);
+    private static DateFormat getShortTimeFormat(UIComponent component,
+            boolean literalValue) {
+        return (DateFormat) LocaleTools.getDefaultFormat(component,
+                LocaleTools.TIME_TYPE, literalValue);
     }
 
     public static String getDefaultTimeFormatPattern(Locale locale) {

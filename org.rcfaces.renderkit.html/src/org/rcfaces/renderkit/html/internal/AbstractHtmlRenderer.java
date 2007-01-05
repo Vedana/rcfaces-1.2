@@ -490,15 +490,15 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
     protected final IHtmlWriter writeScroll(IHtmlWriter writer,
             IScrollableCapability scrollableComponent) throws WriterException {
 
-        String horizontalScrollPosition = scrollableComponent
+        int horizontalScrollPosition = scrollableComponent
                 .getHorizontalScrollPosition();
-        if (horizontalScrollPosition != null) {
+        if (horizontalScrollPosition > 0) {
             writer.writeAttribute("v:hsp", horizontalScrollPosition);
         }
 
-        String verticalScrollPosition = scrollableComponent
+        int verticalScrollPosition = scrollableComponent
                 .getVerticalScrollPosition();
-        if (verticalScrollPosition != null) {
+        if (verticalScrollPosition > 0) {
             writer.writeAttribute("v:vsp", verticalScrollPosition);
         }
 
@@ -669,47 +669,35 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         if (component instanceof IScrollableCapability) {
             IScrollableCapability scrollableCapability = (IScrollableCapability) component;
 
-            String horizontalScrollPosition = componentData
-                    .getStringProperty("horizontalScrollPosition");
-            if (horizontalScrollPosition != null) {
-                try {
-                    String old = scrollableCapability
-                            .getHorizontalScrollPosition();
+            int horizontalScrollPosition = componentData.getIntProperty(
+                    "horizontalScrollPosition", -1);
+            if (horizontalScrollPosition >= 0) {
+                int old = scrollableCapability.getHorizontalScrollPosition();
 
-                    if (horizontalScrollPosition.equals(old) == false) {
-                        scrollableCapability
-                                .setHorizontalScrollPosition(horizontalScrollPosition);
+                if (horizontalScrollPosition != old) {
+                    scrollableCapability
+                            .setHorizontalScrollPosition(horizontalScrollPosition);
 
-                        component.queueEvent(new PropertyChangeEvent(component,
-                                Properties.HORIZONTAL_SCROLL_POSITION, old,
-                                horizontalScrollPosition));
-                    }
-
-                } catch (NumberFormatException ex) {
-                    LOG.error("Bad number '" + horizontalScrollPosition
-                            + "' for horizontalScrollPosition.", ex);
+                    component
+                            .queueEvent(new PropertyChangeEvent(component,
+                                    Properties.HORIZONTAL_SCROLL_POSITION,
+                                    new Integer(old), new Integer(
+                                            horizontalScrollPosition)));
                 }
             }
 
-            String verticalScrollPosition = componentData
-                    .getStringProperty("verticalScrollPosition");
-            if (verticalScrollPosition != null) {
-                try {
-                    String old = scrollableCapability
-                            .getVerticalScrollPosition();
+            int verticalScrollPosition = componentData.getIntProperty(
+                    "verticalScrollPosition", -1);
+            if (verticalScrollPosition >= 0) {
+                int old = scrollableCapability.getVerticalScrollPosition();
 
-                    if (verticalScrollPosition.equals(old) == false) {
-                        scrollableCapability
-                                .setVerticalScrollPosition(verticalScrollPosition);
+                if (verticalScrollPosition != old) {
+                    scrollableCapability
+                            .setVerticalScrollPosition(verticalScrollPosition);
 
-                        component.queueEvent(new PropertyChangeEvent(component,
-                                Properties.VERTICAL_SCROLL_POSITION, old,
-                                verticalScrollPosition));
-                    }
-
-                } catch (NumberFormatException ex) {
-                    LOG.error("Bad number '" + verticalScrollPosition
-                            + "' for verticalScrollPosition.", ex);
+                    component.queueEvent(new PropertyChangeEvent(component,
+                            Properties.VERTICAL_SCROLL_POSITION, new Integer(
+                                    old), new Integer(verticalScrollPosition)));
                 }
             }
         }

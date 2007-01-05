@@ -3,8 +3,7 @@
  */
  
 /**
- *
- * Moteur des aspects !
+ * Aspect primary object.
  *
  * @class public f_aspect extends Object
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -12,7 +11,7 @@
  */
 function f_aspect(aspectName, staticMembers, members) {
 	// Constructeur vide: on ne fait rien !
-	if (arguments.length==0) {
+	if (!arguments.length) {
 		return;
 	}
 
@@ -26,9 +25,9 @@ function f_aspect(aspectName, staticMembers, members) {
 	this._staticMembers=staticMembers;
 	this._classLoader=window._classLoader;
 
+	var parents;
 	if (arguments.length>3) {
-		var parents=f_core.PushArguments(null, arguments, 3);
-		this._parents=parents;
+		parents=f_core.PushArguments(null, arguments, 3);
 		
 		if (f_core.IsDebugEnabled("f_aspect")) {
 			for(var i=0;i<parents.length;i++) {
@@ -37,6 +36,7 @@ function f_aspect(aspectName, staticMembers, members) {
 			}
 		}		
 	}
+	this._parents=parents;
 	
 	this._classLoader._declareAspect(this);
 }
@@ -56,6 +56,18 @@ f_aspect.prototype = {
 		return this._classLoader;
 	},
 	/**
+	 * Returns all aspects extended by this aspect.
+	 *
+	 * @method public final
+	 * @return f_aspect[]
+	 */
+	f_getAspects: function() {
+		if (!this._parents) {
+			this._parents=new Array;
+		}
+		return this._parents;
+	},	
+	/**
 	 * @method public
 	 * @return String
 	 */
@@ -64,6 +76,12 @@ f_aspect.prototype = {
 	}
 }
 
+/** 
+ * Returns class name.
+ *
+ * @method public static 
+ * @return String class name.
+ */
 f_aspect.f_getName=function() {
 	return "f_aspect";
 }

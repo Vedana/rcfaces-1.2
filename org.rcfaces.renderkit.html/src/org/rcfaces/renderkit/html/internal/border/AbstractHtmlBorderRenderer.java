@@ -233,6 +233,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         writer.writeWidth(getWestBorderWidth());
         writer.writeHeight(getNorthBorderHeight());
         writer.writeSrc(getBlankImageURL(writer));
+        writer.endElement("IMG");
 
         writer.endElement("TD");
 
@@ -269,6 +270,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         writer.writeWidth(getEastBorderWidth());
         writer.writeHeight(getNorthBorderHeight());
         writer.writeSrc(getBlankImageURL(writer));
+        writer.endElement("IMG");
 
         writer.endElement("TD");
 

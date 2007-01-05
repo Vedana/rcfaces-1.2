@@ -1,19 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectedCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ISelectedCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The checkButton Component is equivalent to the &lt;INPUT TYPE="checkbox"&gt; HTML tag.</p>
@@ -61,7 +60,7 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 	public final void setTextPosition(String textPosition) {
 
 
-			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, null, textPosition)).intValue());
+			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());
 		
 	}
 

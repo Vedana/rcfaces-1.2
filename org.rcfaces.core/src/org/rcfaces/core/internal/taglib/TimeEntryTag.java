@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.TimeEntryComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.component.TimeEntryComponent;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TimeEntryTag extends AbstractInputTag implements Tag {
 
@@ -23,7 +22,10 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 	private String focusStyleClass;
 	private String selectionListeners;
 	private String readOnly;
-	private String attributesLocale;
+	private String literalLocale;
+	private String literalTimeZone;
+	private String componentLocale;
+	private String componentTimeZone;
 	private String autoCompletion;
 	private String time;
 	private String minTime;
@@ -86,12 +88,36 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		this.readOnly = readOnly;
 	}
 
-	public final String getAttributesLocale() {
-		return attributesLocale;
+	public final String getLiteralLocale() {
+		return literalLocale;
 	}
 
-	public final void setAttributesLocale(String attributesLocale) {
-		this.attributesLocale = attributesLocale;
+	public final void setLiteralLocale(String literalLocale) {
+		this.literalLocale = literalLocale;
+	}
+
+	public final String getLiteralTimeZone() {
+		return literalTimeZone;
+	}
+
+	public final void setLiteralTimeZone(String literalTimeZone) {
+		this.literalTimeZone = literalTimeZone;
+	}
+
+	public final String getComponentLocale() {
+		return componentLocale;
+	}
+
+	public final void setComponentLocale(String componentLocale) {
+		this.componentLocale = componentLocale;
+	}
+
+	public final String getComponentTimeZone() {
+		return componentTimeZone;
+	}
+
+	public final void setComponentTimeZone(String componentTimeZone) {
+		this.componentTimeZone = componentTimeZone;
 	}
 
 	public final String getAutoCompletion() {
@@ -183,7 +209,10 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 			LOG.debug("  autoTab='"+autoTab+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
-			LOG.debug("  attributesLocale='"+attributesLocale+"'");
+			LOG.debug("  literalLocale='"+literalLocale+"'");
+			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
+			LOG.debug("  componentLocale='"+componentLocale+"'");
+			LOG.debug("  componentTimeZone='"+componentTimeZone+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
 			LOG.debug("  time='"+time+"'");
 			LOG.debug("  minTime='"+minTime+"'");
@@ -256,13 +285,43 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 			}
 		}
 
-		if (attributesLocale != null) {
-			if (isValueReference(attributesLocale)) {
-				ValueBinding vb = application.createValueBinding(attributesLocale);
+		if (literalLocale != null) {
+			if (isValueReference(literalLocale)) {
+				ValueBinding vb = application.createValueBinding(literalLocale);
 
-				component.setAttributesLocale(vb);
+				component.setLiteralLocale(vb);
 			} else {
-				component.setAttributesLocale(attributesLocale);
+				component.setLiteralLocale(literalLocale);
+			}
+		}
+
+		if (literalTimeZone != null) {
+			if (isValueReference(literalTimeZone)) {
+				ValueBinding vb = application.createValueBinding(literalTimeZone);
+
+				component.setLiteralTimeZone(vb);
+			} else {
+				component.setLiteralTimeZone(literalTimeZone);
+			}
+		}
+
+		if (componentLocale != null) {
+			if (isValueReference(componentLocale)) {
+				ValueBinding vb = application.createValueBinding(componentLocale);
+
+				component.setComponentLocale(vb);
+			} else {
+				component.setComponentLocale(componentLocale);
+			}
+		}
+
+		if (componentTimeZone != null) {
+			if (isValueReference(componentTimeZone)) {
+				ValueBinding vb = application.createValueBinding(componentTimeZone);
+
+				component.setComponentTimeZone(vb);
+			} else {
+				component.setComponentTimeZone(componentTimeZone);
 			}
 		}
 
@@ -364,7 +423,10 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		focusStyleClass = null;
 		selectionListeners = null;
 		readOnly = null;
-		attributesLocale = null;
+		literalLocale = null;
+		literalTimeZone = null;
+		componentLocale = null;
+		componentTimeZone = null;
 		autoCompletion = null;
 		time = null;
 		minTime = null;

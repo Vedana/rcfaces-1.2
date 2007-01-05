@@ -17,7 +17,7 @@ var __static = {
 	_COMPUTE_TOOLTIP: true,
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_BLANK_IMAGE_URL: "/blank.gif",
 
@@ -1269,6 +1269,7 @@ var __prototype = {
 	*/
 	/**
 	 * @method public
+	 * @param number disabledWeekDays
 	 * @return void
 	 */
 	f_setDisabledWeekDays: function(disabledWeekDays) {
@@ -1279,7 +1280,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return any selection
+	 * @return Date[][] selection
 	 */
 	f_getSelection: function() {
 		return this._dates;
@@ -1371,6 +1372,9 @@ var __prototype = {
 		
 		this.f_refreshComponent();
 	},
+	/**
+	 * @method private
+	 */
 	_createHomeDate: function(doc, component, className, blankImageURL) {
 		f_core.Assert(this._homeDate instanceof Date, "f_calendarObject._createHomeDate: homeDate is not a date ('"+this._homeDate+"').");
 		
@@ -1399,6 +1403,9 @@ var __prototype = {
 		
 		this._todayButton=button;
 	},
+	/**
+	 * @method private
+	 */
 	_createUnitCursor: function(doc, component, className, blankImageURL) {
 		var unitButtons=new Array();
 		this._unitButtons=unitButtons
@@ -1488,6 +1495,9 @@ var __prototype = {
 		
 		component.appendChild(div);
 	},	
+	/**
+	 * @method private
+	 */
 	_createDayList: function(doc, component, className, blankImageURL) {
 		var table=doc.createElement("TABLE");
 		table.align="center";
@@ -1602,6 +1612,9 @@ var __prototype = {
 	
 		component.appendChild(table);
 	},
+	/**
+	 * @method private
+	 */
 	_createMonthList: function(doc, component, className, blankImageURL) {
 		this._monthButtons=new Array;
 
@@ -1646,6 +1659,9 @@ var __prototype = {
 	
 		component.appendChild(table);
 	},
+	/**
+	 * @method private
+	 */
 	_createYearCursor: function(doc, component, className, blankImageURL) {			
 		this._yearButtons=new Array;
 		
@@ -1719,6 +1735,9 @@ var __prototype = {
 		
 		component.appendChild(table);
 	},
+	/**
+	 * @method private
+	 */
 	_createMonthCursor: function(doc, component, className, blankImageURL) {			
 		this._monthButtons=new Array;
 		
@@ -1788,6 +1807,9 @@ var __prototype = {
 		
 		component.appendChild(table);
 	},
+	/**
+	 * @method private
+	 */
 	_updateCells: function(date) {
 		
 		var time=date.getTime();
@@ -1972,6 +1994,9 @@ var __prototype = {
 			lastWeekButton.tabIndex=lastWeekTabIndex;
 		}
 	},
+	/**
+	 * @method private
+	 */
 	_updateUnit: function(lastUnit, lastDate) {
 		if (!this._unitButtons) {
 			return;
@@ -1994,6 +2019,9 @@ var __prototype = {
 	*/	
 		this._unitLabel.data=text;
 	},
+	/**
+	 * @method private
+	 */
 	_updateSelection: function(showDate) {
 		var firstDate;
 		var lastDate;
@@ -2109,6 +2137,9 @@ var __prototype = {
 			}
 		}
 	},
+	/**
+	 * @method private
+	 */
 	_select: function(jsEvent, dates, selectionDetail, canRefocus, nextShowDate) {
 		var ds=new Array;
 	
@@ -2190,6 +2221,9 @@ var __prototype = {
 		f_core.Debug(f_calendarObject, "Fire selection for '"+ds+"' detail='"+selectionDetail+"'.");
 		this.f_fireEvent(f_event.SELECTION, jsEvent, null, ds, null, selectionDetail);
 	},
+	/**
+	 * @method private
+	 */
 	_updateShowDate: function(showDate, canRefocus) {
 		var refocus=false;
 		
@@ -2230,6 +2264,9 @@ var __prototype = {
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 */
 	_isValidDate: function(date, t) {
 		f_core.Assert(date instanceof Date, "Parameter is invalid: "+date);
 		
@@ -2256,6 +2293,9 @@ var __prototype = {
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 */
 	_searchValidDate: function(date, increment, limit) {
 		var limitMax;
 		var limitMin;
@@ -2296,6 +2336,9 @@ var __prototype = {
 			t=date.getTime();
 		}		
 	},
+	/**
+	 * @method private
+	 */
 	_searchLastValidDate: function(date, increment, limit) {
 		var limitTime=(limit)?limit.getTime():0;
 		// Le limit est ACCEPTE
@@ -2323,6 +2366,9 @@ var __prototype = {
 			return new Date(lastValidTime);
 		}		
 	},
+	/**
+	 * @method private
+	 */
 	_isValidPeriod: function(start, end) {
 		if ((this._minDate && end<this._minTime) || 
 			(this._maxDate && start>this._maxTime)) {
@@ -2331,6 +2377,9 @@ var __prototype = {
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 */
 	_onDayClick: function(evt, dayButton, date) {
 		if (!this._isValidDate(date)) {
 			return;
@@ -2339,6 +2388,9 @@ var __prototype = {
 		this._select(evt, [ date, date ], f_calendarObject.DAY_SELECTION_DETAIL, true, null);
 		this._updateUnit(f_calendarObject._DAY_UNIT, date);
 	},
+	/**
+	 * @method private
+	 */
 	_onMonthClick: function(evt, monthButton, date) {
 		var d;
 		var next;
@@ -2394,6 +2446,9 @@ var __prototype = {
 		this._select(evt, [d, next], f_calendarObject.MONTH_SELECTION_DETAIL);
 		this._updateUnit(f_calendarObject._MONTH_UNIT, d);
 	},
+	/**
+	 * @method private
+	 */
 	_onYearClick: function(evt, yearButton, date) {
 		var d;
 		var next;
@@ -2422,6 +2477,9 @@ var __prototype = {
 		this._select(evt, [d, next], f_calendarObject.YEAR_SELECTION_DETAIL);
 		this._updateUnit(f_calendarObject._YEAR_UNIT, d);
 	},
+	/**
+	 * @method private
+	 */
 	_onWeekClick: function(evt, weekButton, date) {
 		
 		f_core.Debug(f_calendarObject, "_onWeekClick: weekButton="+weekButton+" date="+date+" mode="+this._mode+" dates="+this._dates.length);
@@ -2480,6 +2538,9 @@ var __prototype = {
 		this._select(evt, [d, next], f_calendarObject.WEEK_SELECTION_DETAIL);
 		this._updateUnit(f_calendarObject._WEEK_UNIT, d);
 	},
+	/**
+	 * @method private
+	 */
 	_onWeekDayClick: function(evt, weekDayButton, date) {
 		var l;
 		
@@ -2548,6 +2609,9 @@ var __prototype = {
 		this._select(evt, l, f_calendarObject.DAYOFWEEK_SELECTION_DETAIL);
 		this._updateUnit(f_calendarObject._DAYOFWEEK_UNIT, l[0]);
 	},
+	/**
+	 * @method private
+	 */
 	_onUnitClick: function(evt, button, delta, lastUnit, canRefocus) {
 		if (lastUnit===undefined) {
 			lastUnit=this._lastUnit;
@@ -2852,7 +2916,7 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_formatDate: function(date, format) {
-		return f_dateFormat.FormatDate(date, format, this._twoDigitYearStart, this._locale);
+		return f_dateFormat.FormatDate(date, format, this._locale);
 	},
 	/** 
 	 * @method protected

@@ -15,7 +15,6 @@ import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
@@ -39,14 +38,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
     protected static final String TEXT_SUFFIX = "_text";
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        encodeComponent(htmlWriter);
-
-        super.encodeEnd(writer);
-    }
-
+ 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
         IComponentRenderContext componentRenderContext = htmlWriter

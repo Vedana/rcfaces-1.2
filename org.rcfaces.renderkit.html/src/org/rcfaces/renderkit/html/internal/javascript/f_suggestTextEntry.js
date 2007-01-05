@@ -22,7 +22,7 @@ var __static = {
 	_DEFAULT_SUGGESTION_DELAY_MS: 300,
 	
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_SUGGESTION_MENU_ID: "#suggestion"
 }
@@ -30,8 +30,6 @@ var __static = {
 var __prototype = {
 	f_suggestTextEntry: function() {
 		this.f_super(arguments);
-		
-		this._className=this.className;
 		
 		this.setAttribute("autocomplete", "off");
 		
@@ -434,19 +432,25 @@ var __prototype = {
 		}
 		
 		this._loading=state;
-
-		var style=this.style;
-		if (!state) {
-			this.className=this._className;
-			return;
+		
+		var cls=this.f_computeStyleClass((state)?"_waiting":null);
+		
+		if (this.className!=cls) {	
+			this.className=cls;
 		}
-	
-		this.className=this._className+"_waiting";
 	},
 	/**
 	 * @method public
+	 * @param String label
+	 * @param any value
+	 * @param optional String description
+	 * @param optional String imageURL
+	 * @param optional String clientDataName1
+	 * @param optional String clientDataValue1
+	 * @param optional String... clientDataName2
+	 * @return Object New item.
 	 */
-	f_appendItem: function(label, value, description, imageURL) {
+	f_appendItem: function(label, value, description, imageURL, clientDataName1, clientDataValue1, clientDataName2) {
 		var results=this._results;
 		if (!results) {
 			results=new Array;
@@ -465,13 +469,17 @@ var __prototype = {
 			}
 		}
 		
-		results.push({
+		var item={
 			_label: label,
 			_value: value,
 			_description: description,
 			_imageURL: imageURL,
 			_clientDatas: clientDatas
-		});
+		};
+		
+		results.push(item);
+		
+		return item;
 	},
 	/**
 	 * @method hidden

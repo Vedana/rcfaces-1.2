@@ -101,9 +101,20 @@ f_resourceBundle.prototype = {
 	 * @method private
 	 * @return void
 	 */
-	_putAll: function(values) {		
+	_putAll: function(values) {
 		var properties=new Object();
 		this._properties=properties;
+		
+		if (values instanceof Array) {
+			for(var i=0;i<values.length;) {
+				var key=values[i++];
+				var value=values[i++];
+				
+				properties[key]=value;
+			}
+			
+			return;
+		}
 		
 		for(var name in values) {
 			properties[name]=values[name];
@@ -179,7 +190,7 @@ var __static = {
 	/**
 	 * @method static final hidden
 	 * @param String name Name of baseName of a previous request.
-	 * @param Object values
+	 * @param Object values Object or an Array
 	 * @return void
 	 */
 	DefineLoaded: function(baseName, values) {

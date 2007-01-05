@@ -10,8 +10,7 @@
  * @version $Revision$ $Date$ 
  */
  
-.f_expandBar,
-.f_expandBar_collapsed {
+.f_expandBar {
 	font-family:Verdana;
 	font-size:7pt;
 	margin: 0;
@@ -19,6 +18,7 @@
 	list-style-type: none;
 	border: 1px solid #CCCCCC;
 	text-align: left;
+	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
 }
 
 .f_expandBar_button {
@@ -29,8 +29,7 @@
 	background-position: -16px 0;
 }
 
-.f_expandBar_body,
-.f_expandBar_body_collapsed {
+.f_expandBar_body {
 	padding: 0;
 	text-align: left;
 }
@@ -40,17 +39,6 @@
 	overflow: hidden;
 }
 
-.f_expandBar_head,
-.f_expandBar_head_over {
-	vertical-align: middle;
-	background-color: #EEEEEE;
-	color: black;
-	padding: 2px;
-	text-align: left;
-}
-
-.f_expandBar_head {
-}
 
 .f_expandBar_button {
 	vertical-align: middle;
@@ -62,7 +50,7 @@
 }
 
 .f_expandBar_label {
-	font: 10pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
 	vertical-align: middle;
 	-moz-user-select: none;
 	user-select: none;
@@ -76,18 +64,24 @@
 	display: inline;
 }
 
+.f_expandBar_head {
+	vertical-align: middle;
+	background-color: #EEEEEE;
+	color: black;
+	padding: 2px;
+	text-align: left;
+}
+
 .f_expandBar_head_over {
 	background-color: #CDDEEE;
 }
 
 .f_expandBar_head_over .f_expandBar_label, 
-.f_expandBar_head_over U.f_accessKey {
+.f_expandBar_head_over .f_accessKey {
 	text-decoration: underline;
 }
 
-
-.f_expandBar_content,
-.f_expandBar_content_effect {
+.f_expandBar_content {
 	background: white;
 	padding: 2px;
 }

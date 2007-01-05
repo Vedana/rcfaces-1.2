@@ -280,13 +280,18 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.core.textEntry</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextEntryRenderer</renderer-class>
+			<renderer-type>org.rcfaces.core.textArea</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextAreaRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.core.textArea</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextAreaRenderer</renderer-class>
+			<renderer-type>org.rcfaces.core.textEditor</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextEditorRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.textEntry</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextEntryRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>

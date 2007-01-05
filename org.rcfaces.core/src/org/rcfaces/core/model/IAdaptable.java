@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.model;
 
-import java.util.Map;
 
 /**
  * An interface for an adaptable object.
@@ -33,5 +32,5 @@ public interface IAdaptable {
      * @return a object castable to the given class, or <code>null</code> if
      *         this object does not have an adapter for the given class
      */
-    Object getAdapter(Class adapter, Map parameters);
+    Object getAdapter(Class adapter, Object parameter);
 }

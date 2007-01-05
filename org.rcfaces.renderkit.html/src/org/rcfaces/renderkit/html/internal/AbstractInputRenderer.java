@@ -3,11 +3,22 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import javax.faces.component.UIComponent;
+import java.util.Set;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -38,37 +49,39 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
     protected abstract String getInputType(UIComponent component);
 
     /*
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+     * protected void encodeEnd(IComponentWriter writer) throws WriterException {
+     * 
+     * IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+     * 
+     * if (htmlWriter.isJavaScriptEnabled() == false) { Iterator it =
+     * writer.getComponentRenderContext().getFacesContext() .getMessages(
+     * writer.getComponentRenderContext() .getComponentClientId()); if
+     * (it.hasNext()) { ((IHtmlWriter) writer).enableJavaScript();
+     * 
+     * writer.getComponentRenderContext().setAttribute( INPUT_MESSAGES_PROPERTY,
+     * Boolean.TRUE); } }
+     * 
+     * super.encodeEnd(writer); }
+     * 
+     * protected void encodeJavaScript(IJavaScriptWriter js) throws
+     * WriterException { super.encodeJavaScript(js);
+     * 
+     * if (JavaScriptTools.writeMessages(js)) {
+     * js.getHtmlComponentRenderContext().setAttribute( INPUT_MESSAGES_PROPERTY,
+     * Boolean.TRUE); } }
+     */
 
+    protected final void encodeEnd(IComponentWriter writer)
+            throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        if (htmlWriter.isJavaScriptEnabled() == false) {
-            Iterator it = writer.getComponentRenderContext().getFacesContext()
-                    .getMessages(
-                            writer.getComponentRenderContext()
-                                    .getComponentClientId());
-            if (it.hasNext()) {
-                ((IHtmlWriter) writer).enableJavaScript();
-
-                writer.getComponentRenderContext().setAttribute(
-                        INPUT_MESSAGES_PROPERTY, Boolean.TRUE);
-            }
-        }
+        encodeComponent(htmlWriter);
 
         super.encodeEnd(writer);
     }
 
-    protected void encodeJavaScript(IJavaScriptWriter js)
-            throws WriterException {
-        super.encodeJavaScript(js);
-
-        if (JavaScriptTools.writeMessages(js)) {
-            js.getHtmlComponentRenderContext().setAttribute(
-                    INPUT_MESSAGES_PROPERTY, Boolean.TRUE);
-
-        }
-    }
-    */
+    protected abstract void encodeComponent(IHtmlWriter htmlWriter)
+            throws WriterException;
 
     protected IHtmlWriter writeInputAttributes(IHtmlWriter writer)
             throws WriterException {
@@ -77,24 +90,6 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
         return writeInputAttributes(writer, component.getId());
     }
-
-    /*   
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(writer, classes);
-
-        if (writer.getComponentRenderContext().containsAttribute(
-                INPUT_MESSAGES_PROPERTY)) {
-
-            IJavaScriptRenderContext javaScriptRenderContext = writer
-                    .getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .getJavaScriptRenderContext();
-
-            javaScriptRenderContext.appendRequiredClasses(classes,
-                    JavaScriptClasses.INPUT, "message");
-        }
-    }
-    */
 
     protected final IHtmlWriter writeInputAttributes(IHtmlWriter writer,
             String id) throws WriterException {
@@ -140,5 +135,71 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
     protected String getInputName(
             IHtmlComponentRenderContext componentRenderContext, String id) {
         return componentRenderContext.getComponentClientId();
+    }
+
+    protected IComponentDecorator createComponentDecorator(
+            FacesContext facesContext, UIComponent component) {
+
+        if ((component instanceof IMenuCapability) == false) {
+            return null;
+        }
+
+        IMenuCapability menuCapabilityComponent = (IMenuCapability) component;
+
+        IComponentDecorator decorator = null;
+
+        IMenuIterator menuIterator = menuCapabilityComponent.listMenus();
+        for (; menuIterator.hasNext();) {
+            MenuComponent menuComponent = menuIterator.next();
+
+            IComponentDecorator menuDecorator = new SubMenuDecorator(
+                    menuComponent, menuComponent.getMenuId(), null,
+                    menuComponent.isRemoveAllWhenShown(facesContext),
+                    getMenuItemImageWidth(menuComponent),
+                    getMenuItemImageHeight(menuComponent));
+
+            if (decorator == null) {
+                decorator = menuDecorator;
+                continue;
+            }
+
+            menuDecorator.addChildDecorator(decorator);
+            decorator = menuDecorator;
+        }
+
+        return decorator;
+    }
+
+    protected int getMenuItemImageHeight(IMenuComponent menuComponent) {
+        return -1;
+    }
+
+    protected int getMenuItemImageWidth(IMenuComponent menuComponent) {
+        return -1;
+    }
+
+    protected void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
+            Set classes) {
+        super.addRequiredJavaScriptClassNames(htmlWriter, classes);
+
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        UIComponent component = componentRenderContext.getComponent();
+
+        if (component instanceof IMenuCapability) {
+            IMenuCapability menuCapability = (IMenuCapability) component;
+
+            IMenuIterator menuIterator = menuCapability.listMenus();
+            if (menuIterator.hasNext()) {
+
+                IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
+                        .getHtmlComponentRenderContext().getHtmlRenderContext()
+                        .getJavaScriptRenderContext();
+
+                javaScriptRenderContext.appendRequiredClasses(classes,
+                        getJavaScriptClassName(), "menu");
+            }
+        }
     }
 }

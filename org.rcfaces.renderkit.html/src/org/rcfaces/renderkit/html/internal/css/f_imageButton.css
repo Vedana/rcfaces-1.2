@@ -11,14 +11,8 @@
  */
  
 .f_imageButton, 
-.f_imageButton_text,
-.f_imageButton_hover, 
-.f_imageButton_pushed, 
-.f_imageButton_selected, 
-.f_imageButton_focus,
-.f_imageButton_selected_focus, 
-.f_imageButton_selected_hover, 
-.f_imageButton_disabled {
+.f_imageButton_image,
+.f_imageButton_text {
 	border: 0;
 	padding: 0;
 	margin: 0;
@@ -30,22 +24,7 @@
 	vertical-align: baseline;
 }
 
-.f_imageButton_image {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	user-select: none;
-	color: black;
-	text-decoration: none;
-}
-
-.f_imageButton, 
-.f_imageButton_hover, 
-.f_imageButton_pushed, 
-.f_imageButton_selected, 
-.f_imageButton_focus,
-.f_imageButton_selected_focus, 
-.f_imageButton_selected_hover {
+.f_imageButton {
 	cursor: pointer;
 	cursor: hand;
 	display: inline;

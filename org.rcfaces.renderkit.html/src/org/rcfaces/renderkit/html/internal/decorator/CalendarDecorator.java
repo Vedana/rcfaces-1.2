@@ -21,6 +21,8 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.taglib.CalendarTag;
+import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.model.BasicDateItem;
 import org.rcfaces.core.model.BasicSelectItem;
 import org.rcfaces.core.model.IClientDataSelectItem;
@@ -28,7 +30,6 @@ import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IStyleClassItem;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-
 
 /**
  * 
@@ -40,18 +41,16 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
 
     private final int maxResultNumber;
 
-    private final Calendar calendar;
-
     private final boolean onlyDay;
+
+    private Calendar calendar;
 
     private int count = 0;
 
-    public CalendarDecorator(UIComponent component, Calendar calendar,
-            boolean onlyDay, IFilterProperties filterProperties,
-            int maxResultNumber) {
+    public CalendarDecorator(UIComponent component, boolean onlyDay,
+            IFilterProperties filterProperties, int maxResultNumber) {
         super(component, filterProperties);
 
-        this.calendar = calendar;
         this.onlyDay = onlyDay;
 
         this.maxResultNumber = maxResultNumber;
@@ -96,6 +95,12 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
         }
 
         javaScriptWriter.writeMethodCall("_appendDateItem");
+
+        if (calendar == null) {
+            calendar = CalendarTools.getCalendar(getComponentRenderContext()
+                    .getRenderContext().getProcessContext(), getComponent(),
+                    false);
+        }
 
         StringAppender sb = new StringAppender(32);
         if (selectItemValue instanceof Date) {
@@ -217,7 +222,8 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
                 }
 
                 filterCapability.setFilterProperties(HtmlTools
-                        .decodeFilterExpression(component, filterExpression));
+                        .decodeFilterExpression(context.getProcessContext(),
+                                component, filterExpression));
             }
         }
     }

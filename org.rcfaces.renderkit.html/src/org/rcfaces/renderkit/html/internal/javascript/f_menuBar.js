@@ -35,7 +35,6 @@ var __static = {
 		menuBarItem.onkeypress=null;
 		menuBarItem.onkeydown=null;
 		
-		menuBarItem._className=undefined;
 		menuBarItem._menuBar=undefined;
 		menuBarItem._menuPopup=undefined;
 		menuBarItem._value=undefined;
@@ -350,17 +349,10 @@ var __static = {
 var __prototype = {
 	f_menuBar: function() {
 		this.f_super(arguments);
-
-		this._className=f_core.GetAttribute(this, "v:className");
-		if (!this._className) {
-			this._className=this.className;
-		}
 		
-//		this._menuClassName=this._className;
 	},
 	/*
 	f_finalize: function() {
-		this._className=undefined; // string
 		
 		this.f_super(arguments);
 	},
@@ -532,21 +524,26 @@ var __prototype = {
 	fa_updateItemStyle: function(item) {
 		if (!item._parentItem && !item._separator) {
 			// MenuBarItem 
-			var className=item._className;
+			var className="f_menuBar_bitem";
 			
+			var suffix="";
 			if (item._disabled || this.f_isDisabled()) {
-				className+="_disabled";
+				suffix+="_disabled";
 		
 				if (this._selectedMenuItem==item) {
-					className+="_hover";
+					suffix+="_hover";
 				}
 				
 			} else if (this._selectedMenuItem==item) {
 				if (item._popupOpened) {
-					className+="_selected";
+					suffix+="_selected";
 				}
 				
-				className+="_hover";
+				suffix+="_hover";
+			}
+			
+			if (suffix) {
+				className+=" "+className+suffix;
 			}
 			
 			item.className=className;
@@ -572,8 +569,7 @@ var __prototype = {
 		
 		menuBarItem.id=id;
 		menuBarItem.tabIndex=-1;
-		menuBarItem.className=this.className+"_bitem";
-		menuBarItem._className=menuBarItem.className;
+		menuBarItem.className="f_menuBar_bitem";
 		
 		menuBarItem._accessKey=accessKey;
 		f_component.AddLabelWithAccessKey(menuBarItem, label, accessKey);
@@ -590,7 +586,7 @@ var __prototype = {
 		}
 		*/
 		
-		menuBarItem.onselectstart=f_core._IeOnSelectStart;
+		menuBarItem.onselectstart=f_core.IeOnSelectStart;
 				
 		if (accessKey) {
 			menuBarItem.accessKey=accessKey;

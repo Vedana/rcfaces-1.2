@@ -32,6 +32,8 @@ public interface IHierarchicalRepository extends IRepository {
 
     ISet declareSet(String name, String uri, String[] moduleNames);
 
+    ISet declareSet(String name, String uri, IModule[] modules);
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)

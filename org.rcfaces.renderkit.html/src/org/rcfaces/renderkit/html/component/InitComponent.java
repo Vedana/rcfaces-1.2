@@ -1,17 +1,18 @@
 package org.rcfaces.renderkit.html.component;
 
+import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import java.util.TimeZone;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.component.IPageConfigurator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.core.internal.component.IPageConfigurator;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
 
 /**
  * <p><b>Mandatory</b>.</p>
@@ -25,7 +26,7 @@ public class InitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"base","renderBaseTag","disabledCookiesPageURL","disableContextMenu","title","invalidBrowserPageURL","disabledScriptPageURL","favoriteImageURL","disabledIEImageBar","attributesLocale","disableCache"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disableContextMenu","title","clientMessageIdFilter","base","literalTimeZone","renderBaseTag","disabledCookiesPageURL","literalLocale","disabledScriptPageURL","invalidBrowserPageURL","favoriteImageURL","disabledIEImageBar","disableCache"}));
 	}
 
 	public InitComponent() {
@@ -44,10 +45,17 @@ public class InitComponent extends CameliaBaseComponent implements
 			
 	}
 
-	public final void setAttributesLocale(String locale) {
+	public final void setLiteralLocale(String locale) {
 
 
-		setAttributesLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		
+	}
+
+	public final void setLiteralTimeZone(String timeZone) {
+
+
+		setLiteralTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
 		
 	}
 
@@ -92,7 +100,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	}
 
 	/**
-	 * Returns a string value specifying the title for the component.
+	 * Returns a string value specifying the title for the document.
 	 * @return title
 	 */
 	public final String getTitle() {
@@ -100,7 +108,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	}
 
 	/**
-	 * Returns a string value specifying the title for the component.
+	 * Returns a string value specifying the title for the document.
 	 * @return title
 	 */
 	public final String getTitle(javax.faces.context.FacesContext facesContext) {
@@ -108,7 +116,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	}
 
 	/**
-	 * Sets a string value specifying the title for the component.
+	 * Sets a string value specifying the title for the document.
 	 * @param title title
 	 */
 	public final void setTitle(String title) {
@@ -116,7 +124,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	}
 
 	/**
-	 * Sets a string value specifying the title for the component.
+	 * Sets a string value specifying the title for the document.
 	 * @param title title
 	 */
 	public final void setTitle(ValueBinding title) {
@@ -291,44 +299,52 @@ public class InitComponent extends CameliaBaseComponent implements
 		return engine.isPropertySetted(Properties.INVALID_BROWSER_PAGE_URL);
 	}
 
-	/**
-	 * Returns a string value that indicates the locale associated with the component.
-	 * @return string for locale
-	 */
-	public final java.util.Locale getAttributesLocale() {
-		return getAttributesLocale(null);
+	public final java.util.Locale getLiteralLocale() {
+		return getLiteralLocale(null);
+	}
+
+	public final java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getValue(Properties.LITERAL_LOCALE, facesContext);
+	}
+
+	public final void setLiteralLocale(java.util.Locale literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
+	}
+
+	public final void setLiteralLocale(ValueBinding literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
 	/**
-	 * Returns a string value that indicates the locale associated with the component.
-	 * @return string for locale
-	 */
-	public final java.util.Locale getAttributesLocale(javax.faces.context.FacesContext facesContext) {
-		return (java.util.Locale)engine.getValue(Properties.ATTRIBUTES_LOCALE, facesContext);
-	}
-
-	/**
-	 * Sets a string value that indicates the locale associated with the component.
-	 * @param attributesLocale string for locale
-	 */
-	public final void setAttributesLocale(java.util.Locale attributesLocale) {
-		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
-	}
-
-	/**
-	 * Sets a string value that indicates the locale associated with the component.
-	 * @param attributesLocale string for locale
-	 */
-	public final void setAttributesLocale(ValueBinding attributesLocale) {
-		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "attributesLocale" is set.
+	 * Returns <code>true</code> if the attribute "literalLocale" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isAttributesLocaleSetted() {
-		return engine.isPropertySetted(Properties.ATTRIBUTES_LOCALE);
+	public final boolean isLiteralLocaleSetted() {
+		return engine.isPropertySetted(Properties.LITERAL_LOCALE);
+	}
+
+	public final java.util.TimeZone getLiteralTimeZone() {
+		return getLiteralTimeZone(null);
+	}
+
+	public final java.util.TimeZone getLiteralTimeZone(javax.faces.context.FacesContext facesContext) {
+		return (java.util.TimeZone)engine.getValue(Properties.LITERAL_TIME_ZONE, facesContext);
+	}
+
+	public final void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
+		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
+	}
+
+	public final void setLiteralTimeZone(ValueBinding literalTimeZone) {
+		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "literalTimeZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLiteralTimeZoneSetted() {
+		return engine.isPropertySetted(Properties.LITERAL_TIME_ZONE);
 	}
 
 	/**
@@ -489,6 +505,30 @@ public class InitComponent extends CameliaBaseComponent implements
 	 */
 	public final boolean isRenderBaseTagSetted() {
 		return engine.isPropertySetted(Properties.RENDER_BASE_TAG);
+	}
+
+	public final String getClientMessageIdFilter() {
+		return getClientMessageIdFilter(null);
+	}
+
+	public final String getClientMessageIdFilter(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CLIENT_MESSAGE_ID_FILTER, facesContext);
+	}
+
+	public final void setClientMessageIdFilter(String clientMessageIdFilter) {
+		engine.setProperty(Properties.CLIENT_MESSAGE_ID_FILTER, clientMessageIdFilter);
+	}
+
+	public final void setClientMessageIdFilter(ValueBinding clientMessageIdFilter) {
+		engine.setProperty(Properties.CLIENT_MESSAGE_ID_FILTER, clientMessageIdFilter);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "clientMessageIdFilter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClientMessageIdFilterSetted() {
+		return engine.isPropertySetted(Properties.CLIENT_MESSAGE_ID_FILTER);
 	}
 
 	protected Set getCameliaFields() {

@@ -62,8 +62,8 @@ public class HtmlTools {
 
     private static final Number NUMBER_0 = new Double(0);
 
-    public static Map decodeParametersToMap(UIComponent component,
-            String values, char sep, Object noValue) {
+    public static Map decodeParametersToMap(IProcessContext processContext,
+            UIComponent component, String values, char sep, Object noValue) {
         if (values == null || values.length() < 1) {
             return Collections.EMPTY_MAP;
         }
@@ -174,7 +174,7 @@ public class HtmlTools {
                     String date = URLFormCodec.decodeURL(cs, valueStart,
                             valueEnd);
 
-                    vs = CalendarTools.parseDate(component, date);
+                    vs = CalendarTools.parseDate(processContext, component, date, false);
                     break;
 
                 default:
@@ -266,10 +266,10 @@ public class HtmlTools {
     }
 
     public static IFilterProperties decodeFilterExpression(
-            UIComponent component, String filterExpression) {
+            IProcessContext processContext, UIComponent component, String filterExpression) {
 
-        Map filter = HtmlTools.decodeParametersToMap(component,
-                filterExpression, '&', null);
+        Map filter = HtmlTools.decodeParametersToMap(processContext,
+                component, filterExpression, '&', null);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Decode filter expression to " + filter);

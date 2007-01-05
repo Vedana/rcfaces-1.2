@@ -41,6 +41,9 @@ public class LocaleConverter extends AbstractConverter {
 
             localesByName.put(key, l);
         }
+
+        Locale defaultLocale = Locale.getDefault();
+        localesByName.put("default", defaultLocale);
     }
 
     public Object getAsObject(FacesContext context, UIComponent component,

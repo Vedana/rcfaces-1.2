@@ -1,16 +1,16 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.taglib.CameliaTag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import org.rcfaces.renderkit.html.component.InitComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class InitTag extends CameliaTag implements Tag {
 
@@ -23,11 +23,13 @@ public class InitTag extends CameliaTag implements Tag {
 	private String disabledScriptPageURL;
 	private String disabledCookiesPageURL;
 	private String invalidBrowserPageURL;
-	private String attributesLocale;
+	private String literalLocale;
+	private String literalTimeZone;
 	private String disabledIEImageBar;
 	private String disableCache;
 	private String disableContextMenu;
 	private String renderBaseTag;
+	private String clientMessageIdFilter;
 	public String getComponentType() {
 		return InitComponent.COMPONENT_TYPE;
 	}
@@ -80,12 +82,20 @@ public class InitTag extends CameliaTag implements Tag {
 		this.invalidBrowserPageURL = invalidBrowserPageURL;
 	}
 
-	public final String getAttributesLocale() {
-		return attributesLocale;
+	public final String getLiteralLocale() {
+		return literalLocale;
 	}
 
-	public final void setAttributesLocale(String attributesLocale) {
-		this.attributesLocale = attributesLocale;
+	public final void setLiteralLocale(String literalLocale) {
+		this.literalLocale = literalLocale;
+	}
+
+	public final String getLiteralTimeZone() {
+		return literalTimeZone;
+	}
+
+	public final void setLiteralTimeZone(String literalTimeZone) {
+		this.literalTimeZone = literalTimeZone;
 	}
 
 	public final String getDisabledIEImageBar() {
@@ -120,6 +130,14 @@ public class InitTag extends CameliaTag implements Tag {
 		this.renderBaseTag = renderBaseTag;
 	}
 
+	public final String getClientMessageIdFilter() {
+		return clientMessageIdFilter;
+	}
+
+	public final void setClientMessageIdFilter(String clientMessageIdFilter) {
+		this.clientMessageIdFilter = clientMessageIdFilter;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (InitComponent.COMPONENT_TYPE==getComponentType()) {
@@ -131,11 +149,13 @@ public class InitTag extends CameliaTag implements Tag {
 			LOG.debug("  disabledScriptPageURL='"+disabledScriptPageURL+"'");
 			LOG.debug("  disabledCookiesPageURL='"+disabledCookiesPageURL+"'");
 			LOG.debug("  invalidBrowserPageURL='"+invalidBrowserPageURL+"'");
-			LOG.debug("  attributesLocale='"+attributesLocale+"'");
+			LOG.debug("  literalLocale='"+literalLocale+"'");
+			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
 			LOG.debug("  disabledIEImageBar='"+disabledIEImageBar+"'");
 			LOG.debug("  disableCache='"+disableCache+"'");
 			LOG.debug("  disableContextMenu='"+disableContextMenu+"'");
 			LOG.debug("  renderBaseTag='"+renderBaseTag+"'");
+			LOG.debug("  clientMessageIdFilter='"+clientMessageIdFilter+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -204,12 +224,21 @@ public class InitTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (attributesLocale != null) {
-			if (isValueReference(attributesLocale)) {
-				ValueBinding vb = application.createValueBinding(attributesLocale);
-				component.setAttributesLocale(vb);
+		if (literalLocale != null) {
+			if (isValueReference(literalLocale)) {
+				ValueBinding vb = application.createValueBinding(literalLocale);
+				component.setLiteralLocale(vb);
 			} else {
-				component.setAttributesLocale(attributesLocale);
+				component.setLiteralLocale(literalLocale);
+			}
+		}
+
+		if (literalTimeZone != null) {
+			if (isValueReference(literalTimeZone)) {
+				ValueBinding vb = application.createValueBinding(literalTimeZone);
+				component.setLiteralTimeZone(vb);
+			} else {
+				component.setLiteralTimeZone(literalTimeZone);
 			}
 		}
 
@@ -248,6 +277,15 @@ public class InitTag extends CameliaTag implements Tag {
 				component.setRenderBaseTag(getBool(renderBaseTag));
 			}
 		}
+
+		if (clientMessageIdFilter != null) {
+			if (isValueReference(clientMessageIdFilter)) {
+				ValueBinding vb = application.createValueBinding(clientMessageIdFilter);
+				component.setClientMessageIdFilter(vb);
+			} else {
+				component.setClientMessageIdFilter(clientMessageIdFilter);
+			}
+		}
 	}
 
 	public void release() {
@@ -257,11 +295,13 @@ public class InitTag extends CameliaTag implements Tag {
 		disabledScriptPageURL = null;
 		disabledCookiesPageURL = null;
 		invalidBrowserPageURL = null;
-		attributesLocale = null;
+		literalLocale = null;
+		literalTimeZone = null;
 		disabledIEImageBar = null;
 		disableCache = null;
 		disableContextMenu = null;
 		renderBaseTag = null;
+		clientMessageIdFilter = null;
 
 		super.release();
 	}

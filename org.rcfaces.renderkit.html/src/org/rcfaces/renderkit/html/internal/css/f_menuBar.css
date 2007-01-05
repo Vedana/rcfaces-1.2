@@ -13,16 +13,25 @@
 
 .f_menuBar {
 	display: block;
+	position: relative;
+
 	padding: 0 2px;
 	border: 1px solid #BBB;		
-	position: relative;
+	
 	-moz-user-select: none;
 	user-select: none;
+	
 	text-align: left;
 	vertical-align: baseline;
 }
 
-INPUT.f_menuBar_binput {
+.f_menuBar,
+.f_menuBar_bitem {
+	text-decoration:none;
+	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+}
+
+.f_menuBar_binput {
 	width: 1px;
 	height: 1px;
 	border: 0;
@@ -38,33 +47,10 @@ INPUT.f_menuBar_binput {
 	-moz-outline-width: 0px;
 }
 
-.f_menuBar,
-.f_menuBar_bitem, 
-.f_menuBar_bitem_hover,
-.f_menuBar_bitem_disabled, 
-.f_menuBar_bitem_disabled_hover, 
-.f_menuBar_bitem_selected, 
-.f_menuBar_bitem_selected_hover {
-	text-decoration:none;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 8pt;
+.f_menuBar_bitem {
 	-moz-user-select: none;
-}
-
-.f_menuBar_bitem, 
-.f_menuBar_bitem_hover,
-.f_menuBar_bitem_selected, 
-.f_menuBar_bitem_selected_hover {
 	cursor: pointer;
 	cursor: hand;
-}
-
-.f_menuBar_bitem, 
-.f_menuBar_bitem_hover, 
-.f_menuBar_bitem_selected, 
-.f_menuBar_bitem_selected_hover, 
-.f_menuBar_bitem_disabled,
-.f_menuBar_bitem_disabled_hover {
 	color: #000;
 	border: 0;
 	background: transparent;
@@ -75,7 +61,6 @@ INPUT.f_menuBar_binput {
 button::-moz-focus-inner {
 	border: 0;
 }
-
 
 .f_menuBar_bitem_selected, 
 .f_menuBar_bitem_selected_hover,
@@ -88,4 +73,5 @@ button::-moz-focus-inner {
 .f_menuBar_bitem_disabled,
 .f_menuBar_bitem_disabled_hover {
 	color: #ACA899;
+	cursor: default;
 }

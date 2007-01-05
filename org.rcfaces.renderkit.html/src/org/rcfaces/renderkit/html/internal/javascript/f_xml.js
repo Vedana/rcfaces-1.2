@@ -3,28 +3,33 @@
  */
 
 /**
- * XML package
+ * XML utils
  * 
- * @class f_xml extends f_object
- * @author Joel Merlin
+ * @class public f_xml extends Object
+ * @author Joel Merlin and Olivier Oeuillot
  * @version $Revision$ $Date$
  */
+ 
+function f_xml() {
+}
+ 
 var __static = {
 
 	/**
 	 * @method public static
-	 * @param Element element XML node.
-	 * @param optional String tagName Name of the tag, or null.
-	 * @param optional String attrName Name of an attribute or null.
-	 * @param optional String attrValue A value for the specified attribute of null.
-	 * @return Element[] An array of xml nodes.
+	 * @param Node element XML node.
+	 * @param optional String tagName Name of the tag or null.
+	 * @param optional String attrName Name of an attribute.
+	 * @param optional String attrValue A value for the specified attribute.
+	 * @return Node[] An array of xml nodes.
 	 */
 	GetChildElements: function(element, tagName, attrName, attrValue) {
 		var list = new Array;
 		var acn = element.childNodes;
-		if (!acn || acn.length==0) {
+		if (!acn || !acn.length) {
 			return list;
 		}
+		
 		for (var i=0; i<acn.length; i++) {
 			var cn = acn[i];
 			if (cn.nodeType!=1) {
@@ -38,6 +43,7 @@ var __static = {
 				if (!attr) {
 					continue;
 				}
+			
 				if (attrValue && attr.nodeValue!=attrValue) {
 					continue;
 				}
@@ -48,13 +54,13 @@ var __static = {
 	},
 	/**
 	 * @method public static
-	 * @param Object element XML node.
-	 * @param optional String tagName Name of the tag. (or null)
-	 * @return Object XML node or null.
+	 * @param Node element XML node.
+	 * @param optional String tagName Name of the tag.
+	 * @return Node XML node or null.
 	 */
 	GetFirstChildElement: function(element, tagName) {
 		var acn = element.childNodes;
-		if (!acn || acn.length==0) {
+		if (!acn || !acn.length) {
 			return null;
 		}
 		
@@ -73,40 +79,48 @@ var __static = {
 
 	/**
 	 * @method public static
-	 * @param Object element XML node.
-	 * @param any value Default value.
-	 * @return any Value associated to the XML node.
+	 * @param Node element XML node.
+	 * @param optional String defaultValue Default value.
+	 * @return String Value associated to the XML node.
 	 */
-	GetValue: function(element, value) {
-		var acn = element.childNodes;
-		if (!acn || acn.length==0) {
+	GetValue: function(element, defaultValue) {
+		var childNodes = element.childNodes;
+		if (!childNodes || !childNodes.length) {
 			return value;
 		}
 		
 		var ret = null;
-		for (var i=0; i<acn.length; i++) {
-			var cn = acn[i];
-			if (cn.nodeType==3 || cn.nodeType==4) {
-				var v = cn.nodeValue;
-				if (!v || v=="") {
-					continue;
-				}
-				if (ret==null) {
-					ret = String(v);
-				} else {
-					ret += v;
-				}
+		for (var i=0; i<childNodes.length; i++) {
+			var childNode = childNodes[i];
+			if (childNode.nodeType!=3 && childNode.nodeType!=4) {
 				continue;
 			}
+			
+			var v = childNode.nodeValue;
+			if (!v) {
+				continue;
+			}
+			
+			if (!ret) {
+				ret = v;
+				continue;
+			}
+
+			ret += v;
 		}
-		return (ret==null)? value:ret; // @TODO .a_trim();
+		
+		if (ret==null) {
+			return defaultValue;
+		}
+		
+		return ret;
 	},
 
 	/**
 	 * Create an empty XML Document.
 	 *
 	 * @method public static
-	 * @return Object Empty XML DOM document.
+	 * @return Document Empty XML DOM document.
 	 */
 	Object: function() {
 		var dom=null;
@@ -128,7 +142,7 @@ var __static = {
 	/**
 	 * @method public static
 	 * @param String data XML content.
-	 * @return Object XML Document.
+	 * @return Document XML Document.
 	 */
 	FromString: function(data) {
 		var dom;
@@ -139,7 +153,7 @@ var __static = {
 
 		} else if (f_core.IsGecko()) {
 			dom = new DOMParser();
-			dom = dom.parseFromString(data,"text/xml");
+			dom = dom.parseFromString(data, "text/xml");
 		}
 		
 		if (!dom) {
@@ -151,13 +165,13 @@ var __static = {
 
 	/**
 	 * @method public static
-	 * @param Object node XML node.
+	 * @param Node node XML node.
 	 * @return String XML output.
 	 */
 	Serialize: function(node) {
 		var ret = "";
 		var acn = node.childNodes;
-		if (!acn || acn.length==0) {
+		if (!acn || !acn.length) {
 			return ret;
 		}
 		
@@ -216,7 +230,19 @@ var __static = {
 		}
 		
 		return ret;
+	},
+	/**
+	 * Returns the name of the class.
+	 *
+	 * @method public static
+	 * @return String
+	 */
+	f_getName: function() {
+		return "f_xml";
 	}
 }
 
-var f_xml=new f_class("f_xml", null, __static);
+
+for(var p in __static) {
+	f_xml[p]=__static[p];
+}

@@ -201,7 +201,7 @@ var __prototype = {
 			this._lastSelectedElement=element;
 		}
 		
-		if (f_core.IsDebugEnabled("fa_selectionManager")) {
+		if (f_core.IsDebugEnabled(fa_selectionManager)) {
 			var s="SelectedValues=";
 			var selectedElementValues=this._selectedElementValues;
 			if (selectedElementValues.length<1) {
@@ -362,7 +362,7 @@ var __prototype = {
 		return this._selectElementsRange(l, appendSelection, false, elements);
 	},
 	_selectElementsRange: function(l, appendSelection, show, elements) {
-		if (f_core.IsDebugEnabled("fa_selectionManager")) {
+		if (f_core.IsDebugEnabled(fa_selectionManager)) {
 			var s="Range select: "+l.length+" elements: ";
 
 			if (l.length<1) {
@@ -565,7 +565,9 @@ var __prototype = {
 			detail|=1;
 		}
 	
-		this._fireSelectionChangedEvent(evt, detail, element, elementValue);
+		var item=this.fa_getElementItem(element);
+	
+		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 		
 		return true;
 	},
@@ -653,18 +655,26 @@ var __prototype = {
 		
 		if (!selection) {
 			this._deselectAllElements();
-			this._fireSelectionChangedEvent();
+			this.fa_fireSelectionChangedEvent();
 			return;
 		}
 		
 		this._selectElementsRange(selection, show);
 		
-		this._fireSelectionChangedEvent();
+		this.fa_fireSelectionChangedEvent();
 	},
-	_fireSelectionChangedEvent: function(evt, detail, element, elementValue) {
+	/**
+	 * @method protected
+	 */
+	fa_fireSelectionChangedEvent: function(evt, detail, item, elementValue) {
 		
-		this.f_fireEvent(f_event.SELECTION, evt, element, elementValue, this, detail);
+		this.f_fireEvent(f_event.SELECTION, evt, item, elementValue, this, detail);
 	},
+
+	/**
+	 * @method protected
+	 */
+	fa_getElementItem: f_class.ABSTRACT,
 
 	/**
 	 * @method protected abstract

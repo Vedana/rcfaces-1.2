@@ -109,6 +109,9 @@ public class CameliaComponentHandler extends ComponentHandler {
                 ListenersTools.CHECK_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("closeListener", new ListenerAttributeMetaData(
                 ListenersTools.CLOSE_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("doubleClickListener",
+                new ListenerAttributeMetaData(
+                        ListenersTools.SELECTION_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("focusListener", new ListenerAttributeMetaData(
                 ListenersTools.FOCUS_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("initListener", new ListenerAttributeMetaData(
@@ -181,7 +184,13 @@ public class CameliaComponentHandler extends ComponentHandler {
         ATTRIBUTES_METADATA.put("textPosition", ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("order", ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("mode", ENUMERATION_ATTRIBUTE_METADATA);
-        ATTRIBUTES_METADATA.put("attributesLocale",
+        ATTRIBUTES_METADATA
+                .put("literalLocale", ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("literalTimeZone",
+                ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("componentLocale",
+                ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("componentTimeZone",
                 ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("clientDatesStrategy",
                 ENUMERATION_ATTRIBUTE_METADATA);

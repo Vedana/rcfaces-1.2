@@ -12,13 +12,6 @@
 
 var __prototype = {
 
-	/**
-	 * 
-	 * @method protected
-	 */
-	f_getMainClassName: function() {
-		return "f_imageResetButton";
-	},
 	_onSelect: function() {
 		if (this.f_isReadOnly() || this.f_isDisabled()) {
 			return false;

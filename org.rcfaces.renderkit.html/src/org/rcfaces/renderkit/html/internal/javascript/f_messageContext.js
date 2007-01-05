@@ -118,7 +118,6 @@ f_messageContext.prototype = {
 	
 	/**
 	 * @method hidden
-	 * @param HTMLElement component 
 	 * @param Function listener
 	 * @return boolean 
 	 */
@@ -132,7 +131,6 @@ f_messageContext.prototype = {
 	
 	/**
 	 * @method hidden
-	 * @param HTMLElement component 
 	 * @param Function listener
 	 * @return boolean 
 	 */
@@ -145,7 +143,7 @@ f_messageContext.prototype = {
 	/**
 	 * @method public
 	 * @param String componentId Identifiant of component, or an array of identifiants.  (<code>null</code> specified ALL messages)
-	 * @param boolean globalOnly
+	 * @param optional boolean globalOnly
 	 * @return f_messageObject[]
 	 */
 	f_listMessages: function(componentId, globalOnly) {
@@ -238,7 +236,7 @@ f_messageContext.prototype = {
 	 * @param HTMLElement component Component to add the message, or an array of components.
 	 * @param number severity
 	 * @param String summary
-	 * @param String detail
+	 * @param optional String detail
 	 * @return f_messageObject
 	 */
 	f_addMessage: function(component, severity, summary, detail) {
@@ -267,7 +265,7 @@ f_messageContext.prototype = {
 	
 	/**
 	 * @method public
-	 * @param HTMLElement... component (or an id)
+	 * @param optional HTMLElement... component (or an id)
 	 * @return boolean Returns <code>true</code> if some messages have been removed.
 	 */
 	f_clearMessages: function(component) {
@@ -276,7 +274,8 @@ f_messageContext.prototype = {
 	
 	/**
 	 * @method private
-	 * @param HTMLElement component (or an id)
+	 * @param boolean performEvent 
+	 * @param optional HTMLElement[] components (or an id)
 	 * @return boolean Returns <code>true</code> if some messages have been removed.
 	 */
 	_clearMessages: function(performEvent, components) {

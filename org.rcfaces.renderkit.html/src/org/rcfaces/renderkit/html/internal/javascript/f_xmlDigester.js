@@ -11,12 +11,12 @@
  */
 var __static = {
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_MAIN_STACK_NAME: "_--main--_",
 	
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_PARAMS_STACK_NAME: "_--params--_",
 	

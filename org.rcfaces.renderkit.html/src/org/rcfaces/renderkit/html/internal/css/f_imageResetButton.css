@@ -12,14 +12,7 @@
  
 .f_imageResetButton_image,
 .f_imageResetButton_text,
-.f_imageResetButton, 
-.f_imageResetButton_hover, 
-.f_imageResetButton_pushed, 
-.f_imageResetButton_selected, 
-.f_imageResetButton_focus,
-.f_imageResetButton_selected_focus, 
-.f_imageResetButton_selected_hover, 
-.f_imageResetButton_disabled {
+.f_imageResetButton {
 	border: 0;
 	padding: 0;
 	margin: 0;
@@ -32,13 +25,7 @@
 	vertical-align: baseline;
 }
 
-.f_imageResetButton, 
-.f_imageResetButton_hover, 
-.f_imageResetButton_pushed, 
-.f_imageResetButton_selected, 
-.f_imageResetButton_focus,
-.f_imageResetButton_selected_focus, 
-.f_imageResetButton_selected_hover {
+.f_imageResetButton  {
 	cursor: pointer;
 	cursor: hand;
 }

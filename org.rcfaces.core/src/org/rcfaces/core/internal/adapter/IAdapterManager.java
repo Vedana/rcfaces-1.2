@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.internal.adapter;
 
-import java.util.Map;
 
 import org.rcfaces.core.model.IAdapterFactory;
 
@@ -14,7 +13,7 @@ import org.rcfaces.core.model.IAdapterFactory;
  */
 public interface IAdapterManager {
 
-    Object getAdapter(Object adaptable, Class adapterType, Map parameters);
+    Object getAdapter(Object adaptable, Class adapterType, Object parameter);
 
     void registerAdapters(IAdapterFactory factory, Class adaptable);
 }

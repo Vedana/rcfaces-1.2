@@ -74,21 +74,30 @@ public class DataGridService extends AbstractHtmlService {
 
         UIViewRoot viewRoot = facesContext.getViewRoot();
 
-        String index_s = (String) parameters.get("index");
-        if (index_s == null) {
-            sendJsError(facesContext, "Can not find 'index' parameter.");
-            return;
-        }
-
         String dataGridId = (String) parameters.get("dataGridId");
         if (dataGridId == null) {
             sendJsError(facesContext, "Can not find 'dataGridId' parameter.");
             return;
         }
 
+        String index_s = (String) parameters.get("index");
+        if (index_s == null) {
+            sendJsError(facesContext, "Can not find 'index' parameter.");
+            return;
+        }
+
+        String forcedRows_s = (String) parameters.get("rows");
+
         String filterExpression = (String) parameters.get("filterExpression");
 
         int rowIndex = Integer.parseInt(index_s);
+        int forcedRows = -1;
+        if (forcedRows_s != null && forcedRows_s.length() > 0) {
+            forcedRows = Integer.parseInt(forcedRows_s);
+            if (forcedRows < 1) {
+                forcedRows = -1;
+            }
+        }
 
         UIComponent component = HtmlTools.getForComponent(facesContext,
                 dataGridId, viewRoot);
@@ -169,7 +178,7 @@ public class DataGridService extends AbstractHtmlService {
             }
 
             writeJs(facesContext, printWriter, dgc, dataGridId, dgr, rowIndex,
-                    sortedComponents, filterExpression);
+                    forcedRows, sortedComponents, filterExpression);
 
         } catch (IOException ex) {
 
@@ -211,8 +220,8 @@ public class DataGridService extends AbstractHtmlService {
                     "GetElementById").writeString(componentId).writeln(
                     ", document);");
 
-            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeInt(rowIndex)
-                    .write(");");
+            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeInt(
+                    rowIndex).write(");");
 
         } catch (IOException ex) {
             throw new FacesException("Can not write cancel response.", ex);
@@ -235,11 +244,11 @@ public class DataGridService extends AbstractHtmlService {
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             DataGridComponent dgc, String componentId, DataGridRenderer dgr,
-            int rowIndex, ISortedComponent sortedComponents[],
+            int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
             String filterExpression) throws IOException {
 
         DataGridRenderer.TableRenderContext tableContext = dgr
-                .createTableContext(facesContext, dgc, rowIndex,
+                .createTableContext(facesContext, dgc, rowIndex, forcedRows,
                         sortedComponents, filterExpression);
 
         CharArrayWriter cw = null;

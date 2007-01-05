@@ -5,7 +5,7 @@
 /**
  * f_tree
  *
- * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager, fa_itemClientDatas, fa_scrollPositions
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
@@ -13,17 +13,17 @@
 var __static = {
 	
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_BLANK_NODE_IMAGE_URL: "/blank.gif",
 	
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_NODE_MENU_ID: "#node",
 	
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_BODY_MENU_ID: "#body",
 
@@ -207,7 +207,9 @@ var __static = {
 		
 		var node=li._node;
 
-		tree.f_setFocus();
+		if (!tree._focus) {
+			tree.f_setFocus();
+		}
 
 		if (tree._userExpandable) {
 			if (node._opened) {
@@ -383,21 +385,7 @@ var __static = {
 		}
  
 		return true;
-	},
-	/**
-	 * @method private static 
-	 */
-	_InitializeScrollbars: function(tree) {
-		var pos=tree._initialHorizontalScrollPosition;
-		if (pos) {
-			tree.scrollLeft=pos;
-		}
-		
-		pos=tree._initialVerticalScrollPosition;
-		if (pos) {
-			tree.scrollTop=pos;
-		}
-	}	
+	}
 }
 
 var __prototype = {
@@ -420,23 +408,8 @@ var __prototype = {
 		var v_userExpandable=f_core.GetAttribute(this, "v:userExpandable");
 		this._userExpandable=(v_userExpandable!="false");
 		
-		this._className=f_core.GetAttribute(this, "v:className");
-		if (!this._className) {
-			this._className=this.className;
-		}
-
 		if (f_core.GetAttribute(this, "v:images")) {
 			this._images=true;
-		}
-				
-		var hsp=f_core.GetAttribute(this, "v:hsp");
-		if (hsp) {
-			this._initialHorizontalScrollPosition=hsp;
-		}
-			
-		var vsp=f_core.GetAttribute(this, "v:vsp");
-		if (vsp) {
-			this._initialVerticalScrollPosition=vsp;
 		}
 		
 		var pld=f_core.GetAttribute(this, "v:preloadedLevelDepth");
@@ -466,7 +439,7 @@ var __prototype = {
 			var focus=document.createElement("A");
 			this._cfocus=focus;
 
-			focus.className=this.className+"_focus";
+			focus.className="f_tree_focus";
 			focus.onfocus=f_tree._Link_onfocus;
 			focus.onblur=f_tree._Link_onblur;
 			focus.onkeydown=f_tree._Link_onkeydown;
@@ -501,7 +474,6 @@ var __prototype = {
 //		this._preloadedLevelDepth=undefined;  // number
 //		this._userExpandable=undefined; // boolean
 //		this._images=undefined;  // boolean 
-//		this._className=undefined; // string
 		this._tree=undefined;
 //		this._hideRootExpandSign=undefined; // boolean
 		
@@ -509,9 +481,6 @@ var __prototype = {
 		
 //		this._lastKeyDate=undefined; // number
 //		this._lastKey=undefined; // char
-
-//		this._initialHorizontalScrollPosition=undefined; // string
-//		this._initialVerticalScrollPosition=undefined; // string
 
 //		this._focus=undefined;   // boolean
 		
@@ -616,8 +585,7 @@ var __prototype = {
 //		li._depth=undefined; // number
 //		li._className=undefined; // string
 		li._tree=undefined; // f_tree
-		li._divNode=undefined; // HtmlDivElement
-		// li.title=null;
+// 		li.title=null; // string
 //		li._over=undefined; // boolean
 //		li._clientDatas=undefined; // Map<String, String>
 		
@@ -636,7 +604,9 @@ var __prototype = {
 			
 			f_core.VerifyProperties(divNode);			
 		} else {
-			f_core.Debug(f_tree, "No div node ? "+li);
+			if (f_core.IsDebugEnabled("f_tree")) {
+				f_core.Debug(f_tree, "No div node ? "+li);
+			}
 		}
 		
 		var command=li._command;
@@ -644,7 +614,6 @@ var __prototype = {
 			li._command=undefined;
 			
 			command._node=undefined;
-//			command._className=undefined; // string
 			command.onmousedown=null;
 			command.onmouseup=null;
 			command.onclick=null;
@@ -695,6 +664,8 @@ var __prototype = {
 		f_core.VerifyProperties(li);			
 	},
 	f_update: function() {
+		this.fa_initializeScrollBars();
+
 		var nodes=this._nodes;
 		if (nodes) {
 			this._constructTree(this, nodes, 0);
@@ -704,7 +675,7 @@ var __prototype = {
 			
 		if (!this.f_isVisible()) {
 			this.f_getClass().f_getClassLoader().addVisibleComponentListener(this);
-		}
+		}		
 	},	
 	f_setDomEvent: function(type, target) {
 		switch(type) {
@@ -744,16 +715,18 @@ var __prototype = {
 
 	/**
 	 * @method hidden
+	 * @return void
 	 */
 	f_performComponentVisible: function() {
-		f_tree._InitializeScrollbars(this);		
-
 		if (this._interactiveShow) {
 			// Appel si un onglet etait en Ajax et il charge la liste !
 			this.f_setFirst(this._first, this._currentCursor);			
 		}
 	},
-	
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_constructTree: function(container, nodes, depth) {
 		for(var i=0;i<nodes.length;i++) {
 			var node=nodes[i];
@@ -763,7 +736,7 @@ var __prototype = {
 			li._node=node;
 			li._depth=depth;
 			li._tree=this;
-			li._className=this.className+"_parent";
+			li._className="f_tree_parent";
 			li.className=li._className;
 			if (node._tooltip) {
 				li.title=node._tooltip;
@@ -776,7 +749,7 @@ var __prototype = {
 			var divNode=document.createElement("DIV");
 			li._divNode=divNode;
 			divNode._node=li;
-			divNode.className=this.className+"_depth"+depth;
+			divNode.className="f_tree_depth"+depth;
 			
 			divNode.role="treeitem";
 			divNode.onmouseover=f_tree._DivNode_mouseOver;
@@ -801,7 +774,6 @@ var __prototype = {
 					divNode.appendChild(command);
 					li._command=command;
 									
-					command._className=this._className+"_command";					
 					command.onmousedown=f_tree._Command_mouseDown;
 					command.onmouseup=f_core.CancelEventHandler;
 					command.onclick=f_core.CancelEventHandler;
@@ -819,7 +791,7 @@ var __prototype = {
 				var input=document.createElement("INPUT");
 				li._input=input;
 				input._node=li;
-				input.className=this._className+"_check";
+				input.className="f_tree_check";
 				input.tabIndex=-1;
 				input.onclick=f_tree._NodeInput_mouseClick;
 		
@@ -853,7 +825,7 @@ var __prototype = {
 			if (this._images) {
 				var image=document.createElement("IMG");
 				image.align="center";
-				image.className=this._className+"_image";
+				image.className="f_tree_image";
 				image._node=li;
 
 				span.appendChild(image);
@@ -865,7 +837,7 @@ var __prototype = {
 			span.appendChild(label);
 			li._label=label;
 
-			label.className=this._className+"_label";
+			label.className="f_tree_label";
 			label._node=li;
 			
 			if (node._label) {
@@ -887,7 +859,7 @@ var __prototype = {
 				var ul=document.createElement("UL");
 				ul.role="treegroup";				
 				ul.style.display="none";
-				ul.className=this.className+"_parent";
+				ul.className="f_tree_parent";
 
 				li.appendChild(ul);
 				
@@ -911,7 +883,7 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @param optional Event evt Javascript event
+	 * @param optional hidden Event evt Javascript event
 	 * @return boolean <code>true</code> if success.
 	 */
 	f_closeNode: function(value, evt) {
@@ -954,7 +926,7 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param any value Value of the node, or the node object
-	 * @param optional Event evt Javascript event
+	 * @param optional hidden Event evt Javascript event
 	 * @return boolean <code>true</code> if success.
 	 */
 	f_openNode: function(value, evt) {
@@ -1000,7 +972,7 @@ var __prototype = {
 			
 			if (!ul) {
 				ul=document.createElement("UL");
-				ul.className=this.className+"_parent";
+				ul.className="f_tree_parent";
 				ul.role="treegroup";
 			
 				li.appendChild(ul);
@@ -1177,11 +1149,11 @@ var __prototype = {
 	_newWaitingNode: function(parentDepth) {
 		var li=document.createElement("LI");
 
-		li.className=this.className+"_parent";
+		li.className="f_tree_parent";
 		
 		var divNode=document.createElement("DIV");
 		li.appendChild(divNode);
-		divNode.className=this.className+"_depth"+(parentDepth+1);
+		divNode.className="f_tree_depth"+(parentDepth+1);
 		divNode.style.paddingLeft=(parentDepth*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 		
 		var command=document.createElement("IMG");
@@ -1202,14 +1174,14 @@ var __prototype = {
 		image.width=f_waiting.WAIT_IMAGE_WIDTH;
 		image.height=f_waiting.WAIT_IMAGE_HEIGHT;
 		image.src=f_waiting.GetWaitingImageURL();
-		image.className=this._className+"_image";
+		image.className="f_tree_image";
 		li._image=image;
 			
 		var label=document.createElement("LABEL");
 		span.appendChild(label);
 		li._label=label;
 
-		label.className=this._className+"_label";
+		label.className="f_tree_label";
 
 		var txt=f_waiting.GetLoadingMessage();
 		label.appendChild(document.createTextNode(txt));
@@ -1290,8 +1262,15 @@ var __prototype = {
 		}
 	
 		var divNode=li._divNode;
-		var divNodeClassName=this.className+"_depth"+li._depth+suffixDivNode;
-		var labelClassName=this._className+"_node"+suffixLabel;
+		var divNodeClassName="f_tree_depth f_tree_depth"+li._depth;
+		if (suffixDivNode) {
+			divNodeClassName+=" f_tree_depth"+suffixDivNode+" f_tree_depth"+li._depth+suffixDivNode;
+		}
+		
+		var labelClassName="f_tree_node";
+		if (suffixLabel) {
+			labelClassName+=" f_tree_node"+suffixLabel;
+		}
 		
 		if (divNode.className!=divNodeClassName) {
 			divNode.className=divNodeClassName;
@@ -1311,9 +1290,9 @@ var __prototype = {
 			span.className=labelClassName;
 		}
 		
-		labelClassName=this._className+"_label";
+		labelClassName="f_tree_label";
 		if (this._cursor==li && this._focus) {
-			labelClassName+="_cursor";
+			labelClassName+=" "+labelClassName+"_cursor";
 		}
 
 		var label=li._label;
@@ -1345,18 +1324,23 @@ var __prototype = {
 
 		var node=li._node;
 		
-		var className=command._className;
 		
+		var suffix="";
 		if (node._container) {
 			if (!node._opened) {
-				className+="_opened";
+				suffix+="_opened";
 			} else {
-				className+="_closed";
+				suffix+="_closed";
 			}
 		}
 		
 		if (node._selected) {
-			className+="_selected";
+			suffix+="_selected";
+		}
+
+		var className="f_tree_command";
+		if (suffix) {
+			className+=" "+className+suffix;
 		}
 
 		if (className!=command.className) {
@@ -1503,16 +1487,6 @@ var __prototype = {
 			}
 		}
 		
-	},
-	/**
-	 * @method hidden
-	 */
-	f_setItemClientDatas: function(node, datas) {
-		f_core.Assert(typeof(datas)=="object", "f_tree.f_setItemClientDatas: Invalid datas parameter '"+datas+"'.");
-		var atts=0;
-		var node=arguments[atts++];
-		
-		node._clientDatas=datas;
 	},
 	/**
 	 * @method hidden
@@ -2145,7 +2119,7 @@ var __prototype = {
 	 * @method public
 	 * @param any value Value of the node
 	 * @param optional hidden Event jsEvent Javascript event associated to this action.
-	 * @return boolean <code>true</code> if success !
+	 * @return boolean <code>true</code> if success.
 	 */
 	f_uncheck: function(value, jsEvent) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2153,19 +2127,23 @@ var __prototype = {
 		return this.fa_performElementCheck(li, false, jsEvent, false);
 	},
 	/**
+	 * Returns the check state of a node.
+	 * 
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @return boolean
+	 * @return boolean <code>true</code> if the node is checked.
 	 */
 	f_getChecked: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
 
-		return this.fa_isElementChecked(value);
+		return this.fa_isElementChecked(li);
 	},
 	/**
+	 * Returns the expand state of a node.
+	 * 
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @return boolean
+	 * @return boolean <code>true</code> if the node is expanded. (open)
 	 */
 	f_isOpened: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2173,9 +2151,11 @@ var __prototype = {
 		return (li._node._opened)?true:false;
 	},
 	/**
+	 * Returns the selection state of a node.
+	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @return boolean
+	 * @return boolean <code>true</code> if the node is selected.
 	 */
 	f_isSelected: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2183,6 +2163,8 @@ var __prototype = {
 		return this.fa_isElementSelected(li);
 	},
 	/**
+	 * Returns the disable state of a node.
+	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
 	 * @return boolean
@@ -2197,7 +2179,7 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @param boolean disabled State to set.
+	 * @param optional boolean disabled State to set.
 	 * @return void
 	 */
 	f_setNodeDisabled: function(value, disabled) {
@@ -2229,6 +2211,8 @@ var __prototype = {
 		enabledValues.push(value);
 	},
 	/**
+	 * Returns the value of each children of a node.
+	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
 	 * @return Object[] value of each children nodes.
@@ -2257,6 +2241,8 @@ var __prototype = {
 		return ret;
 	},
 	/**
+	 * Returns the label of a node.
+	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
 	 * @return String
@@ -2267,9 +2253,11 @@ var __prototype = {
 		return li._node._label;
 	},
 	/**
+	 * Returns the value of a node.
+	 * 
 	 * @method public
-	 * @param Object node
-	 * @return String
+	 * @param Object node Node object.
+	 * @return any Value of the node.
 	 */
 	f_getNodeValue: function(node) {
 		f_core.Assert(node._parentTreeNode, "f_getNodeLabel: Node parameter is invalid !");
@@ -2314,6 +2302,8 @@ var __prototype = {
 		return null;
 	},
 	/**
+	 * Search a node by a specified value.
+	 *
 	 * @method public
 	 * @param any value Value of the node.
 	 * @param hidden boolean throwException
@@ -2373,6 +2363,12 @@ var __prototype = {
 		if (enabledValues) {
 			this.f_setProperty(f_prop.ENABLED_ITEMS, enabledValues, true);
 		}
+	
+		var cursor=this._cursor;
+		if (cursor) {
+			cursor=this.fa_getElementValue(cursor);
+		}
+		this.f_setProperty(f_prop.CURSOR, cursor);
 		
 		this.f_setProperty(f_prop.HORZSCROLLPOS, this.scrollLeft);
 		this.f_setProperty(f_prop.VERTSCROLLPOS, this.scrollTop);
@@ -2437,6 +2433,8 @@ var __prototype = {
 		}
 	},
 	/**
+	 * Refresh the structure of the tree.
+	 * 
 	 * @method public
 	 * @param optional any value Value of the node, or the node object.
 	 * @return void
@@ -2505,6 +2503,13 @@ var __prototype = {
 		return null;
 	},
 
+	fa_getElementItem: function(li) {
+		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_getElementItem: Invalid element parameter ! ("+li+")");
+
+		return li._node;
+	},
+
+
 	fa_getElementValue: function(li) {
 		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_getElementValue: Invalid element parameter ! ("+li+")");
 
@@ -2539,8 +2544,17 @@ var __prototype = {
 		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_setElementChecked: Invalid element parameter ! ("+li+")");
 		
 		li._node._checked=checked;
+	},
+	fa_getScrolledComponent: function() {
+		return this;
+	},
+	fa_getScrolledHorizontalTitle: function() {
+		return null;
+	},
+	fa_getScrolledVerticalTitle: function() {
+		return null;
 	}
 	
 }
  
-var f_tree=new f_class("f_tree", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager);
+var f_tree=new f_class("f_tree", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager, fa_itemClientDatas, fa_scrollPositions);

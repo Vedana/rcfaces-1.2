@@ -11,7 +11,7 @@
  */
 var __static = {
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_MENU_ID: "#popup"
 }
@@ -22,13 +22,6 @@ var __prototype = {
 		this.f_super(arguments);
 		
 		this.f_addEventListener(f_event.KEYDOWN, this._onKeyDown);		
-	},
-	/**
-	 * 
-	 * @method protected
-	 */
-	f_getMainClassName: function() {
-		return "f_imageCombo";
 	},
 	/** 
 	 * @method private

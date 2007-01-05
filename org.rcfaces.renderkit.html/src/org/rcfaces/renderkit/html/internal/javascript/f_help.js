@@ -12,7 +12,7 @@
 var __static = {
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_ID: "VFCHelpWindow",
 	
@@ -38,7 +38,7 @@ var __static = {
 	_H: 450,
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_F: "scrollbars,resizable,status=no",
 

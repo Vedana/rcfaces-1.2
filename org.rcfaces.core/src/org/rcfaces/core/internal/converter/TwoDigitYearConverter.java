@@ -25,11 +25,16 @@ public class TwoDigitYearConverter extends AbstractConverter {
 
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
-        return CalendarTools.parseTwoDigitYearDate(component, value);
+        return CalendarTools.parseTwoDigitYearDate(component, value,
+                isLiteral());
     }
 
     public String getAsString(FacesContext context, UIComponent component,
             Object value) {
-        return CalendarTools.formatDate(component, (Date) value);
+        return CalendarTools.formatDate(component, (Date) value, isLiteral());
+    }
+
+    protected boolean isLiteral() {
+        return false;
     }
 }

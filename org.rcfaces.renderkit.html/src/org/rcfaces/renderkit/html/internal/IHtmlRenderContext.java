@@ -3,6 +3,8 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.Set;
+
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -24,6 +26,10 @@ public interface IHtmlRenderContext extends IRenderContext {
     String CSS_TYPE = "text/css";
 
     String HTML_TYPE = "text/html";
+
+    String NO_CLIENT_MESSAGES = "none";
+
+    String ALL_CLIENT_MESSAGES = "all";
 
     IHtmlProcessContext getHtmlProcessContext();
 
@@ -48,9 +54,11 @@ public interface IHtmlRenderContext extends IRenderContext {
 
     boolean isDisabledContextMenu();
 
-    void setDisabledContextMenu(boolean state);
+    //void setDisabledContextMenu(boolean state);
 
     String getInvalidBrowserURL();
 
-    void setInvalidBrowserURL(String invalidBrowserURL);
+    //void setInvalidBrowserURL(String invalidBrowserURL);
+
+    Set getClientMessageIdFilters();
 }

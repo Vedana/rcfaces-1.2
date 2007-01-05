@@ -12,13 +12,6 @@ var __prototype={
 
 	f_dateChooser: function() {
 		this.f_super(arguments);
-
-		var className=f_core.GetAttribute(this, "v:className");
-		if (!className) {
-			className=this.className;
-		}
-
-		this._className=className;
 		
 		this._forComponent=f_core.GetAttribute(this, "v:for");
 		if (this._forComponent) {
@@ -27,7 +20,6 @@ var __prototype={
 	},
 	f_finalize: function() {
 		this._initialSelection=undefined; // any ?
-		// this._className=undefined; // string
 	
 		this.f_super(arguments);
 	},

@@ -11,12 +11,12 @@
  */
 var __static = {
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_IMAGE: "/helpButton/helpButton.gif",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_HOVER: "/helpButton/helpButtonHover.gif"
 }

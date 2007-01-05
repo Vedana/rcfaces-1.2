@@ -4,9 +4,13 @@
  */
 package org.rcfaces.core.internal.renderkit;
 
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
+
+import org.rcfaces.core.internal.RcfacesContext;
 
 /**
  * 
@@ -14,6 +18,8 @@ import javax.faces.context.FacesContext;
  * @version $Revision$ $Date$
  */
 public interface IProcessContext {
+
+    RcfacesContext getRcfacesContext();
 
     String getNamingSeparator();
 
@@ -27,6 +33,10 @@ public interface IProcessContext {
 
     Locale getUserLocale();
 
+    TimeZone getUserTimeZone();
+
+    Calendar getUserCalendar();
+    
     String getAbsolutePath(String uri, boolean containsContextPath);
 
     String getRelativePath(String uri);

@@ -5,7 +5,7 @@
 /**
  * Aspect Items
  *
- * @aspect public fa_items
+ * @aspect public fa_items extends fa_itemClientDatas
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -23,9 +23,11 @@ var __prototype = {
 		this._enabledItems=undefined;
 		this._itemByValues=undefined;
 		
-		if (this._items) {
-			this.fa_destroyItems(this._items);
+		var items=this._items;
+		if (items) {
 			this._items=undefined;
+
+			this.fa_destroyItems(items);
 		}
 	},
 	/*   ** PAS DE SENS ***
@@ -236,7 +238,7 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param String item Value of the item, or the item object.
-	 * @param boolean disabled Disable state to set.
+	 * @param optional boolean disabled Disable state to set.
 	 * @return void
 	 */
 	f_setItemDisabled: function(item, disabled) {
@@ -513,6 +515,8 @@ var __prototype = {
 	 * @return Object[]
 	 */
 	f_listItemChildren: function(item) {
+		f_core.Assert(typeof(item)=="object", "fa_items.f_listItemChildren: Invalid item object. ("+item+")");
+
 		return item._items;
 	},
 	/**
@@ -521,57 +525,13 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_hasItemChildren: function(item) {
-		if (!item || !item._items || !item._items.length) {
+		f_core.Assert(typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");
+
+		if (!item._items || !item._items.length) {
 			return false;
 		}
 		
 		return true;
-	},
-	/**
-	 * @method public
-	 * @param Object item Item object.
-	 * @param String key Key of property.
-	 * @return String Value associated to the specified property.
-	 */
-	f_getItemClientData: function(item, key) {
-		f_core.Assert(typeof(key)=="string", "fa_items.f_getItemClientData: Invalid key parameter ! ("+key+")");
-		
-		var clientDatas=item._clientDatas;
-		if (!clientDatas) {
-			return null;
-		}
-		
-		return clientDatas[key];
-	},
-	/**
-	 * @method public
-	 * @param Object item Item object.
-	 * @param String key Key of property.
-	 * @param String value Value of property.
-	 * @return String old value
-	 */
-	f_setItemClientData: function(item, key, value) {
-		f_core.Assert(typeof(key)=="string", "fa_items.f_setItemClientData: Invalid key parameter ! ("+key+")");
-		f_core.Assert(value===undefined || value===null || typeof(value)=="string", "fa_items.f_setItemClientData: Invalid value parameter ! ("+value+")");
-		
-		var clientDatas=item._clientDatas;
-		if (!clientDatas) {
-			clientDatas=new Object;
-			item._clientDatas=clientDatas;
-		}
-		
-		var old=clientDatas[key];
-		clientDatas[key]=value;
-		
-		return old;
-	},
-	/**
-	 * @method protected
-	 */
-	f_setItemClientDatas: function(item, clientDatas) {
-		f_core.Assert(typeof(clientDatas)=="object", "fa_items.f_setItemClientDatas: Invalid clientDatas parameter ! ("+clientDatas+")");
-		
-		item._clientDatas=clientDatas;
 	},
 	/**
 	 * @method abstract protected
@@ -598,4 +558,4 @@ var __prototype = {
 	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT
 }
 
-var fa_items=new f_aspect("fa_items", null, __prototype);
+var fa_items=new f_aspect("fa_items", null, __prototype, fa_itemClientDatas);

@@ -12,13 +12,7 @@
  
 .f_dateChooser, 
 .f_dateChooser_text,
-.f_dateChooser_hover, 
-.f_dateChooser_pushed, 
-.f_dateChooser_selected, 
-.f_dateChooser_focus,
-.f_dateChooser_selected_focus, 
-.f_dateChooser_selected_hover, 
-.f_dateChooser_disabled {
+.f_dateChooser_image {
 	border: 0;
 	padding: 0;
 	margin: 0;
@@ -27,24 +21,6 @@
 	color: black;
 	text-decoration: none;
 	position: relative;
-}
-
-.f_dateChooser_image {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	user-select: none;
-	color: black;
-	text-decoration: none;
-}
-
-.f_dateChooser, 
-.f_dateChooser_hover, 
-.f_dateChooser_pushed, 
-.f_dateChooser_selected, 
-.f_dateChooser_focus,
-.f_dateChooser_selected_focus, 
-.f_dateChooser_selected_hover {
 	cursor: pointer;
 	cursor: hand;
 }

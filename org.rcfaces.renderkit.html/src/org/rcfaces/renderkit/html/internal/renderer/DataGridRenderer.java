@@ -196,7 +196,6 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         boolean scrollBars = false;
 
-        String cssClassNameSuffix = "";
         String height = dg.getHeight(facesContext);
         String width = dg.getWidth(facesContext);
         int rows = tableContext.getRows();
@@ -248,10 +247,6 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
         tableContext.setResizable(resizable, totalResize);
 
-        if (tableContext.isDisabled()) {
-            cssClassNameSuffix += "_disabled";
-        }
-
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.startElement("DIV", dg);
@@ -259,13 +254,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter, cssClassNameSuffix, CSS_ALL_MASK);
+        writeCssAttributes(htmlWriter);
 
-        String className = getStyleClassName(dg);
-
-        if (cssClassNameSuffix != null) {
-            htmlWriter.writeAttribute("v:className", className);
-        }
         if (tableContext.selectable) {
             htmlWriter.writeAttribute("v:selectionCardinality",
                     tableContext.selectionCardinality);
@@ -365,7 +355,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 }
             }
 
-            tableWidth = encodeFixedHeader(htmlWriter, className, tableContext,
+            tableWidth = encodeFixedHeader(htmlWriter, tableContext,
                     dataGridPixelWidth);
             htmlWriter.endElement("DIV");
 
@@ -438,7 +428,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
             boolean disabled) {
         String className = getMainStyleClassName() + TABLE;
         if (disabled) {
-            className += "_disabled";
+            className += " " + className + "_disabled";
         }
 
         return className;
@@ -452,7 +442,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         return 19;
     }
 
-    protected int encodeFixedHeader(IHtmlWriter htmlWriter, String className,
+    protected int encodeFixedHeader(IHtmlWriter htmlWriter,
             TableRenderContext tableContext, int dataGridWidth)
             throws WriterException {
 
@@ -502,7 +492,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 continue;
             }
 
-            encodeFixedTitleCol(htmlWriter, className, tableContext, dc, first);
+            encodeFixedTitleCol(htmlWriter, tableContext, dc, first);
             first = false;
 
             if (tableWidth < 0) {
@@ -539,7 +529,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         return getMainStyleClassName() + "_fttitle";
     }
 
-    private void encodeFixedTitleCol(IHtmlWriter htmlWriter, String className,
+    private void encodeFixedTitleCol(IHtmlWriter htmlWriter,
             TableRenderContext tableContext, DataColumnComponent dc,
             boolean first) throws WriterException {
 
@@ -585,12 +575,14 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
     protected String getTitleCellClassName(IHtmlWriter htmlWriter,
             boolean firstColumn, boolean disabled) {
-        String className = getMainStyleClassName() + TITLE_CELL;
+        String mainClassName = getMainStyleClassName() + TITLE_CELL;
+        String className = mainClassName;
+
         if (firstColumn) {
-            className += "_left";
+            className += " " + mainClassName + "_left";
         }
         if (disabled) {
-            className += "_disabled";
+            className += " " + mainClassName + "_disabled";
         }
 
         return className;
@@ -672,10 +664,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
     }
 
     public TableRenderContext createTableContext(FacesContext facesContext,
-            DataGridComponent dg, int rowIndex,
+            DataGridComponent dg, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression) {
         TableRenderContext tableContext = new TableRenderContext(facesContext,
-                dg, rowIndex, sortedComponents, filterExpression);
+                dg, rowIndex, forcedRows, sortedComponents, filterExpression);
 
         return tableContext;
     }
@@ -1304,7 +1296,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
             filtred = true;
         }
 
-        int rows = tableContext.getRows();
+        int rows = tableContext.getForcedRows();
+        if (rows < 1) {
+            rows = tableContext.getRows();
+        }
 
         boolean searchEnd = (rows > 0);
         // int firstCount = -1;
@@ -2135,8 +2130,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 filterExpression = null;
             }
 
-            IFilterProperties fexp = HtmlTools.decodeFilterExpression(
-                    component, filterExpression);
+            IFilterProperties fexp = HtmlTools.decodeFilterExpression(context
+                    .getProcessContext(), component, filterExpression);
 
             IFilterProperties old = dg.getFilterProperties(facesContext);
             if (isEquals(fexp, old) == false) {
@@ -2371,6 +2366,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         private ISortedComponent sortedComponents[];
 
         private final int rows;
+
+        private int forcedRows = -1;
 
         private boolean resizable;
 
@@ -2686,12 +2683,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
 
         public TableRenderContext(FacesContext facesContext,
-                DataGridComponent dg, int rowIndex,
+                DataGridComponent dg, int rowIndex, int forcedRows,
                 ISortedComponent sortedComponents[], String filterExpression) {
             this(facesContext, dg, sortedComponents, null);
 
-            first = rowIndex;
-            this.filtersMap = HtmlTools.decodeFilterExpression(dg,
+            this.first = rowIndex;
+            this.forcedRows = forcedRows;
+            this.filtersMap = HtmlTools.decodeFilterExpression(null, dg,
                     filterExpression);
         }
 
@@ -2733,6 +2731,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         public final ISortedComponent[] listSortedComponents() {
             return sortedComponents;
+        }
+
+        public final int getForcedRows() {
+            return forcedRows;
         }
 
         public final int getRows() {

@@ -11,7 +11,6 @@ import javax.faces.render.RenderKitFactory;
 
 import org.rcfaces.core.component.CustomButtonComponent;
 import org.rcfaces.core.component.capability.ISelectedCapability;
-import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
@@ -56,8 +55,9 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
         if (component.isBorder(facesContext)) {
             borderType = component.getBorderType(facesContext);
 
-            IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
-                    .getInstance(facesContext).getBorderRenderersRegistry();
+            IBorderRenderersRegistry borderRendererRegistry = componentRenderContext
+                    .getRenderContext().getProcessContext().getRcfacesContext()
+                    .getBorderRenderersRegistry();
 
             borderRenderer = (IHtmlBorderRenderer) borderRendererRegistry
                     .getBorderRenderer(facesContext,
@@ -65,8 +65,6 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
                                     .getFamily(), component.getRendererType(),
                             borderType);
         }
-
-        String className = getStyleClassName(component);
 
         boolean disabled = component.isDisabled(facesContext);
 
@@ -88,18 +86,9 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:borderType", borderType);
         }
 
-        String classSuffix = null;
-        if (disabled) {
-            classSuffix = "_disabled";
-        }
-
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter, classSuffix, CSS_ALL_MASK);
-
-        if (classSuffix != null) {
-            htmlWriter.writeAttribute("v:className", className);
-        }
+        writeCssAttributes(htmlWriter);
 
         encodeAttributes(htmlWriter, component);
 

@@ -9,9 +9,10 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.PhaseId;
 
 import org.rcfaces.core.component.ButtonComponent;
+import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.event.SelectionEvent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
@@ -27,16 +28,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public class ButtonRenderer extends AbstractInputRenderer {
     private static final String REVISION = "$Revision$";
-
-    // On le met sur le end, car des clientsDatas ... et autres peuvent survenir
-    // ...
-    public void encodeEnd(IComponentWriter writer) throws WriterException {
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        encodeComponent(htmlWriter);
-
-        super.encodeEnd(htmlWriter);
-    }
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
@@ -72,6 +63,21 @@ public class ButtonRenderer extends AbstractInputRenderer {
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
+
+        ButtonComponent buttonRenderer = (ButtonComponent) component;
+
+        String text = componentData.getStringProperty("text");
+        if (text != null) {
+            String old = buttonRenderer.getText(facesContext);
+            if (text.equals(old) == false) {
+                buttonRenderer.setText(text);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.TEXT, old, text));
+            }
+        }
 
         if (componentData.isEventComponent()) {
             return;

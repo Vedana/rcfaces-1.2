@@ -85,6 +85,7 @@ var __static = {
 }
 
 var __prototype = {
+
 	/**
 	 * @method hidden
 	 * @return void
@@ -113,6 +114,9 @@ var __prototype = {
 		this._accessKey=undefined; // string
 		this.fa_componentUpdated = undefined; // boolean
 		this._oldDisplay = undefined; // string
+
+		this._styleClass = undefined; // String;
+		this._computedStyleClass=undefined; // String
 
 		this.f_super(arguments);		
 	},
@@ -176,6 +180,8 @@ var __prototype = {
 		this.f_setProperty(f_prop.Y,y);
 	},
 	/**
+	 * Returns the width of the component.
+	 *
 	 * @method public
 	 * @return number
 	 */
@@ -183,17 +189,21 @@ var __prototype = {
 		return this._getSize(this.style.width);
 	},
 	/**
+	 * Set the width of the component
+	 *
 	 * @method public
-	 * @param number w
+	 * @param number width Width of the component.
 	 * @return void
 	 */
-	f_setWidth: function(w) {
-		f_core.Assert(typeof(w)=="number", "w parameter must be a number ! ("+w+")");
+	f_setWidth: function(width) {
+		f_core.Assert(typeof(width)=="number", "w parameter must be a number ! ("+width+")");
 
-		this.style.width = w+"px";
-		this.f_setProperty(f_prop.WIDTH,w);
+		this.style.width = width+"px";
+		this.f_setProperty(f_prop.WIDTH, width);
 	},
 	/**
+	 * Returns the height of the component.
+	 *
 	 * @method public
 	 * @return number
 	 */
@@ -201,17 +211,21 @@ var __prototype = {
 		return this._getSize(this.style.height);
 	},
 	/**
+	 * Set the height of the component.
+	 * 
 	 * @method public
-	 * @param number h
+	 * @param number height Height of the component.
 	 * @return void
 	 */
-	f_setHeight: function(h) {
-		f_core.Assert(typeof(h)=="number", "h parameter must be a number ! ("+h+")");
+	f_setHeight: function(height) {
+		f_core.Assert(typeof(height)=="number", "h parameter must be a number ! ("+height+")");
 
-		this.style.height = h+"px";
-		this.f_setProperty(f_prop.HEIGHT,h);
+		this.style.height = height+"px";
+		this.f_setProperty(f_prop.HEIGHT, height);
 	},
 	/**
+	 *  Returns the background color of the component.
+	 * 
 	 * @method public
 	 * @return String
 	 */
@@ -219,6 +233,8 @@ var __prototype = {
 		return this.style.backgroundColor;
 	},
 	/**
+	 * Set the background color of the component.
+	 * 
 	 * @method public
 	 * @param String color
 	 * @return void
@@ -230,6 +246,8 @@ var __prototype = {
 		this.f_setProperty(f_prop.BACKGROUND,color);
 	},
 	/**
+	 * Returns the foreground color of the component.
+	 *
 	 * @method public
 	 * @return String
 	 */
@@ -237,6 +255,8 @@ var __prototype = {
 		return this.style.color;
 	},
 	/**
+	 * Set the foreground color of the component.
+	 *
 	 * @method public
 	 * @param String color
 	 * @return void
@@ -514,6 +534,56 @@ var __prototype = {
 		f_core.Assert(false, "Focus method not implemented !");
 	},
 	/**
+	 * @method protected final
+	 * @return String
+	 */
+	f_getStyleClass: function() {
+		var styleClass=this._styleClass;
+		if (styleClass!==undefined) {
+			return styleClass;
+		}
+		
+		styleClass=f_core.GetAttribute(this, "v:styleClass");
+		if (!styleClass) {
+			styleClass=null;
+		}
+		
+		this._styleClass=styleClass;
+		
+		return styleClass;
+	},
+	/** 
+	 * @method protected
+	 * @return String
+	 */
+	f_getMainStyleClass: function() {
+		return this.f_getClass().f_getName();
+	},
+	/** 
+	 * @method protected final
+	 * @param optional String suffix
+	 * @return String
+	 */
+	f_computeStyleClass: function(suffix) {
+		var computedStyleClass=this._computedStyleClass;
+		if (!computedStyleClass) {
+			computedStyleClass=this.f_getMainStyleClass();
+			
+			var styleClass=this.f_getStyleClass();
+			if (styleClass) {
+				computedStyleClass+=" "+styleClass;
+			}
+			
+			this._computedStyleClass=computedStyleClass;
+		}
+				
+		if (suffix) {
+			computedStyleClass+=" "+this.f_getMainStyleClass()+suffix;
+		}
+		
+		return computedStyleClass;
+	},
+	/**
 	 * @method public
 	 * @param optional boolean scroll Scroll into view to show the component.
 	 *		(<code>true</code> align on top, <code>false</code> align on bottom)
@@ -576,8 +646,9 @@ var __prototype = {
 	},
 	/**
 	 * @method hidden
+	 * @return void
 	 */
-	_completeComponent: function() {
+	f_completeComponent: function() {
 	 	try {
 	 		this.f_update(true);
 	 		
@@ -593,7 +664,7 @@ var __prototype = {
 		this.f_onInitEvent();
 	},
 	f_serialize: function() {
-		f_core.Assert(this.fa_componentUpdated, "Method fa_componentUpdated not called for component '"+this.id+"/"+this._kclass+"'.");
+		f_core.Assert(this.fa_componentUpdated, "f_component.f_serialize: Method fa_componentUpdated not called for component '"+this.id+"/"+this._kclass+"'.");
 	},
 	
 	/**

@@ -43,7 +43,7 @@ var __prototype={
 			var card=cards[i];
 		
 			var ccard=f_core.GetElementById(card._id, this.ownerDocument);
-			f_core.Assert(ccard, "Can not find card component of card '"+card._id+"'.");
+			f_core.Assert(ccard, "f_cardBox.f_updateCards: Can not find card component of card '"+card._id+"'.");
 
 			f_core.Debug(f_cardBox, "Update card#"+i+" card="+card+" ccard="+ccard);
 			card._ccard=ccard;

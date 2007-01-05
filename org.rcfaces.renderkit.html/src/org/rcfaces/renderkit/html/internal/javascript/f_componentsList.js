@@ -40,11 +40,6 @@ var __prototype = {
 	
 	f_componentsList: function() {
 		this.f_super(arguments);
-
-		this._className=f_core.GetAttribute(this, "v:className");
-		if (!this._className) {
-			this._className=this.className;
-		}
 	
 		this._scrollBody=f_core.GetFirstElementByTagName(this, "TABLE");
 		
@@ -53,7 +48,6 @@ var __prototype = {
 	f_finalize: function() {
 		this._scrollBody=undefined;
 		this._tbody=undefined;
-		// this._className=undefined;  // string
 
 		this._nextCommand=undefined; // function
 
@@ -101,7 +95,8 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param number index
-	 * @param number cursorIndex The cursor index. (can be undefined)
+	 * @param optional number cursorIndex The cursor index. (can be undefined)
+	 * @param hidden jsEvent
 	 * @return boolean Returns <code>false</code>.
 	 */
 	f_setFirst: function(index, cursorIndex, jsEvent) {

@@ -25,12 +25,12 @@ var __prototype = {
 		
 		var cursor=this.ownerDocument.createElement("DIV");
 		
-		var className=this.className+"_cursor";
+		var suffix="_cursor";
 		if (true) {
-			className+="_smooth";
+			suffix+="_smooth";
 		}
 		
-		cursor.className=className;
+		cursor.className=this.f_computeStyleClass(suffix);
 		this._cursor=cursor;
 		var tds=this.getElementsByTagName("TD");
 		

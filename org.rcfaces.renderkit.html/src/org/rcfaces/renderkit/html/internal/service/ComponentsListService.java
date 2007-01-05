@@ -59,7 +59,7 @@ public class ComponentsListService extends AbstractHtmlService {
 
     private static final int INITIAL_SIZE = 8000;
 
-    private static final String RENDER_CONTEXT_STATE = "camelia.renderContext";
+    private static final String RENDER_CONTEXT_STATE = "camelia.cls.renderContext";
 
     public ComponentsListService() {
     }
@@ -226,8 +226,8 @@ public class ComponentsListService extends AbstractHtmlService {
                     "GetElementById").writeString(componentId).writeln(
                     ", document);");
 
-            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeInt(rowIndex)
-                    .write(");");
+            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeInt(
+                    rowIndex).write(");");
 
         } catch (IOException ex) {
             throw new FacesException("Can not write cancel response.", ex);
@@ -265,7 +265,9 @@ public class ComponentsListService extends AbstractHtmlService {
             pw = new PrintWriter(cw);
         }
 
-        Object state = dgc.getAttributes().get(RENDER_CONTEXT_STATE);
+        Object states[] = (Object[]) dgc.getAttributes().get(
+                RENDER_CONTEXT_STATE);
+        String contentType = (String) states[1];
 
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
                 pw, dgc, componentClientId);
@@ -281,24 +283,24 @@ public class ComponentsListService extends AbstractHtmlService {
 
         ResponseWriter oldWriter = facesContext.getResponseWriter();
         ResponseStream oldStream = facesContext.getResponseStream();
-        try {
 
+        try {
             CharArrayWriter myWriter = new CharArrayWriter(INITIAL_SIZE);
 
             ResponseWriter newWriter = facesContext.getRenderKit()
-                    .createResponseWriter(myWriter, null, RESPONSE_CHARSET);
+                    .createResponseWriter(myWriter, contentType, RESPONSE_CHARSET);
 
             facesContext.setResponseWriter(newWriter);
 
             IRenderContext renderContext = HtmlRenderContext
-                    .restoreRenderContext(facesContext, state, true);
+                    .restoreRenderContext(facesContext, states[0], true);
 
             renderContext.pushComponent(dgc, componentClientId);
 
-            IComponentWriter writer = renderContext
-                    .getComponentWriter();
-            
-//            IComponentTreeRenderProcessor componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
+            IComponentWriter writer = renderContext.getComponentWriter();
+
+            // IComponentTreeRenderProcessor
+            // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
 
             dgr.encodeChildren(writer, listContext);
 
@@ -340,7 +342,11 @@ public class ComponentsListService extends AbstractHtmlService {
         Object state = htmlRenderContext.saveRenderContextState();
 
         if (state != null) {
-            dataListComponent.getAttributes().put(RENDER_CONTEXT_STATE, state);
+            String contentType = htmlRenderContext.getFacesContext()
+                    .getResponseWriter().getContentType();
+
+            dataListComponent.getAttributes().put(RENDER_CONTEXT_STATE,
+                    new Object[] { state, contentType });
         }
     }
 }

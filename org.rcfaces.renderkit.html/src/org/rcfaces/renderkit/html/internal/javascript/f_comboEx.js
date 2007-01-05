@@ -11,7 +11,7 @@
 var __static = {
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_BLANK_IMAGE_URL: "/comboEx/blank.gif",
 	

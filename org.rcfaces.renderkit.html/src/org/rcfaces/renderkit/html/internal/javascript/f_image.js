@@ -13,15 +13,13 @@
 var __prototype = {
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_BLANK_IMAGE_URL: "/blank.gif",
 
 
 	f_image: function() {
 		this.f_super(arguments);
-		
-		this._className=this.className;
 		
 		this._imageURL=(f_core.GetAttribute(this, "v:blank"))?null:this.src;
 	},
@@ -31,7 +29,6 @@ var __prototype = {
 //		this._loading=undefined; // boolean
 		this._waiting=undefined; // f_waiting
 //		this._oldWidth=undefined; // string
-//		this._className=undefined; // string
 
 		this.f_super(arguments);
 	},
@@ -78,7 +75,7 @@ var __prototype = {
 			return;
 		}
 
-		this.className=this._className+"_loading";
+		this.className=this.f_computeStyleClass("_loading");
  	
 		var params=new Object;
 		params.componentId=this.id;
@@ -109,7 +106,7 @@ var __prototype = {
 	 		
 				image._loading=false;		
 				
-				image.className=image._className;
+				image.className=this.f_computeStyleClass();
 	 		},
 			/**
 			 * @method public
@@ -125,7 +122,7 @@ var __prototype = {
 				}
 				
 				try {
-					image.className=image._className;
+					image.className=this.f_computeStyleClass();
 
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
 						f_core.Error(f_image, "Bad Status ! ("+request.f_getStatusText()+")");

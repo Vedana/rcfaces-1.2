@@ -115,21 +115,23 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
 
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
-            writeCalendarAttributes(writer);
 
             IComponentRenderContext componentRenderContext = writer
                     .getComponentRenderContext();
             DateChooserComponent dateChooserComponent = (DateChooserComponent) componentRenderContext
                     .getComponent();
 
+            Calendar componentCalendar = CalendarTools.getCalendar(
+                    componentRenderContext.getRenderContext()
+                            .getProcessContext(), dateChooserComponent, false);
+
+            writeCalendarAttributes(writer, componentCalendar);
+
             Date homeDate = dateChooserComponent.getHomeDate(facesContext);
             if (homeDate != null) {
-                Calendar calendar = CalendarTools.getAttributesCalendar(
-                        componentRenderContext.getRenderContext()
-                                .getProcessContext(), dateChooserComponent);
 
                 StringAppender sb = new StringAppender(16);
-                appendDate(calendar, homeDate, sb, true);
+                appendDate(componentCalendar, homeDate, sb, true);
                 writer.writeAttribute("v:homeDate", sb.toString());
 
                 String homeDateLabel = dateChooserComponent

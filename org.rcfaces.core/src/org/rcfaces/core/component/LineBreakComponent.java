@@ -1,17 +1,16 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.lang.String;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The lineBreak Component is the &lt;BR&gt; HTML equivalent.</p>
@@ -45,19 +44,19 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 	public final void setHiddenMode(String hiddenMode) {
 
 
-			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, null, hiddenMode)).intValue());
+			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
 	}
 
 	public final Boolean getVisibleState(FacesContext facesContext) {
 
 
-				if (engine.isPropertySetted(Properties.VISIBLE)==false) {
-					return null;
-				}
-				
-				return Boolean.valueOf(isVisible(facesContext));
+			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+				return null;
+			}
 			
+			return Boolean.valueOf(isVisible(facesContext));
+		
 	}
 
 	public final java.lang.String getStyleClass() {
@@ -129,8 +128,8 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 	public final Boolean getVisibleState() {
 
 
-				return getVisibleState(null);
-			
+			return getVisibleState(null);
+		
 	}
 
 	protected Set getCameliaFields() {

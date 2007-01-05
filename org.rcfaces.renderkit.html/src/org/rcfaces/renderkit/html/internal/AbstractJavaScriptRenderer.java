@@ -236,7 +236,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
         }
 
         if (sendCompleteComponent()) {
-            writer.writeMethodCall("_completeComponent").writeln(");");
+            writer.writeMethodCall("f_completeComponent").writeln(");");
         }
 
         // writer.writeln("}");

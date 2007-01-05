@@ -12,10 +12,6 @@
 
 var __prototype = {
 	fa_message: function() {
-		this._styleClass=f_core.GetAttribute(this, "v:styleClass");
-		if (!this._styleClass) {
-			this._styleClass=this.className;
-		}
 
 		if (window.f_messageContext) {
 			var messageContext=f_messageContext.Get(this);
@@ -54,7 +50,7 @@ var __prototype = {
 			return true;
 		}
 		
-		var styleClass=this._styleClass;
+		var styleClass=this.f_getMainStyleClass();
 		
 		this._fatalStyleClass=styleClass+"_fatal";
 		this._errorStyleClass=styleClass+"_error";
@@ -67,7 +63,6 @@ var __prototype = {
 	/*
 	f_finalize: function() {
 		// this._classSpecified=undefined; // boolean
-		// this._styleClass=undefined; // string
 		
 		// this._fatalStyleClass=undefined;  // string
 		// this._errorStyleClass=undefined; // string

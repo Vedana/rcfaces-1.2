@@ -10,8 +10,7 @@
  * @version $Revision$ $Date$ 
  */
  
-.f_waiting_inline,
-.f_waiting_absolute {
+.f_waiting {
 	display: none;
 	overflow: hidden;
 
@@ -25,11 +24,7 @@
 	vertical-align: middle;
 	text-align: left;
 	
-	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-	font-size: 8pt;
-	font-weight: normal;
-	font-stretch: normal;
-	font-style: normal;
+	font: normal normal normal 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif normal;
 }
 
 .f_waiting_absolute {

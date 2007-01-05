@@ -17,10 +17,10 @@
 	display: inline;
 }
 
-.f_numberEntry INPUT {
+.f_numberEntry_input {
 	border: 0;
-	background-color: transparent;
 	margin: 0;
+	background-color: transparent;
 }
 
 .f_numberEntry_I {

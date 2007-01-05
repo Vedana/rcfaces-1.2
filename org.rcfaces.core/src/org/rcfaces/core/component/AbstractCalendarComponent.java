@@ -1,25 +1,29 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-
+import org.rcfaces.core.internal.converter.WeekDaysConverter;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
+import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
-import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.internal.component.Properties;
+import java.util.TimeZone;
+import java.util.Date;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Locale;
 import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
-import org.rcfaces.core.internal.converter.DateConverter;
+import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.converter.TwoDigitYearConverter;
-import org.rcfaces.core.internal.converter.WeekDaysConverter;
-import org.rcfaces.core.internal.tools.CalendarTools;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -27,23 +31,28 @@ import org.rcfaces.core.internal.tools.CalendarTools;
 public abstract class AbstractCalendarComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,
 	IReadOnlyCapability,
-	ILocalizedAttributesCapability,
+	ILiteralLocaleCapability,
+	ILiteralTimeZoneCapability,
+	IComponentLocaleCapability,
+	IComponentTimeZoneCapability,
 	IClientDatesStrategyCapability {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","maxDate","clientDatesStrategy","readOnly","disabledWeekDays","attributesLocale","twoDigitYearStart","minDate"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalTimeZone","maxDate","literalLocale","componentLocale","clientDatesStrategy","componentTimeZone","readOnly","disabledWeekDays","twoDigitYearStart","minDate"}));
 	}
 
 
-	public final void setValue(Object value) {
+	public final Object getValue() {
 
 
+				Object value=super.getValue();
+				
 				if (value instanceof String) {
-					value=CalendarTools.parseValue(this, (String)value);
+					value=LiteralDateConverter.SINGLETON.getAsObject(null, this, (String)value);
 				}
 				
-				super.setValue(value);
+				return value;
 			
 	}
 
@@ -51,6 +60,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 
 				Object value=getValue();
+
 				if (value==null || (value instanceof Date)) {
 					return (Date)value;
 				}
@@ -69,7 +79,19 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	public final void setTwoDigitYearStart(String date) {
 
 
-			setTwoDigitYearStart((Date)TwoDigitYearConverter.SINGLETON.getAsObject(null, this, date));
+			engine.setProperty(Properties.TWO_DIGIT_YEAR_START, date);
+		
+	}
+
+	public final Date getTwoDigitYearStart(FacesContext facesContext) {
+
+
+			Object value=engine.getProperty(Properties.TWO_DIGIT_YEAR_START, facesContext);
+			if (value instanceof String) {
+				value=LiteralTwoDigitYearConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
 		
 	}
 
@@ -83,21 +105,66 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	public final void setMinDate(String date) {
 
 
-			setMinDate((Date)DateConverter.SINGLETON.getAsObject(null, this, date));
+			engine.setProperty(Properties.MIN_DATE, date);
+		
+	}
+
+	public final Date getMinDate(FacesContext facesContext) {
+
+
+			Object value=engine.getProperty(Properties.MIN_DATE, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
 		
 	}
 
 	public final void setMaxDate(String date) {
 
 
-			setMaxDate((Date)DateConverter.SINGLETON.getAsObject(null, this, date));
+			engine.setProperty(Properties.MAX_DATE, date);
 		
 	}
 
-	public final void setAttributesLocale(String locale) {
+	public final Date getMaxDate(FacesContext facesContext) {
 
 
-		setAttributesLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+			Object value=engine.getProperty(Properties.MAX_DATE, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
+		
+	}
+
+	public final void setLiteralLocale(String locale) {
+
+
+		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		
+	}
+
+	public final void setComponentLocale(String locale) {
+
+
+		setComponentLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		
+	}
+
+	public final void setLiteralTimeZone(String timeZone) {
+
+
+		setLiteralTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
+		
+	}
+
+	public final void setComponentTimeZone(String timeZone) {
+
+
+		setComponentTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
 		
 	}
 
@@ -142,26 +209,92 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public final java.util.Locale getAttributesLocale() {
-		return getAttributesLocale(null);
+	public final java.util.Locale getLiteralLocale() {
+		return getLiteralLocale(null);
 	}
 
 	/**
-	 * See {@link #getAttributesLocale() getAttributesLocale()} for more details
+	 * See {@link #getLiteralLocale() getLiteralLocale()} for more details
 	 */
-	public final java.util.Locale getAttributesLocale(javax.faces.context.FacesContext facesContext) {
-		return (java.util.Locale)engine.getProperty(Properties.ATTRIBUTES_LOCALE, facesContext);
+	public final java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.LITERAL_LOCALE, facesContext);
 	}
 
-	public final void setAttributesLocale(java.util.Locale attributesLocale) {
-		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
+	public final void setLiteralLocale(java.util.Locale literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
 	/**
-	 * See {@link #setAttributesLocale(java.util.Locale) setAttributesLocale(java.util.Locale)} for more details
+	 * See {@link #setLiteralLocale(java.util.Locale) setLiteralLocale(java.util.Locale)} for more details
 	 */
-	public final void setAttributesLocale(ValueBinding attributesLocale) {
-		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
+	public final void setLiteralLocale(ValueBinding literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
+	}
+
+	public final java.util.TimeZone getLiteralTimeZone() {
+		return getLiteralTimeZone(null);
+	}
+
+	/**
+	 * See {@link #getLiteralTimeZone() getLiteralTimeZone()} for more details
+	 */
+	public final java.util.TimeZone getLiteralTimeZone(javax.faces.context.FacesContext facesContext) {
+		return (java.util.TimeZone)engine.getProperty(Properties.LITERAL_TIME_ZONE, facesContext);
+	}
+
+	public final void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
+		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
+	}
+
+	/**
+	 * See {@link #setLiteralTimeZone(java.util.TimeZone) setLiteralTimeZone(java.util.TimeZone)} for more details
+	 */
+	public final void setLiteralTimeZone(ValueBinding literalTimeZone) {
+		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
+	}
+
+	public final java.util.Locale getComponentLocale() {
+		return getComponentLocale(null);
+	}
+
+	/**
+	 * See {@link #getComponentLocale() getComponentLocale()} for more details
+	 */
+	public final java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.COMPONENT_LOCALE, facesContext);
+	}
+
+	public final void setComponentLocale(java.util.Locale componentLocale) {
+		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
+	}
+
+	/**
+	 * See {@link #setComponentLocale(java.util.Locale) setComponentLocale(java.util.Locale)} for more details
+	 */
+	public final void setComponentLocale(ValueBinding componentLocale) {
+		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
+	}
+
+	public final java.util.TimeZone getComponentTimeZone() {
+		return getComponentTimeZone(null);
+	}
+
+	/**
+	 * See {@link #getComponentTimeZone() getComponentTimeZone()} for more details
+	 */
+	public final java.util.TimeZone getComponentTimeZone(javax.faces.context.FacesContext facesContext) {
+		return (java.util.TimeZone)engine.getProperty(Properties.COMPONENT_TIME_ZONE, facesContext);
+	}
+
+	public final void setComponentTimeZone(java.util.TimeZone componentTimeZone) {
+		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
+	}
+
+	/**
+	 * See {@link #setComponentTimeZone(java.util.TimeZone) setComponentTimeZone(java.util.TimeZone)} for more details
+	 */
+	public final void setComponentTimeZone(ValueBinding componentTimeZone) {
+		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
 	}
 
 	public final int getClientDatesStrategy() {
@@ -192,14 +325,6 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 */
 	public final Date getTwoDigitYearStart() {
 		return getTwoDigitYearStart(null);
-	}
-
-	/**
-	 * Returns a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
-	 * @return pivot year
-	 */
-	public final Date getTwoDigitYearStart(javax.faces.context.FacesContext facesContext) {
-		return (Date)engine.getValue(Properties.TWO_DIGIT_YEAR_START, facesContext);
 	}
 
 	/**
@@ -235,14 +360,6 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	}
 
 	/**
-	 * Returns a date value indicating the minimum acceptable date for the component. the first accepted value is minDate plus one day.
-	 * @return min date
-	 */
-	public final java.util.Date getMinDate(javax.faces.context.FacesContext facesContext) {
-		return (java.util.Date)engine.getValue(Properties.MIN_DATE, facesContext);
-	}
-
-	/**
 	 * Sets a date value indicating the minimum acceptable date for the component. the first accepted value is minDate plus one day.
 	 * @param minDate min date
 	 */
@@ -272,14 +389,6 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 */
 	public final java.util.Date getMaxDate() {
 		return getMaxDate(null);
-	}
-
-	/**
-	 * Returns a date value indicating the maximum acceptable date for the component. The last accepted value is maxDate minus one day.
-	 * @return max date
-	 */
-	public final java.util.Date getMaxDate(javax.faces.context.FacesContext facesContext) {
-		return (java.util.Date)engine.getValue(Properties.MAX_DATE, facesContext);
 	}
 
 	/**

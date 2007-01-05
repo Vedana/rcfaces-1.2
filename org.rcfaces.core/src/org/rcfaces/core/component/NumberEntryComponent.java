@@ -1,31 +1,33 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.INumberFormatTypeCapability;
+import java.lang.Object;
+import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAutoTabCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
-import org.rcfaces.core.component.capability.INumberFormatTypeCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.converter.AbstractNumberConverter;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.converter.NumberFormatTypeConverter;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.lang.String;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import java.util.HashMap;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.internal.manager.IValidationParameters;
+import java.util.Locale;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.LiteralNumberConverter;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <b>NOT COMPLETE</b>
@@ -38,14 +40,15 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	ISelectionEventCapability,
 	IReadOnlyCapability,
 	INumberFormatTypeCapability,
-	ILocalizedAttributesCapability,
+	ILiteralLocaleCapability,
+	IComponentLocaleCapability,
 	IValidationParameters {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.numberEntry";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","autoCompletion","numberFormat","minimum","required","defaultNumber","numberFormatType","valueChangeListener","integerStep","fractionStep","attributesLocale","integerDigits","maximum","fractionDigits","readOnly","focusStyleClass","autoTab","number"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","autoCompletion","numberFormat","minimum","required","componentLocale","defaultNumber","numberFormatType","valueChangeListener","integerStep","fractionStep","integerDigits","maximum","literalLocale","fractionDigits","readOnly","focusStyleClass","autoTab","number"}));
 	}
 
 	public NumberEntryComponent() {
@@ -129,8 +132,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 
 				if (value instanceof String) {
-					FacesContext facesContext=FacesContext.getCurrentInstance();
-					value=AbstractNumberConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+					value=LiteralNumberConverter.SINGLETON.getAsObject(null, this, (String)value);
 				}
 				
 				super.setValue(value);
@@ -183,7 +185,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 
 			FacesContext facesContext=FacesContext.getCurrentInstance();
-			Number numberObject=(Number)AbstractNumberConverter.SINGLETON.getAsObject(facesContext, this, number);
+			Number numberObject=(Number)LiteralNumberConverter.SINGLETON.getAsObject(facesContext, this, number);
 			setMinimum(numberObject);
 		
 	}
@@ -192,7 +194,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 
 			FacesContext facesContext=FacesContext.getCurrentInstance();
-			Number numberObject=(Number)AbstractNumberConverter.SINGLETON.getAsObject(facesContext, this, number);
+			Number numberObject=(Number)LiteralNumberConverter.SINGLETON.getAsObject(facesContext, this, number);
 			setDefaultNumber(numberObject);
 		
 	}
@@ -201,15 +203,22 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 
 			FacesContext facesContext=FacesContext.getCurrentInstance();
-			Number numberObject=(Number)AbstractNumberConverter.SINGLETON.getAsObject(facesContext, this, number);
+			Number numberObject=(Number)LiteralNumberConverter.SINGLETON.getAsObject(facesContext, this, number);
 			setMaximum(numberObject);
 		
 	}
 
-	public final void setAttributesLocale(String locale) {
+	public final void setLiteralLocale(String locale) {
 
 
-		setAttributesLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		
+	}
+
+	public final void setComponentLocale(String locale) {
+
+
+		setComponentLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
@@ -461,26 +470,48 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.NUMBER_FORMAT_TYPE, numberFormatType);
 	}
 
-	public final java.util.Locale getAttributesLocale() {
-		return getAttributesLocale(null);
+	public final java.util.Locale getLiteralLocale() {
+		return getLiteralLocale(null);
 	}
 
 	/**
-	 * See {@link #getAttributesLocale() getAttributesLocale()} for more details
+	 * See {@link #getLiteralLocale() getLiteralLocale()} for more details
 	 */
-	public final java.util.Locale getAttributesLocale(javax.faces.context.FacesContext facesContext) {
-		return (java.util.Locale)engine.getProperty(Properties.ATTRIBUTES_LOCALE, facesContext);
+	public final java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.LITERAL_LOCALE, facesContext);
 	}
 
-	public final void setAttributesLocale(java.util.Locale attributesLocale) {
-		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
+	public final void setLiteralLocale(java.util.Locale literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
 	/**
-	 * See {@link #setAttributesLocale(java.util.Locale) setAttributesLocale(java.util.Locale)} for more details
+	 * See {@link #setLiteralLocale(java.util.Locale) setLiteralLocale(java.util.Locale)} for more details
 	 */
-	public final void setAttributesLocale(ValueBinding attributesLocale) {
-		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
+	public final void setLiteralLocale(ValueBinding literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
+	}
+
+	public final java.util.Locale getComponentLocale() {
+		return getComponentLocale(null);
+	}
+
+	/**
+	 * See {@link #getComponentLocale() getComponentLocale()} for more details
+	 */
+	public final java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.COMPONENT_LOCALE, facesContext);
+	}
+
+	public final void setComponentLocale(java.util.Locale componentLocale) {
+		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
+	}
+
+	/**
+	 * See {@link #setComponentLocale(java.util.Locale) setComponentLocale(java.util.Locale)} for more details
+	 */
+	public final void setComponentLocale(ValueBinding componentLocale) {
+		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
 	}
 
 	/**

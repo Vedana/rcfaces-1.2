@@ -17,7 +17,6 @@ import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.decorator.CalendarDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -30,8 +29,8 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
 
-    protected void writeCalendarAttributes(IHtmlWriter htmlWriter)
-            throws WriterException {
+    protected void writeCalendarAttributes(IHtmlWriter htmlWriter,
+            Calendar componentCalendar) throws WriterException {
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -47,27 +46,23 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 .getTwoDigitYearStart(facesContext);
 
         if (maxDate != null || minDate != null || twoDigitYearStart != null) {
-            Calendar calendar = CalendarTools.getAttributesCalendar(
-                    componentRenderContext.getRenderContext()
-                            .getProcessContext(), calendarComponent);
-
             StringAppender sb = new StringAppender(12);
 
             if (maxDate != null) {
                 sb.setLength(0);
-                appendDate(calendar, maxDate, sb, true);
+                appendDate(componentCalendar, maxDate, sb, true);
                 htmlWriter.writeAttribute("v:maxDate", sb.toString());
             }
 
             if (minDate != null) {
                 sb.setLength(0);
-                appendDate(calendar, minDate, sb, true);
+                appendDate(componentCalendar, minDate, sb, true);
                 htmlWriter.writeAttribute("v:minDate", sb.toString());
             }
 
             if (twoDigitYearStart != null) {
                 sb.setLength(0);
-                appendDate(calendar, twoDigitYearStart, sb, true);
+                appendDate(componentCalendar, twoDigitYearStart, sb, true);
                 htmlWriter.writeAttribute("v:twoDigitYearStart", sb.toString());
             }
         }
@@ -254,13 +249,8 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         int maxResultNumber = -1;
         IFilterProperties filterProperties = null;
 
-        AbstractCalendarComponent calendarComponent = (AbstractCalendarComponent) component;
-
-        Calendar calendar = CalendarTools.getAttributesCalendar(null,
-                calendarComponent);
-
-        return new CalendarDecorator(component, calendar, dayOnly,
-                filterProperties, maxResultNumber);
+        return new CalendarDecorator(component, dayOnly, filterProperties,
+                maxResultNumber);
     }
 
     protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,

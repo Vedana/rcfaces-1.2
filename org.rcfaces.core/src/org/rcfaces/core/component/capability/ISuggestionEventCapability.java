@@ -19,16 +19,16 @@ public interface ISuggestionEventCapability {
 	/**
 	 * Adds a listener to the component for the suggestion event
 	 * 
-	 * @param facesListener the suggestion listener to add 
+	 * @param suggestionListener the suggestion listener to add 
 	 */
-    void addSuggestionListener(ISuggestionListener siggestionListener);
+    void addSuggestionListener(ISuggestionListener suggestionListener);
 
 	/**
 	 * Removes a listener from the component for the suggestion event
 	 * 
-	 * @param facesListener the suggestion listener to remove
+	 * @param suggestionListener the suggestion listener to remove
 	 */
-    void removeSuggestionListener(ISuggestionListener siggestionListener);
+    void removeSuggestionListener(ISuggestionListener suggestionListener);
 
 	/**
 	 * Returns a list of suggestion listener for the component

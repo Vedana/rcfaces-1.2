@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$ 
  */
  
-U.f_accessKey {
+.f_accessKey {
 	text-decoration: inherit;
 	accelerator:true;
 }

@@ -19,13 +19,6 @@ var __prototype = {
 	},
 	*/
 	/**
-	 * 
-	 * @method protected
-	 */
-	f_getMainClassName: function() {
-		return "f_imageRadioButton";
-	},
-	/**
 	 * @method protected
 	 */
 	_onSelect: function() {

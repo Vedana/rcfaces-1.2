@@ -133,8 +133,8 @@ class HtmlRequestContext extends AbstractRequestContext implements
         String values = (String) this.properties.get(componentId);
         if (values != null) {
             // Il faut transformer la valeur serialisée en Map
-            properties = HtmlTools.decodeParametersToMap(component, values,
-                    PROPERTY_SEPARATOR, Boolean.FALSE);
+            properties = HtmlTools.decodeParametersToMap(getProcessContext(),
+                    component, values, PROPERTY_SEPARATOR, Boolean.FALSE);
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Decode component data of '" + componentId + "' to "
@@ -180,7 +180,8 @@ class HtmlRequestContext extends AbstractRequestContext implements
         if (isLockedClientAttributes()) {
             if (component instanceof IUnlockedClientAttributesCapability) {
                 properties = filterProperties(
-                        (IUnlockedClientAttributesCapability) component, properties);
+                        (IUnlockedClientAttributesCapability) component,
+                        properties);
 
             } else {
                 properties = Collections.EMPTY_MAP;

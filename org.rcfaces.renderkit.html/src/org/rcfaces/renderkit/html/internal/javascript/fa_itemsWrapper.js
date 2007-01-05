@@ -5,7 +5,7 @@
 /**
  * Aspect Items
  *
- * @aspect hidden fa_itemsWrapper
+ * @aspect public fa_itemsWrapper
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

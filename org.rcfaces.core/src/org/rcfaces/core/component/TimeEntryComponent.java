@@ -1,30 +1,36 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAutoTabCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.ILocalizedAttributesCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.converter.LiteralTimeConverter;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.converter.TimeConverter;
-import org.rcfaces.core.internal.manager.IValidationParameters;
+import java.lang.Object;
+import java.util.TimeZone;
+import java.util.Collections;
+import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.model.Time;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import java.util.HashMap;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import java.util.Locale;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The timeEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a time.</p>
@@ -48,14 +54,17 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	IFocusStyleClassCapability,
 	ISelectionEventCapability,
 	IReadOnlyCapability,
-	ILocalizedAttributesCapability,
+	ILiteralLocaleCapability,
+	ILiteralTimeZoneCapability,
+	IComponentLocaleCapability,
+	IComponentTimeZoneCapability,
 	IValidationParameters {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.timeEntry";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","minTime","autoCompletion","required","time","timeFormat","valueChangeListener","attributesLocale","defaultTime","hourStep","readOnly","secondStep","focusStyleClass","millisStep","minuteStep","autoTab","maxTime"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","minTime","autoCompletion","required","componentLocale","time","timeFormat","valueChangeListener","defaultTime","hourStep","literalTimeZone","literalLocale","readOnly","componentTimeZone","secondStep","focusStyleClass","millisStep","minuteStep","autoTab","maxTime"}));
 	}
 
 	public TimeEntryComponent() {
@@ -140,7 +149,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 				if (value instanceof String) {
 					FacesContext facesContext=FacesContext.getCurrentInstance();
-					value=TimeConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+					value=LiteralTimeConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
 				}
 				
 				super.setValue(value);
@@ -171,7 +180,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	public final void setTime(String time) {
 
 
-			Time timeValue=(Time)TimeConverter.SINGLETON.getAsObject(null, this, time);
+			Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
 			setTime(timeValue);
 		
 	}
@@ -179,7 +188,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	public final void setMinTime(String time) {
 
 
-			Time timeValue=(Time)TimeConverter.SINGLETON.getAsObject(null, this, time);
+			Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
 			setMinTime(timeValue);
 		
 	}
@@ -187,7 +196,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	public final void setDefaultTime(String time) {
 
 
-			Time timeValue=(Time)TimeConverter.SINGLETON.getAsObject(null, this, time);
+			Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
 			setDefaultTime(timeValue);
 		
 	}
@@ -195,15 +204,36 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	public final void setMaxTime(String time) {
 
 
-			Time timeValue=(Time)TimeConverter.SINGLETON.getAsObject(null, this, time);
+			Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
 			setMaxTime(timeValue);
 		
 	}
 
-	public final void setAttributesLocale(String locale) {
+	public final void setLiteralLocale(String locale) {
 
 
-		setAttributesLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		
+	}
+
+	public final void setComponentLocale(String locale) {
+
+
+		setComponentLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		
+	}
+
+	public final void setLiteralTimeZone(String timeZone) {
+
+
+		setLiteralTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
+		
+	}
+
+	public final void setComponentTimeZone(String timeZone) {
+
+
+		setComponentTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
 		
 	}
 
@@ -433,26 +463,92 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public final java.util.Locale getAttributesLocale() {
-		return getAttributesLocale(null);
+	public final java.util.Locale getLiteralLocale() {
+		return getLiteralLocale(null);
 	}
 
 	/**
-	 * See {@link #getAttributesLocale() getAttributesLocale()} for more details
+	 * See {@link #getLiteralLocale() getLiteralLocale()} for more details
 	 */
-	public final java.util.Locale getAttributesLocale(javax.faces.context.FacesContext facesContext) {
-		return (java.util.Locale)engine.getProperty(Properties.ATTRIBUTES_LOCALE, facesContext);
+	public final java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.LITERAL_LOCALE, facesContext);
 	}
 
-	public final void setAttributesLocale(java.util.Locale attributesLocale) {
-		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
+	public final void setLiteralLocale(java.util.Locale literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
 	/**
-	 * See {@link #setAttributesLocale(java.util.Locale) setAttributesLocale(java.util.Locale)} for more details
+	 * See {@link #setLiteralLocale(java.util.Locale) setLiteralLocale(java.util.Locale)} for more details
 	 */
-	public final void setAttributesLocale(ValueBinding attributesLocale) {
-		engine.setProperty(Properties.ATTRIBUTES_LOCALE, attributesLocale);
+	public final void setLiteralLocale(ValueBinding literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
+	}
+
+	public final java.util.TimeZone getLiteralTimeZone() {
+		return getLiteralTimeZone(null);
+	}
+
+	/**
+	 * See {@link #getLiteralTimeZone() getLiteralTimeZone()} for more details
+	 */
+	public final java.util.TimeZone getLiteralTimeZone(javax.faces.context.FacesContext facesContext) {
+		return (java.util.TimeZone)engine.getProperty(Properties.LITERAL_TIME_ZONE, facesContext);
+	}
+
+	public final void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
+		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
+	}
+
+	/**
+	 * See {@link #setLiteralTimeZone(java.util.TimeZone) setLiteralTimeZone(java.util.TimeZone)} for more details
+	 */
+	public final void setLiteralTimeZone(ValueBinding literalTimeZone) {
+		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
+	}
+
+	public final java.util.Locale getComponentLocale() {
+		return getComponentLocale(null);
+	}
+
+	/**
+	 * See {@link #getComponentLocale() getComponentLocale()} for more details
+	 */
+	public final java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.COMPONENT_LOCALE, facesContext);
+	}
+
+	public final void setComponentLocale(java.util.Locale componentLocale) {
+		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
+	}
+
+	/**
+	 * See {@link #setComponentLocale(java.util.Locale) setComponentLocale(java.util.Locale)} for more details
+	 */
+	public final void setComponentLocale(ValueBinding componentLocale) {
+		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
+	}
+
+	public final java.util.TimeZone getComponentTimeZone() {
+		return getComponentTimeZone(null);
+	}
+
+	/**
+	 * See {@link #getComponentTimeZone() getComponentTimeZone()} for more details
+	 */
+	public final java.util.TimeZone getComponentTimeZone(javax.faces.context.FacesContext facesContext) {
+		return (java.util.TimeZone)engine.getProperty(Properties.COMPONENT_TIME_ZONE, facesContext);
+	}
+
+	public final void setComponentTimeZone(java.util.TimeZone componentTimeZone) {
+		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
+	}
+
+	/**
+	 * See {@link #setComponentTimeZone(java.util.TimeZone) setComponentTimeZone(java.util.TimeZone)} for more details
+	 */
+	public final void setComponentTimeZone(ValueBinding componentTimeZone) {
+		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
 	}
 
 	/**

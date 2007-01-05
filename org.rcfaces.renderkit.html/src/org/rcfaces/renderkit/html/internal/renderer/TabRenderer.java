@@ -3,12 +3,17 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.component.TabComponent;
 import org.rcfaces.core.component.TabbedPaneComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -174,4 +179,23 @@ public class TabRenderer extends CardRenderer {
         return asyncRender;
     }
 
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
+
+        TabComponent tabComponent = (TabComponent) component;
+
+        String text = componentData.getStringProperty("text");
+        if (text != null) {
+            String old = tabComponent.getText(facesContext);
+            if (text.equals(old) == false) {
+                tabComponent.setText(text);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.TEXT, old, text));
+            }
+        }
+    }
 }

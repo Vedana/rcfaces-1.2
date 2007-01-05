@@ -116,6 +116,8 @@ f_time.prototype = {
 }
 
 /**
+ * Returns class name.
+ * 
  * @method public static
  * @return String
  */

@@ -14,12 +14,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import org.rcfaces.core.component.AbstractCalendarComponent;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.tools.LocaleTools.LocaleDateTimeFormatNormalizer;
 
@@ -30,6 +36,8 @@ import org.rcfaces.core.internal.tools.LocaleTools.LocaleDateTimeFormatNormalize
  */
 public class CalendarTools {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(CalendarTools.class);
 
     private static final Date EMPTY_PERIOD[] = new Date[0];
 
@@ -103,22 +111,21 @@ public class CalendarTools {
                 DateFormat.FULL));
     }
 
-    public static void setDate(AbstractCalendarComponent component, String date) {
-        DateFormat dateFormat = getShortDateFormat(component);
-
-        Date d = parseDate(dateFormat, date);
-
-        component.setValue(d);
-    }
-
-    public static void setPeriod(AbstractCalendarComponent component,
-            String period) {
-        DateFormat dateFormat = getShortDateFormat(component);
-
-        Date ds[] = parsePeriod(dateFormat, period);
-
-        component.setValue(ds);
-    }
+    /*
+     * public static void setDate(AbstractCalendarComponent component, String
+     * date) { DateFormat dateFormat = getShortDateFormat(component, xxx);
+     * 
+     * Date d = parseDate(dateFormat, date);
+     * 
+     * component.setValue(d); }
+     * 
+     * public static void setPeriod(AbstractCalendarComponent component, String
+     * period) { DateFormat dateFormat = getShortDateFormat(component, xxx);
+     * 
+     * Date ds[] = parsePeriod(dateFormat, period);
+     * 
+     * component.setValue(ds); }
+     */
 
     private static Date[] parsePeriod(DateFormat dateFormat, String dates) {
         StringTokenizer st = new StringTokenizer(dates, ":");
@@ -230,14 +237,6 @@ public class CalendarTools {
         }
     }
 
-    public static Calendar getAttributesCalendar(
-            IProcessContext processContext, UIComponent component) {
-        Locale locale = PageConfiguration.getAttributesLocale(processContext,
-                component);
-
-        return Calendar.getInstance(locale);
-    }
-
     private static interface IDateKeyword {
         Date getDate(DateFormat dateFormat);
     }
@@ -265,9 +264,10 @@ public class CalendarTools {
 
     }
 
-    public static Object parseValue(UIComponent component, String value) {
+    public static Object parseValue(IProcessContext processContext, UIComponent component,
+            String value, boolean literalValue) {
 
-        DateFormat dateFormat = getShortDateFormat(component);
+        DateFormat dateFormat = getShortDateFormat(processContext, component, literalValue);
 
         if (value.indexOf(':') >= 0) {
             return parsePeriods(dateFormat, value);
@@ -280,21 +280,26 @@ public class CalendarTools {
         return parseDate(dateFormat, value);
     }
 
-    public static Date parseDate(UIComponent component, String value) {
+    public static Date parseDate(IProcessContext processContext,
+            UIComponent component, String value, boolean literalValue) {
 
-        DateFormat dateFormat = getShortDateFormat(component);
+        DateFormat dateFormat = getShortDateFormat(processContext, component,
+                literalValue);
 
         return parseDate(dateFormat, value);
     }
 
-    public static String formatDate(UIComponent calendarComponent, Date date) {
-        DateFormat dateFormat = getShortDateFormat(calendarComponent);
+    public static String formatDate(UIComponent calendarComponent, Date date,
+            boolean literalValue) {
+        DateFormat dateFormat = getShortDateFormat(null, calendarComponent,
+                literalValue);
         synchronized (dateFormat) {
             return dateFormat.format(date);
         }
     }
 
-    public static Date parseTwoDigitYearDate(UIComponent component, String value) {
+    public static Date parseTwoDigitYearDate(UIComponent component,
+            String value, boolean literalValue) {
         if (value == null || value.length() < 1) {
             return null;
         }
@@ -311,14 +316,15 @@ public class CalendarTools {
         }
 
         if (onlyDigit == false) {
-            DateFormat dateFormat = getShortDateFormat(component);
+            DateFormat dateFormat = getShortDateFormat(null, component,
+                    literalValue);
 
             return parseDate(dateFormat, value);
         }
 
         // Il n'y a que l'année de specifier !
 
-        Calendar calendar = getAttributesCalendar(null, component);
+        Calendar calendar = getCalendar(null, component, literalValue);
 
         int year = Integer.parseInt(value);
         if (year < 1000) {
@@ -330,8 +336,23 @@ public class CalendarTools {
         return calendar.getTime();
     }
 
-    private static DateFormat getShortDateFormat(UIComponent component) {
-        return (DateFormat) LocaleTools.getDefaultFormat(component, LocaleTools.DATE_TYPE);
+    private static DateFormat getShortDateFormat(
+            IProcessContext processContext, UIComponent component,
+            boolean literalValue) {
+        DateFormat dateFormat = (DateFormat) LocaleTools.getDefaultFormat(
+                component, LocaleTools.DATE_TYPE, literalValue);
+
+        TimeZone timeZone = getCalendar(processContext, component, literalValue)
+                .getTimeZone();
+        if (dateFormat.getCalendar().getTimeZone().equals(timeZone) == false) {
+            synchronized (dateFormat) {
+                dateFormat = (DateFormat) dateFormat.clone();
+            }
+
+            dateFormat.setTimeZone(timeZone);
+        }
+
+        return dateFormat;
     }
 
     public static String getDateFormatPattern(Locale locale, int style) {
@@ -347,5 +368,96 @@ public class CalendarTools {
 
     public static String getDefaultPattern(Locale locale) {
         return LocaleTools.getDefaultPattern(locale, LocaleTools.DATE_TYPE);
+    }
+
+    public static Calendar getCalendar(IComponentWriter writer) {
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+
+        return getCalendar(componentRenderContext.getRenderContext()
+                .getProcessContext(), componentRenderContext.getComponent(),
+                false);
+    }
+
+    public static Calendar getCalendar(IProcessContext processContext,
+            UIComponent component, boolean literalValue) {
+        Locale locale = null;
+        TimeZone timeZone = null;
+
+        if (literalValue) {
+            if (processContext == null) {
+                processContext = AbstractProcessContext.getProcessContext(null);
+            }
+
+            locale = PageConfiguration.getLiteralLocale(processContext,
+                    component);
+            timeZone = PageConfiguration.getLiteralTimeZone(processContext,
+                    component);
+
+        } else {
+
+            if (component instanceof IComponentLocaleCapability) {
+                locale = ((IComponentLocaleCapability) component)
+                        .getComponentLocale();
+            }
+
+            if (component instanceof IComponentTimeZoneCapability) {
+                timeZone = ((IComponentTimeZoneCapability) component)
+                        .getComponentTimeZone();
+            }
+
+            if (locale == null && timeZone == null) {
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Component[" + component.getId()
+                            + "] => returns user calendar !");
+                }
+
+                if (processContext == null) {
+                    processContext = AbstractProcessContext
+                            .getProcessContext(null);
+                }
+
+                return processContext.getUserCalendar();
+            }
+
+            if (locale == null) {
+                if (processContext == null) {
+                    processContext = AbstractProcessContext
+                            .getProcessContext(null);
+                }
+
+                locale = processContext.getUserLocale();
+            }
+
+            if (timeZone == null) {
+                if (processContext == null) {
+                    processContext = AbstractProcessContext
+                            .getProcessContext(null);
+                }
+
+                timeZone = processContext.getUserTimeZone();
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Component[" + component.getId() + "] literal="
+                        + literalValue + " => Locale=" + locale + " timeZone="
+                        + timeZone);
+            }
+        }
+
+        if (locale != null && timeZone != null) {
+            return Calendar.getInstance(timeZone, locale);
+        }
+
+        if (locale != null) {
+            return Calendar.getInstance(locale);
+        }
+
+        if (timeZone != null) {
+            return Calendar.getInstance(timeZone);
+        }
+
+        return Calendar.getInstance();
     }
 }

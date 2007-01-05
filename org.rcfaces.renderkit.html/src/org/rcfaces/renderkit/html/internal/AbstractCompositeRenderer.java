@@ -39,11 +39,18 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
     protected String getSubStyleClassName(IHtmlWriter htmlWriter, char ch,
             int length) {
 
-        StringAppender sb = new StringAppender(1 + length);
+        String cls = getMainStyleClassName();
+        StringAppender sb = new StringAppender(cls.length() * 2 + 7 + 1
+                + length);
+
+        sb.append(cls);
+        sb.append("_input ");
+
+        sb.append(cls);
         sb.append('_');
         sb.append(ch, length);
 
-        return getMainStyleClassName() + sb.toString();
+        return sb.toString();
     }
 
     public static void writeSubInput(IHtmlWriter htmlWriter, String className,

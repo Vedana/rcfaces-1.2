@@ -133,7 +133,7 @@ public class ImageService extends AbstractHtmlService {
             }
 
             IFilterProperties filterProperties = HtmlTools
-                    .decodeFilterExpression(component, filterExpression);
+                    .decodeFilterExpression(null, component, filterExpression);
 
             IImageAccessors contentAccessors = (IImageAccessors) imageComponent
                     .getImageAccessors(facesContext);

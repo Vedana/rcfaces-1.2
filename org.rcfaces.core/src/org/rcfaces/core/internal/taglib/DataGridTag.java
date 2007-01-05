@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.DataGridComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class DataGridTag extends AbstractGridTag implements Tag {
 
@@ -39,6 +38,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 	private String sortedColumnIds;
 	private String columnsOrder;
 	private String rowValueColumnId;
+	private String cursorValue;
 	private String rowCountVar;
 	private String rowIndexVar;
 	private String clientSelectionFullState;
@@ -225,6 +225,14 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		this.rowValueColumnId = rowValueColumnId;
 	}
 
+	public final String getCursorValue() {
+		return cursorValue;
+	}
+
+	public final void setCursorValue(String cursorValue) {
+		this.cursorValue = cursorValue;
+	}
+
 	public final String getRowCountVar() {
 		return rowCountVar;
 	}
@@ -297,6 +305,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  sortedColumnIds='"+sortedColumnIds+"'");
 			LOG.debug("  columnsOrder='"+columnsOrder+"'");
 			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
+			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
@@ -415,7 +424,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 
 				component.setHorizontalScrollPosition(vb);
 			} else {
-				component.setHorizontalScrollPosition(horizontalScrollPosition);
+				component.setHorizontalScrollPosition(getInt(horizontalScrollPosition));
 			}
 		}
 
@@ -425,7 +434,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 
 				component.setVerticalScrollPosition(vb);
 			} else {
-				component.setVerticalScrollPosition(verticalScrollPosition);
+				component.setVerticalScrollPosition(getInt(verticalScrollPosition));
 			}
 		}
 
@@ -504,6 +513,15 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (cursorValue != null) {
+			if (isValueReference(cursorValue)) {
+				ValueBinding vb = application.createValueBinding(cursorValue);
+				component.setCursorValue(vb);
+			} else {
+				component.setCursorValue(cursorValue);
+			}
+		}
+
 		if (rowCountVar != null) {
 			if (isValueReference(rowCountVar)) {
 				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
@@ -568,6 +586,7 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		sortedColumnIds = null;
 		columnsOrder = null;
 		rowValueColumnId = null;
+		cursorValue = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		clientSelectionFullState = null;

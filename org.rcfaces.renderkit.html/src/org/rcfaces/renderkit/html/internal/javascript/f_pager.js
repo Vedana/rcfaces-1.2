@@ -15,7 +15,7 @@ var __static = {
 	 */
 	_AddSpan: function(container, spanClass, text) {
 		var span=document.createElement("SPAN");
-		span.className=spanClass;
+		span.className="f_pager_value f_pager_value_"+spanClass;
 		span.appendChild(document.createTextNode(text));
 		
 		container.appendChild(span);
@@ -36,9 +36,10 @@ var __static = {
 	_AddButton: function(dataPager, container, buttonClass, text, tooltip, index) {
 		var button;
 		
+		var suffix="";
 		if (index===undefined || index<0) {
 			button=document.createElement("SPAN");
-			buttonClass+="_disabled";
+			suffix+="_disabled";
 			
 		} else {
 			button=document.createElement("A");
@@ -48,7 +49,16 @@ var __static = {
 			button.onkeydown=f_pager._PositionKey;
 			button.f_link=dataPager;
 		}
-		button.className=buttonClass;
+		
+		var cls="f_pager_button f_pager_button_"+buttonClass;
+		
+		if (suffix) {
+			cls+=" f_pager_button"+suffix+" f_pager_button_"+buttonClass+suffix;
+		}
+		
+		if (button.className!=cls) {
+			button.className=cls;
+		}
 		if (tooltip) {
 			button.title=tooltip;
 		}
@@ -62,7 +72,7 @@ var __static = {
 			buttons=new Array;
 			dataPager._buttons=buttons;
 		}
-		button.id=dataPager+"__"+buttons.length;
+		button.id=dataPager.id+"::"+buttons.length;
 		buttons.push(button);
 		
 		return button;
@@ -286,95 +296,10 @@ var __prototype = {
 	},
 	
 	/* ****************************************************************** */
-	
-	/*
-	fa_pagedComponentInitialized0: function(dataComponent) {
-		this._pagedComponent=dataComponent;
-			
-		var className=this.className;
-		
-		var children=this.childNodes;
-		if (children) {
-			this._destroyButtons();
-
-			while (this.hasChildNodes()) {
-		    	this.removeChild(this.lastChild);
-			}
-		}
-		
-		var resourceBundle=f_resourceBundle.Get(f_pager);
-		
-		var rows=dataComponent.f_getRows();
-		if (rows<1) {
-			f_pager._AddSpan(this, "f_pager_title_found", resourceBundle.f_get("NO_PAGE"));
-			return;
-		}
-		
-		var cls=className+"_title_found";
-		
-		var rowCount=dataComponent.f_getRowCount();
-		var first=dataComponent.f_getFirst();
-		var maxRows=dataComponent.f_getMaxRows();
-
-		f_core.Debug("f_pager", "Update pager values :  rowCount="+rowCount+" first="+first+" maxRows="+maxRows);
-
-		if (rowCount<0) {
-			f_pager._AddSpan(this, cls, resourceBundle.f_get("UNKNOWN_ENTRY_COUNT"));
-
-		} else if (rowCount==0) {
-			f_pager._AddSpan(this, cls, resourceBundle.f_get("NO_RESULT"));
-			return;
-			
-		} else if (rowCount==1) {
-			f_pager._AddSpan(this, cls, resourceBundle.f_get("ONE_RESULT"));
-
-		} else {
-			f_pager._AddSpan(this, cls, resourceBundle.f_format("N_RESULTS", rowCount));
-		}
-		
-		f_pager._AddText(this, ", ");
-		
-		if (rowCount<0) {
-			f_pager._AddSpan(this, cls, resourceBundle.f_format("SUMMARY_NO_END", first+1));
-			
-		} else {
-			var last=first+rows;
-			if (last>=rowCount) {
-				last=rowCount;
-			}
-			f_pager._AddSpan(this, cls, resourceBundle.f_format("SUMMARY", first+1, last));
-		}
-		
-		this.appendChild(document.createElement("BR"));
-
-		f_pager._AddText(this, "[");
-
-		this.f_appendFirstButton(this, first, className+"_pfirst", resourceBundle);
-
-		f_pager._AddText(this, "/");
-
-		this.f_appendPrevButton(this, first, rows, className+"_pprev", resourceBundle);
-
-		f_pager._AddText(this, "]  ");
-		
-		this.f_appendPagesButtons(this, first, rows, rowCount, maxRows,className+"_pgoto", resourceBundle, parameter);
-	
-		f_pager._AddText(this, "  [");
-	
-		this.f_appendNextButton(this, first, rows, rowCount, maxRows, className+"_pnext", resourceBundle);
-
-		f_pager._AddText(this, "/");
-
-		this.f_appendLastButton(this, first, rows, rowCount, maxRows, className+"_plast", resourceBundle);
-
-		f_pager._AddText(this, "]");
-	},
-	*/
 	fa_pagedComponentInitialized: function(dataComponent) {
 		this._pagedComponent=dataComponent;
 		
 		var component=this;
-		var className=this.className;
 		
 		var children=this.childNodes;
 		if (children) {
@@ -385,7 +310,6 @@ var __prototype = {
 			}
 		}
 	
-		var className=this.className;
 		var resourceBundle;
 		var message;
 
@@ -442,13 +366,13 @@ var __prototype = {
 				switch(varName) {
 				case "first":
 				case "position":
-					this.f_appendFirstValue(component, first+1, className+"_vfirst");
+					this.f_appendFirstValue(component, first+1, "first");
 					
 					break;
 					
 				case "pageposition":
 					if (rows>0) {
-						this.f_appendFirstValue(component, Math.floor(first/rows)+1, className+"_vpageposition");
+						this.f_appendFirstValue(component, Math.floor(first/rows)+1, "pagePosition");
 					}
 					
 					break;
@@ -460,39 +384,39 @@ var __prototype = {
 					} else if (maxRows>0 && last>=maxRows) {
 						last=maxRows;
 					}
-					this.f_appendLastValue(component, last, className+"_vlast");
+					this.f_appendLastValue(component, last, "last");
 					break;
 					
 				case "rowcount":
 					if (rowCount>=0) {
-						this.f_appendRowCountValue(component, rowCount, className+"_vrowCount");
+						this.f_appendRowCountValue(component, rowCount, "rowCount");
 					}
 					break;
 					
 				case "pagecount":
 					if (rowCount>=0 && rows>0) {
-						this.f_appendRowCountValue(component, Math.floor(((rowCount-1)/rows)+1), className+"_vpageCount");
+						this.f_appendRowCountValue(component, Math.floor(((rowCount-1)/rows)+1), "pageCount");
 					}
 					break;
 					
 				case "bfirst":
-					this.f_appendFirstButton(component, first, className+"_pfirst", resourceBundle);
+					this.f_appendFirstButton(component, first, "first", resourceBundle);
 					break;
 
 				case "bprev":
-					this.f_appendPrevButton(component, first, rows, className+"_pprev", resourceBundle);
+					this.f_appendPrevButton(component, first, rows, "prev", resourceBundle);
 					break;
 					
 				case "bnext":		
-					this.f_appendNextButton(component, first, rows, rowCount, maxRows, className+"_pnext", resourceBundle);
+					this.f_appendNextButton(component, first, rows, rowCount, maxRows, "next", resourceBundle);
 					break;
 				
 				case "blast":
-					this.f_appendLastButton(component, first, rows, rowCount, maxRows, className+"_plast", resourceBundle);
+					this.f_appendLastButton(component, first, rows, rowCount, maxRows, "last", resourceBundle);
 					break;
 				
 				case "bpages":
-					this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,className+"_pgoto", resourceBundle, parameter);
+					this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,"goto", resourceBundle, parameter);
 					break;
 					
 				default:
@@ -575,7 +499,7 @@ var __prototype = {
 	f_appendFirstButton: function(component, first, cls, resourceBundle) {
 		f_pager._AddButton(this, 
 			component, 
-			cls, 
+			cls,
 			resourceBundle.f_get("FIRST"), 
 			resourceBundle.f_get("FIRST_TOOLTIP"), 
 			(first>0)?0:-1);
@@ -621,7 +545,7 @@ var __prototype = {
 							
 		f_pager._AddButton(this, 
 			component, 
-			cls, 
+			cls,
 			resourceBundle.f_get("NEXT"), 
 			resourceBundle.f_get("NEXT_TOOLTIP"), 
 			nextIndex);
@@ -654,7 +578,7 @@ var __prototype = {
 							
 		f_pager._AddButton(this, 
 			component, 
-			cls, 
+			cls,
 			resourceBundle.f_get("LAST"), 
 			resourceBundle.f_get("LAST_TOOLTIP"), 
 			lastIndex);
@@ -732,7 +656,7 @@ var __prototype = {
 	
 			f_pager._AddButton(this, 
 				component, 
-				cls, 
+				cls,
 				label, 
 				tooltipIndex,
 				(pi == selectedPage)?-1:(pi * rows));

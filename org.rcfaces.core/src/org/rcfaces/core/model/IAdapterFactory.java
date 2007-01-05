@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.model;
 
-import java.util.Map;
 
 /**
  * <p>
@@ -28,12 +27,12 @@ public interface IAdapterFactory {
      *            <code>IAdaptable</code>)
      * @param adapterType
      *            the type of adapter to look up
-     * @reutrn a object castable to the given adapter type, or <code>null</code>
+     * @return a object castable to the given adapter type, or <code>null</code>
      *         if this adapter factory does not have an adapter of the given
      *         type for the given object
      */
 
-    Object getAdapter(Object adaptableObject, Class adapterType, Map parameters);
+    Object getAdapter(Object adaptableObject, Class adapterType, Object parameter);
 
     /**
      * Returns the collection of adapter types handled by this factory.

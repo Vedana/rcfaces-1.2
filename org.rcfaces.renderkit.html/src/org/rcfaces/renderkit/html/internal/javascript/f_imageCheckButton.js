@@ -11,13 +11,6 @@
  */
 var __prototype = {
 
-	/**
-	 * 
-	 * @method protected
-	 */
-	f_getMainClassName: function() {
-		return "f_imageCheckButton";
-	},
 	_onSelect: function() {
 		if (!this._focus)  {
 			this.f_setFocus();

@@ -14,12 +14,12 @@
 
 var f_vb = {
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_LATIN_ACCENT_FR: "àäâéèëêïîöôùüûÿçÀÄÂÉÈËÊÏÎÖÔÙÜÛÇ",
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_LATIN_ACCENT: "áãàâäåéèêëíìîïóõòôöúùûüµýÿçñÀÁÂÃÄÅÈÉÊËÌÍÎÏÓÔÕÖÒÙÚÛÜÝÇÑ",
 
@@ -1099,7 +1099,12 @@ var f_vb = {
 			}
 			
 			var sep = validator.f_getParameter("date.sepSign");
-						
+			
+			if (sep.length>1) {
+				sep=sep.charAt(0);
+			}
+			
+			return object.getDate()+sep+(object.getMonth()+1)+sep+object.getFullYear();	
 		}
 	},
 
@@ -1111,6 +1116,17 @@ var f_vb = {
 		f_getAsObject: function(validator, text) {
 		},
 		f_getAsString: function(validator, object) {
+			if (!(object instanceof Date)) {
+				return undefined;
+			}
+			
+			var sep = validator.f_getParameter("date.sepSign");
+			
+			if (sep.length>1) {
+				sep=sep.charAt(0);
+			}
+			
+			return object.getHours()+sep+object.getMinutes()+sep+object.getSeconds();	
 		}
 	},
 

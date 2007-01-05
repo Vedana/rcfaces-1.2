@@ -191,7 +191,7 @@ var __static = {
 	KF_META           : 0x08,
 
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_MAIN_SCOPE_NAME: "--MainScope--",
 
@@ -208,6 +208,7 @@ var __static = {
 
 	/**
 	 * @method public static
+	 * @param number code Key code.
 	 * @return boolean
 	 */
 	IsPrintable: function(code) {
@@ -224,6 +225,7 @@ var __static = {
 	},
 	/**
 	 * @method public static
+	 * @param number code Key code.
 	 * @return boolean
 	 */
 	IsLetterOrDigit: function(code) {

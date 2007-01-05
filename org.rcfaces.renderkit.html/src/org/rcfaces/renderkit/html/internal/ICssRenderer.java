@@ -3,7 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import javax.faces.component.UIComponent;
 
 /**
  * 
@@ -11,7 +10,7 @@ import javax.faces.component.UIComponent;
  * @version $Revision$ $Date$
  */
 public interface ICssRenderer {
-    String getStyleClassName(UIComponent component);
+    String getComponentStyleClassName();
 
     String getMainStyleClassName();
 

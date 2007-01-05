@@ -21,7 +21,7 @@ var __static = {
 			detail=message.f_getDetail();
 
 			if (styleMessage) {
-				className=styleMessage;
+				className=" "+styleMessage;
 			}
 		}
 		
@@ -33,7 +33,9 @@ var __static = {
 			detail="";
 		}
 		
-		component.className=className;
+		if (component.className!=className) {
+			component.className=className;
+		}
 		
 		if (textLabel) {
 			textLabel.style.display="none";
@@ -101,7 +103,10 @@ var __prototype = {
 		
 		var message=this._currentMessage;
 		if (!message) {
-			this.className=this._className;
+			var cls=this.f_computeStyleClass();
+			if (this.className!=cls) {
+				this.className=cls;
+			}
 
 			if (summaryLabel && summaryLabel.style.display!="none") {
 				summaryLabel.style.display="none";
@@ -134,7 +139,7 @@ var __prototype = {
 			detailLabel=document.createElement("LABEL");
 		}
 	
-		f_message.FillComponent(this._className, 
+		f_message.FillComponent(this.f_computeStyleClass(), 
 			this, 
 			textLabel,
 			summaryLabel, 

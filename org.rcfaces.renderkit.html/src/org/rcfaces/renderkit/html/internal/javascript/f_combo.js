@@ -22,15 +22,12 @@ var __prototype = {
 
 	f_combo: function() {
 		this.f_super(arguments);
-		
-		this._className=this.className;
 	},
 
 	f_finalize: function() {
 //		this._loading=undefined; // boolean
 		this._waiting=undefined; // f_waiting
 //		this._oldWidth=undefined; // string
-//		this._className=undefined; // string
 
 		// Pour l'instant il n'y a pas de variables attachées aux OPTIONs
 	
@@ -271,7 +268,7 @@ var __prototype = {
 			}
 			this.style.width=w+"px";
 		}
-		this.className=this._className+"_loading";
+		this.className=this.f_computeStyleClass("_loading");
 		
 		// Effaces les items !
 		while (this.hasChildNodes()) {
@@ -338,7 +335,7 @@ var __prototype = {
 					combo._oldWidth=undefined;
 				}
 				
-				combo.className=combo._className;
+				combo.className=this.f_computeStyleClass();
 	 		},
 			/**
 			 * @method public
@@ -421,6 +418,7 @@ var __prototype = {
 	 * @param optional boolean selected
 	 * @param optional boolean disabled
 	 * @param optional String description
+	 * @return Object New item.
 	 */
 	f_appendItem: function(parent, label, value, selected, disabled, description) {
 		if (parent) {

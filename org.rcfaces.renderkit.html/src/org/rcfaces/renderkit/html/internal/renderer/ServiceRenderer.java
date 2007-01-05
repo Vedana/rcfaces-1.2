@@ -18,7 +18,6 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -74,7 +73,8 @@ public class ServiceRenderer extends AbstractJavaScriptRenderer {
             }
 
             serviceComponent.setFilterProperties(HtmlTools
-                    .decodeFilterExpression(component, filterExpression));
+                    .decodeFilterExpression(context.getProcessContext(),
+                            component, filterExpression));
         }
 
     }

@@ -14,13 +14,6 @@ var __prototype = {
 	 * 
 	 * @method protected
 	 */
-	f_getMainClassName: function() {
-		return "f_imageSubmitButton";
-	},
-	/**
-	 * 
-	 * @method protected
-	 */
 	f_disableSubmitEvent: function() {
 		// Rien: le fonctionement standard
 	}

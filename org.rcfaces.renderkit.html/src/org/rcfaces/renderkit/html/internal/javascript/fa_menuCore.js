@@ -5,18 +5,13 @@
 /**
  * Aspect Menu
  *
- * @aspect hidden fa_menuCore extends fa_groupName, fa_items
+ * @aspect public fa_menuCore extends fa_groupName, fa_items
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 
 var __static = {
 
-	/** 
-	 * @field private static final string
-	 */
-	_MENU_CLASSNAME: "f_menu",
-	
 	/** 
 	 * @field hidden static final number
 	 */
@@ -43,7 +38,7 @@ var __static = {
 	_ITEM_IMAGE_HEIGHT: 18,
 	
 	/** 
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_BLANK_IMAGE_URL: "/menu/blank.gif",
 	
@@ -91,7 +86,6 @@ var __static = {
 		var icon=menuItem._icon; // HtmlImageElement
 		if (icon) {
 			menuItem._icon=undefined;
-			// icon._menuClassName=undefined; // string
 
 			f_core.VerifyProperties(icon);
 		}
@@ -108,7 +102,6 @@ var __static = {
 		menuItem.onmousedown=null;		
 		menuItem.onclick=null;		
 		
-		// menuItem._menuClassName=undefined; // string
 		menuItem._menuPopup=undefined;
 		// menuItem._attachedTable=undefined; // boolean
 		// menuItem._checked=undefined; // boolean
@@ -652,7 +645,6 @@ var __static = {
 			pmenuItem._link=undefined;
 			// pmenuItem._accessKey=undefined; // string
 			// pmenuItem._value=undefined; // string
-			// pmenuItem._menuClassName=undefined; // string
 			// pmenuItem._disabled=undefined; // boolean
 			// pmenuItem._over=undefined; // boolean
 			
@@ -689,8 +681,6 @@ var __prototype = {
 	fa_menuCore: function() {
 
 		if (this.tagName) {
-			this._menuClassName=f_core.GetAttribute(this, "v:menuClassName");
-
 			var itemImageWidth=f_core.GetAttribute(this, "v:itemImageWidth");
 			if (itemImageWidth) {
 				this._itemImageWidth=parseInt(itemImageWidth);
@@ -705,10 +695,6 @@ var __prototype = {
 				f_core.Debug(fa_menuCore, "Set item image width/height by tag attributes width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
 			}
 		}
-		if (!this._menuClassName) {
-			this._menuClassName=fa_menuCore._MENU_CLASSNAME;
-		}
-		
 		
 		this._blankMenuImageURL=f_env.GetStyleSheetBase()+fa_menuCore._BLANK_IMAGE_URL;
 		
@@ -717,7 +703,6 @@ var __prototype = {
 	f_finalize:  function() {
 		// this._popupOpened=undefined;  // boolean
 		this._selectedMenuItem=undefined;
-		// this._menuClassName=undefined; // string
 		// this._blankMenuImageURL=undefined; // string
 		// this._menuItemsChanged=undefined; // boolean
 		// this._itemImageWidth=undefined; // number
@@ -791,6 +776,7 @@ var __prototype = {
 	 * @param optional String tooltip
 	 * @param optional boolean disabled
 	 * @param optional boolean visible
+	 * @param optional String acceleratorKey
 	 * @return Object
 	 */
 	f_appendItem: function(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey) {
@@ -817,7 +803,7 @@ var __prototype = {
 		
 		var menuItem=document.createElement("LI");
 		menuItem.id=id;
-		menuItem.className=this._menuClassName+"_item";
+		menuItem.className="f_menu_item";
 		menuItem._style=fa_menuCore._AS_PUSH_BUTTON;
 		menuItem.role="menuitem";
 		
@@ -834,20 +820,19 @@ var __prototype = {
 		}
 
 		var image=document.createElement("IMG");
-		image.className=this._menuClassName+"_item_image";
 		image.align="middle";
 		image.valign="middle";
 		image.border=0;
 		image.width=this._itemImageWidth;
 		image.height=this._itemImageHeight;
 		image.src=this._blankMenuImageURL;
-		image._menuClassName=image.className;
+		image.className="f_menu_item_image";
 		menuItem._icon=image;
 		
 		menuItem.appendChild(image);
 		
 		var div=document.createElement("LABEL");
-		div.className=this._menuClassName+"_item_text";
+		div.className="f_menu_item_text";
 		if (accessKey) {
 			menuItem._accessKey=accessKey;
 			menuItem.accessKey=accessKey;
@@ -862,12 +847,12 @@ var __prototype = {
 		if (acceleratorKey) {
 			var htmlAcceleratorKey=f_core.EncodeHtml(acceleratorKey);
 			var accelV=document.createElement("LABEL");
-			accelV.className=this._menuClassName+"_item_accelV";
+			accelV.className="f_menu_item_accelV";
 			accelV.innerHTML=htmlAcceleratorKey;
 			menuItem.appendChild(accelV);
 	
 			var accel=document.createElement("LABEL");
-			accel.className=this._menuClassName+"_item_accel";
+			accel.className="f_menu_item_accel";
 			accel.innerHTML=htmlAcceleratorKey;
 			menuItem.appendChild(accel);
 		}
@@ -877,7 +862,6 @@ var __prototype = {
 		menuItem.onmousedown=fa_menuCore._MenuItem_mouseDown;
 		menuItem.onclick=fa_menuCore._MenuItem_click;
 		
-		menuItem._menuClassName=menuItem.className;
 		menuItem._menuBar=this;
 		menuItem._value=value;
 		menuItem._parentItem=parentItem;
@@ -944,7 +928,7 @@ var __prototype = {
 	 */
 	f_createPopup: function(parentId) {
 		var table=document.createElement("UL");
-		table.className=this._menuClassName+"_popup";
+		table.className="f_menu_popup";
 		table.style.visibility="hidden";
 		if (parentId) {
 			table.id=parentId;
@@ -955,6 +939,7 @@ var __prototype = {
 	/**
 	 * @method public 
 	 * @param Object parentItem Parent object or <code>null</code>
+	 * @return void
 	 */
 	f_appendSeparatorItem: function(parentItem) {
 		var document=this.ownerDocument;
@@ -969,7 +954,7 @@ var __prototype = {
 		}
 		
 		var item=document.createElement("LI");
-		item.className=this._menuClassName+"_item_sep";
+		item.className="f_menu_item_sep";
 		item.onmousedown=fa_menuCore._SeparatorItem_click;
 		item._separator=true;
 		item._disabled=true;
@@ -1439,7 +1424,6 @@ var __prototype = {
 			return;
 		}
 	
-		var className=item._menuClassName;
 		var imageURL=item._imageURL;
 		var itemStyle=item.style;
 		
@@ -1454,17 +1438,18 @@ var __prototype = {
 				}
 			}
 		}
-				
+
+		var suffix="";
 		if (item._menuPopup) {
 			if (item._popupOpened || item._over) {
-				className+="_selected";
+				suffix+="_selected";
 	
 			} else {
-				className+="_popup";
+				suffix+="_popup";
 			}
 
 			if (item._disabled) {
-				className+="_disabled";
+				suffix+="_disabled";
 			
 				var disabledImageURL=item._disabledImageURL;
 				if (disabledImageURL) {
@@ -1478,10 +1463,10 @@ var __prototype = {
 			}
 				
 		} else if (item._disabled) {
-			className+="_disabled";
+			suffix+="_disabled";
 			
 			if (item._over) {
-				className+="_hover";			
+				suffix+="_hover";			
 			}
 			
 			var disabledImageURL=item._disabledImageURL;
@@ -1490,7 +1475,7 @@ var __prototype = {
 			}
 	
 		} else if (item._over) {
-			className+="_hover";
+			suffix+="_hover";
 			
 			var hoverImageURL=item._hoverImageURL;
 			if (hoverImageURL) {
@@ -1504,6 +1489,11 @@ var __prototype = {
 			}
 		} 
 		
+		var className="f_menu_item";
+		if (suffix) {
+			className+=" "+className+suffix;			
+		}
+		
 		if (item.className!=className) {
 			item.className=className;	
 			if (item._rlink) {
@@ -1513,22 +1503,27 @@ var __prototype = {
 				
 		var icon=item._icon;
 		if (icon) {
-			var iconClassName=icon._menuClassName;
+			var iconClassName="f_menu_item_image";
 			
+			var suffix="";
 			if (!imageURL) {
 				if (item._checked) {
 					var style=item._style;
 					
 					if (style==fa_menuCore._AS_CHECK_BOX) {
-						iconClassName=icon._menuClassName+"_check";
+						suffix="_check";
 
 					} else if (style==fa_menuCore._AS_RADIO_BUTTON) {
-						iconClassName=icon._menuClassName+"_radio";
+						suffix="_radio";
 					}
 				}
 
 				if (item._over) {
-					iconClassName+="_hover";
+					suffix+="_hover";
+				}
+				
+				if (suffix) {
+					iconClassName+=" "+iconClassName+suffix;
 				}
 			}
 			
@@ -1610,7 +1605,7 @@ var __prototype = {
 	 * Remove all items
 	 *
 	 * @method public
-	 * @param optional Object menuItem
+	 * @param Object menuItem
 	 * @return void
 	 */
 	f_removeAllItems: function(menuItem) {

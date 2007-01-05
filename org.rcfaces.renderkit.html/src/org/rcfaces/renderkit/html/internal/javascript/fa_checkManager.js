@@ -208,17 +208,19 @@ var __prototype = {
 		if (checked) {
 			detail|=1;
 		}
+
+		var item=this.fa_getElementItem(element);
 	
-		this.fa_fireCheckChangedEvent(evt, detail, element, elementValue);
+		this.fa_fireCheckChangedEvent(evt, detail, item, elementValue);
 		
 		return true;
 	},
 	/**
 	 * @method protected
 	 */
-	fa_fireCheckChangedEvent: function(evt, detail, element, elementValue) {
-
-		return this.f_fireEvent(f_event.CHECK, evt, element, elementValue, null, detail);
+	fa_fireCheckChangedEvent: function(evt, detail, item, elementValue) {
+	
+		return this.f_fireEvent(f_event.CHECK, evt, item, elementValue, null, detail);
 	},
 	/**
 	 * @method protected
@@ -248,7 +250,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public
-	 * @return Object[] An array of checked values.
+	 * @return any[] An array of checked values.
 	 */
 	f_getCheckedValues: function() {
 		var ret=new Array;

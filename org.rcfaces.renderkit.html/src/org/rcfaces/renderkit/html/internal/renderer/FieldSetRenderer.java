@@ -9,7 +9,6 @@ import javax.faces.render.RenderKitFactory;
 
 import org.rcfaces.core.component.FieldSetComponent;
 import org.rcfaces.core.event.PropertyChangeEvent;
-import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -147,9 +146,9 @@ public class FieldSetRenderer extends AbstractCssRenderer {
             FieldSetComponent fieldSetComponent) throws WriterException {
 
         writeCoreAttributes(htmlWriter);
-        htmlWriter.writeClass(getStyleClassName(fieldSetComponent));
-
         writeJavaScriptAttributes(htmlWriter);
+
+        writeStyleClass(htmlWriter, null);
 
         ICssWriter cssWriter = htmlWriter.writeStyle(32);
         writeFieldSetCss(cssWriter, fieldSetComponent);
@@ -174,8 +173,9 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
         String borderType = fieldSetComponent.getBorderType(facesContext);
 
-        IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
-                .getInstance(facesContext).getBorderRenderersRegistry();
+        IBorderRenderersRegistry borderRendererRegistry = componentRenderContext
+                .getRenderContext().getProcessContext().getRcfacesContext()
+                .getBorderRenderersRegistry();
 
         return (IHtmlBorderRenderer) borderRendererRegistry.getBorderRenderer(
                 facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT,
@@ -226,11 +226,13 @@ public class FieldSetRenderer extends AbstractCssRenderer {
             IComponentData componentData) {
         super.decode(context, component, componentData);
 
+        FacesContext facesContext = context.getFacesContext();
+
         FieldSetComponent fieldSetComponent = (FieldSetComponent) component;
 
         String text = componentData.getStringProperty("text");
         if (text != null) {
-            String old = fieldSetComponent.getText();
+            String old = fieldSetComponent.getText(facesContext);
             if (text.equals(old) == false) {
                 fieldSetComponent.setText(text);
 

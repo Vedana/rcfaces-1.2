@@ -25,11 +25,16 @@ public class DateConverter extends AbstractConverter {
 
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
-        return CalendarTools.parseValue(component, value);
+        return CalendarTools.parseValue(null, component, value, isLiteral());
     }
 
     public String getAsString(FacesContext context, UIComponent component,
             Object value) {
-        return CalendarTools.formatDate(component, (Date) value);
+        return CalendarTools.formatDate(component, (Date) value,  isLiteral());
+    }
+
+
+    protected boolean isLiteral() {
+        return false;
     }
 }

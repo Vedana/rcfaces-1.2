@@ -42,7 +42,10 @@ import org.rcfaces.core.internal.webapp.HierarchicalRepositoryServlet;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IHierarchicalFile;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IModule;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.webapp.IRepository.IContent;
+import org.rcfaces.core.internal.webapp.IRepository.IContext;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -293,6 +296,40 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     private String getOuputCharset() {
         return "UTF-8";
+    }
+
+    protected ISet initializeDefaultSet() {
+
+        List mds = new ArrayList(8);
+
+        IModule modules[] = getHierarchicalRepository().listModules();
+
+        for (int i = 0; i < modules.length; i++) {
+            IModule module = modules[i];
+
+            if (module.isDefaultCoreModule() == false) {
+                continue;
+            }
+
+            module.setGroupAllFiles(true);
+            mds.add(module);
+        }
+
+        IContext context = getHierarchicalRepository().createContext(null);
+
+        IHierarchicalFile ret[] = getHierarchicalRepository().computeFiles(mds,
+                IHierarchicalRepository.FILE_COLLECTION_TYPE, context);
+
+        String name = getBootSetDefaultValue();
+
+        String uri = getSetURI(name);
+
+        mds = Arrays.asList(ret);
+
+        ISet set = getHierarchicalRepository().declareSet(name, uri,
+                (IModule[]) mds.toArray(new IModule[mds.size()]));
+
+        return set;
     }
 
     /**

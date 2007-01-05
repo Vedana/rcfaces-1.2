@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
@@ -30,9 +31,11 @@ import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.model.DefaultSortedComponent;
+import org.rcfaces.core.model.IAdaptable;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -54,7 +57,7 @@ public class GridTools {
     private static final ISortedComponent[] SORTED_COMPONENTS_EMPTY_ARRAY = new ISortedComponent[0];
 
     private static final boolean SORT_INDICES = true;
-
+    
     public static IDataColumnIterator listColumns(DataGridComponent component) {
         List list = ComponentIterators.list(component,
                 DataColumnComponent.class);
@@ -65,6 +68,11 @@ public class GridTools {
         return new DataColumnListIterator(list);
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private static final class DataColumnListIterator extends
             ComponentIterators.ComponentListIterator implements
             IDataColumnIterator {
@@ -330,37 +338,124 @@ public class GridTools {
         return true;
     }
 
-    public static DataModel getDataModel(Object current,
+    public static DataModel getDataModel(Object current, UIComponent component,
             FacesContext facesContext) {
 
         if (current == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("DataModel conversion: null value type '" + current
+                        + "' for component '" + component.getId()
+                        + ", return a ListDataModel.");
+            }
+
             return new ListDataModel(Collections.EMPTY_LIST);
         }
 
         if (current instanceof DataModel) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("DataModel conversion: DataModel value type '"
+                        + current + "' for component '" + component.getId()
+                        + ", return the value.");
+            }
+
             return (DataModel) current;
         }
 
         if (current instanceof List) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("DataModel conversion: List value type '" + current
+                        + "' for component '" + component.getId()
+                        + ", return a ListDataModel.");
+            }
+
             return new ListDataModel((List) current);
         }
 
         if (Object[].class.isAssignableFrom(current.getClass())) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("DataModel conversion: Object array value type '"
+                        + current + "' for component '" + component.getId()
+                        + ", return an ArrayDataModel.");
+            }
+
             return new ArrayDataModel((Object[]) current);
         }
 
         if (current instanceof ResultSet) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("DataModel conversion: ResultSet value type '"
+                        + current + "' for component '" + component.getId()
+                        + ", return a ResultSetDataModel.");
+            }
+
             return new ResultSetDataModel((ResultSet) current);
         }
 
         if (current instanceof Result) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("DataModel conversion: Result value type '" + current
+                        + "' for component '" + component.getId()
+                        + ", return a ResultDataModel.");
+            }
+
             return new ResultDataModel((Result) current);
         }
 
         if (Constants.COLLECTION_DATAMODEL_SUPPORT) {
             if (current instanceof Collection) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("DataModel conversion: Collection value type '"
+                            + current + "' for component '" + component.getId()
+                            + ", return an ArrayDataModel.");
+                }
+
                 return new ArrayDataModel(((Collection) current).toArray());
             }
+        }
+
+        if (Constants.ADAPTABLE_DATAMODEL_SUPPORT) {
+            if (current instanceof IAdaptable) {
+                DataModel dataModel = (DataModel) ((IAdaptable) current)
+                        .getAdapter(DataModel.class, component);
+                if (dataModel != null) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG
+                                .debug("DataModel conversion: IAdaptable value type '"
+                                        + current
+                                        + "' for component '"
+                                        + component.getId()
+                                        + ", return a DataModel.");
+                    }
+
+                    return dataModel;
+                }
+            }
+
+            RcfacesContext rcfacesContext = RcfacesContext
+                    .getInstance(facesContext);
+
+            DataModel dataModel = (DataModel) rcfacesContext
+                    .getAdapterManager().getAdapter(current, DataModel.class,
+                            component);
+
+            if (dataModel != null) {
+                if (LOG.isDebugEnabled()) {
+                    LOG
+                            .debug("DataModel conversion: AdaptableFactory response for type '"
+                                    + current
+                                    + "' for component '"
+                                    + component.getId()
+                                    + ", return a DataModel.");
+                }
+
+                return dataModel;
+            }
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("DataModel conversion: Unknown value type '" + current
+                    + "' for component '" + component.getId()
+                    + ", return a ScalarDataModel.");
         }
 
         return new ScalarDataModel(current);
@@ -379,7 +474,8 @@ public class GridTools {
         if (selectedValues instanceof IIndexesModel) {
             // Il nous faut l'index ...
 
-            int index = searchIndexIntoDataModel(facesContext, component, rowValue);
+            int index = searchIndexIntoDataModel(facesContext, component,
+                    rowValue);
 
             if (index < 0) {
                 return;
@@ -678,7 +774,8 @@ public class GridTools {
 
             // Il nous faut l'index ...
 
-            int index = searchIndexIntoDataModel(facesContext, component, rowValue);
+            int index = searchIndexIntoDataModel(facesContext, component,
+                    rowValue);
 
             if (index < 0) {
                 return;

@@ -22,7 +22,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setText: function(text) {
-		f_core.Assert(typeof(text)=="string", "Invalid text parameter ! ('"+text+"')");
+		f_core.Assert(typeof(text)=="string", "f_styledText.f_setText: Invalid text parameter ! ('"+text+"')");
 
 		if (this.f_getText() == text) {
 			return;

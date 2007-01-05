@@ -228,7 +228,7 @@ var __prototype = {
 			this._title=undefined;
 			
 			title.onresize=null;
-			title._tabbedPane=undefined;
+			title._tabbedPane=undefined; // f_tabbedPane
 			f_core.VerifyProperties(title);
 		}
 
@@ -243,16 +243,20 @@ var __prototype = {
 	},
 	/**
 	 * @method protected
+	 * @return void
 	 */
 	f_updateCards: function() {
-		for(var i=0;i<this._cards.length;i++) {
-			var tab=this._cards[i];
-		
-			tab._ccard=f_core.GetElementById(tab._id, this.ownerDocument);
-			f_core.Assert(tab._ccard, "Can not find body of tab '"+tab._id+"'.");
+		var cards=this._cards;
+		for(var i=0;i<cards.length;i++) {
+			var tab=cards[i];
 
-			//tab._ccard._vcard=tab;			
-			tab._ccard.f_declareTab(this, tab._text, tab._accessKey, tab._disabled, tab._imageURL, tab._disabledImageURL, tab._selectedImageURL, tab._hoverImageURL);	
+			var ccard=f_core.GetElementById(tab._id, this.ownerDocument);
+			f_core.Assert(ccard, "f_tabbedPane.f_updateCards: Can not find card component of tab '"+tab._id+"'.");
+
+			f_core.Debug(f_tabbedPane, "Update tab#"+i+" tab="+tab+" ccard="+ccard);
+			tab._ccard=ccard;
+			ccard._vcard=tab;			
+			ccard.f_declareTab(this, tab._text, tab._accessKey, tab._disabled, tab._imageURL, tab._disabledImageURL, tab._selectedImageURL, tab._hoverImageURL);	
 		}
 	},
 	f_documentComplete: function() {
@@ -371,7 +375,7 @@ var __prototype = {
 			for(var i=0;i<bodies.length;i++) {
 				var body=bodies[i];
 				
-				if (body.className!=this.className+"_content") {
+				if (body.className!="f_tabbedPane_content") {
 					continue;
 				}
 				
@@ -586,7 +590,7 @@ var __prototype = {
 			}
 		}
 		
-		var className=this.className;
+		var className="f_tabbedPane";
 		tab._rightTTitleImage.className=className+rightTTitleImage;
 		tab._leftTTitleImage.className=className+leftTTitleImage;
 		tab._rightTitle.className=className+rightTitle;
@@ -659,7 +663,7 @@ var __prototype = {
 		
 		var table=this._title;
 		if (!table) {
-			table=f_core.GetChildByCssClass(this,this.className+"_title");
+			table=f_core.GetChildByCssClass(this,"f_tabbedPane_title");
 			this._title=table;
 			table._tabbedPane=this;
 		}
@@ -716,7 +720,7 @@ var __prototype = {
 			tab._icon.src=tab._imageURL;
 			tab._icon.align="center";
 			tab._icon.border=0;
-			tab._icon.className=this.className+"_titleIcon";
+			tab._icon.className="f_tabbedPane_titleIcon";
 
 			tab._textLink.appendChild(tab._icon);
 		}

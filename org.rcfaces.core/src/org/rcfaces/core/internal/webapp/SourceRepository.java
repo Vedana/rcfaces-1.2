@@ -349,7 +349,7 @@ public abstract class SourceRepository {
             hash = ConfiguredHttpServlet.computeHash(sourceBuffer);
         }
 
-        if (canUseGzip) {
+        if (canUseGzip && sourceBuffer.length > 0) {
             try {
                 ByteBufferOutputStream bos = new ByteBufferOutputStream(
                         sourceBuffer.length);

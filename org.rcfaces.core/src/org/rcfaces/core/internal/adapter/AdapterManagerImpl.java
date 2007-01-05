@@ -167,12 +167,13 @@ public class AdapterManagerImpl extends AbstractProvider implements
         return table;
     }
 
-    public Object getAdapter(Object adaptable, Class adapterType, Map parameters) {
+    public Object getAdapter(Object adaptable, Class adapterType,
+            Object parameter) {
         IAdapterFactory factory = (IAdapterFactory) getFactories(
                 adaptable.getClass()).get(adapterType.getName());
         Object result = null;
         if (factory != null) {
-            result = factory.getAdapter(adaptable, adapterType, parameters);
+            result = factory.getAdapter(adaptable, adapterType, parameter);
         }
 
         if (result == null && adapterType.isInstance(adaptable)) {
@@ -182,7 +183,7 @@ public class AdapterManagerImpl extends AbstractProvider implements
         return result;
     }
 
-    public Class[] computeClassOrder(Class adaptable) {
+    private Class[] computeClassOrder(Class adaptable) {
         List classes = null;
         // cache reference to lookup to protect against concurrent flush
         Map lookup = classSearchOrderLookup;
@@ -233,45 +234,56 @@ public class AdapterManagerImpl extends AbstractProvider implements
     }
 
     private void addFactoriesFor(String typeName, Map table) {
-        List factoryList = (List) getFactories().get(typeName);
+        List factoryList;
+        synchronized (factories) {
+            factoryList = (List) factories.get(typeName);
+        }
+
         if (factoryList == null) {
             return;
         }
 
-        for (int i = 0, imax = factoryList.size(); i < imax; i++) {
-            IAdapterFactory factory = (IAdapterFactory) factoryList.get(i);
+        synchronized (factoryList) {
+            int size = factoryList.size();
+            for (int i = 0; i < size; i++) {
+                IAdapterFactory factory = (IAdapterFactory) factoryList.get(i);
 
-            Class[] adapters = factory.getAdapterList();
-            for (int j = 0; j < adapters.length; j++) {
-                String adapterName = adapters[j].getName();
-                if (table.get(adapterName) == null)
+                Class[] adapters = factory.getAdapterList();
+                for (int j = 0; j < adapters.length; j++) {
+                    String adapterName = adapters[j].getName();
+                    if (table.containsKey(adapterName)) {
+                        continue;
+                    }
+
                     table.put(adapterName, factory);
+                }
             }
         }
     }
 
-    public Map getFactories() {
-        return factories;
-    }
-
-    public synchronized void registerAdapters(IAdapterFactory factory,
-            Class adaptable) {
+    public void registerAdapters(IAdapterFactory factory, Class adaptable) {
         registerFactory(factory, adaptable.getName());
+        
         flushLookup();
     }
 
-    public synchronized void flushLookup() {
+    private synchronized void flushLookup() {
         adapterLookup = null;
         classSearchOrderLookup = null;
     }
 
-    public void registerFactory(IAdapterFactory factory, String adaptableType) {
-        List list = (List) factories.get(adaptableType);
-        if (list == null) {
-            list = new ArrayList(5);
-            factories.put(adaptableType, list);
+    private void registerFactory(IAdapterFactory factory, String adaptableType) {
+        List list;
+        synchronized (factories) {
+            list = (List) factories.get(adaptableType);
+            if (list == null) {
+                list = new ArrayList(5);
+                factories.put(adaptableType, list);
+            }
         }
-        list.add(factory);
+        synchronized (list) {
+            list.add(factory);
+        }
     }
 
     /**

@@ -50,7 +50,7 @@ f_classLoader.prototype = {
 	/**
 	 * @method public final
 	 * @param String className Name of class.
-	 * @param String lookId Look id.
+	 * @param optional String lookId Look id.
 	 * @return f_class
 	 */
 	f_getClass: function(className, lookId) {
@@ -84,8 +84,16 @@ f_classLoader.prototype = {
 		return claz;
 	},
 	
+	/**
+	 * @method public final
+	 * @param String aspectName Name of aspect.
+	 * @return f_aspect
+	 */
 	f_getAspect: function(aspectName) {
 		var aspect=this._aspects[aspectName];
+		if (aspect) {
+			return aspect;
+		}
 	
 		var parentClassloader=this._parent;
 		if (!parentClassloader) {
@@ -150,7 +158,7 @@ f_classLoader.prototype = {
 	_onExit: function() {
 		// Cleanup objects
 	
-		f_core.Profile("f_classLoader.onExit.enter");
+		f_core.Profile(false, "f_classLoader.onExit");
 		
 		this._exiting=true;
 		
@@ -164,7 +172,7 @@ f_classLoader.prototype = {
 		f_core.Debug("f_classLoader", "Clean "+pool.length+" components store into component pool !");
 		f_class.Clean(pool);
 		
-		f_core.Profile("f_classLoader.onExit.clean(components)");
+		f_core.Profile(null, "f_classLoader.onExit.clean(components)");
 		
 		// Vide le pool des composants
 		pool=this._objectPool;
@@ -182,7 +190,7 @@ f_classLoader.prototype = {
 		f_core.Debug("f_classLoader","Clean "+pool.length+" system objects store into component pool !");
 		f_class.Clean(pool);
 	
-		f_core.Profile("f_classLoader.onExit.clean(objects)");
+		f_core.Profile(null, "f_classLoader.onExit.clean(objects)");
 	
 		this._mainBundleName=undefined;
 		this._bundles=undefined;
@@ -220,7 +228,7 @@ f_classLoader.prototype = {
 			}
 		}
 			
-		f_core.Profile("f_classLoader.onExit.clean(classes)");
+		f_core.Profile(null, "f_classLoader.onExit.clean(classes)");
 			
 		var aspects=this._aspects;
 		f_core.Assert(aspects, "f_classLoader._onExit: Invalid Aspects pool !");
@@ -253,7 +261,7 @@ f_classLoader.prototype = {
 			}
 		}	
 		
-		f_core.Profile("f_classLoader.onExit.clean(aspects)");
+		f_core.Profile(true, "f_classLoader.onExit");
 		
 		this._parent=undefined;
 		
@@ -523,13 +531,13 @@ f_classLoader.prototype = {
 			fa_clientData.InitializeDataAttribute(o, node);
 		}
 			
-		var update=o._completeComponent;
+		var update=o.f_completeComponent;
 		if (update && typeof(update)=="function") {
 			try {
 				update.call(o);
 	
 			} catch (x) {
-				f_core.Error("f_classLoader", "_completeComponent throws exception for component '"+o.id+"'.", x);
+				f_core.Error("f_classLoader", "f_completeComponent throws exception for component '"+o.id+"'.", x);
 			}
 		}
 		
@@ -818,7 +826,7 @@ f_classLoader.prototype = {
 		
 		var name=bundle.f_getName();
 	
-		f_core.Profile("f_classLoader.loadBundle("+name+")");
+		f_core.Profile(false, "f_classLoader.loadBundle("+name+")");
 		
 		f_core.Assert(!this._bundles[name], "Bundle '"+name+"' is alreay declared !");
 		
@@ -832,6 +840,8 @@ f_classLoader.prototype = {
 		if (parentClassloader) {
 			parentClassloader._declareBundle(bundle, win);
 		}
+
+		f_core.Profile(true, "f_classLoader.loadBundle("+name+")");
 	},
 	
 	toString: function() {

@@ -229,8 +229,8 @@ public class ClientService extends AbstractClientService {
         }
 
         if ("object".equals(type)) {
-            return HtmlTools.decodeParametersToMap(component, parameterString,
-                    '&', null);
+            return HtmlTools.decodeParametersToMap(null, component,
+                    parameterString, '&', null);
 
         } else if ("null".equals(type)) {
             return null;

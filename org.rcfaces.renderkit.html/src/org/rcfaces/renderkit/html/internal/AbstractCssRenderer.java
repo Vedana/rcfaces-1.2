@@ -9,15 +9,19 @@ import javax.faces.component.UIComponent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
@@ -45,7 +49,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     protected static final int SEVERITY_CLASSES_MASK = 4;
 
-    protected String getComponentStyleClassName() {
+    public String getComponentStyleClassName() {
         return getMainStyleClassName();
     }
 
@@ -55,32 +59,73 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     protected IHtmlWriter writeStyleClass(IHtmlWriter writer, String classSuffix)
             throws WriterException {
+        UIComponent component = writer.getComponentRenderContext()
+                .getComponent();
 
-        String cssClass = null;
+        StringAppender cssClass = new StringAppender(64);
 
-        cssClass = getStyleClassName(writer.getComponentRenderContext()
-                .getComponent());
-        if (cssClass != null) {
-            if (classSuffix != null && classSuffix.length() > 0) {
-                cssClass += classSuffix;
+        String componentStyleClassName = getComponentStyleClassName();
+        cssClass.append(componentStyleClassName);
+
+        if (component instanceof IStyleClassCapability) {
+            IStyleClassCapability styleClassCapability = (IStyleClassCapability) component;
+
+            String styleClass = styleClassCapability.getStyleClass();
+            if (styleClass != null) {
+                cssClass.append(' ');
+                cssClass.append(styleClass);
+
+                writer.writeAttribute("v:styleClass", styleClass);
             }
-            writer.writeClass(cssClass);
+        }
+
+        if (classSuffix == null || classSuffix.length() < 1) {
+            classSuffix = computeComponentStyleClass(component, "");
+
+            if (classSuffix != null && classSuffix.length() > 0) {
+                classSuffix = componentStyleClassName + classSuffix;
+            }
+        }
+
+        if (classSuffix != null && classSuffix.length() > 0) {
+            cssClass.append(' ');
+            cssClass.append(classSuffix);
+        }
+        if (cssClass.length() > 0) {
+            writer.writeClass(cssClass.toString());
         }
 
         return writer;
     }
 
-    public String getStyleClassName(UIComponent component) {
-        if (component instanceof IStyleClassCapability) {
-            IStyleClassCapability styleClassCapability = (IStyleClassCapability) component;
+    /*
+     * public final String getStyleClassName(UIComponent component) { return
+     * getComponentStyleClassName(); }
+     */
 
-            String cssClass = styleClassCapability.getStyleClass();
-            if (cssClass != null) {
-                return cssClass;
+    protected String computeComponentStyleClass(UIComponent component,
+            String classSuffix) {
+        if (component instanceof IDisabledCapability) {
+            if (((IDisabledCapability) component).isDisabled()) {
+                classSuffix = "_disabled";
+            }
+        }
+        
+        if (classSuffix == null) {
+            if (component instanceof IReadOnlyCapability) {
+                if (((IReadOnlyCapability) component).isReadOnly()) {
+                    classSuffix = "_readOnly";
+                }
             }
         }
 
-        return getComponentStyleClassName();
+        if (component instanceof IRequiredCapability) {
+            if (((IRequiredCapability) component).isRequired()) {
+                classSuffix += "_required";
+            }
+        }
+        
+        return classSuffix;
     }
 
     protected final IHtmlWriter writeCssAttributes(IHtmlWriter writer)

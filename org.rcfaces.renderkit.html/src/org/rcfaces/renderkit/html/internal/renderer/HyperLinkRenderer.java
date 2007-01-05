@@ -4,10 +4,15 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.HyperLinkComponent;
+import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -73,5 +78,25 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
     protected String getActionEventName(INameSpace nameSpace) {
         return nameSpace.getSelectionEventName();
+    }
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
+
+        HyperLinkComponent hyperlinkComponent = (HyperLinkComponent) component;
+
+        String text = componentData.getStringProperty("text");
+        if (text != null) {
+            String old = hyperlinkComponent.getText(facesContext);
+            if (text.equals(old) == false) {
+                hyperlinkComponent.setText(text);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.TEXT, old, text));
+            }
+        }
     }
 }

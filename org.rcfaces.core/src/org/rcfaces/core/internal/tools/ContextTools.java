@@ -6,6 +6,7 @@ package org.rcfaces.core.internal.tools;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -89,5 +90,10 @@ public final class ContextTools {
         }
 
         return locale;
+    }
+
+    public static TimeZone getUserTimeZone(FacesContext facesContext) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

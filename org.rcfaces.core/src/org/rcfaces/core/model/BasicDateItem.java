@@ -13,7 +13,7 @@ import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.internal.converter.LocalizedDateConverter;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
 
 /**
  * 
@@ -63,8 +63,8 @@ public class BasicDateItem extends SelectItem implements IStyleClassItem,
         }
 
         if (value instanceof String) {
-            return LocalizedDateConverter.SINGLETON.getAsObject(null,
-                    component, (String) value);
+            return LiteralDateConverter.SINGLETON.getAsObject(null, component,
+                    (String) value);
         }
 
         throw new FacesException("Invalid itemValue for DateItem '" + value

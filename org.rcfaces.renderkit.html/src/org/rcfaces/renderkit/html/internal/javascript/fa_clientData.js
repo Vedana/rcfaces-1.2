@@ -11,12 +11,12 @@
  */
 var __static = {
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_REMOVED_PROPERTY: "removed",
 	
 	/**
-	 * @field private static final string
+	 * @field private static final String
 	 */
 	_CHANGED_PROPERTY: "changed",
 
@@ -108,11 +108,12 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
-	 * @param String name
-	 * @param String value
+	 * @param String name1
+	 * @param optional String value1
+	 * @param optional String... name2
 	 * @return void
 	 */
-	f_setClientData: function(name, value) {
+	f_setClientData: function(name1, value1, name2) {
 		if (this._clientDatas===undefined) {
 			this.f_getClientData("");
 		}

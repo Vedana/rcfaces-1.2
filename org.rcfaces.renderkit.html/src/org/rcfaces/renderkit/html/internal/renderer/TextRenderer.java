@@ -3,10 +3,17 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 import org.rcfaces.core.component.TextComponent;
+import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -97,7 +104,7 @@ public class TextRenderer extends AbstractCssRenderer {
         if (text == null || text.trim().length() < 1) {
             return false;
         }
-        
+
         text = ParamUtils.formatMessage(textComponent, text);
 
         return HtmlTools.writeSpanAccessKey(htmlWriter, textComponent, text,
@@ -106,5 +113,26 @@ public class TextRenderer extends AbstractCssRenderer {
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.TEXT;
+    }
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
+
+        TextComponent textComponent = (TextComponent) component;
+
+        String newValue = componentData.getStringProperty("text");
+        if (newValue != null) {
+            String old = textComponent.getText(facesContext);
+
+            if (newValue.equals(old) == false) {
+                textComponent.setText(newValue);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.TEXT, old, newValue));
+            }
+        }
     }
 }

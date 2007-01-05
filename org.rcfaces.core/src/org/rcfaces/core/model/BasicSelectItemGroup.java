@@ -56,6 +56,13 @@ public class BasicSelectItemGroup extends SelectItemGroup implements
         super(label, description, disabled, selectItems);
     }
 
+    public BasicSelectItemGroup(ISelectItem selectItem) {
+        super(selectItem.getLabel(), selectItem.getDescription(), selectItem
+                .isDisabled(), null);
+
+        setValue(selectItem.getValue());
+    }
+
     public BasicSelectItemGroup(ISelectItemGroup selectItemGroup) {
         super(selectItemGroup.getLabel(), selectItemGroup.getDescription(),
                 selectItemGroup.isDisabled(), selectItemGroup.getSelectItems());

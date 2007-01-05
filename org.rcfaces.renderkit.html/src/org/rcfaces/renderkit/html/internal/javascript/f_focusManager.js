@@ -19,13 +19,11 @@ var __static={
 	
 	/**
 	 * @method public static
+	 * @return f_focusManager
 	 */
 	Get: function() {
 		return f_focusManager._Instance;
 	},
-	/**
-	 * @method public static
-	 */
 	/**
 	 * @method hidden static
 	 * @return void
@@ -154,30 +152,25 @@ var __prototype={
 	 * @return boolean
 	 */
 	f_setFocus: function(focus, async) {
-		f_core.Assert(focus.nodeType==1, "Focus component parameter is not defined.");
+		f_core.Assert(typeof(focus)=="string" || (focus && focus.nodeType==1), "Focus component parameter is not invalid ("+focus+").");
 		
-		f_core.Debug(f_focusManager, "f_setFocus to '"+focus.id+"' async='"+async+"'.");
-		var component;
+		var component=focus;
 		
 		if (typeof(focus)=="string") {
+			f_core.Debug(f_focusManager, "f_setFocus search component id='"+focus+"' async='"+async+"'.");
+		
 			try {
 				component=f_core.GetElementById(focus, document);
+				
 			} catch (x)  {
 				// Si le composant n'est pas Camelia, ca pete !
 				
 				component=document.getElementById(focus);
 			}
+		}
 			
-			if (!component) {
-				f_core.Info(f_focusManager, "Can not find component '"+focus+"' to set focus !");
-				return false;
-			}
-			
-		} else if (focus.tagName) {
-			component=focus;
-			
-		} else {
-			f_core.Error(f_focusManager, "Focus parameter is invalid '"+focus+"'.");
+		if (!component) {
+			f_core.Info(f_focusManager, "Can not find component '"+focus+"' to set focus !");
 			return false;
 		}
 

@@ -4,11 +4,13 @@
 package org.rcfaces.core.internal.renderkit;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -35,6 +37,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     private static final String EXTERNAL_CONTEXT_PROPERTY = "org.rcfaces.renderkit.core.EXTERNAL_CONTEXT";
 
+    protected final RcfacesContext rcfacesContext;
+
     protected final FacesContext facesContext;
 
     private final String contextPath;
@@ -53,6 +57,10 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     private String scriptType;
 
+    private TimeZone timeZone;
+
+    private Calendar calendar;
+
     protected AbstractProcessContext(FacesContext facesContext) {
         this.facesContext = facesContext;
 
@@ -67,8 +75,9 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         this.servletPath = servletPath;
 
-        this.designerMode = RcfacesContext.getCurrentInstance()
-                .isDesignerMode();
+        rcfacesContext = RcfacesContext.getInstance(facesContext);
+
+        this.designerMode = rcfacesContext.isDesignerMode();
     }
 
     public final FacesContext getFacesContext() {
@@ -95,6 +104,34 @@ public abstract class AbstractProcessContext implements IProcessContext {
         userLocale = ContextTools.getUserLocale(null);
 
         return userLocale;
+    }
+
+    public Calendar getUserCalendar() {
+        if (calendar != null) {
+            return calendar;
+        }
+
+        TimeZone timeZone = getUserTimeZone();
+        Locale locale = getUserLocale();
+
+        if (timeZone != null) {
+            calendar = Calendar.getInstance(timeZone, locale);
+            return calendar;
+        }
+
+        calendar = Calendar.getInstance(locale);
+
+        return calendar;
+    }
+
+    public TimeZone getUserTimeZone() {
+        if (timeZone != null) {
+            return timeZone;
+        }
+
+        timeZone = ContextTools.getUserTimeZone(null);
+
+        return timeZone;
     }
 
     public final String getAbsolutePath(String uri, boolean containsContextPath) {
@@ -326,6 +363,10 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     public static IProcessContext getProcessContext(FacesContext facesContext) {
 
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
         ExternalContext externalContext = facesContext.getExternalContext();
 
         Map requestMap = externalContext.getRequestMap();
@@ -354,7 +395,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         scriptType = PageConfiguration.getScriptType(getFacesContext());
         defaultAttributesLocale = PageConfiguration
-                .getDefaultAttributesLocale(getFacesContext());
+                .getDefaultLiteralLocale(getFacesContext());
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Page configurator of view "
@@ -364,4 +405,9 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         }
     }
+
+    public RcfacesContext getRcfacesContext() {
+        return rcfacesContext;
+    }
+
 }

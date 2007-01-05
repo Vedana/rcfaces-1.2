@@ -54,10 +54,6 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         DateEntryComponent dateEntryComponent = (DateEntryComponent) componentRenderContext
                 .getComponent();
 
-        Calendar calendar = CalendarTools.getAttributesCalendar(
-                componentRenderContext.getRenderContext().getProcessContext(),
-                dateEntryComponent);
-
         htmlWriter.startElement("DIV");
 
         htmlWriter.writeRole(IAccessibilityRoles.TEXT_FIELD);
@@ -70,12 +66,16 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
             htmlWriter.writeAttribute("v:showOnFocus", "true");
         }
 
+        Locale componentLocale = dateEntryComponent
+                .getComponentLocale(facesContext);
+        if (componentLocale == null) {
+            componentLocale = htmlWriter.getComponentRenderContext()
+                    .getRenderContext().getProcessContext().getUserLocale();
+        }
+
         String dateFormat = dateEntryComponent.getDateFormat(facesContext);
         if (dateFormat == null) {
-            Locale locale = htmlWriter.getComponentRenderContext()
-                    .getRenderContext().getProcessContext().getUserLocale();
-
-            dateFormat = CalendarTools.getDefaultPattern(locale);
+            dateFormat = CalendarTools.getDefaultPattern(componentLocale);
         }
 
         if (dateFormat == null) {
@@ -89,21 +89,26 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         // htmlWriter.writeAttribute("v:dateFormat", dateFormat);
 
         Date minDate = dateEntryComponent.getMinDate(facesContext);
+        Date maxDate = dateEntryComponent.getMaxDate(facesContext);
+
+        Calendar componentCalendar = CalendarTools.getCalendar(
+                componentRenderContext.getRenderContext().getProcessContext(),
+                dateEntryComponent, false);
+
         if (minDate != null) {
-            htmlWriter.writeAttribute("v:minDate", convertDate(calendar,
-                    minDate, true));
+            htmlWriter.writeAttribute("v:minDate", convertDate(
+                    componentCalendar, minDate, true));
         }
 
-        Date maxDate = dateEntryComponent.getMaxDate(facesContext);
         if (maxDate != null) {
-            htmlWriter.writeAttribute("v:maxDate", convertDate(calendar,
-                    maxDate, true));
+            htmlWriter.writeAttribute("v:maxDate", convertDate(
+                    componentCalendar, maxDate, true));
         }
 
         AbstractCompositeRenderer.writeClientValidatorParams(htmlWriter);
 
-        encodeSubComponents(htmlWriter, dateEntryComponent, dateFormat,
-                calendar);
+        encodeSubComponents(htmlWriter, dateEntryComponent, componentCalendar,
+                dateFormat);
 
         htmlWriter.enableJavaScript();
     }
@@ -116,8 +121,8 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
     }
 
     protected void encodeSubComponents(IHtmlWriter htmlWriter,
-            DateEntryComponent dateEntryComponent, String dateFormat,
-            Calendar calendar) throws WriterException {
+            DateEntryComponent dateEntryComponent, Calendar componentCalendar,
+            String dateFormat) throws WriterException {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
         FacesContext facesContext = componentRenderContext.getFacesContext();
@@ -141,20 +146,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         int curDay = -1;
 
         Date curDate = dateEntryComponent.getDate();
-        if (curDate != null) {
-            calendar.setTime(curDate);
-            curYear = calendar.get(Calendar.YEAR);
-            curMonth = calendar.get(Calendar.MONTH) + 1;
-            curDay = calendar.get(Calendar.DAY_OF_MONTH);
-        }
-
         Date defaultDate = dateEntryComponent.getDefaultDate(facesContext);
-        if (defaultDate != null) {
-            calendar.setTime(defaultDate);
-            defaultYear = calendar.get(Calendar.YEAR);
-            defaultMonth = calendar.get(Calendar.MONTH) + 1;
-            defaultDay = calendar.get(Calendar.DAY_OF_MONTH);
-        }
 
         Date minDate = dateEntryComponent.getMinDate(facesContext);
         Date maxDate = dateEntryComponent.getMaxDate(facesContext);
@@ -166,33 +158,47 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
             }
         }
 
+        if (curDate != null) {
+            componentCalendar.setTime(curDate);
+            curYear = componentCalendar.get(Calendar.YEAR);
+            curMonth = componentCalendar.get(Calendar.MONTH) + 1;
+            curDay = componentCalendar.get(Calendar.DAY_OF_MONTH);
+        }
+
+        if (defaultDate != null) {
+            componentCalendar.setTime(defaultDate);
+            defaultYear = componentCalendar.get(Calendar.YEAR);
+            defaultMonth = componentCalendar.get(Calendar.MONTH) + 1;
+            defaultDay = componentCalendar.get(Calendar.DAY_OF_MONTH);
+        }
+
         if (minDate != null) {
-            calendar.setTime(minDate);
-            minYear = calendar.get(Calendar.YEAR);
+            componentCalendar.setTime(minDate);
+            minYear = componentCalendar.get(Calendar.YEAR);
         }
         if (maxDate != null) {
-            calendar.setTime(maxDate);
-            maxYear = calendar.get(Calendar.YEAR);
+            componentCalendar.setTime(maxDate);
+            maxYear = componentCalendar.get(Calendar.YEAR);
         }
 
         if (minDate != null && maxDate != null) {
             // On peut limiter le nombre du jour ou du mois si les années sont
             // identiques !
             if (maxYear == minYear) {
-                calendar.setTime(minDate);
-                minMonth = calendar.get(Calendar.MONTH) + 1;
+                componentCalendar.setTime(minDate);
+                minMonth = componentCalendar.get(Calendar.MONTH) + 1;
 
-                calendar.setTime(maxDate);
-                maxMonth = calendar.get(Calendar.MONTH) + 1;
+                componentCalendar.setTime(maxDate);
+                maxMonth = componentCalendar.get(Calendar.MONTH) + 1;
 
                 // On peut limiter le nombre du jour si les années et les mois
                 // sont identiques !
                 if (minMonth == maxMonth) {
-                    calendar.setTime(minDate);
-                    minDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    componentCalendar.setTime(minDate);
+                    minDay = componentCalendar.get(Calendar.DAY_OF_MONTH);
 
-                    calendar.setTime(maxDate);
-                    maxDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    componentCalendar.setTime(maxDate);
+                    maxDay = componentCalendar.get(Calendar.DAY_OF_MONTH);
                 }
             }
         }
@@ -410,11 +416,18 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
     protected String getSubStyleClassName(IHtmlWriter htmlWriter, char ch,
             int length) {
 
-        StringAppender sb = new StringAppender(1 + length);
+        String cls = getMainStyleClassName();
+        StringAppender sb = new StringAppender(cls.length() * 2 + 7 + 1
+                + length);
+
+        sb.append(cls);
+        sb.append("_input ");
+
+        sb.append(cls);
         sb.append('_');
         sb.append(ch, length);
 
-        return getMainStyleClassName() + sb.toString();
+        return sb.toString();
     }
 
     protected void decode(IRequestContext context, UIComponent component,
@@ -425,10 +438,10 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
 
         String dateValue = componentData.getStringProperty("value");
         if (dateValue != null) {
-            Calendar calendar = CalendarTools.getAttributesCalendar(context
-                    .getProcessContext(), dateEntryComponent);
+            Calendar componentCalendar = CalendarTools.getCalendar(context
+                    .getProcessContext(), dateEntryComponent, false);
 
-            Date date = parseDate(calendar, dateValue, true);
+            Date date = parseDate(componentCalendar, dateValue, true);
 
             dateEntryComponent.setSubmittedValue(date);
         }

@@ -12,14 +12,7 @@
  
 .f_imagePagerButton_image,
 .f_imagePagerButton_text,
-.f_imagePagerButton, 
-.f_imagePagerButton_hover, 
-.f_imagePagerButton_pushed, 
-.f_imagePagerButton_selected, 
-.f_imagePagerButton_focus,
-.f_imagePagerButton_selected_focus, 
-.f_imagePagerButton_selected_hover, 
-.f_imagePagerButton_disabled {
+.f_imagePagerButton {
 	border: 0;
 	padding: 0;
 	margin: 0;
@@ -32,13 +25,7 @@
 	vertical-align: baseline;
 }
 
-.f_imagePagerButton, 
-.f_imagePagerButton_hover, 
-.f_imagePagerButton_pushed, 
-.f_imagePagerButton_selected, 
-.f_imagePagerButton_focus,
-.f_imagePagerButton_selected_focus, 
-.f_imagePagerButton_selected_hover {
+.f_imagePagerButton {
 	cursor: pointer;
 	cursor: hand;
 }

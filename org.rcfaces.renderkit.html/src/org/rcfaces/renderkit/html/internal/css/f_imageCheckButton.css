@@ -12,14 +12,7 @@
  
 .f_imageCheckButton_image,
 .f_imageCheckButton_text,
-.f_imageCheckButton, 
-.f_imageCheckButton_hover, 
-.f_imageCheckButton_pushed, 
-.f_imageCheckButton_selected, 
-.f_imageCheckButton_focus,
-.f_imageCheckButton_selected_focus, 
-.f_imageCheckButton_selected_hover, 
-.f_imageCheckButton_disabled {
+.f_imageCheckButton {
 	border: 0;
 	padding: 0;
 	margin: 0;
@@ -32,13 +25,7 @@
 	vertical-align: baseline;
 }
 
-.f_imageCheckButton, 
-.f_imageCheckButton_hover, 
-.f_imageCheckButton_pushed, 
-.f_imageCheckButton_selected, 
-.f_imageCheckButton_focus,
-.f_imageCheckButton_selected_focus, 
-.f_imageCheckButton_selected_hover {
+.f_imageCheckButton {
 	cursor: pointer;
 	cursor: hand;
 }
