@@ -82,7 +82,7 @@ var __prototype = {
 		
 		if (!this._image) {
 			var images=this.getElementsByTagName("IMG");
-			if (images.length>0) {
+			if (images.length) {
 				var cl=this.f_getMainStyleClass()+"_image";
 				var image;
 				for(var i=0;i<images.length;i++) {
@@ -424,9 +424,10 @@ var __prototype = {
 				border.className=borderClassName;
 			}
 		}
-		
-		if (url && this._image.src!=url) {
-			this._image.src = url;
+
+		var image=this._image;		
+		if (url && image.src!=url) {
+			image.src = url;
 		}		
 	},
 

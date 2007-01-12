@@ -80,7 +80,6 @@
 .f_tree_image {
 	margin: 0 2px 0 0;
 	cursor: pointer;
-	cursor: hand;
 	vertical-align: middle;
 }
 
@@ -101,7 +100,6 @@
 	padding: 0;
 	margin: 0 2px 0 0;
 	cursor: pointer;
-	cursor: hand;
 	-moz-user-focus: ignore;
 	width: 16px;
 	height: 16px;
@@ -109,7 +107,6 @@
 
 .f_tree_label {
 	cursor: pointer;
-	cursor: hand;
 	padding: 2px 1px 2px 1px;
 	text-decoration: inherit;
 	white-space: nowrap;

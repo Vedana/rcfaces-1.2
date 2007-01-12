@@ -264,14 +264,14 @@ var __static = {
 
 		f_core.Debug("f_key", "Enter scope '"+scope._name+"'.");
 
-		/*
+		
 		var s="";
-		for(var i=0;i<_CurrentScopes.length;i++) {
-			s+="/"+_CurrentScopes[i]._name;
+		for(var i=0;i<currentScopes.length;i++) {
+			s+="/"+currentScopes[i]._name;
 		}
 		
 		document.title=s;
-		*/
+		
 	},
 	/**
 	 * @method hidden static final
@@ -284,14 +284,14 @@ var __static = {
 
 		f_core.Debug("f_key", "Exit scope '"+scope._name+"'.");
 
-/*
+
 		var s="";
-		for(var i=0;i<_CurrentScopes.length;i++) {
-			s+="/"+_CurrentScopes[i]._name;
+		for(var i=0;i<f_key._CurrentScopes.length;i++) {
+			s+="/"+f_key._CurrentScopes[i]._name;
 		}
 		
 		document.title=s;
-		*/
+		
 	},
 	/**
 	 * @method hidden static final
@@ -636,7 +636,7 @@ var __static = {
 		}
 */	
 		if (f_core.IsGecko()) {
-			styleSheet.insertRule("U.f_accessKey { text-decoration: underline }", styleSheet.cssRules.length);
+			styleSheet.insertRule(".f_accessKey { text-decoration: underline }", styleSheet.cssRules.length);
 			return;			
 		}
 	},

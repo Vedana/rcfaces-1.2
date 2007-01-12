@@ -186,10 +186,10 @@ var __prototype = {
 		this._cycleValue=(f_core.GetAttribute(this, "v:cycle")=="true");
 		
 		this._spinnerUp=f_core.GetChildByCssClass(this, "f_spinner_up"+disabledSuffix);
-		this._installSpinnerButton(this._spinnerUp, "f_spinner_up",  1);
+		this._installSpinnerButton(this._spinnerUp, "_up",  1);
 		
 		this._spinnerDown=f_core.GetChildByCssClass(this, "f_spinner_down"+disabledSuffix);
-		this._installSpinnerButton(this._spinnerDown, "f_spinner_down", -1);
+		this._installSpinnerButton(this._spinnerDown, "_down", -1);
 		
 		this.f_addEventListener(f_event.KEYDOWN, this._performSpinnerKeyDown);
 		this.f_addEventListener(f_event.KEYUP, this._performSpinnerKeyUp);
@@ -333,7 +333,7 @@ var __prototype = {
 		//button._scale=undefined; // number
 		//button._hover=undefined; // boolean
 		//button._pushed=undefined; // boolean
-		//button._className=undefined; // string
+		//button._suffix=undefined; // string
 		//button._keyPress=undefined; // boolean
 		
 		button._spinner=undefined; // f_spinner
@@ -347,11 +347,11 @@ var __prototype = {
 	/**
 	 * @method private
 	 */
-	_installSpinnerButton: function(button, className, scale) {
+	_installSpinnerButton: function(button, suffix, scale) {
 	
 		button._scale=scale;
 		button._spinner=this;
-		button._className=className;
+		button._suffix=suffix;
 		button.onmouseover=fa_spinner._OnSpinnerButtonOver;
 		button.onmouseout=fa_spinner._OnSpinnerButtonOut;
 		button.onmousedown=fa_spinner._OnSpinnerButtonDown;
@@ -360,10 +360,8 @@ var __prototype = {
 	/**
 	 * @method protected
 	 */
-	f_updateSpinnerButton: function(button) {
-		var cname=button._className;
-		
-		var suffix="";
+	f_updateSpinnerButton: function(button) {		
+		var suffix=button._suffix;
 		if (this.f_isDisabled()) {
 			suffix+="_disabled";
 		
@@ -379,9 +377,7 @@ var __prototype = {
 			}
 		}
 		
-		if (suffix) {
-			cname+=" "+cname+suffix;
-		}
+		var cname=this.f_computeStyleClass(suffix);
 		
 		if (button.className==cname) {
 			return;

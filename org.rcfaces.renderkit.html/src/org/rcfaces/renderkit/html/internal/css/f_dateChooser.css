@@ -10,6 +10,11 @@
  * @version $Revision$ $Date$ 
  */
  
+.f_dateChooser {
+	cursor: pointer;
+	position: relative;
+}
+
 .f_dateChooser, 
 .f_dateChooser_text,
 .f_dateChooser_image {
@@ -20,9 +25,6 @@
 	user-select: none;
 	color: black;
 	text-decoration: none;
-	position: relative;
-	cursor: pointer;
-	cursor: hand;
 }
 
 .f_dateChooser_disabled,

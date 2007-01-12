@@ -506,20 +506,21 @@ public class HtmlTools {
             return groupName;
         }
 
+        UIComponent container=component;
         // Recherche un Container
-        for (; component != null; component = component.getParent()) {
-            if (component instanceof NamingContainer) {
+        for (; container != null; container = container.getParent()) {
+            if (container instanceof NamingContainer) {
                 break;
             }
         }
 
         StringAppender prefixClientId = new StringAppender(64);
 
-        if (component == null) {
+        if (container == null) {
             LOG.error("No naming container for component '" + component.getId()
                     + "'.");
         } else {
-            NamingContainer namingContainer = (NamingContainer) component;
+            NamingContainer namingContainer = (NamingContainer) container;
 
             String parentClientId = ((UIComponent) namingContainer)
                     .getClientId(processContext.getFacesContext());

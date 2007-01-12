@@ -12,14 +12,18 @@
 
 .f_menu_popup {
 	display: block;
-	background-color: white;
-	position:absolute;
+	position: absolute;
 	left: 0;
 	top: 0;
-	z-index:1000;
-	border: 1px solid #8A867A;
+	overflow: visible;
+
+	background-color: white;
 	margin: 0;
 	padding: 1px;
+
+	z-index:1000;
+
+	border: 1px solid #8A867A;
 	list-style-type: none;
 	text-align: left;
 	vertical-align: baseline;
@@ -30,7 +34,7 @@
 .f_menu_item {
 	display: block;
 	position: relative;
-	overflow: hidden;
+	overflow: visible;
 
 	padding: 1px 14px 1px 1px;
 	height: 19px;
@@ -43,7 +47,6 @@
 	vertical-align: middle;
 
 	cursor: pointer;
-	cursor: hand;
 
 	color: black;
 }
@@ -143,7 +146,6 @@
 	height: 18px;
 	padding-left: 2px;
 	cursor: pointer;
-	cursor: hand;
 }
 
 .f_menu_item_disabled .f_menu_item_text, 

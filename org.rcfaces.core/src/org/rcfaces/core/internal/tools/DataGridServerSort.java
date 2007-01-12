@@ -414,8 +414,7 @@ public final class DataGridServerSort {
         }
 
         public Comparator getComparator() {
-            // TODO Auto-generated method stub
-            return null;
+            return (Comparator) listener; // @XXX TODO
         }
     }
 }

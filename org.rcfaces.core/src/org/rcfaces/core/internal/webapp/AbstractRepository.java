@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 
 /**
  * 
@@ -279,6 +280,14 @@ public abstract class AbstractRepository implements IRepository {
                     localizedContentLocation = contentProvider
                             .searchLocalizedContentReference(
                                     unlocalizedContentLocation, locale);
+
+                    if (localizedContentLocation == null) {
+                        locale = Constants.REPOSITORY_DEFAULT_LOCALE;
+
+                        localizedContentLocation = contentProvider
+                                .searchLocalizedContentReference(
+                                        unlocalizedContentLocation, locale);
+                    }
 
                     if (localizedContentLocation != null) {
                         if (LOG.isTraceEnabled()) {

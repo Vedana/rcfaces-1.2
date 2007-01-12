@@ -46,7 +46,6 @@
 	-moz-user-select: none;
 	user-select: none;
 	cursor: pointer;
-	cursor: hand;
 }
 
 .f_expandBar_label {
@@ -55,7 +54,6 @@
 	-moz-user-select: none;
 	user-select: none;
 	cursor: pointer;
-	cursor: hand;
 }
 
 .f_expandBar_hfacet {

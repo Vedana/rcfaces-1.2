@@ -26,6 +26,11 @@ var __static = {
 	 * @field hidden static final number
 	 */
 	_AS_RADIO_BUTTON: 4,
+
+	/** 
+	 * @field hidden static final number
+	 */
+	_AS_SEPARATOR: 8,
 	
 	/** 
 	 * @field private static final number
@@ -43,112 +48,28 @@ var __static = {
 	_BLANK_IMAGE_URL: "/menu/blank.gif",
 	
 	/** 
-	 * @field hidden static final number
-	 */
-	_LABEL_CHANGED: 1,
-	
-	/** 
 	 * @field private static number
 	 */
 	_ItemIds: 0,
 	
 	/**
-	 * @method hidden static 
-	 */	
-	DestroyMenuItem: function(menuItem) {
-		menuItem._menuBar=undefined;
-		menuItem._parentItem=undefined;
-		// menuItem._disabled=undefined; // boolean
-		// menuItem._removeAllWhenShow=undefined; // boolean
-		
-		var menuActionList=menuItem._menuActionList;
-		if (menuActionList) {
-			menuItem._menuActionList=undefined;
-			
-			f_classLoader.Destroy(menuActionList);
-		}
-
-		if (menuItem._separator) {
-			menuItem.onmousedown=null;		
-			// menuItem._separator=undefined; // boolean
-			return;
-		}
-		
-		var items=menuItem._items;
-		if (items) {
-			menuItem._items=undefined;
-
-			for(var i=0;i<items.length;i++) {
-				fa_menuCore.DestroyMenuItem(items[i]);
-			}			
-		}
-	
-		var icon=menuItem._icon; // HtmlImageElement
-		if (icon) {
-			menuItem._icon=undefined;
-
-			f_core.VerifyProperties(icon);
-		}
-		
-		var text=menuItem._text;
-		if (text) {
-			menuItem._text=undefined; // HtmlDivElement
-						
-			f_core.VerifyProperties(text);
-		}
-
-		menuItem.onmouseover=null;
-		menuItem.onmouseout=null;		
-		menuItem.onmousedown=null;		
-		menuItem.onclick=null;		
-		
-		menuItem._menuPopup=undefined;
-		// menuItem._attachedTable=undefined; // boolean
-		// menuItem._checked=undefined; // boolean
-		menuItem._value=undefined; // any
-		// menuItem._label=undefined; // string
-		// menuItem._groupName=undefined; // string
-		// menuItem._over=undefined; // boolean
-		// menuItem._style=undefined; // number
-		// menuItem._changes=undefined; // boolean
-
-		// menuItem._imageURL=undefined; // string
-		// menuItem._hoverImageURL=undefined; // string
-		// menuItem._selectedImageURL=undefined; // string
-		// menuItem._disabledImageURL=undefined; // string
-		// menuItem._expandedImageURL=undefined; // string
-
-		menuItem._selectedMenuItem=undefined;
-		// menuItem._popupOpened=undefined; // boolean
-		// menuItem._accessKey=undefined; // string
-
-		menuItem._openPopup=undefined;
-		menuItem._closePopup=undefined;
-		
-		var iePopup=menuItem._iePopup;
-		if (iePopup) {
-			menuItem._iePopup=undefined;
-			f_core.VerifyProperties(iePopup);
-		}
-		menuItem._rlink=undefined;
-		menuItem._ricon=undefined;
-		
-		f_core.VerifyProperties(menuItem);
-	},
-	/**
 	 * @method private static 
 	 */
 	_MenuItem_mouseOver: function(evt) {
-		var menuBar=this._menuBar;
-		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
+		var item=this._item;
+		var menu=item._menu;
+		f_core.Debug(fa_menuCore, "_MenuItem_mouseOver: menu="+menu+" item="+item);
+		
+		if (menu.f_getEventLocked(false, f_event.POPUP_LOCK)) {
 			return false;
 		}
-		
-		menuBar._menuItem_over(this, true);
 
 		if (!evt) {
-			evt=window.event;
+			evt=f_core.IeGetEvent(this);
 		}
+		
+		menu._menuItem_over(item, true, evt);
+
 		return f_core.CancelEvent(evt);
 	},
 	/**
@@ -157,28 +78,34 @@ var __static = {
 	_MenuItem_mouseOut: function(evt) {
 // Pas bloqué !			if (f_core.GetEventLocked(false)) return false;
 
-		var menuBar=this._menuBar;
+		var item=this._item;
+		var menu=item._menu;
 
-		menuBar._menuItem_out(this);
+		f_core.Debug(fa_menuCore, "_MenuItem_mouseOut: menu="+menu+" item="+item);
+
+		menu._menuItem_out(item);
 	
 		if (!evt) {
-			evt=window.event;
+			evt=f_core.IeGetEvent(this);
 		}
 		return f_core.CancelEvent(evt);
 	},
 	/**
 	 * @method private static 
+	 * @document this.ownerDocument
 	 */
 	_MenuItem_mouseDown: function(evt) {
-		var menuBar=this._menuBar;
-		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
+		var item=this._item;
+		var menu=item._menu;
+		if (menu.f_getEventLocked(true, f_event.POPUP_LOCK)) {
 			return false;
 		}
+		
 		if (!evt) {
-			evt = window.event;
+			evt = f_core.IeGetEvent(this);
 		}
 	
-		menuBar._menuItem_select(this, evt);
+		menu._menuItem_select(item, evt);
 			
 		return f_core.CancelEvent(evt);
 	},
@@ -190,182 +117,6 @@ var __static = {
 	 * @method private static 
 	 */
 	_MenuItem_click: f_core.CancelEventHandler,
-	/**
-	 * @method private static 
-	 */
-	_MenuItem_openPopup: function(menuItem, autoSelect) {
-		if (menuItem._popupOpened) {
-			return;
-		}
-
-		var popup=menuItem._menuPopup;
-		if (!popup) {
-			return;
-		}
-		
-		var menuBar=menuItem._menuBar;
-		
-		// Efface tout si necessaire !
-		if (menuItem._removeAllWhenShow) {
-			// Effaces tous les items !
-			menuBar.f_removeAllItems(menuItem);
-		}
-		
-		var menuActionList=menuItem._menuActionList;
-		if (menuActionList) {
-			// Appel les callbacks !
-			var evt=new f_event(menuBar, f_event.MENU, null, menuItem, null, menuBar);
-			try {
-				if (!menuActionList.f_callActions(evt)) {
-					// Refuse l'affichage !
-					return;
-				}
-	
-			} finally {
-				f_classLoader.Destroy(evt);
-			}
-		}
-		
-		if (menuItem._items.length<1) {
-			// Pas d'items !
-			return;
-		}
-		
-		f_key.EnterScope(menuItem.id);
-		
-		menuItem._popupOpened=true;
-		menuBar.fa_updateItemStyle(menuItem);
-
-		// Il faut filtrer les separators ...
-		fa_menuCore.HideSeparators(menuItem);
-
-		if (menuItem._iePopup) {
-			fa_menuCore._Ie_openPopup(menuItem, menuItem, menuItem._rlink.offsetWidth+1, 0);
-
-		} else {
-			var p1=f_core.GetAbsolutePosition(menuItem);
-			var p2=f_core.GetAbsolutePosition(popup);
-		
-			var x=p1.x+menuItem.offsetWidth;
-			var y=p1.y;
-			
-			x-=p2.x-popup.offsetLeft;
-			y-=p2.y-popup.offsetTop;
-				
-			x+=2;
-			
-			var pos={ x: x, y: y };
-			
-			f_core.ComputePopupPosition(popup, pos);
-			
-			if (!popup.style.zIndex && menuItem._parentItem) {
-				var ppop=menuItem._parentItem._menuPopup;
-				
-				var zbuf=0;
-				if (ppop) {
-					zbuf=ppop.style.zIndex;
-				}
-				
-				if (!zbuf) {
-					ppop=1000;
-					
-				} else {
-					ppop=parseInt(zbuf, 10);
-				}
-				
-				popup.style.zIndex=String(ppop+1);
-			}
-	
-			popup.style.left=pos.x+"px";
-			popup.style.top=pos.y+"px";
-		
-			popup.style.visibility="inherit";
-		}
-		
-		if (autoSelect) {
-			if (menuItem._items && menuItem._items.length>0) {
-				menuBar._menuItem_over(menuItem._items[0], false);
-			}
-		}
-	},
-	/**
-	 * @method private static 
-	 */
-	_MenuItem_closePopup: function(menuItem) {
-
-		if (!menuItem._popupOpened) {
-			return;
-		}
-
-		menuItem._popupOpened=false;
-
-		var selectedMenuItem=menuItem._selectedMenuItem;
-		if (selectedMenuItem) {
-			fa_menuCore._MenuItem_closePopup(selectedMenuItem);
-			
-			menuItem._selectedMenuItem=undefined;
-
-			selectedMenuItem._over=false;			
-			selectedMenuItem._menuBar.fa_updateItemStyle(selectedMenuItem);			
-		}
-
-		var menuBar=menuItem._menuBar;
-		
-		f_key.ExitScope(menuItem.id);
-		
-		menuBar.fa_updateItemStyle(menuItem);
-
-		if (menuItem._menuPopup) {
-			if (menuItem._iePopup) {
-				fa_menuCore._Ie_closePopup(menuItem);
-				
-			} else {
-				menuItem._menuPopup.style.visibility="hidden";
-			}
-		}
-	},
-	/**
-	 * @method static final hidden
-	 */
-	HideSeparators: function(menuItem) {
-		var popup=menuItem._menuPopup;
-		f_core.Assert(popup, "No popup for item '"+menuItem+"'.");
-		
-		var items=menuItem._items;
-		
-		var first=true;
-		var lastSep;
-		for(var i=0;i<items.length;i++) {
-			var li=items[i];
-			if (li._separator) {
-
-				// Un séparateur !
-				if (first || lastSep) {
-					li.style.display="none";
-					continue;
-				}
-				lastSep=li;
-				
-				continue;
-			}
-			
-			if (li._visible===false) {
-				continue;
-			}
-			
-			first=false;
-			
-			// Pas un separateur !
-			if (lastSep) {
-				lastSep.style.display="";
-				lastSep=undefined;
-			}			
-		}
-		
-		if (lastSep) {
-			lastSep.style.display="none";
-		}
-	},
 	/**
 	 * @method static final hidden
 	 */
@@ -413,7 +164,7 @@ var __static = {
 
 		case f_key.VK_TAB:
 			// Rien ....
-			if (!menu._a_tabKeySelection || !menu._a_tabKeySelection()) {
+			if (!menu.fa_tabKeySelection || !menu.fa_tabKeySelection()) {
 				break;
 			}
 			
@@ -430,12 +181,12 @@ var __static = {
 			cancel=true;
 			break;
 		
-		default: 
-			if (menuPopup && menuPopup._popupOpened) {
+		default: 			
+			if (menu.f_uiIsPopupOpened(menuPopup)) {
 				cancel=true;
 				
 				if (!evt.altKey) {
-					menu._a_keySearchAccessKey(menuPopup, code, evt);
+					menu.fa_keySearchAccessKey(menuPopup, code, evt);
 					cancel=true;
 				}
 				
@@ -449,236 +200,15 @@ var __static = {
 		}
 		
 		return true;
-	},
-	
-	/* ******************************************************************* */
-	/* Popup IE */
-	_Ie_getPopup: function(menuItem) {
-	
-		var parentItem=menuItem._parentItem
-	
-		if (!parentItem) {
-			// un menuBar
-			
-			return f_popup.Ie_GetPopup(document);
-		}
-		
-		var parentPopup=fa_menuCore._Ie_getPopup(parentItem);
-		
-		return f_popup.Ie_GetPopup(parentPopup.document);
-	},
-	_Ie_onclick: function() {
-		return fa_menuCore._MenuItem_click.call(this._link, f_core.IeGetEvent(this));
-	},
-	_Ie_onmouseover: function() {
-		return fa_menuCore._MenuItem_mouseOver.call(this._link, f_core.IeGetEvent(this));
-	},
-	_Ie_onmouseout: function() {
-		return fa_menuCore._MenuItem_mouseOut.call(this._link, f_core.IeGetEvent(this));
-	},
-	_Ie_onmousedown: function() {
-		return fa_menuCore._MenuItem_mouseDown.call(this._link, f_core.IeGetEvent(this));
-	},
-	_Ie_onkeydown: function() {
-		var evt=f_core.IeGetEvent(this);
-
-		try {
-			var callbacks=f_popup.Callbacks;
-			if (!callbacks) {
-				return;
-			}
-			
-			var keyDown=callbacks.keyDown;
-			if (keyDown) {
-				return keyDown.call(f_popup.Component, evt, f_popup.Popup);
-			}
-			
-		} catch (x) {
-			f_core.Error(fa_menuCore, "keyDown callback throws exception", x);
-		}
-	},
-	_Ie_onkeyup: function() {
-		var evt=f_core.IeGetEvent(this);
-
-		try {
-			var callbacks=f_popup.Callbacks;
-			if (!callbacks) {
-				return;
-			}
-			
-			var keyUp=callbacks.keyUp;
-			if (keyUp) {
-				return keyUp.call(f_popup.Component, evt, f_popup.Popup);
-			}
-			
-		} catch (x) {
-			f_core.Error(fa_menuCore, "keyUp callback throws exception", x);
-		}
-	},
-	_Ie_onkeypress: function() {
-		var evt=f_core.IeGetEvent(this);
-
-		try {
-			var callbacks=f_popup.Callbacks;
-			if (!callbacks) {
-				return;
-			}
-			
-			var keyPress=callbacks.keyPress;
-			if (keyPress) {
-				return keyPress.call(f_popup.Component, evt, f_popup.Popup);
-			}
-			
-		} catch (x) {
-			f_core.Error(fa_menuCore, "keyPress callback throws exception", x);
-		}
-	},
-	_Ie_openPopup: function(menuItem, component, popupX, popupY, popupWidth) {
-		var popup=menuItem._iePopup;
-	
-		var popupDocument=popup.document;
-		
-		f_key.UpdateAccessKeyRule(document.parentWindow, popupDocument.parentWindow);
-				
-		popupDocument.hideFocus=true;
-
-		var code=menuItem._menuPopup.outerHTML;
-	
-		var pbody=popupDocument.body;
-		pbody._menuItem=menuItem;
-		pbody.onunload=fa_menuCore._Ie_unload;
-		pbody.onkeydown=fa_menuCore._Ie_onkeydown;
-		pbody.onkeyup=fa_menuCore._Ie_onkeyup;
-		pbody.onkeypress=fa_menuCore._Ie_onkeypress;
-		pbody.innerHTML=code;
-		
-		var seps=new Array;
-		
-		var menuPopup=pbody.firstChild;
-		if (menuPopup) {
-			menuPopup.style.visibility="inherit";
-	
-			var items=menuItem._menuPopup.getElementsByTagName("LI");
-			var pitems=popupDocument.getElementsByTagName("LI");
-
-			for(var i=0;i<items.length;i++) {
-				var item=items[i];
-				var pitem=pitems[i];
-
-				seps.push(pitem);
-
-				
-				// Il semble que le LAYOUT soit mauvais ... 
-				// il faut forcer le display BLOCK pour avoir un bon resultat 
-				if (item._separator) {
-					continue;
-				}
-					
-				pitem._link=item;
-				item._rlink=pitem;
-				
-				pitem.onclick=fa_menuCore._Ie_onclick;
-				pitem.onmousedown=fa_menuCore._Ie_onmousedown;
-				pitem.onmouseover=fa_menuCore._Ie_onmouseover;
-				pitem.onmouseout=fa_menuCore._Ie_onmouseout;
-				
-				if (!item._icon) {
-					continue;
-				}
-				
-				var picon=f_core.GetFirstElementByTagName(pitem, "IMG");
-				if (picon) {
-					item._ricon=picon;
-					//picon.style.position="relative";
-					//picon.style.top="-1px";
-				}
-			}
-		}
-		
-		popup.show(0, 0, 0, 0);
-		var popupW = menuPopup.offsetWidth;
-		var popupH = menuPopup.offsetHeight;
-		
-		if (popupWidth) {
-			popupW=popupWidth;
-		}
-	
-		if (component._rlink) {
-			component=component._rlink;
-		}
-
-		popup.show(popupX, popupY, popupW, popupH, component);
-		
-		// Il faut motiver les composants ?????
-		// Merci IE .... au moins il y a une solution !
-		for(var i=0;i<seps.length;i++) {
-			if (seps[i].style.display=="none") {
-				continue;
-			}
-			seps[i].style.visibility="inherit";
-		}
-	},
-	_Ie_unload: function(evt) {
-		var body=this.document.body;
-
-		var menuItem=body._menuItem;
-		if (!menuItem) {
-			return;
-		}
-		
-		body.onunload=null;
-		body.onkeydown=null;
-		body.onkeyup=null;
-		body.onkeypress=null;
-		body._menuItem=undefined;
-				
-		var pitems=body.getElementsByTagName("LI");
-		for(var i=0;i<pitems.length;i++) {
-			var pmenuItem=pitems[i];
-			
-			if (!pmenuItem._link) {
-				continue;
-			}
-
-			pmenuItem._link._rlink=undefined;
-			pmenuItem._link._ricon=undefined;
-			pmenuItem._link=undefined;
-			// pmenuItem._accessKey=undefined; // string
-			// pmenuItem._value=undefined; // string
-			// pmenuItem._disabled=undefined; // boolean
-			// pmenuItem._over=undefined; // boolean
-			
-			pmenuItem.onclick=null;
-			pmenuItem.onmousedown=null;
-			pmenuItem.onmouseover=null;
-			pmenuItem.onmouseout=null;
-
-	//		f_core.VerifyProperties(pmenuItem);
-		}
-
-		var menuBar=menuItem._menuBar;
-		if (menuItem._popupOpened) {
-			menuBar._a_clickOutside(evt);
-			return;
-		}
-		
-		if (menuItem._parentItem) {
-			return;
-		}
-		f_popup.UnregisterWindowClick(menuBar);
-	},
-	_Ie_closePopup: function(menuItem) {
-		var popup=menuItem._iePopup;
-		if (!popup.isOpen) {
-			return;
-		}
-
-		popup.hide();
-	}	
+	}
 }
 
 var __prototype = {
 	fa_menuCore: function() {
+
+		this._uiMenuItems=new Object;
+		this._uiMenuPopups=new Object;
+		this._menu=this;
 
 		if (this.tagName) {
 			var itemImageWidth=f_core.GetAttribute(this, "v:itemImageWidth");
@@ -701,6 +231,8 @@ var __prototype = {
 		f_imageRepository.PrepareImage(this._blankMenuImageURL);
 	},
 	f_finalize:  function() {
+		this._menu=undefined; // fa_menuCore
+		
 		// this._popupOpened=undefined;  // boolean
 		this._selectedMenuItem=undefined;
 		// this._blankMenuImageURL=undefined; // string
@@ -728,7 +260,6 @@ var __prototype = {
 
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
 		
-		item.role="menuitemradio";
 		item._style=fa_menuCore._AS_RADIO_BUTTON;
 		if (groupName) {
 			this.f_setItemGroupName(item, groupName);
@@ -756,7 +287,6 @@ var __prototype = {
 	f_appendCheckItem: function(parentItem, id, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
 
-		item.role="menuitemcheckbox";
 		item._style=fa_menuCore._AS_CHECK_BOX;
 		if (checked) {
 			this.f_setItemChecked(item, checked);
@@ -788,94 +318,26 @@ var __prototype = {
 			parentItem=this;
 		}
 		
-		if (!id) {
-			id=this.id+"__"+(fa_menuCore._ItemIds++);
-		}
-		
-		var table=parentItem._menuPopup;
-		if (!table) {
-			var parentId=(parentItem==this)?this.id:null;
-			
-			table=this.f_createPopup(parentId);
-			
-			parentItem._menuPopup=table;
-		}
-		
-		var menuItem=document.createElement("LI");
-		menuItem.id=id;
-		menuItem.className="f_menu_item";
+		var menuItem=new Object;
 		menuItem._style=fa_menuCore._AS_PUSH_BUTTON;
-		menuItem.role="menuitem";
-		
-		table.appendChild(menuItem);
-		
-		if (!this._itemImageWidth) {
-			this._itemImageWidth=fa_menuCore._ITEM_IMAGE_WIDTH;
-		}
-		
-		if (!this._itemImageHeight) {
-			this._itemImageHeight=fa_menuCore._ITEM_IMAGE_HEIGHT;
-
-			f_core.Debug(fa_menuCore, "Use default size for item image width/height, width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
-		}
-
-		var image=document.createElement("IMG");
-		image.align="middle";
-		image.valign="middle";
-		image.border=0;
-		image.width=this._itemImageWidth;
-		image.height=this._itemImageHeight;
-		image.src=this._blankMenuImageURL;
-		image.className="f_menu_item_image";
-		menuItem._icon=image;
-		
-		menuItem.appendChild(image);
-		
-		var div=document.createElement("LABEL");
-		div.className="f_menu_item_text";
-		if (accessKey) {
-			menuItem._accessKey=accessKey;
-			menuItem.accessKey=accessKey;
-		}
-
-		f_component.AddLabelWithAccessKey(div, label, accessKey);
-		
-		menuItem._label=label;
-		menuItem._text=div;
-		menuItem.appendChild(div);
-
-		if (acceleratorKey) {
-			var htmlAcceleratorKey=f_core.EncodeHtml(acceleratorKey);
-			var accelV=document.createElement("LABEL");
-			accelV.className="f_menu_item_accelV";
-			accelV.innerHTML=htmlAcceleratorKey;
-			menuItem.appendChild(accelV);
-	
-			var accel=document.createElement("LABEL");
-			accel.className="f_menu_item_accel";
-			accel.innerHTML=htmlAcceleratorKey;
-			menuItem.appendChild(accel);
-		}
-		
-		menuItem.onmouseover=fa_menuCore._MenuItem_mouseOver;
-		menuItem.onmouseout=fa_menuCore._MenuItem_mouseOut;
-		menuItem.onmousedown=fa_menuCore._MenuItem_mouseDown;
-		menuItem.onclick=fa_menuCore._MenuItem_click;
-		
-		menuItem._menuBar=this;
+		menuItem._accessKey=accessKey;
 		menuItem._value=value;
+		menuItem._acceleratorKey=acceleratorKey;
 		menuItem._parentItem=parentItem;
-		menuItem._openPopup=fa_menuCore._MenuItem_openPopup;
-		menuItem._closePopup=fa_menuCore._MenuItem_closePopup;
-		
-		this.f_addItem(parentItem, menuItem);
-
-		if (f_popup.Ie_enablePopup()) {
-			// On associe le POPUP 
-			
-			menuItem._iePopup=fa_menuCore._Ie_getPopup(menuItem);
+		menuItem._menu=this;
+		menuItem._label=label;
+		menuItem._acceleratorKey=acceleratorKey;
+		menuItem.toString=function() {
+			return "[Item "+id+"]";
 		}
 		
+		if (!id) {
+			id=this.id+"::"+(fa_menuCore._ItemIds++);
+		}
+		menuItem._id=id;
+
+		this.f_addItem(parentItem, menuItem);
+			
 		if (disabled) {
 			this.f_setItemDisabled(menuItem, disabled);
 		}
@@ -885,10 +347,31 @@ var __prototype = {
 		if (visible===false) {
 			this.f_setItemVisible(menuItem, visible);
 		}
-	
-		this._menuItemsChanged=true;
 		
 		return menuItem;
+	},
+	/**
+	 * @method public 
+	 * @param Object parentItem Parent object or <code>null</code>
+	 * @return Object
+	 */
+	f_appendSeparatorItem: function(parentItem) {
+		if (!parentItem) {
+			parentItem=this;
+		}
+
+		var item=new Object;
+		item._style=fa_menuCore._AS_SEPARATOR;
+		item._disabled=true;
+		item._parentItem=parentItem;
+		item._menu=this;
+		item.toString=function() {
+			return "[Separator]";
+		}
+		
+		this.f_addItem(parentItem, item);		
+		
+		return item;
 	},
 	/**
 	 * @method protected
@@ -902,121 +385,246 @@ var __prototype = {
 
 		f_core.Debug(fa_menuCore, "Set item image size to width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
 	},
-	/** ???? Jamais appelé !
-	 * @method hidden
-	 *
-	_addMenuItemListeners: function(menuItem, removeAllWhenShow, listeners) {
-		menuItem._removeAllWhenShow=true;
-		
-		if (arguments.length<3) {
-			return;
-		}
-		
-		var l=menuItem._menuActionList;
-		if (!l) {
-			l=new f_actionList(this, f_event.MENU);
-			menuItem._menuActionList=l;
-		}
-		
-		for(var i=2;i<arguments.length;i++) {
-			l.f_addAction(arguments[i]);
-		}
-	},
-	*/
 	/**
 	 * @method protected 
 	 */
-	f_createPopup: function(parentId) {
-		var table=document.createElement("UL");
-		table.className="f_menu_popup";
-		table.style.visibility="hidden";
-		if (parentId) {
-			table.id=parentId;
-		}
-		
-		return table;
-	},
-	/**
-	 * @method public 
-	 * @param Object parentItem Parent object or <code>null</code>
-	 * @return void
-	 */
-	f_appendSeparatorItem: function(parentItem) {
-		var document=this.ownerDocument;
+	f_createPopup: function(container, parentItem) {
+		var popupObject;
+		var doc;
 
-		var table=parentItem._menuPopup;
-		if (!table) {
-			var parentId=(parentItem==this)?this.id:null;
+		if (f_popup.Ie_enablePopup()) {
+			// container = popup object
 			
-			table=this.f_createPopup(parentId);
-			
-			parentItem._menuPopup=table;
-		}
-		
-		var item=document.createElement("LI");
-		item.className="f_menu_item_sep";
-		item.onmousedown=fa_menuCore._SeparatorItem_click;
-		item._separator=true;
-		item._disabled=true;
-		item._menuBar=this;
-		item._parentItem=parentItem;
-		
-		table.appendChild(item);
-		
-		this.f_addItem(parentItem, item);
-		
-		this._menuItemsChanged=true;
-	},
-	/** 
-	 * @method private
-	 */
-	_updateItem: function(menuItem) {
-		var items=menuItem._items;
-		if (items) {
-			for(var i=0;i<items.length;i++) {
-				this._updateItem(items[i]);
-			}
-		}
-		
-		var table=menuItem._menuPopup;
-		if (table && !menuItem._attachedTable) {
-			menuItem._attachedTable=true;
-			if (menuItem._iePopup) {
-				menuItem.appendChild(table);
-				
-			} else {
-				this.ownerDocument.body.appendChild(table);
-			}
-		}
-		
-		var changes=menuItem._changes;
-		if (changes) {
-			menuItem._changes=undefined;
-
-			if (changes & fa_menuCore._LABEL_CHANGED) {
-				f_component.AddLabelWithAccessKey(menuItem._text, menuItem._label, menuItem._accessKey, true);
-			}
-		}
-		
-		this.fa_updateItemStyle(menuItem);		
-	},
-	_nextMenuItem: function(menuBarItem, evt) {
-	
-		// Par defaut le parent est le menuBarItem
-		var parent=menuBarItem;
-		
-		if (!this._a_isSameMenuBase(menuBarItem)) {
-			var selectedMenuItem=this._selectedMenuItem;
-			if (selectedMenuItem) {
-				selectedMenuItem._closePopup(selectedMenuItem);
-			}
-//			alert("Diff !");
+			popupObject=container;
+			doc=container.document;
+			container=doc.body;
 			
 		} else {
-			// On recherche le sous-menu ouvert ...
+			doc=container.ownerDocument;		
+		}
+	
+		var uiPopup=doc.createElement("UL");		
+		uiPopup.className="f_menu_popup";
+
+		if (!popupObject) {
+			uiPopup.style.visibility="hidden";
+			popupObject=uiPopup;
+		}
+
+		uiPopup._popupObject=popupObject;
+	
+		container.appendChild(uiPopup);
+		
+		this._uiMenuPopups[parentItem]=uiPopup;
+		
+		uiPopup.id=this.fa_getMenuScopeName(parentItem);
+		uiPopup._item=parentItem;
+		
+		if (!this._itemImageWidth) {
+			this._itemImageWidth=fa_menuCore._ITEM_IMAGE_WIDTH;
+		}
+		
+		if (!this._itemImageHeight) {
+			this._itemImageHeight=fa_menuCore._ITEM_IMAGE_HEIGHT;
+
+			f_core.Debug(fa_menuCore, "Use default size for item image width/height, width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
+		}
+		
+		var sep=true;
+		
+		var items=this.f_listVisibleItemChildren(parentItem);
+		for(var i=0;i<items.length;i++) {
+			var item=items[i];
+			
+			if (sep && item._style==fa_menuCore._AS_SEPARATOR) {
+				continue;
+			}
+			
+			var uiItem=doc.createElement("LI");
+			var itemId=item._id;
+			if (itemId) {
+				uiItem.id=itemId;
+			}
+			uiPopup.appendChild(uiItem);
+			
+			this._uiMenuItems[item]=uiItem;
+			uiItem._item=item;
+			sep=false;
+			
+			switch(item._style) {				
+			case fa_menuCore._AS_CHECK_BUTTON:
+				uiItem.role="menuitemcheckbox";
+				break;
+			
+			case fa_menuCore._AS_RADIO_BUTTON:
+				uiItem.role="menuitemradio";
+				break;
+			
+			case fa_menuCore._AS_SEPARATOR:
+				uiItem.role="menuitemradio";
+				uiItem.className="f_menu_item_sep";
+				uiItem.onmousedown=fa_menuCore._SeparatorItem_click;
+				sep=true;
+							
+			default:
+				uiItem.role="menuitem";
+				break;
+			}
+			
+			if (sep) {
+				continue;
+			}
+
+			uiItem.className="f_menu_item";
+			
+			var image=doc.createElement("IMG");
+			image.align="middle";
+			image.valign="middle";
+			image.border=0;
+			image.width=this._itemImageWidth;
+			image.height=this._itemImageHeight;
+			image.src=this._blankMenuImageURL;
+			image.className="f_menu_item_image";
+			uiItem._icon=image;
+			
+			uiItem.appendChild(image);
+			
+			var div=doc.createElement("LABEL");
+			div.className="f_menu_item_text";
+			
+			var accessKey=item._accessKey;
+			if (accessKey) {
+				uiItem._accessKey=accessKey;
+				uiItem.accessKey=accessKey;
+			}
+	
+			var label=this.f_getItemLabel(item);
+			f_component.AddLabelWithAccessKey(div, label, accessKey);
+			
+			uiItem.appendChild(div);
+	
+			var acceleratorKey=this._acceleratorKey;
+			if (acceleratorKey) {
+				var htmlAcceleratorKey=f_core.EncodeHtml(acceleratorKey);
+				var accelV=doc.createElement("LABEL");
+				accelV.className="f_menu_item_accelV";
+				accelV.innerHTML=htmlAcceleratorKey;
+				uiItem.appendChild(accelV);
+		
+				var accel=doc.createElement("LABEL");
+				accel.className="f_menu_item_accel";
+				accel.innerHTML=htmlAcceleratorKey;
+				uiItem.appendChild(accel);
+			}
+			
+			uiItem.onmouseover=fa_menuCore._MenuItem_mouseOver;
+			uiItem.onmouseout=fa_menuCore._MenuItem_mouseOut;
+			uiItem.onmousedown=fa_menuCore._MenuItem_mouseDown;
+			uiItem.onclick=fa_menuCore._MenuItem_click;
+			
+			this.f_uiUpdateItemStyle(item, uiItem);
+		}
+		
+		return uiPopup;
+	},
+	/**
+	 * @method protected final
+	 */
+	f_getUIItem: function(menuItem) {
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_getUIItem: Invalid menuItem parameter ("+menuItem+")");
+
+		var mi=this._uiMenuItems[menuItem];
+		f_core.Assert(mi, "fa_menuCore.f_getUIItem: No uiMenuItem for '"+menuItem+"'.");
+		return mi;
+	},
+	/**
+	 * @method protected final
+	 */
+	f_getUIPopup: function(menuItem, assertIfNotFound) {
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_getUIPopup: Invalid menuItem parameter ("+menuItem+")");
+
+		var mi=this._uiMenuPopups[menuItem];
+			
+		f_core.Debug(fa_menuCore, "fa_menuCore.f_getUIPopup: For popup '"+menuItem+"' => "+mi);
+		return mi;
+	},
+	/**
+	 * @method protected final
+	 * @return boolean
+	 */
+	f_uiIsPopupOpened: function(menuItem) {
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiIsPopupOpened: Invalid menuItem parameter ("+menuItem+")");
+
+		return this.f_getUIPopup(menuItem, false)!=null;
+	},	 
+	/**
+	 * @method protected final
+	 * @return boolean
+	 */
+	f_uiGetSelectedItem: function(menuItem) {
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiGetSelectedItem: Invalid menuItem parameter ("+menuItem+")");
+
+		var popup=this.f_getUIPopup(menuItem);
+		if (!popup) {
+			return null;
+		}
+		
+		return popup._selectedMenuItem;
+	},
+	/**
+	 * @method protected final
+	 * @return void 
+	 */	 
+	f_uiSelectItem: function(menuItemParent, menuItem) {
+		f_core.Assert(typeof(menuItemParent)=="object" && !menuItemParent.nodeType && menuItemParent._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItemParent parameter ("+menuItemParent+")");
+		f_core.Assert(!menuItem || (typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu), "fa_menuCore.f_uiSelectItem: Invalid menuItem parameter ("+menuItem+")");
+		f_core.Assert(menuItemParent!=menuItem, "Invalid menuItem, same as parent. (parent="+menuItemParent+")");
+		 
+		var popup=this.f_getUIPopup(menuItemParent, true);
+
+		popup._selectedMenuItem=menuItem;
+	},
+	/**
+	 * @method protected final
+	 * @return boolean
+	 */
+	f_uiIsItemOver: function(menuItem) {
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiIsItemOver: Invalid menuItem parameter ("+menuItem+")");
+
+		return this.f_getUIItem(menuItem)._over;
+	},
+	/**
+	 * @method protected final
+	 * @return boolean
+	 */	 
+	f_uiSetItemOver: function(menuItem, over) {
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiSetItemOver: Invalid menuItem parameter ("+menuItem+")");
+		f_core.Assert(over===undefined || typeof(over)=="boolean", "fa_menuCore.f_uiSetItemOver: Invalid over parameter '"+over+"'.");
+		
+		this.f_getUIItem(menuItem)._over=over;
+	},
+	/**
+	 * @method private
+	 * @param Object menuItem
+	 * @param Event evt
+	 * @return void
+	 */
+	_nextMenuItem: function(menuItem, evt) {
+	
+		// Par defaut le parent est le menuBarItem
+		var parent=menuItem;
+		
+		if (!this.fa_isSameMenuBase(menuItem)) {
+			var selectedMenuItem=this.f_uiGetSelectedItem(this);
+			if (selectedMenuItem) {
+				this._closeUIPopup(selectedMenuItem);
+			}
+			
+		} else {
+			// On recherche le sous-menu (enfant) ouvert ...
 			for(;;) {
-				var pi=parent._selectedMenuItem;
-				if (!pi || !pi._popupOpened) {
+				var pi=this.f_uiGetSelectedItem(parent);
+				if (!pi || !this.f_uiIsPopupOpened(pi)) {
 					break;
 				}
 				
@@ -1024,23 +632,24 @@ var __prototype = {
 			}			
 		}
 		
-		menuBarItem._openPopup(menuBarItem, false);
+		this.f_openUIPopup(menuItem, evt);
 		
 		// En verifie bien que nous sommes sur le bon menuBarItem !
-		this._a_focusMenuItem(menuBarItem);
+		this.fa_focusMenuItem(menuItem);
 		
-		var menuItems=parent._items;
-		if (!menuItems || menuItems.length<1) {
+		var menuItems=this.f_listItemChildren(parent);
+		if (!menuItems || !menuItems.length) {
 			return;
 		}
 
 		var menuItem=undefined;
-		if (parent._selectedMenuItem) {
+		if (this.f_uiGetSelectedItem(parent)) {
 			var i=0;
+			// On recherche le premier qui est over
 			for(;i<menuItems.length;i++) {
 				var mi=menuItems[i];
 				
-				if (!mi._over) {
+				if (!this.f_uiIsItemOver(mi)) {
 					continue;
 				}
 				
@@ -1051,10 +660,11 @@ var __prototype = {
 			// Recherche le suivant mais on évite les séparateurs !
 			for(;i<menuItems.length;i++) {
 				var m=menuItems[i];
-				if (m._separator || m._visible===false) {
+				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
+					// C'est un séparateur ou il n'est pas visible
 					continue;
 				}
-				
+								
 				menuItem=m;
 				break;
 			}
@@ -1062,11 +672,11 @@ var __prototype = {
 		}
 
 		if (!menuItem) {
-			// Toujours pas ! On prend le premier qui vient !
+			// Toujours pas ! On prend le premier de la liste !
 			
 			for(var i=0;i<menuItems.length;i++) {
 				var m=menuItems[i];
-				if (m._separator || m._visible===false) {
+				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
 					continue;
 				}
 				
@@ -1076,62 +686,75 @@ var __prototype = {
 		}
 		
 		if (menuItem) {
-			this._menuItem_over(menuItem, false);
+			this._menuItem_over(menuItem, false, evt);
 		}		
 	},
-	_previousMenuItem: function(menuBarItem, evt) {
-		var parent=menuBarItem;
+	/**
+	 * @method private
+	 * @param Object menuItem
+	 * @param Event evt
+	 * @return void
+	 */
+	_previousMenuItem: function(menuItem, evt) {
+		var parent=menuItem;
 
-		if (!this._a_isSameMenuBase(menuBarItem)) {
-			if (this._selectedMenuItem) {
-				this._selectedMenuItem._closePopup(this._selectedMenuItem);
+		if (!this.fa_isSameMenuBase(menuItem)) {
+			var selectedMenuItem=this.f_uiGetSelectedItem(this);
+			if (selectedMenuItem) {
+				this._closeUIPopup(selectedMenuItem);
 			}
 
 		} else {
 			
-			// Par defaut le parent est le menuBarItem
+			// Par defaut le parent est le menuItem
 			for(;;) {
-				var pi=parent._selectedMenuItem;
-				if (!pi || !pi._popupOpened) {
+				var pi=this.f_uiGetSelectedItem(parent);
+				
+				if (!pi || !this.f_uiIsPopupOpened(pi)) {
 					break;
 				}			
 				parent=pi;
 			}			
 	
 			
-			if (!parent._selectedMenuItem) {
+			if (!this.f_uiGetSelectedItem(parent)) {
 				return;
 			}
 		}
 	
-		// En verifie bien que nous sommes sur le bon menuBarItem !
-		this._a_focusMenuItem(menuBarItem);
+		// En verifie bien que nous sommes sur le bon menuItem !
+		this.fa_focusMenuItem(menuItem);
 				
-		var menuItems=parent._items;
-		if (!menuItems || menuItems.length<1) {
+		var menuItems=this.f_listItemChildren(parent);
+		if (!menuItems || !menuItems.length) {
 			return;
 		}
 
 		var menuItem;
-		if (parent._selectedMenuItem) {
+		if (this.f_uiGetSelectedItem(parent)) {
 			var i=0;
+			
+			// On recherche l'item OVER
 			for(;i<menuItems.length;i++) {
 				var mi=menuItems[i];
 				
-				if (!mi._over) {
+				if (!this.f_uiIsItemOver(mi)) {
 					continue;
 				}
 				
 				i--;
 				break;
 			}
+			
 			if (i<0) {
+				// Pas trouvé !
 				i=menuItems.length-1;
 			}
 			
+			// On part du bas en remontant ...
 			for(;i>=0;i--) {
 				var m=menuItems[i];
-				if (m._separator || m._visible===false) {
+				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
 					continue;
 				}
 				
@@ -1143,7 +766,7 @@ var __prototype = {
 		if (!menuItem) {
 			for(var i=menuItems.length-1;i>=0;i--) {
 				var m=menuItems[i];
-				if (m._separator || m._visible===false) {
+				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
 					continue;
 				}
 				
@@ -1153,57 +776,70 @@ var __prototype = {
 		}
 
 		if (menuItem) {
-			this._menuItem_over(menuItem, false);		
+			this._menuItem_over(menuItem, false, evt);		
 		}
 	},
-	_nextMenuItemLevel: function(menuBarItem, evt) {
-		if (!this._a_isSameMenuBase(menuBarItem)) {
-			var smi=this._selectedMenuItem;
+	/**
+	 * @method private
+	 * @param Object menuItem
+	 * @param Event evt
+	 * @return void
+	 */
+	_nextMenuItemLevel: function(menuItem, evt) {
+
+		if (!this.fa_isSameMenuBase(menuItem)) {
+			var smi=this.f_uiGetSelectedItem(this);
 			if (smi) {
-				smi._closePopup(smi);
+				this._closeUIPopup(smi);
 			}
-			return true;
+			return;
 		}
 		
-		if (menuBarItem._popupOpened) {
-			// Par defaut le parent est le menuBarItem
-			var parent=menuBarItem;
+		if (this.f_uiIsPopupOpened(menuItem)) {
+			// Recherche le popup enfant le plus ouvert
+			
+			var parent=menuItem;
 			for(;;) {
-				var pi=parent._selectedMenuItem;
-				if (!pi || !pi._popupOpened) {
+				var pi=this.f_uiGetSelectedItem(parent);
+				if (!pi || !this.f_uiIsPopupOpened(pi)) {
 					break;
 				}
 				parent=pi;
 			}
 
-			var selected=parent._selectedMenuItem;
+			var selectedItem=this.f_uiGetSelectedItem(parent);
 
-			if (selected && selected._menuPopup && !this.f_isItemDisabled(selected)) {
+			if (selectedItem 
+					&& !this.f_isItemDisabled(selectedItem) 
+					&& this.f_hasVisibleItemChildren(selectedItem)) {
 				// On ouvre le popup !
 				
-				selected._openPopup(selected, true);
+				this.f_openUIPopup(selectedItem, evt, true);
 				
 				return;
 			}
 		}
+		
 		// Passe au popup suivant !
-		var menuBarItems=this._items;
+		var menuItems=this.f_listItemChildren(this);
 		
 		var mbi;
-		for(var i=0;i<menuBarItems.length;i++) {
-			var mi=menuBarItems[i];
+		for(var i=0;i<menuItems.length;i++) {
+			var mi=menuItems[i];
 		
-			if (mi!=menuBarItem) {
+			// On recherche notre menu !
+			if (mi!=menuItem) {
 				continue;
 			}
 			
-			for(var j=0;j<menuBarItems.length;j++) {
+			// On en cherche un autre en avancant
+			for(var j=0;j<menuItems.length;j++) {
 				i++;
-				if (i==menuBarItems.length) {
+				if (i==menuItems.length) {
 					i=0;
 				}
 				
-				if (this.f_isItemDisabled(menuBarItems[i])) {
+				if (this.f_isItemDisabled(menuItems[i])) {
 					continue;
 				}
 				
@@ -1218,58 +854,73 @@ var __prototype = {
 			return;
 		}
 
-		var smi=this._selectedMenuItem;
+		var smi=this.f_uiGetSelectedItem(this);
 		if (smi) {
-			smi._closePopup(smi);
+			this._closeUIPopup(smi);
 		}
 
-		this._a_focusMenuItem(mbi);
+		this.fa_focusMenuItem(mbi);
 
-		mbi._openPopup(mbi, true);
+		this.f_openUIPopup(mbi, evt, true);
 	},
-	_previousMenuItemLevel: function(menuBarItem, evt) {
-		if (!this._a_isSameMenuBase(menuBarItem)) {
-			if (this._selectedMenuItem) {
-				this._selectedMenuItem._closePopup(this._selectedMenuItem);
+	/**
+	 * @method private
+	 * @param Object menuItem
+	 * @param Event evt
+	 * @return void
+	 */
+	_previousMenuItemLevel: function(menuItem, evt) {
+		if (!this.fa_isSameMenuBase(menuItem)) {
+			var selectedMenuItem=this.f_uiGetSelectedItem(this);
+		
+			if (selectedMenuItem) {
+				this._closeUIPopup(selectedMenuItem);
 			}
-			return true;
+			return;
 		}
 		
-		if (menuBarItem._popupOpened) {
-			// Par defaut le parent est le menuBarItem
-			var parent=menuBarItem;
+		if (this.f_uiIsPopupOpened(menuItem)) {
+			// Recherche l'enfant ouvert le plus profond
+			
+			var parent=menuItem;
 			for(;;) {
-				var pi=parent._selectedMenuItem;
-				if (!pi || !pi._popupOpened) {
+				var pi=this.f_uiGetSelectedItem(parent);
+				if (!pi || !this.f_uiIsPopupOpened(pi)) {
 					break;
 				}
 				parent=pi;
 			}
 
-			if (parent!=menuBarItem) {
+			if (parent!=menuItem) {
 				// On ferme le popup !
 					
-				parent._closePopup(parent);
+				this._closeUIPopup(parent);
 			
 				return;
 			}
 		}
+
+		// Passe au popup precedent !
+		var menuItems=this.f_listItemChildren(this);
 		
 		var mbi;
-		for(var i=0;i<this._items.length;i++) {
-			var mi=this._items[i];
+		for(var i=0;i<menuItems.length;i++) {
+			var mi=menuItems[i];
 			
-			if (mi!=menuBarItem) {
+			// On recherche notre menu
+			if (mi!=menuItem) {
 				continue;
 			}
 			
-			for(var j=0;j<this._items.length;j++) {
+			// On en recherche un autre en reculant
+			
+			for(var j=0;j<menuItems.length;j++) {
 				i--;
 				if (i<0) {
-					i=this._items.length-1;
+					i=menuItems.length-1;
 				}
 				
-				var mip=this._items[i];
+				var mip=menuItems[i];
 				if (this.f_isItemDisabled(mip)) {
 					continue;
 				}
@@ -1280,175 +931,252 @@ var __prototype = {
 			break;
 		}
 		
-		if (this._selectedMenuItem) {
-			this._selectedMenuItem._closePopup(this._selectedMenuItem);
+		var smi=this.f_uiGetSelectedItem(this);
+		if (smi) {
+			this._closeUIPopup(smi);
 		}
 		
 		if (!mbi) {
 			return;
 		}
 
-		this._a_focusMenuItem(mbi);
+		this.fa_focusMenuItem(mbi);
 
-		mbi._openPopup(mbi, true);
+		this.f_openUIPopup(mbi, evt, true);
 	},
-	_keySelectMenuItem: function(menuBarItem, jsEvent) {
+	/**
+	 * Selection de l'item par une touche !  (item root)
+	 * 
+	 * @method private
+	 * @param Object menuItem
+	 * @param Event jsEvent
+	 * @return void
+	 */
+	_keySelectMenuItem: function(menuItem, jsEvent) {
 			
-		if (!this._a_isSameMenuBase(menuBarItem)) {
-			if (this._selectedMenuItem) {
-				this._selectedMenuItem._closePopup(this._selectedMenuItem);
+		if (!this.fa_isSameMenuBase(menuItem)) {
+			var selectedMenuItem=this.f_uiGetSelectedItem(this);
+		
+			if (selectedMenuItem) {
+				this._closeUIPopup(selectedMenuItem);
 			}
 			return true;
 		}
-		if (this.f_isItemDisabled(menuBarItem)) {
-			return true;
-		}
 
+		// Le menu est en mode ReadOnly ?
 		if (this.f_isReadOnly()) {
 			return true;
 		}
+		
+		// Notre menuItem root est-il desactivé ?
+		if (this.f_isItemDisabled(menuItem)) {
+			return true;
+		}
 
-// Deja selectionné !
-//		this._selectedMenuItem=menuBarItem;
-//		this.fa_updateItemStyle(menuBarItem);		
-
-		if (!menuBarItem._menuPopup) {
-			var value=menuBarItem._value;
-			this._performItemSelect(menuBarItem, value, jsEvent);
-
+		// a t-il  un popup ?
+		// (cas d'un menubar)
+		if (!this.f_hasVisibleItemChildren(menuItem)) {
+			// Non ...
+			
+	
+			// Appel de la callback de selection
+			var value=this.f_getItemValue(menuItem);
+			this._performItemSelect(menuItem, value, jsEvent);
 			return;			
 		}
 			
-		if (!menuBarItem._selectedMenuItem) {
-			this._nextMenuItem(menuBarItem, jsEvent);		
+		// Aucune selection ... on passe au menu suivant
+		// (Cas d'un menubar)
+		if (!this.f_uiGetSelectedItem(menuItem)) {
+			// Il n'est pas selectionné ?
+			this._nextMenuItem(menuItem, jsEvent);		
 			return;
 		}
 	
-		var parent=menuBarItem;
+		// Recherche le popup enfant le plus profond
+		var parent=menuItem;
 		for(;;) {
-			var pi=parent._selectedMenuItem;
-			if (!pi || !pi._popupOpened) {
+			var pi=this.f_uiGetSelectedItem(parent);
+			if (!pi || !this.f_uiIsPopupOpened(pi)) {
 				break;
 			}
 			
 			parent=pi;
 		}
 
-		var item=parent._selectedMenuItem;
+		var item=this.f_uiGetSelectedItem(parent);
 		
 		if (this.f_isItemDisabled(item)) {
 			return;
 		}
 		
-		if (item._menuPopup) {
-			this._nextMenuItemLevel(menuBarItem, jsEvent);
+		// Notre vrai item selectionné a t-il des enfants ?
+		if (this.f_hasVisibleItemChildren(item)) {
+			this._nextMenuItemLevel(menuItem, jsEvent);
 			return;
 		}
 		
-		this._a_closeMenu(menuBarItem, jsEvent);
+		// pas d'enfants		
+		this._closeUIPopup(menuItem);
 
-		var value=item._value;
+		// Appel de la callback de selection
+		var value=this.f_getItemValue(item);
 		this._performItemSelect(item, value, jsEvent);
 	},
-	_keyCloseMenuItem: function(menuBarItem, evt) {	
-		this._a_closeMenu(menuBarItem, evt, true);
-		
-		return true;
+	/**
+	 * Fermeture du menu par une touche !
+	 * 
+	 * @method private
+	 * @param Object menuItem
+	 * @param Event evt
+	 * @return void
+	 */
+	_keyCloseMenuItem: function(menuItem, evt) {	
+		this._closeUIPopup(menuItem);
 	},
-	_menuItem_over: function(menuItem, open, autoSelect) {
-		var parent=menuItem._parentItem;			
-
-		menuItem._over=true;
+	/**
+	 * Returns parent of item.
+	 * 
+	 * @method protected final
+	 * @param Object menuItem
+	 * @return Object its parent.
+	 */
+	f_getParentItem: function(item) {
+		f_core.Assert(typeof(item)=="object", "Item parameter must be an object !");
+		return item._parentItem;
+	},
+	/**
+	 * Gestion du OVER d'un menuItem
+	 * 
+	 * @method private
+	 * @param Object menuItem
+	 * @param boolean open
+	 * @param Event evt
+	 * @param boolean autoSelect
+	 * @return void
+	 */
+	_menuItem_over: function(menuItem, open, evt, autoSelect) {
+		var parent=this.f_getParentItem(menuItem);
 		
-		var oldMenuItem=parent._selectedMenuItem;
+		var oldMenuItem=this.f_uiGetSelectedItem(parent);
+		f_core.Debug(fa_menuCore, "Over: "+menuItem+" parent="+parent+" old="+oldMenuItem+" open="+open);
+		
+		// Un autre était déjà over ???
 		if (oldMenuItem && oldMenuItem!=menuItem) {
-			oldMenuItem._over=false
+			this.f_uiSetItemOver(oldMenuItem, false);
 			
 			// Eventuellement on ferme le popup !
-			oldMenuItem._closePopup(oldMenuItem);
+			this._closeUIPopup(oldMenuItem);
 
-			parent._selectedMenuItem=undefined;
-			this.fa_updateItemStyle(oldMenuItem);
+			this.f_uiSelectItem(parent); // deselectionne !
+			this.f_uiUpdateItemStyle(oldMenuItem);
 		}
 				
-		parent._selectedMenuItem=menuItem;
+		this.f_uiSetItemOver(menuItem, true);
+		this.f_uiSelectItem(parent, menuItem);
 
 /* On accepte les disabled over !
 		if (open && menuItem._disabled ) {
 			return;
 		}
 	*/	
-		this.fa_updateItemStyle(menuItem);
+		this.f_uiUpdateItemStyle(menuItem);
 
-		if (menuItem._disabled) {
+		if (this.f_isItemDisabled(menuItem)) {
 			return;
 		}
 		
-		if (menuItem._menuPopup && open) {
-			fa_menuCore._MenuItem_openPopup(menuItem, autoSelect);
+		if (this.f_hasVisibleItemChildren(menuItem) && open) {
+			this.f_openUIPopup(menuItem, evt, autoSelect);
 		}
 	},
+	/**
+	 * Gestion du OUT d'un menuItem
+	 * 
+	 * @method private
+	 * @param Object menuItem
+	 * @return void
+	 */
 	_menuItem_out: function(menuItem) {
-		if (!menuItem._over) {
+		if (!this.f_uiIsItemOver(menuItem)) {
+			f_core.Debug(fa_menuCore, "Out: "+menuItem+" no over !");
+
 			return;
 		}
+
+		f_core.Debug(fa_menuCore, "Out: "+menuItem);
 		
-		menuItem._over=false;
+		this.f_uiSetItemOver(menuItem, false);
 	
-		this.fa_updateItemStyle(menuItem);
+		this.f_uiUpdateItemStyle(menuItem);
 	},
+	/**
+	 * Gestion du MOUSE BUTTON d'un menuItem
+	 * 
+	 * @method private
+	 * @param Object menuItem
+	 * @param Event jsEvent
+	 * @return void
+	 */
 	_menuItem_select: function(menuItem, jsEvent) {
 	
-		if (menuItem._menuPopup) {	
-			return false;
+		// Il a un popup ?
+		if (this.f_hasVisibleItemChildren(menuItem)) {
+			// On ignore
+			return;
 		}
-
-		// Si le composant est disabled
-		if (menuItem._disabled) {
-			return false;
+		
+		if (this.f_isItemDisabled(menuItem)) {
+			return;
 		}
 				
-		this._a_closeMenu(menuItem, jsEvent);
+		this._closeUIPopup(menuItem);
 					
 		if (this.f_isReadOnly()) {
 			return;
 		}
 			
-		var value=menuItem._value;
+		var value=this.f_getItemValue(menuItem);
 		
 		this._performItemSelect(menuItem, value, jsEvent);
 	},
-	fa_updateItemStyle: function(item) {	
+	/**
+	 * @method protected
+	 */
+	fa_updateItemStyle: function(item) {
+		// On s'enfiche car le style est créé a chaque ouverture de popup !
+	},
 	
-		if (item._separator) {
+	f_uiUpdateItemStyle: function(item, uiItem) {	
+		if (item._style==fa_menuCore._AS_SEPARATOR) {
 			return;
 		}
-	
-		var imageURL=item._imageURL;
-		var itemStyle=item.style;
 		
-		if (itemStyle) {
-			if (item._visible===false) {
-				if (itemStyle.display!="none") {
-					itemStyle.display="none";
-				}
-			} else {
-				if (itemStyle.display=="none") {
-					itemStyle.display="block";
-				}
-			}
+		if (!uiItem) {
+			uiItem=this.f_getUIItem(item);
 		}
+		
+	
+		var disabled=this.f_isItemDisabled(item);
+
+		f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: item="+item+" uiItem="+uiItem.id+" over="+uiItem._over+" disabled="+disabled);
 
 		var suffix="";
-		if (item._menuPopup) {
-			if (item._popupOpened || item._over) {
+		var imageURL=item._imageURL;
+
+		if (this.f_hasVisibleItemChildren(item)) {
+			var popupOpened=this.f_uiIsPopupOpened(item);
+
+			f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: popupOpened="+popupOpened+" over="+uiItem._over);
+			
+			if (popupOpened || uiItem._over) {
 				suffix+="_selected";
 	
 			} else {
 				suffix+="_popup";
 			}
 
-			if (item._disabled) {
+			if (disabled) {
 				suffix+="_disabled";
 			
 				var disabledImageURL=item._disabledImageURL;
@@ -1462,10 +1190,10 @@ var __prototype = {
 				}
 			}
 				
-		} else if (item._disabled) {
+		} else if (disabled) {
 			suffix+="_disabled";
 			
-			if (item._over) {
+			if (uiItem._over) {
 				suffix+="_hover";			
 			}
 			
@@ -1474,7 +1202,7 @@ var __prototype = {
 				imageURL=disabledImageURL;
 			}
 	
-		} else if (item._over) {
+		} else if (uiItem._over) {
 			suffix+="_hover";
 			
 			var hoverImageURL=item._hoverImageURL;
@@ -1494,14 +1222,11 @@ var __prototype = {
 			className+=" "+className+suffix;			
 		}
 		
-		if (item.className!=className) {
-			item.className=className;	
-			if (item._rlink) {
-				item._rlink.className=className;
-			}
+		if (uiItem.className!=className) {
+			uiItem.className=className;	
 		}
 				
-		var icon=item._icon;
+		var icon=uiItem._icon;
 		if (icon) {
 			var iconClassName="f_menu_item_image";
 			
@@ -1518,7 +1243,7 @@ var __prototype = {
 					}
 				}
 
-				if (item._over) {
+				if (uiItem._over) {
 					suffix+="_hover";
 				}
 				
@@ -1529,19 +1254,45 @@ var __prototype = {
 			
 			imageURL=(typeof(imageURL)=="string")?"url('"+imageURL+"')":"";
 			
-			if (icon.style.backgroundImage!=imageURL) {
-				icon.style.backgroundImage=imageURL;
-				if (item._ricon) {
-					item._ricon.style.backgroundImage=imageURL;
-				}
+			var iconStyle=icon.style;
+			if (iconStyle.backgroundImage!=imageURL) {
+				iconStyle.backgroundImage=imageURL;
 			}
 			if (icon.className!=iconClassName) {
 				icon.className=iconClassName;
-				if (item._ricon) {
-					item._ricon.className=iconClassName;
-				}				
 			}
 		}
+	},
+	/**
+	 * @method private
+	 * @param Object item
+	 * @param any value
+	 * @param Event jsEvent
+	 * @return void
+	 */
+	_performItemSelect: function(item, value, jsEvent) {		
+
+		this.f_closeAllPopups();
+
+		switch(item._style) {
+		case fa_menuCore._AS_CHECK_BOX:
+			var state=this.f_isItemChecked(item);
+			
+			this.f_setItemChecked(item, !state);
+			
+			// Dans ce cas un event CHECK est envoyé !
+			return;
+		
+		case fa_menuCore._AS_RADIO_BUTTON:
+			this.f_setItemChecked(item, true);
+
+			// Dans ce cas un event CHECK est envoyé !
+			return;
+		}
+
+		var selectionProvider=this.fa_getSelectionProvider();
+
+		this.f_fireEvent(f_event.SELECTION, jsEvent, item, value, selectionProvider);
 	},
 	/**
 	 * Returns the label of the item.
@@ -1551,11 +1302,9 @@ var __prototype = {
 	 * @return String The label.
 	 */
 	f_getItemLabel: function(item) {
-		if (typeof(item)=="string") {
-			item=this.f_getItemByValue(item);
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
 		}
-		
-		f_core.Assert(item, "f_getItemLabel: Item parameter must be defined !");
 
 		return item._label;
 	},
@@ -1569,15 +1318,11 @@ var __prototype = {
 	 */
 	f_setItemLabel: function(item, label) {
 		f_core.Assert(typeof(label)=="string", "f_setItemLabel: Label parameter is not a string !");
-		if (typeof(item)=="string") {
-			item=this.f_getItemByValue(item);
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
 		}
 		
-		f_core.Assert(item, "f_setItemLabel: Item parameter must be defined !");
-		
 		item._label=label;
-		item._changes|=fa_menuCore._LABEL_CHANGED;
-		this._menuItemsChanged=true;
 	},
 	/**
 	 * Returns a list of items
@@ -1613,94 +1358,311 @@ var __prototype = {
 		if (!items) {
 			return;
 		}
-		
-		var table=menuItem._menuPopup;
-		if (table) {
-			for(var i=0;i<items.length;i++) {
-				table.removeChild(items[i]);
-			}
-		}
 	
-		this.fa_destroyItems(items);
 		menuItem._items=new Array;
-		
-		this._menuItemsChanged=true;
 	},
-	_performItemSelect: function(item, value, jsEvent) {
-		this._popupOpened=undefined;
-		
-		if (item._style==fa_menuCore._AS_CHECK_BOX) {
-			var state=this.f_isItemChecked(item);
-			
-			this.f_setItemChecked(item, !state);
-			
-			// Dans ce cas un event CHECK est envoyé !
-			return;
-		}
-		
-		if (item._style==fa_menuCore._AS_RADIO_BUTTON) {
-			this.f_setItemChecked(item, true);
-
-			// Dans ce cas un event CHECK est envoyé !
-			return;
-		}
-
-		this._a_clickOutside(jsEvent);
-
-		var selectionProvider=this._a_getSelectionProvider();
-
-		this.f_fireEvent(f_event.SELECTION, jsEvent, item, value, selectionProvider);
-	},
-	fa_destroyItems: function(items) {
-		for(var i=0;i<items.length;i++) {
-			fa_menuCore.DestroyMenuItem(items[i]);
-		}
-	},	
 	fa_getRadioScope: function() {
 		return this;
 	},
+	fa_destroyItems: function(items) {
+	},	
+	/**
+	 * @method private 
+	 * @return boolean
+	 */
+	_preparePopup: function(menuItem) {
+		if (this.f_getUIPopup(menuItem)) {
+			f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"' is already opened !");
+			return false;
+		}
+			
+		// Efface tout si necessaire !
+		if (menuItem._removeAllWhenShow) {
+			// Effaces tous les items !
+			f_core.Debug(fa_menuCore, "_preparePopup: Remove all items of '"+menuItem+"'.");
 
+			this.f_removeAllItems(menuItem);
+		}
+		
+		var menuActionList=menuItem._menuActionList;
+		if (menuActionList) {
+			f_core.Debug(fa_menuCore, "_preparePopup: Call menu callbacks for menuItem '"+menuItem+"'.");
+			
+			// Appel les callbacks !
+			var evt=new f_event(this, f_event.MENU, null, menuItem, null, this);
+			try {
+				if (menuActionList.f_callActions(evt)===false) {
+					// Refuse l'affichage !
+
+					f_core.Debug(fa_menuCore, "_preparePopup: One callback refuse to open the menu.");
+					return false;
+				}
+	
+			} finally {
+				f_classLoader.Destroy(evt);
+			}
+		}
+		
+		return this.f_hasVisibleItemChildren(menuItem);
+	},
+	/**
+	 * @method protected
+	 * @param Object menuItem
+	 * @return HTMLElement 
+	 */
+	_getPopupContainer: function(menuItem) {
+		var parent=this.f_getParentItem(menuItem);
+	
+		if (f_popup.Ie_enablePopup()) {
+			if (!parent) {
+				return f_popup.Ie_GetPopup(document);
+			}			
+			
+			var parentPopup=this.f_getUIPopup(parent);
+			
+			return f_popup.Ie_GetPopup(parentPopup.ownerDocument);
+		}
+	
+		if (!parent) {
+			return this.ownerDocument.body;
+		}			
+		
+		var parentPopup=this.f_getUIPopup(parent);
+		
+		return parentPopup.ownerDocument.body;
+	},
+	/**
+	 * @method protected
+	 */
+	_showPositionedMenuPopup: function(popup, positionInfos) {
+	},
+	/**
+	 * @method hidden
+	 * @return boolean
+	 */
+	f_open: function(jsEvent, positionInfos, autoSelect) {
+		if (!positionInfos) {
+			positionInfos={				
+				position: f_popup.MOUSE_POSITION
+			};	
+		}
+		if (jsEvent) {
+			positionInfos.jsEvent=jsEvent;
+		}
+		
+		return this.f_openUIPopup(this, jsEvent, autoSelect, positionInfos);
+	},
+	/**
+	 * @method protected
+	 * @return boolean
+	 */
+	f_openUIPopup: function(menuItem, jsEvent, autoSelect, positionInfos) {
+
+		// On verifie l'AJAX !
+
+		if (!this._preparePopup(menuItem)) {
+			f_core.Debug(fa_menuCore, "Prepare popup of '"+menuItem.id+"' returns false !");
+			return false;
+		}
+
+		var parentItem=this.f_getParentItem(menuItem);
+
+		var selectionProvider=this.fa_getSelectionProvider();
+				
+		var container=this._getPopupContainer(menuItem);
+		f_core.Assert(container, "fa_menuCore.f_openUIPopup: Invalid popup container !");
+		f_core.Debug(fa_menuCore, "Get container of '"+menuItem+"' returns '"+container+"'.");
+		
+		var popup=this.f_createPopup(container, menuItem);
+		f_core.Assert(popup, "fa_menuCore.f_openUIPopup: Invalid popup object (container="+container+")");
+
+		if (!parentItem) {
+			f_core.Debug(fa_menuCore, "f_openUIPopup: Register windows this="+this+" menuItem="+menuItem+" popup="+popup);
+	
+			if (f_popup.RegisterWindowClick(this.fa_getPopupCallbacks(), this, popup)==false) {
+				return;
+			}
+		} else {
+			f_core.Debug(fa_menuCore, "f_openUIPopup: Child popup parentItem="+parentItem+" this="+this+" menuItem="+menuItem+" popup="+popup);
+		}
+		
+		try {
+			if (menuItem!=this) {
+				this.f_uiUpdateItemStyle(menuItem);
+			}
+	
+			var scopeName=this.fa_getMenuScopeName(menuItem);
+			f_key.EnterScope(scopeName);
+	
+			if (!positionInfos) {			
+				positionInfos={
+					component: this.f_getUIItem(menuItem),
+					position: f_popup.LEFT_COMPONENT					
+				};
+			}
+											
+			if (f_popup.Ie_enablePopup()) {		
+				f_popup.Ie_openPopup(popup._popupObject, positionInfos);
+
+			} else {
+				f_popup.Gecko_openPopup(popup._popupObject, positionInfos);
+			}
+			
+		} catch(x) {
+			if (!parentItem) {
+				f_popup.UnregisterWindowClick(menuItem);
+			}
+				
+			throw x;
+		}
+				
+		if (autoSelect) {
+			var menuItems=this.f_listVisibleItemChildren(menuItem);
+			
+			if (menuItems && menuItems.length) {
+				this._menuItem_over(menuItems[0], jsEvent);
+			}
+		}
+	},
+	/**
+	 * @method private static 
+	 * @param Object menuItem
+	 * @param optional Object popup
+	 * @return void
+	 */
+	_closeUIPopup: function(menuItem, popup) {
+		f_core.Assert(!popup || this._uiMenuPopups[menuItem]==popup, "Invalid popup or menuItem. menuItem="+menuItem+" popup="+popup);
+
+		if (!popup) {
+			popup=this.f_getUIPopup(menuItem);
+	
+			if (!popup) {
+				f_core.Debug(fa_menuCore, "Popup menu '"+menuItem+"' is already opened !");
+				return;
+			}
+		}
+
+		var selectedItem=this.f_uiGetSelectedItem(menuItem);
+		f_core.Debug(fa_menuCore, "_closeUIPopup: child selected="+selectedItem);
+		
+		if (selectedItem) {
+			var childPopup=this.f_getUIPopup(selectedItem);
+			if (childPopup) {
+				this._closeUIPopup(selectedItem);
+			}
+		}
+		
+		var scopeName=this.fa_getMenuScopeName(menuItem);
+		f_key.ExitScope(scopeName);
+		
+		if (menuItem!=this) {
+			this.f_uiUpdateItemStyle(menuItem);
+		}
+
+		if (f_popup.Ie_enablePopup()) {		
+			f_popup.Ie_closePopup(popup._popupObject);
+
+		} else {
+			f_popup.Gecko_closePopup(popup._popupObject);
+		}			
+
+		var uiMenuItems=this._uiMenuItems;
+		var items=this.f_listItemChildren(menuItem);
+		for(var i=0;i<items.length;i++) {
+			var item=items[i];
+			
+			var uiItem=uiMenuItems[item];
+			if (!uiItem) {
+				continue;
+			}
+			
+			delete uiMenuItems[item];
+			
+			uiItem._item=undefined; // Object
+			uiItem._icon=undefined; // HTMLImageElement
+			uiItem.onclick=null;
+			uiItem.onmousedown=null;
+			uiItem.onmouseover=null;
+			uiItem.onmouseout=null;
+				
+			f_core.VerifyProperties(uiItem);
+		}
+		
+		popup._item=undefined; // Object
+		popup._popupObject=undefined; // Object
+		
+		delete this._uiMenuPopups[menuItem];
+		f_core.Debug(fa_menuCore, "_closeUIPopup: remove one popup="+popup+" menuItem="+menuItem);
+
+		if (f_popup.Ie_enablePopup()) {		
+			f_popup.Ie_releasePopup(popup);
+
+		} else {
+			f_popup.Gecko_releasePopup(popup);
+		}			
+		
+		if (menuItem==this) {
+			f_popup.UnregisterWindowClick(menuItem);
+		}
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_closeAllPopups: function() {
+		f_core.Debug(fa_menuCore, "f_closeAllPopups: close all popups");
+		this._closeUIPopup(this);
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_clickOutside: function() {
+		f_core.Debug(fa_menuCore, "f_clickOutside: click outside !");
+		
+		this.f_closeAllPopups();
+	},
 	/**
 	 * @method abstract
 	 * @return void
 	 */
-	_a_focusMenuItem:  f_class.ABSTRACT,
+	fa_getPopupContainer: f_class.ABSTRACT,
 	
 	/**
 	 * @method abstract
 	 * @return void
 	 */
-	_a_closeMenu:  f_class.ABSTRACT,
+	fa_focusMenuItem: f_class.ABSTRACT,
 	
 	/**
 	 * @method abstract
 	 * @return void
 	 */
-	_a_clickOutside: f_class.ABSTRACT,
+	fa_getSelectionProvider:  f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_getSelectionProvider:  f_class.ABSTRACT,
+	fa_keySearchAccessKey: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
-	 * @return void
+	 * @method protected abstract
+	 * @return boolean
 	 */
-	_a_keySearchAccessKey: f_class.ABSTRACT,
+	fa_isSameMenuPoup: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_isSameMenuPoup: f_class.ABSTRACT,
+	fa_tabKeySelection: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
-	_a_tabKeySelection: f_class.ABSTRACT
+	fa_getMenuScopeName: f_class.ABSTRACT
 }
 
 var fa_menuCore=new f_aspect("fa_menuCore", __static, __prototype, fa_groupName, fa_items);

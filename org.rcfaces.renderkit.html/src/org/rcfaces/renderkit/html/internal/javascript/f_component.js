@@ -34,17 +34,26 @@ var __static = {
 	
 	/**
 	 * @method static hidden
+	 * @param HTMLElement parent
+	 * @param String label
+	 * @param optional String accessKey
+	 * @param optional boolean removeText
 	 * @return HTMLElement Underline zone component
 	 */
 	AddLabelWithAccessKey: function(parent, label, accessKey, removeText) {
+		f_core.Assert(parent.nodeType==1, "Invalid parent parameter '"+parent+"'.");
+		f_core.Assert(typeof(label)=="string", "Invalid label parameter '"+label+"'.");
+		
 		if (removeText) {			
 			while(parent.firstChild) {
 				parent.removeChild(parent.firstChild);
 			}
 		}
+
+		var doc=parent.ownerDocument;
 	
 		if (!accessKey || accessKey.length!=1) {
-			parent.appendChild(document.createTextNode(label));
+			parent.appendChild(doc.createTextNode(label));
 			
 			return null;
 		}
@@ -54,23 +63,23 @@ var __static = {
 		
 		var idx=lab.indexOf(accessKey);
 		
-		if (idx<0) {				
-			parent.appendChild(document.createTextNode(label));
+		if (idx<0) {
+			parent.appendChild(doc.createTextNode(label));
 	
 			return null;
 		}
 		
-		if (idx>0) {
-			parent.appendChild(document.createTextNode(label.substring(0, idx)));
+		if (idx) {
+			parent.appendChild(doc.createTextNode(label.substring(0, idx)));
 		}
 
-		var sub=document.createElement("U");
+		var sub=doc.createElement("U");
 		sub.className="f_accessKey";
 		parent.appendChild(sub);
-		sub.appendChild(document.createTextNode(label.substring(idx, idx+1)));				
+		sub.appendChild(doc.createTextNode(label.substring(idx, idx+1)));				
 		
 		if (idx+1<lab.length) {
-			parent.appendChild(document.createTextNode(label.substring(idx+1, lab.length)));
+			parent.appendChild(doc.createTextNode(label.substring(idx+1, lab.length)));
 		}
 		
 		return sub;

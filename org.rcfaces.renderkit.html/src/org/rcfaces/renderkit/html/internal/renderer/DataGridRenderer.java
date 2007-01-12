@@ -366,7 +366,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
             if (height != null) {
                 cssWriter
-                        .writeHeight(computeSize(height, -1, -getTitleHeight()));
+                        .writeHeight(computeSizeInPixel(height, -1, -getTitleHeight()));
             }
             if (w != null) {
                 cssWriter.writeWidth(w);
@@ -598,7 +598,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeClass(getTitleDivContainerClassName(htmlWriter));
 
         if (width != null) {
-            String widthRightPadding = computeSize(width, -1,
+            String widthRightPadding = computeSizeInPixel(width, -1,
                     -TEXT_RIGHT_PADDING);
             htmlWriter.writeStyle().writeWidth(widthRightPadding);
         }
@@ -614,7 +614,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeAlign(halign);
 
         if (width != null) { // SORTER
-            String widthRightPadding = computeSize(width, -1,
+            String widthRightPadding = computeSizeInPixel(width, -1,
                     -TEXT_RIGHT_PADDING);
             htmlWriter.writeStyle().writeWidth(widthRightPadding);
         }

@@ -37,9 +37,10 @@ var __prototype = {
 
 		var menu=this.f_getSubMenuById(f_imageCombo._MENU_ID);
 		if (menu) {
-			menu.f_open(this, {
-				position: f_menu.BOTTOM_COMPONENT
-				}, null, event.f_getJsEvent());
+			menu.f_open({
+				component: this,
+				position: f_popup.BOTTOM_COMPONENT
+				}, event.f_getJsEvent());
 		}
 		
 		return false;
@@ -65,9 +66,10 @@ var __prototype = {
 			return true;
 		}
 		
-		menu.f_open(this, {
-			position: f_menu.BOTTOM_COMPONENT
-			}, null, evt);
+		menu.f_open(evt, {
+			component: this,
+			position: f_popup.BOTTOM_COMPONENT
+			});
 		
 		return false;
 	},

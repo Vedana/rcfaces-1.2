@@ -50,7 +50,6 @@
 .f_menuBar_bitem {
 	-moz-user-select: none;
 	cursor: pointer;
-	cursor: hand;
 	color: #000;
 	border: 0;
 	background: transparent;

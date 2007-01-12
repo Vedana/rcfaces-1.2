@@ -50,11 +50,18 @@ public class URLContentProvider implements IContentProvider {
         String country = locale.getCountry();
         String language = locale.getLanguage();
 
+        String baseURL = localized.substring(0, idx);
+        if (language.length() > 0) {
+            int idx2 = baseURL.lastIndexOf('/');
+
+            baseURL = baseURL.substring(0, idx2) + '/' + language
+                    + baseURL.substring(idx2);
+        }
+
         try {
             if (variant != null && variant.length() > 0) {
-                URL l = new URL(localized.substring(0, idx) + "_" + language
-                        + "_" + country + "_" + variant
-                        + localized.substring(idx));
+                URL l = new URL(baseURL + "_" + language + "_" + country + "_"
+                        + variant + localized.substring(idx));
 
                 Locale tryLocale = locale;
                 if (testURL(l, tryLocale)) {
@@ -69,8 +76,8 @@ public class URLContentProvider implements IContentProvider {
             }
 
             if (country != null && country.length() > 0) {
-                URL l = new URL(localized.substring(0, idx) + "_" + language
-                        + "_" + country + localized.substring(idx));
+                URL l = new URL(baseURL + "_" + language + "_" + country
+                        + localized.substring(idx));
 
                 Locale tryLocale = locale;
                 if (variant != null && variant.length() > 0) {
@@ -89,7 +96,7 @@ public class URLContentProvider implements IContentProvider {
             }
 
             if (language != null && language.length() > 0) {
-                URL l = new URL(localized.substring(0, idx) + "_" + language
+                URL l = new URL(baseURL + "_" + language
                         + localized.substring(idx));
 
                 Locale tryLocale = locale;

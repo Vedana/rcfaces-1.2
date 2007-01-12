@@ -40,8 +40,22 @@ var __static={
 			f_core.SetProfilerMode(f_fireBugAppender._Profile);
 		}
 		
-		f_core.Assert=console.assert;
+		f_fireBugAppender._oldAssert=f_core.Assert;
+		f_core.Assert=f_fireBugAppender.Assert;
+	},
+	Assert: function(test, message) {
+		if (window.console) {
+			window.console.assert(test, message);
+		
+			if (!test) {
+				window.console.trace();
+			}
+			return;
+		}
+		
+		f_fireBugAppender._oldAssert.call(f_core, test, message);
 	}
+	
 }
 var __prototype = {
 	f_fireBugAppender: function() {

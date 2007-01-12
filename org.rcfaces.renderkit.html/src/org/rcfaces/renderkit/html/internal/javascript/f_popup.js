@@ -9,6 +9,30 @@
  * @version $Revision$ $Date$
  */
 var __static = {
+	/*
+	 * @field hidden static final number
+	 */
+	MOUSE_POSITION:0, 
+
+	/**
+	 * @field hidden static final number
+	 */
+	MIDDLE_COMPONENT: 1,
+
+	/**
+	 * @field hidden static final number
+	 */
+	BOTTOM_COMPONENT: 2,
+
+	/**
+	 * @field hidden static final number
+	 */
+	LEFT_COMPONENT: 4,
+
+	/**
+	 * @field hidden static final number
+	 */
+	BOTTOM_LEFT_COMPONENT: 8,
 	
 	/**
 	 * @field hidden static final String
@@ -55,6 +79,12 @@ var __static = {
 	 */
 	_LockPopupEvents: undefined,
 	
+	Initializer: function() {
+		if (f_core.IsInternetExplorer()) {
+			f_popup._Ie_PreparePopup(document);
+		}
+	},
+	
 	/**
 	 * @method hidden static
 	 * @return void
@@ -86,16 +116,25 @@ var __static = {
 		
 		return popup;
 	},
+	_Ie_PreparePopup: function(doc, useIt) {		
+		var popup=doc._iePopup;
+		
+		if (!popup) {
+			popup=f_popup.Ie_CreatePopup(doc);
+			document._iePopup=popup;
+		}
+				
+		if (useIt) {
+			f_popup._Ie_PreparePopup(popup.document);
+		}
+				
+		return popup;
+	},
 	/**
 	 * @method hidden static
 	 */
-	Ie_GetPopup: function(document, popupKey, clearCallback) {		
-		var popup=document._iePopup;
-		
-		if (!popup) {
-			popup=f_popup.Ie_CreatePopup(document);
-			document._iePopup=popup;
-		}
+	Ie_GetPopup: function(doc, popupKey, clearCallback) {		
+		var popup=f_popup._Ie_PreparePopup(doc, true);
 		
 		if (typeof(f_popup._ClearCallback)=="function") {
 			f_popup._ClearCallback.call(popup);
@@ -103,6 +142,11 @@ var __static = {
 
 		f_popup._ClearCallback=clearCallback;
 		f_popup._PopupKey=popupKey;
+
+		var body=popup.document.body;
+		for(;body.firstChild;) {
+			body.removeChild(body.firstChild);
+		}
 
 		return popup;
 	},
@@ -116,7 +160,7 @@ var __static = {
 		
 		var bases=document.getElementsByTagName("BASE");
 		if (bases.length) {
-			var base=bases[bases.length-1];			
+			var base=bases[bases.length-1];	// On prend le dernier !
 			
 			var pbase=pdocument.createElement(base.tagName);
 			pbase.href=base.href;
@@ -124,8 +168,6 @@ var __static = {
 			pdocument.appendChild(pbase);
 		}
 		
-		// Le BASE a terminer .... ?
-	
 		var links=document.styleSheets;
 		for(var i=0;i<links.length;i++) {
 			var link=links[i];
@@ -139,9 +181,8 @@ var __static = {
 	 * @method hidden static
 	 */
 	RegisterWindowClick: function(callbacks, component, popup) {
-
 		f_core.Assert(component, "f_popup: Component parameter is null !");
-		f_core.Assert(callbacks, "f_popup: Callback parameter is null !");
+		f_core.Assert(typeof(callbacks)=="object", "f_popup: Callback parameter is null !");
 
 		if (!f_popup._OldContextMenu) {
 			var oldContextMenu=document.body.oncontextmenu;
@@ -159,16 +200,18 @@ var __static = {
 			f_event.EnterEventLock(f_event.POPUP_LOCK);
 		}
 		
-		f_core.Debug("f_popup", "Register popup on "+component.id);
+		f_core.Debug(f_popup, "Register popup on "+component.id);
 
 		var oldComponent=f_popup.Component;
 		if (oldComponent) {
-			alert("Already old component !");
+			//alert("Already old component !");
+			
 			// On clot le precedant
 			f_popup.Component=undefined;
 			
-			if (f_popup.Callbacks) {
-				f_popup.Callbacks.exit.call(oldComponent);
+			var oldCallbacks=f_popup.Callbacks;
+			if (oldCallbacks) {
+				oldCallbacks.exit.call(oldComponent);
 				f_popup.Callbacks=undefined;
 			}
 			f_popup.Popup=undefined;
@@ -197,7 +240,8 @@ var __static = {
 		document.addEventListener("focus", f_popup._OnFocus, true);
 		document.addEventListener("keydown", f_popup._OnKeyDown, true);
 		document.addEventListener("keyup", f_popup._OnKeyUp, true);
-		document.addEventListener("keypress", f_popup._OnKeyPress, true);
+		document.addEventListener("keypress", f_popup._OnKeyPress, true);		
+		document.addEventListener("contextmenu", f_popup._OnContextMenu, true);
 		return true;
 	},
 	/**
@@ -234,7 +278,7 @@ var __static = {
 			document.body.oncontextmenu=contextMenu;
 		}
 
-		f_core.Debug("f_popup", "Unregister popup on "+component.id);
+		f_core.Debug(f_popup, "Unregister popup on "+component.id);
 					
 		f_popup.Callbacks=undefined;
 		f_popup.Component=undefined;
@@ -258,12 +302,23 @@ var __static = {
 		document.removeEventListener("keydown", f_popup._OnKeyDown, true);
 		document.removeEventListener("keyup", f_popup._OnKeyUp, true);
 		document.removeEventListener("keypress", f_popup._OnKeyPress, true);
+		document.removeEventListener("contextmenu", f_popup._OnContextMenu, true);
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 */
+	_OnContextMenu: function(evt) {
+		return f_core.CancelEvent(evt);
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_OnMouseDown: function(evt) {	
-		f_core.Debug("f_popup", "OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className);
+		f_core.Debug(f_popup, "OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
 			return;
@@ -272,15 +327,17 @@ var __static = {
 		// Si la target n'est pas dans une popup on ferme !
 		
 		var found=f_popup._IsChildOfDocument(evt.target);
-		f_core.Debug("f_popup", "OnMouseDown search parent="+found);
+		f_core.Debug(f_popup, "OnMouseDown search parent="+found);
 
 		if (found) {
 			return true;
 		}
 	
-		f_core.Debug("f_popup", "OnMouseDown outside: close the popup !");
-		f_popup.Callbacks.exit.call(f_popup.Component, evt);
+		f_core.Debug(f_popup, "OnMouseDown outside: close the popup !");
+		var clb=f_popup.Callbacks;
 		f_popup.Callbacks=undefined;
+		
+		clb.exit.call(f_popup.Component, evt);		
 		
 		return true;
 	},
@@ -290,11 +347,11 @@ var __static = {
 	_IsChildOfDocument: function(target) {
 		var popupDocument=f_popup.Popup;
 		
-		//f_core.Debug("f_popup", "Search parent target='"+target+"' document='"+popupDocument+"'.");
+		//f_core.Debug(f_popup, "Search parent target='"+target+"' document='"+popupDocument+"'.");
 		
 		for(;target;target=target.parentNode) {
 		
-			// f_core.Debug("f_popup", "Test child '"+target+"' popupParent='"+target._popupParent+"'");
+			// f_core.Debug(f_popup, "Test child '"+target+"' popupParent='"+target._popupParent+"'");
 		
 			if (target==popupDocument) {
 				return true;
@@ -311,7 +368,7 @@ var __static = {
 	 * @method private static
 	 */
 	_OnClick: function(evt) {	
-		f_core.Debug("f_popup", "OnClick on "+this+" target="+evt.target+"/"+evt.target.className);
+		f_core.Debug(f_popup, "OnClick on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
 			return;
@@ -327,7 +384,7 @@ var __static = {
 	 * @method private static
 	 */
 	_OnBlur: function(evt) {	
-		f_core.Debug("f_popup", "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
+		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
 
 /*
 		if (!f_popup.Component) {
@@ -346,14 +403,14 @@ var __static = {
 	 * @method private static
 	 */
 	_OnFocus: function(evt) {	
-		f_core.Debug("f_popup", "OnFocus on "+this+" target="+evt.target+"/"+evt.target.className);
+		f_core.Debug(f_popup, "OnFocus on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
 			return;
 		}
 		
 		var found=f_popup._IsChildOfDocument(evt.target);
-		f_core.Debug("f_popup", "OnFocus search parent="+found);
+		f_core.Debug(f_popup, "OnFocus search parent="+found);
 
 		if (found) {
 			return true;
@@ -378,13 +435,13 @@ var __static = {
 	
 		var component=f_popup.Component;
 		if (!component) {
-			f_core.Debug("f_popup", "OnKeyDown["+evt.keyCode+"] on "+this+" no component");
+			f_core.Debug(f_popup, "OnKeyDown["+evt.keyCode+"] on "+this+" no component");
 
 			return true;
 		}
 	
 		var target=evt.target;
-		f_core.Debug("f_popup", "OnKeyDown["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
+		f_core.Debug(f_popup, "OnKeyDown["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
 		if (evt.altKey) { // ?
@@ -423,13 +480,13 @@ var __static = {
 	_OnKeyUp: function(evt) {	
 		var component=f_popup.Component;
 		if (!component) {
-			f_core.Debug("f_popup", "OnKeyUp["+evt.keyCode+"] on "+this+" no component");
+			f_core.Debug(f_popup, "OnKeyUp["+evt.keyCode+"] on "+this+" no component");
 
 			return true;
 		}
 	
 		var target=evt.target;
-		f_core.Debug("f_popup", "OnKeyUp["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
+		f_core.Debug(f_popup, "OnKeyUp["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
 		try {
@@ -451,13 +508,13 @@ var __static = {
 	_OnKeyPress: function(evt) {	
 		var component=f_popup.Component;
 		if (!component) {
-			f_core.Debug("f_popup", "OnKeyPress["+evt.keyCode+"] on "+this+" no component");
+			f_core.Debug(f_popup, "OnKeyPress["+evt.keyCode+"] on "+this+" no component");
 
 			return true;
 		}
 	
 		var target=evt.target;
-		f_core.Debug("f_popup", "OnKeyPress["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
+		f_core.Debug(f_popup, "OnKeyPress["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
 		try {
@@ -513,27 +570,71 @@ var __static = {
 	},
 	/* ******************************************************************* */
 	/* Popup IE */
-	Ie_openPopup: function(popup, component, componentPosition, popupX, popupY, popupWidth) {
+	Ie_openPopup: function(popup, positionInfos) {
 		var popupDocument=popup.document;
 	
-		popupDocument._component=component;
 		popupDocument.hideFocus=true;
 
 		var pbody=popupDocument.body;
 		pbody.onunload=f_popup._Ie_unload;
 //		pbody.onblur=f_popup._Ie_unload;
-		
+
+
+		var firstChild=pbody.firstChild;
+				
 		popup.show(0, 0, 0, 0);
-		var popupW = pbody.firstChild.offsetWidth;
-		var popupH = pbody.firstChild.offsetHeight;
+		
+		var popupX = 0;
+		var popupY = 0;
+		var popupW = firstChild.offsetWidth;
+		var popupH = firstChild.offsetHeight;
+		var popupComponent=positionInfos.component;
+	
+		switch(positionInfos.position) {
+		case f_popup.LEFT_COMPONENT:
+			popupX=popupComponent.offsetWidth;
+			break;
+
+		case f_popup.BOTTOM_COMPONENT:
+			popupY=popupComponent.offsetHeight;
+			break;
+
+		case f_popup.BOTTOM_LEFT_COMPONENT:
+			popupX=popupComponent.offsetWidth;
+			popupY=popupComponent.offsetHeight;
+			break;
+
+		case f_popup.MIDDLE_COMPONENT:
+			popupX=popupComponent.offsetWidth/2;
+			popupY=popupComponent.offsetHeight/2;
+			break;
 			
-		if (popupWidth) {
-			popupW=popupWidth;
+		case f_popup.MOUSE_POSITION:
+			var jsEvent=positionInfos.jsEvent;
+			
+			// Calcule la position de la souris 
+			var eventPos=f_core.GetEventPosition(jsEvent);
+			
+			popupComponent=jsEvent.srcElement.ownerDocument.body;
+			popupX=eventPos.x; //-cursorPos.x;
+			popupY=eventPos.y; //-cursorPos.y;
+
+			break;
 		}
 
-		f_core.Debug(f_popup, "Open popup '"+popup.id+"' for component '"+component.id+"', popup x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" componentPosition="+componentPosition.id+"/"+componentPosition.tagName);
+		if (popupComponent) {
+			f_core.Debug(f_popup, "Open popup x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" componentPosition="+popupComponent.id+"/"+popupComponent.tagName);
+		}
+		
+		popup.show(popupX, popupY, popupW, popupH, popupComponent);		
 
-		popup.show(popupX, popupY, popupW, popupH, componentPosition);		
+
+		var seps=popupDocument.getElementsByTagName("LI");
+		// Il faut motiver les composants ?????
+		// Merci IE .... au moins il y a une solution !
+		for(var i=0;i<seps.length;i++) {
+			seps[i].style.visibility="inherit";
+		}
 	},
 	/**
 	 * @method private static
@@ -542,15 +643,13 @@ var __static = {
 		var doc=this.document;
 		var body=doc.body;
 
-		var component=doc._component;
-		doc._component=undefined;
-		
 		body.onunload=null;
 				
-		f_core.Debug(f_popup, "Unload popup '"+this.id+"' for component '"+component.id+"'.");		
-			
-		if (f_popup.Callbacks) {
-			f_popup.Callbacks.exit.call(f_popup.Component, evt);
+		f_core.Debug(f_popup, "Unload popup '"+this.id+"'.");		
+		
+		var cbs=f_popup.Callbacks;
+		if (cbs) {
+			cbs.exit.call(f_popup.Component, evt);
 			f_popup.Callbacks=undefined;
 		}
 	},
@@ -559,8 +658,127 @@ var __static = {
 			return;
 		}
 
+		f_core.Debug(f_popup, "Close popup '"+popup.id+"'.");		
+
 		popup.hide();
-	}	
+	},
+	Ie_releasePopup: function(popup) {
+		var body=popup.document.body;
+		for(;body.firstChild;) {
+			body.removeChild(body.firstChild);
+		}
+	},
+	Gecko_closePopup: function(popup) {
+		popup.style.visibility="hidden";
+	},
+	Gecko_releasePopup: function(popup) {
+		popup.parentNode.removeChild(popup);
+	},
+	/**
+	 * @method hidden static 
+	 * @param Object positionsInfos
+	 * @param Event jsEvt
+	 * @return Object
+	 */
+	Gecko_openPopup: function(popup, positionInfos) {
+		f_core.Assert(typeof(popup)=="object", "Invalid popup parameter '"+popup+"'.");
+		f_core.Assert(typeof(positionInfos)=="object", "Invalid positionInfos parameter '"+positionInfos+"'.");
+		f_core.Assert(typeof(positionInfos.position)=="number", "Invalid positionInfos.position parameter '"+positionInfos.position+"'.");
+		
+		var component=positionInfos.component;	
+		var offsetX=0;
+		var offsetY=0;
+		var offsetWidth;
+
+		if (component) {
+			var absPos=f_core.GetAbsolutePosition(component);
+			offsetX=absPos.x;
+			offsetY=absPos.y;
+		}
+		
+		switch(positionInfos.position) {
+		case f_popup.BOTTOM_COMPONENT:
+			offsetY+=component.offsetHeight;
+			break;
+
+		case f_popup.LEFT_COMPONENT:
+			offsetX+=component.offsetWidth;
+			break;
+
+		case f_popup.BOTTOM_LEFT_COMPONENT:
+			offsetX+=component.offsetWidth;
+			offsetY+=component.offsetHeight;
+			break;
+
+		case f_popup.MIDDLE_COMPONENT:
+			offsetX+=component.offsetWidth/2;
+			offsetY+=component.offsetHeight/2;
+			break;
+			
+		case f_popup.MOUSE_POSITION:
+			var jsEvent=positionInfos.jsEvent;
+			
+			// Calcule la position de la souris 
+			var eventPos=f_core.GetEventPosition(jsEvent);
+			var cursorPos=f_core.GetAbsolutePosition(popup);
+			
+			offsetX=eventPos.x-cursorPos.x;
+			offsetY=eventPos.y-cursorPos.y;
+
+			f_core.Debug(f_popup, "Gecko_openPopup (mouse position) X="+offsetX+" Y="+offsetY+" eventX="+eventPos.x+" eventY="+eventPos.y+" cursorPosX="+cursorPos.x+" cursorPosY="+cursorPos.y);
+			
+			break;
+		}
+		
+		if (component) {
+			f_core.Debug(f_popup, "Gecko_openPopup: X="+offsetX+" Y="+offsetY+" cx="+component.offsetLeft+" cy="+component.offsetTop+" cw="+component.offsetWidth+" ch="+component.offsetHeight);
+		}
+		
+		if (positionInfos.deltaX) {
+			offsetX+=positionInfos.deltaX;
+		}
+		
+		if (positionInfos.deltaY) {
+			offsetY+=positionInfos.deltaY;
+		}
+		
+		if (positionInfos.deltaWidth) {
+			offsetWidth+=positionInfos.deltaWidth;
+		}
+		
+		if (positionInfos.deltaHeight) {
+			offsetHeight+=positionInfos.deltaHeight;
+		}
+				
+		offsetX+=2; // Border par défaut !
+		
+		var pos={ x: offsetX, y: offsetY };
+		
+		f_core.ComputePopupPosition(popup, pos);
+
+		var menu=popup._item._menu;
+		var parentPopup=menu.f_getUIPopup(popup._item);		
+		
+		var popupStyle=popup.style;
+		if (!popupStyle.zIndex && parentPopup) {
+			var zbuf=parentPopup.style.zIndex;
+			var ppop=0;
+			
+			if (!zbuf) {
+				ppop=1000;
+				
+			} else {
+				ppop=parseInt(zbuf, 10);
+			}
+			
+			popupStyle.zIndex=String(ppop+1);
+		}
+
+		popupStyle.left=pos.x+"px";
+		popupStyle.top=pos.y+"px";
+	
+		popupStyle.visibility="inherit";
+	}
 }
 
 var f_popup=new f_class("f_popup", null, __static);

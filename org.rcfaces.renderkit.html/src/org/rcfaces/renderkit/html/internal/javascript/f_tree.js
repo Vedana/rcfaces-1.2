@@ -115,7 +115,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = window.event;
+			evt=f_core.IeGetEvent(this);
 		}
 	
 		var node=li._node;
@@ -134,7 +134,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = window.event;
+			evt=f_core.IeGetEvent(this);
 		}
 
 		if (!tree._focus) {
@@ -145,12 +145,12 @@ var __static = {
 		
 		tree._moveCursor(li, true, evt, selection);
 					
-		if (f_core.IsPopupButton(evt)) {		
+		if (f_core.IsPopupButton(evt) && !tree.fa_isElementDisabled(li)) {		
 			var menu=tree.f_getSubMenuById(f_tree._NODE_MENU_ID);
 			if (menu) {
-				menu.f_open(this, {
-					position: f_menu.MOUSE_POSITION
-					}, tree, evt);
+				menu.f_open(evt, {
+					position: f_popup.MOUSE_POSITION
+				});
 			}
 		}
 
@@ -165,7 +165,7 @@ var __static = {
 		if (tree.f_getEventLocked()) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+		if (!evt) evt=f_core.IeGetEvent(this);
 
 		if (tree.f_isDisabled()) {
 			return f_core.CancelEvent(evt);
@@ -179,15 +179,17 @@ var __static = {
 		var menuId=f_tree._BODY_MENU_ID;
 		
 		// S'il y a une seule selection, on bascule en popup de ligne !
-		if (tree._currentSelection.length>0) {
+		/* finalement non, car sous File explorer ce n'est pas le cas !  (c'est le cas d'Eclipse)
+		if (tree._currentSelection.length) {
 			menuId=f_tree._NODE_MENU_ID;	
 		}
+		*/
 		
 		var menu=tree.f_getSubMenuById(menuId);
 		if (menu) {
-			menu.f_open(this, {
-				position: f_menu.MOUSE_POSITION
-				}, tree, evt);
+			menu.f_open(evt, {
+				position: f_popup.MOUSE_POSITION
+			});
 		}
 			
 		return f_core.CancelEvent(evt);
@@ -202,7 +204,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = window.event;
+			evt=f_core.IeGetEvent(this);
 		}
 		
 		var node=li._node;
@@ -230,7 +232,9 @@ var __static = {
 		if (tree.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt=f_core.IeGetEvent(this);
+		 }
 		
 		tree.f_setFocus();
 	},
@@ -242,7 +246,9 @@ var __static = {
 		if (tree.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt=f_core.IeGetEvent(this);
+		}		
 
 		if (tree._focus) {
 			return true;
@@ -283,8 +289,10 @@ var __static = {
 		// return false;
 		//}
 		
-		if (!evt) evt = window.event;
-
+		if (!evt) {
+			evt=f_core.IeGetEvent(this);
+		}
+		
 		if (!tree._focus) {
 			return true;
 		}
@@ -311,8 +319,10 @@ var __static = {
 		if (tree.f_getEventLocked(true)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
-
+		if (!evt) {
+			evt=f_core.IeGetEvent(this);
+		}
+		
 		if (!tree._focus) {
 			return true;
 		}
@@ -327,7 +337,10 @@ var __static = {
 		if (tree.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt=f_core.IeGetEvent(this);
+		}
 
 		if (!tree._focus) {
 			return true;
@@ -343,7 +356,10 @@ var __static = {
 		if (tree.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt=f_core.IeGetEvent(this);
+		}
 
 		if (!tree._focus) {
 			return true;
@@ -361,7 +377,9 @@ var __static = {
 			return false;
 		}
 
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt=f_core.IeGetEvent(this);
+		}
 
 		evt.cancelBubble = true;
 
@@ -1551,6 +1569,11 @@ var __prototype = {
 			f_imageRepository.PrepareImage(imageURL);
 		}
 	},
+	/**
+	 * @method private
+	 * @param f_event cevt
+	 * @return boolean
+	 */
 	_performKeyDown: function(cevt) {
 		var evt=cevt.f_getJsEvent();
 	
@@ -1663,15 +1686,16 @@ var __prototype = {
 	},
 	_openContextMenu: function(evt) {
 		var cursorLi=this._cursor;
-		if (!cursorLi) {
+		if (!cursorLi && !tree.fa_isElementDisabled(cursorLi)) {
 			return;
 		}
 		
 		var menu=this.f_getSubMenuById(f_tree._NODE_MENU_ID);
 		if (menu) {
-			menu.f_open(cursorLi._span, {
-				position: f_menu.MIDDLE_COMPONENT
-				}, this, evt);
+			menu.f_open(evt, {
+				component: cursorLi._span,
+				position: f_popup.MIDDLE_COMPONENT
+			});
 		}
 	},
 	_nextTreeNode: function(evt, selection) {	

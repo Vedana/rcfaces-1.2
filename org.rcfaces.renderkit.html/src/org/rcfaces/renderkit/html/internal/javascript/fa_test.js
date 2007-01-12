@@ -14,7 +14,7 @@ var __prototype = {
 		after: function() {
 			alert("AFTER dest !");
 		}
-	},
+	}
 }
 
 var __abstract = [

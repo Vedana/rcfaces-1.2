@@ -111,7 +111,7 @@ public class CameliaComponentHandler extends ComponentHandler {
                 ListenersTools.CLOSE_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("doubleClickListener",
                 new ListenerAttributeMetaData(
-                        ListenersTools.SELECTION_LISTENER_TYPE));
+                        ListenersTools.DOUBLE_CLICK_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("focusListener", new ListenerAttributeMetaData(
                 ListenersTools.FOCUS_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("initListener", new ListenerAttributeMetaData(

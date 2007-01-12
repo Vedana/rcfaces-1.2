@@ -1,5 +1,5 @@
 /*
- * $Id: f_dataGrid.css,v 1.3 2006/10/04 12:31:42 oeuillot Exp $
+ * $Id: f_dataGrid.css,v 1.4 2007/01/05 17:09:59 oeuillot Exp $
  */
 
 /**
@@ -7,7 +7,7 @@
  * @class f_dataGrid
  *
  * @author Olivier Oeuillot (latest modification by $Author: oeuillot $)
- * @version $Revision: 1.3 $ $Date: 2006/10/04 12:31:42 $ 
+ * @version $Revision: 1.4 $ $Date: 2007/01/05 17:09:59 $ 
  */
  
 .f_dataGrid {
@@ -16,19 +16,17 @@
 	margin: 0;
 	padding: 0;	
 	line-height: 18px;
-	font-size: 1pt;
 	text-align: left;
 	-moz-user-select: none;
 	user-select: none;
 	background-color: white;
  	position: relative;
 	vertical-align: baseline;
-	text-align: left;
 	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
 }
 
 .f_dataGrid_disabled {
- 	border: 1px solid #BBB;		
+ 	border: 1px solid #BBB;
 }
 
 .f_dataGrid_table {
@@ -194,7 +192,6 @@
 .f_dataGrid_row_selected,
 .f_dataGrid_row_selected {
 	cursor: pointer;
-	cursor: hand;
 }
 
 .f_dataGrid_focus {
@@ -210,7 +207,6 @@
 
 .f_dataGrid_input {
 	cursor: pointer;
-	cursor: hand;
 	vertical-align: middle;
 	-moz-user-focus: ignore;
 	width: 16px;

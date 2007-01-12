@@ -44,6 +44,14 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
         return new HelpButtonDecorator((IImageButtonFamilly) component);
     }
 
+    protected int getDefaultHelpImageWidth() {
+        return 15;
+    }
+
+    protected int getDefaultHelpImageHeight() {
+        return 15;
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -75,6 +83,24 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
                 if (forId != null) {
                     writer.writeAttribute("v:for", forId);
                 }
+            }
+        }
+
+        protected void writeImageSrc(IHtmlWriter writer, String imageSrc)
+                throws WriterException {
+            if (imageSrc != null) {
+                writer.writeSrc(imageSrc);
+                return;
+            }
+
+            int width = getDefaultHelpImageWidth();
+            if (width > 0) {
+                writer.writeAttribute("width", width);
+            }
+            
+            int height = getDefaultHelpImageHeight();
+            if (height > 0) {
+                writer.writeAttribute("height", height);
             }
         }
 

@@ -95,6 +95,10 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemToolTip: function(item, message) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		item.title=message;
 
 		if (!this.fa_componentUpdated) {
@@ -109,6 +113,10 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getItemToolTip: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		return item.title;
 	},
 	/**
@@ -118,6 +126,10 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemImageURL: function(item, imageURL) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		item._imageURL=imageURL;
 
 		if (imageURL) {
@@ -136,6 +148,10 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getItemImageURL: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		return item._imageURL;
 	},
 	/**
@@ -145,6 +161,10 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemDisabledImageURL: function(item, imageURL) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		item._disabledImageURL=imageURL;
 
 		if (imageURL) {
@@ -163,6 +183,10 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getItemDisabledImageURL: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		return item._disabledImageURL;
 	},
 	/**
@@ -172,6 +196,10 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemHoverImageURL: function(item, imageURL) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		item._hoverImageURL=imageURL;
 
 		if (imageURL) {
@@ -190,6 +218,10 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getItemHoverImageURL: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		return item._hoverImageURL;
 	},
 	/**
@@ -199,6 +231,10 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemSelectedImageURL: function(item, imageURL) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		item._selectedImageURL=imageURL;
 
 		if (imageURL) {
@@ -217,6 +253,10 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getItemSelectedImageURL: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		return item._selectedImageURL;
 	},
 	/**
@@ -225,11 +265,9 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_isItemDisabled: function(item) {		
-		if (typeof(item)=="string") {
-			item=this.f_getItemByValue(item);
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
 		}
-
-		f_core.Assert(item, "Item parameter must be defined !");
 
 		return (item._disabled)?true:false;
 	},
@@ -242,17 +280,17 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemDisabled: function(item, disabled) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		if (disabled===undefined) {
 			disabled=true;
+			
 		} else {
 			disabled=(disabled)?true:false;
 		}
 		
-		if (typeof(item)=="string") {
-			item=this.f_getItemByValue(item);
-		}
-		
-		f_core.Assert(item, "Item parameter must be defined !");
 		var old=(item._disabled)?true:false;
 		item._disabled=(disabled)?true:false;
 		
@@ -301,11 +339,9 @@ var __prototype = {
 	 * @return boolean The visibility state of the item.
 	 */
 	f_isItemVisible: function(item) {
-		if (typeof(item)=="string") {
-			item=this.f_getItemByValue(item);
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
 		}
-		
-		f_core.Assert(item, "Item parameter must be defined !");
 		
 		return (item._visible===false)?false:true;
 	},
@@ -318,18 +354,16 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemVisible: function(item, visible) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+		
 		if (visible===undefined) {
 			visible=true;
 			
 		} else {
 			visible=(visible===false)?false:true;
 		}
-
-		if (typeof(item)=="string") {
-			item=this.f_getItemByValue(item);
-		}
-		
-		f_core.Assert(item, "Item parameter must be defined !");
 		
 		var old=(item._visible===false)?false:true;
 		item._visible=visible;
@@ -354,11 +388,9 @@ var __prototype = {
 	 * @return boolean The check state.
 	 */
 	f_isItemChecked: function(item) {
-		if (typeof(item)=="string") {
-			item=this.f_getItemByValue(item);
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
 		}
-		
-		f_core.Assert(item, "Item parameter must be defined !");
 		
 		return (item._checked)?true:false;
 	},
@@ -369,6 +401,10 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemChecked: function(item, checked) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		if (checked===undefined) {
 			checked=true;
 			
@@ -376,12 +412,6 @@ var __prototype = {
 			checked=(checked)?true:false;
 		}
 
-		if (typeof(item)=="string") {
-			item=this.f_getItemByValue(item);
-		}
-		
-		f_core.Assert(item, "Item parameter must be defined !");
-		
 		if (item._groupName && checked) {
 			var selected=this.f_getCheckedItemInGroup(item);
 			if (selected && this.f_isItemChecked(selected)) {
@@ -433,19 +463,30 @@ var __prototype = {
 	 * 
 	 * @method public
 	 * @param String value Value of an item.
+	 * @param hidden boolean assertIfNotFound 
 	 * @return Object Item associated with the value.
 	 */
-	f_getItemByValue: function(value) {
+	f_getItemByValue: function(value, assertIfNotFound) {
 		f_core.Assert(typeof(value)=="string", "Value parameter must be a string.");
 		
 		var itemValues=this._itemByValues;
 		if (!itemValues) {
+			if (assertIfNotFound) {
+				f_core.Assert(item, "fa_items.f_getItemByValue: Item parameter must be defined !");
+			}
 			return null;
 		}
 			
 		var item=itemValues[value];
+		if (item) {
+			return item;
+		}
 		
-		return (item)?item:null;
+		if (assertIfNotFound) {
+			f_core.Assert(item, "fa_items.f_getItemByValue: Item parameter must be defined !");
+		}
+		
+		return null;
 	},
 	/**
 	 * @method public
@@ -461,6 +502,10 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getItemAccessKey: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		return item._accessKey;
 	},
 	/**
@@ -477,6 +522,10 @@ var __prototype = {
 	 * @return String Group name
 	 */
 	f_getItemGroupName: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		return item._groupName;
 	},
 	/**
@@ -488,6 +537,10 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemGroupName: function(item, groupName) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
 		this.f_changeGroup(item._groupName, groupName, item);
 		item._groupName = groupName;
 	},
@@ -522,16 +575,64 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
+	 * @return Object[]
+	 */
+	f_listVisibleItemChildren: function(item) {
+		f_core.Assert(typeof(item)=="object", "fa_items.f_listItemChildren: Invalid item object. ("+item+")");
+
+		var array=new Array;
+
+		var items=item._items;
+		if (!items || !items.length) {
+			return array;
+		}
+		
+		for(var i=0;i<items.length;i++) {
+			var item=items[i];
+			if (!this.f_isItemVisible(item)) {
+				continue;
+			}
+			
+			array.push(item);
+		}
+		
+		return array;
+	},
+	/**
+	 * @method public
+	 * @param Object item
 	 * @return boolean
 	 */
 	f_hasItemChildren: function(item) {
 		f_core.Assert(typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");
 
-		if (!item._items || !item._items.length) {
+		var items=item._items;
+		if (!items || !items.length) {
 			return false;
 		}
 		
 		return true;
+	},
+	/**
+	 * @method public
+	 * @param Object item
+	 * @return boolean
+	 */
+	f_hasVisibleItemChildren: function(item) {
+		f_core.Assert(typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");
+
+		var items=item._items;
+		if (!items || !items.length) {
+			return false;
+		}
+		
+		for(var i=0;i<items.length;i++) {
+			if (this.f_isItemVisible(items[i])) {
+				return true;
+			}
+		}
+		
+		return false;
 	},
 	/**
 	 * @method abstract protected

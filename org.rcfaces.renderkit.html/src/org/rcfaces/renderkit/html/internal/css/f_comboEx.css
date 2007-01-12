@@ -69,7 +69,6 @@ UL.f_comboEx_popup_image, UL.f_comboEx_popup_image_scroll {
 	padding: 0;
 	list-style-type: none;
 	cursor: pointer;
-	cursor: hand;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 8pt;
 }
@@ -102,14 +101,13 @@ LI.f_comboEx_item_hover, LI.f_comboEx_item_image_hover {
 	color: white;	
 }
 
-SPAN.f_comboEx_item_text {
+.f_comboEx_item_text {
 	display: inline;
 	padding-left: 6px;
 	vertical-align: middle;
 	cursor: pointer;
-	cursor: hand;
 }
 
-IMG.f_comboEx_item_image {
+.f_comboEx_item_image {
 	padding-left: 2px;
 }

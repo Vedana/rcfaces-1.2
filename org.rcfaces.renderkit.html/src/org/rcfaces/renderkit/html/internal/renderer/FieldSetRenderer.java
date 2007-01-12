@@ -130,7 +130,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
                 }
             }
 
-            String hs = computeSize(height, -1, delta);
+            String hs = computeSizeInPixel(height, -1, delta);
             if (hs != null) {
                 htmlWriter.writeStyle(32).writeHeight(hs).writeOverflow(
                         "hidden");

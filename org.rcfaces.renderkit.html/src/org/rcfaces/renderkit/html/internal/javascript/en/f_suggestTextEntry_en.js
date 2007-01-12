@@ -8,6 +8,6 @@
  */
  
 var __resources = {
-	MORE_RELEVANT_RESULTS: "-- There is more relevant results -- ",
+	MORE_RELEVANT_RESULTS: "-- There is more relevant results -- "
 }
 f_resourceBundle.Define(f_suggestTextEntry, __resources);

@@ -199,10 +199,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             String classSuffix = null;
             if (disabled) {
-                classSuffix = getComponentClassName()+"_disabled";
+                classSuffix = getComponentClassName() + "_disabled";
 
             } else if (selected) {
-                classSuffix = getComponentClassName()+"_selected";
+                classSuffix = getComponentClassName() + "_selected";
             }
 
             writeAttributes(classSuffix);
@@ -283,13 +283,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             if (htmlBorderWriter == null && mainComponent.equals("INPUT")) {
                 writer.writeType("image");
 
-                if (imageSrc == null) {
-                    imageSrc = computeBlankImageURL();
-                }
-
-                if (imageSrc != null) {
-                    writer.writeSrc(imageSrc);
-                }
+                writeImageSrc(writer, imageSrc);
                 writer.writeAlign("baseline");
 
                 writeImageAttributes(writer, imageButtonFamilly);
@@ -354,6 +348,19 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         }
 
         super.encodeContainerEnd(writer, renderer);
+    }
+
+    protected void writeImageSrc(IHtmlWriter writer, String imageSrc)
+            throws WriterException {
+        if (imageSrc == null) {
+            imageSrc = computeBlankImageURL();
+
+            if (imageSrc == null) {
+                return;
+            }
+        }
+
+        writer.writeSrc(imageSrc);
     }
 
     protected boolean isSelected(ISelectedCapability imageButtonFamilly) {
@@ -514,17 +521,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             throws WriterException;
 
     protected void writeImage() throws WriterException {
-        String url = imageSrc;
-        if (url == null) {
-            url = computeBlankImageURL();
-        }
-
         writer.startElement("INPUT");
         writer.writeType("image");
 
         writer.writeClass(getImageClassName(htmlBorderWriter));
 
-        writer.writeSrc(url);
+        writeImageSrc(writer, imageSrc);
         // writer.writeAttribute("align", "baseline");
 
         if (textPosition == IHorizontalTextPositionCapability.LEFT_POSITION

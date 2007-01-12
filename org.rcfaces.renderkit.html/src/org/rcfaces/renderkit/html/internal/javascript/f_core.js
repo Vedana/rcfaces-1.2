@@ -2164,27 +2164,29 @@ var f_core = {
 	 * Returns absolute position.
 	 *
 	 * @method hidden static
-	 * @param HTMLElement obj
+	 * @param HTMLElement component
 	 * @return Object 
 	 */
-	GetAbsolutePosition: function(obj) {
+	GetAbsolutePosition: function(component) {
+		f_core.Assert(component && component.nodeType==1, "Invalid component parameter '"+component+"'.");
+
 		var curTop = 0;
 		var curLeft= 0;
 		
-	//	f_core.Debug(f_core, "Get absolutePos of '"+obj.id+"'.");
-		if (obj.offsetParent) {
-			for (;obj.offsetParent;obj = obj.offsetParent) {
-				curTop += obj.offsetTop;
-				curLeft += obj.offsetLeft;
+	//	f_core.Debug(f_core, "Get absolutePos of '"+component.id+"'.");
+		if (component.offsetParent) {
+			for (;component.offsetParent;component = component.offsetParent) {
+				curTop += component.offsetTop;
+				curLeft += component.offsetLeft;
 
-		//		f_core.Debug(f_core, " Sub absolutePos of '"+obj.id+"' x="+obj.offsetLeft+" y="+obj.offsetTop+"  totX="+curLeft+" totY="+curTop);
+		//		f_core.Debug(f_core, " Sub absolutePos of '"+component.id+"' x="+component.offsetLeft+" y="+component.offsetTop+"  totX="+curLeft+" totY="+curTop);
 			}
 		} else {
-			if (obj.x) {
-				curLeft+=obj.x;
+			if (component.x) {
+				curLeft+=component.x;
 			}
-			if (obj.y) {
-				curTop += obj.y;
+			if (component.y) {
+				curTop += component.y;
 			}
 		}
 		
@@ -2411,6 +2413,10 @@ var f_core = {
 			return false;
 		}
 	
+		if (!evt) {
+			evt=f_core.IeGetEvent(this);
+		}
+	
 		return f_core.CancelEvent(evt);
 	},
 	/**
@@ -2512,8 +2518,26 @@ var f_core = {
 	 * @return number[]
 	 */
 	GetEventPosition: function(event, doc) {
+		f_core.Assert(event && event.type, "Invalid event parameter '"+event+"'.");
+	
 		if (!doc) {
-			doc=document;
+			var target=event.relatedTarget;
+			if (!target) {
+				target=event.scrElement;
+			}
+			if (target) {
+				if (target.nodeType==9) {
+					doc=target;
+					
+				} else if (target.nodeType==1) {
+					doc=target.ownerDocument;
+	//				alert("Get doc: "+doc);
+				}
+			}
+			
+			if (!doc) {
+				doc=document;
+			}
 		} 
  		if (f_core.IsInternetExplorer()) {
 			return { 
@@ -2537,6 +2561,9 @@ var f_core = {
 	 * @return boolean
 	 */
 	IsComponentInside: function(component, event) {			
+		f_core.Assert(component && component.nodeType==1, "Invalid component parameter '"+component+"'.");
+		f_core.Assert(event && event.type, "Invalid event parameter '"+event+"'.");
+	
 		var p=f_core.GetAbsolutePosition(component);
 	
 		if (event.clientX<p.x || 

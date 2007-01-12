@@ -126,9 +126,9 @@ var __static = {
 		if (sub && this._selected) {
 			var menu=dataGrid.f_getSubMenuById(f_dataGrid._ROW_MENU_ID);
 			if (menu) {
-				menu.f_open(this, {
-					position: f_menu.MOUSE_POSITION
-					}, dataGrid, evt);
+				menu.f_open(evt, {
+					position: f_popup.MOUSE_POSITION
+				});
 			}
 		}
 			
@@ -193,9 +193,9 @@ var __static = {
 		
 		var menu=dataGrid.f_getSubMenuById(menuId);
 		if (menu) {
-			menu.f_open(this, {
-				position: f_menu.MOUSE_POSITION
-				}, dataGrid, evt);
+			menu.f_open(evt, {
+				position: f_popup.MOUSE_POSITION
+			});
 		}
 			
 		return f_core.CancelEvent(evt);
@@ -659,9 +659,9 @@ var __static = {
 			var menu=dataGrid.f_getSubMenuById(f_dataGrid._HEAD_MENU_ID);
 			
 				if (menu) {
-				menu.f_open(this, {
-					position: f_menu.MOUSE_POSITION
-					}, dataGrid, evt);
+				menu.f_open(evt, {
+					position: f_popup.MOUSE_POSITION
+				});
 			}
 			return f_core.CancelEvent(evt);
 		}
@@ -3317,7 +3317,7 @@ var __prototype = {
 		var menu=this.f_getSubMenuById(f_dataGrid._ROW_MENU_ID);
 		if (menu) {
 			menu.f_open(this._cursor, {
-				position: f_menu.MIDDLE_COMPONENT
+				position: f_popup.MIDDLE_COMPONENT
 				}, this, evt);
 		}
 	},

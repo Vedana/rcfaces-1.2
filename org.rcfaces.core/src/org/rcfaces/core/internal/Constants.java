@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.internal;
 
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
@@ -118,6 +119,8 @@ public class Constants {
 
     public static final boolean ADAPT_SELECT_ITEMS = true;
 
+    public static final Locale REPOSITORY_DEFAULT_LOCALE = Locale.ENGLISH;
+
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
                 + READ_ONLY_COLLECTION_LOCK_ENABLED);
@@ -159,6 +162,8 @@ public class Constants {
 
         LOG.info("VERSIONED_URI_HASHCODE_MAX_SIZE="
                 + VERSIONED_URI_HASHCODE_MAX_SIZE);
+
+        LOG.info("REPOSITORY_DEFAULT_LOCALE=" + REPOSITORY_DEFAULT_LOCALE);
 
         LOG.info("FACELETS_SUPPORT=" + FACELETS_SUPPORT);
 

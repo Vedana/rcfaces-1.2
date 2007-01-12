@@ -25,12 +25,14 @@ var __prototype = {
 	f_helpButton: function() {
 		this.f_super(arguments);
 
-		if (!this.src) {
+		var image=this._image;
+		if (image && !image.src) {
 			var i = f_env.Get("HELPBUTTON_IMAGE_URL");
 			if (!i) {
 				i=f_env.GetStyleSheetBase()+ f_helpButton._IMAGE;
 			}
 			f_imageRepository.PrepareImage(i);
+			image.src=i;
 			this.f_setImageURL(i);
 			
 			var h = f_env.Get("HELPBUTTON_HOVER_URL");

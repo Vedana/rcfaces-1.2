@@ -6,7 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.component.ImageButtonComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
@@ -72,18 +72,18 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             IComponentData componentData) {
         super.decode(context, component, componentData);
 
-        FacesContext facesContext = context.getFacesContext();
+        if (component instanceof ITextCapability) {
+            ITextCapability textCapability = (ITextCapability) component;
 
-        ImageButtonComponent imageButtonRenderer = (ImageButtonComponent) component;
+            String text = componentData.getStringProperty("text");
+            if (text != null) {
+                String old = textCapability.getText();
+                if (text.equals(old) == false) {
+                    textCapability.setText(text);
 
-        String text = componentData.getStringProperty("text");
-        if (text != null) {
-            String old = imageButtonRenderer.getText(facesContext);
-            if (text.equals(old) == false) {
-                imageButtonRenderer.setText(text);
-
-                component.queueEvent(new PropertyChangeEvent(component,
-                        Properties.TEXT, old, text));
+                    component.queueEvent(new PropertyChangeEvent(component,
+                            Properties.TEXT, old, text));
+                }
             }
         }
     }

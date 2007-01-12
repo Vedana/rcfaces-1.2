@@ -9,6 +9,11 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$ 
  */
+
+
+.f_imagePagerButton {
+	cursor: pointer;
+}
  
 .f_imagePagerButton_image,
 .f_imagePagerButton_text,
@@ -23,11 +28,6 @@
 	text-decoration: none;
 	text-align: left;
 	vertical-align: baseline;
-}
-
-.f_imagePagerButton {
-	cursor: pointer;
-	cursor: hand;
 }
 
 .f_imagePagerButton_disabled,

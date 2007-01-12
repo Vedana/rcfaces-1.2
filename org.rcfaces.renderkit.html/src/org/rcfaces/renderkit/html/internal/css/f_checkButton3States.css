@@ -13,19 +13,17 @@
  
 .f_checkButton3States {
 	cursor: pointer;
-	cursor: hand;
 	display: inline;
 	text-align: left;
 	vertical-align: baseline;
 }
 
-INPUT.f_checkButton3States_input {
+.f_checkButton3States_input {
 	vertical-align: middle;
 }
 
-LABEL.f_checkButton3States_text {
+.f_checkButton3States_text {
 	vertical-align: middle;
 	cursor: pointer;
-	cursor: hand;
 	padding-left: 4px;
 }

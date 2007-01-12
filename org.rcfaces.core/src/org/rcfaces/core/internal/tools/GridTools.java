@@ -36,6 +36,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.IAdaptable;
+import org.rcfaces.core.model.IDataModel;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -57,7 +58,7 @@ public class GridTools {
     private static final ISortedComponent[] SORTED_COMPONENTS_EMPTY_ARRAY = new ISortedComponent[0];
 
     private static final boolean SORT_INDICES = true;
-    
+
     public static IDataColumnIterator listColumns(DataGridComponent component) {
         List list = ComponentIterators.list(component,
                 DataColumnComponent.class);
@@ -411,6 +412,16 @@ public class GridTools {
 
                 return new ArrayDataModel(((Collection) current).toArray());
             }
+        }
+
+        if (current instanceof IDataModel) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("DataModel conversion: IDataModel value type '"
+                        + current + "' for component '" + component.getId()
+                        + ", return a DataModelWrapper.");
+            }
+
+            return new DataModelWrapper((IDataModel) current);
         }
 
         if (Constants.ADAPTABLE_DATAMODEL_SUPPORT) {
@@ -1098,5 +1109,49 @@ public class GridTools {
         throw new FacesException(
                 "Deselect index is not implemented for selectedValues="
                         + selectedValues);
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    static final class DataModelWrapper extends DataModel implements IDataModel {
+        private static final String REVISION = "$Revision$";
+
+        private final IDataModel dataModel;
+
+        public DataModelWrapper(IDataModel dataModel) {
+            this.dataModel = dataModel;
+        }
+
+        public int getRowCount() {
+            return dataModel.getRowCount();
+        }
+
+        public Object getRowData() {
+            return dataModel.getRowData();
+        }
+
+        public int getRowIndex() {
+            return dataModel.getRowIndex();
+        }
+
+        public Object getWrappedData() {
+            return dataModel.getWrappedData();
+        }
+
+        public boolean isRowAvailable() {
+            return dataModel.isRowAvailable();
+        }
+
+        public void setRowIndex(int rowIndex) {
+            dataModel.setRowIndex(rowIndex);
+        }
+
+        public void setWrappedData(Object data) {
+            dataModel.setWrappedData(data);
+        }
+
     }
 }

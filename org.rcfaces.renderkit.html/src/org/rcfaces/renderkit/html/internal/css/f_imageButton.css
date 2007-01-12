@@ -10,7 +10,11 @@
  * @version $Revision$ $Date$ 
  */
  
-.f_imageButton, 
+.f_imageButton {
+	cursor: pointer;
+}
+
+.f_imageButton,
 .f_imageButton_image,
 .f_imageButton_text {
 	border: 0;
@@ -22,11 +26,6 @@
 	text-decoration: none;
 	text-align: left;
 	vertical-align: baseline;
-}
-
-.f_imageButton {
-	cursor: pointer;
-	cursor: hand;
 	display: inline;
 }
 

@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.SpinnerComponent;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -19,6 +20,10 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 public class SpinnerRenderer extends TextEntryRenderer {
     private static final String REVISION = "$Revision$";
 
+    protected static final int SPINNER_BUTTON_WIDTH = 16;
+
+    protected static final int SPINNER_BUTTON_HEIGHT = 10;
+
     protected boolean isNameEqualsId() {
         return false;
     }
@@ -26,8 +31,12 @@ public class SpinnerRenderer extends TextEntryRenderer {
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
 
-        SpinnerComponent spinner = (SpinnerComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
+        SpinnerComponent spinner = (SpinnerComponent) componentRenderContext
+                .getComponent();
 
         htmlWriter.startElement("TABLE");
 
@@ -43,19 +52,40 @@ public class SpinnerRenderer extends TextEntryRenderer {
         writeSpinnerAttributes(htmlWriter);
 
         htmlWriter.startElement("COL");
-        htmlWriter.writeWidth("1*");
+
+        int spinnerButtonWidth = getSpinnerButtonWidth();
+
+        int inputWidth = -1;
+
+        String width = spinner.getWidth(facesContext);
+        if (width == null) {
+            htmlWriter.writeWidth("1*");
+        } else {
+            inputWidth = computeSize(width, 0, -spinnerButtonWidth);
+
+            if (inputWidth > 0) {
+                htmlWriter.writeWidth(inputWidth);
+            }
+        }
+
         htmlWriter.endElement("COL");
 
         htmlWriter.startElement("COL");
-        htmlWriter.writeWidth("16");
+        htmlWriter.writeWidth(spinnerButtonWidth);
         htmlWriter.endElement("COL");
 
         htmlWriter.startElement("TR");
         htmlWriter.writeVAlign("middle");
 
         htmlWriter.startElement("TD");
+        if (inputWidth > 0) {
+            htmlWriter.writeWidth(inputWidth);
+        }
 
         htmlWriter.startElement("INPUT");
+        if (inputWidth > 0) {
+            htmlWriter.writeStyle().writeWidth(inputWidth + "px");
+        }
         htmlWriter.writeClass(getInputClassName(htmlWriter));
         writeInputAttributes(htmlWriter);
         writeTextEntryAttributes(htmlWriter);
@@ -65,7 +95,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         htmlWriter.endElement("TD");
 
         htmlWriter.startElement("TD");
-        htmlWriter.writeWidth(16);
+        htmlWriter.writeWidth(spinnerButtonWidth);
 
         boolean disabled = spinner.isDisabled(htmlWriter
                 .getComponentRenderContext().getFacesContext());
@@ -75,18 +105,20 @@ public class SpinnerRenderer extends TextEntryRenderer {
         String blankImageURL = htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
+        int spinnerButtonHeight = getSpinnerButtonHeight();
+
         htmlWriter.startElement("IMG");
         htmlWriter.writeClass(getUpButtonClassName(htmlWriter, disabled));
         htmlWriter.writeSrc(blankImageURL);
-        htmlWriter.writeWidth(16);
-        htmlWriter.writeHeight(10);
+        htmlWriter.writeWidth(spinnerButtonWidth);
+        htmlWriter.writeHeight(spinnerButtonHeight);
         htmlWriter.endElement("IMG");
 
         htmlWriter.startElement("IMG");
         htmlWriter.writeClass(getDownButtonClassName(htmlWriter, disabled));
         htmlWriter.writeSrc(blankImageURL);
-        htmlWriter.writeWidth(16);
-        htmlWriter.writeHeight(10);
+        htmlWriter.writeWidth(spinnerButtonWidth);
+        htmlWriter.writeHeight(spinnerButtonHeight);
         htmlWriter.endElement("IMG");
 
         htmlWriter.endElement("TD");
@@ -97,6 +129,14 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         htmlWriter.enableJavaScript();
 
+    }
+
+    protected int getSpinnerButtonWidth() {
+        return SPINNER_BUTTON_WIDTH;
+    }
+
+    protected int getSpinnerButtonHeight() {
+        return SPINNER_BUTTON_HEIGHT;
     }
 
     protected String getInputClassName(IHtmlWriter htmlWriter) {

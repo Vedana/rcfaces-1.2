@@ -67,7 +67,11 @@ public class LocaleContentProvider extends FilteredContentProvider {
             idx += LOCALE_CLASS_PATTERN.length();
             int idx2 = surl.indexOf('.', idx);
 
-            surl = surl.substring(0, idx) + "xx" + surl.substring(idx2);
+            int idx3 = surl.lastIndexOf('/');
+            int idx4 = surl.lastIndexOf('/', idx3 - 1);
+
+            surl = surl.substring(0, idx4) + surl.substring(idx3, idx) + "xx"
+                    + surl.substring(idx2);
             try {
                 contentReference = new URL(surl);
 

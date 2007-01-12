@@ -54,9 +54,9 @@ var __prototype = {
 		return (d)?d:null;
 	},
 	_performMenuMouseDown: function(event) {		
-		var evt=event.f_getJsEvent();
+		var jsEvent=event.f_getJsEvent();
 		
-		var sub=f_core.IsPopupButton(evt);
+		var sub=f_core.IsPopupButton(jsEvent);
 		if (!sub) {
 			return;
 		}
@@ -68,9 +68,7 @@ var __prototype = {
 		
 		var menu=this.f_getSubMenuById(menuId);
 		if (menu) {
-			menu.f_open(this, {
-				position: f_menu.MOUSE_POSITION
-				}, this, evt);
+			menu.f_open(jsEvent);
 				
 			return event.f_preventDefault();
 		}

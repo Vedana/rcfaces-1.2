@@ -110,7 +110,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
                 classSuffix = "_disabled";
             }
         }
-        
+
         if (classSuffix == null) {
             if (component instanceof IReadOnlyCapability) {
                 if (((IReadOnlyCapability) component).isReadOnly()) {
@@ -124,7 +124,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
                 classSuffix += "_required";
             }
         }
-        
+
         return classSuffix;
     }
 
@@ -233,14 +233,24 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         return size + "px";
     }
 
-    protected static final String computeSize(String size, int parentWidth,
-            int delta) {
-        int v = getPixelSize(size, parentWidth);
-        if (v < 0) {
+    protected static final String computeSizeInPixel(String size,
+            int parentWidth, int delta) {
+        int ssize = computeSize(size, parentWidth, delta);
+        if (ssize < 0) {
             return null;
         }
 
-        return (v + delta) + "px";
+        return ssize + "px";
+    }
+
+    protected static final int computeSize(String size, int parentWidth,
+            int delta) {
+        int v = getPixelSize(size, parentWidth);
+        if (v < 0) {
+            return v;
+        }
+
+        return v + delta;
     }
 
     protected static final int getPixelSize(String size, int parentWidth) {
