@@ -3,6 +3,8 @@
  */
 package org.rcfaces.core.converter;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 /**
@@ -28,6 +30,24 @@ public class AbstractNumberConverter extends
 
     public final void setDefaultValue(Number defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    public Object getAsObject(FacesContext context, UIComponent component,
+            String value) {
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+        }
+        
+        return super.getAsObject(context, component, value);
+    }
+
+    public String getAsString(FacesContext context, UIComponent component,
+            Object value) {
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+        }
+        
+        return super.getAsString(context, component, value);
     }
 
 }

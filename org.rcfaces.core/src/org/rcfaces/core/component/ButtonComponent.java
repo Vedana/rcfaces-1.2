@@ -1,16 +1,15 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractCommandComponent;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
@@ -36,6 +35,7 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","text","readOnly"}));
 	}
+	protected static final String CAMELIA_VALUE_ALIAS="text";
 
 	public ButtonComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -136,5 +136,9 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
+	}
+
+	protected String getCameliaValueAlias() {
+		return CAMELIA_VALUE_ALIAS;
 	}
 }

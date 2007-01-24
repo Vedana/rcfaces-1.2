@@ -1,27 +1,30 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.ToolFolderComponent;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.component.UIImageItemComponent;
 
 /**
  * <b>EXPERIMENTAL</b>
  */
 public class ToolItemComponent extends UIImageItemComponent implements 
-	ISelectionEventCapability,
-	IReadOnlyCapability {
+	IRadioGroupCapability,
+	IInputTypeCapability,
+	IImageSizeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolItem";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","inputType","imageWidth","groupName"}));
 	}
 
 	public ToolItemComponent() {
@@ -33,6 +36,13 @@ public class ToolItemComponent extends UIImageItemComponent implements
 		setId(componentId);
 	}
 
+	public final void setInputType(String inputType) {
+
+
+			setInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
+		
+	}
+
 	public final ToolFolderComponent getToolFolder() {
 
 
@@ -40,38 +50,92 @@ public class ToolItemComponent extends UIImageItemComponent implements
 		
 	}
 
-	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-	}
-
-	public final boolean isReadOnly() {
-		return isReadOnly(null);
+	public final java.lang.String getGroupName() {
+		return getGroupName(null);
 	}
 
 	/**
-	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 * See {@link #getGroupName() getGroupName()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
+	public final java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
-		engine.setProperty(Properties.READ_ONLY, readOnly);
+	public final void setGroupName(java.lang.String groupName) {
+		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
 	/**
-	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 * See {@link #setGroupName(String) setGroupName(String)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
-		engine.setProperty(Properties.READ_ONLY, readOnly);
+	public final void setGroupName(ValueBinding groupName) {
+		engine.setProperty(Properties.GROUP_NAME, groupName);
+	}
+
+	public final int getInputType() {
+		return getInputType(null);
+	}
+
+	/**
+	 * See {@link #getInputType() getInputType()} for more details
+	 */
+	public final int getInputType(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.INPUT_TYPE,0, facesContext);
+	}
+
+	public final void setInputType(int inputType) {
+		engine.setProperty(Properties.INPUT_TYPE, inputType);
+	}
+
+	/**
+	 * See {@link #setInputType(int) setInputType(int)} for more details
+	 */
+	public final void setInputType(ValueBinding inputType) {
+		engine.setProperty(Properties.INPUT_TYPE, inputType);
+	}
+
+	public final int getImageHeight() {
+		return getImageHeight(null);
+	}
+
+	/**
+	 * See {@link #getImageHeight() getImageHeight()} for more details
+	 */
+	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
+	}
+
+	public final void setImageHeight(int imageHeight) {
+		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
+	}
+
+	/**
+	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
+	 */
+	public final void setImageHeight(ValueBinding imageHeight) {
+		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
+	}
+
+	public final int getImageWidth() {
+		return getImageWidth(null);
+	}
+
+	/**
+	 * See {@link #getImageWidth() getImageWidth()} for more details
+	 */
+	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
+	}
+
+	public final void setImageWidth(int imageWidth) {
+		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
+	}
+
+	/**
+	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
+	 */
+	public final void setImageWidth(ValueBinding imageWidth) {
+		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
 	protected Set getCameliaFields() {

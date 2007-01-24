@@ -1,21 +1,25 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.component.ExpandableItemComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.internal.component.Properties;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.TreeComponent;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
 
 /**
  * A node belonging to a tree.
  */
 public class TreeNodeComponent extends ExpandableItemComponent implements 
-	IRadioGroupCapability {
+	IRadioGroupCapability,
+	IInputTypeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.treeNode";
 
@@ -31,6 +35,13 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	public TreeNodeComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public final void setInputType(String inputType) {
+
+
+			setInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
+		
 	}
 
 	public final void setExpanded(boolean expanded) {
@@ -90,44 +101,26 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
-	/**
-	 * Experimental:	Returns a string value specifying the type of input to show radio button or check box.
-	 * @return radio|check
-	 */
-	public final String getInputType() {
+	public final int getInputType() {
 		return getInputType(null);
 	}
 
 	/**
-	 * Experimental:	Returns a string value specifying the type of input to show radio button or check box.
-	 * @return radio|check
+	 * See {@link #getInputType() getInputType()} for more details
 	 */
-	public final String getInputType(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.INPUT_TYPE, facesContext);
+	public final int getInputType(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.INPUT_TYPE,0, facesContext);
 	}
 
-	/**
-	 * Experimental:	Sets a string value specifying the type of input to show radio button or check box.
-	 * @param inputType radio|check
-	 */
-	public final void setInputType(String inputType) {
+	public final void setInputType(int inputType) {
 		engine.setProperty(Properties.INPUT_TYPE, inputType);
 	}
 
 	/**
-	 * Experimental:	Sets a string value specifying the type of input to show radio button or check box.
-	 * @param inputType radio|check
+	 * See {@link #setInputType(int) setInputType(int)} for more details
 	 */
 	public final void setInputType(ValueBinding inputType) {
 		engine.setProperty(Properties.INPUT_TYPE, inputType);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "inputType" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isInputTypeSetted() {
-		return engine.isPropertySetted(Properties.INPUT_TYPE);
 	}
 
 	protected Set getCameliaFields() {

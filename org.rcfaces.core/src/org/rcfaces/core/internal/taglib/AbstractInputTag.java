@@ -1,26 +1,25 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(AbstractInputTag.class);
 
-	private String height;
-	private String width;
 	private String hiddenMode;
 	private String visible;
+	private String height;
+	private String width;
 	private String mouseOutListeners;
 	private String mouseOverListeners;
 	private String helpMessage;
@@ -34,6 +33,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private String lookId;
 	private String blurListeners;
 	private String focusListeners;
+	private String errorListeners;
 	private String marginBottom;
 	private String marginLeft;
 	private String marginRight;
@@ -58,22 +58,6 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private String margins;
 	private String value;
 	private String converter;
-	public final String getHeight() {
-		return height;
-	}
-
-	public final void setHeight(String height) {
-		this.height = height;
-	}
-
-	public final String getWidth() {
-		return width;
-	}
-
-	public final void setWidth(String width) {
-		this.width = width;
-	}
-
 	public final String getHiddenMode() {
 		return hiddenMode;
 	}
@@ -88,6 +72,22 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 	public final void setVisible(String visible) {
 		this.visible = visible;
+	}
+
+	public final String getHeight() {
+		return height;
+	}
+
+	public final void setHeight(String height) {
+		this.height = height;
+	}
+
+	public final String getWidth() {
+		return width;
+	}
+
+	public final void setWidth(String width) {
+		this.width = width;
 	}
 
 	public final String getMouseOutListener() {
@@ -192,6 +192,14 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 	public final void setFocusListener(String focusListeners) {
 		this.focusListeners = focusListeners;
+	}
+
+	public final String getErrorListener() {
+		return errorListeners;
+	}
+
+	public final void setErrorListener(String errorListeners) {
+		this.errorListeners = errorListeners;
 	}
 
 	public final String getMarginBottom() {
@@ -388,10 +396,10 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("  height='"+height+"'");
-			LOG.debug("  width='"+width+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  height='"+height+"'");
+			LOG.debug("  width='"+width+"'");
 			LOG.debug("  helpMessage='"+helpMessage+"'");
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
@@ -431,26 +439,6 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (height != null) {
-			if (isValueReference(height)) {
-				ValueBinding vb = application.createValueBinding(height);
-
-				component.setHeight(vb);
-			} else {
-				component.setHeight(height);
-			}
-		}
-
-		if (width != null) {
-			if (isValueReference(width)) {
-				ValueBinding vb = application.createValueBinding(width);
-
-				component.setWidth(vb);
-			} else {
-				component.setWidth(width);
-			}
-		}
-
 		if (hiddenMode != null) {
 			if (isValueReference(hiddenMode)) {
 				ValueBinding vb = application.createValueBinding(hiddenMode);
@@ -468,6 +456,26 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 				component.setVisible(vb);
 			} else {
 				component.setVisible(getBool(visible));
+			}
+		}
+
+		if (height != null) {
+			if (isValueReference(height)) {
+				ValueBinding vb = application.createValueBinding(height);
+
+				component.setHeight(vb);
+			} else {
+				component.setHeight(height);
+			}
+		}
+
+		if (width != null) {
+			if (isValueReference(width)) {
+				ValueBinding vb = application.createValueBinding(width);
+
+				component.setWidth(vb);
+			} else {
+				component.setWidth(width);
 			}
 		}
 
@@ -575,6 +583,10 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 		if (focusListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
+		}
+
+		if (errorListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
 		}
 
 		if (marginBottom != null) {
@@ -778,10 +790,10 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
-		height = null;
-		width = null;
 		hiddenMode = null;
 		visible = null;
+		height = null;
+		width = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
 		helpMessage = null;
@@ -795,6 +807,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		lookId = null;
 		blurListeners = null;
 		focusListeners = null;
+		errorListeners = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;

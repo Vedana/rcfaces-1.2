@@ -1,28 +1,30 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.component.ValueHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IOrderCapability;
-import org.rcfaces.core.component.capability.IResizableCapability;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
-import org.rcfaces.core.component.capability.ISortEventCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaColumnComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import javax.faces.component.ValueHolder;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.IResizableCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IAlignmentCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.internal.converter.OrderConverter;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Specify a column.
@@ -38,13 +40,14 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 	IOrderCapability,
 	ISortComparatorCapability,
 	IResizableCapability,
+	IImageCapability,
 	ValueHolder {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dataColumn";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","value","maxWidth","width","toolTipText","alignment","ascending","hiddenMode","cellImageURL","foregroundColor","cellToolTipText","minWidth","styleClass","text","sortListener","resizable","verticalAlign","sortComparator","cellStyleClass","visible","backgroundColor","autoFilter"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","value","maxWidth","width","imageURL","toolTipText","alignment","ascending","hiddenMode","cellImageURL","foregroundColor","cellToolTipText","minWidth","styleClass","text","sortListener","resizable","verticalAlign","sortComparator","cellStyleClass","visible","backgroundColor","autoFilter"}));
 	}
 
 	public DataColumnComponent() {
@@ -128,6 +131,13 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 			}
 			
 			return Boolean.valueOf(isVisible(facesContext));
+		
+	}
+
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
 	}
 
@@ -418,6 +428,35 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 	 */
 	public final void setResizable(ValueBinding resizable) {
 		engine.setProperty(Properties.RESIZABLE, resizable);
+	}
+
+	public final java.lang.String getImageURL() {
+		return getImageURL(null);
+	}
+
+	/**
+	 * See {@link #getImageURL() getImageURL()} for more details
+	 */
+	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
+	}
+
+	public final void setImageURL(java.lang.String imageURL) {
+		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	/**
+	 * See {@link #setImageURL(String) setImageURL(String)} for more details
+	 */
+	public final void setImageURL(ValueBinding imageURL) {
+		engine.setProperty(Properties.IMAGE_URL, imageURL);
+	}
+
+	public final IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
+		
 	}
 
 	/**

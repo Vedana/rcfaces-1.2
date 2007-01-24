@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.AbstractBasicComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
@@ -19,6 +18,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	private String propertyChangeListeners;
 	private String userEventListeners;
+	private String errorListeners;
 	private String x;
 	private String y;
 	private String height;
@@ -51,6 +51,14 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	public final void setUserEventListener(String userEventListeners) {
 		this.userEventListeners = userEventListeners;
+	}
+
+	public final String getErrorListener() {
+		return errorListeners;
+	}
+
+	public final void setErrorListener(String errorListeners) {
+		this.errorListeners = errorListeners;
 	}
 
 	public final String getX() {
@@ -239,6 +247,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
+		if (errorListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
+		}
+
 		if (x != null) {
 			if (isValueReference(x)) {
 				ValueBinding vb = application.createValueBinding(x);
@@ -420,6 +432,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	public void release() {
 		propertyChangeListeners = null;
 		userEventListeners = null;
+		errorListeners = null;
 		x = null;
 		y = null;
 		height = null;

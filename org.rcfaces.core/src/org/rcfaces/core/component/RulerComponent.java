@@ -1,24 +1,23 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
-import org.rcfaces.core.component.capability.IOrientationCapability;
-import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
+import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IOrientationCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 
 /**
  * <p>The ruler Component is the &lt;HR&gt; HTML equivalent.</p>

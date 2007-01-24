@@ -126,6 +126,8 @@ public class CameliaComponentHandler extends ComponentHandler {
                 ListenersTools.KEY_UP_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("loadListener", new ListenerAttributeMetaData(
                 ListenersTools.LOAD_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("errorListener", new ListenerAttributeMetaData(
+                ListenersTools.ERROR_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("menuListener", new ListenerAttributeMetaData(
                 ListenersTools.MENU_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("mouseOutListener",
@@ -198,6 +200,7 @@ public class CameliaComponentHandler extends ComponentHandler {
                 ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("disabledWeekDays",
                 ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("inputType", ENUMERATION_ATTRIBUTE_METADATA);
 
         ATTRIBUTES_METADATA.put("date", ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("maxDate", ENUMERATION_ATTRIBUTE_METADATA);

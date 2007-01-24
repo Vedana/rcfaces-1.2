@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AbstractCommandComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.AbstractCommandComponent;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
@@ -34,6 +33,7 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 	private String y;
 	private String blurListeners;
 	private String focusListeners;
+	private String errorListeners;
 	private String marginBottom;
 	private String marginLeft;
 	private String marginRight;
@@ -188,6 +188,14 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
 	public final void setFocusListener(String focusListeners) {
 		this.focusListeners = focusListeners;
+	}
+
+	public final String getErrorListener() {
+		return errorListeners;
+	}
+
+	public final void setErrorListener(String errorListeners) {
+		this.errorListeners = errorListeners;
 	}
 
 	public final String getMarginBottom() {
@@ -540,6 +548,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
+		if (errorListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
+		}
+
 		if (marginBottom != null) {
 			if (isValueReference(marginBottom)) {
 				ValueBinding vb = application.createValueBinding(marginBottom);
@@ -736,6 +748,7 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		y = null;
 		blurListeners = null;
 		focusListeners = null;
+		errorListeners = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;

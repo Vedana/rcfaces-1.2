@@ -1,12 +1,11 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.TextEntryComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The spinner Component is a <a href="/comps/textEntryComponent.html">textEntry Component</a> that accepts numbers and whose value can be incremented or decremented (by a parametrable step) with buttons or the keyboard arrows.</p>

@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.AbstractDataComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
@@ -21,17 +20,18 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private String visible;
 	private String height;
 	private String width;
-	private String mouseOutListeners;
-	private String mouseOverListeners;
 	private String helpMessage;
 	private String helpURL;
 	private String toolTipText;
+	private String mouseOutListeners;
+	private String mouseOverListeners;
 	private String unlockedClientAttributeNames;
 	private String lookId;
 	private String blurListeners;
 	private String focusListeners;
 	private String x;
 	private String y;
+	private String errorListeners;
 	private String marginBottom;
 	private String marginLeft;
 	private String marginRight;
@@ -76,22 +76,6 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.width = width;
 	}
 
-	public final String getMouseOutListener() {
-		return mouseOutListeners;
-	}
-
-	public final void setMouseOutListener(String mouseOutListeners) {
-		this.mouseOutListeners = mouseOutListeners;
-	}
-
-	public final String getMouseOverListener() {
-		return mouseOverListeners;
-	}
-
-	public final void setMouseOverListener(String mouseOverListeners) {
-		this.mouseOverListeners = mouseOverListeners;
-	}
-
 	public final String getHelpMessage() {
 		return helpMessage;
 	}
@@ -114,6 +98,22 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 	public final void setToolTipText(String toolTipText) {
 		this.toolTipText = toolTipText;
+	}
+
+	public final String getMouseOutListener() {
+		return mouseOutListeners;
+	}
+
+	public final void setMouseOutListener(String mouseOutListeners) {
+		this.mouseOutListeners = mouseOutListeners;
+	}
+
+	public final String getMouseOverListener() {
+		return mouseOverListeners;
+	}
+
+	public final void setMouseOverListener(String mouseOverListeners) {
+		this.mouseOverListeners = mouseOverListeners;
 	}
 
 	public final String getUnlockedClientAttributeNames() {
@@ -162,6 +162,14 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 	public final void setY(String y) {
 		this.y = y;
+	}
+
+	public final String getErrorListener() {
+		return errorListeners;
+	}
+
+	public final void setErrorListener(String errorListeners) {
+		this.errorListeners = errorListeners;
 	}
 
 	public final String getMarginBottom() {
@@ -335,14 +343,6 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (mouseOutListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
-		}
-
-		if (mouseOverListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
-		}
-
 		if (helpMessage != null) {
 			if (isValueReference(helpMessage)) {
 				ValueBinding vb = application.createValueBinding(helpMessage);
@@ -371,6 +371,14 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			} else {
 				component.setToolTipText(toolTipText);
 			}
+		}
+
+		if (mouseOutListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+		}
+
+		if (mouseOverListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (unlockedClientAttributeNames != null) {
@@ -419,6 +427,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			} else {
 				component.setY(y);
 			}
+		}
+
+		if (errorListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
 		}
 
 		if (marginBottom != null) {
@@ -520,17 +532,18 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		visible = null;
 		height = null;
 		width = null;
-		mouseOutListeners = null;
-		mouseOverListeners = null;
 		helpMessage = null;
 		helpURL = null;
 		toolTipText = null;
+		mouseOutListeners = null;
+		mouseOverListeners = null;
 		unlockedClientAttributeNames = null;
 		lookId = null;
 		blurListeners = null;
 		focusListeners = null;
 		x = null;
 		y = null;
+		errorListeners = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;

@@ -1,53 +1,57 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.component.capability.IImmediateCapability;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.capability.IKeyEventCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.component.capability.IServerDataCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
-import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.lang.Object;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.component.capability.IFontCapability;
+import java.util.Collections;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.faces.context.FacesContext;
+import java.util.Map;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.component.CameliaOutputComponent;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IServerDataCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
  */
 public abstract class AbstractSelectManyComponent extends CameliaSelectManyComponent implements 
-	ISizeCapability,
 	IVisibilityCapability,
+	ISizeCapability,
 	IMouseEventCapability,
 	IHelpCapability,
 	IClientDataCapability,
@@ -57,6 +61,7 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 	IPositionCapability,
 	ILookAndFeelCapability,
 	IFocusBlurEventCapability,
+	IErrorEventCapability,
 	IMarginCapability,
 	IKeyEventCapability,
 	IForegroundBackgroundColorCapability,
@@ -74,7 +79,7 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","keyPressListener","fontSize","marginRight","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","fontName","keyDownListener","focusListener","keyUpListener","disabled","toolTipText","mouseOverListener","accessKey","userEventListener","helpURL","marginBottom","fontItalic","fontBold","textAlignment","immediate","visible","y","lookId","marginLeft","marginTop","tabIndex","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","keyPressListener","fontSize","marginRight","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","fontName","keyDownListener","focusListener","keyUpListener","disabled","toolTipText","mouseOverListener","accessKey","userEventListener","helpURL","marginBottom","fontItalic","fontBold","textAlignment","immediate","visible","y","lookId","marginLeft","marginTop","backgroundColor","tabIndex","errorListener","x"}));
 	}
 
 
@@ -207,50 +212,6 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		
 	}
 
-	public final java.lang.String getHeight() {
-		return getHeight(null);
-	}
-
-	/**
-	 * See {@link #getHeight() getHeight()} for more details
-	 */
-	public final java.lang.String getHeight(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HEIGHT, facesContext);
-	}
-
-	public final void setHeight(java.lang.String height) {
-		engine.setProperty(Properties.HEIGHT, height);
-	}
-
-	/**
-	 * See {@link #setHeight(String) setHeight(String)} for more details
-	 */
-	public final void setHeight(ValueBinding height) {
-		engine.setProperty(Properties.HEIGHT, height);
-	}
-
-	public final java.lang.String getWidth() {
-		return getWidth(null);
-	}
-
-	/**
-	 * See {@link #getWidth() getWidth()} for more details
-	 */
-	public final java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.WIDTH, facesContext);
-	}
-
-	public final void setWidth(java.lang.String width) {
-		engine.setProperty(Properties.WIDTH, width);
-	}
-
-	/**
-	 * See {@link #setWidth(String) setWidth(String)} for more details
-	 */
-	public final void setWidth(ValueBinding width) {
-		engine.setProperty(Properties.WIDTH, width);
-	}
-
 	public final int getHiddenMode() {
 		return getHiddenMode(null);
 	}
@@ -300,6 +261,50 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 			return getVisibleState(null);
 		
+	}
+
+	public final java.lang.String getHeight() {
+		return getHeight(null);
+	}
+
+	/**
+	 * See {@link #getHeight() getHeight()} for more details
+	 */
+	public final java.lang.String getHeight(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEIGHT, facesContext);
+	}
+
+	public final void setHeight(java.lang.String height) {
+		engine.setProperty(Properties.HEIGHT, height);
+	}
+
+	/**
+	 * See {@link #setHeight(String) setHeight(String)} for more details
+	 */
+	public final void setHeight(ValueBinding height) {
+		engine.setProperty(Properties.HEIGHT, height);
+	}
+
+	public final java.lang.String getWidth() {
+		return getWidth(null);
+	}
+
+	/**
+	 * See {@link #getWidth() getWidth()} for more details
+	 */
+	public final java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WIDTH, facesContext);
+	}
+
+	public final void setWidth(java.lang.String width) {
+		engine.setProperty(Properties.WIDTH, width);
+	}
+
+	/**
+	 * See {@link #setWidth(String) setWidth(String)} for more details
+	 */
+	public final void setWidth(ValueBinding width) {
+		engine.setProperty(Properties.WIDTH, width);
 	}
 
 	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
@@ -600,6 +605,18 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	public final javax.faces.event.FacesListener [] listFocusListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IFocusListener.class);
+	}
+
+	public final void addErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listErrorListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
 	}
 
 	public final java.lang.String getMarginBottom() {

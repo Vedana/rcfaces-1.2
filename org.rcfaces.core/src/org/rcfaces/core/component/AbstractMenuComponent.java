@@ -1,17 +1,17 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractConverterCommandComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.

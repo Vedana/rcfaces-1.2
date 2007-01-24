@@ -176,7 +176,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         rets2[1] = accessor.saveState(context);
 
-        if (properties == null) {
+        if (properties == null || properties.isEmpty()) {
             return rets2;
         }
 
@@ -222,7 +222,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         Object datas[] = (Object[]) params[2];
 
-        if (datas.length == 0) {
+        if (datas==null || datas.length == 0) {
             return this;
         }
 

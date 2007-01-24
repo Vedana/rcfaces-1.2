@@ -1,23 +1,22 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IFontCapability;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
 
 /**
  * <p>The fieldSet Component is a container with a title (text and/or picture).</p>
@@ -52,6 +51,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","imageHeight","imageURL","scopeValue","verticalAlignment","fontSize","fontItalic","fontBold","text","scopeVar","textAlignment","imageWidth","borderType","fontName"}));
 	}
+	protected static final String CAMELIA_VALUE_ALIAS="text";
 
 	public FieldSetComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -379,5 +379,9 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
+	}
+
+	protected String getCameliaValueAlias() {
+		return CAMELIA_VALUE_ALIAS;
 	}
 }

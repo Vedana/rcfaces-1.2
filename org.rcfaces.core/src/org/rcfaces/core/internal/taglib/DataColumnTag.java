@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.DataColumnComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class DataColumnTag extends CameliaTag implements Tag {
 
@@ -29,6 +28,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private String ascending;
 	private String sortComparator;
 	private String resizable;
+	private String imageURL;
 	private String width;
 	private String maxWidth;
 	private String minWidth;
@@ -141,6 +141,14 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.resizable = resizable;
 	}
 
+	public final String getImageURL() {
+		return imageURL;
+	}
+
+	public final void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+
 	public final String getWidth() {
 		return width;
 	}
@@ -245,6 +253,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  ascending='"+ascending+"'");
 			LOG.debug("  sortComparator='"+sortComparator+"'");
 			LOG.debug("  resizable='"+resizable+"'");
+			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  maxWidth='"+maxWidth+"'");
 			LOG.debug("  minWidth='"+minWidth+"'");
@@ -379,6 +388,16 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (imageURL != null) {
+			if (isValueReference(imageURL)) {
+				ValueBinding vb = application.createValueBinding(imageURL);
+
+				component.setImageURL(vb);
+			} else {
+				component.setImageURL(imageURL);
+			}
+		}
+
 		if (width != null) {
 			if (isValueReference(width)) {
 				ValueBinding vb = application.createValueBinding(width);
@@ -491,6 +510,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		ascending = null;
 		sortComparator = null;
 		resizable = null;
+		imageURL = null;
 		width = null;
 		maxWidth = null;
 		minWidth = null;

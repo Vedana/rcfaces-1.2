@@ -6,13 +6,18 @@ package org.rcfaces.core.internal.renderkit;
 import java.io.IOException;
 import java.util.Iterator;
 
+import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.el.ValueBinding;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
@@ -24,6 +29,9 @@ import org.rcfaces.core.internal.tools.ValuesTools;
  */
 public abstract class AbstractCameliaRenderer extends Renderer {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(AbstractCameliaRenderer.class);
 
     private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
 
@@ -229,5 +237,24 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         return ValuesTools.convertStringToValue(context, component,
                 submittedValue);
+    }
+
+    protected static final Renderer getRenderer(FacesContext facesContext,
+            UIComponent component) {
+        String rendererType = component.getRendererType();
+        if (rendererType == null) {
+            LOG.error("Invalid renderType for component id="
+                    + component.getId() + " component=" + component);
+            return null;
+        }
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder
+                .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+
+        RenderKit renderKit = renderKitFactory.getRenderKit(facesContext,
+                facesContext.getViewRoot().getRenderKitId());
+
+        return renderKit.getRenderer(component.getFamily(), rendererType);
+
     }
 }

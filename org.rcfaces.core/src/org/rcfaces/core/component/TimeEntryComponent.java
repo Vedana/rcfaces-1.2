@@ -1,35 +1,38 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAutoTabCapability;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.LiteralTimeConverter;
+import org.rcfaces.core.internal.component.Properties;
+import java.lang.Object;
+import java.util.TimeZone;
+import java.util.Collections;
+import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.model.Time;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import java.util.HashMap;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import javax.faces.FacesException;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import java.util.Locale;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.model.IAdaptable;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.internal.manager.IValidationParameters;
-import org.rcfaces.core.model.Time;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The timeEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a time.</p>
@@ -65,6 +68,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","minTime","autoCompletion","required","componentLocale","time","timeFormat","valueChangeListener","defaultTime","hourStep","literalTimeZone","literalLocale","readOnly","componentTimeZone","secondStep","focusStyleClass","millisStep","minuteStep","autoTab","maxTime"}));
 	}
+	protected static final String CAMELIA_VALUE_ALIAS="time";
 
 	public TimeEntryComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -143,22 +147,31 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setValue(Object value) {
-
-
-				if (value instanceof String) {
-					FacesContext facesContext=FacesContext.getCurrentInstance();
-					value=LiteralTimeConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
-				}
-				
-				super.setValue(value);
-			
-	}
-
 	public final Time getTime() {
 
 
-				return (Time)getValue();
+				Object value=getValue();
+				
+				if (value==null) {
+					return null;
+				}
+				
+				if (value instanceof Time) {
+					return (Time)value;
+				}
+				
+				if (value instanceof String) {
+					return (Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, (String)value);
+				}
+
+				if (value instanceof IAdaptable) {
+					Time adapted=(Time)((IAdaptable)value).getAdapter(Time.class, this);
+					if (adapted!=null) {
+						return adapted;
+					}
+				}
+
+				throw new FacesException("Value of timeEntry is not a time ! ("+value+")");
 			
 	}
 
@@ -896,5 +909,9 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
+	}
+
+	protected String getCameliaValueAlias() {
+		return CAMELIA_VALUE_ALIAS;
 	}
 }

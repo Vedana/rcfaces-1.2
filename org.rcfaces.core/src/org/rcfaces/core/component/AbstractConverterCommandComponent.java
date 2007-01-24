@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.internal.component.IConvertValueHolder;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.convert.Converter;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractCommandComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.component.IConvertValueHolder;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.

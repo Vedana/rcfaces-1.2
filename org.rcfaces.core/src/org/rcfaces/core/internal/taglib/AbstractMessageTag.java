@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AbstractMessageComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractMessageComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 
@@ -26,9 +25,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private String helpMessage;
 	private String helpURL;
 	private String toolTipText;
+	private String lookId;
 	private String x;
 	private String y;
-	private String lookId;
+	private String errorListeners;
 	private String marginBottom;
 	private String marginLeft;
 	private String marginRight;
@@ -39,10 +39,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String showDetail;
 	private String forVal;
-	private String showSummary;
 	private String margins;
+	private String showSummary;
+	private String showDetail;
 	public final String getHeight() {
 		return height;
 	}
@@ -115,6 +115,14 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.toolTipText = toolTipText;
 	}
 
+	public final String getLookId() {
+		return lookId;
+	}
+
+	public final void setLookId(String lookId) {
+		this.lookId = lookId;
+	}
+
 	public final String getX() {
 		return x;
 	}
@@ -131,12 +139,12 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.y = y;
 	}
 
-	public final String getLookId() {
-		return lookId;
+	public final String getErrorListener() {
+		return errorListeners;
 	}
 
-	public final void setLookId(String lookId) {
-		this.lookId = lookId;
+	public final void setErrorListener(String errorListeners) {
+		this.errorListeners = errorListeners;
 	}
 
 	public final String getMarginBottom() {
@@ -219,20 +227,20 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final String getShowDetail() {
-		return showDetail;
-	}
-
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
-	}
-
 	public final String getFor() {
 		return forVal;
 	}
 
 	public final void setFor(String forVal) {
 		this.forVal = forVal;
+	}
+
+	public final String getMargins() {
+		return margins;
+	}
+
+	public final void setMargins(String margins) {
+		this.margins = margins;
 	}
 
 	public final String getShowSummary() {
@@ -243,12 +251,12 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.showSummary = showSummary;
 	}
 
-	public final String getMargins() {
-		return margins;
+	public final String getShowDetail() {
+		return showDetail;
 	}
 
-	public final void setMargins(String margins) {
-		this.margins = margins;
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -260,9 +268,9 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  helpMessage='"+helpMessage+"'");
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
+			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
-			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
@@ -270,10 +278,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  forVal='"+forVal+"'");
-			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  showSummary='"+showSummary+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -366,6 +374,16 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (lookId != null) {
+			if (isValueReference(lookId)) {
+				ValueBinding vb = application.createValueBinding(lookId);
+
+				component.setLookId(vb);
+			} else {
+				component.setLookId(lookId);
+			}
+		}
+
 		if (x != null) {
 			if (isValueReference(x)) {
 				ValueBinding vb = application.createValueBinding(x);
@@ -386,14 +404,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (lookId != null) {
-			if (isValueReference(lookId)) {
-				ValueBinding vb = application.createValueBinding(lookId);
-
-				component.setLookId(vb);
-			} else {
-				component.setLookId(lookId);
-			}
+		if (errorListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
 		}
 
 		if (marginBottom != null) {
@@ -478,15 +490,6 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (showDetail != null) {
-			if (isValueReference(showDetail)) {
-				ValueBinding vb = application.createValueBinding(showDetail);
-				component.setShowDetail(vb);
-			} else {
-				component.setShowDetail(getBool(showDetail));
-			}
-		}
-
 		if (forVal != null) {
 			if (isValueReference(forVal)) {
 				ValueBinding vb = application.createValueBinding(forVal);
@@ -494,6 +497,13 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			} else {
 				component.setFor(forVal);
 			}
+		}
+
+		if (margins != null) {
+			if (isValueReference(margins)) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins);
 		}
 
 		if (showSummary != null) {
@@ -505,11 +515,13 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (isValueReference(margins)) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+		if (showDetail != null) {
+			if (isValueReference(showDetail)) {
+				ValueBinding vb = application.createValueBinding(showDetail);
+				component.setShowDetail(vb);
+			} else {
+				component.setShowDetail(getBool(showDetail));
 			}
-				component.setMargins(margins);
 		}
 	}
 
@@ -523,9 +535,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		helpMessage = null;
 		helpURL = null;
 		toolTipText = null;
+		lookId = null;
 		x = null;
 		y = null;
-		lookId = null;
+		errorListeners = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;
@@ -536,10 +549,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		showDetail = null;
 		forVal = null;
-		showSummary = null;
 		margins = null;
+		showSummary = null;
+		showDetail = null;
 
 		super.release();
 	}

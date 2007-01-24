@@ -1,23 +1,24 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The textAreaEntry Component is based on the standard HTML tag &lt;TEXTAREA&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>
@@ -49,6 +50,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","valueChangeListener","columnNumber","warnStyleClass","styleClass","text","rowNumber","infoStyleClass","readOnly","focusStyleClass","emptyMessage"}));
 	}
+	protected static final String CAMELIA_VALUE_ALIAS="text";
 
 	public TextAreaComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -362,5 +364,9 @@ public class TextAreaComponent extends AbstractInputComponent implements
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
+	}
+
+	protected String getCameliaValueAlias() {
+		return CAMELIA_VALUE_ALIAS;
 	}
 }

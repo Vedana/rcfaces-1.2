@@ -1,33 +1,26 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.iterator.IToolFolderIterator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.tools.ToolBarTools;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.iterator.IToolFolderIterator;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.AbstractBasicComponent;
 
 /**
  * <b>EXPERIMENTAL</b>
  */
-public class ToolBarComponent extends AbstractInputComponent implements 
-	ISelectionEventCapability,
-	IReadOnlyCapability,
-	IMenuCapability {
+public class ToolBarComponent extends AbstractBasicComponent implements 
+	IInitEventCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolBar";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"initListener"}));
 	}
 
 	public ToolBarComponent() {
@@ -46,59 +39,16 @@ public class ToolBarComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
 		addFacesListener(listener);
 	}
 
-	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+	public final void removeInitListener(org.rcfaces.core.event.IInitListener listener) {
 		removeFacesListener(listener);
 	}
 
-	public final javax.faces.event.FacesListener [] listSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-	}
-
-	public final boolean isReadOnly() {
-		return isReadOnly(null);
-	}
-
-	/**
-	 * See {@link #isReadOnly() isReadOnly()} for more details
-	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
-	}
-
-	public final void setReadOnly(boolean readOnly) {
-		engine.setProperty(Properties.READ_ONLY, readOnly);
-	}
-
-	/**
-	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
-	 */
-	public final void setReadOnly(ValueBinding readOnly) {
-		engine.setProperty(Properties.READ_ONLY, readOnly);
-	}
-
-	public final IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
-	public final IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
-	public final IMenuIterator listMenus() {
-
-
-		return MenuTools.listMenus(this);
-		
+	public final javax.faces.event.FacesListener [] listInitListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
 	protected Set getCameliaFields() {

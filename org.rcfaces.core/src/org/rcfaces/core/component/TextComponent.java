@@ -1,17 +1,16 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.IForCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IFontCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IForCapability;
 
 /**
  * <p>The text Component is a placeholder for displaying text.</p>
@@ -41,6 +40,7 @@ public class TextComponent extends AbstractOutputComponent implements
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","text","type","textAlignment","fontSize","accessKey","fontName","fontItalic","for"}));
 	}
+	protected static final String CAMELIA_VALUE_ALIAS="text";
 
 	public TextComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -291,5 +291,9 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
+	}
+
+	protected String getCameliaValueAlias() {
+		return CAMELIA_VALUE_ALIAS;
 	}
 }
