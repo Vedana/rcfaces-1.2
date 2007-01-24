@@ -64,4 +64,4 @@ var __prototype = {
 	}
 }
 
-var f_card=new f_class("f_card", null, null, __prototype, f_component, fa_asyncRender);
+new f_class("f_card", null, null, __prototype, f_component, fa_asyncRender);

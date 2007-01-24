@@ -113,7 +113,7 @@ var __prototype = {
 			window._ignoreLog=true;
 			
 			var url=f_env.GetViewURI();
-			var request=f_httpRequest.f_newInstance(document, url, null, true);
+			var request=new f_httpRequest(document, url, null, true);
 			
 			var self=this;
 			
@@ -158,4 +158,4 @@ var __prototype = {
 	}
 }
 
-var f_serverAppender=new f_class("f_serverAppender", null, __static, __prototype);
+new f_class("f_serverAppender", null, __static, __prototype, f_object);

@@ -64,4 +64,4 @@ var __prototype={
 	}
 }
  
-var f_compositeNumEntry=new f_class("f_compositeNumEntry", null, null, __prototype, f_component, fa_compositeNumEntry, fa_required);
+new f_class("f_compositeNumEntry", null, null, __prototype, f_component, fa_compositeNumEntry, fa_required);

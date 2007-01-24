@@ -525,6 +525,15 @@
 		<tag-name>toolFolder</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.toolFolder</component-type>
+			<renderer-type>org.rcfaces.core.toolFolder</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>itemsToolFolder</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.itemsToolFolder</component-type>
+			<renderer-type>org.rcfaces.core.itemsToolFolder</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -655,6 +664,12 @@
 		<tag-name>userEventListener</tag-name>
 		<handler-class>
 			org.rcfaces.core.internal.facelets.UserEventListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>errorListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.ErrorListenerHandler
 		</handler-class>
 	</tag>
 	<tag>

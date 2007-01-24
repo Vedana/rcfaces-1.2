@@ -68,7 +68,7 @@ var __prototype = {
 //		alert("Install="+this._links);
 		
 		if (installSelectionListener) {
-			this.f_addEventListener(f_event.SELECTION,this._onSelect);
+			this.f_insertEventListenerFirst(f_event.SELECTION,this._onSelect);
 		}
 		
 		this._tabIndex=this.tabIndex;
@@ -251,10 +251,10 @@ var __prototype = {
 		}
 
 		this._hoverInstalled = true;
-		this.f_addEventListener(f_event.MOUSEOVER,this._onMouseOver);
-		this.f_addEventListener(f_event.MOUSEOUT,this._onMouseOut);
-		this.f_addEventListener(f_event.FOCUS,this._onFocus);
-		this.f_addEventListener(f_event.BLUR,this._onBlur);
+		this.f_insertEventListenerFirst(f_event.MOUSEOVER,this._onMouseOver);
+		this.f_insertEventListenerFirst(f_event.MOUSEOUT,this._onMouseOut);
+		this.f_insertEventListenerFirst(f_event.FOCUS,this._onFocus);
+		this.f_insertEventListenerFirst(f_event.BLUR,this._onBlur);
 	},
 	f_setDomEvent: function(type, target) {
 		var link=this._link;
@@ -334,4 +334,4 @@ var __prototype = {
 	}	
 }
 
-var f_customButton=new f_class("f_customButton", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_borderType, fa_value);
+new f_class("f_customButton", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_borderType, fa_value);

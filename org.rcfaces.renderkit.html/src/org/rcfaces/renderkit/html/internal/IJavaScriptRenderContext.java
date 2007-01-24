@@ -54,4 +54,6 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
 
     void appendRequiredClasses(Collection classNames, String className,
             String requiredId);
+
+    boolean canLazyTagUsesBrother();
 }

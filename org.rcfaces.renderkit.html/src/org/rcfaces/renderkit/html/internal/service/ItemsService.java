@@ -29,6 +29,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.model.UserFacesException;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IFilteredItemsRenderer;
@@ -51,6 +52,8 @@ public class ItemsService extends AbstractHtmlService {
     private static final int DEFAULT_BUFFER_SIZE = 4096;
 
     private static final int INITIAL_SIZE = 8000;
+
+    private static final int ITEMS_SERVER_INTERNAL_ERROR = SERVICE_ERROR | 0x100;
 
     public ItemsService() {
     }
@@ -76,7 +79,14 @@ public class ItemsService extends AbstractHtmlService {
 
         String componentId = (String) parameters.get("componentId");
         if (componentId == null) {
-            sendJsError(facesContext, "Can not find 'componentId' parameter.");
+            sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'componentId' parameter.", null);
+            return;
+        }
+
+        if (viewRoot.getChildCount() == 0) {
+            sendJsError(facesContext, componentId,
+                    SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
             return;
         }
 
@@ -85,16 +95,19 @@ public class ItemsService extends AbstractHtmlService {
         UIComponent component = HtmlTools.getForComponent(facesContext,
                 componentId, viewRoot);
         if (component == null) {
-            // Cas special: la session a du expir�e ....
+            // Cas special: la session a du expiree .... !?
 
-            sendCancel(facesContext, componentId);
+            sendJsError(facesContext, componentId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Component is not found !", null);
 
             return;
         }
 
         if ((component instanceof IFilterCapability) == false) {
-            sendJsError(facesContext, "Component (id='" + componentId
-                    + "') can not be filtred.");
+            sendJsError(facesContext, componentId,
+                    INVALID_PARAMETER_SERVICE_ERROR, "Component (id='"
+                            + componentId + "') can not be filtred.", null);
             return;
         }
 
@@ -108,12 +121,21 @@ public class ItemsService extends AbstractHtmlService {
 
         IFilterCapability filterCapability = (IFilterCapability) component;
 
-        IFilteredItemsRenderer filtredItemsRenderer = getFilteredItemsRenderer(
-                facesContext, filterCapability);
+        IFilteredItemsRenderer filtredItemsRenderer;
+        try {
+            filtredItemsRenderer = getFilteredItemsRenderer(facesContext,
+                    filterCapability);
+
+        } catch (UserFacesException ex) {
+            sendJsError(facesContext, ex, componentId);
+            return;
+        }
+
         if (filtredItemsRenderer == null) {
-            sendJsError(facesContext,
+            sendJsError(facesContext, componentId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
                     "Can not find filtredItemsRenderer. (componentId='"
-                            + componentId + "')");
+                            + componentId + "')", null);
             return;
         }
 
@@ -171,34 +193,6 @@ public class ItemsService extends AbstractHtmlService {
 
         facesContext.responseComplete();
 
-    }
-
-    private void sendCancel(FacesContext facesContext, String componentId) {
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-
-        try {
-            PrintWriter printWriter = response.getWriter();
-
-            IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(
-                    facesContext, printWriter, null, null);
-
-            String varId = jsWriter.getComponentVarName();
-
-            jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                    "GetElementById").writeString(componentId).writeln(
-                    ", document);");
-            jsWriter.writeMethodCall("fa_cancelFilterRequest").write(");");
-
-        } catch (IOException ex) {
-            throw new FacesException("Can not write cancel response.", ex);
-        }
-
-        facesContext.responseComplete();
     }
 
     private IFilteredItemsRenderer getFilteredItemsRenderer(

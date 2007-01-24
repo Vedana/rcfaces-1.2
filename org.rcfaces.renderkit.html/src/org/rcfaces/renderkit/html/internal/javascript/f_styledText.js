@@ -33,4 +33,4 @@ var __prototype = {
 	}
 }
 
-var f_styledText=new f_class("f_styledText", null, null, __prototype, f_text);
+new f_class("f_styledText", null, null, __prototype, f_text);

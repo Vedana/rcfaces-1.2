@@ -46,7 +46,9 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
     private static final String STRING_EMPTY_ARRAY[] = new String[0];
 
-    private static final String VARIABLES_POOL_PROPERTY = "org.rcfaces.renderkit.html.POOL_PROPERTY";
+    private static final String LAZY_TAG_USES_BROTHER_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".LAZY_TAG_USES_BROTHER";
 
     private static final String ENABLE_LOG_CLIENT_PARAMETER = Constants
             .getPackagePrefix()
@@ -55,6 +57,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
     private static final String ENABLE_SCRIPT_VERIFY_PARAMETER = Constants
             .getPackagePrefix()
             + ".client.SCRIPT_VERIFY";
+
+    private static final String VARIABLES_POOL_PROPERTY = "org.rcfaces.renderkit.html.POOL_PROPERTY";
 
     private static final String JAVASCRIPT_INITIALIZED_PROPERTY = "org.rcfaces.renderkit.html.JAVASCRIPT_INITIALIZED";
 
@@ -100,6 +104,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
     private boolean javaScriptStubForced;
 
+    private boolean lazyTagUsesBrother = Constants.LAZY_TAG_USES_BROTHER_DEFAULT_VALUE;
+
     public JavaScriptRenderContext(FacesContext facesContext) {
         parent = null;
 
@@ -107,9 +113,8 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         declaredFiles = JavaScriptRepositoryServlet
                 .getContextRepository(facesContext);
 
+        Map map = facesContext.getExternalContext().getApplicationMap();
         synchronized (facesContext.getApplication()) {
-            Map map = facesContext.getExternalContext().getApplicationMap();
-
             variablePool = (VariablePool) map.get(VARIABLES_POOL_PROPERTY);
             if (variablePool == null) {
                 variablePool = new VariablePool(facesContext);
@@ -118,6 +123,20 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             }
         }
 
+        String param = facesContext.getExternalContext().getInitParameter(
+                LAZY_TAG_USES_BROTHER_PARAMETER);
+        if (param != null) {
+            if ("false".equalsIgnoreCase(param)) {
+                lazyTagUsesBrother = false;
+
+            } else if ("true".equalsIgnoreCase(param)) {
+                lazyTagUsesBrother = true;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Set lazyTagUsesBrother=" + lazyTagUsesBrother);
+            }
+        }
     }
 
     private JavaScriptRenderContext(JavaScriptRenderContext parent) {
@@ -196,6 +215,14 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         }
 
         return variablePool.getVarName(varCounter++);
+    }
+
+    public boolean canLazyTagUsesBrother() {
+        if (parent != null) {
+            return parent.canLazyTagUsesBrother();
+        }
+
+        return lazyTagUsesBrother;
     }
 
     public String convertSymbol(String symbol) {

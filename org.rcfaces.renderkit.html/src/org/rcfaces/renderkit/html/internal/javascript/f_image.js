@@ -86,7 +86,7 @@ var __prototype = {
 		}
 	
 		var url=f_env.GetViewURI();
-		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var image=this;
 		request.f_setListener({
 			/**
@@ -183,4 +183,4 @@ var __prototype = {
 	}
 }
  
-var f_image=new f_class("f_image", null, null, __prototype, f_component, fa_filterProperties, fa_commands);
+new f_class("f_image", null, null, __prototype, f_component, fa_filterProperties, fa_commands);

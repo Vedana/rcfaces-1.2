@@ -67,4 +67,4 @@ var __prototype={
 	}
 }
  
-var f_progressIndicatorMonitor=new f_class("f_progressIndicatorMonitor", null, null, __prototype, f_progressMonitor);
+new f_class("f_progressIndicatorMonitor", null, null, __prototype, f_progressMonitor);

@@ -29,7 +29,9 @@ var __static = {
 			return false;
 		}
 
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
 		var code=evt.keyCode;
 
@@ -50,7 +52,9 @@ var __static = {
 			return false;
 		}
 
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
 		if (comboEx.f_isDisabled()) {
 			return f_core.CancelEvent(evt);
@@ -574,7 +578,7 @@ var __static = {
 				
 		menuPopup.style.visibility="inherit";
 
-		menuPopup.style.width=combo.offsetWidth;
+		menuPopup.style.width=combo.offsetWidth+"px";
 		menuPopup.document.body.onkeydown=f_comboEx._Ie_popupKeyUp;
 		menuPopup.document.body.onunload=f_comboEx._Ie_onunload;
 		
@@ -1720,4 +1724,4 @@ var __prototype = {
 	}
 }
 
-var f_comboEx=new f_class("f_comboEx", null, __static, __prototype, f_component, fa_readOnly, fa_disabled);
+new f_class("f_comboEx", null, __static, __prototype, f_component, fa_readOnly, fa_disabled);

@@ -1,18 +1,17 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.component.ExpandableItemComponent;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.TreeComponent;
+
 import org.rcfaces.core.component.capability.IInputTypeCapability;
-import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.InputTypeConverter;
+import org.rcfaces.core.internal.tools.TreeTools;
 
 /**
  * A node belonging to a tree.

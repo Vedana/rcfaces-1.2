@@ -284,7 +284,7 @@ var __prototype = {
 		}
 	
 		var url=f_env.GetViewURI();
-		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var combo=this;
 		request.f_setListener({
 			/**
@@ -561,4 +561,4 @@ var __prototype = {
 	}
 }
 
-var f_combo=new f_class("f_combo", null, __static, __prototype, f_input, fa_required, fa_filterProperties, fa_commands, fa_selectionProvider);
+new f_class("f_combo", null, __static, __prototype, f_input, fa_required, fa_filterProperties, fa_commands, fa_selectionProvider);

@@ -65,6 +65,10 @@ public class Constants {
 
     public static final boolean ACCESSIBILITY_ROLE_SUPPORT = true;
 
+    public static final boolean LAZY_TAG_USES_BROTHER_DEFAULT_VALUE = false;
+
+    public static final boolean VERIFY_TAG_STACK = false;
+
     private static final String version;
 
     private static final String buildId;
@@ -104,6 +108,10 @@ public class Constants {
                 + STAT_RESOURCES_HTTP_RESPONSE);
 
         LOG.debug("ACCESSIBILITY_ROLE_SUPPORT=" + ACCESSIBILITY_ROLE_SUPPORT);
+
+        LOG.debug("LAZY_TAG_USES_BROTHER_DEFAULT_VALUE="
+                + LAZY_TAG_USES_BROTHER_DEFAULT_VALUE);
+
     }
 
     public static final String getVersion() {

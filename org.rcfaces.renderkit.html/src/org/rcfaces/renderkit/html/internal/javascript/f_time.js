@@ -13,51 +13,52 @@
 /**
  * @method public
  */
-function f_time(hours, minutes, seconds, millis) {
-	if (arguments.length==1) {
-		if (hours instanceof Date) {	
-			var date=hours;
-			
-			this._hours=date.getHours();
-			this._minutes=date.getMinutes();
-			this._seconds=date.getSeconds();
-			this._millis=date.getMilliseconds();
-			return;
-		}
-
-		if (typeof(hours)=="number") {
-			this._hours=Math.floor((hours/(60*60*1000)));
-			this._minutes=Math.floor((hours/(60*1000)) % 60);
-			this._seconds=Math.floor((hours/1000) % 60);
-			this._millis=Math.floor(hours % 1000);
-			return;
-		}
-	}
-
-	f_core.Assert(typeof(hours)=="number", "Invalid hours parameters ("+hours+")");
-	this._hours=hours;
-
-	this._minutes=0;
-	this._seconds=0;
-	this._millis=0;
+var __prototype = {
+ 
+	f_time: function(hours, minutes, seconds, millis) {
+		if (arguments.length==1) {
+			if (hours instanceof Date) {	
+				var date=hours;
+				
+				this._hours=date.getHours();
+				this._minutes=date.getMinutes();
+				this._seconds=date.getSeconds();
+				this._millis=date.getMilliseconds();
+				return;
+			}
 	
-	if (minutes) {
-		f_core.Assert(typeof(minutes)=="number", "Invalid minutes parameters ("+minutes+")");
-		this._minutes=minutes;
-	
-		if (seconds) {
-			f_core.Assert(typeof(seconds)=="number", "Invalid seconds parameters ("+seconds+")");
-			this._secondes=seconds;
-
-			if (millis) {
-				f_core.Assert(typeof(millis)=="number", "Invalid millis parameters ("+minutes+")");
-				this._millis=millis;
+			if (typeof(hours)=="number") {
+				this._hours=Math.floor((hours/(60*60*1000)));
+				this._minutes=Math.floor((hours/(60*1000)) % 60);
+				this._seconds=Math.floor((hours/1000) % 60);
+				this._millis=Math.floor(hours % 1000);
+				return;
 			}
 		}
-	}
-}
-
-f_time.prototype = {
+	
+		f_core.Assert(typeof(hours)=="number", "Invalid hours parameters ("+hours+")");
+		this._hours=hours;
+	
+		this._minutes=0;
+		this._seconds=0;
+		this._millis=0;
+		
+		if (minutes) {
+			f_core.Assert(typeof(minutes)=="number", "Invalid minutes parameters ("+minutes+")");
+			this._minutes=minutes;
+		
+			if (seconds) {
+				f_core.Assert(typeof(seconds)=="number", "Invalid seconds parameters ("+seconds+")");
+				this._secondes=seconds;
+	
+				if (millis) {
+					f_core.Assert(typeof(millis)=="number", "Invalid millis parameters ("+minutes+")");
+					this._millis=millis;
+				}
+			}
+		}
+	},
+	
 	/**
 	 * @method public
 	 * @return number
@@ -115,13 +116,4 @@ f_time.prototype = {
 	}
 }
 
-/**
- * Returns class name.
- * 
- * @method public static
- * @return String
- */
-f_time.f_getName=function() {
-	return "f_time";
-}
-
+new f_class("f_time", null, null, __prototype);

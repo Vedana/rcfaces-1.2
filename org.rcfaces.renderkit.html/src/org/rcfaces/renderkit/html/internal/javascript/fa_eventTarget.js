@@ -93,7 +93,7 @@ var __prototype = {
 	 * @param optional any value
 	 * @param optional fa_selectionProvider selectionProvider
 	 * @param optional any detail
-	 * @return void
+	 * @return boolean
 	 */
 	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail) {
 		if (!fa_eventTarget._EventId) {
@@ -165,7 +165,7 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_getActionList: function(type) {
-		f_core.Assert(typeof(type)=="string", "Bad type of event name '"+type+"'");
+		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_getActionList: Bad type of event name '"+type+"'");
 
 		var al=this._actionLists;
 		if (!al) {
@@ -180,7 +180,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_isActionListEmpty: function(type) {
-		f_core.Assert(typeof(type)=="string", "Bad type of event name '"+type+"'");
+		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_isActionListEmpty: Bad type of event name '"+type+"'");
 
 		var als=this._actionLists;
 		if (!als) {
@@ -203,7 +203,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_addEventListener: function(type, listener) {
-		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
+		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_addEventListener: Bad type of event '"+type+"'");
 	
 		var al=this.f_openActionList(type);
 		
@@ -219,7 +219,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_insertEventListenerFirst: function(type, listener) {
-		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
+		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_insertEventListenerFirst: Bad type of event '"+type+"'");
 	
 		var al=this.f_openActionList(type);
 		
@@ -235,7 +235,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_removeEventListener: function(type, listener) {
-		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
+		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_removeEventListener: Bad type of event '"+type+"'");
 
 		var al=this.f_getActionList(type);
 		if (!al) {
@@ -251,7 +251,7 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_openActionList: function(type) {
-		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
+		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_openActionList: Bad type of event '"+type+"'");
 
 		var al=this.f_getActionList(type);
 		if (al) {
@@ -298,7 +298,6 @@ var __prototype = {
 				oldValue: oldValue });
 		}, 10);
 	},
-	
 	/**
 	 * @method protected
 	 * @return void

@@ -51,7 +51,7 @@ public class MenuBarDecorator extends MenuDecorator {
         String sid = menuContext.getComponentClientId(component); // menuContext.getMenuBarItemId();
 
         javaScriptWriter.write("var ").write(varId).write('=').writeMethodCall(
-                "_declareBarItem").writeString(sid);
+                "f_declareBarItem").writeString(sid);
 
         menuContext.setManagerComponentId(javaScriptWriter
                 .getComponentVarName());

@@ -130,4 +130,4 @@ var __prototype = {
 
 }
  
-var f_progressMonitor=new f_class("f_progressMonitor", null, __static, __prototype, f_object);
+new f_class("f_progressMonitor", null, __static, __prototype, f_object);

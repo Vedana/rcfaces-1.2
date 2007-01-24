@@ -84,7 +84,7 @@ var __prototype = {
 		this._collapsedText=f_core.GetAttribute(this, "v:collapsedText", txt);
 	
 	//	this._returnOnSelect=false;
-		this.f_addEventListener(f_event.SELECTION, this._onSelect);
+		this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
 	},
 	f_finalize: function() {
 		// this._normalText=undefined; // String
@@ -441,4 +441,4 @@ var __prototype = {
 		return this.f_super(arguments);		
 	}
 }
-var f_expandBar=new f_class("f_expandBar", null, __static, __prototype, f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName);
+new f_class("f_expandBar", null, __static, __prototype, f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName);

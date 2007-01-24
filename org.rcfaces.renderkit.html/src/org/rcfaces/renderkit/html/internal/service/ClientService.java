@@ -65,8 +65,9 @@ public class ClientService extends AbstractClientService {
                 return;
             }
 
-            AbstractHtmlService.sendJsError(facesContext,
-                    "Can not identify command '" + commandId + "'.");
+            AbstractHtmlService.sendJsError(facesContext, null,
+                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not identify command '" + commandId + "'.", null);
 
         } catch (RuntimeException ex) {
             LOG.error("Catch runtime exception !", ex);
@@ -79,33 +80,45 @@ public class ClientService extends AbstractClientService {
         ExternalContext externalContext = facesContext.getExternalContext();
         Map requestHeader = externalContext.getRequestHeaderMap();
 
-        String requestId = (String) requestHeader.get(REQUEST_ID);
-        if (requestId == null) {
-            AbstractHtmlService.sendJsError(facesContext, "Can not get '"
-                    + REQUEST_ID + "' parameter !");
+        String componentId = (String) requestHeader.get(COMPONENT_ID);
+        if (componentId == null) {
+            AbstractHtmlService.sendJsError(facesContext, null,
+                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not get '" + COMPONENT_ID + "' parameter !", null);
             return;
         }
 
-        String componentId = (String) requestHeader.get(COMPONENT_ID);
-        if (componentId == null) {
-            AbstractHtmlService.sendJsError(facesContext, "Can not get '"
-                    + COMPONENT_ID + "' parameter !");
+        String requestId = (String) requestHeader.get(REQUEST_ID);
+        if (requestId == null) {
+            AbstractHtmlService.sendJsError(facesContext, componentId,
+                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not get '" + REQUEST_ID + "' parameter !", null);
             return;
         }
 
         UIViewRoot viewRoot = facesContext.getViewRoot();
 
+        if (viewRoot.getChildCount() == 0) {
+            AbstractHtmlService.sendJsError(facesContext, componentId,
+                    AbstractHtmlService.SESSION_EXPIRED_SERVICE_ERROR,
+                    "No view !", null);
+            return;
+        }
+
         UIComponent component = HtmlTools.getForComponent(facesContext,
                 componentId, viewRoot);
         if (component == null) {
-            AbstractHtmlService.sendJsError(facesContext, "Can not get view '"
-                    + componentId + "' !");
+            AbstractHtmlService.sendJsError(facesContext, componentId,
+                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not get view '" + componentId + "' !", null);
             return;
         }
 
         if ((component instanceof ServiceComponent) == false) {
-            AbstractHtmlService.sendJsError(facesContext, "Bad component '"
-                    + componentId + "' !");
+            AbstractHtmlService.sendJsError(facesContext, componentId,
+                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                    "Component '" + componentId
+                            + "' does not implement ServiceComponent !", null);
             return;
         }
 
@@ -244,8 +257,9 @@ public class ClientService extends AbstractClientService {
 
         String requestId = (String) request.get(REQUEST_ID);
         if (requestId == null) {
-            AbstractHtmlService.sendJsError(facesContext, "Can not get '"
-                    + REQUEST_ID + "' parameter !");
+            AbstractHtmlService.sendJsError(facesContext, null,
+                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not get '" + REQUEST_ID + "' parameter !", null);
             return;
         }
 
@@ -301,8 +315,9 @@ public class ClientService extends AbstractClientService {
 
         String operationKey = (String) request.get(REQUEST_ID);
         if (operationKey == null) {
-            AbstractHtmlService.sendJsError(facesContext, "Can not get '"
-                    + REQUEST_ID + "' parameter !");
+            AbstractHtmlService.sendJsError(facesContext, null,
+                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not get '" + REQUEST_ID + "' parameter !", null);
             return;
         }
 

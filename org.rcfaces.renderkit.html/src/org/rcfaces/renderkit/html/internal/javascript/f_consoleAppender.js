@@ -735,4 +735,4 @@ var __prototype = {
 	}
 }
 
-var f_consoleAppender=new f_class("f_consoleAppender", null, __static, __prototype);
+new f_class("f_consoleAppender", null, __static, __prototype, f_object);

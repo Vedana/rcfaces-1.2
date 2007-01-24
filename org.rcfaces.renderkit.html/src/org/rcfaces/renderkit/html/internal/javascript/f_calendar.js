@@ -63,4 +63,4 @@ var __prototype = {
 	}
 }
  
-var f_calendar=new f_class("f_calendar", null, null, __prototype, f_component, fa_readOnly, fa_disabled, fa_itemsWrapper);
+new f_class("f_calendar", null, null, __prototype, f_component, fa_readOnly, fa_disabled, fa_itemsWrapper);

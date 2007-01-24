@@ -264,34 +264,36 @@ var __static = {
 
 		f_core.Debug("f_key", "Enter scope '"+scope._name+"'.");
 
-		
-		var s="";
-		for(var i=0;i<currentScopes.length;i++) {
-			s+="/"+currentScopes[i]._name;
-		}
-		
-		document.title=s;
-		
+
+		if (false) {		
+			var s="";
+			for(var i=0;i<currentScopes.length;i++) {
+				s+="/"+currentScopes[i]._name;
+			}
+			
+			document.title=s;
+		}		
 	},
 	/**
 	 * @method hidden static final
 	 */
 	ExitScope: function(scopeName) {
-		f_core.Assert(f_key._CurrentScopes, "No scopes defined.");
-					
+		f_core.Assert(f_key._CurrentScopes, "f_key.ExitScope: No scopes defined.");			
+		f_core.Assert(f_key._CurrentScopes.length, "f_key.ExitScope: Empty scopes !");
+		
 		var scope=f_key._CurrentScopes.pop();
-		f_core.Assert(scope._name==scopeName, "Bad scope ! [removed='"+scope._name+"', asked='"+scopeName+"']");
+		f_core.Assert(scope._name==scopeName, "f_key.ExitScope: Bad scope ! [removed='"+scope._name+"', asked='"+scopeName+"']");
 
 		f_core.Debug("f_key", "Exit scope '"+scope._name+"'.");
 
-
-		var s="";
-		for(var i=0;i<f_key._CurrentScopes.length;i++) {
-			s+="/"+f_key._CurrentScopes[i]._name;
-		}
-		
-		document.title=s;
-		
+		if (false) {
+			var s="";
+			for(var i=0;i<f_key._CurrentScopes.length;i++) {
+				s+="/"+f_key._CurrentScopes[i]._name;
+			}
+			
+			document.title=s;
+		}		
 	},
 	/**
 	 * @method hidden static final
@@ -435,7 +437,7 @@ var __static = {
 	 */
 	_PerformKey: function(jsEvent) {
 		if (!jsEvent) {
-			jsEvent = window.event;
+			jsEvent = f_core.GetEvent(this);
 		}
 
 		var def=f_key._SearchDef(jsEvent, true);
@@ -483,7 +485,7 @@ var __static = {
 	 */
 	_CatchKey: function(jsEvent) {
 		if (!jsEvent) {
-			jsEvent = window.event;
+			jsEvent = f_core.GetEvent(this);
 		}
 
 		var def=f_key._SearchDef(jsEvent, false);
@@ -676,4 +678,4 @@ var __static = {
 	}
 }
 
-var f_key=new f_class("f_key", null, __static);
+new f_class("f_key", null, __static);

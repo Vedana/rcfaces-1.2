@@ -20,6 +20,18 @@ function f_aspect(aspectName, staticMembers, members) {
 		return;
 	}
 
+	if (!staticMembers) {
+		staticMembers=new Object;
+	}
+	
+	if (!staticMembers.f_getName) {
+		staticMembers.f_getName=f_class.f_getName
+	}
+	
+	if (!staticMembers.toString) {	
+		staticMembers.toString=f_class.toString;
+	}			
+
 	this._name=aspectName;
 	this._members=members;
 	this._staticMembers=staticMembers;

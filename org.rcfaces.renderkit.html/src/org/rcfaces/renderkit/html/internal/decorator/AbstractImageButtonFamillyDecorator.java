@@ -15,6 +15,7 @@ import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapabilit
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.RcfacesContext;
@@ -88,6 +89,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     protected int imageHeight;
 
+    protected String accessKey = null;
+
+    protected Integer tabIndex = null;
+
     public AbstractImageButtonFamillyDecorator(
             IImageButtonFamilly imageButtonFamilly) {
         this.imageButtonFamilly = imageButtonFamilly;
@@ -128,6 +133,16 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             textPosition = imageButtonFamilly.getTextPosition(facesContext);
 
+            if (imageButtonFamilly instanceof IAccessKeyCapability) {
+                accessKey = ((IAccessKeyCapability) imageButtonFamilly)
+                        .getAccessKey();
+            }
+
+            if (imageButtonFamilly instanceof ITabIndexCapability) {
+                tabIndex = ((ITabIndexCapability) imageButtonFamilly)
+                        .getTabIndex();
+            }
+
             if (htmlBorderWriter == null && (text != null)) {
                 IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
                         .getInstance(facesContext).getBorderRenderersRegistry();
@@ -164,6 +179,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             int tableHorizontalSpan = computeHorizontalSpan();
             int tableVerticalSpan = computeVerticalSpan();
 
+            boolean directComponent = false;
             String mainComponent = null;
             if (htmlBorderWriter == null) {
                 boolean displayInline = true;
@@ -174,7 +190,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     mainComponent = "DIV";
 
                 } else {
-                    mainComponent = "INPUT";
+                    displayInline = false;
+                    mainComponent = getInputElement();
+                    directComponent = true;
                 }
 
                 writer.startElement(mainComponent);
@@ -280,15 +298,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 }
             }
 
-            if (htmlBorderWriter == null && mainComponent.equals("INPUT")) {
-                writer.writeType("image");
-
-                writeImageSrc(writer, imageSrc);
-                writer.writeAlign("baseline");
-
-                writeImageAttributes(writer, imageButtonFamilly);
-            }
-
             if (hoverImageAccessor != null) {
                 String hoverImageURL = hoverImageAccessor.resolveURL(
                         facesContext, null, null);
@@ -297,6 +306,29 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     initJavascript = true;
                     writer.writeAttribute("v:hoverImageURL", hoverImageURL);
                 }
+            }
+
+            if (htmlBorderWriter == null && directComponent) {
+                writeImageAttributes(writer, imageButtonFamilly);
+
+                if (mainComponent.equals("INPUT")) {
+                    writer.writeType("image");
+                    writeInputAttributes(writer);
+                    writeImageSrc(writer, imageSrc);
+                    writeImageSize(writer, imageButtonFamilly); // jbos@unedic.fr
+
+                } else {
+                    writer.writeHRef("javascript:void(0)");
+                    writeInputAttributes(writer);
+
+                    writer.startElement("IMG");
+                    writer.writeClass(getImageClassName(htmlBorderWriter));
+                    writeImageSrc(writer, imageSrc);
+                    writeImageSize(writer, imageButtonFamilly);
+                    writer.endElement("IMG");
+                }
+
+                // writer.writeAlign("baseline");
             }
 
             /*
@@ -327,7 +359,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                 htmlBorderWriter.endComposite(writer);
 
-            } else if ("INPUT".equals(mainComponent) == false) {
+            } else if (directComponent == false) {
                 // htmlBorderWriter=null;
 
                 // Nous sommes dans DIV ou SPAN
@@ -348,6 +380,17 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         }
 
         super.encodeContainerEnd(writer, renderer);
+    }
+
+    private void writeInputAttributes(IHtmlWriter writer)
+            throws WriterException {
+        if (tabIndex != null) {
+            writer.writeTabIndex(tabIndex.intValue());
+        }
+
+        if (accessKey != null) {
+            writer.writeAccessKey(accessKey);
+        }
     }
 
     protected void writeImageSrc(IHtmlWriter writer, String imageSrc)
@@ -381,6 +424,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 writer.writeAccessKey(accessKey);
             }
         }
+    }
+
+    protected void writeImageSize(IHtmlWriter writer,
+            IImageButtonFamilly imageButtonFamilly) throws WriterException {
 
         if (imageWidth > 0 && imageHeight > 0) {
             writer.writeWidth(imageWidth);
@@ -520,13 +567,42 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     protected abstract void writeAttributes(String classSuffix)
             throws WriterException;
 
+    protected String getInputElement() {
+        return "A";
+    }
+
     protected void writeImage() throws WriterException {
-        writer.startElement("INPUT");
-        writer.writeType("image");
+
+        String inputElement = getInputElement();
+        writer.startElement(inputElement);
+        writeInputAttributes(writer);
+
+        if ("INPUT".equals(inputElement)) {
+            writer.writeType("image");
+            writeImageAttributes();
+            writeImageSrc(writer, imageSrc);
+            writeImageSize(writer, imageButtonFamilly);
+
+            writeImageAttributes();
+
+        } else {
+            writeImageAttributes();
+            writer.writeHRef("javascript:void(0)");
+
+            writer.startElement("IMG");
+            writer.writeClass(getImageClassName(htmlBorderWriter));
+            writeImageSrc(writer, imageSrc);
+            writeImageSize(writer, imageButtonFamilly);
+            writer.endElement("IMG");
+        }
+
+        writer.endElement(inputElement);
+    }
+
+    protected void writeImageAttributes() throws WriterException {
 
         writer.writeClass(getImageClassName(htmlBorderWriter));
 
-        writeImageSrc(writer, imageSrc);
         // writer.writeAttribute("align", "baseline");
 
         if (textPosition == IHorizontalTextPositionCapability.LEFT_POSITION
@@ -535,6 +611,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         }
 
         writeImageAttributes(writer, imageButtonFamilly);
+
     }
 
     protected String getImageClassName(IHtmlBorderRenderer htmlBorderWriter) {

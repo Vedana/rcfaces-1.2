@@ -11,11 +11,13 @@ import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.TreeComponent;
+import org.rcfaces.core.component.TreeNodeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -368,8 +370,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             IClientDataSelectItem clientDataItem = (IClientDataSelectItem) selectItem;
 
             if (clientDataItem.isClientDataEmpty() == false) {
-                writeItemClientDatas(clientDataItem, javaScriptWriter,
-                        null, "f_setItemClientDatas", varId);
+                writeItemClientDatas(clientDataItem, javaScriptWriter, null,
+                        "f_setItemClientDatas", varId);
             }
         }
 
@@ -624,4 +626,11 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         return super.convertToSelectItem(value);
     }
 
+    protected SelectItem createSelectItem(UISelectItem component) {
+        if (component instanceof TreeNodeComponent) {
+            return new TreeNode((TreeNodeComponent) component);
+        }
+
+        return super.createSelectItem(component);
+    }
 }

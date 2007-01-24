@@ -502,7 +502,7 @@ var __prototype = {
 		f_core.AddCheckListener(component, this);	
 		
 		var validator=this;
-		component.f_addEventListener(f_event.RESET, function(event) {
+		component.f_insertEventListenerFirst(f_event.RESET, function(event) {
 			return validator._onReset(event);
 		});
 				
@@ -524,8 +524,8 @@ var __prototype = {
 		
 		f_core.Debug(f_clientValidator, "Construct new validator for component '"+component.id+"' with params='"+this._parameters+"' initialValue='"+componentValue+"'.");
 		
-		component.f_addEventListener(f_event.FOCUS, f_clientValidator._OnFocus);
-		component.f_addEventListener(f_event.BLUR, f_clientValidator._OnBlur);
+		component.f_insertEventListenerFirst(f_event.FOCUS, f_clientValidator._OnFocus);
+		component.f_insertEventListenerFirst(f_event.BLUR, f_clientValidator._OnBlur);
 	},
 	f_finalize: function() {
 		this._input = undefined;
@@ -1284,4 +1284,4 @@ var __prototype = {
 	}
 }
 
-var f_clientValidator=new f_class("f_clientValidator", null, __static, __prototype);
+new f_class("f_clientValidator", null, __static, __prototype, f_object);

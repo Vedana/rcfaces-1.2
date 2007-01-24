@@ -43,6 +43,12 @@ public abstract class AbstractFilteredCollection implements Collection,
         this.collection = collection;
     }
 
+    /**
+     * 
+     * @param filter
+     * @param selectItem
+     * @return <code>true</code> if the selectItem is sent to the client.
+     */
     protected abstract boolean accept(IFilterProperties filter,
             SelectItem selectItem);
 
@@ -133,6 +139,7 @@ public abstract class AbstractFilteredCollection implements Collection,
 
         public FilteredIterator(IFilterProperties filterProperties,
                 int maxResultNumber) {
+
             this.filterProperties = filterProperties;
             this.maxResultNumber = maxResultNumber;
             this.size = 0;
@@ -152,7 +159,7 @@ public abstract class AbstractFilteredCollection implements Collection,
                 return true;
             }
 
-            if (maxResultNumber >= 0 && currentIndex >= maxResultNumber) {
+            if (maxResultNumber > 0 && currentIndex >= maxResultNumber) {
                 if (limitTested) {
                     return false;
                 }

@@ -152,6 +152,7 @@ public class ImageAccessorTools {
         }
 
         return new IExpandImageAccessors() {
+            private static final String REVISION = "$Revision$";
 
             public IContentAccessor getImageAccessor() {
                 return imageContentAccessor;
@@ -210,6 +211,7 @@ public class ImageAccessorTools {
         }
 
         return new ISeverityImageAccessors() {
+            private static final String REVISION = "$Revision$";
 
             public IContentAccessor getErrorImageAccessor() {
                 return errorImageContentAccessor;

@@ -78,23 +78,31 @@ public class TreeService extends AbstractHtmlService {
         Map parameters = facesContext.getExternalContext()
                 .getRequestParameterMap();
 
-        UIViewRoot viewRoot = facesContext.getViewRoot();
-
         String treeId = (String) parameters.get("treeId");
         if (treeId == null) {
-            sendJsError(facesContext, "Can not find 'treeId' parameter.");
+            sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'treeId' parameter.", null);
             return;
         }
 
         String waitingId = (String) parameters.get("waitingId");
         if (waitingId == null) {
-            sendJsError(facesContext, "Can not find 'waitingId' parameter.");
+            sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'waitingId' parameter.", null);
+            return;
+        }
+
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        if (viewRoot.getChildCount() == 0) {
+            sendJsError(facesContext, treeId, SESSION_EXPIRED_SERVICE_ERROR,
+                    "No view !", waitingId);
             return;
         }
 
         String node = (String) parameters.get("node");
         if (node == null) {
-            sendJsError(facesContext, "Can not find 'node' parameter.");
+            sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'node' parameter.", waitingId);
             return;
         }
 
@@ -103,14 +111,16 @@ public class TreeService extends AbstractHtmlService {
         if (component == null) {
             // Cas special: la session a du expir�e ....
 
-            sendCancel(facesContext, treeId, waitingId);
+            sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find treeComponent (id='" + treeId + "').",
+                    waitingId);
 
             return;
         }
 
         if ((component instanceof TreeComponent) == false) {
-            sendJsError(facesContext, "Can not find treeComponent (id='"
-                    + treeId + "').");
+            sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Invalid treeComponent (id='" + treeId + "').", waitingId);
             return;
         }
 
@@ -118,8 +128,9 @@ public class TreeService extends AbstractHtmlService {
 
         TreeRenderer treeRenderer = getTreeRenderer(facesContext, treeComponent);
         if (treeRenderer == null) {
-            sendJsError(facesContext, "Can not find treeRenderer. (treeId='"
-                    + treeId + "')");
+            sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find treeRenderer. (treeId='" + treeId + "')",
+                    waitingId);
             return;
         }
 
@@ -176,37 +187,6 @@ public class TreeService extends AbstractHtmlService {
 
     }
 
-    private void sendCancel(FacesContext facesContext, String treeId,
-            String waitingId) {
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-
-        try {
-            PrintWriter printWriter = response.getWriter();
-
-            IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(
-                    facesContext, printWriter, null, null);
-
-            String varId = jsWriter.getComponentVarName();
-
-            jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                    "GetElementById").writeString(treeId).writeln(
-                    ", document);");
-
-            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeString(
-                    waitingId).write(");");
-
-        } catch (IOException ex) {
-            throw new FacesException("Can not write cancel response.", ex);
-        }
-
-        facesContext.responseComplete();
-    }
-
     private TreeRenderer getTreeRenderer(FacesContext facesContext,
             TreeComponent treeComponent) {
 
@@ -246,7 +226,7 @@ public class TreeService extends AbstractHtmlService {
                 "GetElementById").writeString(treeId).writeln(", document);");
 
         jsWriter.write("var ").write(waitingVarId).write('=').writeMethodCall(
-                "_getWaitingNode").write(waitingId).writeln(");");
+                "f_getWaitingNode").write(waitingId).writeln(");");
 
         // Le varName a utiliser est celui du waitingVarId !
         // Car les noeuds sont encod�s par rapport � un parent nomm� par le
@@ -254,7 +234,8 @@ public class TreeService extends AbstractHtmlService {
         jsWriter.setComponentVarName(varId);
 
         ISelectItemNodeWriter nodeWriter = treeRenderer
-                .getSelectItemNodeWriter(jsWriter.getHtmlComponentRenderContext());
+                .getSelectItemNodeWriter(jsWriter
+                        .getHtmlComponentRenderContext());
 
         FilterNodeRenderer nodeRenderer = new FilterNodeRenderer(node,
                 nodeWriter);
@@ -268,8 +249,8 @@ public class TreeService extends AbstractHtmlService {
          */
 
         // treeRenderer.encodeJsTransactionalRows(jsWriter, treeRenderContext);
-        jsWriter.writeMethodCall("_clearWaiting").write(waitingId)
-                .writeln(");");
+        jsWriter.writeMethodCall("f_clearWaiting").write(waitingId).writeln(
+                ");");
 
         if (LOG.isTraceEnabled()) {
             pw.flush();

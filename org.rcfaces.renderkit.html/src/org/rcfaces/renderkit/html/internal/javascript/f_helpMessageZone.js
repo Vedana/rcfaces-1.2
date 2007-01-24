@@ -58,4 +58,4 @@ var __prototype = {
 	}
 }
 
-var f_helpMessageZone=new f_class("f_helpMessageZone", null, null, __prototype, f_component);
+new f_class("f_helpMessageZone", null, null, __prototype, f_component);

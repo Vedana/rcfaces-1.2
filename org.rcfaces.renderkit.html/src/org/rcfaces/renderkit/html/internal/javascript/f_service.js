@@ -126,7 +126,7 @@ var __prototype={
 	 * @method public
 	 * @param function resultCallback Callback which will be called, when the result has been received.
 	 * @param any parameter Parameters of the request.
-	 * @param f_progressMonitor progressMonitor Progress monitor associated to the call.
+	 * @param optional f_progressMonitor progressMonitor Progress monitor associated to the call.
 	 * @return String Request identifier.
 	 */
 	f_asyncCall: function(resultCallback, parameter, progressMonitor) {
@@ -143,7 +143,7 @@ var __prototype={
 	/**
 	 * @method public
 	 * @param any parameter Parameters of the request. (Supported types: String, object, and number)
-	 * @param f_progressMonitor progressMonitor Progress monitor associated to the call.
+	 * @param optional f_progressMonitor progressMonitor Progress monitor associated to the call.
 	 * @return any Result of request.
 	 */
 	f_syncCall: function(parameter, progressMonitor) {
@@ -156,7 +156,7 @@ var __prototype={
 		this._setRequestState(requestId, f_service.INIT_STATE);
 
 		var url=f_env.GetViewURI();
-		var request=f_httpRequest.f_newInstance(this, url);
+		var request=new f_httpRequest(this, url);
 		var params=this._prepareRequest(request, requestId, parameter);
 
 		var ret=this._sendRequest(request, params, progressMonitor);
@@ -197,6 +197,9 @@ var __prototype={
 	 */
 	f_getRequestState: function(requestId) {
 	},
+	/**
+	 * @method private
+	 */
 	_prepareRequest: function(request, requestId, parameter) {
 		var params;
 		var type;		
@@ -244,7 +247,7 @@ var __prototype={
 	 */
 	_asyncCallServer: function(requestId, resultCallback, parameter, progressMonitor) {
 		var url=f_env.GetViewURI();
-		var request=f_httpRequest.f_newInstance(this, url);
+		var request=new f_httpRequest(this, url);
 		var params=this._prepareRequest(request, requestId, parameter);
 		
 		var subProgressMonitor;
@@ -351,6 +354,11 @@ var __prototype={
 					subProgressMonitor.f_done();
 				}			
 	 			
+	 			if (service.f_fireEvent(f_event.ERROR, null, request, f_error.HTTP_ERROR, null, text)===false) {
+					service._loading=undefined;
+					return;
+				}
+	 			
 				if (service.f_processNextCommand()) {
 					return;
 				}
@@ -423,4 +431,4 @@ var __prototype={
 	}
 }
  
-var f_service = new f_class("f_service", null, __static, __prototype, f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands);
+new f_class("f_service", null, __static, __prototype, f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands);

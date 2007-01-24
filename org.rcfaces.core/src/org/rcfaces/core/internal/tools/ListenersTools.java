@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IKeyDownEventCapability;
@@ -42,6 +43,8 @@ import org.rcfaces.core.internal.listener.CloseActionListener;
 import org.rcfaces.core.internal.listener.CloseScriptListener;
 import org.rcfaces.core.internal.listener.DoubleClickActionListener;
 import org.rcfaces.core.internal.listener.DoubleClickScriptListener;
+import org.rcfaces.core.internal.listener.ErrorActionListener;
+import org.rcfaces.core.internal.listener.ErrorScriptListener;
 import org.rcfaces.core.internal.listener.FocusScriptListener;
 import org.rcfaces.core.internal.listener.InitScriptListener;
 import org.rcfaces.core.internal.listener.KeyDownScriptListener;
@@ -152,6 +155,26 @@ public class ListenersTools {
         public void addActionListener(UIComponent component,
                 Application application, String expression) {
             throw new UnsupportedListenerTypeException("Load");
+        }
+    };
+
+    public static final IListenerType ERROR_LISTENER_TYPE = new AbstractListenerType() {
+        private static final String REVISION = "$Revision$";
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IErrorEventCapability errorEventCapability = (IErrorEventCapability) component;
+
+            errorEventCapability.addErrorListener(new ErrorScriptListener(
+                    scriptType, command));
+        }
+
+        public void addActionListener(UIComponent component,
+                Application application, String expression) {
+            IErrorEventCapability errorEventCapability = (IErrorEventCapability) component;
+
+            errorEventCapability.addErrorListener(new ErrorActionListener(
+                    expression));
         }
     };
 

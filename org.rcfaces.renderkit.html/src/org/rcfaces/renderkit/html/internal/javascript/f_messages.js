@@ -147,4 +147,4 @@ var __prototype = {
 	}
 }
 
-var f_messages=new f_class("f_messages", null, __static, __prototype, f_component, fa_messageText);
+new f_class("f_messages", null, __static, __prototype, f_component, fa_messageText);

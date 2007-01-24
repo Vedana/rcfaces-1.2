@@ -303,6 +303,7 @@ var __prototype = {
 
 	/**
 	 * @method public
+	 * @param optional String s
 	 */
 	f_md5: function(s) {
 		this.f_super(arguments);
@@ -412,4 +413,4 @@ var __prototype = {
 	}
 }
 
-var f_md5=new f_class("f_md5", null, __static, __prototype);
+new f_class("f_md5", null, __static, __prototype, f_object);

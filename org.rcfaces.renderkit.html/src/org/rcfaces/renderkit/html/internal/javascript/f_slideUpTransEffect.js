@@ -33,5 +33,5 @@ var __prototype = {
 	}
 }
 
-var f_slideUpTransEffect=new f_class("f_slideUpTransEffect", null, __static, __prototype, f_slideUpEffect);
+new f_class("f_slideUpTransEffect", null, __static, __prototype, f_slideUpEffect);
 

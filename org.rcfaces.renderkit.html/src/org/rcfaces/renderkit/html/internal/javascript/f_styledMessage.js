@@ -47,4 +47,4 @@ var __prototype = {
 	}
 }
  
-var f_styledMessage = new f_class("f_styledMessage", null, __static, __prototype, f_component, fa_message1);
+new f_class("f_styledMessage", null, __static, __prototype, f_component, fa_message1);

@@ -88,4 +88,4 @@ var __prototype = {
 	}
 }
 
-var f_frameSetAppender=new f_class("f_frameSetAppender", null, __static, __prototype);
+new f_class("f_frameSetAppender", null, __static, __prototype, f_object);

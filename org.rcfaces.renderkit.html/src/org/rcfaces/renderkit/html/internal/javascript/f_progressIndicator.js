@@ -191,4 +191,4 @@ var __prototype = {
 	}
 }
  
-var f_progressIndicator=new f_class("f_progressIndicator", null, __static, __prototype, f_component);
+new f_class("f_progressIndicator", null, __static, __prototype, f_component);

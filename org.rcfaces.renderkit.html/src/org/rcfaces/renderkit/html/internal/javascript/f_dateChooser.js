@@ -59,4 +59,4 @@ var __prototype={
 	}
 }
  
-var f_dateChooser=new f_class("f_dateChooser", null, __static, __prototype, f_imageButton, fa_calendarPopup);
+new f_class("f_dateChooser", null, __static, __prototype, f_imageButton, fa_calendarPopup);

@@ -9,6 +9,7 @@
  * @author Joel Merlin + Olivier Oeuillot
  */
 var __static = {
+
 	/**
 	 * @field public static final String
 	 */
@@ -63,8 +64,6 @@ var __static = {
 var __prototype = {
 
 	f_httpRequest: function(component, url, acceptType, noLog) {
-		this.f_super(arguments);
-		
 		this._component=component;
 		this._noLog=noLog;
 		this._url=url;
@@ -81,8 +80,6 @@ var __prototype = {
 		//this._noLog=noLog; // boolean
 		
 		this._component = undefined; // any ?
-		
-		this.f_super(arguments);
 	},
 
 	/**
@@ -563,6 +560,9 @@ var __prototype = {
 	/**
 	 * Gestionnaire d'évènements de la requête xmlHttp, appelle le
 	 * listener enregistré pour la gestion des évènements de la requête
+	 *
+	 * @method private
+	 * @return void
 	 */
 	_onReadyStateChange: function() {
 		var req = this._request;
@@ -748,6 +748,10 @@ var __prototype = {
 			}
 		}
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_callError: function(status, statusText) {
 		if (this._error) {
 			// Error handler already called
@@ -772,6 +776,11 @@ var __prototype = {
 			f_core.Error(f_httpRequest, "Exception when calling onError.\n"+onError,ex);
 		}
 	},
+	/**
+	 * @method public
+	 * @param optional String acceptType Mime type of accept header parameter.
+	 * @return void
+	 */
 	f_setAcceptType: function(acceptType) {
 		if (!acceptType) {
 			acceptType=f_httpRequest.ANY_MIME_TYPE;		
@@ -780,5 +789,5 @@ var __prototype = {
 	}
 }
 
-var f_httpRequest=new f_class("f_httpRequest", null, __static, __prototype);
+new f_class("f_httpRequest", null, __static, __prototype);
 

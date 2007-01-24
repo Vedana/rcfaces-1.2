@@ -654,4 +654,4 @@ var __prototype = {
 		}
 	}
 }
-var f_xmlDigester=new f_class("f_xmlDigester", null, __static, __prototype);
+new f_class("f_xmlDigester", null, __static, __prototype, f_object);

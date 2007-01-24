@@ -25,8 +25,8 @@ var __prototype = {
 		
 		var focusStyleClass=this.f_getFocusStyleClass();
 		if (focusStyleClass || this._emptyMessage) {
-			this.f_addEventListener(f_event.FOCUS, this._performFocusEvent);
-			this.f_addEventListener(f_event.BLUR, this._performBlurEvent);
+			this.f_insertEventListenerFirst(f_event.FOCUS, this._performFocusEvent);
+			this.f_insertEventListenerFirst(f_event.BLUR, this._performBlurEvent);
 		}
 	},
 	/*
@@ -42,7 +42,7 @@ var __prototype = {
 
 		var menu=this.f_getSubMenuById(f_textArea._TEXT_MENU_ID);
 		if (menu) {
-			this.f_addEventListener(f_event.MOUSEDOWN, this._performMenuMouseDown);
+			this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._performMenuMouseDown);
 		}
 		
 		if (this.f_isRequired()) {
@@ -80,7 +80,7 @@ var __prototype = {
 	f_setDomEvent: function(type, target) {
 		switch(type) {
 		case f_event.SELECTION: 
-			this.f_addEventListener(f_event.KEYPRESS, this.f_performSelectionEvent);
+			this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_performSelectionEvent);
 			return;
 			
 		case f_event.KEYPRESS:
@@ -272,5 +272,5 @@ var __prototype = {
 	}
 }
 
-var f_textArea = new f_class("f_textArea", null, __static, __prototype, f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass, fa_message);
+new f_class("f_textArea", null, __static, __prototype, f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass, fa_message);
 

@@ -267,7 +267,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		evt.cancelBubble=true;
 		
@@ -288,7 +288,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		evt.cancelBubble=true;
 		
@@ -310,7 +310,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 				
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 7, true, true);
@@ -488,7 +488,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		evt.cancelBubble=true;
 		
@@ -510,7 +510,7 @@ var __static = {
 			return null;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 			
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 6, true);
@@ -609,7 +609,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		evt.cancelBubble=true;
 		
@@ -679,7 +679,7 @@ var __static = {
 				return false;
 			}
 			if (!evt) {
-				evt = f_core.IeGetEvent(this);
+				evt = f_core.GetEvent(this);
 			}
 			evt.cancelBubble=true;
 			
@@ -704,7 +704,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}		
 		
 		var delta=f_calendarObject._GetDeltaKey(evt, 10, 1);
@@ -771,7 +771,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		evt.cancelBubble=true;
 		
@@ -793,7 +793,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}		
 	
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 10);
@@ -838,7 +838,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 
 		evt.cancelBubble=true;
@@ -855,7 +855,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		
 		evt.cancelBubble=true;
@@ -873,7 +873,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}		
 
 		switch(evt.keyCode) {
@@ -911,7 +911,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 
 		evt.cancelBubble=true;
@@ -928,7 +928,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		
 		evt.cancelBubble=true;
@@ -945,7 +945,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		
 		evt.cancelBubble=true;
@@ -962,7 +962,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 		
 		evt.cancelBubble=true;
@@ -2978,7 +2978,7 @@ var __prototype = {
 		params.maxDate=maxDate.getTime();
 
 		var url=f_env.GetViewURI();	
-		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var calendarObject=this;
 		request.f_setListener({
 			/**
@@ -3083,4 +3083,4 @@ var __prototype = {
 	}
 }
  
-var f_calendarObject=new f_class("f_calendarObject", null, __static, __prototype, f_object, fa_eventTarget, fa_items, fa_selectionProvider, fa_commands);
+new f_class("f_calendarObject", null, __static, __prototype, f_object, fa_eventTarget, fa_items, fa_selectionProvider, fa_commands);

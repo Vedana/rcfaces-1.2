@@ -38,5 +38,4 @@ var __prototype = {
 		return this.f_super(arguments);
 	}
 }
-
-var f_imageCheckButton=new f_class("f_imageCheckButton", null, null, __prototype, f_imageButton, fa_selected);
+new f_class("f_imageCheckButton", null, null, __prototype, f_imageButton, fa_selected);

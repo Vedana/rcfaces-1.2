@@ -96,4 +96,4 @@ var __prototype = {
 	}
 }
 
-var f_spinner = new f_class("f_spinner", null, null, __prototype, f_textEntry, fa_spinner);
+new f_class("f_spinner", null, null, __prototype, f_textEntry, fa_spinner);

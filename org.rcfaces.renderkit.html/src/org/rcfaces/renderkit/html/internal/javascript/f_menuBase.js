@@ -32,4 +32,4 @@ var __prototype = {
 	*/
 }
 
-var f_menuBase=new f_class("f_menuBase", null, null, __prototype, f_component, fa_menuCore);
+new f_class("f_menuBase", null, null, __prototype, f_component, fa_menuCore);

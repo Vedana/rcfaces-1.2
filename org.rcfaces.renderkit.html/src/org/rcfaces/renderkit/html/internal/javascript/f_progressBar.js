@@ -191,4 +191,4 @@ var __prototype = {
 	}
 }
  
-var f_progressBar=new f_class("f_progressBar", null, null, __prototype, f_component);
+new f_class("f_progressBar", null, null, __prototype, f_component);

@@ -305,6 +305,16 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.toolFolder</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ToolFolderRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.itemsToolFolder</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ItemsToolFolderRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.tree</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TreeRenderer</renderer-class>
 		</renderer>

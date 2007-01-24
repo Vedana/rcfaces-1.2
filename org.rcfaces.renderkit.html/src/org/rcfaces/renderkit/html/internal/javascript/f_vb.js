@@ -12,7 +12,7 @@
 =============================================================================*/
 
 
-var f_vb = {
+var __static = {
 	/**
 	 * @field private static final String
 	 */
@@ -1228,9 +1228,8 @@ var f_vb = {
 			f_core.Debug(f_vb, "Converter_num: Convert number["+typeof(object)+"] '"+object+"' to string["+typeof(ret)+"] '"+ret+"'.");
 			return ret;
 		}
-	},
-	
-	f_getName: function() {
-		return "f_vb";
 	}
 }
+
+new f_class("f_vb", null, __static);
+

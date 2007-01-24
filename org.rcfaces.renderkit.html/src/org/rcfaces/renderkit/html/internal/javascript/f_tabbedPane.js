@@ -30,8 +30,10 @@ var __static = {
 		if (tabbedPane.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
 		
+		if (!evt) {
+			evt=f_core.GetEvent(this);
+		}
 		
 		tabbedPane._resize();
 		
@@ -46,8 +48,10 @@ var __static = {
 		if (tabbedPane.f_getEventLocked()) {
 			return false;
 		}
-		if (!evt) evt = window.event;
 
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
 		var old=tabbedPane._selectedCard;
 
@@ -64,7 +68,10 @@ var __static = {
 		if (tabbedPane.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 				
 		return true;
 	},
@@ -77,7 +84,10 @@ var __static = {
 		if (tabbedPane.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
 		switch(evt.keyCode) {
 		case f_key.VK_RIGHT: // FLECHE VERS LA DROITE
@@ -99,7 +109,10 @@ var __static = {
 		if (tabbedPane.f_getEventLocked()) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 			
 		switch(evt.keyCode) {
 		case f_key.VK_RIGHT: // FLECHE VERS LA DROITE
@@ -155,7 +168,10 @@ var __static = {
 		if (tabbedPane.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
 		tabbedPane._tabMouseOver(this._tab, evt);
 		
@@ -170,7 +186,10 @@ var __static = {
 		if (tabbedPane.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
 		tabbedPane._tabMouseOut(this._tab, evt);
 		
@@ -310,8 +329,9 @@ var __prototype = {
 		
 		var maxHeight=0;
 		
-		for(var i=0;i<this._cards.length;i++) {
-			var tab=this._cards[i];
+		var cards=this._cards;
+		for(var i=0;i<cards.length;i++) {
+			var tab=cards[i];
 
 			var _tab=tab._ccard;
 		
@@ -330,16 +350,46 @@ var __prototype = {
 			}
 
 			var mask=_tab._mask;
-			var mleft=tab._textTitle.offsetLeft-2;
-			var mright=tab._textTitle.offsetLeft+tab._textTitle.offsetWidth+2;
+			var textTitle=tab._textTitle;
+			var mleft=textTitle.offsetLeft;
+			var mright=textTitle.offsetLeft+textTitle.offsetWidth;
 			
+			var borderSize=f_core.GetCurrentStyleProperty(_tab, "border-left-width");
+			if (!borderSize) {
+				borderSize=f_core.GetCurrentStyleProperty(_tab, "borderLeftWidth");
+			}
+			
+			var borderSize=parseInt(borderSize);
+			if (!isNaN(borderSize)) {
+				mleft+=1-borderSize;
+				mright+=1-borderSize;
+			}
+			
+			var w=tab._leftTitle.offsetWidth;
+			if (!tab._prev) {
+				mleft-=w;
+			} else {
+				mleft-=w-2;
+			}
+			
+			w=tab._rightTitle.offsetWidth;			
+			if (!tab._next) {
+				mright+=w-2;
+			} else {
+				mright+=w-4;
+			}
+			
+			/*
 			mleft-=2;
 			
 			if (!tab._right) {
 				mright+=2;
 			}
+			*/
 			
-			mask.style.left=(mleft-1)+"px";
+			f_core.Debug(f_tabbedPane, "Set mask position "+mleft+" to "+mright);
+			
+			mask.style.left=(mleft)+"px";
 			mask.style.width=(mright-mleft)+"px";
 		}
 	
@@ -598,7 +648,8 @@ var __prototype = {
 		tab._textTitle.className=className+textTitle;
 		tab._textTTitle.className=className+textTTitle;
 		
-		if (tab._icon) {
+		var icon=tab._icon;
+		if (icon) {
 			var imageURL=null;
 
 			if (tab._disabled) {
@@ -618,11 +669,11 @@ var __prototype = {
 			}
 			
 			if (imageURL) {
-				tab._icon.src=imageURL;
-	//			tab._icon.style.display="inherit";
+				icon.src=imageURL;
+	//			icon.style.display="inherit";
 				
 			} else {
-	//			tab._icon.style.display="none";
+	//			icon.style.display="none";
 			}
 		}
 	},
@@ -681,11 +732,12 @@ var __prototype = {
 			var tdTitleLeft=document.createElement("TD");
 			trTitle.appendChild(tdTitleLeft);
 			
-			tab._leftTTitleImage=document.createElement("IMG");
-			tab._leftTTitleImage.src=blankImage;
-			tab._leftTTitleImage.width=5;
-			tab._leftTTitleImage.height=5;
-			tdTitleLeft.appendChild(tab._leftTTitleImage);
+			var leftTTitleImage=document.createElement("IMG");
+			tab._leftTTitleImage=leftTTitleImage;
+			leftTTitleImage.src=blankImage;
+			leftTTitleImage.width=5;
+			leftTTitleImage.height=5;
+			tdTitleLeft.appendChild(leftTTitleImage);
 			
 			tab._leftTitle=document.createElement("TD");
 			trText.appendChild(tab._leftTitle);
@@ -699,57 +751,63 @@ var __prototype = {
 		
 		tab._textTTitle=document.createElement("TD");		
 		trTitle.appendChild(tab._textTTitle);
+	
+		var textTitle=document.createElement("TD");
+		tab._textTitle=textTitle;
+		trText.appendChild(textTitle);
 
-		tab._textTitle=document.createElement("TD");
-		trText.appendChild(tab._textTitle);
-
-		tab._textTitle._tab=tab;
-		tab._textTitle.onclick=f_tabbedPane._TabbedPane_click;
-		tab._textTitle.onmouseover=f_tabbedPane._TabbedPane_mouseover;
-		tab._textTitle.onmouseout=f_tabbedPane._TabbedPane_mouseout;
+		textTitle._tab=tab;
+		textTitle.onclick=f_tabbedPane._TabbedPane_click;
+		textTitle.onmouseover=f_tabbedPane._TabbedPane_mouseover;
+		textTitle.onmouseout=f_tabbedPane._TabbedPane_mouseout;
 		
-		tab._textLink=document.createElement("A");
-		tab._textTitle.appendChild(tab._textLink);
+		var textLink=document.createElement("A");
+		tab._textLink=textLink;
+		textTitle.appendChild(textLink);
+		
 		if (accessKey && f_core.IsInternetExplorer()) {
 			// Il faut positionner l'accessKey !
-			tab._textLink.accessKey=accessKey;
+			textLink.accessKey=accessKey;
 		}
 
-		if (tab._imageURL) {
-			tab._icon=document.createElement("IMG");
-			tab._icon.src=tab._imageURL;
-			tab._icon.align="center";
-			tab._icon.border=0;
-			tab._icon.className="f_tabbedPane_titleIcon";
+		var imageURL=tab._imageURL;
+		if (imageURL) {
+			var icon=document.createElement("IMG");
+			tab._icon=icon;
+			icon.src=imageURL;
+			icon.align="center";
+			icon.border=0;
+			icon.className="f_tabbedPane_titleIcon";
 
-			tab._textLink.appendChild(tab._icon);
+			textLink.appendChild(icon);
 		}
 		
 		if (text) {
-			f_component.AddLabelWithAccessKey(tab._textLink, text, accessKey);
+			f_component.AddLabelWithAccessKey(textLink, text, accessKey);
 		}
 		
-		tab._textLink._tab=tab;
+		textLink._tab=tab;
 		if (this._tabIndex) {
-			tab._textLink.tabIndex=this._tabIndex;
+			textLink.tabIndex=this._tabIndex;
 		} else {
-			tab._textLink.tabIndex=0;
+			textLink.tabIndex=0;
 		}
-		tab._textLink._tab=tab;
-		tab._textLink.onclick=f_tabbedPane._TabbedPane_click;
-		tab._textLink.onfocus=f_tabbedPane._TabbedPane_focus;
-		tab._textLink.onkeydown=f_tabbedPane._TabbedPane_keyDown;
-		tab._textLink.onkeypress=f_tabbedPane._TabbedPane_keyPress;
-		tab._textLink.href=f_core.JAVASCRIPT_VOID;
+		textLink._tab=tab;
+		textLink.onclick=f_tabbedPane._TabbedPane_click;
+		textLink.onfocus=f_tabbedPane._TabbedPane_focus;
+		textLink.onkeydown=f_tabbedPane._TabbedPane_keyDown;
+		textLink.onkeypress=f_tabbedPane._TabbedPane_keyPress;
+		textLink.href=f_core.JAVASCRIPT_VOID;
 	
 		var tdTitleRight=document.createElement("TD");
 		trTitle.appendChild(tdTitleRight);
 
-		tab._rightTTitleImage=document.createElement("IMG");
-		tab._rightTTitleImage.src=blankImage;
-		tab._rightTTitleImage.width=5;
-		tab._rightTTitleImage.height=5;
-		tdTitleRight.appendChild(tab._rightTTitleImage);		
+		var rightTTitleImage=document.createElement("IMG");
+		tab._rightTTitleImage=rightTTitleImage;
+		rightTTitleImage.src=blankImage;
+		rightTTitleImage.width=5;
+		rightTTitleImage.height=5;
+		tdTitleRight.appendChild(rightTTitleImage);		
 		
 		tab._rightTitle=document.createElement("TD");
 		trText.appendChild(tab._rightTitle);
@@ -979,4 +1037,4 @@ var __prototype = {
 	}
 }
  
-var f_tabbedPane=new f_class("f_tabbedPane", null, __static, __prototype, f_cardBox);
+new f_class("f_tabbedPane", null, __static, __prototype, f_cardBox);

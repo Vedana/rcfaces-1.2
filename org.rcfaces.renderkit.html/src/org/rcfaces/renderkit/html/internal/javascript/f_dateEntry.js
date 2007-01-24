@@ -213,6 +213,8 @@ var __prototype={
 				input.value=v;
 			}
 		}
+
+		this.f_fireEvent(f_event.CHANGE, null, null, date);
 	},
 	f_serialize: function() {
 		var date=this.f_getDate();
@@ -297,4 +299,4 @@ var __prototype={
 	}
 }
  
-var f_dateEntry=new f_class("f_dateEntry", null, null, __prototype, f_compositeNumEntry, fa_calendarPopup);
+new f_class("f_dateEntry", null, null, __prototype, f_compositeNumEntry, fa_calendarPopup);

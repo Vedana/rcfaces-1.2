@@ -10,46 +10,49 @@
  * @version $Revision$ $Date$
  */
 
-
-function f_messageContext(form) {
-
-	this._messages=new Object;
-
-	if (!arguments.length) {
-		this._listeners=new Array;
-		f_core.Assert(f_messageContext._Root===undefined, "Root messageContext is already defined !");
-		return;
-	}
-
-	f_core.Assert(form && form.tagName && form.tagName.toUpperCase()=="FORM", "Form parameter is not a form ! ("+form+")");
-
-	this._form=form;
-	var parent=f_messageContext.Get();
-	this._parent=parent;
-	this._listeners=parent._listeners;
+var __prototype = {
+	/** 
+	 * @method private
+	 * @return f_messageContext
+	 */
+	f_messageContext: function(form) {
 	
-	// Il faut recuperer les messages du root !
-	var rootMessages=parent._messages;
-	if (rootMessages) {
-		var formClientId=form.id;
+		this._messages=new Object;
+	
+		if (!arguments.length) {
+			this._listeners=new Array;
+			f_core.Assert(f_messageContext._Root===undefined, "Root messageContext is already defined !");
+			return;
+		}
+	
+		f_core.Assert(form && form.tagName && form.tagName.toUpperCase()=="FORM", "Form parameter is not a form ! ("+form+")");
+	
+		this._form=form;
+		var parent=f_messageContext.Get();
+		this._parent=parent;
+		this._listeners=parent._listeners;
 		
-		var messages=this._messages;
-	
-		for(var i in rootMessages) {
-			if (i.indexOf(formClientId)) {
-				 // Commence pas par notre clientId !
-				continue;
-			}
+		// Il faut recuperer les messages du root !
+		var rootMessages=parent._messages;
+		if (rootMessages) {
+			var formClientId=form.id;
 			
-			messages[i]=rootMessages[i];
-			rootMessages[i]=undefined;
+			var messages=this._messages;
+		
+			for(var i in rootMessages) {
+				if (i.indexOf(formClientId)) {
+					 // Commence pas par notre clientId !
+					continue;
+				}
+				
+				messages[i]=rootMessages[i];
+				rootMessages[i]=undefined;
+			}	
 		}	
-	}	
+		
+		f_core.AddCheckListener(form, this);
+	},
 	
-	f_core.AddCheckListener(form, this);
-}
-	
-f_messageContext.prototype = {
 	f_finalize: function() {
 		var parent=this._parent;
 		if (parent) {
@@ -437,19 +440,8 @@ var __static = {
 		for(var i=1;i<arguments.length;i++) {
 			root.f_addMessageObject(clientId, arguments[i]);
 		}
-	},
-	 
-	/**
-	 * @method public static
-	 * @return String
-	 */
-	f_getName: function() {
-		return "f_messageContext";
 	}
 }
 
-
-for(var p in __static) {
-	f_messageContext[p]=__static[p];
-}
+new f_class("f_messageContext", null, __static, __prototype);
 

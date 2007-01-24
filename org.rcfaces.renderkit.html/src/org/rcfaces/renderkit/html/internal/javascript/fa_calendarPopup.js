@@ -347,7 +347,7 @@ var __prototype={
 			f_calendarObject.HOME_DATE_LAYOUT);
 		this._calendar=calendar;
 		
-		calendar.f_addEventListener(f_event.SELECTION, fa_calendarPopup._DateSelectedEvent);
+		calendar.f_insertEventListenerFirst(f_event.SELECTION, fa_calendarPopup._DateSelectedEvent);
 		calendar.f_enablePopupMode();
 		
 		this._iePopup=f_popup.Ie_enablePopup();

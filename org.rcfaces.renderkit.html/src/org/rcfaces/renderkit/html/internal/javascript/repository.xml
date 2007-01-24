@@ -2,19 +2,12 @@
 
 <repository id="javascript">
 	<module id="core" defaultCoreModule="true">
-		<file name="f_bundle.js">
-			<class name="f_bundle" />
-		</file>
 		<file name="f_core.js">
 			<class name="f_core" />
-		</file>
-		<file name="f_prop.js">
-			<class name="f_prop" />
 		</file>
 		<file name="f_classLoader.js">
 			<class name="f_classLoader">
 				<required-class name="f_core" />
-				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="f_class.js">
@@ -27,10 +20,20 @@
 				<required-class name="f_class" />
 			</class>
 		</file>
+		<file name="f_bundle.js">
+			<class name="f_bundle" />
+		</file>
 		<file name="f_object.js">
 			<class name="f_object">
 				<required-class name="f_class" />
 				<required-class name="f_aspect" />
+			</class>
+		</file>
+		<file name="f_prop.js">
+			<class name="f_prop" />
+		</file>
+		<file name="f_error.js">
+			<class name="f_error">
 			</class>
 		</file>
 		<file name="f_resourceBundle.js">
@@ -40,7 +43,6 @@
 		</file>
 		<file name="f_env.js">
 			<class name="f_env">
-				<required-class name="f_object" />
 				<required-class name="f_resourceBundle" />
 			</class>
 		</file>
@@ -99,6 +101,7 @@
 		<file name="fa_disabled.js">
 			<class name="fa_disabled">
 				<required-class name="f_aspect" />
+				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="fa_selected.js">
@@ -119,6 +122,7 @@
 		<file name="fa_immediate.js">
 			<class name="fa_immediate">
 				<required-class name="f_aspect" />
+				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="fa_borderType.js">
@@ -135,16 +139,19 @@
 			<class name="fa_images">
 				<required-class name="f_aspect" />
 				<required-class name="f_imageRepository" />
+				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="fa_collapsed.js">
 			<class name="fa_collapsed">
 				<required-class name="f_aspect" />
+				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="fa_filterProperties.js">
 			<class name="fa_filterProperties">
 				<required-class name="f_aspect" />
+				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="fa_serializable.js">
@@ -155,6 +162,7 @@
 		<file name="fa_clientData.js">
 			<class name="fa_clientData">
 				<required-class name="f_aspect" />
+				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="fa_eventTarget.js">
@@ -226,6 +234,7 @@
 			<class name="f_component">
 				<required-class name="f_eventTarget" />
 				<required-class name="f_env" />
+				<required-class name="f_prop" />
 				<required-class name="fa_serializable" />
 				<required-class name="fa_clientData" />
 				<required-class name="fa_namingContainer" />
@@ -310,6 +319,23 @@
 			</class>
 		</file>
 	</module>
+	<module id="extraComponent">
+		<file name="f_fieldSet.js">
+			<class name="f_fieldSet">
+				<required-class name="f_component" />
+			</class>
+		</file>
+		<file name="f_lineBreak.js">
+			<class name="f_lineBreak">
+				<required-class name="f_component" />
+			</class>
+		</file>
+		<file name="f_ruler.js">
+			<class name="f_ruler">
+				<required-class name="f_component" />
+			</class>
+		</file>
+	</module>
 	<module id="extraButton">
 		<file name="f_imageButton.js">
 			<class name="f_imageButton">
@@ -341,15 +367,6 @@
 		<file name="f_imageSubmitButton.js">
 			<class name="f_imageSubmitButton">
 				<required-class name="f_imageButton" />
-			</class>
-		</file>
-	</module>
-	
-<!-- FIELDSET Components -->
-	<module id="fieldSet">
-		<file name="f_fieldSet.js">
-			<class name="f_fieldSet">
-				<required-class name="f_component" />
 			</class>
 		</file>
 	</module>
@@ -452,6 +469,7 @@
 		<file name="fa_checkManager.js">
 			<class name="fa_checkManager">
 				<required-class name="fa_selectionManager" />
+				<required-class name="f_prop" />
 			</class>
 		</file>
 	</module>
@@ -626,6 +644,7 @@
 				<required-class name="fa_commands" />
 				<required-class name="f_httpRequest" />
 				<required-class name="f_menu" />
+				<required-class name="f_error" />
 			</class>
 		</file>
 	</module>
@@ -724,6 +743,7 @@
 			<class name="f_message">
 				<required-class name="f_component" />
 				<required-class name="fa_message1" />
+				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="f_styledMessage.js">
@@ -818,6 +838,7 @@
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_checkManager" />
 				<required-class name="fa_scrollPositions" />
+				<required-class name="f_error" />
 				<required-class id="menu" name="f_menu" />
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
@@ -838,6 +859,7 @@
 				<required-class name="fa_itemClientDatas" />
 				<required-class name="fa_scrollPositions" />
 				<required-class name="f_imageRepository" />
+				<required-class name="f_error" />
 				<required-class id="menu" name="f_menu" />
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
@@ -850,11 +872,20 @@
 		<file name="f_toolBar.js">
 			<class name="f_toolBar">
 				<required-class name="f_component" />
+			</class>
+		</file>
+		<file name="f_itemsToolFolder.js">
+			<class name="f_itemsToolFolder">
+				<required-class name="f_component" />
 				<required-class name="fa_disabled" />
+				<required-class name="fa_readOnly" />
+				<required-class name="fa_items" />
+				<required-class name="fa_groupName" />
 				<required-class name="fa_subMenu" />
 				<required-class id="menu" name="f_menu" />
 			</class>
 		</file>
+		
 	</module>
 
 	
@@ -1063,6 +1094,7 @@
 				<required-class name="fa_commands" />				
 				<required-class name="f_xml" />				
 				<required-class name="f_httpRequest" />				
+				<required-class name="f_error" />
 				<required-class id="progressMonitor" name="f_progressMonitor" />				
 			</class>
 		</file>

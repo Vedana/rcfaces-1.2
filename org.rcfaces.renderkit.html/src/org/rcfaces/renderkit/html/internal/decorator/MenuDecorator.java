@@ -20,6 +20,7 @@ import org.rcfaces.core.component.MenuItemComponent;
 import org.rcfaces.core.component.MenuSeparatorComponent;
 import org.rcfaces.core.component.capability.ICheckedCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -32,7 +33,7 @@ import org.rcfaces.core.model.IAccessKeySelectItem;
 import org.rcfaces.core.model.ICheckSelectItem;
 import org.rcfaces.core.model.IGroupSelectItem;
 import org.rcfaces.core.model.IImagesSelectItem;
-import org.rcfaces.core.model.IStyledSelectItem;
+import org.rcfaces.core.model.IInputTypeSelectItem;
 import org.rcfaces.core.model.IVisibleSelectItem;
 import org.rcfaces.core.model.SeparatorSelectItem;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
@@ -126,19 +127,19 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         String sid = menuContext.getComponentClientId(component);
 
-        int style = IStyledSelectItem.AS_PUSH_BUTTON;
-        if (selectItem instanceof IStyledSelectItem) {
-            style = ((IStyledSelectItem) selectItem).getStyle();
+        int style = IInputTypeCapability.AS_PUSH_BUTTON;
+        if (selectItem instanceof IInputTypeSelectItem) {
+            style = ((IInputTypeSelectItem) selectItem).getInputType();
 
         } else if (selectItem instanceof IGroupSelectItem) {
-            style = IStyledSelectItem.AS_RADIO_BUTTON;
+            style = IInputTypeCapability.AS_RADIO_BUTTON;
 
         } else if (selectItem instanceof ICheckSelectItem) {
-            style = IStyledSelectItem.AS_CHECK_BOX;
+            style = IInputTypeCapability.AS_CHECK_BOX;
         }
 
         String groupName = null;
-        if (style == IStyledSelectItem.AS_RADIO_BUTTON) {
+        if (style == IInputTypeCapability.AS_RADIO_BUTTON) {
             groupName = ((IGroupSelectItem) selectItem).getGroupName();
             if (groupName != null) {
                 groupName = javaScriptWriter.allocateString(groupName);
@@ -152,11 +153,11 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         String cmd;
         switch (style) {
-        case IStyledSelectItem.AS_RADIO_BUTTON:
+        case IInputTypeCapability.AS_RADIO_BUTTON:
             cmd = "f_appendRadioItem";
             break;
 
-        case IStyledSelectItem.AS_CHECK_BOX:
+        case IInputTypeCapability.AS_CHECK_BOX:
             cmd = "f_appendCheckItem";
             break;
 
@@ -169,7 +170,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         int pred = 0;
 
-        if (style == IStyledSelectItem.AS_RADIO_BUTTON) {
+        if (style == IInputTypeCapability.AS_RADIO_BUTTON) {
             if (groupName != null) {
                 for (; pred > 0; pred--) {
                     javaScriptWriter.write(',').writeNull();
@@ -198,8 +199,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             pred++;
         }
 
-        if (style == IStyledSelectItem.AS_CHECK_BOX
-                || style == IStyledSelectItem.AS_RADIO_BUTTON) {
+        if (style == IInputTypeCapability.AS_CHECK_BOX
+                || style == IInputTypeCapability.AS_RADIO_BUTTON) {
             if (((ICheckSelectItem) selectItem).isChecked()) {
                 for (; pred > 0; pred--) {
                     javaScriptWriter.write(',').writeNull();

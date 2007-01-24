@@ -73,5 +73,5 @@ var __prototype = {
 	}
 }
 
-var f_timerEffect=new f_class("f_timerEffect", null, __static, __prototype, f_effect);
+new f_class("f_timerEffect", null, __static, __prototype, f_effect);
 

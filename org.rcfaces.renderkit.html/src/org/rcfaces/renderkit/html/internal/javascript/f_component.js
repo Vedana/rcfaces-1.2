@@ -477,8 +477,8 @@ var __prototype = {
 		}
 
 		f_help.Install();
-		this.f_addEventListener(f_event.FOCUS, f_help._OnFocus);
-		this.f_addEventListener(f_event.BLUR, f_help._OnBlur);
+		this.f_insertEventListenerFirst(f_event.FOCUS, f_help._OnFocus);
+		this.f_insertEventListenerFirst(f_event.BLUR, f_help._OnBlur);
 		*/
 	},
 	/**
@@ -745,7 +745,29 @@ var __prototype = {
      */
 	f_findComponent: function(id) {
 		return fa_namingContainer.FindComponents(this, arguments);
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	toString: function() {
+		var s="[component";
+		
+		if (this.id) {
+			s+=" id=\""+this.id+"\"";
+		}
+		s+=" class=\""+this._kclass.f_getName()+"\"";
+		
+		if (this.tagName) {
+			s+=" tag="+this.tagName.toUpperCase();
+		}
+		
+		if (this.className) {
+			s+=" styleClass=\""+this.className+"\"";
+		}
+		
+		return s+"]";
 	}
 }
 
-var f_component=new f_class("f_component", null, __static, __prototype, f_eventTarget, fa_serializable, fa_clientData);
+new f_class("f_component", null, __static, __prototype, f_eventTarget, fa_serializable, fa_clientData);

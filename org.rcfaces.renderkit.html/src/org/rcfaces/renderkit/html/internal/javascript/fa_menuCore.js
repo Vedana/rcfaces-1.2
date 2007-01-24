@@ -65,10 +65,10 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 		
-		menu._menuItem_over(item, true, evt);
+		menu.f_menuItem_over(item, true, evt);
 
 		return f_core.CancelEvent(evt);
 	},
@@ -86,8 +86,9 @@ var __static = {
 		menu._menuItem_out(item);
 	
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
+		
 		return f_core.CancelEvent(evt);
 	},
 	/**
@@ -102,10 +103,10 @@ var __static = {
 		}
 		
 		if (!evt) {
-			evt = f_core.IeGetEvent(this);
+			evt = f_core.GetEvent(this);
 		}
 	
-		menu._menuItem_select(item, evt);
+		menu.f_menuItem_select(item, evt);
 			
 		return f_core.CancelEvent(evt);
 	},
@@ -118,9 +119,9 @@ var __static = {
 	 */
 	_MenuItem_click: f_core.CancelEventHandler,
 	/**
-	 * @method static final hidden
+	 * @method hidden static final hidden
 	 */
-	OnKeyDown: function(menu, menuPopup, evt) {
+	OnKeyDown: function(menu, menuItem, evt) {
 		var cancel;
 
 		f_core.Assert(evt, "Event is null !");
@@ -132,32 +133,32 @@ var __static = {
 			break;
 
 		case f_key.VK_DOWN: // FLECHE VERS LE BAS
-			menu._nextMenuItem(menuPopup, evt);
+			menu._nextMenuItem(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_UP: // FLECHE VERS LE HAUT
-			menu._previousMenuItem(menuPopup, evt);
+			menu._previousMenuItem(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_RIGHT: // FLECHE VERS LA DROITE
-			menu._nextMenuItemLevel(menuPopup, evt);
+			menu._nextMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_LEFT: // FLECHE VERS LA GAUCHE
-			menu._previousMenuItemLevel(menuPopup, evt);
+			menu._previousMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 
 		case f_key.VK_HOME: // HOME
-// @TODO		menu._nextMenuItemLevel(menuPopup, evt);
+// @TODO		menu._nextMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_END: // END
-// @TODO			menu._previousMenuItemLevel(menuPopup, evt);
+// @TODO			menu._previousMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 
@@ -172,21 +173,23 @@ var __static = {
 	
 		case f_key.VK_RETURN:
 	 	case f_key.VK_ENTER:
-			menu._keySelectMenuItem(menuPopup, evt);
+			menu._keySelectMenuItem(menuItem, evt);
 			cancel=true;
 			break;
 
 		case f_key.VK_ESCAPE:
-			menu._keyCloseMenuItem(menuPopup, evt);
+			menu._keyCloseMenuItem(menuItem, evt);
 			cancel=true;
 			break;
 		
-		default: 			
-			if (menu.f_uiIsPopupOpened(menuPopup)) {
+		default:
+			f_core.Debug(fa_menuCore, "OnKeyDown: menu="+menu+" menuItem="+menuItem);
+			
+			if (menu.f_uiIsPopupOpened(menuItem)) {
 				cancel=true;
 				
 				if (!evt.altKey) {
-					menu.fa_keySearchAccessKey(menuPopup, code, evt);
+					menu.fa_keySearchAccessKey(menuItem, code, evt);
 					cancel=true;
 				}
 				
@@ -233,12 +236,12 @@ var __prototype = {
 	f_finalize:  function() {
 		this._menu=undefined; // fa_menuCore
 		
-		// this._popupOpened=undefined;  // boolean
-		this._selectedMenuItem=undefined;
 		// this._blankMenuImageURL=undefined; // string
-		// this._menuItemsChanged=undefined; // boolean
 		// this._itemImageWidth=undefined; // number
 		// this._itemImageHeight=undefined; // number
+
+		this._uiMenuItems=undefined; // Map<Object, HTMLElement>
+		this._uiMenuPopups=undefined; // Map<Object, HTMLElement>
 	},
 	/**
 	 * @method public
@@ -531,7 +534,7 @@ var __prototype = {
 	 * @method protected final
 	 */
 	f_getUIItem: function(menuItem) {
-		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_getUIItem: Invalid menuItem parameter ("+menuItem+")");
+		f_core.Assert(typeof(menuItem)=="object" && (!menuItem.nodeType || menuItem==this) && menuItem._menu, "fa_menuCore.f_getUIItem: Invalid menuItem parameter ("+menuItem+")");
 
 		var mi=this._uiMenuItems[menuItem];
 		f_core.Assert(mi, "fa_menuCore.f_getUIItem: No uiMenuItem for '"+menuItem+"'.");
@@ -540,12 +543,12 @@ var __prototype = {
 	/**
 	 * @method protected final
 	 */
-	f_getUIPopup: function(menuItem, assertIfNotFound) {
-		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_getUIPopup: Invalid menuItem parameter ("+menuItem+")");
+	f_getUIPopup: function(menuItem) {
+		f_core.Assert(typeof(menuItem)=="object" && (!menuItem.nodeType || menuItem==this) && menuItem._menu, "fa_menuCore.f_getUIPopup: Invalid menuItem parameter ("+menuItem+")");
 
 		var mi=this._uiMenuPopups[menuItem];
 			
-		f_core.Debug(fa_menuCore, "fa_menuCore.f_getUIPopup: For popup '"+menuItem+"' => "+mi);
+//		f_core.Debug(fa_menuCore, "fa_menuCore.f_getUIPopup: For popup '"+menuItem+"' => "+mi);
 		return mi;
 	},
 	/**
@@ -555,10 +558,10 @@ var __prototype = {
 	f_uiIsPopupOpened: function(menuItem) {
 		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiIsPopupOpened: Invalid menuItem parameter ("+menuItem+")");
 
-		return this.f_getUIPopup(menuItem, false)!=null;
+		return this.f_getUIPopup(menuItem)!=null;
 	},	 
 	/**
-	 * @method protected final
+	 * @method protected 
 	 * @return boolean
 	 */
 	f_uiGetSelectedItem: function(menuItem) {
@@ -576,11 +579,12 @@ var __prototype = {
 	 * @return void 
 	 */	 
 	f_uiSelectItem: function(menuItemParent, menuItem) {
-		f_core.Assert(typeof(menuItemParent)=="object" && !menuItemParent.nodeType && menuItemParent._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItemParent parameter ("+menuItemParent+")");
+		f_core.Assert(typeof(menuItemParent)=="object" && (!menuItemParent.nodeType || menuItemParent==this ) && menuItemParent._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItemParent parameter ("+menuItemParent+")");
 		f_core.Assert(!menuItem || (typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu), "fa_menuCore.f_uiSelectItem: Invalid menuItem parameter ("+menuItem+")");
 		f_core.Assert(menuItemParent!=menuItem, "Invalid menuItem, same as parent. (parent="+menuItemParent+")");
 		 
 		var popup=this.f_getUIPopup(menuItemParent, true);
+		f_core.Assert(popup, "fa_menuCore.f_uiSelectItem: Invalid popup for item="+menuItemParent);
 
 		popup._selectedMenuItem=menuItem;
 	},
@@ -686,7 +690,7 @@ var __prototype = {
 		}
 		
 		if (menuItem) {
-			this._menuItem_over(menuItem, false, evt);
+			this.f_menuItem_over(menuItem, false, evt);
 		}		
 	},
 	/**
@@ -742,17 +746,16 @@ var __prototype = {
 					continue;
 				}
 				
-				i--;
 				break;
 			}
 			
-			if (i<0) {
+			if (i<1) {
 				// Pas trouvé !
-				i=menuItems.length-1;
+				i=menuItems.length;
 			}
 			
 			// On part du bas en remontant ...
-			for(;i>=0;i--) {
+			for(i--;i>=0;i--) {
 				var m=menuItems[i];
 				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
 					continue;
@@ -776,7 +779,7 @@ var __prototype = {
 		}
 
 		if (menuItem) {
-			this._menuItem_over(menuItem, false, evt);		
+			this.f_menuItem_over(menuItem, false, evt);		
 		}
 	},
 	/**
@@ -981,7 +984,7 @@ var __prototype = {
 	
 			// Appel de la callback de selection
 			var value=this.f_getItemValue(menuItem);
-			this._performItemSelect(menuItem, value, jsEvent);
+			this.f_performItemSelect(menuItem, value, jsEvent);
 			return;			
 		}
 			
@@ -1021,7 +1024,7 @@ var __prototype = {
 
 		// Appel de la callback de selection
 		var value=this.f_getItemValue(item);
-		this._performItemSelect(item, value, jsEvent);
+		this.f_performItemSelect(item, value, jsEvent);
 	},
 	/**
 	 * Fermeture du menu par une touche !
@@ -1048,18 +1051,23 @@ var __prototype = {
 	/**
 	 * Gestion du OVER d'un menuItem
 	 * 
-	 * @method private
+	 * @method protected final
 	 * @param Object menuItem
 	 * @param boolean open
 	 * @param Event evt
 	 * @param boolean autoSelect
 	 * @return void
 	 */
-	_menuItem_over: function(menuItem, open, evt, autoSelect) {
+	f_menuItem_over: function(menuItem, open, evt, autoSelect) {
 		var parent=this.f_getParentItem(menuItem);
+
+		var parentPopup=this.f_getUIPopup(parent);
+		if (!parentPopup) {
+			return;
+		}
 		
 		var oldMenuItem=this.f_uiGetSelectedItem(parent);
-		f_core.Debug(fa_menuCore, "Over: "+menuItem+" parent="+parent+" old="+oldMenuItem+" open="+open);
+//		f_core.Debug(fa_menuCore, "f_menuItem_over: "+menuItem+" parent="+parent+" old="+oldMenuItem+" open="+open);
 		
 		// Un autre était déjà over ???
 		if (oldMenuItem && oldMenuItem!=menuItem) {
@@ -1099,12 +1107,12 @@ var __prototype = {
 	 */
 	_menuItem_out: function(menuItem) {
 		if (!this.f_uiIsItemOver(menuItem)) {
-			f_core.Debug(fa_menuCore, "Out: "+menuItem+" no over !");
+//			f_core.Debug(fa_menuCore, "_menuItem_out: "+menuItem+" no over !");
 
 			return;
 		}
 
-		f_core.Debug(fa_menuCore, "Out: "+menuItem);
+//		f_core.Debug(fa_menuCore, "_menuItem_out: "+menuItem);
 		
 		this.f_uiSetItemOver(menuItem, false);
 	
@@ -1113,12 +1121,12 @@ var __prototype = {
 	/**
 	 * Gestion du MOUSE BUTTON d'un menuItem
 	 * 
-	 * @method private
+	 * @method protected final
 	 * @param Object menuItem
 	 * @param Event jsEvent
 	 * @return void
 	 */
-	_menuItem_select: function(menuItem, jsEvent) {
+	f_menuItem_select: function(menuItem, jsEvent) {
 	
 		// Il a un popup ?
 		if (this.f_hasVisibleItemChildren(menuItem)) {
@@ -1138,7 +1146,7 @@ var __prototype = {
 			
 		var value=this.f_getItemValue(menuItem);
 		
-		this._performItemSelect(menuItem, value, jsEvent);
+		this.f_performItemSelect(menuItem, value, jsEvent);
 	},
 	/**
 	 * @method protected
@@ -1159,7 +1167,7 @@ var __prototype = {
 	
 		var disabled=this.f_isItemDisabled(item);
 
-		f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: item="+item+" uiItem="+uiItem.id+" over="+uiItem._over+" disabled="+disabled);
+		// f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: item="+item+" uiItem="+uiItem.id+" over="+uiItem._over+" disabled="+disabled);
 
 		var suffix="";
 		var imageURL=item._imageURL;
@@ -1167,7 +1175,7 @@ var __prototype = {
 		if (this.f_hasVisibleItemChildren(item)) {
 			var popupOpened=this.f_uiIsPopupOpened(item);
 
-			f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: popupOpened="+popupOpened+" over="+uiItem._over);
+		//	f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: popupOpened="+popupOpened+" over="+uiItem._over);
 			
 			if (popupOpened || uiItem._over) {
 				suffix+="_selected";
@@ -1264,13 +1272,13 @@ var __prototype = {
 		}
 	},
 	/**
-	 * @method private
+	 * @method protected
 	 * @param Object item
 	 * @param any value
 	 * @param Event jsEvent
 	 * @return void
 	 */
-	_performItemSelect: function(item, value, jsEvent) {		
+	f_performItemSelect: function(item, value, jsEvent) {		
 
 		this.f_closeAllPopups();
 
@@ -1371,6 +1379,8 @@ var __prototype = {
 	 * @return boolean
 	 */
 	_preparePopup: function(menuItem) {
+		f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"'");
+	
 		if (this.f_getUIPopup(menuItem)) {
 			f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"' is already opened !");
 			return false;
@@ -1406,7 +1416,7 @@ var __prototype = {
 		return this.f_hasVisibleItemChildren(menuItem);
 	},
 	/**
-	 * @method protected
+	 * @method private
 	 * @param Object menuItem
 	 * @return HTMLElement 
 	 */
@@ -1414,20 +1424,26 @@ var __prototype = {
 		var parent=this.f_getParentItem(menuItem);
 	
 		if (f_popup.Ie_enablePopup()) {
+		
+			f_core.Debug(fa_menuCore, "_getPopupContainer: parent="+parent);
 			if (!parent) {
 				return f_popup.Ie_GetPopup(document);
 			}			
 			
 			var parentPopup=this.f_getUIPopup(parent);
+			f_core.Debug(fa_menuCore, "_getPopupContainer: parentPopup="+parentPopup);
 			
 			return f_popup.Ie_GetPopup(parentPopup.ownerDocument);
 		}
 	
 		if (!parent) {
-			return this.ownerDocument.body;
+			return document.body;
 		}			
 		
 		var parentPopup=this.f_getUIPopup(parent);
+		if (!parentPopup) {
+			return document.body;
+		}
 		
 		return parentPopup.ownerDocument.body;
 	},
@@ -1441,6 +1457,8 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_open: function(jsEvent, positionInfos, autoSelect) {
+		f_core.Debug(fa_menuCore, "f_open: Open menu "+this+".");
+		
 		if (!positionInfos) {
 			positionInfos={				
 				position: f_popup.MOUSE_POSITION
@@ -1464,10 +1482,14 @@ var __prototype = {
 			f_core.Debug(fa_menuCore, "Prepare popup of '"+menuItem.id+"' returns false !");
 			return false;
 		}
-
+		
 		var parentItem=this.f_getParentItem(menuItem);
 
+		f_core.Debug(fa_menuCore, "2 "+parentItem);
+
 		var selectionProvider=this.fa_getSelectionProvider();
+
+		f_core.Debug(fa_menuCore, "3 "+selectionProvider);
 				
 		var container=this._getPopupContainer(menuItem);
 		f_core.Assert(container, "fa_menuCore.f_openUIPopup: Invalid popup container !");
@@ -1479,7 +1501,7 @@ var __prototype = {
 		if (!parentItem) {
 			f_core.Debug(fa_menuCore, "f_openUIPopup: Register windows this="+this+" menuItem="+menuItem+" popup="+popup);
 	
-			if (f_popup.RegisterWindowClick(this.fa_getPopupCallbacks(), this, popup)==false) {
+			if (f_popup.RegisterWindowClick(this.fa_getPopupCallbacks(), this, popup, this.fa_getKeyProvider())==false) {
 				return;
 			}
 		} else {
@@ -1497,7 +1519,7 @@ var __prototype = {
 			if (!positionInfos) {			
 				positionInfos={
 					component: this.f_getUIItem(menuItem),
-					position: f_popup.LEFT_COMPONENT					
+					position: f_popup.RIGHT_COMPONENT					
 				};
 			}
 											
@@ -1520,7 +1542,7 @@ var __prototype = {
 			var menuItems=this.f_listVisibleItemChildren(menuItem);
 			
 			if (menuItems && menuItems.length) {
-				this._menuItem_over(menuItems[0], jsEvent);
+				this.f_menuItem_over(menuItems[0], false, jsEvent);
 			}
 		}
 	},
@@ -1537,10 +1559,23 @@ var __prototype = {
 			popup=this.f_getUIPopup(menuItem);
 	
 			if (!popup) {
-				f_core.Debug(fa_menuCore, "Popup menu '"+menuItem+"' is already opened !");
+				f_core.Debug(fa_menuCore, "Popup menu '"+menuItem+"' is already closed !");
 				return;
 			}
 		}
+		
+		if (popup._item===undefined) {
+			// Déjà fermé !
+			
+			f_core.Debug(fa_menuCore, "Popup menu '"+menuItem+"' is already closed !");
+			return;
+		}
+
+		f_core.Debug(fa_menuCore, "_closeUIPopup: menuItem="+menuItem+" popup="+popup);
+		var popupObject=popup._popupObject;
+		
+		popup._item=undefined; // Object
+		popup._popupObject=undefined; // Object
 
 		var selectedItem=this.f_uiGetSelectedItem(menuItem);
 		f_core.Debug(fa_menuCore, "_closeUIPopup: child selected="+selectedItem);
@@ -1560,10 +1595,10 @@ var __prototype = {
 		}
 
 		if (f_popup.Ie_enablePopup()) {		
-			f_popup.Ie_closePopup(popup._popupObject);
+			f_popup.Ie_closePopup(popupObject);
 
 		} else {
-			f_popup.Gecko_closePopup(popup._popupObject);
+			f_popup.Gecko_closePopup(popupObject);
 		}			
 
 		var uiMenuItems=this._uiMenuItems;
@@ -1588,17 +1623,14 @@ var __prototype = {
 			f_core.VerifyProperties(uiItem);
 		}
 		
-		popup._item=undefined; // Object
-		popup._popupObject=undefined; // Object
-		
 		delete this._uiMenuPopups[menuItem];
 		f_core.Debug(fa_menuCore, "_closeUIPopup: remove one popup="+popup+" menuItem="+menuItem);
 
 		if (f_popup.Ie_enablePopup()) {		
-			f_popup.Ie_releasePopup(popup);
+			f_popup.Ie_releasePopup(popupObject);
 
 		} else {
-			f_popup.Gecko_releasePopup(popup);
+			f_popup.Gecko_releasePopup(popupObject);
 		}			
 		
 		if (menuItem==this) {
@@ -1662,7 +1694,13 @@ var __prototype = {
 	 * @method protected abstract
 	 * @return void
 	 */
-	fa_getMenuScopeName: f_class.ABSTRACT
+	fa_getMenuScopeName: f_class.ABSTRACT,
+	
+	/**
+	 * @method protected abstract
+	 * @return void
+	 */
+	fa_getKeyProvider: f_class.ABSTRACT
 }
 
 var fa_menuCore=new f_aspect("fa_menuCore", __static, __prototype, fa_groupName, fa_items);

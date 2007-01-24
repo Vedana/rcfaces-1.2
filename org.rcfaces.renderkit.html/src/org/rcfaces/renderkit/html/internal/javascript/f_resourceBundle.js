@@ -8,11 +8,11 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  */
 
-function f_resourceBundle(name) {
-	this._name=name;
-}
-
-f_resourceBundle.prototype = {	
+var __prototype = {	
+	f_resourceBundle: function(name) {
+		this._name=name;
+	},
+	
 	/**
 	 * Search a value associated to a property.
 	 *
@@ -236,17 +236,7 @@ var __static = {
 	 */
 	Finalizer: function() {
 		f_resourceBundle._Resources=undefined;
-	},
-	
-	/**
-	 * @method public static
-	 * @return String
-	 */
-	f_getName: function() {
-		return "f_resourceBundle";
 	}
 }
 
-for(var p in __static) {
-	f_resourceBundle[p]=__static[p];
-}
+new f_class("f_resourceBundle", null, __static, __prototype);

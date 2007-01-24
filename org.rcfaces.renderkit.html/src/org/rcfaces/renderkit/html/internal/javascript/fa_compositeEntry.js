@@ -24,7 +24,10 @@ var __static={
 		if (compositeEntry.f_getEventLocked()) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {
 			return f_core.CancelEvent(evt);
@@ -45,7 +48,10 @@ var __static={
 		if (compositeEntry.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+	
+		if (!evt) {
+			evt = window.event;
+		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {
 			return f_core.CancelEvent(evt);
@@ -66,7 +72,10 @@ var __static={
 		if (compositeEntry.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {
 			return f_core.CancelEvent(evt);

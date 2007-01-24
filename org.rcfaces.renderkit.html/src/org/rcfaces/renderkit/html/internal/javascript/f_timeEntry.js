@@ -268,4 +268,4 @@ var __prototype={
 	}
 }
  
-var f_timeEntry=new f_class("f_timeEntry", null, null, __prototype, f_compositeNumEntry);
+new f_class("f_timeEntry", null, null, __prototype, f_compositeNumEntry);

@@ -76,6 +76,8 @@ public final class JavaScriptClasses {
 
     public static final String INPUT = "f_input";
 
+    public static final String ITEMS_TOOL_FOLDER = "f_itemsToolFolder";
+
     public static final String LINE_BREAK = "f_lineBreak";
 
     public static final String LIST = "f_list";
@@ -134,6 +136,8 @@ public final class JavaScriptClasses {
 
     public static final String TOOL_BAR = "f_toolBar";
 
+    public static final String TOOL_FOLDER = "f_toolFolder";
+
     public static final String TREE = "f_tree";
 
     public static final String EVENT_CHECK = "check";
@@ -147,6 +151,10 @@ public final class JavaScriptClasses {
     public static final String EVENT_BLUR = "blur";
 
     public static final String EVENT_BLUR_CST = "f_event.BLUR";
+
+    public static final String EVENT_ERROR = "error";
+
+    public static final String EVENT_ERROR_CST = "f_event.ERROR";
 
     public static final String EVENT_VALUE_CHANGE = "change";
 
@@ -219,6 +227,8 @@ public final class JavaScriptClasses {
     public static final String EVENT_CLOSE_ATTRIBUTE = "close";
 
     public static final String EVENT_DBLCLICK_ATTRIBUTE = "dblClick";
+
+    public static final String EVENT_ERROR_ATTRIBUTE = "error";
 
     public static final String EVENT_FOCUS_ATTRIBUTE = "focus";
 

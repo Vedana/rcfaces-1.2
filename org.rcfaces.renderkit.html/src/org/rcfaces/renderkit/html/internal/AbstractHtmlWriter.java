@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.io.IOException;
+import java.util.Stack;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
@@ -26,6 +27,8 @@ public abstract class AbstractHtmlWriter extends
 
     private static final char LF = '\n';
 
+    private static final String TAG_STACK_PROPERTY = "org.rcfaces.core.internal.writer.TAG_STACK";
+
     private final ResponseWriter responseWriter;
 
     protected final AbstractRenderContext renderContext;
@@ -33,8 +36,8 @@ public abstract class AbstractHtmlWriter extends
     private ICssWriter cssWriter;
 
     public AbstractHtmlWriter(AbstractRenderContext renderContext) {
-        super(renderContext.getFacesContext(), renderContext.getComponent(), renderContext
-                .getComponentClientId());
+        super(renderContext.getFacesContext(), renderContext.getComponent(),
+                renderContext.getComponentClientId());
 
         this.renderContext = renderContext;
 
@@ -195,11 +198,39 @@ public abstract class AbstractHtmlWriter extends
     }
 
     public ISgmlWriter startElement(String name) throws WriterException {
+        if (Constants.VERIFY_TAG_STACK) {
+            Stack tagStack = (Stack) getFacesContext().getExternalContext()
+                    .getRequestMap().get(TAG_STACK_PROPERTY);
+            if (tagStack == null) {
+                tagStack = new Stack();
+
+                getFacesContext().getExternalContext().getRequestMap().put(
+                        TAG_STACK_PROPERTY, tagStack);
+            }
+
+            tagStack.push(name);
+        }
+
         return startElement(name, this.getComponent());
     }
 
     public ISgmlWriter endElement(String name) throws WriterException {
         closeCssWriter();
+
+        if (Constants.VERIFY_TAG_STACK) {
+            Stack tagStack = (Stack) getFacesContext().getExternalContext()
+                    .getRequestMap().get(TAG_STACK_PROPERTY);
+            if (tagStack == null || tagStack.isEmpty()) {
+                throw new IllegalStateException("Tag stack is empty !");
+            }
+
+            String current = (String) tagStack.pop();
+
+            if (current.equals(name) == false) {
+                throw new IllegalStateException("Invalid close of tag '" + name
+                        + "' current='" + current + "' !");
+            }
+        }
 
         try {
             responseWriter.endElement(name);
@@ -473,12 +504,11 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-
     public IHtmlWriter writeRole(String role) throws WriterException {
-        if (Constants.ACCESSIBILITY_ROLE_SUPPORT==false) {
+        if (Constants.ACCESSIBILITY_ROLE_SUPPORT == false) {
             return this;
         }
-        
+
         writeAttribute("role", role);
 
         return this;

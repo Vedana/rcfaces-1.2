@@ -183,4 +183,4 @@ var __prototype = {
 	}
 }
  
-var f_subProgressMonitor=new f_class("f_subProgressMonitor", null, __static, __prototype, f_progressMonitor);
+new f_class("f_subProgressMonitor", null, __static, __prototype, f_progressMonitor);

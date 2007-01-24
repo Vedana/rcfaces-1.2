@@ -21,7 +21,7 @@ var __prototype = {
 	f_imageCombo: function() {
 		this.f_super(arguments);
 		
-		this.f_addEventListener(f_event.KEYDOWN, this._onKeyDown);		
+		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onKeyDown);		
 	},
 	/** 
 	 * @method private
@@ -37,10 +37,10 @@ var __prototype = {
 
 		var menu=this.f_getSubMenuById(f_imageCombo._MENU_ID);
 		if (menu) {
-			menu.f_open({
+			menu.f_open(event.f_getJsEvent(), {
 				component: this,
 				position: f_popup.BOTTOM_COMPONENT
-				}, event.f_getJsEvent());
+				});
 		}
 		
 		return false;
@@ -59,6 +59,11 @@ var __prototype = {
 		
 		if (f_popup.VerifyMouseDown(this, evt._jsEvent)==false) {
 			return false;
+		}
+		
+		if (evt.f_getItem()) {
+			// Selection d'un item !
+			return true;
 		}
 	
 		var menu=this.f_getSubMenuById(f_imageCombo._MENU_ID);
@@ -81,4 +86,4 @@ var __prototype = {
 	}
 }		
 
-var f_imageCombo=new f_class("f_imageCombo", null, __static, __prototype, f_imageButton, fa_subMenu, fa_itemsWrapper);
+new f_class("f_imageCombo", null, __static, __prototype, f_imageButton, fa_subMenu, fa_itemsWrapper);

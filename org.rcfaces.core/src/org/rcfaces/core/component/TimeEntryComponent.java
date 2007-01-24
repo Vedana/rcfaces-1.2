@@ -1,38 +1,37 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.converter.LiteralTimeConverter;
-import org.rcfaces.core.internal.component.Properties;
-import java.lang.Object;
-import java.util.TimeZone;
-import java.util.Collections;
-import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.model.Time;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import java.util.Map;
-import javax.faces.context.FacesContext;
+import java.util.Collections;
 import java.util.HashMap;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import javax.faces.FacesException;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.manager.IValidationParameters;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAutoTabCapability;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.model.IAdaptable;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.LiteralTimeConverter;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.model.IAdaptable;
+import org.rcfaces.core.model.Time;
 
 /**
  * <p>The timeEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a time.</p>

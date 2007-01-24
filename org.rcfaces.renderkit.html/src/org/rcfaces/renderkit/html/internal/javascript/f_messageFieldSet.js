@@ -52,4 +52,4 @@ var __prototype = {
 		this.f_setText(text);
 	}
 }
-var f_messageFieldSet=new f_class("f_messageFieldSet", null, null, __prototype, f_fieldSet, fa_message1);
+new f_class("f_messageFieldSet", null, null, __prototype, f_fieldSet, fa_message1);

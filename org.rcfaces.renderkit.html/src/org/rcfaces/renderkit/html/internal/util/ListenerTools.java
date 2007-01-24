@@ -13,6 +13,7 @@ import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IKeyDownEventCapability;
@@ -50,6 +51,10 @@ public final class ListenerTools {
 
         public String getCheckEventName() {
             return JavaScriptClasses.EVENT_CHECK_CST;
+        }
+
+        public String getErrorEventName() {
+            return JavaScriptClasses.EVENT_ERROR_CST;
         }
 
         public String getMenuEventName() {
@@ -131,6 +136,10 @@ public final class ListenerTools {
 
         public String getCheckEventName() {
             return JavaScriptClasses.EVENT_CHECK_ATTRIBUTE;
+        }
+
+        public String getErrorEventName() {
+            return JavaScriptClasses.EVENT_ERROR_ATTRIBUTE;
         }
 
         public String getMenuEventName() {
@@ -432,6 +441,19 @@ public final class ListenerTools {
             }
         }
 
+        if (component instanceof IErrorEventCapability) {
+            IErrorEventCapability errorListenerCapability = (IErrorEventCapability) component;
+
+            FacesListener fls[] = errorListenerCapability.listErrorListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getErrorEventName(), fls);
+            }
+        }
+
         if (map == null) {
             return Collections.EMPTY_MAP;
         }
@@ -449,6 +471,8 @@ public final class ListenerTools {
         String getCheckEventName();
 
         String getDoubleClickEventName();
+
+        String getErrorEventName();
 
         String getFocusEventName();
 

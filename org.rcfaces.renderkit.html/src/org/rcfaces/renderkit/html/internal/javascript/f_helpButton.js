@@ -56,4 +56,4 @@ var __prototype = {
 	}
 }
 
-var f_helpButton=new f_class("f_helpButton", null, __static, __prototype, f_imageButton);
+new f_class("f_helpButton", null, __static, __prototype, f_imageButton);

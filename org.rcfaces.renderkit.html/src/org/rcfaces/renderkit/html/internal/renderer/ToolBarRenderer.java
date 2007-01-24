@@ -3,116 +3,127 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
+import javax.faces.render.Renderer;
 
-import org.rcfaces.core.component.ToolBarComponent;
-import org.rcfaces.core.event.ItemActionEvent;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IEventData;
-import org.rcfaces.core.internal.renderkit.IRequestContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ItemsToolFolderComponent;
+import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
+import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
-import org.rcfaces.renderkit.html.internal.decorator.ToolBarDecorator;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ToolBarRenderer extends AbstractSelectItemsRenderer {
+public class ToolBarRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
 
-    protected void encodeBeforeDecorator(IHtmlWriter writer,
-            IComponentDecorator componentDecorator) throws WriterException {
-        super.encodeBeforeDecorator(writer, componentDecorator);
+    private static final Log LOG = LogFactory.getLog(ToolBarRenderer.class);
 
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
-
-        FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        writer.startElement("DIV");
-        writeHtmlAttributes(writer);
-        writeJavaScriptAttributes(writer);
-        writeCssAttributes(writer);
-
-        ToolBarComponent toolBarComponent = (ToolBarComponent) componentRenderContext
-                .getComponent();
-        if (toolBarComponent.isDisabled(facesContext) == false) {
-            writer.writeAttribute("v:disabled", "true");
-        }
-        if (toolBarComponent.isReadOnly(facesContext)) {
-            writer.writeAttribute("v:readOnly", "true");
-        }
-
-        String className = getMainStyleClassName();
-        // Un dummy pour eviter des sauts de pages
-        writer.startElement("A");
-        String cls = className + "_itemFolder";
-        writer.writeAttribute("class", cls);
-        writer.endElement("A");
+    public boolean getRendersChildren() {
+        return true;
     }
 
-    protected void encodeAfterDecorator(IHtmlWriter writer,
-            IComponentDecorator componentDecorator) throws WriterException {
+    protected void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
 
-        writer.endElement("DIV");
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        super.encodeAfterDecorator(writer, componentDecorator);
+        // IComponentRenderContext componentRenderContext =
+        // writer.getComponentRenderContext();
+
+        // FacesContext facesContext = componentRenderContext.getFacesContext();
+
+        htmlWriter.startElement("TABLE");
+        htmlWriter.writeCellPadding(0);
+        htmlWriter.writeCellSpacing(0);
+
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter);
+
+        htmlWriter.startElement("TR");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
-     */
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        htmlWriter.endElement("TR");
+
+        htmlWriter.endElement("TABLE");
+
+        super.encodeEnd(writer);
+    }
+
+    public void encodeChildren(FacesContext facesContext, UIComponent component)
+            throws IOException {
+
+        List children = component.getChildren();
+
+        for (Iterator it = children.iterator(); it.hasNext();) {
+            UIComponent child = (UIComponent) it.next();
+
+            if (child instanceof ItemsToolFolderComponent) {
+                encodeToolFolder(facesContext, child);
+                continue;
+            }
+            if (child instanceof ToolFolderComponent) {
+                encodeToolFolder(facesContext, child);
+                continue;
+            }
+
+            LOG.error("Invalid child of ToolBar: " + component + " id="
+                    + component.getId());
+        }
+    }
+
+    protected void encodeToolFolder(FacesContext facesContext,
+            UIComponent component) throws WriterException {
+
+        Renderer renderer = getRenderer(facesContext, component);
+
+        if (renderer == null) {
+            LOG.error("Can not get renderer for component '" + component
+                    + "' id=" + component.getId());
+            return;
+        }
+
+        IRenderContext renderContext = getRenderContext(facesContext);
+
+        IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
+                .getComponentWriter();
+
+        htmlWriter.startElement("TD");
+
+        try {
+            renderer.encodeBegin(facesContext, component);
+
+            renderer.encodeEnd(facesContext, component);
+
+        } catch (IOException ex) {
+            throw new WriterException(ex.getMessage(), ex.getCause(), component);
+        }
+
+        htmlWriter.endElement("TD");
+    }
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.TOOL_BAR;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#getDecodesChildren()
-     */
     public boolean getDecodesChildren() {
         return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decodeEvent(org.rcfaces.core.internal.renderkit.IRequestContext,
-     *      javax.faces.component.UIComponent, java.lang.String,
-     *      java.lang.String)
-     */
-    protected void decodeEvent(IRequestContext context, UIComponent component,
-            IEventData eventData) {
-
-        if (eventData != null
-                && JavaScriptClasses.EVENT_SELECTION.equals(eventData
-                        .getEventName())) {
-
-            Object value = eventData.getEventValue();
-
-            // TODO: Il faut converir la value de l'item ...
-
-            ActionEvent actionEvent = new ItemActionEvent(component, value);
-            component.queueEvent(actionEvent);
-
-            return;
-        }
-
-        super.decodeEvent(context, component, eventData);
-    }
-
-    protected IComponentDecorator createComponentDecorator(
-            FacesContext facesContext, UIComponent component) {
-        return new ToolBarDecorator(component);
     }
 }

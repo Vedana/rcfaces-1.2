@@ -9,24 +9,24 @@
  * @version $Revision$ $Date$
  */
  
-function f_locale() {
-	var resourceBundle=f_resourceBundle.Get(f_locale);
-
-	this._monthShortNames=resourceBundle.f_get("MONTH_SHORT_NAMES");
-	this._monthMedNames=resourceBundle.f_get("MONTH_MED_NAMES");
-	this._monthLongNames=resourceBundle.f_get("MONTH_LONG_NAMES");
-
-	this._dayShortNames=resourceBundle.f_get("DAY_SHORT_NAMES");
-	this._dayMedNames=resourceBundle.f_get("DAY_MED_NAMES");
-	this._dayLongNames=resourceBundle.f_get("DAY_LONG_NAMES");
+var __prototype = {
+	f_locale: function() {
+		var resourceBundle=f_resourceBundle.Get(f_locale);
 	
-	this._firstDayOfWeek=resourceBundle.f_get("FIRST_DAY_OF_WEEK");
-	this._twoDigitYearStart=resourceBundle.f_get("TWO_DIGIT_YEAR_START");
-
-	this._dateFormats=resourceBundle.f_get("DATE_FORMATS");
-}
-
-f_locale.prototype = {
+		this._monthShortNames=resourceBundle.f_get("MONTH_SHORT_NAMES");
+		this._monthMedNames=resourceBundle.f_get("MONTH_MED_NAMES");
+		this._monthLongNames=resourceBundle.f_get("MONTH_LONG_NAMES");
+	
+		this._dayShortNames=resourceBundle.f_get("DAY_SHORT_NAMES");
+		this._dayMedNames=resourceBundle.f_get("DAY_MED_NAMES");
+		this._dayLongNames=resourceBundle.f_get("DAY_LONG_NAMES");
+		
+		this._firstDayOfWeek=resourceBundle.f_get("FIRST_DAY_OF_WEEK");
+		this._twoDigitYearStart=resourceBundle.f_get("TWO_DIGIT_YEAR_START");
+	
+		this._dateFormats=resourceBundle.f_get("DATE_FORMATS");
+	},
+	
 	/*
 	f_finalize: function() {
 		this._monthShortNames=undefined; // string[]
@@ -224,13 +224,8 @@ var __static = {
 		}
 		
 		return seps[idx];
-	},
-	f_getName: function() {
-		return "f_getName";
 	}
 }
 
-for(var p in __static) {
-	f_locale[p]=__static[p];
-}
+new f_class("f_locale", null, __static, __prototype);
 

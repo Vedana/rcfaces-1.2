@@ -22,6 +22,8 @@ public class TreeNode extends SelectItemGroup implements ITreeNode {
 
     private static final long serialVersionUID = -8687718500434714577L;
 
+    private static final SelectItem SELECT_ITEMS_EMPTY_ARRAY[] = new SelectItem[0];
+
     private String imageURL;
 
     private String disabledImageURL;
@@ -31,6 +33,8 @@ public class TreeNode extends SelectItemGroup implements ITreeNode {
     private String selectedImageURL;
 
     private String expandedImageURL;
+
+    private int inputType;
 
     public TreeNode() {
     }
@@ -48,6 +52,7 @@ public class TreeNode extends SelectItemGroup implements ITreeNode {
         super(treeNode.getLabel(), treeNode.getDescription(), treeNode
                 .isDisabled(), treeNode.getSelectItems());
 
+        setInputType(treeNode.getInputType());
         setValue(treeNode.getValue());
         setImageURL(treeNode.getImageURL());
         setDisabledImageURL(treeNode.getDisabledImageURL());
@@ -58,7 +63,10 @@ public class TreeNode extends SelectItemGroup implements ITreeNode {
 
     public TreeNode(TreeNodeComponent treeNodeComponent) {
         super(treeNodeComponent.getItemLabel(), treeNodeComponent
-                .getItemDescription(), treeNodeComponent.isDisabled(), null);
+                .getItemDescription(), treeNodeComponent.isDisabled(),
+                SELECT_ITEMS_EMPTY_ARRAY);
+
+        setInputType(treeNodeComponent.getInputType());
 
         setValue(treeNodeComponent.getItemValue());
 
@@ -159,6 +167,14 @@ public class TreeNode extends SelectItemGroup implements ITreeNode {
 
     public void setSelectedImageURL(String selectedImageURL) {
         this.selectedImageURL = selectedImageURL;
+    }
+
+    public int getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(int inputType) {
+        this.inputType = inputType;
     }
 
 }

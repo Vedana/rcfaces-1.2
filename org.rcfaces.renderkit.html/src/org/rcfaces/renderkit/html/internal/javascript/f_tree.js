@@ -115,7 +115,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 	
 		var node=li._node;
@@ -134,7 +134,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 
 		if (!tree._focus) {
@@ -165,7 +165,9 @@ var __static = {
 		if (tree.f_getEventLocked()) {
 			return false;
 		}
-		if (!evt) evt=f_core.IeGetEvent(this);
+		if (!evt) {
+			evt=f_core.GetEvent(this);
+		}
 
 		if (tree.f_isDisabled()) {
 			return f_core.CancelEvent(evt);
@@ -204,7 +206,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 		
 		var node=li._node;
@@ -233,7 +235,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		 }
 		
 		tree.f_setFocus();
@@ -247,7 +249,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}		
 
 		if (tree._focus) {
@@ -290,7 +292,7 @@ var __static = {
 		//}
 		
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 		
 		if (!tree._focus) {
@@ -320,7 +322,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 		
 		if (!tree._focus) {
@@ -339,7 +341,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 
 		if (!tree._focus) {
@@ -358,7 +360,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 
 		if (!tree._focus) {
@@ -378,7 +380,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 
 		evt.cancelBubble = true;
@@ -486,7 +488,7 @@ var __prototype = {
 		this.onmouseup=f_core.CancelEventHandler;
 		this.onclick=f_core.CancelEventHandler;
 		
-		this.f_addEventListener(f_event.KEYDOWN, this._performKeyDown);
+		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);
 	},
 	f_finalize: function() {
 //		this._preloadedLevelDepth=undefined;  // number
@@ -622,7 +624,7 @@ var __prototype = {
 			
 			f_core.VerifyProperties(divNode);			
 		} else {
-			if (f_core.IsDebugEnabled("f_tree")) {
+			if (f_core.IsDebugEnabled(f_tree)) {
 				f_core.Debug(f_tree, "No div node ? "+li);
 			}
 		}
@@ -886,7 +888,7 @@ var __prototype = {
 			}
 			
 			if (node._nodes) {
-				// f_core.Debug("f_tree", "constructTree: children: opened="+node._opened+" userExp="+this._userExpandable+" depth="+depth);
+				// f_core.Debug(f_tree, "constructTree: children: opened="+node._opened+" userExp="+this._userExpandable+" depth="+depth);
 				
 				if (node._opened || !this._userExpandable) {
 					this._constructTree(li._nodes, node._nodes, depth+1);
@@ -1090,7 +1092,7 @@ var __prototype = {
 					break;
 				}
 			}
-			if (params.length==0) {
+			if (!params.length) {
 				waitingNode.parentNode.removeChild(waitingNode);
 				return;
 			}
@@ -1101,7 +1103,7 @@ var __prototype = {
 		}
 		
 		var url=f_env.GetViewURI();
-		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var tree=this;
 
 		request.f_setListener({
@@ -1109,15 +1111,20 @@ var __prototype = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-				if (waitingNode._label) {
-					waitingNode._label.innerHTML="ERREUR !";
-					waitingNode._label.className="f_waiting_error";
-				}
-				if (waitingNode._image) {
-					waitingNode._image.src=f_waiting.GetWaitingErrorImageURL();
+	 			var label=waitingNode._label;
+				if (label) {
+					label.innerHTML="ERREUR !";
+					label.className="f_waiting_error";
 				}
 				
-				f_tree.Info("f_tree", "Bad status: "+request.f_getStatus());
+				var image=waitingNode._image;
+				if (image) {
+					image.src=f_waiting.GetWaitingErrorImageURL();
+				}
+				
+				f_tree.Info(f_tree, "Bad status: "+request.f_getStatus());
+				
+		 		tree.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
 	 		},
 			/**
 			 * @method public
@@ -1131,15 +1138,25 @@ var __prototype = {
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-	 			var ret=null;
+				if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+					tree.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+					return;
+				}
+
+				var responseContentType=request.f_getResponseContentType();
+				if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+		 			tree.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+
+					return;
+				}
+
+	 			var ret=request.f_getResponse();
 				try {
-					ret=request.f_getResponse();
-					
 					//alert("ret="+ret);
 					eval(ret);
 
 				} catch(x) {				
-					f_core.Error(f_tree, "Evaluation exception : '"+ret+"'.", x);
+				 	tree.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
 				}
 	
 				var event=new f_event(tree, f_event.CHANGE);
@@ -1163,6 +1180,12 @@ var __prototype = {
 		};
 		request.f_doFormRequest(params);
 		
+	},
+	/**
+	 * @method protected
+	 */
+	f_performErrorEvent: function(param, messageCode, message) {
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	_newWaitingNode: function(parentDepth) {
 		var li=document.createElement("LI");
@@ -1226,17 +1249,17 @@ var __prototype = {
 	fa_showElement: function(item) {
 		f_core.Assert(item && item.tagName, "Item parameter must be a LI tag ! ("+item+")");
 		
-		//f_core.Debug("f_tree", "Show="+item._label.innerHTML);
+		//f_core.Debug(f_tree, "Show="+item._label.innerHTML);
 		if (item.offsetTop-this.scrollTop<0) {
 			this.scrollTop=item.offsetTop;
-			//	f_core.Debug("f_tree", "Show=UP");
+			//	f_core.Debug(f_tree, "Show=UP");
 			return;
 		}	
 		
 		if (item.offsetTop+item._label.offsetHeight-this.scrollTop>this.clientHeight) {			
 			this.scrollTop=item.offsetTop+item.offsetHeight-this.clientHeight;
 
-			// f_core.Debug("f_tree", "Show=DOWN itemO="+item.offsetTop+" laH="+item._label.offsetHeight+", stop="+this.scrollTop+", ch="+this.clientHeight);
+			// f_core.Debug(f_tree, "Show=DOWN itemO="+item.offsetTop+" laH="+item._label.offsetHeight+", stop="+this.scrollTop+", ch="+this.clientHeight);
 			return;
 		}
 	},
@@ -1992,7 +2015,7 @@ var __prototype = {
 		var now=new Date().getTime();
 		if (this._lastKeyDate!==undefined) {
 			var dt=now-this._lastKeyDate;
-			f_core.Debug("f_tree", "Delay key down "+dt+"ms");
+			f_core.Debug(f_tree, "Delay key down "+dt+"ms");
 			if (dt<f_tree._SEARCH_KEY_DELAY) {
 				key=this._lastKey+key;
 			}
@@ -2400,11 +2423,13 @@ var __prototype = {
 		return this.f_super(arguments);
 	},
 	/** 
-	 * @method private
+	 * @method hidden
+	 * @param String waitingId Identifier of waiting process
+	 * @return Object
 	 */
-	_getWaitingNode: function(waitingId) {
+	f_getWaitingNode: function(waitingId) {
 		var waiting=this._waitingNodes[waitingId];
-		f_core.Assert(waiting, "Can not find waiting #"+waitingId);
+		f_core.Assert(waiting, "f_tree.f_getWaitingNode: Can not find waiting #"+waitingId);
 
 		var li=waiting._li;
 		if (li==this) {
@@ -2414,13 +2439,15 @@ var __prototype = {
 		return li._node;
 	},
 	/** 
-	 * @method private
+	 * @method hidden
+	 * @param String waitingId Identifier of waiting process
+	 * @return void
 	 */
-	_clearWaiting: function(waitingId) {
+	f_clearWaiting: function(waitingId) {
 		var waiting=this._waitingNodes[waitingId];
-		f_core.Assert(waiting, "Can not find waiting #"+waitingId);
+		f_core.Assert(waiting, "f_tree.f_clearWaiting: Can not find waiting #"+waitingId);
 
-		f_core.Debug("f_tree", "_clearWaiting id='"+waitingId+"'.");
+		f_core.Debug(f_tree, "_clearWaiting id='"+waitingId+"'.");
 
 		var li=waiting._li;
 		f_core.Assert(li, "Waiting node is already cleared !");
@@ -2432,7 +2459,7 @@ var __prototype = {
 		waiting.parentNode.removeChild(waiting);
 
 		if (li==this) {			
-			f_core.Debug("f_tree", "_clearWaiting reconstruct tree.");
+			f_core.Debug(f_tree, "f_clearWaiting: reconstruct tree.");
 
 			var nodes=this._nodes;
 			if (nodes) {
@@ -2443,7 +2470,7 @@ var __prototype = {
 		}			
 
 		var node=li._node;
-		f_core.Debug("f_tree", "_clearWaiting construct node '"+node._value+"'.");
+		f_core.Debug(f_tree, "f_clearWaiting: construct node '"+node._value+"'.");
 	
 		if (node._nodes && node._opened) {
 			var ul=li._nodes;
@@ -2499,7 +2526,7 @@ var __prototype = {
 			this._closeNode(node, null, li);
 		}
 				
-		f_core.Debug("f_tree", "Refreshed node open state="+opened);
+		f_core.Debug(f_tree, "Refreshed node open state="+opened);
 		
 		node._nodes=undefined;
 		this._setInteractiveParent(node);
@@ -2577,8 +2604,7 @@ var __prototype = {
 	},
 	fa_getScrolledVerticalTitle: function() {
 		return null;
-	}
-	
+	}	
 }
- 
-var f_tree=new f_class("f_tree", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager, fa_itemClientDatas, fa_scrollPositions);
+
+new f_class("f_tree", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager, fa_itemClientDatas, fa_scrollPositions);

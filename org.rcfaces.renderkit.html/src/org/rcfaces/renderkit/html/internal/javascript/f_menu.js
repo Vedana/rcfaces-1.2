@@ -98,7 +98,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_isOpened: function() {
-		return this._popupOpened;
+		return this.f_uiIsPopupOpened(this);
 	},
 	fa_getSelectionProvider: function() {
 		return this._selectionProvider;
@@ -111,40 +111,38 @@ var __prototype = {
 
 		// Par defaut le parent est le menuBarItem
 		// On recherche le popup le plus "ouvert"
-		var parent=item;
+		var parent=this;
 		for(;;) {
-			var pi=parent._selectedMenuItem;
-			if (!pi || !pi._popupOpened) {
+			var pi=this.f_uiGetSelectedItem(parent);
+			
+			if (!pi || !this.f_uiIsPopupOpened(pi)) {
 				break;
-			}
+			}			
 			parent=pi;
-		}
-		
+		}			
+			
 		var key=String.fromCharCode(code).toUpperCase();
 
-		var items=parent._items;
-		for(var i=0;i<items.length;i++) {
-			var it=items[i];
+		var menuItems=this.f_listItemChildren(parent);
+		for(var i=0;i<menuItems.length;i++) {
+			var menuItem=menuItems[i];
 
-			if (!it._accessKey) {
+			var accessKey=this.f_getItemAccessKey(menuItem);
+
+			if (accessKey!=key) {
 				continue;
 			}
 
-			if (it._accessKey!=key) {
-				continue;
-			}
-
- 			if (this.f_isItemDisabled(it)) {
-				item._closePopup(item);
+ 			if (this.f_isItemDisabled(menuItem)) {
 				return true;
  			}
  
-			this._menuItem_over(it, true, true);			
-			if (it._menuPopup) {
+			this.f_menuItem_over(menuItem, true, jsEvent);			
+			if (this.f_hasVisibleItemChildren(menuItem)) {
 				return true;
 			}
 
-			this._menuItem_select(it, jsEvent);
+			this.f_menuItem_select(menuItem, jsEvent);
 			return true;
 		}
 		
@@ -175,7 +173,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	_filterKey: function(phase, evt) {
-		f_core.Debug(f_menu, "Filter key '"+evt.keyCode+"'.");
+		f_core.Debug(f_menu, "_filterKey: key '"+evt.keyCode+"' catchOnlyPopupKeys="+this._catchOnlyPopupKeys);
 		if (!this._catchOnlyPopupKeys) {
 			return false;
 		}
@@ -258,9 +256,20 @@ var __prototype = {
 		}
 		
 		return cid+"::"+menuItem._id;
+	},
+	fa_getKeyProvider: function() {
+		return this._parentComponent;
+	},
+	
+	/**
+	 * @method public
+	 * @return String
+	 */
+	toString: function() {
+		return "[f_menu id="+this.id+" menuId="+this._menuId+" component="+this._component+"]";
 	}
 }
 
 
-var f_menu=new f_class("f_menu", null, null, __prototype, f_eventTarget, fa_menuCore);
+new f_class("f_menu", null, null, __prototype, f_eventTarget, fa_menuCore);
  

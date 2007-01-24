@@ -82,7 +82,7 @@ var __prototype={
 			this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
 			this._forItemValue=f_core.GetAttribute(this, "v:forItemValue");
 				
-			this.f_addEventListener(f_event.KEYPRESS, this._forListener);
+			this.f_insertEventListenerFirst(f_event.KEYPRESS, this._forListener);
 		}
 	},
 	/*
@@ -169,4 +169,4 @@ var __prototype={
 	}
 }
  
-var f_accelerator = new f_class("f_accelerator", null, __static, __prototype, f_object, fa_immediate, fa_eventTarget);
+new f_class("f_accelerator", null, __static, __prototype, f_object, fa_immediate, fa_eventTarget);

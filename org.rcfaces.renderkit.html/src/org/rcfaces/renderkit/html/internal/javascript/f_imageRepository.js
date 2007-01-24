@@ -109,4 +109,4 @@ var __static = {
 	}
 }
 
-var f_imageRepository=new f_class("f_imageRepository", null, __static);
+new f_class("f_imageRepository", null, __static);

@@ -256,4 +256,4 @@ var __prototype = {
 	}
 }
 
-var f_message=new f_class("f_message", null, __static, __prototype, f_component, fa_message1);
+new f_class("f_message", null, __static, __prototype, f_component, fa_message1);

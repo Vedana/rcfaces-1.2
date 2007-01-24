@@ -9,10 +9,7 @@
  * @author Joel Merlin and Olivier Oeuillot
  * @version $Revision$ $Date$
  */
- 
-function f_xml() {
-}
- 
+
 var __static = {
 
 	/**
@@ -230,19 +227,8 @@ var __static = {
 		}
 		
 		return ret;
-	},
-	/**
-	 * Returns the name of the class.
-	 *
-	 * @method public static
-	 * @return String
-	 */
-	f_getName: function() {
-		return "f_xml";
 	}
 }
 
+new f_class("f_xml", null, __static);
 
-for(var p in __static) {
-	f_xml[p]=__static[p];
-}

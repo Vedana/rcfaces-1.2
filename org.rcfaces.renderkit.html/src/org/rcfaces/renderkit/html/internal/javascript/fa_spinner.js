@@ -59,7 +59,10 @@ var __static = {
 		if (spinner.f_getEventLocked(false) || spinner.f_isDisabled()) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 	
 		if (!f_core.GetEvtButton(evt) && this._pushed) {
 			this._pushed=false;
@@ -102,7 +105,10 @@ var __static = {
 		if (spinner.f_getEventLocked() || spinner.f_isDisabled()) {
 			return false;
 		}
-		if (!evt) evt = window.event;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 		
 		this._pushed=true;
 		
@@ -191,9 +197,9 @@ var __prototype = {
 		this._spinnerDown=f_core.GetChildByCssClass(this, "f_spinner_down"+disabledSuffix);
 		this._installSpinnerButton(this._spinnerDown, "_down", -1);
 		
-		this.f_addEventListener(f_event.KEYDOWN, this._performSpinnerKeyDown);
-		this.f_addEventListener(f_event.KEYUP, this._performSpinnerKeyUp);
-		this.f_addEventListener(f_event.KEYPRESS, this._performSpinnerKeyPress);
+		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performSpinnerKeyDown);
+		this.f_insertEventListenerFirst(f_event.KEYUP, this._performSpinnerKeyUp);
+		this.f_insertEventListenerFirst(f_event.KEYPRESS, this._performSpinnerKeyPress);
 	},
 	
 	f_finalize: function() {

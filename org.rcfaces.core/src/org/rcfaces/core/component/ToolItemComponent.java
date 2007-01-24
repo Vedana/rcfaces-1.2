@@ -1,16 +1,16 @@
 package org.rcfaces.core.component;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.InputTypeConverter;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.ToolFolderComponent;
-import javax.faces.el.ValueBinding;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IInputTypeCapability;
-import org.rcfaces.core.component.UIImageItemComponent;
 
 /**
  * <b>EXPERIMENTAL</b>

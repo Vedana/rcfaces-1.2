@@ -115,4 +115,4 @@ var __prototype = {
 	fa_getRadioScope: fa_groupName.GlobalScope
 }
 
-var f_imageRadioButton=new f_class("f_imageRadioButton", null, null, __prototype, f_imageCheckButton, fa_groupName, fa_required);
+new f_class("f_imageRadioButton", null, null, __prototype, f_imageCheckButton, fa_groupName, fa_required);

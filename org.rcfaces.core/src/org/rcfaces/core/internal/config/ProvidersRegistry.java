@@ -95,10 +95,10 @@ public class ProvidersRegistry implements IProvidersRegistry {
             parameters = new Object[] { null };
 
         } catch (NoSuchMethodException ex) {
-            LOG.debug(
+            LOG.trace(
                     "Can not get constructor with provider parameter for class '"
                             + className + "' specified by provider id='" + id
-                            + "'  (providerId='" + providerId + "').", ex);
+                            + "'  (providerId='" + providerId + "'), TRY with no parameter !", ex);
 
             try {
                 constructor = clazz.getConstructor(null);
@@ -211,8 +211,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
     public void loadProvidersConfiguration(IProvidersConfigurator configurator) {
         Digester digester = new Digester();
 
-        for (Iterator it = providersById.entrySet().iterator(); it
-                .hasNext();) {
+        for (Iterator it = providersById.entrySet().iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
             IProvider provider = (IProvider) entry.getValue();
@@ -228,8 +227,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
     }
 
     public void startupProviders(FacesContext facesContext) {
-        for (Iterator it = providersById.entrySet().iterator(); it
-                .hasNext();) {
+        for (Iterator it = providersById.entrySet().iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
             String providerId = (String) entry.getKey();

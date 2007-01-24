@@ -116,7 +116,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = window.event;
+			evt = f_core.GetEvent(this);
 		}
 		var code=evt.keyCode;
 		var cancel=false;
@@ -190,8 +190,9 @@ var __static = {
 		if (dataPager.f_getEventLocked()) {
 			return false;
 		}
+
 		if (!evt) {
-			evt = window.event;
+			evt = f_core.GetEvent(this);
 		}
 
 		var v_index=f_core.GetAttribute(this, "v:index");		
@@ -692,4 +693,4 @@ var __prototype = {
 	}
 }
 
-var f_pager=new f_class("f_pager", null, __static, __prototype, f_component, fa_pager);
+new f_class("f_pager", null, __static, __prototype, f_component, fa_pager);

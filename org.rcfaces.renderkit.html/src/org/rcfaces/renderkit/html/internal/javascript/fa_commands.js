@@ -58,6 +58,7 @@ var __prototype = {
 		
 		return true;
 	},
+
 	
 	_loading: f_class.ABSTRACT
 }

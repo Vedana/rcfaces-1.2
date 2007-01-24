@@ -10,7 +10,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var f_prop = {
+var __static = {
 
 	/**
 	 * @field hidden static final
@@ -315,13 +315,8 @@ var f_prop = {
 	/**
 	 * @field hidden static final
 	 */
-	ALL_VALUE:				"\x07all",
-	
-	
-	/**
-	 * @method public static final
-	 */
-	f_getName: function() {
-		return "f_prop";
-	}
+	ALL_VALUE:				"\x07all"
 }
+
+new f_class("f_prop", null, __static);
+

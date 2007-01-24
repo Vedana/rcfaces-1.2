@@ -8,19 +8,96 @@
  * @author Joel Merlin & Olivier Oeuillot
  * @version $Revision$ $Date$
  */
- 
-function f_actionList(component,type) {
-	f_core.Assert(typeof(type)=="string", "Type of actionList is invalid '"+type+"'.");
+
+
+var __static= {
+	/**
+	 * @method private static 
+	 * @return void
+	 */
+	_ShowEventException: function(index, type, link, evt, fct, ex) {
+		var s="*** Action Error: type="+type+" (action #"+index+")\n";
 	
-	this._link = component;
-	this._type = type;
+		s+="-- Target Object --------------------------\n";
+		
+		if (!link) {
+			s+="link=NULL\n";
+			
+		} else {
+			if (link.tagName) {
+				s+="id="+link.id+" tagName="+link.tagName+" cssClass="+link.className+"\n";
+			}
+			if (link._kclass) {
+				s+="f_class="+link._kclass._name+"\n";
+			}
+	
+			if (link.toString) {
+				s+=link.toString();
+				
+			} else {
+				s+=link;
+			}
+		}
+		s+="\n-- Event Object --------------------------\n";
+		
+		var cmp=evt.f_getComponent();
+		if (cmp) {
+			if (cmp==link) {
+				s+="evt.component = *** target ***\n";
+			} else {
+				if (cmp.tagName) {
+					s+="evt.component: id="+cmp.id+" tagName="+cmp.tagName+" cssClass="+cmp.className+"\n";
+				}
+				if (cmp._kclass) {
+					s+="evt.component: f_class="+cmp._kclass._name+"\n";
+				}
+						
+				if (cmp.toString) {
+					s+="evt.component="+cmp.toString()+"\n";
+				} else {
+					s+="evt.component="+cmp+"\n";
+				}
+			}
+		}
+		if (evt.f_getItem()) {
+			s+="evt.component="+evt.f_getItem()+"\n";
+		}
+		if (evt.f_getValue()) {
+			s+="evt.component="+evt.f_getValue()+"\n";
+		}
+		s+="-- Exception Object -----------------------\n";
+		s+=ex;
+		
+		var code=fct.toString().split('\n');
+		if (code.length>15) {
+			s+="\n-- Function source - (first 15 lines) ---\n";
+	
+		} else {
+			s+="\n-- Function source ----------------------\n";
+		}		
+		
+		for(var i=0;i<code.length && i<15;i++) {
+			s+=code[i]+"\n";
+		}
+		
+		//alert(s);
+		f_core.Error(f_actionList, s, ex);
+	}
 }
 
-f_actionList.prototype= {
+var __prototype= {
+	f_actionList: function(component,type) {
+		f_core.Assert(typeof(type)=="string", "Type of actionList is invalid '"+type+"'.");
+		
+		this._link = component;
+		this._type = type;
+	},
+
 	f_finalize: function() {
 		this._link=undefined;  // object
 	//	this._type=undefined; // string
 		this._actions=undefined;  // function[]
+		this._firsts=undefined;  // function[]
 	},
 	
 	/**
@@ -54,11 +131,11 @@ f_actionList.prototype= {
 		
 		f_core.PushArguments(as, arguments);
 		
-		if (f_core.IsDebugEnabled("f_actionList")) {
+		if (f_core.IsDebugEnabled(f_actionList)) {
 			for(var i=0;i<as.length;i++) {
 				var a=as[i];
 				
-				f_core.Assert(typeof(a)=="string" || typeof(a)=="function", "Bad action type ! ("+a+").");
+				f_core.Assert(typeof(a)=="string" || typeof(a)=="function", "f_actionList.f_addAction: Bad listener for action type '"+this._type+"'. (listener="+a+").");
 			}
 		}
 	},
@@ -75,18 +152,24 @@ f_actionList.prototype= {
 	 * 
 	 * @method hidden
 	 */
-	f_removeAction: function(actions) {
-		var as=this._actions
-		if (!as) {
+	f_removeAction: function(listeners) {
+		var actions=this._actions
+		var firsts=this._firsts
+		if (!actions && !firsts) {
 			return;
 		}
 		
 		for(var i=0;i<arguments.length;i++) {
 			var action=arguments[i];
 			
-			f_core.Assert(typeof(action)=="string" || typeof(action)=="function", "Bad action type ! ("+action+").");
+			f_core.Assert(typeof(action)=="string" || typeof(action)=="function", "f_actionList.f_removeAction: Bad listener for action type '"+this._type+"'. (listener="+action+").");
 			
-			as.f_removeElement(action);
+			if (actions && actions.f_removeElement(action)) {
+				continue;
+			}
+			if (firsts) {
+				firsts.f_removeElement(action)
+			}
 		}
 	},
 	
@@ -103,7 +186,17 @@ f_actionList.prototype= {
 	 * @method hidden
 	 */
 	f_isEmpty: function() {
-		return !this._actions;
+		var actions=this._actions;
+		if (actions && actions.length) {
+			return false;
+		}
+		
+		var firsts=this._firsts;
+		if (firsts && firsts.length) {
+			return false;
+		}
+		
+		return true;
 	},
 	
 	/**
@@ -111,17 +204,20 @@ f_actionList.prototype= {
 	 * @method hidden
 	 */
 	f_addActionFirst: function(actions) {
-		var as=this._actions
+		var as=this._firsts
 		if (!as) {
 			as = new Array;
-			this._actions = as;
+			this._firsts = as;
 		}
 		
-		for(var i=0;i<arguments.length;i++) {
-			var action=arguments[i];
-			
-			f_core.Assert(typeof(action)=="string" || typeof(action)=="function", "Bad action type ! ("+action+").");
-			as.unshift(action);
+		f_core.PushArguments(as, arguments);
+		
+		if (f_core.IsDebugEnabled(f_actionList)) {
+			for(var i=0;i<as.length;i++) {
+				var a=as[i];
+				
+				f_core.Assert(typeof(a)=="string" || typeof(a)=="function", "f_actionList.f_addActionFirst: Bad listener for action type '"+this._type+"'. (listener="+a+").");
+			}
 		}
 	},
 	
@@ -133,7 +229,10 @@ f_actionList.prototype= {
 		f_core.Assert(this._link, "No linked component for this actionList !");
 		
 		var ret = true;
-		if (!this._actions) {
+
+		var firsts = this._firsts;
+		var actions = this._actions;
+		if (!actions && !firsts) {
 			f_core.Debug(f_actionList, "No actions '"+this._type+"' returns true.");
 			return ret;
 		}
@@ -141,8 +240,16 @@ f_actionList.prototype= {
 		var link=this._link;
 		
 		// Remet dans le context de la window de l'objet !
-		var actions = this._actions;
-		for(var i=0;i<actions.length;i++) {
+
+		if (firsts) {
+			if (actions) {
+				actions=firsts.concat(actions);
+			} else {
+				actions=firsts;
+			}
+		}
+		
+		for(var i=0;i<actions.length;i++) {		
 			var fct = actions[i];
 			if (!fct) {
 				continue;
@@ -200,78 +307,4 @@ f_actionList.prototype= {
 	}
 }
 
-/**
- * @method private static final
- */
-f_actionList._ShowEventException=function(index, type, link, evt, fct, ex) {
-	var s="*** Action Error: type="+type+" (action #"+index+")\n";
-
-	s+="-- Target Object --------------------------\n";
-	
-	if (!link) {
-		s+="link=NULL\n";
-		
-	} else {
-		if (link.tagName) {
-			s+="id="+link.id+" tagName="+link.tagName+" cssClass="+link.className+"\n";
-		}
-		if (link._kclass) {
-			s+="f_class="+link._kclass._name+"\n";
-		}
-
-		if (link.toString) {
-			s+=link.toString();
-			
-		} else {
-			s+=link;
-		}
-	}
-	s+="\n-- Event Object --------------------------\n";
-	
-	var cmp=evt.f_getComponent();
-	if (cmp) {
-		if (cmp==link) {
-			s+="evt.component = *** target ***\n";
-		} else {
-			if (cmp.tagName) {
-				s+="evt.component: id="+cmp.id+" tagName="+cmp.tagName+" cssClass="+cmp.className+"\n";
-			}
-			if (cmp._kclass) {
-				s+="evt.component: f_class="+cmp._kclass._name+"\n";
-			}
-					
-			if (cmp.toString) {
-				s+="evt.component="+cmp.toString()+"\n";
-			} else {
-				s+="evt.component="+cmp+"\n";
-			}
-		}
-	}
-	if (evt.f_getItem()) {
-		s+="evt.component="+evt.f_getItem()+"\n";
-	}
-	if (evt.f_getValue()) {
-		s+="evt.component="+evt.f_getValue()+"\n";
-	}
-	s+="-- Exception Object -----------------------\n";
-	s+=ex;
-	
-	var code=fct.toString().split('\n');
-	if (code.length>15) {
-		s+="\n-- Function source - (first 15 lines) ---\n";
-
-	} else {
-		s+="\n-- Function source ----------------------\n";
-	}		
-	
-	for(var i=0;i<code.length && i<15;i++) {
-		s+=code[i]+"\n";
-	}
-	
-	//alert(s);
-	f_core.Error(f_actionList, s, ex);
-}
-
-f_actionList.f_getName=function() {
-	return "f_actionList";
-}
+new f_class("f_actionList", null, __static, __prototype);

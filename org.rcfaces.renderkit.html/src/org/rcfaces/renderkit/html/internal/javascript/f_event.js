@@ -10,90 +10,107 @@
  * @version $Revision$ $Date$
  */
 
-/**
- * @method public
- * @param f_object component
- * @param String type
- * @param optional Event jsEvent
- * @param optional Object item
- * @param optional any value
- * @param optional fa_selectionProvider selectionProvider
- * @param optional any detail
- */
-function f_event(component, type, jsEvent, item, value, selectionProvider, detail) {
-	f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
-	f_core.Assert(component.tagName || component._kclass, "Bad component '"+component+"'.");
-
-	this._type = type;
-	this._component = component;
-	this._jsEvent = jsEvent;
-	this._item = item;
-	this._value = value;
-	this._selectionProvider = selectionProvider;
-	this._detail = detail;
-}
-
-f_event.prototype= {
+var __prototype= {
 	/**
 	 * @method public
-	 * @return String
+	 * @param f_object component
+	 * @param String type
+	 * @param optional Event jsEvent
+	 * @param optional Object item
+	 * @param optional any value
+	 * @param optional fa_selectionProvider selectionProvider
+	 * @param optional any detail
+	 */
+	 f_event: function(component, type, jsEvent, item, value, selectionProvider, detail) {
+		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
+		f_core.Assert(component.tagName || component._kclass, "Bad component '"+component+"'.");
+	
+		this._type = type;
+		this._component = component;
+		this._jsEvent = jsEvent;
+		this._item = item;
+		this._value = value;
+		this._selectionProvider = selectionProvider;
+		this._detail = detail;
+	},
+	
+	/**
+	 * Returns the type of event.
+	 * @method public
+	 * @return String The type of event.
 	 */
 	f_getType: function() {
 		return this._type;
 	},
 	
 	/**
+	 * Returns the Javascript event if any.
+	 *
 	 * @method public
-	 * @return Event
+	 * @return Event The Javascript event.
 	 */
 	f_getJsEvent: function() {
 		return this._jsEvent;
 	},
 	
 	/**
+	 * Returns the item associated to the event.
+	 *
 	 * @method public
-	 * @return Object
+	 * @return Object An item.
 	 */
 	f_getItem: function() {
 		return this._item;
 	},
 	
 	/**
+	 * Returns the component associated to the event.
+	 *
 	 * @method public
-	 * @return f_object
+	 * @return f_object The component associated to the event.
 	 */
 	f_getComponent: function() {
 		return this._component;
 	},
 	
 	/**
+	 * Returns the value of the item associated to the event.
+	 *
 	 * @method public
-	 * @return any
+	 * @return any The value of the item associated to the event.
 	 */
 	f_getValue: function() {
 		return this._value;
 	},
 	
 	/**
+	 * Returns the selectionProvider wich contains the item associated to the event.
+	 *
 	 * @method public
-	 * @return fa_selectionProvider
+	 * @return fa_selectionProvider Returns the selectionProvider associated to the item.
 	 */
 	f_getSelectionProvider: function() {
 		return this._selectionProvider;
 	},
 	
 	/**
+	 * Returns a detail about the event.
+	 *
 	 * @method public
-	 * @return any
+	 * @return any A detail value.
 	 */
 	f_getDetail: function() {
 		return this._detail;
 	},
 	
 	/**
+	 * <p>Search for and return the {@link f_component} with an <code>id</code>
+     * that matches the specified search expression (if any).
+	 *
 	 * @method public
 	 * @param String... id Identifier of component.
-	 * @return f_component
+	 * @return f_component the found {@link f_component}, or <code>null</code>
+     *  if the component was not found.
 	 * @see f_component#f_findComponent f_component.f_findComponent()
 	 */
 	f_findComponent: function(id) {
@@ -105,6 +122,8 @@ f_event.prototype= {
 	},
 	
 	/**
+	 * Prevent the default process of the event.
+	 *
 	 * @method public
 	 * @return boolean <code>false</code> value.
 	 */
@@ -119,6 +138,7 @@ f_event.prototype= {
 	
 	/**
 	 * @method hidden
+	 * @return void
 	 */
 	f_finalize: function() {
 	//	this._type = undefined;  // string
@@ -130,6 +150,10 @@ f_event.prototype= {
 		this._selectionProvider = undefined; // fa_selectionProvider
 	},
 	 
+	/**
+	 * @method public
+	 * @return String
+	 */
 	toString: function() {
 		return "[f_event type='"+this._type+"' component='"+this._component+"' value='"+this._value+"' item='"+this._item+"' jsEvent='"+this._jsEvent+"']";
 	}
@@ -210,6 +234,13 @@ var __static = {
 	 * @field public static final String
 	 */
 	DBLCLICK:	"dblclick",
+
+	/**
+ 	 * Error event name.
+ 	 *
+	 * @field public static final String
+	 */
+	ERROR:		"error",
 
 	/**
  	 * Focus event name.
@@ -348,6 +379,17 @@ var __static = {
 	},
 	/**
 	 * @method public static
+	 * @return f_object
+	 */
+	GetType: function() { 
+		var event=f_event.GetEvent();
+		if(!event) {
+			return null;
+		}
+		return event.f_getType();
+	},
+	/**
+	 * @method public static
 	 * @return Object
 	 */
 	GetItem: function() { 
@@ -448,8 +490,18 @@ var __static = {
 		}
 	
 		if (currentLock==f_event.POPUP_LOCK) {
-			f_core.Debug("f_event", "Catch popup lock (mask="+mask+" show="+showAlert+")");
-			return true;
+			if (f_popup.VerifyLock()) {
+				f_core.Debug("f_event", "Catch popup lock (mask="+mask+" show="+showAlert+")");
+				return true;
+			}
+
+			currentLock=f_event._EvtLock;
+			if (mask) {
+				currentLock &= ~mask;
+			}
+			if (!currentLock) {
+				return false;
+			}
 		}
 	
 		var currentMode=f_event._EvtLockMode;
@@ -514,21 +566,8 @@ var __static = {
 		
 		f_event._EvtLock &= (~set);
 		f_core.Debug("f_event", "Exit event lock (new state="+f_event._EvtLock+" old="+currentLock+")");
-	},
-	toString: function() {
-		return "[class f_event]";
-	},
-	/**
-	 * Returns the name of the class.
-	 *
-	 * @method public static
-	 * @return String
-	 */
-	f_getName: function() {
-		return "f_event";
+		
+		return f_event._EvtLock;
 	}
 }
-
-for(var p in __static) {
-	f_event[p]=__static[p];
-}
+new f_class("f_event", null, __static, __prototype);

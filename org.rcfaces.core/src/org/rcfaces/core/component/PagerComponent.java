@@ -1,12 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IForCapability;
-import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The pager Component is linked to the <a href="/comps/dataGridComponent.html">dataGrid Component</a>.

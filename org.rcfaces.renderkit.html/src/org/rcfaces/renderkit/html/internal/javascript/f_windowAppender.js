@@ -87,4 +87,4 @@ var __prototype = {
 	}
 }
 
-var f_windowAppender=new f_class("f_windowAppender", null, __static, __prototype);
+new f_class("f_windowAppender", null, __static, __prototype, f_object);

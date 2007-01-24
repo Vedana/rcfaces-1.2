@@ -18,5 +18,5 @@ var __prototype = {
 	}
 }
 
-var f_button=new f_class("f_button", null, null, __prototype, f_input, fa_immediate);
+new f_class("f_button", null, null, __prototype, f_input, fa_immediate);
 

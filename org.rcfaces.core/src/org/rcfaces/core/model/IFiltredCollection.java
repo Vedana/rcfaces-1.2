@@ -17,6 +17,11 @@ public interface IFiltredCollection {
     Iterator iterator(IFilterProperties filterProperties,
             int maximumResultNumber);
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     public interface IFiltredIterator extends Iterator {
         int getSize();
 

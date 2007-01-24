@@ -118,4 +118,4 @@ var __prototype = {
 	}
 }
 
-var f_fireBugAppender=new f_class("f_fireBugAppender", null, __static, __prototype);
+new f_class("f_fireBugAppender", null, __static, __prototype, f_object);

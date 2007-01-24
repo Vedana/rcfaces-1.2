@@ -46,7 +46,7 @@ var __prototype = {
 		var component=this._component;
 		if (this._current!=this._nextValue && this._current==0) {
 			component.style.display="block";
-			component.style.height="1";
+			component.style.height="1px";
 		}
 		
 		if (this._callback) {
@@ -79,10 +79,10 @@ var __prototype = {
 			ch="auto";
 		}
 		
-		component.style.height=ch;
+		component.style.height=ch+"px";
 		component.scrollTop=h-ch;
 	}
 }
 
-var f_slideUpEffect=new f_class("f_slideUpEffect", null, __static, __prototype, f_timerEffect);
+new f_class("f_slideUpEffect", null, __static, __prototype, f_timerEffect);
 

@@ -62,7 +62,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
 
     private static final String ALREADY_LAZY_OBJECT = "camelia.already.lazy";
 
-    private static final boolean LAZY_TAG_USE_BROTHER = true;
+    private boolean lazyTagUsesBrother = true;
 
     public static String getRequestURL(FacesContext facesContext,
             UIViewRoot viewRoot) {
@@ -87,8 +87,11 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
     public final void initializeJavaScript(IJavaScriptWriter writer)
             throws WriterException {
 
-        writer.getJavaScriptRenderContext()
-                .initializeJavaScriptDocument(writer);
+        IJavaScriptRenderContext javaScriptRenderContext=writer.getJavaScriptRenderContext();
+
+        lazyTagUsesBrother=javaScriptRenderContext.canLazyTagUsesBrother();
+        
+        javaScriptRenderContext.initializeJavaScriptDocument(writer);
     }
 
     protected IJavaScriptWriter writeJsInitComponent(IJavaScriptWriter writer)
@@ -195,7 +198,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
                     // directement dans le m�me tag !
                     w.startElement(LAZY_INIT_TAG);
 
-                    if (LAZY_TAG_USE_BROTHER == false) {
+                    if (lazyTagUsesBrother == false) {
                         w.writeAttribute("rid", componentRenderContext
                                 .getComponentClientId());
                     }

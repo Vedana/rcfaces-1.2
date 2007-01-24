@@ -76,13 +76,22 @@ public class DataGridService extends AbstractHtmlService {
 
         String dataGridId = (String) parameters.get("dataGridId");
         if (dataGridId == null) {
-            sendJsError(facesContext, "Can not find 'dataGridId' parameter.");
+            sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'dataGridId' parameter.", null);
+            return;
+        }
+
+        if (viewRoot.getChildCount() == 0) {
+            sendJsError(facesContext, dataGridId,
+                    SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
             return;
         }
 
         String index_s = (String) parameters.get("index");
         if (index_s == null) {
-            sendJsError(facesContext, "Can not find 'index' parameter.");
+            sendJsError(facesContext, dataGridId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'index' parameter.", null);
             return;
         }
 
@@ -104,14 +113,20 @@ public class DataGridService extends AbstractHtmlService {
         if (component == null) {
             // Cas special: la session a du expir�e ....
 
-            sendCancel(facesContext, dataGridId, rowIndex);
+            sendJsError(facesContext, dataGridId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Component is not found !", null);
 
             return;
         }
 
         if ((component instanceof DataGridComponent) == false) {
-            sendJsError(facesContext, "Can not find dataGridComponent (id='"
-                    + dataGridId + "').");
+            sendJsError(
+                    facesContext,
+                    dataGridId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find dataGridComponent (id='" + dataGridId + "').",
+                    null);
             return;
         }
 
@@ -141,9 +156,9 @@ public class DataGridService extends AbstractHtmlService {
 
         DataGridRenderer dgr = getDataGridRenderer(facesContext, dgc);
         if (dgr == null) {
-            sendJsError(facesContext,
-                    "Can not find dataGridRenderer. (dataGridId='" + dataGridId
-                            + "')");
+            sendJsError(facesContext, dataGridId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find dataGridRenderer.", null);
             return;
         }
 
@@ -197,37 +212,6 @@ public class DataGridService extends AbstractHtmlService {
 
         facesContext.responseComplete();
 
-    }
-
-    private void sendCancel(FacesContext facesContext, String componentId,
-            int rowIndex) {
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-
-        try {
-            PrintWriter printWriter = response.getWriter();
-
-            IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(
-                    facesContext, printWriter, null, null);
-
-            String varId = jsWriter.getComponentVarName();
-
-            jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                    "GetElementById").writeString(componentId).writeln(
-                    ", document);");
-
-            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeInt(
-                    rowIndex).write(");");
-
-        } catch (IOException ex) {
-            throw new FacesException("Can not write cancel response.", ex);
-        }
-
-        facesContext.responseComplete();
     }
 
     private DataGridRenderer getDataGridRenderer(FacesContext facesContext,

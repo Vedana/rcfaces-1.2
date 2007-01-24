@@ -14,31 +14,8 @@ var __static = {
 	/**
 	 * @field private static final String
 	 */
-	_EMPTY_IMAGE_URL: "/imageButton/blank.gif",
+	_EMPTY_IMAGE_URL: "/imageButton/blank.gif"
 
-	/**
-	 * @method private static final
-	 */
-	_MouseDown: function() {
-		var imageButton=this.f_link;
-		if (imageButton.f_getEventLocked()) {
-			return false;
-		}
-		
-		return imageButton._onMouseDown();
-	},
-	
-	/**
-	 * @method private static final
-	 */
-	_MouseUp: function() {
-		var imageButton=this.f_link;
-		if (imageButton.f_getEventLocked(false)) {
-			return false;
-		}
-
-		return imageButton._onMouseUp();
-	}
 }
  
 var __prototype = {
@@ -52,21 +29,40 @@ var __prototype = {
 		
 		var tabIndex=this.tabIndex;
 		var link=null;
-		if (this.tagName.toUpperCase()=="INPUT") {
+		var tagName=this.tagName.toUpperCase();
+		
+		if (tagName=="INPUT") {
 			// Il faut recuperer le click pour empecher le submit !
 			this._image=this;
 			
 			installSelectionListener=true;
 			
+		} else 	if (tagName=="A") {
+			// Il faut recuperer le click pour empecher le submit !
+			this._image=f_core.GetFirstElementByTagName(this, "IMG", true);
+			
+			installSelectionListener=true;
+			
 		} else {
-			link=f_core.GetFirstElementByTagName(this, "INPUT", true);
+			link=f_core.GetFirstElementByTagName(this, "INPUT", false);
+			if (!link) {
+				link=f_core.GetFirstElementByTagName(this, "A", true);
+			}
+			
 			if (link) {
 				tabIndex=f_core.GetAttribute(this, "tabIndex");
 				if (!tabIndex) {
 					tabIndex=0;
 				}
 			
-				this._image=link;
+				if (link.tagName.toUpperCase()=="INPUT") {				
+					this._image=link;
+				} else {
+					this._image=f_core.GetFirstElementByTagName(link, "IMG", false);
+					
+					f_core.Assert(this._image, "Can not find Image of component '"+this.id+"'.");
+				}
+				
 				this._link=link;
 				link.f_link=this;
 				
@@ -77,8 +73,6 @@ var __prototype = {
 				this.f_openActionList(f_event.SELECTION);
 			}
 		}
-		
-		this.onselectstart=f_core.IeBlockSelectStart;
 		
 		if (!this._image) {
 			var images=this.getElementsByTagName("IMG");
@@ -102,7 +96,7 @@ var __prototype = {
 		}
 		
 		var texts=this.getElementsByTagName("SPAN");
-		if (texts.length>0) {
+		if (texts.length) {
 			var cl=this.f_getMainStyleClass()+"_text";
 			var text;
 			for(var i=0;i<texts.length;i++) {
@@ -113,7 +107,6 @@ var __prototype = {
 				}
 				
 				text=txt;
-				text.onselectstart=f_core.IeBlockSelectStart;
 				break;
 			}
 
@@ -122,8 +115,8 @@ var __prototype = {
 			this._text = text;
 			text.f_link=this;
 	
-			text.onmousedown=f_imageButton._MouseDown;
-			text.onmouseup=f_imageButton._MouseUp;
+//			text.onmousedown=f_imageButton._MouseDown;
+//			text.onmouseup=f_imageButton._MouseUp;
 			installSelectionListener=true;
 		}
 			
@@ -131,24 +124,25 @@ var __prototype = {
 	
 		var border=this.f_getBorderComponent();
 		if (border) {
-			border.onmousedown=f_imageButton._MouseDown;
-			border.onmouseup=f_imageButton._MouseUp;
+//			border.onmousedown=f_imageButton._MouseDown;
+//			border.onmouseup=f_imageButton._MouseUp;
 			this._border=border;	
 			installSelectionListener=true;
 		}
 
 		var image=this._image;
 		if (image) {
-			image.onmousedown=f_imageButton._MouseDown;
-			image.onmouseup=f_imageButton._MouseUp;
-			image.onselectstart=f_core.IeBlockSelectStart;
+//			image.onmousedown=f_imageButton._MouseDown;
+//			image.onmouseup=f_imageButton._MouseUp;
 				
 			image.f_link=this;
 			installSelectionListener=true;
 		}
 		
 		if (installSelectionListener) {
-			this.f_addEventListener(f_event.SELECTION, this._onSelect);
+			this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
+			this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
+			this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
 		}
 		
 		this._tabIndex=tabIndex;
@@ -174,7 +168,6 @@ var __prototype = {
 			
 			image.onmousedown=null;
 			image.onmouseup=null;
-			image.onselectstart=null;
 			
 			image.f_link=undefined;
 		}
@@ -183,7 +176,6 @@ var __prototype = {
 		if (text) {
 			this._text=undefined;
 			
-			text.onselectstart=null;
 			text.onmousedown=null;
 			text.onmouseup=null;
 			text.f_link=undefined;
@@ -193,7 +185,6 @@ var __prototype = {
 
 		this.onmousedown=null;
 		this.onmouseup=null;
-		this.onselectstart=null;
 
 		this.f_super(arguments);
 
@@ -242,12 +233,14 @@ var __prototype = {
 			}
 		}
 	},
-
 	/**
 	 * @method private
 	 */
 	_onSelect: function() {
-		f_core.Debug("f_imageButton", "_onSelect: focus="+this._focus);
+		f_core.Debug(f_imageButton, "_onSelect: focus="+this._focus);
+		
+		this._mouseDown_out = undefined;	
+		this._mouseDown = undefined;	
 		
 		if (!this._focus)  {
 			this.f_setFocus();
@@ -265,14 +258,15 @@ var __prototype = {
 	 * @method private
 	 */
 	_onMouseDown: function() {
-		f_core.Debug("f_imageButton", "onMouseDown on imageButton '"+this.id+"'.");
+		f_core.Debug(f_imageButton, "onMouseDown on imageButton '"+this.id+"'.");
+		
 		if (this.f_isReadOnly() || this.f_isDisabled()) {
 			return false;
 		}
 		this.f_updateLastFlatBorder();
 
 		this._mouseDown = true;		
-		this._mouseDown_out = false;		
+		this._mouseDown_out = false;
 		this._updateImage();
 		
 		if (!this._focus) {
@@ -292,7 +286,7 @@ var __prototype = {
 		
 		this._mouseDown_out = undefined;	
 		this._mouseDown = undefined;	
-		this._updateImage();
+	//	this._updateImage();
 		return true;				
 	},
 
@@ -395,6 +389,8 @@ var __prototype = {
 			this.className=className;
 		}
 
+
+		f_core.Debug(f_imageButton, "Update class: "+className+" mouseDown="+this._mouseDown+" selected="+this._selected+" focus="+this._focus);
 /*		
 		var text=this._text;
 		if (text) {
@@ -440,10 +436,10 @@ var __prototype = {
 		}
 
 		this._hoverInstalled = true;
-		this.f_addEventListener(f_event.MOUSEOVER, this._onMouseOver);
-		this.f_addEventListener(f_event.MOUSEOUT, this._onMouseOut);
-		this.f_addEventListener(f_event.FOCUS, this._onFocus);
-		this.f_addEventListener(f_event.BLUR, this._onBlur);
+		this.f_insertEventListenerFirst(f_event.MOUSEOVER, this._onMouseOver);
+		this.f_insertEventListenerFirst(f_event.MOUSEOUT, this._onMouseOut);
+		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
+		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
 	},
 	f_setDomEvent: function(type, target) {
 		var link=this._link;
@@ -575,4 +571,4 @@ var __prototype = {
 	}
 }
 
-var f_imageButton=new f_class("f_imageButton", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate);
+new f_class("f_imageButton", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate);

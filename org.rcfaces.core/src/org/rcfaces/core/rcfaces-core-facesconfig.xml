@@ -275,6 +275,10 @@
 		<component-class>org.rcfaces.core.component.ToolFolderComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.itemsToolFolder</component-type>
+		<component-class>org.rcfaces.core.component.ItemsToolFolderComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.toolItem</component-type>
 		<component-class>org.rcfaces.core.component.ToolItemComponent</component-class>
 	</component>

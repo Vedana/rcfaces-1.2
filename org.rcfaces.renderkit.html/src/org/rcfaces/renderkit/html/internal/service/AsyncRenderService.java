@@ -129,28 +129,38 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
             String componentId = (String) parameters.get("id");
             if (componentId == null) {
-                AbstractHtmlService.sendJsError(facesContext,
-                        "Can not find 'id' parameter.");
+                AbstractHtmlService.sendJsError(facesContext, null,
+                        AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                        "Can not find 'id' parameter.", null);
                 return;
             }
 
             UIViewRoot viewRoot = facesContext.getViewRoot();
+
+            if (viewRoot.getChildCount() == 0) {
+                AbstractHtmlService.sendJsError(facesContext, componentId,
+                        AbstractHtmlService.SESSION_EXPIRED_SERVICE_ERROR,
+                        "No view !", null);
+                return;
+            }
 
             componentId = HtmlTools.computeComponentId(facesContext,
                     componentId);
             UIComponent component = ComponentTools.getForComponent(
                     facesContext, componentId, viewRoot);
             if (component == null) {
-                AbstractHtmlService.sendJsError(facesContext,
-                        "Can not find component '" + componentId + "'.");
+                AbstractHtmlService.sendJsError(facesContext, componentId,
+                        AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                        "Can not find component '" + componentId + "'.", null);
 
                 return;
             }
 
             if ((component instanceof IAsyncRenderComponent) == false) {
-                AbstractHtmlService.sendJsError(facesContext,
+                AbstractHtmlService.sendJsError(facesContext, componentId,
+                        AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
                         "Can not find AsyncRenderComponent (id='" + componentId
-                                + "').");
+                                + "').", null);
                 return;
             }
 
@@ -197,8 +207,10 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 }
 
             } else {
-                AbstractHtmlService.sendJsError(facesContext,
-                        "No content for component id='" + componentId + "'.");
+                AbstractHtmlService.sendJsError(facesContext, componentId,
+                        AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                        "No content for component id='" + componentId + "'.",
+                        null);
 
                 return;
             }

@@ -17,7 +17,7 @@ import javax.faces.model.SelectItemGroup;
  */
 public class BasicSelectItemGroup extends SelectItemGroup implements
         ISelectItemGroup, IAccessKeySelectItem, IAcceleratorKeySelectItem,
-        IGroupSelectItem, ICheckSelectItem, IStyledSelectItem,
+        IGroupSelectItem, ICheckSelectItem, IInputTypeSelectItem,
         IVisibleSelectItem, IServerDataSelectItem, IClientDataSelectItem,
         IStyleClassItem {
     private static final String REVISION = "$Revision$";
@@ -40,7 +40,7 @@ public class BasicSelectItemGroup extends SelectItemGroup implements
 
     private boolean visible;
 
-    private int style;
+    private int inputType;
 
     private String styleClass;
 
@@ -103,8 +103,8 @@ public class BasicSelectItemGroup extends SelectItemGroup implements
         return checked;
     }
 
-    public int getStyle() {
-        return style;
+    public int getInputType() {
+        return inputType;
     }
 
     public boolean isVisible() {
@@ -123,8 +123,8 @@ public class BasicSelectItemGroup extends SelectItemGroup implements
         this.groupName = groupName;
     }
 
-    public void setStyle(int style) {
-        this.style = style;
+    public void setInputType(int inputType) {
+        this.inputType = inputType;
     }
 
     public void setVisible(boolean visible) {

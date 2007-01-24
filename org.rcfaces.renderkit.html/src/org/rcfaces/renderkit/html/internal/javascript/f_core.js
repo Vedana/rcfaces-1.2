@@ -59,6 +59,16 @@ var f_core = {
 	_FOCUS_TIMEOUT_DELAY: 100,
 	
 	/**
+	 * @field private static final number
+	 */
+	_ELEMENT_NODE: 1,
+	
+	/**
+	 * @field private static final number
+	 */
+	_DOCUMENT_NODE: 9,
+
+	/**
 	 * @field hidden static final String
 	 */
 	FIREFOX_1_0: "firefox.1.0",
@@ -555,7 +565,7 @@ var f_core = {
 		f_core.AddEventListener(window, "unload", f_core._OnExit);
 
 		if (f_core.IsInternetExplorer()) {
-			f_core.AddEventListener(document, "selectstart", f_core.IeOnSelectStart);
+			f_core.AddEventListener(document, "selectstart", f_core._IeOnSelectStart);
 		}
 	},
 	/**
@@ -782,7 +792,7 @@ var f_core = {
 				f_core._DesinstallModalWindow();
 				
 				if (f_core.IsInternetExplorer()) {
-					f_core.RemoveEventListener(document, "selectstart", f_core.IeOnSelectStart);
+					f_core.RemoveEventListener(document, "selectstart", f_core._IeOnSelectStart);
 				}
 				
 				var timeoutID=f_core._FocusTimeoutID;
@@ -951,7 +961,7 @@ var f_core = {
 	 * @return void
 	 */
 	SetTextNode: function(component, text, accessKey) {
-		f_core.Assert(component && component.nodeType==1, "f_core.SetTextNode: Invalid component ! ("+component+")");
+		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "f_core.SetTextNode: Invalid component ! ("+component+")");
 		f_core.Assert(text===null || typeof(text)=="string", "f_core.SetTextNode: Invalid text parameter ("+text+")");
 		f_core.Assert(accessKey===undefined || accessKey===null || typeof(accessKey)=="string", "f_core.SetTextNode: Invalid accessKey parameter ("+accessKey+")");
 		
@@ -1009,7 +1019,7 @@ var f_core = {
 	 * @method static hidden
 	 */
 	GetTextNode: function(component, concatChildren) {
-		f_core.Assert(component && component.nodeType==1, "f_core.GetTextNode: Invalid component ! ("+component+")");
+		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "f_core.GetTextNode: Invalid component ! ("+component+")");
 
 		var children=component.childNodes;
 
@@ -1039,7 +1049,7 @@ var f_core = {
 	 */
 	_OnReset: function(evt) {
 		if (!evt) {
-			evt = window.event;
+			evt = f_core.GetEvent(this);
 		}
 		
 		var win;
@@ -1145,16 +1155,24 @@ var f_core = {
 				f_core.InitializeForm(form); 
 			}
 			
-			var immediate;
 			var component=win.f_event.GetComponent();
-	
-			f_core.Debug("f_core", "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
-			if (component && component.f_isImmediate) {
-				immediate=component.f_isImmediate();
-	
-				f_core.Debug("f_core", "Test immediate property of '"+component.id+"' = "+immediate);
-			}
 			
+			var immediate;
+			if (win.f_event.GetType()==f_event.ERROR) {
+				f_core.Debug("f_core", "Event is an Error, bypass check validation !");
+
+				immediate=true;
+				
+			} else if (component) {			
+				f_core.Debug("f_core", "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
+		
+				if (typeof(component.f_isImmediate)=="function") {
+					immediate=component.f_isImmediate();
+		
+					f_core.Debug("f_core", "Test immediate property of '"+component.id+"' = "+immediate);
+				}
+			}
+						
 			if (immediate!==true && f_env.GetCheckValidation()) {
 				var valid=f_core._CallFormCheckListeners(form);
 				
@@ -1201,10 +1219,10 @@ var f_core = {
 			var type;
 			if (typeof(event)=="string") {
 				type=event;	
-				event=f_event.GetEvent();
+				event=f_event.GetEvent(form);
 	
 			} else if (!event) {
-				event=f_event.GetEvent();
+				event=f_event.GetEvent(form);
 			}
 	
 			// Get element from event info if given
@@ -1851,7 +1869,7 @@ var f_core = {
 	 * @return Window Window associated to the element.
 	 */
 	GetWindow: function(elt) {		
-		f_core.Assert(elt && (elt.nodeType==1 || elt.nodeType==9), "f_core.GetWindow: Invalid elt parameter ("+elt+")");
+		f_core.Assert(elt && (elt.nodeType==f_core._ELEMENT_NODE || elt.nodeType==f_core._DOCUMENT_NODE), "f_core.GetWindow: Invalid elt parameter ("+elt+")");
 
 		// Cas de IE, si elt est déjà un Document !
 		var view=elt.window;
@@ -1860,7 +1878,7 @@ var f_core = {
 		}
 		
 		var doc;
-		if (elt.nodeType==9) { // nodeType=9 => Document
+		if (elt.nodeType==f_core._DOCUMENT_NODE) { // nodeType=9 => Document
 			doc=elt;
 	
 		} else { // nodeType=1 => Element
@@ -1907,7 +1925,7 @@ var f_core = {
 		if (kclass && kclass._name==claz) {
 			return elt;
 		}
-		if (elt.nodeType==1 && f_core.GetAttribute(elt, "v:class")==claz) {
+		if (elt.nodeType==f_core._ELEMENT_NODE && f_core.GetAttribute(elt, "v:class")==claz) {
 			return f_core.GetWindow(elt)._classLoader._init(elt);
 		}
 		return null;
@@ -2056,7 +2074,7 @@ var f_core = {
 	 * @param Element 
 	 */
 	GetAttribute: function(object, attributeName, defaultValue) {
-		f_core.Assert(object && object.nodeType==1, "Object parameter is node a valid node ! ("+object+")");
+		f_core.Assert(object && object.nodeType==f_core._ELEMENT_NODE, "Object parameter is node a valid node ! ("+object+")");
 		f_core.Assert(typeof(attributeName)=="string", "attributeName parameter is invalid.");
 
 		try {
@@ -2168,7 +2186,7 @@ var f_core = {
 	 * @return Object 
 	 */
 	GetAbsolutePosition: function(component) {
-		f_core.Assert(component && component.nodeType==1, "Invalid component parameter '"+component+"'.");
+		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "Invalid component parameter '"+component+"'.");
 
 		var curTop = 0;
 		var curLeft= 0;
@@ -2414,7 +2432,7 @@ var f_core = {
 		}
 	
 		if (!evt) {
-			evt=f_core.IeGetEvent(this);
+			evt=f_core.GetEvent(this);
 		}
 	
 		return f_core.CancelEvent(evt);
@@ -2526,10 +2544,10 @@ var f_core = {
 				target=event.scrElement;
 			}
 			if (target) {
-				if (target.nodeType==9) {
+				if (target.nodeType==f_core._DOCUMENT_NODE) {
 					doc=target;
 					
-				} else if (target.nodeType==1) {
+				} else if (target.nodeType==f_core._ELEMENT_NODE) {
 					doc=target.ownerDocument;
 	//				alert("Get doc: "+doc);
 				}
@@ -2561,7 +2579,7 @@ var f_core = {
 	 * @return boolean
 	 */
 	IsComponentInside: function(component, event) {			
-		f_core.Assert(component && component.nodeType==1, "Invalid component parameter '"+component+"'.");
+		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "Invalid component parameter '"+component+"'.");
 		f_core.Assert(event && event.type, "Invalid event parameter '"+event+"'.");
 	
 		var p=f_core.GetAbsolutePosition(component);
@@ -2698,7 +2716,7 @@ var f_core = {
 	 */
 	SetFocus: function(component, asyncMode) {
 		f_core.Assert(component, "Component is NULL");
-		f_core.Assert(component.nodeType==1, "Parameter is not a component.");
+		f_core.Assert(component.nodeType==f_core._ELEMENT_NODE, "Parameter is not a component.");
 
 		f_core.Debug(f_core, "SetFocus: component="+component.id+" asyncMode="+asyncMode);
 
@@ -3010,15 +3028,20 @@ var f_core = {
 		return obj;
 	},
 	/**
-	 * @method hidden static
+	 * @method private static
 	 */
-	IeBlockSelectStart: function(evt) {
+	_IeBlockSelectStart: function(evt) {
 		return f_core.CancelEvent(evt);
 	},
 	/**
 	 * @method hidden static
 	 */
-	IeGetEvent: function(component) {		
+	GetEvent: function(component) {	
+		if (component.nodeType==f_core._DOCUMENT_NODE) {
+			// component=document
+			return component.parentWindow.event;
+		}
+		
 		return component.ownerDocument.parentWindow.event;
 	},
 	/**
@@ -3044,7 +3067,7 @@ var f_core = {
 		}
 		var textRange=textRanges[0];
 		
-		for(;component && component.nodeType==1;component=component.parentNode) {
+		for(;component && component.nodeType==f_core._ELEMENT_NODE;component=component.parentNode) {
 			var style=component.currentStyle;
 			if (!style) {
 				continue;
@@ -3341,7 +3364,7 @@ var f_core = {
 	 * @return HTMLElement[] A list of HTMLElements
 	 */
 	ListAllHtmlComponents: function(doc) {
-		f_core.Assert(doc && doc.nodeType==9, "f_core.ListAllHtmlComponents: Doc parameter must be a document object.");
+		f_core.Assert(doc && doc.nodeType==f_core._DOCUMENT_NODE, "f_core.ListAllHtmlComponents: Doc parameter must be a document object.");
 	
 		// On peut toujours essayer ;-)
 		var elts=doc.all;
@@ -3357,7 +3380,7 @@ var f_core = {
 		for(;e.length;) {
 			var p=e.pop();
 		
-			if (p.nodeType==1) {
+			if (p.nodeType==f_core._ELEMENT_NODE) {
 				elts.push(p);
 			}
 			
@@ -3723,7 +3746,7 @@ var f_core = {
 	UpdateAjaxParameters:function(component, url, data) {
 		var forms=document.forms;
 		var form=component;
-		if (forms.length==1 || !component || component.nodeType==9) {
+		if (forms.length==1 || !component || component.nodeType==f_core._DOCUMENT_NODE) {
 			form=forms[0];
 
 		} else if (component.tagName.toUpperCase()!="FORM") {
@@ -3929,6 +3952,34 @@ var f_core = {
 		}
 		
 		return obj;
+	},
+	/**
+	 * @method static hidden
+	 * @param String componentClientId 
+	 * @param number messageCode
+	 * @param String message
+	 * @param String messageDetail
+	 * @return boolean
+	 */
+	PerformErrorEvent: function(componentClientId, messageCode, message, messageDetail) {
+		if (!componentClientId) {
+			f_core.Error(f_core, "Error event code='"+messageCode+"' message='"+message+"' messageDetail='"+messageDetail+"'.");
+			return false;
+		}
+		
+		var component=f_core.GetElementById(componentClientId);
+		if (!component || typeof(component.f_fireEvent)!="function") {
+			f_core.Error(f_core, "Error event componentClientId='"+componentClientId+"' code='"+messageCode+"' message='"+message+"' messageDetail='"+messageDetail+"'.");
+			return false;
+		}
+		
+		var event=new f_event(component, f_event.ERROR, null, message, messageCode, null, messageDetail);
+		try {
+			return component.f_fireEvent(event);
+			
+		} finally {
+			event.f_finalize();
+		}
 	},
 	/**
 	 * @method public static

@@ -178,7 +178,7 @@ var __prototype = {
 		}		
 
 		var url=f_env.GetViewURI();
-		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var componentsList=this;
 		request.f_setListener({
 			/**
@@ -199,7 +199,17 @@ var __prototype = {
 			 */
 	 		onError: function(request, status, text) {
 	 			f_core.Info(f_componentsList, "Bad status: "+request.f_getStatus());
-	 			
+
+		 		if (componentsList.f_performErrorEvent(request, f_error.HTTP_ERROR, text)===false) {
+					componentsList._loading=false;		
+					
+					var waiting=componentsList._waiting;
+					if (waiting) {
+						waiting.f_hide();
+					}
+					return;
+				}
+					 			
 				if (componentsList._nextCommand) {
 					componentsList._processNextCommand();
 					return;
@@ -233,20 +243,25 @@ var __prototype = {
 	 			var waiting=componentsList._waiting;
 				try {
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-						f_core.Error(f_componentsList, "Bad Status ! ("+request.f_getStatusText()+")");
+						componentsList.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
 					}
 	
 					var responseContentType=request.f_getResponseContentType();
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
-						f_core.Error(f_componentsList, "Unsupported content type: "+responseContentType);
+				 		componentsList.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
 						return;
 					}
 				
 					var ret=request.f_getResponse();
 					
 					//alert("ret="+ret);
-					eval(ret);
+					try {
+						eval(ret);
+						
+					} catch (x) {
+			 			componentsList.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
+					}
 					
 				} finally {				
 					componentsList._loading=false;
@@ -269,6 +284,13 @@ var __prototype = {
 		this._loading=true;
 		request.f_setRequestHeader("X-Camelia", "componentsList.update");
 		request.f_doFormRequest(params);
+	},
+	/**
+	 * @method protected
+	 */
+	f_performErrorEvent: function(param, messageCode, message) {
+
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	/**
 	 * @method private
@@ -364,4 +386,4 @@ var __prototype = {
 	}
 }
  
-var f_componentsList=new f_class("f_componentsList", null, __static, __prototype, f_component, fa_pagedComponent);
+new f_class("f_componentsList", null, __static, __prototype, f_component, fa_pagedComponent);

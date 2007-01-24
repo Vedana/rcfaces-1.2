@@ -105,4 +105,5 @@ var __prototype = {
 		this.f_setProperty(f_prop.MULTIPLE,set);
 	}
 }
-var f_list=new f_class("f_list", null, null, __prototype, f_combo);
+
+new f_class("f_list", null, null, __prototype, f_combo);

@@ -43,7 +43,7 @@ var __prototype = {
 		this._interactive=undefined;
 		
 		var url=f_env.GetViewURI();
-		var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
+		var request=new f_httpRequest(this, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		var component=this;
 		if (!parent) {
 			if (typeof(this.fa_getInteractiveParent)=="function") {
@@ -82,6 +82,8 @@ var __prototype = {
 					waiting.f_hide();
 				}
 				f_core.Info(fa_asyncRender, "Bad status: "+request.f_getStatus());
+				
+				component.f_performAsyncErrorEvent(request, f_error.HTTP_ERROR, text);
 	 		},
 			/* *
 			 * @method public
@@ -107,7 +109,7 @@ var __prototype = {
 	 			var waiting=component._intWaiting;
 				try {
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-						f_core.Error(fa_asyncRender, "Bad Status ! ("+request.f_getStatusText()+")");
+						component.f_performAsyncErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
 					}
 				
@@ -116,7 +118,12 @@ var __prototype = {
 
 					var responseContentType=request.f_getResponseContentType();
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
-						eval(ret);
+						try {
+							eval(ret);
+							
+						} catch (x) {
+				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
+						}
 						return;
 					}
 					
@@ -127,11 +134,16 @@ var __prototype = {
 							waiting=null;
 						}
 						
-						window._classLoader._load(component, component, component.innerHTML+ret);
+						try {
+							window._classLoader._load(component, component, component.innerHTML+ret);
+							
+						} catch (x) {
+				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
+						}
 						return;
 					}
 					
-					f_core.Error(fa_asyncRender, "Unknown content type: "+responseContentType);
+				 	component.f_performAsyncErrorEvent(request, f_error.RESPONSE_TYPE_ASYNC_RENDER_ERROR, "Unsupported content type: "+responseContentType);
 					
 				} finally {				
 					component._intLoading=false;
@@ -152,6 +164,12 @@ var __prototype = {
 		request.f_doFormRequest(param);
 		
 		return false;
+	},
+	/**
+	 * @method protected
+	 */
+	f_performAsyncErrorEvent: function(param, messageCode, message) {
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	
 	/**

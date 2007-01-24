@@ -31,7 +31,21 @@ var __prototype = {
 	 */
 	f_getClass: function() {
 		return this._kclass;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	toString: function() {
+		var s="[component";
+		
+		if (this.id) {
+			s+=" id=\""+this.id+"\"";
+		}
+		s+=" class=\""+this._kclass.f_getName()+"\"";
+		
+		return s+"]";
 	}
 }
 
-var f_object=new f_class("f_object", null, null, __prototype);
+new f_class("f_object", null, null, __prototype);

@@ -204,4 +204,4 @@ var __prototype={
 	}
 }
  
-var f_focusManager = new f_class("f_focusManager", null, __static, __prototype, f_object, fa_serializable);
+new f_class("f_focusManager", null, __static, __prototype, f_object, fa_serializable);

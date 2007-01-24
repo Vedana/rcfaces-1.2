@@ -48,5 +48,4 @@ var __prototype = {
 		this.f_setProperty(f_prop.TEXT,text);
 	}
 }
-
-var f_hyperLink=new f_class("f_hyperLink", null, null, __prototype, f_input, fa_immediate);
+new f_class("f_hyperLink", null, null, __prototype, f_input, fa_immediate);

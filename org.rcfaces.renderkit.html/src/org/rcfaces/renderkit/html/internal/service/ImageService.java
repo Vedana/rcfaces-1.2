@@ -78,7 +78,14 @@ public class ImageService extends AbstractHtmlService {
 
         String componentId = (String) parameters.get("componentId");
         if (componentId == null) {
-            sendJsError(facesContext, "Can not find 'componentId' parameter.");
+            sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'componentId' parameter.", null);
+            return;
+        }
+
+        if (viewRoot.getChildCount() == 0) {
+            sendJsError(facesContext, componentId,
+                    SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
             return;
         }
 
@@ -89,14 +96,18 @@ public class ImageService extends AbstractHtmlService {
         if (component == null) {
             // Cas special: la session a du expir�e ....
 
-            sendCancel(facesContext, componentId);
+            sendJsError(facesContext, componentId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Component is not found !", null);
 
             return;
         }
 
         if ((component instanceof ImageComponent) == false) {
-            sendJsError(facesContext, "Component (id='" + componentId
-                    + "') can not be filtred. (not an ImageComponent)");
+            sendJsError(facesContext, componentId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Component can not be filtred. (not an ImageComponent)",
+                    null);
             return;
         }
 
@@ -170,34 +181,6 @@ public class ImageService extends AbstractHtmlService {
 
         facesContext.responseComplete();
 
-    }
-
-    private void sendCancel(FacesContext facesContext, String componentId) {
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-
-        try {
-            PrintWriter printWriter = response.getWriter();
-
-            IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(
-                    facesContext, printWriter, null, null);
-
-            String varId = jsWriter.getComponentVarName();
-
-            jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                    "GetElementById").writeString(componentId).writeln(
-                    ", document);");
-            jsWriter.writeMethodCall("fa_cancelFilterRequest").write(");");
-
-        } catch (IOException ex) {
-            throw new FacesException("Can not write cancel response.", ex);
-        }
-
-        facesContext.responseComplete();
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,

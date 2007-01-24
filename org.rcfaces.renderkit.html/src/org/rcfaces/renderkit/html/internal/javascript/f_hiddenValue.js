@@ -38,6 +38,5 @@
 		}
 	}
 }
- 
- 
-var f_hiddenValue = new f_class("f_hiddenValue", null, null, __prototype, f_eventTarget, fa_serializable, fa_clientData);
+
+new f_class("f_hiddenValue", null, null, __prototype, f_eventTarget, fa_serializable, fa_clientData);

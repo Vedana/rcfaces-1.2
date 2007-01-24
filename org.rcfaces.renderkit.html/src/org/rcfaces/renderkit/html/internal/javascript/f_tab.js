@@ -144,7 +144,7 @@ var __prototype = {
 		
 		var mask=document.createElement("DIV");
 		this._mask=mask;
-		mask.className=tabbedPane.className+"_tab_mask";
+		mask.className="f_tabbedPane_tab_mask";
 		
 		this.insertBefore(mask, this.firstChild);
 	},
@@ -184,4 +184,4 @@ var __prototype = {
 	}
 }
 
-var f_tab=new f_class("f_tab", null, null, __prototype, f_card);
+new f_class("f_tab", null, null, __prototype, f_card);

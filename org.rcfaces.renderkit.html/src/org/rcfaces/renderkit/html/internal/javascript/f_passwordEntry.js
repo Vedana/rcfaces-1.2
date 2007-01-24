@@ -9,4 +9,4 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var f_passwordEntry = new f_class("f_passwordEntry", null, null, null, f_textEntry);
+new f_class("f_passwordEntry", null, null, null, f_textEntry);

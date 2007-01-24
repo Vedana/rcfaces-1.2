@@ -72,13 +72,13 @@ var __prototype = {
 
 		this._suggestionValue=f_core.GetAttribute(this, "v:suggestionValue");
 		
-		this.f_addEventListener(f_event.KEYDOWN, this._onCancelDown);
-		this.f_addEventListener(f_event.KEYUP, this._onSuggest);
+		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
+		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);
 		
 		var suggestTextEntry=this;
 		var menu=this.f_newSubMenu(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		menu.f_setCatchOnlyPopupKeys(true);
-		menu.f_addEventListener(f_event.SELECTION, function(evt) {
+		menu.f_insertEventListenerFirst(f_event.SELECTION, function(evt) {
 			var jsEvt=evt.f_getJsEvent();
 			var menu=evt.f_getComponent();
 			var evtItem=evt.f_getItem();
@@ -164,7 +164,7 @@ var __prototype = {
 	_onCancelDown: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
 		if (jsEvt.cancelBubble) {
-			f_core.Debug("f_suggestTextEntry", "_onSuggest: Event has been canceled !");
+			f_core.Debug(f_suggestTextEntry, "_onCancelDown: Event has been canceled !");
 			return true;
 		}
 
@@ -182,7 +182,7 @@ var __prototype = {
 	_onSuggest: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
 		if (jsEvt.cancelBubble) {
-			f_core.Debug("f_suggestTextEntry", "_onSuggest: Event has been canceled !");
+			f_core.Debug(f_suggestTextEntry, "_onSuggest: Event has been canceled !");
 			return true;
 		}
 		
@@ -216,16 +216,16 @@ var __prototype = {
 			return true;
 		}
 
-		f_core.Debug("f_suggestTextEntry", "_onSuggest: Charcode ("+jsEvt.keyCode+").");
+		f_core.Debug(f_suggestTextEntry, "_onSuggest: Charcode ("+jsEvt.keyCode+").");
 		
 		var value=this.value;
 		if (value==this._lastValue) {
-			f_core.Debug("f_suggestTextEntry", "_onSuggest: Same value ! (value="+value+" / last="+this._lastValue+")");
+			f_core.Debug(f_suggestTextEntry, "_onSuggest: Same value ! (value="+value+" / last="+this._lastValue+")");
 			return true;
 		}
 		
 		if (menuOpened) {
-			menu.f_close();
+			menu.f_closeAllPopups();
 		}
 
 		// On retire la value !
@@ -251,7 +251,7 @@ var __prototype = {
 			return;
 		}
 		
-		f_core.Debug("f_suggestTextEntry", "_onSuggest: Set timeout to "+suggestionDelayMs);
+		f_core.Debug(f_suggestTextEntry, "_onSuggest: Set timeout to "+suggestionDelayMs);
 		
 		var delay=suggestionDelayMs;
 		if (menuOpened) {
@@ -272,7 +272,12 @@ var __prototype = {
 
 			var suggestTextEntry=this;
 			this._timerId=window.setTimeout(function() {
-				suggestTextEntry._onSuggestTimeOut();
+				try {
+					suggestTextEntry._onSuggestTimeOut();
+					
+				} catch (x) {
+					f_core.Error(f_suggestTextEntry, "Timeout processing error !", x);
+				}
 			}, delay);
 		}		
 		
@@ -291,7 +296,7 @@ var __prototype = {
 		}
 		
 		var minChars=this._suggestionMinChars;
-		f_core.Debug("f_suggestTextEntry", "_onSuggestTimeOut() text='"+text+"'. (minChars="+minChars+")");
+		f_core.Debug(f_suggestTextEntry, "_onSuggestTimeOut() text='"+text+"'. (minChars="+minChars+")");
 
 		if (minChars>0 && text.length<minChars) {
 			return;
@@ -360,10 +365,10 @@ var __prototype = {
 	
 			this._results=undefined;
 			
-			f_core.Debug("f_suggestTextEntry", "Call server text='"+text+"' maxResultNumber="+maxResultNumber);
+			f_core.Debug(f_suggestTextEntry, "Call server text='"+text+"' maxResultNumber="+maxResultNumber);
 		
 			var url=f_env.GetViewURI();	
-			var request=f_httpRequest.f_newInstance(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 			var suggestTextEntry=this;
 			request.f_setListener({
 				/**
@@ -371,6 +376,12 @@ var __prototype = {
 				 */
 		 		onError: function(request, status, text) {
 		 			f_core.Info(f_suggestTextEntry, "Bad status: "+request.f_getStatus());
+		 			
+		 			if (suggestTextEntry.f_performErrorEvent(request, f_error.HTTP_ERROR, text)===false) {
+						suggestTextEntry.f_setLoading(false);
+						return;
+					}
+		 			
 		 			
 					if (suggestTextEntry.f_processNextCommand()) {
 						return;
@@ -381,19 +392,27 @@ var __prototype = {
 				/**
 				 * @method public
 				 */
+		 		onProgress: function(request, content, length, contentType) {
+					// XXX TODO
+				 	// f_core.SetTextNode(waitingNode._label, f_waiting.GetReceivingMessage());
+		 		},
+				/**
+				 * @method public
+				 */
 		 		onLoad: function(request, content, contentType) {
 					if (suggestTextEntry.f_processNextCommand()) {
 						return;
 					}
 					try {
 						if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-							f_core.Error(f_suggestTextEntry, "Bad Status ! ("+request.f_getStatusText()+")");
+							suggestTextEntry.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 							return;
 						}
 		
 						var responseContentType=request.f_getResponseContentType();
 						if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
-							f_core.Error(f_suggestTextEntry, "Unsupported content type: "+responseContentType);
+				 			suggestTextEntry.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+
 							return;
 						}
 	
@@ -405,7 +424,7 @@ var __prototype = {
 							eval(ret);
 							
 						} catch (x) {
-							f_core.Error(f_suggestTextEntry, "Can not eval response '"+ret+"'.", x);
+				 			suggestTextEntry.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
 						}
 	
 					} finally {
@@ -422,6 +441,13 @@ var __prototype = {
 		} finally {
 			this._calling=undefined;
 		}
+	},
+	/**
+	 * @method protected
+	 */
+	f_performErrorEvent: function(param, messageCode, message) {
+
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	/**
 	 * @method hidden
@@ -485,12 +511,14 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_setRowCount: function(rows) {
+		f_core.Debug(f_suggestTextEntry, "f_setRowCount rows="+rows+" canSuggest="+this._canSuggest);
+		
 		this._rowCount=rows;
 		
 		if (!this._canSuggest) {
 			return;
 		}
-		
+
 		this._showProposal();
 	},
 	/**
@@ -505,9 +533,11 @@ var __prototype = {
 		var rs=new Array;
 		this._filterProposals(rs);
 	
-		if (rs.length<1) {
+		if (!rs.length) {
 			return;
 		}
+		
+		f_core.Debug(f_suggestTextEntry, "_showProposal: result="+rs+" forceProposal="+this._forceProposal);
 		
 		if (!this._forceProposal && rs.length>1) {	
 			this._showPopup(jsEvt);
@@ -526,18 +556,21 @@ var __prototype = {
 	_showPopup: function(jsEvt, autoSelect) {
 		var menu=this.f_getSubMenuById(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		if (!menu) {
+			f_core.Debug(f_suggestTextEntry, "_showPopup: no menu !");
 			return;
 		}
 		
 		if (menu.f_isOpened()) {
-			menu.f_close();
+			f_core.Debug(f_suggestTextEntry, "_showPopup: already opened, close all");
+
+			menu.f_closeAllPopups();
 		}
 		
 		menu.f_removeAllItems(menu);
 		
 		var results=new Array;
 		var complete=this._filterProposals(results);
-		if (results.length<1) {
+		if (!results.length) {
 			return;
 		}
 		
@@ -577,6 +610,8 @@ var __prototype = {
 			params.deltaY=-1;
 			params.deltaWidth=-4;
 		}
+	
+		f_core.Debug(f_suggestTextEntry, "_showPopup: open menu :"+menu);
 	
 		menu.f_open(jsEvt, params, autoSelect);
 //		this.focus();
@@ -642,7 +677,7 @@ var __prototype = {
 	 * @method private
 	 */
 	_setSuggestion: function(label, value, item, jsEvt) {
-		f_core.Debug("f_suggestTextEntry", "_setSuggestion: label='"+label+"' value='"+value+"' item='"+item+"'.");
+		f_core.Debug(f_suggestTextEntry, "_setSuggestion: label='"+label+"' value='"+value+"' item='"+item+"'.");
 
 		this.f_setText(label, true);
 		this._setSuggestionValue(value, item, jsEvt);
@@ -667,7 +702,7 @@ var __prototype = {
 	_filterProposals: function(ret) {
 		var d=this.f_getSelection();
 		if (!d) {
-			f_core.Debug("f_suggestTextEntry", "No selection to change proposal !");
+			f_core.Debug(f_suggestTextEntry, "No selection to change proposal !");
 			return true;
 		}
 
@@ -690,7 +725,8 @@ var __prototype = {
 			if (!this._caseSensitive) {
 				r=r.toLowerCase();
 			}
-			if (r.indexOf(text)!=0) {
+			
+			if (r.indexOf(text)) {
 				complete=true;
 				continue;
 			}
@@ -709,7 +745,7 @@ var __prototype = {
 			complete=true;
 		}
 		
-		f_core.Debug("f_suggestTextEntry", "Results="+results.length+" rowCount="+this._rowCount+" Post filter="+ret.length+" complete="+complete);
+		f_core.Debug(f_suggestTextEntry, "_filterProposals: Results="+results.length+" rowCount="+this._rowCount+" Post filter="+ret.length+" complete="+complete);
 			
 		return complete;
 	},
@@ -771,6 +807,7 @@ var __prototype = {
 	 */
 	f_getEventLocked: function(showAlert, mask) {
 		var menu=this.f_getSubMenuById(f_suggestTextEntry._SUGGESTION_MENU_ID);
+					
 		var menuOpened=(menu && menu.f_isOpened());
 		if (menuOpened) {
 			if (!mask) {
@@ -779,6 +816,8 @@ var __prototype = {
 			
 			mask|=f_event.POPUP_LOCK;
 		}
+
+		f_core.Debug(f_suggestTextEntry, "f_getEventLocked: menu="+menu+" menuOpened="+menuOpened+" mask="+mask+" showAlert="+showAlert);
 
 		return this.f_super(arguments, showAlert, mask);
 	},
@@ -789,4 +828,4 @@ var __prototype = {
 	}
 }
 
-var f_suggestTextEntry=new f_class("f_suggestTextEntry", null, __static, __prototype, f_textEntry, fa_filterProperties, fa_commands);
+new f_class("f_suggestTextEntry", null, __static, __prototype, f_textEntry, fa_filterProperties, fa_commands);

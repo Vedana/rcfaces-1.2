@@ -28,7 +28,7 @@ var __prototype = {
 		
 		var menu=this.f_getSubMenuById(f_box._BODY_MENU_ID);
 		if (menu) {
-			this.f_addEventListener(f_event.MOUSEDOWN, this._performMenuMouseDown);
+			this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._performMenuMouseDown);
 		}
 	},
 	/**
@@ -78,4 +78,4 @@ var __prototype = {
 	}
 }
  
-var f_box = new f_class("f_box", null, __static, __prototype, f_component, fa_asyncRender, fa_subMenu);
+new f_class("f_box", null, __static, __prototype, f_component, fa_asyncRender, fa_subMenu);

@@ -27,6 +27,7 @@
 	text-align: left;
 	vertical-align: baseline;
 	display: inline;
+	background-color: transparent;
 }
 
 .f_imageButton_disabled,

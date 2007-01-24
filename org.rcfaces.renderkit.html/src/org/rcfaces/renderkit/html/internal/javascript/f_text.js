@@ -54,4 +54,4 @@ var __prototype = {
 	}	
 }
 
-var f_text=new f_class("f_text", null, null, __prototype, f_component);
+new f_class("f_text", null, null, __prototype, f_component);

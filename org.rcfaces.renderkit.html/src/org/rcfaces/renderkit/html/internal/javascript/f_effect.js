@@ -100,6 +100,5 @@ var __prototype = {
 		return this._component;
 	}
 }
-
-var f_effect=new f_class("f_effect", null, __static, __prototype, f_object);
+new f_class("f_effect", null, __static, __prototype, f_object);
 

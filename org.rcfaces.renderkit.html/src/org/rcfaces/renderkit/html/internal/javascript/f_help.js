@@ -199,4 +199,4 @@ var __static = {
 	}
 }
 
-var f_help=new f_class("f_help", null, __static);
+new f_class("f_help", null, __static);

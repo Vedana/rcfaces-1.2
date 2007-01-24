@@ -208,7 +208,6 @@
 }
 
 .f_tabbedPane_content {
-//	position: relative;  // why setting position ?
 	display: block;
 }
 

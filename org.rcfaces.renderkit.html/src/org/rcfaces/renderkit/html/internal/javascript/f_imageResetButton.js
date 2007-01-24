@@ -29,4 +29,4 @@ var __prototype = {
 	}
 }
 
-var f_imageResetButton=new f_class("f_imageResetButton", null, null, __prototype, f_imageButton);
+new f_class("f_imageResetButton", null, null, __prototype, f_imageButton);

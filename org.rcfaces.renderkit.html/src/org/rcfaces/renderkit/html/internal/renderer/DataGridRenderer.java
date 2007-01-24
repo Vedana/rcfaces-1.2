@@ -31,10 +31,13 @@ import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.IServerActionListener;
@@ -365,8 +368,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
             ICssWriter cssWriter = htmlWriter.writeStyle(32);
 
             if (height != null) {
-                cssWriter
-                        .writeHeight(computeSizeInPixel(height, -1, -getTitleHeight()));
+                cssWriter.writeHeight(computeSizeInPixel(height, -1,
+                        -getTitleHeight()));
             }
             if (w != null) {
                 cssWriter.writeWidth(w);
@@ -946,6 +949,54 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 }
 
                 htmlWriter.writeBoolean(cellImage).write(',');
+
+                if (url != null) {
+                    htmlWriter.write(url);
+
+                } else {
+                    htmlWriter.writeNull();
+                }
+            }
+            htmlWriter.writeln(");");
+        }
+
+        if (tableContext.hasTitleColumnImages()) {
+            htmlWriter.writeMethodCall("f_setTitleColumnsImages");
+            int pred = 0;
+            first = true;
+            for (int i = 0; i < cnt; i++) {
+                if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
+                    continue;
+                }
+
+                String url = tableContext.getTitleColumnImageURL(i);
+
+                if (url == null) {
+                    pred++;
+                    continue;
+                }
+
+                if (pred > 0) {
+                    // Si il y avait des pred avant, ce sont forcement des
+                    // colonnes qui n'ont pas d'image/cellule
+                    if (first) {
+                        pred--;
+                        htmlWriter.writeBoolean(false).write(',').writeNull();
+                        first = false;
+                    }
+
+                    for (; pred > 0; pred--) {
+                        htmlWriter.write(',').writeBoolean(false).write(',')
+                                .writeNull();
+                    }
+                }
+
+                if (first) {
+                    first = false;
+
+                } else {
+                    htmlWriter.write(',');
+                }
 
                 if (url != null) {
                     htmlWriter.write(url);
@@ -1946,18 +1997,6 @@ public class DataGridRenderer extends AbstractCssRenderer {
         return true;
     }
 
-    /*
-     * public void encodeChildren(FacesContext context, UIComponent component) { //
-     * Il faut bloquer l'encodage de l'interieur ! }
-     */
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decode(org.rcfaces.core.internal.renderkit.IRequestContext,
-     *      javax.faces.component.UIComponent,
-     *      org.rcfaces.core.internal.renderkit.IComponentData)
-     */
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
@@ -2363,6 +2402,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         private boolean hasColumnImages;
 
+        private boolean hasTitleColumnImages;
+
         private ISortedComponent sortedComponents[];
 
         private final int rows;
@@ -2376,6 +2417,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         private int rowCount;
 
         private final boolean columnImageURLs[];
+
+        private String titleColumnImageURLs[];
 
         private boolean sortClientSide[];
 
@@ -2398,7 +2441,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         private TableRenderContext(FacesContext facesContext,
                 DataGridComponent dataGridComponent,
                 ISortedComponent sortedComponents[],
-                IProcessContext processContext) {
+                IProcessContext processContext, boolean checkTitleImages) {
             this.dataGridComponent = dataGridComponent;
             this.sortedComponents = sortedComponents;
 
@@ -2506,6 +2549,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
             cellToolTipText = new boolean[columns.length];
             columnIds = new String[columns.length];
 
+            if (checkTitleImages) {
+                titleColumnImageURLs = new String[columns.length];
+            }
+
             for (int i = 0; i < columns.length; i++) {
                 DataColumnComponent dc = columns[i];
 
@@ -2536,6 +2583,24 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 if (dc.isCellImageURLSetted()) {
                     columnImageURLs[i] = true;
                     hasColumnImages = true;
+                }
+
+                if (checkTitleImages) {
+                    IContentAccessors contentAccessors = dc.getImageAccessors();
+                    if (contentAccessors instanceof IImageAccessors) {
+                        IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+
+                        IContentAccessor contentAccessor = imageAccessors
+                                .getImageAccessor();
+                        if (contentAccessor != null) {
+                            String imageURL = contentAccessor.resolveURL(
+                                    facesContext, null, null);
+                            if (imageURL != null) {
+                                titleColumnImageURLs[i] = imageURL;
+                                hasTitleColumnImages = true;
+                            }
+                        }
+                    }
                 }
 
                 if (dc.isCellStyleClassSetted()) {
@@ -2668,7 +2733,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     ((DataGridComponent) componentRenderContext.getComponent())
                             .listSortedComponents(componentRenderContext
                                     .getFacesContext()), componentRenderContext
-                            .getRenderContext().getProcessContext());
+                            .getRenderContext().getProcessContext(), true);
 
             designerMode = componentRenderContext.getRenderContext()
                     .getProcessContext().isDesignerMode();
@@ -2685,7 +2750,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         public TableRenderContext(FacesContext facesContext,
                 DataGridComponent dg, int rowIndex, int forcedRows,
                 ISortedComponent sortedComponents[], String filterExpression) {
-            this(facesContext, dg, sortedComponents, null);
+            this(facesContext, dg, sortedComponents, null, false);
 
             this.first = rowIndex;
             this.forcedRows = forcedRows;
@@ -2757,12 +2822,20 @@ public class DataGridRenderer extends AbstractCssRenderer {
             return cellToolTipText[index];
         }
 
+        public boolean hasTitleColumnImages() {
+            return hasTitleColumnImages;
+        }
+
         public boolean hasColumnImages() {
             return hasColumnImages;
         }
 
         public boolean isColumnImageURL(int index) {
             return columnImageURLs[index];
+        }
+
+        public String getTitleColumnImageURL(int index) {
+            return titleColumnImageURLs[index];
         }
 
         public int getColumnStateCount() {

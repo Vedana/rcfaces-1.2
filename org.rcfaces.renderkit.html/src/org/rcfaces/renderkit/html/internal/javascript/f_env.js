@@ -9,9 +9,6 @@
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
- 
-function f_env() {
-}
 
 var __static = {
 	/**
@@ -263,13 +260,7 @@ var __static = {
 		}
 			
 		return bundle.f_get("OPEN_WINDOW_ERROR_MESSAGE");
-	},
-	
-	f_getName: function() {
-		return "f_env";
 	}
 }
 
-for(var p in __static) {
-	f_env[p]=__static[p];
-}
+new f_class("f_env", null, __static);

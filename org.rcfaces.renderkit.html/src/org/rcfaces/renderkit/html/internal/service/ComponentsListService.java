@@ -81,18 +81,25 @@ public class ComponentsListService extends AbstractHtmlService {
         Map parameters = facesContext.getExternalContext()
                 .getRequestParameterMap();
 
-        UIViewRoot viewRoot = facesContext.getViewRoot();
-
-        String index_s = (String) parameters.get("index");
-        if (index_s == null) {
-            sendJsError(facesContext, "Can not find 'index' parameter.");
+        String componentsListId = (String) parameters.get("componentsListId");
+        if (componentsListId == null) {
+            sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'componentsListId' parameter.", null);
             return;
         }
 
-        String componentsListId = (String) parameters.get("componentsListId");
-        if (componentsListId == null) {
-            sendJsError(facesContext,
-                    "Can not find 'componentsListId' parameter.");
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        if (viewRoot.getChildCount() == 0) {
+            sendJsError(facesContext, componentsListId,
+                    SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
+            return;
+        }
+
+        String index_s = (String) parameters.get("index");
+        if (index_s == null) {
+            sendJsError(facesContext, componentsListId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find 'index' parameter.", null);
             return;
         }
 
@@ -105,14 +112,19 @@ public class ComponentsListService extends AbstractHtmlService {
         if (component == null) {
             // Cas special: la session a du expir�e ....
 
-            sendCancel(facesContext, componentsListId, rowIndex);
+            sendJsError(facesContext, componentsListId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Can not find dataListComponent (id='" + componentsListId
+                            + "').", null);
 
             return;
         }
 
         if ((component instanceof ComponentsListComponent) == false) {
-            sendJsError(facesContext, "Can not find dataListComponent (id='"
-                    + componentsListId + "').");
+            sendJsError(facesContext, componentsListId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
+                    "Invalid dataListComponent (id='" + componentsListId
+                            + "').", null);
             return;
         }
 
@@ -146,9 +158,10 @@ public class ComponentsListService extends AbstractHtmlService {
 
         ComponentsListRenderer dgr = getDataListRenderer(facesContext, dgc);
         if (dgr == null) {
-            sendJsError(facesContext,
+            sendJsError(facesContext, componentsListId,
+                    INVALID_PARAMETER_SERVICE_ERROR,
                     "Can not find dataListRenderer. (dataListId='"
-                            + componentsListId + "')");
+                            + componentsListId + "')", null);
             return;
         }
 
@@ -199,38 +212,6 @@ public class ComponentsListService extends AbstractHtmlService {
             if (printWriter != null) {
                 printWriter.close();
             }
-        }
-
-        facesContext.responseComplete();
-
-    }
-
-    private void sendCancel(FacesContext facesContext, String componentId,
-            int rowIndex) {
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-
-        try {
-            PrintWriter printWriter = response.getWriter();
-
-            IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(
-                    facesContext, printWriter, null, null);
-
-            String varId = jsWriter.getComponentVarName();
-
-            jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                    "GetElementById").writeString(componentId).writeln(
-                    ", document);");
-
-            jsWriter.writeMethodCall("fa_cancelFilterRequest").writeInt(
-                    rowIndex).write(");");
-
-        } catch (IOException ex) {
-            throw new FacesException("Can not write cancel response.", ex);
         }
 
         facesContext.responseComplete();
@@ -288,7 +269,8 @@ public class ComponentsListService extends AbstractHtmlService {
             CharArrayWriter myWriter = new CharArrayWriter(INITIAL_SIZE);
 
             ResponseWriter newWriter = facesContext.getRenderKit()
-                    .createResponseWriter(myWriter, contentType, RESPONSE_CHARSET);
+                    .createResponseWriter(myWriter, contentType,
+                            RESPONSE_CHARSET);
 
             facesContext.setResponseWriter(newWriter);
 

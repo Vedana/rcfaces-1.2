@@ -152,4 +152,4 @@ var __prototype = {
 	}
 }
 
-var f_imagePagerButton=new f_class("f_imagePagerButton", null, null, __prototype, f_imageButton, fa_pager);
+new f_class("f_imagePagerButton", null, null, __prototype, f_imageButton, fa_pager);

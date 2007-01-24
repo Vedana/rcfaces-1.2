@@ -13,6 +13,7 @@ import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.ICheckedCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
@@ -25,7 +26,7 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
  */
 public class BasicSelectItem extends SelectItem implements ISelectItem,
         IAccessKeySelectItem, IAcceleratorKeySelectItem, IGroupSelectItem,
-        ICheckSelectItem, IStyledSelectItem, IVisibleSelectItem,
+        ICheckSelectItem, IInputTypeSelectItem, IVisibleSelectItem,
         IServerDataSelectItem, IClientDataSelectItem, IStyleClassItem {
     private static final String REVISION = "$Revision$";
 
@@ -47,7 +48,7 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
     private boolean visible;
 
-    private int style;
+    private int inputType;
 
     private String styleClass;
 
@@ -80,7 +81,7 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         super(getValue(component), component.getItemLabel(), component
                 .getItemDescription(), component.isItemDisabled());
 
-        int s = AS_PUSH_BUTTON;
+        int s = IInputTypeCapability.AS_PUSH_BUTTON;
 
         if (component instanceof IAccessKeyCapability) {
             accessKey = ((IAccessKeyCapability) component).getAccessKey();
@@ -99,14 +100,14 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
         if (component instanceof ICheckedCapability) {
             checked = ((ICheckedCapability) component).isChecked();
-            s = AS_CHECK_BOX;
+            s = IInputTypeCapability.AS_CHECK_BOX;
         } else {
             checked = false;
         }
 
         if (component instanceof IRadioGroupCapability) {
             groupName = ((IRadioGroupCapability) component).getGroupName();
-            s = AS_RADIO_BUTTON;
+            s = IInputTypeCapability.AS_RADIO_BUTTON;
 
         } else {
             groupName = null;
@@ -141,7 +142,7 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
             }
         }
 
-        this.style = s;
+        this.inputType = s;
 
         if (component instanceof IStyleClassCapability) {
             IStyleClassCapability styleClassCapability = (IStyleClassCapability) component;
@@ -183,8 +184,8 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         return checked;
     }
 
-    public int getStyle() {
-        return style;
+    public int getInputType() {
+        return inputType;
     }
 
     public boolean isVisible() {
@@ -203,8 +204,8 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         this.groupName = groupName;
     }
 
-    public void setStyle(int style) {
-        this.style = style;
+    public void setInputType(int style) {
+        this.inputType = style;
     }
 
     public void setVisible(boolean visible) {

@@ -76,4 +76,4 @@ var __prototype = {
 		this.f_setProperty(f_prop.TEXT, text);
 	}
 }
-var f_fieldSet=new f_class("f_fieldSet", null, null, __prototype, f_component);
+new f_class("f_fieldSet", null, null, __prototype, f_component);

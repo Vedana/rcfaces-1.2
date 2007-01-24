@@ -56,7 +56,7 @@ f_classLoader.prototype = {
 	f_getClass: function(className, lookId) {
 		var claz; 
 		for(;;) {
-			var name=f_class.MakeClassName(className, lookId);
+			var name=f_classLoader._MakeClassName(className, lookId);
 			
 			claz=this._classes[name];
 			if (claz) {
@@ -102,8 +102,10 @@ f_classLoader.prototype = {
 		
 		return parentClassloader.f_getAspect(aspectName);
 	},
-	
-	_declareClass: function(claz, win) {
+	/**
+	 * @method hidden
+	 */
+	f_declareClass: function(claz, win) {
 		if (win && win!=window) {
 			// On ne traite pas les déclarations de classes si c'est pas notre fenetre !
 			return;
@@ -112,20 +114,22 @@ f_classLoader.prototype = {
 			win=window;
 		}
 	
-		var key=f_class.MakeClassName(claz._name, claz._look);
+		var key=f_classLoader._MakeClassName(claz._name, claz._look);
 		
-		f_core.Assert(!this._classes[key], "Class '"+key+"' is already declared.");
+		f_core.Assert(typeof(key)=="string", "f_classLoader.f_declareClass: Invalid className '"+key+"'.");
+		
+		f_core.Assert(!this._classes[key], "f_classLoader.f_declareClass: Class '"+key+"' is already declared.");
 	
 		this._classes[key] = claz;
 	
-		f_core.Debug("f_classLoader", "Registering class "+claz._name+((claz._look)?" (lookId="+claz._look+")":"")+".");
+		f_core.Debug(f_classLoader, "f_declareClass: Registering class "+claz._name+((claz._look)?" (lookId="+claz._look+")":"")+".");
 	
 		win[claz._name]=claz;
-		f_class.InitializeStaticMembers(claz);
+		f_classLoader._InitializeStaticMembers(claz);
 	
 		var parentClassloader=this._parent;
 		if (parentClassloader) {
-			parentClassloader._declareClass(claz, win);
+			parentClassloader.f_declareClass(claz, win);
 		}
 	},
 	
@@ -147,7 +151,7 @@ f_classLoader.prototype = {
 		
 		this._aspects[name] = aspect;
 	
-		f_class.InitializeStaticMembers(aspect);
+		f_classLoader._InitializeStaticMembers(aspect);
 	
 		var parentClassloader=this._parent;
 		if (parentClassloader) {
@@ -849,6 +853,69 @@ f_classLoader.prototype = {
 			return "[ClassLoader]";
 		}
 		return "[ClassLoader '"+this._window.document.title+"']";
+	}
+}
+
+
+/**
+ * @field private static final String
+ */
+f_classLoader._LOOK="~";
+
+/**
+ * @method private static String
+ */
+f_classLoader._MakeClassName=function(claz,look) {
+	if (!look) {
+		return claz;
+	}
+	
+	return claz+f_class._LOOK+look;
+}
+
+/**
+ * @method static static final
+ */
+f_classLoader._InitializeStaticMembers=function(claz) {
+	// Attention: Code pour Classes et Aspects
+	
+	var staticMembers=claz._staticMembers;
+	if (staticMembers) {
+	/*
+		if (staticMembers instanceof _remapContext) {
+			staticMembers=this._classLoader._remapContext(staticMembers);
+			claz._staticMembers=staticMembers;
+		}
+	*/
+		for(var memberName in staticMembers) {				
+			var member=staticMembers[memberName];
+			
+			/*			
+			f_core.Assert(
+				typeof(member)=="number" || 
+				typeof(member)=="string" || 
+				member===null ||
+				member===false ||
+				member===true ||
+				memberName=="_EVENTS" || // Ok c'est pas joli, mais bon ...
+				memberName=="_ACCENTS_MAPPER" ||
+				memberName=="_CALLBACKS" ||
+				typeof(member)=="function", "Static member '"+memberName+"' is not litteral or function for aspect/class '"+claz._name+"' !");
+			*/
+					
+			claz[memberName]=member;
+		}
+	}
+			
+	var staticInitializer=claz.Initializer;
+	if (staticInitializer) {
+		f_core.Assert(typeof(staticInitializer)=="function", "f_classLoader._InitializeStaticMembers: Invalid 'Initializer' field, it must be a function ! value="+staticInitializer);
+		try {	
+			staticInitializer.call(claz);
+			
+		} catch (x) {
+			f_core.Error(f_classLoader, "_InitializeStaticMembers: Initializer of aspect/class '"+claz._name+"' throws exception.", x);
+		}
 	}
 }
 

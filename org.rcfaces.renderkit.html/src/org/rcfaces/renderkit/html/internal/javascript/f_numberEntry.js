@@ -286,4 +286,4 @@ var __prototype={
 	}
 }
  
-var f_numberEntry=new f_class("f_numberEntry", null, null, __prototype, f_compositeNumEntry);
+new f_class("f_numberEntry", null, null, __prototype, f_compositeNumEntry);

@@ -39,4 +39,4 @@ var __prototype = {
 	*/
 }
 
-var f_submitButton=new f_class("f_submitButton", null, null, __prototype, f_button);
+new f_class("f_submitButton", null, null, __prototype, f_button);

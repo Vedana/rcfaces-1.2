@@ -177,4 +177,4 @@ var __prototype={
 	}
 }
  
-var f_cardBox=new f_class("f_cardBox", null, null, __prototype, f_component);
+new f_class("f_cardBox", null, null, __prototype, f_component);

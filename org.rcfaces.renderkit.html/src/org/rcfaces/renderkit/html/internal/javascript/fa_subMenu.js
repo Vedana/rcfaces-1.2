@@ -9,7 +9,6 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-
 var __prototype = {
 	f_finalize: function() {
 		this._subMenus=undefined; // Map<String,f_menu>
@@ -50,7 +49,12 @@ var __prototype = {
 
 		var componentEventRedirect=this.fa_componentCaptureMenuEvent();
 		
-		var menu=f_menu.f_newInstance(this, null, componentEventRedirect, id, menuId, itemImageWidth, itemImageHeight, removeAllWhenShown);
+		var selectionProvider=null;
+		if (this.f_getSelection) {
+			selectionProvider=this;
+		}
+		
+		var menu=f_menu.f_newInstance(this, selectionProvider, componentEventRedirect, id, menuId, itemImageWidth, itemImageHeight, removeAllWhenShown);
 
 		var subMenus=this._subMenus;
 		if (!subMenus) {

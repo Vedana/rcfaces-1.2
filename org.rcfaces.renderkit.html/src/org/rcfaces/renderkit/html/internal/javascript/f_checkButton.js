@@ -160,4 +160,4 @@ var __prototype = {
 	}
 }
 
-var f_checkButton=new f_class("f_checkButton", null, null, __prototype, f_button);
+new f_class("f_checkButton", null, null, __prototype, f_button);

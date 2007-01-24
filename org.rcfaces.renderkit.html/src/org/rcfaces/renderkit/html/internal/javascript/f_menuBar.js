@@ -15,54 +15,18 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	_DestroyMenuBarItem: function(menuBar, menuBarItem) {
-		var items=menuBarItem._items;
-		if (items) {
-			menuBarItem._items=undefined;
-
-			for(var i=0;i<items.length;i++) {
-				fa_menuCore.DestroyMenuItem(items[i]);
-			}			
-		}
-
-		menuBarItem.onmouseover=null;
-		menuBarItem.onmouseout=null;
-		menuBarItem.onmousedown=null;
-		menuBarItem.onclick=null;
-		menuBarItem.onselectstart=null;
-		menuBarItem.onblur=null;
-		menuBarItem.onfocus=null;
-		menuBarItem.onkeypress=null;
-		menuBarItem.onkeydown=null;
-		
-		menuBarItem._menuBar=undefined;
-		menuBarItem._menuPopup=undefined;
-		menuBarItem._value=undefined;
-		menuBarItem._disabled=undefined;
-		menuBarItem._accessKey=undefined;
-		menuBarItem._hasFocus=undefined;
-		menuBarItem._popupOpened=undefined;
-		menuBarItem._selectedMenuItem=undefined;
-
-		menuBarItem._openPopup=undefined;
-		menuBarItem._closePopup=undefined;
-		
-		menuBarItem._iePopup=undefined;
-		
-		f_core.VerifyProperties(menuBarItem);
-	},
-	/**
-	 * @method private static
-	 */
 	_MenuBarItem_mouseOver: function(evt) {
-		var menuBar=this._menuBar;
+		var item=this._item;
+		var menuBar=item._menu;
 		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
-		menuBar._menuBarItem_over(this);
+		menuBar._menuBarItem_over(item, evt);
 		
 		return f_core.CancelEvent(evt);
 	},
@@ -70,50 +34,45 @@ var __static = {
 	 * @method private static
 	 */
 	_MenuBarItem_mouseOut: function(evt) {
+		var item=this._item;
+		var menuBar=item._menu;
+
 // Pas bloqué !		if (f_core.GetEventLocked(false)) return false;
-		if (!evt) evt = window.event;
-
-		var menuBar=this._menuBar;
-
-		menuBar._menuBarItem_out(this);
-
-		return f_core.CancelEvent(evt);
-	},
-	/**
-	 * @method private static
-	 */
-	_MenuBarItem_mouseDown: function(evt) {
-		var menuBar=this._menuBar;
-		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
-			return false;
+		
+		if (!evt) {
+			evt = f_core.GetEvent(this);
 		}
-		if (!evt) evt = window.event;
 
-		menuBar._menuBarItem_select(this, false, evt);
-		
-		f_menuBar._MenuBarItem_setFocus(this);
-		
+		menuBar._menuBarItem_out(item);
+
 		return f_core.CancelEvent(evt);
 	},
-	/**
-	 * @method private static
-	 */
-	_MenuBarItem_click: f_core.CancelEventHandler,
 	/**
 	 * @method private static
 	 */
 	_MenuBarItemInput_click: function(evt) {
-		var item=this;
-		var menuBar=item._menuBar;
+		var menuItem=this._item;
+		var menuBar=menuItem._menu;
+	
+		f_core.Debug(f_menuBar, "_MenuBarItemInput_click: click on item='"+menuItem+"' menuBar='"+menuBar+"'.");
+
 		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
 
-		menuBar._menuBarItem_select(item, false, evt);
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
+
+		try {
+			menuBar._menuBarItem_select(menuItem, false, evt);
+			
+			f_menuBar._MenuBarItem_setFocus(menuItem);
 		
-		f_menuBar._MenuBarItem_setFocus(item);
-		
+		} catch (x) {
+			f_core.Error(f_menuBar, "Click exception", x);
+		}
+				
 		return f_core.CancelEvent(evt);
 	},
 	/**
@@ -124,34 +83,50 @@ var __static = {
 			return;
 		}
 
-		menuBarItem.focus();		
+		var uiItem=menuBarItem._menu.f_getUIItem(menuBarItem);
+		if (!uiItem) {
+			return;
+		}
+
+		uiItem.focus();		
 	},
 	/**
 	 * @method private static
 	 */
 	_MenuBarItem_keyDown: function(evt) {
-		var item=this;
-		var menuBar=item._menuBar;
+		var menuItem=this._item;
+		var menuBar=menuItem._menu;
+	
+		f_core.Debug(f_menuBar, "_MenuBarItem_keyDown: key item='"+menuItem+"' menuBar='"+menuBar+"'.");
+
 		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
 			return false;
 		}
 		
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 
-		return fa_menuCore.OnKeyDown(menuBar, item, evt);
+		return fa_menuCore.OnKeyDown(menuBar, menuItem, evt);
 	},
 	/**
 	 * @method private static
 	 */
 	_MenuBarItem_focus: function(evt) {
-		var menuItem=this; //._link;
-		var menuBar=menuItem._menuBar;
+		var menuItem=this._item;
+		var menuBar=menuItem._menu;
+
+		f_core.Debug(f_menuBar, "_MenuBarItem_focus: focus item='"+menuItem+"' menuBar='"+menuBar+"'.");
+
 		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
 
-		menuItem._hasFocus=true;
+		menuBar._hasFocus=true;
+
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 		
 		var old=menuBar._selectedMenuItem;
 		
@@ -162,14 +137,14 @@ var __static = {
 		}
 		
 		if (old) {
-			old._closePopup(old);
 			menuBar._selectedMenuItem=undefined;
-			
-			menuBar.fa_updateItemStyle(old);
+			menuBar.f_closeAllPopups();
+				
+			menuBar.f_updateMenuBarItemStyle(old);
 		}
 			
 		menuBar._selectedMenuItem=menuItem;
-		menuBar.fa_updateItemStyle(menuItem);
+		menuBar.f_updateMenuBarItemStyle(menuItem);
 
 		if (menuBar.f_isItemDisabled(menuItem)) {
 //			f_core.Info("f_menuBar", "Focus-DISABLED cur="+menuBar._selectedMenuItem);
@@ -177,7 +152,7 @@ var __static = {
 		}
 		
 		if (menuBar._openMode) {
-			menuItem._openPopup(menuItem, false);
+		//	menuItem._openPopup(menuItem, false);
 		}
 				
 		return true;
@@ -186,171 +161,44 @@ var __static = {
 	 * @method private static
 	 */
 	_MenuBarItem_blur: function(evt) {
-		var menuItem=this; //._link;
-		var menuBar=menuItem._menuBar;
+		var menuItem=this._item;
+		var menuBar=menuItem._menu;
+	
+		f_core.Debug(f_menuBar, "_MenuBarItem_blur: blur item='"+menuItem+"' menuBar='"+menuBar+"'.");
+		
 		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
 			return false;
 		}
-		if (!evt) evt = window.event;
 
-		menuItem._hasFocus=undefined;
+		if (!evt) {
+			evt = f_core.GetEvent(this);
+		}
 	
-/*		if (menuBar._ignoreBlurOpenMode) {
-			menuBar._ignoreBlurOpenMode=undefined;
-			alert("IGNORE !");
+		menuBar._openMode=undefined;
 			
-		} else {
-		*/
-			menuBar._openMode=undefined;
-			
-			f_core.Info(f_menuBar, "Blur clear openMode");
-			
-/*		} */
-
+		f_core.Info(f_menuBar, "Blur clear openMode");
+		
 		var old=menuBar._selectedMenuItem;
 		if (old!=menuItem) {
 			return true;
 		}
 
-		old._closePopup(old);
 		menuBar._selectedMenuItem=undefined;
+		menuBar.f_closeAllPopups();
 		
-		menuBar.fa_updateItemStyle(old);
+		menuBar.f_updateMenuBarItemStyle(menuItem);
 
 		return true;
-	},
-	/**
-	 * @method private static
-	 */
-	_MenuBarItem_closePopup: function(menuBarItem) {
-		if (!menuBarItem._popupOpened || !menuBarItem._menuPopup) {
-			return;
-		}
-
-//		f_core.Info("f_menuBar", "Close popup cur="+menuBarItem._selectedMenuItem+"/ param="+menuBarItem);		
-
-		menuBarItem._popupOpened=undefined;
-		
-		var menuBar=menuBarItem._menuBar;
-		
-		f_popup.UnregisterWindowClick(menuBar);
-		
-		var old=menuBarItem._selectedMenuItem;
-		if (old) {
-			old._closePopup(old);
-			old._over=undefined;
-			
-			menuBarItem._selectedMenuItem=undefined;
-			menuBar.fa_updateItemStyle(old);
-		}
-				
-		f_key.ExitScope(menuBarItem.id);
-		
-		var popup=menuBarItem._menuPopup;
-		if (popup) {
-			if (menuBarItem._iePopup) {
-				fa_menuCore._Ie_closePopup(menuBarItem);
-				
-			} else {
-				popup.style.visibility="hidden";
-			}
-					
-			var old=popup._menuItemSelected;
-			if (old) {
-				old._closePopup(old);
-				
-				popup._menuItemSelected=null;
-			}			
-		}
-		
-		menuBar.fa_updateItemStyle(menuBarItem);			
-	},
-	/**
-	 * @method private static
-	 */
-	_MenuBarItem_openPopup: function(menuBarItem, autoSelect) {
-//		f_core.Info("f_menuBar", "OpenPopup: "+menuBarItem._popupOpened+"/"+this._openMode);
-
-		if (menuBarItem._popupOpened) {
-			return;
-		}
-	
-		var menuBar=menuBarItem._menuBar;
-
-		if (menuBar.f_isItemDisabled(menuBarItem)) {
-			return;
-		}
-
-		var old=menuBar._selectedMenuItem;
-		if (old) {
-			menuBar._selectedMenuItem=undefined;
-			menuBar.fa_updateItemStyle(old);
-		}
-
-		if (!menuBarItem._menuPopup) {
-			menuBar._selectedMenuItem=menuBarItem;
-			menuBar.fa_updateItemStyle(menuBarItem);
-		
-			return;
-		}
-	
-		fa_menuCore.HideSeparators(menuBarItem);
-	
-		var popup=menuBarItem._menuPopup;
-										
-		if (f_popup.RegisterWindowClick({
-				exit: menuBar._a_clickOutside,
-				keyDown: function(evt) {
-					return fa_menuCore.OnKeyDown(menuBar, menuBarItem, evt);
-				}
-			}, menuBar, menuBar)==false) {
-			return;
-		}
-
-		if (popup) {
-			f_key.EnterScope(menuBarItem.id);
-
-			if (menuBarItem._iePopup) {
-				fa_menuCore._Ie_openPopup(menuBarItem, menuBarItem, 0, menuBarItem.offsetHeight);
-			
-			} else {
-				var p1=f_core.GetAbsolutePosition(menuBarItem);
-			
-				var x=p1.x;
-				var y=p1.y+menuBarItem.offsetHeight;
-
-				x+=1; // Les bordures ....
-				y+=1;
-
-				var pos={ x: x, y: y };
-				
-				f_core.ComputePopupPosition(popup, pos);
-
-				popup.style.left=pos.x+"px";
-				popup.style.top=pos.y+"px";
-			
-				popup.style.visibility="inherit";
-			}			
-			popup._menuItemSelected=null;
-		}
-	
-		menuBarItem._popupOpened=true;
-		menuBar._selectedMenuItem=menuBarItem;
-		menuBar.fa_updateItemStyle(menuBarItem);
-
-		if (autoSelect) {
-			if (menuBarItem._items && menuBarItem._items.length>0) {
-				menuBar._menuItem_over(menuBarItem._items[0], false);
-			}
-		}
 	}
 }
  
 var __prototype = {
+	/*
 	f_menuBar: function() {
 		this.f_super(arguments);
 		
 	},
+	*/
 	/*
 	f_finalize: function() {
 		
@@ -360,29 +208,6 @@ var __prototype = {
 	f_serialize: function() {
 		this.f_serializeItems();
 			
-		return this.f_super(arguments);
-	},
-	f_update: function() {
-		if (this._items) {
-			var l=this._items;
-			
-			var dummies=this.getElementsByTagName("A");
-			
-			for(var i=0;i<dummies.length;i++) {
-				this.removeChild(dummies[i]);
-			}
-			
-			for(var i=0;i<l.length;i++) {
-				var menuBarItem=l[i];
-				
-// XXXX On est pas pressé !
-				this._updateBarItem(menuBarItem);
-//				this.fa_updateItemStyle(menuBarItem);
-				
-				this.appendChild(menuBarItem);
-			}
-		}
-		
 		return this.f_super(arguments);
 	},
 	f_setDomEvent: function(type, target) {
@@ -404,55 +229,77 @@ var __prototype = {
 		
 	 * ********************************************************************/
 	fa_destroyItems: function(items) {
+		var uiMenuItems=this._uiMenuItems;
+		var items=this.f_listItemChildren(this);
 		for(var i=0;i<items.length;i++) {
-			f_menuBar._DestroyMenuBarItem(this, items[i]);
-		}
-	},	
-	_updateBarItem: function(menuBarItem) {
-		var items=menuBarItem._items;
-		if (items) {
-			for(var i=0;i<items.length;i++) {
-				this._updateItem(items[i]);
+			var item=items[i];
+			
+			var uiItem=uiMenuItems[item];
+			if (!uiItem) {
+				continue;
 			}
-		}
+			
+			delete uiMenuItems[item];
 		
-		var table=menuBarItem._menuPopup;
-		if (table) {
-			if (menuBarItem._iePopup) {
-				menuBarItem.appendChild(table);
-				
-			} else {
-				this.ownerDocument.body.appendChild(table);
-			}
+			this.f_destroyMenuBarItem(uiItem);
 		}
-						
-		this.fa_updateItemStyle(menuBarItem);
 	},
-	_menuBarItem_over: function(menuBarItem) {
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_destroyMenuBarItem: function(uiItem) {
+		uiItem.onmouseover=null;
+		uiItem.onmouseout=null;
+		uiItem.onmousedown=null;
+		uiItem.onclick=null;
+		uiItem.onblur=null;
+		uiItem.onfocus=null;
+		uiItem.onkeypress=null;
+		uiItem.onkeydown=null;
+		
+		uiItem._item=undefined;
+
+		f_core.VerifyProperties(uiItem);
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_menuBarItem_over: function(menuBarItem, jsEvt) {
 		var old=this._selectedMenuItem;
+				
 		var oldOpenMode=this._openMode;
 		
-//		f_core.Info("f_menuBar", "OVER: cur="+old+" param="+menuBarItem+" openMode="+this._openMode);
+		// f_core.Info("f_menuBar", "OVER: cur="+old+" param="+menuBarItem+" openMode="+this._openMode);
 		
 		if (old==menuBarItem) {
-			this.fa_updateItemStyle(menuBarItem);
+			// Le selectionné est le méme que l'ancien selectionné !
+			
+			this.f_updateMenuBarItemStyle(menuBarItem);
 			
 			if (this._openMode) {
-				menuBarItem._openPopup.call(this, menuBarItem, false);
+				this.f_openUIPopup(menuBarItem, jsEvt, false, {
+					position: f_popup.BOTTOM_LEFT_COMPONENT,
+					component: this.f_getUIItem(menuBarItem),
+					deltaX: -1,
+					deltaY: 1
+				});
 			}
 			
-			return true;
+			return;
 		}
 			
 		if (old) {
-			old._closePopup(old);
 			this._selectedMenuItem=undefined;
-			
-			this.fa_updateItemStyle(old);
+	
+			this.f_closeAllPopups();
+				
+			this.f_updateMenuBarItemStyle(old);
 		}
 
 		this._selectedMenuItem=menuBarItem;
-		this.fa_updateItemStyle(menuBarItem);
+		this.f_updateMenuBarItemStyle(menuBarItem);
 				
 		if (this.f_isItemDisabled(menuBarItem)) {	
 			this._openMode=oldOpenMode;
@@ -460,167 +307,162 @@ var __prototype = {
 //			f_core.Info("f_menuBar", "OVER DISABLED: cur="+this._selectedMenuItem+" openMode="+this._openMode);
 			return;
 		}
-
-		f_menuBar._MenuBarItem_setFocus(menuBarItem);
 		
 		this._openMode=oldOpenMode;
-		if (this._openMode) {
-			menuBarItem._openPopup.call(this, menuBarItem, false);
+		if (oldOpenMode) {
+			f_menuBar._MenuBarItem_setFocus(menuBarItem);
+
+			this.f_openUIPopup(menuBarItem, jsEvt, false, {
+				position: f_popup.BOTTOM_LEFT_COMPONENT,
+				component: this.f_getUIItem(menuBarItem),
+				deltaX: -1,
+				deltaY: 1
+			});
 		}
-		
-/*			
-		if (old) {
-			this._ignoreBlurOpenMode=true;
-		}		
-		*/
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_menuBarItem_out: function(menuBarItem) {
 		var old=this._selectedMenuItem;
 		if (old!=menuBarItem) {
-			return true;
+			return;
 		}
 
 		if (this._openMode) { // old._popupOpened
-			return true;
+			return;
 		}
 
 		this._selectedMenuItem=undefined;
-		old._closePopup(old);
+		this.f_closeAllPopups();
 			
-		this.fa_updateItemStyle(old);
+		this.f_updateMenuBarItemStyle(old);
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_menuBarItem_select: function(menuBarItem, autoSelect, jsEvent) {
 		var old=this._selectedMenuItem;
-		if (old && old._popupOpened) {
+		if (old && this.f_uiIsPopupOpened(old)) {
 			// Un popup deja ouvert ?
 			this._openMode=undefined;
 			
-			old._closePopup(old);
+			this.f_closeAllPopups();
 
-			this.fa_updateItemStyle(old);
+			this.f_updateMenuBarItemStyle(old);
 
 			return;			
 		}
 	
-		if (this.f_isItemDisabled(menuBarItem) || this.f_isDisabled()) {
+		if (this.f_isDisabled() || this.f_isItemDisabled(menuBarItem)) {
 			return;
 		}
 		
-		if (!menuBarItem._menuPopup) {
+		if (!this.f_hasVisibleItemChildren(menuBarItem)) {
 			// Pas de popup !
 			
 			if (this.f_isReadOnly()) {
 				return;
 			}
 			
-			var value=menuBarItem._value;
-			this._performItemSelect(menuBarItem, value, jsEvent);
+			var value=this.f_getItemValue(menuBarItem);
+			
+			this.f_performItemSelect(menuBarItem, value, jsEvent);
 
 			return;
 		}
 		this._openMode=true;
-		menuBarItem._openPopup(menuBarItem, autoSelect);
+
+		this.f_openUIPopup(menuBarItem, jsEvent, autoSelect, {
+			position: f_popup.BOTTOM_LEFT_COMPONENT,
+			component: this.f_getUIItem(menuBarItem),
+			deltaX: -1,
+			deltaY: 1
+		});
 	},
-	fa_updateItemStyle: function(item) {
-		if (!item._parentItem && !item._separator) {
-			// MenuBarItem 
-			var className="f_menuBar_bitem";
-			
-			var suffix="";
-			if (item._disabled || this.f_isDisabled()) {
-				suffix+="_disabled";
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_updateMenuBarItemStyle: function(menuBarItem) {
+		var component=this.f_getUIItem(menuBarItem);
+		// MenuBarItem 
+		var className="f_menuBar_bitem";
 		
-				if (this._selectedMenuItem==item) {
-					suffix+="_hover";
-				}
-				
-			} else if (this._selectedMenuItem==item) {
-				if (item._popupOpened) {
-					suffix+="_selected";
-				}
-				
+		var suffix="";
+		if (this.f_isDisabled() || this.f_isItemDisabled(menuBarItem)) {
+			suffix+="_disabled";
+	
+			if (this._selectedMenuItem==menuBarItem) {
 				suffix+="_hover";
 			}
 			
-			if (suffix) {
-				className+=" "+className+suffix;
+		} else if (this._selectedMenuItem==menuBarItem) {
+			if (this.f_uiIsPopupOpened(menuBarItem)) {
+				suffix+="_selected";
 			}
 			
-			item.className=className;
-		
-			return;	
+			suffix+="_hover";
 		}
 		
-		this.f_super(arguments, item);
+		if (suffix) {
+			className+=" "+className+suffix;
+		}
+		
+		if (component.className!=className) {
+			component.className=className;
+		}
 	},
-	_accessKeyBarItem: function(evt, menuBarItem) {
-		var menuItem=menuBarItem._link;
+	/**
+	 * @method hidden
+	 * @return Object item
+	 */
+	f_declareBarItem: function(id, label, value, accessKey, disabled) {
+		var menuBarItem=this.f_appendItem(this, id, label, value, accessKey, null, disabled);
 		
-		this._menuBarItem_select(menuItem, true, evt);
+		var uiItem=document.createElement("BUTTON");
+		this._uiMenuItems[menuBarItem]=uiItem; // Ben oui 
+		uiItem._item=menuBarItem;
 		
-		f_menuBar._MenuBarItem_setFocus(menuItem);
-	},
-	_declareBarItem: function(id, label, value, accessKey, disabled) {
-		var document=this.ownerDocument;
+		uiItem.id=id;
+		uiItem.tabIndex=-1;
+		uiItem.className="f_menuBar_bitem";
 		
-		var menuBarItem;
-		
-		menuBarItem=document.createElement("BUTTON");
-		
-		menuBarItem.id=id;
-		menuBarItem.tabIndex=-1;
-		menuBarItem.className="f_menuBar_bitem";
-		
-		menuBarItem._accessKey=accessKey;
-		f_component.AddLabelWithAccessKey(menuBarItem, label, accessKey);
+		f_component.AddLabelWithAccessKey(uiItem, label, accessKey);
 
-		menuBarItem.onmouseover=f_menuBar._MenuBarItem_mouseOver;
-		menuBarItem.onmouseout=f_menuBar._MenuBarItem_mouseOut;
-		
-		/*
-		if (f_core.IsGecko()) {
-			menuBarItem.onmousedown=f_menuBar._MenuBarItem_mouseDown;
-			
-		} else {
-			menuBarItem.onmouseup=f_menuBar._MenuBarItem_mouseDown;
-		}
-		*/
-		
-		menuBarItem.onselectstart=f_core.IeOnSelectStart;
+		uiItem.onmouseover=f_menuBar._MenuBarItem_mouseOver;
+		uiItem.onmouseout=f_menuBar._MenuBarItem_mouseOut;
 				
 		if (accessKey) {
-			menuBarItem.accessKey=accessKey;
+			uiItem.accessKey=accessKey;
 			
-			f_key.AddKeyHandler(null, accessKey, this, null, menuBarItem);
+			f_key.AddKeyHandler(null, accessKey, this, null, uiItem);
 		}			
-		menuBarItem.tabIndex=this._tabIndex;
-		menuBarItem.onkeydown=f_menuBar._MenuBarItem_keyDown;
-		menuBarItem.onclick=f_menuBar._MenuBarItemInput_click;
-		menuBarItem.onfocus=f_menuBar._MenuBarItem_focus;
-		menuBarItem.onblur=f_menuBar._MenuBarItem_blur;
-		menuBarItem.hideFocus=true;
-			
-			
-		menuBarItem._menuBar=this;
-		menuBarItem._value=value;
-		menuBarItem._openPopup=f_menuBar._MenuBarItem_openPopup;
-		menuBarItem._closePopup=f_menuBar._MenuBarItem_closePopup;
-	
-		this.f_addItem(this, menuBarItem);
+		
+		uiItem.tabIndex=this._tabIndex;
+		uiItem.onkeydown=f_menuBar._MenuBarItem_keyDown;
+		uiItem.onclick=f_menuBar._MenuBarItemInput_click;
+		uiItem.onfocus=f_menuBar._MenuBarItem_focus;
+		uiItem.onblur=f_menuBar._MenuBarItem_blur;
+		uiItem.hideFocus=true;
 
-		if (f_popup.Ie_enablePopup()) {
-			// On associe le POPUP 
-			
-			menuBarItem._iePopup=fa_menuCore._Ie_getPopup(menuBarItem);
-		}
+		this.f_updateMenuBarItemStyle(menuBarItem);
 
-		if (disabled) {
-			this.f_setItemDisabled(menuBarItem, disabled);
+		if (this._items.length==1) {
+			var dummies=this.getElementsByTagName("A");
+			
+			for(var i=0;i<dummies.length;i++) {
+				this.removeChild(dummies[i]);
+			}
 		}
+		
+		this.appendChild(uiItem);
 
 		return menuBarItem;
 	},
-	_a_keySearchAccessKey: function(menuBarItem, code, jsEvent) {
+	fa_keySearchAccessKey: function(menuBarItem, code, jsEvent) {
 		if (this._selectedMenuItem!=menuBarItem) {
 			if (this._selectedMenuItem) {
 				this._selectedMenuItem._closePopup(this._selectedMenuItem);
@@ -677,7 +519,7 @@ var __prototype = {
 		
 		return false;
 	},
-	_a_focusMenuItem: function(menuBarItem) {
+	fa_focusMenuItem: function(menuBarItem) {
 			// On verifie si c'est un menuBar !
 		for(;menuBarItem._parentItem;) {
 			menuBarItem=menuBarItem._parentItem;
@@ -699,48 +541,22 @@ var __prototype = {
 		
 		this._selectedMenuItem=menuBarItem;
 	},
-	_a_closeMenu: function(menuBarItem, jsEvent, definitive) {
-		// On verifie si c'est un menuBar !
-		for(;menuBarItem._parentItem;) {
-			menuBarItem=menuBarItem._parentItem;
-		}
-		
-		if (definitive) {
-			this._openMode=undefined;
-		}
-		
-		f_menuBar._MenuBarItem_closePopup(menuBarItem);
-	},
-	_a_clickOutside: function(jsEvt) {
-		f_core.Info(f_menuBar, "Click outside !");
-		this._openMode=undefined;
-
-		var menuBarItem=this._selectedMenuItem;
-		if (!menuBarItem) {
-			return;
-		}
-		menuBarItem._closePopup(menuBarItem, jsEvt);
-		
-		this.fa_updateItemStyle(menuBarItem);		
-	},
 	fa_updateDisabled: function() {
 		if (!this.fa_componentUpdated) {
 			return;
 		}
 		
-		if (this._items) {
-			var l=this._items;
-			for(var i=0;i<l.length;i++) {
-				this.fa_updateItemStyle(l[i]);
-			}
-		}		
+		var l=this.f_listVisibleItemChildren(this);
+		for(var i=0;i<l.length;i++) {
+			this.fa_updateItemStyle(l[i]);
+		}
 	},
 	fa_updateReadOnly: function() {
 	},
-	_a_getSelectionProvider: function() {
+	fa_getSelectionProvider: function() {
 		return null;
 	},
-	_a_isSameMenuBase: function(menuBarItem) {
+	fa_isSameMenuBase: function(menuBarItem) {
 		return this._selectedMenuItem==menuBarItem;
 	},
 	f_setFocus: function() {
@@ -752,10 +568,11 @@ var __prototype = {
 			return false;
 		}
 		
-		var items=this._items;
-		if (!items || items.length<1) {
+		var items=this.f_listVisibleItemChildren(this);
+		if (!items.length) {
 			return false;
 		}
+		
 		for(var i=0;i<items.length;i++) {
 			var menuBarItem=items[i];
 			
@@ -765,13 +582,70 @@ var __prototype = {
 			}
 			*/
 			
-			menuBarItem.focus();
+			var uiItem=this.f_getUIItem(menuBarItem);
+			if (!uiItem) {
+				continue;
+			}
+
+			uiItem.focus();
 			return true;
 		}
 		
 		return false;
+	},
+	f_closeAllPopups: function() {
+		f_core.Debug(fa_menuCore, "menuBar.f_closeAllPopups: close all popups");
+		
+		var items=this.f_listVisibleItemChildren(this);
+		for(var i=0;i<items.length;i++) {
+			var item=items[i];
+			this._closeUIPopup(item);
+		}
+	},
+	fa_updateItemStyle: function(menuItem) {
+		if (this.f_getParentItem(menuItem)==this) {
+			this.f_updateMenuBarItemStyle(menuItem);
+			return;
+		}
+		
+		this.f_super(arguments, menuItem);		
+	},
+	
+	fa_getMenuScopeName: function(menuItem) {
+		var cid=this.id;
+		if (menuItem==this) {
+			return cid;
+		}
+		
+		return cid+"::"+menuItem._id;
+	},
+	f_uiUpdateItemStyle: function(menuItem) {
+		if (this.f_getParentItem(menuItem)==this) {
+			this.f_updateMenuBarItemStyle(menuItem);
+			return;
+		}
+		
+		this.f_super(arguments, menuItem);		
 	}
+	/*,
+	f_uiGetSelectedItem: function(menuItem) {
+		if (this.f_getParentItem(menuItem)==this) {
+			return this._selectedMenuItem;
+		}
+		
+		return this.f_super(arguments, menuItem);
+	},
+	f_uiSelectItem: function(menuItemParent, menuItem) {
+		f_core.Debug(f_menuBar, "f_uiSelectItem: parent="+menuItemParent+" item="+menuItem);
+		if (menuItemParent==this) {
+			this._selectedMenuItem=menuItem;
+			return;
+		}
+		
+		return this.f_super(arguments, menuItemParent, menuItem);
+	}
+	*/
 }
 
-var f_menuBar=new f_class("f_menuBar", null, __static, __prototype, f_menuBase,
+new f_class("f_menuBar", null, __static, __prototype, f_menuBase,
 	fa_readOnly, fa_disabled, fa_immediate);

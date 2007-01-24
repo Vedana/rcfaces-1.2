@@ -17,154 +17,8 @@
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
-function f_class(className, lookId, staticMembers, members, parentClass) {
-	// Constructeur vide: on ne fait rien !
-	if (arguments.length==0) {
-		return;
-	}
-	if (arguments[0] instanceof f_classLoader) {
-		this._newMultiWindow(arguments);		
-		return;
-	}
-	
-	if (!parentClass) {
-		parentClass=window.f_object;
-		// Pour certaines classes de base (f_env, ...)
-		// f_object ne peut ne pas être encore déclaré !
-	}
-
-	this._classLoader=window._classLoader;
-	
-	this._name = className;
-	this._look = lookId;
-	this._staticMembers = staticMembers;
-	this._members = members;
-	this._parent = parentClass;
-	
-	var aspects;
-	if (arguments.length>5) {
-		// Aspects
-		aspects=f_core.PushArguments(null, arguments, 5);
-		
-		if (f_core.IsDebugEnabled("f_class")) {
-			for(var i=0;i<aspects.length;i++) {
-				var aspect=aspects[i];
-				
-				f_core.Assert(aspect instanceof f_aspect, "f_class: Not an aspect ("+aspect+") for className '"+className+"' lookId='"+lookId+"' ?");
-			}
-		}
-	}
-	this._aspects=aspects;
-	
-	this._classLoader._declareClass(this);
-}
-
-f_class.prototype = {
-	/**
-	 * @method public final
-	 * @return String
-	 */
-	f_getName: function() {
-		return this._name;
-	},
-	
-	/**
-	 * @method public final
-	 * @return String
-	 */
-	f_getLookId: function() {
-		return this._look;
-	},
-	
-	/**
-	 * Returns super class of this class.
-	 *
-	 * @method public final
-	 * @return f_class
-	 */
-	f_getSuperClass: function() {
-		return this._parent;
-	},
-	
-	/**
-	 * Returns all aspects extended by this class.
-	 *
-	 * @method public final
-	 * @return f_aspect[]
-	 */
-	f_getAspects: function() {
-		if (!this._aspects) {
-			this._aspects=new Array;
-		}
-		return this._aspects;
-	},
-	
-	/**
-	 * @method public final
-	 * @param any... args Arguments of constructor.
-	 * @return Object
-	 */
-	f_newInstance: function(args) {
-		var obj = new Object;
-		
-		return f_class.Init(obj, this, arguments);
-	},
-	
-	/**
-	 * @method hidden final
-	 * @return Object
-	 */
-	f_newSystemInstance: function() {
-		var obj = new Object;
-		
-		return f_class.Init(obj, this, arguments, true);
-	},
-	
-	/**
-	 * Returns the classes loader of this class.
-	 * 
-	 * @method public final
-	 * @return f_classLoader
-	 */
-	f_getClassLoader: function() {
-		return this._classLoader;
-	},
-	
-	/**
-	 * @method hidden final
-	 * @return f_classLoader
-	 */
-	f_localize: function(staticMembers, instanceMembers) {
-		if (staticMembers) {
-			var sms=this._staticMembers;
-			for(var memberName in staticMembers) {
-				sms[memberName] = staticMembers[memberName];
-			}
-		}
-		
-		if (instanceMembers) {
-			var ims=this._instanceMembers;
-			for(var memberName in instanceMembers) {
-				ims[memberName] = instanceMembers[memberName];
-			}
-		}
-	},
-	
-	/**
-	 * @method public final
-	 * @return String
-	 */
-	toString: function() {
-		return "[f_class "+this._name+"]";
-	}
-}
 
 var __static = {
-
-	/**
-	 * @field private static final String
-	 */
-	_LOOK: "~",
 	
 	/**
 	 * @field hidden static final String
@@ -190,17 +44,7 @@ var __static = {
 	 * @field hidden static final String
 	 */
 	THROWING_ASPECT: "throwing",
-	
-	/**
-	 * @method hidden static final string
-	 */
-	MakeClassName: function(claz,look) {
-		if (!look) {
-			return claz;
-		}
-		
-		return claz+f_class._LOOK+look;
-	},
+
 	/**
 	 * @method private static final string
 	 */
@@ -261,57 +105,16 @@ var __static = {
 	/**
 	 * @method hidden static final
 	 */
-	InitializeStaticMembers: function(claz) {
-		// Attention: Code pour Classes et Aspects
-		
-		var staticMembers=claz._staticMembers;
-		if (staticMembers) {
-		/*
-			if (staticMembers instanceof _remapContext) {
-				staticMembers=this._classLoader._remapContext(staticMembers);
-				claz._staticMembers=staticMembers;
-			}
-		*/
-			for(var memberName in staticMembers) {				
-				var member=staticMembers[memberName];
-				
-				/*			
-				f_core.Assert(
-					typeof(member)=="number" || 
-					typeof(member)=="string" || 
-					member===null ||
-					member===false ||
-					member===true ||
-					memberName=="_EVENTS" || // Ok c'est pas joli, mais bon ...
-					memberName=="_ACCENTS_MAPPER" ||
-					memberName=="_CALLBACKS" ||
-					typeof(member)=="function", "Static member '"+memberName+"' is not litteral or function for aspect/class '"+claz._name+"' !");
-				*/
-						
-				claz[memberName]=member;
-			}
-		}
-				
-		var staticInitializer=claz.Initializer;
-		if (staticInitializer) {
-			f_core.Assert(typeof(staticInitializer)=="function", "f_class.InitializeStaticMembers: Invalid 'Initializer' field, it must be a function ! value="+staticInitializer);
-			try {	
-				staticInitializer.call(claz);
-				
-			} catch (x) {
-				f_core.Error(f_class, "Initializer of aspect/class '"+claz._name+"' throws exception.", x);
-			}
-		}
-	},
-	/**
-	 * @method hidden static final
-	 */
 	InitializeClass: function(claz) {
 		if (claz._initialized) {
 			return;
 		}
 		
 		claz._initialized=true;
+		
+		if (claz._nativeClass) {
+			return;
+		}
 		
 		var methods=new Object;
 				
@@ -330,6 +133,7 @@ var __static = {
 		if (members) {
 			f_class._InitializeClassMembers(claz, methods);
 		}
+
 		methods.f_super = f_class._Super;
 		
 		var aspects=claz._aspects;
@@ -388,8 +192,9 @@ var __static = {
 		var obj=callerArguments.callee;
 			
 		var params;
-		if (callerArguments.length>0) {
+		if (callerArguments.length) {
 			params = new Array;
+
 			for (var i=0;i<callerArguments.length;i++) { 
 				params.push(callerArguments[i]);
 			}
@@ -408,8 +213,8 @@ var __static = {
 				f_class._Call(callerThis, obj._kmethod, params);
 				
 			} catch (x) {
-				if (obj._kthrowing) {
-					var throwing=obj._kthrowing;
+				var throwing=obj._kthrowing;
+				if (throwing) {
 					for(var i=0;i<throwing.length;i++) {
 						throwing[i].call(callerThis, x, obj._kmethod, params);
 					}					
@@ -459,6 +264,7 @@ var __static = {
 			if (memberName==aspectName) {
 				memberName=claz._name;
 				constructor=true;
+				
 			} else {
 				constructor=false;
 			}
@@ -686,7 +492,117 @@ var __static = {
 
 		return (object._kclass)?true:false;
 	},
+	/**
+	 * @method private static final
+	 */
+	_DeclarePrototypeClass: function(name, staticMembers, methods) {
+		var cls=null;
+		if (methods) {
+			cls=methods[name];
+		}
+		if (!cls) {
+			cls=new function() {
+			};
+		}
+		
+		window[name]=cls;
+		
+		cls.prototype=methods;
+		cls._name=name;
+		cls._classLoader=window._classLoader;
+		cls._nativeClass=true;
+
+		if (!staticMembers) {
+			staticMembers=new Object;
+		}
+		
+		if (!staticMembers.f_getName) {
+			staticMembers.f_getName=f_class.f_getName;
+		}
+		
+		if (!staticMembers.toString) {	
+			staticMembers.toString=f_class.toString;
+		}			
+		
+		cls._staticMembers=staticMembers;
+				
+		cls._classLoader.f_declareClass(cls);
+	},
+
 	_remapContext: function() {
+	},
+	
+	/**
+	 * @method private static 
+	 * @return String
+	 */
+	f_getName: function() {
+		return this._name;
+	},
+	
+	/**
+	 * @method private static 
+	 * @return String
+	 */
+	toString: function() {
+		return "[class "+this._name+"]";
+	}
+}
+
+var __prototype = {
+	f_class: function(className, lookId, staticMembers, members, parentClass) {
+		// Constructeur vide: on ne fait rien !
+		if (!arguments.length) {
+			return;
+		}
+		if (arguments[0] instanceof f_classLoader) {
+			this._newMultiWindow(arguments);		
+			return;
+		}
+		
+		if (!parentClass && className!="f_object") {
+			f_class._DeclarePrototypeClass(className, staticMembers, members);
+			
+			return;
+		}
+	
+		this._classLoader=window._classLoader;
+
+		if (!staticMembers) {
+			staticMembers=new Object;
+		}
+		
+		if (!staticMembers.f_getName) {
+			staticMembers.f_getName=f_class.f_getName;
+		}
+		
+		if (!staticMembers.toString) {	
+			staticMembers.toString=f_class.toString;
+		}			
+		
+		this._name = className;
+		this._staticMembers = staticMembers;
+		this._look = lookId;
+		this._members = members;
+		this._parent = parentClass;
+
+		var aspects=new Array
+		this._aspects=aspects;
+		
+		if (arguments.length>5) {
+			// Aspects
+			f_core.PushArguments(aspects, arguments, 5);
+			
+			if (f_core.IsDebugEnabled("f_class")) {
+				for(var i=0;i<aspects.length;i++) {
+					var aspect=aspects[i];
+					
+					f_core.Assert(aspect instanceof f_aspect, "f_class: Not an aspect ("+aspect+") for className '"+className+"' lookId='"+lookId+"' ?");
+				}
+			}
+		}
+				
+		this._classLoader.f_declareClass(this);
 	},
 
 	/**
@@ -694,10 +610,89 @@ var __static = {
 	 * @return String
 	 */
 	f_getName: function() {
-		return "f_class";
+		return this._name;
+	},
+	
+	/**
+	 * @method public final
+	 * @return String
+	 */
+	f_getLookId: function() {
+		return this._look;
+	},
+	
+	/**
+	 * Returns super class of this class.
+	 *
+	 * @method public final
+	 * @return f_class
+	 */
+	f_getSuperClass: function() {
+		return this._parent;
+	},
+	
+	/**
+	 * Returns all aspects extended by this class.
+	 *
+	 * @method public final
+	 * @return f_aspect[]
+	 */
+	f_getAspects: function() {
+		return this._aspects;
+	},
+	
+	/**
+	 * @method public final
+	 * @param any... args Arguments of constructor.
+	 * @return Object
+	 */
+	f_newInstance: function(args) {
+		var obj = new Object;
+		
+		return f_class.Init(obj, this, arguments);
+	},
+	
+	/**
+	 * @method hidden final
+	 * @return Object
+	 */
+	f_newSystemInstance: function() {
+		var obj = new Object;
+		
+		return f_class.Init(obj, this, arguments, true);
+	},
+	
+	/**
+	 * Returns the classes loader of this class.
+	 * 
+	 * @method public final
+	 * @return f_classLoader
+	 */
+	f_getClassLoader: function() {
+		return this._classLoader;
+	},
+	
+	/**
+	 * @method hidden final
+	 * @return f_classLoader
+	 */
+	f_localize: function(staticMembers, instanceMembers) {
+		if (staticMembers) {
+			var sms=this._staticMembers;
+			for(var memberName in staticMembers) {
+				sms[memberName] = staticMembers[memberName];
+			}
+		}
+		
+		if (instanceMembers) {
+			var ims=this._instanceMembers;
+			for(var memberName in instanceMembers) {
+				ims[memberName] = instanceMembers[memberName];
+			}
+		}
 	}
 }
-for(var p in __static) {
-	f_class[p]=__static[p];
-}
+
+
+__static._DeclarePrototypeClass("f_class", __static, __prototype);
 

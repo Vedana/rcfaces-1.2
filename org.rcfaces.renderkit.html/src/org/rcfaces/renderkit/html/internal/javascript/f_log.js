@@ -350,4 +350,4 @@ var __prototype = {
 	}
 }
 
-var f_log=new f_class("f_log", null, __static, __prototype);
+new f_class("f_log", null, __static, __prototype, f_object);

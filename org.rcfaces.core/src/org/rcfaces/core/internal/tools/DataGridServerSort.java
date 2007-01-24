@@ -23,8 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.ISortEventCapability;
+import org.rcfaces.core.event.SortEvent;
 import org.rcfaces.core.internal.listener.IScriptListener;
-import org.rcfaces.core.internal.listener.IServerActionListener;
+import org.rcfaces.core.internal.listener.SortActionListener;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
 
@@ -183,8 +184,9 @@ public final class DataGridServerSort {
 
             // Priorité coté JAVASCRIPT, on verra le serveur dans un
             // deuxieme temps ...
-            if (facesListener instanceof IServerActionListener) {
-                return new SortAction((IServerActionListener) facesListener);
+            if (facesListener instanceof SortActionListener) {
+                return new SortAction((SortActionListener) facesListener,
+                        columnComponent);
             }
 
             if ((facesListener instanceof IScriptListener) == false) {
@@ -402,19 +404,35 @@ public final class DataGridServerSort {
     private static class SortAction extends AbstractSortMethod {
         private static final String REVISION = "$Revision$";
 
-        private final IServerActionListener listener;
+        private final Comparator comparator;
 
-        public SortAction(IServerActionListener listener) {
-            this.listener = listener;
+        private final SortEvent.ISortConverter converter;
+
+        public SortAction(SortActionListener listener,
+                DataColumnComponent dataColumnComponent) {
+            SortEvent sortEvent = new SortEvent(dataColumnComponent);
+
+            listener.processSort(sortEvent);
+
+            comparator = sortEvent.getSortComparator();
+            if (comparator == null) {
+                throw new FacesException("Comparator of sortEvent is NULL !");
+            }
+
+            converter = sortEvent.getSortConverter();
         }
 
         public Object convertValue(FacesContext facesContext,
                 DataColumnComponent component, Object value) {
-            return value;
+            if (converter == null) {
+                return value;
+            }
+
+            return converter.convertValue(facesContext, component, value);
         }
 
         public Comparator getComparator() {
-            return (Comparator) listener; // @XXX TODO
+            return comparator;
         }
     }
 }

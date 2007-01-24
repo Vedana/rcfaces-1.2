@@ -19,6 +19,7 @@ var __static = {
 			check: f_event.CHECK,
 			blur: f_event.BLUR,
 			dblClick: f_event.DBLCLICK,
+			error: f_event.ERROR,
 			focus: f_event.FOCUS,
 			init: f_event.INIT,
 			keyUp: f_event.KEYUP,
@@ -55,6 +56,7 @@ var __static = {
 		cb[f_event.CHECK]=null;
 		cb[f_event.CLOSE]=null;
 		cb[f_event.DBLCLICK]={_dom: "ondblclick", _mtd: __SYMBOL("f_onDblClick") }; 
+		cb[f_event.ERROR]=null;
 		cb[f_event.FOCUS]={_dom: "onfocus", _mtd: __SYMBOL("f_onFocus") }; 
 		cb[f_event.INIT]=null;
 		cb[f_event.KEYDOWN]={_dom: "onkeydown", _mtd: __SYMBOL("f_onKeyDown") }; 
@@ -80,8 +82,8 @@ var __static = {
 	 */
 	_Generic: function(elt, jsEvent, type, lock, custom) {
 		
-		if (!jsEvent) {
-			jsEvent = window.event;
+		if (!jsEvent && elt) {
+			jsEvent = f_core.GetEvent(elt);
 		}
 		
 		var comp = (elt.f_link)? elt.f_link:elt;
@@ -182,6 +184,24 @@ var __prototype = {
 	 * @param optional Event evt
 	 * @return boolean
 	 */
+	f_onDblClick: function(evt) { 
+		return f_eventTarget._Generic(this,evt,f_event.DBLCLICK,true); 
+	},
+	/**
+	 * 
+	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
+	 */
+	f_onError: function(evt) { 
+		return f_eventTarget._Generic(this,evt,f_event.ERROR,false);
+	},
+	/**
+	 * 
+	 * @method protected
+	 * @param optional Event evt
+	 * @return boolean
+	 */
 	f_onKeyUp: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.KEYUP,true); 
 	},
@@ -220,15 +240,6 @@ var __prototype = {
 	 */
 	f_onMouseOut: function(evt) { 
 		return f_eventTarget._Generic(this,evt,f_event.MOUSEOUT,false); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onDblClick: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.DBLCLICK,true); 
 	},
 	/**
 	 * 
@@ -365,4 +376,4 @@ var __prototype = {
 	}
 }
 
-var f_eventTarget=new f_class("f_eventTarget", null, __static, __prototype, f_object, fa_eventTarget);
+new f_class("f_eventTarget", null, __static, __prototype, f_object, fa_eventTarget);

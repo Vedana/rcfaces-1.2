@@ -326,4 +326,4 @@ var __prototype = {
 	}
 }
 
-var f_input=new f_class("f_input", null, null, __prototype, f_component);
+new f_class("f_input", null, null, __prototype, f_component);

@@ -162,4 +162,4 @@ var __prototype = {
 	}
 }
 
-var f_textEntry=new f_class("f_textEntry", null, null, __prototype, f_textArea);
+new f_class("f_textEntry", null, null, __prototype, f_textArea);

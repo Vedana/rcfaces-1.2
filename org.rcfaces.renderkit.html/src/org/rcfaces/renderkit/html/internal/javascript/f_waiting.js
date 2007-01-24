@@ -417,8 +417,9 @@ var __prototype = {
 		this._installTimer(0, immediately);
 		
 		if (this._parentElementOldCursor) {
-			if (this._parentElement.style.cursor=="wait") {
-				this._parentElement.style.cursor=this._parentElementOldCursor;
+			var parentElement=this._parentElement;
+			if (parentElement.style.cursor=="wait") {
+				parentElement.style.cursor=this._parentElementOldCursor;
 			}
 			this._parentElementOldCursor=undefined;
 		}
@@ -464,4 +465,5 @@ var __prototype = {
 		}, f_waiting._STEP_MS);
 	}
 }
-var f_waiting=new f_class("f_waiting", null, __static, __prototype, f_object);
+
+new f_class("f_waiting", null, __static, __prototype, f_object);
