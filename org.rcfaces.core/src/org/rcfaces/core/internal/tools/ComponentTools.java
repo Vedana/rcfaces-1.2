@@ -15,12 +15,20 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.model.IAdaptable;
+import org.rcfaces.core.model.ICheckProvider;
+import org.rcfaces.core.model.ICursorProvider;
+import org.rcfaces.core.model.ISelectionProvider;
 
 /**
  * 
@@ -182,7 +190,19 @@ public final class ComponentTools {
 
     public static Converter createConverter(FacesContext facesContext,
             String converterId) {
-        return facesContext.getApplication().createConverter(converterId);
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        Converter converter = facesContext.getApplication().createConverter(
+                converterId);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Get converter id=" + converterId + "' object="
+                    + converter);
+        }
+
+        return converter;
     }
 
     /**
@@ -342,5 +362,141 @@ public final class ComponentTools {
 
             requestMap.put(var, previousObject);
         }
+    }
+
+    public static void broadcast(UIComponent component, FacesEvent facesEvent,
+            FacesListener listeners[]) {
+
+        if (facesEvent == null) {
+            throw new NullPointerException("Event is null");
+        }
+
+        if (listeners == null || listeners.length < 1) {
+            return;
+        }
+
+        for (int i = 0; i < listeners.length; i++) {
+            FacesListener listener = listeners[i];
+
+            if (facesEvent.isAppropriateListener(listener) == false) {
+                continue;
+            }
+
+            facesEvent.processListener(listener);
+        }
+    }
+
+    public static Object getSelectedValues(Object value, UIComponent component,
+            FacesContext facesContext) {
+        if (value == null) {
+            return null;
+        }
+
+        ISelectionProvider selectionProvider = null;
+
+        if (value instanceof IAdaptable) {
+            selectionProvider = (ISelectionProvider) ((IAdaptable) value)
+                    .getAdapter(ISelectionProvider.class, component);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Try to adapt '" + value
+                        + "' to ISelectionProvider => " + selectionProvider);
+            }
+        }
+
+        if (selectionProvider == null) {
+            IAdapterManager adapterManager = RcfacesContext.getInstance(
+                    facesContext).getAdapterManager();
+
+            selectionProvider = (ISelectionProvider) adapterManager.getAdapter(
+                    value, ISelectionProvider.class, component);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Ask adapterManager to adapt '" + value
+                        + "' to ISelectionProvider => " + selectionProvider);
+            }
+        }
+
+        if (selectionProvider == null) {
+            return null;
+        }
+
+        return selectionProvider.getSelection();
+    }
+
+    public static Object getCheckedValues(Object value, UIComponent component,
+            FacesContext facesContext) {
+        if (value == null) {
+            return null;
+        }
+
+        ICheckProvider checkProvider = null;
+
+        if (value instanceof IAdaptable) {
+            checkProvider = (ICheckProvider) ((IAdaptable) value).getAdapter(
+                    ICheckProvider.class, component);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Try to adapt '" + value + "' to ICheckProvider => "
+                        + checkProvider);
+            }
+        }
+
+        if (checkProvider == null) {
+            IAdapterManager adapterManager = RcfacesContext.getInstance(
+                    facesContext).getAdapterManager();
+
+            checkProvider = (ICheckProvider) adapterManager.getAdapter(value,
+                    ICheckProvider.class, component);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Ask adapterManager to adapt '" + value
+                        + "' to ICheckProvider => " + checkProvider);
+            }
+        }
+
+        if (checkProvider == null) {
+            return null;
+        }
+
+        return checkProvider.getCheckValue();
+    }
+
+    public static Object getCursorValue(Object value, UIComponent component,
+            FacesContext facesContext) {
+        if (value == null) {
+            return null;
+        }
+
+        ICursorProvider cursorProvider = null;
+
+        if (value instanceof IAdaptable) {
+            cursorProvider = (ICursorProvider) ((IAdaptable) value).getAdapter(
+                    ICursorProvider.class, component);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Try to adapt '" + value + "' to ICursorProvider => "
+                        + cursorProvider);
+            }
+        }
+
+        if (cursorProvider == null) {
+            IAdapterManager adapterManager = RcfacesContext.getInstance(
+                    facesContext).getAdapterManager();
+
+            cursorProvider = (ICursorProvider) adapterManager.getAdapter(value,
+                    ICursorProvider.class, component);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Ask adapterManager to adapt '" + value
+                        + "' to ICursorProvider => " + cursorProvider);
+            }
+        }
+
+        if (cursorProvider == null) {
+            return null;
+        }
+
+        return cursorProvider.getCursorValue();
     }
 }
