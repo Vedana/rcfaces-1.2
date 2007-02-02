@@ -23,7 +23,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.images.ImageAdapterFactory;
-import org.rcfaces.core.model.IAdaptable;
+import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.provider.AbstractProvider;
 

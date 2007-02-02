@@ -425,6 +425,14 @@ var __prototype={
 		return fa_namingContainer.FindComponents(this, arguments);
 	},
 	/**
+	 * @method public
+	 * @param String id Identifier of component.
+	 * @return HTMLElement
+	 */
+	f_findSiblingComponent: function(id) {
+		return fa_namingContainer.FindSiblingComponents(this, arguments);
+	},
+	/**
 	 * @method hidden
 	 */
 	fa_cancelFilterRequest: function() {

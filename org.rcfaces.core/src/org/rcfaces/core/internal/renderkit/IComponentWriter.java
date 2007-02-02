@@ -12,5 +12,5 @@ public interface IComponentWriter {
 
     IComponentRenderContext getComponentRenderContext();
 
-    IComponentWriter flush() throws WriterException;
+    IComponentWriter endComponent() throws WriterException;
 }

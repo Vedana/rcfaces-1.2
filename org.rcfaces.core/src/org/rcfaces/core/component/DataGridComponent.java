@@ -1,34 +1,37 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IDataColumnIterator;
-import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import java.util.Arrays;
 import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.AbstractGridComponent;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IPreferenceCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.component.DataColumnComponent;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
@@ -275,6 +278,51 @@ public class DataGridComponent extends AbstractGridComponent implements
 
 
 				GridTools.deselectAll(this);
+			
+	}
+
+	public final Object getCursorValue(FacesContext facesContext) {
+
+
+				Object cursorValue=engine.getValue(Properties.CURSOR_VALUE, facesContext);
+				if (cursorValue!=null) {
+					return cursorValue;
+				}
+				
+				Object value=getValue();
+				cursorValue=ComponentTools.getCursorValue(value, this, facesContext);
+								
+				return cursorValue;				
+			
+	}
+
+	public final Object getSelectedValues(FacesContext facesContext) {
+
+
+				Object selectedValues=engine.getValue(Properties.SELECTED_VALUES, facesContext);
+				if (selectedValues!=null) {
+					return selectedValues;
+				}
+				
+				Object value=getValue();
+				selectedValues=ComponentTools.getSelectedValues(value, this, facesContext);
+								
+				return selectedValues;				
+			
+	}
+
+	public final Object getCheckValues(FacesContext facesContext) {
+
+
+				Object checkedValues=engine.getValue(Properties.CHECKED_VALUES, facesContext);
+				if (checkedValues!=null) {
+					return checkedValues;
+				}
+				
+				Object value=getValue();
+				checkedValues=ComponentTools.getCheckedValues(value, this, facesContext);
+								
+				return checkedValues;				
 			
 	}
 
@@ -700,14 +748,6 @@ public class DataGridComponent extends AbstractGridComponent implements
 	}
 
 	/**
-	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
-	 * @return table of values
-	 */
-	public final Object getSelectedValues(javax.faces.context.FacesContext facesContext) {
-		return engine.getValue(Properties.SELECTED_VALUES, facesContext);
-	}
-
-	/**
 	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
 	 * @param selectedValues table of values
 	 */
@@ -875,10 +915,6 @@ public class DataGridComponent extends AbstractGridComponent implements
 
 	public final Object getCursorValue() {
 		return getCursorValue(null);
-	}
-
-	public final Object getCursorValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getValue(Properties.CURSOR_VALUE, facesContext);
 	}
 
 	public final void setCursorValue(Object cursorValue) {

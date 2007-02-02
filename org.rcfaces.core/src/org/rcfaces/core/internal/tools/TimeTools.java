@@ -14,7 +14,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.model.Time;
+import org.rcfaces.core.lang.Time;
 
 /**
  * 

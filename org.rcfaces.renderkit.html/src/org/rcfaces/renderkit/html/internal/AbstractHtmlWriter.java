@@ -256,7 +256,7 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    public IComponentWriter flush() throws WriterException {
+    public IComponentWriter endComponent() throws WriterException {
         closeCssWriter();
 
         try {

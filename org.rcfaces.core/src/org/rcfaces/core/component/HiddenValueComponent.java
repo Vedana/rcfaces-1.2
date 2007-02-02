@@ -1,24 +1,25 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
+import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
+import java.util.Map;
+import java.lang.Object;
 import javax.faces.el.ValueBinding;
-
+import java.util.Collections;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
  * <p>The hiddenValue Component is a non-visual component. It is equivalent to and Input hidden type HTML tag.</p>

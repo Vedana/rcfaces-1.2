@@ -40,6 +40,8 @@ var __prototype= {
 	 * @return String The type of event.
 	 */
 	f_getType: function() {
+		f_core.Assert(arguments.length==0, "f_event.f_getType: Invalid number of parameter");
+		
 		return this._type;
 	},
 	
@@ -50,6 +52,8 @@ var __prototype= {
 	 * @return Event The Javascript event.
 	 */
 	f_getJsEvent: function() {
+		f_core.Assert(arguments.length==0, "f_event.f_getJsEvent: Invalid number of parameter");
+		
 		return this._jsEvent;
 	},
 	
@@ -60,6 +64,8 @@ var __prototype= {
 	 * @return Object An item.
 	 */
 	f_getItem: function() {
+		f_core.Assert(arguments.length==0, "f_event.f_getItem: Invalid number of parameter");
+		
 		return this._item;
 	},
 	
@@ -70,6 +76,8 @@ var __prototype= {
 	 * @return f_object The component associated to the event.
 	 */
 	f_getComponent: function() {
+		f_core.Assert(arguments.length==0, "f_event.f_getComponent: Invalid number of parameter");
+		
 		return this._component;
 	},
 	
@@ -80,6 +88,8 @@ var __prototype= {
 	 * @return any The value of the item associated to the event.
 	 */
 	f_getValue: function() {
+		f_core.Assert(arguments.length==0, "f_event.f_getValue: Invalid number of parameter");
+
 		return this._value;
 	},
 	
@@ -90,6 +100,8 @@ var __prototype= {
 	 * @return fa_selectionProvider Returns the selectionProvider associated to the item.
 	 */
 	f_getSelectionProvider: function() {
+		f_core.Assert(arguments.length==0, "f_event.f_getSelectionProvider: Invalid number of parameter");
+
 		return this._selectionProvider;
 	},
 	
@@ -100,6 +112,8 @@ var __prototype= {
 	 * @return any A detail value.
 	 */
 	f_getDetail: function() {
+		f_core.Assert(arguments.length==0, "f_event.f_getDetail: Invalid number of parameter");
+
 		return this._detail;
 	},
 	
@@ -109,16 +123,37 @@ var __prototype= {
 	 *
 	 * @method public
 	 * @param String... id Identifier of component.
-	 * @return f_component the found {@link f_component}, or <code>null</code>
+	 * @return HTMLElement the found {@link f_component}, or <code>null</code>
      *  if the component was not found.
 	 * @see f_component#f_findComponent f_component.f_findComponent()
 	 */
 	f_findComponent: function(id) {
+		f_core.Assert(arguments.length, "f_event.f_findComponent: Invalid number of parameter");
+
 		var component=this._component;
 		
 		f_core.Assert(component.f_findComponent, "f_event.f_findComponent: Component '"+component+"' has no f_findComponent method.");
 		
 		return component.f_findComponent.apply(component, arguments);
+	},
+	/**
+	 * <p>Search for and return the sibling {@link f_component} with an <code>id</code>
+     * that matches the specified search expression (if any).
+	 *
+	 * @method public
+	 * @param String... id Identifier of component.
+	 * @return HTMLElement the found {@link f_component}, or <code>null</code>
+     *  if the component was not found.
+	 * @see f_component#f_findComponent f_component.f_findComponent()
+	 */
+	f_findSiblingComponent: function(id) {
+		f_core.Assert(arguments.length, "f_event.f_findSiblingComponent: Invalid number of parameter");
+
+		var component=this._component;
+		
+		f_core.Assert(component.f_findSiblingComponent, "f_event.f_findSiblingComponent: Component '"+component+"' has no f_findSiblingComponent method.");
+		
+		return component.f_findSiblingComponent.apply(component, arguments);
 	},
 	
 	/**
@@ -371,6 +406,8 @@ var __static = {
 	 * @return f_object
 	 */
 	GetComponent: function() { 
+		f_core.Assert(arguments.length==0, "f_event.GetComponent: Invalid number of parameter");
+		
 		var event=f_event.GetEvent();
 		if(!event) {
 			return null;
@@ -382,6 +419,8 @@ var __static = {
 	 * @return f_object
 	 */
 	GetType: function() { 
+		f_core.Assert(arguments.length==0, "f_event.GetType: Invalid number of parameter");
+
 		var event=f_event.GetEvent();
 		if(!event) {
 			return null;
@@ -393,6 +432,8 @@ var __static = {
 	 * @return Object
 	 */
 	GetItem: function() { 
+		f_core.Assert(arguments.length==0, "f_event.GetItem: Invalid number of parameter");
+
 		return f_event.GetEvent().f_getItem();
 	},
 	/**
@@ -400,6 +441,8 @@ var __static = {
 	 * @return any
 	 */
 	GetValue: function() { 
+		f_core.Assert(arguments.length==0, "f_event.GetValue: Invalid number of parameter");
+
 		return f_event.GetEvent().f_getValue();
 	},
 	/**
@@ -407,6 +450,8 @@ var __static = {
 	 * @return any
 	 */
 	GetSelectionProvider: function() { 
+		f_core.Assert(arguments.length==0, "f_event.GetSelectionProvider: Invalid number of parameter");
+
 		return f_event.GetEvent().f_getSelectionProvider();
 	},
 	/**
@@ -414,6 +459,8 @@ var __static = {
 	 * @return Event
 	 */
 	GetJsEvent: function() { 
+		f_core.Assert(arguments.length==0, "f_event.GetJsEvent: Invalid number of parameter");
+
 		var event=f_event.GetEvent();
 		if(!event) {
 			return null;
@@ -425,6 +472,8 @@ var __static = {
 	 * @return any
 	 */
 	GetDetail: function() { 
+		f_core.Assert(arguments.length==0, "f_event.GetDetail: Invalid number of parameter");
+
 		return f_event.GetEvent().f_getDetail();
 	},
 	/**
@@ -432,6 +481,8 @@ var __static = {
 	 * @return f_event
 	 */
 	GetEvent: function() { 
+		f_core.Assert(arguments.length==0, "f_event.GetEvent: Invalid number of parameter");
+
 		return f_event._Event;
 	},
 	/**

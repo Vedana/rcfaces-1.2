@@ -4,7 +4,7 @@
 package org.rcfaces.core.internal.adapter;
 
 
-import org.rcfaces.core.model.IAdapterFactory;
+import org.rcfaces.core.lang.IAdapterFactory;
 
 /**
  * 

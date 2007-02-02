@@ -44,7 +44,10 @@ var __prototype = {
 		var doc=this.ownerDocument;
 		this._calendar.f_constructComponent(this);		
 	},
-	_appendDateItem: function(date, label, disabled, styleClass) {
+	/**
+	 * @method hidden
+	 */
+	f_appendDateItem: function(date, label, disabled, styleClass) {
 		this._calendar.f_appendDateItem.apply(this._calendar, arguments);
 	},
 	

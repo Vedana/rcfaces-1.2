@@ -2037,6 +2037,9 @@ var f_core = {
 	 * @return HTMLElement
 	 */
 	GetElementById: function(id, doc, noCompleteComponent) {
+		f_core.Assert(typeof(id)=="string", "f_core.GetElementById: Invalid id parameter '"+id+"'.");
+		f_core.Assert(doc===undefined || (doc && doc.nodeType==f_core._DOCUMENT_NODE), "f_core.GetElementById: Invalid document parameter '"+doc+"'.");
+		
 		if (!doc) {
 			doc=document;
 		}
@@ -3036,7 +3039,11 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 */
-	GetEvent: function(component) {	
+	GetEvent: function(component) {
+		if (!f_core.IsInternetExplorer()) {
+			return null;
+		}
+		
 		if (component.nodeType==f_core._DOCUMENT_NODE) {
 			// component=document
 			return component.parentWindow.event;
@@ -3099,9 +3106,9 @@ var f_core = {
 			
 	},
 	/**
-	 * @method hidden static
+	 * @method private static
 	 */
-	IeOnSelectStart: function() {
+	_IeOnSelectStart: function() {
 		if (true) {
 			return;
 		}
@@ -3559,10 +3566,13 @@ var f_core = {
 		return getNextAvailable(utabs, -1);
 	},
 	/**
+	 *  NE FONCTIONNE pas avec IE
+	 * 
 	 * @method hidden static
 	 */
 	ComputePopupPosition: function(popup, positions) {
 		var body=popup.ownerDocument.body;
+		
 		var bw=body.clientWidth+window.scrollX;
 		var bh=body.clientHeight+window.scrollY;
 
@@ -3743,7 +3753,7 @@ var f_core = {
 	 * @param any data
 	 * @return any Data
 	 */
-	UpdateAjaxParameters:function(component, url, data) {
+	UpdateAjaxParameters: function(component, url, data) {
 		var forms=document.forms;
 		var form=component;
 		if (forms.length==1 || !component || component.nodeType==f_core._DOCUMENT_NODE) {
@@ -3758,7 +3768,7 @@ var f_core = {
 			return ajaxParametersUpdater.call(this, form, component, url, data);
 		}
 		
-		f_core.Debug("f_core", "UpdateAjaxParameters: Use default faces hidden input search !");
+		f_core.Debug(f_core, "UpdateAjaxParameters: Use default faces hidden input search !");
 		
 		return f_core.AddFacesHiddenInputParameters(form, function(input) {
 			return !f_core.GetAttribute(input, "v:class");

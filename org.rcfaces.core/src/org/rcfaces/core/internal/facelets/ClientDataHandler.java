@@ -13,6 +13,7 @@ import com.sun.facelets.tag.TagAttribute;
 import com.sun.facelets.tag.TagConfig;
 import com.sun.facelets.tag.TagException;
 import com.sun.facelets.tag.TagHandler;
+import com.sun.facelets.tag.jsf.ComponentSupport;
 
 /**
  * 
@@ -38,7 +39,7 @@ public class ClientDataHandler extends TagHandler {
         }
 
         // only process if the parent is new to the tree
-        if (parent.getParent() != null) {
+        if (ComponentSupport.isNew(parent) == false) {
             return;
         }
 

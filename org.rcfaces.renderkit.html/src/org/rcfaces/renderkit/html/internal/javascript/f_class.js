@@ -533,7 +533,7 @@ var __static = {
 	},
 	
 	/**
-	 * @method private static 
+	 * @method public static 
 	 * @return String
 	 */
 	f_getName: function() {
@@ -541,7 +541,7 @@ var __static = {
 	},
 	
 	/**
-	 * @method private static 
+	 * @method public static 
 	 * @return String
 	 */
 	toString: function() {

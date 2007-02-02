@@ -55,9 +55,9 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
 
     private String value;
 
-    private String item;
+    private Object item;
 
-    public SelectionEvent(UIComponent component, String value, String item,
+    public SelectionEvent(UIComponent component, String value, Object item,
             int detail) {
         this(component, computeTypeFromDetail(detail), UNKNOWN_POSITION,
                 UNKNOWN_POSITION, UNKNOWN_BUTTONS, UNKNOWN_MODIFIERS,
@@ -96,7 +96,7 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return type;
     }
 
-    public String getItem() {
+    public Object getItem() {
         return item;
     }
 

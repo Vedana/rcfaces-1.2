@@ -21,14 +21,14 @@ public interface IErrorEventCapability {
 	/**
 	 * Adds a listener to the component for the error event
 	 * 
-	 * @param loadListener the load listener to add 
+	 * @param errorListener the load listener to add 
 	 */
     void addErrorListener(IErrorListener errorListener);
 
 	/**
 	 * Removes a listener from the component for the error event
 	 * 
-	 * @param loadListener the load listener to remove
+	 * @param errorListener the load listener to remove
 	 */
     void removeErrorListener(IErrorListener errorListener);
 

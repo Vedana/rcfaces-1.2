@@ -1,17 +1,16 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.lang.String;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The lineBreak Component is the &lt;BR&gt; HTML equivalent.</p>
@@ -112,7 +111,7 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 	 * See {@link #isVisible() isVisible()} for more details
 	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
+		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
 	}
 
 	public final void setVisible(boolean visible) {

@@ -306,7 +306,7 @@ class ClientBundleRepository extends AbstractRepository implements
                 javaScriptWriter.writeString(value);
             }
 
-            javaScriptWriter.write(" ]});");
+            javaScriptWriter.write(" ]);");
 
             javaScriptWriter.end();
 

@@ -3,7 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.facelets;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -13,14 +12,11 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import com.sun.facelets.FaceletContext;
-import com.sun.facelets.FaceletException;
 import com.sun.facelets.tag.TagAttribute;
 import com.sun.facelets.tag.TagAttributeException;
 import com.sun.facelets.tag.TagConfig;
@@ -41,43 +37,18 @@ public class LoadClientBundleHandler extends TagHandler {
 
     public LoadClientBundleHandler(TagConfig config) {
         super(config);
+
         this.basename = this.getRequiredAttribute("basename");
         this.var = this.getRequiredAttribute("var");
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private final static class ResourceBundleMap implements Map {
-        private final static class ResourceEntry implements Map.Entry {
-
-            protected final String key;
-
-            protected final String value;
-
-            public ResourceEntry(String key, String value) {
-                this.key = key;
-                this.value = value;
-            }
-
-            public Object getKey() {
-                return this.key;
-            }
-
-            public Object getValue() {
-                return this.value;
-            }
-
-            public Object setValue(Object value) {
-                throw new UnsupportedOperationException();
-            }
-
-            public int hashCode() {
-                return this.key.hashCode();
-            }
-
-            public boolean equals(Object obj) {
-                return (obj instanceof ResourceEntry && this.hashCode() == obj
-                        .hashCode());
-            }
-        }
+        private static final String REVISION = "$Revision$";
 
         protected final ResourceBundle bundle;
 
@@ -103,18 +74,17 @@ public class LoadClientBundleHandler extends TagHandler {
         }
 
         public Set entrySet() {
-            Enumeration e = this.bundle.getKeys();
             Set s = new HashSet();
-            String k;
-            while (e.hasMoreElements()) {
-                k = (String) e.nextElement();
-                s.add(new ResourceEntry(k, this.bundle.getString(k)));
+            for (Enumeration e = bundle.getKeys(); e.hasMoreElements();) {
+                String k = (String) e.nextElement();
+
+                s.add(new ResourceEntry(k, bundle.getString(k)));
             }
             return s;
         }
 
         public Object get(Object key) {
-            return this.bundle.getObject((String) key);
+            return bundle.getObject((String) key);
         }
 
         public boolean isEmpty() {
@@ -122,9 +92,8 @@ public class LoadClientBundleHandler extends TagHandler {
         }
 
         public Set keySet() {
-            Enumeration e = this.bundle.getKeys();
             Set s = new HashSet();
-            while (e.hasMoreElements()) {
+            for (Enumeration e = bundle.getKeys(); e.hasMoreElements();) {
                 s.add(e.nextElement());
             }
             return s;
@@ -147,12 +116,80 @@ public class LoadClientBundleHandler extends TagHandler {
         }
 
         public Collection values() {
-            Enumeration e = this.bundle.getKeys();
             Set s = new HashSet();
-            while (e.hasMoreElements()) {
-                s.add(this.bundle.getObject((String) e.nextElement()));
+            for (Enumeration e = bundle.getKeys(); e.hasMoreElements();) {
+                s.add(bundle.getObject((String) e.nextElement()));
             }
             return s;
+        }
+
+        /**
+         * 
+         * @author Olivier Oeuillot (latest modification by $Author$)
+         * @version $Revision$ $Date$
+         */
+        private final static class ResourceEntry implements Map.Entry {
+            private static final String REVISION = "$Revision$";
+
+            protected final String key;
+
+            protected final String value;
+
+            public ResourceEntry(String key, String value) {
+                this.key = key;
+                this.value = value;
+            }
+
+            public Object getKey() {
+                return this.key;
+            }
+
+            public Object getValue() {
+                return this.value;
+            }
+
+            public Object setValue(Object value) {
+                throw new UnsupportedOperationException();
+            }
+
+            public int hashCode() {
+                final int PRIME = 31;
+                int result = 1;
+                result = PRIME * result + ((key == null) ? 0 : key.hashCode());
+                result = PRIME * result
+                        + ((value == null) ? 0 : value.hashCode());
+                return result;
+            }
+
+            public boolean equals(Object obj) {
+                if (this == obj)
+                    return true;
+                if (obj == null)
+                    return false;
+                if (getClass() != obj.getClass())
+                    return false;
+
+                final ResourceEntry other = (ResourceEntry) obj;
+                if (key == null) {
+                    if (other.key != null) {
+                        return false;
+                    }
+
+                } else if (!key.equals(other.key)) {
+                    return false;
+                }
+
+                if (value == null) {
+                    if (other.value != null) {
+                        return false;
+                    }
+                } else if (!value.equals(other.value)) {
+                    return false;
+                }
+
+                return true;
+            }
+
         }
     }
 
@@ -162,27 +199,33 @@ public class LoadClientBundleHandler extends TagHandler {
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) {
         UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
         ResourceBundle bundle = null;
         try {
-            String name = this.basename.getValue(ctx);
-            ClassLoader cl = Thread.currentThread().getContextClassLoader();
-            if (root != null && root.getLocale() != null) {
-                bundle = ResourceBundle.getBundle(name, root.getLocale(), cl);
-            } else {
-                bundle = ResourceBundle
-                        .getBundle(name, Locale.getDefault(), cl);
+            String name = basename.getValue(ctx);
+
+            Locale locale = null;
+            if (root != null) {
+                locale = root.getLocale();
             }
 
+            if (locale == null) {
+                locale = Locale.getDefault();
+            }
+
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+
+            bundle = ResourceBundle.getBundle(name, locale, cl);
+
         } catch (Throwable th) {
-            throw new TagAttributeException(this.tag, this.basename, th);
+            throw new TagAttributeException(tag, basename, th);
         }
+
         ResourceBundleMap map = new ResourceBundleMap(bundle);
-        FacesContext faces = ctx.getFacesContext();
-        faces.getExternalContext().getRequestMap().put(this.var.getValue(ctx),
-                map);
+        FacesContext facesContext = ctx.getFacesContext();
+        facesContext.getExternalContext().getRequestMap().put(
+                var.getValue(ctx), map);
     }
 
 }

@@ -294,5 +294,9 @@ Base name of the resource bundle to be loaded.
 A boolean value indicating wether the resource is available on the server side.
 ]]></description>
 		</attribute>
+		<attribute>
+			<name>override</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 </taglib>

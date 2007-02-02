@@ -71,7 +71,7 @@ public class ClientResourceBundleServlet extends RepositoryServlet {
 
         if (bundleRepository == null) {
             throw new FacesException(
-                    "Bundle client repository is not initialized !");
+                    "Bundle client repository is not initialized ! (Have you declared the 'client resource bundle' servlet ?");
         }
 
         return bundleRepository;

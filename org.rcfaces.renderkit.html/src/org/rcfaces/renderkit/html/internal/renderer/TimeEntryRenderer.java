@@ -19,7 +19,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.TimeTools;
-import org.rcfaces.core.model.Time;
+import org.rcfaces.core.lang.Time;
 import org.rcfaces.renderkit.html.internal.AbstractCompositeRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;

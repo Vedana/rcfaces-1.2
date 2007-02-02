@@ -215,6 +215,15 @@ var __prototype = {
 	f_findComponent: function(id) {
 		return fa_namingContainer.FindComponents(this._parentComponent, arguments);
 	},
+	/**
+	 * @method public
+	 * @param String id Identifier of component.
+	 * @return f_component
+	 * @see f_component#f_findComponent
+	 */
+	f_findSiblingComponent: function(id) {
+		return fa_namingContainer.FindSiblingComponents(this._parentComponent, arguments);
+	},
 	
 	fa_getPopupCallbacks: function() {
 		var menu=this;

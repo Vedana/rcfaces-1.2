@@ -32,8 +32,8 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.model.BasicContentModel;
-import org.rcfaces.core.model.IAdaptable;
 
 /**
  * 

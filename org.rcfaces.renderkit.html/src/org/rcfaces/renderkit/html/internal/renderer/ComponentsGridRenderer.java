@@ -311,7 +311,7 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
                  * htmlWriter.writeAttribute("class", columnClasses[rs]); }
                  */
 
-                htmlWriter.flush();
+                htmlWriter.endComponent();
 
                 UIColumn column = columns[processed % columns.length];
 

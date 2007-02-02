@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.service.AbstractService;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
-import org.rcfaces.core.model.UserFacesException;
+import org.rcfaces.core.lang.UserFacesException;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;

@@ -7,6 +7,7 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.image.IImageOperation;
+import org.rcfaces.core.image.ImageContentInformation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
@@ -17,7 +18,6 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.model.ImageContentInformation;
 import org.rcfaces.core.provider.AbstractProvider;
 
 /**

@@ -9,8 +9,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 import org.rcfaces.core.internal.tools.TimeTools;
+import org.rcfaces.core.lang.Time;
 import org.rcfaces.core.model.AbstractConverter;
-import org.rcfaces.core.model.Time;
 
 /**
  * 

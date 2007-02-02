@@ -57,7 +57,7 @@ public interface IFontCapability {
 
 	/**
 	 * Sets a boolean object (or null) indicating the <i>underline</i> property for the specified font.
-	 * @param italic True|False|null
+	 * @param underline True|False|null
 	 */
 	void setFontUnderline(Boolean underline);
 

@@ -14,6 +14,7 @@
 .f_textEntry {
 	margin: 0;
 }
+
 .f_textEntry_disabled {
 	border: 1px solid black;
 	margin: 1px;
@@ -23,6 +24,6 @@
 	margin: 1px;
 }
 
-.f_textEntry_required {
+.f_textEntry_error {
 	color: red;
 }

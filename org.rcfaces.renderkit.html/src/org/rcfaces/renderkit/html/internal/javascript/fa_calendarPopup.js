@@ -419,7 +419,10 @@ var __prototype={
 		
 		return false;
 	},
-	_appendDateItem: function(date, label, disabled, styleClass) {
+	/**
+	 * @method hidden
+	 */
+	f_appendDateItem: function(date, label, disabled, styleClass) {
 		var calendar=this._calendar;
 		calendar.f_appendDateItem.apply(calendar, arguments);
 	},

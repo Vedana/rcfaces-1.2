@@ -45,7 +45,7 @@ public class ProgressIndicatorRenderer extends AbstractTemplateRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        htmlWriter.writeAttribute("v:nc", "true"); // C'est un naming container
+       // htmlWriter.writeAttribute("v:nc", "true"); // C'est un naming container
         // !
         htmlWriter.writeCellSpacing(0);
         htmlWriter.writeCellPadding(0);

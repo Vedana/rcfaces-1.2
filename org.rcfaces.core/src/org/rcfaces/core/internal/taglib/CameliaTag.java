@@ -46,12 +46,24 @@ public abstract class CameliaTag extends UIComponentBodyTag {
 
     private boolean setupWriter;
 
+    private boolean suppressedChildren = false;
+
     public void release() {
         asyncRender = null;
         asyncRenderServer = null;
         ignoreBody = false;
         setupWriter = false;
+        suppressedChildren = false;
+
         super.release();
+    }
+
+    protected boolean isSuppressed() {
+        if (suppressedChildren) {
+            return true;
+        }
+
+        return super.isSuppressed();
     }
 
     protected int getDoStartValue() {
@@ -68,8 +80,18 @@ public abstract class CameliaTag extends UIComponentBodyTag {
                         .getAsyncRenderer(facesContext);
 
                 if (asyncRender != null) {
-                    if (asyncRenderServer.isAsyncRendererEnabled(facesContext,
-                            component)) {
+                    int mode = asyncRenderServer.getAsyncRendererBufferMode(
+                            facesContext, component);
+
+                    if (mode == AbstractAsyncRenderService.BUFFER_ASYNC_RENDER_BUFFER_MODE) {
+                        return EVAL_BODY_BUFFERED;
+                    }
+                    if (mode == AbstractAsyncRenderService.IGNORE_ASYNC_RENDER_BUFFER_MODE) {
+                        ignoreBody = true;
+                        suppressedChildren = true;
+
+                        // Il faut tout de même créer l'arbre !
+                        // On peut pas mettre SKIP
                         return EVAL_BODY_BUFFERED;
                     }
 
@@ -80,10 +102,12 @@ public abstract class CameliaTag extends UIComponentBodyTag {
 
         if (component.isRendered() == false) {
             ignoreBody = true;
+            // Il faut tout de même créer l'arbre !
+            // On peut pas mettre SKIP
             return EVAL_BODY_BUFFERED;
         }
 
-        return (EVAL_BODY_INCLUDE);
+        return EVAL_BODY_INCLUDE;
     }
 
     protected void setupResponseWriter() {
@@ -154,6 +178,8 @@ public abstract class CameliaTag extends UIComponentBodyTag {
     }
 
     public int doEndTag() throws JspException {
+        suppressedChildren = false;
+
         if (asyncRender == null || ignoreBody) {
             return super.doEndTag();
         }

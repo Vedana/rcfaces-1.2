@@ -19,7 +19,6 @@ import javax.faces.render.Renderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 
@@ -53,10 +52,10 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             encodeBegin(writer);
 
         } catch (RuntimeException e) {
-            throw new WriterException("RuntimeException", e, component);
+            throw new WriterException(e.getMessage(), e, component);
         }
 
-        writer.flush();
+        writer.endComponent();
     }
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
@@ -120,6 +119,7 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         if (AsyncModeTools.isTagProcessor(null)) {
             // Nous sommes en mode TAG, c'est le tag qui détourne le flux.
+            // NON => pas forcement, pas en mode tree !
             return false;
         }
 
@@ -134,26 +134,22 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         IComponentWriter writer = renderContext.getComponentWriter();
 
-        if (Constants.FLUSH_AFTER_ENCODE_CHILDREN) {
-            writer.flush();
-        }
+        writer.endComponent();
 
         renderContext.encodeEnd(component);
+        
         try {
             encodeEnd(writer);
 
         } catch (RuntimeException e) {
-            throw new WriterException("RuntimeException", e, component);
+            throw new WriterException(e.getMessage(), e, component);
         }
 
         super.encodeEnd(context, component);
 
-        if (Constants.FLUSH_AFTER_ENCODE_END) {
-            writer.flush();
-        }
+        writer.endComponent();
 
         renderContext.popComponent(component);
-
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
@@ -197,11 +193,11 @@ public abstract class AbstractCameliaRenderer extends Renderer {
     }
 
     public void decodeChildren(FacesContext context, UIComponent component) {
-        Iterator kids = component.getFacetsAndChildren();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+        for (Iterator children = component.getFacetsAndChildren(); children
+                .hasNext();) {
+            UIComponent child = (UIComponent) children.next();
 
-            decodeChild(context, component, kid);
+            decodeChild(context, component, child);
         }
     }
 

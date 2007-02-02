@@ -8,12 +8,12 @@ import java.util.Set;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ImageComponent;
+import org.rcfaces.core.image.ImageContentInformation;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.model.ImageContentInformation;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;

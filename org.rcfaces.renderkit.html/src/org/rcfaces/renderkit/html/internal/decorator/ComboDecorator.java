@@ -18,7 +18,7 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.model.IClientDataSelectItem;
+import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 
@@ -139,8 +139,8 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
                 writer.writeTitle(description);
             }
 
-            if (selectItem instanceof IClientDataSelectItem) {
-                IClientDataSelectItem clientDataSelectItem = (IClientDataSelectItem) selectItem;
+            if (selectItem instanceof IClientDataItem) {
+                IClientDataItem clientDataSelectItem = (IClientDataItem) selectItem;
 
                 if (clientDataSelectItem.isClientDataEmpty() == false) {
                     Map map = clientDataSelectItem.getClientDataMap();
@@ -189,8 +189,8 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
                     pred++;
                 }
 
-                if (selectItem instanceof IClientDataSelectItem) {
-                    IClientDataSelectItem clientDataSelectItem = (IClientDataSelectItem) selectItem;
+                if (selectItem instanceof IClientDataItem) {
+                    IClientDataItem clientDataSelectItem = (IClientDataItem) selectItem;
 
                     Map map = clientDataSelectItem.getClientDataMap();
 

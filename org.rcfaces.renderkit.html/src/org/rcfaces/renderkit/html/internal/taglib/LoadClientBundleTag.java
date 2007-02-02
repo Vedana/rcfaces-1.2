@@ -1,16 +1,16 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.taglib.CameliaTag;
 import org.rcfaces.renderkit.html.component.LoadClientBundleComponent;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class LoadClientBundleTag extends CameliaTag implements Tag {
 
@@ -20,6 +20,7 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 	private String bundleName;
 	private String baseName;
 	private String serverSide;
+	private String override;
 	public String getComponentType() {
 		return LoadClientBundleComponent.COMPONENT_TYPE;
 	}
@@ -48,6 +49,14 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 		this.serverSide = serverSide;
 	}
 
+	public final String getOverride() {
+		return override;
+	}
+
+	public final void setOverride(String override) {
+		this.override = override;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (LoadClientBundleComponent.COMPONENT_TYPE==getComponentType()) {
@@ -56,6 +65,7 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 			LOG.debug("  bundleName='"+bundleName+"'");
 			LOG.debug("  baseName='"+baseName+"'");
 			LOG.debug("  serverSide='"+serverSide+"'");
+			LOG.debug("  override='"+override+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -96,12 +106,22 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 				component.setServerSide(getBool(serverSide));
 			}
 		}
+
+		if (override != null) {
+			if (isValueReference(override)) {
+				ValueBinding vb = application.createValueBinding(override);
+				component.setOverride(vb);
+			} else {
+				component.setOverride(getBool(override));
+			}
+		}
 	}
 
 	public void release() {
 		bundleName = null;
 		baseName = null;
 		serverSide = null;
+		override = null;
 
 		super.release();
 	}

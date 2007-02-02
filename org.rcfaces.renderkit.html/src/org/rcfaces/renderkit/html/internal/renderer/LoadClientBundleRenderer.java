@@ -98,7 +98,8 @@ public class LoadClientBundleRenderer extends AbstractHtmlRenderer {
                     new BundleMap(bundle));
         }
 
-        JavaScriptRenderer.addRequires(htmlWriter, null, BUNDLE_REQUIRED_CLASSES);
+        JavaScriptRenderer.addRequires(htmlWriter, null,
+                BUNDLE_REQUIRED_CLASSES);
 
         IJavaScriptRepository repository = JavaScriptRepositoryServlet
                 .getRepository(facesContext);
@@ -118,6 +119,10 @@ public class LoadClientBundleRenderer extends AbstractHtmlRenderer {
                 .getHtmlRenderContext().getHtmlProcessContext()
                 .getAbsolutePath(bundleURI, true);
         jsWriter.writeString(uri);
+
+        if (loadClientBundleComponent.isOverride(facesContext)) {
+            jsWriter.write(',').writeBoolean(true);
+        }
 
         jsWriter.writeln(");");
 

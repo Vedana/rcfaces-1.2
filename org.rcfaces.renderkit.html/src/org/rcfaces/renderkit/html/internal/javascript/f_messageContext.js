@@ -10,6 +10,84 @@
  * @version $Revision$ $Date$
  */
 
+
+var __static = {
+
+	/**
+	 * @field private static final
+	 */
+	_GLOBAL_COMPONENT_ID: "",
+	
+	/**
+	 * @field private static final
+	 */
+	_UNKNOWN_COMPONENT_ID: "?",
+	
+	/**
+	 * @field private static 
+	 */
+	_Root: undefined,
+	
+	/**
+	 * @method public static
+	 * @param HTMLElement component
+	 * @return f_messageContext
+	 */
+	Get: function(component) {
+		if (!component) {
+			var root=f_messageContext._Root;
+			if (root) {
+				return root;
+			}
+			
+			root=new f_messageContext();	
+			f_messageContext._Root=root;
+			
+			return root;	
+		}
+	
+		f_core.Assert(component && component.nodeType, "f_messageContext.Get: Bad component parameter ! ("+component+")");
+		
+		var form=f_core.GetParentForm(component);
+		f_core.Assert(form, "f_messageContext.Get: Can not find form associated to component ! (id="+component.id+")");
+	
+		var ctx=form._messageContext;
+		if (ctx) {
+			return ctx;
+		}
+	
+		f_core.Info(f_messageContext, "Create a messageContext associated to form '"+form.id+"'.");
+	
+		ctx=new f_messageContext(form);
+		form._messageContext=ctx;
+		
+		return ctx;	
+	},
+	
+	/**
+	 * @method hidden static
+	 */
+	AppendMessages: function(clientId, messages) {
+		var root=f_messageContext.Get();
+		
+		for(var i=1;i<arguments.length;i++) {
+			root.f_addMessageObject(clientId, arguments[i]);
+		}
+	},
+	/**
+	 * @method public static
+	 */
+	ListMessages: function(component) {
+		var messageContext=f_messageContext.Get(component);
+		
+		if (!messageContext) {
+			return [];
+		}
+		
+		return messageContext.f_listMessages(component.id);
+	}
+}
+
 var __prototype = {
 	/** 
 	 * @method private
@@ -127,7 +205,7 @@ var __prototype = {
 	f_addMessageListener: function(listener) {
 		var l=this._listeners;
 	
-		f_core.Debug("f_messageContext", "Add a new message event listener !");
+		f_core.Debug(f_messageContext, "Add a new message event listener !");
 		
 		return l.f_addElement(listener);
 	},
@@ -221,10 +299,7 @@ var __prototype = {
 			messages[id]=l2;
 		}
 	
-		f_core.Info(f_messageContext, "Add message object to component '"+id
-			+"'.\nseverity="+message.f_getSeverity()
-			+"\nsummary="+message.f_getSummary()
-			+"\ndetail="+message.f_getDetail());
+		f_core.Info(f_messageContext, "Add message object to component '"+id+"'.\nmessage="+message);
 	
 		l2.push(message);
 		
@@ -364,82 +439,24 @@ var __prototype = {
 	
 		var l=this._listeners;
 		if (!l) {
-			f_core.Debug("f_messageContext", "["+this._forms+"] No listeners...");
+			f_core.Debug(f_messageContext, "["+this._forms+"] No listeners...");
 			return;
 		}
 		
-		f_core.Debug("f_messageContext", "Fire event message modifications to "+l.length+" listeners...");
+		f_core.Debug(f_messageContext, "Fire event message modifications to "+l.length+" listeners...");
 	
 		for(var i=0;i<l.length;i++) {
 			var listener=l[i];
 			
 			listener.f_performMessageChanges(this);
 		}
-	}
-}
-
-var __static = {
-
-	/**
-	 * @field private static final
-	 */
-	_GLOBAL_COMPONENT_ID: "",
-	
-	/**
-	 * @field private static final
-	 */
-	_UNKNOWN_COMPONENT_ID: "?",
-	
-	/**
-	 * @field private static 
-	 */
-	_Root: undefined,
-	
-	/**
-	 * @method public static
-	 * @param HTMLElement component
-	 * @return f_messageContext
-	 */
-	Get: function(component) {
-		if (!component) {
-			var root=f_messageContext._Root;
-			if (root) {
-				return root;
-			}
-			
-			root=new f_messageContext();	
-			f_messageContext._Root=root;
-			
-			return root;	
-		}
-	
-		f_core.Assert(component && component.nodeType, "f_messageContext.Get: Bad component parameter ! ("+component+")");
-		
-		var form=f_core.GetParentForm(component);
-		f_core.Assert(form, "f_messageContext.Get: Can not find form associated to component ! (id="+component.id+")");
-	
-		var ctx=form._messageContext;
-		if (ctx!=null) {
-			return ctx;
-		}
-	
-		f_core.Info(f_messageContext, "Create a messageContext associated to form '"+form.id+"'.");
-	
-		ctx=new f_messageContext(form);
-		form._messageContext=ctx;
-		
-		return ctx;	
 	},
-	
 	/**
-	 * @method hidden static
+	 * @method public
+	 * @return String
 	 */
-	AppendMessages: function(clientId, messages) {
-		var root=f_messageContext.Get();
-		
-		for(var i=1;i<arguments.length;i++) {
-			root.f_addMessageObject(clientId, arguments[i]);
-		}
+	toString: function() {
+		return "[f_messageContext form='"+((this._form)?this._form.id:'NONE')+"']";
 	}
 }
 

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItem;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesListener;
@@ -28,14 +29,16 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.KeyTools;
-import org.rcfaces.core.model.IAcceleratorKeySelectItem;
-import org.rcfaces.core.model.IAccessKeySelectItem;
-import org.rcfaces.core.model.ICheckSelectItem;
-import org.rcfaces.core.model.IGroupSelectItem;
-import org.rcfaces.core.model.IImagesSelectItem;
-import org.rcfaces.core.model.IInputTypeSelectItem;
-import org.rcfaces.core.model.IVisibleSelectItem;
-import org.rcfaces.core.model.SeparatorSelectItem;
+import org.rcfaces.core.item.IAcceleratorKeyItem;
+import org.rcfaces.core.item.IAccessKeyItem;
+import org.rcfaces.core.item.ICheckSelectItem;
+import org.rcfaces.core.item.IGroupSelectItem;
+import org.rcfaces.core.item.IImagesItem;
+import org.rcfaces.core.item.IInputTypeItem;
+import org.rcfaces.core.item.IMenuItem;
+import org.rcfaces.core.item.IVisibleItem;
+import org.rcfaces.core.item.MenuItem;
+import org.rcfaces.core.item.SeparatorSelectItem;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
@@ -107,13 +110,6 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
     protected void encodeJsMenuItemBegin(UIComponent component,
             SelectItem selectItem, boolean hasChild) throws WriterException {
-        if (selectItem instanceof IVisibleSelectItem) {
-            IVisibleSelectItem vs = (IVisibleSelectItem) selectItem;
-
-            if (vs.isVisible() == false) {
-                return;
-            }
-        }
 
         MenuContext menuContext = getMenuContext();
 
@@ -128,14 +124,14 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         String sid = menuContext.getComponentClientId(component);
 
         int style = IInputTypeCapability.AS_PUSH_BUTTON;
-        if (selectItem instanceof IInputTypeSelectItem) {
-            style = ((IInputTypeSelectItem) selectItem).getInputType();
+        if (selectItem instanceof IInputTypeItem) {
+            style = ((IInputTypeItem) selectItem).getInputType();
 
         } else if (selectItem instanceof IGroupSelectItem) {
             style = IInputTypeCapability.AS_RADIO_BUTTON;
 
         } else if (selectItem instanceof ICheckSelectItem) {
-            style = IInputTypeCapability.AS_CHECK_BOX;
+            style = IInputTypeCapability.AS_CHECK_BUTTON;
         }
 
         String groupName = null;
@@ -157,7 +153,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             cmd = "f_appendRadioItem";
             break;
 
-        case IInputTypeCapability.AS_CHECK_BOX:
+        case IInputTypeCapability.AS_CHECK_BUTTON:
             cmd = "f_appendCheckItem";
             break;
 
@@ -199,21 +195,18 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             pred++;
         }
 
-        if (style == IInputTypeCapability.AS_CHECK_BOX
+        if (style == IInputTypeCapability.AS_CHECK_BUTTON
                 || style == IInputTypeCapability.AS_RADIO_BUTTON) {
-            if (((ICheckSelectItem) selectItem).isChecked()) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-                javaScriptWriter.write(',').writeBoolean(true);
-
-            } else {
-                pred++;
-            }
+            /*
+             * if (((ICheckSelectItem) selectItem).isChecked()) { for (; pred >
+             * 0; pred--) { javaScriptWriter.write(',').writeNull(); }
+             * javaScriptWriter.write(',').writeBoolean(true); } else { pred++; }
+             */
+            pred++;
         }
 
-        if (selectItem instanceof IAccessKeySelectItem) {
-            String key = ((IAccessKeySelectItem) selectItem).getAccessKey();
+        if (selectItem instanceof IAccessKeyItem) {
+            String key = ((IAccessKeyItem) selectItem).getAccessKey();
             if (key != null && key.length() > 0) {
                 for (; pred > 0; pred--) {
                     javaScriptWriter.write(',').writeNull();
@@ -246,8 +239,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             pred++;
         }
 
-        if (selectItem instanceof IVisibleSelectItem) {
-            boolean visible = ((IVisibleSelectItem) selectItem).isVisible();
+        if (selectItem instanceof IVisibleItem) {
+            boolean visible = ((IVisibleItem) selectItem).isVisible();
             if (visible == false) {
                 for (; pred > 0; pred--) {
                     javaScriptWriter.write(',').writeNull();
@@ -260,8 +253,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             pred++;
         }
 
-        if (selectItem instanceof IAcceleratorKeySelectItem) {
-            String acceleratorKey = ((IAcceleratorKeySelectItem) selectItem)
+        if (selectItem instanceof IAcceleratorKeyItem) {
+            String acceleratorKey = ((IAcceleratorKeyItem) selectItem)
                     .getAcceleratorKey();
             if (acceleratorKey != null && acceleratorKey.length() > 0) {
                 KeyTools.State state = KeyTools.parseKeyBinding(acceleratorKey);
@@ -332,11 +325,20 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        if (selectItem instanceof IImagesSelectItem) {
-            writeSelectItemImages((IImagesSelectItem) selectItem,
-                    javaScriptWriter, managerVarId, "f_setItemImages", varId,
-                    true);
+        if (selectItem instanceof IImagesItem) {
+            writeSelectItemImages((IImagesItem) selectItem, javaScriptWriter,
+                    managerVarId, "f_setItemImages", varId, true);
         }
+
+        if (selectItem instanceof IVisibleItem) {
+            IVisibleItem vs = (IVisibleItem) selectItem;
+
+            if (vs.isVisible() == false) {
+                javaScriptWriter.writeMethodCall("f_setItemVisible").writeln(
+                        "false);");
+            }
+        }
+
         if (hasChild == false) {
             return;
         }
@@ -423,6 +425,24 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
          * 
          * return new MenuBarContext(this, writer, menuBarComponent.getValue());
          */
+    }
+
+    protected SelectItem createSelectItem(UISelectItem component) {
+        if (component instanceof MenuItemComponent) {
+            return new MenuItem((MenuItemComponent) component);
+        }
+
+        return super.createSelectItem(component);
+    }
+
+    protected SelectItem convertToSelectItem(Object value) {
+        if (value instanceof IMenuItem) {
+            IMenuItem menuItem = (IMenuItem) value;
+
+            return new MenuItem(menuItem);
+        }
+
+        return super.convertToSelectItem(value);
     }
 
     /*

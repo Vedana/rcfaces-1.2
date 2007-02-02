@@ -226,28 +226,26 @@ var __prototype= {
 	 * @method hidden
 	 */
 	f_callActions: function(evt) {
-		f_core.Assert(this._link, "No linked component for this actionList !");
+		f_core.Assert(this._link, "f_callActions: No linked component for this actionList !");
 		
 		var ret = true;
 
 		var firsts = this._firsts;
 		var actions = this._actions;
-		if (!actions && !firsts) {
-			f_core.Debug(f_actionList, "No actions '"+this._type+"' returns true.");
-			return ret;
+		if (!actions || !actions.length) {
+			if (!firsts || !firsts.length) {
+				f_core.Debug(f_actionList, "f_callActions: No actions '"+this._type+"' returns true.");
+				return ret;
+			}
+			actions=firsts;
+			
+		} else if (firsts && firsts.length) {
+			actions=firsts.concat(actions);
 		}
+		
+	//	f_core.Debug(f_actionList, "f_callActions: call "+actions.length+" listeners: "+actions);
 	
 		var link=this._link;
-		
-		// Remet dans le context de la window de l'objet !
-
-		if (firsts) {
-			if (actions) {
-				actions=firsts.concat(actions);
-			} else {
-				actions=firsts;
-			}
-		}
 		
 		for(var i=0;i<actions.length;i++) {		
 			var fct = actions[i];

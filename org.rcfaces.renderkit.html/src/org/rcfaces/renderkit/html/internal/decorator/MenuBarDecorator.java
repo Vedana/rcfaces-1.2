@@ -9,7 +9,7 @@ import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.model.IAccessKeySelectItem;
+import org.rcfaces.core.item.IAccessKeyItem;
 
 /**
  * 
@@ -76,8 +76,8 @@ public class MenuBarDecorator extends MenuDecorator {
             pred++;
         }
 
-        if (selectItem instanceof IAccessKeySelectItem) {
-            String key = ((IAccessKeySelectItem) selectItem).getAccessKey();
+        if (selectItem instanceof IAccessKeyItem) {
+            String key = ((IAccessKeyItem) selectItem).getAccessKey();
             if (key != null && key.length() > 0) {
                 for (; pred > 0; pred--) {
                     javaScriptWriter.write(',').writeNull();

@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.SuggestTextEntryComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.SuggestTextEntryComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 
@@ -27,6 +26,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 	private String forceProposal;
 	private String suggestionValue;
 	private String suggestionConverter;
+	private String moreResultsMessage;
 	public String getComponentType() {
 		return SuggestTextEntryComponent.COMPONENT_TYPE;
 	}
@@ -111,6 +111,14 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		this.suggestionConverter = suggestionConverter;
 	}
 
+	public final String getMoreResultsMessage() {
+		return moreResultsMessage;
+	}
+
+	public final void setMoreResultsMessage(String moreResultsMessage) {
+		this.moreResultsMessage = moreResultsMessage;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (SuggestTextEntryComponent.COMPONENT_TYPE==getComponentType()) {
@@ -124,6 +132,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 			LOG.debug("  forceProposal='"+forceProposal+"'");
 			LOG.debug("  suggestionValue='"+suggestionValue+"'");
 			LOG.debug("  suggestionConverter='"+suggestionConverter+"'");
+			LOG.debug("  moreResultsMessage='"+moreResultsMessage+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -215,6 +224,15 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 				component.setSuggestionConverter(suggestionConverter);
 			}
 		}
+
+		if (moreResultsMessage != null) {
+			if (isValueReference(moreResultsMessage)) {
+				ValueBinding vb = application.createValueBinding(moreResultsMessage);
+				component.setMoreResultsMessage(vb);
+			} else {
+				component.setMoreResultsMessage(moreResultsMessage);
+			}
+		}
 	}
 
 	public void release() {
@@ -228,6 +246,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		forceProposal = null;
 		suggestionValue = null;
 		suggestionConverter = null;
+		moreResultsMessage = null;
 
 		super.release();
 	}

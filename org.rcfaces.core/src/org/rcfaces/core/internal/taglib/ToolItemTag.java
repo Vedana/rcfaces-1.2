@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.component.ToolItemComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ToolItemTag extends UIImageItemTag implements Tag {
 
@@ -20,6 +20,7 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 	private String inputType;
 	private String imageHeight;
 	private String imageWidth;
+	private String lookId;
 	public String getComponentType() {
 		return ToolItemComponent.COMPONENT_TYPE;
 	}
@@ -56,6 +57,14 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 		this.imageWidth = imageWidth;
 	}
 
+	public final String getLookId() {
+		return lookId;
+	}
+
+	public final void setLookId(String lookId) {
+		this.lookId = lookId;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ToolItemComponent.COMPONENT_TYPE==getComponentType()) {
@@ -65,6 +74,7 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 			LOG.debug("  inputType='"+inputType+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
+			LOG.debug("  lookId='"+lookId+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -118,6 +128,16 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 				component.setImageWidth(getInt(imageWidth));
 			}
 		}
+
+		if (lookId != null) {
+			if (isValueReference(lookId)) {
+				ValueBinding vb = application.createValueBinding(lookId);
+
+				component.setLookId(vb);
+			} else {
+				component.setLookId(lookId);
+			}
+		}
 	}
 
 	public void release() {
@@ -125,6 +145,7 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 		inputType = null;
 		imageHeight = null;
 		imageWidth = null;
+		lookId = null;
 
 		super.release();
 	}

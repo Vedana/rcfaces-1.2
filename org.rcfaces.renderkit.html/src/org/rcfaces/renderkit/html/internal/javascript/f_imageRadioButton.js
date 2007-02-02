@@ -18,21 +18,19 @@ var __prototype = {
 		this.f_super(arguments);
 	},
 	*/
+	
 	/**
 	 * @method protected
+	 * @param f_event event
+	 * @return boolean
 	 */
-	_onSelect: function() {
-		if (!this._focus)  {
-			this.f_setFocus();
-		}
-
-		if (this.f_isReadOnly() || this.f_isDisabled() || this.f_isSelected()) {
+	f_performImageSelection: function(event) {
+		if (this.f_isSelected()) {
 			return false;
 		}
 		
-		this.f_setSelected(true);
-		
-		return false;
+		this.f_setSelected(!this.f_isSelected());
+		return true;
 	},
 	/**
 	 * @method protected
@@ -84,6 +82,10 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setGroupName: function(group) {
+		if (group==this._groupName) {
+			return;
+		}
+		
 		this.f_changeGroup(this._groupName, group, this);
 		this._groupName = group;
 		this.f_setProperty(f_prop.GROUPNAME, group);

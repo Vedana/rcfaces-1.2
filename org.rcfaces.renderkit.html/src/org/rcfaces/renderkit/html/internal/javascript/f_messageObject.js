@@ -115,6 +115,13 @@ var __prototype = {
 		}
 		
 		return this._summary;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	toString: function() {
+		return "[f_messageObject severity='"+this._severity+"' summary='"+this._summary+"' detail='"+this._detail+"']";
 	}
 }
 

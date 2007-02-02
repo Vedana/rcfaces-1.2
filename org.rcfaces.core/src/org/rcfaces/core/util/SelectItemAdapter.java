@@ -16,7 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
-import org.rcfaces.core.model.IAdaptable;
+import org.rcfaces.core.lang.IAdaptable;
 
 /**
  * 

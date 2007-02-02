@@ -41,7 +41,7 @@ public class InputTypeConverter extends AbstractConverter {
     private static Map INPUT_TYPES = new HashMap(5);
     static {
         INPUT_TYPES.put(CHECK_BOX_INPUT_TYPE_NAME, new Integer(
-                IInputTypeCapability.AS_CHECK_BOX));
+                IInputTypeCapability.AS_CHECK_BUTTON));
         INPUT_TYPES.put(PUSH_BUTTON_INPUT_TYPE_NAME, new Integer(
                 IInputTypeCapability.AS_PUSH_BUTTON));
         INPUT_TYPES.put(RADIO_BUTTON_INPUT_TYPE_NAME, new Integer(
@@ -105,7 +105,7 @@ public class InputTypeConverter extends AbstractConverter {
         case IInputTypeCapability.AS_PUSH_BUTTON:
             return PUSH_BUTTON_INPUT_TYPE_NAME;
 
-        case IInputTypeCapability.AS_CHECK_BOX:
+        case IInputTypeCapability.AS_CHECK_BUTTON:
             return CHECK_BOX_INPUT_TYPE_NAME;
 
         case IInputTypeCapability.AS_RADIO_BUTTON:

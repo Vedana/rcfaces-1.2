@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
@@ -484,6 +485,10 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
             writeFocusStyleClass(writer, (IFocusStyleClassCapability) component);
         }
 
+        if (component instanceof NamingContainer) {
+            writeNamingContainer(writer, (NamingContainer) component);
+        }
+
         return writer;
     }
 
@@ -823,7 +828,6 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
                 .getHtmlComponentRenderContext(), asyncRenderMode);
         if (asyncRenderMode == IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE) {
             hideChildren(writer.getComponentRenderContext());
-
         }
     }
 
@@ -881,6 +885,14 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         if (selectedCapability.isSelected()) {
             writer.writeChecked();
         }
+
+        return writer;
+    }
+
+    protected IHtmlWriter writeNamingContainer(IHtmlWriter writer,
+            NamingContainer namingContainer) throws WriterException {
+
+        writer.writeAttribute("v:nc", "true");
 
         return writer;
     }

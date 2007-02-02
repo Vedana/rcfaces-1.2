@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.MenuComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class MenuTag extends CameliaTag implements Tag {
 
@@ -20,7 +19,6 @@ public class MenuTag extends CameliaTag implements Tag {
 	private String menuListeners;
 	private String selectionListeners;
 	private String checkListeners;
-	private String selectedValues;
 	private String checkedValues;
 	private String menuId;
 	private String removeAllWhenShown;
@@ -52,14 +50,6 @@ public class MenuTag extends CameliaTag implements Tag {
 
 	public final void setCheckListener(String checkListeners) {
 		this.checkListeners = checkListeners;
-	}
-
-	public final String getSelectedValues() {
-		return selectedValues;
-	}
-
-	public final void setSelectedValues(String selectedValues) {
-		this.selectedValues = selectedValues;
 	}
 
 	public final String getCheckedValues() {
@@ -107,7 +97,6 @@ public class MenuTag extends CameliaTag implements Tag {
 			if (MenuComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  menuId='"+menuId+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
@@ -136,15 +125,6 @@ public class MenuTag extends CameliaTag implements Tag {
 
 		if (checkListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
-		}
-
-		if (selectedValues != null) {
-			if (isValueReference(selectedValues)) {
-				ValueBinding vb = application.createValueBinding(selectedValues);
-				component.setSelectedValues(vb);
-			} else {
-				throw new javax.faces.FacesException("Attribute 'selectedValues' accept only a binding expression !");
-			}
 		}
 
 		if (checkedValues != null) {
@@ -197,7 +177,6 @@ public class MenuTag extends CameliaTag implements Tag {
 		menuListeners = null;
 		selectionListeners = null;
 		checkListeners = null;
-		selectedValues = null;
 		checkedValues = null;
 		menuId = null;
 		removeAllWhenShown = null;

@@ -1,13 +1,11 @@
 package org.rcfaces.renderkit.html.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Loads a property bundle on the client side.
@@ -18,7 +16,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"baseName","bundleName","serverSide"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"override","baseName","bundleName","serverSide"}));
 	}
 
 	public LoadClientBundleComponent() {
@@ -148,6 +146,30 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 */
 	public final boolean isServerSideSetted() {
 		return engine.isPropertySetted(Properties.SERVER_SIDE);
+	}
+
+	public final boolean isOverride() {
+		return isOverride(null);
+	}
+
+	public final boolean isOverride(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.OVERRIDE, false, facesContext);
+	}
+
+	public final void setOverride(boolean override) {
+		engine.setProperty(Properties.OVERRIDE, override);
+	}
+
+	public final void setOverride(ValueBinding override) {
+		engine.setProperty(Properties.OVERRIDE, override);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "override" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOverrideSetted() {
+		return engine.isPropertySetted(Properties.OVERRIDE);
 	}
 
 	protected Set getCameliaFields() {

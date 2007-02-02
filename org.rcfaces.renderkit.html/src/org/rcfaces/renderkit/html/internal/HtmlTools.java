@@ -174,7 +174,8 @@ public class HtmlTools {
                     String date = URLFormCodec.decodeURL(cs, valueStart,
                             valueEnd);
 
-                    vs = CalendarTools.parseDate(processContext, component, date, false);
+                    vs = CalendarTools.parseDate(processContext, component,
+                            date, false);
                     break;
 
                 default:
@@ -266,10 +267,11 @@ public class HtmlTools {
     }
 
     public static IFilterProperties decodeFilterExpression(
-            IProcessContext processContext, UIComponent component, String filterExpression) {
+            IProcessContext processContext, UIComponent component,
+            String filterExpression) {
 
-        Map filter = HtmlTools.decodeParametersToMap(processContext,
-                component, filterExpression, '&', null);
+        Map filter = HtmlTools.decodeParametersToMap(processContext, component,
+                filterExpression, '&', null);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Decode filter expression to " + filter);
@@ -468,6 +470,7 @@ public class HtmlTools {
                 break;
             }
 
+            sa.append(id, idx, newIdx - idx);
             sa.append(NamingContainer.SEPARATOR_CHAR);
             idx = newIdx + separator.length();
         }
@@ -506,7 +509,7 @@ public class HtmlTools {
             return groupName;
         }
 
-        UIComponent container=component;
+        UIComponent container = component;
         // Recherche un Container
         for (; container != null; container = container.getParent()) {
             if (container instanceof NamingContainer) {

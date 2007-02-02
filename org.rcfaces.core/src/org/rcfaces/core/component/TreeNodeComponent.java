@@ -1,30 +1,33 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.component.ExpandableItemComponent;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.TreeComponent;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.InputTypeConverter;
 import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
 
 /**
  * A node belonging to a tree.
  */
 public class TreeNodeComponent extends ExpandableItemComponent implements 
 	IRadioGroupCapability,
+	IStyleClassCapability,
 	IInputTypeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.treeNode";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"inputType","groupName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","inputType","groupName"}));
 	}
 
 	public TreeNodeComponent() {
@@ -98,6 +101,28 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	 */
 	public final void setGroupName(ValueBinding groupName) {
 		engine.setProperty(Properties.GROUP_NAME, groupName);
+	}
+
+	public final java.lang.String getStyleClass() {
+		return getStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 */
+	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
+	}
+
+	public final void setStyleClass(java.lang.String styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
+
+	/**
+	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
+	 */
+	public final void setStyleClass(ValueBinding styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
 	public final int getInputType() {

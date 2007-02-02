@@ -22,8 +22,6 @@
 	margin: 1px;
 }
 
-.f_textArea_required,
-.f_textArea_disabled_required,
-.f_textArea_readonly_required {
+.f_textArea_required {
 	color: red;
 }

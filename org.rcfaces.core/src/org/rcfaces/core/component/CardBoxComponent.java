@@ -1,20 +1,21 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.iterator.ICardIterator;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.CardComponent;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IPreferenceCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.iterator.ICardIterator;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.tools.CardBoxTools;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
 
 /**
  * <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>

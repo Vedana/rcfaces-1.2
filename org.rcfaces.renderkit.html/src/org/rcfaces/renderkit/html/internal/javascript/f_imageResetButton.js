@@ -12,11 +12,12 @@
 
 var __prototype = {
 
-	_onSelect: function() {
-		if (this.f_isReadOnly() || this.f_isDisabled()) {
-			return false;
-		}
-		
+	/**
+	 * @method protected
+	 * @param f_event event
+	 * @return boolean
+	 */
+	f_performImageSelection: function(event) {
 		var form = f_core.GetParentForm(this);
 		if (form) {
 			form.reset();
@@ -25,7 +26,7 @@ var __prototype = {
 			f_core.Error(f_imageResetButton, "FORM component was not found !");
 		}
 		
-		return false;
+		return true;
 	}
 }
 

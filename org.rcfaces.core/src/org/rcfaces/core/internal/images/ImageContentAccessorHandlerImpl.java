@@ -20,6 +20,7 @@ import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
+import org.rcfaces.core.image.ImageContentInformation;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
@@ -29,7 +30,6 @@ import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.util.ClassLocator;
-import org.rcfaces.core.model.ImageContentInformation;
 import org.xml.sax.Attributes;
 
 /**

@@ -11,26 +11,6 @@
  */
 
 var __static = {
-
-	/** 
-	 * @field hidden static final number
-	 */
-	_AS_PUSH_BUTTON: 1,
-
-	/** 
-	 * @field hidden static final number
-	 */
-	_AS_CHECK_BOX: 2,
-
-	/** 
-	 * @field hidden static final number
-	 */
-	_AS_RADIO_BUTTON: 4,
-
-	/** 
-	 * @field hidden static final number
-	 */
-	_AS_SEPARATOR: 8,
 	
 	/** 
 	 * @field private static final number
@@ -263,7 +243,7 @@ var __prototype = {
 
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
 		
-		item._style=fa_menuCore._AS_RADIO_BUTTON;
+		item._inputType=fa_items.AS_RADIO_BUTTON;
 		if (groupName) {
 			this.f_setItemGroupName(item, groupName);
 		}		
@@ -290,7 +270,7 @@ var __prototype = {
 	f_appendCheckItem: function(parentItem, id, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
 
-		item._style=fa_menuCore._AS_CHECK_BOX;
+		item._inputType=fa_items.AS_CHECK_BUTTON;
 		if (checked) {
 			this.f_setItemChecked(item, checked);
 		}
@@ -322,7 +302,7 @@ var __prototype = {
 		}
 		
 		var menuItem=new Object;
-		menuItem._style=fa_menuCore._AS_PUSH_BUTTON;
+		menuItem._inputType=fa_items.AS_PUSH_BUTTON;
 		menuItem._accessKey=accessKey;
 		menuItem._value=value;
 		menuItem._acceleratorKey=acceleratorKey;
@@ -364,7 +344,7 @@ var __prototype = {
 		}
 
 		var item=new Object;
-		item._style=fa_menuCore._AS_SEPARATOR;
+		item._inputType=fa_items.AS_SEPARATOR;
 		item._disabled=true;
 		item._parentItem=parentItem;
 		item._menu=this;
@@ -439,7 +419,7 @@ var __prototype = {
 		for(var i=0;i<items.length;i++) {
 			var item=items[i];
 			
-			if (sep && item._style==fa_menuCore._AS_SEPARATOR) {
+			if (sep && item._inputType==fa_items.AS_SEPARATOR) {
 				continue;
 			}
 			
@@ -454,16 +434,16 @@ var __prototype = {
 			uiItem._item=item;
 			sep=false;
 			
-			switch(item._style) {				
-			case fa_menuCore._AS_CHECK_BUTTON:
+			switch(item._inputType) {				
+			case fa_items.AS_CHECK_BUTTON:
 				uiItem.role="menuitemcheckbox";
 				break;
 			
-			case fa_menuCore._AS_RADIO_BUTTON:
+			case fa_items.AS_RADIO_BUTTON:
 				uiItem.role="menuitemradio";
 				break;
 			
-			case fa_menuCore._AS_SEPARATOR:
+			case fa_items.AS_SEPARATOR:
 				uiItem.role="menuitemradio";
 				uiItem.className="f_menu_item_sep";
 				uiItem.onmousedown=fa_menuCore._SeparatorItem_click;
@@ -664,7 +644,7 @@ var __prototype = {
 			// Recherche le suivant mais on évite les séparateurs !
 			for(;i<menuItems.length;i++) {
 				var m=menuItems[i];
-				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
+				if (m._inputType==fa_items.AS_SEPARATOR || !this.f_isItemVisible(m)) {
 					// C'est un séparateur ou il n'est pas visible
 					continue;
 				}
@@ -680,7 +660,7 @@ var __prototype = {
 			
 			for(var i=0;i<menuItems.length;i++) {
 				var m=menuItems[i];
-				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
+				if (m._inputType==fa_items.AS_SEPARATOR || !this.f_isItemVisible(m)) {
 					continue;
 				}
 				
@@ -757,7 +737,7 @@ var __prototype = {
 			// On part du bas en remontant ...
 			for(i--;i>=0;i--) {
 				var m=menuItems[i];
-				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
+				if (m._inputType==fa_items.AS_SEPARATOR || !this.f_isItemVisible(m)) {
 					continue;
 				}
 				
@@ -769,7 +749,7 @@ var __prototype = {
 		if (!menuItem) {
 			for(var i=menuItems.length-1;i>=0;i--) {
 				var m=menuItems[i];
-				if (m._style==fa_menuCore._AS_SEPARATOR || !this.f_isItemVisible(m)) {
+				if (m._inputType==fa_items.AS_SEPARATOR || !this.f_isItemVisible(m)) {
 					continue;
 				}
 				
@@ -1156,7 +1136,7 @@ var __prototype = {
 	},
 	
 	f_uiUpdateItemStyle: function(item, uiItem) {	
-		if (item._style==fa_menuCore._AS_SEPARATOR) {
+		if (item._inputType==fa_items.AS_SEPARATOR) {
 			return;
 		}
 		
@@ -1241,12 +1221,12 @@ var __prototype = {
 			var suffix="";
 			if (!imageURL) {
 				if (item._checked) {
-					var style=item._style;
+					var style=item._inputType;
 					
-					if (style==fa_menuCore._AS_CHECK_BOX) {
+					if (style==fa_items.AS_CHECK_BUTTON) {
 						suffix="_check";
 
-					} else if (style==fa_menuCore._AS_RADIO_BUTTON) {
+					} else if (style==fa_items.AS_RADIO_BUTTON) {
 						suffix="_radio";
 					}
 				}
@@ -1282,8 +1262,8 @@ var __prototype = {
 
 		this.f_closeAllPopups();
 
-		switch(item._style) {
-		case fa_menuCore._AS_CHECK_BOX:
+		switch(item._inputType) {
+		case fa_items.AS_CHECK_BUTTON:
 			var state=this.f_isItemChecked(item);
 			
 			this.f_setItemChecked(item, !state);
@@ -1291,7 +1271,7 @@ var __prototype = {
 			// Dans ce cas un event CHECK est envoyé !
 			return;
 		
-		case fa_menuCore._AS_RADIO_BUTTON:
+		case fa_items.AS_RADIO_BUTTON:
 			this.f_setItemChecked(item, true);
 
 			// Dans ce cas un event CHECK est envoyé !

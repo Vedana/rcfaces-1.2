@@ -10,19 +10,15 @@
  * @version $Revision$ $Date$
  */
 var __prototype = {
-
-	_onSelect: function() {
-		if (!this._focus)  {
-			this.f_setFocus();
-		}
-
-		if (this.f_isReadOnly() || this.f_isDisabled()) {
-			return false;
-		}
-		
+	
+	/**
+	 * @method protected
+	 * @param f_event event
+	 * @return boolean
+	 */
+	f_performImageSelection: function(event) {
 		this.f_setSelected(!this.f_isSelected());
-		
-		return false;
+		return true;
 	},
 	fa_updateSelected: function() {
 		this._updateImage();

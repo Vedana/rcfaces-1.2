@@ -17,9 +17,9 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.model.IClientDataSelectItem;
+import org.rcfaces.core.item.IClientDataItem;
+import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.model.IImagesSelectItem;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 
 /**
@@ -125,8 +125,8 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
             pred++;
         }
 
-        if (selectItem instanceof IImagesSelectItem) {
-            IImagesSelectItem imagesSelectItem = (IImagesSelectItem) selectItem;
+        if (selectItem instanceof IImagesItem) {
+            IImagesItem imagesSelectItem = (IImagesItem) selectItem;
 
             String imageURL = imagesSelectItem.getImageURL();
 
@@ -144,8 +144,8 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
             pred++;
         }
 
-        if (selectItem instanceof IClientDataSelectItem) {
-            IClientDataSelectItem clientDataSelectItem = (IClientDataSelectItem) selectItem;
+        if (selectItem instanceof IClientDataItem) {
+            IClientDataItem clientDataSelectItem = (IClientDataItem) selectItem;
 
             if (clientDataSelectItem.isClientDataEmpty() == false) {
                 Map map = clientDataSelectItem.getClientDataMap();
@@ -181,12 +181,14 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
 
     protected void encodeComponentsEnd() throws WriterException {
         if (javaScriptWriter == null) {
+            super.encodeComponentsEnd();
             return;
         }
 
         int rowCount = getSelectItemCount();
         if (rowCount < 1 && service == false) {
             // Nous sommes dans un rendu HTML !
+            super.encodeComponentsEnd();
             return;
         }
 

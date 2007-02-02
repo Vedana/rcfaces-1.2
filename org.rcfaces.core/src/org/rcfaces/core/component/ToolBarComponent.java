@@ -1,12 +1,14 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.iterator.IToolFolderIterator;
 import org.rcfaces.core.internal.tools.ToolBarTools;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.iterator.IToolFolderIterator;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.AbstractBasicComponent;
 
 /**
  * <b>EXPERIMENTAL</b>

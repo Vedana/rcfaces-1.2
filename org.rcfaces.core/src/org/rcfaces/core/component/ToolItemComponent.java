@@ -1,16 +1,17 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.InputTypeConverter;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.ToolFolderComponent;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.component.UIImageItemComponent;
 
 /**
  * <b>EXPERIMENTAL</b>
@@ -18,13 +19,14 @@ import org.rcfaces.core.internal.converter.InputTypeConverter;
 public class ToolItemComponent extends UIImageItemComponent implements 
 	IRadioGroupCapability,
 	IInputTypeCapability,
-	IImageSizeCapability {
+	IImageSizeCapability,
+	ILookAndFeelCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolItem";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","inputType","imageWidth","groupName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","inputType","imageWidth","lookId","groupName"}));
 	}
 
 	public ToolItemComponent() {
@@ -136,6 +138,28 @@ public class ToolItemComponent extends UIImageItemComponent implements
 	 */
 	public final void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
+	}
+
+	public final java.lang.String getLookId() {
+		return getLookId(null);
+	}
+
+	/**
+	 * See {@link #getLookId() getLookId()} for more details
+	 */
+	public final java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
+	}
+
+	public final void setLookId(java.lang.String lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
+	}
+
+	/**
+	 * See {@link #setLookId(String) setLookId(String)} for more details
+	 */
+	public final void setLookId(ValueBinding lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
 	protected Set getCameliaFields() {

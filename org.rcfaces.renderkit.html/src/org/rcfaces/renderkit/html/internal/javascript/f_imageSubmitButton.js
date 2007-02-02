@@ -11,18 +11,11 @@
  */
 var __prototype = {
 	/**
-	 * 
 	 * @method protected
+	 * @param f_event event
+	 * @return boolean
 	 */
-	f_disableSubmitEvent: function() {
-		// Rien: le fonctionement standard
-	},
-
-	_onSelect: function() {
-		if (this.f_isReadOnly() || this.f_isDisabled()) {
-			return false;
-		}
-		
+	f_performImageSelection: function(event) {		
 		var form = f_core.GetParentForm(this);
 		if (form) {
 			form.submit();
@@ -30,8 +23,8 @@ var __prototype = {
 		} else {
 			f_core.Error(f_imageSubmitButton, "FORM component was not found !");
 		}
-		
-		return false;
+				
+		return true;
 	}
 }
 

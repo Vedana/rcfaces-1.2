@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AbstractMessagesComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractMessagesComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
@@ -40,10 +39,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private String userEventListeners;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String showSummary;
 	private String margins;
 	private String globalOnly;
 	private String showDetail;
+	private String showSummary;
 	public final String getHeight() {
 		return height;
 	}
@@ -228,14 +227,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final String getShowSummary() {
-		return showSummary;
-	}
-
-	public final void setShowSummary(String showSummary) {
-		this.showSummary = showSummary;
-	}
-
 	public final String getMargins() {
 		return margins;
 	}
@@ -260,6 +251,14 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.showDetail = showDetail;
 	}
 
+	public final String getShowSummary() {
+		return showSummary;
+	}
+
+	public final void setShowSummary(String showSummary) {
+		this.showSummary = showSummary;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  height='"+height+"'");
@@ -279,10 +278,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
+			LOG.debug("  showSummary='"+showSummary+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -491,15 +490,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (showSummary != null) {
-			if (isValueReference(showSummary)) {
-				ValueBinding vb = application.createValueBinding(showSummary);
-				component.setShowSummary(vb);
-			} else {
-				component.setShowSummary(getBool(showSummary));
-			}
-		}
-
 		if (margins != null) {
 			if (isValueReference(margins)) {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
@@ -522,6 +512,15 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 				component.setShowDetail(vb);
 			} else {
 				component.setShowDetail(getBool(showDetail));
+			}
+		}
+
+		if (showSummary != null) {
+			if (isValueReference(showSummary)) {
+				ValueBinding vb = application.createValueBinding(showSummary);
+				component.setShowSummary(vb);
+			} else {
+				component.setShowSummary(getBool(showSummary));
 			}
 		}
 	}
@@ -550,10 +549,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		userEventListeners = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		showSummary = null;
 		margins = null;
 		globalOnly = null;
 		showDetail = null;
+		showSummary = null;
 
 		super.release();
 	}

@@ -5,7 +5,7 @@
 /**
  * f_input class.
  *
- * @class f_input extends f_component
+ * @class f_input extends f_component, fa_message, fa_focusStyleClass
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
@@ -18,10 +18,18 @@ var __prototype = {
 		if (input!=this) {
 			input.f_link=this;
 		}
+			
+		var focusStyleClass=this.f_getFocusStyleClass();
+		if (focusStyleClass) {
+			this.f_insertEventListenerFirst(f_event.FOCUS, this._focusFocusEvent);
+			this.f_insertEventListenerFirst(f_event.BLUR, this._focusBlurEvent);
+		}
 		
 		f_core.Debug(f_input, "Input associated to component '"+this.id+"' is id='"+input.id+"', tagName="+input.tagName+", name='"+input.name+"'.");
 	},
 	f_finalize: function() {
+//		this._hasFocus=undefined; // boolean
+ 		this._currentMessage=undefined; // f_message
 		
 		this._validator=undefined;
 		
@@ -323,7 +331,77 @@ var __prototype = {
 		}
 		
 		return validator.f_isValidValue();		
+	},
+	/**
+	 * @method protected
+	 * @return String
+	 */
+	f_computeStyleClass: function(suffix) {	
+		var styleClass=this.f_super(arguments, suffix);
+
+		if (this._hasFocus && !this.f_isDisabled()) {
+			var focusStyleClass=this.f_getFocusStyleClass();
+
+			if (focusStyleClass) {
+				styleClass+=" "+focusStyleClass;
+			}
+		}
+		
+		var msg=this._currentMessage;
+		if (msg) {
+			var severity=msg.f_getSeverity();
+			
+			var severityClass=this.f_getStyleClassFromSeverity(severity);
+			
+			if (!severityClass && severity>=f_messageObject.SEVERITY_ERROR) {
+				severityClass=this.f_getMainStyleClass()+"_error";
+			}
+			
+			if (severityClass) {
+				styleClass+=" "+severityClass;
+			}
+		}
+
+		return styleClass;
+	},
+	f_performMessageChanges: function() {	
+		var messages=f_messageContext.ListMessages(this);
+		
+		var msg;
+		for(var j=0;j<messages.length;j++) {
+			var m=messages[j];
+			
+			if (!msg || msg.f_getSeverity()<m.f_getSeverity()) {
+				msg=m;
+			}
+		}
+		
+		f_core.Debug(f_input, "Change message to '"+msg+"' for component "+this.id+".");
+						
+		if (msg==this._currentMessage) {
+			return;
+		}
+		
+		this._currentMessage=msg;
+		
+		this.f_updateStyleClass();
+	},
+	/**
+	 * @method private
+	 */
+	_focusFocusEvent: function() {
+		this._hasFocus=true;
+		
+		this.f_updateStyleClass();
+	},
+	/**
+	 * @method private
+	 */
+	_focusBlurEvent: function() {
+		this._hasFocus=undefined;
+		
+		this.f_updateStyleClass();
 	}
 }
 
-new f_class("f_input", null, null, __prototype, f_component);
+new f_class("f_input", null, null, __prototype, f_component, fa_message, fa_focusStyleClass);

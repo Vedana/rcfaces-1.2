@@ -425,9 +425,8 @@ var __prototype = {
 		hiddenMode=f_core.GetAttribute(this, "v:hiddenMode");
 		if (hiddenMode) {
 			hiddenMode=parseInt(hiddenMode);
-		}
 
-		if (typeof(hiddenMode)!="number") {
+		} else {
 			hiddenMode=f_component.GetDefaultHiddenMode();
 		}
 		
@@ -736,7 +735,7 @@ var __prototype = {
      *
  	 * @param String... id Identifier of component.
      *
-     * @return f_component the found {@link f_component}, or <code>null</code>
+     * @return HTMLElement the found {@link f_component}, or <code>null</code>
      *  if the component was not found.
      *
      * @exception Error if an intermediate identifier
@@ -745,6 +744,18 @@ var __prototype = {
      */
 	f_findComponent: function(id) {
 		return fa_namingContainer.FindComponents(this, arguments);
+	},
+	/**
+	 * Find the sibling component.
+	 *
+	 * @method public
+ 	 * @param String... id Identifier of component.
+     * @return HTMLElement the found {@link f_component}, or <code>null</code>
+     *  if the component was not found.
+     * @see #f_findComponent
+	 */
+	f_findSiblingComponent: function(id) {
+		return fa_namingContainer.FindSiblingComponents(this, arguments);
 	},
 	/**
 	 * @method public

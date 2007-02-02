@@ -25,10 +25,10 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.model.IAdaptable;
-import org.rcfaces.core.model.ICheckProvider;
-import org.rcfaces.core.model.ICursorProvider;
-import org.rcfaces.core.model.ISelectionProvider;
+import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.lang.provider.ICheckProvider;
+import org.rcfaces.core.lang.provider.ICursorProvider;
+import org.rcfaces.core.lang.provider.ISelectionProvider;
 
 /**
  * 

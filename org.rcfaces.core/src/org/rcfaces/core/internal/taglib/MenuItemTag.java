@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.MenuItemComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.MenuItemComponent;
+import javax.faces.application.Application;
 
 public class MenuItemTag extends ExpandableItemTag implements Tag {
 
@@ -19,6 +18,7 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 
 	private String accessKey;
 	private String acceleratorKey;
+	private String styleClass;
 	private String menuListeners;
 	private String removeAllWhenShown;
 	public String getComponentType() {
@@ -39,6 +39,14 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 
 	public final void setAcceleratorKey(String acceleratorKey) {
 		this.acceleratorKey = acceleratorKey;
+	}
+
+	public final String getStyleClass() {
+		return styleClass;
+	}
+
+	public final void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
 	}
 
 	public final String getMenuListener() {
@@ -64,6 +72,7 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 			}
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  acceleratorKey='"+acceleratorKey+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
 		}
 		super.setProperties(uiComponent);
@@ -99,6 +108,16 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 			}
 		}
 
+		if (styleClass != null) {
+			if (isValueReference(styleClass)) {
+				ValueBinding vb = application.createValueBinding(styleClass);
+
+				component.setStyleClass(vb);
+			} else {
+				component.setStyleClass(styleClass);
+			}
+		}
+
 		if (menuListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.MENU_LISTENER_TYPE, menuListeners);
 		}
@@ -116,6 +135,7 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 	public void release() {
 		accessKey = null;
 		acceleratorKey = null;
+		styleClass = null;
 		menuListeners = null;
 		removeAllWhenShown = null;
 

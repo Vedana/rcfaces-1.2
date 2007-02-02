@@ -72,6 +72,8 @@ var __prototype = {
 
 		this._suggestionValue=f_core.GetAttribute(this, "v:suggestionValue");
 		
+		this._moreResultsMessage=f_core.GetAttribute(this, "v:moreResultsMessage");
+		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);
 		
@@ -107,6 +109,7 @@ var __prototype = {
 		// this._suggestionValue=undefined; // string
 		// this._orderedResult=undefined; // boolean
 		// this._loading=undefined; // boolean
+		// this._moreResultsMessage=undefined; // String
 
 		// this._oldClassName=undefined; // string
 		// this._canSuggest=undefined; // boolean
@@ -592,8 +595,11 @@ var __prototype = {
 			}
 		}
 		
-		if (!complete) {
-			var message=f_resourceBundle.Get(f_suggestTextEntry).f_get("MORE_RELEVANT_RESULTS");
+		var message=this._moreResultsMessage;
+		if (!complete && message!="") {
+			if (!message) {
+				message=f_resourceBundle.Get(f_suggestTextEntry).f_get("MORE_RELEVANT_RESULTS");
+			}
 		
 			var item=menu.f_appendItem(menu, "_result"+i, message);			
 			menu.f_setItemDisabled(item, true);

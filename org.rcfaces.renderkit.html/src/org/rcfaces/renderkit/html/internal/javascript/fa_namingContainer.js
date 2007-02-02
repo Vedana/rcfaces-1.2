@@ -41,9 +41,10 @@ var __static = {
 	 * @method public static final 
 	 * @param HTMLElement component
 	 * @param String id
+	 * @param hidden boolean sibling
 	 * @return HTMLElement
 	 */
-	FindComponent: function(component, id) {
+	FindComponent: function(component, id, sibling) {
 		f_core.Assert(component && component.tagName, "fa_namingContainer.FindComponent: Bad component parameter ! ("+component+")");
 		f_core.Assert(typeof(id)=="string", "Bad id parameter !");
 
@@ -60,8 +61,8 @@ var __static = {
 			}
 		}
 				
-		var cid=fa_namingContainer.ComputeComponentId(component, id);
-		f_core.Debug("fa_namingContainer", "Compute component id='"+id+"' (pageId='"+pageId+"') returns '"+cid+"'.");
+		var cid=fa_namingContainer.ComputeComponentId(component, id, sibling);
+		f_core.Debug(fa_namingContainer, "Compute component from "+component.id+" id='"+id+"' (pageId='"+pageId+"') returns '"+cid+"'.");
 
 		return f_core.GetElementById(cid, component.ownerDocument);
 	},
@@ -76,7 +77,7 @@ var __static = {
 
 		for(var i=0;component && i<args.length;i++) {
 			var id=args[i];
-			f_core.Assert(typeof(id)=="string", "Bad id parameter (parameter #"+(i+1)+") !");
+			f_core.Assert(typeof(id)=="string", "fa_namingContainer.FindComponents: Bad id parameter (parameter #"+(i+1)+") !");
 			
 			component=fa_namingContainer.FindComponent(component, id);
 		}
@@ -86,10 +87,29 @@ var __static = {
 	/**
 	 * @method hidden static final 
 	 * @param HTMLElement component
+	 * @param String[] args component ids
+	 * @return HTMLElement
+	 */
+	FindSiblingComponents: function(component, args) {
+		f_core.Assert(component && component.tagName, "fa_namingContainer.FindSiblingComponents: Bad component parameter ! ("+component+")");
+
+		for(var i=0;component && i<args.length;i++) {
+			var id=args[i];
+			f_core.Assert(typeof(id)=="string", "fa_namingContainer.FindSiblingComponents: Bad id parameter (parameter #"+(i+1)+") !");
+			
+			component=fa_namingContainer.FindComponent(component, id, !i);
+		}
+		
+		return component;
+	},
+	/**
+	 * @method hidden static final 
+	 * @param HTMLElement component
 	 * @param String id
+	 * @param boolean sibling
 	 * @return String Identifier
 	 */
-	ComputeComponentId: function(component, id) {
+	ComputeComponentId: function(component, id, sibling) {
 		f_core.Assert(component && component.tagName, "fa_namingContainer.ComputeComponentId: Invalid component parameter ('"+component+"')");
 		f_core.Assert(typeof(id)=="string" && id.length>0, "fa_namingContainer.ComputeComponentId: Invalid id parameter ('"+id+"')");
 
@@ -117,20 +137,22 @@ var __static = {
     		pageId=id.replace(fa_namingContainer._SEPARATOR_CHAR_REGEXP, pageSeparator);
     	}
 		
-	//	f_core.Debug(fa_namingContainer, "SearchElementId id='"+id+"' pageId='"+pageId+"' componentId='"+component.id+"' pageSeparator='"+pageSeparator+"'.");
+		f_core.Debug(fa_namingContainer, "ComputeComponentId id='"+id+"' pageId='"+pageId+"' componentId='"+component.id+"' pageSeparator='"+pageSeparator+"'.");
 
     	// Le chemin est en relatif 
     	// On remplace le dernier segment du composant, par l'ID recherché !
     	
-       	var cid=component.id;
+       	var cid=component.id; // L'ID contient le séparateur !
  
-       	if (!fa_namingContainer._IsNamingContainer(component)) {
+       	if (sibling || !fa_namingContainer._IsNamingContainer(component)) {
 	       	var idx=cid.lastIndexOf(pageSeparator);
 	       	
 	       	if (idx<0) {
 	       		// Pas de container ... !
 	       		// On recherche donc à la racine !
-	       		return pageId;
+	       		
+			 	f_core.Debug(fa_namingContainer, "ComputeComponentId: No container returns '"+cid+"'.");
+          		return pageId;
 	       	}
 	       	if (pageSeparator.length>1) {
 	       		for(;idx;idx--) {
@@ -144,11 +166,16 @@ var __static = {
 	       	
 	       	// On prend le container précédant !
        		cid=cid.substring(0, idx);
+ 
+ 		 	f_core.Debug(fa_namingContainer, "ComputeComponentId: Not a naming container cut cid="+cid);
+    
+    	} else {
+ 		 	f_core.Debug(fa_namingContainer, "ComputeComponentId: Component '"+cid+"' is a naming container");
     	}
     	
-    	cid=cid+pageSeparator+pageId;
+    	cid+=pageSeparator+pageId;
     	
-//    	f_core.Debug(fa_namingContainer, "SearchElementId returns '"+cid+"'.");
+    	f_core.Debug(fa_namingContainer, "ComputeComponentId: returns '"+cid+"'.");
     	
     	return cid;
 	},

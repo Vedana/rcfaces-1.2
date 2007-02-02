@@ -9,6 +9,44 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+var __static = {
+
+	/** 
+	 * @field public static final number
+	 */
+	AS_PUSH_BUTTON: 1,
+
+	/** 
+	 * @field public static final number
+	 */
+	AS_CHECK_BUTTON: 2,
+
+	/** 
+	 * @field public static final number
+	 */
+	AS_DROP_DOWN_MENU: 4,
+
+	/** 
+	 * @field public static final number
+	 */
+	AS_RADIO_BUTTON: 8,
+
+	/** 
+	 * @field public static final number
+	 */
+	AS_SUBMIT_BUTTON: 16,
+
+	/** 
+	 * @field public static final number
+	 */
+	AS_RESET_BUTTON: 32,
+
+	/** 
+	 * @field public static final number
+	 */
+	AS_SEPARATOR: 64
+}
+
 var __prototype = {
 
 	fa_items: function() {
@@ -265,7 +303,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_isItemDisabled: function(item) {		
-		if (typeof(item)!="object") {
+		if (item===null || typeof(item)!="object") {
 			item=this.f_getItemByValue(item, true);
 		}
 
@@ -280,7 +318,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemDisabled: function(item, disabled) {
-		if (typeof(item)!="object") {
+		if (item===null || typeof(item)!="object") {
 			item=this.f_getItemByValue(item, true);
 		}
 
@@ -339,7 +377,7 @@ var __prototype = {
 	 * @return boolean The visibility state of the item.
 	 */
 	f_isItemVisible: function(item) {
-		if (typeof(item)!="object") {
+		if (item===null || typeof(item)!="object") {
 			item=this.f_getItemByValue(item, true);
 		}
 		
@@ -354,7 +392,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setItemVisible: function(item, visible) {
-		if (typeof(item)!="object") {
+		if (item===null || typeof(item)!="object") {
 			item=this.f_getItemByValue(item, true);
 		}
 		
@@ -616,6 +654,16 @@ var __prototype = {
 	/**
 	 * @method public
 	 * @param Object item
+	 * @return number
+	 */
+	f_getInputType: function(item) {
+		f_core.Assert(typeof(item)=="object", "fa_items.f_getInputType: Invalid item object. ("+item+")");
+		
+		return item._inputType;
+	},
+	/**
+	 * @method public
+	 * @param Object item
 	 * @return boolean
 	 */
 	f_hasVisibleItemChildren: function(item) {
@@ -659,4 +707,4 @@ var __prototype = {
 	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT
 }
 
-var fa_items=new f_aspect("fa_items", null, __prototype, fa_itemClientDatas);
+var fa_items=new f_aspect("fa_items", __static, __prototype, fa_itemClientDatas);

@@ -54,6 +54,8 @@ public class Constants {
 
     public static final boolean GZIP_SUPPORT_DEFAULT_VALUE = true;
 
+    public static final boolean MYFACES_INPUT_BROADCAST_BUG = true;
+
     /**
      * Collection can be converted to DataModel (JSF spec extension)
      */
@@ -112,10 +114,6 @@ public class Constants {
     public static final int ENABLE_ASYNC_MODE_VALUE = IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE;
 
     public static final boolean FACELETS_SUPPORT = true;
-
-    public static final boolean FLUSH_AFTER_ENCODE_CHILDREN = false;
-
-    public static final boolean FLUSH_AFTER_ENCODE_END = false;
 
     public static final boolean ADAPT_SELECT_ITEMS = true;
 

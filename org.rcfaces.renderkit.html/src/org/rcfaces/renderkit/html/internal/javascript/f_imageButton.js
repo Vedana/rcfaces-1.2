@@ -23,10 +23,6 @@ var __prototype = {
 	f_imageButton: function() {
 		this.f_super(arguments);
 
-		this.f_disableSubmitEvent();
-	
-		var installSelectionListener;
-		
 		var tabIndex=this.tabIndex;
 		var link=null;
 		var tagName=this.tagName.toUpperCase();
@@ -35,14 +31,10 @@ var __prototype = {
 			// Il faut recuperer le click pour empecher le submit !
 			this._image=this;
 			
-			installSelectionListener=true;
-			
 		} else 	if (tagName=="A") {
 			// Il faut recuperer le click pour empecher le submit !
 			this._image=f_core.GetFirstElementByTagName(this, "IMG", true);
-			
-			installSelectionListener=true;
-			
+						
 		} else {
 			link=f_core.GetFirstElementByTagName(this, "INPUT", false);
 			if (!link) {
@@ -117,7 +109,6 @@ var __prototype = {
 	
 //			text.onmousedown=f_imageButton._MouseDown;
 //			text.onmouseup=f_imageButton._MouseUp;
-			installSelectionListener=true;
 		}
 			
 		this.f_parseAttributes();
@@ -127,7 +118,6 @@ var __prototype = {
 //			border.onmousedown=f_imageButton._MouseDown;
 //			border.onmouseup=f_imageButton._MouseUp;
 			this._border=border;	
-			installSelectionListener=true;
 		}
 
 		var image=this._image;
@@ -136,14 +126,11 @@ var __prototype = {
 //			image.onmouseup=f_imageButton._MouseUp;
 				
 			image.f_link=this;
-			installSelectionListener=true;
 		}
 		
-		if (installSelectionListener) {
-			this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
-			this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
-			this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
-		}
+		this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
+		this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
+		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
 		
 		this._tabIndex=tabIndex;
 		if (this.f_isDisabled()) {
@@ -200,13 +187,6 @@ var __prototype = {
 			f_core.VerifyProperties(image);
 		}		
 	},
-	/**
-	 * 
-	 * @method protected
-	 */
-	f_disableSubmitEvent: function() {
-		this._returnOnSelect = false;
-	},
 	
 	/**
 	 * @method private
@@ -236,7 +216,7 @@ var __prototype = {
 	/**
 	 * @method private
 	 */
-	_onSelect: function() {
+	_onSelect: function(event) {
 		f_core.Debug(f_imageButton, "_onSelect: focus="+this._focus);
 		
 		this._mouseDown_out = undefined;	
@@ -246,14 +226,23 @@ var __prototype = {
 			this.f_setFocus();
 		}
 
-		if (this.f_isReadOnly() || this.f_isDisabled()) {
+		if (this.f_isReadOnly() || this.f_isDisabled()) {		
 			return false;
 		}
 
 		this.checked = false;
+		event._eventReturn=false; // Force l'arret
+	
+		return this.f_performImageSelection(event);
+	},
+	/**
+	 * @method protected
+	 * @param f_event event
+	 * @return boolean
+	 */
+	f_performImageSelection: function(event) {
 		return true;
 	},
-
 	/**
 	 * @method private
 	 */
@@ -559,15 +548,6 @@ var __prototype = {
 		}
 		
 		cmp.focus();
-	},
-	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail) {
-		if (type==f_event.SELECTION) {
-			if (this.f_isReadOnly() || this.f_isDisabled()) {
-				return false;
-			}
-		}
-		
-		return this.f_super(arguments, type, jsEvt, item, value, selectionProvider, detail);
 	}
 }
 

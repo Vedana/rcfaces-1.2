@@ -1,18 +1,17 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>

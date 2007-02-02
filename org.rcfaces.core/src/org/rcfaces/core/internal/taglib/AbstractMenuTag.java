@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AbstractMenuComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.AbstractMenuComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractMenuTag extends AbstractConverterCommandTag implements Tag {
 
@@ -20,6 +19,7 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 	private String selectionListeners;
 	private String checkListeners;
 	private String readOnly;
+	private String checkedValues;
 	private String removeAllWhenShown;
 	public final String getSelectionListener() {
 		return selectionListeners;
@@ -45,6 +45,14 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 		this.readOnly = readOnly;
 	}
 
+	public final String getCheckedValues() {
+		return checkedValues;
+	}
+
+	public final void setCheckedValues(String checkedValues) {
+		this.checkedValues = checkedValues;
+	}
+
 	public final String getRemoveAllWhenShown() {
 		return removeAllWhenShown;
 	}
@@ -56,6 +64,7 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
 		}
 		super.setProperties(uiComponent);
@@ -89,6 +98,15 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 			}
 		}
 
+		if (checkedValues != null) {
+			if (isValueReference(checkedValues)) {
+				ValueBinding vb = application.createValueBinding(checkedValues);
+				component.setCheckedValues(vb);
+			} else {
+				throw new javax.faces.FacesException("Attribute 'checkedValues' accept only a binding expression !");
+			}
+		}
+
 		if (removeAllWhenShown != null) {
 			if (isValueReference(removeAllWhenShown)) {
 				ValueBinding vb = application.createValueBinding(removeAllWhenShown);
@@ -103,6 +121,7 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 		selectionListeners = null;
 		checkListeners = null;
 		readOnly = null;
+		checkedValues = null;
 		removeAllWhenShown = null;
 
 		super.release();

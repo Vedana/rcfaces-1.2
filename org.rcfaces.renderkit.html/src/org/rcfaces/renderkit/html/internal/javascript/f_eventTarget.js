@@ -89,7 +89,7 @@ var __static = {
 		var comp = (elt.f_link)? elt.f_link:elt;
 
 		if (lock && comp.f_getEventLocked()) {
-			f_core.Info(f_eventTarget, "Event has been locked !");
+			f_core.Info(f_eventTarget, "Event has been locked ! (type="+type+" comp="+comp+" comp.id="+((comp)?comp.id:"none")+")");
 			
 			return false;
 		}

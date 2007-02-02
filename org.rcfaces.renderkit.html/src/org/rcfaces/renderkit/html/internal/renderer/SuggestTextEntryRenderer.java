@@ -90,6 +90,12 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
             writer.writeAttribute("v:suggestionValue", value);
         }
 
+        String moreResultsMessage = suggestTextEntryComponent
+                .getMoreResultsMessage(facesContext);
+        if (moreResultsMessage != null) {
+            writer.writeAttribute("v:moreResultsMessage", moreResultsMessage);
+        }
+
         return writer;
     }
 

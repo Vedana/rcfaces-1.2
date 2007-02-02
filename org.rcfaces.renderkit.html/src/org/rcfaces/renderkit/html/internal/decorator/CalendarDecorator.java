@@ -22,11 +22,11 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
-import org.rcfaces.core.model.BasicDateItem;
-import org.rcfaces.core.model.BasicSelectItem;
-import org.rcfaces.core.model.IClientDataSelectItem;
+import org.rcfaces.core.item.DateItem;
+import org.rcfaces.core.item.BasicSelectItem;
+import org.rcfaces.core.item.IClientDataItem;
+import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.model.IStyleClassItem;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 
@@ -93,7 +93,7 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
             return EVAL_NODE;
         }
 
-        javaScriptWriter.writeMethodCall("_appendDateItem");
+        javaScriptWriter.writeMethodCall("f_appendDateItem");
 
         if (calendar == null) {
             calendar = CalendarTools.getCalendar(getComponentRenderContext()
@@ -157,8 +157,8 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        if (selectItem instanceof IClientDataSelectItem) {
-            IClientDataSelectItem clientDataItem = (IClientDataSelectItem) selectItem;
+        if (selectItem instanceof IClientDataItem) {
+            IClientDataItem clientDataItem = (IClientDataItem) selectItem;
 
             if (clientDataItem.isClientDataEmpty() == false) {
                 for (; pred > 0; pred--) {
@@ -233,7 +233,7 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
 
     protected SelectItem createSelectItem(UISelectItem component) {
         if (component instanceof DateItemComponent) {
-            return new BasicDateItem(component);
+            return new DateItem(component);
         }
 
         return new BasicSelectItem(component);

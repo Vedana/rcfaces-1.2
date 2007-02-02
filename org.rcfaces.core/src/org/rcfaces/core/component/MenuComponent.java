@@ -1,18 +1,17 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.IMenuEventCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
-import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IMenuEventCapability;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The menu Component provides a way of creating desktop style menus on web pages. It allows sub-menus, check and radio menu items and image menus. It also provides pop-up menus.</p>
@@ -37,7 +36,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","menuId","converter","checkedValues","checkListener","removeAllWhenShown","menuListener","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","menuId","converter","checkedValues","checkListener","removeAllWhenShown","menuListener"}));
 	}
 
 	public MenuComponent() {
@@ -90,46 +89,6 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 	public final javax.faces.event.FacesListener [] listCheckListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
-	}
-
-	/**
-	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
-	 * @return table of values
-	 */
-	public final Object[] getSelectedValues() {
-		return getSelectedValues(null);
-	}
-
-	/**
-	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
-	 * @return table of values
-	 */
-	public final Object[] getSelectedValues(javax.faces.context.FacesContext facesContext) {
-		return (Object[])engine.getValue(Properties.SELECTED_VALUES, facesContext);
-	}
-
-	/**
-	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
-	 * @param selectedValues table of values
-	 */
-	public final void setSelectedValues(Object[] selectedValues) {
-		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
-	}
-
-	/**
-	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
-	 * @param selectedValues table of values
-	 */
-	public final void setSelectedValues(ValueBinding selectedValues) {
-		engine.setValueBinding(Properties.SELECTED_VALUES, selectedValues);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectedValuesSetted() {
-		return engine.isPropertySetted(Properties.SELECTED_VALUES);
 	}
 
 	public final Object[] getCheckedValues() {

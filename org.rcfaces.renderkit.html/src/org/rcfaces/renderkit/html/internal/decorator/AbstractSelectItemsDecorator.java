@@ -36,15 +36,15 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
-import org.rcfaces.core.model.BasicImagesSelectItem;
-import org.rcfaces.core.model.BasicSelectItem;
-import org.rcfaces.core.model.IAdaptable;
-import org.rcfaces.core.model.IClientDataSelectItem;
+import org.rcfaces.core.item.BasicImagesSelectItem;
+import org.rcfaces.core.item.BasicSelectItem;
+import org.rcfaces.core.item.IClientDataItem;
+import org.rcfaces.core.item.IImagesItem;
+import org.rcfaces.core.item.ISelectItem;
+import org.rcfaces.core.item.ISelectItemGroup;
+import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
-import org.rcfaces.core.model.IImagesSelectItem;
-import org.rcfaces.core.model.ISelectItem;
-import org.rcfaces.core.model.ISelectItemGroup;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -700,7 +700,7 @@ public abstract class AbstractSelectItemsDecorator extends
 
             SelectItem selectItems[] = sig.getSelectItems();
 
-            if (selectItems.length > 0) {
+            if (selectItems != null && selectItems.length > 0) {
                 for (int i = 0; i < selectItems.length; i++) {
                     SelectItem s2 = selectItems[i];
 
@@ -837,7 +837,7 @@ public abstract class AbstractSelectItemsDecorator extends
         return null;
     }
 
-    protected static void writeItemClientDatas(IClientDataSelectItem iim,
+    protected static void writeItemClientDatas(IClientDataItem iim,
             IJavaScriptWriter javaScriptWriter, String managerVarId,
             String methodName, String varId) throws WriterException {
 
@@ -885,7 +885,7 @@ public abstract class AbstractSelectItemsDecorator extends
         javaScriptWriter.writeln("});");
     }
 
-    protected static void writeSelectItemImages(IImagesSelectItem iim,
+    protected static void writeSelectItemImages(IImagesItem iim,
             IJavaScriptWriter javaScriptWriter, String managerVarId,
             String methodName, String varId, boolean ignoreExpand)
             throws WriterException {

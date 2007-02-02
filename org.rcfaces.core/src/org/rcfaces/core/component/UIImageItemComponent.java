@@ -1,19 +1,19 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.AbstractItemComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IStatesImageCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 /**
  * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
@@ -115,7 +115,7 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 	 * See {@link #isVisible() isVisible()} for more details
 	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
+		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
 	}
 
 	public final void setVisible(boolean visible) {

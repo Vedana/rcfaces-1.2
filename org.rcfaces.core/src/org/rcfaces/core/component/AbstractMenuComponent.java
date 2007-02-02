@@ -1,17 +1,17 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.AbstractConverterCommandComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -24,7 +24,7 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractConverterCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","checkListener","removeAllWhenShown","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","checkedValues","checkListener","removeAllWhenShown","readOnly"}));
 	}
 
 
@@ -79,6 +79,30 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
+	}
+
+	public final Object[] getCheckedValues() {
+		return getCheckedValues(null);
+	}
+
+	public final Object[] getCheckedValues(javax.faces.context.FacesContext facesContext) {
+		return (Object[])engine.getValue(Properties.CHECKED_VALUES, facesContext);
+	}
+
+	public final void setCheckedValues(Object[] checkedValues) {
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	public final void setCheckedValues(ValueBinding checkedValues) {
+		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "checkedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckedValuesSetted() {
+		return engine.isPropertySetted(Properties.CHECKED_VALUES);
 	}
 
 	/**

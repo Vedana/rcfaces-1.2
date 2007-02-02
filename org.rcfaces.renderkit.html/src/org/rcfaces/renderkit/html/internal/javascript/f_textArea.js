@@ -5,7 +5,7 @@
 /**
  * f_textArea class
  *
- * @class public f_textArea extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass, fa_message
+ * @class public f_textArea extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -23,17 +23,16 @@ var __prototype = {
 		
 		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
 		
-		var focusStyleClass=this.f_getFocusStyleClass();
-		if (focusStyleClass || this._emptyMessage) {
-			this.f_insertEventListenerFirst(f_event.FOCUS, this._performFocusEvent);
-			this.f_insertEventListenerFirst(f_event.BLUR, this._performBlurEvent);
+		if (this._emptyMessage) {
+			this.f_insertEventListenerFirst(f_event.FOCUS, this._messageFocusEvent);
+			this.f_insertEventListenerFirst(f_event.BLUR, this._messageBlurEvent);
 		}
 	},
 	/*
 	f_finalize: function() {
 		// this._emptyMessage=undefined; // string
 		// this._showEmptyMessage=undefined; // string
-		// this._requiredInstalled=undefined // boolean
+		// this._requiredInstalled=undefined; // boolean
 		
 		this.f_super(arguments);
 	},
@@ -164,25 +163,12 @@ var __prototype = {
 	/**
 	 * @method private
 	 */
-	_performFocusEvent: function() {
-		var focusStyleClass=this.f_computeStyleClass()+" "+this.f_getFocusStyleClass();
-		
-		if (focusStyleClass!=this.className) {
-			return;
-		}
-		
-		this.className=focusStyleClass;
+	_messageFocusEvent: function() {
 	},
 	/**
 	 * @method private
 	 */
-	_performBlurEvent: function() {
-		var focusStyleClass=this.f_computeStyleClass();
-		if (focusStyleClass==this.className) {
-			return;
-		}
-		
-		this.className=focusStyleClass;
+	_messageBlurEvent: function() {
 	},
 	/**
 	 * @method public
@@ -255,22 +241,8 @@ var __prototype = {
 	fa_updateRequired: function() {
 		// XXXXXX @TODO this._installRequiredValidator();
 		this.f_updateStyleClass();
-	},	
-	/**
-	 * @method protected
-	 * @return void
-	 */
-	f_updateStyleClass: function(postSuffix) {
-		
-		if (this.f_isRequired()) {
-			postSuffix="_required"+((postSuffix)?postSuffix:"");
-		}
-		
-		this.f_super(arguments, postSuffix);
-	},
-	f_performMessageChanges: function(messageContext) {	
 	}
 }
 
-new f_class("f_textArea", null, __static, __prototype, f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass, fa_message);
+new f_class("f_textArea", null, __static, __prototype, f_input, fa_required, fa_selectionProvider, fa_subMenu);
 

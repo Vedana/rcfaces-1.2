@@ -253,11 +253,21 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
         map.put(INTERACTIVE_KEY, BUFFER_ASYNC_RENDER_MODE);
     }
 
-    public boolean isAsyncRendererEnabled(FacesContext facesContext,
+    public int getAsyncRendererBufferMode(FacesContext facesContext,
             UIComponent component) {
         Map map = component.getAttributes();
 
-        return map.containsKey(INTERACTIVE_KEY);
+        Object interactive = map.get(INTERACTIVE_KEY);
+        if (interactive == null) {
+            return DEFAULT_ASYNC_RENDER_BUFFER_MODE;
+        }
+
+        if (interactive instanceof InteractiveContext) {
+            // En mode tree, on sauvegarde pas le buffer
+            return IGNORE_ASYNC_RENDER_BUFFER_MODE;
+        }
+
+        return BUFFER_ASYNC_RENDER_BUFFER_MODE;
     }
 
     public boolean isAsyncRenderEnable() {

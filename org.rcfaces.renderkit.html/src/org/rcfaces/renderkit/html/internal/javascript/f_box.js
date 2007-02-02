@@ -46,13 +46,18 @@ var __prototype = {
 	 * Returns the current menu identifier.
 	 *
 	 * @method public
-	 * @return Identifier of the menu.
+	 * @return String Identifier of the menu.
 	 */
 	f_getDefaultMenuId: function() {
 		var d=this._defaultMenuId;
 		
 		return (d)?d:null;
 	},
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return void
+	 */
 	_performMenuMouseDown: function(event) {		
 		var jsEvent=event.f_getJsEvent();
 		

@@ -49,27 +49,31 @@ var __prototype = {
 	 */
 	f_getForComponentIds: function() {
 		var fors=this._fors;
-		if (fors===undefined) {
-			var s=f_core.GetAttribute(this, "v:for");
-			
-			fors=new Array();
-			this._fors=fors;
-			
-			var keys=new Array();
-			this._forsTranslated=keys;
-			
-			if (s) {
-				var sd=s.split(",");
-				for(var i=0;i<sd.length;i++) {
-					var f=f_core.Trim(sd[i]);
-					fors.push(f);
-
-					var forTranslated=fa_namingContainer.ComputeComponentId(this, f);					
+		if (fors!==undefined) {
+			return fors;
+		}
 		
-					f_core.Assert(forTranslated, "f_message.f_getForComponents: Component '"+f+"' associated to this message is not defined !");
-					keys.push(forTranslated);
-				}
-			}
+		var s=f_core.GetAttribute(this, "v:for");
+		
+		fors=new Array();
+		this._fors=fors;
+		
+		var keys=new Array();
+		this._forsTranslated=keys;
+		
+		if (!s) {
+			return fors;
+		}
+		
+		var sd=s.split(",");
+		for(var i=0;i<sd.length;i++) {
+			var f=f_core.Trim(sd[i]);
+			fors.push(f);
+
+			var forTranslated=fa_namingContainer.ComputeComponentId(this, f);					
+
+			f_core.Assert(forTranslated, "f_message.f_getForComponents: Component '"+f+"' associated to this message is not defined !");
+			keys.push(forTranslated);
 		}
 		
 		return fors;
@@ -105,18 +109,30 @@ var __prototype = {
 
 		this._setFocusIfMessage=setFocusIfMessage;
 	},
-	f_performMessageChanges: function(messageContext) {
+	f_performMessageChanges: function() {
 
 		var keys=this._getForTranslatedComponentIds();
 		
-		if (keys.length==0) {
+		if (!keys.length) {
 			keys=[null]; // On prend les globaux
 		}
 
 		var msg;
 		for(var i=0;i<keys.length;i++) {
 			var key=keys[i];
-			var messages=messageContext.f_listMessages(key);
+			
+			var messages
+			if (key===null) {
+				messages=f_messageContext.Get().f_listMessages(null, true);
+			
+			} else {
+				var component=f_core.GetElementById(key);
+				if (!component) {
+					continue;
+				}
+			
+				messages=f_messageContext.ListMessages(component);
+			}
 			
 			for(var j=0;j<messages.length;j++) {
 				var m=messages[j];
@@ -132,7 +148,7 @@ var __prototype = {
 			return;
 		}
 
-		f_core.Debug(fa_message1, "Message changes notification: change message !");
+		f_core.Debug(fa_message1, "Message changes notification: change message: "+msg);
 		
 		this._currentMessage=msg;
 		

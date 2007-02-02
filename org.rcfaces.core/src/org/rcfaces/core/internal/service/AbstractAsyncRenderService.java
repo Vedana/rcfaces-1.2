@@ -22,6 +22,12 @@ public abstract class AbstractAsyncRenderService implements IService {
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".AsyncRender";
 
+    public static final int DEFAULT_ASYNC_RENDER_BUFFER_MODE = 0;
+
+    public static final int IGNORE_ASYNC_RENDER_BUFFER_MODE = 1;
+
+    public static final int BUFFER_ASYNC_RENDER_BUFFER_MODE = 2;
+
     public static AbstractAsyncRenderService getInstance(
             FacesContext facesContext) {
 
@@ -39,7 +45,7 @@ public abstract class AbstractAsyncRenderService implements IService {
 
     public abstract boolean isAsyncRenderEnable();
 
-    public abstract boolean isAsyncRendererEnabled(FacesContext facesContext,
+    public abstract int getAsyncRendererBufferMode(FacesContext facesContext,
             UIComponent component);
 
     public abstract void setContent(FacesContext facesContext,

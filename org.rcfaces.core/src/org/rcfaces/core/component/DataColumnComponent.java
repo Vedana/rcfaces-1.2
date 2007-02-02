@@ -1,31 +1,30 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.component.ValueHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.capability.IOrderCapability;
-import org.rcfaces.core.component.capability.IResizableCapability;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
-import org.rcfaces.core.component.capability.ISortEventCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.internal.component.CameliaColumnComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.internal.converter.OrderConverter;
+import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import javax.faces.component.ValueHolder;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.IResizableCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IAlignmentCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ISortEventCapability;
+import org.rcfaces.core.internal.converter.OrderConverter;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Specify a column.
@@ -200,7 +199,7 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 	 * See {@link #isVisible() isVisible()} for more details
 	 */
 	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VISIBLE, false, facesContext);
+		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
 	}
 
 	public final void setVisible(boolean visible) {

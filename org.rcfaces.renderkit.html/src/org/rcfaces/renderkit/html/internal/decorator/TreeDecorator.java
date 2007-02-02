@@ -25,10 +25,10 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.SelectItemMappers;
 import org.rcfaces.core.internal.tools.ValuesTools;
-import org.rcfaces.core.model.IClientDataSelectItem;
-import org.rcfaces.core.model.IImagesSelectItem;
-import org.rcfaces.core.model.ITreeNode;
-import org.rcfaces.core.model.TreeNode;
+import org.rcfaces.core.item.IClientDataItem;
+import org.rcfaces.core.item.IImagesItem;
+import org.rcfaces.core.item.ITreeNode;
+import org.rcfaces.core.item.TreeNode;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -361,13 +361,13 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         javaScriptWriter.writeln(");");
 
-        if (selectItem instanceof IImagesSelectItem) {
-            writeSelectItemImages((IImagesSelectItem) selectItem,
+        if (selectItem instanceof IImagesItem) {
+            writeSelectItemImages((IImagesItem) selectItem,
                     javaScriptWriter, null, "f_setItemImages", varId, false);
         }
 
-        if (selectItem instanceof IClientDataSelectItem) {
-            IClientDataSelectItem clientDataItem = (IClientDataSelectItem) selectItem;
+        if (selectItem instanceof IClientDataItem) {
+            IClientDataItem clientDataItem = (IClientDataItem) selectItem;
 
             if (clientDataItem.isClientDataEmpty() == false) {
                 writeItemClientDatas(clientDataItem, javaScriptWriter, null,

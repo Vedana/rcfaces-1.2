@@ -265,6 +265,8 @@
 		<file name="f_input.js">
 			<class name="f_input">
 				<required-class name="f_component" /> 
+				<required-class name="fa_focusStyleClass" />
+				<required-class name="fa_message" />
 			</class>
 		</file>
 		<file name="f_button.js">
@@ -541,9 +543,7 @@
 				<required-class name="f_input" />
 				<required-class name="fa_required" />
 				<required-class name="fa_subMenu" />
-				<required-class name="fa_focusStyleClass" />
 				<required-class name="fa_selectionProvider" />
-				<required-class name="fa_message" />
 				<required-class id="menu" name="f_menu" />
 			</class>
 		</file>

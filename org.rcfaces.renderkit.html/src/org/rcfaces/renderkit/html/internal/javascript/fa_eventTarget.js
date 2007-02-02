@@ -114,7 +114,7 @@ var __prototype = {
 		try {				
 			var al=this.f_getActionList(type);
 			if (!al) {
-				f_core.Debug("f_eventTarget", "No listeners for event '"+type+"' on '"+this.id+"'"+((event)?("item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"'"):"")+".");
+				f_core.Debug(fa_eventTarget, "No listeners for event '"+type+"' on '"+this.id+"'"+((event)?("item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"'"):"")+".");
 				
 				// On retourne TRUE par défaut.
 				return true;
@@ -132,7 +132,7 @@ var __prototype = {
 			var ret=true;
 			
 			try {
-				f_core.Debug("f_eventTarget", "Fire event '"+event._type+"' on '"+this.id+"' item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"' detail='"+event._detail+"'.");
+				f_core.Debug(fa_eventTarget, "Fire event '"+event._type+"' on '"+this.id+"' item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"' detail='"+event._detail+"'.");
 				
 				ret = al.f_callActions(event);
 					

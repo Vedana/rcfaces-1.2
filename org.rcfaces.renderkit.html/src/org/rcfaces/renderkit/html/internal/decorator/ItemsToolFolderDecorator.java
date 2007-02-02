@@ -5,11 +5,12 @@
 package org.rcfaces.renderkit.html.internal.decorator;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
@@ -37,6 +38,7 @@ import org.rcfaces.core.component.capability.IExpandImageCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -46,16 +48,17 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.model.IAccessKeySelectItem;
-import org.rcfaces.core.model.ICheckSelectItem;
-import org.rcfaces.core.model.IGroupSelectItem;
-import org.rcfaces.core.model.IImageSizeSelectItem;
-import org.rcfaces.core.model.IImagesSelectItem;
-import org.rcfaces.core.model.IInputTypeSelectItem;
-import org.rcfaces.core.model.IToolItem;
-import org.rcfaces.core.model.IVisibleSelectItem;
-import org.rcfaces.core.model.SeparatorSelectItem;
-import org.rcfaces.core.model.ToolItem;
+import org.rcfaces.core.item.IAccessKeyItem;
+import org.rcfaces.core.item.ICheckSelectItem;
+import org.rcfaces.core.item.IGroupSelectItem;
+import org.rcfaces.core.item.IImageSizeItem;
+import org.rcfaces.core.item.IImagesItem;
+import org.rcfaces.core.item.IInputTypeItem;
+import org.rcfaces.core.item.ILookAndFeelItem;
+import org.rcfaces.core.item.IToolItem;
+import org.rcfaces.core.item.IVisibleItem;
+import org.rcfaces.core.item.SeparatorSelectItem;
+import org.rcfaces.core.item.ToolItem;
 
 /**
  * 
@@ -74,7 +77,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
     private final String borderType;
 
-    private final Map itemComponentId = new HashMap(8);
+    private final List itemComponentId = new ArrayList(8);
 
     public ItemsToolFolderDecorator(UIComponent component) {
         super(component, null);
@@ -86,6 +89,92 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         writer.enableJavaScript();
 
         super.preEncodeContainer();
+    }
+
+    protected void encodeComponentsEnd() throws WriterException {
+        if (javaScriptWriter == null) {
+            super.encodeComponentsEnd();
+            return;
+        }
+
+        if (itemComponentId.isEmpty() == false) {
+            List hiddenItems = null;
+
+            javaScriptWriter.writeMethodCall("f_appendToolItems");
+
+            int cnt = 0;
+
+            for (Iterator it = itemComponentId.iterator(); it.hasNext(); cnt++) {
+                SelectItem selectItem = (SelectItem) it.next();
+                String componentId = (String) it.next();
+
+                int inputType = IInputTypeCapability.AS_PUSH_BUTTON;
+
+                if (SeparatorSelectItem.isSeparator(selectItem)) {
+                    inputType = IInputTypeCapability.AS_SEPARATOR;
+
+                } else if (selectItem instanceof IInputTypeItem) {
+                    inputType = ((IInputTypeItem) selectItem).getInputType();
+                }
+
+                if (cnt > 0) {
+                    javaScriptWriter.write(',');
+                }
+
+                javaScriptWriter.writeString(componentId).write(',').writeInt(
+                        inputType);
+
+                String selectItemValue = null;
+                Object si = selectItem.getValue();
+
+                if (si != null) {
+                    selectItemValue = convertItemValue(javaScriptWriter
+                            .getHtmlComponentRenderContext(), selectItem
+                            .getValue());
+                }
+
+                if (selectItemValue == null) {
+                    throw new FacesException(
+                            "Item of a toolbar must have a value. itemsToolFolderId="
+                                    + component.getId());
+                }
+
+                javaScriptWriter.write(',').writeString(selectItemValue);
+                javaScriptWriter.write(',').writeBoolean(
+                        selectItem.isDisabled());
+
+                if (selectItem instanceof IVisibleItem) {
+                    if (((IVisibleItem) selectItem).isVisible() == false) {
+                        if (hiddenItems == null) {
+                            hiddenItems = new ArrayList();
+                        }
+
+                        hiddenItems.add(selectItemValue);
+                    }
+                }
+            }
+
+            javaScriptWriter.writeln(");");
+
+            if (hiddenItems != null) {
+                javaScriptWriter.writeMethodCall("f_hideToolItems");
+
+                int idx = 0;
+                for (Iterator it = hiddenItems.iterator(); it.hasNext(); idx++) {
+                    String itemValue = (String) it.next();
+
+                    if (idx > 0) {
+                        javaScriptWriter.write(',');
+                    }
+
+                    javaScriptWriter.writeString(itemValue);
+                }
+
+                javaScriptWriter.write(");");
+            }
+        }
+
+        super.encodeComponentsEnd();
     }
 
     /*
@@ -103,7 +192,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
 
         if (SeparatorSelectItem.isSeparator(selectItem)) {
-            encodeToolItemSeparator(component);
+            encodeToolItemSeparator(component, selectItem);
             return EVAL_NODE;
         }
 
@@ -119,13 +208,18 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         return EVAL_NODE;
     }
 
-    private void encodeToolItemSeparator(UIComponent component)
-            throws WriterException {
+    private void encodeToolItemSeparator(UIComponent component,
+            SelectItem selectItem) throws WriterException {
 
         writer.startElement("TD");
+        writer.writeAttribute("v:separator", "true");
 
-        // writer.startElement("IMG");
         // Affichage d'un séparator
+
+        writer.startElement("IMG");
+
+        itemComponentId.add(selectItem);
+        itemComponentId.add(null);
 
         writer.endElement("TD");
     }
@@ -138,16 +232,18 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         Object selectItemValue = selectItem.getValue();
 
         String componentId = "_item" + itemComponentId.size();
+        itemComponentId.add(selectItem);
+        itemComponentId.add(componentId);
 
         int style = IInputTypeCapability.AS_PUSH_BUTTON;
-        if (selectItem instanceof IInputTypeSelectItem) {
-            style = ((IInputTypeSelectItem) selectItem).getInputType();
+        if (selectItem instanceof IInputTypeItem) {
+            style = ((IInputTypeItem) selectItem).getInputType();
 
         } else if (selectItem instanceof IGroupSelectItem) {
             style = IInputTypeCapability.AS_RADIO_BUTTON;
 
         } else if (selectItem instanceof ICheckSelectItem) {
-            style = IInputTypeCapability.AS_CHECK_BOX;
+            style = IInputTypeCapability.AS_CHECK_BUTTON;
         }
 
         UIComponent itemComponent = null;
@@ -157,7 +253,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             itemComponent = new ImageRadioButtonComponent(componentId);
             break;
 
-        case IInputTypeCapability.AS_CHECK_BOX:
+        case IInputTypeCapability.AS_CHECK_BUTTON:
             itemComponent = new ImageCheckButtonComponent(componentId);
             break;
 
@@ -177,8 +273,6 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             itemComponent = new ImageButtonComponent(componentId);
         }
 
-        itemComponentId.put(componentId, itemComponent);
-
         if (borderType != null
                 && (itemComponent instanceof IBorderTypeCapability)) {
             ((IBorderTypeCapability) itemComponent).setBorderType(borderType);
@@ -195,8 +289,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             ((ITextCapability) itemComponent).setText(label);
         }
 
-        if (selectItem instanceof IVisibleSelectItem) {
-            if (((IVisibleSelectItem) selectItem).isVisible() == false) {
+        if (selectItem instanceof IVisibleItem) {
+            if (((IVisibleItem) selectItem).isVisible() == false) {
                 if (itemComponent instanceof IVisibilityCapability) {
                     IVisibilityCapability visibilityCapability = (IVisibilityCapability) itemComponent;
 
@@ -207,9 +301,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        if (selectItem instanceof IAccessKeySelectItem) {
-            String accessKey = ((IAccessKeySelectItem) selectItem)
-                    .getAccessKey();
+        if (selectItem instanceof IAccessKeyItem) {
+            String accessKey = ((IAccessKeyItem) selectItem).getAccessKey();
 
             if (accessKey != null
                     && (itemComponent instanceof IAccessKeyCapability)) {
@@ -228,8 +321,17 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             ((IDisabledCapability) itemComponent).setDisabled(true);
         }
 
-        if (selectItem instanceof IImagesSelectItem) {
-            IImagesSelectItem imagesSelectItem = (IImagesSelectItem) selectItem;
+        if (selectItem instanceof ILookAndFeelItem) {
+            ILookAndFeelItem lookIdItem = (ILookAndFeelItem) selectItem;
+
+            String lookId = lookIdItem.getLookId();
+            if (lookId != null
+                    && (itemComponent instanceof ILookAndFeelCapability)) {
+                ((ILookAndFeelCapability) itemComponent).setLookId(lookId);
+            }
+        }
+        if (selectItem instanceof IImagesItem) {
+            IImagesItem imagesSelectItem = (IImagesItem) selectItem;
 
             if (itemComponent instanceof IImageCapability) {
                 String imageURL = imagesSelectItem.getImageURL();
@@ -272,8 +374,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             int width = 0;
             int height = 0;
 
-            if (selectItem instanceof IImageSizeSelectItem) {
-                IImageSizeSelectItem ss = (IImageSizeSelectItem) selectItem;
+            if (selectItem instanceof IImageSizeItem) {
+                IImageSizeItem ss = (IImageSizeItem) selectItem;
 
                 width = ss.getImageWidth();
                 height = ss.getImageHeight();
@@ -303,13 +405,23 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         writer.startElement("TD");
 
+        List children = component.getChildren();
+
         try {
-            renderer.encodeBegin(facesContext, itemComponent);
+            children.add(itemComponent);
 
-            renderer.encodeEnd(facesContext, itemComponent);
+            try {
+                renderer.encodeBegin(facesContext, itemComponent);
 
-        } catch (IOException ex) {
-            throw new WriterException(ex.getMessage(), ex.getCause(), component);
+                renderer.encodeEnd(facesContext, itemComponent);
+
+            } catch (IOException ex) {
+                throw new WriterException(ex.getMessage(), ex.getCause(),
+                        component);
+            }
+
+        } finally {
+            children.remove(itemComponent);
         }
 
         writer.endElement("TD");
@@ -406,7 +518,15 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
      * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
      */
     protected SelectItemsContext createJavaScriptContext() {
-        return null;
+
+        IComponentRenderContext componentRenderContext = javaScriptWriter
+                .getHtmlComponentRenderContext();
+
+        ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) componentRenderContext
+                .getComponent();
+
+        return new ToolBarContext(this, componentRenderContext,
+                itemsToolFolderComponent.getValue());
     }
 
     /*

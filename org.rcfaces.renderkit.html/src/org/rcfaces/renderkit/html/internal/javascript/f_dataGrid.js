@@ -3407,14 +3407,15 @@ var __prototype = {
 			return;
 		}
 		
-		if (this._cfocus) {
-			this._cfocus.style.top=this._table.scrollTop+"px";
+		var cfocus=this._cfocus;
+		if (cfocus) {
+			cfocus.style.top=this._table.scrollTop+"px";
 			
-			f_core.SetFocus(this._cfocus);
+			cfocus.focus();
 			return;
 		}
 
-		f_core.SetFocus(this);
+		this.focus();
 	},
 	f_setFocus: function() {
 		if (!f_core.ForceComponentVisibility(this)) {
@@ -3424,12 +3425,15 @@ var __prototype = {
 			return;
 		}
 
-		if (this._cfocus) {
-			this._cfocus.focus();
+		var cfocus=this._cfocus;
+		if (cfocus && typeof(cfocus.focus)=="function") {
+			cfocus.focus();
 			return true;
 		}
 		
-		this.focus();
+		if (typeof(this.focus)=="function") {
+			this.focus();
+		}
 		return true;
 	},
 	_nextCursorRow: function(evt, selection) {

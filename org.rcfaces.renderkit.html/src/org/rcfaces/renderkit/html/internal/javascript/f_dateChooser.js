@@ -24,7 +24,7 @@ var __prototype={
 		this.f_super(arguments);
 	},
 	_onSelect: function(event) {
-		f_core.Debug("f_dateChooser", "_onSelect: "+event+" detail="+event.f_getDetail());
+		f_core.Debug(f_dateChooser, "_onSelect: "+event+" detail="+event.f_getDetail());
 
 		if (this.f_isDisabled()) {
 			return false;

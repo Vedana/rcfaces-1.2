@@ -36,6 +36,8 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 			try {
 			 	var bundles=classLoader._bundles;
 			 	
+			 	var win=f_core.GetWindow(this._component);
+			 	
 				for(;;) {
 					var loads=this._loads;
 					
@@ -153,7 +155,9 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 						
 						if (script.length) {
 							try {
-								eval(script);
+								with (win) { // On appelle le "eval" du window du component !
+									eval(script)
+								}
 								
 							} catch (x) {
 								f_core.Error("f_asyncClassLoader", "Eval throws exception; script='"+script+"'.", x);

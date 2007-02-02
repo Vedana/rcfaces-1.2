@@ -17,12 +17,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class BasicComponentEngine extends AbstractComponentEngine {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(BasicComponentEngine.class);
 
     private static final String VALIDATORS_KEY = "camelia.validators";
 
@@ -128,7 +134,15 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             return null;
         }
 
-        return propertiesAccessor.getProperty(propertyName);
+        Object value = propertiesAccessor.getProperty(propertyName);
+
+        if (LOG.isDebugEnabled()) {
+            LOG
+                    .debug("getLocalProperty(\"" + propertyName
+                            + "\") returns null");
+        }
+
+        return value;
     }
 
     public final Object getInternalProperty(String propertyName,
@@ -136,6 +150,11 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         Object object = getLocalProperty(propertyName);
         if (object == null) {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("getInternalProperty(\"" + propertyName + "\" ["
+                        + requestedClass.getName() + "]) returns null");
+            }
             return null;
         }
 
@@ -146,7 +165,20 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                 facesContext = getFacesContext();
             }
 
-            return valueBinding.getValue(facesContext);
+            object = valueBinding.getValue(facesContext);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("getInternalProperty(\"" + propertyName + "\" ["
+                        + requestedClass.getName()
+                        + "]) returns a value binding (" + valueBinding
+                        + ") => " + object);
+            }
+            return object;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getInternalProperty(\"" + propertyName + "\" ["
+                    + requestedClass.getName() + "]) returns " + object);
         }
 
         return object;
@@ -163,6 +195,11 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     protected final void setInternalProperty(String propertyName, Object value) {
         IPropertiesAccessor pa = getPropertiesAccessor(true);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("setInernalProperty(\"" + propertyName + "\", " + value
+                    + ")");
+        }
 
         pa.setProperty(null, propertyName, value);
     }
@@ -439,22 +476,17 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     /*
-    public final String getConverterId(FacesContext facesContext) {
-        return getStringProperty(CONVERTER_ID_PROPERTY, facesContext);
-    }
-
-    public final void setConverterId(String converterId) {
-        setProperty(CONVERTER_ID_PROPERTY, converterId);
-        this.converter = null;
-        this.converterSetted = false;
-    }
-
-    public final void setConverterId(ValueBinding converterId) {
-        setProperty(CONVERTER_ID_PROPERTY, converterId);
-        this.converter = null;
-        this.converterSetted = false;
-    }
-    */
+     * public final String getConverterId(FacesContext facesContext) { return
+     * getStringProperty(CONVERTER_ID_PROPERTY, facesContext); }
+     * 
+     * public final void setConverterId(String converterId) {
+     * setProperty(CONVERTER_ID_PROPERTY, converterId); this.converter = null;
+     * this.converterSetted = false; }
+     * 
+     * public final void setConverterId(ValueBinding converterId) {
+     * setProperty(CONVERTER_ID_PROPERTY, converterId); this.converter = null;
+     * this.converterSetted = false; }
+     */
 
     public final Converter getConverter(FacesContext facesContext) {
         if (converterSetted) {
@@ -490,6 +522,10 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     public final void setConverter(Converter converter) {
         this.converter = converter;
         this.converterSetted = true;
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Set converter: " + converter);
+        }
     }
 
     public Object getTransientAttribute(String name) {
@@ -497,12 +533,22 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             return null;
         }
 
-        return transientAttributes.get(name);
+        Object value = transientAttributes.get(name);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Get transient attribute '" + name + "' => " + value);
+        }
+
+        return value;
     }
 
     public Object setTransientAttribute(String name, Object value) {
         if (transientAttributes == null) {
             transientAttributes = factory.createMap(4);
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Set transient attribute '" + name + "'=" + value);
         }
 
         return transientAttributes.put(name, value);
@@ -518,6 +564,10 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     public void processUpdates(FacesContext context) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Process update, enableDelta=" + enableDelta);
+        }
 
         if (enableDelta == false) {
             return;
@@ -541,6 +591,10 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     public void startDecodes(FacesContext context) {
         enableDelta = true;
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Start decode component");
+        }
     }
 
     /**

@@ -5,10 +5,8 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 
 import org.rcfaces.core.component.ItemsToolFolderComponent;
-import org.rcfaces.core.event.ItemActionEvent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -98,16 +96,10 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decodeEvent(org.rcfaces.core.internal.renderkit.IRequestContext,
-     *      javax.faces.component.UIComponent, java.lang.String,
-     *      java.lang.String)
-     */
     protected void decodeEvent(IRequestContext context, UIComponent component,
             IEventData eventData) {
 
+        /*
         if (eventData != null
                 && JavaScriptClasses.EVENT_SELECTION.equals(eventData
                         .getEventName())) {
@@ -116,11 +108,16 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
 
             // TODO: Il faut converir la value de l'item ...
 
-            ActionEvent actionEvent = new ItemActionEvent(component, value);
+            String itemValue=String.valueOf(value);
+            
+            ActionEvent actionEvent = new SelectionEvent(component, String
+                    .valueOf(value), value, 0);
+            actionEvent.setPhaseId(PhaseId.INVOKE_APPLICATION);
             component.queueEvent(actionEvent);
 
             return;
         }
+        */
 
         super.decodeEvent(context, component, eventData);
     }

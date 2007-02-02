@@ -93,4 +93,6 @@ public interface IHtmlWriter extends ISgmlWriter {
     IHtmlWriter writeCharset(String charset) throws WriterException;
 
     IHtmlWriter writeRole(String role) throws WriterException;
+
+   // IHtmlWriter writeAttributeNS(String ns, String name, String value)throws WriterException;
 }

@@ -1,17 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.IMenuEventCapability;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.ExpandableItemComponent;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.component.capability.IMenuEventCapability;
 
 /**
  * A menu item
@@ -19,13 +20,14 @@ import org.rcfaces.core.internal.tools.MenuTools;
 public class MenuItemComponent extends ExpandableItemComponent implements 
 	IAccessKeyCapability,
 	IAcceleratorKeyCapability,
+	IStyleClassCapability,
 	IMenuEventCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuItem";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"acceleratorKey","removeAllWhenShown","accessKey","menuListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","acceleratorKey","removeAllWhenShown","accessKey","menuListener"}));
 	}
 
 	public MenuItemComponent() {
@@ -93,6 +95,28 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 	 */
 	public final void setAcceleratorKey(ValueBinding acceleratorKey) {
 		engine.setProperty(Properties.ACCELERATOR_KEY, acceleratorKey);
+	}
+
+	public final java.lang.String getStyleClass() {
+		return getStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 */
+	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
+	}
+
+	public final void setStyleClass(java.lang.String styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
+
+	/**
+	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
+	 */
+	public final void setStyleClass(ValueBinding styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
 	public final void addMenuListener(org.rcfaces.core.event.IMenuListener listener) {
