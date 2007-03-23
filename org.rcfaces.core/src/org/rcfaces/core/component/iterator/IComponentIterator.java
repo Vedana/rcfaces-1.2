@@ -4,22 +4,61 @@
  */
 package org.rcfaces.core.component.iterator;
 
+import java.util.NoSuchElementException;
+
 import javax.faces.component.UIComponent;
 
 /**
+ * An iterator over a collection of UIComponents.
+ * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface IComponentIterator {
 
-	/**
-	 * Retourne le nombre de composants qu'il reste � it�rer !
-	 */
-	int count();
+    /**
+     * Returns the number of components in this list.
+     * 
+     * @return the number of components in this list.
+     */
+    int count();
 
-	boolean hasNext();
+    /**
+     * Returns <tt>true</tt> if the iteration has more components. (In other
+     * words, returns <tt>true</tt> if <tt>next</tt> would return an element
+     * rather than throwing an exception.)
+     * 
+     * @return <tt>true</tt> if the iterator has more components.
+     */
+    boolean hasNext();
 
-	UIComponent nextComponent();
-    
-    UIComponent [] toArray(UIComponent[] array);
+    /**
+     * Returns the next component in the iteration. Calling this method
+     * repeatedly until the {@link #hasNext()} method returns false will return
+     * each element in the underlying collection exactly once.
+     * 
+     * @return the next component in the iteration.
+     * @exception NoSuchElementException
+     *                iteration has no more component.
+     */
+    UIComponent nextComponent();
+
+    /**
+     * Returns an array containing all of the components in this list in proper
+     * sequence; the runtime type of the returned array is that of the specified
+     * array.
+     * 
+     * @param array
+     *            the array into which the components of this list are to be
+     *            stored, if it is big enough; otherwise, a new array of the
+     *            same runtime type is allocated for this purpose.
+     * @return an array containing the components of this list.
+     * 
+     * @throws ArrayStoreException
+     *             if the runtime type of the specified array is not a supertype
+     *             of the runtime type of every component in this list.
+     * @throws NullPointerException
+     *             if the specified array is <tt>null</tt>.
+     */
+    UIComponent[] toArray(UIComponent[] array);
 }

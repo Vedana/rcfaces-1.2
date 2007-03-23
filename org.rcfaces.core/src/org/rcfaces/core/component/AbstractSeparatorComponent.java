@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -17,6 +18,7 @@ import java.util.HashSet;
  */
 public abstract class AbstractSeparatorComponent extends CameliaBaseComponent implements 
 	IVisibilityCapability,
+	IHiddenModeCapability,
 	ISeparatorComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
@@ -41,28 +43,6 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
-	}
-
-	public final int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	public final void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	/**
-	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
-	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	public final boolean isVisible() {
@@ -92,6 +72,28 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 
 			return getVisibleState(null);
 		
+	}
+
+	public final int getHiddenMode() {
+		return getHiddenMode(null);
+	}
+
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
+	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+	}
+
+	public final void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
+	public final void setHiddenMode(ValueBinding hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	protected Set getCameliaFields() {

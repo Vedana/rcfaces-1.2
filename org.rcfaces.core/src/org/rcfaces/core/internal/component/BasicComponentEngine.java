@@ -152,8 +152,11 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         if (object == null) {
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("getInternalProperty(\"" + propertyName + "\" ["
-                        + requestedClass.getName() + "]) returns null");
+                LOG.debug("getInternalProperty(\""
+                        + propertyName
+                        + "\" ["
+                        + ((requestedClass != null) ? requestedClass.getName()
+                                : "no class") + "]) returns null");
             }
             return null;
         }
@@ -168,17 +171,22 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             object = valueBinding.getValue(facesContext);
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("getInternalProperty(\"" + propertyName + "\" ["
-                        + requestedClass.getName()
-                        + "]) returns a value binding (" + valueBinding
-                        + ") => " + object);
+                LOG.debug("getInternalProperty(\""
+                        + propertyName
+                        + "\" ["
+                        + ((requestedClass != null) ? requestedClass.getName()
+                                : "no class") + "]) returns a value binding ("
+                        + valueBinding + ") => " + object);
             }
             return object;
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("getInternalProperty(\"" + propertyName + "\" ["
-                    + requestedClass.getName() + "]) returns " + object);
+            LOG.debug("getInternalProperty(\""
+                    + propertyName
+                    + "\" ["
+                    + ((requestedClass != null) ? requestedClass.getName()
+                            : "no class") + "]) returns " + object);
         }
 
         return object;

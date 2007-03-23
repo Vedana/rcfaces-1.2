@@ -128,7 +128,7 @@ var __prototype = {
 			image.f_link=this;
 		}
 		
-		this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
+		this.f_insertEventListenerFirst(f_event.SELECTION, this.f_imageButtonSelect);
 		this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
 		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
 		
@@ -214,10 +214,10 @@ var __prototype = {
 		}
 	},
 	/**
-	 * @method private
+	 * @method protected
 	 */
-	_onSelect: function(event) {
-		f_core.Debug(f_imageButton, "_onSelect: focus="+this._focus);
+	f_imageButtonSelect: function(event) {
+		f_core.Debug(f_imageButton, "f_imageButtonSelect: focus="+this._focus);
 		
 		this._mouseDown_out = undefined;	
 		this._mouseDown = undefined;	
@@ -231,7 +231,7 @@ var __prototype = {
 		}
 
 		this.checked = false;
-		event._eventReturn=false; // Force l'arret
+//		event._eventReturn=false; // Force l'arret
 	
 		return this.f_performImageSelection(event);
 	},
@@ -283,6 +283,10 @@ var __prototype = {
 	 * @method private
 	 */
 	_onMouseOver: function() {
+		if (this.f_getEventLocked(false)) {
+			return false;
+		}
+		
 		this.f_updateLastFlatBorder();
 
 		this._hover=true;

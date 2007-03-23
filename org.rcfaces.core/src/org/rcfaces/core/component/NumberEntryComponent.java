@@ -4,9 +4,9 @@ import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.INumberFormatTypeCapability;
 import java.lang.Object;
+import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
-import java.util.Collections;
 import org.rcfaces.core.internal.converter.NumberFormatTypeConverter;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
@@ -14,6 +14,7 @@ import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import java.lang.String;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import java.util.HashMap;
@@ -42,13 +43,14 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	INumberFormatTypeCapability,
 	ILiteralLocaleCapability,
 	IComponentLocaleCapability,
+	ISeverityStyleClassCapability,
 	IValidationParameters {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.numberEntry";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","autoCompletion","numberFormat","minimum","required","componentLocale","defaultNumber","numberFormatType","valueChangeListener","integerStep","fractionStep","integerDigits","maximum","literalLocale","fractionDigits","readOnly","focusStyleClass","autoTab","number"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","errorStyleClass","numberFormat","autoCompletion","fatalStyleClass","minimum","required","componentLocale","defaultNumber","numberFormatType","valueChangeListener","integerStep","fractionStep","integerDigits","warnStyleClass","maximum","styleClass","literalLocale","infoStyleClass","fractionDigits","readOnly","focusStyleClass","autoTab","number"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="number";
 
@@ -150,6 +152,11 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	public final Number getNumber() {
 
 
+				Object submittedValue=getSubmittedValue();
+				if (submittedValue!=null) {
+					return (Number)submittedValue;
+				}
+			
 				return (Number)getValue();
 			
 	}
@@ -510,6 +517,94 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 */
 	public final void setComponentLocale(ValueBinding componentLocale) {
 		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
+	}
+
+	public final java.lang.String getErrorStyleClass() {
+		return getErrorStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
+	 */
+	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
+	}
+
+	public final void setErrorStyleClass(java.lang.String errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	/**
+	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
+	 */
+	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	public final java.lang.String getFatalStyleClass() {
+		return getFatalStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
+	 */
+	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
+	}
+
+	public final void setFatalStyleClass(java.lang.String fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	/**
+	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
+	 */
+	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	public final java.lang.String getInfoStyleClass() {
+		return getInfoStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
+	 */
+	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
+	}
+
+	public final void setInfoStyleClass(java.lang.String infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	/**
+	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
+	 */
+	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	public final java.lang.String getWarnStyleClass() {
+		return getWarnStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
+	 */
+	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
+	}
+
+	public final void setWarnStyleClass(java.lang.String warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+	}
+
+	/**
+	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
+	 */
+	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
 	/**

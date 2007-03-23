@@ -9,7 +9,7 @@ package org.rcfaces.core.lang.provider;
  * @version $Revision$ $Date$
  */
 public interface ICheckProvider {
-    Object getCheckValue();
+    Object getCheckedValues();
 
-    void setCheckValue(Object checkValue);
+    void setCheckedValues(Object checkedValues);
 }

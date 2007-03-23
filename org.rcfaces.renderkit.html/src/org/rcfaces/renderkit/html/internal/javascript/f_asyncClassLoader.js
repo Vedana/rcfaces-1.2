@@ -155,9 +155,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 						
 						if (script.length) {
 							try {
-								with (win) { // On appelle le "eval" du window du component !
-									eval(script)
-								}
+								f_core.WindowScopeEval(script);
 								
 							} catch (x) {
 								f_core.Error("f_asyncClassLoader", "Eval throws exception; script='"+script+"'.", x);
@@ -222,7 +220,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 			continue;
 		}
 		
-		if (typeof(type)=="string" && type.length>0 && type.toLowerCase().indexOf("text/javascript")) {
+		if (typeof(type)=="string" && type.length && type.toLowerCase().indexOf("text/javascript")<0) {
 			f_core.Error("f_asyncClassLoader", "Unknown script type: "+script.type);
 			continue;
 		}

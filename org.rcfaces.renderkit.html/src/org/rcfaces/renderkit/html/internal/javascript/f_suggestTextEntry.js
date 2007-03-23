@@ -174,7 +174,7 @@ var __prototype = {
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
-			return f_core.CancelEvent(jsEvt);
+			return f_core.CancelJsEvent(jsEvt);
 		}
 		
 		return true;
@@ -200,13 +200,13 @@ var __prototype = {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
 			if (menuOpened) {
-				return f_core.CancelEvent(jsEvt);
+				return f_core.CancelJsEvent(jsEvt);
 			}
 
 			if (value==this._lastValue) {
-				this._showPopup(jsEvt, true);
+				this._showPopup(jsEvt, (jsEvt.keyCode==f_key.VK_DOWN)?1:-1);
 
-				return f_core.CancelEvent(jsEvt);
+				return f_core.CancelJsEvent(jsEvt);
 			}
 			
 			showPopup=true;
@@ -279,13 +279,13 @@ var __prototype = {
 					suggestTextEntry._onSuggestTimeOut();
 					
 				} catch (x) {
-					f_core.Error(f_suggestTextEntry, "Timeout processing error !", x);
+					f_core.Error(f_suggestTextEntry, "_onSuggest: Timeout processing error !", x);
 				}
 			}, delay);
 		}		
 		
 		if (cancel) {
-			return f_core.CancelEvent(jsEvt);
+			return f_core.CancelJsEvent(jsEvt);
 		}
 		
 		return true;
@@ -305,23 +305,23 @@ var __prototype = {
 			return;
 		}
 		
+		// Peut-on se limiter à ce que l'on a en mémoire ?
+		
 		var results=this._results;
-		if (results && results.length>0 && results.length==this._rowCount ) {
-			var requestedText=this._requestedText;
-			if (requestedText) {
-				var rtext=text;
-				if (!this._caseSensitive) {
-					requestedText=requestedText.toLowerCase();
-					rtext=rtext.toLowerCase();
-				}
-			
-				if (rtext.indexOf(requestedText)==0) {
-					this._showProposal();
-					return;
-				}
+
+		if (this._requestedText==text) {
+			this._showProposal();
+			return;
+		}
+
+		if (results && results.length && !text.indexOf(this._requestedText)) {
+			if (this._filterProposals(new Array(), text)) {
+				this._showProposal();
+				return;
 			}
 		}
 
+		
 		var p=this.f_getFilterProperties();
 		
 		p.text=text;
@@ -334,14 +334,29 @@ var __prototype = {
 			return;
 		}
 		
+		var params=new Object;
+		params.componentId=this.id;
+		
+		var text=null;
+		var filterExpression=this.f_getProperty(f_prop.FILTER_EXPRESSION);
+		if (filterExpression) {
+			params.filterExpression=filterExpression;
+			
+			text=this.f_getFilterProperties().text;
+		}
+		var maxResultNumber=this._maxResultNumber;
+		if (maxResultNumber>0) {
+			params.maxResultNumber=maxResultNumber;
+		}
+		
 		this.f_appendCommand(function(suggestTextEntry) {
-			suggestTextEntry._callServer();
+			suggestTextEntry._callServer(params, text);
 		});
 	},
 	/**
 	 * @method private
 	 */
-	_callServer: function() {
+	_callServer: function(params, text) {
 		this._calling=true;
 		
 		try {
@@ -350,25 +365,8 @@ var __prototype = {
 			}	
 		
 			this.f_setLoading(true);
-		
-			var params=new Object;
-			params.componentId=this.id;
 			
-			var text=null;
-			var filterExpression=this.f_getProperty(f_prop.FILTER_EXPRESSION);
-			if (filterExpression) {
-				params.filterExpression=filterExpression;
-				
-				text=this.f_getFilterProperties().text;
-			}
-			var maxResultNumber=this._maxResultNumber;
-			if (maxResultNumber>0) {
-				params.maxResultNumber=maxResultNumber;
-			}
-	
-			this._results=undefined;
-			
-			f_core.Debug(f_suggestTextEntry, "Call server text='"+text+"' maxResultNumber="+maxResultNumber);
+			f_core.Debug(f_suggestTextEntry, "Call server text='"+text+"' maxResultNumber="+params.maxResultNumber);
 		
 			var url=f_env.GetViewURI();	
 			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
@@ -396,7 +394,6 @@ var __prototype = {
 				 * @method public
 				 */
 		 		onProgress: function(request, content, length, contentType) {
-					// XXX TODO
 				 	// f_core.SetTextNode(waitingNode._label, f_waiting.GetReceivingMessage());
 		 		},
 				/**
@@ -413,15 +410,17 @@ var __prototype = {
 						}
 		
 						var responseContentType=request.f_getResponseContentType();
-						if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+						if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)) {
 				 			suggestTextEntry.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
 
 							return;
 						}
 	
-						suggestTextEntry._requestedText=text;
 						//alert("Req='"+text+"'");
 						var ret=request.f_getResponse();
+	
+						suggestTextEntry._results=undefined;
+						suggestTextEntry._requestedText=text;
 						
 						try {
 							eval(ret);
@@ -555,6 +554,9 @@ var __prototype = {
 	},
 	/**
 	 * @method private
+	 * @param Event jsEvt
+	 * @param optional number autoSelect
+	 * @return void
 	 */
 	_showPopup: function(jsEvt, autoSelect) {
 		var menu=this.f_getSubMenuById(f_suggestTextEntry._SUGGESTION_MENU_ID);
@@ -642,7 +644,7 @@ var __prototype = {
 
 		if (this._forceProposal) {
 			var results=this._results;
-			if (results && results.length>0 && results.length==this._rowCount ) {
+			if (results && results.length && results.length==this._rowCount ) {
 				// Recherche les caracteres supplementaires !
 				for(var i=label.length+1;i>=0 && i<=proposalLabelCS.length;i++) {
 					var l=proposalLabelCS.substring(0, i);
@@ -655,7 +657,7 @@ var __prototype = {
 							continue;
 						}
 						
-						if (resultCS.indexOf(l)==0) {
+						if (!resultCS.indexOf(l)) {
 							continue;
 						}
 					
@@ -704,27 +706,31 @@ var __prototype = {
 	},
 	/**
 	 * @method private
+	 * @param Array ret
+	 * @return boolean
 	 */
-	_filterProposals: function(ret) {
-		var d=this.f_getSelection();
-		if (!d) {
-			f_core.Debug(f_suggestTextEntry, "No selection to change proposal !");
-			return true;
-		}
-
+	_filterProposals: function(ret, text) {
+	
 		var results=this._results;
-		if (!results) {
+		if (!results || !results.length) {
 			return true;
 		}
 
-		var value=this.value;
-		var text=value.substring(0, d.start);
-		
+		if (text===undefined) {
+			var d=this.f_getSelection();
+			if (!d) {
+				f_core.Debug(f_suggestTextEntry, "_filterProposals: No selection to change proposal !");
+				return true;
+			}
+	
+			text=this.value.substring(0, d.start);
+		}
+				
 		if (!this._caseSensitive) {
 			text=text.toLowerCase();
 		}
-
-		var complete=true;
+		
+		var state=0;
 		
 		for(var i=0;i<results.length;i++) {
 			var r=results[i]._label;
@@ -732,26 +738,54 @@ var __prototype = {
 				r=r.toLowerCase();
 			}
 			
-			if (r.indexOf(text)) {
-				complete=true;
+			if (r.indexOf(text)) { // Ca ne commence pas !
+				if (state==1) {
+					// On avait trouvé, puis c'est la fin
+					state=2;
+				}
+				
 				continue;
 			}
-			
-			complete=false;
+
+			if (state==0) { 
+				state=1;
+			}
 			
 			ret.push(results[i]);
 		}
+
+		var complete=false;
+	
+//	alert("State="+state+" resultsLength="+results.length+" rowCount="+this._rowCount+" ordered="+this._orderedResult);
+	
+		switch(state) {
+		case 0:
+			if (this._orderedResult) {
+				var requestedText=this._requestedText;
+				if (requestedText && requestedText.length) {
+					// on a une petite chance car on a recherché A 
+					// et on tombe sur AE
+					// on peut en déduire qu'il n'y a pas de AA,AB,AC,AD et c'est donc complet
+					
+					if (!this._caseSensitive) {
+						requestedText=requestedText.toLowerCase();
+					}
+					
+					complete=(text.indexOf(requestedText)==0);
+				}
+			}
+			break;
 		
-		if (!this._orderedResult) {
-			// Ben on en sait rien alors !
-			complete=false;
-		}
+		case 1:
+			complete=(results.length==this._rowCount);
+			break;
+
+		case 2:
+			complete=(this._orderedResult==true);
+			break;
+		} 
 		
-		if (results.length==this._rowCount) {
-			complete=true;
-		}
-		
-		f_core.Debug(f_suggestTextEntry, "_filterProposals: Results="+results.length+" rowCount="+this._rowCount+" Post filter="+ret.length+" complete="+complete);
+		f_core.Debug(f_suggestTextEntry, "_filterProposals: Results="+results.length+" rowCount="+this._rowCount+" Post filter="+ret.length+" complete="+complete+" state="+state);
 			
 		return complete;
 	},
@@ -764,7 +798,9 @@ var __prototype = {
 	},
 	/** 
 	 * @method private
-	 * @param String
+	 * @param String value
+	 * @param Object item
+	 * @param Event jsEvt
 	 * @return void
 	 */
 	_setSuggestionValue: function(value, item, jsEvt) {

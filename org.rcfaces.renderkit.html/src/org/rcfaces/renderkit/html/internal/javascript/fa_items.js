@@ -469,26 +469,30 @@ var __prototype = {
 			return;
 		}
 
-		if (item.id) {
-			if (checked) {
-				if (!this._checkedValues) {
-					this._checkedValues=new Object;
-				}
-				this._checkedValues[item.id]=true;
-
-				if (this._uncheckedValues) {
-					delete this._uncheckedValues[item.id];
+		var value=this.f_getItemValue(item);
+		if (value) {
+			var checkedValues=this._checkedValues;
+			var uncheckedValues=this._uncheckedValues;
+			
+			if (checked) {			
+				if (!uncheckedValues || !uncheckedValues.f_removeElement(value)) {
+					if (!checkedValues) {
+						checkedValues=new Array;
+						this._checkedValues=checkedValues;
+					}
+					
+					checkedValues.f_addElement(value);
 				}
 				
 			} else {
-				if (this._checkedValues) {
-					delete this._checkedValues[item.id];
+				if (!checkedValues || !checkedValues.f_removeElement(value)) {
+					if (!uncheckedValues) {
+						uncheckedValues=new Array;
+						this._uncheckedValues=uncheckedValues;
+					}
+					
+					uncheckedValues.f_addElement(value);
 				}
-
-				if (!this._uncheckedValues) {
-					this._uncheckedValues=new Object;
-				}
-				this._uncheckedValues[item.id]=true;
 			}
 		}
 
@@ -587,17 +591,24 @@ var __prototype = {
 	 * @return void
 	 */
 	f_serializeItems: function() {
-		if (this._checkedValues) {
-			this.f_setProperty(f_prop.CHECKED_ITEMS, this._checkedValues, true);
+		var checkedValues=this._checkedValues;
+		if (checkedValues) {
+			this.f_setProperty(f_prop.CHECKED_ITEMS, checkedValues, true);
 		}
-		if (this._uncheckedValues) {
-			this.f_setProperty(f_prop.UNCHECKED_ITEMS, this._uncheckedValues, true);
+		
+		var uncheckedValues=this._uncheckedValues;
+		if (uncheckedValues) {
+			this.f_setProperty(f_prop.UNCHECKED_ITEMS, uncheckedValues, true);
 		}
-		if (this._disabledItems) {
-			this.f_setProperty(f_prop.DISABLED_ITEMS, this._disabledItems, true);
+		
+		var disabledItems=this._disabledItems;
+		if (disabledItems) {
+			this.f_setProperty(f_prop.DISABLED_ITEMS, disabledItems, true);
 		}
-		if (this._enabledItems) {
-			this.f_setProperty(f_prop.ENABLED_ITEMS, this._enabledItems, true);
+		
+		var enabledItems=this._enabledItems;
+		if (enabledItems) {
+			this.f_setProperty(f_prop.ENABLED_ITEMS, enabledItems, true);
 		}
 	},
 	/**
@@ -606,7 +617,7 @@ var __prototype = {
 	 * @return Object[]
 	 */
 	f_listItemChildren: function(item) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_listItemChildren: Invalid item object. ("+item+")");
+		f_core.Assert(item!==null && typeof(item)=="object", "fa_items.f_listItemChildren: Invalid item object. ("+item+")");
 
 		return item._items;
 	},
@@ -616,7 +627,7 @@ var __prototype = {
 	 * @return Object[]
 	 */
 	f_listVisibleItemChildren: function(item) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_listItemChildren: Invalid item object. ("+item+")");
+		f_core.Assert(item!==null && typeof(item)=="object", "fa_items.f_listItemChildren: Invalid item object. ("+item+")");
 
 		var array=new Array;
 
@@ -642,7 +653,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_hasItemChildren: function(item) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");
+		f_core.Assert(item!==null && typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");
 
 		var items=item._items;
 		if (!items || !items.length) {
@@ -657,7 +668,7 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getInputType: function(item) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_getInputType: Invalid item object. ("+item+")");
+		f_core.Assert(item!==null && typeof(item)=="object", "fa_items.f_getInputType: Invalid item object. ("+item+")");
 		
 		return item._inputType;
 	},
@@ -667,7 +678,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_hasVisibleItemChildren: function(item) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");
+		f_core.Assert(item!==null && typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");
 
 		var items=item._items;
 		if (!items || !items.length) {
@@ -675,9 +686,11 @@ var __prototype = {
 		}
 		
 		for(var i=0;i<items.length;i++) {
-			if (this.f_isItemVisible(items[i])) {
-				return true;
+			if (this.f_isItemVisible(items[i])==false) {
+				continue;
 			}
+
+			return true;
 		}
 		
 		return false;
@@ -707,4 +720,4 @@ var __prototype = {
 	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT
 }
 
-var fa_items=new f_aspect("fa_items", __static, __prototype, fa_itemClientDatas);
+new f_aspect("fa_items", __static, __prototype, fa_itemClientDatas);

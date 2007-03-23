@@ -5,7 +5,7 @@
 /**
  * Aspect SelectionManager
  *
- * @aspect public fa_selectionManager extends fa_cardinality, fa_selectionProvider
+ * @aspect public fa_selectionManager extends fa_itemsManager, fa_selectionProvider
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -142,7 +142,7 @@ var __prototype = {
 			}
 			
 			var selectedElementValues=this._selectedElementValues;
-			if (selectedElementValues.length>0) {
+			if (selectedElementValues.length) {
 				this.f_setProperty(f_prop.SELECTED_ITEMS, selectedElementValues, true);
 			}
 			
@@ -151,7 +151,7 @@ var __prototype = {
 
 			} else {
 				var deselectedElementValues=this._deselectedElementValues;
-				if (deselectedElementValues.length>0) {
+				if (deselectedElementValues.length) {
 					this.f_setProperty(f_prop.DESELECTED_ITEMS, deselectedElementValues, true);
 				}
 			}
@@ -298,7 +298,7 @@ var __prototype = {
 	},
 	_deselectAllElements: function() {		
 		var currentSelection=this._currentSelection;
-		if (currentSelection.length>0) {
+		if (currentSelection.length) {
 			this._currentSelection=new Array;
 
 			for(var i=0;i<currentSelection.length;i++) {
@@ -572,7 +572,11 @@ var __prototype = {
 		return true;
 	},
 	
-	_setSelectionStates: function(selectionFullState) {
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_setSelectionStates: function(selectionFullState) {
 		this._selectionFullState=selectionFullState;
 	},
 	/**
@@ -588,18 +592,18 @@ var __prototype = {
 		if (this._clientSelectionFullState) {
 			if (!this._clearAllSelectedElements) {
 				var selectionFullState=this._selectionFullState;
-				if (selectionFullState && selectionFullState.length>0) {
+				if (selectionFullState && selectionFullState.length) {
 					ret.push.apply(ret, selectionFullState);
 				}
 			}	
 			
 			var selectedElementValues=this._selectedElementValues;
-			if (selectedElementValues.length>0) {
+			if (selectedElementValues.length) {
 				ret.f_addElements.apply(ret, selectedElementValues);
 			}
 
 			var deselectedElementValues=this._deselectedElementValues;
-			if (deselectedElementValues.length>0) {
+			if (deselectedElementValues.length) {
 				ret.f_removeElements.apply(ret, deselectedElementValues);
 			}
 			
@@ -672,45 +676,14 @@ var __prototype = {
 	},
 
 	/**
-	 * @method protected
-	 */
-	fa_getElementItem: f_class.ABSTRACT,
-
-	/**
-	 * @method protected abstract
-	 */
-	fa_getElementValue: f_class.ABSTRACT,
-
-	/**
-	 * @method protected abstract
-	 */
-	fa_isElementDisabled: f_class.ABSTRACT,
-
-	/**
 	 * @method protected abstract
 	 */
 	fa_isElementSelected: f_class.ABSTRACT,
-
-	/**
-	 * @method protected abstract
-	 */
-	fa_listVisibleElements: f_class.ABSTRACT,
-
-	/**
-	 * @method protected abstract
-	 */
-	fa_showElement: f_class.ABSTRACT,
 	
 	/**
 	 * @method protected abstract
 	 */
-	fa_setElementSelected: f_class.ABSTRACT,
-
-	/**
-	 * @method protected abstract
-	 */
-	fa_updateElementStyle: f_class.ABSTRACT
+	fa_setElementSelected: f_class.ABSTRACT
 }
 
-
-var fa_selectionManager=new f_aspect("fa_selectionManager", __static, __prototype, fa_cardinality, fa_selectionProvider);
+new f_aspect("fa_selectionManager", __static, __prototype, fa_itemsManager, fa_selectionProvider);

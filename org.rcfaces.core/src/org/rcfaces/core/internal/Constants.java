@@ -119,6 +119,8 @@ public class Constants {
 
     public static final Locale REPOSITORY_DEFAULT_LOCALE = Locale.ENGLISH;
 
+    public static final boolean VERIFY_VARIABLE_SYNTAX = false;
+
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
                 + READ_ONLY_COLLECTION_LOCK_ENABLED);

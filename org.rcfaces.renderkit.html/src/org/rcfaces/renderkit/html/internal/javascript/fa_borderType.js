@@ -155,5 +155,5 @@ var __prototype = {
 	fa_borderFinalizer: f_class.ABSTRACT
 }
 
-var fa_borderType=new f_aspect("fa_borderType", __static, __prototype);
+new f_aspect("fa_borderType", __static, __prototype);
 	

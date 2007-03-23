@@ -436,10 +436,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         if (clazz != null) {
             if (scriptRenderContext != null) {
-                String sclazz = scriptRenderContext.convertSymbol(clazz);
-                if (sclazz != null) {
-                    clazz = sclazz;
-                }
+                clazz = scriptRenderContext.convertSymbol(null, clazz);
             }
 
             sa.append(clazz);
@@ -447,10 +444,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
         }
 
         if (scriptRenderContext != null) {
-            String smethod = scriptRenderContext.convertSymbol(method);
-            if (smethod != null) {
-                method = smethod;
-            }
+            method = scriptRenderContext.convertSymbol(clazz, method);
         }
         sa.append(method);
 

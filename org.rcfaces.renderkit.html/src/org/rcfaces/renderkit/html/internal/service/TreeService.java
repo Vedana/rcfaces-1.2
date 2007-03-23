@@ -223,7 +223,7 @@ public class TreeService extends AbstractHtmlService {
                 .allocateVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementById").writeString(treeId).writeln(", document);");
+                "GetElementByClientId").writeString(treeId).writeln(", document);");
 
         jsWriter.write("var ").write(waitingVarId).write('=').writeMethodCall(
                 "f_getWaitingNode").write(waitingId).writeln(");");

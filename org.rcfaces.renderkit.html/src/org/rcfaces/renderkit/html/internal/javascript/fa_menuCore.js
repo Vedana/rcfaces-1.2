@@ -32,6 +32,13 @@ var __static = {
 	 */
 	_ItemIds: 0,
 	
+	/** 
+	 * @field private static String
+	 * @this Object
+	 */
+	_ItemToString: function() {
+		return this._id;
+	},
 	/**
 	 * @method private static 
 	 */
@@ -45,18 +52,18 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 		
 		menu.f_menuItem_over(item, true, evt);
 
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static 
 	 */
 	_MenuItem_mouseOut: function(evt) {
-// Pas bloqué !			if (f_core.GetEventLocked(false)) return false;
+// Pas bloqué !			if (f_core.GetJsEventLocked(false)) return false;
 
 		var item=this._item;
 		var menu=item._menu;
@@ -66,10 +73,10 @@ var __static = {
 		menu._menuItem_out(item);
 	
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static 
@@ -83,62 +90,88 @@ var __static = {
 		}
 		
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 	
 		menu.f_menuItem_select(item, evt);
 			
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
+	
 	/**
 	 * @method private static 
 	 */
-	_SeparatorItem_click: f_core.CancelEventHandler,
+	_SeparatorItem_click: f_core.CancelJsEventHandler,
+	
 	/**
 	 * @method private static 
 	 */
-	_MenuItem_click: f_core.CancelEventHandler,
+	_MenuItem_click: f_core.CancelJsEventHandler,
+	
 	/**
-	 * @method hidden static final hidden
+	 * @method hidden static final
+	 * @param fa_menuCore menu
+	 * @param Object menuItem
+	 * @param Event evt
+	 * @return boolean
 	 */
-	OnKeyDown: function(menu, menuItem, evt) {
-		var cancel;
-
+	OnKeyDown: function(menu, evt) {
 		f_core.Assert(evt, "Event is null !");
+
+		var menuItem=null;
+		var parent=menu;
+		// On recherche le sous-menu (enfant) ouvert ...
+		for(;;) {
+			var pi=menu.f_uiGetSelectedItem(parent);
+			if (!pi) {
+				break;
+			}
+			menuItem=pi;
+			
+			if (!menu.f_uiIsPopupOpened(pi)) {
+				break;
+			}
+			
+			parent=pi;
+		}
+
+		f_core.Debug(fa_menuCore, "OnKeyDown code="+evt.keyCode+" menu="+menu+" menuItem='"+menuItem+"'.");
+
 		var code=evt.keyCode;
 
+		var cancel;
 		switch(code) {
 		case f_key.VK_CONTEXTMENU:
 			cancel=true;
 			break;
 
 		case f_key.VK_DOWN: // FLECHE VERS LE BAS
-			menu._nextMenuItem(menuItem, evt);
+			menu.f_nextMenuItem(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_UP: // FLECHE VERS LE HAUT
-			menu._previousMenuItem(menuItem, evt);
+			menu.f_previousMenuItem(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_RIGHT: // FLECHE VERS LA DROITE
-			menu._nextMenuItemLevel(menuItem, evt);
+			menu.f_nextMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_LEFT: // FLECHE VERS LA GAUCHE
-			menu._previousMenuItemLevel(menuItem, evt);
+			menu.f_previousMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 
 		case f_key.VK_HOME: // HOME
-// @TODO		menu._nextMenuItemLevel(menuItem, evt);
+// @TODO		menu.f_nextMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_END: // END
-// @TODO			menu._previousMenuItemLevel(menuItem, evt);
+// @TODO			menu.f_previousMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 
@@ -153,33 +186,26 @@ var __static = {
 	
 		case f_key.VK_RETURN:
 	 	case f_key.VK_ENTER:
-			menu._keySelectMenuItem(menuItem, evt);
+			menu.f_keySelectMenuItem(menuItem, evt);
 			cancel=true;
 			break;
 
 		case f_key.VK_ESCAPE:
-			menu._keyCloseMenuItem(menuItem, evt);
+			menu.f_keyCloseMenuItem(menuItem, evt);
 			cancel=true;
 			break;
 		
 		default:
-			f_core.Debug(fa_menuCore, "OnKeyDown: menu="+menu+" menuItem="+menuItem);
-			
-			if (menu.f_uiIsPopupOpened(menuItem)) {
+			f_core.Debug(fa_menuCore, "Default key: menu="+menu+" menuItem="+menuItem);
+
+			if (!evt.altKey) {
 				cancel=true;
-				
-				if (!evt.altKey) {
-					menu.fa_keySearchAccessKey(menuItem, code, evt);
-					cancel=true;
-				}
-				
-			} else if (!evt.altKey) {
-				cancel=true;
+				menu.f_accessKeyMenuItem(menuItem, evt);
 			}
 		}
 
 		if (cancel) {
-			return f_core.CancelEvent(evt);		
+			return f_core.CancelJsEvent(evt);		
 		}
 		
 		return true;
@@ -305,13 +331,18 @@ var __prototype = {
 		menuItem._inputType=fa_items.AS_PUSH_BUTTON;
 		menuItem._accessKey=accessKey;
 		menuItem._value=value;
-		menuItem._acceleratorKey=acceleratorKey;
 		menuItem._parentItem=parentItem;
 		menuItem._menu=this;
 		menuItem._label=label;
 		menuItem._acceleratorKey=acceleratorKey;
-		menuItem.toString=function() {
-			return "[Item "+id+"]";
+
+		if (f_core.IsDebugEnabled(fa_menuCore)) {		
+			menuItem.toString=function() {
+				return "[MenuItem id='"+this._id+"' value='"+this._value+"' inputType='"+this._inputType+"' label='"+this._label+"' accessKey='"+this._accessKey+"' acceleratorKey='"+this._acceleratorKey+"']";
+			}
+		} else {
+			// Attention la clef de l'objet en renvoyé par le toString() !!!!
+			menuItem.toString=fa_menuCore._ItemToString;
 		}
 		
 		if (!id) {
@@ -349,7 +380,7 @@ var __prototype = {
 		item._parentItem=parentItem;
 		item._menu=this;
 		item.toString=function() {
-			return "[Separator]";
+			return "[MenuItemSeparator]";
 		}
 		
 		this.f_addItem(parentItem, item);		
@@ -486,7 +517,7 @@ var __prototype = {
 			
 			uiItem.appendChild(div);
 	
-			var acceleratorKey=this._acceleratorKey;
+			var acceleratorKey=item._acceleratorKey;
 			if (acceleratorKey) {
 				var htmlAcceleratorKey=f_core.EncodeHtml(acceleratorKey);
 				var accelV=doc.createElement("LABEL");
@@ -536,7 +567,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_uiIsPopupOpened: function(menuItem) {
-		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiIsPopupOpened: Invalid menuItem parameter ("+menuItem+")");
+		f_core.Assert(typeof(menuItem)=="object" && (!menuItem.nodeType || menuItem==this) && menuItem._menu, "fa_menuCore.f_uiIsPopupOpened: Invalid menuItem parameter ("+menuItem+")");
 
 		return this.f_getUIPopup(menuItem)!=null;
 	},	 
@@ -545,7 +576,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_uiGetSelectedItem: function(menuItem) {
-		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiGetSelectedItem: Invalid menuItem parameter ("+menuItem+")");
+		f_core.Assert(typeof(menuItem)=="object" && (!menuItem.nodeType || menuItem==this) && menuItem._menu, "fa_menuCore.f_uiGetSelectedItem: Invalid menuItem parameter ("+menuItem+")");
 
 		var popup=this.f_getUIPopup(menuItem);
 		if (!popup) {
@@ -555,397 +586,230 @@ var __prototype = {
 		return popup._selectedMenuItem;
 	},
 	/**
+	 * @method protected 
+	 * @param Object menuItem
+	 * @param Event jsEvent
+	 * @return void
+	 */
+	f_accessKeyMenuItem: function(menuItem, jsEvent) {
+		f_core.Debug(fa_menuCore, "f_accessKeyMenuItem: menuItem='"+menuItem+"' key="+jsEvent.keyCode);
+
+		var code=jsEvent.keyCode;
+			
+		var key=String.fromCharCode(code).toUpperCase();
+
+		var parent=this.f_getParentItem(menuItem);
+
+		var menuItems=this.f_listVisibleItemChildren(parent);
+		for(var i=0;i<menuItems.length;i++) {
+			var menuItem=menuItems[i];
+
+			var accessKey=this.f_getItemAccessKey(menuItem);
+			
+			f_core.Debug(fa_menuCore, "Compare '"+accessKey+"' and '"+key+"'.");
+			if (accessKey!=key) {
+				continue;
+			}
+
+ 			if (this.f_isItemDisabled(menuItem)) {
+				return;
+ 			}
+ 
+			this.f_uiSelectItem(menuItem);
+			if (this.f_hasVisibleItemChildren(menuItem)) {
+				this.f_openUIPopup(menuItem, jsEvent, true);
+				return;
+			}
+				
+			// Appel de la callback de selection
+			var value=this.f_getItemValue(menuItem);
+			this.f_performItemSelect(menuItem, value, jsEvent);
+			return true;
+		}
+		
+		return false;
+	},
+	/**
 	 * @method protected final
 	 * @return void 
 	 */	 
-	f_uiSelectItem: function(menuItemParent, menuItem) {
-		f_core.Assert(typeof(menuItemParent)=="object" && (!menuItemParent.nodeType || menuItemParent==this ) && menuItemParent._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItemParent parameter ("+menuItemParent+")");
-		f_core.Assert(!menuItem || (typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu), "fa_menuCore.f_uiSelectItem: Invalid menuItem parameter ("+menuItem+")");
+	f_uiSelectItem: function(menuItem) {
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItem parameter ("+menuItem+")");
+		
+		var menuItemParent=this.f_getParentItem(menuItem);
+		f_core.Assert(typeof(menuItemParent)=="object" && (!menuItemParent.nodeType || menuItemParent==this) && menuItemParent._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItemParent parameter ("+menuItemParent+")");
 		f_core.Assert(menuItemParent!=menuItem, "Invalid menuItem, same as parent. (parent="+menuItemParent+")");
-		 
+		
 		var popup=this.f_getUIPopup(menuItemParent, true);
 		f_core.Assert(popup, "fa_menuCore.f_uiSelectItem: Invalid popup for item="+menuItemParent);
 
+		var old=popup._selectedMenuItem;
+
+		if (old==menuItem) {
+			return;
+		}
+
 		popup._selectedMenuItem=menuItem;
-	},
-	/**
-	 * @method protected final
-	 * @return boolean
-	 */
-	f_uiIsItemOver: function(menuItem) {
-		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiIsItemOver: Invalid menuItem parameter ("+menuItem+")");
+	
+		if (old) {
+			var oldPopupItem=this.f_getUIPopup(old);
+			
+			if (oldPopupItem) {
+				this.f_closeUIPopup(old);
+			}
 
-		return this.f_getUIItem(menuItem)._over;
+			this.f_uiUpdateItemStyle(old);			
+		}
+		
+		this.f_uiUpdateItemStyle(menuItem);		
 	},
 	/**
 	 * @method protected final
-	 * @return boolean
+	 * @return void 
 	 */	 
-	f_uiSetItemOver: function(menuItem, over) {
-		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiSetItemOver: Invalid menuItem parameter ("+menuItem+")");
-		f_core.Assert(over===undefined || typeof(over)=="boolean", "fa_menuCore.f_uiSetItemOver: Invalid over parameter '"+over+"'.");
+	f_uiDeselectItem: function(menuItem) {
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItem parameter ("+menuItem+")");
 		
-		this.f_getUIItem(menuItem)._over=over;
+		var menuItemParent=this.f_getParentItem(menuItem);
+		f_core.Assert(typeof(menuItemParent)=="object" && (!menuItemParent.nodeType || menuItemParent==this) && menuItemParent._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItemParent parameter ("+menuItemParent+")");
+		f_core.Assert(menuItemParent!=menuItem, "Invalid menuItem, same as parent. (parent="+menuItemParent+")");
+		
+		var popup=this.f_getUIPopup(menuItemParent, true);
+		f_core.Assert(popup, "fa_menuCore.f_uiSelectItem: Invalid popup for item="+menuItemParent);
+
+		var old=popup._selectedMenuItem;
+		if (!old) {
+			return;
+		}
+
+		popup._selectedMenuItem=undefined;
+
+		this.f_uiUpdateItemStyle(old);
 	},
 	/**
-	 * @method private
+	 * @method protected
 	 * @param Object menuItem
 	 * @param Event evt
 	 * @return void
 	 */
-	_nextMenuItem: function(menuItem, evt) {
+	f_nextMenuItem: function(menuItem, evt) {
+		f_core.Debug(fa_menuCore, "f_nextMenuItem: menuItem="+menuItem);
 	
-		// Par defaut le parent est le menuBarItem
-		var parent=menuItem;
+		var parent=this.f_getParentItem(menuItem);
 		
-		if (!this.fa_isSameMenuBase(menuItem)) {
-			var selectedMenuItem=this.f_uiGetSelectedItem(this);
-			if (selectedMenuItem) {
-				this._closeUIPopup(selectedMenuItem);
-			}
-			
-		} else {
-			// On recherche le sous-menu (enfant) ouvert ...
-			for(;;) {
-				var pi=this.f_uiGetSelectedItem(parent);
-				if (!pi || !this.f_uiIsPopupOpened(pi)) {
-					break;
-				}
-				
-				parent=pi;
-			}			
-		}
-		
-		this.f_openUIPopup(menuItem, evt);
-		
-		// En verifie bien que nous sommes sur le bon menuBarItem !
-		this.fa_focusMenuItem(menuItem);
-		
-		var menuItems=this.f_listItemChildren(parent);
-		if (!menuItems || !menuItems.length) {
-			return;
-		}
+		var menuItems=this.f_listVisibleItemChildren(parent);
 
-		var menuItem=undefined;
-		if (this.f_uiGetSelectedItem(parent)) {
-			var i=0;
-			// On recherche le premier qui est over
-			for(;i<menuItems.length;i++) {
-				var mi=menuItems[i];
-				
-				if (!this.f_uiIsItemOver(mi)) {
-					continue;
-				}
-				
-				i++;
-				break;
-			}
-
-			// Recherche le suivant mais on évite les séparateurs !
-			for(;i<menuItems.length;i++) {
-				var m=menuItems[i];
-				if (m._inputType==fa_items.AS_SEPARATOR || !this.f_isItemVisible(m)) {
-					// C'est un séparateur ou il n'est pas visible
-					continue;
-				}
-								
-				menuItem=m;
-				break;
-			}
-			
-		}
-
-		if (!menuItem) {
-			// Toujours pas ! On prend le premier de la liste !
-			
-			for(var i=0;i<menuItems.length;i++) {
-				var m=menuItems[i];
-				if (m._inputType==fa_items.AS_SEPARATOR || !this.f_isItemVisible(m)) {
-					continue;
-				}
-				
-				menuItem=m;
-				break;
-			}
-		}
-		
-		if (menuItem) {
-			this.f_menuItem_over(menuItem, false, evt);
-		}		
-	},
-	/**
-	 * @method private
-	 * @param Object menuItem
-	 * @param Event evt
-	 * @return void
-	 */
-	_previousMenuItem: function(menuItem, evt) {
-		var parent=menuItem;
-
-		if (!this.fa_isSameMenuBase(menuItem)) {
-			var selectedMenuItem=this.f_uiGetSelectedItem(this);
-			if (selectedMenuItem) {
-				this._closeUIPopup(selectedMenuItem);
-			}
-
-		} else {
-			
-			// Par defaut le parent est le menuItem
-			for(;;) {
-				var pi=this.f_uiGetSelectedItem(parent);
-				
-				if (!pi || !this.f_uiIsPopupOpened(pi)) {
-					break;
-				}			
-				parent=pi;
-			}			
-	
-			
-			if (!this.f_uiGetSelectedItem(parent)) {
-				return;
-			}
-		}
-	
-		// En verifie bien que nous sommes sur le bon menuItem !
-		this.fa_focusMenuItem(menuItem);
-				
-		var menuItems=this.f_listItemChildren(parent);
-		if (!menuItems || !menuItems.length) {
-			return;
-		}
-
-		var menuItem;
-		if (this.f_uiGetSelectedItem(parent)) {
-			var i=0;
-			
-			// On recherche l'item OVER
-			for(;i<menuItems.length;i++) {
-				var mi=menuItems[i];
-				
-				if (!this.f_uiIsItemOver(mi)) {
-					continue;
-				}
-				
-				break;
-			}
-			
-			if (i<1) {
-				// Pas trouvé !
-				i=menuItems.length;
-			}
-			
-			// On part du bas en remontant ...
-			for(i--;i>=0;i--) {
-				var m=menuItems[i];
-				if (m._inputType==fa_items.AS_SEPARATOR || !this.f_isItemVisible(m)) {
-					continue;
-				}
-				
-				menuItem=m;
-				break;				
-			}
-		}
-		
-		if (!menuItem) {
-			for(var i=menuItems.length-1;i>=0;i--) {
-				var m=menuItems[i];
-				if (m._inputType==fa_items.AS_SEPARATOR || !this.f_isItemVisible(m)) {
-					continue;
-				}
-				
-				menuItem=m;
-				break;				
-			}
-		}
-
-		if (menuItem) {
-			this.f_menuItem_over(menuItem, false, evt);		
-		}
-	},
-	/**
-	 * @method private
-	 * @param Object menuItem
-	 * @param Event evt
-	 * @return void
-	 */
-	_nextMenuItemLevel: function(menuItem, evt) {
-
-		if (!this.fa_isSameMenuBase(menuItem)) {
-			var smi=this.f_uiGetSelectedItem(this);
-			if (smi) {
-				this._closeUIPopup(smi);
-			}
-			return;
-		}
-		
-		if (this.f_uiIsPopupOpened(menuItem)) {
-			// Recherche le popup enfant le plus ouvert
-			
-			var parent=menuItem;
-			for(;;) {
-				var pi=this.f_uiGetSelectedItem(parent);
-				if (!pi || !this.f_uiIsPopupOpened(pi)) {
-					break;
-				}
-				parent=pi;
-			}
-
-			var selectedItem=this.f_uiGetSelectedItem(parent);
-
-			if (selectedItem 
-					&& !this.f_isItemDisabled(selectedItem) 
-					&& this.f_hasVisibleItemChildren(selectedItem)) {
-				// On ouvre le popup !
-				
-				this.f_openUIPopup(selectedItem, evt, true);
-				
-				return;
-			}
-		}
-		
-		// Passe au popup suivant !
-		var menuItems=this.f_listItemChildren(this);
-		
-		var mbi;
 		for(var i=0;i<menuItems.length;i++) {
-			var mi=menuItems[i];
-		
-			// On recherche notre menu !
-			if (mi!=menuItem) {
+			var item=menuItems[i];
+			
+			if (item!=menuItem) {
 				continue;
 			}
-			
-			// On en cherche un autre en avancant
+						
 			for(var j=0;j<menuItems.length;j++) {
 				i++;
 				if (i==menuItems.length) {
 					i=0;
 				}
-				
-				if (this.f_isItemDisabled(menuItems[i])) {
+
+				item=menuItems[i];
+				if (item._inputType==fa_items.AS_SEPARATOR) {
 					continue;
 				}
 				
-				mbi=menuBarItems[i];
-				break;
+				this.f_uiSelectItem(item);
+				return;
 			}
-			
-			break;
-		}
-		
-		if (!mbi) {
+
+			f_core.Debug(fa_menuCore, "f_nextMenuItem: can not find next menuItem !");
 			return;
 		}
 
-		var smi=this.f_uiGetSelectedItem(this);
-		if (smi) {
-			this._closeUIPopup(smi);
-		}
-
-		this.fa_focusMenuItem(mbi);
-
-		this.f_openUIPopup(mbi, evt, true);
+		f_core.Debug(fa_menuCore, "f_nextMenuItem: can not find current menuItem !");
 	},
 	/**
-	 * @method private
+	 * @method protected
 	 * @param Object menuItem
 	 * @param Event evt
 	 * @return void
 	 */
-	_previousMenuItemLevel: function(menuItem, evt) {
-		if (!this.fa_isSameMenuBase(menuItem)) {
-			var selectedMenuItem=this.f_uiGetSelectedItem(this);
+	f_previousMenuItem: function(menuItem, evt) {
+	
+		var parent=this.f_getParentItem(menuItem);
 		
-			if (selectedMenuItem) {
-				this._closeUIPopup(selectedMenuItem);
-			}
-			return;
-		}
-		
-		if (this.f_uiIsPopupOpened(menuItem)) {
-			// Recherche l'enfant ouvert le plus profond
-			
-			var parent=menuItem;
-			for(;;) {
-				var pi=this.f_uiGetSelectedItem(parent);
-				if (!pi || !this.f_uiIsPopupOpened(pi)) {
-					break;
-				}
-				parent=pi;
-			}
+		var menuItems=this.f_listVisibleItemChildren(parent);
 
-			if (parent!=menuItem) {
-				// On ferme le popup !
-					
-				this._closeUIPopup(parent);
-			
-				return;
-			}
-		}
-
-		// Passe au popup precedent !
-		var menuItems=this.f_listItemChildren(this);
-		
-		var mbi;
 		for(var i=0;i<menuItems.length;i++) {
-			var mi=menuItems[i];
+			var item=menuItems[i];
 			
-			// On recherche notre menu
-			if (mi!=menuItem) {
+			if (item!=menuItem) {
 				continue;
 			}
-			
-			// On en recherche un autre en reculant
 			
 			for(var j=0;j<menuItems.length;j++) {
 				i--;
 				if (i<0) {
 					i=menuItems.length-1;
 				}
-				
-				var mip=menuItems[i];
-				if (this.f_isItemDisabled(mip)) {
+
+				item=menuItems[i];
+				if (item._inputType==fa_items.AS_SEPARATOR) {
 					continue;
 				}
 				
-				mbi=mip;
+				this.f_uiSelectItem(item);
 				break;
 			}
-			break;
+			
+			break;	
 		}
-		
-		var smi=this.f_uiGetSelectedItem(this);
-		if (smi) {
-			this._closeUIPopup(smi);
-		}
-		
-		if (!mbi) {
-			return;
-		}
-
-		this.fa_focusMenuItem(mbi);
-
-		this.f_openUIPopup(mbi, evt, true);
 	},
 	/**
-	 * Selection de l'item par une touche !  (item root)
-	 * 
-	 * @method private
+	 * @method protected
 	 * @param Object menuItem
 	 * @param Event jsEvent
 	 * @return void
 	 */
-	_keySelectMenuItem: function(menuItem, jsEvent) {
-			
-		if (!this.fa_isSameMenuBase(menuItem)) {
-			var selectedMenuItem=this.f_uiGetSelectedItem(this);
+	f_nextMenuItemLevel: function(menuItem, jsEvent) {
 		
-			if (selectedMenuItem) {
-				this._closeUIPopup(selectedMenuItem);
-			}
-			return true;
+		if (this.f_isItemDisabled(menuItem)) {
+			return;
 		}
 
+		if (!this.f_uiIsPopupOpened(menuItem)) {
+			this.f_openUIPopup(menuItem, jsEvent, true);
+			return;
+		}
+				
+		var menuItems=this.f_listVisibleItemChildren(menuItem);
+		
+		if (menuItems && menuItems.length) {
+			this.f_menuItem_over(menuItems[0], false, jsEvent);
+		}
+	},
+	/**
+	 * @method protected
+	 * @param Object menuItem
+	 * @param Event evt
+	 * @return void
+	 */
+	f_previousMenuItemLevel: function(menuItem, evt) {
+		var parent=this.f_getParentItem(menuItem);
+		
+		// Le parent est forcement ouvert !
+		this.f_closeUIPopup(parent);
+	},
+	/**
+	 * Selection de l'item par une touche !  (item root)
+	 * 
+	 * @method protected
+	 * @param Object menuItem
+	 * @param Event jsEvent
+	 * @return void
+	 */
+	f_keySelectMenuItem: function(menuItem, jsEvent) {
+		f_core.Debug(fa_menuCore, "f_keySelectMenuItem: key select item '"+menuItem+"'.");
+		
 		// Le menu est en mode ReadOnly ?
 		if (this.f_isReadOnly()) {
 			return true;
@@ -960,62 +824,46 @@ var __prototype = {
 		// (cas d'un menubar)
 		if (!this.f_hasVisibleItemChildren(menuItem)) {
 			// Non ...
-			
-	
+				
 			// Appel de la callback de selection
 			var value=this.f_getItemValue(menuItem);
 			this.f_performItemSelect(menuItem, value, jsEvent);
 			return;			
 		}
-			
-		// Aucune selection ... on passe au menu suivant
-		// (Cas d'un menubar)
-		if (!this.f_uiGetSelectedItem(menuItem)) {
-			// Il n'est pas selectionné ?
-			this._nextMenuItem(menuItem, jsEvent);		
-			return;
-		}
-	
-		// Recherche le popup enfant le plus profond
-		var parent=menuItem;
-		for(;;) {
-			var pi=this.f_uiGetSelectedItem(parent);
-			if (!pi || !this.f_uiIsPopupOpened(pi)) {
-				break;
-			}
-			
-			parent=pi;
-		}
-
-		var item=this.f_uiGetSelectedItem(parent);
-		
-		if (this.f_isItemDisabled(item)) {
-			return;
-		}
 		
 		// Notre vrai item selectionné a t-il des enfants ?
-		if (this.f_hasVisibleItemChildren(item)) {
-			this._nextMenuItemLevel(menuItem, jsEvent);
+		if (this.f_hasVisibleItemChildren(menuItem)) {		
+			this.f_openUIPopup(menuItem, evt, true);			
 			return;
 		}
 		
 		// pas d'enfants		
-		this._closeUIPopup(menuItem);
+		this.f_closeUIPopup(menuItem);
 
 		// Appel de la callback de selection
-		var value=this.f_getItemValue(item);
-		this.f_performItemSelect(item, value, jsEvent);
+		var value=this.f_getItemValue(menuItem);
+		this.f_performItemSelect(menuItem, value, jsEvent);
 	},
 	/**
 	 * Fermeture du menu par une touche !
 	 * 
-	 * @method private
+	 * @method protected
 	 * @param Object menuItem
 	 * @param Event evt
 	 * @return void
 	 */
-	_keyCloseMenuItem: function(menuItem, evt) {	
-		this._closeUIPopup(menuItem);
+	f_keyCloseMenuItem: function(menuItem, evt) {	
+		f_core.Assert(!menuItem || typeof(menuItem)=="object", "fa_menuCore.f_keyCloseMenuItem: Item parameter must be an object !");
+		
+		if (!menuItem) {
+			this.f_closeUIPopup(this);
+			return;
+		}
+		
+		var parentItem=this.f_getParentItem(menuItem);
+		
+		f_core.Debug(fa_menuCore, "f_keyCloseMenuItem: close parent '"+parentItem+"' of item '"+menuItem+"'.");
+		this.f_closeUIPopup(parentItem);
 	},
 	/**
 	 * Returns parent of item.
@@ -1047,28 +895,23 @@ var __prototype = {
 		}
 		
 		var oldMenuItem=this.f_uiGetSelectedItem(parent);
-//		f_core.Debug(fa_menuCore, "f_menuItem_over: "+menuItem+" parent="+parent+" old="+oldMenuItem+" open="+open);
+		f_core.Debug(fa_menuCore, "f_menuItem_over: "+menuItem+" parent="+parent+" old="+oldMenuItem+" open="+open);
 		
 		// Un autre était déjà over ???
 		if (oldMenuItem && oldMenuItem!=menuItem) {
-			this.f_uiSetItemOver(oldMenuItem, false);
-			
 			// Eventuellement on ferme le popup !
-			this._closeUIPopup(oldMenuItem);
+			this.f_closeUIPopup(oldMenuItem);
 
-			this.f_uiSelectItem(parent); // deselectionne !
-			this.f_uiUpdateItemStyle(oldMenuItem);
+			this.f_uiDeselectItem(oldMenuItem);
 		}
 				
-		this.f_uiSetItemOver(menuItem, true);
-		this.f_uiSelectItem(parent, menuItem);
+		this.f_uiSelectItem(menuItem);
 
 /* On accepte les disabled over !
 		if (open && menuItem._disabled ) {
 			return;
 		}
 	*/	
-		this.f_uiUpdateItemStyle(menuItem);
 
 		if (this.f_isItemDisabled(menuItem)) {
 			return;
@@ -1086,17 +929,11 @@ var __prototype = {
 	 * @return void
 	 */
 	_menuItem_out: function(menuItem) {
-		if (!this.f_uiIsItemOver(menuItem)) {
-//			f_core.Debug(fa_menuCore, "_menuItem_out: "+menuItem+" no over !");
-
+		if (this.f_uiIsPopupOpened(menuItem)) {
 			return;
 		}
 
-//		f_core.Debug(fa_menuCore, "_menuItem_out: "+menuItem);
-		
-		this.f_uiSetItemOver(menuItem, false);
-	
-		this.f_uiUpdateItemStyle(menuItem);
+		this.f_uiDeselectItem(menuItem);
 	},
 	/**
 	 * Gestion du MOUSE BUTTON d'un menuItem
@@ -1118,7 +955,7 @@ var __prototype = {
 			return;
 		}
 				
-		this._closeUIPopup(menuItem);
+		this.f_closeUIPopup(menuItem);
 					
 		if (this.f_isReadOnly()) {
 			return;
@@ -1132,7 +969,7 @@ var __prototype = {
 	 * @method protected
 	 */
 	fa_updateItemStyle: function(item) {
-		// On s'enfiche car le style est créé a chaque ouverture de popup !
+		// On s'en fiche car le style est créé a chaque ouverture de popup !
 	},
 	
 	f_uiUpdateItemStyle: function(item, uiItem) {	
@@ -1143,11 +980,14 @@ var __prototype = {
 		if (!uiItem) {
 			uiItem=this.f_getUIItem(item);
 		}
-		
+
+		var parent=this.f_getParentItem(item);
+		var selectedParentItem=this.f_uiGetSelectedItem(parent);
+		var selected=(selectedParentItem==item);
 	
 		var disabled=this.f_isItemDisabled(item);
 
-		// f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: item="+item+" uiItem="+uiItem.id+" over="+uiItem._over+" disabled="+disabled);
+//		f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: item="+item+" uiItem="+uiItem.id+" over="+selected+" disabled="+disabled+" selectedParentItem="+selectedParentItem);
 
 		var suffix="";
 		var imageURL=item._imageURL;
@@ -1155,9 +995,9 @@ var __prototype = {
 		if (this.f_hasVisibleItemChildren(item)) {
 			var popupOpened=this.f_uiIsPopupOpened(item);
 
-		//	f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: popupOpened="+popupOpened+" over="+uiItem._over);
+//			f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: popupOpened="+popupOpened+" over="+selected);
 			
-			if (popupOpened || uiItem._over) {
+			if (popupOpened || selected) {
 				suffix+="_selected";
 	
 			} else {
@@ -1181,7 +1021,7 @@ var __prototype = {
 		} else if (disabled) {
 			suffix+="_disabled";
 			
-			if (uiItem._over) {
+			if (selected) {
 				suffix+="_hover";			
 			}
 			
@@ -1190,7 +1030,7 @@ var __prototype = {
 				imageURL=disabledImageURL;
 			}
 	
-		} else if (uiItem._over) {
+		} else if (selected) {
 			suffix+="_hover";
 			
 			var hoverImageURL=item._hoverImageURL;
@@ -1209,6 +1049,8 @@ var __prototype = {
 		if (suffix) {
 			className+=" "+className+suffix;			
 		}
+	
+//		f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: className="+className);
 		
 		if (uiItem.className!=className) {
 			uiItem.className=className;	
@@ -1231,7 +1073,7 @@ var __prototype = {
 					}
 				}
 
-				if (uiItem._over) {
+				if (selected) {
 					suffix+="_hover";
 				}
 				
@@ -1362,14 +1204,14 @@ var __prototype = {
 		f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"'");
 	
 		if (this.f_getUIPopup(menuItem)) {
-			f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"' is already opened !");
+//			f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"' is already opened !");
 			return false;
 		}
 			
 		// Efface tout si necessaire !
 		if (menuItem._removeAllWhenShow) {
 			// Effaces tous les items !
-			f_core.Debug(fa_menuCore, "_preparePopup: Remove all items of '"+menuItem+"'.");
+//			f_core.Debug(fa_menuCore, "_preparePopup: Remove all items of '"+menuItem+"'.");
 
 			this.f_removeAllItems(menuItem);
 		}
@@ -1402,11 +1244,10 @@ var __prototype = {
 	 */
 	_getPopupContainer: function(menuItem) {
 		var parent=this.f_getParentItem(menuItem);
+		f_core.Debug(fa_menuCore, "_getPopupContainer: menuItem='"+menuItem+"' parent='"+parent+"' this='"+this+"'");
 	
-		if (f_popup.Ie_enablePopup()) {
-		
-			f_core.Debug(fa_menuCore, "_getPopupContainer: parent="+parent);
-			if (!parent) {
+		if (f_popup.Ie_enablePopup()) {		
+			if (this.fa_isRootMenuItem(parent)) {
 				return f_popup.Ie_GetPopup(document);
 			}			
 			
@@ -1434,6 +1275,9 @@ var __prototype = {
 	},
 	/**
 	 * @method hidden
+	 * @param Event jsEvent
+	 * @param optional Object positionInfos
+	 * @param optional number autoSelect
 	 * @return boolean
 	 */
 	f_open: function(jsEvent, positionInfos, autoSelect) {
@@ -1465,11 +1309,11 @@ var __prototype = {
 		
 		var parentItem=this.f_getParentItem(menuItem);
 
-		f_core.Debug(fa_menuCore, "2 "+parentItem);
+		f_core.Debug(fa_menuCore, "f_openUIPopup: parentItem="+parentItem+" positionInfos="+positionInfos+" autoSelect="+autoSelect);
 
 		var selectionProvider=this.fa_getSelectionProvider();
 
-		f_core.Debug(fa_menuCore, "3 "+selectionProvider);
+		f_core.Debug(fa_menuCore, "f_openUIPopup: selectionProvider="+selectionProvider);
 				
 		var container=this._getPopupContainer(menuItem);
 		f_core.Assert(container, "fa_menuCore.f_openUIPopup: Invalid popup container !");
@@ -1478,10 +1322,15 @@ var __prototype = {
 		var popup=this.f_createPopup(container, menuItem);
 		f_core.Assert(popup, "fa_menuCore.f_openUIPopup: Invalid popup object (container="+container+")");
 
-		if (!parentItem) {
+		var parentPopup;
+		if (parentItem) {
+			parentPopup=this.f_getUIPopup(parentItem);
+		}
+		if (!parentPopup) {
 			f_core.Debug(fa_menuCore, "f_openUIPopup: Register windows this="+this+" menuItem="+menuItem+" popup="+popup);
 	
 			if (f_popup.RegisterWindowClick(this.fa_getPopupCallbacks(), this, popup, this.fa_getKeyProvider())==false) {
+				f_core.Debug(fa_menuCore, "f_openUIPopup: Register FAILED");
 				return;
 			}
 		} else {
@@ -1512,27 +1361,56 @@ var __prototype = {
 			
 		} catch(x) {
 			if (!parentItem) {
-				f_popup.UnregisterWindowClick(menuItem);
+				f_popup.UnregisterWindowClick(this);
 			}
-				
+			
+			f_core.Debug(fa_menuCore, "f_openUIPopup: exception", x);
 			throw x;
 		}
-				
+		
 		if (autoSelect) {
 			var menuItems=this.f_listVisibleItemChildren(menuItem);
 			
 			if (menuItems && menuItems.length) {
-				this.f_menuItem_over(menuItems[0], false, jsEvent);
+				var selectItem=null;
+
+				if (autoSelect<0) {
+					for(var i=menuItems.length-1;i>=0;i--) {
+						var item=menuItems[i];
+			 			if (this.f_isItemDisabled(item)) {
+							continue;
+			 			}
+			 			
+			 			selectItem=item;
+			 			break;
+					}
+				} else {
+					for(var i=0;i<menuItems.length;i++) {
+						var item=menuItems[i];
+			 			if (this.f_isItemDisabled(item)) {
+							continue;
+			 			}
+			 			
+			 			selectItem=item;
+			 			break;
+					}
+				}				
+				
+				if (!selectItem) {
+					selectItem=menuItems[0];
+				}
+
+				this.f_menuItem_over(selectItem, false, jsEvent);
 			}
 		}
 	},
 	/**
-	 * @method private static 
+	 * @method protected
 	 * @param Object menuItem
 	 * @param optional Object popup
 	 * @return void
 	 */
-	_closeUIPopup: function(menuItem, popup) {
+	f_closeUIPopup: function(menuItem, popup) {
 		f_core.Assert(!popup || this._uiMenuPopups[menuItem]==popup, "Invalid popup or menuItem. menuItem="+menuItem+" popup="+popup);
 
 		if (!popup) {
@@ -1551,20 +1429,21 @@ var __prototype = {
 			return;
 		}
 
-		f_core.Debug(fa_menuCore, "_closeUIPopup: menuItem="+menuItem+" popup="+popup);
+		f_core.Debug(fa_menuCore, "f_closeUIPopup: menuItem="+menuItem+" popup="+popup);
+
 		var popupObject=popup._popupObject;
+		popup._popupObject=undefined; // Object
 		
 		popup._item=undefined; // Object
-		popup._popupObject=undefined; // Object
+		
+		var selectedItem=popup._selectedMenuItem;
 
-		var selectedItem=this.f_uiGetSelectedItem(menuItem);
-		f_core.Debug(fa_menuCore, "_closeUIPopup: child selected="+selectedItem);
+		f_core.Debug(fa_menuCore, "f_closeUIPopup: child selected="+selectedItem);
 		
 		if (selectedItem) {
-			var childPopup=this.f_getUIPopup(selectedItem);
-			if (childPopup) {
-				this._closeUIPopup(selectedItem);
-			}
+			popup._selectedMenuItem=undefined; // Object
+
+			this.f_closeUIPopup(selectedItem);
 		}
 		
 		var scopeName=this.fa_getMenuScopeName(menuItem);
@@ -1604,7 +1483,7 @@ var __prototype = {
 		}
 		
 		delete this._uiMenuPopups[menuItem];
-		f_core.Debug(fa_menuCore, "_closeUIPopup: remove one popup="+popup+" menuItem="+menuItem);
+//		f_core.Debug(fa_menuCore, "f_closeUIPopup: remove one popup="+popup+" menuItem="+menuItem);
 
 		if (f_popup.Ie_enablePopup()) {		
 			f_popup.Ie_releasePopup(popupObject);
@@ -1613,8 +1492,14 @@ var __prototype = {
 			f_popup.Gecko_releasePopup(popupObject);
 		}			
 		
-		if (menuItem==this) {
-			f_popup.UnregisterWindowClick(menuItem);
+		var parentPopup;
+		var parentItem=this.f_getParentItem(menuItem);
+		if (parentItem) {		
+			parentPopup=this.f_getUIPopup(parentItem);
+		}
+		
+		if (!parentPopup) {
+			f_popup.UnregisterWindowClick(this);
 		}
 	},
 	/**
@@ -1623,7 +1508,7 @@ var __prototype = {
 	 */
 	f_closeAllPopups: function() {
 		f_core.Debug(fa_menuCore, "f_closeAllPopups: close all popups");
-		this._closeUIPopup(this);
+		this.f_closeUIPopup(this);
 	},
 	/**
 	 * @method protected
@@ -1634,35 +1519,18 @@ var __prototype = {
 		
 		this.f_closeAllPopups();
 	},
-	/**
-	 * @method abstract
-	 * @return void
-	 */
-	fa_getPopupContainer: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	fa_focusMenuItem: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	fa_getSelectionProvider:  f_class.ABSTRACT,
-	
-	/**
-	 * @method protected abstract
-	 * @return void
-	 */
-	fa_keySearchAccessKey: f_class.ABSTRACT,
-	
-	/**
-	 * @method protected abstract
-	 * @return boolean
-	 */
-	fa_isSameMenuPoup: f_class.ABSTRACT,
 	
 	/**
 	 * @method protected abstract
@@ -1680,7 +1548,15 @@ var __prototype = {
 	 * @method protected abstract
 	 * @return void
 	 */
-	fa_getKeyProvider: f_class.ABSTRACT
+	fa_getKeyProvider: f_class.ABSTRACT,
+	
+	/**
+	 * @method protected
+	 * @param Object parent
+	 * @return boolean
+	 */
+	fa_isRootMenuItem: f_class.ABSTRACT
+	
 }
 
-var fa_menuCore=new f_aspect("fa_menuCore", __static, __prototype, fa_groupName, fa_items);
+new f_aspect("fa_menuCore", __static, __prototype, fa_groupName, fa_items);

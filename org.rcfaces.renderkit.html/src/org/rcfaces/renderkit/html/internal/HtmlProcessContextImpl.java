@@ -32,9 +32,13 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     private static final Log LOG = LogFactory
             .getLog(HtmlProcessContextImpl.class);
 
+    private static final String NAMESPACE_URI = "rcfaces.xsd";
+
     private String styleSheetURI;
 
     private String styleSheetURIWithContextPath;
+
+    private String nameSpaceURI;
 
     private final boolean useScriptCData;
 
@@ -75,7 +79,7 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
                 .get(DEBUG_MODE_APPLICATION_PARAMETER));
 
         profilerMode = "true".equalsIgnoreCase((String) applicationMap
-                .get(DEBUG_MODE_APPLICATION_PARAMETER));
+                .get(PROFILER_MODE_APPLICATION_PARAMETER));
 
         separatorChar = getHtmlSeparatorChar(externalContext);
 
@@ -199,6 +203,10 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         return profilerMode;
     }
 
+    public String getNameSpaceURI() {
+        return getStyleSheetURI(NAMESPACE_URI, true);
+    }
+
     public static IHtmlProcessContext getHtmlProcessContext(
             FacesContext facesContext) {
 
@@ -212,4 +220,5 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
         return htmlProcessContext;
     }
+
 }

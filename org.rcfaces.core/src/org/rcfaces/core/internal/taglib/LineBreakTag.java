@@ -17,8 +17,8 @@ public class LineBreakTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(LineBreakTag.class);
 
 	private String styleClass;
-	private String hiddenMode;
 	private String visible;
+	private String hiddenMode;
 	private String rendered;
 	public String getComponentType() {
 		return LineBreakComponent.COMPONENT_TYPE;
@@ -32,20 +32,20 @@ public class LineBreakTag extends CameliaTag implements Tag {
 		this.styleClass = styleClass;
 	}
 
-	public final String getHiddenMode() {
-		return hiddenMode;
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-		this.hiddenMode = hiddenMode;
-	}
-
 	public final String getVisible() {
 		return visible;
 	}
 
 	public final void setVisible(String visible) {
 		this.visible = visible;
+	}
+
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
+
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
 	}
 
 	public final String getRendered() {
@@ -62,8 +62,8 @@ public class LineBreakTag extends CameliaTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  rendered='"+rendered+"'");
 		}
 		super.setProperties(uiComponent);
@@ -89,16 +89,6 @@ public class LineBreakTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (hiddenMode != null) {
-			if (isValueReference(hiddenMode)) {
-				ValueBinding vb = application.createValueBinding(hiddenMode);
-
-				component.setHiddenMode(vb);
-			} else {
-				component.setHiddenMode(hiddenMode);
-			}
-		}
-
 		if (visible != null) {
 			if (isValueReference(visible)) {
 				ValueBinding vb = application.createValueBinding(visible);
@@ -106,6 +96,16 @@ public class LineBreakTag extends CameliaTag implements Tag {
 				component.setVisible(vb);
 			} else {
 				component.setVisible(getBool(visible));
+			}
+		}
+
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+
+				component.setHiddenMode(vb);
+			} else {
+				component.setHiddenMode(hiddenMode);
 			}
 		}
 
@@ -121,8 +121,8 @@ public class LineBreakTag extends CameliaTag implements Tag {
 
 	public void release() {
 		styleClass = null;
-		hiddenMode = null;
 		visible = null;
+		hiddenMode = null;
 		rendered = null;
 
 		super.release();

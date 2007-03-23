@@ -23,8 +23,10 @@ public class CheckButton3StatesRenderer extends AbstractInputRenderer {
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
         htmlWriter.writeText("Composant: checkButton3States");
+    }
 
-        htmlWriter.writeRole(IAccessibilityRoles.CHECK_BOX_3_STATE);
+    protected String getWAIRole() {
+        return IAccessibilityRoles.CHECK_BOX_3_STATE;
     }
 
     protected String getInputType(UIComponent component) {

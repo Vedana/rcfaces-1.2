@@ -10,28 +10,32 @@ package org.rcfaces.renderkit.html.internal;
  */
 public interface IAccessibilityRoles {
 
-    String BUTTON = "button";
+    String WAI_ROLE = "wairole:";
 
-    String CHECK_BOX = "checkbox";
+    String BUTTON = WAI_ROLE + "button";
 
-    String CHECK_BOX_3_STATE = "checkboxtristate";
+    String CHECK_BOX = WAI_ROLE + "checkbox";
 
-    String GRID = "grid";
+    String CHECK_BOX_3_STATE = WAI_ROLE + "checkboxtristate";
 
-    String PROGRESS_BAR = "progressbar";
+    String GRID = WAI_ROLE + "grid";
 
-    String RADIO = "radio";
+    String PROGRESS_BAR = WAI_ROLE + "progressbar";
 
-    String SPIN_BUTTON = "spinbutton";
+    String RADIO = WAI_ROLE + "radio";
 
-    String TAB = "tab";
+    String SPIN_BUTTON = WAI_ROLE + "spinbutton";
 
-    String TAB_CONTENT = "tabcontent";
+    String TAB = WAI_ROLE + "tab";
 
-    String TAB_PANEL = "tabpanel";
+    String TAB_CONTENT = WAI_ROLE + "tabcontent";
 
-    String TEXT_FIELD = "textfield";
+    String TAB_PANEL = WAI_ROLE + "tabpanel";
 
-    String TREE = "tree";
+    String TEXT_FIELD = WAI_ROLE + "textfield";
+
+    String TOOLBAR = WAI_ROLE + "toolbar";
+
+    String TREE = WAI_ROLE + "tree";
 
 }

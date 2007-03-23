@@ -3,6 +3,7 @@ package org.rcfaces.renderkit.html.internal;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
@@ -498,17 +499,25 @@ public class CssWriter extends FastWriter implements ICssWriter {
             return this;
         }
 
-        int hiddenMode = visibility.getHiddenMode();
-        if (hiddenMode == 0) {
-            hiddenMode = IVisibilityCapability.DEFAULT_HIDDEN_MODE;
-        }
+        if (visibility instanceof IHiddenModeCapability) {
+            IHiddenModeCapability hiddenModeCapability = (IHiddenModeCapability) visibility;
 
-        if (IVisibilityCapability.IGNORE_HIDDEN_MODE == hiddenMode) {
-            writeDisplay(NONE);
+            int hiddenMode = hiddenModeCapability.getHiddenMode();
+            if (hiddenMode == 0) {
+                hiddenMode = IHiddenModeCapability.DEFAULT_HIDDEN_MODE;
+            }
+
+            if (IHiddenModeCapability.IGNORE_HIDDEN_MODE == hiddenMode) {
+                writeDisplay(NONE);
+                return this;
+            }
+
+            writeVisibility(HIDDEN);
+
             return this;
         }
 
-        writeVisibility(HIDDEN);
+        writeVisibility(NONE);
 
         return this;
     }

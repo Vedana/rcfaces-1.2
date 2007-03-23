@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.component.capability.ISelectionValuesCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
@@ -19,12 +20,13 @@ import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.AbstractGridComponent;
 import java.lang.String;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IPreferenceCapability;
+import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
@@ -53,9 +55,11 @@ public class DataGridComponent extends AbstractGridComponent implements
 	ISelectionEventCapability,
 	ISelectableCapability,
 	ISelectionCardinalityCapability,
+	ISelectionValuesCapability,
 	ICheckEventCapability,
 	ICheckableCapability,
 	ICheckCardinalityCapability,
+	ICheckedValuesCapability,
 	IDoubleClickEventCapability,
 	IRequiredCapability,
 	IBorderCapability,
@@ -311,7 +315,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 			
 	}
 
-	public final Object getCheckValues(FacesContext facesContext) {
+	public final Object getCheckedValues(FacesContext facesContext) {
 
 
 				Object checkedValues=engine.getValue(Properties.CHECKED_VALUES, facesContext);
@@ -382,6 +386,35 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
 	}
 
+	public final java.lang.Object getSelectedValues() {
+		return getSelectedValues(null);
+	}
+
+	public final void setSelectedValues(java.lang.Object selectedValues) {
+		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
+	}
+
+	/**
+	 * See {@link #setSelectedValues(Object) setSelectedValues(Object)} for more details
+	 */
+	public final void setSelectedValues(ValueBinding selectedValues) {
+		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public final Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.SELECTED_VALUES);
+		if (valueBinding==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueBinding.getType(facesContext);
+	}
+
 	public final void addCheckListener(org.rcfaces.core.event.ICheckListener listener) {
 		addFacesListener(listener);
 	}
@@ -436,6 +469,35 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 */
 	public final void setCheckCardinality(ValueBinding checkCardinality) {
 		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
+	}
+
+	public final java.lang.Object getCheckedValues() {
+		return getCheckedValues(null);
+	}
+
+	public final void setCheckedValues(java.lang.Object checkedValues) {
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	/**
+	 * See {@link #setCheckedValues(Object) setCheckedValues(Object)} for more details
+	 */
+	public final void setCheckedValues(ValueBinding checkedValues) {
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public final Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.CHECKED_VALUES);
+		if (valueBinding==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueBinding.getType(facesContext);
 	}
 
 	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
@@ -737,62 +799,6 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 */
 	public final boolean isPagedSetted() {
 		return engine.isPropertySetted(Properties.PAGED);
-	}
-
-	/**
-	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
-	 * @return table of values
-	 */
-	public final Object getSelectedValues() {
-		return getSelectedValues(null);
-	}
-
-	/**
-	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
-	 * @param selectedValues table of values
-	 */
-	public final void setSelectedValues(Object selectedValues) {
-		engine.setValue(Properties.SELECTED_VALUES, selectedValues);
-	}
-
-	/**
-	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
-	 * @param selectedValues table of values
-	 */
-	public final void setSelectedValues(ValueBinding selectedValues) {
-		engine.setValueBinding(Properties.SELECTED_VALUES, selectedValues);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectedValuesSetted() {
-		return engine.isPropertySetted(Properties.SELECTED_VALUES);
-	}
-
-	public final Object getCheckedValues() {
-		return getCheckedValues(null);
-	}
-
-	public final Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
-		return engine.getValue(Properties.CHECKED_VALUES, facesContext);
-	}
-
-	public final void setCheckedValues(Object checkedValues) {
-		engine.setValue(Properties.CHECKED_VALUES, checkedValues);
-	}
-
-	public final void setCheckedValues(ValueBinding checkedValues) {
-		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "checkedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isCheckedValuesSetted() {
-		return engine.isPropertySetted(Properties.CHECKED_VALUES);
 	}
 
 	/**

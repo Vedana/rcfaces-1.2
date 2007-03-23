@@ -180,13 +180,13 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         if (treeRenderContext.isCheckable()
                 && treeRenderContext.writeCheckFullState()) {
-            writeFullStates(javaScriptWriter, "_setCheckStates",
+            writeFullStates(javaScriptWriter, "f_setCheckStates",
                     treeRenderContext.getCheckValues());
         }
 
         if (treeRenderContext.isSelectable()
                 && treeRenderContext.writeSelectionFullState()) {
-            writeFullStates(javaScriptWriter, "_setSelectionStates",
+            writeFullStates(javaScriptWriter, "f_setSelectionStates",
                     treeRenderContext.getSelectionValues());
         }
 
@@ -362,8 +362,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         javaScriptWriter.writeln(");");
 
         if (selectItem instanceof IImagesItem) {
-            writeSelectItemImages((IImagesItem) selectItem,
-                    javaScriptWriter, null, "f_setItemImages", varId, false);
+            writeSelectItemImages((IImagesItem) selectItem, javaScriptWriter,
+                    null, "f_setItemImages", varId, false);
         }
 
         if (selectItem instanceof IClientDataItem) {
@@ -504,7 +504,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             Set values = ValuesTools.valueToSet(v, true);
 
             if (HtmlValuesTools.updateValues(facesContext, tree, false, values,
-                    checkedValues, uncheckedValues)) {
+                    checkedValues, uncheckedValues)
+                    && tree.isValueLocked(facesContext) == false) {
 
                 if (values.isEmpty()) {
                     tree.setSubmittedValue(OBJECT_EMPTY_ARRAY);

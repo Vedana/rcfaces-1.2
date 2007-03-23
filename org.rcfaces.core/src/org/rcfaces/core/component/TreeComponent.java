@@ -18,6 +18,7 @@ import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import java.lang.String;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
@@ -56,6 +57,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	ICheckableCapability,
 	ICheckCardinalityCapability,
 	ICheckEventCapability,
+	ICheckedValuesCapability,
 	ISelectableCapability,
 	ISelectionCardinalityCapability,
 	ISelectionEventCapability {
@@ -64,7 +66,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","selectable","defaultExpandedLeafImageURL","expansionValues","checkable","defaultSelectedImageURL","checkedValues","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","clientSelectionFullState","checkListener","preloadedLevelDepth","userExpandable","selectionCardinality","readOnly","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","selectable","defaultExpandedLeafImageURL","expansionValues","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","clientSelectionFullState","checkListener","preloadedLevelDepth","userExpandable","selectionCardinality","readOnly","selectedValues"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -130,6 +132,13 @@ public class TreeComponent extends AbstractInputComponent implements
 
 
 				TreeTools.setExpanded(context, this, value, expanded);
+			
+	}
+
+	public final void setExpanded(Object value, boolean expanded) {
+
+
+				setExpanded(null, value, expanded);
 			
 	}
 
@@ -360,6 +369,42 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listCheckListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
+	}
+
+	public final java.lang.Object getCheckedValues() {
+		return getCheckedValues(null);
+	}
+
+	/**
+	 * See {@link #getCheckedValues() getCheckedValues()} for more details
+	 */
+	public final java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.CHECKED_VALUES, facesContext);
+	}
+
+	public final void setCheckedValues(java.lang.Object checkedValues) {
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	/**
+	 * See {@link #setCheckedValues(Object) setCheckedValues(Object)} for more details
+	 */
+	public final void setCheckedValues(ValueBinding checkedValues) {
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public final Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.CHECKED_VALUES);
+		if (valueBinding==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueBinding.getType(facesContext);
 	}
 
 	public final boolean isSelectable() {
@@ -840,30 +885,6 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public final boolean isSelectedValuesSetted() {
 		return engine.isPropertySetted(Properties.SELECTED_VALUES);
-	}
-
-	public final Object getCheckedValues() {
-		return getCheckedValues(null);
-	}
-
-	public final Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
-		return engine.getValue(Properties.CHECKED_VALUES, facesContext);
-	}
-
-	public final void setCheckedValues(Object checkedValues) {
-		engine.setValue(Properties.CHECKED_VALUES, checkedValues);
-	}
-
-	public final void setCheckedValues(ValueBinding checkedValues) {
-		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "checkedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isCheckedValuesSetted() {
-		return engine.isPropertySetted(Properties.CHECKED_VALUES);
 	}
 
 	public final Object[] getExpansionValues() {

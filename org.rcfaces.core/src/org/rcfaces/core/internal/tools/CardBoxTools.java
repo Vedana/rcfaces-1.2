@@ -16,7 +16,6 @@ import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.component.iterator.ICardIterator;
 import org.rcfaces.core.internal.util.ComponentIterators;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -37,7 +36,11 @@ public class CardBoxTools {
     }
 
     public static CardComponent getSelectedCard(CardBoxComponent component) {
-        Object value = component.getValue();
+        Object value = component.getSubmittedValue();
+
+        if (value == null) {
+            value = component.getValue();
+        }
 
         if (value instanceof SelectItem) {
             value = ((SelectItem) value).getValue();
@@ -59,9 +62,11 @@ public class CardBoxTools {
                 }
             }
 
-            if (byId != null) {
-                return byId;
-            }
+            return byId; // On retourne NULL si on trouve pas l'onglet
+            /*
+             * if (byId != null) { return byId; }
+             */
+
         }
 
         // On prend le premier tab dans ce cas !

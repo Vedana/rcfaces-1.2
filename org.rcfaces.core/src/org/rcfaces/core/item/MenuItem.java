@@ -55,11 +55,19 @@ public class MenuItem extends TreeNode implements IMenuItem {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         int type = IInputTypeCapability.AS_PUSH_BUTTON;
-        if (menuItemComponent instanceof MenuCheckItemComponent) {
-            type = IInputTypeCapability.AS_CHECK_BUTTON;
 
-        } else if (menuItemComponent instanceof MenuRadioItemComponent) {
+        if (menuItemComponent instanceof MenuRadioItemComponent) {
             type = IInputTypeCapability.AS_RADIO_BUTTON;
+            // Attention un RADIO est aussi un CHECK !
+
+            String groupName = ((MenuRadioItemComponent) menuItemComponent)
+                    .getGroupName(facesContext);
+            if (groupName != null) {
+                setGroupName(groupName);
+            }
+
+        } else if (menuItemComponent instanceof MenuCheckItemComponent) {
+            type = IInputTypeCapability.AS_CHECK_BUTTON;
         }
 
         setAcceleratorKey(menuItemComponent.getAcceleratorKey(facesContext));

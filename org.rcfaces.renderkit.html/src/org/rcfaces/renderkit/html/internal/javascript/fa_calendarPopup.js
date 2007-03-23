@@ -104,8 +104,8 @@ var __static={
 				popup=dateChooser.ownerDocument.createElement("DIV");
 				popup.className="f_dateChooser_popup";
 	
-				popup.onclick=f_core.CancelEventHandlerTrue;
-				popup.onmousedown=f_core.CancelEventHandlerTrue;
+				popup.onclick=f_core.CancelJsEventHandlerTrue;
+				popup.onmousedown=f_core.CancelJsEventHandlerTrue;
 	
 				body=popup;
 				
@@ -139,7 +139,13 @@ var __static={
 		}
 
 		if (f_popup.RegisterWindowClick({
+				/**
+				 * @method public
+				 */
 				exit: dateChooser._clickOutside,
+				/**
+				 * @method public
+				 */
 				keyDown: function(evt) {
 					f_core.Debug(fa_calendarPopup, "popup keyDown: "+evt.keyCode);
 					/*if (menu._filterKey("down", evt)===true) {
@@ -152,21 +158,27 @@ var __static={
 				 		return true;
 					}
 					
-					return fa_menuCore.OnKeyDown(menu, menu, evt);
+					return fa_menuCore.OnKeyDown(menu, evt);
 					*/
 					return true;
 				},
+				/**
+				 * @method public
+				 */
 				keyUp: function(evt) {
 					f_core.Debug(fa_calendarPopup, "popup keyUp: "+evt.keyCode);
 					/*return menu._filterKey("up", evt);*/
 					return true;
 				},
+				/**
+				 * @method public
+				 */
 				keyPress: function(evt) {
 					f_core.Debug(fa_calendarPopup, "popup keyPress: "+evt.keyCode);
 					/*switch(evt.keyCode) {
 					case f_key.VK_RETURN:
 				 	case f_key.VK_ENTER:
-				 		return fa_menuCore.OnKeyDown(menu, menu, evt);
+				 		return fa_menuCore.OnKeyDown(menu, evt);
 					}
 					*/
 					return true;
@@ -182,7 +194,9 @@ var __static={
 			f_key.EnterScope(fa_calendarPopup._CALENDAR_KEY_SCOPE_ID);
 
 			if (dateChooser._iePopup) {
-				f_popup.Ie_openPopup(popup, dateChooser, position, offsetX, offsetY, offsetWidth);
+				f_popup.Ie_openPopup(popup, {
+					component: dateChooser, 
+					position: f_popup.BOTTOM_LEFT_COMPONENT });
 			
 			} else {
 				var p1=f_core.GetAbsolutePosition(position);
@@ -472,4 +486,4 @@ var __prototype={
 	}
 }
  
-var fa_calendarPopup=new f_aspect("fa_calendarPopup", __static, __prototype, fa_itemsWrapper, fa_selectionProvider);
+new f_aspect("fa_calendarPopup", __static, __prototype, fa_itemsWrapper, fa_selectionProvider);

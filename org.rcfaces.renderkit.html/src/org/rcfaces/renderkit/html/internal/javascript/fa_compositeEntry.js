@@ -26,18 +26,18 @@ var __static={
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 	
 		if (compositeEntry._onInputKeyDown(evt, this)) {
 			return true;
 		}
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -54,14 +54,14 @@ var __static={
 		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 	
 		if (compositeEntry._onInputKeyPress(evt, this)) {
 			return true;
 		}
 		
-		return f_core.CancelEvent(evt);		
+		return f_core.CancelJsEvent(evt);		
 	},
 	
 	/**
@@ -74,11 +74,11 @@ var __static={
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 	
 		return compositeEntry._onInputBlur(this, evt);		
@@ -89,7 +89,7 @@ var __prototype={
 
 	fa_compositeEntry: function() {
 		var inputs=this.getElementsByTagName("INPUT");
-		f_core.Assert(inputs.length>0, "fa_compositeEntry(): Can not find any Input !");
+		f_core.Assert(inputs.length, "fa_compositeEntry(): Can not find any Input !");
 		
 		this._inputs=inputs;
 		for(var i=0;i<inputs.length;i++) {
@@ -171,7 +171,7 @@ var __prototype={
 	 */
 	fa_initializeInput: f_core.OPTIONAL_ABSTRACT,
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 */
 	fa_finalizeInput: f_core.OPTIONAL_ABSTRACT,
 	/**
@@ -340,7 +340,7 @@ var __prototype={
 		if (ret) {
 			return true;
 		}
-		return f_core.CancelEvent(jsEvent);
+		return f_core.CancelJsEvent(jsEvent);
 	},
 	/**
 	 * @method protected abstract
@@ -407,4 +407,4 @@ var __prototype={
 	}
 }
  
-var fa_compositeEntry=new f_aspect("fa_compositeEntry", __static, __prototype, fa_disabled, fa_readOnly);
+new f_aspect("fa_compositeEntry", __static, __prototype, fa_disabled, fa_readOnly);

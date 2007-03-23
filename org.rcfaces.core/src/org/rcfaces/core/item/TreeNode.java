@@ -70,6 +70,11 @@ public class TreeNode extends SelectItemGroup implements ITreeNode {
             setValue(itemValue);
         }
 
+        String groupName = treeNode.getGroupName();
+        if (groupName != null) {
+            setGroupName(groupName);
+        }
+
         setImageURL(treeNode.getImageURL());
         setDisabledImageURL(treeNode.getDisabledImageURL());
         setHoverImageURL(treeNode.getHoverImageURL());
@@ -99,6 +104,11 @@ public class TreeNode extends SelectItemGroup implements ITreeNode {
         Object itemValue = treeNodeComponent.getItemValue();
         if (itemValue != null) {
             setValue(itemValue);
+        }
+
+        String groupName = treeNodeComponent.getGroupName(facesContext);
+        if (groupName != null) {
+            setGroupName(groupName);
         }
 
         setStyleClass(treeNodeComponent.getStyleClass(facesContext));

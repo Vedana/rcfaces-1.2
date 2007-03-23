@@ -12,6 +12,7 @@ import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
@@ -35,7 +36,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     private static final Log LOG = LogFactory.getLog(AbstractCssRenderer.class);
 
-    private static final int DEFAULT_RENDERED_HIDDEN_MODE = IVisibilityCapability.IGNORE_HIDDEN_MODE;
+    private static final int DEFAULT_RENDERED_HIDDEN_MODE = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
 
     private static final String DEFAULT_MARGIN_UNIT = "px";
 
@@ -156,9 +157,13 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
             cssWriter.writeVisibility(visibilityCapability);
 
-            hiddenMode = visibilityCapability.getHiddenMode();
-            if (hiddenMode == 0) {
-                hiddenMode = DEFAULT_RENDERED_HIDDEN_MODE;
+            if (visibilityCapability instanceof IHiddenModeCapability) {
+                IHiddenModeCapability hiddenModeCapability = (IHiddenModeCapability) visibilityCapability;
+
+                hiddenMode = hiddenModeCapability.getHiddenMode();
+                if (hiddenMode == 0) {
+                    hiddenMode = DEFAULT_RENDERED_HIDDEN_MODE;
+                }
             }
         }
 
@@ -216,7 +221,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
     protected void writeCustomCss(IHtmlWriter writer, ICssWriter cssWriter) {
     }
 
-    protected static final String getSize(String size) {
+    public static final String getSize(String size) {
         if (size == null) {
             return size;
         }
@@ -233,8 +238,8 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         return size + "px";
     }
 
-    protected static final String computeSizeInPixel(String size,
-            int parentWidth, int delta) {
+    public static final String computeSizeInPixel(String size, int parentWidth,
+            int delta) {
         int ssize = computeSize(size, parentWidth, delta);
         if (ssize < 0) {
             return null;
@@ -243,8 +248,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         return ssize + "px";
     }
 
-    protected static final int computeSize(String size, int parentWidth,
-            int delta) {
+    public static final int computeSize(String size, int parentWidth, int delta) {
         int v = getPixelSize(size, parentWidth);
         if (v < 0) {
             return v;
@@ -253,7 +257,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         return v + delta;
     }
 
-    protected static final int getPixelSize(String size, int parentWidth) {
+    public static final int getPixelSize(String size, int parentWidth) {
         if (size == null) {
             return -1;
         }

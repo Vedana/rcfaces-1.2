@@ -83,7 +83,9 @@ var __static = {
 	 */
 	PerformErrorEvent: function(component, messageCode, message, param) {
 
-		if (this.f_isActionListEmpty(f_event.ERROR)) {
+		alert("ERROR: "+messageCode+": "+message);
+
+		if (component.f_isActionListEmpty(f_event.ERROR)) {
 			// Pas d'évènements !
 			
 			var x=undefined;
@@ -102,7 +104,7 @@ var __static = {
 			return;
 		}
 
-		return this.f_fireEvent(f_event.ERROR, null, param, messageCode, null, message);
+		return component.f_fireEvent(f_event.ERROR, null, param, messageCode, null, message);
 	}
 }
 

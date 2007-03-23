@@ -264,10 +264,11 @@ public class CalendarTools {
 
     }
 
-    public static Object parseValue(IProcessContext processContext, UIComponent component,
-            String value, boolean literalValue) {
+    public static Object parseValue(IProcessContext processContext,
+            UIComponent component, String value, boolean literalValue) {
 
-        DateFormat dateFormat = getShortDateFormat(processContext, component, literalValue);
+        DateFormat dateFormat = getShortDateFormat(processContext, component,
+                literalValue);
 
         if (value.indexOf(':') >= 0) {
             return parsePeriods(dateFormat, value);
@@ -427,7 +428,9 @@ public class CalendarTools {
                             .getProcessContext(null);
                 }
 
-                locale = processContext.getUserLocale();
+                if (processContext != null) {
+                    locale = processContext.getUserLocale();
+                }
             }
 
             if (timeZone == null) {
@@ -436,7 +439,9 @@ public class CalendarTools {
                             .getProcessContext(null);
                 }
 
-                timeZone = processContext.getUserTimeZone();
+                if (processContext != null) {
+                    timeZone = processContext.getUserTimeZone();
+                }
             }
 
             if (LOG.isDebugEnabled()) {

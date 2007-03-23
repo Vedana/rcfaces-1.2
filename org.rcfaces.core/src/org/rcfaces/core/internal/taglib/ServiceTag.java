@@ -19,6 +19,8 @@ public class ServiceTag extends CameliaTag implements Tag {
 	private String propertyChangeListeners;
 	private String serviceEventListeners;
 	private String filterProperties;
+	private String componentLocale;
+	private String componentTimeZone;
 	private String serviceId;
 	private String enableViewState;
 	public String getComponentType() {
@@ -49,6 +51,22 @@ public class ServiceTag extends CameliaTag implements Tag {
 		this.filterProperties = filterProperties;
 	}
 
+	public final String getComponentLocale() {
+		return componentLocale;
+	}
+
+	public final void setComponentLocale(String componentLocale) {
+		this.componentLocale = componentLocale;
+	}
+
+	public final String getComponentTimeZone() {
+		return componentTimeZone;
+	}
+
+	public final void setComponentTimeZone(String componentTimeZone) {
+		this.componentTimeZone = componentTimeZone;
+	}
+
 	public final String getServiceId() {
 		return serviceId;
 	}
@@ -71,6 +89,8 @@ public class ServiceTag extends CameliaTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  componentLocale='"+componentLocale+"'");
+			LOG.debug("  componentTimeZone='"+componentTimeZone+"'");
 			LOG.debug("  serviceId='"+serviceId+"'");
 			LOG.debug("  enableViewState='"+enableViewState+"'");
 		}
@@ -101,6 +121,26 @@ public class ServiceTag extends CameliaTag implements Tag {
 				component.setFilterProperties(vb);
 		}
 
+		if (componentLocale != null) {
+			if (isValueReference(componentLocale)) {
+				ValueBinding vb = application.createValueBinding(componentLocale);
+
+				component.setComponentLocale(vb);
+			} else {
+				component.setComponentLocale(componentLocale);
+			}
+		}
+
+		if (componentTimeZone != null) {
+			if (isValueReference(componentTimeZone)) {
+				ValueBinding vb = application.createValueBinding(componentTimeZone);
+
+				component.setComponentTimeZone(vb);
+			} else {
+				component.setComponentTimeZone(componentTimeZone);
+			}
+		}
+
 		if (serviceId != null) {
 			if (isValueReference(serviceId)) {
 				ValueBinding vb = application.createValueBinding(serviceId);
@@ -124,6 +164,8 @@ public class ServiceTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		serviceEventListeners = null;
 		filterProperties = null;
+		componentLocale = null;
+		componentTimeZone = null;
 		serviceId = null;
 		enableViewState = null;
 

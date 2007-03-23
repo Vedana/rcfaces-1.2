@@ -34,4 +34,12 @@
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
+	<tag>
+		<tag-name>nameSpace</tag-name>
+		<component>
+			<component-type>org.rcfaces.html.nameSpace</component-type>
+			<renderer-type>org.rcfaces.html.nameSpace</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
 </facelet-taglib>

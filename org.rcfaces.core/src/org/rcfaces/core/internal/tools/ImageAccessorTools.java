@@ -6,6 +6,7 @@ package org.rcfaces.core.internal.tools;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
+import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
@@ -14,6 +15,7 @@ import org.rcfaces.core.internal.component.IComponentEngine;
 import org.rcfaces.core.internal.component.IExpandImageAccessors;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.ISeverityImageAccessors;
+import org.rcfaces.core.internal.component.IToolBarImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -262,5 +264,32 @@ public class ImageAccessorTools {
 
         return ContentAccessorFactory.createFromWebResource(facesContext,
                 imageContent, IContentType.IMAGE);
+    }
+
+    public static IToolBarImageAccessors createImageAccessors(
+            FacesContext facesContext, ToolBarComponent component,
+            IComponentEngine engine) {
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        final IContentAccessor separatorContentAccessor = createSubAccessor(
+                facesContext, engine, Properties.SEPARATOR_IMAGE_URL, null);
+
+        final IContentAccessor controlImageContentAccessor = createSubAccessor(
+                facesContext, engine, Properties.CONTROL_IMAGE_URL, null);
+
+        return new IToolBarImageAccessors() {
+            private static final String REVISION = "$Revision$";
+
+            public IContentAccessor getControlImageAccessor() {
+                return controlImageContentAccessor;
+            }
+
+            public IContentAccessor getSeparatorImageAccessor() {
+                return separatorContentAccessor;
+            }
+
+        };
     }
 }

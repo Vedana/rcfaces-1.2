@@ -157,7 +157,7 @@ var __prototype = {
 
 		var validator=this._validator;
 		if (validator) {
-			validator.f_updateValue(true);
+			validator.f_updateValue(text);
 		}		
 	},
 	/**
@@ -250,6 +250,12 @@ var __prototype = {
 		this.f_super(arguments);
 	},
 	*/
+	
+	f_update: function() {
+		this.f_performMessageChanges();	
+				
+		return this.f_super(arguments);	
+	},
 	/**
 	 * Returns the value associated to the input component.
 	 *
@@ -376,7 +382,7 @@ var __prototype = {
 			}
 		}
 		
-		f_core.Debug(f_input, "Change message to '"+msg+"' for component "+this.id+".");
+		f_core.Debug(f_input, "f_performMessageChanges: Change message to '"+msg+"' for component "+this.id+".");
 						
 		if (msg==this._currentMessage) {
 			return;

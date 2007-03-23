@@ -59,7 +59,6 @@ public class CardBoxRenderer extends AbstractCssRenderer {
         htmlWriter.enableJavaScript();
 
         htmlWriter.startElement("DIV");
-        htmlWriter.writeRole(IAccessibilityRoles.TAB_PANEL);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -80,11 +79,17 @@ public class CardBoxRenderer extends AbstractCssRenderer {
         renderTabHeader(htmlWriter);
     }
 
+    protected String getWAIRole() {
+        return IAccessibilityRoles.TAB_PANEL;
+    }
+
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.endElement("DIV");
+
+        htmlWriter.enableJavaScript();
 
         super.encodeEnd(writer);
     }

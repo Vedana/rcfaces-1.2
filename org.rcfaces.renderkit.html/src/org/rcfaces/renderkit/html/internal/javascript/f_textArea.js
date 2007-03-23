@@ -27,6 +27,9 @@ var __prototype = {
 			this.f_insertEventListenerFirst(f_event.FOCUS, this._messageFocusEvent);
 			this.f_insertEventListenerFirst(f_event.BLUR, this._messageBlurEvent);
 		}
+
+		// On peut pas le mêtre dans le f_setDomEvent, la profondeur de la pile ne le permet pas !
+		this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_performSelectionEvent);
 	},
 	/*
 	f_finalize: function() {
@@ -79,7 +82,6 @@ var __prototype = {
 	f_setDomEvent: function(type, target) {
 		switch(type) {
 		case f_event.SELECTION: 
-			this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_performSelectionEvent);
 			return;
 			
 		case f_event.KEYPRESS:
@@ -96,10 +98,6 @@ var __prototype = {
 	},
 	f_clearDomEvent: function(type, target) {
 		switch(type) {
-		case f_event.SELECTION: 
-			this.f_removeEventListener(f_event.KEYPRESS, this.f_performSelectionEvent);
-			return;
-	
 		case f_event.KEYPRESS:
 		case f_event.KEYDOWN:
 		case f_event.KEYUP:
@@ -116,6 +114,10 @@ var __prototype = {
 	 */
 	f_performSelectionEvent: function(evt) {
 		if (this.f_isDisabled()) {
+			return;
+		}
+		
+		if (this.f_isActionListEmpty(f_event.SELECTION)) {
 			return;
 		}
 		

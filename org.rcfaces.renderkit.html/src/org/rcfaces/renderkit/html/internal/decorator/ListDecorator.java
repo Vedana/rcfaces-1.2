@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.model.IFilterProperties;
@@ -28,7 +29,7 @@ public class ListDecorator extends ComboDecorator {
         super(component, filterProperties, jsVersion);
     }
 
-    protected void decodeList(UIInput component, IComponentData componentData) {
+    protected void decodeList(FacesContext facesContext, UIInput component, IComponentData componentData) {
         String value = componentData.getStringProperty("value");
         if (value != null) {
             if (value.length() < 1) {

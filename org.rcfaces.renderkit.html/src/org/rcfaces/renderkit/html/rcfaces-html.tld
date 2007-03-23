@@ -123,6 +123,14 @@ A boolean value specifying if the HTML BASE tag must be generated.
 			<name>clientMessageIdFilter</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>waiRolesNS</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>clientValidation</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<name>javaScript</name>
@@ -296,6 +304,42 @@ A boolean value indicating wether the resource is available on the server side.
 		</attribute>
 		<attribute>
 			<name>override</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>nameSpace</name>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.NameSpaceTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>uri</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>prefix</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

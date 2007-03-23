@@ -18,8 +18,8 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 
 	private String selectionListeners;
 	private String checkListeners;
-	private String readOnly;
 	private String checkedValues;
+	private String readOnly;
 	private String removeAllWhenShown;
 	public final String getSelectionListener() {
 		return selectionListeners;
@@ -37,20 +37,20 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 		this.checkListeners = checkListeners;
 	}
 
-	public final String getReadOnly() {
-		return readOnly;
-	}
-
-	public final void setReadOnly(String readOnly) {
-		this.readOnly = readOnly;
-	}
-
 	public final String getCheckedValues() {
 		return checkedValues;
 	}
 
 	public final void setCheckedValues(String checkedValues) {
 		this.checkedValues = checkedValues;
+	}
+
+	public final String getReadOnly() {
+		return readOnly;
+	}
+
+	public final void setReadOnly(String readOnly) {
+		this.readOnly = readOnly;
 	}
 
 	public final String getRemoveAllWhenShown() {
@@ -63,8 +63,8 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
 		}
 		super.setProperties(uiComponent);
@@ -88,6 +88,12 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 			ListenersTools.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
 		}
 
+		if (checkedValues != null) {
+				ValueBinding vb = application.createValueBinding(checkedValues);
+
+				component.setCheckedValues(vb);
+		}
+
 		if (readOnly != null) {
 			if (isValueReference(readOnly)) {
 				ValueBinding vb = application.createValueBinding(readOnly);
@@ -95,15 +101,6 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 				component.setReadOnly(vb);
 			} else {
 				component.setReadOnly(getBool(readOnly));
-			}
-		}
-
-		if (checkedValues != null) {
-			if (isValueReference(checkedValues)) {
-				ValueBinding vb = application.createValueBinding(checkedValues);
-				component.setCheckedValues(vb);
-			} else {
-				throw new javax.faces.FacesException("Attribute 'checkedValues' accept only a binding expression !");
 			}
 		}
 
@@ -120,8 +117,8 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 	public void release() {
 		selectionListeners = null;
 		checkListeners = null;
-		readOnly = null;
 		checkedValues = null;
+		readOnly = null;
 		removeAllWhenShown = null;
 
 		super.release();

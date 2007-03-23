@@ -24,19 +24,12 @@ var __prototype = {
  	},
 	f_update: {
 		after: function() {
-			var messageContext=f_messageContext.Get(this);
-	
-			var messages=messageContext.f_listMessages(this.f_getFor());
-			if (messages && messages.length>0 && messages[0]!=this._currentMessage) {
-				this._currentMessage=messages[0];
-	
-				this.fa_updateMessages();
-			}
+			this.f_performMessageChanges();
 		}
 	},
 	/**
 	 * @method public 
-	 * @return String
+	 * @return String Return an identifier (naming separator might not be ':')
 	 */
 	f_getFor: function() {
 		var fors=this.f_getForComponentIds();
@@ -45,7 +38,7 @@ var __prototype = {
 	},
 	/**
 	 * @method public 
-	 * @return String
+	 * @return String Returns an array of identifiers (naming separator might not be ':')
 	 */
 	f_getForComponentIds: function() {
 		var fors=this._fors;
@@ -61,19 +54,24 @@ var __prototype = {
 		var keys=new Array();
 		this._forsTranslated=keys;
 		
-		if (!s) {
+		if (!s || !s.length) {
 			return fors;
 		}
 		
 		var sd=s.split(",");
 		for(var i=0;i<sd.length;i++) {
 			var f=f_core.Trim(sd[i]);
+			if (!f.length) {
+				continue;
+			}
 			fors.push(f);
 
 			var forTranslated=fa_namingContainer.ComputeComponentId(this, f);					
 
 			f_core.Assert(forTranslated, "f_message.f_getForComponents: Component '"+f+"' associated to this message is not defined !");
 			keys.push(forTranslated);
+
+			f_core.Debug(fa_message1, "f_getForComponentIds: translate '"+f+"' to '"+forTranslated+"'.");
 		}
 		
 		return fors;
@@ -117,21 +115,31 @@ var __prototype = {
 			keys=[null]; // On prend les globaux
 		}
 
+		f_core.Debug(fa_message1, "f_performMessageChanges: Search keys: nb="+keys.length+" keys");
+
 		var msg;
 		for(var i=0;i<keys.length;i++) {
 			var key=keys[i];
+
+			f_core.Debug(fa_message1, "f_performMessageChanges: key#"+i+"="+key);
 			
-			var messages
+			var messages;
 			if (key===null) {
-				messages=f_messageContext.Get().f_listMessages(null, true);
+				messages=f_messageContext.Get(this).f_listMessages(null);
 			
+				f_core.Debug(fa_message1, "f_performMessageChanges: Get messages for key=null : "+ messages);
+				
 			} else {
-				var component=f_core.GetElementById(key);
+				var component=f_core.GetElementByClientId(key);
 				if (!component) {
+					f_core.Debug(fa_message1, "f_performMessageChanges: Can not get component associated to key '"+key+"'.");
+				
 					continue;
 				}
 			
 				messages=f_messageContext.ListMessages(component);
+
+				f_core.Debug(fa_message1, "f_performMessageChanges: Messages associated to component: '"+key+"': "+messages);
 			}
 			
 			for(var j=0;j<messages.length;j++) {
@@ -144,11 +152,11 @@ var __prototype = {
 		}
 						
 		if (msg==this._currentMessage) {
-			f_core.Debug(fa_message1, "Message changes notification: no modifications !");
+			f_core.Debug(fa_message1, "f_performMessageChanges: no modifications ("+msg+")");
 			return;
 		}
 
-		f_core.Debug(fa_message1, "Message changes notification: change message: "+msg);
+		f_core.Debug(fa_message1, "f_performMessageChanges: change message: "+msg);
 		
 		this._currentMessage=msg;
 		
@@ -168,4 +176,4 @@ var __prototype = {
 	}
 }
 
-var fa_message1=new f_aspect("fa_message1", null, __prototype, fa_messageText);
+new f_aspect("fa_message1", null, __prototype, fa_messageText);

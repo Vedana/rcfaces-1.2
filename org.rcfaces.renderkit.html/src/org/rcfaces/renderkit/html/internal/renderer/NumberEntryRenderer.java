@@ -64,8 +64,6 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
 
         htmlWriter.startElement("DIV");
 
-        htmlWriter.writeRole(IAccessibilityRoles.TEXT_FIELD);
-
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -147,6 +145,10 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         htmlWriter.endElement("DIV");
 
         htmlWriter.enableJavaScript();
+    }
+
+    protected String getWAIRole() {
+        return IAccessibilityRoles.TEXT_FIELD;
     }
 
     private void writeNumber(IHtmlWriter htmlWriter, String attributeName,
@@ -450,13 +452,14 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
 
         FacesContext facesContext = context.getFacesContext();
 
-        NumberEntryComponent dateEntryComponent = (NumberEntryComponent) component;
+        NumberEntryComponent numberEntryComponent = (NumberEntryComponent) component;
 
         Number numberValue = componentData.getNumberProperty(Properties.VALUE);
-        if (numberValue != null) {
+        if (numberValue != null
+                && numberEntryComponent.isValueLocked(facesContext) == false) {
 
-            if (dateEntryComponent.isFractionDigitsSetted()) {
-                int fd = dateEntryComponent.getFractionDigits(facesContext);
+            if (numberEntryComponent.isFractionDigitsSetted()) {
+                int fd = numberEntryComponent.getFractionDigits(facesContext);
 
                 if (fd == 0) {
                     if ((numberValue instanceof Float)
@@ -472,7 +475,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
                 }
             }
 
-            dateEntryComponent.setSubmittedValue(numberValue);
+            numberEntryComponent.setSubmittedValue(numberValue);
         }
     }
 

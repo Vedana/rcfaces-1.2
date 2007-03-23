@@ -1,25 +1,31 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.context.FacesContext;
-import java.util.Map;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IServiceEventCapability;
-import javax.faces.el.ValueBinding;
-import java.util.Collections;
+import java.util.TimeZone;
 import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.Collections;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import java.lang.String;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Locale;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
 /**
@@ -37,6 +43,8 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	IPropertyChangeEventCapability,
 	IServiceEventCapability,
 	IFilterCapability,
+	IComponentLocaleCapability,
+	IComponentTimeZoneCapability,
 	IServerDataManager,
 	IClientDataManager {
 
@@ -44,7 +52,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"serviceId","filterProperties","enableViewState","propertyChangeListener","serviceEventListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"serviceId","filterProperties","componentLocale","enableViewState","propertyChangeListener","componentTimeZone","serviceEventListener"}));
 	}
 
 	public ServiceComponent() {
@@ -71,6 +79,20 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public final void setComponentLocale(String locale) {
+
+
+		setComponentLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		
+	}
+
+	public final void setComponentTimeZone(String timeZone) {
+
+
+		setComponentTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
 		
 	}
 
@@ -310,6 +332,50 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	 */
 	public final void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
+	}
+
+	public final java.util.Locale getComponentLocale() {
+		return getComponentLocale(null);
+	}
+
+	/**
+	 * See {@link #getComponentLocale() getComponentLocale()} for more details
+	 */
+	public final java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.COMPONENT_LOCALE, facesContext);
+	}
+
+	public final void setComponentLocale(java.util.Locale componentLocale) {
+		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
+	}
+
+	/**
+	 * See {@link #setComponentLocale(java.util.Locale) setComponentLocale(java.util.Locale)} for more details
+	 */
+	public final void setComponentLocale(ValueBinding componentLocale) {
+		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
+	}
+
+	public final java.util.TimeZone getComponentTimeZone() {
+		return getComponentTimeZone(null);
+	}
+
+	/**
+	 * See {@link #getComponentTimeZone() getComponentTimeZone()} for more details
+	 */
+	public final java.util.TimeZone getComponentTimeZone(javax.faces.context.FacesContext facesContext) {
+		return (java.util.TimeZone)engine.getProperty(Properties.COMPONENT_TIME_ZONE, facesContext);
+	}
+
+	public final void setComponentTimeZone(java.util.TimeZone componentTimeZone) {
+		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
+	}
+
+	/**
+	 * See {@link #setComponentTimeZone(java.util.TimeZone) setComponentTimeZone(java.util.TimeZone)} for more details
+	 */
+	public final void setComponentTimeZone(ValueBinding componentTimeZone) {
+		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
 	}
 
 	/**

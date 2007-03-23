@@ -66,8 +66,8 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         CardComponent selectedCard = cardBoxComponent.getSelectedCard();
         boolean selected = false;
-        if (selectedCard == null) {
-            cardBoxComponent.select(cardComponent);
+        if (selectedCard == null && cardBoxComponent.getValue() == null) {
+            // cardBoxComponent.select(cardComponent);
             selected = true;
 
         } else if (selectedCard == cardComponent) {
@@ -101,7 +101,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
                 declare);
         if (declare[0]) {
             js.write("var ").write(var).write('=').writeCall("f_core",
-                    "GetElementById").writeString(cardBoxVarId).writeln(
+                    "GetElementByClientId").writeString(cardBoxVarId).writeln(
                     ", document, true);");
         }
 
@@ -112,7 +112,6 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         htmlWriter.writeln();
 
         htmlWriter.startElement("DIV");
-        htmlWriter.writeRole(IAccessibilityRoles.TAB_CONTENT);
 
         /*
          * String w = tabbedPane.getWidth(); if (w != null) {
@@ -150,6 +149,10 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         if (verticalAlignement != null) {
             cssWriter.writeVerticalAlign(verticalAlignement);
         }
+    }
+
+    protected String getWAIRole() {
+        return IAccessibilityRoles.TAB_CONTENT;
     }
 
     protected String getCardStyleClass(FacesContext facesContext,
@@ -198,6 +201,26 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
                 componentRenderContext.getComponentClientId());
 
         int pred = 0;
+
+        Object value = cardComponent.getValue();
+        String clientValue = null;
+        if (value instanceof String) {
+            clientValue = (String) value;
+
+        } else if (value != null) {
+            clientValue = convertValue(facesContext, cardComponent, value);
+        }
+
+        if (clientValue != null) {
+            for (; pred > 0; pred--) {
+                js.write(',').writeNull();
+            }
+
+            js.write(',').writeString(clientValue);
+        } else {
+            pred++;
+        }
+
         if (selected) {
             for (; pred > 0; pred--) {
                 js.write(',').writeNull();

@@ -26,7 +26,7 @@ public class InitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disableContextMenu","title","clientMessageIdFilter","base","literalTimeZone","renderBaseTag","disabledCookiesPageURL","literalLocale","disabledScriptPageURL","invalidBrowserPageURL","favoriteImageURL","disabledIEImageBar","disableCache"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disableContextMenu","waiRolesNS","title","clientMessageIdFilter","clientValidation","base","literalTimeZone","renderBaseTag","disabledCookiesPageURL","literalLocale","disabledScriptPageURL","invalidBrowserPageURL","favoriteImageURL","disabledIEImageBar","disableCache"}));
 	}
 
 	public InitComponent() {
@@ -480,7 +480,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * @return HTML base
 	 */
 	public final boolean isRenderBaseTag(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.RENDER_BASE_TAG, false, facesContext);
+		return engine.getBoolProperty(Properties.RENDER_BASE_TAG, true, facesContext);
 	}
 
 	/**
@@ -529,6 +529,54 @@ public class InitComponent extends CameliaBaseComponent implements
 	 */
 	public final boolean isClientMessageIdFilterSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_MESSAGE_ID_FILTER);
+	}
+
+	public final String getWaiRolesNS() {
+		return getWaiRolesNS(null);
+	}
+
+	public final String getWaiRolesNS(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WAI_ROLES_NS, facesContext);
+	}
+
+	public final void setWaiRolesNS(String waiRolesNS) {
+		engine.setProperty(Properties.WAI_ROLES_NS, waiRolesNS);
+	}
+
+	public final void setWaiRolesNS(ValueBinding waiRolesNS) {
+		engine.setProperty(Properties.WAI_ROLES_NS, waiRolesNS);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "waiRolesNS" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWaiRolesNSSetted() {
+		return engine.isPropertySetted(Properties.WAI_ROLES_NS);
+	}
+
+	public final boolean isClientValidation() {
+		return isClientValidation(null);
+	}
+
+	public final boolean isClientValidation(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CLIENT_VALIDATION, true, facesContext);
+	}
+
+	public final void setClientValidation(boolean clientValidation) {
+		engine.setProperty(Properties.CLIENT_VALIDATION, clientValidation);
+	}
+
+	public final void setClientValidation(ValueBinding clientValidation) {
+		engine.setProperty(Properties.CLIENT_VALIDATION, clientValidation);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "clientValidation" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClientValidationSetted() {
+		return engine.isPropertySetted(Properties.CLIENT_VALIDATION);
 	}
 
 	protected Set getCameliaFields() {

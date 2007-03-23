@@ -420,7 +420,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             }
         }
 
-        if (newValue != null) {
+        if (newValue != null && textEntryComponent.isValueLocked(facesContext)==false) {
             textEntryComponent.setSubmittedValue(newValue);
         }
 

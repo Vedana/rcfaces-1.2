@@ -14,7 +14,7 @@ var __prototype = {
 	f_button: function() {
 		this.f_super(arguments);
 
-		this._returnOnSelect = true;
+		this.f_setForcedEventReturn(f_event.SELECTION, true);
 	}
 }
 

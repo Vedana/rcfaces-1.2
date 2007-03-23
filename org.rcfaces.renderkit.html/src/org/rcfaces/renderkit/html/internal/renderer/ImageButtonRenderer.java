@@ -88,6 +88,10 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         }
     }
 
+    protected String getWAIRole() {
+        return IAccessibilityRoles.BUTTON;
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -104,7 +108,6 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         protected void writeAttributes(String classSuffix)
                 throws WriterException {
 
-            writer.writeRole(getRole());
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
             writeCssAttributes(writer, classSuffix, ~CSS_FONT_MASK);
@@ -112,10 +115,6 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             FacesContext facesContext = writer.getComponentRenderContext()
                     .getFacesContext();
             encodeAttributes(facesContext);
-        }
-
-        protected String getRole() {
-            return IAccessibilityRoles.BUTTON;
         }
 
         protected void encodeAttributes(FacesContext facesContext)

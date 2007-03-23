@@ -17,13 +17,16 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.event.ValueChangeEvent;
 import java.util.Arrays;
+import javax.faces.event.FacesListener;
 import java.util.HashSet;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IRCFacesComponent;
@@ -332,8 +335,14 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 			return true;
 		}
 		
-		int hiddenMode=visibilityCapability.getHiddenMode();
-		if (IVisibilityCapability.SERVER_HIDDEN_MODE==hiddenMode) {
+		if ((this instanceof IHiddenModeCapability)==false) {
+			return false;
+		}
+		
+		IHiddenModeCapability hiddenModeCapability=(IHiddenModeCapability)this;
+		
+		int hiddenMode=hiddenModeCapability.getHiddenMode();
+		if (IHiddenModeCapability.SERVER_HIDDEN_MODE==hiddenMode) {
 			return false;
 		}
 		
@@ -386,6 +395,21 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 
 			setValueBinding("immediate", immediate);
 		
+	}
+
+	public final void broadcast(FacesEvent event) {
+
+				
+				if (event instanceof ActionEvent) {
+					// Traitement local, sinon l'actionEvent est traité 2 fois !
+					
+					FacesListener listeners[]=getFacesListeners(FacesListener.class);
+					ComponentTools.broadcastCommand(this, (ActionEvent)event, listeners);
+					return;
+				}
+				
+				super.broadcast(event);
+			
 	}
 
 

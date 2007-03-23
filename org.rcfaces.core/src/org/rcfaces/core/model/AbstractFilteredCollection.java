@@ -165,10 +165,18 @@ public abstract class AbstractFilteredCollection implements Collection,
                 }
 
                 limitTested = true;
-                if (iterator.hasNext()) {
-                    // La limite est atteinte, mais il reste peut-etre d'autres
-                    // ...
+
+                // La limite est atteinte, mais il en reste peut-etre
+                // d'autres ...
+
+                for (; iterator.hasNext();) {
+                    SelectItem selectItem = (SelectItem) iterator.next();
+                    if (accept(filterProperties, selectItem) == false) {
+                        continue;
+                    }
+
                     size++;
+                    break;
                 }
 
                 return false;

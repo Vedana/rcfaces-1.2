@@ -10,10 +10,12 @@ import java.util.StringTokenizer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -294,7 +296,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
 
         UIInput input = (UIInput) component;
 
-        decodeList(input, componentData);
+        decodeList(context.getFacesContext(), input, componentData);
 
         if (input instanceof IFilterCapability) {
             IFilterCapability filterCapability = (IFilterCapability) input;
@@ -313,8 +315,16 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
         }
     }
 
-    protected void decodeList(UIInput input, IComponentData componentData) {
-        String value = componentData.getStringProperty("value");
+    protected void decodeList(FacesContext facesContext, UIInput input,
+            IComponentData componentData) {
+
+        if (input instanceof IValueLockedCapability) {
+            if (((IValueLockedCapability) input).isValueLocked()) {
+                return;
+            }
+        }
+
+        String value = componentData.getStringProperty("selectedItems");
         if (value != null) {
             StringTokenizer st = new StringTokenizer(value,
                     HtmlTools.LIST_SEPARATORS);

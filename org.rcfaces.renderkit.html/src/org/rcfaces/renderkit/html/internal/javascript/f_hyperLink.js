@@ -14,7 +14,8 @@ var __prototype = {
 
 	f_hyperLink: function() {
 		this.f_super(arguments);
-		this._returnOnSelect = false;
+
+		this.f_setForcedEventReturn(f_event.SELECTION, false);
 		
 		var input=this._input;
 		if (input.tagName.toUpperCase()=="A") {
@@ -22,7 +23,7 @@ var __prototype = {
 				input.href=f_core.JAVASCRIPT_VOID;
 			}
 		}
-	},	
+	},
 	f_initializeInput: function() {
 		return this;
 	},

@@ -10,6 +10,71 @@
  * @version $Revision$ $Date$
  */
 
+var __static = {
+	/**
+	 * @method hidden static
+	 * @param f_time time
+	 * @return String
+	 */
+	SerializeTime: function(time) {
+		var millis=time.f_getMilliseconds();		
+		if (millis) {
+			return "S"+time.f_getTime().toString(32);
+		}
+		
+		var hours=time.f_getHours();
+		var minutes=time.f_getMinutes();
+		var seconds=time.f_getSeconds();
+
+		if (seconds) {
+			seconds+=(hours*60+minutes)*60;
+			return "s"+seconds.toString(32);
+		}
+		
+		if (minutes) {
+			minutes+=hours*60;
+			return "m"+minutes.toString(32);		
+		}
+		
+		return "H"+hours.toString(32);
+	},
+
+	/**
+	 * @method hidden static
+	 * @param String time
+	 * @return f_time
+	 */
+	DeserializeTime: function(time) {
+		if (!time.length) {
+			return null;
+		}
+		
+		var unit=time.charAt(0);
+		var value=parseInt(time.substring(1), 32);
+
+		switch(unit) {
+		case 'H':		
+			return new f_time(value, 0, 0);
+
+		case 'm':
+			var m=value;
+			var h=Math.floor(value/60);
+			return new f_time(h, m % 60 , 0);
+		
+		case 's':
+			var s=value;
+			var m=Math.floor(s/60);
+			var h=Math.floor(m/60);
+			return new Date(h, m % 60, s % 60);
+	
+		case 'S':
+			return new f_time(value);
+		}
+		
+		f_core.Error(f_time, "DeserializeTime: Invalid time format ! ("+time+")");
+	}
+}
+
 /**
  * @method public
  */
@@ -44,18 +109,16 @@ var __prototype = {
 		this._millis=0;
 		
 		if (minutes) {
-			f_core.Assert(typeof(minutes)=="number", "Invalid minutes parameters ("+minutes+")");
+			f_core.Assert(typeof(minutes)=="number" && minutes>=0 && minutes<=59, "Invalid minutes parameters ("+minutes+")");
 			this._minutes=minutes;
-		
-			if (seconds) {
-				f_core.Assert(typeof(seconds)=="number", "Invalid seconds parameters ("+seconds+")");
-				this._secondes=seconds;
-	
-				if (millis) {
-					f_core.Assert(typeof(millis)=="number", "Invalid millis parameters ("+minutes+")");
-					this._millis=millis;
-				}
-			}
+		}
+		if (seconds) {
+			f_core.Assert(typeof(seconds)=="number" && seconds>=0 && seconds<=59, "Invalid seconds parameters ("+seconds+")");
+			this._seconds=seconds;
+		}
+		if (millis) {
+			f_core.Assert(typeof(millis)=="number" && millis>=0 && millis<=999, "Invalid millis parameters ("+millis+")");
+			this._millis=millis;
 		}
 	},
 	
@@ -116,4 +179,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_time", null, null, __prototype);
+new f_class("f_time", null, __static, __prototype);

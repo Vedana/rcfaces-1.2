@@ -164,7 +164,7 @@ public class PageConfiguration {
                     .getProcessContext(facesContext);
         }
 
-        locale = processContext.getDefaultAttributesLocale();
+        locale = processContext.getDefaultLiteralLocale();
         if (locale != null) {
             return locale;
         }

@@ -37,9 +37,44 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
+        Object value = textEditorComponent.getValue();
+
+        String valueMimeType = textEditorComponent
+                .getValueMimeType(facesContext);
+
+        if (valueMimeType == null) {
+            if (value instanceof String) {
+                valueMimeType = "text/plain";
+            }
+        }
+
+        if (valueMimeType != null) {
+            valueMimeType = valueMimeType.toLowerCase();
+        }
+
+        if (valueMimeType.equals("text/plain")) {
+            formatTextPlain(htmlWriter, value);
+
+        } else if (valueMimeType.equals("text/html")) {
+            formatTextHtml(htmlWriter, value);
+
+        } else {
+
+        }
+
         htmlWriter.endElement("IFRAME");
 
         htmlWriter.enableJavaScript();
+    }
+
+    private void formatTextHtml(IHtmlWriter htmlWriter, Object value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void formatTextPlain(IHtmlWriter htmlWriter, Object value) {
+        // TODO Auto-generated method stub
+
     }
 
     protected boolean useHtmlAccessKeyAttribute() {
@@ -47,7 +82,7 @@ public class TextEditorRenderer extends AbstractInputRenderer {
     }
 
     protected String getJavaScriptClassName() {
-        return JavaScriptClasses.TEXT_AREA;
+        return JavaScriptClasses.TEXT_EDITOR;
     }
 
     protected String getInputType(UIComponent component) {
@@ -85,7 +120,8 @@ public class TextEditorRenderer extends AbstractInputRenderer {
             newValue = componentData.getComponentParameter();
         }
 
-        if (newValue != null) {
+        if (newValue != null
+                && textAreaComponent.isValueLocked(context.getFacesContext()) == false) {
             textAreaComponent.setSubmittedValue(newValue);
         }
     }

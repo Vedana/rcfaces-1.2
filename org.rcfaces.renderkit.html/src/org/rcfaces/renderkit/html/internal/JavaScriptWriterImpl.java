@@ -233,7 +233,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
             return;
         }
 
-        writeSymbol("_classLoader").write('.').writeSymbol("requiresBundle")
+        writeSymbol("_classLoader").write('.').writeSymbol("f_requiresBundle")
                 .write("(document");
 
         IRepository.IFile filesToRequire[] = javascriptRenderContext
@@ -363,13 +363,14 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         requestedModules.add(moduleName);
     }
 
-    protected final String convertSymbol(String symbol) {
-        String converted = javascriptRenderContext.convertSymbol(symbol);
+    protected final String convertSymbol(String className, String memberName) {
+        String converted = javascriptRenderContext.convertSymbol(className,
+                memberName);
 
         if (LOG.isTraceEnabled()) {
-            if (symbol.equals(converted) == false) {
-                LOG.trace("Convert symbol '" + symbol + "' to '" + converted
-                        + "'.");
+            if (memberName.equals(converted) == false) {
+                LOG.trace("Convert symbol '" + className + "." + memberName
+                        + "' to '" + converted + "'.");
             }
         }
 

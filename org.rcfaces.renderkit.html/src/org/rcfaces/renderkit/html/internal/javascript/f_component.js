@@ -586,7 +586,7 @@ var __prototype = {
 		}
 				
 		if (suffix) {
-			computedStyleClass+=" "+this.f_getMainStyleClass()+suffix;
+			computedStyleClass=this.f_getMainStyleClass()+suffix+" "+computedStyleClass;
 		}
 		
 		return computedStyleClass;
@@ -762,12 +762,18 @@ var __prototype = {
 	 * @return String
 	 */
 	toString: function() {
-		var s="[component";
+		var s="[f_component";
 		
 		if (this.id) {
 			s+=" id=\""+this.id+"\"";
 		}
-		s+=" class=\""+this._kclass.f_getName()+"\"";
+
+		var kclazz=this._kclass;
+		if (kclazz) {
+			s+=" class=\""+kclazz.f_getName()+"\"";
+		} else {
+			s+=" class=*undefined*";
+		}
 		
 		if (this.tagName) {
 			s+=" tag="+this.tagName.toUpperCase();

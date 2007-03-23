@@ -4,6 +4,7 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
@@ -23,6 +25,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.component.IConvertValueHolder;
+import org.rcfaces.core.internal.component.IEditableValueHolder;
 import org.rcfaces.core.internal.util.Convertor;
 
 /**
@@ -248,8 +251,7 @@ public class ValuesTools {
 
         Converter converter = null;
         if (component instanceof IConvertValueHolder) {
-            converter = ((IConvertValueHolder) component)
-                    .getConverter();
+            converter = ((IConvertValueHolder) component).getConverter();
 
         } else if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
@@ -298,8 +300,7 @@ public class ValuesTools {
 
         Converter converter = null;
         if (component instanceof IConvertValueHolder) {
-            converter = ((IConvertValueHolder) component)
-                    .getConverter();
+            converter = ((IConvertValueHolder) component).getConverter();
 
         } else if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
@@ -311,7 +312,6 @@ public class ValuesTools {
     public static String convertValueToString(Object value,
             Converter converter, UIComponent component,
             FacesContext facesContext) {
-
         if (value instanceof String) {
             return (String) value;
         }
@@ -338,21 +338,7 @@ public class ValuesTools {
     }
 
     public static final boolean valueToBool(ValueHolder valueHolder) {
-        Object value = valueHolder.getValue();
-
-        if (value == null || value == Boolean.FALSE) {
-            return false;
-        }
-
-        if (value == Boolean.TRUE) {
-            return true;
-        }
-
-        if (value instanceof Boolean) {
-            return ((Boolean) value).booleanValue();
-        }
-
-        Boolean b = (Boolean) Convertor.convert(value, Boolean.TYPE);
+        Boolean b = valueToBoolean(valueHolder);
 
         if (b == null) {
             return false;
@@ -362,6 +348,14 @@ public class ValuesTools {
     }
 
     public static final Boolean valueToBoolean(ValueHolder valueHolder) {
+        if (valueHolder instanceof EditableValueHolder) {
+            Object submittedValue = ((EditableValueHolder) valueHolder)
+                    .getSubmittedValue();
+            if (submittedValue != null) {
+                return (Boolean) submittedValue;
+            }
+        }
+
         Object value = valueHolder.getValue();
 
         if (value == null) {
@@ -376,6 +370,14 @@ public class ValuesTools {
     }
 
     public static final int valueToInt(ValueHolder valueHolder) {
+        if (valueHolder instanceof EditableValueHolder) {
+            Object submittedValue = ((EditableValueHolder) valueHolder)
+                    .getSubmittedValue();
+            if (submittedValue != null) {
+                return ((Integer) submittedValue).intValue();
+            }
+        }
+
         Object value = valueHolder.getValue();
 
         if (value == null) {
@@ -396,6 +398,26 @@ public class ValuesTools {
 
     public static String valueToString(ValueHolder valueHolder,
             FacesContext facesContext) {
+
+        if (valueHolder instanceof IEditableValueHolder) {
+            IEditableValueHolder editableValueHolder = (IEditableValueHolder) valueHolder;
+
+            if (editableValueHolder.isSubmittedValueSet()) {
+                Object submittedValue = editableValueHolder.getSubmittedValue();
+
+                return ValuesTools.valueToString(submittedValue,
+                        (UIComponent) valueHolder, facesContext);
+            }
+
+        } else if (valueHolder instanceof EditableValueHolder) {
+            Object submittedValue = ((EditableValueHolder) valueHolder)
+                    .getSubmittedValue();
+            if (submittedValue != null) {
+                return ValuesTools.valueToString(submittedValue,
+                        (UIComponent) valueHolder, facesContext);
+            }
+        }
+
         return ValuesTools.valueToString(valueHolder.getValue(),
                 (UIComponent) valueHolder, facesContext);
     }
@@ -414,8 +436,7 @@ public class ValuesTools {
 
         Converter converter = null;
         if (component instanceof IConvertValueHolder) {
-            converter = ((IConvertValueHolder) component)
-                    .getConverter();
+            converter = ((IConvertValueHolder) component).getConverter();
 
         } else if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
@@ -449,6 +470,65 @@ public class ValuesTools {
         }
 
         return (String) Convertor.convert(value, String.class);
+    }
+
+    public static Object adaptValues(Class target, Collection collection) {
+        if (target == null || target.equals(Object.class)
+                || target.equals(Object[].class)) {
+            return collection.toArray();
+        }
+
+        if (target.isArray()) {
+            Object array = Array.newInstance(target.getComponentType(),
+                    collection.size());
+
+            if (array instanceof Object[]) {
+                return collection.toArray((Object[]) array);
+            }
+
+            Object src[] = collection.toArray();
+
+            System.arraycopy(src, 0, array, 0, collection.size());
+
+            return array;
+        }
+
+        if (Set.class.isAssignableFrom(target)) {
+            if (collection instanceof Set) {
+                return collection;
+            }
+            return new HashSet(collection);
+        }
+
+        if (List.class.isAssignableFrom(target)) {
+            if (collection instanceof List) {
+                return collection;
+            }
+            return new ArrayList(collection);
+        }
+
+        if (Collection.class.isAssignableFrom(target)) {
+            return collection;
+        }
+
+        throw new FacesException("Invalid collection type '" + target + "'.");
+    }
+
+    public static Set convertSelection(Object selection) {
+        if (selection instanceof Object[]) {
+            return new HashSet(Arrays.asList((Object[]) selection));
+        }
+
+        if (selection instanceof Collection) {
+            return new HashSet((Collection) selection);
+        }
+
+        if (selection == null) {
+            return new HashSet();
+        }
+
+        throw new FacesException(
+                "Bad type of value for attribute selectedValues/checkedValues !");
     }
 
 }

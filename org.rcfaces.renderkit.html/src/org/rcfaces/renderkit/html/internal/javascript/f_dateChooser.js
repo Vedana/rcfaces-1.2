@@ -23,8 +23,8 @@ var __prototype={
 	
 		this.f_super(arguments);
 	},
-	_onSelect: function(event) {
-		f_core.Debug(f_dateChooser, "_onSelect: "+event+" detail="+event.f_getDetail());
+	f_imageButtonSelect: function(event) {
+		f_core.Debug(f_dateChooser, "f_imageButtonSelect: "+event+" detail="+event.f_getDetail());
 
 		if (this.f_isDisabled()) {
 			return false;

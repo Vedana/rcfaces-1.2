@@ -83,6 +83,25 @@ public class TabRenderer extends CardRenderer {
 
         int pred = 0;
 
+        Object value = tab.getValue();
+        String clientValue = null;
+        if (value instanceof String) {
+            clientValue = (String) value;
+
+        } else if (value != null) {
+            clientValue = convertValue(facesContext, cardComponent, value);
+        }
+
+        if (clientValue != null) {
+            for (; pred > 0; pred--) {
+                js.write(',').writeNull();
+            }
+
+            js.write(',').writeString(clientValue);
+        } else {
+            pred++;
+        }
+
         if (selected) {
             for (; pred > 0; pred--) {
                 js.write(',').writeNull();

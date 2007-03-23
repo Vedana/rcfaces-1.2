@@ -12,7 +12,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.model.AbstractConverter;
 
 /**
@@ -23,7 +23,7 @@ public class HiddenModeConverter extends AbstractConverter {
     private static final String REVISION = "$Revision$";
 
     private static final Integer DEFAULT_HIDDEN_MODE = new Integer(
-            IVisibilityCapability.DEFAULT_HIDDEN_MODE);
+            IHiddenModeCapability.DEFAULT_HIDDEN_MODE);
 
     private static final String IGNORE_HIDDEN_MODE_NAME = "ignore";
 
@@ -40,15 +40,15 @@ public class HiddenModeConverter extends AbstractConverter {
     private static Map HIDDEN_MODES = new HashMap(5);
     static {
         HIDDEN_MODES.put(IGNORE_HIDDEN_MODE_NAME, new Integer(
-                IVisibilityCapability.IGNORE_HIDDEN_MODE));
+                IHiddenModeCapability.IGNORE_HIDDEN_MODE));
         HIDDEN_MODES.put(SERVER_HIDDEN_MODE_NAME, new Integer(
-                IVisibilityCapability.SERVER_HIDDEN_MODE));
+                IHiddenModeCapability.SERVER_HIDDEN_MODE));
         HIDDEN_MODES.put(PHANTOM_HIDDEN_MODE_NAME, new Integer(
-                IVisibilityCapability.PHANTOM_HIDDEN_MODE));
+                IHiddenModeCapability.PHANTOM_HIDDEN_MODE));
         HIDDEN_MODES.put(DEFAULT_HIDDEN_MODE_NAME, new Integer(
-                IVisibilityCapability.DEFAULT_HIDDEN_MODE));
+                IHiddenModeCapability.DEFAULT_HIDDEN_MODE));
         HIDDEN_MODES.put(CLIENT_HIDDEN_MODE_NAME, new Integer(
-                IVisibilityCapability.CLIENT_HIDDEN_MODE));
+                IHiddenModeCapability.CLIENT_HIDDEN_MODE));
     }
 
     /*
@@ -112,13 +112,13 @@ public class HiddenModeConverter extends AbstractConverter {
 
     public static final String getName(int hiddenMode) {
         switch (hiddenMode) {
-        case IVisibilityCapability.IGNORE_HIDDEN_MODE:
+        case IHiddenModeCapability.IGNORE_HIDDEN_MODE:
             return IGNORE_HIDDEN_MODE_NAME;
 
-        case IVisibilityCapability.PHANTOM_HIDDEN_MODE:
+        case IHiddenModeCapability.PHANTOM_HIDDEN_MODE:
             return PHANTOM_HIDDEN_MODE_NAME;
 
-        case IVisibilityCapability.SERVER_HIDDEN_MODE:
+        case IHiddenModeCapability.SERVER_HIDDEN_MODE:
             return SERVER_HIDDEN_MODE_NAME;
         }
 

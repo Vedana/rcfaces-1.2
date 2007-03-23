@@ -27,6 +27,7 @@ var __prototype = {
 		
 		this._actionLists=undefined;
 //		this._hasInitListeners=undefined; // boolean
+//		this._forcedEventReturns=undefined; // Map<String, boolean>
 		
 		var clearDomEvent=this.f_clearDomEvent;
 		for(var type in actionLists) {
@@ -60,7 +61,7 @@ var __prototype = {
 			var eventType=eventTypes[eventName];
 			f_core.Assert(eventType, "fa_eventTarget.f_initEventAtts: Unknown eventType '"+eventName+"' for component '"+this.id+"'.");
 			
-			f_core.Debug("f_eventTarget", "Register event '"+eventName+"' on component '"+this.id+"' => "+commands);
+			f_core.Debug(fa_eventTarget, "Register event '"+eventName+"' on component '"+this.id+"' => "+commands);
 
 			if (commands.length==2 && commands[1]=="submit") {
 				this.f_addEventListener(eventType, f_core.Submit);
@@ -135,12 +136,7 @@ var __prototype = {
 				f_core.Debug(fa_eventTarget, "Fire event '"+event._type+"' on '"+this.id+"' item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"' detail='"+event._detail+"'.");
 				
 				ret = al.f_callActions(event);
-					
-				if (jsEvt && ret===false) {
-					f_core.CancelEvent(jsEvt);
-					//alert("Cancel event !");
-				}
-				
+								
 			} finally {
 				if (disposeEvent) {
 					// Nous sommes pas forcement dans un contexte initialisé. (aprés un submit)
@@ -150,8 +146,28 @@ var __prototype = {
 					}
 				}
 			}
+	
+			if (event && event._eventReturn!==undefined) {
+				ret=event._eventReturn;
+				f_core.Debug(fa_eventTarget, "Call actions: eventReturn is forced (by _eventReturn) to "+ret);
+			}
 			
-			if (jsEvt) {
+			var fer=this._forcedEventReturns;
+			if (fer) {
+				var forcedReturn=fer[type];
+				
+				if (forcedReturn!==undefined) {
+					ret=forcedReturn;
+					f_core.Debug(fa_eventTarget, "Call actions: eventReturn is forced (by forcedValue) to "+ret);
+				}
+			}
+
+			if (jsEvt) {			
+				if (ret===false) {
+					f_core.CancelJsEvent(jsEvt);
+					//alert("Cancel event !");
+				}
+	
 				jsEvt.returnValue = ret;
 			}
 			
@@ -176,7 +192,7 @@ var __prototype = {
 	},
 	/**
 	 * 
-	 * @method hidden
+	 * @method protected
 	 * @return boolean
 	 */
 	f_isActionListEmpty: function(type) {
@@ -184,12 +200,12 @@ var __prototype = {
 
 		var als=this._actionLists;
 		if (!als) {
-			return false;
+			return true;
 		}
 		
 		var al=als[type];
 		if (!al) {
-			return false;
+			return true;
 		}
 		
 		return al.f_isEmpty();
@@ -272,7 +288,7 @@ var __prototype = {
 		al = new f_actionList(this, type);
 		actionLists[type] = al;
 		
-		f_core.Debug("f_eventTarget", "Create actionList '"+type+"' for component '"+this.id+"'.");
+		f_core.Debug(fa_eventTarget, "Create actionList '"+type+"' for component '"+this.id+"'.");
 		
 		if (this.f_setDomEvent) {
 			this.f_setDomEvent(type, this);
@@ -299,16 +315,30 @@ var __prototype = {
 		}, 10);
 	},
 	/**
-	 * @method protected
+	 * @protected final
+	 * @param String type
+	 * @param boolean value
+	 * @return void
+	 */
+	f_setForcedEventReturn: function(type, value) {
+		var fer=this._forcedEventReturns;
+		if (!fer) {
+			fer=new Object();
+			this._forcedEventReturns=fer;
+		}		
+		fer[type]=value;
+	},
+	/**
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_setDomEvent: f_class.OPTIONAL_ABSTRACT,
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 * @return void
 	 */
 	f_clearDomEvent: f_class.OPTIONAL_ABSTRACT
 }
 
-var fa_eventTarget=new f_aspect("fa_eventTarget", __static, __prototype);
+new f_aspect("fa_eventTarget", __static, __prototype);

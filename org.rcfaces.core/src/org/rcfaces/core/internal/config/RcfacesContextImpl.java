@@ -40,6 +40,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessorRegistry;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
 import org.rcfaces.core.internal.contentStorage.ContentStorageAccessorHandler;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
+import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandlerImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.service.IServicesRegistry;
@@ -103,6 +104,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
     private transient IAdapterManager adapterManager;
 
     private transient IContentStorageEngine indirectContentRepository;
+
+    private transient IDocumentBuilderProvider documentBuilderProvider;
 
     private boolean designerMode;
 
@@ -492,6 +495,15 @@ public class RcfacesContextImpl extends RcfacesContext implements
     public void setContentStorageEngine(
             IContentStorageEngine indirectContentRepository) {
         this.indirectContentRepository = indirectContentRepository;
+    }
+
+    public IDocumentBuilderProvider getDocumentBuilderProvider() {
+        return documentBuilderProvider;
+    }
+
+    public void setDocumentBuilderProvider(
+            IDocumentBuilderProvider documentBuilderProvider) {
+        this.documentBuilderProvider = documentBuilderProvider;
     }
 
 }

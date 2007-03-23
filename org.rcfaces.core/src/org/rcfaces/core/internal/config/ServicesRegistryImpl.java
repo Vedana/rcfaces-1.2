@@ -51,9 +51,10 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
         RenderKit renderKit = (RenderKit) getRenderKit(facesContext,
                 renderKitId);
         if (renderKit == null) {
-            throw new FacesException("No renderKit '" + renderKitId
-                    + "' defined !");
-
+            throw new FacesException(
+                    "Can not get the service repository associated to the renderKit '"
+                            + facesContext.getViewRoot().getRenderKitId()
+                            + "' !");
         }
 
         ServiceFacade service = renderKit.getServiceById(serviceId);
@@ -66,6 +67,17 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
     }
 
     public void beforePhase(PhaseEvent event) {
+
+        if (LOG.isDebugEnabled()) {
+            FacesContext facesContext = event.getFacesContext();
+
+            Map headers = facesContext.getExternalContext()
+                    .getRequestHeaderMap();
+            String commandId = (String) headers.get(CAMELIA_HEADER);
+
+            LOG.debug("Before phase '" + event.getPhaseId() + "' viewId="
+                    + facesContext.getViewRoot() + " commandId=" + commandId);
+        }
     }
 
     public final PhaseId getPhaseId() {
@@ -77,13 +89,22 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
 
         Map headers = facesContext.getExternalContext().getRequestHeaderMap();
         String commandId = (String) headers.get(CAMELIA_HEADER);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("After phase '" + event.getPhaseId() + "' viewId="
+                    + facesContext.getViewRoot() + " commandId=" + commandId);
+        }
+
         if (commandId == null) {
             return;
         }
 
         RenderKit renderKit = (RenderKit) getRenderKit(facesContext, null);
         if (renderKit == null) {
-            throw new FacesException("No renderKit defined !");
+            throw new FacesException(
+                    "Can not get the service repository associated to the renderKit '"
+                            + facesContext.getViewRoot().getRenderKitId()
+                            + "' !");
         }
 
         ServiceFacade facade = renderKit.getServiceByCommandId(commandId);
@@ -118,7 +139,18 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
             }
         }
 
-        service.service(facesContext, commandId);
+        try {
+            service.service(facesContext, commandId);
+
+        } catch (RuntimeException ex) {
+            LOG.error("Call of service '" + commandId
+                    + "' throw an exception !", ex);
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Service done viewId=" + facesContext.getViewRoot()
+                    + " commandId=" + commandId);
+        }
     }
 
     protected AbstractRenderKitRegistryImpl.RenderKit createRenderKit() {

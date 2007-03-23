@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
 var __static = {
-	/*
+	/**
 	 * @field hidden static final number
 	 */
 	MOUSE_POSITION:0, 
@@ -96,7 +96,7 @@ var __static = {
 	
 	Initializer: function() {
 		if (f_core.IsInternetExplorer()) {
-			var popup=f_popup.Ie_PreparePopup(document);
+			var popup=f_popup._Ie_PreparePopup(document);
 			popup.document._rootPopup=true;
 		}
 	},
@@ -136,7 +136,7 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	Ie_PreparePopup: function(doc, useIt) {		
+	_Ie_PreparePopup: function(doc, useIt) {		
 		var popup=doc._iePopup;
 		
 		if (!popup) {
@@ -145,7 +145,7 @@ var __static = {
 		}
 				
 		if (useIt) {
-			f_popup.Ie_PreparePopup(popup.document);
+			f_popup._Ie_PreparePopup(popup.document);
 		}
 				
 		return popup;
@@ -156,7 +156,7 @@ var __static = {
 	Ie_GetPopup: function(doc, popupKey, clearCallback) {
 		f_core.Debug(f_popup, "Ie_GetPopup: Prepare popup form document="+doc);
 
-		var popup=f_popup.Ie_PreparePopup(doc, true);
+		var popup=f_popup._Ie_PreparePopup(doc, true);
 		
 		f_core.Assert(popup, "f_popup.Ie_GetPopup: Invalid popup from document="+doc);
 		f_core.Debug(f_popup, "Ie_GetPopup: Prepared popup="+popup);
@@ -212,6 +212,8 @@ var __static = {
 		f_core.Assert(component, "f_popup: Component parameter is null !");
 		f_core.Assert(typeof(callbacks)=="object", "f_popup: Callback parameter is null !");
 
+		f_core.Debug(f_popup, "Register callbacks on component='"+component.id+"'.");
+
 		if (!f_popup._OldContextMenu) {
 			var oldContextMenu=document.body.oncontextmenu;
 			if (!oldContextMenu) {
@@ -219,7 +221,7 @@ var __static = {
 			}
 			f_popup._OldContextMenu=oldContextMenu;
 
-			document.body.oncontextmenu=f_core.CancelEventHandler;
+			document.body.oncontextmenu=f_core.CancelJsEventHandler;
 		}
 		
 		if (!f_popup._LockPopupEvents) {
@@ -258,10 +260,13 @@ var __static = {
 		f_popup._Installed=true;
 
 		// Dans le cas  IE pas de Register Window click
-		if (f_popup.Ie_enablePopup()) {
-			keyProvider.f_insertEventListenerFirst(f_event.KEYDOWN, f_popup._OnKeyDown);
-			keyProvider.f_insertEventListenerFirst(f_event.KEYUP, f_popup._OnKeyUp);
-			keyProvider.f_insertEventListenerFirst(f_event.KEYPRESS, f_popup._OnKeyPress);		
+		if (f_popup.Ie_enablePopup()) {			
+			
+			if (keyProvider) {
+				keyProvider.f_insertEventListenerFirst(f_event.KEYDOWN, f_popup._OnKeyDown);
+				keyProvider.f_insertEventListenerFirst(f_event.KEYUP, f_popup._OnKeyUp);
+				keyProvider.f_insertEventListenerFirst(f_event.KEYPRESS, f_popup._OnKeyPress);
+			}
 			return true;
 		}
 		
@@ -292,6 +297,8 @@ var __static = {
 	 * @method hidden static
 	 */
 	UnregisterWindowClick: function(component) {	
+		f_core.Debug(f_popup, "Unregister callbacks on component='"+component.id+"'.");
+
 		var document=component.ownerDocument;
 		
 		f_popup.UnlockPopupEvent();
@@ -327,9 +334,11 @@ var __static = {
 
 		// Dans le cas  IE pas de Register Window click
 		if (f_popup.Ie_enablePopup()) {
-			keyProvider.f_removeEventListener(f_event.KEYDOWN, f_popup._OnKeyDown);
-			keyProvider.f_removeEventListener(f_event.KEYUP, f_popup._OnKeyUp);
-			keyProvider.f_removeEventListener(f_event.KEYPRESS, f_popup._OnKeyPress);		
+			if (keyProvider) {
+				keyProvider.f_removeEventListener(f_event.KEYDOWN, f_popup._OnKeyDown);
+				keyProvider.f_removeEventListener(f_event.KEYUP, f_popup._OnKeyUp);
+				keyProvider.f_removeEventListener(f_event.KEYPRESS, f_popup._OnKeyPress);		
+			}
 			return;
 		}
 
@@ -351,10 +360,10 @@ var __static = {
 	_OnContextMenu: function(evt) {
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
@@ -362,7 +371,7 @@ var __static = {
 	 * @return boolean
 	 */
 	_OnMouseDown: function(evt) {	
-		f_core.Debug(f_popup, "OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className);
+		f_core.Debug(f_popup, "OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className+"  popupComponent="+f_popup.Component);
 
 		if (!f_popup.Component) {
 			return;
@@ -374,6 +383,11 @@ var __static = {
 		f_core.Debug(f_popup, "OnMouseDown search parent="+found);
 
 		if (found) {
+			if (f_popup.VerifyMouseDown(f_popup.Component, evt)) {
+				f_core.Debug(f_popup, "OnMouseDown event into popup !");
+				return true;
+			}
+			evt.cancelBubble=true; // On accepte l'evenement, mais on le passe surtout pas au parent !
 			return true;
 		}
 	
@@ -401,7 +415,7 @@ var __static = {
 				return true;
 			}
 
-			if (target._menuBar==popupDocument || target._popupParent) {
+			if (target._menu==popupDocument || target._popupObject) {
 				return true;
 			}
 		}
@@ -419,7 +433,7 @@ var __static = {
 		}
 
 		if (f_core.IsPopupButton(evt)) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		return true;
@@ -477,7 +491,7 @@ var __static = {
 	 */
 	_OnKeyDown: function(evt) {	
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		} else if (evt._jsEvent) {
 			evt=evt._jsEvent;
 		}
@@ -506,14 +520,14 @@ var __static = {
 				f_popup.Callbacks=undefined;
 			}
 
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		try {
 			var keyDown=callbacks.keyDown;
 			if (keyDown) {
 				if (keyDown.call(component, evt, f_popup.Popup)===false) {
-					return f_core.CancelEvent(evt);
+					return f_core.CancelJsEvent(evt);
 				}
 				
 				return true;
@@ -522,14 +536,14 @@ var __static = {
 			f_core.Error(f_popup, "KeyDown callback throws exception", x);
 		}
 			
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
 	 */
 	_OnKeyUp: function(evt) {	
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		} else if (evt._jsEvent) {
 			evt=evt._jsEvent;
 		}
@@ -548,7 +562,7 @@ var __static = {
 		try {
 			if (callbacks.keyUp) {
 				if (callbacks.keyUp.call(component, evt, f_popup.Popup)===false) {
-					return f_core.CancelEvent(evt);
+					return f_core.CancelJsEvent(evt);
 				}
 			}
 			
@@ -563,31 +577,32 @@ var __static = {
 	 */
 	_OnKeyPress: function(evt) {	
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
+			
 		} else if (evt._jsEvent) {
 			evt=evt._jsEvent;
 		}
 
 		var component=f_popup.Component;
 		if (!component) {
-			f_core.Debug(f_popup, "OnKeyPress["+evt.keyCode+"] on "+this+" no component");
+			f_core.Debug(f_popup, "_OnKeyPress["+evt.keyCode+"] on "+this+" no component");
 
 			return true;
 		}
 	
 		var target=evt.target;
-		f_core.Debug(f_popup, "OnKeyPress["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
+		f_core.Debug(f_popup, "_OnKeyPress["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
 		try {
 			if (callbacks.keyPress) {
 				if (callbacks.keyPress.call(component, evt, f_popup.Popup)===false) {
-					return f_core.CancelEvent(evt);
+					return f_core.CancelJsEvent(evt);
 				}
 			}
 			
 		} catch (x) {
-			f_core.Error(f_popup, "KeyPress callback throws exception", x);
+			f_core.Error(f_popup, "_OnKeyPress: KeyPress callback throws exception", x);
 		}
 		
 		return true;
@@ -610,14 +625,14 @@ var __static = {
 					f_popup.Callbacks=undefined;
 				}
 				
-				return false;
+				return; // undefined
 			}	
 			
 			return true;				
 		}
 	},
 	/**
-	 * ???
+	 * Verify que l'evenement a eu lieu dans une popup !
 	 * @method hidden static 
 	 */	
 	VerifyMouseDown: function(component, jsEvent) {
@@ -631,32 +646,45 @@ var __static = {
 			// l'evenement peut provenir de l'un d'eux ... 
 			// dans le doute on recherche dans les parents
 			for(;target;) {
-				if (target._menuBar || target._popupParent) {
+				if (target._popupObject) {
 					// On laisse tomber ...
 					
-					return false;
+					return true;
 				}
 				target=target.parentNode;
 			}
 			
-			return true;
+			return false;
 		}
 
 		if (f_core.IsInternetExplorer()) {
 			var target=jsEvent.srcElement;
 			
-			if (target.ownerDocument!=component.ownerDocument) {
-				return false;
+			for(;target;) {
+				if (target._popupObject) {
+					// On laisse tomber ...
+					
+					return true;
+				}
+				target=target.parentNode;
 			}
 			
-			return true;
+			return false;
 		}
 		
 		return true;
 	},
-	/* ******************************************************************* */
-	/* Popup IE */
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
 	Ie_openPopup: function(popup, positionInfos) {
+		f_core.Assert(typeof(popup)=="object", "Invalid popup parameter '"+popup+"'.");
+		f_core.Assert(typeof(positionInfos)=="object", "Invalid positionInfos parameter '"+positionInfos+"'.");
+		f_core.Assert(typeof(positionInfos.position)=="number", "Invalid positionInfos.position parameter '"+positionInfos.position+"'.");
+
+		f_core.Debug(f_popup, "Ie_openPopup: open popup '"+popup+"' positionInfos="+positionInfos.position);
+			
 		var popupDocument=popup.document;
 	
 		popupDocument.hideFocus=true;
@@ -703,7 +731,7 @@ var __static = {
 			var jsEvent=positionInfos.jsEvent;
 			
 			// Calcule la position de la souris 
-			var eventPos=f_core.GetEventPosition(jsEvent);
+			var eventPos=f_core.GetJsEventPosition(jsEvent);
 			
 			popupComponent=jsEvent.srcElement.ownerDocument.body;
 			popupX=eventPos.x; //-cursorPos.x;
@@ -711,6 +739,8 @@ var __static = {
 
 			break;
 		}
+		
+//		f_core.Debug(f_popup, "Ie_openPopup: Popup position x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" component="+popupComponent);
 		
 		if (positionInfos.deltaX) {
 			popupX+=positionInfos.deltaX;
@@ -728,12 +758,9 @@ var __static = {
 			popupH+=positionInfos.deltaHeight;
 		}
 
-		if (popupComponent) {
-			f_core.Debug(f_popup, "Open popup x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" componentPosition="+popupComponent.id+"/"+popupComponent.tagName);
-		}
+		f_core.Debug(f_popup, "Open popup x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" componentPosition="+popupComponent.id+"/"+popupComponent.tagName);
 		
 		popup.show(popupX, popupY, popupW, popupH, popupComponent);		
-
 
 		var seps=popupDocument.getElementsByTagName("LI");
 		// Il faut motiver les composants ?????
@@ -790,9 +817,19 @@ var __static = {
 			f_core.Debug(f_popup, "Can not remode body", x);
 		}
 	},
+	/**
+	 * @method hidden static 
+	 * @param HTMLElement popup
+	 * @return void
+	 */
 	Gecko_closePopup: function(popup) {
 		popup.style.visibility="hidden";
 	},
+	/**
+	 * @method hidden static 
+	 * @param HTMLElement popup
+	 * @return void
+	 */
 	Gecko_releasePopup: function(popup) {
 		popup.parentNode.removeChild(popup);
 	},
@@ -845,7 +882,7 @@ var __static = {
 			var jsEvent=positionInfos.jsEvent;
 			
 			// Calcule la position de la souris 
-			var eventPos=f_core.GetEventPosition(jsEvent);
+			var eventPos=f_core.GetJsEventPosition(jsEvent);
 			var cursorPos=f_core.GetAbsolutePosition(popup);
 			
 			offsetX=eventPos.x-cursorPos.x;

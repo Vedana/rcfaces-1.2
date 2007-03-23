@@ -26,6 +26,8 @@ import org.rcfaces.core.internal.service.log.LogService;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
+import org.rcfaces.core.lang.IClientStorage;
+import org.rcfaces.core.util.ClientStorageManager;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
@@ -70,7 +72,7 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
     private static final int COMPONENTS_INITIAL_SIZE = 16;
 
-    private static final String SCRIPT_VERIFY = "try { f_core; } catch(x) { alert(\"RCFaces Javascript Components are not initialized !\"); }";
+    private static final String SCRIPT_VERIFY = "try { f_core; } catch(x) { alert(\"RCFaces Javascript Components are not initialized properly !\"); }";
 
     private final JavaScriptRenderContext parent;
 
@@ -225,14 +227,14 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         return lazyTagUsesBrother;
     }
 
-    public String convertSymbol(String symbol) {
+    public String convertSymbol(String className, String memberName) {
         if (symbolsInitialized == false) {
             symbolsInitialized = true;
 
             if (parent != null) {
-                symbol = parent.convertSymbol(symbol);
+                String converted = parent.convertSymbol(className, memberName);
                 symbols = parent.symbols;
-                return symbol;
+                return converted;
             }
 
             FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -241,15 +243,30 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         }
 
         if (symbols == null) {
-            return symbol;
+            return memberName;
         }
 
-        String s = (String) symbols.get(symbol);
-        if (s != null) {
-            return s;
+        String converted;
+        if (className != null && className.startsWith("f")) {
+            StringAppender sa = new StringAppender(className.length() + 1
+                    + memberName.length());
+            sa.append(className);
+            sa.append(".");
+            sa.append(memberName);
+
+            converted = (String) symbols.get(sa.toString());
+            if (converted != null) {
+                return converted;
+            }
         }
 
-        return symbol;
+        converted = (String) symbols.get(memberName);
+
+        if (converted != null) {
+            return converted;
+        }
+
+        return memberName;
     }
 
     public boolean isUnitializedComponentsPending() {
@@ -532,6 +549,10 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             writer.writeCall("f_core", "DisableContextMenu").writeln(");");
         }
 
+        if (htmlRenderContext.isClientValidation() == false) {
+            writer.writeCall("f_env", "DisableClientValidation").writeln(");");
+        }
+
         boolean flatIdentifier = processContext.isFlatIdentifierEnabled();
         if (flatIdentifier) {
             writer.writeCall("fa_namingContainer", "SetSeparator").writeln(
@@ -637,6 +658,16 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
 
                     writer.writeln(");");
                 }
+            }
+        }
+
+        IClientStorage clientStorage = ClientStorageManager.get(facesContext,
+                false);
+        if (clientStorage != null) {
+            Iterator it = clientStorage.listAttributeNames();
+
+            for (; it.hasNext();) {
+
             }
         }
 

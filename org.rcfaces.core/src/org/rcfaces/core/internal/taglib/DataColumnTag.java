@@ -16,8 +16,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(DataColumnTag.class);
 
-	private String hiddenMode;
 	private String visible;
+	private String hiddenMode;
 	private String text;
 	private String toolTipText;
 	private String alignment;
@@ -28,7 +28,12 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private String ascending;
 	private String sortComparator;
 	private String resizable;
+	private String disabledImageURL;
+	private String hoverImageURL;
+	private String selectedImageURL;
 	private String imageURL;
+	private String imageHeight;
+	private String imageWidth;
 	private String width;
 	private String maxWidth;
 	private String minWidth;
@@ -45,20 +50,20 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		return DataColumnComponent.COMPONENT_TYPE;
 	}
 
-	public final String getHiddenMode() {
-		return hiddenMode;
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-		this.hiddenMode = hiddenMode;
-	}
-
 	public final String getVisible() {
 		return visible;
 	}
 
 	public final void setVisible(String visible) {
 		this.visible = visible;
+	}
+
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
+
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
 	}
 
 	public final String getText() {
@@ -141,12 +146,52 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.resizable = resizable;
 	}
 
+	public final String getDisabledImageURL() {
+		return disabledImageURL;
+	}
+
+	public final void setDisabledImageURL(String disabledImageURL) {
+		this.disabledImageURL = disabledImageURL;
+	}
+
+	public final String getHoverImageURL() {
+		return hoverImageURL;
+	}
+
+	public final void setHoverImageURL(String hoverImageURL) {
+		this.hoverImageURL = hoverImageURL;
+	}
+
+	public final String getSelectedImageURL() {
+		return selectedImageURL;
+	}
+
+	public final void setSelectedImageURL(String selectedImageURL) {
+		this.selectedImageURL = selectedImageURL;
+	}
+
 	public final String getImageURL() {
 		return imageURL;
 	}
 
 	public final void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
+	}
+
+	public final String getImageHeight() {
+		return imageHeight;
+	}
+
+	public final void setImageHeight(String imageHeight) {
+		this.imageHeight = imageHeight;
+	}
+
+	public final String getImageWidth() {
+		return imageWidth;
+	}
+
+	public final void setImageWidth(String imageWidth) {
+		this.imageWidth = imageWidth;
 	}
 
 	public final String getWidth() {
@@ -242,8 +287,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			if (DataColumnComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  alignment='"+alignment+"'");
@@ -253,7 +298,12 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  ascending='"+ascending+"'");
 			LOG.debug("  sortComparator='"+sortComparator+"'");
 			LOG.debug("  resizable='"+resizable+"'");
+			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
+			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
+			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  maxWidth='"+maxWidth+"'");
 			LOG.debug("  minWidth='"+minWidth+"'");
@@ -278,16 +328,6 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (hiddenMode != null) {
-			if (isValueReference(hiddenMode)) {
-				ValueBinding vb = application.createValueBinding(hiddenMode);
-
-				component.setHiddenMode(vb);
-			} else {
-				component.setHiddenMode(hiddenMode);
-			}
-		}
-
 		if (visible != null) {
 			if (isValueReference(visible)) {
 				ValueBinding vb = application.createValueBinding(visible);
@@ -295,6 +335,16 @@ public class DataColumnTag extends CameliaTag implements Tag {
 				component.setVisible(vb);
 			} else {
 				component.setVisible(getBool(visible));
+			}
+		}
+
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+
+				component.setHiddenMode(vb);
+			} else {
+				component.setHiddenMode(hiddenMode);
 			}
 		}
 
@@ -388,6 +438,36 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (disabledImageURL != null) {
+			if (isValueReference(disabledImageURL)) {
+				ValueBinding vb = application.createValueBinding(disabledImageURL);
+
+				component.setDisabledImageURL(vb);
+			} else {
+				component.setDisabledImageURL(disabledImageURL);
+			}
+		}
+
+		if (hoverImageURL != null) {
+			if (isValueReference(hoverImageURL)) {
+				ValueBinding vb = application.createValueBinding(hoverImageURL);
+
+				component.setHoverImageURL(vb);
+			} else {
+				component.setHoverImageURL(hoverImageURL);
+			}
+		}
+
+		if (selectedImageURL != null) {
+			if (isValueReference(selectedImageURL)) {
+				ValueBinding vb = application.createValueBinding(selectedImageURL);
+
+				component.setSelectedImageURL(vb);
+			} else {
+				component.setSelectedImageURL(selectedImageURL);
+			}
+		}
+
 		if (imageURL != null) {
 			if (isValueReference(imageURL)) {
 				ValueBinding vb = application.createValueBinding(imageURL);
@@ -395,6 +475,26 @@ public class DataColumnTag extends CameliaTag implements Tag {
 				component.setImageURL(vb);
 			} else {
 				component.setImageURL(imageURL);
+			}
+		}
+
+		if (imageHeight != null) {
+			if (isValueReference(imageHeight)) {
+				ValueBinding vb = application.createValueBinding(imageHeight);
+
+				component.setImageHeight(vb);
+			} else {
+				component.setImageHeight(getInt(imageHeight));
+			}
+		}
+
+		if (imageWidth != null) {
+			if (isValueReference(imageWidth)) {
+				ValueBinding vb = application.createValueBinding(imageWidth);
+
+				component.setImageWidth(vb);
+			} else {
+				component.setImageWidth(getInt(imageWidth));
 			}
 		}
 
@@ -498,8 +598,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
-		hiddenMode = null;
 		visible = null;
+		hiddenMode = null;
 		text = null;
 		toolTipText = null;
 		alignment = null;
@@ -510,7 +610,12 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		ascending = null;
 		sortComparator = null;
 		resizable = null;
+		disabledImageURL = null;
+		hoverImageURL = null;
+		selectedImageURL = null;
 		imageURL = null;
+		imageHeight = null;
+		imageWidth = null;
 		width = null;
 		maxWidth = null;
 		minWidth = null;

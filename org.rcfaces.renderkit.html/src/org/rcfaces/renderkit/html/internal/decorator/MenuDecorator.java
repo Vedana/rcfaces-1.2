@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -19,7 +20,7 @@ import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.MenuItemComponent;
 import org.rcfaces.core.component.MenuSeparatorComponent;
-import org.rcfaces.core.component.capability.ICheckedCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.internal.listener.IScriptListener;
@@ -28,6 +29,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.KeyTools;
 import org.rcfaces.core.item.IAcceleratorKeyItem;
 import org.rcfaces.core.item.IAccessKeyItem;
@@ -40,6 +42,7 @@ import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.MenuItem;
 import org.rcfaces.core.item.SeparatorSelectItem;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
+import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
@@ -179,12 +182,17 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         String txt = selectItem.getLabel();
         if (txt != null) {
+            for (; pred > 0; pred--) {
+                javaScriptWriter.write(',').writeNull();
+            }
             javaScriptWriter.write(',').writeString(txt);
         } else {
             pred++;
         }
 
-        String value = convertItemValue(componentContext, selectItem.getValue());
+        Object selectItemValue = selectItem.getValue();
+
+        String value = convertItemValue(componentContext, selectItemValue);
         if (value != null) {
             for (; pred > 0; pred--) {
                 javaScriptWriter.write(',').writeNull();
@@ -197,12 +205,16 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         if (style == IInputTypeCapability.AS_CHECK_BUTTON
                 || style == IInputTypeCapability.AS_RADIO_BUTTON) {
-            /*
-             * if (((ICheckSelectItem) selectItem).isChecked()) { for (; pred >
-             * 0; pred--) { javaScriptWriter.write(',').writeNull(); }
-             * javaScriptWriter.write(',').writeBoolean(true); } else { pred++; }
-             */
-            pred++;
+
+            if (menuContext.isValueChecked(selectItem, selectItemValue)) {
+                for (; pred > 0; pred--) {
+                    javaScriptWriter.write(',').writeNull();
+                }
+                javaScriptWriter.write(',').writeBoolean(true);
+
+            } else {
+                pred++;
+            }
         }
 
         if (selectItem instanceof IAccessKeyItem) {
@@ -488,10 +500,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         super.decode(context, component, componentData);
 
-        // MenuBarComponent menuBarComponent = (MenuBarComponent) component;
-
         Map childrenClientIds = null;
-        // Map childrenClientItemValues = null;
 
         String disabledItems = componentData.getStringProperty(DISABLED_ITEMS);
         if (disabledItems != null && disabledItems.length() > 0) {
@@ -500,7 +509,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
                         component);
             }
 
-            List l = listChildren(childrenClientIds, disabledItems,
+            List l = listComponents(childrenClientIds, disabledItems,
                     IDisabledCapability.class);
 
             for (Iterator it = l.iterator(); it.hasNext();) {
@@ -518,7 +527,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
                         component);
             }
 
-            List l = listChildren(childrenClientIds, enabledItems,
+            List l = listComponents(childrenClientIds, enabledItems,
                     IDisabledCapability.class);
 
             for (Iterator it = l.iterator(); it.hasNext();) {
@@ -529,46 +538,74 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        String checkedItems = componentData.getStringProperty(CHECKED_ITEMS);
-        if (checkedItems != null && checkedItems.length() > 0) {
-            if (childrenClientIds == null) {
-                childrenClientIds = mapChildrenClientId(null, context,
-                        component);
-            }
+        if (component instanceof ICheckedValuesCapability) {
+            ICheckedValuesCapability checkedValuesCapability = (ICheckedValuesCapability) component;
 
-            List l = listChildren(childrenClientIds, checkedItems,
-                    ICheckedCapability.class);
+            Object checkedValues = checkedValuesCapability.getCheckedValues();
 
-            if (l.isEmpty() == false) {
-                for (Iterator it = l.iterator(); it.hasNext();) {
-                    ICheckedCapability checkedCapability = (ICheckedCapability) it
-                            .next();
+            boolean checkModified = false;
+            Set checkValues = null;
 
-                    checkedCapability.setChecked(true);
+            String checkedItems = componentData
+                    .getStringProperty(CHECKED_ITEMS);
+            if (checkedItems != null && checkedItems.length() > 0) {
+
+                List values = HtmlValuesTools.parseValues(context
+                        .getFacesContext(), component, true, false,
+                        checkedItems);
+
+                for (Iterator it = values.iterator(); it.hasNext();) {
+                    Object value = it.next();
+
+                    if (checkValues == null) {
+                        checkValues = ValuesTools
+                                .convertSelection(checkedValues);
+                    }
+
+                    if (checkValues.add(value) == false) {
+                        continue;
+                    }
+
+                    checkModified = true;
                 }
             }
-        }
 
-        String uncheckedItems = componentData
-                .getStringProperty(UNCHECKED_ITEMS);
-        if (uncheckedItems != null && uncheckedItems.length() > 0) {
-            if (childrenClientIds == null) {
-                childrenClientIds = mapChildrenClientId(null, context,
-                        component);
+            String uncheckedItems = componentData
+                    .getStringProperty(UNCHECKED_ITEMS);
+            if (uncheckedItems != null && uncheckedItems.length() > 0) {
+
+                if (checkValues == null) {
+                    checkValues = ValuesTools.convertSelection(checkedValues);
+                }
+
+                if (checkValues != null) {
+                    List values = HtmlValuesTools.parseValues(context
+                            .getFacesContext(), component, true, false,
+                            uncheckedItems);
+
+                    for (Iterator it = values.iterator(); it.hasNext();) {
+                        Object value = it.next();
+
+                        if (checkValues.remove(value) == false) {
+                            continue;
+                        }
+
+                        checkModified = true;
+                    }
+                }
             }
 
-            List l = listChildren(childrenClientIds, uncheckedItems,
-                    ICheckedCapability.class);
-
-            if (l.isEmpty() == false) {
-                for (Iterator it = l.iterator(); it.hasNext();) {
-                    ICheckedCapability checkedCapability = (ICheckedCapability) it
-                            .next();
-
-                    checkedCapability.setChecked(false);
+            if (checkModified) {
+                Class cls = checkedValuesCapability
+                        .getCheckedValuesType(context.getFacesContext());
+                if (cls == null && checkedValues != null) {
+                    cls = checkedValues.getClass();
                 }
+
+                Object value = ValuesTools.adaptValues(cls, checkValues);
+
+                checkedValuesCapability.setCheckedValues(value);
             }
         }
     }
-
 }

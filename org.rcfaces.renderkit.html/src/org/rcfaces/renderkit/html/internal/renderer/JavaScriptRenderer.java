@@ -159,7 +159,7 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
 
         JavaScriptRenderContext.initializeJavaScript(jsWriter, repository);
 
-        jsWriter.writeCall("_classLoader", "requiresBundle");
+        jsWriter.writeCall("_classLoader", "f_requiresBundle");
         jsWriter.write("document");
 
         Locale locale = repositoryContext.getLocale();

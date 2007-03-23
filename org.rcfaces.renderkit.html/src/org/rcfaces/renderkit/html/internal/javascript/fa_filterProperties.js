@@ -122,6 +122,5 @@ var __prototype = {
 			
 }
 
-var fa_filterProperties=new f_aspect("fa_filterProperties", null, __prototype);
-
+new f_aspect("fa_filterProperties", null, __prototype);
 

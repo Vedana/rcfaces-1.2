@@ -9,6 +9,7 @@ import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.ToolBarComponent;
 import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.internal.tools.ToolBarTools;
 import org.rcfaces.core.component.IMenuComponent;
@@ -24,13 +25,14 @@ public class ToolFolderComponent extends AbstractBasicComponent implements
 	IInitEventCapability,
 	IMenuCapability,
 	IMouseEventCapability,
-	IDoubleClickEventCapability {
+	IDoubleClickEventCapability,
+	IVerticalAlignmentCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolFolder";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemPadding","initListener","doubleClickListener","mouseOverListener","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalAlignment","initListener","doubleClickListener","mouseOverListener","mouseOutListener"}));
 	}
 
 	public ToolFolderComponent() {
@@ -118,28 +120,26 @@ public class ToolFolderComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
 	}
 
-	public final int getItemPadding() {
-		return getItemPadding(null);
-	}
-
-	public final int getItemPadding(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ITEM_PADDING, 0, facesContext);
-	}
-
-	public final void setItemPadding(int itemPadding) {
-		engine.setProperty(Properties.ITEM_PADDING, itemPadding);
-	}
-
-	public final void setItemPadding(ValueBinding itemPadding) {
-		engine.setProperty(Properties.ITEM_PADDING, itemPadding);
+	public final java.lang.String getVerticalAlignment() {
+		return getVerticalAlignment(null);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "itemPadding" is set.
-	 * @return <code>true</code> if the attribute is set.
+	 * See {@link #getVerticalAlignment() getVerticalAlignment()} for more details
 	 */
-	public final boolean isItemPaddingSetted() {
-		return engine.isPropertySetted(Properties.ITEM_PADDING);
+	public final java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
+	}
+
+	public final void setVerticalAlignment(java.lang.String verticalAlignment) {
+		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
+	}
+
+	/**
+	 * See {@link #setVerticalAlignment(String) setVerticalAlignment(String)} for more details
+	 */
+	public final void setVerticalAlignment(ValueBinding verticalAlignment) {
+		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
 	protected Set getCameliaFields() {

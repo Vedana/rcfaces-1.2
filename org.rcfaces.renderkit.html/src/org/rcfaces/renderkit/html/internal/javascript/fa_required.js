@@ -64,4 +64,4 @@ var __prototype = {
 	fa_updateRequired: f_class.ABSTRACT
 }
 
-var fa_required=new f_aspect("fa_required", null, __prototype);
+new f_aspect("fa_required", null, __prototype);

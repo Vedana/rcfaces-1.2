@@ -6,19 +6,19 @@ package org.rcfaces.core.internal.renderkit;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.el.ValueBinding;
 import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.component.IEditableValueHolder;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 
@@ -52,7 +52,10 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             encodeBegin(writer);
 
         } catch (RuntimeException e) {
-            throw new WriterException(e.getMessage(), e, component);
+            LOG.error("Encode begin of component '" + clientId
+                    + "' throws an exception.", e);
+
+            throw new WriterException(null, e, component);
         }
 
         writer.endComponent();
@@ -137,12 +140,18 @@ public abstract class AbstractCameliaRenderer extends Renderer {
         writer.endComponent();
 
         renderContext.encodeEnd(component);
-        
+
         try {
             encodeEnd(writer);
 
         } catch (RuntimeException e) {
-            throw new WriterException(e.getMessage(), e, component);
+
+            String clientId = renderContext.getComponentClientId(component);
+
+            LOG.error("Encode end of component '" + clientId
+                    + "' throws an exception.", e);
+
+            throw new WriterException(null, e, component);
         }
 
         super.encodeEnd(context, component);
@@ -244,13 +253,47 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             return null;
         }
 
-        RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder
-                .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = facesContext.getRenderKit();
 
-        RenderKit renderKit = renderKitFactory.getRenderKit(facesContext,
-                facesContext.getViewRoot().getRenderKitId());
+        if (renderKit == null) {
+            LOG.error("No renderKit associated to renderKitId='"
+                    + facesContext.getViewRoot().getRenderKitId() + "'.");
 
-        return renderKit.getRenderer(component.getFamily(), rendererType);
+            return null;
+        }
+
+        Renderer renderer = renderKit.getRenderer(component.getFamily(),
+                rendererType);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getRenderer(id='" + component.getId() + " family='"
+                    + component.getFamily() + "' rendererType='" + rendererType
+                    + "' class='" + component.getClass().getName()
+                    + "') for renderKitId='"
+                    + facesContext.getViewRoot().getRenderKitId() + "' => "
+                    + renderer);
+        }
+
+        return renderer;
+    }
+
+    protected Object getSubmittedValue(UIInput input) {
+
+        if (input instanceof IEditableValueHolder) {
+            IEditableValueHolder editableValueHolder = (IEditableValueHolder) input;
+
+            if (editableValueHolder.isSubmittedValueSet()) {
+                return input.getSubmittedValue();
+            }
+            
+        } else {
+            Object submittedValue = input.getSubmittedValue();
+            if (submittedValue != null) {
+                return submittedValue;
+            }
+        }
+
+        return input.getValue();
 
     }
 }

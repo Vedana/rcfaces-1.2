@@ -12,5 +12,7 @@ import org.rcfaces.core.component.RadioButtonComponent;
  */
 public interface IRadioButtonIterator extends IComponentIterator {
 
-	RadioButtonComponent next();
+    RadioButtonComponent next();
+
+    RadioButtonComponent[] toArray();
 }

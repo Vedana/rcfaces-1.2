@@ -5,7 +5,7 @@
 /**
  * Class Menu
  *
- * @class public f_menu extends f_eventTarget, fa_menuCore
+ * @class public f_menu extends f_menuBase
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -40,11 +40,9 @@ var __prototype = {
 		this._selectionProvider=undefined; // f_selectionProvider
 		this._component=undefined; // f_component
 		this._parentComponent=undefined; // f_component
-		this._selectedMenuItem=undefined;
 		// this.fa_componentUpdated=undefined; // boolean
 		this.ownerDocument=undefined; // Document
 
-		this._attachedTable=undefined;
 		this._iePopup=undefined;
 
 		this.f_super(arguments);
@@ -103,54 +101,6 @@ var __prototype = {
 	fa_getSelectionProvider: function() {
 		return this._selectionProvider;
 	},
-	fa_keySearchAccessKey: function(item, code, jsEvent) {
-			
-		if (this.f_isReadOnly()) {
-			return false;
-		}
-
-		// Par defaut le parent est le menuBarItem
-		// On recherche le popup le plus "ouvert"
-		var parent=this;
-		for(;;) {
-			var pi=this.f_uiGetSelectedItem(parent);
-			
-			if (!pi || !this.f_uiIsPopupOpened(pi)) {
-				break;
-			}			
-			parent=pi;
-		}			
-			
-		var key=String.fromCharCode(code).toUpperCase();
-
-		var menuItems=this.f_listItemChildren(parent);
-		for(var i=0;i<menuItems.length;i++) {
-			var menuItem=menuItems[i];
-
-			var accessKey=this.f_getItemAccessKey(menuItem);
-
-			if (accessKey!=key) {
-				continue;
-			}
-
- 			if (this.f_isItemDisabled(menuItem)) {
-				return true;
- 			}
- 
-			this.f_menuItem_over(menuItem, true, jsEvent);			
-			if (this.f_hasVisibleItemChildren(menuItem)) {
-				return true;
-			}
-
-			this.f_menuItem_select(menuItem, jsEvent);
-			return true;
-		}
-		
-		return false;
-	},
-	fa_isSameMenuBase: function(menuBarItem) {
-		return true;
-	},	
 	f_setDomEvent: function(type, target) {
 		// On positionne pas de Handler !
 		return;
@@ -194,7 +144,7 @@ var __prototype = {
 		case f_key.VK_END: // END
 		case f_key.VK_TAB: 
 	 		// En cas de selection !
-	 		if (this._selectedMenuItem) {
+	 		if (this.f_uiGetSelectedItem(this)) {
 				return false;
 			}
 		}
@@ -224,12 +174,72 @@ var __prototype = {
 	f_findSiblingComponent: function(id) {
 		return fa_namingContainer.FindSiblingComponents(this._parentComponent, arguments);
 	},
-	
+	fa_isRootMenuItem: function(parent) {
+		return !parent;
+	},
+	f_nextMenuItem: function(menuItem, jsEvt) {
+
+		f_core.Debug(f_menu, "f_nextMenuItem: menuItem="+menuItem+" evt='"+jsEvt+"'.");
+			
+		if (menuItem) {
+			// Ok c'est pas un menuBarItem
+			this.f_super(arguments, menuItem, jsEvt);
+			return;
+		}
+		
+		var menuItems=this.f_listVisibleItemChildren(this);		
+		if (menuItems && menuItems.length) {
+			for(var i=0;i<menuItems.length;i++) {
+				var item=menuItems[i];
+				
+				if (this.f_isItemDisabled(item)) {
+					continue;
+				}
+				
+				this.f_uiSelectItem(item);
+				return;
+			}
+			
+			this.f_uiSelectItem(menuItems[0]);
+		}
+	},
+	f_previousMenuItem: function(menuItem, jsEvt) {
+
+		f_core.Debug(f_menu, "f_previousMenuItem: menuItem="+menuItem+" evt='"+jsEvt+"'.");
+			
+		if (menuItem) {
+			// Ok c'est pas un menuBarItem
+			this.f_super(arguments, menuItem, jsEvt);
+			return;
+		}
+		
+		var menuItems=this.f_listVisibleItemChildren(this);		
+		if (menuItems && menuItems.length) {
+			for(var i=menuItems.length-1;i>=0;i--) {
+				var item=menuItems[i];
+				
+				if (this.f_isItemDisabled(item)) {
+					continue;
+				}
+				
+				this.f_uiSelectItem(item);
+				return;
+			}
+
+			this.f_uiSelectItem(menuItems[menuItems.length-1]);
+		}
+	},
 	fa_getPopupCallbacks: function() {
 		var menu=this;
 		
 		return {
+			/**
+			 * @method public
+			 */
 			exit: menu.f_clickOutside,
+			/**
+			 * @method public
+			 */
 			keyDown: function(evt) {
 				if (menu._filterKey("down", evt)===true) {
 					return true;
@@ -241,16 +251,22 @@ var __prototype = {
 			 		return true;
 				}
 				
-				return fa_menuCore.OnKeyDown(menu, menu, evt);
+				return fa_menuCore.OnKeyDown(menu, evt);
 			},
+			/**
+			 * @method public
+			 */
 			keyUp: function(evt) {
 				return menu._filterKey("up", evt);
 			},
+			/**
+			 * @method public
+			 */
 			keyPress: function(evt) {
 				switch(evt.keyCode) {
 				case f_key.VK_RETURN:
 			 	case f_key.VK_ENTER:
-			 		return fa_menuCore.OnKeyDown(menu, menu, evt);
+			 		return fa_menuCore.OnKeyDown(menu, evt);
 				}
 				
 				return true;
@@ -280,5 +296,5 @@ var __prototype = {
 }
 
 
-new f_class("f_menu", null, null, __prototype, f_eventTarget, fa_menuCore);
+new f_class("f_menu", null, null, __prototype, f_menuBase);
  

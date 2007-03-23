@@ -35,7 +35,6 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","text","readOnly"}));
 	}
-	protected static final String CAMELIA_VALUE_ALIAS="text";
 
 	public ButtonComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -86,18 +85,18 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	 * See {@link #getText() getText()} for more details
 	 */
 	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
-		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
+		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
 
 	public final void setText(java.lang.String text) {
-		setValue(text);
+		engine.setProperty(Properties.TEXT, text);
 	}
 
 	/**
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
 	public final void setText(ValueBinding text) {
-		setValue(text);
+		engine.setProperty(Properties.TEXT, text);
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
@@ -136,9 +135,5 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
-	}
-
-	protected String getCameliaValueAlias() {
-		return CAMELIA_VALUE_ALIAS;
 	}
 }

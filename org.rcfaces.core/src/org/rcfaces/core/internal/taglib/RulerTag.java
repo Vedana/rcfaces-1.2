@@ -24,8 +24,8 @@ public class RulerTag extends CameliaTag implements Tag {
 	private String marginTop;
 	private String height;
 	private String width;
-	private String hiddenMode;
 	private String visible;
+	private String hiddenMode;
 	private String lookId;
 	private String orientation;
 	private String backgroundColor;
@@ -101,20 +101,20 @@ public class RulerTag extends CameliaTag implements Tag {
 		this.width = width;
 	}
 
-	public final String getHiddenMode() {
-		return hiddenMode;
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-		this.hiddenMode = hiddenMode;
-	}
-
 	public final String getVisible() {
 		return visible;
 	}
 
 	public final void setVisible(String visible) {
 		this.visible = visible;
+	}
+
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
+
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
 	}
 
 	public final String getLookId() {
@@ -186,8 +186,8 @@ public class RulerTag extends CameliaTag implements Tag {
 			LOG.debug("  marginTop='"+marginTop+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  width='"+width+"'");
-			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  orientation='"+orientation+"'");
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
@@ -289,16 +289,6 @@ public class RulerTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (hiddenMode != null) {
-			if (isValueReference(hiddenMode)) {
-				ValueBinding vb = application.createValueBinding(hiddenMode);
-
-				component.setHiddenMode(vb);
-			} else {
-				component.setHiddenMode(hiddenMode);
-			}
-		}
-
 		if (visible != null) {
 			if (isValueReference(visible)) {
 				ValueBinding vb = application.createValueBinding(visible);
@@ -306,6 +296,16 @@ public class RulerTag extends CameliaTag implements Tag {
 				component.setVisible(vb);
 			} else {
 				component.setVisible(getBool(visible));
+			}
+		}
+
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+
+				component.setHiddenMode(vb);
+			} else {
+				component.setHiddenMode(hiddenMode);
 			}
 		}
 
@@ -385,8 +385,8 @@ public class RulerTag extends CameliaTag implements Tag {
 		marginTop = null;
 		height = null;
 		width = null;
-		hiddenMode = null;
 		visible = null;
+		hiddenMode = null;
 		lookId = null;
 		orientation = null;
 		backgroundColor = null;

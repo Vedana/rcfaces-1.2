@@ -81,4 +81,4 @@ var __prototype = {
 	}
 }
 
-var fa_itemClientDatas=new f_aspect("fa_itemClientDatas", null, __prototype);
+new f_aspect("fa_itemClientDatas", null, __prototype);

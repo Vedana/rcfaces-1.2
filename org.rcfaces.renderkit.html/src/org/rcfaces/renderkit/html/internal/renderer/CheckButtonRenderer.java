@@ -68,6 +68,10 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         String className = getMainStyleClassName();
 
         int horizontalTextPosition = button.getTextPosition(facesContext);
+        if (horizontalTextPosition == 0) {
+            horizontalTextPosition = IHorizontalTextPositionCapability.DEFAULT_POSITION;
+        }
+
         if (horizontalTextPosition == IHorizontalTextPositionCapability.LEFT_POSITION) {
             writeLabel(htmlWriter, button, className, buttonId);
 

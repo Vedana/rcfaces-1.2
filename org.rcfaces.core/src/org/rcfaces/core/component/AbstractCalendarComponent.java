@@ -47,6 +47,11 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	public final Date getDate() {
 
 
+				Object submittedValue=getSubmittedValue();
+				if (submittedValue!=null) {
+					return (Date)submittedValue;
+				}
+			
 				Object value=getValue();
 
 				if (value==null) {

@@ -19,6 +19,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	private String propertyChangeListeners;
 	private String userEventListeners;
 	private String errorListeners;
+	private String waiRole;
 	private String x;
 	private String y;
 	private String height;
@@ -32,8 +33,8 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	private String toolTipText;
 	private String backgroundColor;
 	private String foregroundColor;
-	private String hiddenMode;
 	private String visible;
+	private String hiddenMode;
 	private String lookId;
 	private String styleClass;
 	private String margins;
@@ -59,6 +60,14 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	public final void setErrorListener(String errorListeners) {
 		this.errorListeners = errorListeners;
+	}
+
+	public final String getWaiRole() {
+		return waiRole;
+	}
+
+	public final void setWaiRole(String waiRole) {
+		this.waiRole = waiRole;
 	}
 
 	public final String getX() {
@@ -165,20 +174,20 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final String getHiddenMode() {
-		return hiddenMode;
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-		this.hiddenMode = hiddenMode;
-	}
-
 	public final String getVisible() {
 		return visible;
 	}
 
 	public final void setVisible(String visible) {
 		this.visible = visible;
+	}
+
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
+
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
 	}
 
 	public final String getLookId() {
@@ -207,6 +216,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
+			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
 			LOG.debug("  height='"+height+"'");
@@ -220,8 +230,8 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
-			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  margins='"+margins+"'");
@@ -249,6 +259,16 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 		if (errorListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
+		}
+
+		if (waiRole != null) {
+			if (isValueReference(waiRole)) {
+				ValueBinding vb = application.createValueBinding(waiRole);
+
+				component.setWaiRole(vb);
+			} else {
+				component.setWaiRole(waiRole);
+			}
 		}
 
 		if (x != null) {
@@ -381,16 +401,6 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (hiddenMode != null) {
-			if (isValueReference(hiddenMode)) {
-				ValueBinding vb = application.createValueBinding(hiddenMode);
-
-				component.setHiddenMode(vb);
-			} else {
-				component.setHiddenMode(hiddenMode);
-			}
-		}
-
 		if (visible != null) {
 			if (isValueReference(visible)) {
 				ValueBinding vb = application.createValueBinding(visible);
@@ -398,6 +408,16 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 				component.setVisible(vb);
 			} else {
 				component.setVisible(getBool(visible));
+			}
+		}
+
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+
+				component.setHiddenMode(vb);
+			} else {
+				component.setHiddenMode(hiddenMode);
 			}
 		}
 
@@ -433,6 +453,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		userEventListeners = null;
 		errorListeners = null;
+		waiRole = null;
 		x = null;
 		y = null;
 		height = null;
@@ -446,8 +467,8 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		toolTipText = null;
 		backgroundColor = null;
 		foregroundColor = null;
-		hiddenMode = null;
 		visible = null;
+		hiddenMode = null;
 		lookId = null;
 		styleClass = null;
 		margins = null;

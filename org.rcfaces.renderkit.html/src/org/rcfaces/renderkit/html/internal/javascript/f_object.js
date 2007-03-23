@@ -37,12 +37,18 @@ var __prototype = {
 	 * @return String
 	 */
 	toString: function() {
-		var s="[component";
+		var s="[f_object";
 		
 		if (this.id) {
 			s+=" id=\""+this.id+"\"";
 		}
-		s+=" class=\""+this._kclass.f_getName()+"\"";
+		
+		var kclazz=this._kclass;
+		if (kclazz) {
+			s+=" class=\""+kclazz.f_getName()+"\"";
+		} else {
+			s+=" class=*undefined*";
+		}
 		
 		return s+"]";
 	}

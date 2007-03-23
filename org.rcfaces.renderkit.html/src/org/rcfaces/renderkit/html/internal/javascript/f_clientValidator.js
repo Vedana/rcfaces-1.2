@@ -832,7 +832,7 @@ var __prototype = {
 		return formatVal;
 	},
 	/**
-	 * @method private final
+	 * @method private
 	 */
 	_applyBehaviors: function() {
 		var behaviors=this._behaviors;
@@ -854,7 +854,7 @@ var __prototype = {
 		return bRet;
 	},
 	/**
-	 * @method private final
+	 * @method private
 	 */
 	_applyAutoCheck: function(curVal, check) {
 		var bRet = true;
@@ -864,7 +864,7 @@ var __prototype = {
 		var handled;
 		
 		if (!fError && check) {
-			if (window.f_messageContext) {
+			if (f_class.IsClassDefined("f_messageContext")) {
 				fError=f_clientValidator.PerformMessageError;
 				
 			} else {

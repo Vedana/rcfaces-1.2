@@ -71,9 +71,11 @@ abstract class AbstractActionListener implements StateHolder,
         if (forwarNameMethodInitialized == false) {
             forwarNameMethodInitialized = true;
 
+            // Format #[xxx] ???
             String forwardName = getForwardName(expression);
             if (forwardName != null) {
-                forwardNameMethodBinding = getNoArgsMethodBinding(application);
+                // Oui !
+                forwardNameMethodBinding = getForwardMethodBinding();
             }
         }
 

@@ -2,6 +2,7 @@ package org.rcfaces.core.component;
 
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 import java.lang.Object;
@@ -35,6 +36,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 	IServerDataCapability,
 	IPropertyChangeEventCapability,
 	IImmediateCapability,
+	IValueLockedCapability,
 	IServerDataManager,
 	IClientDataManager {
 
@@ -42,7 +44,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","propertyChangeListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","propertyChangeListener","valueLocked"}));
 	}
 
 	public HiddenValueComponent() {
@@ -281,6 +283,28 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listPropertyChangeListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
+	}
+
+	public final boolean isValueLocked() {
+		return isValueLocked(null);
+	}
+
+	/**
+	 * See {@link #isValueLocked() isValueLocked()} for more details
+	 */
+	public final boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VALUE_LOCKED, false, facesContext);
+	}
+
+	public final void setValueLocked(boolean valueLocked) {
+		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
+	}
+
+	/**
+	 * See {@link #setValueLocked(boolean) setValueLocked(boolean)} for more details
+	 */
+	public final void setValueLocked(ValueBinding valueLocked) {
+		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 
 	protected Set getCameliaFields() {

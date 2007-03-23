@@ -8,29 +8,32 @@ import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.internal.component.CameliaColumnComponent;
 import javax.faces.component.ValueHolder;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.internal.converter.OrderConverter;
+import org.rcfaces.core.component.capability.ISortEventCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
 
 /**
  * Specify a column.
  */
 public class DataColumnComponent extends CameliaColumnComponent implements 
 	IVisibilityCapability,
+	IHiddenModeCapability,
 	ITextCapability,
 	IToolTipCapability,
 	IAlignmentCapability,
@@ -40,14 +43,15 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 	IOrderCapability,
 	ISortComparatorCapability,
 	IResizableCapability,
-	IImageCapability,
+	IStatesImageCapability,
+	IImageSizeCapability,
 	ValueHolder {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dataColumn";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","value","maxWidth","width","imageURL","toolTipText","alignment","ascending","hiddenMode","cellImageURL","foregroundColor","cellToolTipText","minWidth","styleClass","text","sortListener","resizable","verticalAlign","sortComparator","cellStyleClass","visible","backgroundColor","autoFilter"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","imageURL","width","alignment","hiddenMode","cellImageURL","foregroundColor","styleClass","sortListener","sortComparator","selectedImageURL","hoverImageURL","imageHeight","maxWidth","value","disabledImageURL","ascending","toolTipText","cellToolTipText","minWidth","resizable","text","imageWidth","verticalAlign","cellStyleClass","visible","backgroundColor","autoFilter"}));
 	}
 
 	public DataColumnComponent() {
@@ -169,28 +173,6 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		
 	}
 
-	public final int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	public final void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	/**
-	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
-	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
 	public final boolean isVisible() {
 		return isVisible(null);
 	}
@@ -218,6 +200,28 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 
 			return getVisibleState(null);
 		
+	}
+
+	public final int getHiddenMode() {
+		return getHiddenMode(null);
+	}
+
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
+	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+	}
+
+	public final void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
+	public final void setHiddenMode(ValueBinding hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	public final java.lang.String getText() {
@@ -430,6 +434,72 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		engine.setProperty(Properties.RESIZABLE, resizable);
 	}
 
+	public final java.lang.String getDisabledImageURL() {
+		return getDisabledImageURL(null);
+	}
+
+	/**
+	 * See {@link #getDisabledImageURL() getDisabledImageURL()} for more details
+	 */
+	public final java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DISABLED_IMAGE_URL, facesContext);
+	}
+
+	public final void setDisabledImageURL(java.lang.String disabledImageURL) {
+		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
+	}
+
+	/**
+	 * See {@link #setDisabledImageURL(String) setDisabledImageURL(String)} for more details
+	 */
+	public final void setDisabledImageURL(ValueBinding disabledImageURL) {
+		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
+	}
+
+	public final java.lang.String getHoverImageURL() {
+		return getHoverImageURL(null);
+	}
+
+	/**
+	 * See {@link #getHoverImageURL() getHoverImageURL()} for more details
+	 */
+	public final java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HOVER_IMAGE_URL, facesContext);
+	}
+
+	public final void setHoverImageURL(java.lang.String hoverImageURL) {
+		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
+	}
+
+	/**
+	 * See {@link #setHoverImageURL(String) setHoverImageURL(String)} for more details
+	 */
+	public final void setHoverImageURL(ValueBinding hoverImageURL) {
+		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
+	}
+
+	public final java.lang.String getSelectedImageURL() {
+		return getSelectedImageURL(null);
+	}
+
+	/**
+	 * See {@link #getSelectedImageURL() getSelectedImageURL()} for more details
+	 */
+	public final java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SELECTED_IMAGE_URL, facesContext);
+	}
+
+	public final void setSelectedImageURL(java.lang.String selectedImageURL) {
+		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
+	}
+
+	/**
+	 * See {@link #setSelectedImageURL(String) setSelectedImageURL(String)} for more details
+	 */
+	public final void setSelectedImageURL(ValueBinding selectedImageURL) {
+		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
+	}
+
 	public final java.lang.String getImageURL() {
 		return getImageURL(null);
 	}
@@ -457,6 +527,50 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 
 			return getImageAccessors(null);
 		
+	}
+
+	public final int getImageHeight() {
+		return getImageHeight(null);
+	}
+
+	/**
+	 * See {@link #getImageHeight() getImageHeight()} for more details
+	 */
+	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
+	}
+
+	public final void setImageHeight(int imageHeight) {
+		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
+	}
+
+	/**
+	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
+	 */
+	public final void setImageHeight(ValueBinding imageHeight) {
+		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
+	}
+
+	public final int getImageWidth() {
+		return getImageWidth(null);
+	}
+
+	/**
+	 * See {@link #getImageWidth() getImageWidth()} for more details
+	 */
+	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
+	}
+
+	public final void setImageWidth(int imageWidth) {
+		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
+	}
+
+	/**
+	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
+	 */
+	public final void setImageWidth(ValueBinding imageWidth) {
+		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
 	/**

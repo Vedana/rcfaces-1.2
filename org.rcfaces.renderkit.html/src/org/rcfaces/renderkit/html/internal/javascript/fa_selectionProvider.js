@@ -30,5 +30,5 @@ var __prototype = {
 	f_setSelection: f_class.ABSTRACT
 }
 
-var fa_selectionProvider=new f_aspect("fa_selectionProvider", null, __prototype);
+new f_aspect("fa_selectionProvider", null, __prototype);
 	

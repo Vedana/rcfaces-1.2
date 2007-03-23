@@ -30,13 +30,13 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		var code=evt.keyCode;
 
 		if (code==f_key.VK_DOWN || code==f_key.VK_UP) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 				
 		comboEx._updateInputStyle();
@@ -53,23 +53,23 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		if (comboEx.f_isDisabled()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 
 		var code=evt.keyCode;
 		if (code==f_key.VK_DOWN || code==f_key.VK_UP || 
 			code==f_key.VK_PAGE_DOWN || code==f_key.VK_PAGE_UP ||
 				code==f_key.VK_ENTER || code==f_key.VK_RETURN) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 				
 		if (comboEx._isPopupOpened()) {
 			if (code==f_key.VK_HOME || code==f_key.VK_END) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 		}				
 
@@ -89,7 +89,7 @@ var __static = {
 		}
 
 		if (comboEx.f_isDisabled()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 
 		if (evt.ctrlKey || evt.altKey) {
@@ -180,7 +180,7 @@ var __static = {
 		}
 
 		if (ignoreKey) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 				
 		return true;
@@ -200,11 +200,11 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	_InputChange: f_core.CancelEventHandler,
+	_InputChange: f_core.CancelJsEventHandler,
 	/**
 	 * @method private static
 	 */
-	_InputClick: f_core.CancelEventHandler,
+	_InputClick: f_core.CancelJsEventHandler,
 	/**
 	 * @method private static
 	 */
@@ -219,7 +219,7 @@ var __static = {
 		}
 
 		if (comboEx.f_isDisabled()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		if (!comboEx.f_isReadOnly()) {
@@ -267,7 +267,7 @@ var __static = {
 		if (!evt) evt = window.event;
 
 		if (comboEx.f_isDisabled()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 
 		
@@ -374,7 +374,7 @@ var __static = {
 		}
 
 		if (comboEx.f_isDisabled()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 
 		var opened=comboEx._isPopupOpened();
@@ -412,12 +412,12 @@ var __static = {
 		
 		comboEx._updateButtonStyle(comboEx);
 				
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
 	 */
-	_ButtonClick: f_core.CancelEventHandler,
+	_ButtonClick: f_core.CancelJsEventHandler,
 	/**
 	 * @method private static
 	 */
@@ -434,7 +434,7 @@ var __static = {
 		if (!evt) {
 			evt=window.event;
 		}
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
@@ -448,7 +448,7 @@ var __static = {
 
 		comboEx._buttonOver(evt);
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
@@ -460,7 +460,7 @@ var __static = {
 
 		this._comboEx._buttonOut(evt);
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
@@ -543,7 +543,7 @@ var __static = {
 		}
 		
 		if (stopKey) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 
 		return true;
@@ -668,7 +668,7 @@ var __static = {
 
 		comboEx._setHoverItem(this, evt);
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	}, 
 	/**
 	 * @method private static
@@ -689,7 +689,7 @@ var __static = {
 		if (!evt) {
 			evt=window.event;
 		}
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	}
 }
 

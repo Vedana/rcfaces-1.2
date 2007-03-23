@@ -735,7 +735,7 @@ public abstract class AbstractSelectItemsDecorator extends
                         .getFacesContext());
     }
 
-    protected final List listChildren(Map childrenClientIds, String itemIds,
+    protected final List listComponents(Map childrenClientIds, String itemIds,
             Class capability) {
 
         List l = null;
@@ -746,6 +746,40 @@ public abstract class AbstractSelectItemsDecorator extends
             String key = st.nextToken();
 
             UIComponent item = (UIComponent) childrenClientIds.get(key);
+            if (item == null) {
+                continue;
+            }
+
+            if (capability != null && capability.isInstance(item) == false) {
+                continue;
+            }
+
+            if (l == null) {
+                l = new ArrayList();
+            }
+
+            l.add(item);
+        }
+
+        if (l == null) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return l;
+
+    }
+
+    protected final List listSelectItems(Map childrenValues, String itemIds,
+            Class capability) {
+
+        List l = null;
+
+        StringTokenizer st = new StringTokenizer(itemIds,
+                HtmlTools.LIST_SEPARATORS);
+        for (; st.hasMoreTokens();) {
+            String key = st.nextToken();
+
+            SelectItem item = (SelectItem) childrenValues.get(key);
             if (item == null) {
                 continue;
             }
@@ -1068,6 +1102,5 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         javaScriptWriter.writeln(");");
-
     }
 }

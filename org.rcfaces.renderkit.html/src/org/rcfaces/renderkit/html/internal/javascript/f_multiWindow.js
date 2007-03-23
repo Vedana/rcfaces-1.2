@@ -64,7 +64,7 @@ f_classLoader.prototype._newWindow=function(clparent, changeContext) {
 	var cl=new f_classLoader(win, clparent);
 	win._classLoader=cl;
 	
-	cl.requiresBundle(win.document, clparent._mainBundleName);
+	cl.f_requiresBundle(win.document, clparent._mainBundleName);
 }
 
 _classLoader._mwDeclareBundle=f_classLoader.prototype._declareBundle;

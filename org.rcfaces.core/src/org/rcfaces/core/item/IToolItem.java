@@ -10,5 +10,6 @@ package org.rcfaces.core.item;
  */
 public interface IToolItem extends ISelectItemGroup, IImagesItem,
         IInputTypeItem, IImageSizeItem, ILookAndFeelItem, IClientDataItem,
-        IServerDataItem, IVisibleItem {
+        IServerDataItem, IVisibleItem, IBorderTypeItem, ITextPositionItem,
+        IAccessKeyItem {
 }

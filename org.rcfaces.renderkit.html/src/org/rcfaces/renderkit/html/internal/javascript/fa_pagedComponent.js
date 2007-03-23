@@ -187,6 +187,15 @@ var __prototype = {
 	f_getRowCount: function() {
 		return this._rowCount;
 	},
+	/**
+	 * Returns <code>true</code> if the component is paged
+	 *
+	 * @method public
+	 * @return boolean <code>true</code> if the component is paged.
+	 */
+	f_isPaged: function() {
+		return this._paged;
+	},
 	
 	/**
 	 * @method protected abstract
@@ -195,6 +204,6 @@ var __prototype = {
 	f_setFirst: f_class.ABSTRACT
 }
 
-var fa_pagedComponent=new f_aspect("fa_pagedComponent", __static, __prototype, fa_filterProperties);
+new f_aspect("fa_pagedComponent", __static, __prototype, fa_filterProperties);
 
 

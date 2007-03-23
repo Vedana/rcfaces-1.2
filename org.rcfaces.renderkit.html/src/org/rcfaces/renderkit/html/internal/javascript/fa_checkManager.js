@@ -5,7 +5,7 @@
 /**
  * Aspect CheckManager
  *
- * @aspect public fa_checkManager extends fa_selectionManager
+ * @aspect public fa_checkManager extends fa_itemsManager
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -64,9 +64,16 @@ var __prototype = {
 		}
 	},
 	
-	_setCheckStates: function(checkFullState) {
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_setCheckStates: function(checkFullState) {
 		this._checkFullState=checkFullState;
 	},
+	/**
+	 * @method private
+	 */
 	_checkElement: function(element, value, show) {
 		if (this.fa_isElementChecked(element)) {
 			return;
@@ -89,6 +96,9 @@ var __prototype = {
 			this.fa_showElement(element);
 		}
 	},
+	/**
+	 * @method private
+	 */
 	_uncheckElement: function(element, value) {
 		if (!this.fa_isElementChecked(element)) {
 			return false;
@@ -113,9 +123,12 @@ var __prototype = {
 			
 		return this._uncheckedElementValues.f_addElement(value);
 	},
+	/**
+	 * @method private
+	 */
 	_uncheckAllElements: function() {		
 		var currentChecks=this._currentChecks;
-		if (currentChecks.length>0) {
+		if (currentChecks.length) {
 			this._currentChecks=new Array;
 
 			for(var i=0;i<currentChecks.length;i++) {
@@ -261,18 +274,18 @@ var __prototype = {
 		if (this._checkFullState) {
 			if (!this._clearAllCheckedElements) {
 				var checkFullState=this._checkFullState;
-				if (checkFullState && checkFullState.length>0) {
+				if (checkFullState && checkFullState.length) {
 					ret.push.apply(ret, checkFullState);
 				}
 			}	
 			
 			var checkedElementValues=this._checkedElementValues;
-			if (checkedElementValues.length>0) {
+			if (checkedElementValues.length) {
 				ret.f_addElements.apply(ret, checkedElementValues);
 			}
 
 			var uncheckedElementValues=this._uncheckedElementValues;
-			if (uncheckedElementValues.length>0) {
+			if (uncheckedElementValues.length) {
 				ret.f_removeElements.apply(ret, uncheckedElementValues);
 			}
 			
@@ -297,16 +310,19 @@ var __prototype = {
 
 	/**
 	 * @method protected abstract
+	 * @param Object element
+	 * @return boolean
 	 */
 	fa_isElementChecked: f_class.ABSTRACT,
 	
 	/**
 	 * @method protected abstract
+	 * @param Object element
+	 * @boolean checked state
+	 * @return void
 	 */
 	fa_setElementChecked: f_class.ABSTRACT
 	
 }
 
-
-
-var fa_checkManager=new f_aspect("fa_checkManager", null, __prototype, fa_selectionManager);
+new f_aspect("fa_checkManager", null, __prototype, fa_itemsManager);

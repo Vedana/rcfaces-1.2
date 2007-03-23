@@ -26,6 +26,17 @@ BODY {
 	padding-bottom: 6px;
 }
 
+.logWait,
+.logSpan {
+	font-size: 13px;
+	font-weight: bold;
+	display: block;
+}
+
+.logWait {
+	color: #A00;
+}
+
 #profiling {
 	position: relative;
 	left: 0;
@@ -139,15 +150,13 @@ function appendProfile(name, date) {
 	var title="["+h+":"+m+":"+s+"."+ms+"]";
 
 	if (this!=window._loggedWindow) {
-		title+=" {window: "+this.document.location+"}";
+		title+=" {"+this.document.location+"}";
 	}
 
 	title+="  PROFILE";
 
 	var span=document.createElement("SPAN");
-	span.style.fontSize="small";
-	span.style.fontWeight="bold";
-	span.style.display="block";
+	span.className="logWait";
 	span.appendChild(document.createTextNode(title));
 	
 	li.appendChild(span);
@@ -205,24 +214,32 @@ function appendLog(event) {
 	var title="["+h+":"+m+":"+s+"."+ms+"]";
 	
 	if (event.window!=window._loggedWindow) {
-		title+=" {window: "+event.window.document.location+"}";
+		title+=" {"+event.window.document.location+"}";
 	}
 
 	switch(event.level) {
 	case 0:
 		title+=" FATAL";
 		break;
-	case 3:
+	case 1:
 		title+=" ERROR";
 		break;
-	case 4:
+	case 2:
 		title+=" WARN";
 		break;
-	case 6:
+	case 3:
 		title+=" INFO";
 		break;
-	case 7:
+	case 4:
 		title+=" DEBUG";
+		break;
+	case 5:
+		title+=" TRACE";
+		break;
+	default: 
+		if (event.level) {
+			title+=" [Level: "+event.level+"]";
+		}
 		break;
 	}
 	li._level=event.level;
@@ -235,9 +252,7 @@ function appendLog(event) {
 	}
 
 	var span=document.createElement("SPAN");
-	span.style.fontSize="small";
-	span.style.fontWeight="bold";
-	span.style.display="block";
+	span.className="logSpan";
 	span.appendChild(document.createTextNode(title));
 	
 	li.appendChild(span);
@@ -388,20 +403,19 @@ filterLI=function(li) {
 		visible=true;
 		break;
 		
-	case 3:
-	case 4:
+	case 1:
 		visible=window.showError;
 		break;
-/*		
+
+	case 2:
 		visible=window.showWarning;
 		break;
-	*/
 		
-	case 6:
+	case 3:
 		visible=window.showInfo;
 		break;
 		
-	case 7:
+	case 4:
 		visible=window.showDebug;
 		break;
 		

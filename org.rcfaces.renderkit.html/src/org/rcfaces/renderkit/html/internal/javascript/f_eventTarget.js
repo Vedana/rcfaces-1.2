@@ -80,35 +80,27 @@ var __static = {
 	 * @method private static
 	 * @return boolean
 	 */
-	_Generic: function(elt, jsEvent, type, lock, custom) {
+	_Generic: function(elt, jsEvent, type, lock) {
+		
+		if (window._f_exiting) {
+			return false;
+		}
 		
 		if (!jsEvent && elt) {
-			jsEvent = f_core.GetEvent(elt);
+			jsEvent = f_core.GetJsEvent(elt);
 		}
 		
 		var comp = (elt.f_link)? elt.f_link:elt;
 
 		if (lock && comp.f_getEventLocked()) {
-			f_core.Info(f_eventTarget, "Event has been locked ! (type="+type+" comp="+comp+" comp.id="+((comp)?comp.id:"none")+")");
+			f_core.Info(f_eventTarget, "_Generic: Event has been locked ! (type="+type+" comp="+comp+" comp.id="+((comp)?comp.id:"none")+")");
 			
 			return false;
 		}
 
 		var ret = comp.f_fireEvent(type, jsEvent);
 
-		if (custom !== undefined) {
-			ret = comp._returnOnSelect;
-			if (ret===undefined) {
-				ret=custom;
-				if (jsEvent && custom===false) {
-//		alert("Type:"+type+"/"+custom+"/"+ret);
-
-					f_core.CancelEvent(jsEvent);				
-				}
-			}
-		}
-
-		f_core.Debug(f_eventTarget, "Generic call type '"+type+"' elt='"+((elt)?elt.id:"?")+"' comp='"+comp+"' returns '"+ret+"'.");
+		f_core.Debug(f_eventTarget, "_Generic: Generic call type '"+type+"' elt='"+((elt)?elt.id:"?")+"' comp='"+comp+"' returns '"+ret+"'.");
 		return ret;
 	}
 }
@@ -116,7 +108,7 @@ var __static = {
 var __prototype = {
 	
 	f_eventTarget: function() {
-		this.f_super(arguments);
+		// this.f_super(arguments); // On appelle pas le super à cause d'un problème de profondeur de pile IE
 		
 		if (this.nodeType==1) {
 			this.f_initEventAtts(f_eventTarget._EVENTS);
@@ -128,8 +120,6 @@ var __prototype = {
 	 */
 	/*
 	f_finalize: function() {
-		this._returnOnSelect=undefined; // boolean
-		
 		this.f_super(arguments);
 	},
 	*/
@@ -140,7 +130,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onCheck: function(evt) {
-		return f_eventTarget._Generic(this,evt,f_event.CHECK,true,false); 
+		return f_eventTarget._Generic(this,evt,f_event.CHECK,true); 
 	},
 	/**
 	 * 
@@ -149,7 +139,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onSelect: function(evt) {
-		return f_eventTarget._Generic(this, evt, f_event.SELECTION, true, false); 
+		return f_eventTarget._Generic(this, evt, f_event.SELECTION, true); 
 	},
 	/**
 	 * 
@@ -158,7 +148,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onFocus: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.FOCUS,false); 
+		return f_eventTarget._Generic(this,evt,f_event.FOCUS); 
 	},
 	/**
 	 * 
@@ -167,7 +157,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onBlur: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.BLUR,false); 
+		return f_eventTarget._Generic(this,evt,f_event.BLUR); 
 	},
 	/**
 	 * 
@@ -194,7 +184,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onError: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.ERROR,false);
+		return f_eventTarget._Generic(this,evt,f_event.ERROR);
 	},
 	/**
 	 * 
@@ -230,7 +220,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onMouseOver: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEOVER,false); 
+		return f_eventTarget._Generic(this,evt,f_event.MOUSEOVER); 
 	},
 	/**
 	 * 
@@ -239,7 +229,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onMouseOut: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEOUT,false); 
+		return f_eventTarget._Generic(this,evt,f_event.MOUSEOUT); 
 	},
 	/**
 	 * 
@@ -257,7 +247,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onMouseUp: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEUP,false);
+		return f_eventTarget._Generic(this,evt,f_event.MOUSEUP);
 	},
 	/**
 	 * 
@@ -266,7 +256,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onPrepareSuggestion: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.PREPAGESUGGESTION,false);
+		return f_eventTarget._Generic(this,evt,f_event.PREPAGESUGGESTION);
 	},
 	/**
 	 * 
@@ -275,7 +265,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onPropertyChange: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.PROPERTY_CHANGE,false);
+		return f_eventTarget._Generic(this,evt,f_event.PROPERTY_CHANGE);
 	},
 	/**
 	 * 
@@ -284,7 +274,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onMenu: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MENU,false);
+		return f_eventTarget._Generic(this,evt,f_event.MENU);
 	},
 	/**
 	 * 
@@ -293,7 +283,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onReset: function(evt) { 
-		return f_eventTarget._Generic(this, evt, f_event.RESET, false);
+		return f_eventTarget._Generic(this, evt, f_event.RESET);
 	},
 	/**
 	 * 
@@ -302,7 +292,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_onUserEvent: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.USER,false);
+		return f_eventTarget._Generic(this,evt,f_event.USER);
 	},
 	/**
 	 * 

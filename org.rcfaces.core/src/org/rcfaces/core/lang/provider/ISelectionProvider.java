@@ -9,7 +9,7 @@ package org.rcfaces.core.lang.provider;
  * @version $Revision$ $Date$
  */
 public interface ISelectionProvider {
-    Object getSelection();
+    Object getSelectedValues();
 
-    void setSelection(Object selection);
+    void setSelectedValues(Object selectedValues);
 }

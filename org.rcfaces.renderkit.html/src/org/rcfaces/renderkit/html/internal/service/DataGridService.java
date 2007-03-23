@@ -248,7 +248,7 @@ public class DataGridService extends AbstractHtmlService {
         String varId = jsWriter.getComponentVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementById").writeString(componentId).writeln(
+                "GetElementByClientId").writeString(componentId).writeln(
                 ", document);");
 
         jsWriter.writeMethodCall("_startNewPage").writeInt(rowIndex).writeln(

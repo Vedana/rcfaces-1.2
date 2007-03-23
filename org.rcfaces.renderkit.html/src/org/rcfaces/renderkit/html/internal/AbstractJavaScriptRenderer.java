@@ -139,7 +139,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
 
         javascriptRenderContext.popUnitializedComponentsClientId();
 
-        writer.writeCall("_classLoader", "_initializeObjects").writeln(");");
+        writer.writeCall("_classLoader", "f_initializeObjects").writeln(");");
     }
 
     public void initializeJavaScriptComponent(IJavaScriptWriter writer)

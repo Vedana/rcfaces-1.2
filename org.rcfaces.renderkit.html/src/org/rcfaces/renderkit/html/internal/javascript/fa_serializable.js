@@ -11,12 +11,11 @@
  */
 var __prototype = {
 
-/*
+
 	f_finalize: function() {
-		this._properties = undefined;  // Map<string, string>
-		this._noPropertyUpdates=undefined; // boolean
+		this._properties = undefined;  // Map<string, Object>
+//		this._noPropertyUpdates=undefined; // boolean
 	},
-*/
 
 	/** 
 	 * @method hidden
@@ -47,7 +46,7 @@ var __prototype = {
 		}
 
 		if (isList) {		
-			if (!value || value.length<1) {
+			if (!value || !value.length) {
 				f_core.Debug(fa_serializable, "No values to set for property '"+name+"'. (value='"+value+"')");
 				return;
 			}
@@ -84,6 +83,8 @@ var __prototype = {
 		f_core.Assert(typeof(value)=="string" 
 			|| typeof(value)=="number" 
 			|| typeof(value)=="boolean" 
+			|| (value instanceof Date)
+			|| (f_class.IsClassDefined("f_time") && (value instanceof f_time))
 			|| value===null || value===undefined, "Invalid value '"+value+"'.");
 		
 		var properties=this._properties;
@@ -98,7 +99,7 @@ var __prototype = {
 			f_core.Debug(fa_serializable, "Create property map for object '"+this.id+"'.");
 		}
 		
-		f_core.Info(fa_serializable, "Set property '"+name+"' to '"+value+"'.");
+		f_core.Info(fa_serializable, "Set property '"+name+"' to '"+value+"' (type='"+typeof(value)+"').");
 		
 		if (this._kclass._classLoader._serializing) {
 			// Pas d'evenement dans ce cas !
@@ -150,4 +151,4 @@ var __prototype = {
 	f_serialize: f_class.OPTIONAL_ABSTRACT
 }
 
-var fa_serializable=new f_aspect("fa_serializable", null, __prototype);
+new f_aspect("fa_serializable", null, __prototype);

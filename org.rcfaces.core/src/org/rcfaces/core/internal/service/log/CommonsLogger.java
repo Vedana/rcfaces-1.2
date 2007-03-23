@@ -55,7 +55,7 @@ public class CommonsLogger implements ILogger {
 
         if (name != null) {
             try {
-                Log log = LogFactory.getLog(LogService.PREFIX_LOGGER_NAME
+                Log log = LogFactory.getLog(LogService.PREFIX_LOGGER_NAME + "."
                         + name);
                 if (log != null) {
                     if (level < 0) {

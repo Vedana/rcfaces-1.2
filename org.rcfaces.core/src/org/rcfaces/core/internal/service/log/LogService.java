@@ -23,7 +23,7 @@ public abstract class LogService extends AbstractService {
 
     private static final Log LOG = LogFactory.getLog(LogService.class);
 
-    public static final String PREFIX_LOGGER_NAME = "client.";
+    public static final String PREFIX_LOGGER_NAME = "client";
 
     protected static final IFilter[] EMPTY_FILTERS = new IFilter[0];
 

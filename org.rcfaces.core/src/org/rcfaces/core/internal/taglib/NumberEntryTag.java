@@ -25,6 +25,10 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 	private String numberFormatType;
 	private String literalLocale;
 	private String componentLocale;
+	private String errorStyleClass;
+	private String fatalStyleClass;
+	private String infoStyleClass;
+	private String warnStyleClass;
 	private String autoCompletion;
 	private String integerDigits;
 	private String fractionDigits;
@@ -109,6 +113,38 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 
 	public final void setComponentLocale(String componentLocale) {
 		this.componentLocale = componentLocale;
+	}
+
+	public final String getErrorStyleClass() {
+		return errorStyleClass;
+	}
+
+	public final void setErrorStyleClass(String errorStyleClass) {
+		this.errorStyleClass = errorStyleClass;
+	}
+
+	public final String getFatalStyleClass() {
+		return fatalStyleClass;
+	}
+
+	public final void setFatalStyleClass(String fatalStyleClass) {
+		this.fatalStyleClass = fatalStyleClass;
+	}
+
+	public final String getInfoStyleClass() {
+		return infoStyleClass;
+	}
+
+	public final void setInfoStyleClass(String infoStyleClass) {
+		this.infoStyleClass = infoStyleClass;
+	}
+
+	public final String getWarnStyleClass() {
+		return warnStyleClass;
+	}
+
+	public final void setWarnStyleClass(String warnStyleClass) {
+		this.warnStyleClass = warnStyleClass;
 	}
 
 	public final String getAutoCompletion() {
@@ -203,6 +239,10 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 			LOG.debug("  numberFormatType='"+numberFormatType+"'");
 			LOG.debug("  literalLocale='"+literalLocale+"'");
 			LOG.debug("  componentLocale='"+componentLocale+"'");
+			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
+			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
+			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
+			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
 			LOG.debug("  integerDigits='"+integerDigits+"'");
 			LOG.debug("  fractionDigits='"+fractionDigits+"'");
@@ -302,6 +342,46 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 				component.setComponentLocale(vb);
 			} else {
 				component.setComponentLocale(componentLocale);
+			}
+		}
+
+		if (errorStyleClass != null) {
+			if (isValueReference(errorStyleClass)) {
+				ValueBinding vb = application.createValueBinding(errorStyleClass);
+
+				component.setErrorStyleClass(vb);
+			} else {
+				component.setErrorStyleClass(errorStyleClass);
+			}
+		}
+
+		if (fatalStyleClass != null) {
+			if (isValueReference(fatalStyleClass)) {
+				ValueBinding vb = application.createValueBinding(fatalStyleClass);
+
+				component.setFatalStyleClass(vb);
+			} else {
+				component.setFatalStyleClass(fatalStyleClass);
+			}
+		}
+
+		if (infoStyleClass != null) {
+			if (isValueReference(infoStyleClass)) {
+				ValueBinding vb = application.createValueBinding(infoStyleClass);
+
+				component.setInfoStyleClass(vb);
+			} else {
+				component.setInfoStyleClass(infoStyleClass);
+			}
+		}
+
+		if (warnStyleClass != null) {
+			if (isValueReference(warnStyleClass)) {
+				ValueBinding vb = application.createValueBinding(warnStyleClass);
+
+				component.setWarnStyleClass(vb);
+			} else {
+				component.setWarnStyleClass(warnStyleClass);
 			}
 		}
 
@@ -406,6 +486,10 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 		numberFormatType = null;
 		literalLocale = null;
 		componentLocale = null;
+		errorStyleClass = null;
+		fatalStyleClass = null;
+		infoStyleClass = null;
+		warnStyleClass = null;
 		autoCompletion = null;
 		integerDigits = null;
 		fractionDigits = null;

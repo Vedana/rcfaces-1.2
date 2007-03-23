@@ -380,7 +380,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
         return scriptType;
     }
 
-    public final Locale getDefaultAttributesLocale() {
+    public final Locale getDefaultLiteralLocale() {
         initializePageConfigurator();
 
         return defaultAttributesLocale;

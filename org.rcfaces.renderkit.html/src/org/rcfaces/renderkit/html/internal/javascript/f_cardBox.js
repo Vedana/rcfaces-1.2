@@ -42,13 +42,13 @@ var __prototype={
 		for(var i=0;i<cards.length;i++) {
 			var card=cards[i];
 		
-			var ccard=f_core.GetElementById(card._id, this.ownerDocument);
+			var ccard=f_core.GetElementByClientId(card._id, this.ownerDocument);
 			f_core.Assert(ccard, "f_cardBox.f_updateCards: Can not find card component of card '"+card._id+"'.");
 
 			f_core.Debug(f_cardBox, "Update card#"+i+" card="+card+" ccard="+ccard);
 			card._ccard=ccard;
 			ccard._vcard=card;			
-			ccard.f_declareCard(this);	
+			ccard.f_declareCard(this, card._value);	
 		}
 	},
 	/**
@@ -98,7 +98,7 @@ var __prototype={
 	 * @method hidden
 	 * @return void
 	 */
-	f_declareCard: function(cardBodyId, selected) {
+	f_declareCard: function(cardBodyId, cardValue, selected) {
 		var card=new Object;
 
 		var cards=this._cards;
@@ -107,15 +107,22 @@ var __prototype={
 			prev._next=card;
 			card._prev=prev;
 		}
-		cards.push(card);		
+		cards.push(card);	
+			
 		card._cardBox=this;
-
+		card._value=cardValue;
 		card._id=cardBodyId;
 			
 		if (selected) {
 			this._selectedCard=card;
 		}
-		
+	
+		if (f_core.IsDebugEnabled(f_cardBox)) {		
+			card.toString=function() {
+				return "[card id="+this._id+" value="+this._value+" selected="+this._selectedCard+"]";
+			}
+		}
+				
 		return card;
 	},
 
@@ -128,7 +135,7 @@ var __prototype={
 	f_selectCard: function(cardComponent, setFocus) {
 		if (typeof(cardComponent)=="string") {
 			var id=cardComponent;
-			cardComponent=f_core.GetElementById(id, this.ownerDocument);
+			cardComponent=f_core.GetElementByClientId(id, this.ownerDocument);
 	
 			f_core.Assert(cardComponent, "Can not find card '"+id+"'.");
 		}
@@ -174,6 +181,22 @@ var __prototype={
 		}
 		
 		return sc._ccard;
+	},
+	f_setDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.SELECTION:
+			return;
+		}
+
+		return this.f_super(arguments, type, target);
+	},
+	f_clearDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.SELECTION:
+			return;
+		}
+
+		return this.f_super(arguments, type, target);
 	}
 }
  

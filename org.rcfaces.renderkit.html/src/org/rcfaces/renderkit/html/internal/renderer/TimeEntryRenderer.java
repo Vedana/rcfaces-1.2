@@ -57,8 +57,6 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
         htmlWriter.startElement("DIV");
 
-        htmlWriter.writeRole(IAccessibilityRoles.TEXT_FIELD);
-
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -98,6 +96,10 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
         htmlWriter.endElement("DIV");
 
         htmlWriter.enableJavaScript();
+    }
+
+    protected String getWAIRole() {
+        return IAccessibilityRoles.TEXT_FIELD;
     }
 
     protected void encodeSubComponents(IHtmlWriter htmlWriter,
@@ -397,17 +399,17 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
             IComponentData componentData) {
         super.decode(context, component, componentData);
 
-        TimeEntryComponent dateEntryComponent = (TimeEntryComponent) component;
+        TimeEntryComponent timeEntryComponent = (TimeEntryComponent) component;
 
-        Number dateValue = componentData.getNumberProperty("value");
-        if (dateValue != null) {
-            int t = dateValue.intValue();
+        Time timeValue = (Time) componentData.getProperty("value");
+        Time time = null;
+        if (timeValue != null
+                && timeEntryComponent.isValueLocked(context.getFacesContext()) == false) {
 
-            Time time = new Time(t / (60 * 60 * 1000), (t / (60 * 1000)) % 60,
-                    (t / 1000) % 60, t % 1000);
-
-            dateEntryComponent.setSubmittedValue(time);
+            time = timeValue;
         }
+
+        timeEntryComponent.setSubmittedValue(time);
     }
 
     protected String getActionEventName(INameSpace nameSpace) {

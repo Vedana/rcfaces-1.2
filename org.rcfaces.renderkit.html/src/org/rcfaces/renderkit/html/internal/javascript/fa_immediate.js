@@ -55,5 +55,4 @@ var __prototype = {
 	f_setProperty: f_class.ABSTRACT
 }
 
-var fa_immediate=new f_aspect("fa_immediate", null, __prototype);
-	
+new f_aspect("fa_immediate", null, __prototype);	

@@ -1,0 +1,58 @@
+<xd:?xml version="1.0" encoding="UTF-8"?>
+<xd:schema 
+		xd:xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://rcfaces.org/rcfaces-1" 
+		xmlns="http://rcfaces.org/rcfaces-1">
+	<xd:annotation>
+		<xd:documentation>RCFaces schema</xd:documentation>
+	</xd:annotation>
+
+	<xd:simpleType name="rid">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+
+	<xd:simpleType name="requiresBundle">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+
+	<xd:simpleType name="for">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+
+	<xd:simpleType name="forItemvalue">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+
+	<xd:simpleType name="character">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+
+	<xd:simpleType name="virtualKey">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+
+	<xd:simpleType name="keyFlags">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+	
+	<xd:simpleType name="focusId">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+	
+	<xd:simpleType name="serviceId">
+		<xd:restriction base="xd:string"/>
+	</xd:simpleType>
+	
+	
+	<xd:complexType name="ns.type">
+	</xd:complexType>
+	
+	<xd:complexType name="init.type">
+		<xd:attribute name="rid" type="xd:string"/>
+		<xd:attribute name="requiresBundle" type="xd:string"/>
+		<xd:attribute name="keyFlags" type="keyFlags"/>
+	</xd:complexType>
+	
+	<xd:element name="ns" type="ns.type"/>
+	<xd:element name="init" type="init.type"/>
+</xd:schema>

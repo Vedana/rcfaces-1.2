@@ -382,4 +382,4 @@ var __prototype={
 	
 }
  
-var fa_compositeNumEntry=new f_aspect("fa_compositeNumEntry", __static, __prototype, fa_compositeEntry);
+new f_aspect("fa_compositeNumEntry", __static, __prototype, fa_compositeEntry);

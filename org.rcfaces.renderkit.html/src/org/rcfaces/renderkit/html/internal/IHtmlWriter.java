@@ -94,5 +94,9 @@ public interface IHtmlWriter extends ISgmlWriter {
 
     IHtmlWriter writeRole(String role) throws WriterException;
 
-   // IHtmlWriter writeAttributeNS(String ns, String name, String value)throws WriterException;
+    IHtmlWriter writeAlt(String altText) throws WriterException;
+
+    // IHtmlWriter writeAttributeNS(String ns, String name, String value)throws
+    // WriterException;
+
 }

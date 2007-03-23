@@ -11,7 +11,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
-public class ProgressBarTag extends AbstractOutputTag implements Tag {
+public class ProgressBarTag extends AbstractInputTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ProgressBarTag.class);

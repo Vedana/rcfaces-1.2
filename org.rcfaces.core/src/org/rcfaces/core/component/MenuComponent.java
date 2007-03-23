@@ -1,17 +1,18 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IMenuEventCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.component.capability.IMenuEventCapability;
 
 /**
  * <p>The menu Component provides a way of creating desktop style menus on web pages. It allows sub-menus, check and radio menu items and image menus. It also provides pop-up menus.</p>
@@ -30,6 +31,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	IMenuEventCapability,
 	ISelectionEventCapability,
 	ICheckEventCapability,
+	ICheckedValuesCapability,
 	IMenuComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menu";
@@ -91,28 +93,40 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
 	}
 
-	public final Object[] getCheckedValues() {
+	public final java.lang.Object getCheckedValues() {
 		return getCheckedValues(null);
 	}
 
-	public final Object[] getCheckedValues(javax.faces.context.FacesContext facesContext) {
-		return (Object[])engine.getValue(Properties.CHECKED_VALUES, facesContext);
+	/**
+	 * See {@link #getCheckedValues() getCheckedValues()} for more details
+	 */
+	public final java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.CHECKED_VALUES, facesContext);
 	}
 
-	public final void setCheckedValues(Object[] checkedValues) {
+	public final void setCheckedValues(java.lang.Object checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
+	/**
+	 * See {@link #setCheckedValues(Object) setCheckedValues(Object)} for more details
+	 */
 	public final void setCheckedValues(ValueBinding checkedValues) {
-		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "checkedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
+	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
 	 */
-	public final boolean isCheckedValuesSetted() {
-		return engine.isPropertySetted(Properties.CHECKED_VALUES);
+	public final Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.CHECKED_VALUES);
+		if (valueBinding==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueBinding.getType(facesContext);
 	}
 
 	/**

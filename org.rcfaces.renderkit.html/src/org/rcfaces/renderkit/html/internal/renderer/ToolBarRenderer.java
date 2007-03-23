@@ -14,10 +14,13 @@ import javax.faces.render.Renderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ItemsToolFolderComponent;
+import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -41,10 +44,13 @@ public class ToolBarRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        // IComponentRenderContext componentRenderContext =
-        // writer.getComponentRenderContext();
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
 
-        // FacesContext facesContext = componentRenderContext.getFacesContext();
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
+        ToolBarComponent toolBarComponent = (ToolBarComponent) componentRenderContext
+                .getComponent();
 
         htmlWriter.startElement("TABLE");
         htmlWriter.writeCellPadding(0);
@@ -54,6 +60,14 @@ public class ToolBarRenderer extends AbstractCssRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
+        String verticalAlignment = toolBarComponent
+                .getVerticalAlignment(facesContext);
+        if (verticalAlignment != null) {
+            htmlWriter.writeVAlign(verticalAlignment);
+        }
+
+        htmlWriter.startElement("TBODY");
+
         htmlWriter.startElement("TR");
     }
 
@@ -61,6 +75,8 @@ public class ToolBarRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.endElement("TR");
+
+        htmlWriter.endElement("TBODY");
 
         htmlWriter.endElement("TABLE");
 
@@ -107,14 +123,7 @@ public class ToolBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.startElement("TD");
 
-        try {
-            renderer.encodeBegin(facesContext, component);
-
-            renderer.encodeEnd(facesContext, component);
-
-        } catch (IOException ex) {
-            throw new WriterException(ex.getMessage(), ex.getCause(), component);
-        }
+        ComponentTools.encodeRecursive(facesContext, component);
 
         htmlWriter.endElement("TD");
     }

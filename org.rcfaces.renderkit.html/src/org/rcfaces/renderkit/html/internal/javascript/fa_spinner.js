@@ -61,7 +61,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 	
 		if (!f_core.GetEvtButton(evt) && this._pushed) {
@@ -107,7 +107,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 		
 		this._pushed=true;
@@ -506,4 +506,4 @@ var __prototype = {
 	}
 }
 
-var fa_spinner = new f_aspect("fa_spinner", __static, __prototype);
+new f_aspect("fa_spinner", __static, __prototype);

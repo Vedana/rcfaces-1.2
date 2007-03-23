@@ -101,4 +101,4 @@ var __prototype = {
 	fa_updateMessages: f_class.ABSTRACT
 }
 
-var fa_messageText=new f_aspect("fa_messageText", null, __prototype, fa_message);
+new f_aspect("fa_messageText", null, __prototype, fa_message);

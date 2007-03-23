@@ -1,16 +1,17 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.AbstractConverterCommandComponent;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.component.AbstractConverterCommandComponent;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
@@ -19,6 +20,7 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
 public abstract class AbstractMenuComponent extends AbstractConverterCommandComponent implements 
 	ISelectionEventCapability,
 	ICheckEventCapability,
+	ICheckedValuesCapability,
 	IReadOnlyCapability,
 	IMenuComponent {
 
@@ -59,6 +61,42 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
 	}
 
+	public final java.lang.Object getCheckedValues() {
+		return getCheckedValues(null);
+	}
+
+	/**
+	 * See {@link #getCheckedValues() getCheckedValues()} for more details
+	 */
+	public final java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.CHECKED_VALUES, facesContext);
+	}
+
+	public final void setCheckedValues(java.lang.Object checkedValues) {
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	/**
+	 * See {@link #setCheckedValues(Object) setCheckedValues(Object)} for more details
+	 */
+	public final void setCheckedValues(ValueBinding checkedValues) {
+		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public final Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.CHECKED_VALUES);
+		if (valueBinding==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueBinding.getType(facesContext);
+	}
+
 	public final boolean isReadOnly() {
 		return isReadOnly(null);
 	}
@@ -79,30 +117,6 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 	 */
 	public final void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
-	}
-
-	public final Object[] getCheckedValues() {
-		return getCheckedValues(null);
-	}
-
-	public final Object[] getCheckedValues(javax.faces.context.FacesContext facesContext) {
-		return (Object[])engine.getValue(Properties.CHECKED_VALUES, facesContext);
-	}
-
-	public final void setCheckedValues(Object[] checkedValues) {
-		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
-	}
-
-	public final void setCheckedValues(ValueBinding checkedValues) {
-		engine.setValueBinding(Properties.CHECKED_VALUES, checkedValues);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "checkedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isCheckedValuesSetted() {
-		return engine.isPropertySetted(Properties.CHECKED_VALUES);
 	}
 
 	/**

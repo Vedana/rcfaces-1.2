@@ -216,7 +216,7 @@ var __static = {
 		var ret=new Array;
 		
 		for(var i=0;i<ds.length;i++) {
-			var d=f_dateFormat.ParseStringDate(ds[i]);
+			var d=f_core.DeserializeDate(ds[i]);
 			if (!d) {
 				continue;
 			}
@@ -237,7 +237,7 @@ var __static = {
 		for(var i=0;i<ds.length;i++) {
 			var ds2=ds[i].split(":");
 			
-			var d=f_dateFormat.ParseStringDate(ds2[0]);
+			var d=f_core.DeserializeDate(ds2[0]);
 			if (!d) {
 				continue;
 			}
@@ -247,7 +247,7 @@ var __static = {
 				continue;
 			}
 			
-			var d2=f_dateFormat.ParseStringDate(ds2[0]);
+			var d2=f_core.DeserializeDate(ds2[0]);
 			if (!d2) {
 				continue;
 			}
@@ -267,16 +267,17 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-		evt.cancelBubble=true;
 		
 		var date=this._date;
 		if ((date instanceof Date)==false) {
-			return false;
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		calendar._onDayClick(evt, this, date);
+		
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -288,16 +289,17 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-		evt.cancelBubble=true;
 		
 		var date=this._date;
 		if ((date instanceof Date)==false) {
-			return false;
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		calendar._onDayClick(evt, this, date);
+		
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -310,20 +312,20 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 				
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 7, true, true);
 		
 		if (!delta) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		switch(delta) {
 		case f_calendarObject._PAGE_UP_DELTA: 
 			var date=this._date;
 			if (!date) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 
 			var nbd=date.getDate();  // Nombre de jour à reculer
@@ -338,7 +340,7 @@ var __static = {
 			
 			d2=calendar._searchValidDate(d2, 1, date);
 			if (!d2 || d2.getTime()==date.getTime()) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 
 			delta=nbjm-d2.getDate()+nbd;
@@ -349,7 +351,7 @@ var __static = {
 		case f_calendarObject._PAGE_DOWN_DELTA: 
 			var date=this._date;
 			if (!date) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 
 			var d2=new Date(date.getTime());
@@ -370,7 +372,7 @@ var __static = {
 			
 			d2=calendar._searchValidDate(d2, -1, date);
 			if (!d2 || d2.getTime()==date.getTime()) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 
 			delta=d2.getDate()+nbd;
@@ -381,7 +383,7 @@ var __static = {
 		case f_calendarObject._HOME_DELTA: 
 			var date=this._date;
 			if (!date) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 			
 			var d2=new Date(date.getTime());
@@ -394,7 +396,7 @@ var __static = {
 			var deltaDate=date.getDate()-d2.getDate();			
 			
 			if (deltaDate<0) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 
 			} else if (deltaDate==0) {
 				// On change de mois !
@@ -409,7 +411,7 @@ var __static = {
 				
 				d2=calendar._searchValidDate(d2, 1, date);
 				if (!d2 || d2.getTime()==date.getTime()) {
-					return f_core.CancelEvent(evt);
+					return f_core.CancelJsEvent(evt);
 				}
 
 				deltaDate=nbjm-d2.getDate()+nbd;
@@ -423,7 +425,7 @@ var __static = {
 			var date=this._date;
 			
 			if (!date) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 			
 			var d2=new Date(date.getTime());
@@ -436,13 +438,13 @@ var __static = {
 			d2=calendar._searchValidDate(d2, -1, date);
 			if (!d2) {
 				// f_core.Debug(f_calendarObject, "Day.EndDelta: invalid date '"+d2+"' from '"+d1+"'=>'"+date+"'.");
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 
 			var delta=d2.getDate()-date.getDate();			
 			
 			if (delta<0) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 			
 			if (delta==0) {
@@ -453,7 +455,7 @@ var __static = {
 				
 				d2=calendar._searchValidDate(d2, -1, date);
 				if (!d2 || d2.getTime()==date.getTime()) {
-					return f_core.CancelEvent(evt);
+					return f_core.CancelJsEvent(evt);
 				}
 
 				delta=nbd+d2.getDate();
@@ -476,7 +478,7 @@ var __static = {
 		
 		f_calendarObject._SearchButton(calendar._dayButtons, f, true);
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -488,16 +490,17 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-		evt.cancelBubble=true;
 		
 		var date=this._date;
 		if ((date instanceof Date)==false) {
-			return false;
+			return f_core.CancelJsEvent(evt);
 		}
 		
-		calendar._onMonthClick(evt, this, date);		
+		calendar._onMonthClick(evt, this, date);
+		
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -510,13 +513,13 @@ var __static = {
 			return null;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 			
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 6, true);
 		
 		if (!delta) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		switch(delta) {
@@ -552,7 +555,7 @@ var __static = {
 			f_calendarObject._Focus(calendar._monthButtons[ds.getMonth()]);
 		}
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -609,16 +612,17 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-		evt.cancelBubble=true;
 		
 		var date=this._date;
 		if ((date instanceof Date)==false) {
-			return false;
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		calendar._onYearClick(evt, this, date);		
+	
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -666,7 +670,7 @@ var __static = {
 		
 		f_calendarObject._Focus(calendar._yearButtons[(delta<0)?0:2]);
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -679,19 +683,20 @@ var __static = {
 				return false;
 			}
 			if (!evt) {
-				evt = f_core.GetEvent(this);
+				evt = f_core.GetJsEvent(this);
 			}
-			evt.cancelBubble=true;
-			
+				
 			var date=this._date;
 			if ((date instanceof Date)==false) {
-				return false;
+				return f_core.CancelJsEvent(evt);
 			}
 			
 			calendar._onWeekClick(evt, this, date);		
 		} catch (x) {
 			f_core.Error(f_calendarObject, "_OnWeekClick throws exception.",x);
 		}
+
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -704,13 +709,13 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}		
 		
 		var delta=f_calendarObject._GetDeltaKey(evt, 10, 1);
 		
 		if (!delta || delta==-10) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		if (delta==10) {
@@ -721,7 +726,7 @@ var __static = {
 				f_calendarObject._SearchButton(calendar._dayButtons, date, true);
 			}
 			
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		calendar._onUnitClick(evt, this, delta, f_calendarObject._WEEK_UNIT);
@@ -736,7 +741,7 @@ var __static = {
 			f_calendarObject._SearchButton(calendar._weekButtons, ds, true);
 		}		
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -771,16 +776,17 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-		evt.cancelBubble=true;
 		
 		var date=this._date;
 		if ((date instanceof Date)==false) {
-			return false;
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		calendar._onWeekDayClick(evt, this, date);		
+
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -793,13 +799,13 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}		
 	
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 10);
 		
 		if (!delta || delta==-10) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		if (delta==10) {
 			// Focus le bouton du jour !
@@ -809,7 +815,7 @@ var __static = {
 				f_calendarObject._SearchButton(calendar._dayButtons, date, true);
 			}
 			
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 	
 		calendar._onUnitClick(evt, this, delta, f_calendarObject._DAYOFWEEK_UNIT);
@@ -826,7 +832,7 @@ var __static = {
 		
 		f_calendarObject._Focus(calendar._weekDayButtons[(day + 7 - calendar._firstDayOfWeek) % 7]);
 				
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -838,12 +844,12 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-
-		evt.cancelBubble=true;
 		
 		calendar._onUnitClick(evt, this, 1);
+
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -855,12 +861,12 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 		
-		evt.cancelBubble=true;
-		
 		calendar._onUnitClick(evt, this, -1);
+
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -873,7 +879,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}		
 
 		switch(evt.keyCode) {
@@ -899,7 +905,7 @@ var __static = {
 			break;			
 		}
 
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -911,12 +917,12 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-
-		evt.cancelBubble=true;
 		
 		calendar._onUnitClick(evt, this, 1, f_calendarObject._YEAR_UNIT);
+	
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -928,12 +934,12 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-		
-		evt.cancelBubble=true;
 
 		calendar._onUnitClick(evt, this, -1, f_calendarObject._YEAR_UNIT);
+
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -945,12 +951,12 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-		
-		evt.cancelBubble=true;
-
+	
 		calendar._onUnitClick(evt, this, 1, f_calendarObject._MONTH_UNIT);
+		
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -962,12 +968,12 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
-		
-		evt.cancelBubble=true;
 
 		calendar._onUnitClick(evt, this, -1, f_calendarObject._MONTH_UNIT);
+
+		return f_core.CancelJsEvent(evt);
 	},
 	
 	/**
@@ -1213,7 +1219,7 @@ var __prototype = {
 	 */
 	f_setMaxDate: function(maxDate) {
 		if (typeof(maxDate)=="string") {
-			maxDate=f_dateFormat.ParseStringDate(maxDate);
+			maxDate=f_core.DeserializeDate(maxDate);
 		}
 		this._maxDate=maxDate;
 		this._maxTime=(maxDate)?maxDate.getTime():undefined;
@@ -1225,7 +1231,7 @@ var __prototype = {
 	 */
 	f_setMinDate: function(minDate) {
 		if (typeof(minDate)=="string") {
-			minDate=f_dateFormat.ParseStringDate(minDate);
+			minDate=f_core.DeserializeDate(minDate);
 		}
 		this._minDate=minDate;
 		this._minTime=(minDate)?minDate.getTime():undefined;
@@ -1238,7 +1244,7 @@ var __prototype = {
 	f_setTwoDigitYearStart: function(twoDigitYearStart) {
 		switch(typeof(twoDigitYearStart)) {
 		case "string":
-			twoDigitYearStart=f_dateFormat.ParseStringDate(twoDigitYearStart);
+			twoDigitYearStart=f_core.DeserializeDate(twoDigitYearStart);
 			break;
 			
 		case "number":
@@ -1255,7 +1261,7 @@ var __prototype = {
 	 */
 	f_setHomeDate: function(homeDate, homeDateLabel) {
 		if (typeof(homeDate)=="string") {
-			homeDate=f_dateFormat.ParseStringDate(homeDate);
+			homeDate=f_core.DeserializeDate(homeDate);
 		}
 		this._homeDate=homeDate;
 		this._homeDateLabel=homeDateLabel;
@@ -1337,6 +1343,10 @@ var __prototype = {
 	 */
 	f_createCalendar: function(doc, component, className) {
 		this._parentComponent=component;
+
+		if (!className) {
+			className="f_calendarObject";
+		}
 	
 		var blankImageURL=f_env.GetStyleSheetBase()+f_calendarObject._BLANK_IMAGE_URL;
 		f_imageRepository.PrepareImage(blankImageURL);
@@ -2952,10 +2962,7 @@ var __prototype = {
 	 * @method private
 	 */
 	_callServer: function(minDate, maxDate) {
-		if (!window.f_httpRequest) {
-			f_core.Error(f_calendarObject, "Class f_httpRequest is not defined !");
-			return;
-		}
+		f_class.IsClassDefined("f_httpRequest", true);
 		
 		/*
 		var w=this.style.width;

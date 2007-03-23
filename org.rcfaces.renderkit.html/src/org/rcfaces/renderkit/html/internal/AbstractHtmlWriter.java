@@ -29,6 +29,8 @@ public abstract class AbstractHtmlWriter extends
 
     private static final String TAG_STACK_PROPERTY = "org.rcfaces.core.internal.writer.TAG_STACK";
 
+    private static final String NONE_WAI_ROLE_NS = "none";
+
     private final ResponseWriter responseWriter;
 
     protected final AbstractRenderContext renderContext;
@@ -416,6 +418,12 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    public IHtmlWriter writeAlt(String alt) throws WriterException {
+        writeAttribute("alt", alt);
+
+        return this;
+    }
+
     public IHtmlWriter writeMultiple() throws WriterException {
         writeAttribute("multiple");
 
@@ -509,9 +517,19 @@ public abstract class AbstractHtmlWriter extends
             return this;
         }
 
+        String waiRoleNS = getHtmlRenderContext().getWaiRolesNS();
+
+        if (NONE_WAI_ROLE_NS.equals(waiRoleNS)) {
+            return this;
+        }
+
+        if (waiRoleNS != null && waiRoleNS.length() > 0) {
+            writeAttribute(waiRoleNS + ":role", role);
+            return this;
+        }
+
         writeAttribute("role", role);
 
         return this;
     }
-
 }

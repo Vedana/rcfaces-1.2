@@ -26,6 +26,7 @@ import org.rcfaces.core.internal.component.IConvertValueHolder;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IRCFacesComponent;
@@ -334,8 +335,14 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 			return true;
 		}
 		
-		int hiddenMode=visibilityCapability.getHiddenMode();
-		if (IVisibilityCapability.SERVER_HIDDEN_MODE==hiddenMode) {
+		if ((this instanceof IHiddenModeCapability)==false) {
+			return false;
+		}
+		
+		IHiddenModeCapability hiddenModeCapability=(IHiddenModeCapability)this;
+		
+		int hiddenMode=hiddenModeCapability.getHiddenMode();
+		if (IHiddenModeCapability.SERVER_HIDDEN_MODE==hiddenMode) {
 			return false;
 		}
 		

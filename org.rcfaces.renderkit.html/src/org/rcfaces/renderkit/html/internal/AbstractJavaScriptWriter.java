@@ -25,14 +25,19 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
 
     public IJavaScriptWriter writeSymbol(String symbol) throws WriterException {
         int idx = symbol.indexOf('.');
+
+        String className = null;
+
         if (idx >= 0) {
-            write(convertSymbol(symbol.substring(0, idx)));
+            className = symbol.substring(0, idx);
+
+            write(convertSymbol(null, className));
             write('.');
 
             symbol = symbol.substring(idx + 1);
         }
 
-        write(convertSymbol(symbol));
+        write(convertSymbol(className, symbol));
 
         return this;
     }
@@ -47,10 +52,11 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
                     + "'.");
         }
 
-        write(convertSymbol(object));
+        String converted = convertSymbol(null, object);
+        write(converted);
         write('.');
 
-        write(convertSymbol(symbol));
+        write(convertSymbol(converted, symbol));
         write('(');
 
         return this;
@@ -74,9 +80,9 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
         if (componentVarName == null) {
             throw new FacesException("Component var name is not defined !");
         }
-        write(convertSymbol(componentVarName));
+        write(componentVarName); // Pas de convertion !
         write('.');
-        write(convertSymbol(symbol));
+        write(convertSymbol(null, symbol));
         write('(');
 
         return this;
@@ -91,7 +97,7 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
         }
 
         write("new ");
-        write(convertSymbol(symbol));
+        write(convertSymbol(null, symbol));
         write('(');
 
         return this;
@@ -152,6 +158,6 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
         return getHtmlComponentRenderContext().getHtmlRenderContext();
     }
 
-    protected abstract String convertSymbol(String symbol);
+    protected abstract String convertSymbol(String className, String memberName);
 
 }

@@ -59,6 +59,7 @@ class Log4jLogger implements LogService.ILogger {
             if (name.startsWith(LogService.PREFIX_LOGGER_NAME) == false) {
                 continue;
             }
+            
             name = name.substring(LogService.PREFIX_LOGGER_NAME.length());
             if (name.length() > 0 && name.charAt(0) == '.') {
                 name = name.substring(1);

@@ -20,6 +20,10 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 	private String autoTab;
 	private String valueChangeListeners;
 	private String focusStyleClass;
+	private String errorStyleClass;
+	private String fatalStyleClass;
+	private String infoStyleClass;
+	private String warnStyleClass;
 	private String showCalendarOnFocus;
 	private String autoCompletion;
 	private String dateFormat;
@@ -60,6 +64,38 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
 	public final void setFocusStyleClass(String focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
+	}
+
+	public final String getErrorStyleClass() {
+		return errorStyleClass;
+	}
+
+	public final void setErrorStyleClass(String errorStyleClass) {
+		this.errorStyleClass = errorStyleClass;
+	}
+
+	public final String getFatalStyleClass() {
+		return fatalStyleClass;
+	}
+
+	public final void setFatalStyleClass(String fatalStyleClass) {
+		this.fatalStyleClass = fatalStyleClass;
+	}
+
+	public final String getInfoStyleClass() {
+		return infoStyleClass;
+	}
+
+	public final void setInfoStyleClass(String infoStyleClass) {
+		this.infoStyleClass = infoStyleClass;
+	}
+
+	public final String getWarnStyleClass() {
+		return warnStyleClass;
+	}
+
+	public final void setWarnStyleClass(String warnStyleClass) {
+		this.warnStyleClass = warnStyleClass;
 	}
 
 	public final String getShowCalendarOnFocus() {
@@ -118,6 +154,10 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  autoTab='"+autoTab+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
+			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
+			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
+			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  showCalendarOnFocus='"+showCalendarOnFocus+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
 			LOG.debug("  dateFormat='"+dateFormat+"'");
@@ -172,6 +212,46 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (errorStyleClass != null) {
+			if (isValueReference(errorStyleClass)) {
+				ValueBinding vb = application.createValueBinding(errorStyleClass);
+
+				component.setErrorStyleClass(vb);
+			} else {
+				component.setErrorStyleClass(errorStyleClass);
+			}
+		}
+
+		if (fatalStyleClass != null) {
+			if (isValueReference(fatalStyleClass)) {
+				ValueBinding vb = application.createValueBinding(fatalStyleClass);
+
+				component.setFatalStyleClass(vb);
+			} else {
+				component.setFatalStyleClass(fatalStyleClass);
+			}
+		}
+
+		if (infoStyleClass != null) {
+			if (isValueReference(infoStyleClass)) {
+				ValueBinding vb = application.createValueBinding(infoStyleClass);
+
+				component.setInfoStyleClass(vb);
+			} else {
+				component.setInfoStyleClass(infoStyleClass);
+			}
+		}
+
+		if (warnStyleClass != null) {
+			if (isValueReference(warnStyleClass)) {
+				ValueBinding vb = application.createValueBinding(warnStyleClass);
+
+				component.setWarnStyleClass(vb);
+			} else {
+				component.setWarnStyleClass(warnStyleClass);
+			}
+		}
+
 		if (showCalendarOnFocus != null) {
 			if (isValueReference(showCalendarOnFocus)) {
 				ValueBinding vb = application.createValueBinding(showCalendarOnFocus);
@@ -222,6 +302,10 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		autoTab = null;
 		valueChangeListeners = null;
 		focusStyleClass = null;
+		errorStyleClass = null;
+		fatalStyleClass = null;
+		infoStyleClass = null;
+		warnStyleClass = null;
 		showCalendarOnFocus = null;
 		autoCompletion = null;
 		dateFormat = null;

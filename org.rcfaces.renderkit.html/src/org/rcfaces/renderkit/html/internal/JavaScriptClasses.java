@@ -132,6 +132,8 @@ public final class JavaScriptClasses {
 
     public static final String TEXT_AREA = "f_textArea";
 
+    public static final String TEXT_EDITOR = "f_textEditor";
+
     public static final String TIME_ENTRY = "f_timeEntry";
 
     public static final String TOOL_BAR = "f_toolBar";

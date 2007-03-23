@@ -128,12 +128,9 @@ public class MenuTag extends CameliaTag implements Tag {
 		}
 
 		if (checkedValues != null) {
-			if (isValueReference(checkedValues)) {
 				ValueBinding vb = application.createValueBinding(checkedValues);
+
 				component.setCheckedValues(vb);
-			} else {
-				throw new javax.faces.FacesException("Attribute 'checkedValues' accept only a binding expression !");
-			}
 		}
 
 		if (menuId != null) {

@@ -164,5 +164,5 @@ var __prototype = {
 	
 }
 
-var fa_scrollPositions=new f_aspect("fa_scrollPositions", null, __prototype);
+new f_aspect("fa_scrollPositions", null, __prototype);
 	

@@ -14,7 +14,8 @@ var __prototype = {
 	f_finalize: function() {		
 		this._mask=undefined;  // HTMLElement
 		// this._text=undefined;  // String
-		// this._accessKey=undefined; // string
+		// this._accessKey=undefined; // String
+		// this._value=undefined; // String
 		
 		// this._disabled=undefined; // boolean
 		// this._imageURL=undefined; // string
@@ -128,8 +129,8 @@ var __prototype = {
 	f_isDisabled: function() {
 		return this._disabled;
 	},
-	f_declareTab: function(tabbedPane, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
-		this.f_declareCard(tabbedPane);
+	f_declareTab: function(tabbedPane, value, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
+		this.f_declareCard(tabbedPane, value);
 
 		this._text=text;
 		this._accessKey=accessKey;

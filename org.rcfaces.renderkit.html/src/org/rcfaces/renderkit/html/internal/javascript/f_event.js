@@ -23,7 +23,7 @@ var __prototype= {
 	 */
 	 f_event: function(component, type, jsEvent, item, value, selectionProvider, detail) {
 		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
-		f_core.Assert(component.tagName || component._kclass, "Bad component '"+component+"'.");
+		f_core.Assert(component && (component.tagName || component._kclass), "Bad component '"+component+"'.");
 	
 		this._type = type;
 		this._component = component;
@@ -166,7 +166,7 @@ var __prototype= {
 		var evt=this._jsEvent;
 		f_core.Assert(evt, "Javascript Event is null !");
 	
-		f_core.CancelEvent(evt);
+		f_core.CancelJsEvent(evt);
 		
 		return false;
 	},
@@ -527,6 +527,8 @@ var __static = {
 		if (mask) {
 			currentLock &= ~mask;
 		}
+		
+					
 		if (!currentLock) {
 			return false;
 		}
@@ -541,9 +543,11 @@ var __static = {
 		}
 	
 		if (currentLock==f_event.POPUP_LOCK) {
-			if (f_popup.VerifyLock()) {
-				f_core.Debug("f_event", "Catch popup lock (mask="+mask+" show="+showAlert+")");
-				return true;
+			var ret=f_popup.VerifyLock();
+			
+			if (ret!==undefined) {
+				f_core.Debug(f_event, "Catch popup lock (mask="+mask+" show="+showAlert+") returns "+ret);
+				return ret;
 			}
 
 			currentLock=f_event._EvtLock;
@@ -560,7 +564,7 @@ var __static = {
 			return false;
 		}
 		
-		f_core.Debug("f_event", "Events are locked, break current process ! (mode="+currentMode+" state="+currentLock+" show="+showAlert+")");
+		f_core.Debug(f_event, "Events are locked, break current process ! (mode="+currentMode+" state="+currentLock+" show="+showAlert+")");
 
 		if (showAlert===false) {
 			return true;
@@ -577,10 +581,12 @@ var __static = {
 				s=f_event._LOCK_MESSAGE;
 			}
 		}
-		
+			
+		/*
 		if (window.console && console.trace) {
-			console.trace();
+			
 		}
+		*/
 		
 		alert(s);
 

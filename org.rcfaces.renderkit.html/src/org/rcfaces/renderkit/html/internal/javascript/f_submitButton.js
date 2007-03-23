@@ -12,7 +12,7 @@ var __prototype = {
 	f_submitButton: function() {
 		this.f_super(arguments);
 
-		this._returnOnSelect = false;
+		this.f_setForcedEventReturn(f_event.SELECTION, false);
 	}
 	 /*,
 	f_updateDisabled: function(disabled) {

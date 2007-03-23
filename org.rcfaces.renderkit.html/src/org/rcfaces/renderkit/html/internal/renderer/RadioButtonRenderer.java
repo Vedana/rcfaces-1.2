@@ -38,7 +38,6 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
     protected static final String TEXT_SUFFIX = "_text";
 
- 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
         IComponentRenderContext componentRenderContext = htmlWriter
@@ -70,6 +69,10 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         String inputClassName = getInputClassName(htmlWriter);
 
         int horizontalTextPosition = button.getTextPosition(facesContext);
+        if (horizontalTextPosition == 0) {
+            horizontalTextPosition = IHorizontalTextPositionCapability.DEFAULT_POSITION;
+        }
+
         if (horizontalTextPosition == IHorizontalTextPositionCapability.LEFT_POSITION) {
             writeLabel(htmlWriter, button, labelClassName, buttonId);
 
@@ -201,7 +204,9 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
             }
         }
 
-        radioButton.setSubmittedValue(submittedValue);
+        if (radioButton.isValueLocked(facesContext) == false) {
+            radioButton.setSubmittedValue(submittedValue);
+        }
 
         if (radioButton.isSelected(facesContext) != selected) {
             radioButton.setSelected(selected);

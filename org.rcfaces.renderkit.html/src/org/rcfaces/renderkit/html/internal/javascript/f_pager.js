@@ -116,7 +116,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 		var code=evt.keyCode;
 		var cancel=false;
@@ -177,7 +177,7 @@ var __static = {
 		}
 		
 		if (cancel) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		return true;
 	},
@@ -192,7 +192,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		var v_index=f_core.GetAttribute(this, "v:index");		
@@ -206,7 +206,7 @@ var __static = {
 		
 		dataPager.f_changePosition(v_index);
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	}
 }
  
@@ -318,8 +318,9 @@ var __prototype = {
 		var rowCount=dataComponent.f_getRowCount();
 		var first=dataComponent.f_getFirst();
 		var maxRows=dataComponent.f_getMaxRows();
+		var paged=dataComponent.f_isPaged();
 
-		if (rows<1) {
+		if (rows<1 || !paged) {
 			message=this._noPagedMessage;
 
 		} else {

@@ -63,5 +63,4 @@ var __prototype = {
 	fa_updateCollapsed: f_class.ABSTRACT
 }
 
-var fa_collapsed=new f_aspect("fa_collapsed", null, __prototype);
-	
+new f_aspect("fa_collapsed", null, __prototype);

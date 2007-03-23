@@ -54,11 +54,15 @@ public interface IHtmlRenderContext extends IRenderContext {
 
     boolean isDisabledContextMenu();
 
-    //void setDisabledContextMenu(boolean state);
+    // void setDisabledContextMenu(boolean state);
 
     String getInvalidBrowserURL();
 
-    //void setInvalidBrowserURL(String invalidBrowserURL);
+    // void setInvalidBrowserURL(String invalidBrowserURL);
 
     Set getClientMessageIdFilters();
+
+    String getWaiRolesNS();
+
+    boolean isClientValidation();
 }

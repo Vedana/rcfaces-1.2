@@ -88,7 +88,7 @@ var __prototype = {
 		}
 	},
 
-	_onSelect: function() {
+	f_imageButtonSelect: function() {
 		if (!this._focus)  {
 			this.f_setFocus();
 		}

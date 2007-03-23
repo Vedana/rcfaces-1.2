@@ -1,16 +1,22 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.InputTypeConverter;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.ToolFolderComponent;
 import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.component.capability.ITextPositionCapability;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.component.ToolFolderComponent;
 import org.rcfaces.core.component.UIImageItemComponent;
 
 /**
@@ -20,13 +26,16 @@ public class ToolItemComponent extends UIImageItemComponent implements
 	IRadioGroupCapability,
 	IInputTypeCapability,
 	IImageSizeCapability,
-	ILookAndFeelCapability {
+	ILookAndFeelCapability,
+	IBorderTypeCapability,
+	ITextPositionCapability,
+	IAccessKeyCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolItem";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","inputType","imageWidth","lookId","groupName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","inputType","imageWidth","accessKey","borderType","lookId","groupName","textPosition"}));
 	}
 
 	public ToolItemComponent() {
@@ -49,6 +58,20 @@ public class ToolItemComponent extends UIImageItemComponent implements
 
 
 		return (ToolFolderComponent)getParent();
+		
+	}
+
+	protected final Converter getTextPositionConverter() {
+
+
+				return TextPositionConverter.SINGLETON;
+			
+	}
+
+	public final void setTextPosition(String textPosition) {
+
+
+			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());
 		
 	}
 
@@ -160,6 +183,72 @@ public class ToolItemComponent extends UIImageItemComponent implements
 	 */
 	public final void setLookId(ValueBinding lookId) {
 		engine.setProperty(Properties.LOOK_ID, lookId);
+	}
+
+	public final java.lang.String getBorderType() {
+		return getBorderType(null);
+	}
+
+	/**
+	 * See {@link #getBorderType() getBorderType()} for more details
+	 */
+	public final java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
+	}
+
+	public final void setBorderType(java.lang.String borderType) {
+		engine.setProperty(Properties.BORDER_TYPE, borderType);
+	}
+
+	/**
+	 * See {@link #setBorderType(String) setBorderType(String)} for more details
+	 */
+	public final void setBorderType(ValueBinding borderType) {
+		engine.setProperty(Properties.BORDER_TYPE, borderType);
+	}
+
+	public final int getTextPosition() {
+		return getTextPosition(null);
+	}
+
+	/**
+	 * See {@link #getTextPosition() getTextPosition()} for more details
+	 */
+	public final int getTextPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
+	}
+
+	public final void setTextPosition(int textPosition) {
+		engine.setProperty(Properties.TEXT_POSITION, textPosition);
+	}
+
+	/**
+	 * See {@link #setTextPosition(int) setTextPosition(int)} for more details
+	 */
+	public final void setTextPosition(ValueBinding textPosition) {
+		engine.setProperty(Properties.TEXT_POSITION, textPosition);
+	}
+
+	public final java.lang.String getAccessKey() {
+		return getAccessKey(null);
+	}
+
+	/**
+	 * See {@link #getAccessKey() getAccessKey()} for more details
+	 */
+	public final java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
+	}
+
+	public final void setAccessKey(java.lang.String accessKey) {
+		engine.setProperty(Properties.ACCESS_KEY, accessKey);
+	}
+
+	/**
+	 * See {@link #setAccessKey(String) setAccessKey(String)} for more details
+	 */
+	public final void setAccessKey(ValueBinding accessKey) {
+		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
 	protected Set getCameliaFields() {

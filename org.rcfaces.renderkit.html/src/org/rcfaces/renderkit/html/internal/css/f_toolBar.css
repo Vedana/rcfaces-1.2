@@ -1,0 +1,24 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_toolBar
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+
+.f_toolBar_item {
+}
+
+.f_toolBar_itemSeparator {
+	display: relative;
+	vertical-align: middle;
+}
+
+.f_toolBar_autoSeparator {
+	background: transparent url('toolBar/separator.gif') center top repeat-y;
+	width: 4px;
+}

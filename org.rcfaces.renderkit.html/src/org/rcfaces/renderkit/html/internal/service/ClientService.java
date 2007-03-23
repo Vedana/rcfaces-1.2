@@ -6,8 +6,10 @@ package org.rcfaces.renderkit.html.internal.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -18,11 +20,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ServiceComponent;
+import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.service.AbstractClientService;
 import org.rcfaces.core.internal.service.ClientServiceException;
 import org.rcfaces.core.internal.service.IClientService;
 import org.rcfaces.core.internal.service.IClientServiceRegistry;
 import org.rcfaces.core.progressMonitor.IProgressMonitor;
+import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.w3c.dom.Document;
 
@@ -147,6 +153,11 @@ public class ClientService extends AbstractClientService {
             progressMonitorValue = null;
         }
 
+        // On a besoin du processContext pour "parser"/formater les dates qui
+        // proviennent du client !
+        IProcessContext processContext = HtmlProcessContextImpl
+                .getProcessContext(facesContext);
+
         if (formParameters) {
             Map request = externalContext.getRequestParameterMap();
 
@@ -154,8 +165,8 @@ public class ClientService extends AbstractClientService {
 
             String parameterString = (String) request.get(PARAMETER);
 
-            parameter = deserializeParameter(serviceComponent, parameterType,
-                    parameterString);
+            parameter = deserializeParameter(processContext, serviceComponent,
+                    parameterType, parameterString);
         }
 
         IClientServiceRegistry operationsRegistry = getClientServiceRegistry(facesContext);
@@ -179,7 +190,8 @@ public class ClientService extends AbstractClientService {
             Object ret = operationsRegistry.waitClientService(clientService,
                     progressMonitor);
 
-            sendResponse(facesContext, ret, progressMonitor);
+            sendResponse(facesContext, ret, progressMonitor, processContext,
+                    component);
 
             return;
         }
@@ -188,7 +200,8 @@ public class ClientService extends AbstractClientService {
     }
 
     protected void sendResponse(FacesContext facesContext, Object ret,
-            IProgressMonitor progressMonitor) {
+            IProgressMonitor progressMonitor, IProcessContext processContext,
+            UIComponent component) {
         HttpServletResponse response = (HttpServletResponse) facesContext
                 .getExternalContext().getResponse();
 
@@ -202,7 +215,8 @@ public class ClientService extends AbstractClientService {
             type = "xml";
 
         } else if (ret instanceof Map) {
-            buffer = HtmlTools.encodeParametersFromMap((Map) ret, '&');
+            buffer = HtmlTools.encodeParametersFromMap((Map) ret, '&',
+                    processContext, component);
             type = "object";
 
         } else if (ret == null) {
@@ -223,8 +237,12 @@ public class ClientService extends AbstractClientService {
             if (buffer != null) {
                 pw.print(buffer);
 
-            } else {
+            } else if (type.equals("xml")) {
                 // C'est un document ... on serialize !
+
+                RcfacesContext.getInstance(facesContext)
+                        .getDocumentBuilderProvider().serialize(pw,
+                                (Document) ret);
             }
 
         } catch (IOException ex) {
@@ -234,15 +252,25 @@ public class ClientService extends AbstractClientService {
         facesContext.responseComplete();
     }
 
-    private Object deserializeParameter(UIComponent component, String type,
-            String parameterString) {
+    private Object deserializeParameter(IProcessContext processContext,
+            UIComponent component, String type, String parameterString) {
         if ("xml".equals(type)) {
-            // => transforme en Document !
-            return null;
+            IDocumentBuilderProvider documentBuilderProvider = RcfacesContext
+                    .getInstance(processContext.getFacesContext())
+                    .getDocumentBuilderProvider();
+
+            try {
+                return documentBuilderProvider.parse(new StringReader(
+                        parameterString));
+
+            } catch (IOException e) {
+                throw new FacesException(
+                        "Can not parse xml document from service !", e);
+            }
         }
 
         if ("object".equals(type)) {
-            return HtmlTools.decodeParametersToMap(null, component,
+            return HtmlTools.decodeParametersToMap(processContext, component,
                     parameterString, '&', null);
 
         } else if ("null".equals(type)) {

@@ -180,4 +180,4 @@ var __prototype = {
 	
 }
 
-var fa_asyncRender=new f_aspect("fa_asyncRender", null, __prototype);
+new f_aspect("fa_asyncRender", null, __prototype);

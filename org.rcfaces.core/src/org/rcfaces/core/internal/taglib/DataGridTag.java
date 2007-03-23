@@ -19,9 +19,11 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 	private String selectionListeners;
 	private String selectable;
 	private String selectionCardinality;
+	private String selectedValues;
 	private String checkListeners;
 	private String checkable;
 	private String checkCardinality;
+	private String checkedValues;
 	private String doubleClickListeners;
 	private String required;
 	private String border;
@@ -33,8 +35,6 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 	private String preference;
 	private String headerVisible;
 	private String paged;
-	private String selectedValues;
-	private String checkedValues;
 	private String sortedColumnIds;
 	private String columnsOrder;
 	private String rowValueColumnId;
@@ -73,6 +73,14 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		this.selectionCardinality = selectionCardinality;
 	}
 
+	public final String getSelectedValues() {
+		return selectedValues;
+	}
+
+	public final void setSelectedValues(String selectedValues) {
+		this.selectedValues = selectedValues;
+	}
+
 	public final String getCheckListener() {
 		return checkListeners;
 	}
@@ -95,6 +103,14 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 
 	public final void setCheckCardinality(String checkCardinality) {
 		this.checkCardinality = checkCardinality;
+	}
+
+	public final String getCheckedValues() {
+		return checkedValues;
+	}
+
+	public final void setCheckedValues(String checkedValues) {
+		this.checkedValues = checkedValues;
 	}
 
 	public final String getDoubleClickListener() {
@@ -185,22 +201,6 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		this.paged = paged;
 	}
 
-	public final String getSelectedValues() {
-		return selectedValues;
-	}
-
-	public final void setSelectedValues(String selectedValues) {
-		this.selectedValues = selectedValues;
-	}
-
-	public final String getCheckedValues() {
-		return checkedValues;
-	}
-
-	public final void setCheckedValues(String checkedValues) {
-		this.checkedValues = checkedValues;
-	}
-
 	public final String getSortedColumnIds() {
 		return sortedColumnIds;
 	}
@@ -288,8 +288,10 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			}
 			LOG.debug("  selectable='"+selectable+"'");
 			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
+			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
@@ -300,8 +302,6 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  preference='"+preference+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
 			LOG.debug("  paged='"+paged+"'");
-			LOG.debug("  selectedValues='"+selectedValues+"'");
-			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  sortedColumnIds='"+sortedColumnIds+"'");
 			LOG.debug("  columnsOrder='"+columnsOrder+"'");
 			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
@@ -350,6 +350,12 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (selectedValues != null) {
+				ValueBinding vb = application.createValueBinding(selectedValues);
+
+				component.setSelectedValues(vb);
+		}
+
 		if (checkListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
 		}
@@ -372,6 +378,12 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			} else {
 				component.setCheckCardinality(checkCardinality);
 			}
+		}
+
+		if (checkedValues != null) {
+				ValueBinding vb = application.createValueBinding(checkedValues);
+
+				component.setCheckedValues(vb);
 		}
 
 		if (doubleClickListeners != null) {
@@ -468,24 +480,6 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
-		if (selectedValues != null) {
-			if (isValueReference(selectedValues)) {
-				ValueBinding vb = application.createValueBinding(selectedValues);
-				component.setSelectedValues(vb);
-			} else {
-				component.setSelectedValues(selectedValues);
-			}
-		}
-
-		if (checkedValues != null) {
-			if (isValueReference(checkedValues)) {
-				ValueBinding vb = application.createValueBinding(checkedValues);
-				component.setCheckedValues(vb);
-			} else {
-				component.setCheckedValues(checkedValues);
-			}
-		}
-
 		if (sortedColumnIds != null) {
 			if (isValueReference(sortedColumnIds)) {
 				ValueBinding vb = application.createValueBinding(sortedColumnIds);
@@ -567,9 +561,11 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		selectionListeners = null;
 		selectable = null;
 		selectionCardinality = null;
+		selectedValues = null;
 		checkListeners = null;
 		checkable = null;
 		checkCardinality = null;
+		checkedValues = null;
 		doubleClickListeners = null;
 		required = null;
 		border = null;
@@ -581,8 +577,6 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		preference = null;
 		headerVisible = null;
 		paged = null;
-		selectedValues = null;
-		checkedValues = null;
 		sortedColumnIds = null;
 		columnsOrder = null;
 		rowValueColumnId = null;

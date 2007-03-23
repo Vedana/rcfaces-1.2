@@ -32,4 +32,4 @@ var __static = {
 	ONEMANY_CARDINALITY: 4
 }
 
-var fa_cardinality=new f_aspect("fa_cardinality", __static);
+new f_aspect("fa_cardinality", __static);

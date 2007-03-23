@@ -27,6 +27,7 @@ public class TextEditorTag extends AbstractInputTag implements Tag {
 	private String infoStyleClass;
 	private String warnStyleClass;
 	private String selectionListeners;
+	private String valueMimeType;
 	private String action;
 	private String actionListeners;
 	public String getComponentType() {
@@ -121,6 +122,14 @@ public class TextEditorTag extends AbstractInputTag implements Tag {
 		this.selectionListeners = selectionListeners;
 	}
 
+	public final String getValueMimeType() {
+		return valueMimeType;
+	}
+
+	public final void setValueMimeType(String valueMimeType) {
+		this.valueMimeType = valueMimeType;
+	}
+
 	public final void setAction(String action) {
 		this.action=action;
 	}
@@ -151,6 +160,7 @@ public class TextEditorTag extends AbstractInputTag implements Tag {
 			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
 			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
+			LOG.debug("  valueMimeType='"+valueMimeType+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -265,6 +275,15 @@ public class TextEditorTag extends AbstractInputTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
+		if (valueMimeType != null) {
+			if (isValueReference(valueMimeType)) {
+				ValueBinding vb = application.createValueBinding(valueMimeType);
+				component.setValueMimeType(vb);
+			} else {
+				component.setValueMimeType(valueMimeType);
+			}
+		}
+
 		if (action != null) {
 			ListenersTools.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -286,6 +305,7 @@ public class TextEditorTag extends AbstractInputTag implements Tag {
 		infoStyleClass = null;
 		warnStyleClass = null;
 		selectionListeners = null;
+		valueMimeType = null;
 		action = null;
 		actionListeners = null;
 

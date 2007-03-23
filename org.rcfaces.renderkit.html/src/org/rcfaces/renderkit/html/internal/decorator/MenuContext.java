@@ -6,8 +6,8 @@ package org.rcfaces.renderkit.html.internal.decorator;
 
 import javax.faces.component.UIComponent;
 
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -20,5 +20,16 @@ class MenuContext extends SelectItemsJsContext {
             IComponentRenderContext componentRenderContext,
             UIComponent rootComponent, Object value) {
         super(renderer, componentRenderContext, rootComponent, value);
+
+        UIComponent menuComponent = componentRenderContext.getComponent();
+
+        if (menuComponent instanceof ICheckedValuesCapability) {
+            ICheckedValuesCapability checkedValuesCapability = (ICheckedValuesCapability) menuComponent;
+
+            Object checkValues = checkedValuesCapability.getCheckedValues();
+            if (checkValues != null) {
+                initializeCheckValue(checkValues);
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@ var __prototype={
 		
 		var twoDigitYearStart=f_core.GetAttribute(this, "v:twoDigitYearStart");
 		if (twoDigitYearStart) {
-			this._twoDigitYearStart=f_dateFormat.ParseStringDate(twoDigitYearStart);
+			this._twoDigitYearStart=f_core.DeserializeDate(twoDigitYearStart);
 		}
 	},
 	/*
@@ -52,7 +52,7 @@ var __prototype={
 		
 		minDate=f_core.GetAttribute(this, "v:minDate");
 		if (minDate) {
-			minDate=f_dateFormat.ParseStringDate(minDate);
+			minDate=f_core.DeserializeDate(minDate);
 		} else {
 			minDate=null;
 		}
@@ -74,7 +74,7 @@ var __prototype={
 		
 		maxDate=f_core.GetAttribute(this, "v:maxDate");
 		if (maxDate) {
-			maxDate=f_dateFormat.ParseStringDate(maxDate);
+			maxDate=f_core.DeserializeDate(maxDate);
 		} else {
 			maxDate=null;
 		}
@@ -219,9 +219,7 @@ var __prototype={
 	f_serialize: function() {
 		var date=this.f_getDate();
 		
-		var d=(date instanceof Date)?f_dateFormat.FormatStringDate(date):null;
-		
-		this.f_setProperty(f_prop.VALUE, d);
+		this.f_setProperty(f_prop.VALUE, date);
 
 		this.f_super(arguments);
 	},
@@ -269,9 +267,15 @@ var __prototype={
 			var t=date.getTime();
 			
 			var d2=new Date(t);
-			
-			if (d2.getDate()!=date.getDate() || d2.getMonth()!=date.getMonth() || d2.getFullYear()!=date.getFullYear()) {
+		
+			if (d2.getDate()!=date.getDate()) {
 				errorMessage="invalidDate.error";
+		
+			} else if (d2.getMonth()!=date.getMonth()) {
+				errorMessage="invalidMonth.error";
+		
+			} else if (d2.getFullYear()!=date.getFullYear()) {
+				errorMessage="invalidYear.error";
 				
 			} else {			
 				var minDate=this.f_getMinDate();
@@ -296,6 +300,8 @@ var __prototype={
 		
 		
 		this.f_addErrorMessage(f_dateEntry, errorMessage);
+		
+		return false;
 	}
 }
  

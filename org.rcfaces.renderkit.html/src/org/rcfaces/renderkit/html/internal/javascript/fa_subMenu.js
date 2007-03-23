@@ -30,9 +30,7 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_newSubMenu: function(menuId, id, removeAllWhenShown, itemImageWidth, itemImageHeight) {
-		if (!window.f_menu) {
-			throw new Error("f_menu class has not beeen loaded !");
-		}
+		f_class.IsClassDefined("f_menu", true);
 		
 		if (!id) {
 			// La forme de menuId n'est peut-etre pas normalisée !
@@ -77,7 +75,7 @@ var __prototype = {
 	f_listSubMenus: function() {
 		var l=new Array;
 
-		if (!window.f_menu) {
+		if (!f_class.IsClassDefined("f_menu")) {
 			return l;
 		}
 		
@@ -115,10 +113,8 @@ var __prototype = {
 	},
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 */
 	fa_componentCaptureMenuEvent: f_class.ABSTRACT
 }
-
-
-var fa_subMenu=new f_aspect("fa_subMenu", null, __prototype);
+new f_aspect("fa_subMenu", null, __prototype);

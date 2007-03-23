@@ -15,15 +15,16 @@ var __static = {
 	 * @field private static final String 
 	 */
 	_STYLESHEET_BASE: "styleSheet.base",
-	/**
-	 * @field private static final String 
-	 */
-	_DEFAULT_STYLESHEET_BASE: "stylesheets",
 	
 	/**
 	 * @field private static final String 
 	 */
 	_CANCEL_EXTERNAL_SUBMIT: "cancel.external.submit",
+
+	/**
+	 * @field private static final String 
+	 */
+	_DOMAIN_NAME: "camelia.domain",
 	
 	/**
 	 * @field private static String
@@ -59,6 +60,11 @@ var __static = {
 	 * @field hidden static boolean
 	 */
 	_SensitiveCaseTagName: undefined,
+		
+	/**
+	 * @field private static boolean
+	 */
+	_ClientValidationDisabled: undefined,
 	
 	/*
 	Initializer: function() {
@@ -146,6 +152,7 @@ var __static = {
 	},
 	/**
 	 * @method hidden static final 
+	 * @return String The url of the rcfaces resources, or null if it is not defined !
 	 */
 	GetStyleSheetBase: function() {
 		if (f_env._StyleSheetBase) {
@@ -158,7 +165,8 @@ var __static = {
 			return sb;
 		}
 		
-		return f_env._DEFAULT_STYLESHEET_BASE;
+		f_core.Debug(f_env, "GetStyleSheetBase: not yet initialized !");
+		return null;
 	},
 	/**
 	 * @method hidden static final 
@@ -237,7 +245,7 @@ var __static = {
 	 * @method hidden static final
 	 */
 	GetCheckValidation: function() {
-		return true;
+		return (f_env._ClientValidationDisabled!==true);
 	},
 	
 	/**
@@ -247,6 +255,8 @@ var __static = {
 		if (f_core.IsGecko()) { // Gecko n'est pas sensitive case !
 			return;
 		}
+		
+		f_core.Debug(f_env, "Enable sensitiveCaseTagName");
 		f_env._SensitiveCaseTagName=true;
 	},
 	
@@ -260,6 +270,57 @@ var __static = {
 		}
 			
 		return bundle.f_get("OPEN_WINDOW_ERROR_MESSAGE");
+	},
+	/**
+	 * @method hidden static final
+	 * @return String the domain
+	 */
+	GetDomain: function() {
+		var domain=f_env.Get(f_env._DOMAIN_NAME);
+		if (domain) {
+			return domain;
+		}
+			
+		var url=window.location.toString();
+		var idx=url.indexOf("//");
+		if (idx<0) {
+			f_env.Set(f_env._DOMAIN_NAME, "");
+
+			f_core.Debug(f_env, "Invalid domain from url '"+url+"'.");
+			return "";
+		}
+		
+		var domain;
+		
+		var idx2=url.indexOf("/", idx+2);
+		if (idx2>idx) {
+			domain=url.substring(idx+2, idx2);
+		} else {
+			domain=url.substring(idx+2);
+		}
+		
+		var idx2=domain.indexOf(":");
+		if (idx2>0) {
+			domain=domain.subtring(0, idx2);
+		}
+		
+		var ds=domain.split(".");
+		var dsl=ds.length;
+		if (dsl>1) {
+			domain=ds[dsl-2]+"."+ds[dsl-1];
+		}
+		
+		f_env.Set(f_env._DOMAIN_NAME, domain);
+		
+		f_core.Debug(f_env, "Set domain to '"+domain+"' (url='"+url+"')");
+		return domain;
+	},
+	/** 
+	 * @method hidden static
+	 * @return void
+	 */	
+	DisableClientValidation: function() {
+		f_env._ClientValidationDisabled=true;
 	}
 }
 

@@ -206,4 +206,4 @@ var __prototype = {
 	}
 }
 
-var fa_clientData=new f_aspect("fa_clientData", __static, __prototype);
+new f_aspect("fa_clientData", __static, __prototype);

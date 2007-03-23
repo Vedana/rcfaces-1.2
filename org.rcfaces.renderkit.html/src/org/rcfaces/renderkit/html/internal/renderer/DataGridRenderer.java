@@ -5,8 +5,6 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,13 +27,14 @@ import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.capability.ICardinality;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.IImageAccessors;
+import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -47,6 +46,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
+import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ArrayIndexesModel;
@@ -54,6 +54,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.DataGridServerSort;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
@@ -253,7 +254,6 @@ public class DataGridRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.startElement("DIV", dg);
-        htmlWriter.writeRole(IAccessibilityRoles.GRID);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -306,8 +306,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
             IFilterProperties filterMap = tableContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
-                String filterExpression = HtmlTools
-                        .encodeFilterExpression(filterMap);
+                String filterExpression = HtmlTools.encodeFilterExpression(
+                        filterMap, componentRenderContext.getRenderContext()
+                                .getProcessContext(), componentRenderContext
+                                .getComponent());
                 htmlWriter.writeAttribute("v:filterExpression",
                         filterExpression);
             }
@@ -328,6 +330,26 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
         if (tableContext.isPaged() == false) {
             htmlWriter.writeAttribute("v:paged", "false");
+        }
+
+        Object cursorValue = dg.getCursorValue(facesContext);
+        String clientCursorValue = null;
+
+        if (cursorValue instanceof String) {
+            clientCursorValue = (String) cursorValue;
+
+        } else if (cursorValue != null) {
+            DataColumnComponent rowValueColumn = tableContext
+                    .getRowValueColumn();
+
+            if (rowValueColumn != null) {
+                clientCursorValue = ValuesTools.convertValueToString(
+                        cursorValue, rowValueColumn, facesContext);
+            }
+        }
+
+        if (clientCursorValue != null) {
+            htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
         }
 
         int dataGridPixelWidth = getPixelSize(dg.getWidth(), -1);
@@ -421,6 +443,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
         htmlWriter.endElement("DIV");
 
         htmlWriter.enableJavaScript();
+    }
+
+    protected String getWAIRole() {
+        return IAccessibilityRoles.GRID;
     }
 
     protected String getDataBodyScrollClassName(IHtmlWriter htmlWriter) {
@@ -622,6 +648,86 @@ public class DataGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeStyle().writeWidth(widthRightPadding);
         }
 
+        IContentAccessors contentAccessors = dc.getImageAccessors(facesContext);
+        if (contentAccessors instanceof IImageAccessors) {
+            IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+
+            IContentAccessor imageAccessor = imageAccessors.getImageAccessor();
+            if (imageAccessor != null) {
+                String imageURL = imageAccessor.resolveURL(facesContext, null,
+                        null);
+
+                if (imageURL != null) {
+                    htmlWriter.startElement("IMG");
+                    htmlWriter.writeClass(getTitleImageClassName(htmlWriter));
+
+                    String disabledImageURL = null;
+                    String hoverImageURL = null;
+                    String selectedImageURL = null;
+
+                    if (imageAccessors instanceof IStatesImageAccessors) {
+                        IStatesImageAccessors is = (IStatesImageAccessors) imageAccessors;
+
+                        IContentAccessor disabledImageContentAccessor = is
+                                .getDisabledImageAccessor();
+                        if (disabledImageContentAccessor != null) {
+                            disabledImageURL = disabledImageContentAccessor
+                                    .resolveURL(facesContext, null, null);
+                        }
+
+                        IContentAccessor hoverImageContentAccessor = is
+                                .getHoverImageAccessor();
+                        if (hoverImageContentAccessor != null) {
+                            hoverImageURL = hoverImageContentAccessor
+                                    .resolveURL(facesContext, null, null);
+                        }
+
+                        IContentAccessor selectedImageContentAccessor = is
+                                .getSelectedImageAccessor();
+                        if (selectedImageContentAccessor != null) {
+                            selectedImageURL = selectedImageContentAccessor
+                                    .resolveURL(facesContext, null, null);
+                        }
+                    }
+
+                    if (disabledImageURL == null) {
+                        htmlWriter.writeSrc(imageURL);
+
+                    } else if (tableContext.isDisabled()) {
+                        htmlWriter.writeSrc(disabledImageURL);
+                        htmlWriter.writeAttribute("v:imageURL", imageURL);
+
+                    } else {
+                        htmlWriter.writeSrc(imageURL);
+                        htmlWriter.writeAttribute("v:disabledImageURL",
+                                imageURL);
+                    }
+
+                    if (hoverImageURL != null) {
+                        htmlWriter.writeAttribute("v:hoverImageURL",
+                                hoverImageURL);
+                    }
+
+                    if (selectedImageURL != null) {
+                        htmlWriter.writeAttribute("v:selectedImageURL",
+                                selectedImageURL);
+                    }
+
+                    int imageWidth = dc.getImageWidth(facesContext);
+                    if (imageWidth > 0) {
+                        htmlWriter.writeWidth(imageWidth);
+                    }
+
+                    int imageHeight = dc.getImageHeight(facesContext);
+                    if (imageHeight > 0) {
+                        htmlWriter.writeHeight(imageHeight);
+                    }
+
+                    htmlWriter.endElement("IMG");
+                }
+            }
+        }
+
         String text = dc.getText(facesContext);
         if (text != null && text.trim().length() > 0) {
             htmlWriter.writeText(text);
@@ -643,6 +749,10 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
     protected String getTitleDivContainerClassName(IHtmlWriter htmlWriter) {
         return getMainStyleClassName() + TITLE_STEXT;
+    }
+
+    protected String getTitleImageClassName(IHtmlWriter htmlWriter) {
+        return getMainStyleClassName() + TITLE_IMAGE;
     }
 
     protected void encodeJavaScript(IJavaScriptWriter htmlWriter)
@@ -959,55 +1069,55 @@ public class DataGridRenderer extends AbstractCssRenderer {
             }
             htmlWriter.writeln(");");
         }
-
-        if (tableContext.hasTitleColumnImages()) {
-            htmlWriter.writeMethodCall("f_setTitleColumnsImages");
-            int pred = 0;
-            first = true;
-            for (int i = 0; i < cnt; i++) {
-                if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-                    continue;
-                }
-
-                String url = tableContext.getTitleColumnImageURL(i);
-
-                if (url == null) {
-                    pred++;
-                    continue;
-                }
-
-                if (pred > 0) {
-                    // Si il y avait des pred avant, ce sont forcement des
-                    // colonnes qui n'ont pas d'image/cellule
-                    if (first) {
-                        pred--;
-                        htmlWriter.writeBoolean(false).write(',').writeNull();
-                        first = false;
-                    }
-
-                    for (; pred > 0; pred--) {
-                        htmlWriter.write(',').writeBoolean(false).write(',')
-                                .writeNull();
-                    }
-                }
-
-                if (first) {
-                    first = false;
-
-                } else {
-                    htmlWriter.write(',');
-                }
-
-                if (url != null) {
-                    htmlWriter.write(url);
-
-                } else {
-                    htmlWriter.writeNull();
-                }
-            }
-            htmlWriter.writeln(");");
-        }
-
+        /*
+         * if (tableContext.hasTitleColumnImages()) {
+         * htmlWriter.writeMethodCall("f_setTitleColumnsImages"); int pred = 0;
+         * first = true; for (int i = 0; i < cnt; i++) { if
+         * (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
+         * continue; }
+         * 
+         * String imageURL = tableContext.getTitleColumnImageURL(i);
+         * 
+         * String selectedImageURL = tableContext
+         * .getTitleColumnSelectedImageURL(i);
+         * 
+         * String hoverImageURL = tableContext .getTitleColumnHoverImageURL(i);
+         * 
+         * String disabledImageURL = tableContext
+         * .getTitleColumnDisabledImageURL(i);
+         * 
+         * if (imageURL == null && selectedImageURL == null && hoverImageURL ==
+         * null && disabledImageURL == null) { pred++; continue; }
+         * 
+         * if (pred > 0) { // Si il y avait des pred avant, ce sont forcement
+         * des // colonnes qui n'ont pas d'image/cellule
+         * 
+         * for (; pred > 0; pred--) { if (first) { first = false; } else {
+         * htmlWriter.write(','); }
+         * 
+         * htmlWriter.writeBoolean(false); } }
+         * 
+         * if (first) { first = false; } else { htmlWriter.write(','); }
+         * 
+         * if (imageURL != null) { htmlWriter.write(imageURL); } else {
+         * htmlWriter.writeNull(); }
+         * 
+         * htmlWriter.write(','); if (selectedImageURL != null) {
+         * htmlWriter.write(selectedImageURL); } else { if (hoverImageURL ==
+         * null && disabledImageURL == null) { htmlWriter.writeBoolean(false);
+         * continue; }
+         * 
+         * htmlWriter.writeNull(); }
+         * 
+         * htmlWriter.write(','); if (hoverImageURL != null) {
+         * htmlWriter.write(hoverImageURL); } else { if (disabledImageURL ==
+         * null) { htmlWriter.writeBoolean(false); continue; }
+         * htmlWriter.writeNull(); }
+         * 
+         * htmlWriter.write(','); if (disabledImageURL != null) {
+         * htmlWriter.write(disabledImageURL); } else { htmlWriter.writeNull(); } }
+         * htmlWriter.writeln(");"); }
+         */
         if (clazz != null) {
             List sc = new ArrayList(cnt);
 
@@ -1125,6 +1235,11 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     if (tableContext.sortClientSide[i] == false) {
                         aliasCommand = (String) SORT_ALIASES
                                 .get(ISortEventCapability.SORT_SERVER);
+
+                        if (aliasCommand != null) {
+                            aliasCommand = translateJavascriptMethod(
+                                    facesContext, aliasCommand);
+                        }
                     }
 
                     for (; pred > 0; pred--) {
@@ -1413,7 +1528,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                             .listSortedIndexes();
 
                     if (tableContext.clientSelectionFullState) {
-                        writeFullStates(jsWriter, "_setSelectionStates",
+                        writeFullStates(jsWriter, "f_setSelectionStates",
                                 selectedIndexes);
                         selectedIndexes = null;
 
@@ -1435,11 +1550,12 @@ public class DataGridRenderer extends AbstractCssRenderer {
                         }
                     }
                 } else {
-                    selectedObjects = convertSelection(selectionModel);
+                    selectedObjects = ValuesTools
+                            .convertSelection(selectionModel);
 
                     if (tableContext.clientSelectionFullState) {
                         writeFullStates(jsWriter, tableContext,
-                                "_setSelectionStates", selectedObjects);
+                                "f_setSelectionStates", selectedObjects);
                         selectedObjects = null;
                     }
                 }
@@ -1461,7 +1577,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                             .listSortedIndexes();
 
                     if (tableContext.clientCheckFullState) {
-                        writeFullStates(jsWriter, "_setCheckStates",
+                        writeFullStates(jsWriter, "f_setCheckStates",
                                 checkedIndexes);
                         checkedIndexes = null;
 
@@ -1484,11 +1600,11 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     }
 
                 } else {
-                    checkedObjects = convertSelection(checkModel);
+                    checkedObjects = ValuesTools.convertSelection(checkModel);
 
                     if (tableContext.clientCheckFullState) {
                         writeFullStates(jsWriter, tableContext,
-                                "_setCheckStates", checkedObjects);
+                                "f_setCheckStates", checkedObjects);
                         checkedObjects = null;
                     }
                 }
@@ -2039,8 +2155,15 @@ public class DataGridRenderer extends AbstractCssRenderer {
             if (rowValueColumn != null) {
                 Object selected = dg.getSelectedValues(facesContext);
 
-                selected = updateSelection(facesContext, rowValueColumn,
+                Set values = updateSelection(facesContext, rowValueColumn,
                         selected, selectedRows, deselectedRows);
+
+                Class cls = dg.getSelectedValuesType(facesContext);
+                if (cls == null && selected != null) {
+                    cls = selected.getClass();
+                }
+
+                selected = ValuesTools.adaptValues(cls, values);
 
                 dg.setSelectedValues(selected);
 
@@ -2068,8 +2191,15 @@ public class DataGridRenderer extends AbstractCssRenderer {
             if (rowValueColumn != null) {
                 Object checked = dg.getCheckedValues(facesContext);
 
-                checked = updateSelection(facesContext, rowValueColumn,
+                Set values = updateSelection(facesContext, rowValueColumn,
                         checked, checkedRows, uncheckedRows);
+
+                Class cls = dg.getCheckedValuesType(facesContext);
+                if (cls == null && checked != null) {
+                    cls = checked.getClass();
+                }
+
+                checked = ValuesTools.adaptValues(cls, values);
 
                 dg.setCheckedValues(checked);
 
@@ -2179,6 +2309,27 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 component.queueEvent(new PropertyChangeEvent(component,
                         Properties.FILTER_PROPERTIES, old, fexp));
             }
+        }
+
+        String cursorValue = componentData.getStringProperty("cursor");
+        if (cursorValue != null) {
+            Object cursorValueObject = cursorValue;
+
+            if (rowValueColumn != null) {
+                cursorValueObject = ValuesTools.convertStringToValue(
+                        facesContext, rowValueColumn, cursorValueObject);
+            }
+
+            Object oldCursorValueObject = dg.getCursorValue(facesContext);
+            if (isEquals(oldCursorValueObject, cursorValueObject) == false) {
+
+                dg.setCursorValue(cursorValueObject);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.CURSOR_VALUE, oldCursorValueObject,
+                        cursorValueObject));
+
+            }
 
         }
 
@@ -2188,20 +2339,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
         }
     }
 
-    private Set convertSelection(Object selection) {
-        if (selection instanceof Object[]) {
-            return new HashSet(Arrays.asList((Object[]) selection));
-        }
-
-        if (selection instanceof Collection) {
-            return new HashSet((Collection) selection);
-        }
-
-        throw new FacesException(
-                "Bad type of value for attribute selectedValues/checkedValues !");
-    }
-
-    private Object updateSelection(FacesContext facesContext,
+    private Set updateSelection(FacesContext facesContext,
             DataColumnComponent dataColumnComponent, Object selected,
             String selectedRows, String deselectedRows) {
         Set set;
@@ -2210,13 +2348,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
             set = new HashSet(8);
 
         } else {
-            set = convertSelection(selected);
+            set = ValuesTools.convertSelection(selected);
         }
 
         if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
             set.clear();
 
-        } else if (set.size() > 1 && deselectedRows != null
+        } else if (set.size() > 0 && deselectedRows != null
                 && deselectedRows.length() > 0) {
             List deselect = HtmlValuesTools.parseValues(facesContext,
                     dataColumnComponent, true, false, deselectedRows);
@@ -2236,7 +2374,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         }
 
-        return set.toArray();
+        return set;
     }
 
     protected void decodeEvent(IRequestContext context, UIComponent component,
@@ -2356,7 +2494,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public static final class TableRenderContext {
+    public final class TableRenderContext {
 
         private static final String REVISION = "$Revision$";
 
@@ -2418,7 +2556,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
         private final boolean columnImageURLs[];
 
-        private String titleColumnImageURLs[];
+        //private String titleColumnImageURLs[];
+
+        //private String titleColumnSelectedImageURLs[];
+
+        //private String titleColumnHoverImageURLs[];
+
+        //private String titleColumnDisabledImageURLs[];
 
         private boolean sortClientSide[];
 
@@ -2549,9 +2693,11 @@ public class DataGridRenderer extends AbstractCssRenderer {
             cellToolTipText = new boolean[columns.length];
             columnIds = new String[columns.length];
 
+            /*
             if (checkTitleImages) {
                 titleColumnImageURLs = new String[columns.length];
             }
+            */
 
             for (int i = 0; i < columns.length; i++) {
                 DataColumnComponent dc = columns[i];
@@ -2567,7 +2713,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     // Pas visible du tout !
 
                     int hiddenMode = dc.getHiddenMode(facesContext);
-                    if (IVisibilityCapability.SERVER_HIDDEN_MODE == hiddenMode) {
+                    if (IHiddenModeCapability.SERVER_HIDDEN_MODE == hiddenMode) {
                         columnStates[i] = SERVER_HIDDEN; // Pas visible et
                         // limit� au serveur
                         continue;
@@ -2585,10 +2731,11 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     hasColumnImages = true;
                 }
 
+                /*
                 if (checkTitleImages) {
                     IContentAccessors contentAccessors = dc.getImageAccessors();
                     if (contentAccessors instanceof IImageAccessors) {
-                        IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+                        IStatesImageAccessors imageAccessors = (IStatesImageAccessors) contentAccessors;
 
                         IContentAccessor contentAccessor = imageAccessors
                                 .getImageAccessor();
@@ -2600,8 +2747,43 @@ public class DataGridRenderer extends AbstractCssRenderer {
                                 hasTitleColumnImages = true;
                             }
                         }
+
+                        contentAccessor = imageAccessors
+                                .getSelectedImageAccessor();
+                        if (contentAccessor != null) {
+                            String imageURL = contentAccessor.resolveURL(
+                                    facesContext, null, null);
+                            if (imageURL != null) {
+                                titleColumnSelectedImageURLs[i] = imageURL;
+                                hasTitleColumnImages = true;
+                            }
+                        }
+
+                        contentAccessor = imageAccessors
+                                .getHoverImageAccessor();
+                        if (contentAccessor != null) {
+                            String imageURL = contentAccessor.resolveURL(
+                                    facesContext, null, null);
+                            if (imageURL != null) {
+                                titleColumnHoverImageURLs[i] = imageURL;
+                                hasTitleColumnImages = true;
+                            }
+                        }
+
+                        contentAccessor = imageAccessors
+                                .getDisabledImageAccessor();
+                        if (contentAccessor != null) {
+                            String imageURL = contentAccessor.resolveURL(
+                                    facesContext, null, null);
+                            if (imageURL != null) {
+                                titleColumnDisabledImageURLs[i] = imageURL;
+                                hasTitleColumnImages = true;
+                            }
+                        }
+
                     }
                 }
+                */
 
                 if (dc.isCellStyleClassSetted()) {
                     cellStyleClasses[i] = true;
@@ -2634,9 +2816,11 @@ public class DataGridRenderer extends AbstractCssRenderer {
 
                             String aliasCommand = (String) SORT_ALIASES
                                     .get(scriptListener.getCommand());
+
                             if (aliasCommand != null) {
                                 // Gestion serveur comme client !
-                                sortCommand[i] = aliasCommand;
+                                sortCommand[i] = translateJavascriptMethod(
+                                        facesContext, aliasCommand);
                                 sortClientSide[i] = (rows == 0);
                                 sortSetted = true;
                                 break listeners;
@@ -2834,9 +3018,23 @@ public class DataGridRenderer extends AbstractCssRenderer {
             return columnImageURLs[index];
         }
 
+        /*
         public String getTitleColumnImageURL(int index) {
             return titleColumnImageURLs[index];
         }
+
+        public String getTitleColumnSelectedImageURL(int index) {
+            return titleColumnSelectedImageURLs[index];
+        }
+
+        public String getTitleColumnHoverImageURL(int index) {
+            return titleColumnHoverImageURLs[index];
+        }
+
+        public String getTitleColumnDisabledImageURL(int index) {
+            return titleColumnDisabledImageURLs[index];
+        }
+        */
 
         public int getColumnStateCount() {
             return columnStates.length;
@@ -2954,4 +3152,27 @@ public class DataGridRenderer extends AbstractCssRenderer {
         jsWriter.writeln("]);");
     }
 
+    private String translateJavascriptMethod(FacesContext facesContext,
+            String command) {
+        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) getRenderContext(facesContext);
+
+        IScriptRenderContext scriptRenderContext = htmlRenderContext
+                .getScriptRenderContext();
+
+        int idx = command.indexOf('.');
+        String className = command.substring(0, idx);
+        className = scriptRenderContext.convertSymbol(null, className);
+
+        String memberName = command.substring(idx + 1);
+        memberName = scriptRenderContext.convertSymbol(className, memberName);
+
+        StringAppender sa = new StringAppender(className.length() + 1
+                + memberName.length());
+
+        sa.append(className);
+        sa.append('.');
+        sa.append(memberName);
+
+        return sa.toString();
+    }
 }

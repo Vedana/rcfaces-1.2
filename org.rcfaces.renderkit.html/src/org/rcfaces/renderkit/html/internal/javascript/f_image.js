@@ -70,10 +70,7 @@ var __prototype = {
 	 * @method private
 	 */
 	_callServer: function() {
-		if (!window.f_httpRequest) {
-			f_core.Error(f_image, "Class f_httpRequest is not defined !");
-			return;
-		}
+		f_class.IsClassDefined("f_httpRequest", true);
 
 		this.className=this.f_computeStyleClass("_loading");
  	

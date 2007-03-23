@@ -38,6 +38,8 @@ var __static = {
 	_SEPARATOR_CHAR_REGEXP:	new RegExp(":", "g"),
 	
 	/**
+	 * Find a component. <b>(The naming separator is ':')</b>
+	 *
 	 * @method public static final 
 	 * @param HTMLElement component
 	 * @param String id
@@ -64,12 +66,12 @@ var __static = {
 		var cid=fa_namingContainer.ComputeComponentId(component, id, sibling);
 		f_core.Debug(fa_namingContainer, "Compute component from "+component.id+" id='"+id+"' (pageId='"+pageId+"') returns '"+cid+"'.");
 
-		return f_core.GetElementById(cid, component.ownerDocument);
+		return f_core.GetElementByClientId(cid, component.ownerDocument);
 	},
 	/**
 	 * @method hidden static final 
 	 * @param HTMLElement component
-	 * @param String[] args component ids
+	 * @param String[] args Component ids <b>(The naming separator is ':')</b>
 	 * @return HTMLElement
 	 */
 	FindComponents: function(component, args) {
@@ -87,7 +89,7 @@ var __static = {
 	/**
 	 * @method hidden static final 
 	 * @param HTMLElement component
-	 * @param String[] args component ids
+	 * @param String[] args component ids <b>(The naming separator is ':')</b>
 	 * @return HTMLElement
 	 */
 	FindSiblingComponents: function(component, args) {
@@ -105,13 +107,13 @@ var __static = {
 	/**
 	 * @method hidden static final 
 	 * @param HTMLElement component
-	 * @param String id
+	 * @param String id <b>(The naming separator is ':')</b>
 	 * @param boolean sibling
-	 * @return String Identifier
+	 * @return String Identifier (The naming separator might not be ':')
 	 */
 	ComputeComponentId: function(component, id, sibling) {
 		f_core.Assert(component && component.tagName, "fa_namingContainer.ComputeComponentId: Invalid component parameter ('"+component+"')");
-		f_core.Assert(typeof(id)=="string" && id.length>0, "fa_namingContainer.ComputeComponentId: Invalid id parameter ('"+id+"')");
+		f_core.Assert(typeof(id)=="string" && id.length, "fa_namingContainer.ComputeComponentId: Invalid id parameter ('"+id+"')");
 
 		if (fa_namingContainer._flatIdentifierMode) {
 			return id;
@@ -217,7 +219,7 @@ var __static = {
 	
 	/**
 	 * Search into each forms of the document, a component by its identifier. <br>
-	 * It does not initialize the found component.
+	 * It does not initialize the found component. (naming container separator must be ':' )
 	 *
 	 * @method hidden static final
 	 * @param Document doc The document.
@@ -237,11 +239,13 @@ var __static = {
 		}
 	
 		var pageSeparator=fa_namingContainer.PageSeparator;
-	
+
 		var pageId=id;
-      	if (separator!=pageSeparator) {
+/*	
+     	if (separator!=pageSeparator) {
     		pageId=id.replace(fa_namingContainer._SEPARATOR_CHAR_REGEXP, pageSeparator);
     	}
+*/	
 		
 		// Nous sommes dans la recherche d'un ID sans séparateur !
 		// C'est peut etre un composant dans une form !
@@ -256,7 +260,7 @@ var __static = {
 				continue;
 			}
 			
-			f_core.Debug("f_core", "SearchElementById of direct id='"+id+"' (pageId='"+pageId+"') (without scope).");
+			f_core.Debug(fa_namingContainer, "SearchElementById of direct id='"+id+"' (pageId='"+pageId+"') (without scope).");
 			return obj;
 		}
 		
@@ -264,5 +268,4 @@ var __static = {
 	}
 }
 
-var fa_namingContainer=new f_aspect("fa_namingContainer", __static);
-	
+new f_aspect("fa_namingContainer", __static);	

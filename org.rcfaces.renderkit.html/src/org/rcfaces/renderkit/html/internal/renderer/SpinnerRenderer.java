@@ -40,8 +40,6 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         htmlWriter.startElement("TABLE");
 
-        htmlWriter.writeRole(IAccessibilityRoles.SPIN_BUTTON);
-
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);
 
@@ -129,6 +127,10 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         htmlWriter.enableJavaScript();
 
+    }
+
+    protected String getWAIRole() {
+        return IAccessibilityRoles.SPIN_BUTTON;
     }
 
     protected int getSpinnerButtonWidth() {

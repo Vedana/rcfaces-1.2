@@ -18,6 +18,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 
 	private String propertyChangeListeners;
 	private String immediate;
+	private String valueLocked;
 	private String value;
 	private String converter;
 	public String getComponentType() {
@@ -38,6 +39,14 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 
 	public final void setImmediate(String immediate) {
 		this.immediate = immediate;
+	}
+
+	public final String getValueLocked() {
+		return valueLocked;
+	}
+
+	public final void setValueLocked(String valueLocked) {
+		this.valueLocked = valueLocked;
 	}
 
 	public final String getValue() {
@@ -62,6 +71,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  immediate='"+immediate+"'");
+			LOG.debug("  valueLocked='"+valueLocked+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -90,6 +100,16 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (valueLocked != null) {
+			if (isValueReference(valueLocked)) {
+				ValueBinding vb = application.createValueBinding(valueLocked);
+
+				component.setValueLocked(vb);
+			} else {
+				component.setValueLocked(getBool(valueLocked));
+			}
+		}
+
 		if (value != null) {
 			if (isValueReference(value)) {
 				ValueBinding vb = application.createValueBinding(value);
@@ -112,6 +132,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 	public void release() {
 		propertyChangeListeners = null;
 		immediate = null;
+		valueLocked = null;
 		value = null;
 		converter = null;
 

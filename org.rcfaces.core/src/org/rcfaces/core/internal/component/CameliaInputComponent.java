@@ -18,6 +18,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.lang.String;
+import org.rcfaces.core.internal.component.IEditableValueHolder;
+import javax.faces.convert.ConverterException;
 import javax.faces.convert.Converter;
 import javax.faces.event.ValueChangeEvent;
 import java.util.Arrays;
@@ -29,6 +31,7 @@ import org.rcfaces.core.internal.component.IConvertValueHolder;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IRCFacesComponent;
@@ -47,7 +50,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
  * @author Olivier Oeuillot
  */
 public abstract class CameliaInputComponent extends javax.faces.component.UIInput implements
-		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder {
+		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder, IEditableValueHolder {
 	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory.getLog(CameliaInputComponent.class);
@@ -57,6 +60,8 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	protected final transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
+
+	 protected boolean submittedValueSet = false;
 
 
 	protected CameliaInputComponent() {
@@ -337,8 +342,14 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 			return true;
 		}
 		
-		int hiddenMode=visibilityCapability.getHiddenMode();
-		if (IVisibilityCapability.SERVER_HIDDEN_MODE==hiddenMode) {
+		if ((this instanceof IHiddenModeCapability)==false) {
+			return false;
+		}
+		
+		IHiddenModeCapability hiddenModeCapability=(IHiddenModeCapability)this;
+		
+		int hiddenMode=hiddenModeCapability.getHiddenMode();
+		if (IHiddenModeCapability.SERVER_HIDDEN_MODE==hiddenMode) {
 			return false;
 		}
 		
@@ -442,6 +453,69 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 				FacesListener listeners[]=getFacesListeners(FacesListener.class);
 				ComponentTools.broadcast(this, event, listeners);
 				
+			
+	}
+
+	public final void setSubmittedValue(Object value) {
+
+
+				this.submittedValueSet=true;
+				
+				super.setSubmittedValue(value);
+			
+	}
+
+	public final boolean isSubmittedValueSet() {
+
+
+				return submittedValueSet;
+			
+	}
+
+	public final void clearSubmittedValue() {
+
+
+				setSubmittedValue(null);
+				this.submittedValueSet=false;			
+			
+	}
+
+	public final void validate(FacesContext context) {
+
+
+		        if (context == null) {
+		            throw new NullPointerException();
+		        }
+		
+		        // Submitted value == null means "the component was not submitted
+		        // at all";  validation should not continue
+		        Object submittedValue = getSubmittedValue();
+		        if (this.submittedValueSet==false) {
+		            return;
+		        }
+		
+				Object newValue = null;
+			
+				try {
+				    newValue = getConvertedValue(context, submittedValue);
+
+				} catch (ConverterException ce) {
+			            ComponentTools.addConversionErrorMessage(context, this, ce, submittedValue);
+			            setValid(false);
+			    }	
+			
+				validateValue(context, newValue);
+			            
+				// If our value is valid, store the new value, erase the
+			        // "submitted" value, and emit a ValueChangeEvent if appropriate
+				if (isValid()) {
+				    Object previous = getValue();
+			        setValue(newValue);
+		            clearSubmittedValue();
+		            if (compareValues(previous, newValue)) {
+		                queueEvent(new ValueChangeEvent(this, previous, newValue));
+		            }			
+			    }
 			
 	}
 

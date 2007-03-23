@@ -50,6 +50,7 @@
 @import url(f_textArea.css);				//module:basic
 @import url(f_textEntry.css);				//module:basic
 @import url(f_timeEntry.css);				//module:calendar
+@import url(f_toolBar.css);					//module:toolBar
 @import url(f_tree.css); 					//module:tree
 @import url(f_waiting.css); 				//module:waiting
 

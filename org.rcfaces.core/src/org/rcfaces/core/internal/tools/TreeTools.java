@@ -14,7 +14,6 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.TreeNodeComponent;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -23,99 +22,103 @@ import org.rcfaces.core.component.TreeNodeComponent;
 public class TreeTools {
     private static final String REVISION = "$Revision$";
 
-	private static final Object OBJECT_EMPTY_ARRAY[] = new Object[0];
+    private static final Object OBJECT_EMPTY_ARRAY[] = new Object[0];
 
-	public static void collapseAll(FacesContext facesContext,
-			TreeComponent treeComponent) {
-		treeComponent.setExpansionValues((Object[]) null);
-	}
+    public static void collapseAll(FacesContext facesContext,
+            TreeComponent treeComponent) {
+        treeComponent.setExpansionValues((Object[]) null);
+    }
 
-	public static void expandAll(FacesContext facesContext,
-			TreeComponent treeComponent) {
-		// TODO Auto-generated method stub
+    public static void expandAll(FacesContext facesContext,
+            TreeComponent treeComponent) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	public static void setExpanded(FacesContext facesContext,
-			TreeComponent treeComponent, Object itemValue, boolean expanded) {
+    public static void setExpanded(FacesContext facesContext,
+            TreeComponent treeComponent, Object itemValue, boolean expanded) {
 
-		if (treeComponent.isExpansionUseValue(facesContext) == false) {
-			itemValue = getTreeNodeValue(facesContext, treeComponent);
-		}
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
 
-		if (itemValue == null) {
-			return;
-		}
+        if (treeComponent.isExpansionUseValue(facesContext) == false) {
+            itemValue = getTreeNodeValue(facesContext, treeComponent);
+        }
 
-		Set values = getExpansionValues(facesContext, treeComponent);
+        if (itemValue == null) {
+            return;
+        }
 
-		if (expanded) {
-			if (values.add(itemValue) == false) {
-				return;
-			}
+        Set values = getExpansionValues(facesContext, treeComponent);
 
-		} else if (values.remove(itemValue) == false) {
-			return;
-		}
+        if (expanded) {
+            if (values.add(itemValue) == false) {
+                return;
+            }
 
-		if (values.isEmpty()) {
-			treeComponent.setExpansionValues((Object[]) null);
-			return;
-		}
+        } else if (values.remove(itemValue) == false) {
+            return;
+        }
 
-		treeComponent.setExpansionValues(values.toArray());
-	}
+        if (values.isEmpty()) {
+            treeComponent.setExpansionValues((Object[]) null);
+            return;
+        }
 
-	public static boolean isExpanded(FacesContext facesContext,
-			TreeComponent treeComponent, Object itemValue) {
+        treeComponent.setExpansionValues(values.toArray());
+    }
 
-		if (treeComponent.isExpansionUseValue(facesContext) == false) {
-			itemValue = getTreeNodeValue(facesContext, treeComponent);
-		}
+    public static boolean isExpanded(FacesContext facesContext,
+            TreeComponent treeComponent, Object itemValue) {
 
-		if (itemValue == null) {
-			return false;
-		}
+        if (treeComponent.isExpansionUseValue(facesContext) == false) {
+            itemValue = getTreeNodeValue(facesContext, treeComponent);
+        }
 
-		Set values = getExpansionValues(facesContext, treeComponent);
-		if (values == null || values.isEmpty()) {
-			return false;
-		}
+        if (itemValue == null) {
+            return false;
+        }
 
-		return values.contains(itemValue);
-	}
+        Set values = getExpansionValues(facesContext, treeComponent);
+        if (values == null || values.isEmpty()) {
+            return false;
+        }
 
-	private static Object getTreeNodeValue(FacesContext facesContext,
-			TreeComponent treeComponent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return values.contains(itemValue);
+    }
 
-	private static Set getExpansionValues(FacesContext facesContext,
-			TreeComponent treeComponent) {
+    private static Object getTreeNodeValue(FacesContext facesContext,
+            TreeComponent treeComponent) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-		Object values[] = treeComponent.getExpansionValues(facesContext);
+    private static Set getExpansionValues(FacesContext facesContext,
+            TreeComponent treeComponent) {
 
-		return ValuesTools.valueToSet(values, true);
-	}
+        Object values[] = treeComponent.getExpansionValues(facesContext);
 
-	public static TreeComponent getTree(TreeNodeComponent component) {
-		UIComponent parent = component.getParent();
+        return ValuesTools.valueToSet(values, true);
+    }
 
-		for (; parent != null; parent = parent.getParent()) {
-			if (parent instanceof TreeComponent) {
-				return (TreeComponent) parent;
-			}
+    public static TreeComponent getTree(TreeNodeComponent component) {
+        UIComponent parent = component.getParent();
 
-			if (parent instanceof UISelectItem) {
-				continue;
-			}
+        for (; parent != null; parent = parent.getParent()) {
+            if (parent instanceof TreeComponent) {
+                return (TreeComponent) parent;
+            }
 
-			throw new FacesException(
-					"Invalid parent of TreeNode component. (Parent must be a Tree or a UISelectItem).");
-		}
+            if (parent instanceof UISelectItem) {
+                continue;
+            }
 
-		throw new FacesException("Parent of TreeNode component not found !");
-	}
+            throw new FacesException(
+                    "Invalid parent of TreeNode component. (Parent must be a Tree or a UISelectItem).");
+        }
+
+        throw new FacesException("Parent of TreeNode component not found !");
+    }
 
 }

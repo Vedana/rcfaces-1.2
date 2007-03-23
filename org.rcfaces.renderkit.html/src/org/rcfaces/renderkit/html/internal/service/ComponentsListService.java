@@ -256,7 +256,7 @@ public class ComponentsListService extends AbstractHtmlService {
         String varId = jsWriter.getComponentVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementById").writeString(componentClientId).writeln(
+                "GetElementByClientId").writeString(componentClientId).writeln(
                 ", document);");
 
         jsWriter.writeMethodCall("_startNewPage").writeInt(rowIndex).writeln(

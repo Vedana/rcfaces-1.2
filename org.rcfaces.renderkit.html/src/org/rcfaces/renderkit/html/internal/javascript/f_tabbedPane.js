@@ -32,7 +32,7 @@ var __static = {
 		}
 		
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 		
 		tabbedPane._resize();
@@ -50,14 +50,14 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		var old=tabbedPane._selectedCard;
 
 		tabbedPane._selectTab(this._tab, true, evt);
 				
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
@@ -70,7 +70,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 				
 		return true;
@@ -86,7 +86,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		switch(evt.keyCode) {
@@ -95,7 +95,7 @@ var __static = {
 		case f_key.VK_HOME:
 		case f_key.VK_END:
 		case f_key.VK_SPACE:
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		return true;	
@@ -111,7 +111,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 			
 		switch(evt.keyCode) {
@@ -157,7 +157,7 @@ var __static = {
 			return true;
 		}
 
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
@@ -170,12 +170,12 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		tabbedPane._tabMouseOver(this._tab, evt);
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
@@ -188,23 +188,31 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		tabbedPane._tabMouseOut(this._tab, evt);
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
 	 */
 	_PrepareImages: function() {
 		var styleSheetBase=f_env.GetStyleSheetBase();
+		if (!styleSheetBase) {
+			return;
+		}
+
+		var args= [
+			f_tabbedPane._BLANK_IMAGE_URL,
+			"/tabbedPane/xpMid2.gif", 
+			"/tabbedPane/xpT2.gif" ];
 
 		f_tabbedPane._PreparedImages=new Object;
 
-		for(var i=0;i<arguments.length;i++) {
-			var filename=arguments[i];
+		for(var i=0;i<args.length;i++) {
+			var filename=args[i];
 			
 			var url=styleSheetBase+filename;
 			f_imageRepository.PrepareImage(url);
@@ -227,10 +235,7 @@ var __static = {
 	 * @return void
 	 */
 	Initializer: function() {
-		f_tabbedPane._PrepareImages(
-			f_tabbedPane._BLANK_IMAGE_URL,
-			"/tabbedPane/xpMid2.gif", 
-			"/tabbedPane/xpT2.gif");
+		f_tabbedPane._PrepareImages();
 	}
 }
 
@@ -238,6 +243,8 @@ var __prototype = {
 
 	f_tabbedPane: function() {
 		this.f_super(arguments);
+		
+		f_tabbedPane._PrepareImages();
 		
 		this._tabIndex=f_core.GetAttribute(this, "v:tabIndex");
 	},
@@ -269,13 +276,18 @@ var __prototype = {
 		for(var i=0;i<cards.length;i++) {
 			var tab=cards[i];
 
-			var ccard=f_core.GetElementById(tab._id, this.ownerDocument);
+			var ccard=f_core.GetElementByClientId(tab._id, this.ownerDocument);
 			f_core.Assert(ccard, "f_tabbedPane.f_updateCards: Can not find card component of tab '"+tab._id+"'.");
 
 			f_core.Debug(f_tabbedPane, "Update tab#"+i+" tab="+tab+" ccard="+ccard);
 			tab._ccard=ccard;
 			ccard._vcard=tab;			
-			ccard.f_declareTab(this, tab._text, tab._accessKey, tab._disabled, tab._imageURL, tab._disabledImageURL, tab._selectedImageURL, tab._hoverImageURL);	
+			ccard.f_declareTab(this, tab._value, tab._text, tab._accessKey, tab._disabled, tab._imageURL, tab._disabledImageURL, tab._selectedImageURL, tab._hoverImageURL);	
+		}
+
+		
+		if (!this._selectedCard && cards.length) {
+			this._selectTab(cards[0], false, null, false);
 		}
 	},
 	f_documentComplete: function() {
@@ -450,8 +462,10 @@ var __prototype = {
 	/**
 	 * @method private
 	 */
-	_selectTab: function(tab, setFocus, evt) {
-		if (tab._disabled) {
+	_selectTab: function(tab, setFocus, evt, sendEvent) {
+		var ccard=tab._ccard;
+		
+		if (ccard.f_isDisabled()) {
 			return false;
 		}
 	
@@ -464,6 +478,12 @@ var __prototype = {
 			return true;
 		}
 		
+		if (sendEvent!==false) {
+			if (this.f_fireEvent(f_event.SELECTION, evt, ccard, ccard.f_getValue())===false) {
+				return false;
+			}
+		}
+		
 		var old=this._selectedCard;
 		this._selectedCard=null;
 		if (old) {
@@ -473,7 +493,7 @@ var __prototype = {
 		if (old) {
 			old._ccard.f_setVisible(false);
 		}
-		tab._ccard.f_setVisible(true);
+		ccard.f_setVisible(true);
 		
 		this._selectedCard=tab;
 		this.f_updateCardStyle(tab);
@@ -680,8 +700,13 @@ var __prototype = {
 	/**
 	 * @method hidden
 	 */
-	f_declareTab: function(tabBodyId, selected, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
-		var tab=this.f_declareCard(tabBodyId, selected);
+	f_declareTab: function(tabBodyId, tabValue, selected, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
+		f_core.Assert(typeof(tabBodyId)=="string", "f_tabbedPane.f_declareTab: Invalid tabBodyId parameter ("+tabBodyId+")");
+		f_core.Assert(!tabValue || typeof(tabValue)=="string", "f_tabbedPane.f_declareTab: Invalid tabValue parameter ("+tabValue+")");
+		f_core.Assert(!selected || typeof(selected)=="boolean", "f_tabbedPane.f_declareTab: Invalid selected parameter ("+selected+")");
+		f_core.Assert(!text || typeof(text)=="string", "f_tabbedPane.f_declareTab: Invalid text parameter ("+text+")");
+		
+		var tab=this.f_declareCard(tabBodyId, tabValue, selected);
 
 		f_core.Debug(f_tabbedPane, "Declare tab : "+tab);
 

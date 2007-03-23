@@ -226,7 +226,7 @@ public class ItemsService extends AbstractHtmlService {
         String varId = jsWriter.getComponentVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementById").writeString(componentId).writeln(
+                "GetElementByClientId").writeString(componentId).writeln(
                 ", document);");
         dgr.encodeFilteredItems(jsWriter, component, filterProperties,
                 maxResultNumber);

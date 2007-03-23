@@ -16,7 +16,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(UIImageItemTag.class);
 
-	private String hiddenMode;
 	private String visible;
 	private String toolTipText;
 	private String disabledImageURL;
@@ -26,14 +25,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 	private String rendered;
 	public String getComponentType() {
 		return UIImageItemComponent.COMPONENT_TYPE;
-	}
-
-	public final String getHiddenMode() {
-		return hiddenMode;
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-		this.hiddenMode = hiddenMode;
 	}
 
 	public final String getVisible() {
@@ -97,7 +88,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			if (UIImageItemComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
@@ -118,16 +108,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		UIImageItemComponent component = (UIImageItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
-
-		if (hiddenMode != null) {
-			if (isValueReference(hiddenMode)) {
-				ValueBinding vb = application.createValueBinding(hiddenMode);
-
-				component.setHiddenMode(vb);
-			} else {
-				component.setHiddenMode(hiddenMode);
-			}
-		}
 
 		if (visible != null) {
 			if (isValueReference(visible)) {
@@ -200,7 +180,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 	}
 
 	public void release() {
-		hiddenMode = null;
 		visible = null;
 		toolTipText = null;
 		disabledImageURL = null;

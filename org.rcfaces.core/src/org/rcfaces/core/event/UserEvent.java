@@ -21,27 +21,21 @@ public class UserEvent extends ActionEvent {
 
     private final int detail;
 
-    public UserEvent(UIComponent component, String value, int detail) {
+    private final String item;
+
+    public UserEvent(UIComponent component, String value, String item,
+            int detail) {
         super(component);
 
         this.value = value;
+        this.item = item;
         this.detail = detail;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
-     */
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IUserEventListener);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
-     */
     public void processListener(FacesListener listener) {
         ((IUserEventListener) listener).processUserEvent(this);
     }
@@ -53,4 +47,9 @@ public class UserEvent extends ActionEvent {
     public int getDetail() {
         return detail;
     }
+
+    public final String getItem() {
+        return item;
+    }
+
 }

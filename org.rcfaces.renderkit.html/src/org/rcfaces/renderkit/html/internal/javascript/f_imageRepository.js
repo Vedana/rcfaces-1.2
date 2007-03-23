@@ -32,7 +32,7 @@ var __static = {
 	 * @return void
 	 */
 	PrepareImage: function(url) {
-		f_core.Assert(url, "URL must be not NULL !");
+		f_core.Assert(url, "f_imageRepository.PrepareImage: URL must be not NULL !");
 		
 		var images=f_imageRepository._Images;
 		if (!images) {
@@ -45,7 +45,7 @@ var __static = {
 			return;
 		}
 
-		f_core.Debug("f_imageRepository", "Load image '"+url+"'.");
+		f_core.Debug(f_imageRepository, "PrepareImage: Load image '"+url+"'.");
 			
 		var pool=f_imageRepository._ImagesPool;
 		var image;
@@ -66,6 +66,7 @@ var __static = {
 	 * @method private static
 	 */
 	_OnErrorHandler: function() {
+
 		f_core.Error(f_imageRepository, "Error while loading image '"+this.src+"'.");
 
 		this.onload=null;

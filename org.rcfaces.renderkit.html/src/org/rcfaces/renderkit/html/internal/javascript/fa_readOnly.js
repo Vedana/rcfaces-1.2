@@ -63,5 +63,5 @@ var __prototype = {
 	fa_updateReadOnly: f_class.ABSTRACT
 }
 
-var fa_readOnly=new f_aspect("fa_readOnly", null, __prototype);
+new f_aspect("fa_readOnly", null, __prototype);
 	

@@ -50,7 +50,7 @@ function f_aspect(aspectName, staticMembers, members) {
 	}
 	this._parents=parents;
 	
-	this._classLoader._declareAspect(this);
+	this._classLoader.f_declareAspect(this);
 }
 f_aspect.prototype = {
 	/**

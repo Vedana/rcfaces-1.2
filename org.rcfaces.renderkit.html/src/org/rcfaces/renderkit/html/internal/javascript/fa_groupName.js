@@ -127,4 +127,5 @@ var __prototype = {
 	 */
 	fa_getRadioScope: f_class.ABSTRACT
 }
-var fa_groupName=new f_aspect("fa_groupName", __static, __prototype);
+
+new f_aspect("fa_groupName", __static, __prototype);

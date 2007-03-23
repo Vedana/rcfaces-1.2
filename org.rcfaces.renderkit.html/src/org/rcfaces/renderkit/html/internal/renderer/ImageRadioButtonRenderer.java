@@ -30,9 +30,9 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
     private static final Log LOG = LogFactory
             .getLog(ImageRadioButtonRenderer.class);
 
-    protected void decodeSelection(IImageButtonFamilly imageButtonCapability,
-            boolean selected) {
-        super.decodeSelection(imageButtonCapability, selected);
+    protected void decodeSelection(FacesContext facesContext,
+            IImageButtonFamilly imageButtonCapability, boolean selected) {
+        super.decodeSelection(facesContext, imageButtonCapability, selected);
 
         ImageRadioButtonComponent imageRadioButtonComponent = (ImageRadioButtonComponent) imageButtonCapability;
         Object radioValue = imageRadioButtonComponent.getRadioValue();
@@ -48,7 +48,8 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
         }
 
         // La selection pouvait être déjà faite !
-        if (imageRadioButtonComponent.isSelected()) {
+        if (imageRadioButtonComponent.isSelected()
+                && imageRadioButtonComponent.isValueLocked(facesContext) == false) {
             imageRadioButtonComponent.setSubmittedValue(radioValue);
         }
     }
@@ -70,7 +71,8 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
             return imageRadioButtonComponent.isSelected(facesContext);
         }
 
-        Object currentValue = imageRadioButtonComponent.getValue();
+        Object currentValue = getSubmittedValue(imageRadioButtonComponent);
+
         return radioValue.equals(currentValue);
     }
 

@@ -182,9 +182,6 @@ var __prototype={
 	},
 	f_serialize: function() {
 		var time=this.f_getTime();
-		if (time) {
-			time=time.f_getTime();
-		}
 		
 		this.f_setProperty(f_prop.VALUE, time);
 
@@ -235,13 +232,19 @@ var __prototype={
 			
 			var d2=new f_time(t);
 			
-			if (d2.f_getHours()!=date.f_getHours() || 
-					d2.f_getMinutes()!=date.f_getMinutes() || 
-					d2.f_getSeconds()!=date.f_getSeconds() ||
-					d2.f_getMilliseconds()!=date.f_getMilliseconds()) {
+			if (d2.f_getHours()!=date.f_getHours()) {
+				errorMessage="invalidTime.error";
+			
+			} else if (d2.f_getMinutes()!=date.f_getMinutes()) {
+				errorMessage="invalidMinute.error";
+		
+			} else if (d2.f_getSeconds()!=date.f_getSeconds()) {
+				errorMessage="invalidSecond.error";
+			
+			} else if (d2.f_getMilliseconds()!=date.f_getMilliseconds()) {
 					
 //					alert("Different ! "+d2.f_getHours()+"/"+date.f_getHours());
-				errorMessage="invalidTime.error";
+				errorMessage="invalideMillisecond.error";
 				
 			} else {			
 				var minTime=this.f_getMinTime();

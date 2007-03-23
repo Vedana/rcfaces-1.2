@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN" "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 <faces-config>
 	<component>
 		<component-type>org.rcfaces.html.init</component-type>
@@ -16,6 +16,10 @@
 	<component>
 		<component-type>org.rcfaces.html.loadClientBundle</component-type>
 		<component-class>org.rcfaces.renderkit.html.component.LoadClientBundleComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.html.nameSpace</component-type>
+		<component-class>org.rcfaces.renderkit.html.component.NameSpaceComponent</component-class>
 	</component>
 	<render-kit>
 		<renderer>
@@ -347,6 +351,11 @@
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.html.loadClientBundle</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.LoadClientBundleRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.html.nameSpace</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.NameSpaceRenderer</renderer-class>
 		</renderer>
 	</render-kit>
 </faces-config>

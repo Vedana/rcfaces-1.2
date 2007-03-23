@@ -239,4 +239,4 @@ var __prototype = {
 	fa_getItemsWrapper: f_class.ABSTRACT
 }
 
-var fa_itemsWrapper=new f_aspect("fa_itemsWrapper", null, __prototype);
+new f_aspect("fa_itemsWrapper", null, __prototype);

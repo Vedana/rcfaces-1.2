@@ -83,7 +83,6 @@ var __prototype = {
 		this._normalText=f_core.GetAttribute(this, "v:text", txt);
 		this._collapsedText=f_core.GetAttribute(this, "v:collapsedText", txt);
 	
-	//	this._returnOnSelect=false;
 		this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
 	},
 	f_finalize: function() {

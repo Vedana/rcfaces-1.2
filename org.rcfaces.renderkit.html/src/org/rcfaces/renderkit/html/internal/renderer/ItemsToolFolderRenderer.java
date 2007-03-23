@@ -34,12 +34,13 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        ItemsToolFolderComponent toolBarComponent = (ItemsToolFolderComponent) componentRenderContext
+        ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) componentRenderContext
                 .getComponent();
 
         writer.startElement("TABLE");
 
-        int cellPadding = toolBarComponent.getItemPadding(facesContext);
+        int cellPadding = itemsToolFolderComponent.getToolBar().getItemPadding(
+                facesContext);
         if (cellPadding < 0) {
             cellPadding = 0;
         }
@@ -51,11 +52,17 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         writeJavaScriptAttributes(writer);
         writeCssAttributes(writer);
 
-        if (toolBarComponent.isDisabled(facesContext) == false) {
+        if (itemsToolFolderComponent.isDisabled(facesContext) == false) {
             writer.writeAttribute("v:disabled", "true");
         }
-        if (toolBarComponent.isReadOnly(facesContext)) {
+        if (itemsToolFolderComponent.isReadOnly(facesContext)) {
             writer.writeAttribute("v:readOnly", "true");
+        }
+
+        String verticalAlignment = itemsToolFolderComponent
+                .getVerticalAlignment(facesContext);
+        if (verticalAlignment != null) {
+            writer.writeVAlign(verticalAlignment);
         }
 
         /*
@@ -65,6 +72,8 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
          * writer.endElement("A");
          */
 
+        writer.startElement("TBODY");
+
         writer.startElement("TR");
     }
 
@@ -72,6 +81,8 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
             IComponentDecorator componentDecorator) throws WriterException {
 
         writer.endElement("TR");
+
+        writer.endElement("TBODY");
 
         writer.endElement("TABLE");
 
@@ -100,24 +111,21 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
             IEventData eventData) {
 
         /*
-        if (eventData != null
-                && JavaScriptClasses.EVENT_SELECTION.equals(eventData
-                        .getEventName())) {
-
-            Object value = eventData.getEventValue();
-
-            // TODO: Il faut converir la value de l'item ...
-
-            String itemValue=String.valueOf(value);
-            
-            ActionEvent actionEvent = new SelectionEvent(component, String
-                    .valueOf(value), value, 0);
-            actionEvent.setPhaseId(PhaseId.INVOKE_APPLICATION);
-            component.queueEvent(actionEvent);
-
-            return;
-        }
-        */
+         * if (eventData != null &&
+         * JavaScriptClasses.EVENT_SELECTION.equals(eventData .getEventName())) {
+         * 
+         * Object value = eventData.getEventValue(); // TODO: Il faut converir
+         * la value de l'item ...
+         * 
+         * String itemValue=String.valueOf(value);
+         * 
+         * ActionEvent actionEvent = new SelectionEvent(component, String
+         * .valueOf(value), value, 0);
+         * actionEvent.setPhaseId(PhaseId.INVOKE_APPLICATION);
+         * component.queueEvent(actionEvent);
+         * 
+         * return; }
+         */
 
         super.decodeEvent(context, component, eventData);
     }

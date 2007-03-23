@@ -39,7 +39,8 @@ var __prototype = {
 
 	f_customButton: function() {
 		this.f_super(arguments);
-		this._returnOnSelect = false;
+
+		this.f_setForcedEventReturn(f_event.SELECTION, false);
 				
 		var installSelectionListener=false;
 	

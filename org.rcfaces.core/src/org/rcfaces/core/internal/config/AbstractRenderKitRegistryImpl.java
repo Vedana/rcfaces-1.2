@@ -48,6 +48,10 @@ abstract class AbstractRenderKitRegistryImpl {
             }
 
             renderKitId = facesContext.getViewRoot().getRenderKitId();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ViewRoot render kit id='" + renderKitId + "'.");
+            }
         }
 
         if (renderKitId == null) {
@@ -57,6 +61,11 @@ abstract class AbstractRenderKitRegistryImpl {
         Map renderKitsById = initialize(facesContext);
 
         RenderKit renderKit = (RenderKit) renderKitsById.get(renderKitId);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getRenderKit: returns '" + renderKit
+                    + "' for renderKitId='" + renderKitId + "'.");
+        }
 
         return renderKit;
     }

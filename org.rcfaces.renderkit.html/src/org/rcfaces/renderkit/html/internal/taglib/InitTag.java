@@ -30,6 +30,8 @@ public class InitTag extends CameliaTag implements Tag {
 	private String disableContextMenu;
 	private String renderBaseTag;
 	private String clientMessageIdFilter;
+	private String waiRolesNS;
+	private String clientValidation;
 	public String getComponentType() {
 		return InitComponent.COMPONENT_TYPE;
 	}
@@ -138,6 +140,22 @@ public class InitTag extends CameliaTag implements Tag {
 		this.clientMessageIdFilter = clientMessageIdFilter;
 	}
 
+	public final String getWaiRolesNS() {
+		return waiRolesNS;
+	}
+
+	public final void setWaiRolesNS(String waiRolesNS) {
+		this.waiRolesNS = waiRolesNS;
+	}
+
+	public final String getClientValidation() {
+		return clientValidation;
+	}
+
+	public final void setClientValidation(String clientValidation) {
+		this.clientValidation = clientValidation;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (InitComponent.COMPONENT_TYPE==getComponentType()) {
@@ -156,6 +174,8 @@ public class InitTag extends CameliaTag implements Tag {
 			LOG.debug("  disableContextMenu='"+disableContextMenu+"'");
 			LOG.debug("  renderBaseTag='"+renderBaseTag+"'");
 			LOG.debug("  clientMessageIdFilter='"+clientMessageIdFilter+"'");
+			LOG.debug("  waiRolesNS='"+waiRolesNS+"'");
+			LOG.debug("  clientValidation='"+clientValidation+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -286,6 +306,24 @@ public class InitTag extends CameliaTag implements Tag {
 				component.setClientMessageIdFilter(clientMessageIdFilter);
 			}
 		}
+
+		if (waiRolesNS != null) {
+			if (isValueReference(waiRolesNS)) {
+				ValueBinding vb = application.createValueBinding(waiRolesNS);
+				component.setWaiRolesNS(vb);
+			} else {
+				component.setWaiRolesNS(waiRolesNS);
+			}
+		}
+
+		if (clientValidation != null) {
+			if (isValueReference(clientValidation)) {
+				ValueBinding vb = application.createValueBinding(clientValidation);
+				component.setClientValidation(vb);
+			} else {
+				component.setClientValidation(getBool(clientValidation));
+			}
+		}
 	}
 
 	public void release() {
@@ -302,6 +340,8 @@ public class InitTag extends CameliaTag implements Tag {
 		disableContextMenu = null;
 		renderBaseTag = null;
 		clientMessageIdFilter = null;
+		waiRolesNS = null;
+		clientValidation = null;
 
 		super.release();
 	}

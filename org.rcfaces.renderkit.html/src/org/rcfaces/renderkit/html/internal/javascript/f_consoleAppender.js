@@ -86,15 +86,15 @@ var __static={
 			
   		var console=this._console;
 		if (console._closed) {
-		   	return f_core.CancelEvent(evt);
+		   	return f_core.CancelJsEvent(evt);
 		}
 
 		f_core.AddEventListener(document, "mousemove", f_consoleAppender._ResizeCursorDragMove, this);
 		f_core.AddEventListener(document, "mouseup",   f_consoleAppender._ResizeCursorDragStop, this);
 
-		f_core.CancelEvent(evt);
+		f_core.CancelJsEvent(evt);
   		
-		var eventPos=f_core.GetEventPosition(evt, document);
+		var eventPos=f_core.GetJsEventPosition(evt, document);
 		var cursorPos=f_core.GetAbsolutePosition(console._console);
 		console._dragDeltaX=eventPos.x-cursorPos.x;
 		console._dragDeltaY=eventPos.y-(cursorPos.y+console._console.clientHeight);
@@ -134,7 +134,7 @@ var __static={
  
  	 	var console=window._dragConsole;
  		
-		var eventPos=f_core.GetEventPosition(evt, document);
+		var eventPos=f_core.GetJsEventPosition(evt, document);
 		var cursorPos=f_core.GetAbsolutePosition(console._console);	
 
 		var dx=eventPos.x-cursorPos.x-console._dragDeltaX;
@@ -157,7 +157,7 @@ var __static={
 		
 		console._updateSizes();
 						
-		return f_core.CancelEvent(evt);	
+		return f_core.CancelJsEvent(evt);	
 	}
 }
 var __prototype = {

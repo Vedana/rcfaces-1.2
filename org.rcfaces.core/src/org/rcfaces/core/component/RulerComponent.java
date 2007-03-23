@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
@@ -36,6 +37,7 @@ public class RulerComponent extends CameliaBaseComponent implements
 	IMarginCapability,
 	ISizeCapability,
 	IVisibilityCapability,
+	IHiddenModeCapability,
 	ILookAndFeelCapability,
 	IOrientationCapability,
 	IForegroundBackgroundColorCapability,
@@ -258,28 +260,6 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
-	public final int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	public final void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	/**
-	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
-	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
 	public final boolean isVisible() {
 		return isVisible(null);
 	}
@@ -307,6 +287,28 @@ public class RulerComponent extends CameliaBaseComponent implements
 
 			return getVisibleState(null);
 		
+	}
+
+	public final int getHiddenMode() {
+		return getHiddenMode(null);
+	}
+
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
+	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+	}
+
+	public final void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
+	public final void setHiddenMode(ValueBinding hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	public final java.lang.String getLookId() {

@@ -21,6 +21,9 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 	private String imageHeight;
 	private String imageWidth;
 	private String lookId;
+	private String borderType;
+	private String textPosition;
+	private String accessKey;
 	public String getComponentType() {
 		return ToolItemComponent.COMPONENT_TYPE;
 	}
@@ -65,6 +68,30 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 		this.lookId = lookId;
 	}
 
+	public final String getBorderType() {
+		return borderType;
+	}
+
+	public final void setBorderType(String borderType) {
+		this.borderType = borderType;
+	}
+
+	public final String getTextPosition() {
+		return textPosition;
+	}
+
+	public final void setTextPosition(String textPosition) {
+		this.textPosition = textPosition;
+	}
+
+	public final String getAccessKey() {
+		return accessKey;
+	}
+
+	public final void setAccessKey(String accessKey) {
+		this.accessKey = accessKey;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ToolItemComponent.COMPONENT_TYPE==getComponentType()) {
@@ -75,6 +102,9 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -138,6 +168,36 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 				component.setLookId(lookId);
 			}
 		}
+
+		if (borderType != null) {
+			if (isValueReference(borderType)) {
+				ValueBinding vb = application.createValueBinding(borderType);
+
+				component.setBorderType(vb);
+			} else {
+				component.setBorderType(borderType);
+			}
+		}
+
+		if (textPosition != null) {
+			if (isValueReference(textPosition)) {
+				ValueBinding vb = application.createValueBinding(textPosition);
+
+				component.setTextPosition(vb);
+			} else {
+				component.setTextPosition(textPosition);
+			}
+		}
+
+		if (accessKey != null) {
+			if (isValueReference(accessKey)) {
+				ValueBinding vb = application.createValueBinding(accessKey);
+
+				component.setAccessKey(vb);
+			} else {
+				component.setAccessKey(accessKey);
+			}
+		}
 	}
 
 	public void release() {
@@ -146,6 +206,9 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 		imageHeight = null;
 		imageWidth = null;
 		lookId = null;
+		borderType = null;
+		textPosition = null;
+		accessKey = null;
 
 		super.release();
 	}

@@ -45,6 +45,8 @@ public interface IHtmlProcessContext extends IProcessContext {
     IContentAccessor getStyleSheetContentAccessor(String uri,
             IContentType contentType);
 
+    String getNameSpaceURI();
+
     boolean useMetaContentScriptType();
 
     boolean useMetaContentStyleType();

@@ -68,8 +68,10 @@ public class ImageRenderer extends AbstractCssRenderer {
                         .getFilterProperties();
                 if (filterProperties != null
                         && filterProperties.isEmpty() == false) {
-                    String filterExpression = HtmlTools
-                            .encodeFilterExpression(filterProperties);
+                    String filterExpression = HtmlTools.encodeFilterExpression(
+                            filterProperties, componentRenderContext
+                                    .getRenderContext().getProcessContext(),
+                            componentRenderContext.getComponent());
                     htmlWriter.writeAttribute("v:filterExpression",
                             filterExpression);
                 }

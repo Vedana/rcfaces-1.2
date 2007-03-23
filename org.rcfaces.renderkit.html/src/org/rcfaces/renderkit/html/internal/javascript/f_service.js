@@ -127,15 +127,20 @@ var __prototype={
 	 * @param function resultCallback Callback which will be called, when the result has been received.
 	 * @param any parameter Parameters of the request.
 	 * @param optional f_progressMonitor progressMonitor Progress monitor associated to the call.
+	 * @param optional number contentSizePercent
 	 * @return String Request identifier.
 	 */
-	f_asyncCall: function(resultCallback, parameter, progressMonitor) {
+	f_asyncCall: function(resultCallback, parameter, progressMonitor, contentSizePercent) {
 		var requestId=this._allocateRequestId();
 		
 		this._setRequestState(requestId, f_service.INIT_STATE);
 		
+		if (progressMonitor && contentSizePercent===undefined) {
+			contentSizePercent=100;
+		}
+		
 		this.f_appendCommand(function(service) {			
-			service._asyncCallServer(requestId, resultCallback, parameter, progressMonitor);
+			service._asyncCallServer(requestId, resultCallback, parameter, progressMonitor, contentSizePercent);
 		});
 		
 		return requestId;
@@ -149,7 +154,7 @@ var __prototype={
 	f_syncCall: function(parameter, progressMonitor) {
 		var requestId=this._allocateRequestId();
 		
-		if (progressMonitor && window.f_subProgressMonitor) {
+		if (progressMonitor && f_class.IsClassDefined("f_subProgressMonitor")) {
 			progressMonitor=f_subProgressMonitor.f_newInstance(progressMonitor, f_service._TOTAL_WORK_PROGRESS_MONITOR);
 		}
 		
@@ -245,13 +250,13 @@ var __prototype={
 	 * @method private
 	 * @return void
 	 */
-	_asyncCallServer: function(requestId, resultCallback, parameter, progressMonitor) {
+	_asyncCallServer: function(requestId, resultCallback, parameter, progressMonitor, contentSizePercent) {
 		var url=f_env.GetViewURI();
 		var request=new f_httpRequest(this, url);
 		var params=this._prepareRequest(request, requestId, parameter);
 		
 		var subProgressMonitor;
-		if (progressMonitor && window.f_subProgressMonitor) {
+		if (progressMonitor && f_class.IsClassDefined("f_subProgressMonitor")) {
 			subProgressMonitor=f_subProgressMonitor.f_newInstance(progressMonitor, f_service._TOTAL_WORK_PROGRESS_MONITOR);
 		}
 		

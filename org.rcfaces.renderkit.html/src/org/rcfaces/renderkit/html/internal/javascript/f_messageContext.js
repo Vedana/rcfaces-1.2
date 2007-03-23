@@ -30,10 +30,12 @@ var __static = {
 	
 	/**
 	 * @method public static
-	 * @param HTMLElement component
+	 * @param optional HTMLElement component A component.
 	 * @return f_messageContext
 	 */
 	Get: function(component) {
+		f_core.Assert(!arguments.length || typeof(component)=="object", "f_messageContext: Invalid component parameter ! ("+component+")");
+
 		if (!component) {
 			var root=f_messageContext._Root;
 			if (root) {
@@ -43,11 +45,33 @@ var __static = {
 			root=new f_messageContext();	
 			f_messageContext._Root=root;
 			
+//			f_core.Debug(f_messageContext, "Get: Returns root message context");
 			return root;	
-		}
+		}	
 	
-		f_core.Assert(component && component.nodeType, "f_messageContext.Get: Bad component parameter ! ("+component+")");
-		
+		if (false && typeof(component)=="string") {
+			var componentId=component;
+			
+			for(;;) {
+				component=f_core.GetElementByClientId(componentId);
+				if (component) {
+					break;
+				}
+				
+				var idx=componentId.lastIndexOf(':');
+				if (idx<0) {
+					break;
+				}
+				
+				componentId=componentId.substring(0, idx);
+			}
+	
+			f_core.Assert(component, "f_messageContext.Get: Can not get component id="+componentId);
+
+		} else {
+			f_core.Assert(component && component.nodeType, "f_messageContext.Get: Bad component parameter ! ("+component+")");
+		}
+				
 		var form=f_core.GetParentForm(component);
 		f_core.Assert(form, "f_messageContext.Get: Can not find form associated to component ! (id="+component.id+")");
 	
@@ -81,10 +105,15 @@ var __static = {
 		var messageContext=f_messageContext.Get(component);
 		
 		if (!messageContext) {
+//			f_core.Debug(f_messageContext, "ListMessages: no context for '"+component+"'");
 			return [];
 		}
 		
-		return messageContext.f_listMessages(component.id);
+		var messages=messageContext.f_listMessages(component.id);
+		
+//		f_core.Debug(f_messageContext, "ListMessages: messages of component '"+component+"': "+messages);
+
+		return messages;		
 	}
 }
 
@@ -185,7 +214,7 @@ var __prototype = {
 				
 				// Positionne le focus ?
 				
-				var component=f_core.GetElementById(clientId);
+				var component=f_core.GetElementByClientId(clientId);
 				if (component) {
 					f_core.SetFocus(component, true);
 				}
@@ -223,7 +252,7 @@ var __prototype = {
 	
 	/**
 	 * @method public
-	 * @param String componentId Identifiant of component, or an array of identifiants.  (<code>null</code> specified ALL messages)
+	 * @param optional String componentId Identifiant of component, or an array of identifiants.  (<code>null</code> specified ALL messages)
 	 * @param optional boolean globalOnly
 	 * @return f_messageObject[]
 	 */
@@ -241,10 +270,14 @@ var __prototype = {
 	
 		if (typeof(componentId)=="string") {
 			if (!messages) {
+			
+//				f_core.Debug(f_messageContext, "f_listMessages["+this.form+"]: no messages at all !");
 				return [];
 			}
 	
 			var l=messages[componentId];
+
+//			f_core.Debug(f_messageContext, "f_listMessages["+this.form+"]: no messages for component '"+componentId+"' !");
 			return (l)?l:[];
 		}
 	
@@ -260,20 +293,22 @@ var __prototype = {
 			l.push.apply(l, this._parent.f_listMessages(null, true));
 		}
 	
+//		f_core.Debug(f_messageContext, "f_listMessages["+this.form+"]: All messages: "+l);
+	
 		return l;
 	},
 	
 	/**
-	 * @method public
+	 * @method hidden
 	 *
-	 * @param HTMLElement component componentOrId Component to add the message.
+	 * @param HTMLElement component componentOrId Component to add the message. (If the parameter is an ID, the naming container separator might not be ":")
 	 * @param f_messageObject message
-	 * @param hidden boolean performEvent
+	 * @param hidden optional boolean performEvent
 	 * @return void
 	 */
 	f_addMessageObject: function(component, message, performEvent) {	
 		f_core.Assert(component===null || component===false || component.id || typeof(component)=="string", "f_messageContext.f_addMessageObject: Component parameter must be a component or an id !");
-		f_core.Assert(typeof(component)!="string" || component.length, "f_messageContext.f_addMessageObject: Parameter componentId is invalid ! ('"+component+"')"); 
+//		f_core.Assert(typeof(component)!="string" || component.length, "f_messageContext.f_addMessageObject: Parameter componentId is invalid ! ('"+component+"')"); 
 	
 		var id=component;
 		if (component && component.id) {
@@ -281,7 +316,10 @@ var __prototype = {
 		}
 		
 		if (id===null && this._parent) {
+			f_core.Debug(f_messageContext, "f_addMessageObject["+this.form+"] Add message object to parent !");
+
 			this._parent.f_addMessageObject(null, message, performEvent);
+			
 			return;
 		}
 		
@@ -299,7 +337,7 @@ var __prototype = {
 			messages[id]=l2;
 		}
 	
-		f_core.Info(f_messageContext, "Add message object to component '"+id+"'.\nmessage="+message);
+		f_core.Info(f_messageContext, "f_addMessageObject["+this.form+"] Add message object to component '"+id+"'.\nmessage="+message);
 	
 		l2.push(message);
 		
@@ -315,12 +353,13 @@ var __prototype = {
 	 * @param number severity
 	 * @param String summary
 	 * @param optional String detail
+	 * @param hidden optional boolean performEvent
 	 * @return f_messageObject
 	 */
 	f_addMessage: function(component, severity, summary, detail) {
 		f_core.Assert(typeof(severity)=="number", "f_messageContext.f_addMessage: Bad type of severity !");
 		f_core.Assert(summary, "f_messageContext.f_addMessage: Summary is null !");
-		f_core.Assert(component===null || (component instanceof Array) || component.id, "f_messageContext.f_addMessage: Component parameter must be a component or an id or null !");
+		f_core.Assert(component===null || (component instanceof Array) || component.id || typeof(component)=="string", "f_messageContext.f_addMessage: Component parameter must be a component or an id or null !");
 		
 		var message=new f_messageObject(severity, summary, detail);
 		
@@ -375,11 +414,11 @@ var __prototype = {
 			}
 		
 			if (!changed) {
-				f_core.Info(f_messageContext, "["+this._form+"] No messages to clear.");
+				f_core.Info(f_messageContext, "_clearMessages["+this._form+"] No messages to clear.");
 				return false;
 			}	
 	
-			f_core.Info(f_messageContext,  "["+this._form+"] Clear all messages.");
+			f_core.Info(f_messageContext,  "_clearMessages["+this._form+"] Clear all messages.");
 			
 			if (performEvent) {
 				this._fireMessageEvent();
@@ -410,14 +449,14 @@ var __prototype = {
 	
 			var l2=messages[componentId];
 			if (!l2) {
-				f_core.Debug(f_messageContext,  "["+this._form+"] Nothing to clear for component '"+componentId+"'.");
+				f_core.Debug(f_messageContext,  "_clearMessages["+this._form+"] Nothing to clear for component '"+componentId+"'.");
 				continue;
 			}
 			
 			delete messages[componentId];
 			changed=true;
 		
-			f_core.Info(f_messageContext,  "["+this._form+"] Clear "+(l2.length)+" messages associated to the component '"+componentId+"'.");
+			f_core.Info(f_messageContext,  "_clearMessages["+this._form+"] Clear "+(l2.length)+" messages associated to the component '"+componentId+"'.");
 		}
 		
 		if (!changed) {
@@ -439,11 +478,11 @@ var __prototype = {
 	
 		var l=this._listeners;
 		if (!l) {
-			f_core.Debug(f_messageContext, "["+this._forms+"] No listeners...");
+			f_core.Debug(f_messageContext, "_fireMessageEvent["+this._form+"] No listeners...");
 			return;
 		}
 		
-		f_core.Debug(f_messageContext, "Fire event message modifications to "+l.length+" listeners...");
+		f_core.Debug(f_messageContext, "_fireMessageEvent["+this._form+"] : Fire event message modifications to "+l.length+" listeners...");
 	
 		for(var i=0;i<l.length;i++) {
 			var listener=l[i];
@@ -456,7 +495,7 @@ var __prototype = {
 	 * @return String
 	 */
 	toString: function() {
-		return "[f_messageContext form='"+((this._form)?this._form.id:'NONE')+"']";
+		return "[f_messageContext form='"+((this._form)?this._form.id:'ROOT')+"']";
 	}
 }
 

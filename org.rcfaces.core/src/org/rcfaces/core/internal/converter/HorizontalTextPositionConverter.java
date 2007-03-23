@@ -28,10 +28,12 @@ public class HorizontalTextPositionConverter extends AbstractConverter {
 
     protected static final String LEFT_POSITION_NAME = "left";
 
+    private static final String DEFAULT_POSITION_NAME = "default";
+
     private static final Integer DEFAULT_POSITION = new Integer(
             IHorizontalTextPositionCapability.DEFAULT_POSITION);
 
-    private static Map HORIZONTAL_TEXT_POSITIONS = new HashMap(5);
+    protected static Map HORIZONTAL_TEXT_POSITIONS = new HashMap(5);
     static {
         Integer i = new Integer(IHorizontalTextPositionCapability.LEFT_POSITION);
         HORIZONTAL_TEXT_POSITIONS.put(LEFT_POSITION_NAME, i);
@@ -57,7 +59,8 @@ public class HorizontalTextPositionConverter extends AbstractConverter {
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 
-        if (value == null || value.length() < 1 || "default".equals(value)) {
+        if (value == null || value.length() < 1
+                || "default".equalsIgnoreCase(value)) {
             return getDefaultPosition();
         }
 

@@ -18,10 +18,13 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 
 	private String doubleClickListeners;
 	private String borderType;
+	private String textPosition;
 	private String selectionListeners;
 	private String checkListeners;
+	private String checkedValues;
 	private String readOnly;
-	private String itemPadding;
+	private String verticalAlignment;
+	private String itemHiddenMode;
 	public String getComponentType() {
 		return ItemsToolFolderComponent.COMPONENT_TYPE;
 	}
@@ -42,6 +45,14 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 		this.borderType = borderType;
 	}
 
+	public final String getTextPosition() {
+		return textPosition;
+	}
+
+	public final void setTextPosition(String textPosition) {
+		this.textPosition = textPosition;
+	}
+
 	public final String getSelectionListener() {
 		return selectionListeners;
 	}
@@ -58,6 +69,14 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 		this.checkListeners = checkListeners;
 	}
 
+	public final String getCheckedValues() {
+		return checkedValues;
+	}
+
+	public final void setCheckedValues(String checkedValues) {
+		this.checkedValues = checkedValues;
+	}
+
 	public final String getReadOnly() {
 		return readOnly;
 	}
@@ -66,12 +85,20 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 		this.readOnly = readOnly;
 	}
 
-	public final String getItemPadding() {
-		return itemPadding;
+	public final String getVerticalAlignment() {
+		return verticalAlignment;
 	}
 
-	public final void setItemPadding(String itemPadding) {
-		this.itemPadding = itemPadding;
+	public final void setVerticalAlignment(String verticalAlignment) {
+		this.verticalAlignment = verticalAlignment;
+	}
+
+	public final String getItemHiddenMode() {
+		return itemHiddenMode;
+	}
+
+	public final void setItemHiddenMode(String itemHiddenMode) {
+		this.itemHiddenMode = itemHiddenMode;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -80,8 +107,11 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
-			LOG.debug("  itemPadding='"+itemPadding+"'");
+			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
+			LOG.debug("  itemHiddenMode='"+itemHiddenMode+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -110,12 +140,28 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (textPosition != null) {
+			if (isValueReference(textPosition)) {
+				ValueBinding vb = application.createValueBinding(textPosition);
+
+				component.setTextPosition(vb);
+			} else {
+				component.setTextPosition(textPosition);
+			}
+		}
+
 		if (selectionListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (checkListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
+		}
+
+		if (checkedValues != null) {
+				ValueBinding vb = application.createValueBinding(checkedValues);
+
+				component.setCheckedValues(vb);
 		}
 
 		if (readOnly != null) {
@@ -128,12 +174,22 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 			}
 		}
 
-		if (itemPadding != null) {
-			if (isValueReference(itemPadding)) {
-				ValueBinding vb = application.createValueBinding(itemPadding);
-				component.setItemPadding(vb);
+		if (verticalAlignment != null) {
+			if (isValueReference(verticalAlignment)) {
+				ValueBinding vb = application.createValueBinding(verticalAlignment);
+
+				component.setVerticalAlignment(vb);
 			} else {
-				component.setItemPadding(getInt(itemPadding));
+				component.setVerticalAlignment(verticalAlignment);
+			}
+		}
+
+		if (itemHiddenMode != null) {
+			if (isValueReference(itemHiddenMode)) {
+				ValueBinding vb = application.createValueBinding(itemHiddenMode);
+				component.setItemHiddenMode(vb);
+			} else {
+				component.setItemHiddenMode(itemHiddenMode);
 			}
 		}
 	}
@@ -141,10 +197,13 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 	public void release() {
 		doubleClickListeners = null;
 		borderType = null;
+		textPosition = null;
 		selectionListeners = null;
 		checkListeners = null;
+		checkedValues = null;
 		readOnly = null;
-		itemPadding = null;
+		verticalAlignment = null;
+		itemHiddenMode = null;
 
 		super.release();
 	}

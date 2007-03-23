@@ -67,17 +67,19 @@ var __prototype = {
 			this._callback(cur);
 		}
 		
-		if (cur<0.00001) {
+		if (cur<0.0001) {
 			component.style.display="none";
+			return;
+		}
+		
+		if (cur>0.9999) {
+			component.style.height="auto";
+			component.scrollTop=0;
 			return;
 		}
 		
 		var h=component.scrollHeight;
 		var ch=Math.floor(h*cur);
-		
-		if (cur>=1) {
-			ch="auto";
-		}
 		
 		component.style.height=ch+"px";
 		component.scrollTop=h-ch;

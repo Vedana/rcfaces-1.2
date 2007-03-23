@@ -46,9 +46,10 @@ var __prototype = {
 		return false;
 	},
 	/** 
-	 * @method private
+	 * @method protected
 	 */
-	_onSelect: function(evt) {
+	f_imageButtonSelect: function(evt) {
+		f_core.Debug(f_imageCombo, "f_imageButtonSelect: evt="+evt);
 		if (!this._focus)  {
 			this.f_setFocus();
 		}
@@ -57,17 +58,20 @@ var __prototype = {
 			return false;
 		}
 		
-		if (f_popup.VerifyMouseDown(this, evt._jsEvent)==false) {
+		if (f_popup.VerifyMouseDown(this, evt._jsEvent)) {
+			f_core.Debug(f_imageCombo, "f_imageButtonSelect: mouse down outside !");
 			return false;
 		}
 		
 		if (evt.f_getItem()) {
 			// Selection d'un item !
+			f_core.Debug(f_imageCombo, "f_imageButtonSelect: item already selected");
 			return true;
 		}
 	
 		var menu=this.f_getSubMenuById(f_imageCombo._MENU_ID);
 		if (!menu) {
+			f_core.Debug(f_imageCombo, "f_imageButtonSelect: no menu");
 			return true;
 		}
 		
@@ -76,6 +80,7 @@ var __prototype = {
 			position: f_popup.BOTTOM_COMPONENT
 			});
 		
+		f_core.Debug(f_imageCombo, "f_imageButtonSelect: Menu open (menu='"+menu+"')");
 		return false;
 	},
 	fa_componentCaptureMenuEvent: function() {

@@ -113,6 +113,10 @@ public class RadioButtonTools {
         public final RadioButtonComponent next() {
             return (RadioButtonComponent) nextComponent();
         }
+
+        public RadioButtonComponent[] toArray() {
+            return (RadioButtonComponent[]) toArray(new RadioButtonComponent[count()]);
+        }
     }
 
     /**
@@ -204,83 +208,63 @@ public class RadioButtonTools {
     }
 
     /*
-    public static Object getGroupValue(IRadioValueCapability component) {
-        IRadioValueCapability radioGroupCapability = (IRadioValueCapability) getSelectedRadioGroupFromSameGroup(component);
-        if (radioGroupCapability == null) {
-            return null;
-        }
-
-        return getValue(radioGroupCapability);
-    }
-
-    
-    public static void setGroupValue(IComponentEngine engine,
-            IRadioValueCapability component, Object value) {
-
-        if (value instanceof ValueBinding) {
-            engine.setProperty(Properties.GROUP_VALUE, value);
-            return;
-        }
-
-        List list = new ArrayList(8);
-
-        listRadioWithSameGroupBox((UIComponent) component, component
-                .getGroupName(), list);
-        if (list.isEmpty()) {
-            return;
-        }
-
-        for (Iterator it = list.iterator(); it.hasNext();) {
-            IRadioValueCapability radio = (IRadioValueCapability) it.next();
-
-            boolean state = false;
-
-            if (value != null && value.equals(getValue(radio))) {
-                state = true;
-            }
-
-            select(radio, state);
-        }
-
-        engine.setProperty(Properties.GROUP_VALUE, value);
-    }
-
-    private static Object getValue(IRadioValueCapability groupValueCapability) {
-        if (groupValueCapability instanceof ValueHolder) {
-            return ((ValueHolder) groupValueCapability).getValue();
-        }
-
-        if (groupValueCapability instanceof UISelectItem) {
-            return ((UISelectItem) groupValueCapability).getItemValue();
-        }
-
-        throw new FacesException("Unknown type of groupValueCapability: "
-                + groupValueCapability);
-    }
-
-    private static void select(IRadioValueCapability groupValueCapability,
-            boolean state) {
-
-        if (groupValueCapability instanceof ISelectedCapability) {
-            ISelectedCapability selectedCapability = (ISelectedCapability) groupValueCapability;
-
-            if (selectedCapability.isSelected() != state) {
-                selectedCapability.setSelected(state);
-            }
-            return;
-        }
-
-        if (groupValueCapability instanceof ICheckedCapability) {
-            ICheckedCapability checkedCapability = (ICheckedCapability) groupValueCapability;
-            if (checkedCapability.isChecked() != state) {
-                checkedCapability.setChecked(state);
-            }
-            return;
-        }
-
-        throw new FacesException("Unknown to select groupValueCapability: "
-                + groupValueCapability);
-    }
-    */
+     * public static Object getGroupValue(IRadioValueCapability component) {
+     * IRadioValueCapability radioGroupCapability = (IRadioValueCapability)
+     * getSelectedRadioGroupFromSameGroup(component); if (radioGroupCapability ==
+     * null) { return null; }
+     * 
+     * return getValue(radioGroupCapability); }
+     * 
+     * 
+     * public static void setGroupValue(IComponentEngine engine,
+     * IRadioValueCapability component, Object value) {
+     * 
+     * if (value instanceof ValueBinding) {
+     * engine.setProperty(Properties.GROUP_VALUE, value); return; }
+     * 
+     * List list = new ArrayList(8);
+     * 
+     * listRadioWithSameGroupBox((UIComponent) component, component
+     * .getGroupName(), list); if (list.isEmpty()) { return; }
+     * 
+     * for (Iterator it = list.iterator(); it.hasNext();) {
+     * IRadioValueCapability radio = (IRadioValueCapability) it.next();
+     * 
+     * boolean state = false;
+     * 
+     * if (value != null && value.equals(getValue(radio))) { state = true; }
+     * 
+     * select(radio, state); }
+     * 
+     * engine.setProperty(Properties.GROUP_VALUE, value); }
+     * 
+     * private static Object getValue(IRadioValueCapability
+     * groupValueCapability) { if (groupValueCapability instanceof ValueHolder) {
+     * return ((ValueHolder) groupValueCapability).getValue(); }
+     * 
+     * if (groupValueCapability instanceof UISelectItem) { return
+     * ((UISelectItem) groupValueCapability).getItemValue(); }
+     * 
+     * throw new FacesException("Unknown type of groupValueCapability: " +
+     * groupValueCapability); }
+     * 
+     * private static void select(IRadioValueCapability groupValueCapability,
+     * boolean state) {
+     * 
+     * if (groupValueCapability instanceof ISelectedCapability) {
+     * ISelectedCapability selectedCapability = (ISelectedCapability)
+     * groupValueCapability;
+     * 
+     * if (selectedCapability.isSelected() != state) {
+     * selectedCapability.setSelected(state); } return; }
+     * 
+     * if (groupValueCapability instanceof ICheckedCapability) {
+     * ICheckedCapability checkedCapability = (ICheckedCapability)
+     * groupValueCapability; if (checkedCapability.isChecked() != state) {
+     * checkedCapability.setChecked(state); } return; }
+     * 
+     * throw new FacesException("Unknown to select groupValueCapability: " +
+     * groupValueCapability); }
+     */
 
 }

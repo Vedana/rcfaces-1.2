@@ -122,11 +122,11 @@ var __static = {
 			var last;
 			
 			for(var name in levels) {
-				if (name.length>0 && logName.indexOf(name)!=0) {
+				if (name.length && logName.indexOf(name)) {
 					continue;
 				}
 				
-				if (last && last.length>name) {
+				if (last && last.length>name.length) {
 					continue;
 				}
 				
@@ -178,6 +178,7 @@ var __static = {
 				if (typeof(appender.f_doAppend)!="function") {
 					continue;
 				}
+				
 				try {
 					appender.f_doAppend(event);
 					

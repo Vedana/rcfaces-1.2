@@ -78,7 +78,7 @@ var __prototype={
 		
 		var forComponent=f_core.GetAttribute(this, "v:for");
 		
-		if (forComponent && forComponent.length>0) {
+		if (forComponent && forComponent.length) {
 			this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
 			this._forItemValue=f_core.GetAttribute(this, "v:forItemValue");
 				
@@ -107,7 +107,7 @@ var __prototype={
 	_forListener: function(event) {
 		var forComponent=this._forComponentId;
 		
-		var component=f_core.GetElementById(forComponent, this.ownerDocument);
+		var component=f_core.GetElementByClientId(forComponent, this.ownerDocument);
 		
 		if (!component) {
 			f_core.Debug(f_accelerator, "Can not find component '"+forComponent+"'.");

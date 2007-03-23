@@ -20,7 +20,7 @@ public class ToolFolderTag extends AbstractBasicTag implements Tag {
 	private String mouseOutListeners;
 	private String mouseOverListeners;
 	private String doubleClickListeners;
-	private String itemPadding;
+	private String verticalAlignment;
 	public String getComponentType() {
 		return ToolFolderComponent.COMPONENT_TYPE;
 	}
@@ -57,12 +57,12 @@ public class ToolFolderTag extends AbstractBasicTag implements Tag {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final String getItemPadding() {
-		return itemPadding;
+	public final String getVerticalAlignment() {
+		return verticalAlignment;
 	}
 
-	public final void setItemPadding(String itemPadding) {
-		this.itemPadding = itemPadding;
+	public final void setVerticalAlignment(String verticalAlignment) {
+		this.verticalAlignment = verticalAlignment;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -70,7 +70,7 @@ public class ToolFolderTag extends AbstractBasicTag implements Tag {
 			if (ToolFolderComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  itemPadding='"+itemPadding+"'");
+			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -101,12 +101,13 @@ public class ToolFolderTag extends AbstractBasicTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
 		}
 
-		if (itemPadding != null) {
-			if (isValueReference(itemPadding)) {
-				ValueBinding vb = application.createValueBinding(itemPadding);
-				component.setItemPadding(vb);
+		if (verticalAlignment != null) {
+			if (isValueReference(verticalAlignment)) {
+				ValueBinding vb = application.createValueBinding(verticalAlignment);
+
+				component.setVerticalAlignment(vb);
 			} else {
-				component.setItemPadding(getInt(itemPadding));
+				component.setVerticalAlignment(verticalAlignment);
 			}
 		}
 	}
@@ -116,7 +117,7 @@ public class ToolFolderTag extends AbstractBasicTag implements Tag {
 		mouseOutListeners = null;
 		mouseOverListeners = null;
 		doubleClickListeners = null;
-		itemPadding = null;
+		verticalAlignment = null;
 
 		super.release();
 	}

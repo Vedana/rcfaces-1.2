@@ -77,6 +77,9 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
         encodeComponent(htmlWriter);
 
+        // On active le javascript pour le traitement des facesMessages !
+        htmlWriter.enableJavaScript();
+        
         super.encodeEnd(writer);
     }
 

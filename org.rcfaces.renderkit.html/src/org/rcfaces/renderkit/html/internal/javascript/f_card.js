@@ -17,7 +17,9 @@ var __prototype = {
 	},
 	f_finalize: function() {
 		var cardBox=this._cardBox;
-		this._cardBox=undefined;
+		this._cardBox=undefined; // f_cardBox
+
+//		this._value=undefined; // String
 
 		var vcard=this._vcard;
 		if (vcard) {
@@ -37,8 +39,9 @@ var __prototype = {
 	 * @method hidden
 	 * @return void
 	 */
-	f_declareCard: function(cardBox) {
+	f_declareCard: function(cardBox, value) {
 		this._cardBox=cardBox;
+		this._value=value;
 	},
 	/**
 	 * @method public
@@ -61,6 +64,13 @@ var __prototype = {
 	 */
 	fa_getInteractiveParent: function() {
 		return this; //._tabbedPane;
+	},
+	/**
+	 * @method public
+	 * @return String value of the card.
+	 */
+	f_getValue: function() {
+		return this._value;
 	}
 }
 

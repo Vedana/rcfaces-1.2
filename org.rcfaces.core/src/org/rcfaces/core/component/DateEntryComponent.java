@@ -2,6 +2,7 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 import java.util.HashMap;
@@ -40,13 +41,14 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	IAutoTabCapability,
 	IValueChangeEventCapability,
 	IFocusStyleClassCapability,
+	ISeverityStyleClassCapability,
 	IValidationParameters {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateEntry";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"autoCompletion","required","dateFormat","valueChangeListener","focusStyleClass","showCalendarOnFocus","autoTab","defaultDate"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","fatalStyleClass","autoCompletion","required","dateFormat","valueChangeListener","showCalendarOnFocus","warnStyleClass","styleClass","infoStyleClass","focusStyleClass","autoTab","defaultDate"}));
 	}
 
 	public DateEntryComponent() {
@@ -335,6 +337,94 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 */
 	public final void setFocusStyleClass(ValueBinding focusStyleClass) {
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
+	}
+
+	public final java.lang.String getErrorStyleClass() {
+		return getErrorStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
+	 */
+	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
+	}
+
+	public final void setErrorStyleClass(java.lang.String errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	/**
+	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
+	 */
+	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	public final java.lang.String getFatalStyleClass() {
+		return getFatalStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
+	 */
+	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
+	}
+
+	public final void setFatalStyleClass(java.lang.String fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	/**
+	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
+	 */
+	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	public final java.lang.String getInfoStyleClass() {
+		return getInfoStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
+	 */
+	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
+	}
+
+	public final void setInfoStyleClass(java.lang.String infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	/**
+	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
+	 */
+	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	public final java.lang.String getWarnStyleClass() {
+		return getWarnStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
+	 */
+	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
+	}
+
+	public final void setWarnStyleClass(java.lang.String warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+	}
+
+	/**
+	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
+	 */
+	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
 	/**

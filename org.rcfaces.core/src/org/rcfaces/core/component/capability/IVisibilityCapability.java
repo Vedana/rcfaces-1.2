@@ -13,31 +13,6 @@ package org.rcfaces.core.component.capability;
 public interface IVisibilityCapability {
 
     /**
-     * 
-     */
-    int SERVER_HIDDEN_MODE = 1;
-
-    /**
-     * 
-     */
-    int PHANTOM_HIDDEN_MODE = 2;
-
-    /**
-     * 
-     */
-    int IGNORE_HIDDEN_MODE = 4;
-
-    /**
-     * 
-     */
-    int DEFAULT_HIDDEN_MODE = IGNORE_HIDDEN_MODE;
-
-    /**
-     * 
-     */
-    int CLIENT_HIDDEN_MODE = IGNORE_HIDDEN_MODE;
-
-    /**
      * Marks the receiver as visible if the argument is
      * <code>{@link Boolean#TRUE TRUE}</code>, and marks it invisible if
      * argument is <code>{@link Boolean#FALSE FALSE}</code>. <br>
@@ -50,41 +25,17 @@ public interface IVisibilityCapability {
      */
     void setVisible(boolean visible);
 
-     boolean isVisible();
+    boolean isVisible();
 
-     /**
-      * Returns <code>{@link Boolean#TRUE TRUE}</code> if the receiver is
-      * visible, <code>{@link Boolean#FALSE FALSE}</code> if the receiver is
-      * specified "not visible", and <code>null</code> otherwise. <br>
-      * If one of the receiver's ancestors is not visible or some other condition
-      * makes the receiver not visible, this method may still indicate that it is
-      * considered visible even though it may not actually be showing.
-      * 
-      * @return the receiver's visibility state
-      */
-    Boolean getVisibleState();
-    
-    /*
-     * Returns <code>true</code> if the receiver is visible and all ancestors
-     * up to and including the receiver's nearest ancestor view are visible.
-     * Otherwise, <code>false</code> is returned.
+    /**
+     * Returns <code>{@link Boolean#TRUE TRUE}</code> if the receiver is
+     * visible, <code>{@link Boolean#FALSE FALSE}</code> if the receiver is
+     * specified "not visible", and <code>null</code> otherwise. <br>
+     * If one of the receiver's ancestors is not visible or some other condition
+     * makes the receiver not visible, this method may still indicate that it is
+     * considered visible even though it may not actually be showing.
      * 
      * @return the receiver's visibility state
-     * 
-     * @see #getVisible()
-     * 
-     * boolean isVisible();
      */
-
-    /**
-     * Set the hidden mode in client side.
-     * @param hiddenMode hidden mode
-     */
-    void setHiddenMode(int hiddenMode);
-
-    /**
-     * Returns the hidden mode in client side.
-     * @return hidden mode
-     */
-    int getHiddenMode();
+    Boolean getVisibleState();
 }

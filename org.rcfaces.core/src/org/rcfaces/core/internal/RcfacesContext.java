@@ -22,6 +22,7 @@ import org.rcfaces.core.internal.config.RcfacesContextImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorRegistry;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
+import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
@@ -210,4 +211,9 @@ public abstract class RcfacesContext {
 
     public abstract void setContentStorageEngine(
             IContentStorageEngine indirectContentRepository);
+
+    public abstract IDocumentBuilderProvider getDocumentBuilderProvider();
+
+    public abstract void setDocumentBuilderProvider(
+            IDocumentBuilderProvider documentBuilderProvider);
 }

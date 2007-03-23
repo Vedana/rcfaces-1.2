@@ -104,6 +104,9 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden
+	 * @param f_class claz
+	 * @param optional Window win
+	 * @return void
 	 */
 	f_declareClass: function(claz, win) {
 		if (win && win!=window) {
@@ -133,7 +136,13 @@ f_classLoader.prototype = {
 		}
 	},
 	
-	_declareAspect: function(aspect, win) {
+	/**
+	 * @method hidden
+	 * @param f_aspect aspect
+	 * @param optional Window win
+	 * @return void
+	 */
+	f_declareAspect: function(aspect, win) {
 		if (win && win!=window) {
 			// On ne traite pas les déclarations de classes si c'est pas notre fenetre !
 			return;
@@ -150,12 +159,13 @@ f_classLoader.prototype = {
 		f_core.Debug("f_classLoader", "Registering aspect "+name+".");
 		
 		this._aspects[name] = aspect;
-	
+		win[name]=aspect;
+
 		f_classLoader._InitializeStaticMembers(aspect);
-	
+		
 		var parentClassloader=this._parent;
 		if (parentClassloader) {
-			parentClassloader._declareAspect(aspect, win);
+			parentClassloader.f_declareAspect(aspect, win);
 		}
 	},
 	
@@ -166,7 +176,7 @@ f_classLoader.prototype = {
 		
 		this._exiting=true;
 		
-		this._visibleListeners=undefined;
+		this._visibleListeners=undefined; // List<f_component>
 	
 		// Vide le pool des objets AVANT !
 		var pool=this._componentPool;
@@ -367,10 +377,10 @@ f_classLoader.prototype = {
 	},
 	
 	/**
-	 * @method hidden static
+	 * @method hidden
 	 * @return void
 	 */
-	requiresBundle: function(doc) {
+	f_requiresBundle: function(doc) {
 		if (this._exiting) {
 			throw "This classloader is exiting ... [requiresBundle]";
 		}
@@ -419,7 +429,11 @@ f_classLoader.prototype = {
 	},
 	
 	// Initialize les objets "lazy" qui utilisent le tag v:init pour être identifiés.
-	_initializeObjects: function() {
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_initializeObjects: function() {
 		if (this._interactiveMode) {
 			return;
 		}
@@ -435,7 +449,7 @@ f_classLoader.prototype = {
 		f_core.Debug("f_classLoader", lazys.length+" lazy object(s) found !"+
 			((this._lazyIndex)?"(Current index="+this._lazyIndex+")":""));
 		
-		if (lazys.length==0) {
+		if (!lazys.length) {
 			return;
 		}
 	
@@ -443,6 +457,8 @@ f_classLoader.prototype = {
 		if (index===undefined) {
 			index=0;
 		}
+		
+		var components=new Array;
 		
 		for(;index<lazys.length;) {
 			var component=lazys[index++];
@@ -454,18 +470,18 @@ f_classLoader.prototype = {
 				var args=requires.split(";");
 				
 				args.unshift(this, this._window.document);
-				this.requiresBundle.apply(args);
+				this.f_requiresBundle.apply(args);
 			}
 			
 			var rid=f_core.GetAttribute(component, "rid");
 			if (rid) {
-				this._vinit(rid, component);
+				components.push(rid, component);
 				continue;
 			}
 			
 			var clz=f_core.GetAttribute(component, "v:class");
 			if (clz) {
-				this._vinit(component);
+				components.push(component, component);
 				continue;
 			}
 			
@@ -492,7 +508,7 @@ f_classLoader.prototype = {
 			}
 			
 			if (prev) {				
-				this._vinit(prev);
+				components.push(prev, prev);
 				continue;
 			}
 			
@@ -510,44 +526,47 @@ f_classLoader.prototype = {
 	
 			f_core.Error("f_classLoader", "Unknown lazy component path='"+path+"'.");
 		}
-	},
+		
+		for(var i=0;i<components.length;) {
+			var obj=components[i++];
+			var node=components[i++];
 	
-	_vinit: function(obj, node) {	
-		var o;
-		try {
-			o=this._init(obj);
-			
-		} catch (x) {
-			f_core.Error("f_classLoader", "Failed to initialize object '"+obj.id+"'.", x);
-			return;
-		}
-					
-		if (!o) {
-			return;
-		}
-		
-		if (!node) {
-			node=obj;
-		}
-		
-		var clientData=f_core.GetAttribute(node, "v:data");
-		if (clientData) {
-			fa_clientData.InitializeDataAttribute(o, node);
-		}
-			
-		var update=o.f_completeComponent;
-		if (update && typeof(update)=="function") {
+			var o;
 			try {
-				update.call(o);
-	
+				o=this._init(obj);
+				
 			} catch (x) {
-				f_core.Error("f_classLoader", "f_completeComponent throws exception for component '"+o.id+"'.", x);
+				f_core.Error("f_classLoader", "Failed to initialize object '"+obj.id+"'.", x);
+				continue;
+			}
+						
+			if (!o) {
+				continue;
+			}
+			
+			var clientData=f_core.GetAttribute(node, "v:data");
+			if (clientData) {
+				fa_clientData.InitializeDataAttribute(o, node);
+			}
+				
+			var completeComponent=o.f_completeComponent;
+			if (typeof(completeComponent)=="function") {
+				try {
+					completeComponent.call(o);
+		
+				} catch (x) {
+					f_core.Error("f_classLoader", "f_completeComponent throws exception for component '"+o.id+"'.", x);
+				}
 			}
 		}
-		
-		return o;
 	},
 	
+	/**
+	 * @method private
+	 * @param Object obj
+	 * @param boolean ignoreNotFound
+	 * @return Object
+	 */
 	_init: function(obj, ignoreNotFound) {
 		f_core.Assert(obj, "f_classLoader._init: Obj parameter is invalid ("+obj+")");
 		
@@ -559,7 +578,7 @@ f_classLoader.prototype = {
 			var obj=document.getElementById(id);
 			if (!obj) {
 				var names=document.getElementsByName(id);
-				if (!names || names.length==0) {
+				if (!names || !names.length) {
 					if (ignoreNotFound) {
 						return null;
 					}
@@ -606,7 +625,7 @@ f_classLoader.prototype = {
 		var cls=this.f_getClass(claz, look);
 		f_core.Assert(cls instanceof f_class, "Class '"+claz+"' lookId '"+look+"' not found !");
 	
-		return f_class.Init(obj, cls);
+		return f_class.Init(obj, cls, f_classLoader._EMPTY_ARGUMENTS);
 	},
 	
 	/**
@@ -827,19 +846,19 @@ f_classLoader.prototype = {
 		if (!win) {
 			win=window;
 		}
-		
+
 		var name=bundle.f_getName();
-	
+
 		f_core.Profile(false, "f_classLoader.loadBundle("+name+")");
-		
+
 		f_core.Assert(!this._bundles[name], "Bundle '"+name+"' is alreay declared !");
-		
+
 		this._bundles[name]=bundle;
-		
+
 		if (!this._mainBundleName) {
 			this._mainBundleName=name;
 		}
-		
+
 		var parentClassloader=this._parent;
 		if (parentClassloader) {
 			parentClassloader._declareBundle(bundle, win);
@@ -847,7 +866,7 @@ f_classLoader.prototype = {
 
 		f_core.Profile(true, "f_classLoader.loadBundle("+name+")");
 	},
-	
+
 	toString: function() {
 		if (!this._window) {
 			return "[ClassLoader]";
@@ -861,6 +880,11 @@ f_classLoader.prototype = {
  * @field private static final String
  */
 f_classLoader._LOOK="~";
+
+/**
+ * @field private static final Array
+ */
+f_classLoader._EMPTY_ARGUMENTS=[];
 
 /**
  * @method private static String
@@ -878,6 +902,7 @@ f_classLoader._MakeClassName=function(claz,look) {
  */
 f_classLoader._InitializeStaticMembers=function(claz) {
 	// Attention: Code pour Classes et Aspects
+	
 	
 	var staticMembers=claz._staticMembers;
 	if (staticMembers) {
@@ -963,8 +988,6 @@ f_classLoader.Destroy=function(object1, object2) {
 		lastClassLoader._destroy(toDestroy);
 	}
 }
-
-
 
 f_classLoader.f_getName=function() {
 	return "f_classLoader";

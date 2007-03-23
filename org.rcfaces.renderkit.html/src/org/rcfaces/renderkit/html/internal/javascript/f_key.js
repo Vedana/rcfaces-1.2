@@ -437,7 +437,7 @@ var __static = {
 	 */
 	_PerformKey: function(jsEvent) {
 		if (!jsEvent) {
-			jsEvent = f_core.GetEvent(this);
+			jsEvent = f_core.GetJsEvent(this);
 		}
 
 		var def=f_key._SearchDef(jsEvent, true);
@@ -446,7 +446,7 @@ var __static = {
 		}
 
 		if (f_event.GetEventLocked()) {
-			return f_core.CancelEvent(jsEvent);
+			return f_core.CancelJsEvent(jsEvent);
 		}
 		
 		var method=def._method;
@@ -478,14 +478,14 @@ var __static = {
 			}
 		}
 				
-		return f_core.CancelEvent(jsEvent);
+		return f_core.CancelJsEvent(jsEvent);
 	},
 	/**
 	 * @method private static
 	 */
 	_CatchKey: function(jsEvent) {
 		if (!jsEvent) {
-			jsEvent = f_core.GetEvent(this);
+			jsEvent = f_core.GetJsEvent(this);
 		}
 
 		var def=f_key._SearchDef(jsEvent, false);
@@ -500,7 +500,7 @@ var __static = {
 			return true;
 		}	
 		
-		return f_core.CancelEvent(jsEvent);
+		return f_core.CancelJsEvent(jsEvent);
 	},	
 	/**
 	 * @method private static

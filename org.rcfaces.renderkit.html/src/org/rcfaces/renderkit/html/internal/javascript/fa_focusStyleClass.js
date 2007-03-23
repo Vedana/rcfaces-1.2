@@ -35,5 +35,5 @@ var __prototype = {
 	f_setProperty: f_class.ABSTRACT
 }
 
-var fa_focusStyleClass=new f_aspect("fa_focusStyleClass", null, __prototype);
+new f_aspect("fa_focusStyleClass", null, __prototype);
 	

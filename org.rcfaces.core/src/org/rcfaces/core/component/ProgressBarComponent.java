@@ -1,9 +1,9 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.AbstractInputComponent;
 import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.AbstractOutputComponent;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -20,11 +20,11 @@ import java.util.HashSet;
  * </ul>
  * </p>
  */
-public class ProgressBarComponent extends AbstractOutputComponent {
+public class ProgressBarComponent extends AbstractInputComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.progressBar";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"indeterminate","minimum","maximum"}));
 	}

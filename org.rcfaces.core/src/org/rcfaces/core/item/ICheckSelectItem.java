@@ -8,5 +8,4 @@ package org.rcfaces.core.item;
  * @version $Revision$ $Date$
  */
 public interface ICheckSelectItem {
-	boolean isChecked();
 }

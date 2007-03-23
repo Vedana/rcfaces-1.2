@@ -17,6 +17,7 @@ import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import java.util.HashMap;
@@ -60,13 +61,14 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	ILiteralTimeZoneCapability,
 	IComponentLocaleCapability,
 	IComponentTimeZoneCapability,
+	ISeverityStyleClassCapability,
 	IValidationParameters {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.timeEntry";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","minTime","autoCompletion","required","componentLocale","time","timeFormat","valueChangeListener","defaultTime","hourStep","literalTimeZone","literalLocale","readOnly","componentTimeZone","secondStep","focusStyleClass","millisStep","minuteStep","autoTab","maxTime"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","minTime","time","warnStyleClass","defaultTime","hourStep","styleClass","infoStyleClass","componentTimeZone","secondStep","millisStep","minuteStep","errorStyleClass","fatalStyleClass","autoCompletion","componentLocale","required","timeFormat","valueChangeListener","literalTimeZone","literalLocale","readOnly","focusStyleClass","autoTab","maxTime"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="time";
 
@@ -149,6 +151,11 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 	public final Time getTime() {
 
+
+				Object submittedValue=getSubmittedValue();
+				if (submittedValue!=null) {
+					return (Time)submittedValue;
+				}
 
 				Object value=getValue();
 				
@@ -561,6 +568,94 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 */
 	public final void setComponentTimeZone(ValueBinding componentTimeZone) {
 		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
+	}
+
+	public final java.lang.String getErrorStyleClass() {
+		return getErrorStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
+	 */
+	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
+	}
+
+	public final void setErrorStyleClass(java.lang.String errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	/**
+	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
+	 */
+	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	public final java.lang.String getFatalStyleClass() {
+		return getFatalStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
+	 */
+	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
+	}
+
+	public final void setFatalStyleClass(java.lang.String fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	/**
+	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
+	 */
+	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	public final java.lang.String getInfoStyleClass() {
+		return getInfoStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
+	 */
+	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
+	}
+
+	public final void setInfoStyleClass(java.lang.String infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	/**
+	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
+	 */
+	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	public final java.lang.String getWarnStyleClass() {
+		return getWarnStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
+	 */
+	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
+	}
+
+	public final void setWarnStyleClass(java.lang.String warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+	}
+
+	/**
+	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
+	 */
+	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
 	/**

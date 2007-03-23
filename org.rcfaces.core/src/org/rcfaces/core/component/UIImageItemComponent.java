@@ -1,19 +1,17 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.AbstractItemComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
 
 /**
  * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
@@ -27,7 +25,7 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hoverImageURL","imageURL","disabledImageURL","selectedImageURL","toolTipText","visible","hiddenMode","rendered"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hoverImageURL","imageURL","disabledImageURL","selectedImageURL","toolTipText","visible","rendered"}));
 	}
 
 	public UIImageItemComponent() {
@@ -76,35 +74,6 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 			return getItemDescription();
 			
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-
-
-			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
-		
-	}
-
-	public final int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	public final void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	/**
-	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
-	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	public final boolean isVisible() {

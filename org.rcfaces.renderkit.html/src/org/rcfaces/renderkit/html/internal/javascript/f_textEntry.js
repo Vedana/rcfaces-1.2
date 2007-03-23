@@ -19,7 +19,7 @@ var __prototype = {
 			this._autoTab=true;
 		}
 				
-		if (window.f_clientValidator) {
+		if (f_class.IsClassDefined("f_clientValidator")) {
 			f_clientValidator.InstallValidator(this);
 		}
 	},
@@ -65,6 +65,10 @@ var __prototype = {
 	 */
 	f_performSelectionEvent: function(evt) {
 		if (this.f_isDisabled()) {
+			return;
+		}
+		
+		if (this.f_isActionListEmpty(f_event.SELECTION)) {
 			return;
 		}
 		
@@ -119,10 +123,7 @@ var __prototype = {
 	 * @return void
 	 */
 	_installAutoTab: function() {
-		if (!window.f_clientValidator) {
-			f_core.Error(f_textEntry, "Validator class is not known !");
-			return;
-		}
+		f_class.IsClassDefined("f_clientValidator", true);
 		
 		f_core.Debug(f_textEntry, "Install autotab processor to component '"+this.id+"' !");
 		
@@ -146,10 +147,7 @@ var __prototype = {
 		
 		this._requiredInstalled=true;
 
-		if (!window.f_clientValidator) {
-			f_core.Error(f_textEntry, "Validator class is not known !");
-			return;
-		}
+		f_class.IsClassDefined("f_clientValidator", true);
 	
 		f_core.Debug(f_textEntry, "Install required behavior to component '"+this.id+"' !");
 		

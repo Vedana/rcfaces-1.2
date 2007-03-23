@@ -57,9 +57,17 @@
 				<required-class name="f_env" />
 			</class>
 		</file>
+		<file name="f_event.js">
+			<class name="f_event">
+				<required-class name="f_object" />
+				<required-class name="f_env" />
+				<required-class name="f_resourceBundle" />
+			</class>
+		</file>
 		<file name="f_actionList.js">
 			<class name="f_actionList">
 				<required-class name="f_object" />
+				<required-class name="f_event" />
 			</class>
 		</file>
 		<file name="f_imageRepository.js">
@@ -168,6 +176,7 @@
 		<file name="fa_eventTarget.js">
 			<class name="fa_eventTarget">
 				<required-class name="f_aspect" />
+				<required-class name="f_event" />
 			</class>
 		</file>
 		<file name="fa_subMenu.js">
@@ -216,14 +225,6 @@
 				<required-class name="f_object" />
 			</class>
 		</file>
-		<file name="f_event.js">
-			<class name="f_event">
-				<required-class name="f_object" />
-				<required-class name="f_actionList" />
-				<required-class name="f_env" />
-				<required-class name="f_resourceBundle" />
-			</class>
-		</file>
 		<file name="f_eventTarget.js">
 			<class name="f_eventTarget">
 				<required-class name="f_event" />
@@ -251,7 +252,7 @@
 	</module>
 	
 	<!-- Messages features -->
-	<module id="message">
+	<module id="message" defaultCoreModule="true">
 		<file name="fa_message.js">
 			<class name="fa_message">
 				<required-class name="f_aspect" />
@@ -428,6 +429,7 @@
 			<class name="f_compositeNumEntry">
 				<required-class name="f_component" />
 				<required-class name="fa_required" />
+				<required-class name="fa_message" />
 			</class>
 		</file>
 	</module>
@@ -444,13 +446,19 @@
 				<required-class name="f_aspect" />
 				<required-class name="fa_groupName" />
 				<required-class name="fa_items" />
+				<required-class name="f_event" />
 				<required-class name="f_popup" />
+			</class>
+		</file>
+		<file name="f_menuBase.js">	
+			<class name="f_menuBase">
+				<required-class name="f_eventTarget" />
+				<required-class name="fa_menuCore" />
 			</class>
 		</file>
 		<file name="f_menu.js">
 			<class name="f_menu">
-				<required-class name="f_eventTarget" />
-				<required-class name="fa_menuCore" />
+				<required-class name="f_menuBase" />
 			</class>
 		</file>
 	</module>
@@ -461,31 +469,37 @@
 				<required-class name="f_aspect" />
 			</class>
 		</file>
-		<file name="fa_selectionManager.js">
-			<class name="fa_selectionManager">
+		<file name="fa_itemsManager.js">
+			<class name="fa_itemsManager">
 				<required-class name="f_aspect" />
 				<required-class name="fa_cardinality" />
+			</class>
+		</file>
+		<file name="fa_selectionManager.js">
+			<class name="fa_selectionManager">
+				<required-class name="fa_itemsManager" />
+				<required-class name="f_prop" />
 				<required-class name="fa_selectionProvider" />
 			</class>
 		</file>
 		<file name="fa_checkManager.js">
 			<class name="fa_checkManager">
-				<required-class name="fa_selectionManager" />
+				<required-class name="fa_itemsManager" />
 				<required-class name="f_prop" />
 			</class>
 		</file>
 	</module>
 
 	<module id="menu">
-		<file name="f_menuBase.js">	
-			<class name="f_menuBase">
+		<file name="f_menuBarBase.js">	
+			<class name="f_menuBarBase">
 				<required-class name="f_component" />
 				<required-class name="fa_menuCore" />
 			</class>
 		</file>
 		<file name="f_menuBar.js">
 			<class name="f_menuBar">
-				<required-class name="f_menuBase" />
+				<required-class name="f_menuBarBase" />
 				<required-class name="f_popup" />
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_disabled" />
@@ -528,6 +542,7 @@
 		<file name="f_clientValidator.js">
 			<class name="f_clientValidator">
 				<required-class name="f_component" />
+				<required-class name="f_messageObject" />
 			</class>
 		</file>
 		<file name="f_vb.js">
@@ -836,6 +851,7 @@
 				<required-class name="fa_pagedComponent" />
 				<required-class name="fa_commands" />
 				<required-class name="fa_subMenu" />
+				<required-class name="fa_selectionManager" />
 				<required-class name="fa_checkManager" />
 				<required-class name="fa_scrollPositions" />
 				<required-class name="f_error" />
@@ -855,6 +871,7 @@
 				<required-class name="fa_disabled" />
 				<required-class name="fa_immediate" />
 				<required-class name="fa_subMenu" />
+				<required-class name="fa_selectionManager" />
 				<required-class name="fa_checkManager" />
 				<required-class name="fa_itemClientDatas" />
 				<required-class name="fa_scrollPositions" />
@@ -872,6 +889,13 @@
 		<file name="f_toolBar.js">
 			<class name="f_toolBar">
 				<required-class name="f_component" />
+			</class>
+		</file>
+		<file name="f_toolFolder.js">
+			<class name="f_toolFolder">
+				<required-class name="f_component" />
+				<required-class name="fa_subMenu" />
+				<required-class id="menu" name="f_menu" />
 			</class>
 		</file>
 		<file name="f_itemsToolFolder.js">
@@ -1012,7 +1036,9 @@
 
 	<module id="log">
 		<file name="f_log.js">
-			<class name="f_log"/>
+			<class name="f_log">
+				<required-class name="f_core" />
+			</class>
 		</file>
 	</module>
 
@@ -1096,6 +1122,44 @@
 				<required-class name="f_httpRequest" />				
 				<required-class name="f_error" />
 				<required-class id="progressMonitor" name="f_progressMonitor" />				
+			</class>
+		</file>
+	</module>
+
+	<module id="clientStorage">
+		<file name="f_clientStorage.js">
+			<class name="f_clientStorage">
+				<required-class name="f_object" />
+			</class>
+		</file>
+		<file name="f_cookieClientStorage.js">
+			<class name="f_cookieClientStorage">
+				<required-class name="f_clientStorage" />
+			</class>
+		</file>
+	</module>
+
+	<module id="flash">
+		<file name="f_flashObject.js">
+			<class name="f_flashObject" />
+		</file>
+		<file name="f_flashClientStorage.js">
+			<class name="f_flashClientStorage">
+				<required-class name="f_clientStorage" />
+				<required-class name="f_flashObject" />
+			</class>
+		</file>
+	</module>
+
+	<module id="extraClientStorage">
+		<file name="f_userDataClientStorage.js">
+			<class name="f_userDataClientStorage">
+				<required-class name="f_clientStorage" />
+			</class>
+		</file>
+		<file name="f_domClientStorage.js">
+			<class name="f_domClientStorage">
+				<required-class name="f_clientStorage" />
 			</class>
 		</file>
 	</module>

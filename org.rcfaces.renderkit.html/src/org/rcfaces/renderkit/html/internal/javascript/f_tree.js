@@ -5,7 +5,7 @@
 /**
  * f_tree
  *
- * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager, fa_itemClientDatas, fa_scrollPositions
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
@@ -115,14 +115,14 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 	
 		var node=li._node;
 
 		tree.f_fireEvent(f_event.DBLCLICK, evt, node, node._value);
 
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static 
@@ -134,7 +134,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 
 		if (!tree._focus) {
@@ -154,7 +154,7 @@ var __static = {
 			}
 		}
 
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static 
@@ -166,16 +166,16 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 
 		if (tree.f_isDisabled()) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		var sub=f_core.IsPopupButton(evt);
 		if (!sub) {
-			return f_core.CancelEvent(evt);
+			return f_core.CancelJsEvent(evt);
 		}
 		
 		var menuId=f_tree._BODY_MENU_ID;
@@ -194,7 +194,7 @@ var __static = {
 			});
 		}
 			
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static 
@@ -206,7 +206,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 		
 		var node=li._node;
@@ -224,7 +224,7 @@ var __static = {
 			}
 		}
 		
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static 
@@ -235,7 +235,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		 }
 		
 		tree.f_setFocus();
@@ -249,7 +249,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}		
 
 		if (tree._focus) {
@@ -261,19 +261,30 @@ var __static = {
 		if (tree._selectable) {
 			if (!tree._cursor) {
 				var currentSelection=tree._currentSelection;
-				if (currentSelection.length>0) {
+				if (currentSelection.length) {
 					tree._cursor=currentSelection[0];
+					tree._initCursorValue=undefined;
 				}
 				
 				if (!tree._cursor) {
 					var li=f_core.GetFirstElementByTagName(tree, "LI");
 					if (li) {
 						tree._cursor=li;
+						tree._initCursorValue=undefined;
 					}
 				}
 			}
 		
 			tree._updateSelectedNodes();
+			
+		} else if (!tree._cursor) {
+			var li=f_core.GetFirstElementByTagName(tree, "LI");
+			if (li) {
+				tree._cursor=li;
+				tree._initCursorValue=undefined;
+				
+				tree.fa_updateElementStyle(li);
+			}
 		}
 
 		tree.f_onFocus(evt);
@@ -292,7 +303,7 @@ var __static = {
 		//}
 		
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 		
 		if (!tree._focus) {
@@ -322,7 +333,7 @@ var __static = {
 			return false;
 		}
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 		
 		if (!tree._focus) {
@@ -341,7 +352,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 
 		if (!tree._focus) {
@@ -360,7 +371,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 
 		if (!tree._focus) {
@@ -380,7 +391,7 @@ var __static = {
 		}
 
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 
 		evt.cancelBubble = true;
@@ -437,6 +448,8 @@ var __prototype = {
 			this._preloadedLevelDepth=parseInt(pld);
 		}
 		
+		this._initCursorValue=f_core.GetAttribute(this, "v:cursorValue");
+		
 		var styleSheetBase=f_env.GetStyleSheetBase();
 
 		this._blankNodeImageURL=styleSheetBase+f_tree._BLANK_NODE_IMAGE_URL;
@@ -485,8 +498,8 @@ var __prototype = {
 		}
 		
 		this.onmousedown=f_tree._BodyMouseDown;
-		this.onmouseup=f_core.CancelEventHandler;
-		this.onclick=f_core.CancelEventHandler;
+		this.onmouseup=f_core.CancelJsEventHandler;
+		this.onclick=f_core.CancelJsEventHandler;
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);
 	},
@@ -775,8 +788,8 @@ var __prototype = {
 			divNode.onmouseover=f_tree._DivNode_mouseOver;
 			divNode.onmouseout=f_tree._DivNode_mouseOut;
 			divNode.onmousedown=f_tree._DivNode_mouseDown;
-			divNode.onmouseup=f_core.CancelEventHandler;
-			divNode.onclick=f_core.CancelEventHandler;
+			divNode.onmouseup=f_core.CancelJsEventHandler;
+			divNode.onclick=f_core.CancelJsEventHandler;
 			divNode.ondblclick=f_tree._DivNode_dblClick;
 
 			li.appendChild(divNode);
@@ -795,8 +808,8 @@ var __prototype = {
 					li._command=command;
 									
 					command.onmousedown=f_tree._Command_mouseDown;
-					command.onmouseup=f_core.CancelEventHandler;
-					command.onclick=f_core.CancelEventHandler;
+					command.onmouseup=f_core.CancelJsEventHandler;
+					command.onclick=f_core.CancelJsEventHandler;
 					
 					this._updateCommandStyle(li);					
 				}
@@ -870,6 +883,12 @@ var __prototype = {
 			if (this._checkable) {	
 				this.fa_updateElementCheck(li, li._node._checked);
 			}
+				
+			var initCursorValue=this._initCursorValue;
+			if (!this._cursor && node._value==initCursorValue) {
+				this._cursor=li;
+				this._initCursorValue=undefined;
+			}			
 			
 			this.fa_updateElementStyle(li);
 			
@@ -1702,7 +1721,7 @@ var __prototype = {
 		}
 
 		if (cancel) {
-			return f_core.CancelEvent(evt);		
+			return f_core.CancelJsEvent(evt);		
 		}
 		
 		return true;
@@ -1897,7 +1916,7 @@ var __prototype = {
 			}
 			
 			var ul=li.getElementsByTagName("UL");
-			if (ul.length>0) {
+			if (ul.length) {
 				this.fa_listVisibleElements(ul[0], list);
 			}
 		}
@@ -2412,10 +2431,11 @@ var __prototype = {
 		}
 	
 		var cursor=this._cursor;
+		var cursorValue=null;
 		if (cursor) {
-			cursor=this.fa_getElementValue(cursor);
+			cursorValue=this.fa_getElementValue(cursor);
 		}
-		this.f_setProperty(f_prop.CURSOR, cursor);
+		this.f_setProperty(f_prop.CURSOR, cursorValue);
 		
 		this.f_setProperty(f_prop.HORZSCROLLPOS, this.scrollLeft);
 		this.f_setProperty(f_prop.VERTSCROLLPOS, this.scrollTop);
@@ -2607,4 +2627,4 @@ var __prototype = {
 	}	
 }
 
-new f_class("f_tree", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_checkManager, fa_itemClientDatas, fa_scrollPositions);
+new f_class("f_tree", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions);

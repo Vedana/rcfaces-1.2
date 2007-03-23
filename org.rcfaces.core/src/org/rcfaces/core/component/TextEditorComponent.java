@@ -35,7 +35,7 @@ public class TextEditorComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","errorStyleClass","styleClass","fatalStyleClass","text","infoStyleClass","required","valueChangeListener","readOnly","focusStyleClass","warnStyleClass","emptyMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","valueMimeType","valueChangeListener","warnStyleClass","styleClass","text","infoStyleClass","readOnly","focusStyleClass","emptyMessage"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -267,6 +267,30 @@ public class TextEditorComponent extends AbstractInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listSelectionListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public final String getValueMimeType() {
+		return getValueMimeType(null);
+	}
+
+	public final String getValueMimeType(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VALUE_MIME_TYPE, facesContext);
+	}
+
+	public final void setValueMimeType(String valueMimeType) {
+		engine.setProperty(Properties.VALUE_MIME_TYPE, valueMimeType);
+	}
+
+	public final void setValueMimeType(ValueBinding valueMimeType) {
+		engine.setProperty(Properties.VALUE_MIME_TYPE, valueMimeType);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "valueMimeType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isValueMimeTypeSetted() {
+		return engine.isPropertySetted(Properties.VALUE_MIME_TYPE);
 	}
 
 	protected Set getCameliaFields() {

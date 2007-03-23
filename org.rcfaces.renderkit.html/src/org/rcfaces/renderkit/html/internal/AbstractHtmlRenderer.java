@@ -37,6 +37,7 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.event.BlurEvent;
 import org.rcfaces.core.event.CheckEvent;
 import org.rcfaces.core.event.CloseEvent;
@@ -271,10 +272,9 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
 
                     public void decodeEvent(UIComponent component,
                             IEventData eventData) {
-                        // @XXX A Completer avec les noms des propriétés ...
-
                         FacesEvent event = new UserEvent(component, eventData
-                                .getEventValue(), eventData.getEventDetail());
+                                .getEventValue(), eventData.getEventItem(),
+                                eventData.getEventDetail());
                         queueEvent(component, event);
                     }
                 });
@@ -488,6 +488,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         if (component instanceof NamingContainer) {
             writeNamingContainer(writer, (NamingContainer) component);
         }
+
+        writeRole(writer, component);
 
         return writer;
     }
@@ -778,6 +780,13 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
 
         IEventDecoder eventDecoder = (IEventDecoder) EVENT_DECODERS
                 .get(eventData.getEventName());
+
+        if (eventDecoder == null) {
+            LOG.error("Unknown decoder for event name '"
+                    + eventData.getEventName() + "'.");
+            return;
+        }
+
         eventDecoder.decodeEvent(component, eventData);
     }
 
@@ -1008,5 +1017,26 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         }
 
         return true;
+    }
+
+    protected void writeRole(IHtmlWriter writer, UIComponent component)
+            throws WriterException {
+
+        String waiRole = null;
+        if (component instanceof IWAIRoleCapability) {
+            waiRole = ((IWAIRoleCapability) component).getWaiRole();
+        }
+
+        if (waiRole == null) {
+            waiRole = getWAIRole();
+        }
+
+        if (waiRole != null) {
+            writer.writeRole(waiRole);
+        }
+    }
+
+    protected String getWAIRole() {
+        return null;
     }
 }

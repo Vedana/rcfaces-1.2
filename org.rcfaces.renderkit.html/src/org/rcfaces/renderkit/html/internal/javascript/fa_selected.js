@@ -69,5 +69,5 @@ var __prototype = {
 	f_setProperty: f_class.ABSTRACT
 }
 
-var fa_selected=new f_aspect("fa_selected", null, __prototype);
+new f_aspect("fa_selected", null, __prototype);
 	

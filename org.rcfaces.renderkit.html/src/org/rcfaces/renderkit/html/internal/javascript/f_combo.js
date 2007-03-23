@@ -240,10 +240,7 @@ var __prototype = {
 	 * @method private
 	 */
 	_callServer: function() {
-		if (!window.f_httpRequest) {
-			f_core.Error(f_combo, "Class f_httpRequest is not defined !");
-			return;
-		}
+		f_class.IsClassDefined("f_httpRequest", true);
 		
 		var w=f_core.GetCurrentStyleProperty(this, "width");
 		if (f_core.IsGecko()) {

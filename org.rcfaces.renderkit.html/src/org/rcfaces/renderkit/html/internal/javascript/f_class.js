@@ -49,7 +49,7 @@ var __static = {
 	 * @method private static final string
 	 */
 	_Call: function(obj,m,a) {
-		if (!a || a.length<1) {
+		if (!a || !a.length) {
 			return m.call(obj);
 		}
 		return m.apply(obj, a);
@@ -88,8 +88,53 @@ var __static = {
 
 			callee._ksuper=ksuper;
 		}
-		
+	
 		var nargs=arguments.length;
+		
+		if (ksuper._kcreateAspectMethod) {
+// On évite d'empiler ... (a cause de IE)
+//			return f_class._ManageAspects(arguments, this);
+
+			var callerArguments = new Array;
+			if (nargs>1) {
+				f_core.PushArguments(callerArguments, arguments, 1);
+			}
+	
+			var before=ksuper._kbefore;
+			if (before) {
+				for(var i=0;i<before.length;i++) {
+					before[i].apply(this, callerArguments);
+				}
+			}
+			
+			var ret=undefined;
+			var kmethod=ksuper._kmethod;
+			var after=ksuper._kafter;
+			if (kmethod) {
+				try {
+					ret=kmethod.apply(this, callerArguments);
+					
+				} catch (x) {
+					var throwing=ksuper._kthrowing;
+					if (throwing) {
+						for(var i=0;i<throwing.length;i++) {
+							throwing[i].call(this, x, kmethod, callerArguments);
+						}
+					}
+
+					throw x;
+				}
+			}
+
+			if (after) {
+				for(var i=0;i<after.length;i++) {
+					after[i].apply(this, callerArguments);
+				}
+			}
+
+			return ret;	
+		}
+		
 		switch(nargs) {
 		case 1:
 			return ksuper.call(this);
@@ -106,6 +151,8 @@ var __static = {
 	 * @method hidden static final
 	 */
 	InitializeClass: function(claz) {
+		f_core.Assert(typeof(claz)=="object" && claz, "Invalid claz parameter '"+claz+"'.");
+		
 		if (claz._initialized) {
 			return;
 		}
@@ -149,6 +196,9 @@ var __static = {
 	 * @method private static final
 	 */
 	_InitializeClassMembers: function(claz, methods) {
+		f_core.Assert(typeof(claz)=="object" && claz, "Invalid claz parameter '"+claz+"'.");
+		f_core.Assert(typeof(methods)=="object" && methods, "Invalid methods parameter '"+methods+"'.");		
+		
 		var members=claz._members;
 /*
 		if (members instanceof _remapContext) {
@@ -162,8 +212,10 @@ var __static = {
 
 			var type=typeof(member);
 
-			f_core.Assert(type!="undefined", "f_class._InitializeClassMembers: Type undefined for "+claz._name+"."+memberName);
+			// On verifie plus le "undefined" car on accepte la déclaration de champs non static !
+			//f_core.Assert(type!="undefined", "f_class._InitializeClassMembers: Type undefined for "+claz._name+"."+memberName);
 			if (type=="undefined") {
+				// declaration d'un champ !
 				continue;
 			}		
 
@@ -190,33 +242,25 @@ var __static = {
 	 */
 	_ManageAspects: function(callerArguments, callerThis) {
 		var obj=callerArguments.callee;
-			
-		var params;
-		if (callerArguments.length) {
-			params = new Array;
-
-			for (var i=0;i<callerArguments.length;i++) { 
-				params.push(callerArguments[i]);
-			}
-		}
 		
 		var before=obj._kbefore;
 		if (before) {
 			for(var i=0;i<before.length;i++) {
-				f_class._Call(callerThis, before[i], params);
+				before[i].apply(callerThis, callerArguments);
 			}
 		}
 		
 		var ret=undefined;
-		if (obj._kmethod) {
+		var kmethod=obj._kmethod;
+		if (kmethod) {
 			try {
-				f_class._Call(callerThis, obj._kmethod, params);
+				ret=kmethod.apply(callerThis, callerArguments);
 				
 			} catch (x) {
 				var throwing=obj._kthrowing;
 				if (throwing) {
 					for(var i=0;i<throwing.length;i++) {
-						throwing[i].call(callerThis, x, obj._kmethod, params);
+						throwing[i].call(callerThis, x, kmethod, callerArguments);
 					}					
 				}
 				
@@ -227,7 +271,7 @@ var __static = {
 		var after=obj._kafter;
 		if (after) {
 			for(var i=0;i<after.length;i++) {
-				f_class._Call(callerThis, after[i], params);
+				after[i].apply(callerThis, callerArguments);
 			}
 		}
 		
@@ -346,7 +390,7 @@ var __static = {
 			for(var pclaz=claz;!old && pclaz;pclaz=pclaz._parent) {
 				old=pclaz._constructor;
 			}
-					
+
 		} else {
 			old=methods[memberName];
 		}
@@ -357,6 +401,7 @@ var __static = {
 			f._kmethod=old;
 			f._kname=memberName;
 			f._kclass=claz;
+			f._kcreateAspectMethod=true;
 			
 			if (constructor) {
 				claz._constructor=f;
@@ -432,7 +477,7 @@ var __static = {
 		f_core.Assert(typeof(constructor)=="function", "f_class.Init: No constructor for class '"+cls._name+"'.");
 
 		try {
-			f_class._Call(obj, constructor, args);
+			constructor.apply(obj, args);
 		
 		} catch (ex) {
 			f_core.Error(f_class, "Call of constructor of '"+cls._name+"' throws exception ! (id='"+obj.id+"')", ex);
@@ -517,16 +562,40 @@ var __static = {
 		}
 		
 		if (!staticMembers.f_getName) {
-			staticMembers.f_getName=f_class.f_getName;
+			staticMembers.f_getName=window.f_class.f_getName;
 		}
 		
 		if (!staticMembers.toString) {	
-			staticMembers.toString=f_class.toString;
+			staticMembers.toString=window.f_class.toString;
 		}			
 		
 		cls._staticMembers=staticMembers;
 				
 		cls._classLoader.f_declareClass(cls);
+	},
+	
+	/**
+	 * @method hidden static
+	 * @param String className
+	 * @param optional String requiredClassErrorMessage
+	 * @return boolean
+	 */
+	IsClassDefined: function(className, requiredClassErrorMessage) {
+		f_core.Assert(typeof(className)=="string" && className.length, "f_class.IsClassDefined: Invalid className parameter ("+className+")");
+		
+		var clazz=window[className];
+		if (clazz) {
+			return true;
+		}
+		
+		if (requiredClassErrorMessage) {
+			if (requiredClassErrorMessage===true) {
+				throw new Error("Panic: Required class '"+requiredClass+"' is not loaded !");
+			}
+			throw new Error(requiredClassErrorMessage);
+		}
+		
+		return false;
 	},
 
 	_remapContext: function() {

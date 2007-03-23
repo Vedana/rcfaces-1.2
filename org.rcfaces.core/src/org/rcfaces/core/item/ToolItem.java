@@ -51,6 +51,12 @@ public class ToolItem extends SelectItemGroup implements IToolItem {
 
     private boolean visible = true;
 
+    private String borderType;
+
+    private int textPosition = -1;
+
+    private String accessKey;
+
     public ToolItem() {
     }
 
@@ -77,6 +83,10 @@ public class ToolItem extends SelectItemGroup implements IToolItem {
         setLookId(toolItem.getLookId());
         setImageWidth(toolItem.getImageWidth());
         setImageHeight(toolItem.getImageHeight());
+        setBorderType(toolItem.getBorderType());
+
+        setTextPosition(toolItem.getTextPosition());
+        setAccessKey(toolItem.getAccessKey());
 
         setVisible(toolItem.isVisible());
 
@@ -137,6 +147,11 @@ public class ToolItem extends SelectItemGroup implements IToolItem {
         setLookId(toolItemComponent.getLookId(facesContext));
 
         setVisible(toolItemComponent.isVisible(facesContext));
+        setBorderType(toolItemComponent.getBorderType(facesContext));
+
+        setTextPosition(toolItemComponent.getTextPosition(facesContext));
+
+        setAccessKey(toolItemComponent.getAccessKey(facesContext));
     }
 
     public String getImageURL() {
@@ -269,6 +284,30 @@ public class ToolItem extends SelectItemGroup implements IToolItem {
 
     public final void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public final String getBorderType() {
+        return borderType;
+    }
+
+    public final void setBorderType(String borderType) {
+        this.borderType = borderType;
+    }
+
+    public final int getTextPosition() {
+        return textPosition;
+    }
+
+    public final void setTextPosition(int textPosition) {
+        this.textPosition = textPosition;
+    }
+
+    public final String getAccessKey() {
+        return accessKey;
+    }
+
+    public final void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
     }
 
 }

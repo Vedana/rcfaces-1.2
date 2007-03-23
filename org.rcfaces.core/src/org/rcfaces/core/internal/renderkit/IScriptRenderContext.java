@@ -15,6 +15,6 @@ public interface IScriptRenderContext {
 
     Locale getUserLocale();
 
-    String convertSymbol(String symbol);
+    String convertSymbol(String className, String memberName);
 
 }

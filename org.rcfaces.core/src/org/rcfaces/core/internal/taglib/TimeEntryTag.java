@@ -26,6 +26,10 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 	private String literalTimeZone;
 	private String componentLocale;
 	private String componentTimeZone;
+	private String errorStyleClass;
+	private String fatalStyleClass;
+	private String infoStyleClass;
+	private String warnStyleClass;
 	private String autoCompletion;
 	private String time;
 	private String minTime;
@@ -118,6 +122,38 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 
 	public final void setComponentTimeZone(String componentTimeZone) {
 		this.componentTimeZone = componentTimeZone;
+	}
+
+	public final String getErrorStyleClass() {
+		return errorStyleClass;
+	}
+
+	public final void setErrorStyleClass(String errorStyleClass) {
+		this.errorStyleClass = errorStyleClass;
+	}
+
+	public final String getFatalStyleClass() {
+		return fatalStyleClass;
+	}
+
+	public final void setFatalStyleClass(String fatalStyleClass) {
+		this.fatalStyleClass = fatalStyleClass;
+	}
+
+	public final String getInfoStyleClass() {
+		return infoStyleClass;
+	}
+
+	public final void setInfoStyleClass(String infoStyleClass) {
+		this.infoStyleClass = infoStyleClass;
+	}
+
+	public final String getWarnStyleClass() {
+		return warnStyleClass;
+	}
+
+	public final void setWarnStyleClass(String warnStyleClass) {
+		this.warnStyleClass = warnStyleClass;
 	}
 
 	public final String getAutoCompletion() {
@@ -213,6 +249,10 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
 			LOG.debug("  componentLocale='"+componentLocale+"'");
 			LOG.debug("  componentTimeZone='"+componentTimeZone+"'");
+			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
+			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
+			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
+			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
 			LOG.debug("  time='"+time+"'");
 			LOG.debug("  minTime='"+minTime+"'");
@@ -325,6 +365,46 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (errorStyleClass != null) {
+			if (isValueReference(errorStyleClass)) {
+				ValueBinding vb = application.createValueBinding(errorStyleClass);
+
+				component.setErrorStyleClass(vb);
+			} else {
+				component.setErrorStyleClass(errorStyleClass);
+			}
+		}
+
+		if (fatalStyleClass != null) {
+			if (isValueReference(fatalStyleClass)) {
+				ValueBinding vb = application.createValueBinding(fatalStyleClass);
+
+				component.setFatalStyleClass(vb);
+			} else {
+				component.setFatalStyleClass(fatalStyleClass);
+			}
+		}
+
+		if (infoStyleClass != null) {
+			if (isValueReference(infoStyleClass)) {
+				ValueBinding vb = application.createValueBinding(infoStyleClass);
+
+				component.setInfoStyleClass(vb);
+			} else {
+				component.setInfoStyleClass(infoStyleClass);
+			}
+		}
+
+		if (warnStyleClass != null) {
+			if (isValueReference(warnStyleClass)) {
+				ValueBinding vb = application.createValueBinding(warnStyleClass);
+
+				component.setWarnStyleClass(vb);
+			} else {
+				component.setWarnStyleClass(warnStyleClass);
+			}
+		}
+
 		if (autoCompletion != null) {
 			if (isValueReference(autoCompletion)) {
 				ValueBinding vb = application.createValueBinding(autoCompletion);
@@ -427,6 +507,10 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		literalTimeZone = null;
 		componentLocale = null;
 		componentTimeZone = null;
+		errorStyleClass = null;
+		fatalStyleClass = null;
+		infoStyleClass = null;
+		warnStyleClass = null;
 		autoCompletion = null;
 		time = null;
 		minTime = null;

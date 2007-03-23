@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Arrays;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.tools.MarginTools;
@@ -28,6 +29,7 @@ import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
 /**
@@ -39,12 +41,14 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 	IPropertyChangeEventCapability,
 	IUserEventCapability,
 	IErrorEventCapability,
+	IWAIRoleCapability,
 	IPositionCapability,
 	ISizeCapability,
 	IMarginCapability,
 	IHelpCapability,
 	IForegroundBackgroundColorCapability,
 	IVisibilityCapability,
+	IHiddenModeCapability,
 	ILookAndFeelCapability,
 	IStyleClassCapability,
 	IServerDataManager,
@@ -52,7 +56,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","toolTipText","hiddenMode","foregroundColor","userEventListener","helpMessage","marginBottom","helpURL","styleClass","height","margins","visible","y","propertyChangeListener","lookId","marginLeft","marginTop","backgroundColor","errorListener","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","waiRole","marginRight","toolTipText","hiddenMode","foregroundColor","userEventListener","helpMessage","helpURL","marginBottom","styleClass","height","margins","visible","y","propertyChangeListener","lookId","marginLeft","marginTop","backgroundColor","errorListener","x"}));
 	}
 
 
@@ -325,6 +329,28 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	public final javax.faces.event.FacesListener [] listErrorListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	}
+
+	public final java.lang.String getWaiRole() {
+		return getWaiRole(null);
+	}
+
+	/**
+	 * See {@link #getWaiRole() getWaiRole()} for more details
+	 */
+	public final java.lang.String getWaiRole(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WAI_ROLE, facesContext);
+	}
+
+	public final void setWaiRole(java.lang.String waiRole) {
+		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	/**
+	 * See {@link #setWaiRole(String) setWaiRole(String)} for more details
+	 */
+	public final void setWaiRole(ValueBinding waiRole) {
+		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
 	public final java.lang.String getX() {
@@ -613,28 +639,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
-	public final int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	public final void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	/**
-	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
-	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
 	public final boolean isVisible() {
 		return isVisible(null);
 	}
@@ -662,6 +666,28 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 			return getVisibleState(null);
 		
+	}
+
+	public final int getHiddenMode() {
+		return getHiddenMode(null);
+	}
+
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
+	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+	}
+
+	public final void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
+	public final void setHiddenMode(ValueBinding hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	public final java.lang.String getLookId() {

@@ -10,6 +10,12 @@
  * @version $Revision$ $Date$
  */
 var __prototype = {
+
+	/**
+	 * @field protected
+	 */
+	_loading: undefined,
+
 	f_finalize: function() {
 		this._nextCommand=undefined; // function
 	},
@@ -57,10 +63,7 @@ var __prototype = {
 		}
 		
 		return true;
-	},
-
-	
-	_loading: f_class.ABSTRACT
+	}
 }
 
-var fa_commands=new f_aspect("fa_commands", null, __prototype);
+new f_aspect("fa_commands", null, __prototype);

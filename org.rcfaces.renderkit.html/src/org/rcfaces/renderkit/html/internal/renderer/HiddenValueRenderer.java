@@ -45,7 +45,7 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
 
         htmlWriter.writeType("hidden");
 
-        Object value = hiddenValueComponent.getValue();
+        Object value = getSubmittedValue(hiddenValueComponent);
         if (value != null) {
             String svalue = convertValue(facesContext, hiddenValueComponent,
                     value);
@@ -68,7 +68,9 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
 
         String newValue = componentData.getComponentParameter();
 
-        if (newValue != null) {
+        if (newValue != null
+                && hiddenValueComponent
+                        .isValueLocked(context.getFacesContext()) == false) {
             hiddenValueComponent.setSubmittedValue(newValue);
         }
     }

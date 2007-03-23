@@ -9,12 +9,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 
@@ -23,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
+import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.lang.IAdaptable;
@@ -293,17 +301,24 @@ public final class ComponentTools {
         }
 
         ITransientAttributesManager manager = (ITransientAttributesManager) variableScopeCapability;
-        Object ret = manager.getTransientAttribute(VARIABLE_SCOPE_VALUE);
-        if (ret != null) {
-            if (ret == NONE_VARIABLE_SCOPE) {
-                ret = null;
+
+        if (false) {
+            /**
+             * On peut pas mettre la valeur en cache !
+             */
+            Object ret = manager.getTransientAttribute(VARIABLE_SCOPE_VALUE);
+            if (ret != null) {
+                if (ret == NONE_VARIABLE_SCOPE) {
+                    ret = null;
+                }
+
+                Map requestMap = facesContext.getExternalContext()
+                        .getRequestMap();
+
+                Object old = requestMap.put(var, ret);
+
+                return new VarScope(var, old);
             }
-
-            Map requestMap = facesContext.getExternalContext().getRequestMap();
-
-            Object old = requestMap.put(var, ret);
-
-            return new VarScope(var, old);
         }
 
         ValueBinding valueBinding = variableScopeCapability.getScopeValue();
@@ -313,13 +328,19 @@ public final class ComponentTools {
 
         Map requestMap = facesContext.getExternalContext().getRequestMap();
 
-        ret = valueBinding.getValue(facesContext);
-        if (ret == null) {
-            manager.setTransientAttribute(VARIABLE_SCOPE_VALUE,
-                    NONE_VARIABLE_SCOPE);
+        Object ret = valueBinding.getValue(facesContext);
+        if (false) {
+            /**
+             * On peut pas mettre la valeur en cache !
+             */
 
-        } else {
-            manager.setTransientAttribute(VARIABLE_SCOPE_VALUE, ret);
+            if (ret == null) {
+                manager.setTransientAttribute(VARIABLE_SCOPE_VALUE,
+                        NONE_VARIABLE_SCOPE);
+
+            } else {
+                manager.setTransientAttribute(VARIABLE_SCOPE_VALUE, ret);
+            }
         }
 
         Object old = requestMap.put(var, ret);
@@ -421,7 +442,7 @@ public final class ComponentTools {
             return null;
         }
 
-        return selectionProvider.getSelection();
+        return selectionProvider.getSelectedValues();
     }
 
     public static Object getCheckedValues(Object value, UIComponent component,
@@ -459,7 +480,7 @@ public final class ComponentTools {
             return null;
         }
 
-        return checkProvider.getCheckValue();
+        return checkProvider.getCheckedValues();
     }
 
     public static Object getCursorValue(Object value, UIComponent component,
@@ -498,5 +519,74 @@ public final class ComponentTools {
         }
 
         return cursorProvider.getCursorValue();
+    }
+
+    public static void addConversionErrorMessage(FacesContext context,
+            UIInput input, ConverterException ce, Object submittedValue) {
+        FacesMessage message = ce.getFacesMessage();
+        if (message == null) {
+            message = new FacesMessage("Conversion error !"); // TODO
+            // MessageFactory.getMessage(context,
+            // CONVERSION_MESSAGE_ID);
+            if (message.getDetail() == null) {
+                message.setDetail(ce.getMessage());
+            }
+        }
+
+        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage(input.getClientId(context), message);
+
+    }
+
+    public static void broadcastCommand(UICommand component,
+            ActionEvent facesEvent, FacesListener listeners[]) {
+
+        if (facesEvent == null) {
+            throw new NullPointerException("Event is null");
+        }
+
+        boolean found = false;
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if (listeners != null && listeners.length > 0) {
+            for (int i = 0; i < listeners.length; i++) {
+                FacesListener listener = listeners[i];
+
+                if (listener instanceof IScriptListener) {
+                    continue;
+                }
+
+                if (facesEvent.isAppropriateListener(listener) == false) {
+                    continue;
+                }
+
+                facesEvent.processListener(listener);
+
+                found = true;
+
+                /*
+                 * On les appelle tous ? if (facesContext.getRenderResponse()) {
+                 * break; }
+                 */
+            }
+        }
+
+        if (found) {
+            return;
+        }
+
+        // Notify the specified action listener method (if any)
+        MethodBinding mb = component.getActionListener();
+        if (mb != null) {
+            mb.invoke(facesContext, new Object[] { facesEvent });
+        }
+
+        // Invoke the default ActionListener
+        ActionListener listener = facesContext.getApplication()
+                .getActionListener();
+        if (listener != null) {
+            listener.processAction(facesEvent);
+        }
     }
 }

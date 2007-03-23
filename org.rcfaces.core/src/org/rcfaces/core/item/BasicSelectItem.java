@@ -11,7 +11,6 @@ import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.ICheckedCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
@@ -25,9 +24,8 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
  * @version $Revision$ $Date$
  */
 public class BasicSelectItem extends SelectItem implements ISelectItem,
-        IAccessKeyItem, IAcceleratorKeyItem, IGroupSelectItem,
-        ICheckSelectItem, IInputTypeItem, IVisibleItem, IServerDataItem,
-        IClientDataItem, IStyleClassItem {
+        IAccessKeyItem, IAcceleratorKeyItem, IGroupSelectItem, IInputTypeItem,
+        IVisibleItem, IServerDataItem, IClientDataItem, IStyleClassItem {
     private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 6953469102413843158L;
@@ -43,8 +41,6 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
     private String acceleratorKey;
 
     private String groupName;
-
-    private boolean checked;
 
     private boolean visible = true;
 
@@ -96,13 +92,6 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
         } else {
             acceleratorKey = null;
-        }
-
-        if (component instanceof ICheckedCapability) {
-            checked = ((ICheckedCapability) component).isChecked();
-            s = IInputTypeCapability.AS_CHECK_BUTTON;
-        } else {
-            checked = false;
         }
 
         if (component instanceof IRadioGroupCapability) {
@@ -175,15 +164,6 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         return component.getId();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.model.ICheckSelectItem#isChecked()
-     */
-    public boolean isChecked() {
-        return checked;
-    }
-
     public int getInputType() {
         return inputType;
     }
@@ -194,10 +174,6 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
     public void setAccessKey(String accessKey) {
         this.accessKey = accessKey;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
     }
 
     public void setGroupName(String groupName) {

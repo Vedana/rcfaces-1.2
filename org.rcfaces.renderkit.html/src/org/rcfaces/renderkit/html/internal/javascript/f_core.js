@@ -66,7 +66,27 @@ var f_core = {
 	/**
 	 * @field private static final number
 	 */
+	_TEXT_NODE: 3,
+	
+	/**
+	 * @field private static final number
+	 */
+	_CDATA_SECTION_NODE: 4,
+	
+	/**
+	 * @field private static final number
+	 */
 	_DOCUMENT_NODE: 9,
+	
+	/**
+	 * @field private static final number
+	 */
+	_RCFACES_EXITING: 1,
+
+	/**
+	 * @field private static final number
+	 */
+	_RCFACES_EXITED: 2,
 
 	/**
 	 * @field hidden static final String
@@ -253,9 +273,12 @@ var f_core = {
 			var l=window._coreLogs;
 			if (l) {
 				window._coreLogs=undefined;
+				
+				f_core._Logging=undefined;
 				for(var i=0;i<l.length;i++) {
 					f_core._AddLog.apply(f_core, l[i]);
 				}
+				f_core._Logging=true;
 			}
 	
 			if (level===undefined) {
@@ -461,6 +484,7 @@ var f_core = {
 				if (exception) {
 					msg+="\n"+exception;
 				}
+				
 				window.dump(msg);
 			}
 		}
@@ -724,7 +748,7 @@ var f_core = {
 			}
 			
 			// Les objets non encore initializés		
-			window._classLoader._initializeObjects();
+			window._classLoader.f_initializeObjects();
 	
 			f_core.Profile(null, "f_core.onInit.objects");
 
@@ -780,7 +804,13 @@ var f_core = {
 	_OnExit: function() {
 		var win=this;
 		
-		win._f_exiting=true;
+		if (win._f_exiting) {
+			return;
+		}
+		
+		win._f_exiting=f_core._RCFACES_EXITING;
+		
+		var exitedState=f_core._RCFACES_EXITED;
 		try {		
 			var document=win.document;
 	
@@ -814,10 +844,10 @@ var f_core = {
 					f_core.RemoveEventListener(f, "submit", f_core._OnSubmit);
 					f_core.RemoveEventListener(f, "reset", f_core._OnReset);
 		
-					f._checkListeners=undefined;
-					f._resetListeners=undefined;
-					f._messageContext=undefined;
-					f.f_findComponent=undefined;
+					f._checkListeners=undefined; // List<method>
+					f._resetListeners=undefined; // List<method>
+					f._messageContext=undefined; // f_messageContext
+					f.f_findComponent=undefined; // function
 					
 					if (f._oldSubmit) {
 						try {
@@ -831,7 +861,7 @@ var f_core = {
 					}
 				}
 		
-				document._lazyIndex=undefined;
+			//	document._lazyIndex=undefined; // number
 		
 				// Terminate packages here
 				win._classLoader._onExit();
@@ -845,7 +875,7 @@ var f_core = {
 				f_core.Profile(true, "f_core.onExit");
 			}
 		} finally {
-			win._f_exiting=undefined;
+			win._f_exiting=exitedState;
 		}
 	},
 	/**
@@ -918,14 +948,19 @@ var f_core = {
 	
 		// Optimisation s'il n'y a qu'une seule form !
 		var forms=elt.ownerDocument.forms;
-		if (forms.length==1) {
-			f_core.Debug(f_core, "Only one form into document, returns "+forms[0].id);
+		switch(forms.length) {
+		case 0:
+			f_core.Debug(f_core, "No form into document !");
+			return null;
+
+		case 1:
+//			f_core.Debug(f_core, "Only one form into document, returns "+forms[0].id);
 			return forms[0];
 		}
 	
 		for(var f=elt;f;f=f.parentNode) {
 			var tagName=f.tagName;
-			if (!tagName || f.nodeType!=1) {
+			if (!tagName || f.nodeType!=f_core._ELEMENT_NODE) {
 				continue;
 			}
 			
@@ -995,7 +1030,7 @@ var f_core = {
 		var children=component.childNodes;
 		for(var i=0;i<children.length;) {
 			var child=children[i];
-			if (child.nodeType!=3) {
+			if (child.nodeType!=f_core._TEXT_NODE) {
 				//i++;
 				component.removeChild(child);
 				continue;
@@ -1028,12 +1063,12 @@ var f_core = {
 			var child=children[i];
 			
 			switch(child.nodeType) {
-			case 3:
-			case 4:
+			case f_core._TEXT_NODE:
+			case f_core._CDATA_SECTION_NODE:
 				text+=child.data;
 				break;
 				
-			case 1:
+			case f_core._ELEMENT_NODE:
 				if (concatChildren) {
 					text+=f_core.GetTextNode(child, true);
 				}
@@ -1049,7 +1084,7 @@ var f_core = {
 	 */
 	_OnReset: function(evt) {
 		if (!evt) {
-			evt = f_core.GetEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 		
 		var win;
@@ -1104,7 +1139,7 @@ var f_core = {
 			// evt peut être null !
 	
 			if (!window._submitting && f_env.GetCancelExternalSubmit()) {
-				return f_core.CancelEvent(evt);
+				return f_core.CancelJsEvent(evt);
 			}
 		
 			var win;
@@ -1133,7 +1168,7 @@ var f_core = {
 	
 			if (win.f_event) {
 				if (win.f_event.GetEventLocked(true)) {
-					return f_core.CancelEvent(evt);
+					return f_core.CancelJsEvent(evt);
 				}
 			}
 	
@@ -1143,11 +1178,11 @@ var f_core = {
 				// Cas ou l'utilisateur va plus vite que la musique ! (avant le onload de la page)
 				
 				if (f_env.IsSubmitUntilPageCompleteLocked()) {
-					return f_core.CancelEvent(evt);
+					return f_core.CancelJsEvent(evt);
 				}
 				
 				// On essaye d'initialiser les objets qui ne sont pas encore initializés
-				window._classLoader._initializeObjects();
+				window._classLoader.f_initializeObjects();
 				
 				// XXX Il faut peut etre attendre QUE TOUTS LES OBJETS soient initialisés ?
 				
@@ -1180,7 +1215,7 @@ var f_core = {
 				
 				f_core.Debug(f_core, "Validation of checkers returns: "+valid);
 				if (!valid) {
-					return f_core.CancelEvent(evt);
+					return f_core.CancelJsEvent(evt);
 				}
 			}
 			
@@ -1219,10 +1254,10 @@ var f_core = {
 			var type;
 			if (typeof(event)=="string") {
 				type=event;	
-				event=f_event.GetEvent(form);
+				event=f_event.GetEvent();
 	
 			} else if (!event) {
-				event=f_event.GetEvent(form);
+				event=f_event.GetEvent();
 			}
 	
 			// Get element from event info if given
@@ -1288,7 +1323,10 @@ var f_core = {
 			f_core.SetInputHidden(form, f_core._VALUE, eventValue);
 		
 			var eventItem=(event)?event.f_getItem():null;
-			f_core.SetInputHidden(form, f_core._ITEM, eventValue);
+			if (eventItem && typeof(eventItem)!="string") {
+				eventItem=String(eventItem);
+			}
+			f_core.SetInputHidden(form, f_core._ITEM, eventItem);
 
 			var eventDetail=(event)?event.f_getDetail():null;
 			f_core.SetInputHidden(form, f_core._DETAIL, eventDetail);
@@ -1639,7 +1677,7 @@ var f_core = {
 	 */
 	_CallFormCheckListeners: function(form) {
 		var checkListeners=form._checkListeners;
-		if (!checkListeners || checkListeners.length<1) {
+		if (!checkListeners || !checkListeners.length) {
 		
 			f_core.Debug(f_core, "No check listeners to call ...");
 			return true;
@@ -1912,7 +1950,7 @@ var f_core = {
 				return (cs==claz)?elt:null;
 			}
 			
-			var classes=cs.split(" ");
+			var classes=cs.split(' ');
 			for(var i=0;i<classes.length;i++) {
 				if (classes[i]==claz) {
 					return elt;
@@ -1986,67 +2024,83 @@ var f_core = {
 	 * @return HTMLElement
 	 */
 	GetChildByClass: function(elt,claz,css) {
-		var comp = f_core._InstanceOf(elt,claz,css);
-		if (comp) {
-			return comp;
-		}
-		var ns=elt.childNodes
-		if (!ns) {
-			return null;
-		}
-		for(var i=0;i<ns.length;i++) {
-			var n=ns[i];
-			comp =  f_core._InstanceOf(n,claz,css);
+		var stack=[elt];		
+		for(;stack.length;) {
+			var n=stack.pop();
+			
+			var comp = f_core._InstanceOf(n, claz, css);
 			if (comp) {
 				return comp;
 			}
-		}
-		for(var i=0;i<ns.length;i++) {
-			var n= f_core.GetChildByClass(ns[i],claz,css);
-			if (n) {
-				return n;
+			
+			var cn=n.childNodes;
+			if (!cn.length) {
+				continue;
+			}
+			
+			for(var i=0;i<cn.length;i++) {
+				n=cn[i];
+				if (n.nodeType!=f_core._ELEMENT_NODE) {
+					continue;
+				}
+				
+				stack.push(n);
 			}
 		}
 		
 		return null;
 	},
 	/**
-	 * Find component
+	 * Find a child by its identifier.  <b>(The naming separator IS ':')</b>
 	 *
 	 * @method public static
-	 * @param String... id Identifier
+	 * @param String id The identifier of the component. (naming separator is ':')
+	 * @param optional Document doc The document.
 	 * @return HTMLElement
 	 */
-	FindComponent: function(id) {
-		var component=document.body;
-		f_core.Assert(component && component.tagName, "f_core.FindComponent: Invalid body component !");
-		
-		for(var i=0;component && i<arguments.length;i++) {
-			component=fa_namingContainer.SearchElementById(component, arguments[i]);
+	FindComponent: function(id, doc) {
+		f_core.Assert(typeof(id)=="string", "f_core.FindComponent: Invalid id parameter '"+id+"'.");
+		f_core.Assert(doc===undefined || (doc && doc.nodeType==f_core._DOCUMENT_NODE), "f_core.FindComponent: Invalid document parameter '"+doc+"'.");
+
+		if (!doc) {
+			doc=document;
 		}
 		
-		return component;
+		return f_namingContainer.FindComponent(doc.body, id);
 	},
 	/**
-	 * Find a child by its identifier.
+	 * Find a child by its identifier. <b>(The naming separator might not be ':')</b>
 	 *
 	 * @method public static
-	 * @param String id Identifier
+	 * @param String id  The identifier of the component. (naming separator might not be is ':')
+	 * @deprecated Replaced by f_core.GetElementByClientId() .
+	 * @return HTMLElement
+	 */
+	GetElementById: function(id, doc, noCompleteComponent) {
+		return f_core.GetElementByClientId.apply(f_core, arguments);
+	},
+	/**
+	 * Find a child by its identifier. <b>(The naming separator might not be ':')</b>
+	 *
+	 * @method public static
+	 * @param String id  The identifier of the component. (naming separator might not be is ':')
 	 * @param optional Document doc Document.
 	 * @param hidden boolean noCompleteComponent Dont complete component !
 	 * @return HTMLElement
 	 */
-	GetElementById: function(id, doc, noCompleteComponent) {
-		f_core.Assert(typeof(id)=="string", "f_core.GetElementById: Invalid id parameter '"+id+"'.");
-		f_core.Assert(doc===undefined || (doc && doc.nodeType==f_core._DOCUMENT_NODE), "f_core.GetElementById: Invalid document parameter '"+doc+"'.");
+	GetElementByClientId: function(id, doc, noCompleteComponent) {
+		f_core.Assert(typeof(id)=="string", "f_core.GetElementByClientId: Invalid id parameter '"+id+"'.");
+		f_core.Assert(doc===undefined || (doc && doc.nodeType==f_core._DOCUMENT_NODE), "f_core.GetElementByClientId: Invalid document parameter '"+doc+"'.");
 		
 		if (!doc) {
 			doc=document;
 		}
 		var obj = doc.getElementById(id);
-	
+		var found=obj;
+		
 		if (!obj) {
 			// On peut toujours chercher dans les forms du document ....
+			// s'il n'y a pas de séparateurs !
 			obj=fa_namingContainer.SearchElementById(doc, id);
 		}
 		
@@ -2061,7 +2115,7 @@ var f_core = {
 		
 		obj = f_core.GetWindow(doc)._classLoader._init(obj, true);
 		if (!obj) {
-			return null;
+			return found;
 		}
 		
 		// Notre composant est trouvé mais il n'était pas initialisé !
@@ -2428,27 +2482,47 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param Event evt Javascript event
+	 * @return boolean
 	 */
-	CancelEventHandler: function(evt) {
+	CancelJsEventHandler: function(evt) {
 		if (f_event.GetEventLocked(false)) {
 			return false;
 		}
 	
 		if (!evt) {
-			evt=f_core.GetEvent(this);
+			evt=f_core.GetJsEvent(this);
 		}
 	
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
+	},
+	/**
+	 * @method hidden static 
+	 * @param Event evt Javascript event
+	 * @return boolean
+	 */
+	CancelJsEventHandlerTrue: function(evt) {
+		if (f_event.GetEventLocked(false)) {
+			return false;
+		}
+
+		if (!evt) {
+			evt=f_core.GetJsEvent(this);
+		}
+			
+		f_core.CancelJsEvent(evt);
+		
+		return true;
 	},
 	/**
 	 * @method hidden static
 	 */
-	CancelEvent: function(evt) {
+	CancelJsEvent: function(evt) {
 		if (!evt) {
 			evt=window.event;
 
 			// Lorsque l'évenement est "USER" il n'y a pas d'evt !
-			// f_core.Assert(evt, "f_core.CancelEvent: Event is not known ?");
+			// f_core.Assert(evt, "f_core.CancelJsEvent: Event is not known ?");
 			if (!evt) {
 				// On peut rien faire, sinon de retourner false
 				return false;		
@@ -2466,16 +2540,6 @@ var f_core = {
 		}
 		
 		return false;
-	},
-	/**
-	 * @method hidden static 
-	 */
-	CancelEventHandlerTrue: function(evt) {
-		if (f_event.GetEventLocked(false)) {
-			return false;
-		}
-			
-		return f_core.CancelEvent(evt);
 	},
 	/**
 	 * Returns the size of the View.
@@ -2538,7 +2602,7 @@ var f_core = {
 	 * @param optional Document doc
 	 * @return number[]
 	 */
-	GetEventPosition: function(event, doc) {
+	GetJsEventPosition: function(event, doc) {
 		f_core.Assert(event && event.type, "Invalid event parameter '"+event+"'.");
 	
 		if (!doc) {
@@ -2638,7 +2702,10 @@ var f_core = {
 			} else if (value instanceof Date) {
 				continue;
 
-			} else if (window.f_time && (value instanceof f_time)) {
+			} else if (value instanceof f_messageObject) {
+				continue;
+
+			} else if (f_class.IsClassDefined("f_time") && (value instanceof f_time)) {
 				continue;
 
 			} else if (value instanceof Array) {
@@ -2695,7 +2762,7 @@ var f_core = {
 			s+="["+value+":"+typeOfValue+"]";
 		}
 		
-		if (s.length>0) {
+		if (s.length) {
 			if (object.tagName) {
 				s="TagName: "+object.tagName+"{"+object.className+"}\n"+s;
 			}
@@ -2932,12 +2999,16 @@ var f_core = {
 				d+="S";
 				
 			} else if (v instanceof Date) {
-				if (!f_core.f_dateFormat) {
-					f_core.Error(f_core, "Can not serialize a Date object without f_dateFormat class.");
-					continue;
-				}
+				d+="D";
+				v=f_core.SerializeDate(v);
 				
-				d+="D"+f_dateFormat.FormatStringDate(v);
+			} else if (v instanceof Document) {
+				d+="X";
+				v=f_xml.Serialize(v);
+				
+			} else if (f_class.IsClassDefined("f_time") && (v instanceof f_time)) {
+				d+="M";
+				v=f_time.SerializeTime(v);
 
 			} else {
 				f_core.Error(f_core, "Can not serialize '"+v+"'.");
@@ -2987,6 +3058,24 @@ var f_core = {
 				}
 				break;
 
+			case 'D':
+				data=f_core.DeserializeDate(data);
+				break;
+
+			case 'M':
+				f_class.IsClassDefined("f_time", "f_time class is required to deserialize a time object !");
+				
+				data=f_time.DeserializeTime(data);
+				break;
+
+			case 'X':
+				f_class.IsClassDefined("f_xml", "Xml class is required to deserialize a xml document !");
+
+				data=data.replace(/\+/g, ' ');
+				data=decodeURIComponent(data);
+				data=f_xml.FromString(data);
+				break;
+
 			case 'L':
 				data=null;
 				break;
@@ -3031,15 +3120,124 @@ var f_core = {
 		return obj;
 	},
 	/**
+	 * @method private hidden
+	 * @param Date date
+	 * @return String
+	 */
+	SerializeDate: function(date) {
+		var year=date.getFullYear();
+		var month=date.getMonth();
+		var day=date.getDate()-1;
+		var hours=date.getHours();
+		var minutes=date.getMinutes();
+		var seconds=date.getSeconds();
+		var millis=date.getMilliseconds();
+		
+		if (!millis) {
+			if (!seconds) {
+				if (!minutes) {
+					if (!hours) {
+						if (!day) {
+							if (!month) {
+								return "Y"+year.toString(32);
+							}							
+							month+=year*12;							
+							return "M"+month.toString(32);
+						}
+						day+=(year*12+month)*31;
+						return "d"+day.toString(32);
+					}
+					hours+=((year*12+month)*31+day)*24;
+					return "H"+hours.toString(32);
+				}
+				minutes+=(((year*12+month)*31+day)*24+hours)*60;
+				return "m"+minutes.toString(32);
+			}
+			seconds+=((((year*12+month)*31+day)*24+hours)*60+minutes)*60;
+			return "s"+seconds.toString(32);
+		}
+		
+		millis+=(((((year*12+month)*31+day)*24+hours)*60+minutes)*60+seconds)*1000;
+		return "S"+millis.toString(32);
+	},
+
+	/**
+	 * @method hidden static
+	 * @param String date
+	 * @return Date
+	 */
+	DeserializeDate: function(date) {
+		if (!date.length) {
+			return null;
+		}
+		
+		var unit=date.charAt(0);
+		var value=parseInt(date.substring(1), 32);
+
+		switch(unit) {
+		case 'Y':		
+			return new Date(value, 0, 1);
+
+		case 'M':
+			var m=value % 12;
+			var y=Math.floor(value/12);
+			return new Date(y, m, 1);
+		
+		case 'd':
+			var d=value;
+			var m=Math.floor(value/31);
+			var y=Math.floor(m/12);
+			return new Date(y, m % 12, (d % 31)+1);
+	
+		case 'H':
+			var h=value;
+			var d=Math.floor(h/24);
+			var m=Math.floor(d/31);
+			var y=Math.floor(m/12);
+			return new Date(y, m % 12, (d % 31)+1, h % 24, 0, 0);
+		
+		case 'm':
+			var mn=value;
+			var h=Math.floor(mn/60);
+			var d=Math.floor(h/24);
+			var m=Math.floor(d/31);
+			var y=Math.floor(m/12);
+			return new Date(y, m % 12, (d % 31)+1, h % 24, mn % 60, 0);
+		
+		case 's':			
+			var s=value;
+			var mn=Math.floor(s/60);
+			var h=Math.floor(mn/60);
+			var d=Math.floor(h/24);
+			var m=Math.floor(d/31);
+			var y=Math.floor(m/12);
+			
+			return new Date(y, m % 12, (d % 31)+1, h % 24, mn % 60, s % 60);
+
+		case 'S':			
+			var ms=value;
+			var s=Math.floor(ms/1000);
+			var mn=Math.floor(s/60);
+			var h=Math.floor(mn/60);
+			var d=Math.floor(h/24);
+			var m=Math.floor(d/31);
+			var y=Math.floor(m/12);
+			
+			return new Date(y, m % 12, (d % 31)+1, h % 24, mn % 60, s % 60, ms % 1000);
+		}
+		
+		f_core.Error(f_core, "DeserializeDate: Invalid date format ! ("+date+")");
+	},
+	/**
 	 * @method private static
 	 */
 	_IeBlockSelectStart: function(evt) {
-		return f_core.CancelEvent(evt);
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method hidden static
 	 */
-	GetEvent: function(component) {
+	GetJsEvent: function(component) {
 		if (!f_core.IsInternetExplorer()) {
 			return null;
 		}
@@ -3188,7 +3386,7 @@ var f_core = {
 		}
 
 		try {
-			if (!cookieValue || cookieValue.length<1) {
+			if (!cookieValue || !cookieValue.length) {
 				doc.cookie=cookieName+"=; expires=Thu, 01-Jan-70 00:00:01 GMT";
 				return true;
 			}
@@ -3573,17 +3771,29 @@ var f_core = {
 	ComputePopupPosition: function(popup, positions) {
 		var body=popup.ownerDocument.body;
 		
-		var bw=body.clientWidth+window.scrollX;
-		var bh=body.clientHeight+window.scrollY;
+		// Ne fonctionne que sous IE !
+		var bw=window.innerWidth;
+		var bh=window.innerHeight;
+/*		
+		document.title="bw="+body.clientWidth+" bh="+body.clientHeight+" ww="+window.innerWidth+" wh="+window.innerHeight+" sx="+window.scrollX+" sy="+window.scrollY;
+	*/	
+		bw+=window.scrollX;
+		bh+=window.scrollY;
 
 		var absPos=f_core.GetAbsolutePosition(popup.offsetParent);
 
+		f_core.Debug(f_core, "ComputePopupPosition: bw="+bw+" bh="+bh+" absPos.x="+absPos.x+" absPos.y="+absPos.y+" positions.x="+positions.x+" positions.y="+positions.y+" popupWidth="+popup.offsetWidth+" popupHeight="+popup.offsetHeight);
+
 		if (popup.offsetWidth+positions.x+absPos.x>bw) {
 			positions.x=bw-popup.offsetWidth-absPos.x;
+
+			f_core.Debug(f_core, "ComputePopupPosition: change x position to "+positions.x);
 		}
 		
 		if (popup.offsetHeight+positions.y+absPos.y>bh) {
 			positions.y=bh-popup.offsetHeight-absPos.y;
+
+			f_core.Debug(f_core, "ComputePopupPosition: change y position to "+positions.y);
 		}
 	},
 	/**
@@ -3878,7 +4088,7 @@ var f_core = {
 			f_core._DisabledContextMenu=true;
 			return;
 		}
-		document.body.oncontextmenu=f_core.CancelEventHandler;
+		document.body.oncontextmenu=f_core.CancelJsEventHandler;
 	},
 	/** 
 	 * @method hidden static
@@ -3977,7 +4187,7 @@ var f_core = {
 			return false;
 		}
 		
-		var component=f_core.GetElementById(componentClientId);
+		var component=f_core.GetElementByClientId(componentClientId);
 		if (!component || typeof(component.f_fireEvent)!="function") {
 			f_core.Error(f_core, "Error event componentClientId='"+componentClientId+"' code='"+messageCode+"' message='"+message+"' messageDetail='"+messageDetail+"'.");
 			return false;
@@ -3990,6 +4200,25 @@ var f_core = {
 		} finally {
 			event.f_finalize();
 		}
+	},
+	/**
+	 * @method hidden static
+	 * @param String code
+	 * @return void
+	 */
+	WindowScopeEval: function(code) {
+
+		if (window.execScript) { // IE only	
+		    window.execScript(code); // eval in global scope for IE
+		    return;
+		}
+		  
+		if (window.eval) { // Firefox
+			window.eval(code);
+			return;
+		}
+
+		eval(code);	// Other ?
 	},
 	/**
 	 * @method public static

@@ -210,15 +210,17 @@ var __prototype= {
 			this._firsts = as;
 		}
 		
-		f_core.PushArguments(as, arguments);
-		
 		if (f_core.IsDebugEnabled(f_actionList)) {
-			for(var i=0;i<as.length;i++) {
-				var a=as[i];
+			for(var i=0;i<arguments.length;i++) {
+				var a=arguments[i];
 				
 				f_core.Assert(typeof(a)=="string" || typeof(a)=="function", "f_actionList.f_addActionFirst: Bad listener for action type '"+this._type+"'. (listener="+a+").");
+				
+			//	f_core.Debug(f_actionList, "f_actionList.f_addActionFirst: type="+this._type+" "+a);
 			}
 		}
+		
+		as.unshift.apply(as, arguments);
 	},
 	
 	/**
@@ -294,12 +296,7 @@ var __prototype= {
 		
 		// Attention un submit a pu survenir, et nous sommes plus dans un contexte camelia sain !
 		// => Plus d'appels aux méthodes !
-	
-		if (evt && evt._eventReturn!==undefined) {
-			f_core.Debug(f_actionList, "Call actions: eventReturn is forced to "+evt._eventReturn);
-			return evt._eventReturn;
-		}
-	
+		
 		f_core.Debug(f_actionList, "Call actions returns "+ret);
 		return ret;
 	}

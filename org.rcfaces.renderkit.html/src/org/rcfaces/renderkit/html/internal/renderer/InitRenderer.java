@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.ImageContentInformation;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
@@ -39,6 +38,7 @@ import org.rcfaces.core.internal.webapp.IRepository.IContext;
 import org.rcfaces.renderkit.html.component.InitComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
@@ -69,9 +69,13 @@ public class InitRenderer extends AbstractHtmlRenderer {
             .getPackagePrefix()
             + ".DISABLE_CONTEXT_MENU";
 
-    private static final String DISABLE_CACHE_PARAMETER = Constants
+    private static final String JSP_DISABLE_CACHE_PARAMETER = Constants
             .getPackagePrefix()
-            + ".DISABLE_CACHE";
+            + ".JSP_DISABLE_CACHE";
+
+    private static final String CLIENT_VALIDATION_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".CLIENT_VALIDATION";
 
     private static final String DISABLED_COOKIES_PAGE_URL_PARAMETER = Constants
             .getPackagePrefix()
@@ -84,6 +88,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static final String FAVORITE_IMAGE_URL_PARAMETER = Constants
             .getPackagePrefix()
             + ".FAVORITE_IMAGE_URL";
+
+    private static final String WAI_ROLES_NS_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".WAI_ROLES_NS";
 
     private static final String MULTI_WINDOW_FILENAME = "f_multiWindow.js";
 
@@ -211,10 +219,28 @@ public class InitRenderer extends AbstractHtmlRenderer {
             htmlRenderContext.setDisabledContextMenu(true);
         }
 
+        String waiRolesNS = initComponent.getWaiRolesNS(facesContext);
+        if (waiRolesNS == null) {
+            waiRolesNS = appParams.waiRolesNS;
+        }
+
+        if (waiRolesNS != null) {
+            htmlRenderContext.setWaiRolesNS(waiRolesNS.trim());
+        }
+
         if (appParams.clientMessageIdFilter != null) {
             htmlRenderContext
                     .setClientMessageId(appParams.clientMessageIdFilter);
         }
+
+        boolean clientValidation = appParams.clientValidation;
+        if (initComponent.isClientValidationSetted()) {
+            clientValidation = initComponent.isClientValidation(facesContext);
+        }
+        if (clientValidation == false) {
+            htmlRenderContext.setClientValidation(false);
+        }
+
         String clientMessageIdFilter = initComponent
                 .getClientMessageIdFilter(facesContext);
         if (clientMessageIdFilter != null
@@ -254,7 +280,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         .getExternalContext().getRequest();
                 String scheme = request.getScheme();
                 if (scheme != null) {
-                    sa.append(scheme).append(":\\").append(
+                    sa.append(scheme).append("://").append(
                             request.getServerName());
 
                     int port = request.getServerPort();
@@ -276,7 +302,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                     sa.append('/');
                 }
 
-                htmlWriter.writeSrc(sa.toString());
+                htmlWriter.writeHRef(sa.toString());
 
                 htmlWriter.endElement("BASE");
             }
@@ -676,6 +702,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         boolean disableCache;
 
+        boolean clientValidation;
+
         Map symbols;
 
         String disabledCookiesPageURL;
@@ -687,6 +715,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
         String favoriteImageURL;
 
         Set clientMessageIdFilter;
+
+        String waiRolesNS;
 
         private boolean symbolsInitialized;
 
@@ -716,11 +746,16 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 disableIEImageBar = org.rcfaces.renderkit.html.internal.Constants.DISABLE_IE_IMAGEBAR_DEFAULT_VALUE;
             }
 
-            disableContextMenu = "true".equals(initParameters
-                    .get(DISABLE_CONTEXT_MENU_PARAMETER));
+            disableContextMenu = "true"
+                    .equalsIgnoreCase((String) initParameters
+                            .get(DISABLE_CONTEXT_MENU_PARAMETER));
 
-            disableCache = "true".equals(initParameters
-                    .get(DISABLE_CACHE_PARAMETER));
+            disableCache = "true".equalsIgnoreCase((String) initParameters
+                    .get(JSP_DISABLE_CACHE_PARAMETER));
+
+            clientValidation = ("false"
+                    .equalsIgnoreCase((String) initParameters
+                            .get(CLIENT_VALIDATION_PARAMETER)) == false);
 
             disabledCookiesPageURL = (String) initParameters
                     .get(DISABLED_COOKIES_PAGE_URL_PARAMETER);
@@ -750,6 +785,15 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 favoriteImageURL = null;
             }
 
+            waiRolesNS = (String) initParameters.get(WAI_ROLES_NS_PARAMETER);
+            if (waiRolesNS != null) {
+                waiRolesNS = waiRolesNS.trim();
+
+                if (waiRolesNS.length() < 1) {
+                    waiRolesNS = null;
+                }
+            }
+
             metaContentType = true;
             if ("false".equalsIgnoreCase((String) initParameters
                     .get(META_CONTENT_TYPE_PARAMETER))) {
@@ -776,6 +820,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
                 if (disableContextMenu) {
                     LOG.info("DisableContextMenu is enabled for context.");
+                }
+
+                if (clientValidation == false) {
+                    LOG.info("Client validation is disabled for context.");
                 }
 
                 if (multiWindowScript) {
@@ -884,7 +932,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
             this.writer = writer;
         }
 
-        protected String convertSymbol(String symbol) {
+        protected String convertSymbol(String className, String memberName) {
             if (symbols == null) {
                 symbols = JavaScriptRepositoryServlet.getSymbols(writer
                         .getHtmlComponentRenderContext().getFacesContext());
@@ -893,16 +941,29 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 }
             }
 
-            String compacted = (String) symbols.get(symbol);
+            if (symbols.isEmpty()) {
+                return memberName;
+            }
+
+            if (className != null && className.startsWith("f")) {
+                String s = (String) symbols.get(className + "." + memberName);
+                if (s != null) {
+                    return s;
+                }
+            }
+
+            String compacted = (String) symbols.get(memberName);
             if (compacted != null) {
                 return compacted;
             }
 
-            return symbol;
+            return memberName;
         }
 
         public IJavaScriptRenderContext getJavaScriptRenderContext() {
-            throw new UnsupportedOperationException("Not implemented !");
+            return writer.getHtmlComponentRenderContext()
+                    .getHtmlRenderContext().getJavaScriptRenderContext();
+            // throw new UnsupportedOperationException("Not implemented !");
         }
 
         public String getComponentVarName() {
@@ -981,8 +1042,33 @@ public class InitRenderer extends AbstractHtmlRenderer {
             throw new UnsupportedOperationException("Not implemented !");
         }
 
-        public String allocateString(String text) {
-            throw new UnsupportedOperationException("Not implemented !");
+        public String allocateString(String string) throws WriterException {
+            if (string == null) {
+                return null;
+            }
+
+            boolean ret[] = new boolean[1];
+
+            String varId = getJavaScriptRenderContext().allocateString(string,
+                    ret);
+            if (ret[0] == false) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("String '" + string
+                            + "' is already setted to var '" + varId + "'.");
+                }
+
+                return varId;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Allocate string '" + string + "' to var '" + varId
+                        + "'.");
+            }
+
+            write("var ").write(varId).write("=").writeString(string).writeln(
+                    ";");
+
+            return varId;
         }
 
         protected void initializeRaw() throws WriterException {

@@ -132,6 +132,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     text);
 
             textPosition = imageButtonFamilly.getTextPosition(facesContext);
+            if (textPosition == 0) {
+                textPosition = IHorizontalTextPositionCapability.DEFAULT_POSITION;
+            }
 
             if (imageButtonFamilly instanceof IAccessKeyCapability) {
                 accessKey = ((IAccessKeyCapability) imageButtonFamilly)
@@ -735,7 +738,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     }
 
     protected boolean isValidText(String text) {
-        return (text != null);
+        return (text != null) && text.length() > 0;
     }
 
     protected void writeText(String halign, String valign, String width,

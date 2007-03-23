@@ -15,8 +15,13 @@ import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -51,8 +56,6 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         FacesContext facesContext = componentContext.getFacesContext();
 
         htmlWriter.startElement("UL");
-
-        htmlWriter.writeRole(IAccessibilityRoles.TREE);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -96,6 +99,54 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         int depthLevel = treeComponent.getPreloadedLevelDepth(facesContext);
         if (depthLevel > 0) {
             htmlWriter.writeAttribute("v:preloadedLevelDepth", depthLevel);
+        }
+
+        Object cursorValue = treeComponent.getCursorValue(facesContext);
+        String clientCursorValue = null;
+
+        if (cursorValue != null) {
+            clientCursorValue = ValuesTools.convertValueToString(cursorValue,
+                    treeComponent, facesContext);
+        }
+
+        if (clientCursorValue != null) {
+            htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
+        }
+
+        htmlWriter.enableJavaScript();
+    }
+
+    protected String getWAIRole() {
+        return IAccessibilityRoles.TREE;
+    }
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
+
+        TreeComponent treeComponent = (TreeComponent) component;
+
+        String cursorValue = componentData.getStringProperty("cursor");
+        if (cursorValue != null) {
+            Object cursorValueObject = cursorValue;
+
+            cursorValueObject = ValuesTools.convertStringToValue(facesContext,
+                    treeComponent, cursorValueObject);
+
+            Object oldCursorValueObject = treeComponent
+                    .getCursorValue(facesContext);
+            if (isEquals(oldCursorValueObject, cursorValueObject) == false) {
+
+                treeComponent.setCursorValue(cursorValueObject);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.CURSOR_VALUE, oldCursorValueObject,
+                        cursorValueObject));
+
+            }
+
         }
     }
 

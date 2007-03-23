@@ -196,7 +196,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 .get(CSS_CONFIG_PROPERTY);
 
         if (cssConfig == null) {
-            throw new FacesException("No initialized stylesheet config !");
+            throw new FacesException(
+                    "No initialized stylesheet config ! (You have forgotten the RCFaces servlet, or its startup has failed !)");
         }
 
         return cssConfig;

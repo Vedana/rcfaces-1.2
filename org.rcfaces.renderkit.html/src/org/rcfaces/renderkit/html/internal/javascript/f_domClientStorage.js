@@ -1,0 +1,92 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class hidden f_domClientStorage extends f_clientStorage
+ * @version $Revision$ $Date$
+ */
+
+var __static = {
+		
+	/**
+	 * @field private static final number
+	 */
+	_STORAGE_MAX_SIZE: 5242880,
+	
+	/**
+	 * @field private static Object
+	 */
+	_StorageList: undefined,
+
+	Initializer: function() {
+
+		var globalStorage=window.globalStorage;
+		if (!globalStorage || (globalStorage instanceof StorageList)==false) {
+			return false;
+		}
+		
+		var domain=f_env.GetDomain();
+		
+		var storage=globalStorage[domain];
+		
+		f_core.Debug(f_domClientStorage, "Use global storage (domain="+storage+") = "+storage);
+		
+		f_domClientStorage._Storage=storage;
+	},
+	
+	/**
+	 * @method hidden static
+	 */
+	IsSupported: function() {
+	
+		return f_domClientStorage._Storage!=null;
+	}
+}
+
+var __prototype = {
+	f_getStorageType: function() {
+		return f_clientStorage.DOM_STORAGE_TYPE;
+	},
+	f_getStorageMaxSize: function() {
+		return f_domClientStorage._STORAGE_MAX_SIZE;
+	},
+	f_get: function(name) {
+		f_core.Assert(typeof(name)=="string", "Invalid name parameter ("+name+")");
+
+		var item=f_domClientStorage._Storage.getItem(name);
+		if (!item) {
+			return null;
+		}
+		
+		return item.value;
+	},
+	f_set: function(name, value) {
+		f_core.Assert(typeof(name)=="string", "Invalid name parameter ("+name+")");
+		f_core.Assert(value===null || typeof(value)=="string", "Invalid value parameter ("+value+")");
+	
+		var storage=f_domClientStorage._Storage;
+		var item=storage.getItem(name);
+		var old=null;
+		if (!item) {
+			if (!value) {
+				return null;
+			}
+
+		} else {		
+			old=item.value;
+			
+			if (!value) {
+				storage.removeItem(name);
+				return old;
+			}
+		}
+		
+		storage.setItem(name, value);
+		
+		return old;
+	}
+}
+
+new f_class("f_domClientStorage", null, __static, __prototype, f_clientStorage);

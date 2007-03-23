@@ -25,6 +25,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String checkable;
 	private String checkCardinality;
 	private String checkListeners;
+	private String checkedValues;
 	private String selectable;
 	private String selectionCardinality;
 	private String selectionListeners;
@@ -40,7 +41,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String hideRootExpandSign;
 	private String preloadedLevelDepth;
 	private String selectedValues;
-	private String checkedValues;
 	private String expansionValues;
 	private String cursorValue;
 	private String expansionUseValue;
@@ -120,6 +120,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public final void setCheckListener(String checkListeners) {
 		this.checkListeners = checkListeners;
+	}
+
+	public final String getCheckedValues() {
+		return checkedValues;
+	}
+
+	public final void setCheckedValues(String checkedValues) {
+		this.checkedValues = checkedValues;
 	}
 
 	public final String getSelectable() {
@@ -242,14 +250,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.selectedValues = selectedValues;
 	}
 
-	public final String getCheckedValues() {
-		return checkedValues;
-	}
-
-	public final void setCheckedValues(String checkedValues) {
-		this.checkedValues = checkedValues;
-	}
-
 	public final String getExpansionValues() {
 		return expansionValues;
 	}
@@ -302,6 +302,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
+			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  selectable='"+selectable+"'");
 			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
 			LOG.debug("  defaultImageURL='"+defaultImageURL+"'");
@@ -316,7 +317,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  hideRootExpandSign='"+hideRootExpandSign+"'");
 			LOG.debug("  preloadedLevelDepth='"+preloadedLevelDepth+"'");
 			LOG.debug("  selectedValues='"+selectedValues+"'");
-			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  expansionValues='"+expansionValues+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
@@ -412,6 +412,12 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 		if (checkListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
+		}
+
+		if (checkedValues != null) {
+				ValueBinding vb = application.createValueBinding(checkedValues);
+
+				component.setCheckedValues(vb);
 		}
 
 		if (selectable != null) {
@@ -546,15 +552,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			}
 		}
 
-		if (checkedValues != null) {
-			if (isValueReference(checkedValues)) {
-				ValueBinding vb = application.createValueBinding(checkedValues);
-				component.setCheckedValues(vb);
-			} else {
-				component.setCheckedValues(checkedValues);
-			}
-		}
-
 		if (expansionValues != null) {
 			if (isValueReference(expansionValues)) {
 				ValueBinding vb = application.createValueBinding(expansionValues);
@@ -611,6 +608,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		checkable = null;
 		checkCardinality = null;
 		checkListeners = null;
+		checkedValues = null;
 		selectable = null;
 		selectionCardinality = null;
 		selectionListeners = null;
@@ -626,7 +624,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		hideRootExpandSign = null;
 		preloadedLevelDepth = null;
 		selectedValues = null;
-		checkedValues = null;
 		expansionValues = null;
 		cursorValue = null;
 		expansionUseValue = null;

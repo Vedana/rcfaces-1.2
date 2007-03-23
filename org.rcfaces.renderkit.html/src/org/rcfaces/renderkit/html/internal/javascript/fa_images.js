@@ -229,5 +229,4 @@ var __prototype = {
 	
 }
 
-var fa_images=new f_aspect("fa_images", null, __prototype);
-	
+new f_aspect("fa_images", null, __prototype);	

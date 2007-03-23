@@ -273,4 +273,31 @@ public final class StringAppender {
         return this;
     }
 
+    public Writer createWriter() {
+        return new Writer() {
+            private static final String REVISION = "$Revision$";
+
+            public void close() {
+            }
+
+            public void flush() {
+            }
+
+            public void write(char[] cbuf, int off, int len) {
+                StringAppender.this.append(cbuf, off, len);
+            }
+
+            public void write(char c) {
+                StringAppender.this.append(c);
+            }
+
+            public void write(String s, int off, int len) {
+                StringAppender.this.append(s, off, len);
+            }
+
+            public void write(String s) {
+                StringAppender.this.append(s);
+            }
+        };
+    }
 }

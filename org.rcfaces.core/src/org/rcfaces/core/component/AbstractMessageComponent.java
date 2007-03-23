@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Arrays;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.tools.MarginTools;
@@ -34,14 +35,15 @@ import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.component.CameliaMessageComponent;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
  */
 public abstract class AbstractMessageComponent extends CameliaMessageComponent implements 
-	ISizeCapability,
 	IVisibilityCapability,
+	ISizeCapability,
 	IMouseEventCapability,
 	IHelpCapability,
 	IClientDataCapability,
@@ -53,6 +55,8 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 	IStyleClassCapability,
 	IUserEventCapability,
 	IServerDataCapability,
+	IHiddenModeCapability,
+	IWAIRoleCapability,
 	IPropertyChangeEventCapability,
 	IInitEventCapability,
 	IServerDataManager,
@@ -61,7 +65,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","for","toolTipText","mouseOverListener","userEventListener","showDetail","helpURL","marginBottom","showSummary","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","initListener","margins","propertyChangeListener","mouseOutListener","for","waiRole","toolTipText","mouseOverListener","showDetail","userEventListener","marginBottom","helpURL","showSummary","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -187,6 +191,35 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		
 	}
 
+	public final boolean isVisible() {
+		return isVisible(null);
+	}
+
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
+	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
+	}
+
+	public final void setVisible(boolean visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	/**
+	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
+	 */
+	public final void setVisible(ValueBinding visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final Boolean getVisibleState() {
+
+
+			return getVisibleState(null);
+		
+	}
+
 	public final java.lang.String getHeight() {
 		return getHeight(null);
 	}
@@ -229,57 +262,6 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 	 */
 	public final void setWidth(ValueBinding width) {
 		engine.setProperty(Properties.WIDTH, width);
-	}
-
-	public final int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	public final void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	/**
-	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
-	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	public final boolean isVisible() {
-		return isVisible(null);
-	}
-
-	/**
-	 * See {@link #isVisible() isVisible()} for more details
-	 */
-	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
-	}
-
-	public final void setVisible(boolean visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	/**
-	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
-	 */
-	public final void setVisible(ValueBinding visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	public final Boolean getVisibleState() {
-
-
-			return getVisibleState(null);
-		
 	}
 
 	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
@@ -727,6 +709,50 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 			return listServerDataKeys(null);
 		
+	}
+
+	public final int getHiddenMode() {
+		return getHiddenMode(null);
+	}
+
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
+	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+	}
+
+	public final void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	/**
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
+	 */
+	public final void setHiddenMode(ValueBinding hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public final java.lang.String getWaiRole() {
+		return getWaiRole(null);
+	}
+
+	/**
+	 * See {@link #getWaiRole() getWaiRole()} for more details
+	 */
+	public final java.lang.String getWaiRole(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WAI_ROLE, facesContext);
+	}
+
+	public final void setWaiRole(java.lang.String waiRole) {
+		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	/**
+	 * See {@link #setWaiRole(String) setWaiRole(String)} for more details
+	 */
+	public final void setWaiRole(ValueBinding waiRole) {
+		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
 	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {

@@ -16,16 +16,16 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(AbstractOutputTag.class);
 
-	private String hiddenMode;
 	private String visible;
 	private String height;
 	private String width;
-	private String mouseOutListeners;
-	private String mouseOverListeners;
 	private String helpMessage;
 	private String helpURL;
 	private String toolTipText;
+	private String mouseOutListeners;
+	private String mouseOverListeners;
 	private String unlockedClientAttributeNames;
+	private String valueLocked;
 	private String lookId;
 	private String x;
 	private String y;
@@ -38,19 +38,13 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 	private String foregroundColor;
 	private String styleClass;
 	private String userEventListeners;
+	private String hiddenMode;
+	private String waiRole;
 	private String propertyChangeListeners;
 	private String initListeners;
 	private String margins;
 	private String value;
 	private String converter;
-	public final String getHiddenMode() {
-		return hiddenMode;
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-		this.hiddenMode = hiddenMode;
-	}
-
 	public final String getVisible() {
 		return visible;
 	}
@@ -73,22 +67,6 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 
 	public final void setWidth(String width) {
 		this.width = width;
-	}
-
-	public final String getMouseOutListener() {
-		return mouseOutListeners;
-	}
-
-	public final void setMouseOutListener(String mouseOutListeners) {
-		this.mouseOutListeners = mouseOutListeners;
-	}
-
-	public final String getMouseOverListener() {
-		return mouseOverListeners;
-	}
-
-	public final void setMouseOverListener(String mouseOverListeners) {
-		this.mouseOverListeners = mouseOverListeners;
 	}
 
 	public final String getHelpMessage() {
@@ -115,12 +93,36 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		this.toolTipText = toolTipText;
 	}
 
+	public final String getMouseOutListener() {
+		return mouseOutListeners;
+	}
+
+	public final void setMouseOutListener(String mouseOutListeners) {
+		this.mouseOutListeners = mouseOutListeners;
+	}
+
+	public final String getMouseOverListener() {
+		return mouseOverListeners;
+	}
+
+	public final void setMouseOverListener(String mouseOverListeners) {
+		this.mouseOverListeners = mouseOverListeners;
+	}
+
 	public final String getUnlockedClientAttributeNames() {
 		return unlockedClientAttributeNames;
 	}
 
 	public final void setUnlockedClientAttributeNames(String unlockedClientAttributeNames) {
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
+	}
+
+	public final String getValueLocked() {
+		return valueLocked;
+	}
+
+	public final void setValueLocked(String valueLocked) {
+		this.valueLocked = valueLocked;
 	}
 
 	public final String getLookId() {
@@ -219,6 +221,22 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		this.userEventListeners = userEventListeners;
 	}
 
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
+
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
+	}
+
+	public final String getWaiRole() {
+		return waiRole;
+	}
+
+	public final void setWaiRole(String waiRole) {
+		this.waiRole = waiRole;
+	}
+
 	public final String getPropertyChangeListener() {
 		return propertyChangeListeners;
 	}
@@ -261,7 +279,6 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  width='"+width+"'");
@@ -269,6 +286,7 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
+			LOG.debug("  valueLocked='"+valueLocked+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
@@ -279,6 +297,8 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
 		super.setProperties(uiComponent);
@@ -293,16 +313,6 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		AbstractOutputComponent component = (AbstractOutputComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
-
-		if (hiddenMode != null) {
-			if (isValueReference(hiddenMode)) {
-				ValueBinding vb = application.createValueBinding(hiddenMode);
-
-				component.setHiddenMode(vb);
-			} else {
-				component.setHiddenMode(hiddenMode);
-			}
-		}
 
 		if (visible != null) {
 			if (isValueReference(visible)) {
@@ -332,14 +342,6 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			} else {
 				component.setWidth(width);
 			}
-		}
-
-		if (mouseOutListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
-		}
-
-		if (mouseOverListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (helpMessage != null) {
@@ -372,6 +374,14 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (mouseOutListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+		}
+
+		if (mouseOverListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+		}
+
 		if (unlockedClientAttributeNames != null) {
 			if (isValueReference(unlockedClientAttributeNames)) {
 				ValueBinding vb = application.createValueBinding(unlockedClientAttributeNames);
@@ -379,6 +389,16 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 				component.setUnlockedClientAttributeNames(vb);
 			} else {
 				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames);
+			}
+		}
+
+		if (valueLocked != null) {
+			if (isValueReference(valueLocked)) {
+				ValueBinding vb = application.createValueBinding(valueLocked);
+
+				component.setValueLocked(vb);
+			} else {
+				component.setValueLocked(getBool(valueLocked));
 			}
 		}
 
@@ -490,6 +510,26 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+
+				component.setHiddenMode(vb);
+			} else {
+				component.setHiddenMode(hiddenMode);
+			}
+		}
+
+		if (waiRole != null) {
+			if (isValueReference(waiRole)) {
+				ValueBinding vb = application.createValueBinding(waiRole);
+
+				component.setWaiRole(vb);
+			} else {
+				component.setWaiRole(waiRole);
+			}
+		}
+
 		if (propertyChangeListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
@@ -525,16 +565,16 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
-		hiddenMode = null;
 		visible = null;
 		height = null;
 		width = null;
-		mouseOutListeners = null;
-		mouseOverListeners = null;
 		helpMessage = null;
 		helpURL = null;
 		toolTipText = null;
+		mouseOutListeners = null;
+		mouseOverListeners = null;
 		unlockedClientAttributeNames = null;
+		valueLocked = null;
 		lookId = null;
 		x = null;
 		y = null;
@@ -547,6 +587,8 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		foregroundColor = null;
 		styleClass = null;
 		userEventListeners = null;
+		hiddenMode = null;
+		waiRole = null;
 		propertyChangeListeners = null;
 		initListeners = null;
 		margins = null;

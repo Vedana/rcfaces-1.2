@@ -13,6 +13,8 @@
 var __resources = {
 	REQUIRED_ERROR_SUMMARY: "Fecha requerida",
 	INVALIDDATE_ERROR_SUMMARY: "Fecha inválida",
+	INVALIDMONTH_ERROR_SUMMARY: "TODO Invalid month",
+	INVALIDYEAR_ERROR_SUMMARY: "TODO Invalid year",
 	MINDATE_ERROR_SUMMARY: "La fecha debe ser mayor que la fecha mínima",
 	MAXDATE_ERROR_SUMMARY: "La fecha debe ser menor que la fecha máxima"
 }

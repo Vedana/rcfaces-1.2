@@ -65,8 +65,6 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.startElement("TABLE");
 
-        htmlWriter.writeRole(IAccessibilityRoles.PROGRESS_BAR);
-
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -128,6 +126,10 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
         htmlWriter.endElement("TABLE");
     }
 
+    protected String getWAIRole() {
+        return IAccessibilityRoles.PROGRESS_BAR;
+    }
+
     protected String getLeftCellClassName(IHtmlWriter htmlWriter) {
         return getMainStyleClassName() + "_left";
     }
@@ -183,7 +185,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         Number value = componentData.getNumberProperty("value");
         if (value != null) {
-            progressBar.setValue(value);
+            progressBar.setSubmittedValue(value);
         }
 
         Number min = componentData.getNumberProperty("min");

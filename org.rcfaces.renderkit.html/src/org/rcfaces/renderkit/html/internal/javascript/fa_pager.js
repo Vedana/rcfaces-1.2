@@ -19,5 +19,5 @@ var __prototype = {
 	
 }
 
-var fa_pager=new f_aspect("fa_pager", null, __prototype);
+new f_aspect("fa_pager", null, __prototype);
 	

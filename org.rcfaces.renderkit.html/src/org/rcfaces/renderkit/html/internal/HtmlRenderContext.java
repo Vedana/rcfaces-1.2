@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.component.IAsyncRenderComponent;
+import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -58,8 +59,6 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private boolean asyncRenderer = false;
 
-    private boolean javaScriptEnabled = false;
-
     private IHtmlProcessContext htmlExternalContext;
 
     private String invalidBrowserURL;
@@ -69,6 +68,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     private Set clientMessageIdFilter;
 
     private boolean clientMessageIdFilterReadOnly;
+
+    private String waiRolesNS = null;
+
+    private boolean clientValidation = true;
 
     public void initialize(FacesContext facesContext) {
         super.initialize(facesContext);
@@ -163,16 +166,20 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             IJavaScriptRenderContext javaScriptRenderContext = getJavaScriptRenderContext();
             javaScriptRenderContext.restoreState(ret[1]);
         }
+
+        waiRolesNS = (String) ret[2];
     }
 
     public Object saveRenderContextState() {
-        Object ret[] = new Object[2];
+        Object ret[] = new Object[3];
 
         ret[0] = super.saveRenderContextState();
 
         if (javascriptRenderContext != null) {
             ret[1] = javascriptRenderContext.saveState();
         }
+
+        ret[2] = waiRolesNS;
 
         return ret;
     }
@@ -351,29 +358,33 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
         private static final String ENABLE_JAVASCRIPT = "camelia.html.javascript.enable";
 
+        private boolean javaScriptEnabled = false;
+
         public HtmlWriterImpl(HtmlRenderContext context) {
             super(context);
-        }
 
-        public void enableJavaScript() {
-            ((HtmlRenderContext) renderContext).enableJavaScript();
+            javaScriptEnabled = ((ITransientAttributesManager) getComponent())
+                    .getTransientAttribute(ENABLE_JAVASCRIPT) != null;
         }
 
         public boolean isJavaScriptEnabled() {
-            return ((HtmlRenderContext) renderContext).isJavaScriptEnabled();
+            return javaScriptEnabled;
+        }
+
+        public void enableJavaScript() {
+            if (javaScriptEnabled) {
+                return;
+            }
+
+            javaScriptEnabled = true;
+
+            ((ITransientAttributesManager) getComponent())
+                    .setTransientAttribute(ENABLE_JAVASCRIPT, Boolean.TRUE);
         }
     }
 
     public IHtmlProcessContext getHtmlProcessContext() {
         return htmlExternalContext;
-    }
-
-    public boolean isJavaScriptEnabled() {
-        return javaScriptEnabled;
-    }
-
-    public void enableJavaScript() {
-        javaScriptEnabled = true;
     }
 
     public IProcessContext getProcessContext() {
@@ -419,7 +430,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     }
 
     public void addClientMessageIds(Set ids) {
-        if (ids==null || ids.isEmpty()) {
+        if (ids == null || ids.isEmpty()) {
             return;
         }
 
@@ -442,4 +453,21 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             clientMessageIdFilter.add(id);
         }
     }
+
+    public String getWaiRolesNS() {
+        return waiRolesNS;
+    }
+
+    public void setWaiRolesNS(String waiRolesNS) {
+        this.waiRolesNS = waiRolesNS;
+    }
+
+    public void setClientValidation(boolean clientValidation) {
+        this.clientValidation = clientValidation;
+    }
+
+    public boolean isClientValidation() {
+        return clientValidation;
+    }
+
 }

@@ -16,16 +16,8 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(AbstractSeparatorTag.class);
 
-	private String hiddenMode;
 	private String visible;
-	public final String getHiddenMode() {
-		return hiddenMode;
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-		this.hiddenMode = hiddenMode;
-	}
-
+	private String hiddenMode;
 	public final String getVisible() {
 		return visible;
 	}
@@ -34,10 +26,18 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 		this.visible = visible;
 	}
 
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
+
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -52,16 +52,6 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (hiddenMode != null) {
-			if (isValueReference(hiddenMode)) {
-				ValueBinding vb = application.createValueBinding(hiddenMode);
-
-				component.setHiddenMode(vb);
-			} else {
-				component.setHiddenMode(hiddenMode);
-			}
-		}
-
 		if (visible != null) {
 			if (isValueReference(visible)) {
 				ValueBinding vb = application.createValueBinding(visible);
@@ -71,11 +61,21 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 				component.setVisible(getBool(visible));
 			}
 		}
+
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+
+				component.setHiddenMode(vb);
+			} else {
+				component.setHiddenMode(hiddenMode);
+			}
+		}
 	}
 
 	public void release() {
-		hiddenMode = null;
 		visible = null;
+		hiddenMode = null;
 
 		super.release();
 	}

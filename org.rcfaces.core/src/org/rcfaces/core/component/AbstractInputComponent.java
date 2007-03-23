@@ -5,9 +5,10 @@ import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import java.lang.Object;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.capability.IFontCapability;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IKeyEventCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.manager.IClientDataManager;
 import org.rcfaces.core.internal.tools.MarginTools;
@@ -23,8 +25,8 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import java.lang.String;
@@ -42,6 +44,7 @@ import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.component.CameliaOutputComponent;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
@@ -49,36 +52,39 @@ import org.rcfaces.core.component.capability.IServerDataCapability;
  * Technical component, used as a basis for building new RCFaces components.
  */
 public abstract class AbstractInputComponent extends CameliaInputComponent implements 
-	IVisibilityCapability,
 	ISizeCapability,
+	IVisibilityCapability,
 	IMouseEventCapability,
-	IHelpCapability,
-	IClientDataCapability,
 	IDisabledCapability,
 	IUnlockedClientAttributesCapability,
-	ITabIndexCapability,
-	IPositionCapability,
-	ILookAndFeelCapability,
 	IFocusBlurEventCapability,
 	IErrorEventCapability,
-	IMarginCapability,
-	IForegroundBackgroundColorCapability,
 	IKeyEventCapability,
+	IForegroundBackgroundColorCapability,
+	IStyleClassCapability,
+	IServerDataCapability,
+	IFontCapability,
+	IInitEventCapability,
+	IHelpCapability,
+	IClientDataCapability,
+	IValueLockedCapability,
+	ITabIndexCapability,
+	ILookAndFeelCapability,
+	IPositionCapability,
+	IMarginCapability,
 	ITextAlignmentCapability,
 	IImmediateCapability,
 	IUserEventCapability,
-	IStyleClassCapability,
-	IServerDataCapability,
+	IHiddenModeCapability,
+	IWAIRoleCapability,
 	IPropertyChangeEventCapability,
-	IFontCapability,
 	IAccessKeyCapability,
-	IInitEventCapability,
 	IServerDataManager,
 	IClientDataManager {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","keyPressListener","fontSize","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","fontName","keyDownListener","focusListener","keyUpListener","disabled","toolTipText","mouseOverListener","accessKey","userEventListener","helpURL","marginBottom","fontItalic","fontBold","textAlignment","immediate","visible","y","lookId","marginLeft","marginTop","tabIndex","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","keyPressListener","marginRight","fontSize","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","keyDownListener","fontName","focusListener","waiRole","keyUpListener","disabled","mouseOverListener","toolTipText","accessKey","userEventListener","marginBottom","helpURL","fontItalic","fontBold","textAlignment","immediate","y","visible","marginLeft","lookId","marginTop","tabIndex","valueLocked","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -211,57 +217,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		
 	}
 
-	public final int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	public final void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	/**
-	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
-	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	public final boolean isVisible() {
-		return isVisible(null);
-	}
-
-	/**
-	 * See {@link #isVisible() isVisible()} for more details
-	 */
-	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
-	}
-
-	public final void setVisible(boolean visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	/**
-	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
-	 */
-	public final void setVisible(ValueBinding visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	public final Boolean getVisibleState() {
-
-
-			return getVisibleState(null);
-		
-	}
-
 	public final java.lang.String getHeight() {
 		return getHeight(null);
 	}
@@ -306,6 +261,35 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
+	public final boolean isVisible() {
+		return isVisible(null);
+	}
+
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
+	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
+	}
+
+	public final void setVisible(boolean visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	/**
+	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
+	 */
+	public final void setVisible(ValueBinding visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public final Boolean getVisibleState() {
+
+
+			return getVisibleState(null);
+		
+	}
+
 	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
 		addFacesListener(listener);
 	}
@@ -328,6 +312,369 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	public final javax.faces.event.FacesListener [] listMouseOverListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
+	}
+
+	public final boolean isDisabled() {
+		return isDisabled(null);
+	}
+
+	/**
+	 * See {@link #isDisabled() isDisabled()} for more details
+	 */
+	public final boolean isDisabled(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
+	}
+
+	public final void setDisabled(boolean disabled) {
+		engine.setProperty(Properties.DISABLED, disabled);
+	}
+
+	/**
+	 * See {@link #setDisabled(boolean) setDisabled(boolean)} for more details
+	 */
+	public final void setDisabled(ValueBinding disabled) {
+		engine.setProperty(Properties.DISABLED, disabled);
+	}
+
+	public final java.lang.String getUnlockedClientAttributeNames() {
+		return getUnlockedClientAttributeNames(null);
+	}
+
+	/**
+	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
+	 */
+	public final java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
+	}
+
+	public final void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+	}
+
+	/**
+	 * See {@link #setUnlockedClientAttributeNames(String) setUnlockedClientAttributeNames(String)} for more details
+	 */
+	public final void setUnlockedClientAttributeNames(ValueBinding unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+	}
+
+	public final void addBlurListener(org.rcfaces.core.event.IBlurListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeBlurListener(org.rcfaces.core.event.IBlurListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listBlurListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IBlurListener.class);
+	}
+
+	public final void addFocusListener(org.rcfaces.core.event.IFocusListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeFocusListener(org.rcfaces.core.event.IFocusListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listFocusListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IFocusListener.class);
+	}
+
+	public final void addErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listErrorListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	}
+
+	public final void addKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
+	}
+
+	public final void addKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listKeyDownListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IKeyDownListener.class);
+	}
+
+	public final void addKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listKeyUpListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IKeyUpListener.class);
+	}
+
+	public final java.lang.String getBackgroundColor() {
+		return getBackgroundColor(null);
+	}
+
+	/**
+	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
+	 */
+	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
+	}
+
+	public final void setBackgroundColor(java.lang.String backgroundColor) {
+		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
+	}
+
+	/**
+	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
+	 */
+	public final void setBackgroundColor(ValueBinding backgroundColor) {
+		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
+	}
+
+	public final java.lang.String getForegroundColor() {
+		return getForegroundColor(null);
+	}
+
+	/**
+	 * See {@link #getForegroundColor() getForegroundColor()} for more details
+	 */
+	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
+	}
+
+	public final void setForegroundColor(java.lang.String foregroundColor) {
+		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	}
+
+	/**
+	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
+	 */
+	public final void setForegroundColor(ValueBinding foregroundColor) {
+		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+	}
+
+	public final java.lang.String getStyleClass() {
+		return getStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 */
+	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
+	}
+
+	public final void setStyleClass(java.lang.String styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
+
+	/**
+	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
+	 */
+	public final void setStyleClass(ValueBinding styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
+
+	public final Object getServerData(String name) {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return dataMapAccessor.getData(name, null);
+		
+	}
+
+	public final Object removeServerData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+		 	return null;
+		}
+            
+		return dataMapAccessor.removeData(name, null);
+		
+	}
+
+	public final Map getServerDataMap() {
+
+
+		return getServerDataMap(null);
+		
+	}
+
+	public final int getServerDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
+		
+	}
+
+	public final Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public final String[] listServerDataKeys() {
+
+
+			return listServerDataKeys(null);
+		
+	}
+
+	public final java.lang.Boolean getFontBold() {
+		return getFontBold(null);
+	}
+
+	/**
+	 * See {@link #getFontBold() getFontBold()} for more details
+	 */
+	public final java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
+		return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
+	}
+
+	public final void setFontBold(java.lang.Boolean fontBold) {
+		engine.setProperty(Properties.FONT_BOLD, fontBold);
+	}
+
+	/**
+	 * See {@link #setFontBold(Boolean) setFontBold(Boolean)} for more details
+	 */
+	public final void setFontBold(ValueBinding fontBold) {
+		engine.setProperty(Properties.FONT_BOLD, fontBold);
+	}
+
+	public final java.lang.Boolean getFontItalic() {
+		return getFontItalic(null);
+	}
+
+	/**
+	 * See {@link #getFontItalic() getFontItalic()} for more details
+	 */
+	public final java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
+		return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
+	}
+
+	public final void setFontItalic(java.lang.Boolean fontItalic) {
+		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
+	}
+
+	/**
+	 * See {@link #setFontItalic(Boolean) setFontItalic(Boolean)} for more details
+	 */
+	public final void setFontItalic(ValueBinding fontItalic) {
+		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
+	}
+
+	public final java.lang.String getFontName() {
+		return getFontName(null);
+	}
+
+	/**
+	 * See {@link #getFontName() getFontName()} for more details
+	 */
+	public final java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FONT_NAME, facesContext);
+	}
+
+	public final void setFontName(java.lang.String fontName) {
+		engine.setProperty(Properties.FONT_NAME, fontName);
+	}
+
+	/**
+	 * See {@link #setFontName(String) setFontName(String)} for more details
+	 */
+	public final void setFontName(ValueBinding fontName) {
+		engine.setProperty(Properties.FONT_NAME, fontName);
+	}
+
+	public final java.lang.String getFontSize() {
+		return getFontSize(null);
+	}
+
+	/**
+	 * See {@link #getFontSize() getFontSize()} for more details
+	 */
+	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
+	}
+
+	public final void setFontSize(java.lang.String fontSize) {
+		engine.setProperty(Properties.FONT_SIZE, fontSize);
+	}
+
+	/**
+	 * See {@link #setFontSize(String) setFontSize(String)} for more details
+	 */
+	public final void setFontSize(ValueBinding fontSize) {
+		engine.setProperty(Properties.FONT_SIZE, fontSize);
+	}
+
+	public final java.lang.Boolean getFontUnderline() {
+		return getFontUnderline(null);
+	}
+
+	/**
+	 * See {@link #getFontUnderline() getFontUnderline()} for more details
+	 */
+	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
+		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
+	}
+
+	public final void setFontUnderline(java.lang.Boolean fontUnderline) {
+		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
+	}
+
+	/**
+	 * See {@link #setFontUnderline(Boolean) setFontUnderline(Boolean)} for more details
+	 */
+	public final void setFontUnderline(ValueBinding fontUnderline) {
+		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
+	}
+
+	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeInitListener(org.rcfaces.core.event.IInitListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listInitListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
 	public final java.lang.String getHelpMessage() {
@@ -450,48 +797,26 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		
 	}
 
-	public final boolean isDisabled() {
-		return isDisabled(null);
+	public final boolean isValueLocked() {
+		return isValueLocked(null);
 	}
 
 	/**
-	 * See {@link #isDisabled() isDisabled()} for more details
+	 * See {@link #isValueLocked() isValueLocked()} for more details
 	 */
-	public final boolean isDisabled(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
+	public final boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VALUE_LOCKED, false, facesContext);
 	}
 
-	public final void setDisabled(boolean disabled) {
-		engine.setProperty(Properties.DISABLED, disabled);
+	public final void setValueLocked(boolean valueLocked) {
+		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 
 	/**
-	 * See {@link #setDisabled(boolean) setDisabled(boolean)} for more details
+	 * See {@link #setValueLocked(boolean) setValueLocked(boolean)} for more details
 	 */
-	public final void setDisabled(ValueBinding disabled) {
-		engine.setProperty(Properties.DISABLED, disabled);
-	}
-
-	public final java.lang.String getUnlockedClientAttributeNames() {
-		return getUnlockedClientAttributeNames(null);
-	}
-
-	/**
-	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
-	 */
-	public final java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
-	}
-
-	public final void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
-		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
-	}
-
-	/**
-	 * See {@link #setUnlockedClientAttributeNames(String) setUnlockedClientAttributeNames(String)} for more details
-	 */
-	public final void setUnlockedClientAttributeNames(ValueBinding unlockedClientAttributeNames) {
-		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+	public final void setValueLocked(ValueBinding valueLocked) {
+		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 
 	public final java.lang.Integer getTabIndex() {
@@ -514,6 +839,28 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	 */
 	public final void setTabIndex(ValueBinding tabIndex) {
 		engine.setProperty(Properties.TAB_INDEX, tabIndex);
+	}
+
+	public final java.lang.String getLookId() {
+		return getLookId(null);
+	}
+
+	/**
+	 * See {@link #getLookId() getLookId()} for more details
+	 */
+	public final java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
+	}
+
+	public final void setLookId(java.lang.String lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
+	}
+
+	/**
+	 * See {@link #setLookId(String) setLookId(String)} for more details
+	 */
+	public final void setLookId(ValueBinding lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
 	public final java.lang.String getX() {
@@ -558,64 +905,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	 */
 	public final void setY(ValueBinding y) {
 		engine.setProperty(Properties.Y, y);
-	}
-
-	public final java.lang.String getLookId() {
-		return getLookId(null);
-	}
-
-	/**
-	 * See {@link #getLookId() getLookId()} for more details
-	 */
-	public final java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
-	}
-
-	public final void setLookId(java.lang.String lookId) {
-		engine.setProperty(Properties.LOOK_ID, lookId);
-	}
-
-	/**
-	 * See {@link #setLookId(String) setLookId(String)} for more details
-	 */
-	public final void setLookId(ValueBinding lookId) {
-		engine.setProperty(Properties.LOOK_ID, lookId);
-	}
-
-	public final void addBlurListener(org.rcfaces.core.event.IBlurListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeBlurListener(org.rcfaces.core.event.IBlurListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listBlurListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IBlurListener.class);
-	}
-
-	public final void addFocusListener(org.rcfaces.core.event.IFocusListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeFocusListener(org.rcfaces.core.event.IFocusListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listFocusListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IFocusListener.class);
-	}
-
-	public final void addErrorListener(org.rcfaces.core.event.IErrorListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeErrorListener(org.rcfaces.core.event.IErrorListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listErrorListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
 	}
 
 	public final java.lang.String getMarginBottom() {
@@ -706,86 +995,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
-	public final java.lang.String getBackgroundColor() {
-		return getBackgroundColor(null);
-	}
-
-	/**
-	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
-	 */
-	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
-	}
-
-	public final void setBackgroundColor(java.lang.String backgroundColor) {
-		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
-	}
-
-	/**
-	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
-	 */
-	public final void setBackgroundColor(ValueBinding backgroundColor) {
-		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
-	}
-
-	public final java.lang.String getForegroundColor() {
-		return getForegroundColor(null);
-	}
-
-	/**
-	 * See {@link #getForegroundColor() getForegroundColor()} for more details
-	 */
-	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
-	}
-
-	public final void setForegroundColor(java.lang.String foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
-	}
-
-	/**
-	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
-	 */
-	public final void setForegroundColor(ValueBinding foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
-	}
-
-	public final void addKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
-	}
-
-	public final void addKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listKeyDownListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IKeyDownListener.class);
-	}
-
-	public final void addKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listKeyUpListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IKeyUpListener.class);
-	}
-
 	public final java.lang.String getTextAlignment() {
 		return getTextAlignment(null);
 	}
@@ -820,85 +1029,48 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
 	}
 
-	public final java.lang.String getStyleClass() {
-		return getStyleClass(null);
+	public final int getHiddenMode() {
+		return getHiddenMode(null);
 	}
 
 	/**
-	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
-	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
+	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
 
-	public final void setStyleClass(java.lang.String styleClass) {
-		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	public final void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	/**
-	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
+	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
 	 */
-	public final void setStyleClass(ValueBinding styleClass) {
-		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	public final void setHiddenMode(ValueBinding hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public final Object getServerData(String name) {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		 if (dataMapAccessor==null) {
-		 	return null;
-		 }
-            
-		return dataMapAccessor.getData(name, null);
-		
+	public final java.lang.String getWaiRole() {
+		return getWaiRole(null);
 	}
 
-	public final Object removeServerData(String name) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-		 	return null;
-		}
-            
-		return dataMapAccessor.removeData(name, null);
-		
+	/**
+	 * See {@link #getWaiRole() getWaiRole()} for more details
+	 */
+	public final java.lang.String getWaiRole(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WAI_ROLE, facesContext);
 	}
 
-	public final Map getServerDataMap() {
-
-
-		return getServerDataMap(null);
-		
+	public final void setWaiRole(java.lang.String waiRole) {
+		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
-	public final int getServerDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-            
-		return dataMapAccessor.getDataCount();
-		
-	}
-
-	public final Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public final String[] listServerDataKeys() {
-
-
-			return listServerDataKeys(null);
-		
+	/**
+	 * See {@link #setWaiRole(String) setWaiRole(String)} for more details
+	 */
+	public final void setWaiRole(ValueBinding waiRole) {
+		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
 	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
@@ -911,116 +1083,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	public final javax.faces.event.FacesListener [] listPropertyChangeListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
-	}
-
-	public final java.lang.Boolean getFontBold() {
-		return getFontBold(null);
-	}
-
-	/**
-	 * See {@link #getFontBold() getFontBold()} for more details
-	 */
-	public final java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
-	}
-
-	public final void setFontBold(java.lang.Boolean fontBold) {
-		engine.setProperty(Properties.FONT_BOLD, fontBold);
-	}
-
-	/**
-	 * See {@link #setFontBold(Boolean) setFontBold(Boolean)} for more details
-	 */
-	public final void setFontBold(ValueBinding fontBold) {
-		engine.setProperty(Properties.FONT_BOLD, fontBold);
-	}
-
-	public final java.lang.Boolean getFontItalic() {
-		return getFontItalic(null);
-	}
-
-	/**
-	 * See {@link #getFontItalic() getFontItalic()} for more details
-	 */
-	public final java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
-	}
-
-	public final void setFontItalic(java.lang.Boolean fontItalic) {
-		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
-	}
-
-	/**
-	 * See {@link #setFontItalic(Boolean) setFontItalic(Boolean)} for more details
-	 */
-	public final void setFontItalic(ValueBinding fontItalic) {
-		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
-	}
-
-	public final java.lang.String getFontName() {
-		return getFontName(null);
-	}
-
-	/**
-	 * See {@link #getFontName() getFontName()} for more details
-	 */
-	public final java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_NAME, facesContext);
-	}
-
-	public final void setFontName(java.lang.String fontName) {
-		engine.setProperty(Properties.FONT_NAME, fontName);
-	}
-
-	/**
-	 * See {@link #setFontName(String) setFontName(String)} for more details
-	 */
-	public final void setFontName(ValueBinding fontName) {
-		engine.setProperty(Properties.FONT_NAME, fontName);
-	}
-
-	public final java.lang.String getFontSize() {
-		return getFontSize(null);
-	}
-
-	/**
-	 * See {@link #getFontSize() getFontSize()} for more details
-	 */
-	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
-	}
-
-	public final void setFontSize(java.lang.String fontSize) {
-		engine.setProperty(Properties.FONT_SIZE, fontSize);
-	}
-
-	/**
-	 * See {@link #setFontSize(String) setFontSize(String)} for more details
-	 */
-	public final void setFontSize(ValueBinding fontSize) {
-		engine.setProperty(Properties.FONT_SIZE, fontSize);
-	}
-
-	public final java.lang.Boolean getFontUnderline() {
-		return getFontUnderline(null);
-	}
-
-	/**
-	 * See {@link #getFontUnderline() getFontUnderline()} for more details
-	 */
-	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
-	}
-
-	public final void setFontUnderline(java.lang.Boolean fontUnderline) {
-		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
-	}
-
-	/**
-	 * See {@link #setFontUnderline(Boolean) setFontUnderline(Boolean)} for more details
-	 */
-	public final void setFontUnderline(ValueBinding fontUnderline) {
-		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
 	public final java.lang.String getAccessKey() {
@@ -1043,18 +1105,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	 */
 	public final void setAccessKey(ValueBinding accessKey) {
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
-	}
-
-	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeInitListener(org.rcfaces.core.event.IInitListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listInitListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
 	protected Set getCameliaFields() {

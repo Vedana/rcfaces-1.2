@@ -47,5 +47,5 @@ public interface IProcessContext {
 
     String getScriptType();
 
-    Locale getDefaultAttributesLocale();
+    Locale getDefaultLiteralLocale();
 }

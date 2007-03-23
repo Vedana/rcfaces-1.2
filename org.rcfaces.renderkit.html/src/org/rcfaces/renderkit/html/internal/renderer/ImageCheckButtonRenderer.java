@@ -36,15 +36,16 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
 
         Boolean selected = componentData.getBooleanProperty("selected");
         if (selected != null) {
-            decodeSelection(imageButtonCapability, selected.booleanValue());
+            decodeSelection(context.getFacesContext(), imageButtonCapability,
+                    selected.booleanValue());
         }
 
         // System.out.println("Component:"+component.getId()+"
         // Selected="+selected+" : "+componentData.getProperty("selected"));
     }
 
-    protected void decodeSelection(IImageButtonFamilly imageButtonCapability,
-            boolean selected) {
+    protected void decodeSelection(FacesContext facesContext,
+            IImageButtonFamilly imageButtonCapability, boolean selected) {
         ((ISelectedCapability) imageButtonCapability).setSelected(selected);
     }
 

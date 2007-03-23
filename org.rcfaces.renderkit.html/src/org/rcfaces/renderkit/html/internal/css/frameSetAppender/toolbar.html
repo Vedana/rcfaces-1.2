@@ -22,6 +22,7 @@ BODY {
 <script type="text/javascript">
 function updateLocation(location) {
 	document.getElementById("url").value=location;
+	document._oldLocation=location;
 }
 function toggleDebug() {
 	window._showDebug=!window._showDebug;
@@ -63,6 +64,14 @@ function callUpdateLevels() {
 }
 function callClearLogs() {
 	window.parent.clearLogs();
+}
+
+function callReload() {
+	if (!document._oldLocation) {
+		return;
+	}
+	
+	window.parent.changeMainLocation(document._oldLocation);
 }
 
 function initIcons() {
@@ -177,8 +186,10 @@ function locationKeys(event) {
 		event=window.event;
 	}
 	
+	var input=document.getElementById("url");		
+	
 	if (event.keyCode==13) {
-		window.parent.changeMainLocation(this.value);
+		window.parent.changeMainLocation(input.value);
 	}
 }
 
@@ -200,14 +211,24 @@ function locationKeys(event) {
 				<td>
 					<input 
 						type="image" 
+						src="../frameSetAppender/reload.gif" 
+						class="icons"
+						title="Reload current page"
+						width="16" height="16"
+						onclick="callReload()">
+				</td>
+				<td>
+					<img src="separator.gif" width="11" height="22" />
+				</td>
+				</td>
+				<td>
+					<input 
+						type="image" 
 						src="../consoleAppender/delete.gif" 
 						class="icons"
 						title="Permanently delete all entries"
 						width="16" height="16"
 						onclick="callClearLogs()">
-				</td>
-				<td>
-					<img src="separator.gif" width="11" height="22" />
 				</td>
 				<td>
 					<input 

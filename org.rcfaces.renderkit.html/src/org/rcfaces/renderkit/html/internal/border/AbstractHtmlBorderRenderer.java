@@ -113,7 +113,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
     protected IHtmlWriter writeTopBorder(IHtmlWriter writer)
             throws WriterException {
         writer.startElement("TR");
-        writer.writeHeight(4);
+        writer.writeHeight(getNorthBorderHeight());
 
         writeCellBorderNorthWest(writer);
 

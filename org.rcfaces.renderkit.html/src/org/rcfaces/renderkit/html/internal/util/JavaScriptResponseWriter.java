@@ -234,33 +234,38 @@ public class JavaScriptResponseWriter extends
 
     public IJavaScriptWriter writeSymbol(String symbol) {
         int idx = symbol.indexOf('.');
+        String className = null;
         if (idx >= 0) {
-            write(convertSymbol(symbol.substring(0, idx)));
+            className = symbol.substring(0, idx);
+
+            className = convertSymbol(null, className);
+            write(className);
             write('.');
 
             symbol = symbol.substring(idx + 1);
         }
 
-        write(convertSymbol(symbol));
+        write(convertSymbol(className, symbol));
 
         return this;
     }
 
     public IJavaScriptWriter writeCall(String object, String symbol) {
         if (object != null) {
-            write(convertSymbol(object));
+            object = convertSymbol(null, object);
+            write(object);
             write('.');
         }
-        write(convertSymbol(symbol));
+        write(convertSymbol(object, symbol));
         write('(');
 
         return this;
     }
 
     public IJavaScriptWriter writeMethodCall(String symbol) {
-        write(convertSymbol(getComponentVarName()));
+        write(convertSymbol(null, getComponentVarName()));
         write('.');
-        write(convertSymbol(symbol));
+        write(convertSymbol(null, symbol));
         write('(');
 
         return this;
@@ -268,7 +273,7 @@ public class JavaScriptResponseWriter extends
 
     public IJavaScriptWriter writeConstructor(String symbol) {
         write("new ");
-        write(convertSymbol(symbol));
+        write(convertSymbol(null, symbol));
         write('(');
 
         return this;
@@ -286,22 +291,29 @@ public class JavaScriptResponseWriter extends
         return write("null");
     }
 
-    private String convertSymbol(String symbol) {
+    private String convertSymbol(String className, String memberName) {
         if (symbolsInitialized == false) {
             symbolsInitialized = true;
             symbols = getSymbolsMap();
         }
 
         if (symbols == null) {
-            return symbol;
+            return memberName;
         }
 
-        String s = (String) symbols.get(symbol);
+        if (className != null && className.startsWith("f")) {
+            String s = (String) symbols.get(className + "." + memberName);
+            if (s != null) {
+                return s;
+            }
+        }
+
+        String s = (String) symbols.get(memberName);
         if (s != null) {
             return s;
         }
 
-        return symbol;
+        return memberName;
     }
 
     protected Map getSymbolsMap() {

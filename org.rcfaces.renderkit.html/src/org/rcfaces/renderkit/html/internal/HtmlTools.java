@@ -4,7 +4,11 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,6 +21,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
@@ -24,7 +29,9 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
+import org.rcfaces.core.lang.Time;
 import org.rcfaces.core.model.IFilterProperties;
+import org.w3c.dom.Document;
 
 /**
  * 
@@ -58,15 +65,23 @@ public class HtmlTools {
 
     private static final char DATE_TYPE = 'D';
 
+    private static final char TIME_TYPE = 'M';
+
+    private static final char DOCUMENT_TYPE = 'X';
+
     private static final char ZERO_TYPE = '0';
 
     private static final Number NUMBER_0 = new Double(0);
+
+    private static final int RADIX = 32;
 
     public static Map decodeParametersToMap(IProcessContext processContext,
             UIComponent component, String values, char sep, Object noValue) {
         if (values == null || values.length() < 1) {
             return Collections.EMPTY_MAP;
         }
+
+        FacesContext facesContext = null;
 
         char cs[] = values.toCharArray();
 
@@ -88,7 +103,7 @@ public class HtmlTools {
                 break;
             }
             if (i == cs.length) {
-                throw createFormatException("EOF", i, values);
+                throw createFormatException("EOF", i, values, null);
             }
 
             i++;
@@ -174,13 +189,39 @@ public class HtmlTools {
                     String date = URLFormCodec.decodeURL(cs, valueStart,
                             valueEnd);
 
-                    vs = CalendarTools.parseDate(processContext, component,
-                            date, false);
+                    vs = parseDate(date, processContext, component);
+
+                    break;
+
+                case TIME_TYPE:
+                    String time = URLFormCodec.decodeURL(cs, valueStart,
+                            valueEnd);
+
+                    vs = parseTime(time);
+
+                    break;
+
+                case DOCUMENT_TYPE:
+                    String xml = URLFormCodec.decodeURL(cs, valueStart,
+                            valueEnd);
+
+                    if (facesContext == null) {
+                        if (processContext != null) {
+                            facesContext = processContext.getFacesContext();
+                        }
+
+                        if (facesContext == null) {
+                            facesContext = FacesContext.getCurrentInstance();
+                        }
+                    }
+
+                    vs = parseDocument(facesContext, xml);
+
                     break;
 
                 default:
                     throw createFormatException("Unknown serialized type '"
-                            + type + "'.", i, values);
+                            + type + "'.", i, values, null);
                 }
             }
 
@@ -193,14 +234,23 @@ public class HtmlTools {
     }
 
     private static FacesException createFormatException(String message, int i,
-            String datas) {
+            String datas, Throwable th) {
         return new FacesException("Bad format of rcfaces serialized datas ! ("
-                + message + ": pos=" + i + " data='" + datas + "')");
+                + message + ": pos=" + i + " data='" + datas + "')", th);
     }
 
-    public static String encodeParametersFromMap(Map map, char sep) {
+    public static String encodeParametersFromMap(Map map, char sep,
+            IProcessContext processContext, UIComponent component) {
         if (map.isEmpty()) {
             return "";
+        }
+
+        FacesContext facesContext = null;
+        if (processContext != null) {
+            facesContext = processContext.getFacesContext();
+        }
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
         }
 
         StringAppender sb = new StringAppender(map.size() * 24);
@@ -218,43 +268,7 @@ public class HtmlTools {
             URLFormCodec.encode(sb, key);
             sb.append('=');
 
-            if (value == null) {
-                sb.append(NULL_TYPE);
-                continue;
-            }
-
-            if (value.equals("")) {
-                // String vide !
-                continue;
-            }
-
-            if (value instanceof Boolean) {
-                if (((Boolean) value).booleanValue()) {
-                    sb.append(TRUE_TYPE);
-                    continue;
-                }
-
-                sb.append(FALSE_TYPE);
-                continue;
-            }
-
-            if ((value instanceof Number)
-                    && ((Number) value).doubleValue() == 0.0) {
-                sb.append(ZERO_TYPE);
-                continue;
-            }
-
-            if (value instanceof Number) {
-                // sb.append(NUMBER_TYPE);
-                // Pas necessaire !
-
-                value = ((Number) value).toString();
-
-            } else {
-                sb.append(STRING_TYPE);
-            }
-
-            URLFormCodec.encode(sb, (String) value);
+            formatField(facesContext, value, sb, processContext, component);
         }
 
         return sb.toString();
@@ -280,11 +294,13 @@ public class HtmlTools {
         return FilterExpressionTools.create(filter);
     }
 
-    public static String encodeFilterExpression(IFilterProperties filterMap) {
+    public static String encodeFilterExpression(IFilterProperties filterMap,
+            IProcessContext processContext, UIComponent component) {
 
         Map map = filterMap.toMap();
 
-        String encode = HtmlTools.encodeParametersFromMap(map, '&');
+        String encode = HtmlTools.encodeParametersFromMap(map, '&',
+                processContext, component);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Encode filter expression to " + encode);
@@ -548,5 +564,362 @@ public class HtmlTools {
         }
 
         return convertedGroupName;
+    }
+
+    private static void formatTime(Time time, StringAppender sa) {
+        int hours = time.getHours();
+        int minutes = time.getMinutes();
+        int seconds = time.getSeconds();
+        int millis = time.getMillis();
+
+        if (millis < 1) {
+            if (seconds < 1) {
+                if (minutes < 1) {
+                    sa.append('H');
+                    sa.append(Integer.toString(hours, RADIX));
+                    return;
+                }
+
+                sa.append('m');
+                sa.append(Integer.toString(hours * 60 + minutes, RADIX));
+                return;
+            }
+
+            sa.append('s');
+            sa.append(Integer.toString((hours * 60 + minutes) * 60 + seconds,
+                    RADIX));
+            return;
+        }
+
+        sa.append('S');
+        sa.append(Integer.toString(((hours * 60 + minutes) * 60 + seconds)
+                * 1000 + millis, RADIX));
+    }
+
+    private static Time parseTime(String time) {
+
+        int hours = 0;
+        int minutes = 0;
+        int seconds = 0;
+        int millis = 0;
+
+        char c = time.charAt(0);
+        long value = Long.parseLong(time.substring(1), RADIX);
+
+        switch (c) {
+        case 'H':
+            hours = (int) value;
+            break;
+
+        case 'm':
+            minutes = (int) (value % 60);
+            value /= 60;
+            hours = (int) value;
+            break;
+
+        case 's':
+            seconds = (int) (value % 60);
+            value /= 60;
+            minutes = (int) (value % 60);
+            value /= 60;
+            hours = (int) value;
+            break;
+
+        case 'S':
+            millis = (int) (value % 1000);
+            value /= 1000;
+            seconds = (int) (value % 60);
+            value /= 60;
+            minutes = (int) (value % 60);
+            value /= 60;
+            hours = (int) value;
+            break;
+
+        default:
+            throw new FacesException("Invalid time format '" + time + "'.");
+        }
+
+        return new Time(hours, minutes, seconds, millis);
+    }
+
+    public static void formatDate(Date date, StringAppender sa,
+            IProcessContext processContext, UIComponent component,
+            boolean onlyDate) {
+
+        Calendar calendar = CalendarTools.getCalendar(processContext,
+                component, false);
+
+        formatDate(date, sa, calendar, onlyDate);
+    }
+
+    public static void formatDate(Date date, StringAppender sa,
+            Calendar calendar, boolean onlyDate) {
+
+        int year = 0;
+        int month = 0;
+        int day = 0;
+        int hours = 0;
+        int minutes = 0;
+        int seconds = 0;
+        int millis = 0;
+
+        synchronized (calendar) {
+
+            calendar.setTime(date);
+
+            year = calendar.get(Calendar.YEAR);
+            month = calendar.get(Calendar.MONTH);
+            day = calendar.get(Calendar.DATE);
+            
+            if (onlyDate) {
+                hours = calendar.get(Calendar.HOUR);
+                minutes = calendar.get(Calendar.MINUTE);
+                seconds = calendar.get(Calendar.SECOND);
+                millis = calendar.get(Calendar.MILLISECOND);
+            }
+        }
+
+        if (millis < 1) {
+            if (seconds < 1) {
+                if (minutes < 1) {
+                    if (hours < 1) {
+                        if (day < 1) {
+                            if (month < 1) {
+                                sa.append('Y');
+                                sa.append(Integer.toString(year, RADIX));
+                                return;
+                            }
+                            sa.append('M');
+                            sa.append(Integer
+                                    .toString(year * 12 + month, RADIX));
+                            return;
+                        }
+                        sa.append('d');
+                        sa.append(Integer.toString((year * 12 + month) * 31
+                                + day, RADIX));
+                        return;
+                    }
+                    sa.append('H');
+                    sa.append(Integer.toString(((year * 12 + month) * 31 + day)
+                            * 24 + hours, RADIX));
+                    return;
+                }
+
+                sa.append('m');
+                sa.append(Long.toString(
+                        (((year * 12 + month) * 31 + day) * 24 + hours) * 60
+                                + minutes, RADIX));
+                return;
+            }
+
+            sa.append('s');
+            sa
+                    .append(Long
+                            .toString(
+                                    ((((year * 12 + month) * 31 + day) * 24 + hours) * 60 + minutes)
+                                            * 60 + seconds, RADIX));
+            return;
+        }
+
+        sa.append('S');
+        sa
+                .append(Long
+                        .toString(
+                                (((((year * 12 + month) * 31 + day) * 24 + hours) * 60 + minutes) * 60 + seconds)
+                                        * 1000 + millis, RADIX));
+    }
+
+    public static Date parseDate(String time, IProcessContext processContext,
+            UIComponent component) {
+
+        int year = 0;
+        int month = 0;
+        int date = 0;
+        int hours = 0;
+        int minutes = 0;
+        int seconds = 0;
+        int millis = 0;
+
+        char c = time.charAt(0);
+        long value = Long.parseLong(time.substring(1), RADIX);
+
+        switch (c) {
+        case 'Y':
+            year = (int) value;
+            break;
+
+        case 'M':
+            month = (int) (value % 12);
+            value /= 12;
+            year = (int) value;
+            break;
+
+        case 'd':
+            date = (int) (value % 31);
+            value /= 31;
+            month = (int) (value % 12);
+            value /= 12;
+            year = (int) value;
+            break;
+
+        case 'H':
+            hours = (int) (value % 24);
+            value /= 24;
+            date = (int) (value % 31);
+            value /= 31;
+            month = (int) (value % 12);
+            value /= 12;
+            year = (int) value;
+            break;
+
+        case 'm':
+            minutes = (int) (value % 60);
+            value /= 60;
+            hours = (int) (value % 24);
+            value /= 24;
+            date = (int) (value % 31);
+            value /= 31;
+            month = (int) (value % 12);
+            value /= 12;
+            year = (int) value;
+            break;
+
+        case 's':
+            seconds = (int) (value % 60);
+            value /= 60;
+            minutes = (int) (value % 60);
+            value /= 60;
+            hours = (int) (value % 24);
+            value /= 24;
+            date = (int) (value % 31);
+            value /= 31;
+            month = (int) (value % 12);
+            value /= 12;
+            year = (int) value;
+
+        case 'S':
+            millis = (int) (value % 1000);
+            value /= 1000;
+            seconds = (int) (value % 60);
+            value /= 60;
+            minutes = (int) (value % 60);
+            value /= 60;
+            hours = (int) (value % 24);
+            value /= 24;
+            date = (int) (value % 31);
+            value /= 31;
+            month = (int) (value % 12);
+            value /= 12;
+            year = (int) value;
+            break;
+
+        default:
+            throw new FacesException("Invalid time format '" + time + "'.");
+        }
+
+        Calendar calendar = CalendarTools.getCalendar(processContext,
+                component, false);
+        synchronized (calendar) {
+            calendar.set(year, month, date+1, hours, minutes, seconds);
+            if (millis > 0) {
+                calendar.set(Calendar.MILLISECOND, millis);
+            }
+
+            return calendar.getTime();
+        }
+    }
+
+    public static void formatField(FacesContext facesContext, Object value,
+            StringAppender sb, IProcessContext processContext,
+            UIComponent component) {
+
+        if (value == null) {
+            sb.append(NULL_TYPE);
+            return;
+        }
+
+        if (value.equals("")) {
+            // String vide !
+            return;
+        }
+
+        if (value instanceof Boolean) {
+            if (((Boolean) value).booleanValue()) {
+                sb.append(TRUE_TYPE);
+                return;
+            }
+
+            sb.append(FALSE_TYPE);
+            return;
+        }
+
+        if (value instanceof Date) {
+            Date date = (Date) value;
+
+            sb.append(DATE_TYPE);
+
+            formatDate(date, sb, processContext, component, false);
+            return;
+        }
+
+        if (value instanceof Document) {
+            Document document = (Document) value;
+
+            sb.append(DOCUMENT_TYPE);
+            formatDocument(facesContext, document, sb);
+            return;
+        }
+
+        if (value instanceof Time) {
+            Time time = (Time) value;
+
+            sb.append(TIME_TYPE);
+            formatTime(time, sb);
+            return;
+        }
+
+        if ((value instanceof Number) && ((Number) value).doubleValue() == 0.0) {
+            sb.append(ZERO_TYPE);
+            return;
+        }
+
+        if (value instanceof Number) {
+            // sb.append(NUMBER_TYPE);
+            // Pas necessaire !
+
+            value = ((Number) value).toString();
+
+        } else {
+            sb.append(STRING_TYPE);
+        }
+
+        URLFormCodec.encode(sb, (String) value);
+    }
+
+    private static final Document parseDocument(FacesContext facesContext,
+            String xml) {
+        RcfacesContext rcfacesContext = RcfacesContext
+                .getInstance(facesContext);
+
+        try {
+            return rcfacesContext.getDocumentBuilderProvider().parse(
+                    new StringReader(xml));
+        } catch (IOException e) {
+            throw createFormatException("Can not parse document", 0, xml, e);
+        }
+    }
+
+    private static final void formatDocument(FacesContext facesContext,
+            Document document, StringAppender sa) {
+        RcfacesContext rcfacesContext = RcfacesContext
+                .getInstance(facesContext);
+
+        try {
+            rcfacesContext.getDocumentBuilderProvider().serialize(
+                    sa.createWriter(), document);
+
+        } catch (IOException e) {
+            throw new FacesException("Can not format xml document !", e);
+        }
     }
 }

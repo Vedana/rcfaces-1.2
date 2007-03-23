@@ -403,7 +403,7 @@ var __prototype = {
 		var body="";
 		
 		var children=xmlNode.childNodes;
-		if (children && children.length>0) {
+		if (children && children.length) {
 			for(var i=0;i<children.length;i++) {
 				var xmlChild=chilren[i];
 				

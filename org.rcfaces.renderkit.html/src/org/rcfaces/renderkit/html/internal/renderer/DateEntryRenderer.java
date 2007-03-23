@@ -56,8 +56,6 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
 
         htmlWriter.startElement("DIV");
 
-        htmlWriter.writeRole(IAccessibilityRoles.TEXT_FIELD);
-
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -111,6 +109,10 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
                 dateFormat);
 
         htmlWriter.enableJavaScript();
+    }
+
+    protected String getWAIRole() {
+        return IAccessibilityRoles.TEXT_FIELD;
     }
 
     protected void encodeAfterDecorator(IHtmlWriter htmlWriter,
@@ -436,15 +438,14 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
 
         DateEntryComponent dateEntryComponent = (DateEntryComponent) component;
 
-        String dateValue = componentData.getStringProperty("value");
-        if (dateValue != null) {
-            Calendar componentCalendar = CalendarTools.getCalendar(context
-                    .getProcessContext(), dateEntryComponent, false);
-
-            Date date = parseDate(componentCalendar, dateValue, true);
-
-            dateEntryComponent.setSubmittedValue(date);
+        Date dateValue = (Date) componentData.getProperty("value");
+        Date date = null;
+        if (dateValue != null
+                && dateEntryComponent.isValueLocked(context.getFacesContext()) == false) {
+            date = dateValue;
         }
+
+        dateEntryComponent.setSubmittedValue(date);
     }
 
     protected String getActionEventName(INameSpace nameSpace) {

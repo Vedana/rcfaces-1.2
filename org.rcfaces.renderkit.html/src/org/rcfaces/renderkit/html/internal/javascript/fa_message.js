@@ -13,13 +13,14 @@
 var __prototype = {
 	fa_message: function() {
 
-		if (window.f_messageContext) {
+		if (f_class.IsClassDefined("f_messageContext")) {
 			var messageContext=f_messageContext.Get(this);
 			
 			var messages=messageContext.f_listMessages(this);
 			
 			messageContext.f_addMessageListener(this);
 			
+			f_core.Debug(fa_message, "fa_message: message detected for component id='"+this.id+"' = "+messages);
 			if (messages.length) {
 				this.f_performMessageChanges(messageContext);
 			}
@@ -146,7 +147,10 @@ var __prototype = {
 		return null;
 	},
 	
+	/**
+	 * @method protected abstract
+	 */
 	f_performMessageChanges: f_class.ABSTRACT	
 }
 
-var fa_message=new f_aspect("fa_message", null, __prototype);
+new f_aspect("fa_message", null, __prototype);
