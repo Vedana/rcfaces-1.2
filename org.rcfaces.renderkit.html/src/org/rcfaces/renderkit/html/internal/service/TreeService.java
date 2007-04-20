@@ -58,6 +58,8 @@ public class TreeService extends AbstractHtmlService {
 
     private static final int DEFAULT_BUFFER_SIZE = 4096;
 
+    private static final String TREE_SERVICE_VERSION = "1.0.0";
+
     public TreeService() {
     }
 
@@ -140,6 +142,7 @@ public class TreeService extends AbstractHtmlService {
         setNoCache(response);
         response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
                 + "; charset=" + RESPONSE_CHARSET);
+        setCameliaResponse(response, TREE_SERVICE_VERSION);
 
         boolean useGzip = canUseGzip(facesContext);
 
@@ -223,7 +226,8 @@ public class TreeService extends AbstractHtmlService {
                 .allocateVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(treeId).writeln(", document);");
+                "GetElementByClientId").writeString(treeId).writeln(
+                ", document);");
 
         jsWriter.write("var ").write(waitingVarId).write('=').writeMethodCall(
                 "f_getWaitingNode").write(waitingId).writeln(");");

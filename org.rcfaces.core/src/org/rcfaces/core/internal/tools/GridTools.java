@@ -1,6 +1,5 @@
 /*
  * $Id$
- * 
  */
 package org.rcfaces.core.internal.tools;
 
@@ -12,9 +11,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ArrayDataModel;
@@ -27,14 +27,20 @@ import javax.servlet.jsp.jstl.sql.Result;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ComponentsColumnComponent;
 import org.rcfaces.core.component.DataColumnComponent;
-import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.iterator.IComponentsColumnIterator;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.lang.provider.ICheckProvider;
+import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.IDataModel;
 import org.rcfaces.core.model.IIndexesModel;
@@ -50,7 +56,17 @@ public class GridTools {
 
     private static final Log LOG = LogFactory.getLog(GridTools.class);
 
-    private static final IDataColumnIterator EMPTY_COMPONENT_ITERATOR = new DataColumnListIterator(
+    public static final int SELECTION_VALUES_TYPE = 1;
+
+    public static final int CHECK_VALUES_TYPE = 2;
+
+    private static final IDataColumnIterator EMPTY_DATA_COLUMN_ITERATOR = new DataColumnListIterator(
+            Collections.EMPTY_LIST);
+
+    private static final IColumnIterator EMPTY_COLUMNS_ITERATOR = new ColumnListIterator(
+            Collections.EMPTY_LIST);
+
+    private static final IComponentsColumnIterator EMPTY_COMPONENTS_COLUMN_ITERATOR = new ComponentsColumnListIterator(
             Collections.EMPTY_LIST);
 
     private static final String ALL_INDEX = "all";
@@ -59,14 +75,37 @@ public class GridTools {
 
     private static final boolean SORT_INDICES = true;
 
-    public static IDataColumnIterator listColumns(DataGridComponent component) {
-        List list = ComponentIterators.list(component,
+    private static final UIColumn[] COLUMN_EMPTY_ARRAY = new UIColumn[0];
+
+    public static IColumnIterator listColumns(IGridComponent component,
+            Class filter) {
+        List list = ComponentIterators.list((UIComponent) component, filter);
+        if (list.isEmpty()) {
+            return EMPTY_COLUMNS_ITERATOR;
+        }
+
+        return new ColumnListIterator(list);
+    }
+
+    public static IDataColumnIterator listDataColumns(IGridComponent component) {
+        List list = ComponentIterators.list((UIComponent) component,
                 DataColumnComponent.class);
         if (list.isEmpty()) {
-            return EMPTY_COMPONENT_ITERATOR;
+            return EMPTY_DATA_COLUMN_ITERATOR;
         }
 
         return new DataColumnListIterator(list);
+    }
+
+    public static IComponentsColumnIterator listComponentsColumns(
+            IGridComponent component) {
+        List list = ComponentIterators.list((UIComponent) component,
+                ComponentsColumnComponent.class);
+        if (list.isEmpty()) {
+            return EMPTY_COMPONENTS_COLUMN_ITERATOR;
+        }
+
+        return new ComponentsColumnListIterator(list);
     }
 
     /**
@@ -89,6 +128,53 @@ public class GridTools {
 
         public DataColumnComponent[] toArray() {
             return (DataColumnComponent[]) toArray(new DataColumnComponent[count()]);
+        }
+
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static final class ComponentsColumnListIterator extends
+            ComponentIterators.ComponentListIterator implements
+            IComponentsColumnIterator {
+        private static final String REVISION = "$Revision$";
+
+        public ComponentsColumnListIterator(List list) {
+            super(list);
+        }
+
+        public final ComponentsColumnComponent next() {
+            return (ComponentsColumnComponent) nextComponent();
+        }
+
+        public ComponentsColumnComponent[] toArray() {
+            return (ComponentsColumnComponent[]) toArray(new ComponentsColumnComponent[count()]);
+        }
+
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static final class ColumnListIterator extends
+            ComponentIterators.ComponentListIterator implements IColumnIterator {
+        private static final String REVISION = "$Revision$";
+
+        public ColumnListIterator(List list) {
+            super(list);
+        }
+
+        public final UIColumn next() {
+            return (UIColumn) nextComponent();
+        }
+
+        public UIColumn[] toArray() {
+            return (UIColumn[]) toArray(new UIColumn[count()]);
         }
 
     }
@@ -131,19 +217,28 @@ public class GridTools {
      * return new CollectionIndexesModel(l); }
      */
 
-    public static final Object getFirst(DataModel dataModel, Object selection) {
+    public static final Object getFirst(Object value, Object selection,
+            int valuesType) {
         if (selection == null) {
             return null;
         }
 
-        if (selection instanceof Object[]) {
-            Object array[] = (Object[]) selection;
-
-            if (array.length == 0) {
+        if (selection.getClass().isArray()) {
+            if (Array.getLength(selection) == 0) {
                 return null;
             }
 
-            return array[0];
+            return Array.get(selection, 0);
+        }
+
+        if (selection instanceof List) {
+            List collection = (List) selection;
+
+            if (collection.isEmpty()) {
+                return null;
+            }
+
+            return collection.get(0);
         }
 
         if (selection instanceof Collection) {
@@ -159,21 +254,37 @@ public class GridTools {
         if (selection instanceof IIndexesModel) {
             IIndexesModel indexesModel = (IIndexesModel) selection;
 
-            return indexesModel.getFirstSelectedObject(dataModel);
+            return indexesModel.getFirstSelectedObject(value);
         }
 
-        return selection;
+        switch (valuesType) {
+        case SELECTION_VALUES_TYPE:
+            ISelectionProvider selectionProvider = getSelectionProvider(selection);
+            if (selectionProvider != null) {
+                return selectionProvider.getFirstSelectedValue();
+            }
+            break;
+
+        case CHECK_VALUES_TYPE:
+            ICheckProvider checkProvider = CheckTools
+                    .getCheckProvider(selection);
+
+            if (checkProvider != null) {
+                return checkProvider.getFirstCheckedValue();
+            }
+            break;
+        }
+
+        return null;
     }
 
-    public static int getCount(Object selection) {
+    public static int getCount(Object selection, int valuesType) {
         if (selection == null) {
             return 0;
         }
 
-        if (selection instanceof Object[]) {
-            Object array[] = (Object[]) selection;
-
-            return array.length;
+        if (selection.getClass().isArray()) {
+            return Array.getLength(selection);
         }
 
         if (selection instanceof Collection) {
@@ -182,161 +293,81 @@ public class GridTools {
             return collection.size();
         }
 
+        if (selection instanceof Map) {
+            return ((Map) selection).size();
+        }
+
         if (selection instanceof IIndexesModel) {
             IIndexesModel indexesModel = (IIndexesModel) selection;
 
             return indexesModel.countIndexes();
         }
 
-        return 1;
+        switch (valuesType) {
+        case SELECTION_VALUES_TYPE:
+            ISelectionProvider selectionProvider = getSelectionProvider(selection);
+            if (selectionProvider != null) {
+                return selectionProvider.getSelectedValuesCount();
+            }
+            break;
+
+        case CHECK_VALUES_TYPE:
+            ICheckProvider checkProvider = CheckTools
+                    .getCheckProvider(selection);
+
+            if (checkProvider != null) {
+                return checkProvider.getCheckedValuesCount();
+            }
+            break;
+        }
+
+        return 0;
+    }
+
+    private static ISelectionProvider getSelectionProvider(Object selection) {
+        if (selection instanceof ISelectionProvider) {
+            return (ISelectionProvider) selection;
+        }
+
+        if (selection instanceof IAdaptable) {
+            ISelectionProvider selectionProvider = (ISelectionProvider) ((IAdaptable) selection)
+                    .getAdapter(ISelectionProvider.class, null);
+
+            if (selectionProvider != null) {
+                return selectionProvider;
+            }
+        }
+
+        ISelectionProvider selectionProvider = (ISelectionProvider) RcfacesContext
+                .getCurrentInstance().getAdapterManager().getAdapter(selection,
+                        ISelectionProvider.class, null);
+
+        return selectionProvider;
     }
 
     public static ISortedComponent[] listSortedComponents(FacesContext context,
-            DataGridComponent dataGridComponent) {
+            ISortedChildrenCapability dataGridComponent) {
 
-        String ids = dataGridComponent.getSortedColumnIds(context);
-        if (ids == null) {
+        UIComponent columns[] = dataGridComponent.getSortedChildren();
+        if (columns.length < 1) {
             return SORTED_COMPONENTS_EMPTY_ARRAY;
         }
 
-        DataColumnComponent columns[] = dataGridComponent.listColumns()
-                .toArray();
-        StringTokenizer st = new StringTokenizer(ids, ",");
-        List l = new ArrayList(st.countTokens());
+        List l = new ArrayList(columns.length);
+        for (int i = 0; i < columns.length; i++) {
 
-        for (; st.hasMoreTokens();) {
-            String id = st.nextToken();
+            UIColumn column = (UIColumn) columns[i];
 
-            if (id.startsWith("#")) {
-                int idx = Integer.parseInt(id.substring(1));
-
-                DataColumnComponent column = columns[idx];
-
-                l.add(new DefaultSortedComponent(column, idx, column
-                        .isAscending(context)));
+            if ((column instanceof IOrderCapability) == false) {
                 continue;
             }
 
-            for (int i = 0; i < columns.length; i++) {
-                DataColumnComponent column = columns[i];
+            l.add(new DefaultSortedComponent(column, i,
+                    ((IOrderCapability) column).isAscending()));
 
-                if (id.equals(column.getId()) == false) {
-                    continue;
-                }
-
-                l.add(new DefaultSortedComponent(column, i, column
-                        .isAscending(context)));
-                break;
-            }
         }
 
         return (ISortedComponent[]) l.toArray(new ISortedComponent[l.size()]);
-    }
-
-    public static DataColumnComponent getFirstSortedColumn(
-            FacesContext context, DataGridComponent dataGridComponent) {
-
-        String ids = dataGridComponent.getSortedColumnIds(context);
-        if (ids == null) {
-            return null;
-        }
-
-        DataColumnComponent columns[] = dataGridComponent.listColumns()
-                .toArray();
-        StringTokenizer st = new StringTokenizer(ids, ",");
-
-        for (; st.hasMoreTokens();) {
-            String id = st.nextToken();
-
-            for (int i = 0; i < columns.length; i++) {
-                DataColumnComponent column = columns[i];
-
-                if (id.equals(column.getId()) == false) {
-                    continue;
-                }
-
-                return column;
-            }
-        }
-
-        return null;
-    }
-
-    public static boolean setSortedColumn(DataGridComponent component,
-            DataColumnComponent dataColumn) {
-        String id = dataColumn.getId();
-        if (id == null || ComponentTools.isAnonymousComponentId(id)) {
-            // On utilise l'index alors ...
-
-            id = null;
-
-            int idx = 0;
-            for (IDataColumnIterator it = component.listColumns(); it.hasNext(); idx++) {
-                DataColumnComponent column = it.next();
-
-                if (column != dataColumn) {
-                    continue;
-                }
-
-                id = "#" + idx;
-                break;
-            }
-
-            if (id == null) {
-                throw new FacesException("Can not get id of DataColumn !");
-            }
-        }
-
-        component.setSortedColumnIds(id);
-
-        return true;
-    }
-
-    public static boolean setSortedColumns(DataGridComponent component,
-            DataColumnComponent dataColumns[]) {
-
-        if (dataColumns == null || dataColumns.length < 1) {
-            component.setSortedColumnIds((String) null);
-            return true;
-        }
-
-        StringAppender sa = new StringAppender(dataColumns.length * 8);
-        for (int i = 0; i < dataColumns.length; i++) {
-            DataColumnComponent dataColumn = dataColumns[i];
-
-            String id = dataColumn.getId();
-            if (id == null || ComponentTools.isAnonymousComponentId(id)) {
-                // On utilise l'index alors ...
-
-                id = null;
-
-                int idx = 0;
-                for (IDataColumnIterator it = component.listColumns(); it
-                        .hasNext(); idx++) {
-                    DataColumnComponent column = it.next();
-
-                    if (column != dataColumn) {
-                        continue;
-                    }
-
-                    id = "#" + idx;
-                    break;
-                }
-
-                if (id == null) {
-                    throw new FacesException("Can not get id of DataColumn !");
-                }
-            }
-            if (sa.length() > 0) {
-                sa.append(',');
-            }
-
-            sa.append(id);
-        }
-
-        component.setSortedColumnIds(sa.toString());
-
-        return true;
     }
 
     public static DataModel getDataModel(Object current, UIComponent component,
@@ -472,10 +503,9 @@ public class GridTools {
         return new ScalarDataModel(current);
     }
 
-    public static void select(DataGridComponent component, Object rowValue) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        Object selectedValues = component.getSelectedValues(facesContext);
+    public static void select(FacesContext facesContext,
+            ISelectionProvider component, Object rowValue) {
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             selectedValues = new ArrayIndexesModel();
@@ -485,8 +515,12 @@ public class GridTools {
         if (selectedValues instanceof IIndexesModel) {
             // Il nous faut l'index ...
 
-            int index = searchIndexIntoDataModel(facesContext, component,
-                    rowValue);
+            if (facesContext == null) {
+                facesContext = FacesContext.getCurrentInstance();
+            }
+
+            int index = searchIndexIntoDataModel(facesContext,
+                    (IGridComponent) component, rowValue);
 
             if (index < 0) {
                 return;
@@ -500,10 +534,9 @@ public class GridTools {
         select(component, selectedValues, Collections.singletonList(rowValue));
     }
 
-    public static void select(DataGridComponent component, int index) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        Object selectedValues = component.getSelectedValues(facesContext);
+    public static void select(FacesContext facesContext,
+            ISelectionProvider component, int index) {
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             selectedValues = new ArrayIndexesModel();
@@ -515,19 +548,25 @@ public class GridTools {
             return;
         }
 
-        DataModel dataModel = component.getDataModel(facesContext);
+        IGridComponent gridComponent = (IGridComponent) component;
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        DataModel dataModel = gridComponent.getDataModelValue();
 
         if (dataModel instanceof IRangeDataModel) {
             ((IRangeDataModel) dataModel).setRowRange(index, 1);
         }
 
         Object rowData = null;
-        component.setRowIndex(index);
+        gridComponent.setRowIndex(index);
         try {
-            rowData = component.getRowData();
+            rowData = gridComponent.getRowData();
 
         } finally {
-            component.setRowIndex(-1);
+            gridComponent.setRowIndex(-1);
         }
 
         if (rowData == null) {
@@ -543,10 +582,9 @@ public class GridTools {
         select(component, selectedValues, Collections.singleton(rowData));
     }
 
-    public static void select(DataGridComponent component, int indices[]) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        Object selectedValues = component.getSelectedValues(facesContext);
+    public static void select(FacesContext facesContext,
+            ISelectionProvider component, int indices[]) {
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             selectedValues = new ArrayIndexesModel();
@@ -561,9 +599,15 @@ public class GridTools {
             return;
         }
 
-        int rowCount = component.getRowCount();
+        IGridComponent gridComponent = (IGridComponent) component;
+
+        int rowCount = gridComponent.getRowCount();
         if (rowCount > 0) {
-            DataModel dataModel = component.getDataModel(facesContext);
+            if (facesContext == null) {
+                facesContext = FacesContext.getCurrentInstance();
+            }
+
+            DataModel dataModel = gridComponent.getDataModelValue();
 
             if (dataModel instanceof IRangeDataModel) {
                 ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
@@ -579,9 +623,9 @@ public class GridTools {
         try {
             for (int i = 0; i < indices.length; i++) {
                 int index = indices[i];
-                component.setRowIndex(index);
+                gridComponent.setRowIndex(index);
 
-                Object rowData = component.getRowData();
+                Object rowData = gridComponent.getRowData();
 
                 if (rowData == null) {
                     LOG.error("No rowData for index='" + index + "'.");
@@ -596,7 +640,7 @@ public class GridTools {
             }
 
         } finally {
-            component.setRowIndex(-1);
+            gridComponent.setRowIndex(-1);
         }
 
         if (rowDatas.isEmpty()) {
@@ -606,10 +650,9 @@ public class GridTools {
         select(component, selectedValues, rowDatas);
     }
 
-    public static void select(DataGridComponent component, int start, int end) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        Object selectedValues = component.getSelectedValues(facesContext);
+    public static void select(FacesContext facesContext,
+            ISelectionProvider component, int start, int end) {
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             selectedValues = new ArrayIndexesModel();
@@ -624,7 +667,13 @@ public class GridTools {
             return;
         }
 
-        DataModel dataModel = component.getDataModel(facesContext);
+        IGridComponent gridComponent = (IGridComponent) component;
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        DataModel dataModel = gridComponent.getDataModelValue();
 
         if (dataModel instanceof IRangeDataModel) {
             ((IRangeDataModel) dataModel).setRowRange(start, end - start + 1);
@@ -633,9 +682,9 @@ public class GridTools {
         List rowDatas = new ArrayList(end - start + 1);
         try {
             for (int index = start; index <= end; index++) {
-                component.setRowIndex(index);
+                gridComponent.setRowIndex(index);
 
-                Object rowData = component.getRowData();
+                Object rowData = gridComponent.getRowData();
 
                 if (rowData == null) {
                     LOG.error("No rowData for index='" + index + "'.");
@@ -648,7 +697,7 @@ public class GridTools {
             }
 
         } finally {
-            component.setRowIndex(-1);
+            gridComponent.setRowIndex(-1);
         }
 
         if (rowDatas.isEmpty()) {
@@ -658,24 +707,25 @@ public class GridTools {
         select(component, selectedValues, rowDatas);
     }
 
-    public static void selectAll(DataGridComponent component) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        Object selectedValues = component.getSelectedValues(facesContext);
+    public static void selectAll(FacesContext facesContext,
+            ISelectionProvider component) {
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             selectedValues = new ArrayIndexesModel();
             component.setSelectedValues(selectedValues);
         }
 
+        IGridComponent gridComponent = (IGridComponent) component;
+
         if (selectedValues instanceof IIndexesModel) {
-            int index = component.getRowCount();
+            int index = gridComponent.getRowCount();
 
             if (index < 0) {
                 try {
                     for (;;) {
-                        component.setRowIndex(index);
-                        Object rowData = component.getRowData();
+                        gridComponent.setRowIndex(index);
+                        Object rowData = gridComponent.getRowData();
 
                         if (rowData == null) {
                             break;
@@ -684,7 +734,7 @@ public class GridTools {
                         index++;
                     }
                 } finally {
-                    component.setRowIndex(-1);
+                    gridComponent.setRowIndex(-1);
                 }
             }
 
@@ -697,9 +747,13 @@ public class GridTools {
             return;
         }
 
-        int rowCount = component.getRowCount();
+        int rowCount = gridComponent.getRowCount();
         if (rowCount > 0) {
-            DataModel dataModel = component.getDataModel(facesContext);
+            if (facesContext == null) {
+                facesContext = FacesContext.getCurrentInstance();
+            }
+
+            DataModel dataModel = gridComponent.getDataModelValue();
 
             if (dataModel instanceof IRangeDataModel) {
                 ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
@@ -713,9 +767,9 @@ public class GridTools {
         List rowDatas = new ArrayList(rowCount);
         try {
             for (int index = 0;; index++) {
-                component.setRowIndex(index);
+                gridComponent.setRowIndex(index);
 
-                Object rowData = component.getRowData();
+                Object rowData = gridComponent.getRowData();
 
                 if (rowData == null) {
                     break;
@@ -727,7 +781,7 @@ public class GridTools {
             }
 
         } finally {
-            component.setRowIndex(-1);
+            gridComponent.setRowIndex(-1);
         }
 
         if (rowDatas.isEmpty()) {
@@ -737,10 +791,9 @@ public class GridTools {
         select(component, selectedValues, rowDatas);
     }
 
-    public static void deselectAll(DataGridComponent component) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        Object selectedValues = component.getSelectedValues(facesContext);
+    public static void deselectAll(FacesContext facesContext,
+            ISelectionProvider component) {
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             return;
@@ -771,10 +824,9 @@ public class GridTools {
                         + selectedValues);
     }
 
-    public static void deselect(DataGridComponent component, Object rowValue) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        Object selectedValues = component.getSelectedValues(facesContext);
+    public static void deselect(FacesContext facesContext,
+            ISelectionProvider component, Object rowValue) {
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             return;
@@ -785,8 +837,12 @@ public class GridTools {
 
             // Il nous faut l'index ...
 
-            int index = searchIndexIntoDataModel(facesContext, component,
-                    rowValue);
+            if (facesContext == null) {
+                facesContext = FacesContext.getCurrentInstance();
+            }
+
+            int index = searchIndexIntoDataModel(facesContext,
+                    (IGridComponent) component, rowValue);
 
             if (index < 0) {
                 return;
@@ -801,10 +857,10 @@ public class GridTools {
     }
 
     private static int searchIndexIntoDataModel(FacesContext facesContext,
-            DataGridComponent component, Object rowValue) {
+            IGridComponent component, Object rowValue) {
         int rowCount = component.getRowCount();
         if (rowCount > 0) {
-            DataModel dataModel = component.getDataModel(facesContext);
+            DataModel dataModel = component.getDataModelValue();
 
             if (dataModel instanceof IRangeDataModel) {
                 ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
@@ -840,10 +896,10 @@ public class GridTools {
         return -1;
     }
 
-    public static void deselect(DataGridComponent component, int index) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+    public static void deselect(FacesContext facesContext,
+            ISelectionProvider component, int index) {
 
-        Object selectedValues = component.getSelectedValues(facesContext);
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             return;
@@ -854,19 +910,25 @@ public class GridTools {
             return;
         }
 
-        DataModel dataModel = component.getDataModel(facesContext);
+        IGridComponent gridComponent = (IGridComponent) component;
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        DataModel dataModel = gridComponent.getDataModelValue();
 
         if (dataModel instanceof IRangeDataModel) {
             ((IRangeDataModel) dataModel).setRowRange(index, 1);
         }
 
         Object rowData = null;
-        component.setRowIndex(index);
+        gridComponent.setRowIndex(index);
         try {
-            rowData = component.getRowData();
+            rowData = gridComponent.getRowData();
 
         } finally {
-            component.setRowIndex(-1);
+            gridComponent.setRowIndex(-1);
         }
 
         if (rowData == null) {
@@ -882,10 +944,10 @@ public class GridTools {
         deselect(component, selectedValues, Collections.singleton(rowData));
     }
 
-    public static void deselect(DataGridComponent component, int indices[]) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+    public static void deselect(FacesContext facesContext,
+            ISelectionProvider component, int indices[]) {
 
-        Object selectedValues = component.getSelectedValues(facesContext);
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             return;
@@ -899,9 +961,15 @@ public class GridTools {
             return;
         }
 
-        int rowCount = component.getRowCount();
+        IGridComponent gridComponent = (IGridComponent) component;
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        int rowCount = gridComponent.getRowCount();
         if (rowCount > 0) {
-            DataModel dataModel = component.getDataModel(facesContext);
+            DataModel dataModel = gridComponent.getDataModelValue();
 
             if (dataModel instanceof IRangeDataModel) {
                 ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
@@ -917,9 +985,9 @@ public class GridTools {
         try {
             for (int i = 0; i < indices.length; i++) {
                 int index = indices[i];
-                component.setRowIndex(index);
+                gridComponent.setRowIndex(index);
 
-                Object rowData = component.getRowData();
+                Object rowData = gridComponent.getRowData();
 
                 if (rowData == null) {
                     LOG.error("No rowData for index='" + index + "'.");
@@ -934,7 +1002,7 @@ public class GridTools {
             }
 
         } finally {
-            component.setRowIndex(-1);
+            gridComponent.setRowIndex(-1);
         }
 
         if (rowDatas.isEmpty()) {
@@ -944,10 +1012,10 @@ public class GridTools {
         deselect(component, selectedValues, rowDatas);
     }
 
-    public static void deselect(DataGridComponent component, int start, int end) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+    public static void deselect(FacesContext facesContext,
+            ISelectionProvider component, int start, int end) {
 
-        Object selectedValues = component.getSelectedValues(facesContext);
+        Object selectedValues = component.getSelectedValues();
 
         if (selectedValues == null) {
             return;
@@ -961,7 +1029,13 @@ public class GridTools {
             return;
         }
 
-        DataModel dataModel = component.getDataModel(facesContext);
+        IGridComponent gridComponent = (IGridComponent) component;
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        DataModel dataModel = gridComponent.getDataModelValue();
 
         if (dataModel instanceof IRangeDataModel) {
             ((IRangeDataModel) dataModel).setRowRange(start, end - start + 1);
@@ -970,9 +1044,9 @@ public class GridTools {
         List rowDatas = new ArrayList(end - start + 1);
         try {
             for (int index = start; index <= end; index++) {
-                component.setRowIndex(index);
+                gridComponent.setRowIndex(index);
 
-                Object rowData = component.getRowData();
+                Object rowData = gridComponent.getRowData();
 
                 if (rowData == null) {
                     LOG.error("No rowData for index='" + index + "'.");
@@ -985,7 +1059,7 @@ public class GridTools {
             }
 
         } finally {
-            component.setRowIndex(-1);
+            gridComponent.setRowIndex(-1);
         }
 
         if (rowDatas.isEmpty()) {
@@ -995,7 +1069,7 @@ public class GridTools {
         deselect(component, selectedValues, rowDatas);
     }
 
-    private static void select(DataGridComponent component,
+    private static void select(ISelectionProvider component,
             Object selectedValues, Collection rowDatas) {
 
         if (selectedValues instanceof Object[]) {
@@ -1053,7 +1127,7 @@ public class GridTools {
                         + selectedValues);
     }
 
-    private static void deselect(DataGridComponent component,
+    private static void deselect(ISelectionProvider component,
             Object selectedValues, Collection rowDatas) {
 
         if (selectedValues instanceof Object[]) {
@@ -1153,5 +1227,27 @@ public class GridTools {
             dataModel.setWrappedData(data);
         }
 
+    }
+
+    public static void setOrderIds(IGridComponent gridComponent,
+            String columnsOrder) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public static void setSortIds(IGridComponent gridComponent,
+            String sortedColumnIds) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public static String getOrderIds(IGridComponent dataGridComponent) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public static String getSortIds(IGridComponent dataGridComponent) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -19,6 +19,7 @@ import javax.faces.el.ValueBinding;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.capability.IStateChildrenList;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -580,6 +581,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         if (enableDelta == false) {
             return;
         }
+        
         enableDelta = false;
 
         if (dataAccessorsByName != null

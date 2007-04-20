@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.component;
+package org.rcfaces.core.internal.capability;
 
 import javax.faces.component.EditableValueHolder;
 

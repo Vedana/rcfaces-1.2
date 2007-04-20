@@ -54,7 +54,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         DateEntryComponent dateEntryComponent = (DateEntryComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -119,7 +119,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeAfterDecorator(htmlWriter, componentDecorator);
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
     }
 
     protected void encodeSubComponents(IHtmlWriter htmlWriter,
@@ -329,9 +329,9 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
                         }
                     }
 
-                    // htmlWriter.startElement("SPAN");
+                    // htmlWriter.startElement(IHtmlWriter.SPAN");
                     htmlWriter.writeText(sb.toString());
-                    // htmlWriter.endElement("SPAN");
+                    // htmlWriter.endElement(IHtmlWriter.SPAN");
 
                     sb.setLength(0);
                 }

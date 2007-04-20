@@ -1,14 +1,15 @@
 package org.rcfaces.core.component;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ICalendarModeCapability;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.CalendarModeConverter;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.AbstractCalendarComponent;
 
 /**
  * <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
@@ -52,47 +53,63 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 			
 	}
 
-	public final boolean isBorder() {
+	public boolean isBorder() {
 		return isBorder(null);
 	}
 
 	/**
 	 * See {@link #isBorder() isBorder()} for more details
 	 */
-	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
+	public boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
 
-	public final void setBorder(boolean border) {
+	/**
+	 * Returns <code>true</code> if the attribute "border" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderSetted() {
+		return engine.isPropertySetted(Properties.BORDER);
+	}
+
+	public void setBorder(boolean border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
 	/**
 	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
 	 */
-	public final void setBorder(ValueBinding border) {
+	public void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
-	public final int getMode() {
+	public int getMode() {
 		return getMode(null);
 	}
 
 	/**
 	 * See {@link #getMode() getMode()} for more details
 	 */
-	public final int getMode(javax.faces.context.FacesContext facesContext) {
+	public int getMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.MODE,0, facesContext);
 	}
 
-	public final void setMode(int mode) {
+	/**
+	 * Returns <code>true</code> if the attribute "mode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isModeSetted() {
+		return engine.isPropertySetted(Properties.MODE);
+	}
+
+	public void setMode(int mode) {
 		engine.setProperty(Properties.MODE, mode);
 	}
 
 	/**
 	 * See {@link #setMode(int) setMode(int)} for more details
 	 */
-	public final void setMode(ValueBinding mode) {
+	public void setMode(ValueBinding mode) {
 		engine.setProperty(Properties.MODE, mode);
 	}
 

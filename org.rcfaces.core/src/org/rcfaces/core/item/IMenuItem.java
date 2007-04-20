@@ -8,6 +8,7 @@ package org.rcfaces.core.item;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IMenuItem extends ITreeNode, IAccessKeyItem,
-        IAcceleratorKeyItem, IVisibleItem {
+public interface IMenuItem extends ISelectItemGroup, IImagesItem,
+        IGroupSelectItem, IInputTypeItem, IStyleClassItem, IServerDataItem,
+        IClientDataItem, IAccessKeyItem, IAcceleratorKeyItem, IVisibleItem {
 }

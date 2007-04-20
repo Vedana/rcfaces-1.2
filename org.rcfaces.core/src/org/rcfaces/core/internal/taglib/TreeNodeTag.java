@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.TreeNodeComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TreeNodeComponent;
 
 public class TreeNodeTag extends ExpandableItemTag implements Tag {
 
@@ -18,6 +18,7 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 
 	private String groupName;
 	private String styleClass;
+	private String menuPopupId;
 	private String inputType;
 	public String getComponentType() {
 		return TreeNodeComponent.COMPONENT_TYPE;
@@ -39,6 +40,14 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 		this.styleClass = styleClass;
 	}
 
+	public final String getMenuPopupId() {
+		return menuPopupId;
+	}
+
+	public final void setMenuPopupId(String menuPopupId) {
+		this.menuPopupId = menuPopupId;
+	}
+
 	public final String getInputType() {
 		return inputType;
 	}
@@ -54,6 +63,7 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 			}
 			LOG.debug("  groupName='"+groupName+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  menuPopupId='"+menuPopupId+"'");
 			LOG.debug("  inputType='"+inputType+"'");
 		}
 		super.setProperties(uiComponent);
@@ -89,6 +99,16 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 			}
 		}
 
+		if (menuPopupId != null) {
+			if (isValueReference(menuPopupId)) {
+				ValueBinding vb = application.createValueBinding(menuPopupId);
+
+				component.setMenuPopupId(vb);
+			} else {
+				component.setMenuPopupId(menuPopupId);
+			}
+		}
+
 		if (inputType != null) {
 			if (isValueReference(inputType)) {
 				ValueBinding vb = application.createValueBinding(inputType);
@@ -103,6 +123,7 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 	public void release() {
 		groupName = null;
 		styleClass = null;
+		menuPopupId = null;
 		inputType = null;
 
 		super.release();

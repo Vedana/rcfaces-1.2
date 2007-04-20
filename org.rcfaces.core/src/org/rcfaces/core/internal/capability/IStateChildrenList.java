@@ -2,7 +2,7 @@
  * $Id$
  * 
  */
-package org.rcfaces.core.internal.component;
+package org.rcfaces.core.internal.capability;
 
 import java.util.List;
 

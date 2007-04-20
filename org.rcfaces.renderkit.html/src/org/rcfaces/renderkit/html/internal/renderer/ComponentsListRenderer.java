@@ -73,7 +73,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV", componentsListComponent);
+        htmlWriter.startElement(IHtmlWriter.DIV, componentsListComponent);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -125,7 +125,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:first", first);
         }
 
-        htmlWriter.startElement("TABLE");
+        htmlWriter.startElement(IHtmlWriter.TABLE);
 
         String w = componentsListComponent.getWidth(facesContext);
         if (w != null) {
@@ -142,21 +142,21 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         if (columnNumber > 0) {
             for (int i = 0; i < columnNumber; i++) {
-                htmlWriter.startElement("COL");
+                htmlWriter.startElement(IHtmlWriter.COL);
                 htmlWriter.writeWidth("1*");
 
                 if (columnClasses == null || columnClasses.length < 1) {
-                    htmlWriter.endElement("COL");
+                    htmlWriter.endElement(IHtmlWriter.COL);
                     continue;
                 }
                 int rs = i % columnClasses.length;
 
                 htmlWriter.writeClass(columnClasses[rs]);
-                htmlWriter.endElement("COL");
+                htmlWriter.endElement(IHtmlWriter.COL);
             }
         }
 
-        htmlWriter.startElement("TBODY");
+        htmlWriter.startElement(IHtmlWriter.TBODY);
         htmlWriter.writeAttribute("class", getTBodyClassName(htmlWriter));
     }
 
@@ -282,7 +282,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
                 if ((processed % columnNumber) == 0) {
                     // Render the beginning of this row
-                    htmlWriter.startElement("TR");
+                    htmlWriter.startElement(IHtmlWriter.TR);
 
                     String rowId = htmlRenderContext
                             .getComponentClientId(componentsListComponent);
@@ -299,7 +299,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
                     }
                 }
 
-                htmlWriter.startElement("TD");
+                htmlWriter.startElement(IHtmlWriter.TD);
                 htmlWriter.writeClass(tdClass);
 
                 htmlWriter.writeln();
@@ -319,20 +319,20 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
                 htmlWriter.writeln();
 
-                htmlWriter.endElement("TD");
+                htmlWriter.endElement(IHtmlWriter.TD);
 
                 if (((processed + 1) % columnNumber) == 0) {
-                    htmlWriter.endElement("TR");
+                    htmlWriter.endElement(IHtmlWriter.TR);
                 }
             }
 
             if ((processed % columnNumber) > 0) {
                 for (; (processed % columnNumber) > 0; processed++) {
-                    htmlWriter.startElement("TD");
-                    htmlWriter.endElement("TD");
+                    htmlWriter.startElement(IHtmlWriter.TD);
+                    htmlWriter.endElement(IHtmlWriter.TD);
                 }
 
-                htmlWriter.endElement("TR");
+                htmlWriter.endElement(IHtmlWriter.TR);
             }
 
         } finally {
@@ -353,12 +353,14 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.endElement("TBODY");
+        htmlWriter.endElement(IHtmlWriter.TBODY);
 
-        htmlWriter.endElement("TABLE");
+        htmlWriter.endElement(IHtmlWriter.TABLE);
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
+        htmlWriter.enableJavaScript();
+        
         super.encodeEnd(htmlWriter);
     }
 

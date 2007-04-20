@@ -1,17 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import java.util.Arrays;
+
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
 
 /**
  * <p>The lineBreak Component is the &lt;BR&gt; HTML equivalent.</p>
@@ -61,47 +62,63 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		
 	}
 
-	public final java.lang.String getStyleClass() {
+	public java.lang.String getStyleClass() {
 		return getStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getStyleClass() getStyleClass()} for more details
 	 */
-	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
 
-	public final void setStyleClass(java.lang.String styleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "styleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isStyleClassSetted() {
+		return engine.isPropertySetted(Properties.STYLE_CLASS);
+	}
+
+	public void setStyleClass(java.lang.String styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
 	/**
 	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
 	 */
-	public final void setStyleClass(ValueBinding styleClass) {
+	public void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
-	public final boolean isVisible() {
+	public boolean isVisible() {
 		return isVisible(null);
 	}
 
 	/**
 	 * See {@link #isVisible() isVisible()} for more details
 	 */
-	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
 	}
 
-	public final void setVisible(boolean visible) {
+	/**
+	 * Returns <code>true</code> if the attribute "visible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVisibleSetted() {
+		return engine.isPropertySetted(Properties.VISIBLE);
+	}
+
+	public void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	/**
 	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
 	 */
-	public final void setVisible(ValueBinding visible) {
+	public void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
@@ -112,25 +129,33 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		
 	}
 
-	public final int getHiddenMode() {
+	public int getHiddenMode() {
 		return getHiddenMode(null);
 	}
 
 	/**
 	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
 
-	public final void setHiddenMode(int hiddenMode) {
+	/**
+	 * Returns <code>true</code> if the attribute "hiddenMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHiddenModeSetted() {
+		return engine.isPropertySetted(Properties.HIDDEN_MODE);
+	}
+
+	public void setHiddenMode(int hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	/**
 	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
 	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
+	public void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 

@@ -55,7 +55,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
                 .getComponent();
         FacesContext facesContext = componentContext.getFacesContext();
 
-        htmlWriter.startElement("UL");
+        htmlWriter.startElement(IHtmlWriter.UL);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -154,7 +154,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeAfterDecorator(htmlWriter, componentDecorator);
 
-        htmlWriter.endElement("UL");
+        htmlWriter.endElement(IHtmlWriter.UL);
     }
 
     protected void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,

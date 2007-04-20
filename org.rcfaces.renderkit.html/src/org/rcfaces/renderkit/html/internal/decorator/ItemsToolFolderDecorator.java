@@ -43,6 +43,7 @@ import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
@@ -57,6 +58,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.item.IAccessKeyItem;
 import org.rcfaces.core.item.IBorderTypeItem;
 import org.rcfaces.core.item.ICheckSelectItem;
+import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IGroupSelectItem;
 import org.rcfaces.core.item.IImageSizeItem;
 import org.rcfaces.core.item.IImagesItem;
@@ -67,6 +69,8 @@ import org.rcfaces.core.item.IToolItem;
 import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.SeparatorSelectItem;
 import org.rcfaces.core.item.ToolItem;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -128,13 +132,65 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             return;
         }
 
-        List hiddenItems = null;
+        /*
+         * List hiddenItems = null;
+         * 
+         * javaScriptWriter.writeMethodCall("f_appendToolItems");
+         * 
+         * int cnt = 0;
+         * 
+         * for (Iterator it = itemComponentId.iterator(); it.hasNext(); cnt++) {
+         * SelectItem selectItem = (SelectItem) it.next(); String componentId =
+         * (String) it.next();
+         * 
+         * int inputType = IInputTypeCapability.AS_PUSH_BUTTON;
+         * 
+         * if (SeparatorSelectItem.isSeparator(selectItem)) { inputType =
+         * IInputTypeCapability.AS_SEPARATOR; } else if (selectItem instanceof
+         * IInputTypeItem) { inputType = ((IInputTypeItem)
+         * selectItem).getInputType(); }
+         * 
+         * if (inputType == 0) { inputType = DEFAULT_INPUT_TYPE; }
+         * 
+         * if (cnt > 0) { javaScriptWriter.write(','); }
+         * 
+         * javaScriptWriter.writeString(componentId).write(',').writeInt(
+         * inputType);
+         * 
+         * String selectItemValue = null; Object si = selectItem.getValue();
+         * 
+         * if (si != null) { selectItemValue = convertItemValue(javaScriptWriter
+         * .getHtmlComponentRenderContext(), selectItem.getValue()); }
+         * 
+         * if (selectItemValue == null) { throw new FacesException( "Item of a
+         * toolbar must have a value. itemsToolFolderId=" + component.getId()); }
+         * 
+         * javaScriptWriter.write(',').writeString(selectItemValue);
+         * javaScriptWriter.write(',').writeBoolean(selectItem.isDisabled());
+         * 
+         * if (selectItem instanceof IVisibleItem) { if (((IVisibleItem)
+         * selectItem).isVisible() == false) { if (hiddenItems == null) {
+         * hiddenItems = new ArrayList(); }
+         * 
+         * hiddenItems.add(selectItemValue); } } }
+         * 
+         * javaScriptWriter.writeln(");");
+         * 
+         * if (hiddenItems != null) {
+         * javaScriptWriter.writeMethodCall("f_hideToolItems");
+         * 
+         * int idx = 0; for (Iterator it = hiddenItems.iterator(); it.hasNext();
+         * idx++) { String itemValue = (String) it.next();
+         * 
+         * if (idx > 0) { javaScriptWriter.write(','); }
+         * 
+         * javaScriptWriter.writeString(itemValue); }
+         * 
+         * javaScriptWriter.write(");"); }
+         */
 
-        javaScriptWriter.writeMethodCall("f_appendToolItems");
-
-        int cnt = 0;
-
-        for (Iterator it = itemComponentId.iterator(); it.hasNext(); cnt++) {
+        // int cnt = 0;
+        for (Iterator it = itemComponentId.iterator(); it.hasNext();) {
             SelectItem selectItem = (SelectItem) it.next();
             String componentId = (String) it.next();
 
@@ -151,20 +207,15 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                 inputType = DEFAULT_INPUT_TYPE;
             }
 
-            if (cnt > 0) {
-                javaScriptWriter.write(',');
-            }
+            javaScriptWriter.writeMethodCall("f_appendToolItem2").writeString(
+                    componentId).write(',');
 
-            javaScriptWriter.writeString(componentId).write(',').writeInt(
-                    inputType);
+            IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
+                    .writeObjectLiteral(false);
 
-            String selectItemValue = null;
-            Object si = selectItem.getValue();
-
-            if (si != null) {
-                selectItemValue = convertItemValue(javaScriptWriter
-                        .getHtmlComponentRenderContext(), selectItem.getValue());
-            }
+            Object siValue = selectItem.getValue();
+            String selectItemValue = convertItemValue(javaScriptWriter
+                    .getHtmlComponentRenderContext(), siValue);
 
             if (selectItemValue == null) {
                 throw new FacesException(
@@ -172,37 +223,63 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                                 + component.getId());
             }
 
-            javaScriptWriter.write(',').writeString(selectItemValue);
-            javaScriptWriter.write(',').writeBoolean(selectItem.isDisabled());
+            if (inputType == IInputTypeCapability.AS_SEPARATOR) {
+                objectLiteralWriter.writeSymbol("_inputType").writeInt(
+                        inputType);
+
+            } else {
+                objectLiteralWriter.writeSymbol("_value").writeString(
+                        selectItemValue);
+
+                if (inputType != DEFAULT_INPUT_TYPE) {
+                    objectLiteralWriter.writeSymbol("_inputType").writeInt(
+                            inputType);
+                }
+            }
+
+            if (selectItem.getLabel() != null) {
+                objectLiteralWriter.writeSymbol("_label").writeString(
+                        selectItem.getLabel());
+            }
+
+            if (selectItem.getDescription() != null) {
+                objectLiteralWriter.writeSymbol("_description").writeString(
+                        selectItem.getDescription());
+            }
+
+            if (selectItem.isDisabled()) {
+                objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
+            }
+
+            /*
+             * if (selectItem instanceof IStyleClassItem) { String styleClass =
+             * ((IStyleClassItem) selectItem) .getStyleClass(); if (styleClass !=
+             * null) { javaScriptWriter.write(',').writeSymbol("_styleClass")
+             * .write(':').writeString(styleClass); } }
+             */
 
             if (selectItem instanceof IVisibleItem) {
                 if (((IVisibleItem) selectItem).isVisible() == false) {
-                    if (hiddenItems == null) {
-                        hiddenItems = new ArrayList();
-                    }
-
-                    hiddenItems.add(selectItemValue);
+                    objectLiteralWriter.writeSymbol("_visible").writeBoolean(
+                            false);
                 }
             }
-        }
 
-        javaScriptWriter.writeln(");");
-
-        if (hiddenItems != null) {
-            javaScriptWriter.writeMethodCall("f_hideToolItems");
-
-            int idx = 0;
-            for (Iterator it = hiddenItems.iterator(); it.hasNext(); idx++) {
-                String itemValue = (String) it.next();
-
-                if (idx > 0) {
-                    javaScriptWriter.write(',');
-                }
-
-                javaScriptWriter.writeString(itemValue);
+            if (selectItem instanceof IClientDataItem) {
+                writeItemClientDatas((IClientDataItem) selectItem,
+                        javaScriptWriter, null, null, objectLiteralWriter);
             }
 
-            javaScriptWriter.write(");");
+            /*
+             * if (selectItem instanceof IMenuPopupIdCapability) { String
+             * menuPopupId = ((IMenuPopupIdCapability) selectItem)
+             * .getMenuPopupId(); if (menuPopupId != null) {
+             * javaScriptWriter.write(',').writeSymbol("_menuPopupId")
+             * .write(':').writeString(menuPopupId); } }
+             */
+
+            objectLiteralWriter.end();
+            javaScriptWriter.writeln(");");
         }
 
         super.encodeComponentsEnd();
@@ -245,7 +322,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         IContentAccessor separatorImageURL = toolBarImageAccessors
                 .getSeparatorImageAccessor();
 
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
 
         StringAppender sa = new StringAppender("f_toolBar_itemSeparator", 32);
         if (separatorImageURL == null) {
@@ -266,7 +343,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             String imageURL = separatorImageURL.resolveURL(facesContext, null,
                     null);
             if (imageURL != null) {
-                writer.startElement("IMG");
+                writer.startElement(IHtmlWriter.IMG);
                 writer.writeClass("f_toolBar_imgSeparator");
 
                 int imageWidth = toolBar.getSeparatorImageWidth(facesContext);
@@ -286,11 +363,11 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     writer.writeAlt(tooltip);
                 }
 
-                writer.endElement("IMG");
+                writer.endElement(IHtmlWriter.IMG);
             }
         }
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
     }
 
     protected String getSeparatorImageAlt(SelectItem selectItem) {
@@ -442,6 +519,16 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
+        if (selectItem instanceof IStyleClassCapability) {
+            IStyleClassCapability lookIdItem = (IStyleClassCapability) selectItem;
+
+            String cssClass = lookIdItem.getStyleClass();
+            if (cssClass != null
+                    && (itemComponent instanceof IStyleClassCapability)) {
+                ((IStyleClassCapability) itemComponent).setStyleClass(cssClass);
+            }
+        }
+
         if (selectItem instanceof IAccessKeyItem) {
             IAccessKeyItem accessKeyItem = (IAccessKeyItem) selectItem;
 
@@ -538,7 +625,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             return;
         }
 
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass("f_toolBar_item");
 
         List children = component.getChildren();
@@ -560,7 +647,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             children.remove(itemComponent);
         }
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
     }
 
     private int getDefaultTextPosition(SelectItem selectItem) {

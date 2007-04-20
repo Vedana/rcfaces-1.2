@@ -43,7 +43,7 @@ public class HelpMessageZoneRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -58,7 +58,7 @@ public class HelpMessageZoneRenderer extends AbstractCssRenderer {
             }
         }
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
         // Done in lazy mode by the HELP package itself
         // see package F_HELP in f_help.js
         // enableJavaScript(htmlWriter);

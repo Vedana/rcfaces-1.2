@@ -18,7 +18,6 @@ import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -39,7 +38,6 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
                 .getComponent();
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
 
         htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
         writeHtmlAttributes(htmlWriter);

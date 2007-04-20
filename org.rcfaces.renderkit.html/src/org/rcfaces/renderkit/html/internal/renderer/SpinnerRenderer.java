@@ -38,7 +38,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         SpinnerComponent spinner = (SpinnerComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement("TABLE");
+        htmlWriter.startElement(IHtmlWriter.TABLE);
 
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);
@@ -49,7 +49,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         writeValidatorAttributes(htmlWriter);
         writeSpinnerAttributes(htmlWriter);
 
-        htmlWriter.startElement("COL");
+        htmlWriter.startElement(IHtmlWriter.COL);
 
         int spinnerButtonWidth = getSpinnerButtonWidth();
 
@@ -66,21 +66,21 @@ public class SpinnerRenderer extends TextEntryRenderer {
             }
         }
 
-        htmlWriter.endElement("COL");
+        htmlWriter.endElement(IHtmlWriter.COL);
 
-        htmlWriter.startElement("COL");
+        htmlWriter.startElement(IHtmlWriter.COL);
         htmlWriter.writeWidth(spinnerButtonWidth);
-        htmlWriter.endElement("COL");
+        htmlWriter.endElement(IHtmlWriter.COL);
 
-        htmlWriter.startElement("TR");
+        htmlWriter.startElement(IHtmlWriter.TR);
         htmlWriter.writeVAlign("middle");
 
-        htmlWriter.startElement("TD");
+        htmlWriter.startElement(IHtmlWriter.TD);
         if (inputWidth > 0) {
             htmlWriter.writeWidth(inputWidth);
         }
 
-        htmlWriter.startElement("INPUT");
+        htmlWriter.startElement(IHtmlWriter.INPUT);
         if (inputWidth > 0) {
             htmlWriter.writeStyle().writeWidth(inputWidth + "px");
         }
@@ -88,11 +88,11 @@ public class SpinnerRenderer extends TextEntryRenderer {
         writeInputAttributes(htmlWriter);
         writeTextEntryAttributes(htmlWriter);
         writeValueAttributes(htmlWriter);
-        htmlWriter.endElement("INPUT");
+        htmlWriter.endElement(IHtmlWriter.INPUT);
 
-        htmlWriter.endElement("TD");
+        htmlWriter.endElement(IHtmlWriter.TD);
 
-        htmlWriter.startElement("TD");
+        htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeWidth(spinnerButtonWidth);
 
         boolean disabled = spinner.isDisabled(htmlWriter
@@ -105,25 +105,25 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         int spinnerButtonHeight = getSpinnerButtonHeight();
 
-        htmlWriter.startElement("IMG");
+        htmlWriter.startElement(IHtmlWriter.IMG);
         htmlWriter.writeClass(getUpButtonClassName(htmlWriter, disabled));
         htmlWriter.writeSrc(blankImageURL);
         htmlWriter.writeWidth(spinnerButtonWidth);
         htmlWriter.writeHeight(spinnerButtonHeight);
-        htmlWriter.endElement("IMG");
+        htmlWriter.endElement(IHtmlWriter.IMG);
 
-        htmlWriter.startElement("IMG");
+        htmlWriter.startElement(IHtmlWriter.IMG);
         htmlWriter.writeClass(getDownButtonClassName(htmlWriter, disabled));
         htmlWriter.writeSrc(blankImageURL);
         htmlWriter.writeWidth(spinnerButtonWidth);
         htmlWriter.writeHeight(spinnerButtonHeight);
-        htmlWriter.endElement("IMG");
+        htmlWriter.endElement(IHtmlWriter.IMG);
 
-        htmlWriter.endElement("TD");
+        htmlWriter.endElement(IHtmlWriter.TD);
 
-        htmlWriter.endElement("TR");
+        htmlWriter.endElement(IHtmlWriter.TR);
 
-        htmlWriter.endElement("TABLE");
+        htmlWriter.endElement(IHtmlWriter.TABLE);
 
         htmlWriter.enableJavaScript();
 

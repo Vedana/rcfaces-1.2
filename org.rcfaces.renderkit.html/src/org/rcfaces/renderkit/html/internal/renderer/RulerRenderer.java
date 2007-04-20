@@ -21,13 +21,13 @@ public class RulerRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("HR");
+        htmlWriter.startElement(IHtmlWriter.HR);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        htmlWriter.endElement("HR");
+        htmlWriter.endElement(IHtmlWriter.HR);
 
         super.encodeEnd(htmlWriter);
     }

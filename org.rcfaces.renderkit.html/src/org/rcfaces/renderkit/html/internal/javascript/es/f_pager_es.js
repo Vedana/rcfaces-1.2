@@ -26,7 +26,8 @@ var __resources = {
 	ZERO_RESULT_MESSAGE: "'No hay datos.'",
 	ONE_RESULT_MESSAGE: "'Un registro.'",
 	MESSAGE: "{rowcount}' registros encontrados, mostrando del '{first}' al '{last}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'",
-	MANY_RESULTS_MESSAGE: "'Cantidad desconocida de registros, mostrando del '{first}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'"
+	MANY_RESULTS_MESSAGE: "'Cantidad desconocida de registros, mostrando del '{first}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'",
+	MANY_RESULTS_MESSAGE2: "'Cantidad desconocida de registros, mostrando del '{first}' al '{last}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'"
 }
 
 f_resourceBundle.Define(f_pager, __resources);

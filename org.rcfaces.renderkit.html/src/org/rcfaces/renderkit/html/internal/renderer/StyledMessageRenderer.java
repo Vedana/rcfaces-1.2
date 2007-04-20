@@ -30,7 +30,7 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeComponentAttributes(htmlWriter);
     }
@@ -38,7 +38,7 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         super.encodeEnd(writer);
 
@@ -58,7 +58,8 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
         boolean showIfMessage = messageComponent.isShowIfMessage(facesContext);
         String forValue = messageComponent.getFor(facesContext);
         if (showIfMessage && forValue != null) {
-     //       Iterator iterator = MessageTools.listMessages(facesContext, forValue, messageComponent);
+            // Iterator iterator = MessageTools.listMessages(facesContext,
+            // forValue, messageComponent);
 
             // On masque, on affichera une fois le message traité !
             messageComponent.setVisible(false);
@@ -105,11 +106,9 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
     }
 
     /*
-    protected void encodeJavaScript(IJavaScriptWriter js)
-            throws WriterException {
-        super.encodeJavaScript(js);
-
-        JavaScriptTools.writeFirstMessage(js);
-    }
-    */
+     * protected void encodeJavaScript(IJavaScriptWriter js) throws
+     * WriterException { super.encodeJavaScript(js);
+     * 
+     * JavaScriptTools.writeFirstMessage(js); }
+     */
 }

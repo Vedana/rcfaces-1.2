@@ -1,12 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IForCapability;
-import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The pager Component is linked to the <a href="/comps/dataGridComponent.html">dataGrid Component</a>.
@@ -43,25 +44,33 @@ public class PagerComponent extends AbstractBasicComponent implements
 		setId(componentId);
 	}
 
-	public final java.lang.String getFor() {
+	public java.lang.String getFor() {
 		return getFor(null);
 	}
 
 	/**
 	 * See {@link #getFor() getFor()} for more details
 	 */
-	public final java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR, facesContext);
 	}
 
-	public final void setFor(java.lang.String forValue) {
+	/**
+	 * Returns <code>true</code> if the attribute "for" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isForSetted() {
+		return engine.isPropertySetted(Properties.FOR);
+	}
+
+	public void setFor(java.lang.String forValue) {
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
 	/**
 	 * See {@link #setFor(String) setFor(String)} for more details
 	 */
-	public final void setFor(ValueBinding forValue) {
+	public void setFor(ValueBinding forValue) {
 		engine.setProperty(Properties.FOR, forValue);
 	}
 

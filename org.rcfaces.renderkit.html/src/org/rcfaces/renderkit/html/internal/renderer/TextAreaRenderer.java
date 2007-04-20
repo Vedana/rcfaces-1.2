@@ -31,7 +31,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        htmlWriter.startElement("TEXTAREA");
+        htmlWriter.startElement(IHtmlWriter.TEXTAREA);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -51,7 +51,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
             htmlWriter.writeText(txt);
         }
 
-        htmlWriter.endElement("TEXTAREA");
+        htmlWriter.endElement(IHtmlWriter.TEXTAREA);
 
         if (textAreaComponent.isRequired()) {
             // Il nous faut le javascript, car c'est un traitement javascript !

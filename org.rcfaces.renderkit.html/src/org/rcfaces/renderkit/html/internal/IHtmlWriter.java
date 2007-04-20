@@ -12,7 +12,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IHtmlWriter extends ISgmlWriter {
+public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
     void enableJavaScript();
 
     boolean isJavaScriptEnabled();

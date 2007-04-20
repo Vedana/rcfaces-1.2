@@ -1,19 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.AbstractDataComponent;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.MenuTools;
 
 /**
  * Shows the components for each data with pagination.
@@ -28,7 +27,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalScrollPosition","var","value","rows","horizontalScrollPosition","columnStyleClass","first","rowStyleClass","columnNumber","rowIndexVar","rowCountVar","border","borderType"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"rowCountVar","verticalScrollPosition","horizontalScrollPosition","columnStyleClass","border","borderType","rowStyleClass","columnNumber","rowIndexVar"}));
 	}
 
 	public ComponentsListComponent() {
@@ -38,35 +37,6 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	public ComponentsListComponent(String componentId) {
 		this();
 		setId(componentId);
-	}
-
-	public final void setRows(ValueBinding rows) {
-
-
-			super.setValueBinding("rows", rows);
-		
-	}
-
-	public final void setFirst(ValueBinding first) {
-
-
-				super.setValueBinding("first", first);
-			
-	}
-
-	public final void setVar(ValueBinding var) {
-
-
-				super.setValueBinding("var", var);
-			
-	}
-
-	public final void setValue(ValueBinding value) {
-
-
-				super.setValueBinding("value", value);
-//				clearCachedValue();
-			
 	}
 
 	public final IMenuComponent getMenu(String menuId) {
@@ -90,91 +60,123 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		
 	}
 
-	public final boolean isBorder() {
+	public boolean isBorder() {
 		return isBorder(null);
 	}
 
 	/**
 	 * See {@link #isBorder() isBorder()} for more details
 	 */
-	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
+	public boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
 
-	public final void setBorder(boolean border) {
+	/**
+	 * Returns <code>true</code> if the attribute "border" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderSetted() {
+		return engine.isPropertySetted(Properties.BORDER);
+	}
+
+	public void setBorder(boolean border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
 	/**
 	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
 	 */
-	public final void setBorder(ValueBinding border) {
+	public void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
-	public final java.lang.String getBorderType() {
+	public java.lang.String getBorderType() {
 		return getBorderType(null);
 	}
 
 	/**
 	 * See {@link #getBorderType() getBorderType()} for more details
 	 */
-	public final java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
 	}
 
-	public final void setBorderType(java.lang.String borderType) {
+	/**
+	 * Returns <code>true</code> if the attribute "borderType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderTypeSetted() {
+		return engine.isPropertySetted(Properties.BORDER_TYPE);
+	}
+
+	public void setBorderType(java.lang.String borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
 	/**
 	 * See {@link #setBorderType(String) setBorderType(String)} for more details
 	 */
-	public final void setBorderType(ValueBinding borderType) {
+	public void setBorderType(ValueBinding borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
-	public final int getHorizontalScrollPosition() {
+	public int getHorizontalScrollPosition() {
 		return getHorizontalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getHorizontalScrollPosition() getHorizontalScrollPosition()} for more details
 	 */
-	public final int getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
+	public int getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HORIZONTAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setHorizontalScrollPosition(int horizontalScrollPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalScrollPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalScrollPositionSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_SCROLL_POSITION);
+	}
+
+	public void setHorizontalScrollPosition(int horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
 	/**
 	 * See {@link #setHorizontalScrollPosition(int) setHorizontalScrollPosition(int)} for more details
 	 */
-	public final void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
-	public final int getVerticalScrollPosition() {
+	public int getVerticalScrollPosition() {
 		return getVerticalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getVerticalScrollPosition() getVerticalScrollPosition()} for more details
 	 */
-	public final int getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
+	public int getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.VERTICAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setVerticalScrollPosition(int verticalScrollPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "verticalScrollPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalScrollPositionSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_SCROLL_POSITION);
+	}
+
+	public void setVerticalScrollPosition(int verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
 	/**
 	 * See {@link #setVerticalScrollPosition(int) setVerticalScrollPosition(int)} for more details
 	 */
-	public final void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 

@@ -1,15 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.TreeComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TreeComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public class TreeTag extends AbstractInputTag implements Tag {
 
@@ -22,6 +23,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String verticalScrollPosition;
 	private String border;
 	private String readOnly;
+	private String showValue;
 	private String checkable;
 	private String checkCardinality;
 	private String checkListeners;
@@ -29,6 +31,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String selectable;
 	private String selectionCardinality;
 	private String selectionListeners;
+	private String preloadedLevelDepth;
 	private String defaultImageURL;
 	private String defaultSelectedImageURL;
 	private String defaultExpandedImageURL;
@@ -39,7 +42,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String defaultDisabledLeafImageURL;
 	private String userExpandable;
 	private String hideRootExpandSign;
-	private String preloadedLevelDepth;
 	private String selectedValues;
 	private String expansionValues;
 	private String cursorValue;
@@ -98,6 +100,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.readOnly = readOnly;
 	}
 
+	public final String getShowValue() {
+		return showValue;
+	}
+
+	public final void setShowValue(String showValue) {
+		this.showValue = showValue;
+	}
+
 	public final String getCheckable() {
 		return checkable;
 	}
@@ -152,6 +162,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public final void setSelectionListener(String selectionListeners) {
 		this.selectionListeners = selectionListeners;
+	}
+
+	public final String getPreloadedLevelDepth() {
+		return preloadedLevelDepth;
+	}
+
+	public final void setPreloadedLevelDepth(String preloadedLevelDepth) {
+		this.preloadedLevelDepth = preloadedLevelDepth;
 	}
 
 	public final String getDefaultImageURL() {
@@ -234,14 +252,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.hideRootExpandSign = hideRootExpandSign;
 	}
 
-	public final String getPreloadedLevelDepth() {
-		return preloadedLevelDepth;
-	}
-
-	public final void setPreloadedLevelDepth(String preloadedLevelDepth) {
-		this.preloadedLevelDepth = preloadedLevelDepth;
-	}
-
 	public final String getSelectedValues() {
 		return selectedValues;
 	}
@@ -300,11 +310,13 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  showValue='"+showValue+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  selectable='"+selectable+"'");
 			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  preloadedLevelDepth='"+preloadedLevelDepth+"'");
 			LOG.debug("  defaultImageURL='"+defaultImageURL+"'");
 			LOG.debug("  defaultSelectedImageURL='"+defaultSelectedImageURL+"'");
 			LOG.debug("  defaultExpandedImageURL='"+defaultExpandedImageURL+"'");
@@ -315,7 +327,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  defaultDisabledLeafImageURL='"+defaultDisabledLeafImageURL+"'");
 			LOG.debug("  userExpandable='"+userExpandable+"'");
 			LOG.debug("  hideRootExpandSign='"+hideRootExpandSign+"'");
-			LOG.debug("  preloadedLevelDepth='"+preloadedLevelDepth+"'");
 			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  expansionValues='"+expansionValues+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
@@ -390,6 +401,16 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (showValue != null) {
+			if (isValueReference(showValue)) {
+				ValueBinding vb = application.createValueBinding(showValue);
+
+				component.setShowValue(vb);
+			} else {
+				component.setShowValue(showValue);
+			}
+		}
+
 		if (checkable != null) {
 			if (isValueReference(checkable)) {
 				ValueBinding vb = application.createValueBinding(checkable);
@@ -442,6 +463,16 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 		if (selectionListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
+		if (preloadedLevelDepth != null) {
+			if (isValueReference(preloadedLevelDepth)) {
+				ValueBinding vb = application.createValueBinding(preloadedLevelDepth);
+
+				component.setPreloadedLevelDepth(vb);
+			} else {
+				component.setPreloadedLevelDepth(getInt(preloadedLevelDepth));
+			}
 		}
 
 		if (defaultImageURL != null) {
@@ -534,15 +565,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			}
 		}
 
-		if (preloadedLevelDepth != null) {
-			if (isValueReference(preloadedLevelDepth)) {
-				ValueBinding vb = application.createValueBinding(preloadedLevelDepth);
-				component.setPreloadedLevelDepth(vb);
-			} else {
-				component.setPreloadedLevelDepth(getInt(preloadedLevelDepth));
-			}
-		}
-
 		if (selectedValues != null) {
 			if (isValueReference(selectedValues)) {
 				ValueBinding vb = application.createValueBinding(selectedValues);
@@ -605,6 +627,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		verticalScrollPosition = null;
 		border = null;
 		readOnly = null;
+		showValue = null;
 		checkable = null;
 		checkCardinality = null;
 		checkListeners = null;
@@ -612,6 +635,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		selectable = null;
 		selectionCardinality = null;
 		selectionListeners = null;
+		preloadedLevelDepth = null;
 		defaultImageURL = null;
 		defaultSelectedImageURL = null;
 		defaultExpandedImageURL = null;
@@ -622,7 +646,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		defaultDisabledLeafImageURL = null;
 		userExpandable = null;
 		hideRootExpandSign = null;
-		preloadedLevelDepth = null;
 		selectedValues = null;
 		expansionValues = null;
 		cursorValue = null;

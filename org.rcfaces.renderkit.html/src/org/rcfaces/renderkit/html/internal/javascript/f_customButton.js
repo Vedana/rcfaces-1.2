@@ -54,7 +54,7 @@ var __prototype = {
 		}
 
 		
-		var link=f_core.GetFirstElementByTagName(this, "A", true);
+		var link=f_core.GetFirstElementByTagName(this, "a", true);
 		if (link) {
 			this._link=link;
 			link.href=f_core.JAVASCRIPT_VOID;
@@ -63,9 +63,9 @@ var __prototype = {
 			}
 		}
 		
-//		this._installListeners("DIV");
-//		this._installListeners("SPAN");
-//		this._installListeners("IMG");
+//		this._installListeners("div");
+//		this._installListeners("span");
+//		this._installListeners("img");
 //		alert("Install="+this._links);
 		
 		if (installSelectionListener) {

@@ -1,18 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.TextEntryComponent;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
  * <p>The suggestTextEntry is a <a href="/comps/textEntryCOmponent.html">textEntry Component</a> with an autosuggestion feature that shows in the form of a dropdown list.</p>
@@ -65,47 +66,63 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 		
 	}
 
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {
 		return getFilterProperties(null);
 	}
 
 	/**
 	 * See {@link #getFilterProperties() getFilterProperties()} for more details
 	 */
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
 
-	public final void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+	/**
+	 * Returns <code>true</code> if the attribute "filterProperties" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFilterPropertiesSetted() {
+		return engine.isPropertySetted(Properties.FILTER_PROPERTIES);
+	}
+
+	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
 	/**
 	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
 	 */
-	public final void setFilterProperties(ValueBinding filterProperties) {
+	public void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
-	public final int getMaxResultNumber() {
+	public int getMaxResultNumber() {
 		return getMaxResultNumber(null);
 	}
 
 	/**
 	 * See {@link #getMaxResultNumber() getMaxResultNumber()} for more details
 	 */
-	public final int getMaxResultNumber(javax.faces.context.FacesContext facesContext) {
+	public int getMaxResultNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.MAX_RESULT_NUMBER,0, facesContext);
 	}
 
-	public final void setMaxResultNumber(int maxResultNumber) {
+	/**
+	 * Returns <code>true</code> if the attribute "maxResultNumber" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isMaxResultNumberSetted() {
+		return engine.isPropertySetted(Properties.MAX_RESULT_NUMBER);
+	}
+
+	public void setMaxResultNumber(int maxResultNumber) {
 		engine.setProperty(Properties.MAX_RESULT_NUMBER, maxResultNumber);
 	}
 
 	/**
 	 * See {@link #setMaxResultNumber(int) setMaxResultNumber(int)} for more details
 	 */
-	public final void setMaxResultNumber(ValueBinding maxResultNumber) {
+	public void setMaxResultNumber(ValueBinding maxResultNumber) {
 		engine.setProperty(Properties.MAX_RESULT_NUMBER, maxResultNumber);
 	}
 

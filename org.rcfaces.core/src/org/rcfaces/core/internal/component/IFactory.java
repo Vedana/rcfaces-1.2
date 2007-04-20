@@ -7,12 +7,14 @@ package org.rcfaces.core.internal.component;
 import java.util.List;
 import java.util.Map;
 
+import org.rcfaces.core.internal.capability.IComponentEngine;
+
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface IFactory {
-    
+
     String getName();
 
     List createList(int size);
@@ -23,11 +25,13 @@ public interface IFactory {
 
     IPropertiesManager createPropertiesManager(IComponentEngine engine);
 
-    /*
-    IPropertiesAccessor createPropertiesAccessor(IComponentEngine engine);
+    IInitializationState createInitializationState();
 
-    
-    IPropertiesAccessor restorePropertiesAccessor(FacesContext facesContext,
-            IComponentEngine engine, Object state);
-            */
+    /*
+     * IPropertiesAccessor createPropertiesAccessor(IComponentEngine engine);
+     * 
+     * 
+     * IPropertiesAccessor restorePropertiesAccessor(FacesContext facesContext,
+     * IComponentEngine engine, Object state);
+     */
 }

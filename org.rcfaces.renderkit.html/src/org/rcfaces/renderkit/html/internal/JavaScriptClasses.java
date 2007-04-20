@@ -50,6 +50,8 @@ public final class JavaScriptClasses {
 
     public static final String FOCUS_MANAGER = "f_focusManager";
 
+    public static final String GRID = "f_grid";
+
     public static final String HELP_BUTTON = "f_helpButton";
 
     public static final String HELP_MESSAGE_ZONE = "f_helpMessageZone";

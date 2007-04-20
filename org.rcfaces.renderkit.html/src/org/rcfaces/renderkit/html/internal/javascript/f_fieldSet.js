@@ -15,7 +15,7 @@ var __prototype = {
 		this.f_super(arguments);
 		
 		// Le premier LABEL est forcement notre titre !
-		this._titleLabel = f_core.GetFirstElementByTagName(this, "LABEL");		
+		this._titleLabel = f_core.GetFirstElementByTagName(this, "label");		
 	},
 	f_finalize: function() {
 		var text=this._titleLabel;

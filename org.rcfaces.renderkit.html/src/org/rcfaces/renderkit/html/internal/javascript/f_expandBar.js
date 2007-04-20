@@ -54,7 +54,7 @@ var __prototype = {
 		}
 
 		var txt=null;
-		var lis=this.getElementsByTagName("LI");
+		var lis=this.getElementsByTagName("li");
 		var head=lis[0];
 		if (head) {
 			this._head=head;
@@ -63,7 +63,7 @@ var __prototype = {
 			head.onmouseover=f_expandBar._OnHeadOver;
 			head.onmouseout=f_expandBar._OnHeadOut;
 		
-			var text=f_core.GetFirstElementByTagName(head, "LABEL");
+			var text=f_core.GetFirstElementByTagName(head, "label");
 			if (text) {
 				this._text=text;
 				text._link=this;
@@ -77,7 +77,7 @@ var __prototype = {
 		if (body) {
 			this._body=body;
 			
-			this._content=f_core.GetFirstElementByTagName(body, "DIV");
+			this._content=f_core.GetFirstElementByTagName(body, "div");
 		}
 			
 		this._normalText=f_core.GetAttribute(this, "v:text", txt);
@@ -164,7 +164,7 @@ var __prototype = {
 			return button;
 		}
 		
-		button=f_core.GetFirstElementByTagName(this, "INPUT");
+		button=f_core.GetFirstElementByTagName(this, "input");
 		if (button) {
 			button.f_link=this;
 		} else {

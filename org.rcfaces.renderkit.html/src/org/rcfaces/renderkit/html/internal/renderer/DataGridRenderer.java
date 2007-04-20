@@ -4,58 +4,35 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIColumn;
 import javax.faces.context.FacesContext;
-import javax.faces.event.FacesListener;
 import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.MenuComponent;
-import org.rcfaces.core.component.capability.ICardinality;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.event.PropertyChangeEvent;
-import org.rcfaces.core.internal.component.IImageAccessors;
-import org.rcfaces.core.internal.component.IStatesImageAccessors;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.capability.ICellImageSettings;
+import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.IServerActionListener;
-import org.rcfaces.core.internal.renderkit.IComponentData;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
-import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
-import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.ArrayIndexesModel;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.DataGridServerSort;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.ValuesTools;
-import org.rcfaces.core.internal.util.ParamUtils;
+import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
@@ -63,54 +40,24 @@ import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.model.ITransactionalDataModel;
-import org.rcfaces.core.preference.IComponentPreference;
-import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
-import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
-import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
-import org.rcfaces.renderkit.html.internal.ICssWriter;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
-import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 import org.rcfaces.renderkit.html.internal.service.DataGridService;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DataGridRenderer extends AbstractCssRenderer {
+public class DataGridRenderer extends AbstractGridRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(DataGridRenderer.class);
-
-    private static final String TABLE = "_table";
-
-    private static final String TITLE_ROW = "_title";
-
-    private static final String TITLE_CELL = "_tcell";
-
-    private static final String TITLE_IMAGE = "_timage";
-
-    private static final String TITLE_TTEXT = "_ttext";
-
-    private static final String TITLE_STEXT = "_stext";
-
-    private static final String TABLE_CONTEXT = "camelia.table.context";
-
-    private static final String SCROLLBARS_PROPERTY = "camelia.scrollbars";
-
-    private static final boolean ENABLE_SERVER_REQUEST = true;
-
-    private static final int[] EMPTY_INDEXES = new int[0];
-
-    private static final String NULL_VALUE = "*$& NULL VALUE *$& O.O.";
-
-    private static final boolean ALLOCATE_ROW_STRINGS = true;
 
     private static final Map SORT_ALIASES = new HashMap(8);
 
@@ -131,789 +78,161 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 "f_dataGrid.Sort_Server");
     }
 
-    private static final int TEXT_RIGHT_PADDING = 4;
-
-    private static final int SORT_PADDING = 10;
-
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.DATA_GRID;
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(writer, classes);
+    protected void writeGridColumnProperties(IObjectLiteralWriter objectWriter,
+            AbstractGridRenderContext tableContext, UIColumn columnComponent,
+            int columnIndex) throws WriterException {
 
-        FacesContext facesContext = writer.getComponentRenderContext()
-                .getFacesContext();
+        Object sort = tableContext.getSortCommand(columnIndex);
+        if (sort != null) {
+            if (sort instanceof String) {
+                String aliasCommand = (String) sort;
 
-        DataGridComponent dataGridComponent = (DataGridComponent) writer
-                .getComponentRenderContext().getComponent();
+                if (tableContext.getSortClientSide(columnIndex) == false) {
+                    aliasCommand = (String) SORT_ALIASES
+                            .get(ISortEventCapability.SORT_SERVER);
 
-        IJavaScriptRenderContext javaScriptRenderContext = writer
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext();
+                    if (aliasCommand != null) {
+                        aliasCommand = tableContext
+                                .translateJavascriptMethod(aliasCommand);
+                    }
+                }
 
-        IMenuIterator menuIterator = dataGridComponent.listMenus();
-        if (menuIterator.hasNext()) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
-                    JavaScriptClasses.DATA_GRID, "menu");
+                IJavaScriptWriter jsWriter = objectWriter
+                        .writeSymbol("_sorter");
+
+                String delimiters = " (),;:";
+                StringTokenizer st = new StringTokenizer(aliasCommand,
+                        delimiters, true);
+                if (st.countTokens() == 1
+                        && delimiters.indexOf(st.nextToken()) < 0) {
+                    jsWriter.write(aliasCommand);
+
+                } else {
+                    jsWriter.writeString(aliasCommand);
+                }
+
+            } else if (sort instanceof IScriptListener) {
+                IScriptListener scriptListener = (IScriptListener) sort;
+
+                IJavaScriptWriter jsWriter = objectWriter
+                        .writeSymbol("_sorter");
+
+                EventsRenderer.encodeJavaScriptCommmand(jsWriter,
+                        scriptListener);
+
+            } else if (sort instanceof IServerActionListener) {
+                // Le tri se fait cot� serveur !
+
+                String aliasCommand = (String) SORT_ALIASES
+                        .get(ISortEventCapability.SORT_SERVER);
+
+                objectWriter.writeSymbol("_sorter").writeString(aliasCommand);
+            }
         }
 
-        if (dataGridComponent.getRows(facesContext) > 0) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
-                    JavaScriptClasses.DATA_GRID, "ajax");
-        }
     }
 
-    protected void writeCustomCss(IHtmlWriter writer, ICssWriter cssWriter) {
-        super.writeCustomCss(writer, cssWriter);
+    protected void encodeBodyBegin(IHtmlWriter htmlWriter,
+            AbstractGridRenderContext data) throws WriterException {
 
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
-        DataGridComponent dataGridComponent = (DataGridComponent) componentRenderContext
-                .getComponent();
+        encoreBodyTableEnd(htmlWriter, data);
 
-        if (dataGridComponent
-                .isBorder(componentRenderContext.getFacesContext()) == false) {
-            cssWriter.writeBorderStyle("none");
-        }
+        super.encodeBodyBegin(htmlWriter, data);
     }
 
-    protected void encodeBegin(IComponentWriter writer) throws WriterException {
-        super.encodeBegin(writer);
-
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
-
-        FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        DataGridComponent dg = (DataGridComponent) componentRenderContext
-                .getComponent();
-
-        IComponentPreference preference = dg.getPreference(facesContext);
-        if (preference != null) {
-            preference.loadPreference(facesContext, dg);
+    protected void writeFullStates(IJavaScriptWriter jsWriter,
+            AbstractGridRenderContext context, String jsCommand, Set objects)
+            throws WriterException {
+        if (objects == null || objects.isEmpty()) {
+            return;
         }
 
-        TableRenderContext tableContext = createTableContext(writer
-                .getComponentRenderContext());
+        DataGridRenderContext dataGridRenderContext = (DataGridRenderContext) context;
 
-        boolean scrollBars = false;
+        FacesContext facesContext = jsWriter.getFacesContext();
+        DataColumnComponent dataColumnComponent = dataGridRenderContext
+                .getRowValueColumn();
 
-        String height = dg.getHeight(facesContext);
-        String width = dg.getWidth(facesContext);
-        int rows = tableContext.getRows();
-        if (height != null || width != null) {
-            scrollBars = true;
-            /*
-             * writer.setComponentRenderAttribute(SCROLLBARS_PROPERTY,
-             * Boolean.TRUE);
-             */
+        jsWriter.writeMethodCall(jsCommand).write('[');
+        int i = 0;
+        for (Iterator it = objects.iterator(); it.hasNext();) {
+            Object value = it.next();
+
+            String convert = convertValue(facesContext, dataColumnComponent,
+                    value);
+
+            if (convert == null) {
+                continue;
+            }
+
+            if (i > 0) {
+                jsWriter.write(',');
+            }
+
+            jsWriter.writeString(convert);
+
+            i++;
         }
 
-        boolean resizable = false;
-        int totalResize = 0;
-        {
-            boolean widthNotSpecified = false;
+        jsWriter.writeln("]);");
+    }
 
-            DataColumnComponent dccs[] = tableContext.listColumns();
-            for (int i = 0; i < dccs.length; i++) {
-                DataColumnComponent dc = dccs[i];
+    protected UIColumn getRowValueColumn(IGridComponent dg) {
+        DataGridComponent dataGridComponent = (DataGridComponent) dg;
 
-                if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
+        String rowValueColumnId = dataGridComponent.getRowValueColumnId();
+        if (rowValueColumnId != null) {
+            for (IDataColumnIterator it = dataGridComponent.listDataColumns(); it
+                    .hasNext();) {
+                DataColumnComponent column = it.next();
+                if (rowValueColumnId.equals(column.getId()) == false) {
                     continue;
                 }
 
-                String dw = dc.getWidth();
-                if (dw == null) {
-                    widthNotSpecified = true;
-
-                } else {
-                    try {
-                        int idw = Integer.parseInt(dw);
-                        if (idw < 0) {
-                            idw = 0;
-                        }
-
-                        totalResize += idw;
-
-                    } catch (NumberFormatException ex) {
-                        LOG.error("Bad width of column #" + i + ": " + dw, ex);
-                    }
-                }
-
-                resizable |= dc.isResizable();
-            }
-
-            if (resizable && (scrollBars == false || widthNotSpecified)) {
-                resizable = false;
-            }
-        }
-        tableContext.setResizable(resizable, totalResize);
-
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        htmlWriter.startElement("DIV", dg);
-
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter);
-
-        if (tableContext.selectable) {
-            htmlWriter.writeAttribute("v:selectionCardinality",
-                    tableContext.selectionCardinality);
-
-            if (tableContext.clientSelectionFullState) {
-                htmlWriter.writeAttribute("v:clientSelectionFullState", "true");
-            }
-        }
-        if (tableContext.checkable) {
-            htmlWriter.writeAttribute("v:checkCardinality",
-                    tableContext.checkCardinality);
-
-            if (tableContext.checkCardinality == ICardinality.ONEMANY_CARDINALITY) {
-                int checkedCount = dg.getCheckedRowsCount();
-
-                if (checkedCount > 0) {
-                    htmlWriter.writeAttribute("v:checkedCount", checkedCount);
-                }
-            }
-
-            if (tableContext.clientCheckFullState) {
-                htmlWriter.writeAttribute("v:clientCheckFullState", "true");
+                return column;
             }
         }
 
-        if (dg.isReadOnly(facesContext)) {
-            htmlWriter.writeAttribute("v:readOnly", "true");
-        }
-
-        if (tableContext.isDisabled()) {
-            htmlWriter.writeAttribute("v:disabled", "true");
-        }
-
-        if (dg.isRequired(facesContext)) {
-            htmlWriter.writeAttribute("v:required", "true");
-        }
-
-        if (resizable) {
-            htmlWriter.writeAttribute("v:resizable", "true");
-        }
-
-        Object dataModel = tableContext.getDataModel();
-        if (dataModel instanceof IFiltredModel) {
-            htmlWriter.writeAttribute("v:filtred", "true");
-
-            IFilterProperties filterMap = tableContext.getFiltersMap();
-            if (filterMap != null && filterMap.isEmpty() == false) {
-                String filterExpression = HtmlTools.encodeFilterExpression(
-                        filterMap, componentRenderContext.getRenderContext()
-                                .getProcessContext(), componentRenderContext
-                                .getComponent());
-                htmlWriter.writeAttribute("v:filterExpression",
-                        filterExpression);
-            }
-        }
-
-        if (rows > 0) {
-            htmlWriter.writeAttribute("v:rows", rows);
-        }
-
-        int rowCount = tableContext.getRowCount();
-        if (rowCount >= 0) {
-            htmlWriter.writeAttribute("v:rowCount", rowCount);
-        }
-
-        int first = tableContext.getFirst();
-        if (first > 0) {
-            htmlWriter.writeAttribute("v:first", first);
-        }
-        if (tableContext.isPaged() == false) {
-            htmlWriter.writeAttribute("v:paged", "false");
-        }
-
-        Object cursorValue = dg.getCursorValue(facesContext);
-        String clientCursorValue = null;
-
-        if (cursorValue instanceof String) {
-            clientCursorValue = (String) cursorValue;
-
-        } else if (cursorValue != null) {
-            DataColumnComponent rowValueColumn = tableContext
-                    .getRowValueColumn();
-
-            if (rowValueColumn != null) {
-                clientCursorValue = ValuesTools.convertValueToString(
-                        cursorValue, rowValueColumn, facesContext);
-            }
-        }
-
-        if (clientCursorValue != null) {
-            htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
-        }
-
-        int dataGridPixelWidth = getPixelSize(dg.getWidth(), -1);
-
-        if (ENABLE_SERVER_REQUEST) {
-            DataGridService dataGridServer = DataGridService
-                    .getInstance(facesContext);
-            if (dataGridServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", "true");
-            }
-        }
-
-        boolean headerVisible = true; // dg.isHeaderVisible(facesContext);
-
-        int tableWidth = 0;
-        if (scrollBars) {
-            String w = null;
-            // dataGridPixelWidth-=2;
-            if (dataGridPixelWidth > 0) {
-                w = String.valueOf(dataGridPixelWidth) + "px";
-            }
-
-            if (headerVisible) {
-                htmlWriter.startElement("DIV");
-                htmlWriter.writeClass(getDataTitleScroll(htmlWriter));
-                if (w != null) {
-                    htmlWriter.writeStyle().writeWidth(w);
-                }
-            }
-
-            tableWidth = encodeFixedHeader(htmlWriter, tableContext,
-                    dataGridPixelWidth);
-            htmlWriter.endElement("DIV");
-
-            htmlWriter.startElement("DIV");
-            htmlWriter.writeClass(getDataBodyScrollClassName(htmlWriter));
-
-            ICssWriter cssWriter = htmlWriter.writeStyle(32);
-
-            if (height != null) {
-                cssWriter.writeHeight(computeSizeInPixel(height, -1,
-                        -getTitleHeight()));
-            }
-            if (w != null) {
-                cssWriter.writeWidth(w);
-            }
-        }
-
-        htmlWriter.startElement("TABLE");
-        htmlWriter.writeClass(getDataTableClassName(htmlWriter, tableContext
-                .isDisabled()));
-
-        // Pas de support CSS de border-spacing pour IE: on est oblig� de le
-        // cod� en HTML ...
-        htmlWriter.writeCellSpacing(0);
-
-        if (tableWidth > 0) {
-            int ttw = getPixelSize(dg.getWidth(), -1);
-            if (ttw > 0 && ttw > tableWidth) {
-                tableWidth = -1;
-            }
-        }
-
-        if (resizable) {
-            // 2 htmlWriter.writeAttribute("width", totalResize);
-            htmlWriter.writeStyle().writeWidth(totalResize + "px");
-
-        } else if (tableWidth > 0) {
-            htmlWriter.writeWidth(tableWidth);
-
-        } else {
-            htmlWriter.writeWidth("100%");
-        }
-
-        encodeHeader(htmlWriter, tableContext, !scrollBars);
-
-        encodeFooter(htmlWriter, tableContext);
-
-        htmlWriter.startElement("TBODY");
-
-        encodeBody(htmlWriter, tableContext);
-
-        htmlWriter.endElement("TBODY");
-
-        htmlWriter.endElement("TABLE");
-
-        if (scrollBars) {
-            htmlWriter.endElement("DIV");
-        }
-
-        htmlWriter.endElement("DIV");
-
-        htmlWriter.enableJavaScript();
+        return null;
     }
 
-    protected String getWAIRole() {
-        return IAccessibilityRoles.GRID;
+    protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        encodeJsColumns(htmlWriter, gridRenderContext, false);
     }
 
-    protected String getDataBodyScrollClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + "_dataBody_scroll";
-    }
-
-    protected String getDataTableClassName(IHtmlWriter htmlWriter,
-            boolean disabled) {
-        String className = getMainStyleClassName() + TABLE;
-        if (disabled) {
-            className += " " + className + "_disabled";
-        }
-
-        return className;
-    }
-
-    protected String getDataTitleScroll(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + "_dataTitle_scroll";
-    }
-
-    protected int getTitleHeight() {
-        return 19;
-    }
-
-    protected int encodeFixedHeader(IHtmlWriter htmlWriter,
-            TableRenderContext tableContext, int dataGridWidth)
+    protected void encodeJsColumns(IJavaScriptWriter jsWriter,
+            AbstractGridRenderContext tableContext, boolean ignoreUI)
             throws WriterException {
 
-        htmlWriter.startElement("TABLE");
-        htmlWriter.writeClass(getFixedHeaderTableClassName(htmlWriter));
-        htmlWriter.writeCellPadding(0);
-        htmlWriter.writeCellSpacing(0);
-        if (tableContext.isResizable()) {
-            // OO2: htmlWriter.writeAttribute("width",
-            // tableContext.getResizeTotalSize());
-            htmlWriter.writeStyle().writeWidth(
-                    tableContext.getResizeTotalSize() + "px");
-        }
+        super.encodeJsColumns(jsWriter, tableContext, ignoreUI);
 
-        int tableWidth = 0;
+        UIColumn rowValueColumn = ((DataGridRenderContext) tableContext)
+                .getRowValueColumn();
+        if (rowValueColumn != null) {
+            UIColumn columns[] = tableContext.listColumns();
 
-        int colStatesCount = tableContext.getColumnStateCount();
+            for (int i = 0; i < columns.length; i++) {
+                UIColumn columnComponent = columns[i];
 
-        DataColumnComponent dcs[] = tableContext.listColumns();
+                if (rowValueColumn == columnComponent) {
+                    jsWriter.writeMethodCall("f_setRowValueColumn").write(
+                            String.valueOf(i)).writeln(");");
 
-        for (int i = 0; i < colStatesCount; i++) {
-            if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-                continue;
-            }
-
-            htmlWriter.startElement("COL");
-
-            if (false) {
-                String width = dcs[i].getWidth();
-                if (width != null) {
-                    htmlWriter.writeStyle().writeWidth(width + "px");
-                }
-            }
-            htmlWriter.endElement("COL");
-        }
-        // htmlWriter.startElement("COL");
-
-        htmlWriter.startElement("THEAD");
-        htmlWriter.startElement("TR");
-        htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
-
-        boolean first = true;
-        for (int i = 0; i < colStatesCount; i++) {
-            DataColumnComponent dc = dcs[i];
-
-            if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-                continue;
-            }
-
-            encodeFixedTitleCol(htmlWriter, tableContext, dc, first);
-            first = false;
-
-            if (tableWidth < 0) {
-                continue;
-            }
-
-            int wp = getPixelSize(dc.getWidth(), dataGridWidth);
-            if (wp <= 0) {
-                continue;
-            }
-
-            tableWidth += wp;
-        }
-
-        // Fin des titres ....
-        htmlWriter.endElement("TR");
-        htmlWriter.endElement("THEAD");
-        htmlWriter.startElement("TBODY");
-        htmlWriter.endElement("TBODY");
-        htmlWriter.endElement("TABLE");
-
-        if (tableWidth < 0) {
-            return -1;
-        }
-
-        return tableWidth;
-    }
-
-    protected String getTitleRowClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + TITLE_ROW;
-    }
-
-    protected String getFixedHeaderTableClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + "_fttitle";
-    }
-
-    private void encodeFixedTitleCol(IHtmlWriter htmlWriter,
-            TableRenderContext tableContext, DataColumnComponent dc,
-            boolean first) throws WriterException {
-
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
-                .getFacesContext();
-
-        htmlWriter.startElement("TH");
-        htmlWriter.writeClass(getTitleCellClassName(htmlWriter, first,
-                tableContext.isDisabled()));
-
-        String toolTip = dc.getToolTipText(facesContext);
-        if (toolTip != null) {
-            toolTip = ParamUtils.formatMessage(dc, toolTip);
-
-            htmlWriter.writeTitle(toolTip);
-        }
-
-        if (tableContext.isResizable()) {
-            if (dc.isResizable(facesContext)) {
-                htmlWriter.writeAttribute("v:resizable", "true");
-
-                int min = dc.getMinWidth(facesContext);
-                if (min > 0) {
-                    htmlWriter.writeAttribute("v:minWidth", min);
-                }
-
-                int max = dc.getMaxWidth(facesContext);
-                if (max > 0) {
-                    htmlWriter.writeAttribute("v:maxWidth", max);
+                    break;
                 }
             }
         }
-
-        String width = dc.getWidth(facesContext);
-        if (width != null) {
-            htmlWriter.writeWidth(width);
-        }
-
-        encodeTitleText(htmlWriter, tableContext, dc, width);
-
-        htmlWriter.endElement("TH");
-    }
-
-    protected String getTitleCellClassName(IHtmlWriter htmlWriter,
-            boolean firstColumn, boolean disabled) {
-        String mainClassName = getMainStyleClassName() + TITLE_CELL;
-        String className = mainClassName;
-
-        if (firstColumn) {
-            className += " " + mainClassName + "_left";
-        }
-        if (disabled) {
-            className += " " + mainClassName + "_disabled";
-        }
-
-        return className;
-    }
-
-    protected void encodeTitleText(IHtmlWriter htmlWriter,
-            TableRenderContext tableContext, DataColumnComponent dc,
-            String width) throws WriterException {
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
-                .getFacesContext();
-
-        htmlWriter.startElement("DIV");
-        htmlWriter.writeClass(getTitleDivContainerClassName(htmlWriter));
-
-        if (width != null) {
-            String widthRightPadding = computeSizeInPixel(width, -1,
-                    -TEXT_RIGHT_PADDING);
-            htmlWriter.writeStyle().writeWidth(widthRightPadding);
-        }
-
-        htmlWriter.startElement("DIV");
-        htmlWriter.writeClass(getTitleDivTextClassName(htmlWriter));
-
-        String halign = dc.getAlignment(facesContext);
-        if (halign == null) {
-            halign = "left";
-        }
-
-        htmlWriter.writeAlign(halign);
-
-        if (width != null) { // SORTER
-            String widthRightPadding = computeSizeInPixel(width, -1,
-                    -TEXT_RIGHT_PADDING);
-            htmlWriter.writeStyle().writeWidth(widthRightPadding);
-        }
-
-        IContentAccessors contentAccessors = dc.getImageAccessors(facesContext);
-        if (contentAccessors instanceof IImageAccessors) {
-            IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
-
-            IContentAccessor imageAccessor = imageAccessors.getImageAccessor();
-            if (imageAccessor != null) {
-                String imageURL = imageAccessor.resolveURL(facesContext, null,
-                        null);
-
-                if (imageURL != null) {
-                    htmlWriter.startElement("IMG");
-                    htmlWriter.writeClass(getTitleImageClassName(htmlWriter));
-
-                    String disabledImageURL = null;
-                    String hoverImageURL = null;
-                    String selectedImageURL = null;
-
-                    if (imageAccessors instanceof IStatesImageAccessors) {
-                        IStatesImageAccessors is = (IStatesImageAccessors) imageAccessors;
-
-                        IContentAccessor disabledImageContentAccessor = is
-                                .getDisabledImageAccessor();
-                        if (disabledImageContentAccessor != null) {
-                            disabledImageURL = disabledImageContentAccessor
-                                    .resolveURL(facesContext, null, null);
-                        }
-
-                        IContentAccessor hoverImageContentAccessor = is
-                                .getHoverImageAccessor();
-                        if (hoverImageContentAccessor != null) {
-                            hoverImageURL = hoverImageContentAccessor
-                                    .resolveURL(facesContext, null, null);
-                        }
-
-                        IContentAccessor selectedImageContentAccessor = is
-                                .getSelectedImageAccessor();
-                        if (selectedImageContentAccessor != null) {
-                            selectedImageURL = selectedImageContentAccessor
-                                    .resolveURL(facesContext, null, null);
-                        }
-                    }
-
-                    if (disabledImageURL == null) {
-                        htmlWriter.writeSrc(imageURL);
-
-                    } else if (tableContext.isDisabled()) {
-                        htmlWriter.writeSrc(disabledImageURL);
-                        htmlWriter.writeAttribute("v:imageURL", imageURL);
-
-                    } else {
-                        htmlWriter.writeSrc(imageURL);
-                        htmlWriter.writeAttribute("v:disabledImageURL",
-                                imageURL);
-                    }
-
-                    if (hoverImageURL != null) {
-                        htmlWriter.writeAttribute("v:hoverImageURL",
-                                hoverImageURL);
-                    }
-
-                    if (selectedImageURL != null) {
-                        htmlWriter.writeAttribute("v:selectedImageURL",
-                                selectedImageURL);
-                    }
-
-                    int imageWidth = dc.getImageWidth(facesContext);
-                    if (imageWidth > 0) {
-                        htmlWriter.writeWidth(imageWidth);
-                    }
-
-                    int imageHeight = dc.getImageHeight(facesContext);
-                    if (imageHeight > 0) {
-                        htmlWriter.writeHeight(imageHeight);
-                    }
-
-                    htmlWriter.endElement("IMG");
-                }
-            }
-        }
-
-        String text = dc.getText(facesContext);
-        if (text != null && text.trim().length() > 0) {
-            htmlWriter.writeText(text);
-
-        } else {
-            htmlWriter.write(' ');
-            htmlWriter.writeText(ISgmlWriter.NBSP);
-            htmlWriter.write(' ');
-        }
-
-        htmlWriter.endElement("DIV");
-
-        htmlWriter.endElement("DIV");
-    }
-
-    protected String getTitleDivTextClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + TITLE_TTEXT;
-    }
-
-    protected String getTitleDivContainerClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + TITLE_STEXT;
-    }
-
-    protected String getTitleImageClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + TITLE_IMAGE;
-    }
-
-    protected void encodeJavaScript(IJavaScriptWriter htmlWriter)
-            throws WriterException {
-        super.encodeJavaScript(htmlWriter);
-
-        TableRenderContext tableContext = (TableRenderContext) htmlWriter
-                .getHtmlComponentRenderContext().setAttribute(TABLE_CONTEXT,
-                        null);
-
-        encodeJsHeader(htmlWriter, tableContext);
-        encodeJsBody(htmlWriter, tableContext);
-        encodeJsFooter(htmlWriter, tableContext);
-    }
-
-    public TableRenderContext createTableContext(
-            IComponentRenderContext componentRenderContext) {
-        TableRenderContext tableContext = new TableRenderContext(
-                componentRenderContext);
-
-        return tableContext;
-    }
-
-    public TableRenderContext createTableContext(FacesContext facesContext,
-            DataGridComponent dg, int rowIndex, int forcedRows,
-            ISortedComponent sortedComponents[], String filterExpression) {
-        TableRenderContext tableContext = new TableRenderContext(facesContext,
-                dg, rowIndex, forcedRows, sortedComponents, filterExpression);
-
-        return tableContext;
-    }
-
-    protected void encodeHeader(IHtmlWriter htmlWriter,
-            TableRenderContext tableContext, boolean title)
-            throws WriterException {
-
-        IComponentRenderContext componentRenderContext = htmlWriter
-                .getComponentRenderContext();
-
-        int columnsStateCount = tableContext.getColumnStateCount();
-
-        DataColumnComponent dcs[] = new DataColumnComponent[columnsStateCount];
-        IDataColumnIterator it = tableContext.dataGridComponent.listColumns();
-        int is = 0;
-        for (int i = 0; i < columnsStateCount; i++) {
-            DataColumnComponent dc = it.next();
-
-            if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-                continue;
-            }
-
-            dcs[is++] = dc;
-            encodeTitleCol(htmlWriter, dc);
-        }
-
-        if (title) {
-            htmlWriter.startElement("THEAD");
-            htmlWriter.startElement("TR");
-            htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
-
-            for (int i = 0; i < is; i++) {
-                encodeTitleText(htmlWriter, i, tableContext, dcs[i]);
-            }
-
-            htmlWriter.endElement("TR");
-            htmlWriter.endElement("THEAD");
-        }
-
-        componentRenderContext.setAttribute(TABLE_CONTEXT, tableContext);
-    }
-
-    private void encodeTitleCol(IHtmlWriter htmlWriter, DataColumnComponent dc)
-            throws WriterException {
-        htmlWriter.startElement("COL");
-
-        String width = dc.getWidth();
-        if (width != null) {
-            // 2: htmlWriter.writeAttribute("width", width);
-            htmlWriter.writeStyle().writeWidth(width + "px");
-        }
-        String halign = dc.getAlignment();
-        if (halign == null) {
-            halign = "left";
-        }
-        htmlWriter.writeAlign(halign);
-
-        String valign = dc.getVerticalAlign();
-        if (valign != null) {
-            htmlWriter.writeVAlign(valign);
-        }
-
-        String foregroundColor = dc.getForegroundColor();
-        String backgroundColor = dc.getBackgroundColor();
-        if (foregroundColor != null || backgroundColor != null) {
-            ICssWriter cssWriter = htmlWriter.writeStyle(128);
-            if (foregroundColor != null) {
-                cssWriter.writeColor(foregroundColor);
-            }
-            if (backgroundColor != null) {
-                cssWriter.writeBackgroundColor(backgroundColor);
-            }
-        }
-
-        htmlWriter.endElement("COL");
-    }
-
-    protected void encodeTitleText(IHtmlWriter htmlWriter, int number,
-            TableRenderContext tableContext, DataColumnComponent dc)
-            throws WriterException {
-        htmlWriter.startElement("TH");
-        String thClassName = getTitleCellClassName(htmlWriter, number == 0,
-                tableContext.isDisabled());
-        htmlWriter.writeClass(thClassName);
-
-        String halign = dc.getAlignment();
-        if (halign == null) {
-            halign = "left";
-        }
-        htmlWriter.writeAlign(halign);
-
-        String toolTip = dc.getToolTipText();
-        if (toolTip != null) {
-            toolTip = ParamUtils.formatMessage(dc, toolTip);
-
-            htmlWriter.writeTitle(toolTip);
-        }
-
-        encodeTitleText(htmlWriter, tableContext, dc, null);
-
-        htmlWriter.endElement("TH");
-    }
-
-    protected void encodeBody(IHtmlWriter htmlWriter, TableRenderContext data) {
-    }
-
-    protected void encodeFooter(IHtmlWriter htmlWriter, TableRenderContext dg) {
-    }
-
-    protected void encodeJsHeader(IJavaScriptWriter htmlWriter,
-            TableRenderContext data) {
     }
 
     protected void encodeJsBody(IJavaScriptWriter htmlWriter,
-            TableRenderContext tableContext) throws WriterException {
+            AbstractGridRenderContext tableContext) throws WriterException {
 
-        encodeJsColumns(htmlWriter, tableContext);
-
-        /* Si le tableau n'est pas visible ! */
-
-        if (ENABLE_SERVER_REQUEST) {
-            String interactiveComponentClientId = htmlWriter
-                    .getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .getCurrentInteractiveRenderComponentClientId();
-
-            if (interactiveComponentClientId != null) {
-                // Pas de donn�es si nous sommes dans un scope interactif !
-                htmlWriter.writeMethodCall("f_setInteractiveShow").write('"')
-                        .write(interactiveComponentClientId).writeln("\");");
-                return;
-            }
-        }
+        super.encodeJsBody(htmlWriter, tableContext);
 
         IJavaScriptRenderContext javascriptRenderContext = ((IHtmlRenderContext) htmlWriter
                 .getHtmlComponentRenderContext().getRenderContext())
@@ -922,486 +241,12 @@ public class DataGridRenderer extends AbstractCssRenderer {
         String rowVarName = javascriptRenderContext.allocateVarName();
         tableContext.setRowVarName(rowVarName);
 
-        encodeJsTransactionalRows(htmlWriter, tableContext, true);
-
-    }
-
-    private void encodeJsColumns(IJavaScriptWriter htmlWriter,
-            TableRenderContext tableContext) throws WriterException {
-
-        FacesContext facesContext = htmlWriter.getFacesContext();
-
-        int columnsStateCount = tableContext.getColumnStateCount();
-
-        DataGridComponent dataGridComponent = tableContext
-                .getDataGridComponent();
-
-        htmlWriter.writeMethodCall("f_setColumns");
-        boolean first = true;
-        for (int i = 0; i < columnsStateCount; i++) {
-            if (first) {
-                first = false;
-
-            } else {
-                htmlWriter.write(',');
-            }
-
-            String columnId = tableContext.getColumnId(i);
-            if (columnId != null) {
-                htmlWriter.writeString(columnId).write(',');
-            }
-
-            int rowState = tableContext.getColumnState(i);
-            if (rowState == TableRenderContext.SERVER_HIDDEN) {
-                htmlWriter.writeNull();
-                continue;
-            }
-
-            if (rowState == TableRenderContext.CLIENT_HIDDEN) {
-                htmlWriter.writeBoolean(false);
-                continue;
-            }
-
-            htmlWriter.writeBoolean(true);
-        }
-        htmlWriter.writeln(");");
-
-        IDataColumnIterator it = dataGridComponent.listColumns();
-        String urls[] = null;
-        String clazz[] = null;
-        int cnt = it.count();
-        StringAppender autoFilter = null;
-        DataColumnComponent rowValueColumn = tableContext.getRowValueColumn();
-        for (int i = 0; it.hasNext(); i++) {
-            DataColumnComponent dataColumnComponent = it.next();
-
-            String url = dataColumnComponent
-                    .getDefaultCellImageURL(facesContext);
-            if (url != null && url.length() > 0) {
-                if (urls == null) {
-                    urls = new String[cnt];
-                }
-                urls[i] = htmlWriter.allocateString(url);
-            }
-
-            String claz = dataColumnComponent.getStyleClass(facesContext);
-            if (claz != null && claz.length() > 0) {
-                if (clazz == null) {
-                    clazz = new String[cnt];
-                }
-                clazz[i] = claz;
-            }
-
-            if (rowValueColumn == dataColumnComponent) {
-                htmlWriter.writeMethodCall("f_setRowValueColumn").write(
-                        String.valueOf(i)).writeln(");");
-            }
-
-            if (dataColumnComponent.isAutoFilter(facesContext)) {
-                if (autoFilter == null) {
-                    autoFilter = new StringAppender(128);
-                } else {
-                    autoFilter.append(", ");
-                }
-
-                autoFilter.append(String.valueOf(i));
-            }
-        }
-
-        if (autoFilter != null) {
-            htmlWriter.writeMethodCall("f_setAutoFilters").write(
-                    autoFilter.toString()).writeln(");");
-        }
-
-        if (urls != null || tableContext.hasColumnImages()) {
-            htmlWriter.writeMethodCall("f_setColumnsImages");
-            int pred = 0;
-            first = true;
-            for (int i = 0; i < cnt; i++) {
-                if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-                    continue;
-                }
-
-                String url = null;
-                // URL des images par defaut !
-                if (urls != null) {
-                    url = urls[i];
-                }
-
-                boolean cellImage = tableContext.isColumnImageURL(i);
-                // cellImage=false: une image par d�faut est peut etre
-                // positionn�e !
-                if (url == null && cellImage == false) {
-                    pred++;
-                    continue;
-                }
-
-                if (pred > 0) {
-                    // Si il y avait des pred avant, ce sont forcement des
-                    // colonnes qui n'ont pas d'image/cellule
-                    if (first) {
-                        pred--;
-                        htmlWriter.writeBoolean(false).write(',').writeNull();
-                        first = false;
-                    }
-
-                    for (; pred > 0; pred--) {
-                        htmlWriter.write(',').writeBoolean(false).write(',')
-                                .writeNull();
-                    }
-                }
-
-                if (first) {
-                    first = false;
-
-                } else {
-                    htmlWriter.write(',');
-                }
-
-                htmlWriter.writeBoolean(cellImage).write(',');
-
-                if (url != null) {
-                    htmlWriter.write(url);
-
-                } else {
-                    htmlWriter.writeNull();
-                }
-            }
-            htmlWriter.writeln(");");
-        }
-        /*
-         * if (tableContext.hasTitleColumnImages()) {
-         * htmlWriter.writeMethodCall("f_setTitleColumnsImages"); int pred = 0;
-         * first = true; for (int i = 0; i < cnt; i++) { if
-         * (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-         * continue; }
-         * 
-         * String imageURL = tableContext.getTitleColumnImageURL(i);
-         * 
-         * String selectedImageURL = tableContext
-         * .getTitleColumnSelectedImageURL(i);
-         * 
-         * String hoverImageURL = tableContext .getTitleColumnHoverImageURL(i);
-         * 
-         * String disabledImageURL = tableContext
-         * .getTitleColumnDisabledImageURL(i);
-         * 
-         * if (imageURL == null && selectedImageURL == null && hoverImageURL ==
-         * null && disabledImageURL == null) { pred++; continue; }
-         * 
-         * if (pred > 0) { // Si il y avait des pred avant, ce sont forcement
-         * des // colonnes qui n'ont pas d'image/cellule
-         * 
-         * for (; pred > 0; pred--) { if (first) { first = false; } else {
-         * htmlWriter.write(','); }
-         * 
-         * htmlWriter.writeBoolean(false); } }
-         * 
-         * if (first) { first = false; } else { htmlWriter.write(','); }
-         * 
-         * if (imageURL != null) { htmlWriter.write(imageURL); } else {
-         * htmlWriter.writeNull(); }
-         * 
-         * htmlWriter.write(','); if (selectedImageURL != null) {
-         * htmlWriter.write(selectedImageURL); } else { if (hoverImageURL ==
-         * null && disabledImageURL == null) { htmlWriter.writeBoolean(false);
-         * continue; }
-         * 
-         * htmlWriter.writeNull(); }
-         * 
-         * htmlWriter.write(','); if (hoverImageURL != null) {
-         * htmlWriter.write(hoverImageURL); } else { if (disabledImageURL ==
-         * null) { htmlWriter.writeBoolean(false); continue; }
-         * htmlWriter.writeNull(); }
-         * 
-         * htmlWriter.write(','); if (disabledImageURL != null) {
-         * htmlWriter.write(disabledImageURL); } else { htmlWriter.writeNull(); } }
-         * htmlWriter.writeln(");"); }
-         */
-        if (clazz != null) {
-            List sc = new ArrayList(cnt);
-
-            int total = 0;
-            for (int i = 0; i < cnt; i++) {
-                if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-                    continue;
-                }
-
-                String claz = clazz[i];
-                if (claz == null) {
-                    sc.add(null);
-                    continue;
-                }
-
-                if (claz.indexOf(',') >= 0 || claz.indexOf(';') >= 0
-                        || claz.indexOf(' ') >= 0) {
-                    StringTokenizer st = new StringTokenizer(claz, ",; ");
-                    if (st.countTokens() > 1) {
-                        String claz1 = st.nextToken();
-                        claz1 = htmlWriter.allocateString(claz1);
-
-                        String claz2 = st.nextToken();
-                        claz2 = htmlWriter.allocateString(claz2);
-
-                        sc.add(claz1);
-                        sc.add(claz2);
-                        total += 2;
-                        continue;
-                    }
-
-                    claz = st.nextToken();
-                }
-
-                claz = htmlWriter.allocateString(claz);
-                sc.add(claz);
-                sc.add(Boolean.FALSE);
-                total++;
-            }
-
-            if (total > 0) {
-                htmlWriter.writeMethodCall("f_setColumnsStyleClass");
-                int pred = 0;
-                first = true;
-                for (Iterator it2 = sc.iterator(); it2.hasNext();) {
-                    Object tok = it2.next();
-
-                    if (tok == null) {
-                        pred++;
-                        continue;
-                    }
-
-                    for (; pred > 0; pred--) {
-                        if (first == false) {
-                            htmlWriter.write(',');
-                        } else {
-                            first = false;
-                        }
-
-                        htmlWriter.writeNull();
-                    }
-
-                    if (first == false) {
-                        htmlWriter.write(',');
-
-                    } else {
-                        first = false;
-                    }
-
-                    if (tok == Boolean.FALSE) {
-                        htmlWriter.writeBoolean(false);
-                        continue;
-                    }
-
-                    htmlWriter.write((String) tok);
-                }
-                htmlWriter.writeln(");");
-            }
-        }
-
-        if (tableContext.hasCellStyleClass()) {
-            htmlWriter.writeMethodCall("f_setColumnsCellStyle");
-            writeBooleanArray(htmlWriter, tableContext, cnt, CELL_STYLE_CLASS);
-            htmlWriter.writeln(");");
-        }
-
-        if (tableContext.hasCellToolTipText()) {
-            htmlWriter.writeMethodCall("f_setColumnsToolTipText");
-            writeBooleanArray(htmlWriter, tableContext, cnt, CELL_TOOLTIP_TEXT);
-            htmlWriter.writeln(");");
-        }
-
-        if (tableContext.sortClientSide != null) {
-            int pred = 0;
-
-            htmlWriter.writeMethodCall("f_setColumnSorters");
-            // int cnt = tableContext.getColumnCount();
-            first = true;
-            for (int i = 0; i < cnt; i++) {
-
-                Object sort = tableContext.sortCommand[i];
-
-                if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-                    continue;
-                }
-
-                if (sort == null) {
-                    pred++;
-                    continue;
-                }
-
-                if (sort instanceof String) {
-                    String aliasCommand = (String) sort;
-
-                    if (tableContext.sortClientSide[i] == false) {
-                        aliasCommand = (String) SORT_ALIASES
-                                .get(ISortEventCapability.SORT_SERVER);
-
-                        if (aliasCommand != null) {
-                            aliasCommand = translateJavascriptMethod(
-                                    facesContext, aliasCommand);
-                        }
-                    }
-
-                    for (; pred > 0; pred--) {
-                        if (first == false) {
-                            htmlWriter.write(',');
-                        } else {
-                            first = false;
-                        }
-
-                        htmlWriter.writeNull();
-                    }
-
-                    if (first == false) {
-                        htmlWriter.write(',');
-                    } else {
-                        first = false;
-                    }
-                    htmlWriter.writeSymbol(aliasCommand); // .write('\"');
-
-                    continue;
-                }
-
-                if (sort instanceof IScriptListener) {
-                    IScriptListener scriptListener = (IScriptListener) sort;
-
-                    for (; pred > 0; pred--) {
-                        if (first == false) {
-                            htmlWriter.write(',');
-                        } else {
-                            first = false;
-                        }
-                        htmlWriter.writeNull();
-                    }
-
-                    if (first == false) {
-                        htmlWriter.write(',');
-                    } else {
-                        first = false;
-                    }
-
-                    EventsRenderer.encodeJavaScriptCommmand(htmlWriter,
-                            scriptListener);
-                    // On envoie que le premier valide !
-                    continue;
-                }
-
-                if (sort instanceof IServerActionListener) {
-                    // Le tri se fait cot� serveur !
-
-                    for (; pred > 0; pred--) {
-                        if (first == false) {
-                            htmlWriter.write(',');
-                        } else {
-                            first = false;
-                        }
-                        htmlWriter.writeNull();
-                    }
-
-                    String aliasCommand = (String) SORT_ALIASES
-                            .get(ISortEventCapability.SORT_SERVER);
-
-                    if (first == false) {
-                        htmlWriter.write(',');
-                    } else {
-                        first = false;
-                    }
-
-                    htmlWriter.writeString(aliasCommand);
-
-                    continue;
-
-                }
-                // Ben y a pas de listener SCRIPT !
-                pred++;
-            }
-            htmlWriter.writeln(");");
-
-            ISortedComponent sortedComponents[] = tableContext
-                    .listSortedComponents();
-            if (sortedComponents.length > 0) {
-                htmlWriter.writeMethodCall("f_enableSorters");
-                pred = 0;
-                for (int j = 0; j < sortedComponents.length; j++) {
-                    ISortedComponent sortedComponent = sortedComponents[j];
-
-                    if (j > 0) {
-                        for (; pred > 0; pred--) {
-                            htmlWriter.write(',').writeNull();
-                        }
-
-                        htmlWriter.write(',');
-                    }
-                    htmlWriter.writeInt(sortedComponent.getIndex());
-
-                    if (sortedComponent.isAscending()) {
-                        htmlWriter.write(',').writeBoolean(true);
-
-                    } else {
-                        pred++;
-                    }
-                }
-                htmlWriter.writeln(");");
-            }
-        }
-    }
-
-    private interface IBooleanStateCallback {
-        boolean test(TableRenderContext tableContext, int index);
-    }
-
-    private static final IBooleanStateCallback CELL_STYLE_CLASS = new IBooleanStateCallback() {
-        private static final String REVISION = "$Revision$";
-
-        public boolean test(TableRenderContext tableContext, int index) {
-            return tableContext.isCellStyleClass(index);
-        }
-    };
-
-    private static final IBooleanStateCallback CELL_TOOLTIP_TEXT = new IBooleanStateCallback() {
-        private static final String REVISION = "$Revision$";
-
-        public boolean test(TableRenderContext tableContext, int index) {
-            return tableContext.isCellToolTipText(index);
-        }
-    };
-
-    private void writeBooleanArray(IJavaScriptWriter htmlWriter,
-            TableRenderContext tableContext, int cnt,
-            IBooleanStateCallback callback) throws WriterException {
-        int pred = 0;
-        boolean first = true;
-        for (int i = 0; i < cnt; i++) {
-
-            if (tableContext.getColumnState(i) != TableRenderContext.VISIBLE) {
-                continue;
-            }
-
-            if (pred > 0) {
-                if (first) {
-                    pred--;
-                    htmlWriter.writeBoolean(false).write(',');
-                    first = false;
-                }
-
-                for (; pred > 0; pred--) {
-                    htmlWriter.write(',').writeBoolean(false);
-                }
-            }
-
-            if (first) {
-                first = false;
-
-            } else {
-                htmlWriter.write(',');
-            }
-
-            htmlWriter.writeBoolean(callback.test(tableContext, i));
-        }
+        encodeJsTransactionalRows(htmlWriter,
+                (DataGridRenderContext) tableContext, true);
     }
 
     public void encodeJsTransactionalRows(IJavaScriptWriter htmlWriter,
-            TableRenderContext tableContext, boolean sendFullStates)
+            DataGridRenderContext tableContext, boolean sendFullStates)
             throws WriterException {
 
         DataModel dataModel = tableContext.getDataModel();
@@ -1426,7 +271,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
     }
 
     private void encodeJsRows(IJavaScriptWriter jsWriter,
-            TableRenderContext tableContext, boolean sendFullStates)
+            DataGridRenderContext tableContext, boolean sendFullStates)
             throws WriterException {
 
         FacesContext facesContext = jsWriter.getFacesContext();
@@ -1516,8 +361,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         int selectedOffset = -1;
         Set selectedObjects = null;
 
-        if (tableContext.selectable
-                && (tableContext.clientSelectionFullState == false || sendFullStates)) {
+        if (tableContext.isSelectable()
+                && (tableContext.isClientSelectionFullState() == false || sendFullStates)) {
 
             Object selectionModel = dataGridComponent
                     .getSelectedValues(facesContext);
@@ -1527,7 +372,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     selectedIndexes = ((IIndexesModel) selectionModel)
                             .listSortedIndexes();
 
-                    if (tableContext.clientSelectionFullState) {
+                    if (tableContext.isClientSelectionFullState()) {
                         writeFullStates(jsWriter, "f_setSelectionStates",
                                 selectedIndexes);
                         selectedIndexes = null;
@@ -1553,7 +398,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     selectedObjects = ValuesTools
                             .convertSelection(selectionModel);
 
-                    if (tableContext.clientSelectionFullState) {
+                    if (tableContext.isClientSelectionFullState()) {
                         writeFullStates(jsWriter, tableContext,
                                 "f_setSelectionStates", selectedObjects);
                         selectedObjects = null;
@@ -1566,8 +411,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
         int checkedOffset = -1;
         Set checkedObjects = null;
 
-        if (tableContext.checkable
-                && (tableContext.clientCheckFullState == false || sendFullStates)) {
+        if (tableContext.isCheckable()
+                && (tableContext.isClientCheckFullState() == false || sendFullStates)) {
 
             Object checkModel = dataGridComponent
                     .getCheckedValues(facesContext);
@@ -1576,7 +421,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     checkedIndexes = ((IIndexesModel) checkModel)
                             .listSortedIndexes();
 
-                    if (tableContext.clientCheckFullState) {
+                    if (tableContext.isClientCheckFullState()) {
                         writeFullStates(jsWriter, "f_setCheckStates",
                                 checkedIndexes);
                         checkedIndexes = null;
@@ -1602,7 +447,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                 } else {
                     checkedObjects = ValuesTools.convertSelection(checkModel);
 
-                    if (tableContext.clientCheckFullState) {
+                    if (tableContext.isClientCheckFullState()) {
                         writeFullStates(jsWriter, tableContext,
                                 "f_setCheckStates", checkedObjects);
                         checkedObjects = null;
@@ -1611,11 +456,15 @@ public class DataGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        IDataColumnIterator it = dataGridComponent.listColumns();
-        boolean testImageUrls[] = new boolean[it.count()];
-        for (int i = 0; it.hasNext(); i++) {
-            DataColumnComponent dataColumnComponent = it.next();
-            testImageUrls[i] = dataColumnComponent.isCellImageURLSetted();
+        UIColumn columns[] = tableContext.listColumns();
+        boolean testImageUrls[] = new boolean[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            UIColumn column = columns[i];
+
+            if (column instanceof ICellImageSettings) {
+                testImageUrls[i] = ((ICellImageSettings) column)
+                        .isCellImageURLSetted();
+            }
         }
 
         if (sortTranslations == null && rows > 0
@@ -1660,14 +509,13 @@ public class DataGridRenderer extends AbstractCssRenderer {
             boolean checked = false;
             String rowId = null;
 
-            DataColumnComponent rowValueColumn = tableContext
+            DataColumnComponent rowValueColumn = (DataColumnComponent) tableContext
                     .getRowValueColumn();
 
             int rowValueColumnIndex = -1;
             if (designerMode && rowValueColumn != null) {
-                IDataColumnIterator it2 = dataGridComponent.listColumns();
-                for (int i = 0; it2.hasNext(); i++) {
-                    DataColumnComponent dataColumnComponent = it2.next();
+                for (int i = 0; i < columns.length; i++) {
+                    DataColumnComponent dataColumnComponent = (DataColumnComponent) columns[i];
                     if (dataColumnComponent != rowValueColumn) {
                         continue;
                     }
@@ -1860,19 +708,25 @@ public class DataGridRenderer extends AbstractCssRenderer {
     }
 
     protected void encodeJsRowCount(IJavaScriptWriter htmlWriter,
-            TableRenderContext tableContext, int count) throws WriterException {
+            AbstractGridRenderContext tableContext, int count)
+            throws WriterException {
         htmlWriter.writeMethodCall("f_setRowCount").writeInt(count).writeln(
                 ");");
     }
 
-    protected void encodeJsRow(IJavaScriptWriter htmlWriter,
-            TableRenderContext tableContext, int index, String rowId,
+    protected void encodeJsRow(IJavaScriptWriter jsWriter,
+            DataGridRenderContext tableContext, int index, String rowId,
             int iRowId, boolean selected, boolean checked)
             throws WriterException {
-        FacesContext facesContext = htmlWriter.getFacesContext();
-        DataColumnComponent dcs[] = tableContext.listColumns();
+
+        FacesContext facesContext = jsWriter.getFacesContext();
+        DataGridComponent dataGridComponent = tableContext
+                .getDataGridComponent();
+        UIColumn dcs[] = tableContext.listColumns();
         int columnNumber = dcs.length;
 
+        String trClassName=null; // Pas d'évaluation pour chaque ligne 
+        
         String rowVarName = tableContext.getRowVarName();
 
         String values[] = null;
@@ -1880,28 +734,40 @@ public class DataGridRenderer extends AbstractCssRenderer {
             values = new String[columnNumber];
         }
 
-        if (values == null) {
+        if (ALLOCATE_ROW_STRINGS == false) {
             if (index < 1) {
-                htmlWriter.write("var ");
+                jsWriter.write("var ");
             }
-            htmlWriter.write(rowVarName).write('=').writeMethodCall("_addRow");
+            jsWriter.write(rowVarName).write('=').writeMethodCall("f_addRow2");
 
             if (rowId != null) {
-                htmlWriter.writeString(rowId);
+                jsWriter.writeString(rowId);
 
             } else {
-                htmlWriter.writeInt(iRowId);
+                jsWriter.writeInt(iRowId);
             }
 
-            if (tableContext.selectable
-                    && tableContext.clientSelectionFullState == false) {
-                htmlWriter.write(',').writeBoolean(selected);
+            jsWriter.write(',');
+
+            IObjectLiteralWriter objectLiteralWriter = jsWriter
+                    .writeObjectLiteral(true);
+
+            if (selected && tableContext.isSelectable()
+                    && tableContext.isClientSelectionFullState() == false) {
+                objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
             }
 
-            if (tableContext.checkable
-                    && tableContext.clientCheckFullState == false) {
-                htmlWriter.write(',').writeBoolean(checked);
+            if (checked && tableContext.isCheckable()
+                    && tableContext.isClientCheckFullState() == false) {
+                objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
             }
+
+            if (trClassName != null) {
+                objectLiteralWriter.writeSymbol("_styleClass").write(
+                        trClassName);
+            }
+
+            objectLiteralWriter.end();
         }
 
         String images[] = null;
@@ -1909,21 +775,17 @@ public class DataGridRenderer extends AbstractCssRenderer {
         String cellToolTipTexts[] = null;
         int visibleColumns = 0;
 
-        int ciIndex = 0;
-        int csIndex = 0;
-        int ctIndex = 0;
         boolean designerMode = tableContext.isDesignerMode();
         String designerData[] = null;
         if (designerMode) {
-            designerData = (String[]) tableContext.getDataGridComponent()
-                    .getRowData();
+            designerData = (String[]) dataGridComponent.getRowData();
         }
 
         for (int i = 0; i < columnNumber; i++) {
-            DataColumnComponent dc = dcs[i];
+            DataColumnComponent dc = (DataColumnComponent) dcs[i];
 
             int rowState = tableContext.getColumnState(i);
-            if (rowState == TableRenderContext.SERVER_HIDDEN) {
+            if (rowState == AbstractGridRenderContext.SERVER_HIDDEN) {
                 continue;
             }
 
@@ -1943,7 +805,7 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     }
                 }
 
-                if (values != null) {
+                if (ALLOCATE_ROW_STRINGS) {
                     if (svalue == null) {
                         svalue = NULL_VALUE;
                     }
@@ -1951,11 +813,11 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     values[i] = svalue;
 
                 } else {
-                    htmlWriter.write(',').writeString(svalue);
+                    jsWriter.write(',').writeString(svalue);
                 }
             }
 
-            if (rowState != TableRenderContext.VISIBLE) {
+            if (rowState != AbstractGridRenderContext.VISIBLE) {
                 continue;
             }
 
@@ -1965,10 +827,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     if (images == null) {
                         images = new String[columnNumber];
                     }
-                    images[ciIndex] = imageURL;
+                    images[i] = imageURL;
                 }
-
-                ciIndex++;
             }
 
             if (tableContext.isCellStyleClass(i)) {
@@ -1978,9 +838,8 @@ public class DataGridRenderer extends AbstractCssRenderer {
                         cellStyleClasses = new String[columnNumber];
                     }
 
-                    cellStyleClasses[csIndex] = cs;
+                    cellStyleClasses[i] = cs;
                 }
-                csIndex++;
             }
 
             if (tableContext.isCellToolTipText(i)) {
@@ -1990,43 +849,56 @@ public class DataGridRenderer extends AbstractCssRenderer {
                         cellToolTipTexts = new String[columnNumber];
                     }
 
-                    cellToolTipTexts[ctIndex] = ct;
+                    cellToolTipTexts[i] = ct;
                 }
-                ctIndex++;
             }
 
             visibleColumns++;
         }
 
-        if (values != null) {
+        if (ALLOCATE_ROW_STRINGS) {
             for (int i = 0; i < values.length; i++) {
                 String v = values[i];
                 if (v == null || v == NULL_VALUE) {
                     continue;
                 }
 
-                values[i] = htmlWriter.allocateString(v);
+                values[i] = jsWriter.allocateString(v);
             }
 
             if (index < 1) {
-                htmlWriter.write("var ");
+                jsWriter.write("var ");
             }
-            htmlWriter.write(rowVarName).write('=').writeMethodCall("_addRow");
+            jsWriter.write(rowVarName).write('=').writeMethodCall("f_addRow2");
 
             if (rowId != null) {
-                htmlWriter.writeString(rowId);
+                jsWriter.writeString(rowId);
 
             } else {
-                htmlWriter.writeInt(iRowId);
+                jsWriter.writeInt(iRowId);
             }
 
-            if (tableContext.selectable) {
-                htmlWriter.write(',').writeBoolean(selected);
+            jsWriter.write(',');
+
+            IObjectLiteralWriter objectLiteralWriter = jsWriter
+                    .writeObjectLiteral(true);
+
+            if (selected && tableContext.isSelectable()
+                    && tableContext.isClientSelectionFullState() == false) {
+                objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
             }
 
-            if (tableContext.checkable) {
-                htmlWriter.write(',').writeBoolean(checked);
+            if (checked && tableContext.isCheckable()
+                    && tableContext.isClientCheckFullState() == false) {
+                objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
             }
+
+            if (trClassName != null) {
+                objectLiteralWriter.writeSymbol("_styleClass").write(
+                        trClassName);
+            }
+
+            objectLiteralWriter.end();
 
             for (int i = 0; i < values.length; i++) {
                 String v = values[i];
@@ -2034,459 +906,101 @@ public class DataGridRenderer extends AbstractCssRenderer {
                     continue;
                 }
 
-                htmlWriter.write(',');
+                jsWriter.write(',');
                 if (v == NULL_VALUE) {
-                    htmlWriter.writeNull();
+                    jsWriter.writeNull();
                     continue;
                 }
 
-                htmlWriter.write(v);
+                jsWriter.write(v);
             }
 
         }
-        htmlWriter.writeln(");");
+        jsWriter.writeln(");");
 
-        if (images != null) {
-            writeRowProperties(htmlWriter, tableContext, ciIndex, rowVarName,
-                    "f_setCellImages", images);
-        }
-        if (cellStyleClasses != null) {
-            writeRowProperties(htmlWriter, tableContext, csIndex, rowVarName,
-                    "f_setCellStyleClass", cellStyleClasses);
-        }
-        if (cellToolTipTexts != null) {
-            writeRowProperties(htmlWriter, tableContext, ctIndex, rowVarName,
-                    "f_setCellToolTipText", cellToolTipTexts);
-        }
-    }
+        if (images != null || cellStyleClasses != null
+                || cellToolTipTexts != null) {
 
-    protected void writeRowProperties(IJavaScriptWriter htmlWriter,
-            TableRenderContext tableContext, int visibleColumns, String varId,
-            String command, String values[]) throws WriterException {
-        for (int i = 0; i < values.length; i++) {
-            if (values[i] == null) {
-                continue;
-            }
+            allocateStrings(jsWriter, images, images);
+            allocateStrings(jsWriter, cellStyleClasses, cellStyleClasses);
+            allocateStrings(jsWriter, cellToolTipTexts, cellToolTipTexts);
 
-            values[i] = htmlWriter.allocateString(values[i]);
-        }
+            jsWriter.writeMethodCall("f_setCells2").write(rowVarName);
+            int pred = 0;
 
-        htmlWriter.writeMethodCall(command).write(varId);
-        int pred = 0;
-        for (int i = 0; i < visibleColumns; i++) {
-            if (values[i] == null) {
-                pred++;
-                continue;
-            }
+            for (int i = 0; i < columnNumber; i++) {
+                if (tableContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
+                    continue;
+                }
 
-            if (pred > 0) {
+                String imageURL = null;
+                if (images != null) {
+                    imageURL = images[i];
+                }
+
+                String cellStyleClass = null;
+                if (cellStyleClasses != null) {
+                    cellStyleClass = cellStyleClasses[i];
+                }
+
+                String toolTipText = null;
+                if (cellToolTipTexts != null) {
+                    toolTipText = cellToolTipTexts[i];
+                }
+
+                if (imageURL == null && cellStyleClass == null
+                        && toolTipText == null) {
+                    pred++;
+                    continue;
+                }
+
                 for (; pred > 0; pred--) {
-                    htmlWriter.write(',').writeNull();
-                }
-            }
-
-            htmlWriter.write(',').write(values[i]);
-        }
-
-        htmlWriter.writeln(");");
-    }
-
-    protected void encodeJsFooter(IJavaScriptWriter htmlWriter,
-            TableRenderContext data) {
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#getDecodesChildren()
-     */
-    public boolean getDecodesChildren() {
-        return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.render.Renderer#getRendersChildren()
-     */
-    public boolean getRendersChildren() {
-        return true;
-    }
-
-    protected void decode(IRequestContext context, UIComponent component,
-            IComponentData componentData) {
-        super.decode(context, component, componentData);
-
-        FacesContext facesContext = context.getFacesContext();
-
-        DataGridComponent dg = (DataGridComponent) component;
-
-        Number first = componentData.getNumberProperty("first");
-        if (first != null) {
-            int old = dg.getFirst();
-
-            int f = first.intValue();
-            if (old != f) {
-                dg.setFirst(f);
-
-                component.queueEvent(new PropertyChangeEvent(component,
-                        Properties.FIRST, new Integer(old), first));
-            }
-        }
-
-        DataColumnComponent rowValueColumn = null;
-        String rowValueColumnId = dg.getRowValueColumnId(facesContext);
-        if (rowValueColumnId != null) {
-            for (IDataColumnIterator it = dg.listColumns(); it.hasNext();) {
-                DataColumnComponent column = it.next();
-                if (rowValueColumnId.equals(column.getId()) == false) {
-                    continue;
+                    jsWriter.write(',').writeNull();
                 }
 
-                rowValueColumn = column;
-                break;
-            }
-        }
+                jsWriter.write(',');
 
-        String selectedRows = componentData.getStringProperty("selectedItems");
-        String deselectedRows = componentData
-                .getStringProperty("deselectedItems");
-        if (selectedRows != null || deselectedRows != null) {
-            if (rowValueColumn != null) {
-                Object selected = dg.getSelectedValues(facesContext);
+                IObjectLiteralWriter objWriter = jsWriter
+                        .writeObjectLiteral(true);
 
-                Set values = updateSelection(facesContext, rowValueColumn,
-                        selected, selectedRows, deselectedRows);
-
-                Class cls = dg.getSelectedValuesType(facesContext);
-                if (cls == null && selected != null) {
-                    cls = selected.getClass();
+                if (imageURL != null) {
+                    objWriter.writeSymbol("_imageURL").write(imageURL);
                 }
 
-                selected = ValuesTools.adaptValues(cls, values);
-
-                dg.setSelectedValues(selected);
-
-            } else {
-                int indexes[] = parseIndexes(selectedRows);
-                int dindexes[] = null;
-                boolean all = false;
-
-                if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
-                    all = true;
-                    dindexes = EMPTY_INDEXES;
-                } else {
-                    dindexes = parseIndexes(deselectedRows);
+                if (cellStyleClass != null) {
+                    objWriter.writeSymbol("_styleClass").write(cellStyleClass);
                 }
 
-                if (indexes.length > 0 || all || dindexes.length > 0) {
-                    setSelectedIndexes(facesContext, dg, indexes, dindexes, all);
-                }
-            }
-        }
-        String checkedRows = componentData.getStringProperty("checkedItems");
-        String uncheckedRows = componentData
-                .getStringProperty("uncheckedItems");
-        if (checkedRows != null || uncheckedRows != null) {
-            if (rowValueColumn != null) {
-                Object checked = dg.getCheckedValues(facesContext);
-
-                Set values = updateSelection(facesContext, rowValueColumn,
-                        checked, checkedRows, uncheckedRows);
-
-                Class cls = dg.getCheckedValuesType(facesContext);
-                if (cls == null && checked != null) {
-                    cls = checked.getClass();
+                if (toolTipText != null) {
+                    objWriter.writeSymbol("_toolTipText").write(toolTipText);
                 }
 
-                checked = ValuesTools.adaptValues(cls, values);
-
-                dg.setCheckedValues(checked);
-
-            } else {
-                int cindexes[] = parseIndexes(checkedRows);
-                int uindexes[] = null;
-                boolean all = false;
-
-                if (HtmlTools.ALL_VALUE.equals(uncheckedRows)) {
-                    all = true;
-                    uindexes = EMPTY_INDEXES;
-                } else {
-                    uindexes = parseIndexes(uncheckedRows);
-                }
-
-                if (cindexes.length > 0 || uindexes.length > 0 || all) {
-                    setCheckedIndexes(facesContext, dg, cindexes, uindexes, all);
-                }
-            }
-        }
-
-        String sortIndex = componentData.getStringProperty("sortIndex");
-        if (sortIndex != null) {
-            DataColumnComponent columns[] = dg.listColumns().toArray();
-
-            List sortedColumns = new ArrayList(columns.length);
-            StringTokenizer st1 = new StringTokenizer(sortIndex, ",");
-
-            for (; st1.hasMoreTokens();) {
-                String tok1 = st1.nextToken();
-                String tok2 = st1.nextToken();
-
-                int idx = Integer.parseInt(tok1);
-                boolean order = "true".equalsIgnoreCase(tok2);
-
-                DataColumnComponent dataColumn = columns[idx];
-
-                sortedColumns.add(dataColumn);
-
-                if (dataColumn.isAscending(facesContext) == order) {
-                    continue;
-                }
-
-                dataColumn.setAscending(order);
-
-                dataColumn.queueEvent(new PropertyChangeEvent(dataColumn,
-                        Properties.ASCENDING, Boolean.valueOf(!order), Boolean
-                                .valueOf(order)));
+                objWriter.end();
             }
 
-            String old = dg.getSortedColumnIds(facesContext);
+            jsWriter.writeln(");");
 
-            if (dg.setSortedColumns((DataColumnComponent[]) sortedColumns
-                    .toArray(new DataColumnComponent[sortedColumns.size()]))) {
-
-                String newIds = dg.getSortedColumnIds(facesContext);
-                if (isEquals(old, newIds) == false) {
-                    component.queueEvent(new PropertyChangeEvent(component,
-                            Properties.SORTED_COLUMN_IDS, old, newIds));
-                }
-            }
-        }
-
-        String columnWidths = componentData.getStringProperty("columnWidths");
-        if (columnWidths != null) {
-            StringTokenizer st = new StringTokenizer(columnWidths, ",");
-            IDataColumnIterator it = dg.listColumns();
-
-            for (; st.hasMoreTokens();) {
-                String width = st.nextToken();
-
-                for (; it.hasNext();) {
-                    DataColumnComponent col = it.next();
-
-                    if (col.isResizable(facesContext) == false) {
-                        continue;
-                    }
-
-                    String old = col.getWidth(facesContext);
-                    if (isEquals(old, width)) {
-                        break;
-                    }
-
-                    col.setWidth(width);
-
-                    col.queueEvent(new PropertyChangeEvent(col,
-                            Properties.WIDTH, old, width));
-                    break;
-                }
-            }
-        }
-
-        String filterExpression = componentData
-                .getStringProperty("filterExpression");
-        if (filterExpression != null) {
-            if (filterExpression.length() < 1) {
-                filterExpression = null;
-            }
-
-            IFilterProperties fexp = HtmlTools.decodeFilterExpression(context
-                    .getProcessContext(), component, filterExpression);
-
-            IFilterProperties old = dg.getFilterProperties(facesContext);
-            if (isEquals(fexp, old) == false) {
-                dg.setFilterProperties(fexp);
-
-                component.queueEvent(new PropertyChangeEvent(component,
-                        Properties.FILTER_PROPERTIES, old, fexp));
-            }
-        }
-
-        String cursorValue = componentData.getStringProperty("cursor");
-        if (cursorValue != null) {
-            Object cursorValueObject = cursorValue;
-
-            if (rowValueColumn != null) {
-                cursorValueObject = ValuesTools.convertStringToValue(
-                        facesContext, rowValueColumn, cursorValueObject);
-            }
-
-            Object oldCursorValueObject = dg.getCursorValue(facesContext);
-            if (isEquals(oldCursorValueObject, cursorValueObject) == false) {
-
-                dg.setCursorValue(cursorValueObject);
-
-                component.queueEvent(new PropertyChangeEvent(component,
-                        Properties.CURSOR_VALUE, oldCursorValueObject,
-                        cursorValueObject));
-
-            }
-
-        }
-
-        IComponentPreference preference = dg.getPreference(facesContext);
-        if (preference != null) {
-            preference.savePreference(facesContext, dg);
         }
     }
 
-    private Set updateSelection(FacesContext facesContext,
-            DataColumnComponent dataColumnComponent, Object selected,
-            String selectedRows, String deselectedRows) {
-        Set set;
+    public AbstractGridRenderContext createTableContext(
+            IHtmlComponentRenderContext componentRenderContext) {
+        DataGridRenderContext tableContext = new DataGridRenderContext(
+                componentRenderContext);
 
-        if (selected == null) {
-            set = new HashSet(8);
-
-        } else {
-            set = ValuesTools.convertSelection(selected);
-        }
-
-        if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
-            set.clear();
-
-        } else if (set.size() > 0 && deselectedRows != null
-                && deselectedRows.length() > 0) {
-            List deselect = HtmlValuesTools.parseValues(facesContext,
-                    dataColumnComponent, true, false, deselectedRows);
-
-            if (deselect.isEmpty() == false) {
-                set.removeAll(deselect);
-            }
-        }
-
-        if (selectedRows != null && selectedRows.length() > 0) {
-            List select = HtmlValuesTools.parseValues(facesContext,
-                    dataColumnComponent, true, false, selectedRows);
-
-            if (select.isEmpty() == false) {
-                set.addAll(select);
-            }
-
-        }
-
-        return set;
+        return tableContext;
     }
 
-    protected void decodeEvent(IRequestContext context, UIComponent component,
-            IEventData eventData) {
+    public DataGridRenderContext createTableContext(
+            IProcessContext processContext,
+            IScriptRenderContext scriptRenderContext, DataGridComponent dg,
+            int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
+            String filterExpression) {
+        DataGridRenderContext tableContext = new DataGridRenderContext(
+                processContext, scriptRenderContext, dg, rowIndex, forcedRows,
+                sortedComponents, filterExpression);
 
-        if (eventData != null
-                && JavaScriptClasses.EVENT_VALUE_CHANGE.equals(eventData
-                        .getEventName())) {
-
-            // Ok on change de page ...
-            return;
-        }
-
-        super.decodeEvent(context, component, eventData);
-    }
-
-    protected static final int[] parseIndexes(String indexes) {
-        if (indexes == null) {
-            return EMPTY_INDEXES;
-        }
-        StringTokenizer st = new StringTokenizer(indexes,
-                HtmlTools.LIST_SEPARATORS);
-
-        int cnt = st.countTokens();
-        if (cnt < 1) {
-            return EMPTY_INDEXES;
-        }
-
-        int ret[] = new int[cnt];
-
-        int idx = 0;
-        for (; st.hasMoreTokens();) {
-            String s_index = st.nextToken();
-            try {
-                int index = Integer.parseInt(s_index);
-                ret[idx++] = index;
-
-            } catch (NumberFormatException ex) {
-                throw new FacesException("Can not parse index '" + s_index
-                        + ".");
-            }
-        }
-
-        for (; idx < ret.length;) {
-            ret[idx++] = -1;
-        }
-
-        return ret;
-    }
-
-    protected void setCheckedIndexes(FacesContext facesContext,
-            DataGridComponent dg, int[] indexes, int uindexes[], boolean all) {
-        Object m = dg.getCheckedValues(facesContext);
-        if (m != null && (m instanceof IIndexesModel) == false) {
-            throw new FacesException(
-                    "'CheckedValues' attribute must contain an IIndexesModel if you do not specify 'rowValueColumnId' attribute !");
-        }
-
-        IIndexesModel model = (IIndexesModel) m;
-        if (model == null) {
-            model = new ArrayIndexesModel();
-
-            dg.setCheckedValues(model);
-        }
-
-        if (all) {
-            model.clearIndexes();
-
-        } else {
-            for (int i = 0; i < uindexes.length; i++) {
-                model.removeIndex(uindexes[i]);
-            }
-        }
-
-        for (int i = 0; i < indexes.length; i++) {
-            model.addIndex(indexes[i]);
-        }
-
-        model.commitChanges();
-    }
-
-    protected void setSelectedIndexes(FacesContext facesContext,
-            DataGridComponent dg, int[] indexes, int dindexes[],
-            boolean deselectAll) {
-
-        Object m = dg.getSelectedValues(facesContext);
-        if (m != null && (m instanceof IIndexesModel) == false) {
-            throw new FacesException(
-                    "'SelectedValues' attribute must contain an IIndexesModel if you do not specify 'rowValueColumnId' attribute !");
-        }
-
-        IIndexesModel model = (IIndexesModel) m;
-        if (model == null) {
-            model = new ArrayIndexesModel();
-
-            dg.setSelectedValues(model);
-        }
-
-        if (deselectAll) {
-            model.clearIndexes();
-
-        } else {
-            for (int i = 0; i < dindexes.length; i++) {
-                model.removeIndex(dindexes[i]);
-            }
-        }
-
-        for (int i = 0; i < indexes.length; i++) {
-            model.addIndex(indexes[i]);
-        }
-
-        model.commitChanges();
+        return tableContext;
     }
 
     /**
@@ -2494,156 +1008,37 @@ public class DataGridRenderer extends AbstractCssRenderer {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public final class TableRenderContext {
+    public class DataGridRenderContext extends AbstractGridRenderContext {
 
         private static final String REVISION = "$Revision$";
 
-        public static final int SERVER_HIDDEN = 1;
-
-        public static final int CLIENT_HIDDEN = 2;
-
-        public static final int VISIBLE = 3;
-
-        private final DataGridComponent dataGridComponent;
-
-        private final boolean clientSelectionFullState;
-
-        private final boolean clientCheckFullState;
-
-        private final boolean checkable;
-
-        private final int checkCardinality;
-
-        private final boolean selectable;
-
-        private final int selectionCardinality;
-
-        private final boolean disabled;
-
-        private final String rowIndexVar;
-
-        private final String rowCountVar;
-
-        private boolean hasCellStyleClass;
-
-        private final boolean cellStyleClasses[];
-
-        private boolean hasCellToolTipText;
-
-        private final boolean cellToolTipText[];
-
-        private final int columnStates[];
-
-        private final boolean paged;
-
-        private String rowVarName;
-
-        private boolean hasColumnImages;
-
-        private boolean hasTitleColumnImages;
-
-        private ISortedComponent sortedComponents[];
-
-        private final int rows;
-
-        private int forcedRows = -1;
-
-        private boolean resizable;
-
-        private int first;
-
-        private int rowCount;
-
-        private final boolean columnImageURLs[];
-
-        //private String titleColumnImageURLs[];
-
-        //private String titleColumnSelectedImageURLs[];
-
-        //private String titleColumnHoverImageURLs[];
-
-        //private String titleColumnDisabledImageURLs[];
-
-        private boolean sortClientSide[];
-
-        private Object sortCommand[];
-
-        private String columnIds[];
-
-        private DataModel dataModel;
-
-        private IFilterProperties filtersMap;
-
-        private DataColumnComponent columns[];
-
         private DataColumnComponent rowValueColumn;
 
-        private int totalSize;
+        public DataGridRenderContext(IProcessContext processContext,
+                IScriptRenderContext scriptRenderContext, DataGridComponent dg,
+                int rowIndex, int forcedRows,
+                ISortedComponent[] sortedComponents, String filterExpression) {
+            super(processContext, scriptRenderContext, dg, rowIndex,
+                    forcedRows, sortedComponents, filterExpression);
+        }
 
-        private boolean designerMode;
+        public DataGridRenderContext(
+                IHtmlComponentRenderContext componentRenderContext) {
+            super(componentRenderContext);
+        }
 
-        private TableRenderContext(FacesContext facesContext,
-                DataGridComponent dataGridComponent,
-                ISortedComponent sortedComponents[],
-                IProcessContext processContext, boolean checkTitleImages) {
-            this.dataGridComponent = dataGridComponent;
-            this.sortedComponents = sortedComponents;
+        protected void initialize(boolean checkTitleImages) {
+            super.initialize(checkTitleImages);
 
-            paged = dataGridComponent.isPaged(facesContext);
+            String rowValueColumnId = ((DataGridComponent) gridComponent)
+                    .getRowValueColumnId();
 
-            selectable = dataGridComponent.isSelectable(facesContext);
-            if (selectable) {
-                int selectionCardinality = dataGridComponent
-                        .getSelectionCardinality(facesContext);
-                if (selectionCardinality == 0) {
-                    selectionCardinality = ICardinality.DEFAULT_CARDINALITY;
-                }
-                this.selectionCardinality = selectionCardinality;
-
-                this.clientSelectionFullState = dataGridComponent
-                        .isClientSelectionFullState(facesContext);
-            } else {
-                this.selectionCardinality = 0;
-                this.clientSelectionFullState = false;
-            }
-
-            checkable = dataGridComponent.isCheckable(facesContext);
-            if (checkable) {
-                int checkCardinality = dataGridComponent
-                        .getCheckCardinality(facesContext);
-                if (checkCardinality == 0) {
-                    checkCardinality = ICardinality.DEFAULT_CARDINALITY;
-                }
-                this.checkCardinality = checkCardinality;
-
-                this.clientCheckFullState = dataGridComponent
-                        .isClientCheckFullState(facesContext);
-            } else {
-                this.checkCardinality = 0;
-                this.clientCheckFullState = false;
-            }
-
-            disabled = dataGridComponent.isDisabled(facesContext);
-
-            rows = dataGridComponent.getRows();
-
-            rowCountVar = dataGridComponent.getRowCountVar(facesContext);
-
-            rowIndexVar = dataGridComponent.getRowIndexVar(facesContext);
-
-            String rowValueColumnId = dataGridComponent
-                    .getRowValueColumnId(facesContext);
-
-            IDataColumnIterator itColumns = dataGridComponent.listColumns();
-            List cs = new ArrayList(itColumns.count());
-            for (; itColumns.hasNext();) {
-                DataColumnComponent dataColumnComponent = itColumns.next();
-
-                cs.add(dataColumnComponent);
+            for (int i = 0; i < columns.length; i++) {
+                UIColumn column = columns[i];
 
                 if (rowValueColumnId != null && rowValueColumn == null) {
-                    if (rowValueColumnId.equals(dataColumnComponent.getId())) {
-                        rowValueColumn = dataColumnComponent;
+                    if (rowValueColumnId.equals(column.getId())) {
+                        rowValueColumn = (DataColumnComponent) column;
                     }
                 }
             }
@@ -2653,526 +1048,60 @@ public class DataGridRenderer extends AbstractCssRenderer {
                         + rowValueColumnId
                         + "' specified by 'rowValueColumnId' attribute.");
             }
-
-            String columnOrder = dataGridComponent
-                    .getColumnsOrder(facesContext);
-            if (columnOrder != null) {
-                StringTokenizer st = new StringTokenizer(columnOrder, ", ");
-                List first = new ArrayList(cs.size());
-
-                for (; st.hasMoreTokens();) {
-                    String tok = st.nextToken();
-
-                    for (Iterator itCs = cs.iterator(); itCs.hasNext();) {
-                        DataColumnComponent dc = (DataColumnComponent) itCs
-                                .next();
-
-                        String id = dc.getId();
-                        if (id == null || id.equals(tok) == false) {
-                            continue;
-                        }
-
-                        first.add(dc);
-                        itCs.remove();
-
-                        break;
-                    }
-                }
-
-                first.addAll(cs);
-
-                cs = first;
-            }
-
-            columns = (DataColumnComponent[]) cs
-                    .toArray(new DataColumnComponent[cs.size()]);
-
-            columnStates = new int[columns.length];
-            columnImageURLs = new boolean[columns.length];
-            cellStyleClasses = new boolean[columns.length];
-            cellToolTipText = new boolean[columns.length];
-            columnIds = new String[columns.length];
-
-            /*
-            if (checkTitleImages) {
-                titleColumnImageURLs = new String[columns.length];
-            }
-            */
-
-            for (int i = 0; i < columns.length; i++) {
-                DataColumnComponent dc = columns[i];
-
-                String columnId = dc.getId();
-                if (columnId != null
-                        && ComponentTools.isAnonymousComponentId(columnId) == false) {
-                    columnIds[i] = columnId;
-                }
-
-                Boolean v = dc.getVisibleState();
-                if (v != null && v.booleanValue() == false) {
-                    // Pas visible du tout !
-
-                    int hiddenMode = dc.getHiddenMode(facesContext);
-                    if (IHiddenModeCapability.SERVER_HIDDEN_MODE == hiddenMode) {
-                        columnStates[i] = SERVER_HIDDEN; // Pas visible et
-                        // limit� au serveur
-                        continue;
-                    }
-
-                    columnStates[i] = CLIENT_HIDDEN; // Pas visible mais
-                    // envoy�
-
-                } else {
-                    columnStates[i] = VISIBLE;
-                }
-
-                if (dc.isCellImageURLSetted()) {
-                    columnImageURLs[i] = true;
-                    hasColumnImages = true;
-                }
-
-                /*
-                if (checkTitleImages) {
-                    IContentAccessors contentAccessors = dc.getImageAccessors();
-                    if (contentAccessors instanceof IImageAccessors) {
-                        IStatesImageAccessors imageAccessors = (IStatesImageAccessors) contentAccessors;
-
-                        IContentAccessor contentAccessor = imageAccessors
-                                .getImageAccessor();
-                        if (contentAccessor != null) {
-                            String imageURL = contentAccessor.resolveURL(
-                                    facesContext, null, null);
-                            if (imageURL != null) {
-                                titleColumnImageURLs[i] = imageURL;
-                                hasTitleColumnImages = true;
-                            }
-                        }
-
-                        contentAccessor = imageAccessors
-                                .getSelectedImageAccessor();
-                        if (contentAccessor != null) {
-                            String imageURL = contentAccessor.resolveURL(
-                                    facesContext, null, null);
-                            if (imageURL != null) {
-                                titleColumnSelectedImageURLs[i] = imageURL;
-                                hasTitleColumnImages = true;
-                            }
-                        }
-
-                        contentAccessor = imageAccessors
-                                .getHoverImageAccessor();
-                        if (contentAccessor != null) {
-                            String imageURL = contentAccessor.resolveURL(
-                                    facesContext, null, null);
-                            if (imageURL != null) {
-                                titleColumnHoverImageURLs[i] = imageURL;
-                                hasTitleColumnImages = true;
-                            }
-                        }
-
-                        contentAccessor = imageAccessors
-                                .getDisabledImageAccessor();
-                        if (contentAccessor != null) {
-                            String imageURL = contentAccessor.resolveURL(
-                                    facesContext, null, null);
-                            if (imageURL != null) {
-                                titleColumnDisabledImageURLs[i] = imageURL;
-                                hasTitleColumnImages = true;
-                            }
-                        }
-
-                    }
-                }
-                */
-
-                if (dc.isCellStyleClassSetted()) {
-                    cellStyleClasses[i] = true;
-                    hasCellStyleClass = true;
-                }
-
-                if (dc.isCellToolTipTextSetted()) {
-                    cellToolTipText[i] = true;
-                    hasCellToolTipText = true;
-                }
-
-                if (columnStates[i] != VISIBLE) {
-                    continue;
-                }
-
-                boolean sortSetted = false;
-
-                FacesListener facesListeners[] = dc.listSortListeners();
-                if (facesListeners != null && facesListeners.length > 0) {
-                    if (sortClientSide == null) {
-                        sortClientSide = new boolean[columnStates.length];
-                        sortCommand = new Object[columnStates.length];
-                    }
-
-                    listeners: for (int j = 0; j < facesListeners.length; j++) {
-                        FacesListener facesListener = facesListeners[j];
-
-                        if (facesListener instanceof IScriptListener) {
-                            IScriptListener scriptListener = (IScriptListener) facesListener;
-
-                            String aliasCommand = (String) SORT_ALIASES
-                                    .get(scriptListener.getCommand());
-
-                            if (aliasCommand != null) {
-                                // Gestion serveur comme client !
-                                sortCommand[i] = translateJavascriptMethod(
-                                        facesContext, aliasCommand);
-                                sortClientSide[i] = (rows == 0);
-                                sortSetted = true;
-                                break listeners;
-                            }
-
-                            if (IHtmlRenderContext.JAVASCRIPT_TYPE
-                                    .equals(scriptListener
-                                            .getScriptType(processContext))) {
-
-                                if (rows > 0) {
-                                    // Script en mode ROW !
-                                    throw new FacesException(
-                                            "Client-side sort not support with 'rows' mode !");
-                                }
-
-                                sortClientSide[i] = true;
-                                sortCommand[i] = scriptListener;
-                                sortSetted = true;
-                                break listeners;
-                            }
-                        }
-
-                        if (facesListener instanceof IServerActionListener) {
-                            sortClientSide[i] = false;
-                            sortCommand[i] = facesListener;
-                            sortSetted = true;
-                            break listeners;
-                        }
-                    }
-                }
-
-                if (sortSetted == false) {
-                    Comparator comparator = dc.getSortComparator(facesContext);
-                    if (comparator != null) {
-                        if (sortClientSide == null) {
-                            sortClientSide = new boolean[columnStates.length];
-                            sortCommand = new Object[columnStates.length];
-                        }
-
-                        sortSetted = true;
-                        sortClientSide[i] = false;
-                        sortCommand[i] = comparator;
-                    }
-                }
-            }
-
-            dataModel = dataGridComponent.getDataModel(facesContext);
-
-            // Le dataModel peut etre NULL, car dans des cas de structures
-            // simples,
-            // elles n'ont pas besoin de publier un model !
         }
 
-        public boolean isDesignerMode() {
-            return designerMode;
+        public DataGridComponent getDataGridComponent() {
+            return (DataGridComponent) getGridComponent();
         }
 
-        public String getRowIndexVar() {
-            return rowIndexVar;
-        }
-
-        public String getRowCountVar() {
-            return rowCountVar;
-        }
-
-        public String getRowVarName() {
-            return rowVarName;
+        protected String convertAliasCommand(String command) {
+            return (String) SORT_ALIASES.get(command);
         }
 
         public DataColumnComponent getRowValueColumn() {
             return rowValueColumn;
         }
 
-        public int getColumnCount() {
-            return columns.length;
-        }
-
-        public void setResizable(boolean resizable, int totalSize) {
-            this.resizable = resizable;
-            this.totalSize = totalSize;
-        }
-
-        public final int getResizeTotalSize() {
-            return totalSize;
-        }
-
-        public DataColumnComponent[] listColumns() {
-            return columns;
-        }
-
-        public TableRenderContext(IComponentRenderContext componentRenderContext) {
-            this(componentRenderContext.getFacesContext(),
-                    (DataGridComponent) componentRenderContext.getComponent(),
-                    ((DataGridComponent) componentRenderContext.getComponent())
-                            .listSortedComponents(componentRenderContext
-                                    .getFacesContext()), componentRenderContext
-                            .getRenderContext().getProcessContext(), true);
-
-            designerMode = componentRenderContext.getRenderContext()
-                    .getProcessContext().isDesignerMode();
-
-            first = dataGridComponent.getFirst();
-
-            rowCount = -2;
-
-            filtersMap = dataGridComponent
-                    .getFilterProperties(componentRenderContext
-                            .getFacesContext());
-        }
-
-        public TableRenderContext(FacesContext facesContext,
-                DataGridComponent dg, int rowIndex, int forcedRows,
-                ISortedComponent sortedComponents[], String filterExpression) {
-            this(facesContext, dg, sortedComponents, null, false);
-
-            this.first = rowIndex;
-            this.forcedRows = forcedRows;
-            this.filtersMap = HtmlTools.decodeFilterExpression(null, dg,
-                    filterExpression);
-        }
-
-        public IFilterProperties getFiltersMap() {
-            return filtersMap;
-        }
-
-        public DataModel getDataModel() {
-            return dataModel;
-        }
-
-        public final boolean isResizable() {
-            return resizable;
-        }
-
-        public String getColumnId(int index) {
-            return columnIds[index];
-        }
-
-        public void updateRowCount() {
-            rowCount = -2;
-        }
-
-        public int getRowCount() {
-            if (rowCount == -2) {
-                rowCount = dataGridComponent.getRowCount();
-            }
-
-            return rowCount;
-        }
-
-        public final int getFirst() {
-            return first;
-        }
-
-        public final boolean isPaged() {
-            return paged;
-        }
-
-        public final ISortedComponent[] listSortedComponents() {
-            return sortedComponents;
-        }
-
-        public final int getForcedRows() {
-            return forcedRows;
-        }
-
-        public final int getRows() {
-            return rows;
-        }
-
-        public boolean hasCellStyleClass() {
-            return hasCellStyleClass;
-        }
-
-        public boolean hasCellToolTipText() {
-            return hasCellToolTipText;
-        }
-
-        public boolean isCellStyleClass(int index) {
-            return cellStyleClasses[index];
-        }
-
-        public boolean isCellToolTipText(int index) {
-            return cellToolTipText[index];
-        }
-
-        public boolean hasTitleColumnImages() {
-            return hasTitleColumnImages;
-        }
-
-        public boolean hasColumnImages() {
-            return hasColumnImages;
-        }
-
-        public boolean isColumnImageURL(int index) {
-            return columnImageURLs[index];
-        }
-
-        /*
-        public String getTitleColumnImageURL(int index) {
-            return titleColumnImageURLs[index];
-        }
-
-        public String getTitleColumnSelectedImageURL(int index) {
-            return titleColumnSelectedImageURLs[index];
-        }
-
-        public String getTitleColumnHoverImageURL(int index) {
-            return titleColumnHoverImageURLs[index];
-        }
-
-        public String getTitleColumnDisabledImageURL(int index) {
-            return titleColumnDisabledImageURLs[index];
-        }
-        */
-
-        public int getColumnStateCount() {
-            return columnStates.length;
-        }
-
-        public final int getColumnState(int index) {
-            return columnStates[index];
-        }
-
-        public final boolean isDisabled() {
-            return disabled;
-        }
-
-        public final DataGridComponent getDataGridComponent() {
-            return dataGridComponent;
-        }
-
-        public void setRowVarName(String rowVarName) {
-            this.rowVarName = rowVarName;
-        }
     }
 
-    protected boolean hasComponenDecoratorSupport() {
-        return true;
-    }
-
-    protected IComponentDecorator createComponentDecorator(
-            FacesContext facesContext, UIComponent component) {
-
-        IComponentDecorator decorator = null;
-
-        DataGridComponent dataGridComponent = (DataGridComponent) component;
-
-        IMenuIterator menuIterator = dataGridComponent.listMenus();
-        for (; menuIterator.hasNext();) {
-            MenuComponent menuComponent = menuIterator.next();
-
-            IComponentDecorator menuDecorator = new SubMenuDecorator(
-                    menuComponent, menuComponent.getMenuId(), null,
-                    menuComponent.isRemoveAllWhenShown(facesContext),
-                    getItemImageWidth(menuComponent),
-                    getItemImageHeight(menuComponent));
-
-            if (decorator == null) {
-                decorator = menuDecorator;
-                continue;
-            }
-
-            menuDecorator.addChildDecorator(decorator);
-            decorator = menuDecorator;
-        }
-
-        return decorator;
-    }
-
-    protected int getItemImageHeight(IMenuComponent menuComponent) {
-        return -1;
-    }
-
-    protected int getItemImageWidth(IMenuComponent menuComponent) {
-        return -1;
-    }
-
-    private void writeFullStates(IJavaScriptWriter jsWriter,
-            TableRenderContext context, String jsCommand, Set objects)
+    protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
+            AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
-        if (objects == null || objects.isEmpty()) {
-            return;
+
+        if (ENABLE_SERVER_REQUEST) {
+            DataGridService dataGridServer = DataGridService
+                    .getInstance(htmlWriter.getComponentRenderContext()
+                            .getFacesContext());
+            if (dataGridServer != null) {
+                htmlWriter.writeAttribute("v:asyncRender", "true");
+            }
         }
 
-        FacesContext facesContext = jsWriter.getFacesContext();
-        DataColumnComponent dataColumnComponent = context.getRowValueColumn();
+        if (dg instanceof ICursorProvider) {
 
-        jsWriter.writeMethodCall(jsCommand).write('[');
-        int i = 0;
-        for (Iterator it = objects.iterator(); it.hasNext();) {
-            Object value = it.next();
+            Object cursorValue = ((ICursorProvider) dg).getCursorValue();
+            String clientCursorValue = null;
 
-            String convert = convertValue(facesContext, dataColumnComponent,
-                    value);
+            if (cursorValue instanceof String) {
+                clientCursorValue = (String) cursorValue;
 
-            if (convert == null) {
-                continue;
+            } else if (cursorValue != null) {
+                DataColumnComponent rowValueColumn = ((DataGridRenderContext) tableContext)
+                        .getRowValueColumn();
+
+                if (rowValueColumn != null) {
+                    clientCursorValue = ValuesTools.convertValueToString(
+                            cursorValue, rowValueColumn, htmlWriter
+                                    .getComponentRenderContext()
+                                    .getFacesContext());
+                }
             }
 
-            if (i > 0) {
-                jsWriter.write(',');
+            if (clientCursorValue != null) {
+                htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
             }
 
-            jsWriter.writeString(convert);
-
-            i++;
         }
 
-        jsWriter.writeln("]);");
-
-    }
-
-    private void writeFullStates(IJavaScriptWriter jsWriter, String jsCommand,
-            int[] indexes) throws WriterException {
-
-        if (indexes == null || indexes.length < 1) {
-            return;
-        }
-
-        jsWriter.writeMethodCall(jsCommand).write('[');
-        for (int i = 0; i < indexes.length; i++) {
-            if (i > 0) {
-                jsWriter.write(',');
-            }
-
-            jsWriter.writeInt(indexes[i]);
-        }
-
-        jsWriter.writeln("]);");
-    }
-
-    private String translateJavascriptMethod(FacesContext facesContext,
-            String command) {
-        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) getRenderContext(facesContext);
-
-        IScriptRenderContext scriptRenderContext = htmlRenderContext
-                .getScriptRenderContext();
-
-        int idx = command.indexOf('.');
-        String className = command.substring(0, idx);
-        className = scriptRenderContext.convertSymbol(null, className);
-
-        String memberName = command.substring(idx + 1);
-        memberName = scriptRenderContext.convertSymbol(className, memberName);
-
-        StringAppender sa = new StringAppender(className.length() + 1
-                + memberName.length());
-
-        sa.append(className);
-        sa.append('.');
-        sa.append(memberName);
-
-        return sa.toString();
     }
 }

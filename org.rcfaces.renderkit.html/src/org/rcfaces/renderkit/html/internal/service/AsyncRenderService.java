@@ -33,7 +33,7 @@ import javax.servlet.jsp.tagext.BodyContent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.internal.component.IAsyncRenderComponent;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -75,6 +75,8 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE);
 
     private static final int TREE_BUFFER_INITIAL_SIZE = 8000;
+
+    private static final String ASYNC_RENDER_SERVICE_VERSION = "1.0.0";
 
     private transient boolean interactiveRender;
 
@@ -174,6 +176,8 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 AbstractHtmlService.setNoCache(response);
                 response.setContentType(IHtmlRenderContext.HTML_TYPE
                         + "; charset=" + AbstractHtmlService.RESPONSE_CHARSET);
+                AbstractHtmlService.setCameliaResponse(response,
+                        ASYNC_RENDER_SERVICE_VERSION);
 
                 try {
                     interactiveBuffer.sendBuffer(facesContext);
@@ -193,6 +197,8 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 AbstractHtmlService.setNoCache(response);
                 response.setContentType(IHtmlRenderContext.HTML_TYPE
                         + "; charset=" + AbstractHtmlService.RESPONSE_CHARSET);
+                AbstractHtmlService.setCameliaResponse(response,
+                        ASYNC_RENDER_SERVICE_VERSION);
 
                 try {
                     InteractiveBuffer interactiveBuffer = interactiveContext

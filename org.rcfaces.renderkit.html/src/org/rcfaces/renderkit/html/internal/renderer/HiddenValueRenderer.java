@@ -36,7 +36,7 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("INPUT");
+        htmlWriter.startElement(IHtmlWriter.INPUT);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
@@ -55,7 +55,7 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
             }
         }
 
-        htmlWriter.endElement("INPUT");
+        htmlWriter.endElement(IHtmlWriter.INPUT);
 
         super.encodeEnd(htmlWriter);
     }

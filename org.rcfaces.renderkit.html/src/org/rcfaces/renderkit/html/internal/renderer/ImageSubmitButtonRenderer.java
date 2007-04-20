@@ -8,6 +8,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
@@ -42,7 +43,7 @@ public class ImageSubmitButtonRenderer extends ImageButtonRenderer {
         }
 
         protected String getInputElement() {
-            return "INPUT";
+            return IHtmlWriter.INPUT;
         }
     }
 }

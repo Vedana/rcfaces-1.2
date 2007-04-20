@@ -51,9 +51,10 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
 
-        writer.startElement("TABLE");
+        writer.startElement(IHtmlWriter.TABLE);
 
-        int cellPadding = toolFolderComponent.getToolBar().getItemPadding(facesContext);
+        int cellPadding = toolFolderComponent.getToolBar().getItemPadding(
+                facesContext);
         if (cellPadding < 0) {
             cellPadding = 0;
         }
@@ -71,9 +72,9 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
             writer.writeVAlign(verticalAlignment);
         }
 
-        writer.startElement("TBODY");
+        writer.startElement(IHtmlWriter.TBODY);
 
-        writer.startElement("TR");
+        writer.startElement(IHtmlWriter.TR);
     }
 
     public boolean getRendersChildren() {
@@ -89,11 +90,11 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
 
     protected void encodeEndToolFolder(IHtmlWriter writer,
             ToolFolderComponent component) throws WriterException {
-        writer.endElement("TR");
+        writer.endElement(IHtmlWriter.TR);
 
-        writer.endElement("TBODY");
+        writer.endElement(IHtmlWriter.TBODY);
 
-        writer.endElement("TABLE");
+        writer.endElement(IHtmlWriter.TABLE);
     }
 
     public void encodeChildren(FacesContext facesContext, UIComponent component)
@@ -124,13 +125,13 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
-        htmlWriter.startElement("TD");
+        htmlWriter.startElement(IHtmlWriter.TD);
 
         htmlWriter.endComponent();
 
         ComponentTools.encodeRecursive(facesContext, component);
 
-        htmlWriter.endElement("TD");
+        htmlWriter.endElement(IHtmlWriter.TD);
     }
 
 }

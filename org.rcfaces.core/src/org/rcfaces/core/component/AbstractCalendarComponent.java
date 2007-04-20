@@ -1,29 +1,30 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.converter.WeekDaysConverter;
-import org.rcfaces.core.internal.component.Properties;
-import java.util.TimeZone;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import javax.faces.FacesException;
 import java.util.Date;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TimeZone;
+
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.internal.converter.WeekDaysConverter;
 import org.rcfaces.core.lang.IAdaptable;
 
 /**
@@ -196,135 +197,183 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
-	public final boolean isReadOnly() {
+	public boolean isReadOnly() {
 		return isReadOnly(null);
 	}
 
 	/**
 	 * See {@link #isReadOnly() isReadOnly()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	/**
 	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
+	public void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public final java.util.Locale getLiteralLocale() {
+	public java.util.Locale getLiteralLocale() {
 		return getLiteralLocale(null);
 	}
 
 	/**
 	 * See {@link #getLiteralLocale() getLiteralLocale()} for more details
 	 */
-	public final java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
+	public java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Locale)engine.getProperty(Properties.LITERAL_LOCALE, facesContext);
 	}
 
-	public final void setLiteralLocale(java.util.Locale literalLocale) {
+	/**
+	 * Returns <code>true</code> if the attribute "literalLocale" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLiteralLocaleSetted() {
+		return engine.isPropertySetted(Properties.LITERAL_LOCALE);
+	}
+
+	public void setLiteralLocale(java.util.Locale literalLocale) {
 		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
 	/**
 	 * See {@link #setLiteralLocale(java.util.Locale) setLiteralLocale(java.util.Locale)} for more details
 	 */
-	public final void setLiteralLocale(ValueBinding literalLocale) {
+	public void setLiteralLocale(ValueBinding literalLocale) {
 		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
-	public final java.util.TimeZone getLiteralTimeZone() {
+	public java.util.TimeZone getLiteralTimeZone() {
 		return getLiteralTimeZone(null);
 	}
 
 	/**
 	 * See {@link #getLiteralTimeZone() getLiteralTimeZone()} for more details
 	 */
-	public final java.util.TimeZone getLiteralTimeZone(javax.faces.context.FacesContext facesContext) {
+	public java.util.TimeZone getLiteralTimeZone(javax.faces.context.FacesContext facesContext) {
 		return (java.util.TimeZone)engine.getProperty(Properties.LITERAL_TIME_ZONE, facesContext);
 	}
 
-	public final void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
+	/**
+	 * Returns <code>true</code> if the attribute "literalTimeZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLiteralTimeZoneSetted() {
+		return engine.isPropertySetted(Properties.LITERAL_TIME_ZONE);
+	}
+
+	public void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
 		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
 	}
 
 	/**
 	 * See {@link #setLiteralTimeZone(java.util.TimeZone) setLiteralTimeZone(java.util.TimeZone)} for more details
 	 */
-	public final void setLiteralTimeZone(ValueBinding literalTimeZone) {
+	public void setLiteralTimeZone(ValueBinding literalTimeZone) {
 		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
 	}
 
-	public final java.util.Locale getComponentLocale() {
+	public java.util.Locale getComponentLocale() {
 		return getComponentLocale(null);
 	}
 
 	/**
 	 * See {@link #getComponentLocale() getComponentLocale()} for more details
 	 */
-	public final java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
+	public java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Locale)engine.getProperty(Properties.COMPONENT_LOCALE, facesContext);
 	}
 
-	public final void setComponentLocale(java.util.Locale componentLocale) {
+	/**
+	 * Returns <code>true</code> if the attribute "componentLocale" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isComponentLocaleSetted() {
+		return engine.isPropertySetted(Properties.COMPONENT_LOCALE);
+	}
+
+	public void setComponentLocale(java.util.Locale componentLocale) {
 		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
 	}
 
 	/**
 	 * See {@link #setComponentLocale(java.util.Locale) setComponentLocale(java.util.Locale)} for more details
 	 */
-	public final void setComponentLocale(ValueBinding componentLocale) {
+	public void setComponentLocale(ValueBinding componentLocale) {
 		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
 	}
 
-	public final java.util.TimeZone getComponentTimeZone() {
+	public java.util.TimeZone getComponentTimeZone() {
 		return getComponentTimeZone(null);
 	}
 
 	/**
 	 * See {@link #getComponentTimeZone() getComponentTimeZone()} for more details
 	 */
-	public final java.util.TimeZone getComponentTimeZone(javax.faces.context.FacesContext facesContext) {
+	public java.util.TimeZone getComponentTimeZone(javax.faces.context.FacesContext facesContext) {
 		return (java.util.TimeZone)engine.getProperty(Properties.COMPONENT_TIME_ZONE, facesContext);
 	}
 
-	public final void setComponentTimeZone(java.util.TimeZone componentTimeZone) {
+	/**
+	 * Returns <code>true</code> if the attribute "componentTimeZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isComponentTimeZoneSetted() {
+		return engine.isPropertySetted(Properties.COMPONENT_TIME_ZONE);
+	}
+
+	public void setComponentTimeZone(java.util.TimeZone componentTimeZone) {
 		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
 	}
 
 	/**
 	 * See {@link #setComponentTimeZone(java.util.TimeZone) setComponentTimeZone(java.util.TimeZone)} for more details
 	 */
-	public final void setComponentTimeZone(ValueBinding componentTimeZone) {
+	public void setComponentTimeZone(ValueBinding componentTimeZone) {
 		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
 	}
 
-	public final int getClientDatesStrategy() {
+	public int getClientDatesStrategy() {
 		return getClientDatesStrategy(null);
 	}
 
 	/**
 	 * See {@link #getClientDatesStrategy() getClientDatesStrategy()} for more details
 	 */
-	public final int getClientDatesStrategy(javax.faces.context.FacesContext facesContext) {
+	public int getClientDatesStrategy(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.CLIENT_DATES_STRATEGY,0, facesContext);
 	}
 
-	public final void setClientDatesStrategy(int clientDatesStrategy) {
+	/**
+	 * Returns <code>true</code> if the attribute "clientDatesStrategy" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClientDatesStrategySetted() {
+		return engine.isPropertySetted(Properties.CLIENT_DATES_STRATEGY);
+	}
+
+	public void setClientDatesStrategy(int clientDatesStrategy) {
 		engine.setProperty(Properties.CLIENT_DATES_STRATEGY, clientDatesStrategy);
 	}
 
 	/**
 	 * See {@link #setClientDatesStrategy(int) setClientDatesStrategy(int)} for more details
 	 */
-	public final void setClientDatesStrategy(ValueBinding clientDatesStrategy) {
+	public void setClientDatesStrategy(ValueBinding clientDatesStrategy) {
 		engine.setProperty(Properties.CLIENT_DATES_STRATEGY, clientDatesStrategy);
 	}
 

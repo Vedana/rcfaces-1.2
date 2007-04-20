@@ -74,7 +74,7 @@ var __prototype = {
 		var inputTagName=this.f_getInputTagName();
 		
 		var tagName=this.tagName;
-		if (tagName && tagName.toUpperCase()==inputTagName) {
+		if (tagName && tagName.toLowerCase()==inputTagName) {
 			return this;
 		}
 		
@@ -88,7 +88,7 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getInputTagName: function() {
-		return "INPUT";
+		return "input";
 	},
 	/**
 	 * @method public
@@ -117,12 +117,16 @@ var __prototype = {
 			f_core.Error(f_input, "Error while setting focus to '"+input.id+"'.", x);
 		}
 		
-		var type=input.type;
-		if (type) {
-			switch(type.toUpperCase()) {
-			case "TEXT":
-			case "TEXTAREA":
-				input.select();
+		if (input.tagName.toLowerCase()=="textarea") {
+			input.select();
+		} else {  		
+			var type=input.type;
+			if (type) {
+				switch(type.toUpperCase()) {
+				case "TEXT":
+					input.select();
+					break;					
+				}
 			}
 		}
 	},

@@ -55,7 +55,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
         TimeEntryComponent timeEntryComponent = (TimeEntryComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -93,7 +93,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
         encodeSubComponents(htmlWriter, timeEntryComponent, timeFormat);
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         htmlWriter.enableJavaScript();
     }
@@ -303,9 +303,9 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
                         }
                     }
 
-                    // htmlWriter.startElement("SPAN");
+                    // htmlWriter.startElement(IHtmlWriter.SPAN");
                     htmlWriter.writeText(sb.toString());
-                    // htmlWriter.endElement("SPAN");
+                    // htmlWriter.endElement(IHtmlWriter.SPAN");
 
                     sb.setLength(0);
                 }

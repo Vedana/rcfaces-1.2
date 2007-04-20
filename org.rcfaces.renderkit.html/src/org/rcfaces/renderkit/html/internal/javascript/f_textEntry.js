@@ -44,7 +44,7 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getInputTagName: function() {
-		return "INPUT";
+		return "input";
 	},
 	/**
 	 * @method public

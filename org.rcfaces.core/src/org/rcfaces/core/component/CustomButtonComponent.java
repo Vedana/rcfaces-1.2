@@ -1,16 +1,17 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.AbstractCommandComponent;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * A button Component highly customizable through its API.
@@ -56,47 +57,63 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 			
 	}
 
-	public final java.lang.String getBorderType() {
+	public java.lang.String getBorderType() {
 		return getBorderType(null);
 	}
 
 	/**
 	 * See {@link #getBorderType() getBorderType()} for more details
 	 */
-	public final java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
 	}
 
-	public final void setBorderType(java.lang.String borderType) {
+	/**
+	 * Returns <code>true</code> if the attribute "borderType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderTypeSetted() {
+		return engine.isPropertySetted(Properties.BORDER_TYPE);
+	}
+
+	public void setBorderType(java.lang.String borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
 	/**
 	 * See {@link #setBorderType(String) setBorderType(String)} for more details
 	 */
-	public final void setBorderType(ValueBinding borderType) {
+	public void setBorderType(ValueBinding borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
-	public final boolean isBorder() {
+	public boolean isBorder() {
 		return isBorder(null);
 	}
 
 	/**
 	 * See {@link #isBorder() isBorder()} for more details
 	 */
-	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
+	public boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
 
-	public final void setBorder(boolean border) {
+	/**
+	 * Returns <code>true</code> if the attribute "border" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderSetted() {
+		return engine.isPropertySetted(Properties.BORDER);
+	}
+
+	public void setBorder(boolean border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
 	/**
 	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
 	 */
-	public final void setBorder(ValueBinding border) {
+	public void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
@@ -124,25 +141,33 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
 	}
 
-	public final boolean isReadOnly() {
+	public boolean isReadOnly() {
 		return isReadOnly(null);
 	}
 
 	/**
 	 * See {@link #isReadOnly() isReadOnly()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	/**
 	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
+	public void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 

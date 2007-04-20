@@ -41,7 +41,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
     protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -59,7 +59,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeAfterDecorator(htmlWriter, componentDecorator);
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
     }
 
     protected void writeCustomCss(IHtmlWriter writer, ICssWriter cssWriter) {

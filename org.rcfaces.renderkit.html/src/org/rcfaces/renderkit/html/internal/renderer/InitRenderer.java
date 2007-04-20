@@ -186,31 +186,31 @@ public class InitRenderer extends AbstractHtmlRenderer {
             }
 
             if (contentType != null) {
-                htmlWriter.startElement("META");
+                htmlWriter.startElement(IHtmlWriter.META);
                 htmlWriter.writeHttpEquiv("Content-Type", contentType);
-                htmlWriter.endElement("META");
+                htmlWriter.endElement(IHtmlWriter.META);
             }
         }
 
         if (htmlProcessContext.useMetaContentScriptType()) {
-            htmlWriter.startElement("META");
+            htmlWriter.startElement(IHtmlWriter.META);
             htmlWriter.writeHttpEquiv("Content-Script-Type",
                     IHtmlRenderContext.JAVASCRIPT_TYPE);
-            htmlWriter.endElement("META");
+            htmlWriter.endElement(IHtmlWriter.META);
         }
 
         if (htmlProcessContext.useMetaContentStyleType()) {
-            htmlWriter.startElement("META");
+            htmlWriter.startElement(IHtmlWriter.META);
             htmlWriter.writeHttpEquiv("Content-Style-Type",
                     IHtmlRenderContext.CSS_TYPE);
-            htmlWriter.endElement("META");
+            htmlWriter.endElement(IHtmlWriter.META);
         }
 
         if (disableIEImageBar) {
             // Desactive la toolbar Image de IE !
-            htmlWriter.startElement("META");
+            htmlWriter.startElement(IHtmlWriter.META);
             htmlWriter.writeHttpEquiv("imagetoolbar", "no");
-            htmlWriter.endElement("META");
+            htmlWriter.endElement(IHtmlWriter.META);
         }
 
         HtmlRenderContext htmlRenderContext = (HtmlRenderContext) htmlWriter
@@ -254,7 +254,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
         if (base != null) {
             boolean renderBaseTag = initComponent.isRenderBaseTag(facesContext);
             if (renderBaseTag) {
-                htmlWriter.startElement("BASE"); // ("<BASE href=\"");
+                htmlWriter.startElement(IHtmlWriter.BASE); // ("<BASE
+                // href=\"");
             }
 
             if (base.startsWith("$context")) {
@@ -304,7 +305,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
                 htmlWriter.writeHRef(sa.toString());
 
-                htmlWriter.endElement("BASE");
+                htmlWriter.endElement(IHtmlWriter.BASE);
             }
 
             if (LOG.isDebugEnabled()) {
@@ -323,7 +324,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         ICssConfig cssConfig = StylesheetsServlet.getConfig(htmlProcessContext);
         if (cssConfig != null) {
-            htmlWriter.startElement("LINK");
+            htmlWriter.startElement(IHtmlWriter.LINK);
             htmlWriter.writeRel("stylesheet");
             if (htmlProcessContext.useMetaContentStyleType() == false) {
                 htmlWriter.writeType("text/css");
@@ -334,7 +335,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
             htmlWriter.writeHRef(styleSheetURI);
 
-            htmlWriter.endElement("LINK");
+            htmlWriter.endElement(IHtmlWriter.LINK);
         }
 
         String disabledScriptPageURL = initComponent
@@ -466,17 +467,17 @@ public class InitRenderer extends AbstractHtmlRenderer {
             LOG.debug("Too late to specify NO-CACHE into HttpResponse !", th);
         }
 
-        writer.startElement("META");
+        writer.startElement(IHtmlWriter.META);
         writer.writeHttpEquiv("cache-control", "no-cache");
-        writer.endElement("META");
+        writer.endElement(IHtmlWriter.META);
 
-        writer.startElement("META");
+        writer.startElement(IHtmlWriter.META);
         writer.writeHttpEquiv("pragma", "no-cache");
-        writer.endElement("META");
+        writer.endElement(IHtmlWriter.META);
 
-        writer.startElement("META");
+        writer.startElement(IHtmlWriter.META);
         writer.writeHttpEquiv("expires", "0");
-        writer.endElement("META");
+        writer.endElement(IHtmlWriter.META);
     }
 
     private void writeFavoriteImageURL(IHtmlWriter writer,
@@ -517,7 +518,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 facesContext, favoriteIcoImageInformation, null);
 
         if (favoriteIcoImageURL != null) {
-            writer.startElement("LINK");
+            writer.startElement(IHtmlWriter.LINK);
             writer.writeRel("SHORTCUT ICON");
 
             if (favoriteIcoImageInformation != null) {
@@ -530,11 +531,11 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
             writer.writeHRef(favoriteIcoImageURL);
 
-            writer.endElement("LINK");
+            writer.endElement(IHtmlWriter.LINK);
         }
 
         if (favoriteImageURL != null) {
-            writer.startElement("LINK");
+            writer.startElement(IHtmlWriter.LINK);
             writer.writeRel("ICON");
             if (favoriteImageOperation != null) {
                 String favoriteMimeType = favoriteImageOperation
@@ -545,7 +546,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
             }
             writer.writeHRef(favoriteImageURL);
 
-            writer.endElement("LINK");
+            writer.endElement(IHtmlWriter.LINK);
         }
 
     }
@@ -557,11 +558,11 @@ public class InitRenderer extends AbstractHtmlRenderer {
             return;
         }
 
-        writer.startElement("TITLE");
+        writer.startElement(IHtmlWriter.TITLE);
 
         writer.write(title);
 
-        writer.endElement("TITLE");
+        writer.endElement(IHtmlWriter.TITLE);
     }
 
     private void writeDisabledScriptPageURL(IHtmlWriter writer,
@@ -571,13 +572,13 @@ public class InitRenderer extends AbstractHtmlRenderer {
             return;
         }
 
-        writer.startElement("NOSCRIPT");
+        writer.startElement(IHtmlWriter.NOSCRIPT);
 
-        writer.startElement("META");
+        writer.startElement(IHtmlWriter.META);
         writer.writeHttpEquiv("Refresh", "0; URL=" + disabledScriptPageURL);
-        writer.endElement("META");
+        writer.endElement(IHtmlWriter.META);
 
-        writer.endElement("NOSCRIPT");
+        writer.endElement(IHtmlWriter.NOSCRIPT);
     }
 
     private void writeScriptTag(IHtmlWriter writer, String uri,
@@ -865,7 +866,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getHtmlProcessContext();
 
-        writer.startElement("SCRIPT");
+        writer.startElement(IHtmlWriter.SCRIPT);
         if (htmlProcessContext.useMetaContentScriptType() == false) {
             writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
         }
@@ -880,7 +881,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getHtmlProcessContext();
 
-        writer.startElement("SCRIPT");
+        writer.startElement(IHtmlWriter.SCRIPT);
 
         if (htmlProcessContext.useMetaContentScriptType() == false) {
             writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
@@ -892,7 +893,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
             writer.writeCharset(javascriptCharset);
         }
 
-        writer.endElement("SCRIPT");
+        writer.endElement(IHtmlWriter.SCRIPT);
     }
 
     static Set parseClientMessageIdFilter(String filter) {
@@ -1094,7 +1095,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 writer.write(IHtmlRenderContext.JAVASCRIPT_CDATA_END);
             }
 
-            writer.endElement("SCRIPT");
+            writer.endElement(IHtmlWriter.SCRIPT);
         }
 
         public boolean isOpened() {

@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.rcfaces.core.internal.capability.IComponentEngine;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

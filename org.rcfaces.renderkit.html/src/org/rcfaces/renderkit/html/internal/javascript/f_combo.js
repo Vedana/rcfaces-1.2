@@ -49,7 +49,7 @@ var __prototype = {
 	 * @return Object The item object or <code>null</code> if the item is not found.
 	 */
 	f_getItemByValue: function(value) {
-		if (value.nodeType==1 && value.tagName=="OPTION") {
+		if (value.nodeType==1 && value.tagName.toLowerCase()=="option") {
 			return value;
 		}
 		
@@ -290,7 +290,7 @@ var __prototype = {
 	 		onInit: function(request) {
 	 		 	var waiting=combo._waiting;
 	 			if (!waiting && combo.childNodes.length<1) {
-		 			waiting=combo.ownerDocument.createElement("OPTION");
+		 			waiting=combo.ownerDocument.createElement("option");
 		 			waiting.disabled=true;
 		 			
 		 			combo.appendChild(waiting);
@@ -367,16 +367,22 @@ var __prototype = {
 					combo.className=combo._className;
 
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-						f_core.Error(f_combo, "Bad Status ! ("+request.f_getStatusText()+")");
+						combo.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
 					}
 	
 					var responseContentType=request.f_getResponseContentType();
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
-						f_core.Error(f_combo, "Unsupported content type: "+responseContentType);
+				 		combo.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
 						return;
 					}
-
+				
+					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+					if (!cameliaServiceVersion) {
+						combo.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+						return;					
+					}
+	
 					var ret=request.f_getResponse();
 					try {
 						eval(ret);
@@ -419,7 +425,7 @@ var __prototype = {
 	 */
 	f_appendItem: function(parent, label, value, selected, disabled, description) {
 		if (parent) {
-			var optgroup=this.ownerDocument.createElement("OPTGROUP");
+			var optgroup=this.ownerDocument.createElement("optgroup");
 			if (disabled) {
 				optgroup.disabled=true;
 			}
@@ -431,7 +437,7 @@ var __prototype = {
 			return optgroup;
 		}
 		
-		var option=this.ownerDocument.createElement("OPTION");
+		var option=this.ownerDocument.createElement("option");
 		option.value=value;
 		if (disabled) {
 			option.disabled=true;

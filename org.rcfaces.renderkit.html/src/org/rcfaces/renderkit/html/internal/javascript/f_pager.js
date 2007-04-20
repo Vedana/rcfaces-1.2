@@ -14,7 +14,7 @@ var __static = {
 	 * @method private static
 	 */
 	_AddSpan: function(container, spanClass, text) {
-		var span=document.createElement("SPAN");
+		var span=document.createElement("span");
 		span.className="f_pager_value f_pager_value_"+spanClass;
 		span.appendChild(document.createTextNode(text));
 		
@@ -38,11 +38,11 @@ var __static = {
 		
 		var suffix="";
 		if (index===undefined || index<0) {
-			button=document.createElement("SPAN");
+			button=document.createElement("span");
 			suffix+="_disabled";
 			
 		} else {
-			button=document.createElement("A");
+			button=document.createElement("a");
 			button._index=index;
 			button.href=f_core.JAVASCRIPT_VOID;
 			button.onclick=f_pager._PositionSelect;
@@ -220,12 +220,14 @@ var __prototype = {
 		var zeroMessage;
 		var oneMessage;
 		var manyMessage;
+		var manyMessage2;
 
 		var message=f_core.GetAttribute(this, "v:message");
 		if (message) {
 			zeroMessage=f_core.GetAttribute(this, "v:zeroResultMessage");
 			oneMessage=f_core.GetAttribute(this, "v:oneResultMessage");
 			manyMessage=f_core.GetAttribute(this, "v:manyResultMessage");
+			manyMessage2=f_core.GetAttribute(this, "v:manyResultMessage2");
 		
 		} else {
 			var resourceBundle=f_resourceBundle.Get(f_pager);
@@ -234,12 +236,14 @@ var __prototype = {
 			zeroMessage=resourceBundle.f_get("ZERO_RESULT_MESSAGE");			
 			oneMessage=resourceBundle.f_get("ONE_RESULT_MESSAGE");			
 			manyMessage=resourceBundle.f_get("MANY_RESULTS_MESSAGE");			
+			manyMessage2=resourceBundle.f_get("MANY_RESULTS_MESSAGE2");			
 		}
 		
 		this._message=message;
 		this._zeroMessage=(zeroMessage!==undefined)?zeroMessage:message;
 		this._oneMessage=(oneMessage!==undefined)?oneMessage:message;
 		this._manyMessage=(manyMessage!==undefined)?manyMessage:message;
+		this._manyMessage2=(manyMessage2!==undefined)?manyMessage2:this._manyMessage;
 		
 		var noPagedMessage=f_core.GetAttribute(this, "v:noPagedMessage");
 		if (!noPagedMessage) {
@@ -255,6 +259,7 @@ var __prototype = {
 		f_core.Debug(f_pager, "OneMessage='"+this._oneMessage+"'");
 		f_core.Debug(f_pager, "ManyMessage='"+this._manyMessage+"'");
 		f_core.Debug(f_pager, "NoPagedMessage='"+this._noPagedMessage+"'");
+		f_core.Debug(f_pager, "ManyMessage2='"+this._manyMessage2+"'");
 */
 		if (this._for) {
 			fa_pagedComponent.RegisterPager(this._for, this);
@@ -272,6 +277,7 @@ var __prototype = {
 		// this._zeroMessage=undefined; // string
 		// this._oneMessage=undefined; // string
 		// this._manyMessage=undefined; // string
+		// this._manyMessage2=undefined; // string
 		// this._noPagedMessage=undefined; // string
 		
 		this.f_super(arguments);
@@ -325,7 +331,12 @@ var __prototype = {
 
 		} else {
 			if (rowCount<0) {
-				message=this._manyMessage;
+				if (first+rows<maxRows) {
+					message=this._manyMessage2;
+					
+				} else {
+					message=this._manyMessage;
+				}
 				
 			} else if (rowCount==0) {
 				message=this._zeroMessage;
@@ -472,7 +483,7 @@ var __prototype = {
 				f_pager._AddText(component, message.substring(idx, next));
 			}
 			
-			component.appendChild(document.createElement("BR"));
+			component.appendChild(document.createElement("br"));
 			
 			idx=next+1;
 		}
@@ -679,7 +690,7 @@ var __prototype = {
 		if (tag==null) {
 			return;
 		}
-		if (tag.tagName=="A") {
+		if (tag.tagName.toLowerCase()=="a") {
 			tag.href=f_core.JAVASCRIPT_VOID;
 			
 			tag.onclick=f_pager._PositionSelect;

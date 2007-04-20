@@ -1,15 +1,16 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.AbstractCommandComponent;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
@@ -77,25 +78,33 @@ public class ButtonComponent extends AbstractCommandComponent implements
 			
 	}
 
-	public final java.lang.String getText() {
+	public java.lang.String getText() {
 		return getText(null);
 	}
 
 	/**
 	 * See {@link #getText() getText()} for more details
 	 */
-	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
 
-	public final void setText(java.lang.String text) {
+	/**
+	 * Returns <code>true</code> if the attribute "text" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextSetted() {
+		return engine.isPropertySetted(Properties.TEXT);
+	}
+
+	public void setText(java.lang.String text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
 	/**
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
-	public final void setText(ValueBinding text) {
+	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
@@ -111,25 +120,33 @@ public class ButtonComponent extends AbstractCommandComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
-	public final boolean isReadOnly() {
+	public boolean isReadOnly() {
 		return isReadOnly(null);
 	}
 
 	/**
 	 * See {@link #isReadOnly() isReadOnly()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	/**
 	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
+	public void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 

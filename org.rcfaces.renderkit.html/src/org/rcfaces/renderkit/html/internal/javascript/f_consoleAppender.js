@@ -313,7 +313,7 @@ var __prototype = {
 		var list=this._list;
 		
 		var doc=list.ownerDocument;
-		var li=doc.createElement("LI");
+		var li=doc.createElement("li");
 		li.className="f_consoleAppender_item";
 		
 		if ((this._cnt++) % 2) {
@@ -367,7 +367,7 @@ var __prototype = {
 			msg=event.name;
 		}
 
-		var span=doc.createElement("SPAN");
+		var span=doc.createElement("span");
 		span.style.fontSize="small";
 		span.style.fontWeight="bold";
 		span.style.display="block";
@@ -379,7 +379,7 @@ var __prototype = {
 			var sp=msg.split("\n");
 			for(var i=0;i<sp.length;i++) {
 				if (i>0) {
-					li.appendChild(doc.createElement("BR"));
+					li.appendChild(doc.createElement("br"));
 				}
 				
 				li.appendChild(doc.createTextNode(sp[i]));
@@ -389,9 +389,9 @@ var __prototype = {
 		var ex=event.exception;
 		if (ex) {
 			if (typeof(ex)!="string") {
-				li.appendChild(doc.createElement("HR"));
+				li.appendChild(doc.createElement("hr"));
 				
-				var span=doc.createElement("SPAN");
+				var span=doc.createElement("span");
 				span.style.fontSize="small";
 				span.style.color="#666";
 				span.appendChild(doc.createTextNode("Exception: "));
@@ -399,11 +399,11 @@ var __prototype = {
 			}
 							
 			if (ex.fileName && ex.lineNumber) {
-				var span=doc.createElement("SPAN");
+				var span=doc.createElement("span");
 				span.style.fontSize="small";
 				span.appendChild(doc.createTextNode("    ("));
 
-				var link=doc.createElement("A");
+				var link=doc.createElement("a");
 				link.target="_blank";
 				link.href="view-source:"+ex.fileName+"#"+ex.lineNumber;
 				span.appendChild(link);
@@ -413,15 +413,15 @@ var __prototype = {
 				li.appendChild(span);
 			}			
 			
-			li.appendChild(doc.createElement("BR"));
+			li.appendChild(doc.createElement("br"));
 					
 			if (ex.name) {
-				var span=doc.createElement("SPAN");
+				var span=doc.createElement("span");
 				span.style.fontSize="small";
 				span.style.color="#888";
 				span.appendChild(doc.createTextNode("Name: "));
 
-				var span=doc.createElement("SPAN");
+				var span=doc.createElement("span");
 				span.style.fontSize="small";
 				span.appendChild(doc.createTextNode(ex.name));
 			}
@@ -431,11 +431,11 @@ var __prototype = {
 				m=ex;
 			}
 			if (typeof(m)=="string") {
-				var span=doc.createElement("SPAN");
+				var span=doc.createElement("span");
 				span.style.fontSize="small";
 				span.style.display="block";
 				
-				var span2=doc.createElement("SPAN");
+				var span2=doc.createElement("span");
 				span2.style.color="#666";
 				span2.appendChild(doc.createTextNode("Message: "));
 				span.appendChild(span2);
@@ -443,7 +443,7 @@ var __prototype = {
 				var sp=m.split('\n');
 				for(var i=0;i<sp.length;i++) {
 					if (i>0) {
-						span.appendChild(doc.createElement("BR"));
+						span.appendChild(doc.createElement("br"));
 					}
 					
 					var s=sp[i];
@@ -454,11 +454,11 @@ var __prototype = {
 						
 			var m=ex.stack;
 			if (typeof(m)=="string") {
-				var span=doc.createElement("SPAN");
+				var span=doc.createElement("span");
 				span.style.fontSize="small";
 				span.style.display="block";
 				
-				var span2=doc.createElement("SPAN");
+				var span2=doc.createElement("span");
 				span2.style.color="#666";
 				span2.appendChild(doc.createTextNode("Stack: "));
 				span.appendChild(span2);
@@ -466,7 +466,7 @@ var __prototype = {
 				var sp=m.split('\n');
 				for(var i=0;i<sp.length;i++) {
 					if (i>0) {
-						span.appendChild(doc.createElement("BR"));
+						span.appendChild(doc.createElement("br"));
 					}
 					
 					var s=sp[i];
@@ -483,14 +483,14 @@ var __prototype = {
 		li.scrollIntoView(false);
 	},
 	_makeConsole: function(doc) {
-		var table=doc.createElement("DIV");
+		var table=doc.createElement("div");
 		table.className="f_consoleAppender_table";
 
-		var tds=doc.createElement("DIV");
+		var tds=doc.createElement("div");
 		tds.className="f_consoleAppender_command";
 		table.appendChild(tds);
 		
-		var div=doc.createElement("DIV");
+		var div=doc.createElement("div");
 		div.className="f_consoleAppender_body";
 		table.appendChild(div);
 		this._body=div;
@@ -502,7 +502,7 @@ var __prototype = {
 			div.style.overflow="-moz-scrollbars-vertical";
 		}
 			
-		var ul=doc.createElement("UL");
+		var ul=doc.createElement("ul");
 		ul.className="f_consoleAppender_list";
 		div.appendChild(ul);
 		this._list=ul;
@@ -510,7 +510,7 @@ var __prototype = {
 		var TABLE=true;
 
 		if (TABLE) {
-			var buttons=doc.createElement("DIV");
+			var buttons=doc.createElement("div");
 			tds.appendChild(buttons);
 			buttons.className="f_consoleAppender_buttons";
 			if (this._closed) {
@@ -518,7 +518,7 @@ var __prototype = {
 			}
 			this._buttons=buttons;
 			
-			var img=doc.createElement("IMG");
+			var img=doc.createElement("img");
 			img.className="f_consoleAppender_button";
 			buttons.appendChild(img);
 			img.onclick=f_consoleAppender._ClearButtonClick;
@@ -529,7 +529,7 @@ var __prototype = {
 			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/delete.gif";
 			this._clearButton=img;
 			
-			var img=doc.createElement("IMG");
+			var img=doc.createElement("img");
 			img.className="f_consoleAppender_button";
 			buttons.appendChild(img);
 			img.onclick=f_consoleAppender._ErrorButtonClick;
@@ -540,7 +540,7 @@ var __prototype = {
 			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/error.gif";
 			this._errorButton=img;
 			
-			var img=doc.createElement("IMG");
+			var img=doc.createElement("img");
 			img.className="f_consoleAppender_button";
 			buttons.appendChild(img);
 			img.onclick=f_consoleAppender._WarningButtonClick;
@@ -551,7 +551,7 @@ var __prototype = {
 			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/warning.gif";
 			this._warningButton=img;
 			
-			var img=doc.createElement("IMG");
+			var img=doc.createElement("img");
 			img.className="f_consoleAppender_button";
 			buttons.appendChild(img);
 			img.onclick=f_consoleAppender._InfoButtonClick;
@@ -562,7 +562,7 @@ var __prototype = {
 			img.src=f_env.GetStyleSheetBase()+"/consoleAppender/info.gif";
 			this._infoButton=img;
 			
-			var img=doc.createElement("IMG");
+			var img=doc.createElement("img");
 			img.className="f_consoleAppender_button";
 			buttons.appendChild(img);
 			img.onclick=f_consoleAppender._DebugButtonClick;
@@ -574,7 +574,7 @@ var __prototype = {
 			this._debugButton=img;
 		}
 		
-		var img=doc.createElement("IMG");
+		var img=doc.createElement("img");
 		img.className="f_consoleAppender_image";
 		tds.appendChild(img);
 		
@@ -587,7 +587,7 @@ var __prototype = {
 		tds.onmousedown=f_consoleAppender._ResizeClick;
 		tds._console=this;
 		
-		f_core.GetFirstElementByTagName(doc, "BODY").appendChild(table);
+		f_core.GetFirstElementByTagName(doc, "body").appendChild(table);
 		
 		this._console=table;
 		this._updateConsole();

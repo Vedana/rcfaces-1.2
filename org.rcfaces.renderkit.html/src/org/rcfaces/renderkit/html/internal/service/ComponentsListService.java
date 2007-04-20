@@ -61,6 +61,8 @@ public class ComponentsListService extends AbstractHtmlService {
 
     private static final String RENDER_CONTEXT_STATE = "camelia.cls.renderContext";
 
+    private static final String COMPONENTS_LIST_SERVICE_VERSION = "1.0.0";
+
     public ComponentsListService() {
     }
 
@@ -171,6 +173,7 @@ public class ComponentsListService extends AbstractHtmlService {
         setNoCache(response);
         response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
                 + "; charset=" + RESPONSE_CHARSET);
+        setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
 
         boolean useGzip = canUseGzip(facesContext);
 
@@ -259,7 +262,7 @@ public class ComponentsListService extends AbstractHtmlService {
                 "GetElementByClientId").writeString(componentClientId).writeln(
                 ", document);");
 
-        jsWriter.writeMethodCall("_startNewPage").writeInt(rowIndex).writeln(
+        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
                 ");");
 
         ResponseWriter oldWriter = facesContext.getResponseWriter();
@@ -292,7 +295,7 @@ public class ComponentsListService extends AbstractHtmlService {
 
             int rowCount = 10;
 
-            jsWriter.writeMethodCall("_updateNewPage").writeInt(rowCount)
+            jsWriter.writeMethodCall("f_updateNewPage").writeInt(rowCount)
                     .write(',').writeString(buffer).writeln(");");
 
         } finally {
@@ -315,8 +318,7 @@ public class ComponentsListService extends AbstractHtmlService {
     }
 
     public void setupComponent(IComponentRenderContext componentRenderContext) {
-        ComponentsListComponent dataListComponent = (ComponentsListComponent) componentRenderContext
-                .getComponent();
+        UIComponent dataListComponent = componentRenderContext.getComponent();
 
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
                 .getRenderContext();

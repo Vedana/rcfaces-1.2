@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.AbstractMenuComponent;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * <p>The imageCombo Component is a <a href="/comps/comboComponent.html">combo Component</a> with an image added to the text.</p>
@@ -60,223 +60,303 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		
 	}
 
-	public final java.lang.String getImageURL() {
+	public java.lang.String getImageURL() {
 		return getImageURL(null);
 	}
 
 	/**
 	 * See {@link #getImageURL() getImageURL()} for more details
 	 */
-	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
 
-	public final void setImageURL(java.lang.String imageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageURLSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_URL);
+	}
+
+	public void setImageURL(java.lang.String imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
 	/**
 	 * See {@link #setImageURL(String) setImageURL(String)} for more details
 	 */
-	public final void setImageURL(ValueBinding imageURL) {
+	public void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
-	public final java.lang.String getDisabledImageURL() {
+	public java.lang.String getDisabledImageURL() {
 		return getDisabledImageURL(null);
 	}
 
 	/**
 	 * See {@link #getDisabledImageURL() getDisabledImageURL()} for more details
 	 */
-	public final java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DISABLED_IMAGE_URL, facesContext);
 	}
 
-	public final void setDisabledImageURL(java.lang.String disabledImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "disabledImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDisabledImageURLSetted() {
+		return engine.isPropertySetted(Properties.DISABLED_IMAGE_URL);
+	}
+
+	public void setDisabledImageURL(java.lang.String disabledImageURL) {
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
 
 	/**
 	 * See {@link #setDisabledImageURL(String) setDisabledImageURL(String)} for more details
 	 */
-	public final void setDisabledImageURL(ValueBinding disabledImageURL) {
+	public void setDisabledImageURL(ValueBinding disabledImageURL) {
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
 
-	public final java.lang.String getHoverImageURL() {
+	public java.lang.String getHoverImageURL() {
 		return getHoverImageURL(null);
 	}
 
 	/**
 	 * See {@link #getHoverImageURL() getHoverImageURL()} for more details
 	 */
-	public final java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOVER_IMAGE_URL, facesContext);
 	}
 
-	public final void setHoverImageURL(java.lang.String hoverImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "hoverImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHoverImageURLSetted() {
+		return engine.isPropertySetted(Properties.HOVER_IMAGE_URL);
+	}
+
+	public void setHoverImageURL(java.lang.String hoverImageURL) {
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
 
 	/**
 	 * See {@link #setHoverImageURL(String) setHoverImageURL(String)} for more details
 	 */
-	public final void setHoverImageURL(ValueBinding hoverImageURL) {
+	public void setHoverImageURL(ValueBinding hoverImageURL) {
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
 
-	public final java.lang.String getSelectedImageURL() {
+	public java.lang.String getSelectedImageURL() {
 		return getSelectedImageURL(null);
 	}
 
 	/**
 	 * See {@link #getSelectedImageURL() getSelectedImageURL()} for more details
 	 */
-	public final java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SELECTED_IMAGE_URL, facesContext);
 	}
 
-	public final void setSelectedImageURL(java.lang.String selectedImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "selectedImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectedImageURLSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_IMAGE_URL);
+	}
+
+	public void setSelectedImageURL(java.lang.String selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
 
 	/**
 	 * See {@link #setSelectedImageURL(String) setSelectedImageURL(String)} for more details
 	 */
-	public final void setSelectedImageURL(ValueBinding selectedImageURL) {
+	public void setSelectedImageURL(ValueBinding selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
 
-	public final boolean isBorder() {
+	public boolean isBorder() {
 		return isBorder(null);
 	}
 
 	/**
 	 * See {@link #isBorder() isBorder()} for more details
 	 */
-	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
+	public boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
 
-	public final void setBorder(boolean border) {
+	/**
+	 * Returns <code>true</code> if the attribute "border" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderSetted() {
+		return engine.isPropertySetted(Properties.BORDER);
+	}
+
+	public void setBorder(boolean border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
 	/**
 	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
 	 */
-	public final void setBorder(ValueBinding border) {
+	public void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
-	public final java.lang.String getBorderType() {
+	public java.lang.String getBorderType() {
 		return getBorderType(null);
 	}
 
 	/**
 	 * See {@link #getBorderType() getBorderType()} for more details
 	 */
-	public final java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
 	}
 
-	public final void setBorderType(java.lang.String borderType) {
+	/**
+	 * Returns <code>true</code> if the attribute "borderType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderTypeSetted() {
+		return engine.isPropertySetted(Properties.BORDER_TYPE);
+	}
+
+	public void setBorderType(java.lang.String borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
 	/**
 	 * See {@link #setBorderType(String) setBorderType(String)} for more details
 	 */
-	public final void setBorderType(ValueBinding borderType) {
+	public void setBorderType(ValueBinding borderType) {
 		engine.setProperty(Properties.BORDER_TYPE, borderType);
 	}
 
-	public final java.lang.String getText() {
+	public java.lang.String getText() {
 		return getText(null);
 	}
 
 	/**
 	 * See {@link #getText() getText()} for more details
 	 */
-	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
 
-	public final void setText(java.lang.String text) {
+	/**
+	 * Returns <code>true</code> if the attribute "text" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextSetted() {
+		return engine.isPropertySetted(Properties.TEXT);
+	}
+
+	public void setText(java.lang.String text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
 	/**
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
-	public final void setText(ValueBinding text) {
+	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
-	public final int getTextPosition() {
+	public int getTextPosition() {
 		return getTextPosition(null);
 	}
 
 	/**
 	 * See {@link #getTextPosition() getTextPosition()} for more details
 	 */
-	public final int getTextPosition(javax.faces.context.FacesContext facesContext) {
+	public int getTextPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
 	}
 
-	public final void setTextPosition(int textPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "textPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextPositionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_POSITION);
+	}
+
+	public void setTextPosition(int textPosition) {
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
 
 	/**
 	 * See {@link #setTextPosition(int) setTextPosition(int)} for more details
 	 */
-	public final void setTextPosition(ValueBinding textPosition) {
+	public void setTextPosition(ValueBinding textPosition) {
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
 
-	public final int getImageHeight() {
+	public int getImageHeight() {
 		return getImageHeight(null);
 	}
 
 	/**
 	 * See {@link #getImageHeight() getImageHeight()} for more details
 	 */
-	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
+	public int getImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
 	}
 
-	public final void setImageHeight(int imageHeight) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageHeight" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageHeightSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_HEIGHT);
+	}
+
+	public void setImageHeight(int imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
 	/**
 	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
 	 */
-	public final void setImageHeight(ValueBinding imageHeight) {
+	public void setImageHeight(ValueBinding imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
-	public final int getImageWidth() {
+	public int getImageWidth() {
 		return getImageWidth(null);
 	}
 
 	/**
 	 * See {@link #getImageWidth() getImageWidth()} for more details
 	 */
-	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
+	public int getImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
 	}
 
-	public final void setImageWidth(int imageWidth) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageWidth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageWidthSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_WIDTH);
+	}
+
+	public void setImageWidth(int imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
 	/**
 	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
 	 */
-	public final void setImageWidth(ValueBinding imageWidth) {
+	public void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 

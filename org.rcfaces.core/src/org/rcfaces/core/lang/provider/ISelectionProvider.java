@@ -12,4 +12,8 @@ public interface ISelectionProvider {
     Object getSelectedValues();
 
     void setSelectedValues(Object selectedValues);
+
+    int getSelectedValuesCount();
+
+    Object getFirstSelectedValue();
 }

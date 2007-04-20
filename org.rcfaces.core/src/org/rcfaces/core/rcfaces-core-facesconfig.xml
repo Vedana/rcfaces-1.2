@@ -35,6 +35,10 @@
 		<component-class>org.rcfaces.core.component.CustomButtonComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.componentsColumn</component-type>
+		<component-class>org.rcfaces.core.component.ComponentsColumnComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.dataColumn</component-type>
 		<component-class>org.rcfaces.core.component.DataColumnComponent</component-class>
 	</component>
@@ -328,6 +332,6 @@
 	</converter>
 	<lifecycle>
 		<phase-listener>org.rcfaces.core.internal.config.ServicesRegistryImpl</phase-listener>
-		<phase-listener>org.rcfaces.core.internal.component.TemplatesEngine</phase-listener>
+		<phase-listener>org.rcfaces.core.internal.component.RestoreViewPhaseListener</phase-listener>
 	</lifecycle>
 </faces-config>

@@ -77,7 +77,7 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
 
         String subId = sa.toString();
 
-        htmlWriter.startElement("INPUT");
+        htmlWriter.startElement(IHtmlWriter.INPUT);
         htmlWriter.writeType("TEXT");
         htmlWriter.writeId(subId);
         htmlWriter.writeClass(className);
@@ -143,7 +143,7 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
             htmlWriter.writeValue(curValue);
         }
 
-        htmlWriter.endElement("INPUT");
+        htmlWriter.endElement(IHtmlWriter.INPUT);
     }
 
     public static void writeClientValidatorParams(IHtmlWriter htmlWriter)

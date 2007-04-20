@@ -37,7 +37,7 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("A");
+        htmlWriter.startElement(IHtmlWriter.A);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -60,7 +60,7 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
             htmlWriter.writeText(text);
         }
 
-        htmlWriter.endElement("A");
+        htmlWriter.endElement(IHtmlWriter.A);
 
         htmlWriter.enableJavaScript();
 

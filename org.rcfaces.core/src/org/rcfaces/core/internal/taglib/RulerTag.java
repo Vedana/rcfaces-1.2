@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.RulerComponent;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
 
 public class RulerTag extends CameliaTag implements Tag {
 
@@ -22,8 +22,8 @@ public class RulerTag extends CameliaTag implements Tag {
 	private String marginLeft;
 	private String marginRight;
 	private String marginTop;
-	private String height;
 	private String width;
+	private String height;
 	private String visible;
 	private String hiddenMode;
 	private String lookId;
@@ -85,20 +85,20 @@ public class RulerTag extends CameliaTag implements Tag {
 		this.marginTop = marginTop;
 	}
 
-	public final String getHeight() {
-		return height;
-	}
-
-	public final void setHeight(String height) {
-		this.height = height;
-	}
-
 	public final String getWidth() {
 		return width;
 	}
 
 	public final void setWidth(String width) {
 		this.width = width;
+	}
+
+	public final String getHeight() {
+		return height;
+	}
+
+	public final void setHeight(String height) {
+		this.height = height;
 	}
 
 	public final String getVisible() {
@@ -184,8 +184,8 @@ public class RulerTag extends CameliaTag implements Tag {
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
 			LOG.debug("  marginTop='"+marginTop+"'");
-			LOG.debug("  height='"+height+"'");
 			LOG.debug("  width='"+width+"'");
+			LOG.debug("  height='"+height+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  lookId='"+lookId+"'");
@@ -269,16 +269,6 @@ public class RulerTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (height != null) {
-			if (isValueReference(height)) {
-				ValueBinding vb = application.createValueBinding(height);
-
-				component.setHeight(vb);
-			} else {
-				component.setHeight(height);
-			}
-		}
-
 		if (width != null) {
 			if (isValueReference(width)) {
 				ValueBinding vb = application.createValueBinding(width);
@@ -286,6 +276,16 @@ public class RulerTag extends CameliaTag implements Tag {
 				component.setWidth(vb);
 			} else {
 				component.setWidth(width);
+			}
+		}
+
+		if (height != null) {
+			if (isValueReference(height)) {
+				ValueBinding vb = application.createValueBinding(height);
+
+				component.setHeight(vb);
+			} else {
+				component.setHeight(height);
 			}
 		}
 
@@ -383,8 +383,8 @@ public class RulerTag extends CameliaTag implements Tag {
 		marginLeft = null;
 		marginRight = null;
 		marginTop = null;
-		height = null;
 		width = null;
+		height = null;
 		visible = null;
 		hiddenMode = null;
 		lookId = null;

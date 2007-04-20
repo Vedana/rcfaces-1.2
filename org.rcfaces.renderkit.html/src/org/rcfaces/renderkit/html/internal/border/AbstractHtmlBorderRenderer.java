@@ -87,7 +87,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         verifyTopBorder(writer);
 
-        writer.startElement("TR");
+        writer.startElement(IHtmlWriter.TR);
         if (hasBorder() == false) {
             return writer;
         }
@@ -112,7 +112,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeTopBorder(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TR");
+        writer.startElement(IHtmlWriter.TR);
         writer.writeHeight(getNorthBorderHeight());
 
         writeCellBorderNorthWest(writer);
@@ -121,7 +121,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         writeCellBorderNorthEast(writer);
 
-        writer.endElement("TR");
+        writer.endElement(IHtmlWriter.TR);
 
         return writer;
     }
@@ -140,7 +140,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             }
         }
 
-        writer.endElement("TR");
+        writer.endElement(IHtmlWriter.TR);
 
         return writer;
     }
@@ -151,7 +151,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             return writer;
         }
 
-        writer.startElement("TABLE");
+        writer.startElement(IHtmlWriter.TABLE);
 
         String className = getClassName();
         if (className != null) {
@@ -225,17 +225,17 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeCellBorderNorthWest(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeWidth(getWestBorderWidth());
         writer.writeClass(getWestBorderClassName(writer));
 
-        writer.startElement("IMG");
+        writer.startElement(IHtmlWriter.IMG);
         writer.writeWidth(getWestBorderWidth());
         writer.writeHeight(getNorthBorderHeight());
         writer.writeSrc(getBlankImageURL(writer));
-        writer.endElement("IMG");
+        writer.endElement(IHtmlWriter.IMG);
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -262,17 +262,17 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeCellBorderNorthEast(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeWidth(getEastBorderWidth());
         writer.writeClass(getEastBorderClassName(writer));
 
-        writer.startElement("IMG");
+        writer.startElement(IHtmlWriter.IMG);
         writer.writeWidth(getEastBorderWidth());
         writer.writeHeight(getNorthBorderHeight());
         writer.writeSrc(getBlankImageURL(writer));
-        writer.endElement("IMG");
+        writer.endElement(IHtmlWriter.IMG);
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -283,9 +283,9 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeCellBorderSouthWest(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass(getSouthBorderClassName(writer));
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -296,9 +296,9 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeCellBorderSouthEast(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass(getSouthEastBorderClassName(writer));
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -309,13 +309,13 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeCellBorderWest(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass(getBorderWestClassName(writer));
 
         if (verticalSpan > 1) {
             writer.writeRowSpan(verticalSpan);
         }
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -326,7 +326,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeCellBorderEast(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass(getBorderEastClassName(writer));
 
         if (verticalSpan > 1) {
@@ -334,7 +334,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             skipVerticalRow = verticalSpan - 1;
         }
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -345,13 +345,13 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeCellBorderSouth(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass(getBorderSouthClassName(writer));
 
         if (horizontalSpan > 1) {
             writer.writeColSpan(horizontalSpan);
         }
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -362,12 +362,12 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected IHtmlWriter writeCellBorderNorth(IHtmlWriter writer)
             throws WriterException {
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass(getBorderNorthClassName(writer));
         if (horizontalSpan > 1) {
             writer.writeColSpan(horizontalSpan);
         }
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -384,7 +384,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         if (hasBorder()) {
             verifyTopBorder(writer);
 
-            writer.startElement("TR");
+            writer.startElement(IHtmlWriter.TR);
             writer.writeHeight(getSouthBorderHeight());
 
             writeCellBorderSouthWest(writer);
@@ -393,10 +393,10 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
             writeCellBorderSouthEast(writer);
 
-            writer.endElement("TR");
+            writer.endElement(IHtmlWriter.TR);
         }
 
-        writer.endElement("TABLE");
+        writer.endElement(IHtmlWriter.TABLE);
 
         return writer;
     }
@@ -413,7 +413,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             return writer;
         }
 
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
 
         String className = getClassName();
         if (className != null) {
@@ -446,7 +446,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             return writer;
         }
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
@@ -472,7 +472,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
     public void writeComboImage(IHtmlWriter writer, String componentClassName)
             throws WriterException {
 
-        writer.startElement("IMG");
+        writer.startElement(IHtmlWriter.IMG);
 
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
@@ -487,7 +487,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         writer.writeHeight(3);
         writer.writeVAlign(getComboImageVerticalAlign(writer));
 
-        writer.endElement("IMG");
+        writer.endElement(IHtmlWriter.IMG);
     }
 
     private String getMarkerClassName(IHtmlWriter writer,

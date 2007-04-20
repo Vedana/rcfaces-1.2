@@ -1,14 +1,16 @@
 package org.rcfaces.core.component;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IKeyPressEventCapability;
 import org.rcfaces.core.internal.component.CameliaCommandComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IKeyPressEventCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IImmediateCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IForCapability;
 
 /**
  * <p>The accelerator Component is a non-visual component.</p>
@@ -53,25 +55,33 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
 	}
 
-	public final java.lang.String getFor() {
+	public java.lang.String getFor() {
 		return getFor(null);
 	}
 
 	/**
 	 * See {@link #getFor() getFor()} for more details
 	 */
-	public final java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR, facesContext);
 	}
 
-	public final void setFor(java.lang.String forValue) {
+	/**
+	 * Returns <code>true</code> if the attribute "for" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isForSetted() {
+		return engine.isPropertySetted(Properties.FOR);
+	}
+
+	public void setFor(java.lang.String forValue) {
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
 	/**
 	 * See {@link #setFor(String) setFor(String)} for more details
 	 */
-	public final void setFor(ValueBinding forValue) {
+	public void setFor(ValueBinding forValue) {
 		engine.setProperty(Properties.FOR, forValue);
 	}
 

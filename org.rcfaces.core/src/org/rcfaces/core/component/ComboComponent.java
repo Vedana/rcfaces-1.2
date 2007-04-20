@@ -1,14 +1,15 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The combo Component is equivalent to the standard HTML tag &lt;SELECT SIZE=1&gt;.</p>
@@ -57,25 +58,33 @@ public class ComboComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {
 		return getFilterProperties(null);
 	}
 
 	/**
 	 * See {@link #getFilterProperties() getFilterProperties()} for more details
 	 */
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
 
-	public final void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+	/**
+	 * Returns <code>true</code> if the attribute "filterProperties" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFilterPropertiesSetted() {
+		return engine.isPropertySetted(Properties.FILTER_PROPERTIES);
+	}
+
+	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
 	/**
 	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
 	 */
-	public final void setFilterProperties(ValueBinding filterProperties) {
+	public void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 

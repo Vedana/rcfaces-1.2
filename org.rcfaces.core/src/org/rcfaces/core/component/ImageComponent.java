@@ -1,17 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
@@ -30,7 +32,8 @@ import java.util.HashSet;
 public class ImageComponent extends AbstractOutputComponent implements 
 	IImageCapability,
 	IImageSizeCapability,
-	IFilterCapability {
+	IFilterCapability,
+	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.image";
 
@@ -49,13 +52,6 @@ public class ImageComponent extends AbstractOutputComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors() {
-
-
-				return getImageAccessors(null);
-			
-	}
-
 	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
@@ -68,91 +64,130 @@ public class ImageComponent extends AbstractOutputComponent implements
 			
 	}
 
-	public final java.lang.String getImageURL() {
+	public java.lang.String getImageURL() {
 		return getImageURL(null);
 	}
 
 	/**
 	 * See {@link #getImageURL() getImageURL()} for more details
 	 */
-	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
 	}
 
-	public final void setImageURL(java.lang.String imageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageURLSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_URL);
+	}
+
+	public void setImageURL(java.lang.String imageURL) {
 		setValue(imageURL);
 	}
 
 	/**
 	 * See {@link #setImageURL(String) setImageURL(String)} for more details
 	 */
-	public final void setImageURL(ValueBinding imageURL) {
+	public void setImageURL(ValueBinding imageURL) {
 		setValue(imageURL);
 	}
 
-	public final int getImageHeight() {
+	public final IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
+		
+	}
+
+	public int getImageHeight() {
 		return getImageHeight(null);
 	}
 
 	/**
 	 * See {@link #getImageHeight() getImageHeight()} for more details
 	 */
-	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
+	public int getImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
 	}
 
-	public final void setImageHeight(int imageHeight) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageHeight" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageHeightSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_HEIGHT);
+	}
+
+	public void setImageHeight(int imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
 	/**
 	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
 	 */
-	public final void setImageHeight(ValueBinding imageHeight) {
+	public void setImageHeight(ValueBinding imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
-	public final int getImageWidth() {
+	public int getImageWidth() {
 		return getImageWidth(null);
 	}
 
 	/**
 	 * See {@link #getImageWidth() getImageWidth()} for more details
 	 */
-	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
+	public int getImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
 	}
 
-	public final void setImageWidth(int imageWidth) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageWidth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageWidthSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_WIDTH);
+	}
+
+	public void setImageWidth(int imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
 	/**
 	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
 	 */
-	public final void setImageWidth(ValueBinding imageWidth) {
+	public void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {
 		return getFilterProperties(null);
 	}
 
 	/**
 	 * See {@link #getFilterProperties() getFilterProperties()} for more details
 	 */
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
 
-	public final void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+	/**
+	 * Returns <code>true</code> if the attribute "filterProperties" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFilterPropertiesSetted() {
+		return engine.isPropertySetted(Properties.FILTER_PROPERTIES);
+	}
+
+	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
 	/**
 	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
 	 */
-	public final void setFilterProperties(ValueBinding filterProperties) {
+	public void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 

@@ -1,12 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IRadioValueCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.MenuCheckItemComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IRadioValueCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * A menu item with a radiobutton (see attribute GroupName)
@@ -30,47 +31,63 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 		setId(componentId);
 	}
 
-	public final java.lang.Object getRadioValue() {
+	public java.lang.Object getRadioValue() {
 		return getRadioValue(null);
 	}
 
 	/**
 	 * See {@link #getRadioValue() getRadioValue()} for more details
 	 */
-	public final java.lang.Object getRadioValue(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Object getRadioValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getProperty(Properties.RADIO_VALUE, facesContext);
 	}
 
-	public final void setRadioValue(java.lang.Object radioValue) {
+	/**
+	 * Returns <code>true</code> if the attribute "radioValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRadioValueSetted() {
+		return engine.isPropertySetted(Properties.RADIO_VALUE);
+	}
+
+	public void setRadioValue(java.lang.Object radioValue) {
 		engine.setProperty(Properties.RADIO_VALUE, radioValue);
 	}
 
 	/**
 	 * See {@link #setRadioValue(Object) setRadioValue(Object)} for more details
 	 */
-	public final void setRadioValue(ValueBinding radioValue) {
+	public void setRadioValue(ValueBinding radioValue) {
 		engine.setProperty(Properties.RADIO_VALUE, radioValue);
 	}
 
-	public final java.lang.String getGroupName() {
+	public java.lang.String getGroupName() {
 		return getGroupName(null);
 	}
 
 	/**
 	 * See {@link #getGroupName() getGroupName()} for more details
 	 */
-	public final java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getGroupName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.GROUP_NAME, facesContext);
 	}
 
-	public final void setGroupName(java.lang.String groupName) {
+	/**
+	 * Returns <code>true</code> if the attribute "groupName" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isGroupNameSetted() {
+		return engine.isPropertySetted(Properties.GROUP_NAME);
+	}
+
+	public void setGroupName(java.lang.String groupName) {
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 
 	/**
 	 * See {@link #setGroupName(String) setGroupName(String)} for more details
 	 */
-	public final void setGroupName(ValueBinding groupName) {
+	public void setGroupName(ValueBinding groupName) {
 		engine.setProperty(Properties.GROUP_NAME, groupName);
 	}
 

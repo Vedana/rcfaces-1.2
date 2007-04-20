@@ -80,7 +80,7 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         if (borderRenderer != null) {
             htmlWriter.writeAttribute("v:borderType", borderType);
@@ -128,13 +128,13 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
                 .getAttribute(BORDER_RENDERER);
 
         if (borderRenderer == null) {
-            htmlWriter.startElement("A");
+            htmlWriter.startElement(IHtmlWriter.A);
 
             htmlWriter.writeClass(getLinkClassName(htmlWriter));
 
             encodeChildren(htmlWriter);
 
-            htmlWriter.endElement("A");
+            htmlWriter.endElement(IHtmlWriter.A);
 
             return;
         }
@@ -145,14 +145,14 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
             borderRenderer.startChild(htmlWriter,
                     AbstractHtmlBorderRenderer.TD_TEXT);
             try {
-                htmlWriter.startElement("A");
+                htmlWriter.startElement(IHtmlWriter.A);
 
                 htmlWriter
                         .writeAttribute("class", getLinkClassName(htmlWriter));
 
                 encodeChildren(htmlWriter);
 
-                htmlWriter.endElement("A");
+                htmlWriter.endElement(IHtmlWriter.A);
 
             } finally {
                 borderRenderer.endChild(htmlWriter);
@@ -194,7 +194,7 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
             borderRenderer.endComposite(htmlWriter);
         }
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         super.encodeEnd(htmlWriter);
     }

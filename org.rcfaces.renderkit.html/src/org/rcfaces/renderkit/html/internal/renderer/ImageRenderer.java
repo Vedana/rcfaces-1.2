@@ -42,7 +42,7 @@ public class ImageRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("IMG");
+        htmlWriter.startElement(IHtmlWriter.IMG);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -102,7 +102,7 @@ public class ImageRenderer extends AbstractCssRenderer {
             htmlWriter.writeHeight(imageHeight);
         }
 
-        htmlWriter.endElement("IMG");
+        htmlWriter.endElement(IHtmlWriter.IMG);
 
         super.encodeEnd(htmlWriter);
     }

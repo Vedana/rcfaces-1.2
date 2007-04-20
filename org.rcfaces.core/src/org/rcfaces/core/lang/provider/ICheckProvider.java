@@ -12,4 +12,8 @@ public interface ICheckProvider {
     Object getCheckedValues();
 
     void setCheckedValues(Object checkedValues);
+
+    int getCheckedValuesCount();
+
+    Object getFirstCheckedValue();
 }

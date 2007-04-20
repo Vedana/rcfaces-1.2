@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.ToolItemComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ToolItemComponent;
 
 public class ToolItemTag extends UIImageItemTag implements Tag {
 
@@ -24,6 +24,8 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 	private String borderType;
 	private String textPosition;
 	private String accessKey;
+	private String width;
+	private String styleClass;
 	public String getComponentType() {
 		return ToolItemComponent.COMPONENT_TYPE;
 	}
@@ -92,6 +94,22 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 		this.accessKey = accessKey;
 	}
 
+	public final String getWidth() {
+		return width;
+	}
+
+	public final void setWidth(String width) {
+		this.width = width;
+	}
+
+	public final String getStyleClass() {
+		return styleClass;
+	}
+
+	public final void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ToolItemComponent.COMPONENT_TYPE==getComponentType()) {
@@ -105,6 +123,8 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -198,6 +218,26 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 				component.setAccessKey(accessKey);
 			}
 		}
+
+		if (width != null) {
+			if (isValueReference(width)) {
+				ValueBinding vb = application.createValueBinding(width);
+
+				component.setWidth(vb);
+			} else {
+				component.setWidth(width);
+			}
+		}
+
+		if (styleClass != null) {
+			if (isValueReference(styleClass)) {
+				ValueBinding vb = application.createValueBinding(styleClass);
+
+				component.setStyleClass(vb);
+			} else {
+				component.setStyleClass(styleClass);
+			}
+		}
 	}
 
 	public void release() {
@@ -209,6 +249,8 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 		borderType = null;
 		textPosition = null;
 		accessKey = null;
+		width = null;
+		styleClass = null;
 
 		super.release();
 	}

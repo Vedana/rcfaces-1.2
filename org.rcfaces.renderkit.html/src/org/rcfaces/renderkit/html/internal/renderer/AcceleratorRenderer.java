@@ -15,7 +15,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

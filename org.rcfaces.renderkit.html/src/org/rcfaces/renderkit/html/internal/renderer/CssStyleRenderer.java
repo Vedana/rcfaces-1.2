@@ -49,7 +49,7 @@ public class CssStyleRenderer extends AbstractHtmlRenderer {
 
             src = contentAccessor.resolveURL(facesContext, null, null);
             if (src != null) {
-                htmlWriter.startElement("LINK");
+                htmlWriter.startElement(IHtmlWriter.LINK);
                 htmlWriter.writeRel("stylesheet");
                 if (useMetaContentStyleType == false) {
                     htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
@@ -57,20 +57,20 @@ public class CssStyleRenderer extends AbstractHtmlRenderer {
 
                 htmlWriter.writeHRef(src);
 
-                htmlWriter.endElement("LINK");
+                htmlWriter.endElement(IHtmlWriter.LINK);
             }
         }
 
         String text = cssStyleComponent.getText(facesContext);
         if (text != null && text.trim().length() > 0) {
-            htmlWriter.startElement("STYLE");
+            htmlWriter.startElement(IHtmlWriter.STYLE);
             if (useMetaContentStyleType == false) {
                 htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
             }
 
             htmlWriter.write(text);
 
-            htmlWriter.endElement("STYLE");
+            htmlWriter.endElement(IHtmlWriter.STYLE);
 
         }
     }

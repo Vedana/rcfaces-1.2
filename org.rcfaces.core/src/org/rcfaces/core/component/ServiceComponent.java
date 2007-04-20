@@ -1,32 +1,32 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import java.lang.Object;
-import org.rcfaces.core.component.capability.IServiceEventCapability;
-import java.util.TimeZone;
 import java.util.Arrays;
 import java.util.Collections;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import java.lang.String;
-import java.util.Map;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Locale;
-import org.rcfaces.core.internal.Constants;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.component.capability.IServiceEventCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
  * <p>The service Component is a non-visual component.</p>
@@ -312,69 +312,93 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IServiceEventListener.class);
 	}
 
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {
 		return getFilterProperties(null);
 	}
 
 	/**
 	 * See {@link #getFilterProperties() getFilterProperties()} for more details
 	 */
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
 
-	public final void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+	/**
+	 * Returns <code>true</code> if the attribute "filterProperties" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFilterPropertiesSetted() {
+		return engine.isPropertySetted(Properties.FILTER_PROPERTIES);
+	}
+
+	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
 	/**
 	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
 	 */
-	public final void setFilterProperties(ValueBinding filterProperties) {
+	public void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
-	public final java.util.Locale getComponentLocale() {
+	public java.util.Locale getComponentLocale() {
 		return getComponentLocale(null);
 	}
 
 	/**
 	 * See {@link #getComponentLocale() getComponentLocale()} for more details
 	 */
-	public final java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
+	public java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Locale)engine.getProperty(Properties.COMPONENT_LOCALE, facesContext);
 	}
 
-	public final void setComponentLocale(java.util.Locale componentLocale) {
+	/**
+	 * Returns <code>true</code> if the attribute "componentLocale" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isComponentLocaleSetted() {
+		return engine.isPropertySetted(Properties.COMPONENT_LOCALE);
+	}
+
+	public void setComponentLocale(java.util.Locale componentLocale) {
 		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
 	}
 
 	/**
 	 * See {@link #setComponentLocale(java.util.Locale) setComponentLocale(java.util.Locale)} for more details
 	 */
-	public final void setComponentLocale(ValueBinding componentLocale) {
+	public void setComponentLocale(ValueBinding componentLocale) {
 		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
 	}
 
-	public final java.util.TimeZone getComponentTimeZone() {
+	public java.util.TimeZone getComponentTimeZone() {
 		return getComponentTimeZone(null);
 	}
 
 	/**
 	 * See {@link #getComponentTimeZone() getComponentTimeZone()} for more details
 	 */
-	public final java.util.TimeZone getComponentTimeZone(javax.faces.context.FacesContext facesContext) {
+	public java.util.TimeZone getComponentTimeZone(javax.faces.context.FacesContext facesContext) {
 		return (java.util.TimeZone)engine.getProperty(Properties.COMPONENT_TIME_ZONE, facesContext);
 	}
 
-	public final void setComponentTimeZone(java.util.TimeZone componentTimeZone) {
+	/**
+	 * Returns <code>true</code> if the attribute "componentTimeZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isComponentTimeZoneSetted() {
+		return engine.isPropertySetted(Properties.COMPONENT_TIME_ZONE);
+	}
+
+	public void setComponentTimeZone(java.util.TimeZone componentTimeZone) {
 		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
 	}
 
 	/**
 	 * See {@link #setComponentTimeZone(java.util.TimeZone) setComponentTimeZone(java.util.TimeZone)} for more details
 	 */
-	public final void setComponentTimeZone(ValueBinding componentTimeZone) {
+	public void setComponentTimeZone(ValueBinding componentTimeZone) {
 		engine.setProperty(Properties.COMPONENT_TIME_ZONE, componentTimeZone);
 	}
 

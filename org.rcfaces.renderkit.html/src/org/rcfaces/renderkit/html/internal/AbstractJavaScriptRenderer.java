@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.internal.component.IRCFacesComponent;
+import org.rcfaces.core.internal.capability.IRCFacesComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -87,10 +87,11 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
     public final void initializeJavaScript(IJavaScriptWriter writer)
             throws WriterException {
 
-        IJavaScriptRenderContext javaScriptRenderContext=writer.getJavaScriptRenderContext();
+        IJavaScriptRenderContext javaScriptRenderContext = writer
+                .getJavaScriptRenderContext();
 
-        lazyTagUsesBrother=javaScriptRenderContext.canLazyTagUsesBrother();
-        
+        lazyTagUsesBrother = javaScriptRenderContext.canLazyTagUsesBrother();
+
         javaScriptRenderContext.initializeJavaScriptDocument(writer);
     }
 

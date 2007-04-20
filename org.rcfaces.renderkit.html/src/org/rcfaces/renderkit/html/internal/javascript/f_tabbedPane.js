@@ -408,7 +408,7 @@ var __prototype = {
 		if (this.style.height) {
 			// Hauteur fixée !
 			var p1=f_core.GetAbsolutePosition(this);
-			var div0=f_core.GetFirstElementByTagName(this, "DIV", true);
+			var div0=f_core.GetFirstElementByTagName(this, "div", true);
 			var p2=f_core.GetAbsolutePosition(div0);
 	
 			var ythis=p1.y;
@@ -433,7 +433,7 @@ var __prototype = {
 			}
 
 			height=(maxHeight+2)+"px";
-			var bodies=this.getElementsByTagName("DIV");
+			var bodies=this.getElementsByTagName("div");
 			for(var i=0;i<bodies.length;i++) {
 				var body=bodies[i];
 				
@@ -754,17 +754,17 @@ var __prototype = {
 		if (!tab._prev) {
 			// Premier !
 			
-			var tdTitleLeft=document.createElement("TD");
+			var tdTitleLeft=document.createElement("td");
 			trTitle.appendChild(tdTitleLeft);
 			
-			var leftTTitleImage=document.createElement("IMG");
+			var leftTTitleImage=document.createElement("img");
 			tab._leftTTitleImage=leftTTitleImage;
 			leftTTitleImage.src=blankImage;
 			leftTTitleImage.width=5;
 			leftTTitleImage.height=5;
 			tdTitleLeft.appendChild(leftTTitleImage);
 			
-			tab._leftTitle=document.createElement("TD");
+			tab._leftTitle=document.createElement("td");
 			trText.appendChild(tab._leftTitle);
 			
 		} else {
@@ -774,10 +774,10 @@ var __prototype = {
 			tab._leftTitle=cellsText[cellsText.length-1];
 		}
 		
-		tab._textTTitle=document.createElement("TD");		
+		tab._textTTitle=document.createElement("td");		
 		trTitle.appendChild(tab._textTTitle);
 	
-		var textTitle=document.createElement("TD");
+		var textTitle=document.createElement("td");
 		tab._textTitle=textTitle;
 		trText.appendChild(textTitle);
 
@@ -786,7 +786,7 @@ var __prototype = {
 		textTitle.onmouseover=f_tabbedPane._TabbedPane_mouseover;
 		textTitle.onmouseout=f_tabbedPane._TabbedPane_mouseout;
 		
-		var textLink=document.createElement("A");
+		var textLink=document.createElement("a");
 		tab._textLink=textLink;
 		textTitle.appendChild(textLink);
 		
@@ -797,7 +797,7 @@ var __prototype = {
 
 		var imageURL=tab._imageURL;
 		if (imageURL) {
-			var icon=document.createElement("IMG");
+			var icon=document.createElement("img");
 			tab._icon=icon;
 			icon.src=imageURL;
 			icon.align="center";
@@ -824,17 +824,17 @@ var __prototype = {
 		textLink.onkeypress=f_tabbedPane._TabbedPane_keyPress;
 		textLink.href=f_core.JAVASCRIPT_VOID;
 	
-		var tdTitleRight=document.createElement("TD");
+		var tdTitleRight=document.createElement("td");
 		trTitle.appendChild(tdTitleRight);
 
-		var rightTTitleImage=document.createElement("IMG");
+		var rightTTitleImage=document.createElement("img");
 		tab._rightTTitleImage=rightTTitleImage;
 		rightTTitleImage.src=blankImage;
 		rightTTitleImage.width=5;
 		rightTTitleImage.height=5;
 		tdTitleRight.appendChild(rightTTitleImage);		
 		
-		tab._rightTitle=document.createElement("TD");
+		tab._rightTitle=document.createElement("td");
 		trText.appendChild(tab._rightTitle);
 		
 		this.f_updateCardStyle(tab);

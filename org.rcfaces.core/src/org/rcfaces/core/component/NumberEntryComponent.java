@@ -1,34 +1,33 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.INumberFormatTypeCapability;
-import java.lang.Object;
-import java.util.Collections;
-import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.converter.NumberFormatTypeConverter;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import java.util.Map;
-import javax.faces.context.FacesContext;
+import java.util.Collections;
 import java.util.HashMap;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.manager.IValidationParameters;
 import java.util.Locale;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.converter.LiteralNumberConverter;
+import java.util.Map;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAutoTabCapability;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.capability.INumberFormatTypeCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.LiteralNumberConverter;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.NumberFormatTypeConverter;
+import org.rcfaces.core.internal.manager.IValidationParameters;
 
 /**
  * <b>NOT COMPLETE</b>
@@ -363,25 +362,33 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final boolean isAutoTab() {
+	public boolean isAutoTab() {
 		return isAutoTab(null);
 	}
 
 	/**
 	 * See {@link #isAutoTab() isAutoTab()} for more details
 	 */
-	public final boolean isAutoTab(javax.faces.context.FacesContext facesContext) {
+	public boolean isAutoTab(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_TAB, false, facesContext);
 	}
 
-	public final void setAutoTab(boolean autoTab) {
+	/**
+	 * Returns <code>true</code> if the attribute "autoTab" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAutoTabSetted() {
+		return engine.isPropertySetted(Properties.AUTO_TAB);
+	}
+
+	public void setAutoTab(boolean autoTab) {
 		engine.setProperty(Properties.AUTO_TAB, autoTab);
 	}
 
 	/**
 	 * See {@link #setAutoTab(boolean) setAutoTab(boolean)} for more details
 	 */
-	public final void setAutoTab(ValueBinding autoTab) {
+	public void setAutoTab(ValueBinding autoTab) {
 		engine.setProperty(Properties.AUTO_TAB, autoTab);
 	}
 
@@ -397,25 +404,33 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		return getFacesListeners(javax.faces.event.ValueChangeListener.class);
 	}
 
-	public final java.lang.String getFocusStyleClass() {
+	public java.lang.String getFocusStyleClass() {
 		return getFocusStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getFocusStyleClass() getFocusStyleClass()} for more details
 	 */
-	public final java.lang.String getFocusStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFocusStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOCUS_STYLE_CLASS, facesContext);
 	}
 
-	public final void setFocusStyleClass(java.lang.String focusStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "focusStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFocusStyleClassSetted() {
+		return engine.isPropertySetted(Properties.FOCUS_STYLE_CLASS);
+	}
+
+	public void setFocusStyleClass(java.lang.String focusStyleClass) {
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
 	/**
 	 * See {@link #setFocusStyleClass(String) setFocusStyleClass(String)} for more details
 	 */
-	public final void setFocusStyleClass(ValueBinding focusStyleClass) {
+	public void setFocusStyleClass(ValueBinding focusStyleClass) {
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
@@ -431,179 +446,243 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
-	public final boolean isReadOnly() {
+	public boolean isReadOnly() {
 		return isReadOnly(null);
 	}
 
 	/**
 	 * See {@link #isReadOnly() isReadOnly()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	/**
 	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
+	public void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public final int getNumberFormatType() {
+	public int getNumberFormatType() {
 		return getNumberFormatType(null);
 	}
 
 	/**
 	 * See {@link #getNumberFormatType() getNumberFormatType()} for more details
 	 */
-	public final int getNumberFormatType(javax.faces.context.FacesContext facesContext) {
+	public int getNumberFormatType(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.NUMBER_FORMAT_TYPE,0, facesContext);
 	}
 
-	public final void setNumberFormatType(int numberFormatType) {
+	/**
+	 * Returns <code>true</code> if the attribute "numberFormatType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isNumberFormatTypeSetted() {
+		return engine.isPropertySetted(Properties.NUMBER_FORMAT_TYPE);
+	}
+
+	public void setNumberFormatType(int numberFormatType) {
 		engine.setProperty(Properties.NUMBER_FORMAT_TYPE, numberFormatType);
 	}
 
 	/**
 	 * See {@link #setNumberFormatType(int) setNumberFormatType(int)} for more details
 	 */
-	public final void setNumberFormatType(ValueBinding numberFormatType) {
+	public void setNumberFormatType(ValueBinding numberFormatType) {
 		engine.setProperty(Properties.NUMBER_FORMAT_TYPE, numberFormatType);
 	}
 
-	public final java.util.Locale getLiteralLocale() {
+	public java.util.Locale getLiteralLocale() {
 		return getLiteralLocale(null);
 	}
 
 	/**
 	 * See {@link #getLiteralLocale() getLiteralLocale()} for more details
 	 */
-	public final java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
+	public java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Locale)engine.getProperty(Properties.LITERAL_LOCALE, facesContext);
 	}
 
-	public final void setLiteralLocale(java.util.Locale literalLocale) {
+	/**
+	 * Returns <code>true</code> if the attribute "literalLocale" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLiteralLocaleSetted() {
+		return engine.isPropertySetted(Properties.LITERAL_LOCALE);
+	}
+
+	public void setLiteralLocale(java.util.Locale literalLocale) {
 		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
 	/**
 	 * See {@link #setLiteralLocale(java.util.Locale) setLiteralLocale(java.util.Locale)} for more details
 	 */
-	public final void setLiteralLocale(ValueBinding literalLocale) {
+	public void setLiteralLocale(ValueBinding literalLocale) {
 		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
-	public final java.util.Locale getComponentLocale() {
+	public java.util.Locale getComponentLocale() {
 		return getComponentLocale(null);
 	}
 
 	/**
 	 * See {@link #getComponentLocale() getComponentLocale()} for more details
 	 */
-	public final java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
+	public java.util.Locale getComponentLocale(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Locale)engine.getProperty(Properties.COMPONENT_LOCALE, facesContext);
 	}
 
-	public final void setComponentLocale(java.util.Locale componentLocale) {
+	/**
+	 * Returns <code>true</code> if the attribute "componentLocale" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isComponentLocaleSetted() {
+		return engine.isPropertySetted(Properties.COMPONENT_LOCALE);
+	}
+
+	public void setComponentLocale(java.util.Locale componentLocale) {
 		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
 	}
 
 	/**
 	 * See {@link #setComponentLocale(java.util.Locale) setComponentLocale(java.util.Locale)} for more details
 	 */
-	public final void setComponentLocale(ValueBinding componentLocale) {
+	public void setComponentLocale(ValueBinding componentLocale) {
 		engine.setProperty(Properties.COMPONENT_LOCALE, componentLocale);
 	}
 
-	public final java.lang.String getErrorStyleClass() {
+	public java.lang.String getErrorStyleClass() {
 		return getErrorStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
 	 */
-	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
 	}
 
-	public final void setErrorStyleClass(java.lang.String errorStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "errorStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isErrorStyleClassSetted() {
+		return engine.isPropertySetted(Properties.ERROR_STYLE_CLASS);
+	}
+
+	public void setErrorStyleClass(java.lang.String errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
 	/**
 	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
 	 */
-	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
+	public void setErrorStyleClass(ValueBinding errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
-	public final java.lang.String getFatalStyleClass() {
+	public java.lang.String getFatalStyleClass() {
 		return getFatalStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
 	 */
-	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
 	}
 
-	public final void setFatalStyleClass(java.lang.String fatalStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "fatalStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFatalStyleClassSetted() {
+		return engine.isPropertySetted(Properties.FATAL_STYLE_CLASS);
+	}
+
+	public void setFatalStyleClass(java.lang.String fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
 	/**
 	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
 	 */
-	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
+	public void setFatalStyleClass(ValueBinding fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
-	public final java.lang.String getInfoStyleClass() {
+	public java.lang.String getInfoStyleClass() {
 		return getInfoStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
 	 */
-	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
 	}
 
-	public final void setInfoStyleClass(java.lang.String infoStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "infoStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isInfoStyleClassSetted() {
+		return engine.isPropertySetted(Properties.INFO_STYLE_CLASS);
+	}
+
+	public void setInfoStyleClass(java.lang.String infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
 	/**
 	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
 	 */
-	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
+	public void setInfoStyleClass(ValueBinding infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
-	public final java.lang.String getWarnStyleClass() {
+	public java.lang.String getWarnStyleClass() {
 		return getWarnStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
 	 */
-	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
 	}
 
-	public final void setWarnStyleClass(java.lang.String warnStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "warnStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWarnStyleClassSetted() {
+		return engine.isPropertySetted(Properties.WARN_STYLE_CLASS);
+	}
+
+	public void setWarnStyleClass(java.lang.String warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
 	/**
 	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
 	 */
-	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
+	public void setWarnStyleClass(ValueBinding warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 

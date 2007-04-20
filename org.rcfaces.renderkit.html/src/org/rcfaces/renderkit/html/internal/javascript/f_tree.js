@@ -143,7 +143,7 @@ var __static = {
 		
 		var selection=fa_selectionManager.ComputeMouseSelection(evt);
 		
-		tree._moveCursor(li, true, evt, selection);
+		tree.f_moveCursor(li, true, evt, selection);
 					
 		if (f_core.IsPopupButton(evt) && !tree.fa_isElementDisabled(li)) {		
 			var menu=tree.f_getSubMenuById(f_tree._NODE_MENU_ID);
@@ -267,7 +267,7 @@ var __static = {
 				}
 				
 				if (!tree._cursor) {
-					var li=f_core.GetFirstElementByTagName(tree, "LI");
+					var li=f_core.GetFirstElementByTagName(tree, "li");
 					if (li) {
 						tree._cursor=li;
 						tree._initCursorValue=undefined;
@@ -278,7 +278,7 @@ var __static = {
 			tree._updateSelectedNodes();
 			
 		} else if (!tree._cursor) {
-			var li=f_core.GetFirstElementByTagName(tree, "LI");
+			var li=f_core.GetFirstElementByTagName(tree, "li");
 			if (li) {
 				tree._cursor=li;
 				tree._initCursorValue=undefined;
@@ -397,7 +397,7 @@ var __static = {
 		evt.cancelBubble = true;
 
 		if (li!=tree._cursor) {
-			tree._moveCursor(li, true, evt);
+			tree.f_moveCursor(li, true, evt);
 		}
 		
 		var checked;
@@ -469,7 +469,7 @@ var __prototype = {
 			this._tree=this;
 			
 		} else {
-			var focus=document.createElement("A");
+			var focus=document.createElement("a");
 			this._cfocus=focus;
 
 			focus.className="f_tree_focus";
@@ -764,7 +764,7 @@ var __prototype = {
 		for(var i=0;i<nodes.length;i++) {
 			var node=nodes[i];
 			
-			var li=document.createElement("LI");
+			var li=document.createElement("li");
 
 			li._node=node;
 			li._depth=depth;
@@ -779,7 +779,7 @@ var __prototype = {
 			
 			container.appendChild(li); // Evite les fuites memoires
 
-			var divNode=document.createElement("DIV");
+			var divNode=document.createElement("div");
 			li._divNode=divNode;
 			divNode._node=li;
 			divNode.className="f_tree_depth"+depth;
@@ -797,7 +797,7 @@ var __prototype = {
 			var d=depth;
 			if (this._userExpandable) {
 				if (depth>0 || !this._hideRootExpandSign) {
-					var command=document.createElement("IMG");
+					var command=document.createElement("img");
 					command.align="center";
 					command.width=f_tree._COMMAND_IMAGE_WIDTH;
 					command.height=f_tree._COMMAND_IMAGE_HEIGHT;
@@ -821,7 +821,7 @@ var __prototype = {
 			divNode.style.paddingLeft=(d*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 			
 			if (this._checkable) {
-				var input=document.createElement("INPUT");
+				var input=document.createElement("input");
 				li._input=input;
 				input._node=li;
 				input.className="f_tree_check";
@@ -847,7 +847,7 @@ var __prototype = {
 				divNode.appendChild(input);
 			}
 
-			var span=document.createElement("SPAN");
+			var span=document.createElement("span");
 			li._span=span;
 			divNode.appendChild(span);
 			
@@ -856,7 +856,7 @@ var __prototype = {
 			span.onmouseout=f_tree._NodeLabel_mouseOut;
 			
 			if (this._images) {
-				var image=document.createElement("IMG");
+				var image=document.createElement("img");
 				image.align="center";
 				image.className="f_tree_image";
 				image._node=li;
@@ -865,7 +865,7 @@ var __prototype = {
 				li._image=image;
 			}
 			
-			var label=document.createElement("LABEL");
+			var label=document.createElement("label");
 
 			span.appendChild(label);
 			li._label=label;
@@ -878,7 +878,7 @@ var __prototype = {
 			}
 			
 			if (this._selectable) {
-				this._updateElementSelection(li, li._node._selected);
+				this.f_updateElementSelection(li, li._node._selected);
 			}
 			if (this._checkable) {	
 				this.fa_updateElementCheck(li, li._node._checked);
@@ -895,7 +895,7 @@ var __prototype = {
 			if (node._container) {
 				// On peut etre un container sans posseder (encore) d'enfants.
 				
-				var ul=document.createElement("UL");
+				var ul=document.createElement("ul");
 				ul.role="treegroup";				
 				ul.style.display="none";
 				ul.className="f_tree_parent";
@@ -1010,7 +1010,7 @@ var __prototype = {
 			node._interactive=undefined;
 			
 			if (!ul) {
-				ul=document.createElement("UL");
+				ul=document.createElement("ul");
 				ul.className="f_tree_parent";
 				ul.role="treegroup";
 			
@@ -1075,7 +1075,7 @@ var __prototype = {
 		if  (waitingNode._li!=this) {
 			for(var c=waitingNode._li;;) {
 				var u=c.parentNode;
-				if (u.tagName!="UL") {
+				if (u.tagName.toLowerCase()!="ul") {
 					error=true;
 					break;
 				}
@@ -1084,7 +1084,7 @@ var __prototype = {
 				var liIdx=0;
 				for(var i=0;i<lis.length;i++) {
 					var li=lis[i];
-					if (li.tagName!="LI") {
+					if (li.tagName.toLowerCase()!="li") {
 						continue;
 					}
 					
@@ -1107,7 +1107,7 @@ var __prototype = {
 				}
 				
 				c=u.parentNode;
-				if (c.tagName!="LI") {
+				if (c.tagName.toLowerCase()!="li") {
 					break;
 				}
 			}
@@ -1207,16 +1207,16 @@ var __prototype = {
 		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	_newWaitingNode: function(parentDepth) {
-		var li=document.createElement("LI");
+		var li=document.createElement("li");
 
 		li.className="f_tree_parent";
 		
-		var divNode=document.createElement("DIV");
+		var divNode=document.createElement("div");
 		li.appendChild(divNode);
 		divNode.className="f_tree_depth"+(parentDepth+1);
 		divNode.style.paddingLeft=(parentDepth*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 		
-		var command=document.createElement("IMG");
+		var command=document.createElement("img");
 		divNode.appendChild(command);
 
 		command.align="center";
@@ -1224,10 +1224,10 @@ var __prototype = {
 		command.height=f_tree._COMMAND_IMAGE_HEIGHT;
 		command.src=this._blankNodeImageURL;
 
-		var span=document.createElement("SPAN");
+		var span=document.createElement("span");
 		divNode.appendChild(span);
 		
-		var image=document.createElement("IMG");
+		var image=document.createElement("img");
 		span.appendChild(image);
 
 		image.align="center";
@@ -1237,7 +1237,7 @@ var __prototype = {
 		image.className="f_tree_image";
 		li._image=image;
 			
-		var label=document.createElement("LABEL");
+		var label=document.createElement("label");
 		span.appendChild(label);
 		li._label=label;
 
@@ -1283,7 +1283,7 @@ var __prototype = {
 		}
 	},
 	fa_updateElementStyle: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "Invalid LI parameter ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "Invalid LI parameter ("+li+")");
 		
 		var node=li._node;
 	
@@ -1342,6 +1342,13 @@ var __prototype = {
 			
 			if (liImage.src!=imageURL) {
 				liImage.src=imageURL;
+			}
+		}
+		
+		if (node._styleClass) {
+			labelClassName+=" "+node._styleClass;
+			if (suffixLabel) {
+				labelClassName+=" "+node._styleClass+suffixLabel;
 			}
 		}
 		
@@ -1483,7 +1490,47 @@ var __prototype = {
 		
 		return this._blankNodeImageURL;
 	},
-	_appendNode: function(parent, label, value, tooltip, disabled) {
+	/** 
+	 * @method hidden
+	 */
+	f_appendNode2: function(parent, properties) {
+		
+		var node=this.f_appendNode(parent, properties._label, properties._value, properties._description, properties._disabled);
+
+		if (properties._opened) {
+			node._opened=true;
+		}
+
+		if (properties._selected) {
+			node._selected=true;
+		}
+
+		if (properties._checked) {
+			node._checked=true;
+		}
+		
+		if (properties._imageURL) {
+			this.f_setItemImages(node, 
+				properties._imageURL, 
+				properties._disabledImageURL, 
+				properties._hoverImageURL, 
+				properties._selectedImageURL);
+		}
+		
+		if (properties._clientDatas) {
+			this.f_setItemClientDatas(node, properties._clientDatas);
+		}
+		
+		if (properties._styleClass) {
+			node._styleClass=properties._styleClass;
+		}
+		
+		return node;
+	},
+	/** 
+	 * @method public
+	 */
+	f_appendNode: function(parent, label, value, tooltip, disabled) {
 //		f_core.Assert(!parent || !parent.tagName, "Bad type of parent ! "+parent);
 	
 		var node=new Object;
@@ -1546,7 +1593,6 @@ var __prototype = {
 				return;
 			}
 		}
-		
 	},
 	/**
 	 * @method hidden
@@ -1765,7 +1811,7 @@ var __prototype = {
 			return;
 		}
 
-		this._moveCursor(lis[i], true, evt, selection);
+		this.f_moveCursor(lis[i], true, evt, selection);
 	},
 	_lastTreeNode: function(evt, selection) {
 		var lis=this.fa_listVisibleElements();
@@ -1773,7 +1819,7 @@ var __prototype = {
 			return;
 		}
 		
-		this._moveCursor(lis[lis.length-1], true, evt, selection);
+		this.f_moveCursor(lis[lis.length-1], true, evt, selection);
 	},
 	_nextPageTreeNode: function(evt, selection) {		
 		var cursorLi=this._cursor;
@@ -1814,7 +1860,7 @@ var __prototype = {
 			}		
 		}
 
-		this._moveCursor(last, true, evt, selection);
+		this.f_moveCursor(last, true, evt, selection);
 	},
 	_firstTreeNode: function(evt, selection) {		
 		var lis=this.fa_listVisibleElements();
@@ -1822,7 +1868,7 @@ var __prototype = {
 			return;
 		}
 
-		this._moveCursor(lis[0], true, evt, selection);
+		this.f_moveCursor(lis[0], true, evt, selection);
 	},
 	_previousTreeNode: function(evt, selection) {
 		var cursorLi=this._cursor;
@@ -1849,7 +1895,7 @@ var __prototype = {
 			return;
 		}
 		
-		this._moveCursor(lis[i], true, evt, selection);
+		this.f_moveCursor(lis[i], true, evt, selection);
 	},
 	
 	_previousPageTreeNode: function(evt, selection) {		
@@ -1891,7 +1937,7 @@ var __prototype = {
 			}		
 		}
 
-		this._moveCursor(last, true, evt, selection);
+		this.f_moveCursor(last, true, evt, selection);
 	},
 	fa_listVisibleElements: function(container, list) {
 		if (container===undefined) {
@@ -1915,7 +1961,7 @@ var __prototype = {
 				continue;
 			}
 			
-			var ul=li.getElementsByTagName("UL");
+			var ul=li.getElementsByTagName("ul");
 			if (ul.length) {
 				this.fa_listVisibleElements(ul[0], list);
 			}
@@ -1939,7 +1985,7 @@ var __prototype = {
 			
 			var childLi=this._searchComponentByNodeOrValue(nodes[0]);
 	
-			this._moveCursor(childLi, true, evt, selection);
+			this.f_moveCursor(childLi, true, evt, selection);
 			return;
 		}
 		
@@ -1968,7 +2014,7 @@ var __prototype = {
 
 		var parentLi=this._searchComponentByNodeOrValue(parentNode);
 
-		this._moveCursor(parentLi, true, evt, selection);
+		this.f_moveCursor(parentLi, true, evt, selection);
 	},
 	_expandAllTreeNode: function(evt) {
 		var cursorLi=this._cursor;
@@ -1998,7 +2044,7 @@ var __prototype = {
 				this.f_openNode(node, evt);
 			}
 			
-			var ul=f_core.GetFirstElementByTagName(li, "UL");
+			var ul=f_core.GetFirstElementByTagName(li, "ul");
 			if (!ul) {
 				continue;
 			}
@@ -2062,7 +2108,7 @@ var __prototype = {
 					continue;
 				}
 				
-				this._moveCursor(li, true, evt);
+				this.f_moveCursor(li, true, evt);
 				return true;
 			}
 		}
@@ -2102,10 +2148,13 @@ var __prototype = {
 		
 		this.focus();
 	},
+	/**
+	 * @method private
+	 */
 	_searchComponentByNodeOrValue: function(nodeOrValue) {
 		f_core.Assert(nodeOrValue, "Value parameter is null !");
 
-		var lis=this.getElementsByTagName("LI");
+		var lis=this.getElementsByTagName("li");
 		for(var i=0;i<lis.length;i++) {
 			var li=lis[i];
 			
@@ -2401,9 +2450,11 @@ var __prototype = {
 	fa_updateReadOnly: function() {
 	},
 	/** 
-	 * @method private
+	 * @method hidden
+	 * @param Object node
+	 * @return void
 	 */
-	_setInteractiveParent: function(node) {
+	f_setInteractiveParent: function(node) {
 		node._container=true;
 		node._interactive=true;
 	},
@@ -2519,7 +2570,7 @@ var __prototype = {
 			var lis=ul.childNodes;
 			for(var i=0;i<lis.length;) {
 				var li=lis[i];
-				if (li.tagName!="LI") {
+				if (li.tagName.toLowerCase()!="li") {
 					i++;
 					continue;
 				}
@@ -2546,10 +2597,10 @@ var __prototype = {
 			this._closeNode(node, null, li);
 		}
 				
-		f_core.Debug(f_tree, "Refreshed node open state="+opened);
+		f_core.Debug(f_tree, "f_refreshContent: Refreshed node open state="+opened);
 		
 		node._nodes=undefined;
-		this._setInteractiveParent(node);
+		this.f_setInteractiveParent(node);
 		
 		var ul=li._nodes;
 		if (ul) {
@@ -2575,44 +2626,44 @@ var __prototype = {
 	},
 
 	fa_getElementItem: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_getElementItem: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_getElementItem: Invalid element parameter ! ("+li+")");
 
 		return li._node;
 	},
 
 
 	fa_getElementValue: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_getElementValue: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_getElementValue: Invalid element parameter ! ("+li+")");
 
 		return li._node._value;
 	},
 
 	fa_isElementDisabled: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_isElementDisabled: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_isElementDisabled: Invalid element parameter ! ("+li+")");
 		
 		return li._node._disabled;
 	},
 
 	fa_isElementSelected: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_isElementSelected: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_isElementSelected: Invalid element parameter ! ("+li+")");
 		
 		return li._node._selected;
 	},
 	
 	fa_setElementSelected: function(li, selected) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_setElementSelected: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_setElementSelected: Invalid element parameter ! ("+li+")");
 		
 		li._node._selected=selected;
 	},
 
 	fa_isElementChecked: function(li) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_isElementChecked: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_isElementChecked: Invalid element parameter ! ("+li+")");
 		
 		return li._node._checked;
 	},
 	
 	fa_setElementChecked: function(li, checked) {
-		f_core.Assert(li && li.tagName=="LI", "f_tree.fa_setElementChecked: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_setElementChecked: Invalid element parameter ! ("+li+")");
 		
 		li._node._checked=checked;
 	},
@@ -2624,6 +2675,37 @@ var __prototype = {
 	},
 	fa_getScrolledVerticalTitle: function() {
 		return null;
+	},
+	/**
+	 * @method public
+	 * @param Object nodeOrValue
+	 * @return String
+	 */
+	f_getItemStyleClass: function(nodeOrValue) {
+		var li=this._searchComponentByNodeOrValue(value);
+
+		return li._node._styleClass;
+	},
+	/**
+	 * @method public
+	 * @param Object nodeOrValue
+	 * @param String styleClass
+	 * @return void
+	 */
+	f_setItemStyleClass: function(nodeOrValue, styleClass) {
+		var li=this._searchComponentByNodeOrValue(nodeOrValue);
+
+		if (li._node._styleClass==styleClass) {
+			return;
+		}
+		
+		li._node._styleClass=styleClass;
+
+		if (!this.fa_componentUpdated) {
+			return;
+		}
+
+		this.fa_updateElementStyle(li);
 	}	
 }
 

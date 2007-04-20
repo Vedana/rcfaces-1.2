@@ -36,7 +36,7 @@ public class PagerRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
         if (pagerComponent.getWidth(facesContext) == null
                 && pagerComponent.getHeight(facesContext) == null) {
             htmlWriter.writeStyle().writeDisplay("inline");
@@ -99,7 +99,7 @@ public class PagerRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:noPagedMessage", noPagedMessage);
         }
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         htmlWriter.enableJavaScript();
     }

@@ -25,20 +25,20 @@ var __prototype = {
 
 		var tabIndex=this.tabIndex;
 		var link=null;
-		var tagName=this.tagName.toUpperCase();
+		var tagName=this.tagName.toLowerCase();
 		
-		if (tagName=="INPUT") {
+		if (tagName=="input") {
 			// Il faut recuperer le click pour empecher le submit !
 			this._image=this;
 			
-		} else 	if (tagName=="A") {
+		} else 	if (tagName=="a") {
 			// Il faut recuperer le click pour empecher le submit !
-			this._image=f_core.GetFirstElementByTagName(this, "IMG", true);
+			this._image=f_core.GetFirstElementByTagName(this, "img", true);
 						
 		} else {
-			link=f_core.GetFirstElementByTagName(this, "INPUT", false);
+			link=f_core.GetFirstElementByTagName(this, "input", false);
 			if (!link) {
-				link=f_core.GetFirstElementByTagName(this, "A", true);
+				link=f_core.GetFirstElementByTagName(this, "a", true);
 			}
 			
 			if (link) {
@@ -47,10 +47,10 @@ var __prototype = {
 					tabIndex=0;
 				}
 			
-				if (link.tagName.toUpperCase()=="INPUT") {				
+				if (link.tagName.toLowerCase()=="input") {				
 					this._image=link;
 				} else {
-					this._image=f_core.GetFirstElementByTagName(link, "IMG", false);
+					this._image=f_core.GetFirstElementByTagName(link, "img", false);
 					
 					f_core.Assert(this._image, "Can not find Image of component '"+this.id+"'.");
 				}
@@ -67,7 +67,7 @@ var __prototype = {
 		}
 		
 		if (!this._image) {
-			var images=this.getElementsByTagName("IMG");
+			var images=this.getElementsByTagName("img");
 			if (images.length) {
 				var cl=this.f_getMainStyleClass()+"_image";
 				var image;
@@ -87,7 +87,7 @@ var __prototype = {
 			}
 		}
 		
-		var texts=this.getElementsByTagName("SPAN");
+		var texts=this.getElementsByTagName("span");
 		if (texts.length) {
 			var cl=this.f_getMainStyleClass()+"_text";
 			var text;

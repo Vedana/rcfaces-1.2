@@ -559,10 +559,10 @@ var __static = {
 		popupDocument.body.innerHTML=code;
 		popupDocument.body._comboEx=combo;
 
-		var menuPopup=f_core.GetFirstElementByTagName(popupDocument, "UL", true);
+		var menuPopup=f_core.GetFirstElementByTagName(popupDocument, "ul", true);
 
-		var items=popupDocument.getElementsByTagName("LI");
-		var itemsOrigin=combo._menuPopup.getElementsByTagName("LI");
+		var items=popupDocument.getElementsByTagName("li");
+		var itemsOrigin=combo._menuPopup.getElementsByTagName("li");
 		for(var i=0;i<items.length;i++) {
 			var item=items[i];
 			var c=itemsOrigin[i];
@@ -620,7 +620,7 @@ var __static = {
 		body.onkeyup=null;
 		body.onunload=null;
 		
-		var items=body.getElementsByTagName("LI");
+		var items=body.getElementsByTagName("li");
 		for(var i=0;i<items.length;i++) {
 			var item=items[i];
 			
@@ -705,7 +705,7 @@ var __prototype = {
 			this._className=this.className;
 		}
 		
-		this._input = f_core.GetFirstElementByTagName(this, "INPUT", true);
+		this._input = f_core.GetFirstElementByTagName(this, "input", true);
 		this._input._comboEx = this;
 		this._input.onkeydown=f_comboEx._KeyDown;
 		this._input.onkeypress=f_comboEx._KeyPress;
@@ -861,7 +861,7 @@ var __prototype = {
 	 */
 	f_update: function() {
 		if (!this._menuPopup) { 
-			var popup=document.createElement("UL");
+			var popup=document.createElement("ul");
 			popup.className=this.className+"_popup";
 				
 			this._menuPopup=popup;
@@ -898,7 +898,7 @@ var __prototype = {
 
 	/* ****************************************************** */
 	_goNextItem: function(evt) {
-		var items=this._menuPopup.getElementsByTagName("LI");
+		var items=this._menuPopup.getElementsByTagName("li");
 
 		if (!this._isPopupOpened()) {
 			this._showPopup(evt);
@@ -929,7 +929,7 @@ var __prototype = {
 			return;
 		}
 
-		var items=this._menuPopup.getElementsByTagName("LI");
+		var items=this._menuPopup.getElementsByTagName("li");
 
 		// Deja ouvert ... on scroll la selection vers la bas !
 		var i=0;
@@ -950,7 +950,7 @@ var __prototype = {
 			return;
 		}
 
-		var items=this._menuPopup.getElementsByTagName("LI");
+		var items=this._menuPopup.getElementsByTagName("li");
 		if (items.length<1) {
 			return;
 		}
@@ -967,7 +967,7 @@ var __prototype = {
 			return;
 		}
 
-		var items=this._menuPopup.getElementsByTagName("LI");
+		var items=this._menuPopup.getElementsByTagName("li");
 		if (items.length<1) {
 			return;
 		}
@@ -984,7 +984,7 @@ var __prototype = {
 			return;
 		}
 
-		var items=this._menuPopup.getElementsByTagName("LI");
+		var items=this._menuPopup.getElementsByTagName("li");
 	
 		var last=null;
 		var i;
@@ -1031,7 +1031,7 @@ var __prototype = {
 			return;
 		}
 
-		var items=this._menuPopup.getElementsByTagName("LI");
+		var items=this._menuPopup.getElementsByTagName("li");
 	
 		var last=null;
 		var i;
@@ -1266,7 +1266,7 @@ var __prototype = {
 			clsName+="_image";
 		}		
 		
-		var flatItems=tbody.getElementsByTagName("LI");
+		var flatItems=tbody.getElementsByTagName("li");
 		if (flatItems.length > this._popupRowNumber) {
 			clsName+="_scroll";
 			this._scroll=true;
@@ -1315,7 +1315,7 @@ var __prototype = {
 		for(var i=0;i<items.length;i++) {		
 			var it=items[i];
 			
-			var item=document.createElement("LI");
+			var item=document.createElement("li");
 			if (!filter && this._itemImage) {
 				item._className=this.className+"_item_image";
 				
@@ -1329,7 +1329,7 @@ var __prototype = {
 			container.appendChild(item);
 				
 			if (this._itemImage && !filter) {
-				var image=document.createElement("IMG");
+				var image=document.createElement("img");
 				image.className=this.className+"_item_image";
 				image.align="center";
 				image.valign="center";
@@ -1349,7 +1349,7 @@ var __prototype = {
 				item.appendChild(document.createTextNode(" "));
 			}
 			
-			var div=document.createElement("SPAN");
+			var div=document.createElement("span");
 			div.className=this.className+"_item_text";
 			div.appendChild(document.createTextNode(it.label));
 	
@@ -1610,7 +1610,7 @@ var __prototype = {
 		}
 	},
 	_getComponentFromItem: function(item) {
-		var items=this._menuPopup.getElementsByTagName("LI");
+		var items=this._menuPopup.getElementsByTagName("li");
 		for(var i=0;i<items.length;i++) {
 			var it=items[i];
 			

@@ -73,7 +73,7 @@ var __static = {
 			parent.appendChild(doc.createTextNode(label.substring(0, idx)));
 		}
 
-		var sub=doc.createElement("U");
+		var sub=doc.createElement("u");
 		sub.className="f_accessKey";
 		parent.appendChild(sub);
 		sub.appendChild(doc.createTextNode(label.substring(idx, idx+1)));				
@@ -661,7 +661,7 @@ var __prototype = {
 	 		this.f_update(true);
 	 		
 	 	} catch (x) {
-	 		f_core.Error(f_component, "Call of f_update throws exception !", x);
+	 		f_core.Error(f_component, "f_completeComponent: Call of f_update throws exception !", x);
 	 	}
 
 		if (!this._hasInitListeners) {
@@ -776,7 +776,7 @@ var __prototype = {
 		}
 		
 		if (this.tagName) {
-			s+=" tag="+this.tagName.toUpperCase();
+			s+=" tag="+this.tagName.toLowerCase();
 		}
 		
 		if (this.className) {

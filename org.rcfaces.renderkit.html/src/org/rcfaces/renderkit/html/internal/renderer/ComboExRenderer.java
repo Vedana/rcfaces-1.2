@@ -28,7 +28,7 @@ public class ComboExRenderer extends AbstractSelectItemsRenderer {
 
         writer.enableJavaScript();
 
-        writer.startElement("TABLE");
+        writer.startElement(IHtmlWriter.TABLE");
         writeHtmlAttributes(writer);
         writeJavaScriptAttributes(writer);
         writeCssAttributes(writer);
@@ -56,7 +56,7 @@ public class ComboExRenderer extends AbstractSelectItemsRenderer {
 
     protected void encodeAfterDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
-        writer.endElement("TABLE");
+        writer.endElement(IHtmlWriter.TABLE");
 
         super.encodeAfterDecorator(writer, componentDecorator);
     }

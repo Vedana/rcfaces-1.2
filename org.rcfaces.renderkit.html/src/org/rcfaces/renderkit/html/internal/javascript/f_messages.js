@@ -99,7 +99,7 @@ var __prototype = {
 				return;
 			}
 
-			tbody=document.createElement("TBODY");
+			tbody=document.createElement("tbody");
 
 		} else  {
 			while (tbody.hasChildNodes()) {
@@ -121,17 +121,17 @@ var __prototype = {
 			
 			var styleMessage=this.f_getStyleClassFromSeverity(message.f_getSeverity());
 			
-			var tr=document.createElement("TR");
+			var tr=document.createElement("tr");
 			
 			var summaryLabel;
 			if (this.f_isShowSummary()) {
-				summaryLabel=document.createElement("TD");
+				summaryLabel=document.createElement("td");
 				tr.appendChild(summaryLabel);
 			}
 			
 			var detailLabel;
 			if (this.f_isShowDetail()) {		
-				detailLabel=document.createElement("TD");
+				detailLabel=document.createElement("td");
 				tr.appendChild(detailLabel);
 			}
 			

@@ -557,6 +557,41 @@ var __prototype = {
 		item._accessKey=accessKey;
 	},
 	/**
+	 * @method public
+	 * @param Object item
+	 * @return String
+	 */
+	f_getItemStyleClass: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
+		return item._styleClass;
+	},
+	/**
+	 * @method public
+	 * @param Object item
+	 * @param String styleClass
+	 * @return void
+	 */
+	f_setItemStyleClass: function(item, styleClass) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+
+		if (item._styleClass==styleClass) {
+			return;
+		}
+		
+		item._styleClass=styleClass;
+
+		if (!this.fa_componentUpdated) {
+			return;
+		}
+
+		this.fa_updateItemStyle(item);
+	},
+	/**
 	 * Returns the group name of the item.
 	 *
 	 * @method public

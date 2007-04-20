@@ -92,7 +92,7 @@ var __static={
 					
 					pdoc.body.innerHTML="";
 					
-					body=pdoc.createElement("DIV");
+					body=pdoc.createElement("div");
 					body.className="f_dateChooser_popup";
 					body.style.visibility="inherit";
 	
@@ -101,7 +101,7 @@ var __static={
 				}
 								
 			} else {
-				popup=dateChooser.ownerDocument.createElement("DIV");
+				popup=dateChooser.ownerDocument.createElement("div");
 				popup.className="f_dateChooser_popup";
 	
 				popup.onclick=f_core.CancelJsEventHandlerTrue;
@@ -111,9 +111,9 @@ var __static={
 				
 				var parent=dateChooser;
 				for(;;parent=parent.parentNode) {
-					var tagName=parent.tagName;
+					var tagName=parent.tagName.toLowerCase();
 					
-					if (tagName=="INPUT" || tagName=="SPAN") {
+					if (tagName=="input" || tagName=="span") {
 						continue;
 					}
 					break;
@@ -310,7 +310,7 @@ var __static={
 			return;
 		}
 		
-		if (component.tagName.toUpperCase()=="INPUT") {
+		if (component.tagName.toLowerCase()=="input") {
 			f_core.Debug(fa_calendarPopup, "_SetDateToComponent: set field 'value' of component '"+component.id+"' with value '"+value+"' and format '"+format+"'.");
 			component.value=value;
 			return;
@@ -335,7 +335,7 @@ var __static={
 			f_core.Debug(fa_calendarPopup, "_GetDateToComponent: call f_getText of component '"+component.id+"'.");
 			value=component.f_getText();
 
-		} else if (component.tagName.toUpperCase()=="INPUT") {
+		} else if (component.tagName.toLowerCase()=="input") {
 			f_core.Debug(fa_calendarPopup, "_GetDateToComponent: get field 'value' of component '"+component.id+"'.");
 			value=component.value;
 

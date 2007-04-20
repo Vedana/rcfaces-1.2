@@ -11,5 +11,5 @@ package org.rcfaces.core.item;
 public interface IToolItem extends ISelectItemGroup, IImagesItem,
         IInputTypeItem, IImageSizeItem, ILookAndFeelItem, IClientDataItem,
         IServerDataItem, IVisibleItem, IBorderTypeItem, ITextPositionItem,
-        IAccessKeyItem {
+        IAccessKeyItem, IWidthItem, IStyleClassItem {
 }

@@ -63,7 +63,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
         String blankImageURL = htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
-        htmlWriter.startElement("TABLE");
+        htmlWriter.startElement(IHtmlWriter.TABLE);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -74,56 +74,56 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);
 
-        htmlWriter.startElement("COL");
+        htmlWriter.startElement(IHtmlWriter.COL);
         htmlWriter.writeWidth(BORDER_LEFT_WIDTH);
-        htmlWriter.endElement("COL");
+        htmlWriter.endElement(IHtmlWriter.COL);
 
-        htmlWriter.startElement("COL");
+        htmlWriter.startElement(IHtmlWriter.COL);
         htmlWriter.writeWidth("*");
-        htmlWriter.endElement("COL");
+        htmlWriter.endElement(IHtmlWriter.COL);
 
-        htmlWriter.startElement("COL");
+        htmlWriter.startElement(IHtmlWriter.COL);
         htmlWriter.writeWidth(BORDER_RIGHT_WIDTH);
-        htmlWriter.endElement("COL");
+        htmlWriter.endElement(IHtmlWriter.COL);
 
         htmlWriter.writeln();
 
-        htmlWriter.startElement("TBODY");
+        htmlWriter.startElement(IHtmlWriter.TBODY);
 
-        htmlWriter.startElement("TR");
+        htmlWriter.startElement(IHtmlWriter.TR);
 
-        htmlWriter.startElement("TD");
+        htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeAttribute("class", getLeftCellClassName(htmlWriter));
 
-        htmlWriter.startElement("IMG");
+        htmlWriter.startElement(IHtmlWriter.IMG);
         htmlWriter.writeWidth(BORDER_LEFT_WIDTH);
         htmlWriter.writeHeight(BORDER_HEIGHT);
         htmlWriter.writeSrc(blankImageURL);
-        htmlWriter.endElement("IMG");
+        htmlWriter.endElement(IHtmlWriter.IMG);
 
-        htmlWriter.endElement("TD");
+        htmlWriter.endElement(IHtmlWriter.TD);
 
-        htmlWriter.startElement("TD");
+        htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeClass(getMidCellClassName(htmlWriter));
         htmlWriter.writeText(ISgmlWriter.NBSP);
-        htmlWriter.endElement("TD");
+        htmlWriter.endElement(IHtmlWriter.TD);
 
-        htmlWriter.startElement("TD");
+        htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeClass(getRightCellClassName(htmlWriter));
 
-        htmlWriter.startElement("IMG");
+        htmlWriter.startElement(IHtmlWriter.IMG);
         htmlWriter.writeWidth(BORDER_RIGHT_WIDTH);
         htmlWriter.writeHeight(BORDER_HEIGHT);
         htmlWriter.writeSrc(blankImageURL);
-        htmlWriter.endElement("IMG");
+        htmlWriter.endElement(IHtmlWriter.IMG);
 
-        htmlWriter.endElement("TD");
+        htmlWriter.endElement(IHtmlWriter.TD);
 
-        htmlWriter.endElement("TR");
+        htmlWriter.endElement(IHtmlWriter.TR);
 
-        htmlWriter.endElement("TBODY");
+        htmlWriter.endElement(IHtmlWriter.TBODY);
 
-        htmlWriter.endElement("TABLE");
+        htmlWriter.endElement(IHtmlWriter.TABLE);
     }
 
     protected String getWAIRole() {

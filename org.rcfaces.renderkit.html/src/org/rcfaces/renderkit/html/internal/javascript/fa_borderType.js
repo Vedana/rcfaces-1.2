@@ -73,7 +73,7 @@ var __prototype = {
 		
 		var v_borderType=f_core.GetAttribute(this, "v:borderType");
 		if (v_borderType && v_borderType!=fa_borderType.NONE_BORDER_TYPE) {
-			var border=f_core.GetFirstElementByTagName(this, "TABLE", false);
+			var border=f_core.GetFirstElementByTagName(this, "table", false);
 			borderType=v_borderType;
 			
 			if (border) {

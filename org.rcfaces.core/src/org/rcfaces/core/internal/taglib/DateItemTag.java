@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.DateItemComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.DateItemComponent;
 
 public class DateItemTag extends AbstractItemTag implements Tag {
 
@@ -18,7 +18,9 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 
 	private String text;
 	private String styleClass;
-	private String date;
+	private String menuPopupId;
+	private String literalLocale;
+	private String literalTimeZone;
 	public String getComponentType() {
 		return DateItemComponent.COMPONENT_TYPE;
 	}
@@ -39,12 +41,28 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 		this.styleClass = styleClass;
 	}
 
-	public final String getDate() {
-		return date;
+	public final String getMenuPopupId() {
+		return menuPopupId;
 	}
 
-	public final void setDate(String date) {
-		this.date = date;
+	public final void setMenuPopupId(String menuPopupId) {
+		this.menuPopupId = menuPopupId;
+	}
+
+	public final String getLiteralLocale() {
+		return literalLocale;
+	}
+
+	public final void setLiteralLocale(String literalLocale) {
+		this.literalLocale = literalLocale;
+	}
+
+	public final String getLiteralTimeZone() {
+		return literalTimeZone;
+	}
+
+	public final void setLiteralTimeZone(String literalTimeZone) {
+		this.literalTimeZone = literalTimeZone;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -54,7 +72,9 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 			}
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  date='"+date+"'");
+			LOG.debug("  menuPopupId='"+menuPopupId+"'");
+			LOG.debug("  literalLocale='"+literalLocale+"'");
+			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -89,12 +109,33 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 			}
 		}
 
-		if (date != null) {
-			if (isValueReference(date)) {
-				ValueBinding vb = application.createValueBinding(date);
-				component.setDate(vb);
+		if (menuPopupId != null) {
+			if (isValueReference(menuPopupId)) {
+				ValueBinding vb = application.createValueBinding(menuPopupId);
+
+				component.setMenuPopupId(vb);
 			} else {
-				component.setDate(date);
+				component.setMenuPopupId(menuPopupId);
+			}
+		}
+
+		if (literalLocale != null) {
+			if (isValueReference(literalLocale)) {
+				ValueBinding vb = application.createValueBinding(literalLocale);
+
+				component.setLiteralLocale(vb);
+			} else {
+				component.setLiteralLocale(literalLocale);
+			}
+		}
+
+		if (literalTimeZone != null) {
+			if (isValueReference(literalTimeZone)) {
+				ValueBinding vb = application.createValueBinding(literalTimeZone);
+
+				component.setLiteralTimeZone(vb);
+			} else {
+				component.setLiteralTimeZone(literalTimeZone);
 			}
 		}
 	}
@@ -102,7 +143,9 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 	public void release() {
 		text = null;
 		styleClass = null;
-		date = null;
+		menuPopupId = null;
+		literalLocale = null;
+		literalTimeZone = null;
 
 		super.release();
 	}

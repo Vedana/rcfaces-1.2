@@ -112,7 +112,13 @@ var __prototype = {
 						component.f_performAsyncErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
 					}
-				
+
+					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+					if (!cameliaServiceVersion) {
+						component.f_performAsyncErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+						return;					
+					}
+					
 					var ret=request.f_getResponse();
 					//	alert("Ret="+ret);
 

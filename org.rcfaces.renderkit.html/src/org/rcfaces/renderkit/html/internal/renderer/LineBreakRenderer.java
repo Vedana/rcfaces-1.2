@@ -22,12 +22,12 @@ public class LineBreakRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("BR");
+        htmlWriter.startElement(IHtmlWriter.BR);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        htmlWriter.endElement("BR");
+        htmlWriter.endElement(IHtmlWriter.BR);
 
         super.encodeEnd(htmlWriter);
     }

@@ -18,7 +18,7 @@ import javax.faces.render.Renderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
-import org.rcfaces.core.internal.component.IEditableValueHolder;
+import org.rcfaces.core.internal.capability.IEditableValueHolder;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 

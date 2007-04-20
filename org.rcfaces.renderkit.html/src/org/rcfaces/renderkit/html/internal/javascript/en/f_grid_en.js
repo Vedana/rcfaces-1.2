@@ -13,6 +13,6 @@ var __resources = {
 	COLUMN_RESIZE: "Keep your mouse button pushed to resize the column"
 }
 
-f_resourceBundle.Define(f_dataGrid, __resources);
+f_resourceBundle.Define(f_grid, __resources);
 
  

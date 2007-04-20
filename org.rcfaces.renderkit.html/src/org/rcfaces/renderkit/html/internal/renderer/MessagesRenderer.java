@@ -33,7 +33,7 @@ public class MessagesRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("TABLE");
+        htmlWriter.startElement(IHtmlWriter.TABLE);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -51,7 +51,7 @@ public class MessagesRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:showDetail", "true");
         }
 
-        htmlWriter.endElement("TABLE");
+        htmlWriter.endElement(IHtmlWriter.TABLE);
 
         htmlWriter.enableJavaScript();
     }

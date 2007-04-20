@@ -1,15 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.TabbedPaneComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TabbedPaneComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public class TabbedPaneTag extends CardBoxTag implements Tag {
 
@@ -18,6 +19,7 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 
 	private String closeListeners;
 	private String closable;
+	private String showValue;
 	public String getComponentType() {
 		return TabbedPaneComponent.COMPONENT_TYPE;
 	}
@@ -38,12 +40,21 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 		this.closable = closable;
 	}
 
+	public final String getShowValue() {
+		return showValue;
+	}
+
+	public final void setShowValue(String showValue) {
+		this.showValue = showValue;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (TabbedPaneComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  closable='"+closable+"'");
+			LOG.debug("  showValue='"+showValue+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -71,11 +82,22 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 				component.setClosable(getBool(closable));
 			}
 		}
+
+		if (showValue != null) {
+			if (isValueReference(showValue)) {
+				ValueBinding vb = application.createValueBinding(showValue);
+
+				component.setShowValue(vb);
+			} else {
+				component.setShowValue(showValue);
+			}
+		}
 	}
 
 	public void release() {
 		closeListeners = null;
 		closable = null;
+		showValue = null;
 
 		super.release();
 	}

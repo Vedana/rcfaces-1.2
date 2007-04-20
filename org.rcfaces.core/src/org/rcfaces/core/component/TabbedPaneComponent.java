@@ -1,17 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.CardBoxComponent;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClosableCapability;
+import org.rcfaces.core.component.capability.ICloseEventCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.iterator.ITabIterator;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.TabbedPaneTools;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.IClosableCapability;
-import org.rcfaces.core.component.iterator.ITabIterator;
-import javax.faces.el.ValueBinding;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.TabComponent;
-import org.rcfaces.core.component.capability.ICloseEventCapability;
-import java.util.HashSet;
 
 /**
  * <p>The tabbedPane Component provides a way to show more information on a single page. It can download the data asynchronously via AJAX.</p>
@@ -28,13 +29,14 @@ import java.util.HashSet;
  */
 public class TabbedPaneComponent extends CardBoxComponent implements 
 	ICloseEventCapability,
-	IClosableCapability {
+	IClosableCapability,
+	IShowValueCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tabbedPane";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardBoxComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"closable","closeListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showValue","closable","closeListener"}));
 	}
 
 	public TabbedPaneComponent() {
@@ -86,26 +88,64 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ICloseListener.class);
 	}
 
-	public final boolean isClosable() {
+	public boolean isClosable() {
 		return isClosable(null);
 	}
 
 	/**
 	 * See {@link #isClosable() isClosable()} for more details
 	 */
-	public final boolean isClosable(javax.faces.context.FacesContext facesContext) {
+	public boolean isClosable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLOSABLE, false, facesContext);
 	}
 
-	public final void setClosable(boolean closable) {
+	/**
+	 * Returns <code>true</code> if the attribute "closable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClosableSetted() {
+		return engine.isPropertySetted(Properties.CLOSABLE);
+	}
+
+	public void setClosable(boolean closable) {
 		engine.setProperty(Properties.CLOSABLE, closable);
 	}
 
 	/**
 	 * See {@link #setClosable(boolean) setClosable(boolean)} for more details
 	 */
-	public final void setClosable(ValueBinding closable) {
+	public void setClosable(ValueBinding closable) {
 		engine.setProperty(Properties.CLOSABLE, closable);
+	}
+
+	public java.lang.Object getShowValue() {
+		return getShowValue(null);
+	}
+
+	/**
+	 * See {@link #getShowValue() getShowValue()} for more details
+	 */
+	public java.lang.Object getShowValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SHOW_VALUE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowValueSetted() {
+		return engine.isPropertySetted(Properties.SHOW_VALUE);
+	}
+
+	public void setShowValue(java.lang.Object showValue) {
+		engine.setProperty(Properties.SHOW_VALUE, showValue);
+	}
+
+	/**
+	 * See {@link #setShowValue(Object) setShowValue(Object)} for more details
+	 */
+	public void setShowValue(ValueBinding showValue) {
+		engine.setProperty(Properties.SHOW_VALUE, showValue);
 	}
 
 	protected Set getCameliaFields() {

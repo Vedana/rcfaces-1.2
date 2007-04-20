@@ -66,7 +66,7 @@ var __static = {
 			return userDataComponent;
 		}
 		
-		userDataComponent=document.createElement("DIV");
+		userDataComponent=document.createElement("div");
 		userDataComponent.className="f_userDataClientStorage";
 		
 		document.body.appendChild(userDataComponent);

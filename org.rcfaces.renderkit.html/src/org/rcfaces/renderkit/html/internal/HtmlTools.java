@@ -346,10 +346,10 @@ public class HtmlTools {
 
         int end = idx + accessKey.length();
 
-        writer.startElement("U");
+        writer.startElement(IHtmlWriter.U);
         writer.writeClass(ACCESSKEY_CLASSNAME);
         writer.writeText(text.substring(idx, end));
-        writer.endElement("U");
+        writer.endElement(IHtmlWriter.U);
 
         if (end < text.length()) {
             String txt = text.substring(end);
@@ -394,14 +394,14 @@ public class HtmlTools {
             }
 
             if (c == LF_CHARACTER) {
-                writer.startElement("BR");
-                writer.endElement("BR");
+                writer.startElement(IHtmlWriter.BR);
+                writer.endElement(IHtmlWriter.BR);
 
             } else {
-                writer.startElement("U");
+                writer.startElement(IHtmlWriter.U);
                 writer.writeClass(ACCESSKEY_CLASSNAME);
                 writer.write(c);
-                writer.endElement("U");
+                writer.endElement(IHtmlWriter.U);
                 ak = NO_ACCESS_KEY;
             }
 
@@ -670,7 +670,7 @@ public class HtmlTools {
             year = calendar.get(Calendar.YEAR);
             month = calendar.get(Calendar.MONTH);
             day = calendar.get(Calendar.DATE);
-            
+
             if (onlyDate) {
                 hours = calendar.get(Calendar.HOUR);
                 minutes = calendar.get(Calendar.MINUTE);
@@ -820,7 +820,7 @@ public class HtmlTools {
         Calendar calendar = CalendarTools.getCalendar(processContext,
                 component, false);
         synchronized (calendar) {
-            calendar.set(year, month, date+1, hours, minutes, seconds);
+            calendar.set(year, month, date + 1, hours, minutes, seconds);
             if (millis > 0) {
                 calendar.set(Calendar.MILLISECOND, millis);
             }

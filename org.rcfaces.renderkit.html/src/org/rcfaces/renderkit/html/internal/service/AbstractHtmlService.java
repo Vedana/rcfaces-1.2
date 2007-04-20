@@ -38,6 +38,8 @@ public abstract class AbstractHtmlService extends AbstractService {
 
     protected static final String RESPONSE_CHARSET = "UTF-8";
 
+    private static final String CAMELIA_RESPONSE_HEADER = "X-Camelia-Service";
+
     private transient boolean useGzip;
 
     static void sendJsError(FacesContext facesContext, UserFacesException ex,
@@ -160,6 +162,18 @@ public abstract class AbstractHtmlService extends AbstractService {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Set no cache for response.");
         }
+    }
+
+    static final void setCameliaResponse(ServletResponse response,
+            String version) {
+        if ((response instanceof HttpServletResponse) == false) {
+            LOG.error("Can not set 'noCache' for this response type ! ("
+                    + response.getClass() + ")");
+            return;
+        }
+
+        ((HttpServletResponse) response).setHeader(CAMELIA_RESPONSE_HEADER,
+                version);
     }
 
 }

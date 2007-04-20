@@ -42,7 +42,33 @@ var __static = {
      *
 	 * @field public static final number
 	 */
-    SEVERITY_FATAL: 3
+    SEVERITY_FATAL: 3,
+    
+    /**
+     * @method hidden static
+     */
+    CreateFromTag: function(tag) {
+    	f_core.Assert(tag && tag.nodeType==1, "f_messageObject.CreateFromTag: Invalid tag parameter '"+tag+"'.");
+    	
+		var detail=f_core.GetAttribute(tag, "v:detail");
+		var summary=f_core.GetAttribute(tag, "v:summary");
+		
+		var severity=f_core.GetAttribute(tag, "v:severity");	
+		if (typeof(severity)=="string") {			
+			severity=parseInt(severity);
+		}
+		
+		var component=null;
+		
+		var forClientId=f_core.GetAttribute(tag, "v:for");			
+		if (forClientId) {
+			component=f_core.GetElementById(forClientId);
+		}
+		
+		var messageObject = new f_messageObject(severity, summary, detail);
+		
+		f_messageContext.Get(component).f_addMessageObject(component, messageObject, true);
+    }
 }
 
 var __prototype = {
@@ -59,7 +85,7 @@ var __prototype = {
 	//	f_core.Assert(typeof(severity)=="number", "Bad type of severity");
 	//	f_core.Assert(summary, "Bad summary"); // Summary can be null
 	
-		if (!severity) {
+		if (typeof(severity)!="number") {
 			severity=f_messageObject.SEVERITY_INFO;
 		}
 	

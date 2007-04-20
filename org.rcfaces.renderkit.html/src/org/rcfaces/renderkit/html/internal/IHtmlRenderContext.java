@@ -5,7 +5,7 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.Set;
 
-import org.rcfaces.core.internal.component.IAsyncRenderComponent;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 

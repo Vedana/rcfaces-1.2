@@ -9,12 +9,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.component.DataColumnComponent;
-import org.rcfaces.core.component.DataGridComponent;
-import org.rcfaces.core.component.iterator.IDataColumnIterator;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.component.capability.IWidthRangeCapability;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.model.IFilterProperties;
 
 /**
@@ -56,32 +61,38 @@ public class DataGridPreference extends AbstractComponentPreference {
     }
 
     public void loadPreference(FacesContext facesContext, UIComponent component) {
-        if ((component instanceof DataGridComponent) == false) {
+        if ((component instanceof IGridComponent) == false) {
             throw new FacesException("Can not load dataGrid preferences !");
         }
 
-        DataGridComponent dataGridComponent = (DataGridComponent) component;
+        IGridComponent gridComponent = (IGridComponent) component;
 
-        if (columnsOrder != null) {
-            dataGridComponent.setColumnsOrder(columnsOrder);
+        if (gridComponent instanceof IOrderedChildrenCapability) {
+            if (columnsOrder != null) {
+                GridTools.setOrderIds(gridComponent, columnsOrder);
+            }
         }
 
-        if (sortedColumnIds != null) {
-            dataGridComponent.setSortedColumnIds(sortedColumnIds);
+        if (gridComponent instanceof ISortedChildrenCapability) {
+            if (sortedColumnIds != null) {
+                GridTools.setSortIds(gridComponent, sortedColumnIds);
+            }
         }
 
         if (columnSizes != null) {
-            IDataColumnIterator dataColumnIterator = dataGridComponent
-                    .listColumns();
+            IColumnIterator dataColumnIterator = gridComponent.listColumns();
 
             if (dataColumnIterator.count() > 0) {
                 Map cols = new HashMap(dataColumnIterator.count());
                 for (; dataColumnIterator.hasNext();) {
-                    DataColumnComponent columnComponent = dataColumnIterator
-                            .next();
+                    UIColumn columnComponent = dataColumnIterator.next();
 
                     String columnId = columnComponent.getId();
                     if (columnId == null) {
+                        continue;
+                    }
+
+                    if ((columnComponent instanceof IWidthRangeCapability) == false) {
                         continue;
                     }
 
@@ -94,7 +105,7 @@ public class DataGridPreference extends AbstractComponentPreference {
                     String columnId = (String) entry.getKey();
                     String columnWidth = (String) entry.getValue();
 
-                    DataColumnComponent columnComponent = (DataColumnComponent) cols
+                    IWidthRangeCapability columnComponent = (IWidthRangeCapability) cols
                             .get(columnId);
                     if (columnId == null) {
                         continue;
@@ -105,65 +116,75 @@ public class DataGridPreference extends AbstractComponentPreference {
             }
         }
 
-        if (filterProperties != null) {
-            dataGridComponent.setFilterProperties(filterProperties);
+        if (filterProperties != null
+                && (gridComponent instanceof IFilterCapability)) {
+            ((IFilterCapability) gridComponent)
+                    .setFilterProperties(filterProperties);
         }
 
         if (position >= 0) {
-            dataGridComponent.setFirst(position);
+            gridComponent.setFirst(position);
         }
     }
 
     public void savePreference(FacesContext facesContext, UIComponent component) {
-        if ((component instanceof DataGridComponent) == false) {
+        if ((component instanceof IGridComponent) == false) {
             throw new FacesException("Can not save dataGrid preferences !");
         }
 
-        DataGridComponent dataGridComponent = (DataGridComponent) component;
+        IGridComponent gridComponent = (IGridComponent) component;
 
         if (isSaveColumnsOrder()) {
-            columnsOrder = dataGridComponent.getColumnsOrder(facesContext);
+            if (gridComponent instanceof IOrderedChildrenCapability) {
+                columnsOrder = GridTools.getOrderIds(gridComponent);
+            }
         }
 
         if (isSaveSortedColumnIds()) {
-            sortedColumnIds = dataGridComponent
-                    .getSortedColumnIds(facesContext);
+            if (gridComponent instanceof ISortedChildrenCapability) {
+                sortedColumnIds = GridTools.getSortIds(gridComponent);
+            }
         }
 
         if (isSaveColumnSizes()) {
             columnSizes = null;
 
-            IDataColumnIterator dataColumnIterator = dataGridComponent
-                    .listColumns();
+            IColumnIterator dataColumnIterator = gridComponent.listColumns();
 
             if (dataColumnIterator.count() > 0) {
                 columnSizes = new HashMap(dataColumnIterator.count());
                 for (; dataColumnIterator.hasNext();) {
-                    DataColumnComponent columnComponent = dataColumnIterator
-                            .next();
+                    UIColumn columnComponent = dataColumnIterator.next();
 
                     String columnId = columnComponent.getId();
                     if (columnId == null) {
                         continue;
                     }
 
-                    String columnWidth = columnComponent.getWidth(facesContext);
+                    if ((columnComponent instanceof IWidthRangeCapability) == false) {
+                        continue;
+                    }
+
+                    String columnWidth = ((IWidthRangeCapability) columnComponent)
+                            .getWidth();
                     if (columnWidth == null) {
                         continue;
                     }
 
                     columnSizes.put(columnId, columnWidth);
+
                 }
             }
         }
 
-        if (isSaveFilterProperties()) {
-            filterProperties = dataGridComponent
-                    .getFilterProperties(facesContext);
+        if (isSaveFilterProperties()
+                && (gridComponent instanceof IFilterCapability)) {
+            filterProperties = ((IFilterCapability) gridComponent)
+                    .getFilterProperties();
         }
 
         if (isSavePosition()) {
-            position = dataGridComponent.getFirst();
+            position = gridComponent.getFirst();
         }
     }
 

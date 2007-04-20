@@ -9,6 +9,6 @@ package org.rcfaces.core.item;
  * @version $Revision$ $Date$
  */
 public interface IDateItem extends ISelectItem, IStyleClassItem,
-        IClientDataItem, IServerDataItem {
+        IClientDataItem, IServerDataItem, IMenuPopupIdItem {
 
 }

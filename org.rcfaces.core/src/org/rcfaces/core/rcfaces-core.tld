@@ -214,17 +214,17 @@ A string value (as specified by CSS) for the x position of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -520,17 +520,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -924,17 +924,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -1378,17 +1378,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -1831,17 +1831,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -2246,17 +2246,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -2615,12 +2615,9 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-		<name>dataColumn</name>
-		<tag-class>org.rcfaces.core.internal.taglib.DataColumnTag</tag-class>
+		<name>componentsColumn</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ComponentsColumnTag</tag-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
-Specify a column.
-]]></description>
 		<attribute>
 			<name>id</name>
 <description><![CDATA[
@@ -2642,13 +2639,6 @@ The value binding expression linking this component to a property in a backing b
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>converter</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -2812,11 +2802,8 @@ An int value specifying the width (in pixels) to use for the image shown.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>width</name>
+			<name>menuPopupId</name>
 			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the width of the component.
-]]></description>
 		</attribute>
 		<attribute>
 			<name>maxWidth</name>
@@ -2833,7 +2820,14 @@ An int value specifying the minimum width in pixels (if resizeable).
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>verticalAlign</name>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>verticalAlignment</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string that represent the vertical alignement of the data in the component.
@@ -2847,17 +2841,270 @@ A string that represent the vertical alignement of the data in the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>value</name>
+			<name>cellStyleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string value holding the current value of the component.
+A space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>defaultCellImageURL</name>
+			<name>defaultCellStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>cellDefaultToolTipText</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>cellToolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An url string pointing to the default image.
+A string value containing the text that will appear when the pointer hover the component.
+]]></description>
+		</attribute>
+	</tag>
+	<tag>
+		<name>dataColumn</name>
+		<tag-class>org.rcfaces.core.internal.taglib.DataColumnTag</tag-class>
+		<body-content>JSP</body-content>
+<description><![CDATA[
+Specify a column.
+]]></description>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>converter</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+The converter id to use. as specified in faces-config.xml.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>visible</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>hiddenMode</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the management of invisible state on the client.
+		Authorized values are :
+		<ul><li>
+		server : if not visible, nothing is sent to the client
+		</li><li>
+		phantom : if not visible, the data is sent to the client and the page estate is reserved for a futur eventual display of the component
+		</li><li>
+		ignore : if not visible, the data is sent to the client but no page estate is reserved
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the text (literal or binding) to be shown.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>toolTipText</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>alignment</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string that represents the alignement of the data in the component.
+		<ul><li>
+		left
+		</li><li>
+		right
+		</li><li>
+		center
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>backgroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A color value (as specified by CSS) for the background.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>foregroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A color value (as specified by CSS) for the text.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>sortListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component is sorted.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>ascending</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value that indicates the sorting direction for the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>sortComparator</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the "compare" function to use. it can reference a javascript function or a keyword :
+		<ul><li>
+		integer
+		</li><li>
+		number
+		</li><li>
+		alpha
+		</li><li>
+		alphaIgnoreCase
+		</li><li>
+		time
+		</li><li>
+		date
+		</li><li>
+		&lt;javascript function&gt;
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>resizable</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the component can be resized by the user.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>disabledImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to the image used for the disabled state.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>hoverImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to the image used chen the pointer hover the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>selectedImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to the image used when the component is selected.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>imageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to the image used by the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>imageHeight</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the height (in pixels) to use for the image shown.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>imageWidth</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the width (in pixels) to use for the image shown.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>menuPopupId</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>maxWidth</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the maximum width in pixels (if resizeable).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>minWidth</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the minimum width in pixels (if resizeable).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>verticalAlignment</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string that represent the vertical alignement of the data in the component.
+		<ul><li>
+		top
+		</li><li>
+		center
+		</li><li>
+		bottom
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>autoFilter</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Experimental
+		A boolean value indicating if the component should apply filter automatically.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -2868,11 +3115,26 @@ An url string pointing to the image.
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>defaultCellImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to the default image.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>cellStyleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
 ]]></description>
+		</attribute>
+		<attribute>
+			<name>defaultCellStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>cellDefaultToolTipText</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>cellToolTipText</name>
@@ -2882,11 +3144,10 @@ A string value containing the text that will appear when the pointer hover the c
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>autoFilter</name>
+			<name>value</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-Experimental
-		A boolean value indicating if the component should apply filter automatically.
+A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 	</tag>
@@ -2978,17 +3239,17 @@ A string value (as specified by CSS) for the x position of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3287,17 +3548,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3668,6 +3929,13 @@ A boolean value that indicates if the component should show a border or not.
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>rowStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied when the row is rendered. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>readOnly</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -3705,17 +3973,14 @@ A binded object that hold the filters to use on the server side. This property i
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>showValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>preference</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A binded object that holds the preferences for the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>headerVisible</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A boolean value indicating wether the header should be visible.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3726,45 +3991,6 @@ A boolean value specifying wether the results should be displayed by page (thus 
 		It is ignored if the attribute "rows" is undefined.
 		The default value is true. 
 		If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>sortedColumnIds</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value giving the ordered list of the sorted column ids. read-only
-]]></description>
-		</attribute>
-		<attribute>
-			<name>columnsOrder</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A list of the columns' id which represents their order from left to right.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>rowValueColumnId</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-An id for the column containing the key for the row.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>cursorValue</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>rowCountVar</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the name of the variable receiving the number of rows.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>rowIndexVar</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the name of the variable receiving the index of the current row.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3779,6 +4005,38 @@ A boolean value indicating wether the client should know about the component's f
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>cursorValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>headerVisible</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the header should be visible.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rowValueColumnId</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An id for the column containing the key for the row.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rowCountVar</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of the variable receiving the number of rows.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rowIndexVar</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the name of the variable receiving the index of the current row.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -3838,17 +4096,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4055,39 +4313,17 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
-			<name>border</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A boolean value that indicates if the component should show a border or not.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>borderType</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string that indicates the type of border the component should show.
-		Check for availability for a particular component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>horizontalScrollPosition</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the position of the horizontal scroolbar.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>verticalScrollPosition</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the position of the vertical scroolbar (Browser dependant).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4097,13 +4333,6 @@ A string value specifying the position of the vertical scroolbar (Browser depend
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>first</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4123,6 +4352,111 @@ A string value holding the name of a request-scope attribute under which the mod
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>selectionListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component is selected.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>selectable</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the component can receive a user's selection
+]]></description>
+		</attribute>
+		<attribute>
+			<name>selectionCardinality</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the type of multiple selection authorized:
+		<ul><li>
+		zeromany|*: any number of selections or none
+		</li><li>
+		one|1: one and only one selection
+		</li><li>
+		onemany|+: one or more selection
+		</li><li>
+		optionnal|?: none or one selection
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>selectedValues</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A table of the values associated with selected nodes for the component. (Binding only)
+]]></description>
+		</attribute>
+		<attribute>
+			<name>doubleClickListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component is double-clicked.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>required</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating that the user is required to provide a submitted
+          value for this input component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>border</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value that indicates if the component should show a border or not.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rowStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied when the row is rendered. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>horizontalScrollPosition</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the position of the horizontal scroolbar.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>verticalScrollPosition</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the position of the vertical scroolbar (Browser dependant).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>preference</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A binded object that holds the preferences for the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>paged</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
+		It is ignored if the attribute "rows" is undefined.
+		The default value is true. 
+		If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>rowCountVar</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -4137,17 +4471,18 @@ A string value specifying the name of the variable receiving the index of the cu
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>rowStyleClass</name>
+			<name>rowValue</name>
 			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A space-separated list of CSS style class(es) to be applied when the row is rendered. This value will be passed through as the "class" attribute on generated markup.
-]]></description>
 		</attribute>
 		<attribute>
-			<name>columnStyleClass</name>
+			<name>rowValueConverter</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>clientSelectionFullState</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A space-separated list of CSS style class(es) to be applied when this column is rendered. This value will be passed through as the "class" attribute on generated markup.
+A boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 ]]></description>
 		</attribute>
 	</tag>
@@ -4189,17 +4524,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4406,10 +4741,42 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rows</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4439,38 +4806,6 @@ A string value specifying the position of the horizontal scroolbar.
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value specifying the position of the vertical scroolbar (Browser dependant).
-]]></description>
-		</attribute>
-		<attribute>
-			<name>rows</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>first</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>value</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4618,11 +4953,16 @@ A space-separated list of CSS style class(es) to be applied to the component. Th
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>date</name>
+			<name>menuPopupId</name>
 			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-The date value. (format : according the the declared locale)
-]]></description>
+		</attribute>
+		<attribute>
+			<name>literalLocale</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>literalTimeZone</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	<tag>
@@ -4682,17 +5022,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5173,17 +5513,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5757,17 +6097,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -6394,17 +6734,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -7107,17 +7447,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -7486,17 +7826,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -8008,17 +8348,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -8527,17 +8867,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -8838,17 +9178,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -9250,17 +9590,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -9539,17 +9879,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -10126,17 +10466,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -10689,17 +11029,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -11229,17 +11569,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -11762,17 +12102,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -12341,17 +12681,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -12927,17 +13267,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -13368,17 +13708,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -13746,17 +14086,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -14199,17 +14539,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -14383,6 +14723,14 @@ A string value specifying the margins for the component (compliant to CSS margin
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>showDetail</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
+]]></description>
+		</attribute>
+		<attribute>
 			<name>globalOnly</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -14395,14 +14743,6 @@ A boolean value indicating if the component specific messages should be shown or
 <description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "false".
-]]></description>
-		</attribute>
-		<attribute>
-			<name>showDetail</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
 ]]></description>
 		</attribute>
 		<attribute>
@@ -14493,6 +14833,13 @@ A boolean value indicating whether or not this component should be rendered
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 The converter id to use. as specified in faces-config.xml.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>preloadedLevelDepth</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the number of levels that should be preloaded when a node is displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -14605,17 +14952,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15796,17 +16143,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16374,17 +16721,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16925,17 +17272,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -17372,17 +17719,17 @@ A string value (as specified by CSS) for the x position of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -17554,17 +17901,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -18187,17 +18534,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -18658,17 +19005,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -19089,17 +19436,17 @@ A string value specifying the margin size for the component's top (compliant to 
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -19290,17 +19637,17 @@ A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -19695,17 +20042,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -20300,17 +20647,17 @@ A string value (as specified by CSS) for the x position of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -20610,17 +20957,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -20945,17 +21292,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -21390,17 +21737,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -21695,17 +22042,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22105,6 +22452,10 @@ Executed when the component is closed.
 Experimental : Do not use !
 ]]></description>
 		</attribute>
+		<attribute>
+			<name>showValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<name>tab</name>
@@ -22158,17 +22509,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22558,17 +22909,17 @@ A boolean value indicating wether the composant is visible.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -22894,17 +23245,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -23411,17 +23762,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -23931,17 +24282,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -24484,17 +24835,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -25074,17 +25425,17 @@ A string value (as specified by CSS) for the x position of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -25322,17 +25673,17 @@ A string value (as specified by CSS) for the x position of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -25536,17 +25887,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -26213,6 +26564,20 @@ A string value specifying the position of the text in the component :
 A string that indicates the alphanumeric key used to execute an action from the keyboard (in conjunction with a alteration key ex : Alt).
 ]]></description>
 		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
 	</tag>
 	<tag>
 		<name>toolItemSeparator</name>
@@ -26326,17 +26691,17 @@ The converter id to use. as specified in faces-config.xml.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>height</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value (as specified by CSS) for the height of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>width</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -26716,6 +27081,10 @@ A boolean value indicating that this component will prohibit
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>showValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>checkable</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -26779,6 +27148,13 @@ Executed when the component is selected.
 		the two parts are separated by a semi-column.
 		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
 		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>preloadedLevelDepth</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the number of levels that should be preloaded when a node is displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -26849,13 +27225,6 @@ A boolean value indicating wether the user can expand the component.
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A boolean value indicating wether the expand sign should be visible for the topmost node.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>preloadedLevelDepth</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-An int value specifying the number of levels that should be preloaded when a node is displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -27112,6 +27481,10 @@ A string specifying the name of the virtual entity that links different componen
 <description><![CDATA[
 A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
 ]]></description>
+		</attribute>
+		<attribute>
+			<name>menuPopupId</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>inputType</name>

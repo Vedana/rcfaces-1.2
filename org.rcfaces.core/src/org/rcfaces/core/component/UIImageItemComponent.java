@@ -1,17 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.AbstractItemComponent;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
@@ -19,7 +21,8 @@ import java.util.HashSet;
 public class UIImageItemComponent extends AbstractItemComponent implements 
 	IVisibilityCapability,
 	IToolTipCapability,
-	IStatesImageCapability {
+	IStatesImageCapability,
+	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.UIImageItem";
 
@@ -76,25 +79,33 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 			
 	}
 
-	public final boolean isVisible() {
+	public boolean isVisible() {
 		return isVisible(null);
 	}
 
 	/**
 	 * See {@link #isVisible() isVisible()} for more details
 	 */
-	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
 	}
 
-	public final void setVisible(boolean visible) {
+	/**
+	 * Returns <code>true</code> if the attribute "visible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVisibleSetted() {
+		return engine.isPropertySetted(Properties.VISIBLE);
+	}
+
+	public void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	/**
 	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
 	 */
-	public final void setVisible(ValueBinding visible) {
+	public void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
@@ -105,113 +116,153 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		
 	}
 
-	public final java.lang.String getToolTipText() {
+	public java.lang.String getToolTipText() {
 		return getToolTipText(null);
 	}
 
 	/**
 	 * See {@link #getToolTipText() getToolTipText()} for more details
 	 */
-	public final java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
 	}
 
-	public final void setToolTipText(java.lang.String toolTipText) {
+	/**
+	 * Returns <code>true</code> if the attribute "toolTipText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isToolTipTextSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
+	}
+
+	public void setToolTipText(java.lang.String toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
 	/**
 	 * See {@link #setToolTipText(String) setToolTipText(String)} for more details
 	 */
-	public final void setToolTipText(ValueBinding toolTipText) {
+	public void setToolTipText(ValueBinding toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
-	public final java.lang.String getDisabledImageURL() {
+	public java.lang.String getDisabledImageURL() {
 		return getDisabledImageURL(null);
 	}
 
 	/**
 	 * See {@link #getDisabledImageURL() getDisabledImageURL()} for more details
 	 */
-	public final java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DISABLED_IMAGE_URL, facesContext);
 	}
 
-	public final void setDisabledImageURL(java.lang.String disabledImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "disabledImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDisabledImageURLSetted() {
+		return engine.isPropertySetted(Properties.DISABLED_IMAGE_URL);
+	}
+
+	public void setDisabledImageURL(java.lang.String disabledImageURL) {
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
 
 	/**
 	 * See {@link #setDisabledImageURL(String) setDisabledImageURL(String)} for more details
 	 */
-	public final void setDisabledImageURL(ValueBinding disabledImageURL) {
+	public void setDisabledImageURL(ValueBinding disabledImageURL) {
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
 
-	public final java.lang.String getHoverImageURL() {
+	public java.lang.String getHoverImageURL() {
 		return getHoverImageURL(null);
 	}
 
 	/**
 	 * See {@link #getHoverImageURL() getHoverImageURL()} for more details
 	 */
-	public final java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOVER_IMAGE_URL, facesContext);
 	}
 
-	public final void setHoverImageURL(java.lang.String hoverImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "hoverImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHoverImageURLSetted() {
+		return engine.isPropertySetted(Properties.HOVER_IMAGE_URL);
+	}
+
+	public void setHoverImageURL(java.lang.String hoverImageURL) {
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
 
 	/**
 	 * See {@link #setHoverImageURL(String) setHoverImageURL(String)} for more details
 	 */
-	public final void setHoverImageURL(ValueBinding hoverImageURL) {
+	public void setHoverImageURL(ValueBinding hoverImageURL) {
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
 
-	public final java.lang.String getSelectedImageURL() {
+	public java.lang.String getSelectedImageURL() {
 		return getSelectedImageURL(null);
 	}
 
 	/**
 	 * See {@link #getSelectedImageURL() getSelectedImageURL()} for more details
 	 */
-	public final java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SELECTED_IMAGE_URL, facesContext);
 	}
 
-	public final void setSelectedImageURL(java.lang.String selectedImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "selectedImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectedImageURLSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_IMAGE_URL);
+	}
+
+	public void setSelectedImageURL(java.lang.String selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
 
 	/**
 	 * See {@link #setSelectedImageURL(String) setSelectedImageURL(String)} for more details
 	 */
-	public final void setSelectedImageURL(ValueBinding selectedImageURL) {
+	public void setSelectedImageURL(ValueBinding selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
 
-	public final java.lang.String getImageURL() {
+	public java.lang.String getImageURL() {
 		return getImageURL(null);
 	}
 
 	/**
 	 * See {@link #getImageURL() getImageURL()} for more details
 	 */
-	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
 
-	public final void setImageURL(java.lang.String imageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageURLSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_URL);
+	}
+
+	public void setImageURL(java.lang.String imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
 	/**
 	 * See {@link #setImageURL(String) setImageURL(String)} for more details
 	 */
-	public final void setImageURL(ValueBinding imageURL) {
+	public void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 

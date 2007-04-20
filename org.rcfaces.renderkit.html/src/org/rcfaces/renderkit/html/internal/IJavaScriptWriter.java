@@ -74,6 +74,8 @@ public interface IJavaScriptWriter {
 
     IJavaScriptWriter writeNull() throws WriterException;
 
+    IObjectLiteralWriter writeObjectLiteral(boolean writeNullIfEmpty) throws WriterException;
+
     void end() throws WriterException;
 
     boolean isOpened();

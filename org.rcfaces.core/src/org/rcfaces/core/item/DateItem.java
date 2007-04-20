@@ -3,18 +3,16 @@
  */
 package org.rcfaces.core.item;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.faces.FacesException;
 import javax.faces.component.UISelectItem;
 import javax.faces.model.SelectItem;
 
+import org.rcfaces.core.component.DateItemComponent;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
 
 /**
  * 
@@ -32,6 +30,8 @@ public class DateItem extends SelectItem implements IDateItem {
     private Map clientDatas;
 
     private Map serverDatas;
+
+    private String menuPopupId;
 
     public DateItem() {
     }
@@ -54,8 +54,9 @@ public class DateItem extends SelectItem implements IDateItem {
     }
 
     public DateItem(UISelectItem component) {
-        super(computeValue(component), component.getItemLabel(), component
-                .getItemDescription(), component.isItemDisabled());
+        super(((DateItemComponent) component).getDate(), component
+                .getItemLabel(), component.getItemDescription(), component
+                .isItemDisabled());
 
         if (component instanceof IStyleClassCapability) {
             IStyleClassCapability dateItemComponent = (IStyleClassCapability) component;
@@ -82,22 +83,6 @@ public class DateItem extends SelectItem implements IDateItem {
                 getClientDataMap().putAll(map);
             }
         }
-    }
-
-    private static Object computeValue(UISelectItem component) {
-        Object value = component.getItemValue();
-        if (value == null || (value instanceof Date)
-                || (value instanceof Date[])) {
-            return value;
-        }
-
-        if (value instanceof String) {
-            return LiteralDateConverter.SINGLETON.getAsObject(null, component,
-                    (String) value);
-        }
-
-        throw new FacesException("Invalid itemValue for DateItem '" + value
-                + "'.");
     }
 
     public String getStyleClass() {
@@ -139,4 +124,13 @@ public class DateItem extends SelectItem implements IDateItem {
 
         return serverDatas;
     }
+
+    public final String getMenuPopupId() {
+        return menuPopupId;
+    }
+
+    public final void setMenuPopupId(String menuPopupId) {
+        this.menuPopupId = menuPopupId;
+    }
+
 }

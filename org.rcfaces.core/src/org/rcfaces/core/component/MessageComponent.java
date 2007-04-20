@@ -1,18 +1,20 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.component.AbstractMessageComponent;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ISeverityImagesCapability;
-import java.util.Set;
-import java.util.HashSet;
+
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.ISeverityImagesCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * <p>The message Component is a placeholder for error messages (only one is shown).</p>
@@ -32,7 +34,8 @@ public class MessageComponent extends AbstractMessageComponent implements
 	IImageSizeCapability,
 	ITextCapability,
 	ISeverityStyleClassCapability,
-	ISeverityImagesCapability {
+	ISeverityImagesCapability,
+	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.message";
 
@@ -57,267 +60,363 @@ public class MessageComponent extends AbstractMessageComponent implements
 		
 	}
 
-	public final int getImageHeight() {
+	public int getImageHeight() {
 		return getImageHeight(null);
 	}
 
 	/**
 	 * See {@link #getImageHeight() getImageHeight()} for more details
 	 */
-	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
+	public int getImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
 	}
 
-	public final void setImageHeight(int imageHeight) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageHeight" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageHeightSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_HEIGHT);
+	}
+
+	public void setImageHeight(int imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
 	/**
 	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
 	 */
-	public final void setImageHeight(ValueBinding imageHeight) {
+	public void setImageHeight(ValueBinding imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
-	public final int getImageWidth() {
+	public int getImageWidth() {
 		return getImageWidth(null);
 	}
 
 	/**
 	 * See {@link #getImageWidth() getImageWidth()} for more details
 	 */
-	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
+	public int getImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
 	}
 
-	public final void setImageWidth(int imageWidth) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageWidth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageWidthSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_WIDTH);
+	}
+
+	public void setImageWidth(int imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
 	/**
 	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
 	 */
-	public final void setImageWidth(ValueBinding imageWidth) {
+	public void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public final java.lang.String getText() {
+	public java.lang.String getText() {
 		return getText(null);
 	}
 
 	/**
 	 * See {@link #getText() getText()} for more details
 	 */
-	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
 
-	public final void setText(java.lang.String text) {
+	/**
+	 * Returns <code>true</code> if the attribute "text" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextSetted() {
+		return engine.isPropertySetted(Properties.TEXT);
+	}
+
+	public void setText(java.lang.String text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
 	/**
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
-	public final void setText(ValueBinding text) {
+	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
-	public final java.lang.String getErrorStyleClass() {
+	public java.lang.String getErrorStyleClass() {
 		return getErrorStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
 	 */
-	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
 	}
 
-	public final void setErrorStyleClass(java.lang.String errorStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "errorStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isErrorStyleClassSetted() {
+		return engine.isPropertySetted(Properties.ERROR_STYLE_CLASS);
+	}
+
+	public void setErrorStyleClass(java.lang.String errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
 	/**
 	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
 	 */
-	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
+	public void setErrorStyleClass(ValueBinding errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
-	public final java.lang.String getFatalStyleClass() {
+	public java.lang.String getFatalStyleClass() {
 		return getFatalStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
 	 */
-	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
 	}
 
-	public final void setFatalStyleClass(java.lang.String fatalStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "fatalStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFatalStyleClassSetted() {
+		return engine.isPropertySetted(Properties.FATAL_STYLE_CLASS);
+	}
+
+	public void setFatalStyleClass(java.lang.String fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
 	/**
 	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
 	 */
-	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
+	public void setFatalStyleClass(ValueBinding fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
-	public final java.lang.String getInfoStyleClass() {
+	public java.lang.String getInfoStyleClass() {
 		return getInfoStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
 	 */
-	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
 	}
 
-	public final void setInfoStyleClass(java.lang.String infoStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "infoStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isInfoStyleClassSetted() {
+		return engine.isPropertySetted(Properties.INFO_STYLE_CLASS);
+	}
+
+	public void setInfoStyleClass(java.lang.String infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
 	/**
 	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
 	 */
-	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
+	public void setInfoStyleClass(ValueBinding infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
-	public final java.lang.String getWarnStyleClass() {
+	public java.lang.String getWarnStyleClass() {
 		return getWarnStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
 	 */
-	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
 	}
 
-	public final void setWarnStyleClass(java.lang.String warnStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "warnStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWarnStyleClassSetted() {
+		return engine.isPropertySetted(Properties.WARN_STYLE_CLASS);
+	}
+
+	public void setWarnStyleClass(java.lang.String warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
 	/**
 	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
 	 */
-	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
+	public void setWarnStyleClass(ValueBinding warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
-	public final java.lang.String getErrorImageURL() {
+	public java.lang.String getErrorImageURL() {
 		return getErrorImageURL(null);
 	}
 
 	/**
 	 * See {@link #getErrorImageURL() getErrorImageURL()} for more details
 	 */
-	public final java.lang.String getErrorImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getErrorImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ERROR_IMAGE_URL, facesContext);
 	}
 
-	public final void setErrorImageURL(java.lang.String errorImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "errorImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isErrorImageURLSetted() {
+		return engine.isPropertySetted(Properties.ERROR_IMAGE_URL);
+	}
+
+	public void setErrorImageURL(java.lang.String errorImageURL) {
 		engine.setProperty(Properties.ERROR_IMAGE_URL, errorImageURL);
 	}
 
 	/**
 	 * See {@link #setErrorImageURL(String) setErrorImageURL(String)} for more details
 	 */
-	public final void setErrorImageURL(ValueBinding errorImageURL) {
+	public void setErrorImageURL(ValueBinding errorImageURL) {
 		engine.setProperty(Properties.ERROR_IMAGE_URL, errorImageURL);
 	}
 
-	public final java.lang.String getFatalImageURL() {
+	public java.lang.String getFatalImageURL() {
 		return getFatalImageURL(null);
 	}
 
 	/**
 	 * See {@link #getFatalImageURL() getFatalImageURL()} for more details
 	 */
-	public final java.lang.String getFatalImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFatalImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FATAL_IMAGE_URL, facesContext);
 	}
 
-	public final void setFatalImageURL(java.lang.String fatalImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "fatalImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFatalImageURLSetted() {
+		return engine.isPropertySetted(Properties.FATAL_IMAGE_URL);
+	}
+
+	public void setFatalImageURL(java.lang.String fatalImageURL) {
 		engine.setProperty(Properties.FATAL_IMAGE_URL, fatalImageURL);
 	}
 
 	/**
 	 * See {@link #setFatalImageURL(String) setFatalImageURL(String)} for more details
 	 */
-	public final void setFatalImageURL(ValueBinding fatalImageURL) {
+	public void setFatalImageURL(ValueBinding fatalImageURL) {
 		engine.setProperty(Properties.FATAL_IMAGE_URL, fatalImageURL);
 	}
 
-	public final java.lang.String getInfoImageURL() {
+	public java.lang.String getInfoImageURL() {
 		return getInfoImageURL(null);
 	}
 
 	/**
 	 * See {@link #getInfoImageURL() getInfoImageURL()} for more details
 	 */
-	public final java.lang.String getInfoImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getInfoImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INFO_IMAGE_URL, facesContext);
 	}
 
-	public final void setInfoImageURL(java.lang.String infoImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "infoImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isInfoImageURLSetted() {
+		return engine.isPropertySetted(Properties.INFO_IMAGE_URL);
+	}
+
+	public void setInfoImageURL(java.lang.String infoImageURL) {
 		engine.setProperty(Properties.INFO_IMAGE_URL, infoImageURL);
 	}
 
 	/**
 	 * See {@link #setInfoImageURL(String) setInfoImageURL(String)} for more details
 	 */
-	public final void setInfoImageURL(ValueBinding infoImageURL) {
+	public void setInfoImageURL(ValueBinding infoImageURL) {
 		engine.setProperty(Properties.INFO_IMAGE_URL, infoImageURL);
 	}
 
-	public final java.lang.String getWarnImageURL() {
+	public java.lang.String getWarnImageURL() {
 		return getWarnImageURL(null);
 	}
 
 	/**
 	 * See {@link #getWarnImageURL() getWarnImageURL()} for more details
 	 */
-	public final java.lang.String getWarnImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getWarnImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WARN_IMAGE_URL, facesContext);
 	}
 
-	public final void setWarnImageURL(java.lang.String warnImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "warnImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWarnImageURLSetted() {
+		return engine.isPropertySetted(Properties.WARN_IMAGE_URL);
+	}
+
+	public void setWarnImageURL(java.lang.String warnImageURL) {
 		engine.setProperty(Properties.WARN_IMAGE_URL, warnImageURL);
 	}
 
 	/**
 	 * See {@link #setWarnImageURL(String) setWarnImageURL(String)} for more details
 	 */
-	public final void setWarnImageURL(ValueBinding warnImageURL) {
+	public void setWarnImageURL(ValueBinding warnImageURL) {
 		engine.setProperty(Properties.WARN_IMAGE_URL, warnImageURL);
 	}
 
-	public final java.lang.String getImageURL() {
+	public java.lang.String getImageURL() {
 		return getImageURL(null);
 	}
 
 	/**
 	 * See {@link #getImageURL() getImageURL()} for more details
 	 */
-	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
 
-	public final void setImageURL(java.lang.String imageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageURLSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_URL);
+	}
+
+	public void setImageURL(java.lang.String imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
 	/**
 	 * See {@link #setImageURL(String) setImageURL(String)} for more details
 	 */
-	public final void setImageURL(ValueBinding imageURL) {
+	public void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 

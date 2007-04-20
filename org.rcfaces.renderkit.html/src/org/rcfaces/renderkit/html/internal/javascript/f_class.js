@@ -151,7 +151,7 @@ var __static = {
 	 * @method hidden static final
 	 */
 	InitializeClass: function(claz) {
-		f_core.Assert(typeof(claz)=="object" && claz, "Invalid claz parameter '"+claz+"'.");
+		f_core.Assert((typeof(claz)=="function" && claz._nativeClass) || typeof(claz)=="object", "f_class.InitializeClass: Invalid claz parameter '"+claz+"'.");
 		
 		if (claz._initialized) {
 			return;
@@ -196,8 +196,8 @@ var __static = {
 	 * @method private static final
 	 */
 	_InitializeClassMembers: function(claz, methods) {
-		f_core.Assert(typeof(claz)=="object" && claz, "Invalid claz parameter '"+claz+"'.");
-		f_core.Assert(typeof(methods)=="object" && methods, "Invalid methods parameter '"+methods+"'.");		
+		f_core.Assert(typeof(claz)=="object", "f_class._InitializeClassMembers: Invalid claz parameter '"+claz+"'.");
+		f_core.Assert(typeof(methods)=="object" && methods, "f_class._InitializeClassMembers: Invalid methods parameter '"+methods+"'.");		
 		
 		var members=claz._members;
 /*
@@ -314,38 +314,32 @@ var __static = {
 			}
 
 			if (typeof(member)=="object") {
-				for(var mname in member) {
-					if (mname==f_class.BEFORE_ASPECT || mname==f_class.AFTER_ASPECT || mname==f_class.THROWING_ASPECT) {
+				if (memberName=="__all__") {
+					for(var mname in member) {
+						f_core.Assert(mname==f_class.BEFORE_ASPECT || mname==f_class.AFTER_ASPECT || mname==f_class.THROWING_ASPECT, "f_class._InstallAspects: Bad keyword '"+mname+"' defined in aspect '"+aspect._name+"'.");
+						
 						var m2=member[mname];
 						
-						if (typeof(m2)=="function") {
-							if (memberName=="__all__") {
-								for(var i=0;i<methods.length;i++) {
-									f_class._InstallAspectMethod(claz, methods, methods[i], mname, m2, constructor);
-								}
-							
-								continue;
-							}
-								
-							f_class._InstallAspectMethod(claz, methods, memberName, mname, m2, constructor);
-							continue;
-						}
+						f_core.Assert(typeof(m2)=="function", "f_class._InstallAspects: Bad function type '"+typeof(m2)+"' for member '"+mname+"' of aspect '"+aspect._name+"'.");
 						
-						f_core.Assert(false, "f_class._InstallAspects: Bad function type '"+typeof(m2)+"' for member '"+mname+"' of aspect '"+aspect._name+"'.");
-						continue;
+						for(var i=0;i<methods.length;i++) {
+							f_class._InstallAspectMethod(claz, methods, methods[i], mname, m2, constructor);
+						}
 					}
 					
-					f_core.Assert(false, "f_class._InstallAspects: Bad keyword '"+mname+"' defined in aspect '"+aspect._name+"'.");
+					continue;
 				}
 				
-				continue;
-			}
-
-			if (member===f_class.ABSTRACT || member==f_class.OPTIONAL_ABSTRACT) {
-				// méthode abstraite !
-				if (abstracts) {
-					abstracts.push(memberName);
+				for(var mname in member) {
+					f_core.Assert(mname==f_class.BEFORE_ASPECT || mname==f_class.AFTER_ASPECT || mname==f_class.THROWING_ASPECT, "f_class._InstallAspects: Bad keyword '"+mname+"' defined in aspect '"+aspect._name+"'.");
+					
+					var m2=member[mname];
+					
+					f_core.Assert(typeof(m2)=="function", "f_class._InstallAspects: Bad function type '"+typeof(m2)+"' for member '"+mname+"' of aspect '"+aspect._name+"'.");
+						
+					f_class._InstallAspectMethod(claz, methods, memberName, mname, m2, constructor);
 				}
+				
 				continue;
 			}
 
@@ -355,7 +349,7 @@ var __static = {
 				if (memberName=="f_finalize") {
 					type=f_class.BEFORE_ASPECT;
 
-				} else if (memberName==claz._name) {
+				} else if (constructor) {
 					type=f_class.AFTER_ASPECT;
 				}
 				
@@ -363,13 +357,22 @@ var __static = {
 					f_class._InstallAspectMethod(claz, methods, memberName, type, member, constructor);
 					continue;
 				}
-			}
-			
-			if (methods[memberName]) {
-				f_core.Assert(false, "Aspect: Already defined member '"+memberName+"' of aspect '"+aspect._name+"'.");
+
+			} else if (member==f_class.ABSTRACT || member==f_class.OPTIONAL_ABSTRACT) {
+				// méthode abstraite !
+				if (abstracts) {
+					abstracts.push(memberName);
+				}
 				continue;
 			}
 			
+			if (f_core.IsDebugEnabled("f_class")) {
+				if (methods[memberName]) {
+					f_core.Assert(false, "Aspect: Already defined member '"+memberName+"' of aspect '"+aspect._name+"'.");
+					continue;
+				}
+			}
+						
 			methods[memberName]=member;
 		}
 	},
@@ -472,7 +475,7 @@ var __static = {
 		var constructor=undefined;
 		for (var kls=cls;kls && !constructor;kls = kls._parent) {
 			constructor=kls._constructor;
-		}				
+		}
 		
 		f_core.Assert(typeof(constructor)=="function", "f_class.Init: No constructor for class '"+cls._name+"'.");
 

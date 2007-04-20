@@ -1,17 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IBackgroundImageCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IForCapability;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * An englobing tag that changes the style class surronuding a component when a particular message is emitted for a component.
@@ -46,135 +47,183 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		setId(componentId);
 	}
 
-	public final java.lang.String getBackgroundImageHorizontalPosition() {
+	public java.lang.String getBackgroundImageHorizontalPosition() {
 		return getBackgroundImageHorizontalPosition(null);
 	}
 
 	/**
 	 * See {@link #getBackgroundImageHorizontalPosition() getBackgroundImageHorizontalPosition()} for more details
 	 */
-	public final java.lang.String getBackgroundImageHorizontalPosition(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getBackgroundImageHorizontalPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, facesContext);
 	}
 
-	public final void setBackgroundImageHorizontalPosition(java.lang.String backgroundImageHorizontalPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "backgroundImageHorizontalPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBackgroundImageHorizontalPositionSetted() {
+		return engine.isPropertySetted(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION);
+	}
+
+	public void setBackgroundImageHorizontalPosition(java.lang.String backgroundImageHorizontalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, backgroundImageHorizontalPosition);
 	}
 
 	/**
 	 * See {@link #setBackgroundImageHorizontalPosition(String) setBackgroundImageHorizontalPosition(String)} for more details
 	 */
-	public final void setBackgroundImageHorizontalPosition(ValueBinding backgroundImageHorizontalPosition) {
+	public void setBackgroundImageHorizontalPosition(ValueBinding backgroundImageHorizontalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, backgroundImageHorizontalPosition);
 	}
 
-	public final boolean isBackgroundImageHorizontalRepeat() {
+	public boolean isBackgroundImageHorizontalRepeat() {
 		return isBackgroundImageHorizontalRepeat(null);
 	}
 
 	/**
 	 * See {@link #isBackgroundImageHorizontalRepeat() isBackgroundImageHorizontalRepeat()} for more details
 	 */
-	public final boolean isBackgroundImageHorizontalRepeat(javax.faces.context.FacesContext facesContext) {
+	public boolean isBackgroundImageHorizontalRepeat(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, false, facesContext);
 	}
 
-	public final void setBackgroundImageHorizontalRepeat(boolean backgroundImageHorizontalRepeat) {
+	/**
+	 * Returns <code>true</code> if the attribute "backgroundImageHorizontalRepeat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBackgroundImageHorizontalRepeatSetted() {
+		return engine.isPropertySetted(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT);
+	}
+
+	public void setBackgroundImageHorizontalRepeat(boolean backgroundImageHorizontalRepeat) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, backgroundImageHorizontalRepeat);
 	}
 
 	/**
 	 * See {@link #setBackgroundImageHorizontalRepeat(boolean) setBackgroundImageHorizontalRepeat(boolean)} for more details
 	 */
-	public final void setBackgroundImageHorizontalRepeat(ValueBinding backgroundImageHorizontalRepeat) {
+	public void setBackgroundImageHorizontalRepeat(ValueBinding backgroundImageHorizontalRepeat) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, backgroundImageHorizontalRepeat);
 	}
 
-	public final java.lang.String getBackgroundImageURL() {
+	public java.lang.String getBackgroundImageURL() {
 		return getBackgroundImageURL(null);
 	}
 
 	/**
 	 * See {@link #getBackgroundImageURL() getBackgroundImageURL()} for more details
 	 */
-	public final java.lang.String getBackgroundImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getBackgroundImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_URL, facesContext);
 	}
 
-	public final void setBackgroundImageURL(java.lang.String backgroundImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "backgroundImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBackgroundImageURLSetted() {
+		return engine.isPropertySetted(Properties.BACKGROUND_IMAGE_URL);
+	}
+
+	public void setBackgroundImageURL(java.lang.String backgroundImageURL) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_URL, backgroundImageURL);
 	}
 
 	/**
 	 * See {@link #setBackgroundImageURL(String) setBackgroundImageURL(String)} for more details
 	 */
-	public final void setBackgroundImageURL(ValueBinding backgroundImageURL) {
+	public void setBackgroundImageURL(ValueBinding backgroundImageURL) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_URL, backgroundImageURL);
 	}
 
-	public final java.lang.String getBackgroundImageVerticalPosition() {
+	public java.lang.String getBackgroundImageVerticalPosition() {
 		return getBackgroundImageVerticalPosition(null);
 	}
 
 	/**
 	 * See {@link #getBackgroundImageVerticalPosition() getBackgroundImageVerticalPosition()} for more details
 	 */
-	public final java.lang.String getBackgroundImageVerticalPosition(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getBackgroundImageVerticalPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, facesContext);
 	}
 
-	public final void setBackgroundImageVerticalPosition(java.lang.String backgroundImageVerticalPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "backgroundImageVerticalPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBackgroundImageVerticalPositionSetted() {
+		return engine.isPropertySetted(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION);
+	}
+
+	public void setBackgroundImageVerticalPosition(java.lang.String backgroundImageVerticalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, backgroundImageVerticalPosition);
 	}
 
 	/**
 	 * See {@link #setBackgroundImageVerticalPosition(String) setBackgroundImageVerticalPosition(String)} for more details
 	 */
-	public final void setBackgroundImageVerticalPosition(ValueBinding backgroundImageVerticalPosition) {
+	public void setBackgroundImageVerticalPosition(ValueBinding backgroundImageVerticalPosition) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, backgroundImageVerticalPosition);
 	}
 
-	public final boolean isBackgroundImageVerticalRepeat() {
+	public boolean isBackgroundImageVerticalRepeat() {
 		return isBackgroundImageVerticalRepeat(null);
 	}
 
 	/**
 	 * See {@link #isBackgroundImageVerticalRepeat() isBackgroundImageVerticalRepeat()} for more details
 	 */
-	public final boolean isBackgroundImageVerticalRepeat(javax.faces.context.FacesContext facesContext) {
+	public boolean isBackgroundImageVerticalRepeat(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, false, facesContext);
 	}
 
-	public final void setBackgroundImageVerticalRepeat(boolean backgroundImageVerticalRepeat) {
+	/**
+	 * Returns <code>true</code> if the attribute "backgroundImageVerticalRepeat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBackgroundImageVerticalRepeatSetted() {
+		return engine.isPropertySetted(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT);
+	}
+
+	public void setBackgroundImageVerticalRepeat(boolean backgroundImageVerticalRepeat) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, backgroundImageVerticalRepeat);
 	}
 
 	/**
 	 * See {@link #setBackgroundImageVerticalRepeat(boolean) setBackgroundImageVerticalRepeat(boolean)} for more details
 	 */
-	public final void setBackgroundImageVerticalRepeat(ValueBinding backgroundImageVerticalRepeat) {
+	public void setBackgroundImageVerticalRepeat(ValueBinding backgroundImageVerticalRepeat) {
 		engine.setProperty(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, backgroundImageVerticalRepeat);
 	}
 
-	public final boolean isBorder() {
+	public boolean isBorder() {
 		return isBorder(null);
 	}
 
 	/**
 	 * See {@link #isBorder() isBorder()} for more details
 	 */
-	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
+	public boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
 
-	public final void setBorder(boolean border) {
+	/**
+	 * Returns <code>true</code> if the attribute "border" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderSetted() {
+		return engine.isPropertySetted(Properties.BORDER);
+	}
+
+	public void setBorder(boolean border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
 	/**
 	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
 	 */
-	public final void setBorder(ValueBinding border) {
+	public void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
@@ -214,113 +263,153 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final java.lang.String getFor() {
+	public java.lang.String getFor() {
 		return getFor(null);
 	}
 
 	/**
 	 * See {@link #getFor() getFor()} for more details
 	 */
-	public final java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR, facesContext);
 	}
 
-	public final void setFor(java.lang.String forValue) {
+	/**
+	 * Returns <code>true</code> if the attribute "for" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isForSetted() {
+		return engine.isPropertySetted(Properties.FOR);
+	}
+
+	public void setFor(java.lang.String forValue) {
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
 	/**
 	 * See {@link #setFor(String) setFor(String)} for more details
 	 */
-	public final void setFor(ValueBinding forValue) {
+	public void setFor(ValueBinding forValue) {
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
-	public final java.lang.String getErrorStyleClass() {
+	public java.lang.String getErrorStyleClass() {
 		return getErrorStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
 	 */
-	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
 	}
 
-	public final void setErrorStyleClass(java.lang.String errorStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "errorStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isErrorStyleClassSetted() {
+		return engine.isPropertySetted(Properties.ERROR_STYLE_CLASS);
+	}
+
+	public void setErrorStyleClass(java.lang.String errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
 	/**
 	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
 	 */
-	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
+	public void setErrorStyleClass(ValueBinding errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
-	public final java.lang.String getFatalStyleClass() {
+	public java.lang.String getFatalStyleClass() {
 		return getFatalStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
 	 */
-	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
 	}
 
-	public final void setFatalStyleClass(java.lang.String fatalStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "fatalStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFatalStyleClassSetted() {
+		return engine.isPropertySetted(Properties.FATAL_STYLE_CLASS);
+	}
+
+	public void setFatalStyleClass(java.lang.String fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
 	/**
 	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
 	 */
-	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
+	public void setFatalStyleClass(ValueBinding fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
-	public final java.lang.String getInfoStyleClass() {
+	public java.lang.String getInfoStyleClass() {
 		return getInfoStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
 	 */
-	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
 	}
 
-	public final void setInfoStyleClass(java.lang.String infoStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "infoStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isInfoStyleClassSetted() {
+		return engine.isPropertySetted(Properties.INFO_STYLE_CLASS);
+	}
+
+	public void setInfoStyleClass(java.lang.String infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
 	/**
 	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
 	 */
-	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
+	public void setInfoStyleClass(ValueBinding infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
-	public final java.lang.String getWarnStyleClass() {
+	public java.lang.String getWarnStyleClass() {
 		return getWarnStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
 	 */
-	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
 	}
 
-	public final void setWarnStyleClass(java.lang.String warnStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "warnStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWarnStyleClassSetted() {
+		return engine.isPropertySetted(Properties.WARN_STYLE_CLASS);
+	}
+
+	public void setWarnStyleClass(java.lang.String warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
 	/**
 	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
 	 */
-	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
+	public void setWarnStyleClass(ValueBinding warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 

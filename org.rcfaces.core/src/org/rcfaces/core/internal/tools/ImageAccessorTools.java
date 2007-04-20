@@ -11,7 +11,7 @@ import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.internal.component.IComponentEngine;
+import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.component.IExpandImageAccessors;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.ISeverityImageAccessors;

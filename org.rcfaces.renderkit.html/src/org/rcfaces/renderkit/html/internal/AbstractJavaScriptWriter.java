@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
+import org.rcfaces.renderkit.html.internal.util.JavaScriptObjectLiteralWriter;
 
 /**
  * 
@@ -156,6 +157,10 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
 
     public IHtmlRenderContext getHtmlRenderContext() {
         return getHtmlComponentRenderContext().getHtmlRenderContext();
+    }
+
+    public IObjectLiteralWriter writeObjectLiteral(boolean writeNullIfEmpty) {
+        return new JavaScriptObjectLiteralWriter(this, writeNullIfEmpty);
     }
 
     protected abstract String convertSymbol(String className, String memberName);

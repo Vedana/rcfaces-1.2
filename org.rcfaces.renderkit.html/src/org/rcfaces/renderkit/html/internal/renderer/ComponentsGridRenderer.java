@@ -1,15 +1,11 @@
 /*
  * $Id$
+ * 
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
@@ -17,71 +13,57 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.ComponentsListComponent;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.event.PropertyChangeEvent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.component.ComponentsGridComponent;
+import org.rcfaces.core.component.capability.ICellStyleClassCapability;
+import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
+import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
-import org.rcfaces.core.internal.renderkit.IRequestContext;
+import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
-import org.rcfaces.renderkit.html.internal.ICssWriter;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
+import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
 
 /**
- * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ComponentsGridRenderer extends AbstractCssRenderer {
+public class ComponentsGridRenderer extends AbstractGridRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ComponentsGridRenderer.class);
 
-    private static final String[] STRING_EMPTY_ARRAY = new String[0];
+    private static final String DEFAULT_ROW_CLASSNAMES[] = { "f_grid_row_even",
+            "f_grid_row_odd" };
 
-    private static final boolean ENABLE_SERVER_REQUEST = true;
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.COMPONENTS_GRID;
+    }
 
-    private static final String LIST_CONTEXT = "dataList.listContext";
+    public AbstractGridRenderContext createTableContext(
+            IHtmlComponentRenderContext componentRenderContext) {
+        return new ComponentsGridRenderContext(componentRenderContext);
+    }
 
-    protected void encodeBegin(IComponentWriter writer) throws WriterException {
-        super.encodeBegin(writer);
-
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
-
-        FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        ComponentsListComponent dataListComponent = (ComponentsListComponent) componentRenderContext
-                .getComponent();
-
-        dataListComponent.setRowIndex(-1);
-
-        ListContext listContext = new ListContext(facesContext,
-                dataListComponent);
-        componentRenderContext.setAttribute(LIST_CONTEXT, listContext);
-
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        htmlWriter.startElement("DIV", dataListComponent);
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter);
+    protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
+            AbstractGridRenderContext tableContext, IGridComponent dg)
+            throws WriterException {
+        super.writeGridComponentAttributes(htmlWriter, tableContext, dg);
 
         if (ENABLE_SERVER_REQUEST) {
-            ComponentsListService dataListServer = ComponentsListService
-                    .getInstance(facesContext);
-            if (dataListServer != null) {
+            ComponentsListService componentsListServer = ComponentsListService
+                    .getInstance(htmlWriter.getComponentRenderContext()
+                            .getFacesContext());
+            if (componentsListServer != null) {
                 htmlWriter.writeAttribute("v:asyncRender", "true");
             }
 
@@ -96,76 +78,20 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
                 htmlWriter.writeAttribute("v:interactiveShow",
                         interactiveComponentClientId);
 
-                listContext.setInteractiveShow(true);
+                ((ComponentsGridRenderContext) tableContext)
+                        .setInteractiveShow(true);
             }
         }
-
-        /*
-         * if (listContext.getDataModel() instanceof IFiltredDataModel) {
-         * htmlWriter.writeAttribute("v:filtred", "true");
-         * 
-         * IFilterProperties filterMap = listContext.getFiltersMap(); if
-         * (filterMap != null && filterMap.isEmpty() == false) { String
-         * filterExpression = HtmlTools .encodeFilterExpression(filterMap);
-         * htmlWriter.writeAttribute("v:filterExpression", filterExpression); } }
-         */
-
-        int rows = listContext.getRows();
-        if (rows > 0) {
-            htmlWriter.writeAttribute("v:rows", rows);
-        }
-
-        int rowCount = listContext.getRowCount();
-        if (rowCount >= 0) {
-            htmlWriter.writeAttribute("v:rowCount", rowCount);
-        }
-
-        int first = listContext.getFirst();
-        if (first > 0) {
-            htmlWriter.writeAttribute("v:first", first);
-        }
-
-        htmlWriter.startElement("TABLE");
-
-        String w = dataListComponent.getWidth(facesContext);
-        if (w != null) {
-            htmlWriter.writeWidth("100%");
-        }
-
-        String ccls = dataListComponent.getColumnStyleClass(facesContext);
-        String columnClasses[] = parseClasses(ccls);
-
-        int columnNumber = listContext.getColumnNumber();
-        if (columnNumber < 1) {
-            columnNumber = 1;
-        }
-
-        if (columnNumber > 0) {
-            for (int i = 0; i < columnNumber; i++) {
-                htmlWriter.startElement("COL");
-                htmlWriter.writeWidth("1*");
-
-                if (columnClasses == null || columnClasses.length < 1) {
-                    htmlWriter.endElement("COL");
-                    continue;
-                }
-                int rs = i % columnClasses.length;
-
-                htmlWriter.writeClass(columnClasses[rs]);
-                htmlWriter.endElement("COL");
-            }
-        }
-
-        htmlWriter.startElement("TBODY");
-        htmlWriter.writeClass(getTBodyClassName(htmlWriter));
     }
 
-    protected String getTBodyClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + "_tbody";
-    }
+    protected void encodeBodyEnd(IHtmlWriter writer,
+            AbstractGridRenderContext tableContext) throws WriterException {
 
-    public boolean getRendersChildren() {
-        return true;
+        encoreBodyTableEnd(writer, tableContext);
+
+        writer.enableJavaScript();
+
+        super.encodeBodyEnd(writer, tableContext);
     }
 
     public void encodeChildren(FacesContext facesContext, UIComponent component)
@@ -179,32 +105,48 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
-        ListContext listContext = (ListContext) componentRenderContext
-                .getAttribute(LIST_CONTEXT);
+        ComponentsGridRenderContext tableContext = (ComponentsGridRenderContext) getGridRenderContext(htmlWriter);
 
         // Dans tous les cas il faut positionner le renderContext !
-        ComponentsListService dataListServer = ComponentsListService
+        ComponentsListService componentsListServer = ComponentsListService
                 .getInstance(facesContext);
-        if (dataListServer != null) {
-            dataListServer.setupComponent(componentRenderContext);
+        if (componentsListServer != null) {
+            componentsListServer.setupComponent(componentRenderContext);
         }
 
-        if (listContext.isInteractiveShow()) {
+        if (tableContext.isInteractiveShow()) {
             return;
         }
 
-        encodeChildren(htmlWriter, listContext);
+        encodeChildren(htmlWriter, tableContext);
     }
 
-    public void encodeChildren(IComponentWriter writer, ListContext listContext)
+    protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        encodeJsColumns(htmlWriter, gridRenderContext, true);
+    }
+
+    public void encodeChildren(IComponentWriter writer,
+            ComponentsGridRenderContext gridRenderContext)
             throws WriterException {
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
-        ComponentsListComponent dataListComponent = (ComponentsListComponent) componentRenderContext
+        ComponentsGridComponent componentsGridComponent = (ComponentsGridComponent) componentRenderContext
                 .getComponent();
+
+        boolean hasCellStyleClass[] = gridRenderContext.getCellStyleClass();
+        String defaultCellStyleClasses[][] = gridRenderContext
+                .getDefaultCellStyleClasses();
+
+        boolean hasCellToolTipText[] = gridRenderContext.getCellToolTipText();
+        String defaultCellToolTipTexts[] = gridRenderContext
+                .getDefaultCellToolTipTexts();
+
+        String cellHorizontalAligments[] = gridRenderContext
+                .getDefaultCellHorizontalAlignments();
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
@@ -230,49 +172,44 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
          * filtred = true; }
          */
 
-        UIColumn columns[] = listContext.listColumns();
+        UIColumn columns[] = gridRenderContext.listColumns();
+        int columnNumber = columns.length;
 
         // Debut
-        int rowIndex = listContext.getFirst();
+        int rowIndex = gridRenderContext.getFirst();
 
         // Nombre de ligne a lire !
-        int rows = listContext.getRows();
-
-        int columnNumber = listContext.getColumnNumber();
-
-        if (columnNumber > 1) {
-            rows = rows * columnNumber;
-        }
-
-        String rcls = dataListComponent.getRowStyleClass(facesContext);
-        String rowClasses[] = parseClasses(rcls);
+        int rows = gridRenderContext.getRows();
 
         // String ccls =
-        // dataListComponent.getColumnStyleClass(facesContext);
+        // componentsListComponent.getColumnStyleClass(facesContext);
         // String columnClasses[] = parseClasses(ccls);
 
-        String tdClass = getCellClassName(htmlWriter);
-
-        int count = listContext.getRowCount();
+        int count = gridRenderContext.getRowCount();
 
         Map varContext = facesContext.getExternalContext().getRequestMap();
-        String rowCountVar = listContext.getRowCountVar();
+        String rowCountVar = gridRenderContext.getRowCountVar();
         if (rowCountVar != null) {
             varContext.put(rowCountVar, new Integer(count));
         }
 
-        String rowIndexVar = listContext.getRowIndexVar();
+        String rowIndexVar = gridRenderContext.getRowIndexVar();
 
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) htmlWriter
                 .getComponentRenderContext().getRenderContext();
+
+        String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
+        if (rowStyleClasses == null) {
+            rowStyleClasses = DEFAULT_ROW_CLASSNAMES;
+        }
 
         try {
             int processed = 0;
 
             for (; rows <= 0 || processed < rows; processed++, rowIndex++) {
 
-                dataListComponent.setRowIndex(rowIndex);
-                if (dataListComponent.isRowAvailable() == false) {
+                componentsGridComponent.setRowIndex(rowIndex);
+                if (componentsGridComponent.isRowAvailable() == false) {
                     break;
                 }
 
@@ -280,304 +217,138 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
                     varContext.put(rowIndexVar, new Integer(processed));
                 }
 
-                if ((processed % columnNumber) == 0) {
-                    // Render the beginning of this row
-                    htmlWriter.startElement("TR");
+                htmlWriter.startElement(IHtmlWriter.TR);
 
-                    String rowId = htmlRenderContext
-                            .getComponentClientId(dataListComponent);
-                    if (rowId != null) {
-                        htmlWriter.writeId(rowId);
-                    }
+                htmlWriter.writeAttribute("v:index", rowIndex);
 
-                    htmlWriter.writeAttribute("v:nc", "true");
+                String trClassName = rowStyleClasses[rowIndex
+                        % rowStyleClasses.length];
 
-                    if (rowClasses.length > 0) {
-                        int rs = (processed / columnNumber) % rowClasses.length;
-
-                        htmlWriter.writeClass(rowClasses[rs]);
-                    }
+                if (trClassName != null) {
+                    htmlWriter.writeClass(trClassName);
                 }
 
-                htmlWriter.startElement("TD");
-                htmlWriter.writeClass(tdClass);
+                String rowId = htmlRenderContext
+                        .getComponentClientId(componentsGridComponent);
+                if (rowId != null) {
+                    htmlWriter.writeId(rowId);
+                }
 
-                htmlWriter.writeln();
+                htmlWriter.writeAttribute("v:nc", "true");
 
                 /*
-                 * if (columnClasses.length > 0) { int rs = (processed %
-                 * columnNumber) % columnClasses.length;
+                 * if (rowClasses.length > 0) { int rs = (processed /
+                 * columnNumber) % rowClasses.length;
                  * 
-                 * htmlWriter.writeAttribute("class", columnClasses[rs]); }
+                 * htmlWriter.writeClass(rowClasses[rs]); }
                  */
 
-                htmlWriter.endComponent();
+                String defaultCellStyleClass = getComponentStyleClassName()
+                        + "_cell2";
+                for (int columnIndex = 0; columnIndex < columnNumber; columnIndex++) {
 
-                UIColumn column = columns[processed % columns.length];
+                    UIColumn column = columns[columnIndex];
 
-                ComponentTools.encodeChildrenRecursive(facesContext, column);
+                    htmlWriter.startElement(IHtmlWriter.TD);
 
-                htmlWriter.writeln();
+                    htmlWriter.writeAttribute("noWrap");
 
-                htmlWriter.endElement("TD");
+                    String toolTip = null;
+                    if (defaultCellToolTipTexts != null) {
+                        toolTip = defaultCellToolTipTexts[columnIndex];
+                    }
+                    if (hasCellToolTipText[columnIndex]) {
+                        String cellToolTip = ((ICellToolTipTextCapability) column)
+                                .getCellToolTipText();
+                        if (cellToolTip != null) {
+                            toolTip = cellToolTip;
+                        }
+                    }
+                    if (toolTip != null) {
+                        htmlWriter.writeTitle(toolTip);
+                    }
 
-                if (((processed + 1) % columnNumber) == 0) {
-                    htmlWriter.endElement("TR");
+                    String styleClass = null;
+                    if (defaultCellStyleClasses != null) {
+                        String csc[] = defaultCellStyleClasses[columnIndex];
+                        if (csc != null && csc.length > 0) {
+                            styleClass = csc[processed % csc.length];
+                        }
+                    }
+                    if (hasCellStyleClass[columnIndex]) {
+                        String csc = ((ICellStyleClassCapability) column)
+                                .getCellStyleClass();
+                        if (csc != null) {
+                            styleClass = csc;
+                        }
+                    }
+
+                    if (styleClass != null) {
+                        styleClass = defaultCellStyleClass + " " + styleClass;
+
+                    } else {
+                        styleClass = defaultCellStyleClass;
+                    }
+
+                    htmlWriter.writeClass(styleClass);
+
+                    htmlWriter.writeln();
+
+                    /*
+                     * if (columnClasses.length > 0) { int rs = (processed %
+                     * columnNumber) % columnClasses.length;
+                     * 
+                     * htmlWriter.writeAttribute("class", columnClasses[rs]); }
+                     */
+
+                    htmlWriter.endComponent();
+
+                    ComponentTools
+                            .encodeChildrenRecursive(facesContext, column);
+
+                    htmlWriter.writeln();
+
+                    htmlWriter.endElement(IHtmlWriter.TD);
                 }
-            }
 
-            if ((processed % columnNumber) > 0) {
-                for (; (processed % columnNumber) > 0; processed++) {
-                    htmlWriter.startElement("TD");
-                    htmlWriter.endElement("TD");
-                }
-
-                htmlWriter.endElement("TR");
+                htmlWriter.endElement(IHtmlWriter.TR);
             }
 
         } finally {
-            dataListComponent.setRowIndex(-1);
+            componentsGridComponent.setRowIndex(-1);
         }
-    }
-
-    protected String getCellClassName(IHtmlWriter writer) {
-        return getMainStyleClassName() + "_cell";
     }
 
     public void encodeEnd(IComponentWriter writer) throws WriterException {
 
-        ComponentsListComponent dataListComponent = (ComponentsListComponent) writer
+        ComponentsGridComponent componentsListComponent = (ComponentsGridComponent) writer
                 .getComponentRenderContext().getComponent();
 
-        dataListComponent.setRowIndex(-1);
+        componentsListComponent.setRowIndex(-1);
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        htmlWriter.endElement("TBODY");
-
-        htmlWriter.endElement("TABLE");
-
-        htmlWriter.endElement("DIV");
-
-        super.encodeEnd(htmlWriter);
+        super.encodeEnd(writer);
     }
 
-    private String[] parseClasses(String classes) {
-
-        if (classes == null || classes.length() < 1) {
-            return STRING_EMPTY_ARRAY;
-        }
-
-        List l = null;
-        StringTokenizer st = new StringTokenizer(classes, ",");
-        for (; st.hasMoreTokens();) {
-            String cls = st.nextToken();
-
-            if (l == null) {
-                l = new ArrayList(4);
-            }
-
-            l.add(cls);
-        }
-
-        if (l == null) {
-            return STRING_EMPTY_ARRAY;
-        }
-
-        return (String[]) l.toArray(new String[l.size()]);
-    }
-
-    /*
-     * (non-Javadoc)
+    /**
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
      */
-    protected String getJavaScriptClassName() {
-        return JavaScriptClasses.COMPONENTS_LIST;
-    }
+    public class ComponentsGridRenderContext extends AbstractGridRenderContext {
 
-    protected void writeCustomCss(IHtmlWriter componentWriter,
-            ICssWriter cssWriter) {
-        super.writeCustomCss(componentWriter, cssWriter);
+        private static final String REVISION = "$Revision$";
 
-        IComponentRenderContext componentRenderContext = componentWriter
-                .getComponentRenderContext();
-        ComponentsListComponent dataListComponent = (ComponentsListComponent) componentRenderContext
-                .getComponent();
-
-        FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        if (dataListComponent.isBorder(facesContext) == false) {
-            cssWriter.writeBorderStyle("none");
-        }
-
-        String w = dataListComponent.getWidth(facesContext);
-        String h = dataListComponent.getHeight(facesContext);
-        if (w != null || h != null) {
-            cssWriter.writeSize(dataListComponent);
-            if (h != null) {
-                cssWriter.writeOverflow("scroll");
-            }
-        }
-
-        cssWriter.writeMargin(dataListComponent);
-    }
-
-    protected void decode(IRequestContext context, UIComponent component,
-            IComponentData componentData) {
-        super.decode(context, component, componentData);
-
-        // FacesContext facesContext = context.getFacesContext();
-
-        ComponentsListComponent dg = (ComponentsListComponent) component;
-
-        Number first = componentData.getNumberProperty("first");
-        if (first != null) {
-            int old = dg.getFirst();
-
-            dg.setFirst(first.intValue());
-
-            component.queueEvent(new PropertyChangeEvent(component,
-                    Properties.FIRST, new Integer(old), first));
-        }
-
-        /*
-         * String filterExpression =
-         * componentData.getStringProperty("filterExpression"); if
-         * (filterExpression != null) { if (filterExpression.length() < 1) {
-         * filterExpression = null; }
-         * 
-         * dg.setFilterProperties(HtmlTools
-         * .decodeFilterExpression(filterExpression)); }
-         */
-
-        /*
-         * IComponentPreference preference = dg.getPreference(facesContext); if
-         * (preference != null) { preference.savePreference(facesContext, dg); }
-         */
-    }
-
-    public static class ListContext {
-
-        private final FacesContext facesContext;
-
-        private final ComponentsListComponent dataListComponent;
-
-        private final String rowIndexVar;
-
-        private final String rowCountVar;
-
-        // private DataModel dataModel;
-
-        private UIColumn columns[];
-
-        private int columnNumber;
-
-        private int first;
-
-        private int rowCount;
-
-        private int rows = -2;
-
-        // private IFilterProperties filtersMap;
+        private boolean rowValueSetted;
 
         private boolean interactiveShow;
 
-        ListContext(FacesContext facesContext,
-                ComponentsListComponent dataListComponent) {
-            this(facesContext, dataListComponent, false);
-
-            first = dataListComponent.getFirst();
-
-            // filtersMap = dataListComponent.getFilterProperties(facesContext);
-        }
-
-        public String getRowIndexVar() {
-            return rowIndexVar;
-        }
-
-        public String getRowCountVar() {
-            return rowCountVar;
-        }
-
-        ListContext(FacesContext facesContext,
-                ComponentsListComponent dataListComponent, int rowIndex,
+        public ComponentsGridRenderContext(IProcessContext processContext,
+                IScriptRenderContext scriptRenderContext,
+                ComponentsGridComponent gridComponent, int rowIndex,
+                int forcedRows, ISortedComponent[] sortedComponents,
                 String filterExpression) {
-            this(facesContext, dataListComponent, true);
-
-            first = rowIndex;
-            // this.filtersMap =
-            // HtmlTools.decodeFilterExpression(filterExpression);
-        }
-
-        private ListContext(FacesContext facesContext,
-                ComponentsListComponent dataListComponent, boolean dummy) {
-            this.facesContext = facesContext;
-            this.dataListComponent = dataListComponent;
-
-            columnNumber = dataListComponent.getColumnNumber(facesContext);
-
-            rowIndexVar = dataListComponent.getRowIndexVar(facesContext);
-
-            rowCountVar = dataListComponent.getRowCountVar(facesContext);
-
-            List children = dataListComponent.getChildren();
-            List cols = null;
-            for (Iterator it = children.iterator(); it.hasNext();) {
-                UIComponent child = (UIComponent) it.next();
-
-                if ((child instanceof UIColumn) == false) {
-                    continue;
-                }
-
-                if (cols == null) {
-                    cols = new ArrayList(children.size());
-                }
-
-                cols.add(child);
-            }
-
-            if (cols != null) {
-                columns = (UIColumn[]) cols.toArray(new UIColumn[cols.size()]);
-
-            } else {
-                UIColumn column = new UIColumn();
-
-                column.getChildren().addAll(children);
-
-                children.clear();
-                children.add(column);
-
-                columns = new UIColumn[] { column };
-            }
-
-            if (columnNumber < 1) {
-                columnNumber = columns.length;
-            }
-
-            rows = dataListComponent.getRows();
-            rowCount = dataListComponent.getRowCount();
-
-            /*
-             * Object value = dataListComponent.getCachedValue(); if (value
-             * instanceof DataModel) { dataModel = (DataModel) value; }
-             */
-        }
-
-        public UIColumn[] listColumns() {
-            return columns;
-        }
-
-        public void updateRowCount() {
-            rowCount = -2;
-        }
-
-        public int getRowCount() {
-            if (rowCount == -2) {
-                rowCount = dataListComponent.getRowCount();
-            }
-
-            return rowCount;
+            super(processContext, scriptRenderContext, gridComponent, rowIndex,
+                    forcedRows, sortedComponents, filterExpression);
         }
 
         public void setInteractiveShow(boolean interactiveShow) {
@@ -588,54 +359,28 @@ public class ComponentsGridRenderer extends AbstractCssRenderer {
             return interactiveShow;
         }
 
-        /*
-         * public DataModel getDataModel() { return dataModel; }
-         */
-
-        public int getColumnNumber() {
-            return columnNumber;
+        public ComponentsGridRenderContext(
+                IHtmlComponentRenderContext htmlComponentRenderContext) {
+            super(htmlComponentRenderContext);
         }
 
-        public int getFirst() {
-            return first;
+        protected void initialize(boolean checkTitleImages) {
+            super.initialize(checkTitleImages);
+
+            this.rowValueSetted = getComponentsGridComponent()
+                    .isRowValueSetted();
         }
 
-        public int getRows() {
-            return rows;
+        public ComponentsGridComponent getComponentsGridComponent() {
+            return (ComponentsGridComponent) getGridComponent();
         }
 
-        /*
-         * public IFilterProperties getFiltersMap() { return filtersMap; }
-         */
-
-    }
-
-    public ListContext createListContext(FacesContext facesContext,
-            ComponentsListComponent dgc, int rowIndex,
-            ISortedComponent[] sortedComponents, String filterExpression) {
-        return new ListContext(facesContext, dgc, rowIndex, filterExpression);
-    }
-
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(writer, classes);
-
-        ComponentsListComponent dataListComponent = (ComponentsListComponent) writer
-                .getComponentRenderContext().getComponent();
-
-        IJavaScriptRenderContext javaScriptRenderContext = writer
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext();
-
-        IMenuIterator menuIterator = dataListComponent.listMenus();
-        if (menuIterator.hasNext()) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
-                    JavaScriptClasses.COMPONENTS_LIST, "menu");
+        protected String convertAliasCommand(String command) {
+            return null;
         }
 
-        if (dataListComponent.getRows() > 0) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
-                    JavaScriptClasses.COMPONENTS_LIST, "ajax");
+        public boolean isRowValueSetted() {
+            return rowValueSetted;
         }
     }
 }

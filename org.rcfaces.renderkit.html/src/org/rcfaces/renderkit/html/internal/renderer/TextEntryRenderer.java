@@ -196,7 +196,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        htmlWriter.startElement("INPUT");
+        htmlWriter.startElement(IHtmlWriter.INPUT);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -208,7 +208,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeValidatorAttributes(htmlWriter);
         writeValueAttributes(htmlWriter);
 
-        htmlWriter.endElement("INPUT");
+        htmlWriter.endElement(IHtmlWriter.INPUT);
     }
 
     protected boolean isNameEqualsId() {
@@ -420,7 +420,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             }
         }
 
-        if (newValue != null && textEntryComponent.isValueLocked(facesContext)==false) {
+        if (newValue != null
+                && textEntryComponent.isValueLocked(facesContext) == false) {
             textEntryComponent.setSubmittedValue(newValue);
         }
 

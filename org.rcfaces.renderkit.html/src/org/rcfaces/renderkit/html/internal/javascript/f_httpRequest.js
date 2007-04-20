@@ -58,7 +58,12 @@ var __static = {
 	/**
 	 * @field public static final String
 	 */
-	 HTTP_CONTENT_TYPE: "Content-Type"
+	 HTTP_CONTENT_TYPE: "Content-Type",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	 CAMELIA_RESPONSE_HEADER: "X-Camelia-Service"
 } 
 
 var __prototype = {
@@ -209,15 +214,15 @@ var __prototype = {
 	 */
 	f_getResponseHeader: function(name) {
 		var request=this._request;
-		f_core.Assert(request, "No request to get response header '"+name+"' !");
-		f_core.Assert(this._ready, "This request is not ready yet !");
-		f_core.Assert(typeof(name)=="string", "Name of property must be a string !");
+		f_core.Assert(request, "f_httpRequest.f_getResponseHeader: No request to get response header '"+name+"' !");
+		f_core.Assert(this._ready, "f_httpRequest.f_getResponseHeader: This request is not ready yet !");
+		f_core.Assert(typeof(name)=="string", "f_httpRequest.f_getResponseHeader: Name of property must be a string !");
 		
 		try {
 			return request.getResponseHeader(name);
 			
 		} catch (x) {
-			f_core.Error(f_httpRequest, "Can not get reponse header '"+name+"'.", x);
+			f_core.Error(f_httpRequest, "f_getResponseHeader: Can not get reponse header '"+name+"'.", x);
 			// Il peut y avoir des cas ou la reponse n'est pas prete car c'est un RELOAD forcé par l'utilisateur !
 			return null;
 		}
@@ -238,7 +243,7 @@ var __prototype = {
 				request.abort();
 				
 			} catch (x) {
-				f_core.Error(f_httpRequest, "CancelRequest as failed !", x);
+				f_core.Error(f_httpRequest, "f_cancelRequest: Cancel request has failed !", x);
 			}
 
 			/* Ca marche pas !
@@ -270,7 +275,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setRequestHeader: function(name, value) {
-		f_core.Assert(value===null || typeof(value)=="string", "Header parameter '"+name+"' is not a string ! ("+value+").");
+		f_core.Assert(value===null || typeof(value)=="string", "f_httpRequest.f_setRequestHeader: Header parameter '"+name+"' is not a string ! ("+value+").");
 	
 		var requestHeaders=this._requestHeaders;
 		if (!requestHeaders) {
@@ -305,7 +310,7 @@ var __prototype = {
 	f_doRequest: function(method, data, contentType, progressMonitor) {
 		
 	//	alert("url="+this._url+"\nmethod="+method+"\ntype="+type+"\nasync="+asynch+"\ndata="+data);
-		f_core.Debug(f_httpRequest, "Prepare request: url="+this._url+"\nmethod="+method+"\ncontentType="+contentType+"\nacceptType="+this._acceptType+"\nasync="+(typeof(this._listener)=="function")+"\ndata="+data);
+		f_core.Debug(f_httpRequest, "f_doRequest: Prepare request: url="+this._url+"\nmethod="+method+"\ncontentType="+contentType+"\nacceptType="+this._acceptType+"\nasync="+(typeof(this._listener)=="function")+"\ndata="+data);
 
 		var oldCursor=null;
 		if (!this._listener) {
@@ -319,7 +324,7 @@ var __prototype = {
 			return this._doRequest.apply(this, arguments);
 
 		} catch (x) {
-			f_core.Error(f_httpRequest, "Can not send request to "+this._url+" data="+data);
+			f_core.Error(f_httpRequest, "f_doRequest: Can not send request to "+this._url+" data="+data);
 			throw x;
 			
 		} finally {
@@ -356,7 +361,7 @@ var __prototype = {
 					req = new XMLHttpRequest(); 
 	
 				} catch(ex) {
-					f_core.Error(f_httpRequest, "Can not create XMLHttpRequest !");
+					f_core.Error(f_httpRequest, "_doRequest: Can not create XMLHttpRequest !");
 					
 					throw ex;
 				}
@@ -372,7 +377,7 @@ var __prototype = {
 						req = new ActiveXObject("Microsoft.XMLHTTP"); 
 						
 					} catch(ex) {
-						f_core.Error(f_httpRequest, "Can not find ActiveX XmlHttp !");
+						f_core.Error(f_httpRequest, "_doRequest: Can not find ActiveX XmlHttp !");
 						
 						throw ex;
 					}
@@ -460,7 +465,7 @@ var __prototype = {
 				for(var p in requestHeaders) {
 					var pv=requestHeaders[p];
 					
-					f_core.Assert(typeof(pv)=="string", "Header parameter '"+p+"' is not a string ! ("+pv+").");
+					f_core.Assert(typeof(pv)=="string", "f_httpRequest._doRequest: Header parameter '"+p+"' is not a string ! ("+pv+").");
 					
 					req.setRequestHeader(p, pv);
 				}

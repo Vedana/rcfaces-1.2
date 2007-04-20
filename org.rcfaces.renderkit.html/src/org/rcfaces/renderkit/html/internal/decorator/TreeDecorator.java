@@ -19,6 +19,7 @@ import javax.faces.model.SelectItem;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.TreeNodeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
+import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -27,12 +28,14 @@ import org.rcfaces.core.internal.tools.SelectItemMappers;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IImagesItem;
+import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.item.ITreeNode;
 import org.rcfaces.core.item.TreeNode;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -252,7 +255,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             if (preloadLevelDepth > 0
                     && preloadLevelDepth < treeRenderContext.getDepth()) {
                 if (treeRenderContext.isFirstInteractiveChild(parentVarId)) {
-                    javaScriptWriter.writeMethodCall("_setInteractiveParent")
+                    javaScriptWriter.writeMethodCall("f_setInteractiveParent")
                             .write(parentVarId).writeln(");");
                 }
 
@@ -271,109 +274,81 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             parentVarId = javaScriptWriter.getComponentVarName();
         }
 
-        javaScriptWriter.write('=').writeMethodCall("_appendNode").write(
+        javaScriptWriter.write('=').writeMethodCall("f_appendNode2").write(
                 parentVarId).write(',');
 
-        int pred = 0;
-
-        String text = selectItem.getLabel();
-        if (text != null) {
-            javaScriptWriter.writeString(text);
-
-        } else {
-            javaScriptWriter.writeNull();
-        }
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(false);
 
         Object selectItemValue = selectItem.getValue();
 
         String value = convertItemValue(javaScriptWriter
                 .getHtmlComponentRenderContext(), selectItemValue);
-        if (value != null) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeBoolean(false);
-            }
-            javaScriptWriter.write(',').writeString(value);
+        objectLiteralWriter.writeSymbol("_value").writeString(value);
 
-        } else {
-            pred++;
+        String text = selectItem.getLabel();
+        if (text != null) {
+            objectLiteralWriter.writeSymbol("_label").writeString(text);
         }
 
         String toolTip = selectItem.getDescription();
         if (toolTip != null) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeBoolean(false);
-            }
-            javaScriptWriter.write(',').writeString(toolTip);
-
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_description")
+                    .writeString(toolTip);
         }
 
-        if (selectItem.isDisabled()) { // DISABLED
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeBoolean(false);
-            }
-
-            javaScriptWriter.write(',').writeBoolean(true);
-
-        } else {
-            pred++;
+        if (selectItem.isDisabled()) {
+            objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
         }
 
         if (treeRenderContext.isUserExpandable()) {
             if (treeRenderContext.isValueExpanded(selectItem, selectItemValue)) { // Expand
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeBoolean(false);
-                }
-
-                javaScriptWriter.write(',').writeBoolean(true);
-
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_expanded").writeBoolean(true);
             }
         }
 
         if (treeRenderContext.writeSelectionFullState() == false) {
             if (treeRenderContext.isValueSelected(selectItem, selectItemValue)) { // SELECTION
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeBoolean(false);
-                }
-
-                javaScriptWriter.write(',').writeBoolean(true);
-
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
             }
         }
 
         if (treeRenderContext.writeCheckFullState() == false) {
             if (treeRenderContext.isValueChecked(selectItem, selectItemValue)) { // CHECK
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeBoolean(false);
-                }
-
-                javaScriptWriter.write(',').writeBoolean(true);
-
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
             }
         }
 
-        javaScriptWriter.writeln(");");
+        if (selectItem instanceof IStyleClassItem) {
+            String styleClass = ((IStyleClassItem) selectItem).getStyleClass();
+            if (styleClass != null) {
+                objectLiteralWriter.writeSymbol("_styleClass").writeString(
+                        styleClass);
+            }
+        }
 
         if (selectItem instanceof IImagesItem) {
             writeSelectItemImages((IImagesItem) selectItem, javaScriptWriter,
-                    null, "f_setItemImages", varId, false);
+                    null, null, false, objectLiteralWriter);
         }
 
         if (selectItem instanceof IClientDataItem) {
-            IClientDataItem clientDataItem = (IClientDataItem) selectItem;
+            writeItemClientDatas((IClientDataItem) selectItem,
+                    javaScriptWriter, null, null, objectLiteralWriter);
+        }
 
-            if (clientDataItem.isClientDataEmpty() == false) {
-                writeItemClientDatas(clientDataItem, javaScriptWriter, null,
-                        "f_setItemClientDatas", varId);
+        if (selectItem instanceof IMenuPopupIdCapability) {
+            String menuPopupId = ((IMenuPopupIdCapability) selectItem)
+                    .getMenuPopupId();
+            if (menuPopupId != null) {
+                objectLiteralWriter.writeSymbol("_menuPopupId").writeString(
+                        menuPopupId);
             }
         }
+
+        objectLiteralWriter.end();
+
+        javaScriptWriter.writeln(");");
 
         return EVAL_NODE;
     }

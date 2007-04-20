@@ -1,14 +1,15 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The helpMessageZone Component is a placeholder for help messages. The messages are shown when the pointer hover a component and this component has a "helpMessage" property.</p>
@@ -45,157 +46,213 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 		setId(componentId);
 	}
 
-	public final java.lang.String getText() {
+	public java.lang.String getText() {
 		return getText(null);
 	}
 
 	/**
 	 * See {@link #getText() getText()} for more details
 	 */
-	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
 
-	public final void setText(java.lang.String text) {
+	/**
+	 * Returns <code>true</code> if the attribute "text" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextSetted() {
+		return engine.isPropertySetted(Properties.TEXT);
+	}
+
+	public void setText(java.lang.String text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
 	/**
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
-	public final void setText(ValueBinding text) {
+	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
-	public final java.lang.Boolean getFontBold() {
+	public java.lang.Boolean getFontBold() {
 		return getFontBold(null);
 	}
 
 	/**
 	 * See {@link #getFontBold() getFontBold()} for more details
 	 */
-	public final java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
 	}
 
-	public final void setFontBold(java.lang.Boolean fontBold) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontBold" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontBoldSetted() {
+		return engine.isPropertySetted(Properties.FONT_BOLD);
+	}
+
+	public void setFontBold(java.lang.Boolean fontBold) {
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
 
 	/**
 	 * See {@link #setFontBold(Boolean) setFontBold(Boolean)} for more details
 	 */
-	public final void setFontBold(ValueBinding fontBold) {
+	public void setFontBold(ValueBinding fontBold) {
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
 
-	public final java.lang.Boolean getFontItalic() {
+	public java.lang.Boolean getFontItalic() {
 		return getFontItalic(null);
 	}
 
 	/**
 	 * See {@link #getFontItalic() getFontItalic()} for more details
 	 */
-	public final java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
 	}
 
-	public final void setFontItalic(java.lang.Boolean fontItalic) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontItalic" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontItalicSetted() {
+		return engine.isPropertySetted(Properties.FONT_ITALIC);
+	}
+
+	public void setFontItalic(java.lang.Boolean fontItalic) {
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
 
 	/**
 	 * See {@link #setFontItalic(Boolean) setFontItalic(Boolean)} for more details
 	 */
-	public final void setFontItalic(ValueBinding fontItalic) {
+	public void setFontItalic(ValueBinding fontItalic) {
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
 
-	public final java.lang.String getFontName() {
+	public java.lang.String getFontName() {
 		return getFontName(null);
 	}
 
 	/**
 	 * See {@link #getFontName() getFontName()} for more details
 	 */
-	public final java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_NAME, facesContext);
 	}
 
-	public final void setFontName(java.lang.String fontName) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontName" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontNameSetted() {
+		return engine.isPropertySetted(Properties.FONT_NAME);
+	}
+
+	public void setFontName(java.lang.String fontName) {
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
 
 	/**
 	 * See {@link #setFontName(String) setFontName(String)} for more details
 	 */
-	public final void setFontName(ValueBinding fontName) {
+	public void setFontName(ValueBinding fontName) {
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
 
-	public final java.lang.String getFontSize() {
+	public java.lang.String getFontSize() {
 		return getFontSize(null);
 	}
 
 	/**
 	 * See {@link #getFontSize() getFontSize()} for more details
 	 */
-	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
 	}
 
-	public final void setFontSize(java.lang.String fontSize) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontSize" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontSizeSetted() {
+		return engine.isPropertySetted(Properties.FONT_SIZE);
+	}
+
+	public void setFontSize(java.lang.String fontSize) {
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
 
 	/**
 	 * See {@link #setFontSize(String) setFontSize(String)} for more details
 	 */
-	public final void setFontSize(ValueBinding fontSize) {
+	public void setFontSize(ValueBinding fontSize) {
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
 
-	public final java.lang.Boolean getFontUnderline() {
+	public java.lang.Boolean getFontUnderline() {
 		return getFontUnderline(null);
 	}
 
 	/**
 	 * See {@link #getFontUnderline() getFontUnderline()} for more details
 	 */
-	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
 	}
 
-	public final void setFontUnderline(java.lang.Boolean fontUnderline) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontUnderline" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontUnderlineSetted() {
+		return engine.isPropertySetted(Properties.FONT_UNDERLINE);
+	}
+
+	public void setFontUnderline(java.lang.Boolean fontUnderline) {
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
 	/**
 	 * See {@link #setFontUnderline(Boolean) setFontUnderline(Boolean)} for more details
 	 */
-	public final void setFontUnderline(ValueBinding fontUnderline) {
+	public void setFontUnderline(ValueBinding fontUnderline) {
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
-	public final java.lang.String getTextAlignment() {
+	public java.lang.String getTextAlignment() {
 		return getTextAlignment(null);
 	}
 
 	/**
 	 * See {@link #getTextAlignment() getTextAlignment()} for more details
 	 */
-	public final java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
 	}
 
-	public final void setTextAlignment(java.lang.String textAlignment) {
+	/**
+	 * Returns <code>true</code> if the attribute "textAlignment" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextAlignmentSetted() {
+		return engine.isPropertySetted(Properties.TEXT_ALIGNMENT);
+	}
+
+	public void setTextAlignment(java.lang.String textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
 	/**
 	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
 	 */
-	public final void setTextAlignment(ValueBinding textAlignment) {
+	public void setTextAlignment(ValueBinding textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 

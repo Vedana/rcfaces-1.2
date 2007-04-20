@@ -1388,7 +1388,7 @@ var __prototype = {
 	_createHomeDate: function(doc, component, className, blankImageURL) {
 		f_core.Assert(this._homeDate instanceof Date, "f_calendarObject._createHomeDate: homeDate is not a date ('"+this._homeDate+"').");
 		
-		var button=doc.createElement("A");
+		var button=doc.createElement("a");
 		button.className=className+"_today";
 		button.onclick=f_calendarObject._OnHomeDateClick;
 		button.href=f_core.JAVASCRIPT_VOID;
@@ -1420,25 +1420,25 @@ var __prototype = {
 		var unitButtons=new Array();
 		this._unitButtons=unitButtons
 
-		var div=doc.createElement("DIV");
+		var div=doc.createElement("div");
 		
-		var table=doc.createElement("TABLE");
+		var table=doc.createElement("table");
 		table.align="center";
 		table.cellpadding=0;
 		table.cellspacing=0;
 		table.border=0;
 		div.appendChild(table);
 
-		var tbody=doc.createElement("TBODY");
+		var tbody=doc.createElement("tbody");
 		table.appendChild(tbody);
 
-		var tr=doc.createElement("TR");
+		var tr=doc.createElement("tr");
 		tbody.appendChild(tr);
 
-		var td=doc.createElement("TD");
+		var td=doc.createElement("td");
 		tr.appendChild(td);
 		
-		var link=doc.createElement("A");
+		var link=doc.createElement("a");
 		link.className=className+"_prevUnit";
 		link.href=f_core.JAVASCRIPT_VOID;
 		td.appendChild(link);
@@ -1452,7 +1452,7 @@ var __prototype = {
 		var name=doc.createTextNode(prevUnitLabel);
 		link.appendChild(name);
 		
-		var img=doc.createElement("IMG");
+		var img=doc.createElement("img");
 		img.width=16;
 		img.height=16;
 		img.src=blankImageURL;
@@ -1460,10 +1460,10 @@ var __prototype = {
 		img.className=className+"_prevUnit";
 		link.appendChild(img);
 		
-		var td=doc.createElement("TD");		
+		var td=doc.createElement("td");		
 		tr.appendChild(td);
 		
-		var divName=doc.createElement("SPAN");
+		var divName=doc.createElement("span");
 		td.appendChild(divName);
 		divName.className=className+"_unitLabel";
 		
@@ -1471,17 +1471,17 @@ var __prototype = {
 		this._unitLabel=name;
 		divName.appendChild(name);
 
-		var img=doc.createElement("IMG");
+		var img=doc.createElement("img");
 		img.width=1;
 		img.height=16;
 		img.src=blankImageURL;
 		img.className=className+"_unitLabel";
 		divName.appendChild(img);
 
-		var td=doc.createElement("TD");
+		var td=doc.createElement("td");
 		tr.appendChild(td);
 			
-		var link=doc.createElement("A");
+		var link=doc.createElement("a");
 		link.className=className+"_nextUnit";
 		link.href=f_core.JAVASCRIPT_VOID;
 		td.appendChild(link);
@@ -1491,7 +1491,7 @@ var __prototype = {
 		link._calendar=this;
 		link._date=1;
 				
-		var img=doc.createElement("IMG");
+		var img=doc.createElement("img");
 		img.width=16;
 		img.height=16;
 		img.src=blankImageURL;
@@ -1509,20 +1509,20 @@ var __prototype = {
 	 * @method private
 	 */
 	_createDayList: function(doc, component, className, blankImageURL) {
-		var table=doc.createElement("TABLE");
+		var table=doc.createElement("table");
 		table.align="center";
 		table.cellpadding=1;
 		table.cellspacing=1;
 		table.border=0;
 
-		var tbody=doc.createElement("TBODY");
+		var tbody=doc.createElement("tbody");
 		table.appendChild(tbody);
 
-		var tr=doc.createElement("TR");
+		var tr=doc.createElement("tr");
 		tbody.appendChild(tr);
 
 		if (!this._popupMode) {
-			var td=doc.createElement("TD");
+			var td=doc.createElement("td");
 			tr.appendChild(td);
 		}
 		
@@ -1530,20 +1530,20 @@ var __prototype = {
 
 		var dof=this._firstDayOfWeek;
 		for(var j=0;j<7;j++) {
-			var td=doc.createElement("TD");
+			var td=doc.createElement("td");
 			td.align="center";
 			tr.appendChild(td);
 				
 			var link;
 			if (!this._popupMode) {
-				link=doc.createElement("A");
+				link=doc.createElement("a");
 				link.href=f_core.JAVASCRIPT_VOID;
 				link.onclick=f_calendarObject._OnWeekDayClick;
 				link.onkeydown=f_calendarObject._OnWeekDayKey;
 				link._calendar=this;
 				
 			} else {
-				link=doc.createElement("SPAN");
+				link=doc.createElement("span");
 			}
 			
 			td.appendChild(link);
@@ -1569,17 +1569,17 @@ var __prototype = {
 		var idx=0;
 		for(var j=0;j<42;j++) {
 			if ((j % 7)==0) {
-				tr=doc.createElement("TR");
+				tr=doc.createElement("tr");
 				tr.className=className+"_rday";
 				tbody.appendChild(tr);
 
 				if (!this._popupMode) {
-					var td=doc.createElement("TD");
+					var td=doc.createElement("td");
 					td.align="center";
 					tr.appendChild(td);
 					td.className=className+"_cweek";
 	
-					var but=doc.createElement("A");
+					var but=doc.createElement("a");
 					td.appendChild(but);
 					but.className=className+"_week";
 					but.href=f_core.JAVASCRIPT_VOID;
@@ -1590,7 +1590,7 @@ var __prototype = {
 	
 					but.tabIndex=this._tabIndex;
 	
-					var weekSelect=doc.createElement("IMG");
+					var weekSelect=doc.createElement("img");
 					but.appendChild(weekSelect);
 					weekSelect.className=className+"_weekImage";
 					weekSelect.width=16;
@@ -1599,12 +1599,12 @@ var __prototype = {
 				}
 			}
 			
-			var td=doc.createElement("TD");
+			var td=doc.createElement("td");
 			td.align="center";
 			tr.appendChild(td);
 			td.className=className+"_cday";
 			
-			var day=doc.createElement("A");
+			var day=doc.createElement("a");
 			td.appendChild(day);
 // C'est une classe utilisateur !
 //			day.className=className+"_day";
@@ -1628,30 +1628,30 @@ var __prototype = {
 	_createMonthList: function(doc, component, className, blankImageURL) {
 		this._monthButtons=new Array;
 
-		var table=doc.createElement("TABLE");
+		var table=doc.createElement("table");
 		
 		table.align="center";
 		table.cellpadding=1;
 		table.cellspacing=1;
 		table.border=0;
 
-		var tbody=doc.createElement("TBODY");
+		var tbody=doc.createElement("tbody");
 		table.appendChild(tbody);
 
 		var tr;
 		var idx=0;
 		for(var j=0;j<12;j++) {
 			if ((j % 6)==0) {
-				tr=doc.createElement("TR");
+				tr=doc.createElement("tr");
 				tbody.appendChild(tr);
 			}
 			
-			var td=doc.createElement("TD");
+			var td=doc.createElement("td");
 			td.align="center";
 			tr.appendChild(td);
 			td.className=className+"_cmonth";
 			
-			var month=doc.createElement("A");
+			var month=doc.createElement("a");
 			td.appendChild(month);
 			month.className=className+"_month";
 			month.href=f_core.JAVASCRIPT_VOID;
@@ -1675,22 +1675,22 @@ var __prototype = {
 	_createYearCursor: function(doc, component, className, blankImageURL) {			
 		this._yearButtons=new Array;
 		
-		var table=doc.createElement("TABLE");
+		var table=doc.createElement("table");
 		table.align="center";
 		table.cellpadding=1;
 		table.cellspacing=0;
 		table.border=0;
 		
-		var tbody=doc.createElement("TBODY");
+		var tbody=doc.createElement("tbody");
 		table.appendChild(tbody);
 		
-		var tr=doc.createElement("TR");
+		var tr=doc.createElement("tr");
 		tbody.appendChild(tr);
 		
-		var td=doc.createElement("TD");
+		var td=doc.createElement("td");
 		tr.appendChild(td);
 		
-		var link=doc.createElement("A");
+		var link=doc.createElement("a");
 		link.className=className+"_prevYear";
 		td.appendChild(link);
 		link.href=f_core.JAVASCRIPT_VOID;
@@ -1699,7 +1699,7 @@ var __prototype = {
 		link.onkeydown=f_calendarObject._OnYearKey;
 		link._calendar=this;		
 		
-		var img=doc.createElement("IMG");
+		var img=doc.createElement("img");
 		link.appendChild(img);
 		img.className=className+"_prevYear";
 		img.width=16;
@@ -1707,10 +1707,10 @@ var __prototype = {
 		img.src=blankImageURL;		
 		this._previousYearImage=img;
 		
-		var td=doc.createElement("TD");
+		var td=doc.createElement("td");
 		tr.appendChild(td);
 
-		var year=doc.createElement("A");
+		var year=doc.createElement("a");
 		td.appendChild(year);
 		year.className=className+"_year";
 		year.href=f_core.JAVASCRIPT_VOID;
@@ -1723,10 +1723,10 @@ var __prototype = {
 		year.appendChild(name);
 		this._yearText=name;
 		
-		var td=doc.createElement("TD");
+		var td=doc.createElement("td");
 		tr.appendChild(td);
 		
-		var link=doc.createElement("A");
+		var link=doc.createElement("a");
 		link.className=className+"_nextYear";
 		td.appendChild(link);
 		link.href=f_core.JAVASCRIPT_VOID;
@@ -1735,7 +1735,7 @@ var __prototype = {
 		link.onkeydown=f_calendarObject._OnYearKey;
 		link._calendar=this;
 		
-		var img=doc.createElement("IMG");
+		var img=doc.createElement("img");
 		link.appendChild(img);
 		img.className=className+"_nextYear";
 		img.src=blankImageURL;
@@ -1751,22 +1751,22 @@ var __prototype = {
 	_createMonthCursor: function(doc, component, className, blankImageURL) {			
 		this._monthButtons=new Array;
 		
-		var table=doc.createElement("TABLE");
+		var table=doc.createElement("table");
 		table.align="center";
 		table.cellpadding=1;
 		table.cellspacing=0;
 		table.border=0;
 		
-		var tbody=doc.createElement("TBODY");
+		var tbody=doc.createElement("tbody");
 		table.appendChild(tbody);
 		
-		var tr=doc.createElement("TR");
+		var tr=doc.createElement("tr");
 		tbody.appendChild(tr);
 		
-		var td=doc.createElement("TD");
+		var td=doc.createElement("td");
 		tr.appendChild(td);
 		
-		var link=doc.createElement("A");
+		var link=doc.createElement("a");
 		link.className=className+"_prevMonth";
 		td.appendChild(link);
 		link.href=f_core.JAVASCRIPT_VOID;
@@ -1775,7 +1775,7 @@ var __prototype = {
 		link.onkeydown=f_calendarObject._OnMonthKey;
 		link._calendar=this;		
 		
-		var img=doc.createElement("IMG");
+		var img=doc.createElement("img");
 		link.appendChild(img);
 		img.className=className+"_prevMonth";
 		img.width=16;
@@ -1783,11 +1783,11 @@ var __prototype = {
 		img.src=blankImageURL;		
 		this._previousMonthImage=img;
 		
-		var td=doc.createElement("TD");
+		var td=doc.createElement("td");
 		tr.appendChild(td);
 		td.align="center";
 
-		var month=doc.createElement("DIV");
+		var month=doc.createElement("div");
 		td.appendChild(month);
 		month.className=className+"_month";
 		
@@ -1795,10 +1795,10 @@ var __prototype = {
 		month.appendChild(name);
 		this._monthText=name;
 		
-		var td=doc.createElement("TD");
+		var td=doc.createElement("td");
 		tr.appendChild(td);
 		
-		var link=doc.createElement("A");
+		var link=doc.createElement("a");
 		link.className=className+"_nextMonth";
 		td.appendChild(link);
 		link.href=f_core.JAVASCRIPT_VOID;
@@ -1807,7 +1807,7 @@ var __prototype = {
 		link.onkeydown=f_calendarObject._OnMonthKey;
 		link._calendar=this;
 		
-		var img=doc.createElement("IMG");
+		var img=doc.createElement("img");
 		link.appendChild(img);
 		img.className=className+"_nextMonth";
 		img.src=blankImageURL;

@@ -1,53 +1,50 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
-import org.rcfaces.core.component.capability.IValueLockedCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import java.lang.Object;
-import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.component.capability.IFontCapability;
-import java.util.Collections;
 import java.util.Arrays;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IKeyEventCapability;
-import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
+import java.util.Collections;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
-import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.internal.component.CameliaOutputComponent;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import java.util.Map;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IHelpCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.MarginTools;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -89,6 +86,109 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 	}
 
 
+	public final void setImmediate(ValueBinding immediate) {
+
+
+			setValueBinding("immediate", immediate);
+		
+	}
+
+	public final void setClientData(String name, ValueBinding value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public final String getClientData(String name, FacesContext facesContext) {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return (String)dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public final Map getClientDataMap(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
+		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		return dataMapAccessor.getDataMap(facesContext);
+		
+	}
+
+	public final Object getServerData(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public final void setMargins(String margins) {
+
+
+				MarginTools.setMargins(this, margins);
+			
+	}
+
+	public final String[] listServerDataKeys(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
+	public final String[] listClientDataKeys(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
+	public final void setServerData(String name, ValueBinding value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public final Boolean getVisibleState(FacesContext facesContext) {
+
+
+			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+				return null;
+			}
+			
+			return Boolean.valueOf(isVisible(facesContext));
+		
+	}
+
 	public final Map getServerDataMap(FacesContext facesContext) {
 
 
@@ -115,128 +215,33 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		
 	}
 
-	public final String getClientData(String name, FacesContext facesContext) {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		 if (dataMapAccessor==null) {
-		 	return null;
-		 }
-            
-		return (String)dataMapAccessor.getData(name, facesContext);
-		
-	}
-
-	public final String[] listServerDataKeys(FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-			return ComponentTools.STRING_EMPTY_ARRAY;
-		}
-		
-		return dataMapAccessor.listDataKeys(facesContext);
-		
-	}
-
-	public final void setServerData(String name, ValueBinding value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public final String[] listClientDataKeys(FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		if (dataMapAccessor==null) {
-			return ComponentTools.STRING_EMPTY_ARRAY;
-		}
-		
-		return dataMapAccessor.listDataKeys(facesContext);
-		
-	}
-
-	public final void setImmediate(ValueBinding immediate) {
-
-
-			setValueBinding("immediate", immediate);
-		
-	}
-
-	public final Boolean getVisibleState(FacesContext facesContext) {
-
-
-			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
-				return null;
-			}
-			
-			return Boolean.valueOf(isVisible(facesContext));
-		
-	}
-
-	public final void setClientData(String name, ValueBinding value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public final Map getClientDataMap(FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
-		if (dataMapAccessor==null) {
-			return Collections.EMPTY_MAP;
-		}
-            
-		return dataMapAccessor.getDataMap(facesContext);
-		
-	}
-
-	public final void setMargins(String margins) {
-
-
-				MarginTools.setMargins(this, margins);
-			
-	}
-
-	public final Object getServerData(String name, FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-			return null;
-		}
-		
-		return dataMapAccessor.getData(name, facesContext);
-		
-	}
-
-	public final boolean isVisible() {
+	public boolean isVisible() {
 		return isVisible(null);
 	}
 
 	/**
 	 * See {@link #isVisible() isVisible()} for more details
 	 */
-	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
 	}
 
-	public final void setVisible(boolean visible) {
+	/**
+	 * Returns <code>true</code> if the attribute "visible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVisibleSetted() {
+		return engine.isPropertySetted(Properties.VISIBLE);
+	}
+
+	public void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	/**
 	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
 	 */
-	public final void setVisible(ValueBinding visible) {
+	public void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
@@ -247,48 +252,64 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		
 	}
 
-	public final java.lang.String getHeight() {
-		return getHeight(null);
-	}
-
-	/**
-	 * See {@link #getHeight() getHeight()} for more details
-	 */
-	public final java.lang.String getHeight(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HEIGHT, facesContext);
-	}
-
-	public final void setHeight(java.lang.String height) {
-		engine.setProperty(Properties.HEIGHT, height);
-	}
-
-	/**
-	 * See {@link #setHeight(String) setHeight(String)} for more details
-	 */
-	public final void setHeight(ValueBinding height) {
-		engine.setProperty(Properties.HEIGHT, height);
-	}
-
-	public final java.lang.String getWidth() {
+	public java.lang.String getWidth() {
 		return getWidth(null);
 	}
 
 	/**
 	 * See {@link #getWidth() getWidth()} for more details
 	 */
-	public final java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WIDTH, facesContext);
 	}
 
-	public final void setWidth(java.lang.String width) {
+	/**
+	 * Returns <code>true</code> if the attribute "width" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWidthSetted() {
+		return engine.isPropertySetted(Properties.WIDTH);
+	}
+
+	public void setWidth(java.lang.String width) {
 		engine.setProperty(Properties.WIDTH, width);
 	}
 
 	/**
 	 * See {@link #setWidth(String) setWidth(String)} for more details
 	 */
-	public final void setWidth(ValueBinding width) {
+	public void setWidth(ValueBinding width) {
 		engine.setProperty(Properties.WIDTH, width);
+	}
+
+	public java.lang.String getHeight() {
+		return getHeight(null);
+	}
+
+	/**
+	 * See {@link #getHeight() getHeight()} for more details
+	 */
+	public java.lang.String getHeight(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEIGHT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "height" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeightSetted() {
+		return engine.isPropertySetted(Properties.HEIGHT);
+	}
+
+	public void setHeight(java.lang.String height) {
+		engine.setProperty(Properties.HEIGHT, height);
+	}
+
+	/**
+	 * See {@link #setHeight(String) setHeight(String)} for more details
+	 */
+	public void setHeight(ValueBinding height) {
+		engine.setProperty(Properties.HEIGHT, height);
 	}
 
 	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
@@ -315,47 +336,63 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
 	}
 
-	public final boolean isDisabled() {
+	public boolean isDisabled() {
 		return isDisabled(null);
 	}
 
 	/**
 	 * See {@link #isDisabled() isDisabled()} for more details
 	 */
-	public final boolean isDisabled(javax.faces.context.FacesContext facesContext) {
+	public boolean isDisabled(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
 	}
 
-	public final void setDisabled(boolean disabled) {
+	/**
+	 * Returns <code>true</code> if the attribute "disabled" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDisabledSetted() {
+		return engine.isPropertySetted(Properties.DISABLED);
+	}
+
+	public void setDisabled(boolean disabled) {
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
 	/**
 	 * See {@link #setDisabled(boolean) setDisabled(boolean)} for more details
 	 */
-	public final void setDisabled(ValueBinding disabled) {
+	public void setDisabled(ValueBinding disabled) {
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
-	public final java.lang.String getUnlockedClientAttributeNames() {
+	public java.lang.String getUnlockedClientAttributeNames() {
 		return getUnlockedClientAttributeNames(null);
 	}
 
 	/**
 	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
 	 */
-	public final java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
 	}
 
-	public final void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
+	/**
+	 * Returns <code>true</code> if the attribute "unlockedClientAttributeNames" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isUnlockedClientAttributeNamesSetted() {
+		return engine.isPropertySetted(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES);
+	}
+
+	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
 		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
 	/**
 	 * See {@link #setUnlockedClientAttributeNames(String) setUnlockedClientAttributeNames(String)} for more details
 	 */
-	public final void setUnlockedClientAttributeNames(ValueBinding unlockedClientAttributeNames) {
+	public void setUnlockedClientAttributeNames(ValueBinding unlockedClientAttributeNames) {
 		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
@@ -395,47 +432,63 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
 	}
 
-	public final java.lang.String getBackgroundColor() {
+	public java.lang.String getBackgroundColor() {
 		return getBackgroundColor(null);
 	}
 
 	/**
 	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
 	 */
-	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
 	}
 
-	public final void setBackgroundColor(java.lang.String backgroundColor) {
+	/**
+	 * Returns <code>true</code> if the attribute "backgroundColor" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBackgroundColorSetted() {
+		return engine.isPropertySetted(Properties.BACKGROUND_COLOR);
+	}
+
+	public void setBackgroundColor(java.lang.String backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
 	/**
 	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
 	 */
-	public final void setBackgroundColor(ValueBinding backgroundColor) {
+	public void setBackgroundColor(ValueBinding backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
-	public final java.lang.String getForegroundColor() {
+	public java.lang.String getForegroundColor() {
 		return getForegroundColor(null);
 	}
 
 	/**
 	 * See {@link #getForegroundColor() getForegroundColor()} for more details
 	 */
-	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
 	}
 
-	public final void setForegroundColor(java.lang.String foregroundColor) {
+	/**
+	 * Returns <code>true</code> if the attribute "foregroundColor" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isForegroundColorSetted() {
+		return engine.isPropertySetted(Properties.FOREGROUND_COLOR);
+	}
+
+	public void setForegroundColor(java.lang.String foregroundColor) {
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
 	/**
 	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
 	 */
-	public final void setForegroundColor(ValueBinding foregroundColor) {
+	public void setForegroundColor(ValueBinding foregroundColor) {
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
@@ -475,25 +528,33 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IKeyUpListener.class);
 	}
 
-	public final java.lang.String getStyleClass() {
+	public java.lang.String getStyleClass() {
 		return getStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getStyleClass() getStyleClass()} for more details
 	 */
-	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
 
-	public final void setStyleClass(java.lang.String styleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "styleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isStyleClassSetted() {
+		return engine.isPropertySetted(Properties.STYLE_CLASS);
+	}
+
+	public void setStyleClass(java.lang.String styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
 	/**
 	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
 	 */
-	public final void setStyleClass(ValueBinding styleClass) {
+	public void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
@@ -556,113 +617,153 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		
 	}
 
-	public final java.lang.Boolean getFontBold() {
+	public java.lang.Boolean getFontBold() {
 		return getFontBold(null);
 	}
 
 	/**
 	 * See {@link #getFontBold() getFontBold()} for more details
 	 */
-	public final java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
 	}
 
-	public final void setFontBold(java.lang.Boolean fontBold) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontBold" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontBoldSetted() {
+		return engine.isPropertySetted(Properties.FONT_BOLD);
+	}
+
+	public void setFontBold(java.lang.Boolean fontBold) {
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
 
 	/**
 	 * See {@link #setFontBold(Boolean) setFontBold(Boolean)} for more details
 	 */
-	public final void setFontBold(ValueBinding fontBold) {
+	public void setFontBold(ValueBinding fontBold) {
 		engine.setProperty(Properties.FONT_BOLD, fontBold);
 	}
 
-	public final java.lang.Boolean getFontItalic() {
+	public java.lang.Boolean getFontItalic() {
 		return getFontItalic(null);
 	}
 
 	/**
 	 * See {@link #getFontItalic() getFontItalic()} for more details
 	 */
-	public final java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
 	}
 
-	public final void setFontItalic(java.lang.Boolean fontItalic) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontItalic" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontItalicSetted() {
+		return engine.isPropertySetted(Properties.FONT_ITALIC);
+	}
+
+	public void setFontItalic(java.lang.Boolean fontItalic) {
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
 
 	/**
 	 * See {@link #setFontItalic(Boolean) setFontItalic(Boolean)} for more details
 	 */
-	public final void setFontItalic(ValueBinding fontItalic) {
+	public void setFontItalic(ValueBinding fontItalic) {
 		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
 	}
 
-	public final java.lang.String getFontName() {
+	public java.lang.String getFontName() {
 		return getFontName(null);
 	}
 
 	/**
 	 * See {@link #getFontName() getFontName()} for more details
 	 */
-	public final java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_NAME, facesContext);
 	}
 
-	public final void setFontName(java.lang.String fontName) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontName" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontNameSetted() {
+		return engine.isPropertySetted(Properties.FONT_NAME);
+	}
+
+	public void setFontName(java.lang.String fontName) {
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
 
 	/**
 	 * See {@link #setFontName(String) setFontName(String)} for more details
 	 */
-	public final void setFontName(ValueBinding fontName) {
+	public void setFontName(ValueBinding fontName) {
 		engine.setProperty(Properties.FONT_NAME, fontName);
 	}
 
-	public final java.lang.String getFontSize() {
+	public java.lang.String getFontSize() {
 		return getFontSize(null);
 	}
 
 	/**
 	 * See {@link #getFontSize() getFontSize()} for more details
 	 */
-	public final java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
 	}
 
-	public final void setFontSize(java.lang.String fontSize) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontSize" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontSizeSetted() {
+		return engine.isPropertySetted(Properties.FONT_SIZE);
+	}
+
+	public void setFontSize(java.lang.String fontSize) {
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
 
 	/**
 	 * See {@link #setFontSize(String) setFontSize(String)} for more details
 	 */
-	public final void setFontSize(ValueBinding fontSize) {
+	public void setFontSize(ValueBinding fontSize) {
 		engine.setProperty(Properties.FONT_SIZE, fontSize);
 	}
 
-	public final java.lang.Boolean getFontUnderline() {
+	public java.lang.Boolean getFontUnderline() {
 		return getFontUnderline(null);
 	}
 
 	/**
 	 * See {@link #getFontUnderline() getFontUnderline()} for more details
 	 */
-	public final java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
 		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
 	}
 
-	public final void setFontUnderline(java.lang.Boolean fontUnderline) {
+	/**
+	 * Returns <code>true</code> if the attribute "fontUnderline" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFontUnderlineSetted() {
+		return engine.isPropertySetted(Properties.FONT_UNDERLINE);
+	}
+
+	public void setFontUnderline(java.lang.Boolean fontUnderline) {
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
 	/**
 	 * See {@link #setFontUnderline(Boolean) setFontUnderline(Boolean)} for more details
 	 */
-	public final void setFontUnderline(ValueBinding fontUnderline) {
+	public void setFontUnderline(ValueBinding fontUnderline) {
 		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
 	}
 
@@ -678,69 +779,93 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final java.lang.String getHelpMessage() {
+	public java.lang.String getHelpMessage() {
 		return getHelpMessage(null);
 	}
 
 	/**
 	 * See {@link #getHelpMessage() getHelpMessage()} for more details
 	 */
-	public final java.lang.String getHelpMessage(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getHelpMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HELP_MESSAGE, facesContext);
 	}
 
-	public final void setHelpMessage(java.lang.String helpMessage) {
+	/**
+	 * Returns <code>true</code> if the attribute "helpMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHelpMessageSetted() {
+		return engine.isPropertySetted(Properties.HELP_MESSAGE);
+	}
+
+	public void setHelpMessage(java.lang.String helpMessage) {
 		engine.setProperty(Properties.HELP_MESSAGE, helpMessage);
 	}
 
 	/**
 	 * See {@link #setHelpMessage(String) setHelpMessage(String)} for more details
 	 */
-	public final void setHelpMessage(ValueBinding helpMessage) {
+	public void setHelpMessage(ValueBinding helpMessage) {
 		engine.setProperty(Properties.HELP_MESSAGE, helpMessage);
 	}
 
-	public final java.lang.String getHelpURL() {
+	public java.lang.String getHelpURL() {
 		return getHelpURL(null);
 	}
 
 	/**
 	 * See {@link #getHelpURL() getHelpURL()} for more details
 	 */
-	public final java.lang.String getHelpURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getHelpURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HELP_URL, facesContext);
 	}
 
-	public final void setHelpURL(java.lang.String helpURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "helpURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHelpURLSetted() {
+		return engine.isPropertySetted(Properties.HELP_URL);
+	}
+
+	public void setHelpURL(java.lang.String helpURL) {
 		engine.setProperty(Properties.HELP_URL, helpURL);
 	}
 
 	/**
 	 * See {@link #setHelpURL(String) setHelpURL(String)} for more details
 	 */
-	public final void setHelpURL(ValueBinding helpURL) {
+	public void setHelpURL(ValueBinding helpURL) {
 		engine.setProperty(Properties.HELP_URL, helpURL);
 	}
 
-	public final java.lang.String getToolTipText() {
+	public java.lang.String getToolTipText() {
 		return getToolTipText(null);
 	}
 
 	/**
 	 * See {@link #getToolTipText() getToolTipText()} for more details
 	 */
-	public final java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
 	}
 
-	public final void setToolTipText(java.lang.String toolTipText) {
+	/**
+	 * Returns <code>true</code> if the attribute "toolTipText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isToolTipTextSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
+	}
+
+	public void setToolTipText(java.lang.String toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
 	/**
 	 * See {@link #setToolTipText(String) setToolTipText(String)} for more details
 	 */
-	public final void setToolTipText(ValueBinding toolTipText) {
+	public void setToolTipText(ValueBinding toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
@@ -798,223 +923,303 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		
 	}
 
-	public final boolean isValueLocked() {
+	public boolean isValueLocked() {
 		return isValueLocked(null);
 	}
 
 	/**
 	 * See {@link #isValueLocked() isValueLocked()} for more details
 	 */
-	public final boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
+	public boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VALUE_LOCKED, false, facesContext);
 	}
 
-	public final void setValueLocked(boolean valueLocked) {
+	/**
+	 * Returns <code>true</code> if the attribute "valueLocked" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isValueLockedSetted() {
+		return engine.isPropertySetted(Properties.VALUE_LOCKED);
+	}
+
+	public void setValueLocked(boolean valueLocked) {
 		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 
 	/**
 	 * See {@link #setValueLocked(boolean) setValueLocked(boolean)} for more details
 	 */
-	public final void setValueLocked(ValueBinding valueLocked) {
+	public void setValueLocked(ValueBinding valueLocked) {
 		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 
-	public final java.lang.Integer getTabIndex() {
+	public java.lang.Integer getTabIndex() {
 		return getTabIndex(null);
 	}
 
 	/**
 	 * See {@link #getTabIndex() getTabIndex()} for more details
 	 */
-	public final java.lang.Integer getTabIndex(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Integer getTabIndex(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntegerProperty(Properties.TAB_INDEX, facesContext);
 	}
 
-	public final void setTabIndex(java.lang.Integer tabIndex) {
+	/**
+	 * Returns <code>true</code> if the attribute "tabIndex" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTabIndexSetted() {
+		return engine.isPropertySetted(Properties.TAB_INDEX);
+	}
+
+	public void setTabIndex(java.lang.Integer tabIndex) {
 		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
 
 	/**
 	 * See {@link #setTabIndex(Integer) setTabIndex(Integer)} for more details
 	 */
-	public final void setTabIndex(ValueBinding tabIndex) {
+	public void setTabIndex(ValueBinding tabIndex) {
 		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
 
-	public final java.lang.String getLookId() {
+	public java.lang.String getLookId() {
 		return getLookId(null);
 	}
 
 	/**
 	 * See {@link #getLookId() getLookId()} for more details
 	 */
-	public final java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
 	}
 
-	public final void setLookId(java.lang.String lookId) {
+	/**
+	 * Returns <code>true</code> if the attribute "lookId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLookIdSetted() {
+		return engine.isPropertySetted(Properties.LOOK_ID);
+	}
+
+	public void setLookId(java.lang.String lookId) {
 		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
 	/**
 	 * See {@link #setLookId(String) setLookId(String)} for more details
 	 */
-	public final void setLookId(ValueBinding lookId) {
+	public void setLookId(ValueBinding lookId) {
 		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
-	public final java.lang.String getX() {
+	public java.lang.String getX() {
 		return getX(null);
 	}
 
 	/**
 	 * See {@link #getX() getX()} for more details
 	 */
-	public final java.lang.String getX(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getX(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.X, facesContext);
 	}
 
-	public final void setX(java.lang.String x) {
+	/**
+	 * Returns <code>true</code> if the attribute "x" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isXSetted() {
+		return engine.isPropertySetted(Properties.X);
+	}
+
+	public void setX(java.lang.String x) {
 		engine.setProperty(Properties.X, x);
 	}
 
 	/**
 	 * See {@link #setX(String) setX(String)} for more details
 	 */
-	public final void setX(ValueBinding x) {
+	public void setX(ValueBinding x) {
 		engine.setProperty(Properties.X, x);
 	}
 
-	public final java.lang.String getY() {
+	public java.lang.String getY() {
 		return getY(null);
 	}
 
 	/**
 	 * See {@link #getY() getY()} for more details
 	 */
-	public final java.lang.String getY(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getY(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.Y, facesContext);
 	}
 
-	public final void setY(java.lang.String y) {
+	/**
+	 * Returns <code>true</code> if the attribute "y" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isYSetted() {
+		return engine.isPropertySetted(Properties.Y);
+	}
+
+	public void setY(java.lang.String y) {
 		engine.setProperty(Properties.Y, y);
 	}
 
 	/**
 	 * See {@link #setY(String) setY(String)} for more details
 	 */
-	public final void setY(ValueBinding y) {
+	public void setY(ValueBinding y) {
 		engine.setProperty(Properties.Y, y);
 	}
 
-	public final java.lang.String getMarginBottom() {
+	public java.lang.String getMarginBottom() {
 		return getMarginBottom(null);
 	}
 
 	/**
 	 * See {@link #getMarginBottom() getMarginBottom()} for more details
 	 */
-	public final java.lang.String getMarginBottom(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getMarginBottom(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_BOTTOM, facesContext);
 	}
 
-	public final void setMarginBottom(java.lang.String marginBottom) {
+	/**
+	 * Returns <code>true</code> if the attribute "marginBottom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isMarginBottomSetted() {
+		return engine.isPropertySetted(Properties.MARGIN_BOTTOM);
+	}
+
+	public void setMarginBottom(java.lang.String marginBottom) {
 		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
 
 	/**
 	 * See {@link #setMarginBottom(String) setMarginBottom(String)} for more details
 	 */
-	public final void setMarginBottom(ValueBinding marginBottom) {
+	public void setMarginBottom(ValueBinding marginBottom) {
 		engine.setProperty(Properties.MARGIN_BOTTOM, marginBottom);
 	}
 
-	public final java.lang.String getMarginLeft() {
+	public java.lang.String getMarginLeft() {
 		return getMarginLeft(null);
 	}
 
 	/**
 	 * See {@link #getMarginLeft() getMarginLeft()} for more details
 	 */
-	public final java.lang.String getMarginLeft(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getMarginLeft(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_LEFT, facesContext);
 	}
 
-	public final void setMarginLeft(java.lang.String marginLeft) {
+	/**
+	 * Returns <code>true</code> if the attribute "marginLeft" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isMarginLeftSetted() {
+		return engine.isPropertySetted(Properties.MARGIN_LEFT);
+	}
+
+	public void setMarginLeft(java.lang.String marginLeft) {
 		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
 
 	/**
 	 * See {@link #setMarginLeft(String) setMarginLeft(String)} for more details
 	 */
-	public final void setMarginLeft(ValueBinding marginLeft) {
+	public void setMarginLeft(ValueBinding marginLeft) {
 		engine.setProperty(Properties.MARGIN_LEFT, marginLeft);
 	}
 
-	public final java.lang.String getMarginRight() {
+	public java.lang.String getMarginRight() {
 		return getMarginRight(null);
 	}
 
 	/**
 	 * See {@link #getMarginRight() getMarginRight()} for more details
 	 */
-	public final java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getMarginRight(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_RIGHT, facesContext);
 	}
 
-	public final void setMarginRight(java.lang.String marginRight) {
+	/**
+	 * Returns <code>true</code> if the attribute "marginRight" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isMarginRightSetted() {
+		return engine.isPropertySetted(Properties.MARGIN_RIGHT);
+	}
+
+	public void setMarginRight(java.lang.String marginRight) {
 		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
 	}
 
 	/**
 	 * See {@link #setMarginRight(String) setMarginRight(String)} for more details
 	 */
-	public final void setMarginRight(ValueBinding marginRight) {
+	public void setMarginRight(ValueBinding marginRight) {
 		engine.setProperty(Properties.MARGIN_RIGHT, marginRight);
 	}
 
-	public final java.lang.String getMarginTop() {
+	public java.lang.String getMarginTop() {
 		return getMarginTop(null);
 	}
 
 	/**
 	 * See {@link #getMarginTop() getMarginTop()} for more details
 	 */
-	public final java.lang.String getMarginTop(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getMarginTop(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MARGIN_TOP, facesContext);
 	}
 
-	public final void setMarginTop(java.lang.String marginTop) {
+	/**
+	 * Returns <code>true</code> if the attribute "marginTop" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isMarginTopSetted() {
+		return engine.isPropertySetted(Properties.MARGIN_TOP);
+	}
+
+	public void setMarginTop(java.lang.String marginTop) {
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
 	/**
 	 * See {@link #setMarginTop(String) setMarginTop(String)} for more details
 	 */
-	public final void setMarginTop(ValueBinding marginTop) {
+	public void setMarginTop(ValueBinding marginTop) {
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
-	public final java.lang.String getTextAlignment() {
+	public java.lang.String getTextAlignment() {
 		return getTextAlignment(null);
 	}
 
 	/**
 	 * See {@link #getTextAlignment() getTextAlignment()} for more details
 	 */
-	public final java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
 	}
 
-	public final void setTextAlignment(java.lang.String textAlignment) {
+	/**
+	 * Returns <code>true</code> if the attribute "textAlignment" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextAlignmentSetted() {
+		return engine.isPropertySetted(Properties.TEXT_ALIGNMENT);
+	}
+
+	public void setTextAlignment(java.lang.String textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
 	/**
 	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
 	 */
-	public final void setTextAlignment(ValueBinding textAlignment) {
+	public void setTextAlignment(ValueBinding textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
@@ -1030,47 +1235,63 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
 	}
 
-	public final int getHiddenMode() {
+	public int getHiddenMode() {
 		return getHiddenMode(null);
 	}
 
 	/**
 	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
 
-	public final void setHiddenMode(int hiddenMode) {
+	/**
+	 * Returns <code>true</code> if the attribute "hiddenMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHiddenModeSetted() {
+		return engine.isPropertySetted(Properties.HIDDEN_MODE);
+	}
+
+	public void setHiddenMode(int hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	/**
 	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
 	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
+	public void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public final java.lang.String getWaiRole() {
+	public java.lang.String getWaiRole() {
 		return getWaiRole(null);
 	}
 
 	/**
 	 * See {@link #getWaiRole() getWaiRole()} for more details
 	 */
-	public final java.lang.String getWaiRole(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getWaiRole(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WAI_ROLE, facesContext);
 	}
 
-	public final void setWaiRole(java.lang.String waiRole) {
+	/**
+	 * Returns <code>true</code> if the attribute "waiRole" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWaiRoleSetted() {
+		return engine.isPropertySetted(Properties.WAI_ROLE);
+	}
+
+	public void setWaiRole(java.lang.String waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
 	/**
 	 * See {@link #setWaiRole(String) setWaiRole(String)} for more details
 	 */
-	public final void setWaiRole(ValueBinding waiRole) {
+	public void setWaiRole(ValueBinding waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
@@ -1086,25 +1307,33 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
 	}
 
-	public final java.lang.String getAccessKey() {
+	public java.lang.String getAccessKey() {
 		return getAccessKey(null);
 	}
 
 	/**
 	 * See {@link #getAccessKey() getAccessKey()} for more details
 	 */
-	public final java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
 	}
 
-	public final void setAccessKey(java.lang.String accessKey) {
+	/**
+	 * Returns <code>true</code> if the attribute "accessKey" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAccessKeySetted() {
+		return engine.isPropertySetted(Properties.ACCESS_KEY);
+	}
+
+	public void setAccessKey(java.lang.String accessKey) {
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
 	/**
 	 * See {@link #setAccessKey(String) setAccessKey(String)} for more details
 	 */
-	public final void setAccessKey(ValueBinding accessKey) {
+	public void setAccessKey(ValueBinding accessKey) {
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 

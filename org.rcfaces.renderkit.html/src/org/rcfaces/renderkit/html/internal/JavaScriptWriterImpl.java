@@ -204,7 +204,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         }
         start = true;
 
-        writer.startElement("SCRIPT");
+        writer.startElement(IHtmlWriter.SCRIPT);
 
         if (useMetaContentScriptType == false) {
             writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
@@ -224,7 +224,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         if (useScriptCData) {
             write(IHtmlRenderContext.JAVASCRIPT_CDATA_END);
         }
-        writer.endElement("SCRIPT");
+        writer.endElement(IHtmlWriter.SCRIPT);
         start = false;
     }
 

@@ -39,19 +39,20 @@ public class ProgressIndicatorRenderer extends AbstractTemplateRenderer {
         ProgressIndicatorComponent progressIndicatorComponent = (ProgressIndicatorComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement("TABLE");
+        htmlWriter.startElement(IHtmlWriter.TABLE);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-       // htmlWriter.writeAttribute("v:nc", "true"); // C'est un naming container
+        // htmlWriter.writeAttribute("v:nc", "true"); // C'est un naming
+        // container
         // !
         htmlWriter.writeCellSpacing(0);
         htmlWriter.writeCellPadding(0);
 
-        htmlWriter.startElement("TR");
-        htmlWriter.startElement("TD");
+        htmlWriter.startElement(IHtmlWriter.TR);
+        htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeAlign("center");
         htmlWriter.writeClass(getCellBarClassName(htmlWriter));
 
@@ -70,11 +71,11 @@ public class ProgressIndicatorRenderer extends AbstractTemplateRenderer {
             ComponentTools.encodeRecursive(facesContext, progressBarComponent);
         }
 
-        htmlWriter.endElement("TD");
-        htmlWriter.endElement("TR");
+        htmlWriter.endElement(IHtmlWriter.TD);
+        htmlWriter.endElement(IHtmlWriter.TR);
 
-        htmlWriter.startElement("TR");
-        htmlWriter.startElement("TD");
+        htmlWriter.startElement(IHtmlWriter.TR);
+        htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeAlign("left");
         htmlWriter.writeClass(getTaskNameClassName(htmlWriter));
 
@@ -90,9 +91,9 @@ public class ProgressIndicatorRenderer extends AbstractTemplateRenderer {
             ComponentTools.encodeRecursive(facesContext, textComponent);
         }
 
-        htmlWriter.endElement("TD");
-        htmlWriter.endElement("TR");
-        htmlWriter.endElement("TABLE");
+        htmlWriter.endElement(IHtmlWriter.TD);
+        htmlWriter.endElement(IHtmlWriter.TR);
+        htmlWriter.endElement(IHtmlWriter.TABLE);
     }
 
     protected String getTaskNameClassName(IHtmlWriter htmlWriter) {

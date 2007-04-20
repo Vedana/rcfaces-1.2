@@ -57,7 +57,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 						var interactive=this;
 	
 						var doc=this._htmlNode.ownerDocument;
-						var script=doc.createElement("SCRIPT");
+						var script=doc.createElement("script");
 						script.type=f_httpRequest.JAVASCRIPT_MIME_TYPE;
 						script.src=url;
 						script.defer=false;
@@ -118,7 +118,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 	//					alert("Eval script: "+script);
 						
 						if (typeof(script)=="object") {
-							var scriptElement=document.createElement("SCRIPT");
+							var scriptElement=document.createElement("script");
 							scriptElement.src=script.src;
 							
 							if (script.type) {
@@ -179,7 +179,30 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 	this._interactiveMode=interactiveMode;
 
 //	content=content.replace(/^\s+|\s+$/g, "");
-	
+
+	var disableScripts=false;
+	if (f_core.IsInternetExplorer()) {
+		if (window._camelia_scriptDefer) {
+		
+			f_core.Debug("f_asyncClassLoader", "Add defer to script tags");
+		
+			disableScripts=true;
+			
+			var lowerContent=content.toLowerCase();
+			
+			var pos=content.length();
+			for(;;) {
+				pos=lowerContent.lastIndexOf("<script", pos);
+				if (pos<0) {
+					break;
+				}
+				
+				content=content.substring(0, pos+7)+" defer"+content.substring(pos+7);
+				pos--;
+			}
+		}
+	}
+		
 	f_core.Debug("f_asyncClassLoader", "Set content on component id='"+component.id+"' htmlNode='"+htmlNode+"', htmlNode.tag='"+htmlNode.tagName+"' :\n"+content);
 	
 	try {
@@ -189,7 +212,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 		f_core.Debug("f_asyncClassLoader", "Exception when setting innerHTML for component id='"+component.id+"' htmlNode='"+htmlNode.tagName+"':\n"+content, x);
 	}
 	
-	var forms=f_core.GetElementsByTagName(htmlNode, "FORM");	
+	var forms=f_core.GetElementsByTagName(htmlNode, "form");	
 	if (forms.length) {
 		f_core.Debug("f_asyncClassLoader", forms.length+" form(s) detected !");
 		
@@ -200,38 +223,40 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 		}
 	}
 
-	var scripts=f_core.GetElementsByTagName(htmlNode, "SCRIPT");
-	f_core.Debug("f_asyncClassLoader", scripts.length+" script(s) detected !");
-	
-	var interactiveScripts=interactiveMode._scripts;
-	for(var i=0;i<scripts.length;i++) {
-		var script=scripts[i];
-		var src=script.src;
-		var type=script.type;
+	if (!disableScripts) {
+		var scripts=f_core.GetElementsByTagName(htmlNode, "script");
+		f_core.Debug("f_asyncClassLoader", scripts.length+" script(s) detected !");
 		
-		if (src) {
-			var js= { src: src, 
-					type: type, 
-					charset: script.charset };
-
-			f_core.Debug("f_asyncClassLoader", "Add element script: src="+src+" type="+type+" charset="+script.charset);
-
+		var interactiveScripts=interactiveMode._scripts;
+		for(var i=0;i<scripts.length;i++) {
+			var script=scripts[i];
+			var src=script.src;
+			var type=script.type;
+			
+			if (src) {
+				var js= { src: src, 
+						type: type, 
+						charset: script.charset };
+	
+				f_core.Debug("f_asyncClassLoader", "Add element script: src="+src+" type="+type+" charset="+script.charset);
+	
+				interactiveScripts.push(js);
+				continue;
+			}
+			
+			if (typeof(type)=="string" && type.length && type.toLowerCase().indexOf("text/javascript")<0) {
+				f_core.Error("f_asyncClassLoader", "Unknown script type: "+script.type);
+				continue;
+			}
+	
+			var js=script.text;
+	
+			f_core.Debug("f_asyncClassLoader", "Add text script: "+js);
+			
 			interactiveScripts.push(js);
-			continue;
 		}
-		
-		if (typeof(type)=="string" && type.length && type.toLowerCase().indexOf("text/javascript")<0) {
-			f_core.Error("f_asyncClassLoader", "Unknown script type: "+script.type);
-			continue;
-		}
-
-		var js=script.text;
-
-		f_core.Debug("f_asyncClassLoader", "Add text script: "+js);
-		
-		interactiveScripts.push(js);
 	}
-	
+		
 	interactiveMode.run();
 }
 f_classLoader.prototype._postLoad=function(interactiveMode) {

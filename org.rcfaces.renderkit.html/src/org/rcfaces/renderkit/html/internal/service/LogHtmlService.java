@@ -26,6 +26,8 @@ public class LogHtmlService extends LogService {
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".Log";
 
+    private static final String LOG_SERVICE_VERSION = "1.0.0";
+
     public void initialize(FacesContext facesContext) {
     }
 
@@ -84,6 +86,7 @@ public class LogHtmlService extends LogService {
                 .getExternalContext().getResponse();
 
         AbstractHtmlService.setNoCache(response);
+        AbstractHtmlService.setCameliaResponse(response, LOG_SERVICE_VERSION);
 
         facesContext.responseComplete();
     }

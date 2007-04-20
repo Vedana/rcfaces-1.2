@@ -10,6 +10,10 @@ import javax.faces.model.SelectItem;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.item.IAccessKeyItem;
+import org.rcfaces.core.item.IClientDataItem;
+import org.rcfaces.core.item.IImagesItem;
+import org.rcfaces.core.item.IStyleClassItem;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -51,55 +55,55 @@ public class MenuBarDecorator extends MenuDecorator {
         String sid = menuContext.getComponentClientId(component); // menuContext.getMenuBarItemId();
 
         javaScriptWriter.write("var ").write(varId).write('=').writeMethodCall(
-                "f_declareBarItem").writeString(sid);
+                "f_declareBarItem2").writeString(sid);
 
         menuContext.setManagerComponentId(javaScriptWriter
                 .getComponentVarName());
 
-        int pred = 0;
+        javaScriptWriter.write(',');
+
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(false);
+
+        String value = convertItemValue(componentContext, selectItem.getValue());
+        objectLiteralWriter.writeSymbol("_value").writeString(value);
 
         String txt = selectItem.getLabel();
         if (txt != null) {
-            javaScriptWriter.write(',').writeString(txt);
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_label").writeString(txt);
         }
 
-        String value = convertItemValue(componentContext, selectItem.getValue());
-        if (value != null) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-            javaScriptWriter.write(',').writeString(value);
-
-        } else {
-            pred++;
+        boolean disabled = selectItem.isDisabled();
+        if (disabled) {
+            objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
         }
 
         if (selectItem instanceof IAccessKeyItem) {
             String key = ((IAccessKeyItem) selectItem).getAccessKey();
             if (key != null && key.length() > 0) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-                javaScriptWriter.write(',').writeString(key);
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_accessKey").writeString(key);
             }
-        } else {
-            pred++;
         }
 
-        boolean disabled = selectItem.isDisabled();
-        if (disabled) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
+        if (selectItem instanceof IStyleClassItem) {
+            String styleClass = ((IStyleClassItem) selectItem).getStyleClass();
+            if (styleClass != null) {
+                objectLiteralWriter.writeSymbol("_styleClass").writeString(
+                        styleClass);
             }
-            javaScriptWriter.write(',').writeBoolean(true);
-        } else {
-            pred++;
         }
 
+        if (selectItem instanceof IImagesItem) {
+            writeSelectItemImages((IImagesItem) selectItem, javaScriptWriter,
+                    null, null, true, objectLiteralWriter);
+        }
+
+        if (selectItem instanceof IClientDataItem) {
+            writeItemClientDatas((IClientDataItem) selectItem,
+                    javaScriptWriter, null, null, objectLiteralWriter);
+        }
+
+        objectLiteralWriter.end();
         javaScriptWriter.writeln(");");
 
         if (hasChild == false) {

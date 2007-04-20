@@ -145,7 +145,27 @@ var __static = {
 		}
 				
 		if (useIt) {
-			f_popup._Ie_PreparePopup(popup.document);
+			var pdocument=popup.document;
+			
+			f_popup._Ie_PreparePopup(pdocument);
+
+			// Ajoute les ressources qui n'avaient pas été encore initialisées ...
+			if (!pdocument._resInitialized) {
+				pdocument._resInitialized=true;
+				
+				var links=document.styleSheets;
+				for(var i=pdocument._initializedStyleSheets;i<links.length;i++) {
+					var link=links[i];
+
+					if (!link.href) {
+						// C'est du texte
+						pdocument.createStyleSheet().cssText=link.cssText;						
+						continue;
+					}		
+
+					pdocument.createStyleSheet(link.href);
+				}
+			}
 		}
 				
 		return popup;
@@ -200,8 +220,15 @@ var __static = {
 		for(var i=0;i<links.length;i++) {
 			var link=links[i];
 
+			if (!link.href) {
+				// C'est du texte
+				pdocument.createStyleSheet().cssText=link.cssText;						
+				continue;
+			}		
+
 			pdocument.createStyleSheet(link.href);
 		}
+		pdocument._initializedStyleSheets=links.length;
 		
 		return popup;
 	},
@@ -691,8 +718,6 @@ var __static = {
 
 		var pbody=popupDocument.body;
 		pbody.onunload=f_popup._Ie_unload;
-//		pbody.onblur=f_popup._Ie_unload;
-
 
 		var firstChild=pbody.firstChild;
 				
@@ -762,7 +787,7 @@ var __static = {
 		
 		popup.show(popupX, popupY, popupW, popupH, popupComponent);		
 
-		var seps=popupDocument.getElementsByTagName("LI");
+		var seps=popupDocument.getElementsByTagName("li");
 		// Il faut motiver les composants ?????
 		// Merci IE .... au moins il y a une solution !
 		for(var i=0;i<seps.length;i++) {

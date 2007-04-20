@@ -16,7 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IPageConfigurator;
+import org.rcfaces.core.internal.capability.IPageConfigurator;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
@@ -157,12 +157,12 @@ public class PageConfiguration {
             }
         }
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
         if (processContext == null) {
             processContext = AbstractProcessContext
-                    .getProcessContext(facesContext);
+                    .getProcessContext(FacesContext.getCurrentInstance());
         }
+
+        FacesContext facesContext = processContext.getFacesContext();
 
         locale = processContext.getDefaultLiteralLocale();
         if (locale != null) {

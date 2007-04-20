@@ -5,6 +5,7 @@
 
 package org.rcfaces.renderkit.html.internal;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -790,11 +791,15 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         eventDecoder.decodeEvent(component, eventData);
     }
 
-    protected final IRenderContext getRenderContext(FacesContext context) {
+    protected IRenderContext getRenderContext(FacesContext context) {
+        return getHtmlRenderContext(context);
+    }
+
+    protected IHtmlRenderContext getHtmlRenderContext(FacesContext context) {
         return HtmlRenderContext.getRenderContext(context);
     }
 
-    protected final IRequestContext getRequestContext(FacesContext context) {
+    protected IRequestContext getRequestContext(FacesContext context) {
         return HtmlRequestContext.getRequestContext(context);
     }
 
@@ -910,11 +915,31 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         if (object1 == object2) {
             return true;
         }
-        if (object1 != null && object1.equals(object2)) {
-            return true;
+
+        if (object1 == null || object2 == null) {
+            return false;
         }
 
-        return false;
+        if (object1.getClass().isArray() == false) {
+            return object1.equals(object2);
+        }
+
+        if (object2.getClass().isArray() == false) {
+            return false;
+        }
+
+        int l = Array.getLength(object1);
+        if (l != Array.getLength(object2)) {
+            return false;
+        }
+
+        for (int i = 0; i < l; i++) {
+            if (isEquals(Array.get(object1, i), Array.get(object2, i)) == false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public String convertClientId(FacesContext context, String clientId) {

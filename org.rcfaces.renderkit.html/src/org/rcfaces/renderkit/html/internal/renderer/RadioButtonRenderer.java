@@ -48,7 +48,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -84,7 +84,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
             writeLabel(htmlWriter, button, labelClassName, buttonId);
         }
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
     }
 
     protected String getInputClassName(IHtmlWriter htmlWriter) {
@@ -101,7 +101,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         String inputId = componentId + "_input";
 
-        htmlWriter.startElement("INPUT");
+        htmlWriter.startElement(IHtmlWriter.INPUT);
         htmlWriter.writeId(inputId);
         writeInputAttributes(htmlWriter, inputId);
         writeChecked(htmlWriter, radioButtonComponent);
@@ -134,13 +134,13 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
             htmlWriter.writeAccessKey(accessKey);
         }
 
-        htmlWriter.endElement("INPUT");
+        htmlWriter.endElement(IHtmlWriter.INPUT);
     }
 
     protected void writeLabel(IHtmlWriter htmlWriter,
             RadioButtonComponent button, String className, String componentId)
             throws WriterException {
-        htmlWriter.startElement("LABEL");
+        htmlWriter.startElement(IHtmlWriter.LABEL);
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
         if (button.isDisabled(facesContext)) {
@@ -156,7 +156,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         }
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
-        htmlWriter.endElement("LABEL");
+        htmlWriter.endElement(IHtmlWriter.LABEL);
     }
 
     protected void decode(IRequestContext context, UIComponent element,

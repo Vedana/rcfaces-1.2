@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.ComponentsListComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ComponentsListComponent;
 
 public class ComponentsListTag extends AbstractDataTag implements Tag {
 
@@ -20,10 +20,6 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 	private String borderType;
 	private String horizontalScrollPosition;
 	private String verticalScrollPosition;
-	private String rows;
-	private String first;
-	private String value;
-	private String var;
 	private String rowCountVar;
 	private String rowIndexVar;
 	private String columnNumber;
@@ -63,38 +59,6 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 
 	public final void setVerticalScrollPosition(String verticalScrollPosition) {
 		this.verticalScrollPosition = verticalScrollPosition;
-	}
-
-	public final String getRows() {
-		return rows;
-	}
-
-	public final void setRows(String rows) {
-		this.rows = rows;
-	}
-
-	public final String getFirst() {
-		return first;
-	}
-
-	public final void setFirst(String first) {
-		this.first = first;
-	}
-
-	public final String getValue() {
-		return value;
-	}
-
-	public final void setValue(String value) {
-		this.value = value;
-	}
-
-	public final String getVar() {
-		return var;
-	}
-
-	public final void setVar(String var) {
-		this.var = var;
 	}
 
 	public final String getRowCountVar() {
@@ -146,10 +110,6 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
-			LOG.debug("  rows='"+rows+"'");
-			LOG.debug("  first='"+first+"'");
-			LOG.debug("  value='"+value+"'");
-			LOG.debug("  var='"+var+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  columnNumber='"+columnNumber+"'");
@@ -209,42 +169,6 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 			}
 		}
 
-		if (rows != null) {
-			if (isValueReference(rows)) {
-				ValueBinding vb = application.createValueBinding(rows);
-				component.setRows(vb);
-			} else {
-				component.setRows(getInt(rows));
-			}
-		}
-
-		if (first != null) {
-			if (isValueReference(first)) {
-				ValueBinding vb = application.createValueBinding(first);
-				component.setFirst(vb);
-			} else {
-				component.setFirst(getInt(first));
-			}
-		}
-
-		if (value != null) {
-			if (isValueReference(value)) {
-				ValueBinding vb = application.createValueBinding(value);
-				component.setValue(vb);
-			} else {
-				component.setValue(value);
-			}
-		}
-
-		if (var != null) {
-			if (isValueReference(var)) {
-				ValueBinding vb = application.createValueBinding(var);
-				component.setVar(vb);
-			} else {
-				component.setVar(var);
-			}
-		}
-
 		if (rowCountVar != null) {
 			if (isValueReference(rowCountVar)) {
 				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
@@ -292,10 +216,6 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 		borderType = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
-		rows = null;
-		first = null;
-		value = null;
-		var = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		columnNumber = null;

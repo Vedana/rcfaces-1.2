@@ -2,12 +2,13 @@
  * $Id$
  * 
  */
-package org.rcfaces.core.internal.component;
+package org.rcfaces.core.internal.capability;
 
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.IReleasable;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 
 /**

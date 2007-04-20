@@ -55,6 +55,8 @@ public class ItemsService extends AbstractHtmlService {
 
     private static final int ITEMS_SERVER_INTERNAL_ERROR = SERVICE_ERROR | 0x100;
 
+    private static final String ITEMS_SERVICE_VERSION = "1.0.0";
+
     public ItemsService() {
     }
 
@@ -145,6 +147,8 @@ public class ItemsService extends AbstractHtmlService {
         setNoCache(response);
         response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
                 + "; charset=" + RESPONSE_CHARSET);
+
+        setCameliaResponse(response, ITEMS_SERVICE_VERSION);
 
         boolean useGzip = canUseGzip(facesContext);
 

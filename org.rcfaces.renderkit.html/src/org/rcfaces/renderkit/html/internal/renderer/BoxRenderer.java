@@ -38,7 +38,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeComponentAttributes(htmlWriter);
     }
@@ -83,7 +83,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         BoxComponent boxComponent = (BoxComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         IMenuIterator menuIterator = boxComponent.listMenus();
         if (menuIterator.hasNext()) {

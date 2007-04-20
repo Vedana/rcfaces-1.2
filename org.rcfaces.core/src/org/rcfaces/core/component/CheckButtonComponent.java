@@ -1,18 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ISelectedCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import java.util.HashSet;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
-import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Set;
+
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectedCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 
 /**
  * <p>The checkButton Component is equivalent to the &lt;INPUT TYPE="checkbox"&gt; HTML tag.</p>
@@ -65,47 +66,63 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final java.lang.String getText() {
+	public java.lang.String getText() {
 		return getText(null);
 	}
 
 	/**
 	 * See {@link #getText() getText()} for more details
 	 */
-	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
 
-	public final void setText(java.lang.String text) {
+	/**
+	 * Returns <code>true</code> if the attribute "text" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextSetted() {
+		return engine.isPropertySetted(Properties.TEXT);
+	}
+
+	public void setText(java.lang.String text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
 	/**
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
-	public final void setText(ValueBinding text) {
+	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
-	public final int getTextPosition() {
+	public int getTextPosition() {
 		return getTextPosition(null);
 	}
 
 	/**
 	 * See {@link #getTextPosition() getTextPosition()} for more details
 	 */
-	public final int getTextPosition(javax.faces.context.FacesContext facesContext) {
+	public int getTextPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
 	}
 
-	public final void setTextPosition(int textPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "textPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextPositionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_POSITION);
+	}
+
+	public void setTextPosition(int textPosition) {
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
 
 	/**
 	 * See {@link #setTextPosition(int) setTextPosition(int)} for more details
 	 */
-	public final void setTextPosition(ValueBinding textPosition) {
+	public void setTextPosition(ValueBinding textPosition) {
 		engine.setProperty(Properties.TEXT_POSITION, textPosition);
 	}
 
@@ -121,47 +138,63 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
-	public final boolean isReadOnly() {
+	public boolean isReadOnly() {
 		return isReadOnly(null);
 	}
 
 	/**
 	 * See {@link #isReadOnly() isReadOnly()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	/**
 	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
+	public void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public final boolean isSelected() {
+	public boolean isSelected() {
 		return isSelected(null);
 	}
 
 	/**
 	 * See {@link #isSelected() isSelected()} for more details
 	 */
-	public final boolean isSelected(javax.faces.context.FacesContext facesContext) {
+	public boolean isSelected(javax.faces.context.FacesContext facesContext) {
 		return org.rcfaces.core.internal.tools.ValuesTools.valueToBool(this);
 	}
 
-	public final void setSelected(boolean selected) {
+	/**
+	 * Returns <code>true</code> if the attribute "selected" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectedSetted() {
+		return engine.isPropertySetted(Properties.SELECTED);
+	}
+
+	public void setSelected(boolean selected) {
 		setValue(Boolean.valueOf(selected));
 	}
 
 	/**
 	 * See {@link #setSelected(boolean) setSelected(boolean)} for more details
 	 */
-	public final void setSelected(ValueBinding selected) {
+	public void setSelected(ValueBinding selected) {
 		setValue(selected);
 	}
 

@@ -24,7 +24,8 @@ var __resources = {
 	ZERO_RESULT_MESSAGE: "'No result.'",
 	ONE_RESULT_MESSAGE: "'One result.'",
 	MESSAGE: "{rowcount}' results, results from '{first}' to '{last}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'",
-	MANY_RESULTS_MESSAGE: "'Unknown result number, results from '{first}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'"
+	MANY_RESULTS_MESSAGE: "'Unknown result number, results from '{first}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'",
+	MANY_RESULTS_MESSAGE2: "'Unknown result number, results from '{first}' to '{last}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'"
 }
 
 f_resourceBundle.Define(f_pager, __resources);

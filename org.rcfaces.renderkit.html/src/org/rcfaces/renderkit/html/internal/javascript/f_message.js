@@ -58,12 +58,12 @@ var __prototype = {
 	f_message: function() {
 		this.f_super(arguments);
 		
-		var labels=this.getElementsByTagName("LABEL");
+		var labels=this.getElementsByTagName("label");
 		if (labels.length) {
 			this._textLabel=labels[0];
 		}
 
-		var images=this.getElementsByTagName("IMG");
+		var images=this.getElementsByTagName("img");
 		if (images.length) {
 			this._image=images[0];
 			
@@ -132,11 +132,11 @@ var __prototype = {
 		var styleMessage=this.f_getStyleClassFromSeverity(message.f_getSeverity());
 
 		if (!summaryLabel && this.f_isShowSummary()) {
-			summaryLabel=document.createElement("LABEL");
+			summaryLabel=document.createElement("label");
 		}
 		
 		if (!detailLabel && this.f_isShowDetail()) {
-			detailLabel=document.createElement("LABEL");
+			detailLabel=document.createElement("label");
 		}
 	
 		f_message.FillComponent(this.f_computeStyleClass(), 
@@ -238,7 +238,7 @@ var __prototype = {
 		
 		var textLabel=this._textLabel;
 		if (!textLabel) {
-			textLabel=document.createElement("LABEL");
+			textLabel=document.createElement("label");
 			
 			var message=this._currentMessage;
 			if (!message) {

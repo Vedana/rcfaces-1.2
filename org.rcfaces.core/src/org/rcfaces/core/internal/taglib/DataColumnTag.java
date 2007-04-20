@@ -1,15 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.DataColumnComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.DataColumnComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public class DataColumnTag extends CameliaTag implements Tag {
 
@@ -34,16 +35,19 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private String imageURL;
 	private String imageHeight;
 	private String imageWidth;
-	private String width;
+	private String menuPopupId;
 	private String maxWidth;
 	private String minWidth;
-	private String verticalAlign;
-	private String value;
-	private String defaultCellImageURL;
-	private String cellImageURL;
-	private String cellStyleClass;
-	private String cellToolTipText;
+	private String width;
+	private String verticalAlignment;
 	private String autoFilter;
+	private String cellImageURL;
+	private String defaultCellImageURL;
+	private String cellStyleClass;
+	private String defaultCellStyleClass;
+	private String cellDefaultToolTipText;
+	private String cellToolTipText;
+	private String value;
 	private String converter;
 
 	public String getComponentType() {
@@ -194,12 +198,12 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.imageWidth = imageWidth;
 	}
 
-	public final String getWidth() {
-		return width;
+	public final String getMenuPopupId() {
+		return menuPopupId;
 	}
 
-	public final void setWidth(String width) {
-		this.width = width;
+	public final void setMenuPopupId(String menuPopupId) {
+		this.menuPopupId = menuPopupId;
 	}
 
 	public final String getMaxWidth() {
@@ -218,28 +222,28 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.minWidth = minWidth;
 	}
 
-	public final String getVerticalAlign() {
-		return verticalAlign;
+	public final String getWidth() {
+		return width;
 	}
 
-	public final void setVerticalAlign(String verticalAlign) {
-		this.verticalAlign = verticalAlign;
+	public final void setWidth(String width) {
+		this.width = width;
 	}
 
-	public final String getValue() {
-		return value;
+	public final String getVerticalAlignment() {
+		return verticalAlignment;
 	}
 
-	public final void setValue(String value) {
-		this.value = value;
+	public final void setVerticalAlignment(String verticalAlignment) {
+		this.verticalAlignment = verticalAlignment;
 	}
 
-	public final String getDefaultCellImageURL() {
-		return defaultCellImageURL;
+	public final String getAutoFilter() {
+		return autoFilter;
 	}
 
-	public final void setDefaultCellImageURL(String defaultCellImageURL) {
-		this.defaultCellImageURL = defaultCellImageURL;
+	public final void setAutoFilter(String autoFilter) {
+		this.autoFilter = autoFilter;
 	}
 
 	public final String getCellImageURL() {
@@ -250,12 +254,36 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.cellImageURL = cellImageURL;
 	}
 
+	public final String getDefaultCellImageURL() {
+		return defaultCellImageURL;
+	}
+
+	public final void setDefaultCellImageURL(String defaultCellImageURL) {
+		this.defaultCellImageURL = defaultCellImageURL;
+	}
+
 	public final String getCellStyleClass() {
 		return cellStyleClass;
 	}
 
 	public final void setCellStyleClass(String cellStyleClass) {
 		this.cellStyleClass = cellStyleClass;
+	}
+
+	public final String getDefaultCellStyleClass() {
+		return defaultCellStyleClass;
+	}
+
+	public final void setDefaultCellStyleClass(String defaultCellStyleClass) {
+		this.defaultCellStyleClass = defaultCellStyleClass;
+	}
+
+	public final String getCellDefaultToolTipText() {
+		return cellDefaultToolTipText;
+	}
+
+	public final void setCellDefaultToolTipText(String cellDefaultToolTipText) {
+		this.cellDefaultToolTipText = cellDefaultToolTipText;
 	}
 
 	public final String getCellToolTipText() {
@@ -266,12 +294,12 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.cellToolTipText = cellToolTipText;
 	}
 
-	public final String getAutoFilter() {
-		return autoFilter;
+	public final String getValue() {
+		return value;
 	}
 
-	public final void setAutoFilter(String autoFilter) {
-		this.autoFilter = autoFilter;
+	public final void setValue(String value) {
+		this.value = value;
 	}
 
 	public final void setConverter(String converter) {
@@ -304,16 +332,19 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
-			LOG.debug("  width='"+width+"'");
+			LOG.debug("  menuPopupId='"+menuPopupId+"'");
 			LOG.debug("  maxWidth='"+maxWidth+"'");
 			LOG.debug("  minWidth='"+minWidth+"'");
-			LOG.debug("  verticalAlign='"+verticalAlign+"'");
-			LOG.debug("  value='"+value+"'");
-			LOG.debug("  defaultCellImageURL='"+defaultCellImageURL+"'");
-			LOG.debug("  cellImageURL='"+cellImageURL+"'");
-			LOG.debug("  cellStyleClass='"+cellStyleClass+"'");
-			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 			LOG.debug("  autoFilter='"+autoFilter+"'");
+			LOG.debug("  cellImageURL='"+cellImageURL+"'");
+			LOG.debug("  defaultCellImageURL='"+defaultCellImageURL+"'");
+			LOG.debug("  cellStyleClass='"+cellStyleClass+"'");
+			LOG.debug("  defaultCellStyleClass='"+defaultCellStyleClass+"'");
+			LOG.debug("  cellDefaultToolTipText='"+cellDefaultToolTipText+"'");
+			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
+			LOG.debug("  value='"+value+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -498,18 +529,20 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (width != null) {
-			if (isValueReference(width)) {
-				ValueBinding vb = application.createValueBinding(width);
-				component.setWidth(vb);
+		if (menuPopupId != null) {
+			if (isValueReference(menuPopupId)) {
+				ValueBinding vb = application.createValueBinding(menuPopupId);
+
+				component.setMenuPopupId(vb);
 			} else {
-				component.setWidth(width);
+				component.setMenuPopupId(menuPopupId);
 			}
 		}
 
 		if (maxWidth != null) {
 			if (isValueReference(maxWidth)) {
 				ValueBinding vb = application.createValueBinding(maxWidth);
+
 				component.setMaxWidth(vb);
 			} else {
 				component.setMaxWidth(getInt(maxWidth));
@@ -519,18 +552,100 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		if (minWidth != null) {
 			if (isValueReference(minWidth)) {
 				ValueBinding vb = application.createValueBinding(minWidth);
+
 				component.setMinWidth(vb);
 			} else {
 				component.setMinWidth(getInt(minWidth));
 			}
 		}
 
-		if (verticalAlign != null) {
-			if (isValueReference(verticalAlign)) {
-				ValueBinding vb = application.createValueBinding(verticalAlign);
-				component.setVerticalAlign(vb);
+		if (width != null) {
+			if (isValueReference(width)) {
+				ValueBinding vb = application.createValueBinding(width);
+
+				component.setWidth(vb);
 			} else {
-				component.setVerticalAlign(verticalAlign);
+				component.setWidth(width);
+			}
+		}
+
+		if (verticalAlignment != null) {
+			if (isValueReference(verticalAlignment)) {
+				ValueBinding vb = application.createValueBinding(verticalAlignment);
+
+				component.setVerticalAlignment(vb);
+			} else {
+				component.setVerticalAlignment(verticalAlignment);
+			}
+		}
+
+		if (autoFilter != null) {
+			if (isValueReference(autoFilter)) {
+				ValueBinding vb = application.createValueBinding(autoFilter);
+
+				component.setAutoFilter(vb);
+			} else {
+				component.setAutoFilter(getBool(autoFilter));
+			}
+		}
+
+		if (cellImageURL != null) {
+			if (isValueReference(cellImageURL)) {
+				ValueBinding vb = application.createValueBinding(cellImageURL);
+
+				component.setCellImageURL(vb);
+			} else {
+				component.setCellImageURL(cellImageURL);
+			}
+		}
+
+		if (defaultCellImageURL != null) {
+			if (isValueReference(defaultCellImageURL)) {
+				ValueBinding vb = application.createValueBinding(defaultCellImageURL);
+
+				component.setDefaultCellImageURL(vb);
+			} else {
+				component.setDefaultCellImageURL(defaultCellImageURL);
+			}
+		}
+
+		if (cellStyleClass != null) {
+			if (isValueReference(cellStyleClass)) {
+				ValueBinding vb = application.createValueBinding(cellStyleClass);
+
+				component.setCellStyleClass(vb);
+			} else {
+				component.setCellStyleClass(cellStyleClass);
+			}
+		}
+
+		if (defaultCellStyleClass != null) {
+			if (isValueReference(defaultCellStyleClass)) {
+				ValueBinding vb = application.createValueBinding(defaultCellStyleClass);
+
+				component.setDefaultCellStyleClass(vb);
+			} else {
+				component.setDefaultCellStyleClass(defaultCellStyleClass);
+			}
+		}
+
+		if (cellDefaultToolTipText != null) {
+			if (isValueReference(cellDefaultToolTipText)) {
+				ValueBinding vb = application.createValueBinding(cellDefaultToolTipText);
+
+				component.setCellDefaultToolTipText(vb);
+			} else {
+				component.setCellDefaultToolTipText(cellDefaultToolTipText);
+			}
+		}
+
+		if (cellToolTipText != null) {
+			if (isValueReference(cellToolTipText)) {
+				ValueBinding vb = application.createValueBinding(cellToolTipText);
+
+				component.setCellToolTipText(vb);
+			} else {
+				component.setCellToolTipText(cellToolTipText);
 			}
 		}
 
@@ -540,51 +655,6 @@ public class DataColumnTag extends CameliaTag implements Tag {
 				component.setValue(vb);
 			} else {
 				component.setValue(value);
-			}
-		}
-
-		if (defaultCellImageURL != null) {
-			if (isValueReference(defaultCellImageURL)) {
-				ValueBinding vb = application.createValueBinding(defaultCellImageURL);
-				component.setDefaultCellImageURL(vb);
-			} else {
-				component.setDefaultCellImageURL(defaultCellImageURL);
-			}
-		}
-
-		if (cellImageURL != null) {
-			if (isValueReference(cellImageURL)) {
-				ValueBinding vb = application.createValueBinding(cellImageURL);
-				component.setCellImageURL(vb);
-			} else {
-				component.setCellImageURL(cellImageURL);
-			}
-		}
-
-		if (cellStyleClass != null) {
-			if (isValueReference(cellStyleClass)) {
-				ValueBinding vb = application.createValueBinding(cellStyleClass);
-				component.setCellStyleClass(vb);
-			} else {
-				component.setCellStyleClass(cellStyleClass);
-			}
-		}
-
-		if (cellToolTipText != null) {
-			if (isValueReference(cellToolTipText)) {
-				ValueBinding vb = application.createValueBinding(cellToolTipText);
-				component.setCellToolTipText(vb);
-			} else {
-				component.setCellToolTipText(cellToolTipText);
-			}
-		}
-
-		if (autoFilter != null) {
-			if (isValueReference(autoFilter)) {
-				ValueBinding vb = application.createValueBinding(autoFilter);
-				component.setAutoFilter(vb);
-			} else {
-				component.setAutoFilter(getBool(autoFilter));
 			}
 		}
 	if (converter != null) {
@@ -616,16 +686,19 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		imageURL = null;
 		imageHeight = null;
 		imageWidth = null;
-		width = null;
+		menuPopupId = null;
 		maxWidth = null;
 		minWidth = null;
-		verticalAlign = null;
-		value = null;
-		defaultCellImageURL = null;
-		cellImageURL = null;
-		cellStyleClass = null;
-		cellToolTipText = null;
+		width = null;
+		verticalAlignment = null;
 		autoFilter = null;
+		cellImageURL = null;
+		defaultCellImageURL = null;
+		cellStyleClass = null;
+		defaultCellStyleClass = null;
+		cellDefaultToolTipText = null;
+		cellToolTipText = null;
+		value = null;
 		converter = null;
 
 		super.release();

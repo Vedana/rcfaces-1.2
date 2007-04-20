@@ -5,9 +5,12 @@
 package org.rcfaces.core.internal.tools;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.NamingContainer;
@@ -30,9 +33,11 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
+import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.lang.provider.ICheckProvider;
 import org.rcfaces.core.lang.provider.ICursorProvider;
@@ -54,6 +59,8 @@ public final class ComponentTools {
 
     private static final String NONE_VARIABLE_SCOPE = "##~NONE~"
             + System.currentTimeMillis();
+
+    private static final UIComponent[] COMPONENT_EMPTY_ARRAY = new UIComponent[0];
 
     public static final boolean isAnonymousComponentId(String componentId) {
         if (componentId == null) {
@@ -588,5 +595,89 @@ public final class ComponentTools {
         if (listener != null) {
             listener.processAction(facesEvent);
         }
+    }
+
+    public static UIComponent[] listChildren(FacesContext facesContext,
+            UIComponent component, IComponentEngine engine, Class childClass,
+            String propertyName) {
+
+        String ids = engine.getStringProperty(propertyName, facesContext);
+
+        return listChildren(facesContext, component, ids, childClass);
+    }
+
+    public static UIComponent[] listChildren(FacesContext facesContext,
+            UIComponent component, String ids, Class childClass) {
+
+        if (ids == null) {
+            if (childClass == null || childClass == UIComponent.class) {
+                return COMPONENT_EMPTY_ARRAY;
+            }
+            return (UIComponent[]) Array.newInstance(childClass, 0);
+        }
+
+        StringTokenizer st = new StringTokenizer(ids, ",");
+
+        if (st.hasMoreTokens() == false) {
+            if (childClass == null || childClass == UIComponent.class) {
+                return COMPONENT_EMPTY_ARRAY;
+            }
+            return (UIComponent[]) Array.newInstance(childClass, 0);
+        }
+
+        Object children[] = ComponentIterators.list(component, childClass)
+                .toArray();
+
+        List l = new ArrayList(st.countTokens());
+
+        for (; st.hasMoreTokens();) {
+            String id = st.nextToken().trim();
+
+            if (id.startsWith("#")) {
+                int idx = Integer.parseInt(id.substring(1));
+
+                if (idx >= children.length) {
+                    continue;
+                }
+
+                UIComponent child = (UIComponent) children[idx];
+
+                if (childClass != null && childClass.isInstance(child) == false) {
+                    continue;
+                }
+
+                l.add(child);
+                continue;
+            }
+
+            for (int i = 0; i < children.length; i++) {
+                UIComponent child = (UIComponent) children[i];
+
+                if (id.equals(child.getId()) == false) {
+                    continue;
+                }
+
+                if (childClass != null && childClass.isInstance(child) == false) {
+                    continue;
+                }
+
+                l.add(child);
+                break;
+            }
+        }
+        
+        if (childClass == null) {
+            childClass = UIComponent.class;
+        }
+
+        return (UIComponent[]) l.toArray((UIComponent[]) Array.newInstance(
+                childClass, l.size()));
+    }
+
+    public static void setChildren(UIComponent component,
+            IComponentEngine engine, Class classOfChild,
+            UIComponent[] children, String ordered_children) {
+        // TODO Auto-generated method stub
+
     }
 }

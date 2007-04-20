@@ -63,7 +63,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("UL");
+        htmlWriter.startElement(IHtmlWriter.UL);
         writeCoreAttributes(htmlWriter);
         writeTitle(htmlWriter, expandBarComponent);
         writeHelp(htmlWriter, expandBarComponent);
@@ -119,12 +119,12 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:groupName", groupName);
         }
 
-        htmlWriter.startElement("LI");
+        htmlWriter.startElement(IHtmlWriter.LI);
         htmlWriter.writeClass(getHeadClassName(htmlWriter, collapsed));
 
         writeHeader(htmlWriter);
 
-        htmlWriter.endElement("LI").writeln();
+        htmlWriter.endElement(IHtmlWriter.LI).writeln();
 
         IHtmlRenderContext htmlRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
@@ -151,11 +151,11 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         }
         setAsyncRenderer(htmlWriter, expandBarComponent, asyncRender);
 
-        htmlWriter.startElement("LI");
+        htmlWriter.startElement(IHtmlWriter.LI);
 
         htmlWriter.writeClass(getBodyClassName(htmlWriter, collapsed));
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
         htmlWriter.writeClass(getContentClassName(htmlWriter, collapsed));
         if (collapsed) {
             // On masque le LI le Javascript masquera le DIV !
@@ -219,7 +219,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         String buttonId = componentContext.getComponentClientId() + "__button";
 
-        htmlWriter.startElement("INPUT");
+        htmlWriter.startElement(IHtmlWriter.INPUT);
         htmlWriter.writeType("IMAGE");
         htmlWriter.writeClass(getInputClassName(htmlWriter));
         htmlWriter.writeId(buttonId);
@@ -242,9 +242,9 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         writeAccessKey(htmlWriter, expandBarComponent);
         writeTabIndex(htmlWriter, expandBarComponent);
 
-        htmlWriter.endElement("INPUT");
+        htmlWriter.endElement(IHtmlWriter.INPUT);
 
-        htmlWriter.startElement("LABEL");
+        htmlWriter.startElement(IHtmlWriter.LABEL);
         htmlWriter.writeFor(buttonId);
         htmlWriter.writeClass(getLabelClassName(htmlWriter));
 
@@ -255,20 +255,20 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                     false);
         }
 
-        htmlWriter.endElement("LABEL");
+        htmlWriter.endElement(IHtmlWriter.LABEL);
 
         /*
          * UIComponent component = expandBarComponent.getFacet(HEAD_FACET_NAME);
          * if (component != null) {
          * 
-         * htmlWriter.startElement("DIV");
+         * htmlWriter.startElement(IHtmlWriter.DIV");
          * htmlWriter.writeClass(getFacetClassName(htmlWriter));
          * 
          * htmlWriter.flush();
          * 
          * ComponentTools.encodeRecursive(facesContext, component);
          * 
-         * htmlWriter.endElement("DIV"); }
+         * htmlWriter.endElement(IHtmlWriter.DIV"); }
          */
     }
 
@@ -303,9 +303,9 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.endElement("DIV");
-        htmlWriter.endElement("LI");
-        htmlWriter.endElement("UL");
+        htmlWriter.endElement(IHtmlWriter.DIV);
+        htmlWriter.endElement(IHtmlWriter.LI);
+        htmlWriter.endElement(IHtmlWriter.UL);
 
         super.encodeEnd(htmlWriter);
     }

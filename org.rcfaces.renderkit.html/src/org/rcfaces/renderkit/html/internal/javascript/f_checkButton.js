@@ -17,7 +17,7 @@ var __prototype = {
 	f_checkButton: function() {
 		this.f_super(arguments);
 		
-		this._label=f_core.GetFirstElementByTagName(this, "LABEL");
+		this._label=f_core.GetFirstElementByTagName(this, "label");
 	},
 	
 	/**

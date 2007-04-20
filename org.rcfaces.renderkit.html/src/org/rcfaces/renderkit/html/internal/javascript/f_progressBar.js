@@ -23,7 +23,7 @@ var __prototype = {
 		var svalue=f_core.GetAttribute(this, "v:value");
 		this._value=(svalue)?parseFloat(svalue):0;
 		
-		var cursor=this.ownerDocument.createElement("DIV");
+		var cursor=this.ownerDocument.createElement("div");
 		
 		var suffix="_cursor";
 		if (true) {
@@ -32,7 +32,7 @@ var __prototype = {
 		
 		cursor.className=this.f_computeStyleClass(suffix);
 		this._cursor=cursor;
-		var tds=this.getElementsByTagName("TD");
+		var tds=this.getElementsByTagName("td");
 		
 		f_core.Assert(tds.length==3, "f_progressBar(): TD.length!=3. ("+tds.length+")");
 		

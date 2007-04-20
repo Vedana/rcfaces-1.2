@@ -1,21 +1,25 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.component.CameliaItemComponent;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.CameliaItemComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * A select item (member of a selectable list) that shows an image.
  */
 public class SelectImageItemComponent extends CameliaItemComponent implements 
-	IImageCapability {
+	IImageCapability,
+	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.selectImageItem";
 
@@ -40,25 +44,33 @@ public class SelectImageItemComponent extends CameliaItemComponent implements
 		
 	}
 
-	public final java.lang.String getImageURL() {
+	public java.lang.String getImageURL() {
 		return getImageURL(null);
 	}
 
 	/**
 	 * See {@link #getImageURL() getImageURL()} for more details
 	 */
-	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
 
-	public final void setImageURL(java.lang.String imageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageURLSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_URL);
+	}
+
+	public void setImageURL(java.lang.String imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
 	/**
 	 * See {@link #setImageURL(String) setImageURL(String)} for more details
 	 */
-	public final void setImageURL(ValueBinding imageURL) {
+	public void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 

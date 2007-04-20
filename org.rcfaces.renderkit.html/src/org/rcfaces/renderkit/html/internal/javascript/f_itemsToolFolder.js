@@ -50,85 +50,97 @@ var __prototype = {
 	},	
 	/**
 	 * @method hidden
+	 * @param String id
+	 * @param Object properties
+	 * @return Object
 	 */
-	f_appendToolItems: function() {
+	f_appendToolItem2: function(id, properties) {
 		
-		var toolFolder=this;
-		
-		var selectionCallback=function(event) {
-			return toolFolder._itemOnSelect(event);
-		}
-		
-		for(var i=0;i<arguments.length;) {
-			var id=arguments[i++];
-			var inputType=arguments[i++];
-			var value=arguments[i++];
-			var disabled=arguments[i++];	
-			
-			if (inputType==fa_items.AS_SEPARATOR) {
-				var item=new Object();
-				
-				item._inputType=inputType;
-				item._id="#SEP#"+(this._sepId++);
-								
-				if (f_core.IsDebugEnabled(f_itemsToolFolder)) {
-					item.toString=function() {
-						return "[toolItemSeparator id='"+item._id+"']";
-					}				
-				} else {
-					item.toString=f_itemsToolFolder._ItemToString;
-				}
+		var inputType=properties._inputType;
 
-				this.f_addItem(this, item);
-
-				f_core.Debug(f_itemsToolFolder, "f_appendToolItems: append a separator !");
-			
-				continue;
-			}
-			
-			var component=this.f_findComponent(id);
-			f_core.Assert(component, "f_itemsToolFolder.f_appendToolItems: Can not find component associated to id '"+id+"'.");
-			
-			var item=new Object();
-			item._id=component.id;
+		var item=new Object();
+		
+		if (inputType==fa_items.AS_SEPARATOR) {			
 			item._inputType=inputType;
-			item._value=value;
-			item._disabled=disabled;
-			
+			item._id="#SEP#"+(this._sepId++);
+			item._value=item._id;
+							
 			if (f_core.IsDebugEnabled(f_itemsToolFolder)) {
 				item.toString=function() {
-					return "[toolItem id='"+this._id+"' value='"+this._value+"' inputType='"+this._inputType+"' disabled="+this._disabled+"]";
+					return "[toolItemSeparator id='"+item._id+"']";
 				}				
 			} else {
 				item.toString=f_itemsToolFolder._ItemToString;
 			}
+
 			this.f_addItem(this, item);
-			
-			f_core.Assert(!this._uiItems[value], "f_itemsToolFolder.f_appendToolItems: Value is already used ! ('"+value+"')");
-			
-			this._uiItems[value]=component;
-			
-			f_core.Debug(f_itemsToolFolder, "f_appendToolItems: append item: "+item);
-			
-			switch(inputType) {
-			case fa_items.AS_PUSH_BUTTON:
-			case fa_items.AS_CHECK_BUTTON:
-			case fa_items.AS_RADIO_BUTTON:
-			// case fa_items.AS_SUBMIT_BUTTON: // trop tard !?
-			// case fa_items.AS_RESET_BUTTON: // trop tard !?
-			
-				component.f_addEventListener(f_event.SELECTION, selectionCallback);
-				break;
 
-			case fa_items.AS_SUBMIT_BUTTON: // trop tard !?
-			case fa_items.AS_RESET_BUTTON: // trop tard !?
-				break;
+			f_core.Debug(f_itemsToolFolder, "f_appendToolItem2: append a separator !");
+		
+			return item;
 
-			default:
-				f_core.Debug(f_itemsToolFolder, "f_appendToolItems: unknown input type of item='"+item+"'.");
+		} else if (!inputType) {
+			inputType=fa_items.AS_PUSH_BUTTON;
+		}
+		
+		item._inputType=inputType;
+		
+		var component=this.f_findComponent(id);
+		f_core.Assert(component, "f_itemsToolFolder.f_appendToolItem2: Can not find component associated to id '"+id+"'.");
+		
+		var item=new Object();
+		item._id=component.id;
+		item._value=properties._value;
+		item._disabled=properties._disabled;
+
+		if (properties._visible===false) {
+			this.f_setItemVisible(item, false);
+		}
+		
+		if (properties._clientDatas) {
+			this.f_setItemClientDatas(item, properties._clientDatas);
+		}
+		
+		if (f_core.IsDebugEnabled(f_itemsToolFolder)) {
+			item.toString=function() {
+				return "[toolItem id='"+this._id+"' value='"+this._value+"' inputType='"+this._inputType+"' disabled="+this._disabled+"]";
+			}				
+		} else {
+			item.toString=f_itemsToolFolder._ItemToString;
+		}
+		this.f_addItem(this, item);
+		
+		f_core.Assert(!this._uiItems[item._value], "f_itemsToolFolder.f_appendToolItem2: Value is already used ! ('"+item._value+"')");
+		
+		this._uiItems[item._value]=component;
+		
+		f_core.Debug(f_itemsToolFolder, "f_appendToolItem2: append item: "+item);
+		
+		switch(inputType) {
+		case fa_items.AS_PUSH_BUTTON:
+		case fa_items.AS_CHECK_BUTTON:
+		case fa_items.AS_RADIO_BUTTON:
+		// case fa_items.AS_SUBMIT_BUTTON: // trop tard !?
+		// case fa_items.AS_RESET_BUTTON: // trop tard !?
+
+			var toolFolder=this;
+		
+			var selectionCallback=function(event) {
+				return toolFolder._itemOnSelect(event);
 			}
-			
-		}			
+		
+			component.f_addEventListener(f_event.SELECTION, selectionCallback);
+			break;
+
+		case fa_items.AS_SUBMIT_BUTTON: // trop tard !?
+		case fa_items.AS_RESET_BUTTON: // trop tard !?
+			break;
+
+		default:
+			f_core.Debug(f_itemsToolFolder, "f_appendToolItems: unknown input type of item='"+item+"'.");
+		}
+		
+		return item;
 	},
 	/**
 	 * @method private
@@ -197,17 +209,17 @@ var __prototype = {
 		component.f_setVisible(this.f_isItemVisible(item));
 		//component.f_setReadOnly(this.f_isItemReadOnly(item));
 	},
-	/**
+	/*
 	 * @method hidden
 	 * @return void
-	 */
+	 *
 	f_hideToolItems: function() {
 		for(var i=0;i<arguments.length;i++) {
 			var itemValue=arguments[i];
 			
-			this.f_setItemVisible(itemValue, false);
 		}
 	},
+	*/
 	/**
 	 * @method private
 	 * @return f_component

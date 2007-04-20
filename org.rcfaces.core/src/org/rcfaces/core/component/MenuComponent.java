@@ -1,18 +1,21 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
+import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.internal.tools.MenuTools;
 
 /**
  * <p>The menu Component provides a way of creating desktop style menus on web pages. It allows sub-menus, check and radio menu items and image menus. It also provides pop-up menus.</p>
@@ -28,6 +31,7 @@ import org.rcfaces.core.component.capability.IMenuEventCapability;
  * </p>
  */
 public class MenuComponent extends CameliaSelectManyComponent implements 
+	IPreloadedLevelDepthCapability,
 	IMenuEventCapability,
 	ISelectionEventCapability,
 	ICheckEventCapability,
@@ -38,7 +42,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","menuId","converter","checkedValues","checkListener","removeAllWhenShown","menuListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","menuId","converter","checkedValues","checkListener","preloadedLevelDepth","removeAllWhenShown","menuListener"}));
 	}
 
 	public MenuComponent() {
@@ -55,6 +59,36 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 		return MenuTools.listMenuItems(this);
 		
+	}
+
+	public int getPreloadedLevelDepth() {
+		return getPreloadedLevelDepth(null);
+	}
+
+	/**
+	 * See {@link #getPreloadedLevelDepth() getPreloadedLevelDepth()} for more details
+	 */
+	public int getPreloadedLevelDepth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.PRELOADED_LEVEL_DEPTH,-1, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "preloadedLevelDepth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPreloadedLevelDepthSetted() {
+		return engine.isPropertySetted(Properties.PRELOADED_LEVEL_DEPTH);
+	}
+
+	public void setPreloadedLevelDepth(int preloadedLevelDepth) {
+		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
+	}
+
+	/**
+	 * See {@link #setPreloadedLevelDepth(int) setPreloadedLevelDepth(int)} for more details
+	 */
+	public void setPreloadedLevelDepth(ValueBinding preloadedLevelDepth) {
+		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
 	}
 
 	public final void addMenuListener(org.rcfaces.core.event.IMenuListener listener) {
@@ -93,32 +127,40 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
 	}
 
-	public final java.lang.Object getCheckedValues() {
+	public java.lang.Object getCheckedValues() {
 		return getCheckedValues(null);
 	}
 
 	/**
 	 * See {@link #getCheckedValues() getCheckedValues()} for more details
 	 */
-	public final java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
 		return engine.getProperty(Properties.CHECKED_VALUES, facesContext);
 	}
 
-	public final void setCheckedValues(java.lang.Object checkedValues) {
+	/**
+	 * Returns <code>true</code> if the attribute "checkedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckedValuesSetted() {
+		return engine.isPropertySetted(Properties.CHECKED_VALUES);
+	}
+
+	public void setCheckedValues(java.lang.Object checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
 	 * See {@link #setCheckedValues(Object) setCheckedValues(Object)} for more details
 	 */
-	public final void setCheckedValues(ValueBinding checkedValues) {
+	public void setCheckedValues(ValueBinding checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
 	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
 	 */
-	public final Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
+	public Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
 		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.CHECKED_VALUES);
 		if (valueBinding==null) {
 			return null;
@@ -127,6 +169,20 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
 		}
 		return valueBinding.getType(facesContext);
+	}
+
+	public final int getCheckedValuesCount() {
+
+
+			return CheckTools.getCount(getCheckedValues());
+		
+	}
+
+	public final Object getFirstCheckedValue() {
+
+
+			return CheckTools.getFirst(getCheckedValues());
+		
 	}
 
 	/**

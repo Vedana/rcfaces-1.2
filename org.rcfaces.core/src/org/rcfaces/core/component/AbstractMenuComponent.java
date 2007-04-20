@@ -1,18 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
-import org.rcfaces.core.component.AbstractConverterCommandComponent;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.internal.tools.MenuTools;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -61,32 +62,40 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
 	}
 
-	public final java.lang.Object getCheckedValues() {
+	public java.lang.Object getCheckedValues() {
 		return getCheckedValues(null);
 	}
 
 	/**
 	 * See {@link #getCheckedValues() getCheckedValues()} for more details
 	 */
-	public final java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
 		return engine.getProperty(Properties.CHECKED_VALUES, facesContext);
 	}
 
-	public final void setCheckedValues(java.lang.Object checkedValues) {
+	/**
+	 * Returns <code>true</code> if the attribute "checkedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckedValuesSetted() {
+		return engine.isPropertySetted(Properties.CHECKED_VALUES);
+	}
+
+	public void setCheckedValues(java.lang.Object checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
 	 * See {@link #setCheckedValues(Object) setCheckedValues(Object)} for more details
 	 */
-	public final void setCheckedValues(ValueBinding checkedValues) {
+	public void setCheckedValues(ValueBinding checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
 	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
 	 */
-	public final Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
+	public Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
 		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.CHECKED_VALUES);
 		if (valueBinding==null) {
 			return null;
@@ -97,25 +106,47 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 		return valueBinding.getType(facesContext);
 	}
 
-	public final boolean isReadOnly() {
+	public final int getCheckedValuesCount() {
+
+
+			return CheckTools.getCount(getCheckedValues());
+		
+	}
+
+	public final Object getFirstCheckedValue() {
+
+
+			return CheckTools.getFirst(getCheckedValues());
+		
+	}
+
+	public boolean isReadOnly() {
 		return isReadOnly(null);
 	}
 
 	/**
 	 * See {@link #isReadOnly() isReadOnly()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	/**
 	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
+	public void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 

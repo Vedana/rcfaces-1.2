@@ -111,7 +111,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         htmlWriter.writeln();
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         /*
          * String w = tabbedPane.getWidth(); if (w != null) {
@@ -254,7 +254,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         super.encodeEnd(writer);
     }

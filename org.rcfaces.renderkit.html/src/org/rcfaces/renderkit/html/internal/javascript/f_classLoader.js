@@ -460,6 +460,8 @@ f_classLoader.prototype = {
 		
 		var components=new Array;
 		
+		var evaluations=new Object;
+		
 		for(;index<lazys.length;) {
 			var component=lazys[index++];
 			
@@ -485,6 +487,30 @@ f_classLoader.prototype = {
 				continue;
 			}
 			
+			var fct=f_core.GetAttribute(component, "v:function");
+			if (fct) {
+				var evaluatedFunction=evaluations[fct];
+				if (!evaluatedFunction) {
+					try {
+						evaluatedFunction=eval(fct)
+	
+					} catch (x) {
+						f_core.Error("f_classLoader", "f_initializeObjects: Failed to evaluate function '"+fct+"'.", x);					
+						continue;
+					}
+
+					if (typeof(evaluatedFunction)!="function") {
+						f_core.Error("f_classLoader", "f_initializeObjects: Invalid type of function '"+fct+"': "+evaluatedFunction);
+						continue;
+					}
+					
+					evaluations[fct]=evaluatedFunction;
+				}
+								
+				components.push(evaluatedFunction, component);
+				continue;
+			}
+			
 			// C'est donc le frere !
 			var prev=component.previousSibling;
 			for(;prev;prev=prev.previousSibling) {
@@ -492,7 +518,7 @@ f_classLoader.prototype = {
 					continue;
 				}
 				
-				if (prev.tagName.toUpperCase()=="SCRIPT") {
+				if (prev.tagName.toLowerCase()=="script") {
 					// C'est le cas du premier tag INIT !
 					// ou de requires JS !
 					continue;
@@ -500,7 +526,7 @@ f_classLoader.prototype = {
 				
 				var clz=f_core.GetAttribute(prev, "v:class");
 				if (!clz) {
-					f_core.Warn("f_classLoader", "Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
+					f_core.Warn("f_classLoader", "f_initializeObjects: Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
 					continue;
 				}
 	
@@ -524,22 +550,33 @@ f_classLoader.prototype = {
 				path=p.tagName+((p.id)?("#"+p.id):"")+path;
 			}
 	
-			f_core.Error("f_classLoader", "Unknown lazy component path='"+path+"'.");
+			f_core.Error("f_classLoader", "f_initializeObjects: Unknown lazy component path='"+path+"'.");
 		}
 		
 		for(var i=0;i<components.length;) {
 			var obj=components[i++];
 			var node=components[i++];
-	
+		
 			var o;
-			try {
-				o=this._init(obj);
+			if (typeof(obj)=="function") {
+				try {
+					o = obj.call(this, node);
 				
-			} catch (x) {
-				f_core.Error("f_classLoader", "Failed to initialize object '"+obj.id+"'.", x);
-				continue;
+				} catch (x) {
+					f_core.Error("f_classLoader", "f_initializeObjects: Failed to initialize object by function '"+obj+"'.", x);
+					continue;
+				}
+	
+			} else {
+				try {
+					o=this._init(obj);
+					
+				} catch (x) {
+					f_core.Error("f_classLoader", "f_initializeObjects: Failed to initialize object '"+obj.id+"'.", x);
+					continue;
+				}
 			}
-						
+									
 			if (!o) {
 				continue;
 			}
@@ -555,7 +592,7 @@ f_classLoader.prototype = {
 					completeComponent.call(o);
 		
 				} catch (x) {
-					f_core.Error("f_classLoader", "f_completeComponent throws exception for component '"+o.id+"'.", x);
+					f_core.Error("f_classLoader", "f_initializeObjects: f_completeComponent throws exception for component '"+o.id+"'.", x);
 				}
 			}
 		}
@@ -585,15 +622,15 @@ f_classLoader.prototype = {
 					throw new Error("Component not found by Id/name '"+id+"'.");
 				}
 				
-				f_core.Assert(names.length!=1, "Too many components associated to name '"+id+"'.");
+				f_core.Assert(names.length!=1, "f_classLoader._init: Too many components associated to name '"+id+"'.");
 				
 				var obj=names[0];
 				if (f_core.DebugMode) {
 					if (obj.id) {
-						f_core.Assert(obj, "Component found by name ('"+id+"') has already an ID ('+obj.id+') !");
+						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') has already an ID ('+obj.id+') !");
 			
 					} else if (f_core.GetAttribute(obj, "v:class")==null) {
-						f_core.Assert(obj, "Component found by name ('"+id+"') is not a RCFaces Component !");
+						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') is not a RCFaces Component !");
 					}
 				}
 							
@@ -616,14 +653,14 @@ f_classLoader.prototype = {
 		if (!claz) {
 			// La classe n'est pas définie ... c'est peut etre une form !
 	
-			f_core.Debug("f_classLoader", "Class is not defined for component '"+obj.id+"'.");
+			f_core.Debug("f_classLoader", "_init: Class is not defined for component '"+obj.id+"'.");
 			return obj;
 		}
 	
 		var look = f_core.GetAttribute(obj, "v:lookid");
 	
 		var cls=this.f_getClass(claz, look);
-		f_core.Assert(cls instanceof f_class, "Class '"+claz+"' lookId '"+look+"' not found !");
+		f_core.Assert(cls, "f_classLoader._init: Class '"+claz+"' lookId '"+look+"' not found !");
 	
 		return f_class.Init(obj, cls, f_classLoader._EMPTY_ARGUMENTS);
 	},
@@ -653,13 +690,13 @@ f_classLoader.prototype = {
 				toClean.push(obj);
 				obj=undefined;
 		
-				f_core.Debug("f_classLoader", "Object '"+obj+"' has been removed from the pool !");
+				f_core.Debug("f_classLoader", "_destroy: Object '"+obj+"' has been removed from the pool !");
 				
 				break;
 			}
 	
 			if (obj) {
-				f_core.Warn("f_classLoader", "Object '"+obj+"' is not found into pool, and can not be destroyed !");
+				f_core.Warn("f_classLoader", "_destroy: Object '"+obj+"' is not found into pool, and can not be destroyed !");
 			}
 		}	
 				

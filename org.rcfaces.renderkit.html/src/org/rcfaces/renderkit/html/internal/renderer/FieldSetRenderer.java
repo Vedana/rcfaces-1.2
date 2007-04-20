@@ -59,7 +59,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeFieldSetAttributes(htmlWriter, fieldSetComponent);
 
@@ -100,7 +100,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
                     verticalAlignement, null, null, 1, 1);
         }
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
         htmlWriter.writeClass(getBodyClassName(htmlWriter));
 
         if (borderRenderer == null) {
@@ -206,7 +206,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         IHtmlBorderRenderer borderRenderer = (IHtmlBorderRenderer) componentRenderContext
                 .getAttribute(BORDER_RENDERER);
@@ -219,7 +219,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
             borderRenderer.endComposite(htmlWriter);
         }
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
     }
 
     protected void decode(IRequestContext context, UIComponent component,

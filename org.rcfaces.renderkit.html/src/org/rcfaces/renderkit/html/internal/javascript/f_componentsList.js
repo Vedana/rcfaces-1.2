@@ -41,9 +41,9 @@ var __prototype = {
 	f_componentsList: function() {
 		this.f_super(arguments);
 	
-		this._scrollBody=f_core.GetFirstElementByTagName(this, "TABLE");
+		this._scrollBody=f_core.GetFirstElementByTagName(this, "table");
 		
-		this._tbody=f_core.GetFirstElementByTagName(this._scrollBody, "TBODY");
+		this._tbody=f_core.GetFirstElementByTagName(this._scrollBody, "tbody");
 	},
 	f_finalize: function() {
 		this._scrollBody=undefined;
@@ -158,24 +158,22 @@ var __prototype = {
 			params.filterExpression=filterExpression;
 		}
 
-		if (true) {
-			var tbody=this._tbody;
+		var tbody=this._tbody;
 
-			var scrollBody=this._scrollBody;
-			if (!this._oldHeight) {
-				this._oldHeight=true;
-				this._oldHeightStyle=this.style.height;
-				this.style.height=this.offsetHeight+"px";
+		var scrollBody=this._scrollBody;
+		if (!this._oldHeight) {
+			this._oldHeight=true;
+			this._oldHeightStyle=this.style.height;
+			this.style.height=this.offsetHeight+"px";
+		}
+		
+		if (tbody) {	
+			while (tbody.hasChildNodes()) {
+				tbody.removeChild(tbody.lastChild);
 			}
 			
-			if (tbody) {	
-				while (tbody.hasChildNodes()) {
-					tbody.removeChild(tbody.lastChild);
-				}
-				
-				this.f_getClass().f_getClassLoader().garbageObjects();
-			}
-		}		
+			this.f_getClass().f_getClassLoader().garbageObjects();
+		}
 
 		var url=f_env.GetViewURI();
 		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
@@ -293,10 +291,10 @@ var __prototype = {
 		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	/**
-	 * @method private
+	 * @method hidden
 	 * @return void
 	 */
-	_startNewPage: function(rowIndex) {
+	f_startNewPage: function(rowIndex) {
 		// Appeler par la génération du serveur !
 
 		var scrollBody=this._scrollBody;
@@ -318,10 +316,10 @@ var __prototype = {
 		this.fa_componentUpdated=false;
 	},
 	/**
-	 * @method private
+	 * @method hidden
 	 * @return void
 	 */
-	_updateNewPage: function(rowCount, buffer) {
+	f_updateNewPage: function(rowCount, buffer) {
 		// Appeler par la génération du serveur !
 
 		var component=this._tbody;
@@ -341,9 +339,9 @@ var __prototype = {
 		this.f_getClass().f_getClassLoader()._load(this, component, buffer);
 
 		if (component==this) {
-			this._scrollBody=f_core.GetFirstElementByTagName(this, "TABLE");
+			this._scrollBody=f_core.GetFirstElementByTagName(this, "table");
 			
-			this._tbody=f_core.GetFirstElementByTagName(this._scrollBody, "TBODY");
+			this._tbody=f_core.GetFirstElementByTagName(this._scrollBody, "tbody");
 		}
 
 		if (this._rowCount<0) {

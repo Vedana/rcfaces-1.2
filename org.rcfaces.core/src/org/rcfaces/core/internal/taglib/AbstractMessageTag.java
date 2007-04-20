@@ -1,15 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.AbstractMessageComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AbstractMessageComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 
@@ -17,8 +18,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(AbstractMessageTag.class);
 
 	private String visible;
-	private String height;
 	private String width;
+	private String height;
 	private String mouseOutListeners;
 	private String mouseOverListeners;
 	private String helpMessage;
@@ -52,20 +53,20 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.visible = visible;
 	}
 
-	public final String getHeight() {
-		return height;
-	}
-
-	public final void setHeight(String height) {
-		this.height = height;
-	}
-
 	public final String getWidth() {
 		return width;
 	}
 
 	public final void setWidth(String width) {
 		this.width = width;
+	}
+
+	public final String getHeight() {
+		return height;
+	}
+
+	public final void setHeight(String height) {
+		this.height = height;
 	}
 
 	public final String getMouseOutListener() {
@@ -271,8 +272,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  visible='"+visible+"'");
-			LOG.debug("  height='"+height+"'");
 			LOG.debug("  width='"+width+"'");
+			LOG.debug("  height='"+height+"'");
 			LOG.debug("  helpMessage='"+helpMessage+"'");
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
@@ -316,16 +317,6 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (height != null) {
-			if (isValueReference(height)) {
-				ValueBinding vb = application.createValueBinding(height);
-
-				component.setHeight(vb);
-			} else {
-				component.setHeight(height);
-			}
-		}
-
 		if (width != null) {
 			if (isValueReference(width)) {
 				ValueBinding vb = application.createValueBinding(width);
@@ -333,6 +324,16 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 				component.setWidth(vb);
 			} else {
 				component.setWidth(width);
+			}
+		}
+
+		if (height != null) {
+			if (isValueReference(height)) {
+				ValueBinding vb = application.createValueBinding(height);
+
+				component.setHeight(vb);
+			} else {
+				component.setHeight(height);
 			}
 		}
 
@@ -547,8 +548,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 
 	public void release() {
 		visible = null;
-		height = null;
 		width = null;
+		height = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
 		helpMessage = null;

@@ -304,6 +304,79 @@ var __prototype = {
 		return item;
 	},
 	/**
+	 * Properties:
+	 *  _value: value
+	 *  _label: label
+	 *  _description: description
+	 *  _disabled: disabled
+	 *  _groupName: groupName
+	 *  _type: type
+	 *  _checked: checked
+	 *  _accessKey: accessKey
+	 *  _visible: visible
+	 *  at: acceleratorKey
+	 *  st: styleClass
+	 *  re: removeAllWhenShow
+	 *  me: menuItemListeners
+	 *  img: image 
+	 *  imge: image expanded
+	 *  imgd: image disabled
+	 *  imgh: image hover
+	 *  imgs: image selected
+	 * 
+	 *
+	 * @method hidden
+	 * @return Object
+	 */
+	f_appendItem2: function(parentItem, id, properties) {
+		var item=this.f_appendItem(parentItem, id,
+				properties._label, 
+				properties._value, 
+				properties._accessKey, 
+				properties._description, 
+				properties._disabled, 
+				properties._visible, 
+				properties._acceleratorKey);
+
+
+		switch(properties._type) {
+		case fa_items.AS_RADIO_BUTTON:
+			if (properties._groupName) {
+				this.f_setItemGroupName(item, properties._groupName);
+			}		
+			// On continue
+					
+		case fa_items.AS_CHECK_BUTTON:
+			item._inputType=properties._type;
+			if (properties._checked) {
+				this.f_setItemChecked(item, true);
+			}
+			break;
+		}
+		
+		if (properties._removeAllWhenShow) {
+			item._removeAllWhenShow=true;
+		}
+		
+		if (properties._imageURL) {
+			this.f_setItemImages(item, 
+				properties._imageURL, 
+				properties._disabledImageURL, 
+				properties._hoverImageURL, 
+				properties._selectedImageURL);
+		}		
+				
+		if (properties._clientDatas) {
+			this.f_setItemClientDatas(item, properties._clientDatas);
+		}
+		
+		if (properties._styleClass) {
+			this.f_setItemStyleClass(item, properties._styleClass);
+		}
+		
+		return item;
+	},
+	/**
 	 * Add an item to a component.
 	 * 
 	 * @method public
@@ -417,7 +490,7 @@ var __prototype = {
 			doc=container.ownerDocument;		
 		}
 	
-		var uiPopup=doc.createElement("UL");		
+		var uiPopup=doc.createElement("ul");		
 		uiPopup.className="f_menu_popup";
 
 		if (!popupObject) {
@@ -454,7 +527,7 @@ var __prototype = {
 				continue;
 			}
 			
-			var uiItem=doc.createElement("LI");
+			var uiItem=doc.createElement("li");
 			var itemId=item._id;
 			if (itemId) {
 				uiItem.id=itemId;
@@ -491,7 +564,7 @@ var __prototype = {
 
 			uiItem.className="f_menu_item";
 			
-			var image=doc.createElement("IMG");
+			var image=doc.createElement("img");
 			image.align="middle";
 			image.valign="middle";
 			image.border=0;
@@ -503,7 +576,7 @@ var __prototype = {
 			
 			uiItem.appendChild(image);
 			
-			var div=doc.createElement("LABEL");
+			var div=doc.createElement("label");
 			div.className="f_menu_item_text";
 			
 			var accessKey=item._accessKey;
@@ -520,12 +593,12 @@ var __prototype = {
 			var acceleratorKey=item._acceleratorKey;
 			if (acceleratorKey) {
 				var htmlAcceleratorKey=f_core.EncodeHtml(acceleratorKey);
-				var accelV=doc.createElement("LABEL");
+				var accelV=doc.createElement("label");
 				accelV.className="f_menu_item_accelV";
 				accelV.innerHTML=htmlAcceleratorKey;
 				uiItem.appendChild(accelV);
 		
-				var accel=doc.createElement("LABEL");
+				var accel=doc.createElement("label");
 				accel.className="f_menu_item_accel";
 				accel.innerHTML=htmlAcceleratorKey;
 				uiItem.appendChild(accel);
@@ -991,7 +1064,8 @@ var __prototype = {
 
 		var suffix="";
 		var imageURL=item._imageURL;
-
+		var itemStyleClass=this.f_getItemStyleClass(item);
+		
 		if (this.f_hasVisibleItemChildren(item)) {
 			var popupOpened=this.f_uiIsPopupOpened(item);
 
@@ -1045,9 +1119,19 @@ var __prototype = {
 			}
 		} 
 		
-		var className="f_menu_item";
+		var itemClassName="f_menu_item";
+		var className=itemClassName;
+	
+		if (itemStyleClass) {
+			className+=" "+itemStyleClass;
+		}
+
 		if (suffix) {
-			className+=" "+className+suffix;			
+			className+=" "+itemClassName+suffix;			
+
+			if (itemStyleClass && itemStyleClass.indexOf(' ')<0) {
+				itemStyleClass+=" "+itemStyleClass+suffix;
+			}
 		}
 	
 //		f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: className="+className);

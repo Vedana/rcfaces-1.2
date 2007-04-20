@@ -1,12 +1,14 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class ScopeComponent extends CameliaBaseComponent implements 
 	IVariableScopeCapability {
@@ -27,40 +29,56 @@ public class ScopeComponent extends CameliaBaseComponent implements
 		setId(componentId);
 	}
 
-	public final javax.faces.el.ValueBinding getScopeValue() {
+	public javax.faces.el.ValueBinding getScopeValue() {
 		return getScopeValue(null);
 	}
 
 	/**
 	 * See {@link #getScopeValue() getScopeValue()} for more details
 	 */
-	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
+	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
 	}
 
-	public final void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+	/**
+	 * Returns <code>true</code> if the attribute "scopeValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeValueSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_VALUE);
+	}
+
+	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
 		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
 	}
 
-	public final java.lang.String getScopeVar() {
+	public java.lang.String getScopeVar() {
 		return getScopeVar(null);
 	}
 
 	/**
 	 * See {@link #getScopeVar() getScopeVar()} for more details
 	 */
-	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
 	}
 
-	public final void setScopeVar(java.lang.String scopeVar) {
+	/**
+	 * Returns <code>true</code> if the attribute "scopeVar" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeVarSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_VAR);
+	}
+
+	public void setScopeVar(java.lang.String scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
 	/**
 	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
 	 */
-	public final void setScopeVar(ValueBinding scopeVar) {
+	public void setScopeVar(ValueBinding scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 

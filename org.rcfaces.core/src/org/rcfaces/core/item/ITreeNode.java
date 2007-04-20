@@ -10,5 +10,5 @@ package org.rcfaces.core.item;
  */
 public interface ITreeNode extends ISelectItemGroup, IImagesItem,
         IGroupSelectItem, IInputTypeItem, IStyleClassItem, IServerDataItem,
-        IClientDataItem {
+        IClientDataItem, IMenuPopupIdItem {
 }

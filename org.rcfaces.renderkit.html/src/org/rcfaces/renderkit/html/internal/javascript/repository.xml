@@ -841,23 +841,35 @@
 
 <!-- DATAGRID Components -->
 	<module id="dataGrid">
-		<file name="f_dataGrid.js">
-			<class name="f_dataGrid">
+		<file name="f_grid.js">
+			<class name="f_grid">
 				<required-class name="f_component" />
 				<required-class name="f_resourceBundle" />
-				<required-class name="fa_readOnly" />
 				<required-class name="fa_disabled" />
-				<required-class name="fa_selectionProvider" />
 				<required-class name="fa_pagedComponent" />
 				<required-class name="fa_commands" />
 				<required-class name="fa_subMenu" />
+				<required-class name="fa_selectionProvider" />
 				<required-class name="fa_selectionManager" />
-				<required-class name="fa_checkManager" />
-				<required-class name="fa_scrollPositions" />
 				<required-class name="f_error" />
+				<required-class name="fa_scrollPositions" />
 				<required-class id="menu" name="f_menu" />
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
+			</class>
+		</file>
+			
+		<file name="f_dataGrid.js">
+			<class name="f_dataGrid">
+				<required-class name="f_grid" />
+				<required-class name="fa_readOnly" />
+				<required-class name="fa_checkManager" />
+			</class>
+		</file>
+		
+		<file name="f_componentsGrid.js">
+			<class name="f_componentsGrid">
+				<required-class name="f_grid" />
 			</class>
 		</file>
 	</module>

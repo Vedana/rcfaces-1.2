@@ -24,8 +24,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.el.ValueBinding;
 
-import org.rcfaces.core.internal.component.IConvertValueHolder;
-import org.rcfaces.core.internal.component.IEditableValueHolder;
+import org.rcfaces.core.internal.capability.IConvertValueHolder;
+import org.rcfaces.core.internal.capability.IEditableValueHolder;
 import org.rcfaces.core.internal.util.Convertor;
 
 /**

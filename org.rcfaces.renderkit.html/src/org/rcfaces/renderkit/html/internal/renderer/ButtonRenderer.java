@@ -34,7 +34,7 @@ public class ButtonRenderer extends AbstractInputRenderer {
         ButtonComponent button = (ButtonComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
-        htmlWriter.startElement("INPUT");
+        htmlWriter.startElement(IHtmlWriter.INPUT);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -49,7 +49,7 @@ public class ButtonRenderer extends AbstractInputRenderer {
             htmlWriter.writeValue(txt);
         }
 
-        htmlWriter.endElement("INPUT");
+        htmlWriter.endElement(IHtmlWriter.INPUT);
     }
 
     protected boolean isNameEqualsId() {

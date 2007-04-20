@@ -1,15 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.DataGridComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public class DataGridTag extends AbstractGridTag implements Tag {
 
@@ -27,22 +28,22 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 	private String doubleClickListeners;
 	private String required;
 	private String border;
+	private String rowStyleClass;
 	private String readOnly;
 	private String disabled;
 	private String horizontalScrollPosition;
 	private String verticalScrollPosition;
 	private String filterProperties;
+	private String showValue;
 	private String preference;
-	private String headerVisible;
 	private String paged;
-	private String sortedColumnIds;
-	private String columnsOrder;
-	private String rowValueColumnId;
-	private String cursorValue;
-	private String rowCountVar;
-	private String rowIndexVar;
 	private String clientSelectionFullState;
 	private String clientCheckFullState;
+	private String cursorValue;
+	private String headerVisible;
+	private String rowValueColumnId;
+	private String rowCountVar;
+	private String rowIndexVar;
 	private String action;
 	private String actionListeners;
 	public String getComponentType() {
@@ -137,6 +138,14 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		this.border = border;
 	}
 
+	public final String getRowStyleClass() {
+		return rowStyleClass;
+	}
+
+	public final void setRowStyleClass(String rowStyleClass) {
+		this.rowStyleClass = rowStyleClass;
+	}
+
 	public final String getReadOnly() {
 		return readOnly;
 	}
@@ -177,6 +186,14 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		this.filterProperties = filterProperties;
 	}
 
+	public final String getShowValue() {
+		return showValue;
+	}
+
+	public final void setShowValue(String showValue) {
+		this.showValue = showValue;
+	}
+
 	public final String getPreference() {
 		return preference;
 	}
@@ -185,68 +202,12 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		this.preference = preference;
 	}
 
-	public final String getHeaderVisible() {
-		return headerVisible;
-	}
-
-	public final void setHeaderVisible(String headerVisible) {
-		this.headerVisible = headerVisible;
-	}
-
 	public final String getPaged() {
 		return paged;
 	}
 
 	public final void setPaged(String paged) {
 		this.paged = paged;
-	}
-
-	public final String getSortedColumnIds() {
-		return sortedColumnIds;
-	}
-
-	public final void setSortedColumnIds(String sortedColumnIds) {
-		this.sortedColumnIds = sortedColumnIds;
-	}
-
-	public final String getColumnsOrder() {
-		return columnsOrder;
-	}
-
-	public final void setColumnsOrder(String columnsOrder) {
-		this.columnsOrder = columnsOrder;
-	}
-
-	public final String getRowValueColumnId() {
-		return rowValueColumnId;
-	}
-
-	public final void setRowValueColumnId(String rowValueColumnId) {
-		this.rowValueColumnId = rowValueColumnId;
-	}
-
-	public final String getCursorValue() {
-		return cursorValue;
-	}
-
-	public final void setCursorValue(String cursorValue) {
-		this.cursorValue = cursorValue;
-	}
-
-	public final String getRowCountVar() {
-		return rowCountVar;
-	}
-
-	public final void setRowCountVar(String rowCountVar) {
-		this.rowCountVar = rowCountVar;
-	}
-
-	public final String getRowIndexVar() {
-		return rowIndexVar;
-	}
-
-	public final void setRowIndexVar(String rowIndexVar) {
-		this.rowIndexVar = rowIndexVar;
 	}
 
 	public final String getClientSelectionFullState() {
@@ -263,6 +224,46 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 
 	public final void setClientCheckFullState(String clientCheckFullState) {
 		this.clientCheckFullState = clientCheckFullState;
+	}
+
+	public final String getCursorValue() {
+		return cursorValue;
+	}
+
+	public final void setCursorValue(String cursorValue) {
+		this.cursorValue = cursorValue;
+	}
+
+	public final String getHeaderVisible() {
+		return headerVisible;
+	}
+
+	public final void setHeaderVisible(String headerVisible) {
+		this.headerVisible = headerVisible;
+	}
+
+	public final String getRowValueColumnId() {
+		return rowValueColumnId;
+	}
+
+	public final void setRowValueColumnId(String rowValueColumnId) {
+		this.rowValueColumnId = rowValueColumnId;
+	}
+
+	public final String getRowCountVar() {
+		return rowCountVar;
+	}
+
+	public final void setRowCountVar(String rowCountVar) {
+		this.rowCountVar = rowCountVar;
+	}
+
+	public final String getRowIndexVar() {
+		return rowIndexVar;
+	}
+
+	public final void setRowIndexVar(String rowIndexVar) {
+		this.rowIndexVar = rowIndexVar;
 	}
 
 	public final void setAction(String action) {
@@ -294,22 +295,22 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  border='"+border+"'");
+			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  disabled='"+disabled+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  showValue='"+showValue+"'");
 			LOG.debug("  preference='"+preference+"'");
-			LOG.debug("  headerVisible='"+headerVisible+"'");
 			LOG.debug("  paged='"+paged+"'");
-			LOG.debug("  sortedColumnIds='"+sortedColumnIds+"'");
-			LOG.debug("  columnsOrder='"+columnsOrder+"'");
-			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
-			LOG.debug("  cursorValue='"+cursorValue+"'");
-			LOG.debug("  rowCountVar='"+rowCountVar+"'");
-			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
+			LOG.debug("  cursorValue='"+cursorValue+"'");
+			LOG.debug("  headerVisible='"+headerVisible+"'");
+			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
+			LOG.debug("  rowCountVar='"+rowCountVar+"'");
+			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -410,6 +411,16 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (rowStyleClass != null) {
+			if (isValueReference(rowStyleClass)) {
+				ValueBinding vb = application.createValueBinding(rowStyleClass);
+
+				component.setRowStyleClass(vb);
+			} else {
+				component.setRowStyleClass(rowStyleClass);
+			}
+		}
+
 		if (readOnly != null) {
 			if (isValueReference(readOnly)) {
 				ValueBinding vb = application.createValueBinding(readOnly);
@@ -456,10 +467,60 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 				component.setFilterProperties(vb);
 		}
 
+		if (showValue != null) {
+			if (isValueReference(showValue)) {
+				ValueBinding vb = application.createValueBinding(showValue);
+
+				component.setShowValue(vb);
+			} else {
+				component.setShowValue(showValue);
+			}
+		}
+
 		if (preference != null) {
 				ValueBinding vb = application.createValueBinding(preference);
 
 				component.setPreference(vb);
+		}
+
+		if (paged != null) {
+			if (isValueReference(paged)) {
+				ValueBinding vb = application.createValueBinding(paged);
+
+				component.setPaged(vb);
+			} else {
+				component.setPaged(getBool(paged));
+			}
+		}
+
+		if (clientSelectionFullState != null) {
+			if (isValueReference(clientSelectionFullState)) {
+				ValueBinding vb = application.createValueBinding(clientSelectionFullState);
+
+				component.setClientSelectionFullState(vb);
+			} else {
+				component.setClientSelectionFullState(getBool(clientSelectionFullState));
+			}
+		}
+
+		if (clientCheckFullState != null) {
+			if (isValueReference(clientCheckFullState)) {
+				ValueBinding vb = application.createValueBinding(clientCheckFullState);
+
+				component.setClientCheckFullState(vb);
+			} else {
+				component.setClientCheckFullState(getBool(clientCheckFullState));
+			}
+		}
+
+		if (cursorValue != null) {
+			if (isValueReference(cursorValue)) {
+				ValueBinding vb = application.createValueBinding(cursorValue);
+
+				component.setCursorValue(vb);
+			} else {
+				component.setCursorValue(cursorValue);
+			}
 		}
 
 		if (headerVisible != null) {
@@ -471,48 +532,12 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
-		if (paged != null) {
-			if (isValueReference(paged)) {
-				ValueBinding vb = application.createValueBinding(paged);
-				component.setPaged(vb);
-			} else {
-				component.setPaged(getBool(paged));
-			}
-		}
-
-		if (sortedColumnIds != null) {
-			if (isValueReference(sortedColumnIds)) {
-				ValueBinding vb = application.createValueBinding(sortedColumnIds);
-				component.setSortedColumnIds(vb);
-			} else {
-				component.setSortedColumnIds(sortedColumnIds);
-			}
-		}
-
-		if (columnsOrder != null) {
-			if (isValueReference(columnsOrder)) {
-				ValueBinding vb = application.createValueBinding(columnsOrder);
-				component.setColumnsOrder(vb);
-			} else {
-				component.setColumnsOrder(columnsOrder);
-			}
-		}
-
 		if (rowValueColumnId != null) {
 			if (isValueReference(rowValueColumnId)) {
 				ValueBinding vb = application.createValueBinding(rowValueColumnId);
 				component.setRowValueColumnId(vb);
 			} else {
 				component.setRowValueColumnId(rowValueColumnId);
-			}
-		}
-
-		if (cursorValue != null) {
-			if (isValueReference(cursorValue)) {
-				ValueBinding vb = application.createValueBinding(cursorValue);
-				component.setCursorValue(vb);
-			} else {
-				component.setCursorValue(cursorValue);
 			}
 		}
 
@@ -528,24 +553,6 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 				throw new javax.faces.FacesException("Attribute 'rowIndexVar' does not accept binding !");
 			}
 				component.setRowIndexVar(rowIndexVar);
-		}
-
-		if (clientSelectionFullState != null) {
-			if (isValueReference(clientSelectionFullState)) {
-				ValueBinding vb = application.createValueBinding(clientSelectionFullState);
-				component.setClientSelectionFullState(vb);
-			} else {
-				component.setClientSelectionFullState(getBool(clientSelectionFullState));
-			}
-		}
-
-		if (clientCheckFullState != null) {
-			if (isValueReference(clientCheckFullState)) {
-				ValueBinding vb = application.createValueBinding(clientCheckFullState);
-				component.setClientCheckFullState(vb);
-			} else {
-				component.setClientCheckFullState(getBool(clientCheckFullState));
-			}
 		}
 
 		if (action != null) {
@@ -569,22 +576,22 @@ public class DataGridTag extends AbstractGridTag implements Tag {
 		doubleClickListeners = null;
 		required = null;
 		border = null;
+		rowStyleClass = null;
 		readOnly = null;
 		disabled = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		filterProperties = null;
+		showValue = null;
 		preference = null;
-		headerVisible = null;
 		paged = null;
-		sortedColumnIds = null;
-		columnsOrder = null;
-		rowValueColumnId = null;
-		cursorValue = null;
-		rowCountVar = null;
-		rowIndexVar = null;
 		clientSelectionFullState = null;
 		clientCheckFullState = null;
+		cursorValue = null;
+		headerVisible = null;
+		rowValueColumnId = null;
+		rowCountVar = null;
+		rowIndexVar = null;
 		action = null;
 		actionListeners = null;
 

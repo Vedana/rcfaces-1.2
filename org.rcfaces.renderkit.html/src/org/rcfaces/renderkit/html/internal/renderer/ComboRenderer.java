@@ -47,7 +47,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         UIComponent combo = htmlWriter.getComponentRenderContext()
                 .getComponent();
 
-        htmlWriter.startElement("SELECT");
+        htmlWriter.startElement(IHtmlWriter.SELECT);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -85,7 +85,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
     protected void encodeAfterDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
 
-        htmlWriter.endElement("SELECT");
+        htmlWriter.endElement(IHtmlWriter.SELECT);
 
         super.encodeAfterDecorator(htmlWriter, componentDecorator);
     }

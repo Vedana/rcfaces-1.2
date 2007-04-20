@@ -12,11 +12,12 @@
 @import url(f_combo.css);					//module:list
 @import url(f_comboEx.css); 				//module:popup
 @import url(f_componentsList.css); 				//module:dataGrid
-@import url(f_dataGrid.css); 				//module:dataGrid
+@import url(f_dataGrid.css); 				//module:grid
 @import url(f_dateChooser.css); 				//module:calendar
 @import url(f_dateEntry.css); 				//module:calendar
 @import url(f_expandBar.css);				//module:expandBar
 @import url(f_fieldSet.css);				//module:fieldSet
+@import url(f_grid.css); 				//module:grid
 @import url(f_helpButton.css); 			//module:help
 @import url(f_helpMessageZone.css);		//module:help
 @import url(f_hyperLink.css);				//module:basic

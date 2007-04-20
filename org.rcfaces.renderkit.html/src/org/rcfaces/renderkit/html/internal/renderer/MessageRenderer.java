@@ -48,15 +48,17 @@ public class MessageRenderer extends AbstractCssRenderer {
         boolean showIfMessage = messageComponent.isShowIfMessage(facesContext);
         String forValue = messageComponent.getFor();
         if (showIfMessage && forValue != null) {
-            //Iterator iterator = MessageTools.listMessages(facesContext,forValue, messageComponent);
+            // Iterator iterator =
+            // MessageTools.listMessages(facesContext,forValue,
+            // messageComponent);
 
             // L'affiche ne se fera que coté client !
-            messageComponent.setVisible(false) ;//iterator.hasNext());
+            messageComponent.setVisible(false);// iterator.hasNext());
         }
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -92,7 +94,7 @@ public class MessageRenderer extends AbstractCssRenderer {
                 imageURL = imageAccessor.resolveURL(facesContext, null, null);
             }
 
-            htmlWriter.startElement("IMG");
+            htmlWriter.startElement(IHtmlWriter.IMG);
 
             htmlWriter.writeClass(getImageClassName(htmlWriter));
 
@@ -112,7 +114,7 @@ public class MessageRenderer extends AbstractCssRenderer {
                 htmlWriter.writeHeight(imageHeight);
             }
 
-            htmlWriter.endElement("IMG");
+            htmlWriter.endElement(IHtmlWriter.IMG);
         }
 
         String noMessageText = messageComponent.getText(facesContext);
@@ -120,15 +122,15 @@ public class MessageRenderer extends AbstractCssRenderer {
             noMessageText = ParamUtils.formatMessage(messageComponent,
                     noMessageText);
 
-            htmlWriter.startElement("LABEL");
+            htmlWriter.startElement(IHtmlWriter.LABEL);
 
             htmlWriter.writeClass(getNoMessageClassName(htmlWriter));
 
             htmlWriter.writeText(noMessageText);
-            htmlWriter.endElement("LABEL");
+            htmlWriter.endElement(IHtmlWriter.LABEL);
         }
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         htmlWriter.enableJavaScript();
     }
@@ -159,13 +161,11 @@ public class MessageRenderer extends AbstractCssRenderer {
     }
 
     /*
-    protected void encodeJavaScript(IJavaScriptWriter js)
-            throws WriterException {
-        super.encodeJavaScript(js);
-
-        JavaScriptTools.writeFirstMessage(js);
-    }
-    */
+     * protected void encodeJavaScript(IJavaScriptWriter js) throws
+     * WriterException { super.encodeJavaScript(js);
+     * 
+     * JavaScriptTools.writeFirstMessage(js); }
+     */
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MESSAGE;

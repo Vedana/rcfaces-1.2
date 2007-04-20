@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
+import javax.faces.component.UIComponent;
 import javax.faces.model.SelectItem;
 
 /**
@@ -16,7 +17,7 @@ import javax.faces.model.SelectItem;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractFilteredCollection implements Collection,
-        IFiltredCollection {
+        IFiltredCollection, IFiltredCollection2 {
     private static final String REVISION = "$Revision$";
 
     public static final Collection EMPTY_COLLECTION = new AbstractFilteredCollection() {
@@ -109,6 +110,12 @@ public abstract class AbstractFilteredCollection implements Collection,
         return new FilteredIterator(filterProperties, maxNumberResult);
     }
 
+    public Iterator iterator(UIComponent component,
+            IFilterProperties filterProperties, int maxNumberResult) {
+        return new FilteredIterator(component, filterProperties,
+                maxNumberResult);
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -118,6 +125,8 @@ public abstract class AbstractFilteredCollection implements Collection,
         private static final String REVISION = "$Revision$";
 
         private final IFilterProperties filterProperties;
+
+        private final UIComponent component;
 
         private int maxResultNumber;
 
@@ -132,14 +141,18 @@ public abstract class AbstractFilteredCollection implements Collection,
         private SelectItem currentSelectItem;
 
         public FilteredIterator(IFilterProperties filterProperties) {
-            this(filterProperties, NO_MAXIMUM_RESULT_NUMBER);
-
-            iterator = collection.iterator();
+            this(null, filterProperties, NO_MAXIMUM_RESULT_NUMBER);
         }
 
         public FilteredIterator(IFilterProperties filterProperties,
                 int maxResultNumber) {
+            this(null, filterProperties, maxResultNumber);
+        }
 
+        public FilteredIterator(UIComponent component,
+                IFilterProperties filterProperties, int maxResultNumber) {
+
+            this.component = component;
             this.filterProperties = filterProperties;
             this.maxResultNumber = maxResultNumber;
             this.size = 0;
@@ -216,6 +229,14 @@ public abstract class AbstractFilteredCollection implements Collection,
         }
 
         public void release() {
+        }
+
+        protected UIComponent getComponent() {
+            if (component == null) {
+                throw new NullPointerException("Component is not known !");
+            }
+
+            return component;
         }
     }
 

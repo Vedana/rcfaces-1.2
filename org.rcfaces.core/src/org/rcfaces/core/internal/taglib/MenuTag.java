@@ -1,21 +1,23 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.MenuComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.MenuComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public class MenuTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(MenuTag.class);
 
+	private String preloadedLevelDepth;
 	private String menuListeners;
 	private String selectionListeners;
 	private String checkListeners;
@@ -26,6 +28,14 @@ public class MenuTag extends CameliaTag implements Tag {
 	private String value;
 	public String getComponentType() {
 		return MenuComponent.COMPONENT_TYPE;
+	}
+
+	public final String getPreloadedLevelDepth() {
+		return preloadedLevelDepth;
+	}
+
+	public final void setPreloadedLevelDepth(String preloadedLevelDepth) {
+		this.preloadedLevelDepth = preloadedLevelDepth;
 	}
 
 	public final String getMenuListener() {
@@ -97,6 +107,7 @@ public class MenuTag extends CameliaTag implements Tag {
 			if (MenuComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  preloadedLevelDepth='"+preloadedLevelDepth+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  menuId='"+menuId+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
@@ -114,6 +125,16 @@ public class MenuTag extends CameliaTag implements Tag {
 		MenuComponent component = (MenuComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
+
+		if (preloadedLevelDepth != null) {
+			if (isValueReference(preloadedLevelDepth)) {
+				ValueBinding vb = application.createValueBinding(preloadedLevelDepth);
+
+				component.setPreloadedLevelDepth(vb);
+			} else {
+				component.setPreloadedLevelDepth(getInt(preloadedLevelDepth));
+			}
+		}
 
 		if (menuListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.MENU_LISTENER_TYPE, menuListeners);
@@ -171,6 +192,7 @@ public class MenuTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
+		preloadedLevelDepth = null;
 		menuListeners = null;
 		selectionListeners = null;
 		checkListeners = null;

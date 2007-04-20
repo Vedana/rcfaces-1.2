@@ -143,7 +143,7 @@ var __prototype = {
 		this._hoverImageURL=hoverImageURL;
 		this._selectedImageURL=selectedImageURL;
 		
-		var mask=document.createElement("DIV");
+		var mask=document.createElement("div");
 		this._mask=mask;
 		mask.className="f_tabbedPane_tab_mask";
 		

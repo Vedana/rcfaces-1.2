@@ -166,7 +166,7 @@ var __static = {
 	       		}
 		   	}
 	       	
-	       	// On prend le container précédant !
+	       	// On prend le container précédent !
        		cid=cid.substring(0, idx);
  
  		 	f_core.Debug(fa_namingContainer, "ComputeComponentId: Not a naming container cut cid="+cid);
@@ -191,7 +191,7 @@ var __static = {
 		if (!tagName) {
 			return false;
 		}
-		if (tagName.toUpperCase()=="FORM" || tagName==fa_namingContainer._NAMING_CONTAINER_COMPONENT) {
+		if (tagName.toLowerCase()=="form" || tagName==fa_namingContainer._NAMING_CONTAINER_COMPONENT) {
 			return true;
 		}
 		

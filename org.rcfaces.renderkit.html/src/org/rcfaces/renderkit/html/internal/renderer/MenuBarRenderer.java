@@ -36,7 +36,7 @@ public class MenuBarRenderer extends AbstractSelectItemsRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        writer.startElement("DIV");
+        writer.startElement(IHtmlWriter.DIV);
 
         writeHtmlAttributes(writer);
         writeJavaScriptAttributes(writer);
@@ -52,9 +52,9 @@ public class MenuBarRenderer extends AbstractSelectItemsRenderer {
         }
 
         // Un dummy pour eviter des sauts de pages
-        writer.startElement("A");
+        writer.startElement(IHtmlWriter.A);
         writer.writeAttribute("class", getBarItemClassName(writer));
-        writer.endElement("A");
+        writer.endElement(IHtmlWriter.A);
     }
 
     private String getBarItemClassName(IHtmlWriter writer) {
@@ -64,7 +64,7 @@ public class MenuBarRenderer extends AbstractSelectItemsRenderer {
     protected void encodeAfterDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
 
-        writer.endElement("DIV");
+        writer.endElement(IHtmlWriter.DIV);
 
         super.encodeAfterDecorator(writer, componentDecorator);
     }

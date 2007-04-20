@@ -34,16 +34,19 @@ import org.rcfaces.core.internal.util.KeyTools;
 import org.rcfaces.core.item.IAcceleratorKeyItem;
 import org.rcfaces.core.item.IAccessKeyItem;
 import org.rcfaces.core.item.ICheckSelectItem;
+import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IGroupSelectItem;
 import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.item.IInputTypeItem;
 import org.rcfaces.core.item.IMenuItem;
+import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.MenuItem;
 import org.rcfaces.core.item.SeparatorSelectItem;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -79,7 +82,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     protected void postEncodeContainer() throws WriterException {
         super.postEncodeContainer();
 
-        // writer.endElement("DIV");
+        // writer.endElement(IHtmlWriter.DIV");
     }
 
     /*
@@ -145,124 +148,90 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
+        String jsStyleClass = null;
+        if (selectItem instanceof IStyleClassItem) {
+            String styleClass = ((IStyleClassItem) selectItem).getStyleClass();
+            if (styleClass != null) {
+                jsStyleClass = javaScriptWriter.allocateString(styleClass);
+            }
+        }
+
+        String jsDescription = selectItem.getDescription();
+        if (jsDescription != null) {
+            jsDescription = javaScriptWriter.allocateString(jsDescription);
+        }
+
         IComponentRenderContext componentContext = javaScriptWriter
                 .getHtmlComponentRenderContext();
 
+        Object selectItemValue = selectItem.getValue();
+        String value = convertItemValue(componentContext, selectItemValue);
+
+        /* Finalement en laisse en String !
+         * 
+         if (value != null) {
+            value = javaScriptWriter.allocateString(value);
+        }*/
+
         javaScriptWriter.write("var ").write(varId).write('=');
 
-        String cmd;
-        switch (style) {
-        case IInputTypeCapability.AS_RADIO_BUTTON:
-            cmd = "f_appendRadioItem";
-            break;
+        javaScriptWriter.writeCall(managerVarId, "f_appendItem2");
+        javaScriptWriter.write(parentVarId).write(',').writeString(sid).write(
+                ',');
 
-        case IInputTypeCapability.AS_CHECK_BUTTON:
-            cmd = "f_appendCheckItem";
-            break;
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(false);
 
-        default:
-            cmd = "f_appendItem";
-        }
-
-        javaScriptWriter.writeCall(managerVarId, cmd);
-        javaScriptWriter.write(parentVarId).write(',').writeString(sid);
-
-        int pred = 0;
-
-        if (style == IInputTypeCapability.AS_RADIO_BUTTON) {
-            if (groupName != null) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-                javaScriptWriter.write(',').writeString(groupName);
-            } else {
-                pred++;
-            }
-        }
+        objectLiteralWriter.writeSymbol("_value").writeString(value);
 
         String txt = selectItem.getLabel();
         if (txt != null) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-            javaScriptWriter.write(',').writeString(txt);
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_label").writeString(txt);
         }
 
-        Object selectItemValue = selectItem.getValue();
-
-        String value = convertItemValue(componentContext, selectItemValue);
-        if (value != null) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-            javaScriptWriter.write(',').writeString(value);
-
-        } else {
-            pred++;
+        if (jsDescription != null) {
+            objectLiteralWriter.writeSymbol("_description")
+                    .write(jsDescription);
         }
 
-        if (style == IInputTypeCapability.AS_CHECK_BUTTON
-                || style == IInputTypeCapability.AS_RADIO_BUTTON) {
+        boolean disabled = selectItem.isDisabled();
+        if (disabled) {
+            objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
+        }
+
+        switch (style) {
+        case IInputTypeCapability.AS_RADIO_BUTTON:
+            if (groupName != null) {
+                objectLiteralWriter.writeSymbol("_groupName").write(groupName);
+            }
+            // On continue
+
+        case IInputTypeCapability.AS_CHECK_BUTTON:
+            objectLiteralWriter.writeSymbol("_type").writeInt(style);
 
             if (menuContext.isValueChecked(selectItem, selectItemValue)) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-                javaScriptWriter.write(',').writeBoolean(true);
-
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
             }
+
+            break;
         }
 
         if (selectItem instanceof IAccessKeyItem) {
             String key = ((IAccessKeyItem) selectItem).getAccessKey();
             if (key != null && key.length() > 0) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-                javaScriptWriter.write(',').writeString(key);
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_accessKey").writeString(key);
             }
-        } else {
-            pred++;
-        }
-
-        String description = selectItem.getDescription();
-        if (description != null) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-            javaScriptWriter.write(',').writeString(description);
-        } else {
-            pred++;
-        }
-
-        boolean disabled = selectItem.isDisabled();
-        if (disabled) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-            javaScriptWriter.write(',').writeBoolean(true);
-        } else {
-            pred++;
         }
 
         if (selectItem instanceof IVisibleItem) {
             boolean visible = ((IVisibleItem) selectItem).isVisible();
             if (visible == false) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-                javaScriptWriter.write(',').writeBoolean(false);
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_visible").writeBoolean(false);
             }
-        } else {
-            pred++;
+        }
+
+        if (jsStyleClass != null) {
+            objectLiteralWriter.writeSymbol("_styleClass").write(jsStyleClass);
         }
 
         if (selectItem instanceof IAcceleratorKeyItem) {
@@ -270,19 +239,15 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
                     .getAcceleratorKey();
             if (acceleratorKey != null && acceleratorKey.length() > 0) {
                 KeyTools.State state = KeyTools.parseKeyBinding(acceleratorKey);
-
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-                javaScriptWriter.write(',').writeString(state.format());
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_acceleratorKey").writeString(
+                        state.format());
             }
-        } else {
-            pred++;
         }
 
-        javaScriptWriter.writeln(");");
+        if (selectItem instanceof IImagesItem) {
+            writeSelectItemImages((IImagesItem) selectItem, javaScriptWriter,
+                    null, null, true, objectLiteralWriter);
+        }
 
         MenuItemComponent menuItemComponent = null;
         if (component instanceof MenuItemComponent) {
@@ -317,39 +282,39 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
             boolean removeAllWhenShow = menuItemComponent
                     .isRemoveAllWhenShown(facesContext);
-            if (removeAllWhenShow || l != null) {
-                javaScriptWriter.writeCall(managerVarId,
-                        "_setMenuItemListeners").write(varId);
+            if (removeAllWhenShow) {
+                objectLiteralWriter.writeSymbol("_removeAllWhenShow")
+                        .writeBoolean(true);
+            }
 
-                javaScriptWriter.write(',').writeBoolean(removeAllWhenShow);
+            if (l != null) {
+                objectLiteralWriter.writeSymbol("_menuListeners").write('[');
 
+                boolean first = true;
                 for (Iterator it = l.iterator(); it.hasNext();) {
                     IScriptListener scriptListener = (IScriptListener) it
                             .next();
 
-                    javaScriptWriter.write(',');
+                    if (first == false) {
+                        javaScriptWriter.write(',');
+                    } else {
+                        first = false;
+                    }
 
                     EventsRenderer.encodeJavaScriptCommmand(javaScriptWriter,
                             scriptListener);
                 }
-
-                javaScriptWriter.writeln(");");
+                javaScriptWriter.write(']');
             }
         }
 
-        if (selectItem instanceof IImagesItem) {
-            writeSelectItemImages((IImagesItem) selectItem, javaScriptWriter,
-                    managerVarId, "f_setItemImages", varId, true);
+        if (selectItem instanceof IClientDataItem) {
+            writeItemClientDatas((IClientDataItem) selectItem,
+                    javaScriptWriter, null, null, objectLiteralWriter);
         }
 
-        if (selectItem instanceof IVisibleItem) {
-            IVisibleItem vs = (IVisibleItem) selectItem;
-
-            if (vs.isVisible() == false) {
-                javaScriptWriter.writeMethodCall("f_setItemVisible").writeln(
-                        "false);");
-            }
-        }
+        objectLiteralWriter.end();
+        javaScriptWriter.writeln(");");
 
         if (hasChild == false) {
             return;
@@ -457,11 +422,6 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         return super.convertToSelectItem(value);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
-     */
     protected SelectItemsContext createJavaScriptContext()
             throws WriterException {
         IComponentRenderContext componentRenderContext = javaScriptWriter
@@ -477,24 +437,13 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         }
 
         return new MenuContext(this, componentRenderContext, getComponent(),
-                value);
+                value, 0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#getDecodesChildren()
-     */
     public boolean getDecodesChildren() {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decode(javax.faces.component.UIComponent,
-     *      org.rcfaces.core.internal.renderkit.IComponentData)
-     */
     public void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
 

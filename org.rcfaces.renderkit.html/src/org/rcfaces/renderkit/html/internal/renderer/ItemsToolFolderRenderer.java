@@ -37,7 +37,7 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) componentRenderContext
                 .getComponent();
 
-        writer.startElement("TABLE");
+        writer.startElement(IHtmlWriter.TABLE);
 
         int cellPadding = itemsToolFolderComponent.getToolBar().getItemPadding(
                 facesContext);
@@ -52,7 +52,7 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         writeJavaScriptAttributes(writer);
         writeCssAttributes(writer);
 
-        if (itemsToolFolderComponent.isDisabled(facesContext) == false) {
+        if (itemsToolFolderComponent.isDisabled(facesContext)) {
             writer.writeAttribute("v:disabled", "true");
         }
         if (itemsToolFolderComponent.isReadOnly(facesContext)) {
@@ -67,24 +67,24 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
 
         /*
          * String className = getMainStyleClassName(); // Un dummy pour eviter
-         * des sauts de pages writer.startElement("A"); String cls = className +
+         * des sauts de pages writer.startElement(IHtmlWriter.A"); String cls = className +
          * "_itemFolder"; writer.writeAttribute("class", cls);
-         * writer.endElement("A");
+         * writer.endElement(IHtmlWriter.A");
          */
 
-        writer.startElement("TBODY");
+        writer.startElement(IHtmlWriter.TBODY);
 
-        writer.startElement("TR");
+        writer.startElement(IHtmlWriter.TR);
     }
 
     protected void encodeAfterDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
 
-        writer.endElement("TR");
+        writer.endElement(IHtmlWriter.TR);
 
-        writer.endElement("TBODY");
+        writer.endElement(IHtmlWriter.TBODY);
 
-        writer.endElement("TABLE");
+        writer.endElement(IHtmlWriter.TABLE);
 
         super.encodeAfterDecorator(writer, componentDecorator);
     }

@@ -14,6 +14,16 @@
 var __static = {
 
 	/**
+	 * @field private static final number
+	 */
+	 _IMAGE_OBJECT_MAX_NUMBER: 2,
+
+	/**
+	 * @field private static final number
+	 */
+	 _ASYNC_IMAGE_OBJECT_TIMER: 100,	
+
+	/**
 	 * @field private static
 	 */
 	 _Images: undefined,
@@ -21,7 +31,17 @@ var __static = {
 	/**
 	 * @field private static
 	 */
-	 _ImagesPool: undefined,
+	 _ImagesObjectPool: undefined,
+
+	/**
+	 * @field private static number
+	 */
+	 _ImagesObjectCount: 0,
+
+	/**
+	 * @field private static
+	 */
+	 _ImagesWaiting: undefined,
 	 
 
 	/**
@@ -38,53 +58,122 @@ var __static = {
 		if (!images) {
 			images=new Object;
 			f_imageRepository._Images=images;
-			f_imageRepository._ImagesPool=new Array;
+			f_imageRepository._ImagesObjectPool=new Array;
 		}
 
 		if (images[url]!==undefined) {
 			return;
 		}
 
-		f_core.Debug(f_imageRepository, "PrepareImage: Load image '"+url+"'.");
+		var imageObject;
+		
+		var pool=f_imageRepository._ImagesObjectPool;
+		if (pool.length) {
+			imageObject=pool.pop();
+
+			f_core.Debug(f_imageRepository, "PrepareImage: Load image '"+url+"'. (Use popped image object '"+imageObject.id+"')");
 			
-		var pool=f_imageRepository._ImagesPool;
-		var image;
-		if (pool.length>0) {
-			image=pool.pop();
+		} else if (f_imageRepository._IMAGE_OBJECT_MAX_NUMBER<0 || 
+				f_imageRepository._ImagesObjectCount<f_imageRepository._IMAGE_OBJECT_MAX_NUMBER) {
+	
+			imageObject=new Image();
+			imageObject.id="ImageObject #"+f_imageRepository._ImagesObjectCount;
+			imageObject.onerror=f_imageRepository._OnErrorHandler;
+			imageObject.onload=f_imageRepository._OnLoadHandler;
+
+			f_imageRepository._ImagesObjectCount++;
+
+			f_core.Debug(f_imageRepository, "PrepareImage: Load image '"+url+"'. (Create an image object '"+imageObject.id+"')");
+
+		} else {
+			// On la met en attente ...
+			
+			var waiting=f_imageRepository._ImagesWaiting;
+			if (!waiting) {
+				waiting=new Array;
+				f_imageRepository._ImagesWaiting=waiting;
+			}
+			
+			waiting.push(url);
+			
+			f_core.Debug(f_imageRepository, "PrepareImage: Load image '"+url+"'. (Queue URL)");			
+			return;
+		}
+			
+		images[url]=imageObject;
+		
+		if (f_imageRepository._ASYNC_IMAGE_OBJECT_TIMER>0) {
+			window.setTimeout(function() {
+				f_core.Debug(f_imageRepository, "PrepareImage: Async setting of url '"+url+"' to image object '"+imageObject.id+"'.");
+	
+				imageObject.src=url;		
+			}, f_imageRepository._ASYNC_IMAGE_OBJECT_TIMER);
 			
 		} else {
-			image=new Image();
-		}
-		
-		image.onerror=f_imageRepository._OnErrorHandler;
-		image.onload=f_imageRepository._OnLoadHandler;
-		image.src=url;		
+			f_core.Debug(f_imageRepository, "PrepareImage: Sync setting of url '"+url+"' to image object '"+imageObject.id+"'.");
 
-		images[url]=image;
+			imageObject.src=url;		
+		}
 	},
 	/**
 	 * @method private static
+	 * @return void
 	 */
 	_OnErrorHandler: function() {
 
+		if (!window.f_core) {
+			return;
+		}
+
 		f_core.Error(f_imageRepository, "Error while loading image '"+this.src+"'.");
 
-		this.onload=null;
-		this.onerror=null;
-		f_imageRepository._Images[this.src]=false;
-		f_imageRepository._ImagesPool.push(this);
+//		this.onload=null;
+//		this.onerror=null;
+
+		f_imageRepository._NextImage(this, false);
 	},
 	/**
 	 * @method private static
+	 * @return void
 	 */
 	_OnLoadHandler: function() {
+		if (!window.f_core) {
+			return;
+		}
+
 		f_core.Debug(f_imageRepository, "Image '"+this.src+"' loaded.");
 
-		this.onload=null;
-		this.onerror=null;
+//		this.onload=null;
+//		this.onerror=null;
+
+		f_imageRepository._NextImage(this, true);
+	},	
+	/**
+	 * @method private static
+	 * @param Image imageObject
+	 * @param boolean status of image loading
+	 * @return void
+	 */
+	_NextImage: function(imageObject, status) {
+		var src=imageObject.src;
+
+		if (!f_imageRepository._Images) {
+			return; // Nous sommes en cours de desinstallation !
+		}
+	
+		f_imageRepository._Images[src]=status;
 		
-		f_imageRepository._Images[this.src]=false;
-		f_imageRepository._ImagesPool.push(this);
+		var waiting=f_imageRepository._ImagesWaiting;
+		if (waiting && waiting.length) {
+			var url=waiting.unshift();
+			f_core.Debug(f_imageRepository, "_NextImage: Set url '"+url+"' to image object '"+imageObject.id+"'.");
+
+			this.src=url
+			return;
+		}
+
+		f_core.Debug(f_imageRepository, "_NextImage: Push image object '"+imageObject.id+"' into pool.");
+		f_imageRepository._ImagesObjectPool.push(imageObject);
 	},
 	/**
 	 * @method hidden static
@@ -97,6 +186,7 @@ var __static = {
 		}		
 		f_imageRepository._Images=undefined;
 		f_imageRepository._ImagesPool=undefined;
+		f_imageRepository._ImagesWaiting=undefined;
 		
 		for(var url in images) {
 			var image=images[url];
@@ -104,6 +194,7 @@ var __static = {
 				continue;
 			}
 			
+//			image.id=undefined;
 			image.onload=null;
 			image.onerror=null;
 		}

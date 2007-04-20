@@ -15,6 +15,6 @@ var __resources = {
 	COLUMN_RESIZE: "Mantenga el botón del mouse presionado para modificar el ancho de la columna"
 }
 
-f_resourceBundle.Define(f_dataGrid, __resources);
+f_resourceBundle.Define(f_grid, __resources);
 
  

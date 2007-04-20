@@ -24,7 +24,8 @@ var __resources = {
 	ZERO_RESULT_MESSAGE: "'Aucune entrée.'",
 	ONE_RESULT_MESSAGE: "'Une entrée.'",
 	MESSAGE: "{rowcount}' entrées, affichage de '{first}' à '{last}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'",
-	MANY_RESULTS_MESSAGE: "'Nombre d''entrée indéterminé, affichage à partir de '{first}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'"
+	MANY_RESULTS_MESSAGE: "'Nombre d''entrée indéterminé, affichage à partir de '{first}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'",
+	MANY_RESULTS_MESSAGE2: "'Nombre d''entrée indéterminé, affichage de '{first}' à '{last}'.\n['{bfirst}'/'{bprev}'] '{bpages}' ['{bnext}'/'{blast}']'"
 }
 
 f_resourceBundle.Define(f_pager, __resources);

@@ -1,22 +1,19 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.ToolBarComponent;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.AbstractBasicComponent;
-import org.rcfaces.core.internal.tools.ToolBarTools;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.MenuTools;
 
 /**
  * <b>EXPERIMENTAL</b>
@@ -120,25 +117,33 @@ public class ToolFolderComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
 	}
 
-	public final java.lang.String getVerticalAlignment() {
+	public java.lang.String getVerticalAlignment() {
 		return getVerticalAlignment(null);
 	}
 
 	/**
 	 * See {@link #getVerticalAlignment() getVerticalAlignment()} for more details
 	 */
-	public final java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
 	}
 
-	public final void setVerticalAlignment(java.lang.String verticalAlignment) {
+	/**
+	 * Returns <code>true</code> if the attribute "verticalAlignment" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalAlignmentSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_ALIGNMENT);
+	}
+
+	public void setVerticalAlignment(java.lang.String verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
 	/**
 	 * See {@link #setVerticalAlignment(String) setVerticalAlignment(String)} for more details
 	 */
-	public final void setVerticalAlignment(ValueBinding verticalAlignment) {
+	public void setVerticalAlignment(ValueBinding verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 

@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.CardBoxComponent;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.internal.component.IAsyncRenderComponent;
-import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.CardBoxTools;
 
 /**
  * An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.
@@ -47,84 +47,116 @@ public class CardComponent extends AbstractOutputComponent implements
 			
 	}
 
-	public final java.lang.String getTextAlignment() {
+	public java.lang.String getTextAlignment() {
 		return getTextAlignment(null);
 	}
 
 	/**
 	 * See {@link #getTextAlignment() getTextAlignment()} for more details
 	 */
-	public final java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
 	}
 
-	public final void setTextAlignment(java.lang.String textAlignment) {
+	/**
+	 * Returns <code>true</code> if the attribute "textAlignment" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextAlignmentSetted() {
+		return engine.isPropertySetted(Properties.TEXT_ALIGNMENT);
+	}
+
+	public void setTextAlignment(java.lang.String textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
 	/**
 	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
 	 */
-	public final void setTextAlignment(ValueBinding textAlignment) {
+	public void setTextAlignment(ValueBinding textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
 	}
 
-	public final java.lang.String getVerticalAlignment() {
+	public java.lang.String getVerticalAlignment() {
 		return getVerticalAlignment(null);
 	}
 
 	/**
 	 * See {@link #getVerticalAlignment() getVerticalAlignment()} for more details
 	 */
-	public final java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
 	}
 
-	public final void setVerticalAlignment(java.lang.String verticalAlignment) {
+	/**
+	 * Returns <code>true</code> if the attribute "verticalAlignment" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalAlignmentSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_ALIGNMENT);
+	}
+
+	public void setVerticalAlignment(java.lang.String verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
 	/**
 	 * See {@link #setVerticalAlignment(String) setVerticalAlignment(String)} for more details
 	 */
-	public final void setVerticalAlignment(ValueBinding verticalAlignment) {
+	public void setVerticalAlignment(ValueBinding verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
-	public final javax.faces.el.ValueBinding getScopeValue() {
+	public javax.faces.el.ValueBinding getScopeValue() {
 		return getScopeValue(null);
 	}
 
 	/**
 	 * See {@link #getScopeValue() getScopeValue()} for more details
 	 */
-	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
+	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
 	}
 
-	public final void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+	/**
+	 * Returns <code>true</code> if the attribute "scopeValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeValueSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_VALUE);
+	}
+
+	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
 		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
 	}
 
-	public final java.lang.String getScopeVar() {
+	public java.lang.String getScopeVar() {
 		return getScopeVar(null);
 	}
 
 	/**
 	 * See {@link #getScopeVar() getScopeVar()} for more details
 	 */
-	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
 	}
 
-	public final void setScopeVar(java.lang.String scopeVar) {
+	/**
+	 * Returns <code>true</code> if the attribute "scopeVar" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeVarSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_VAR);
+	}
+
+	public void setScopeVar(java.lang.String scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
 	/**
 	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
 	 */
-	public final void setScopeVar(ValueBinding scopeVar) {
+	public void setScopeVar(ValueBinding scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 

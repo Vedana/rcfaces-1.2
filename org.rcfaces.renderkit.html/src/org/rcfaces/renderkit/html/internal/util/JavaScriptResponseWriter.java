@@ -21,6 +21,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
@@ -350,6 +351,10 @@ public class JavaScriptResponseWriter extends
 
     public void setComponentVarName(String varName) {
         this.componentVarName = varName;
+    }
+
+    public IObjectLiteralWriter writeObjectLiteral(boolean writeNullIfEmpty) {
+        return new JavaScriptObjectLiteralWriter(this, writeNullIfEmpty);
     }
 
 }

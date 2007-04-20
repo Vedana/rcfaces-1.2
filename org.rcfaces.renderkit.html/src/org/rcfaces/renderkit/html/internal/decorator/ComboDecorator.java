@@ -23,6 +23,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
 /**
  * 
@@ -114,7 +115,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
 
         if (jsVersion == false) {
             if (hasChildren) {
-                writer.startElement("OPTGROUP");
+                writer.startElement(IHtmlWriter.OPTGROUP);
 
                 if (text != null) {
                     writer.writeLabel(text);
@@ -123,7 +124,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
                 return EVAL_NODE;
             }
 
-            writer.startElement("OPTION");
+            writer.startElement(IHtmlWriter.OPTION);
 
             writer.writeValue(value);
 
@@ -156,7 +157,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
                 writer.writeText(text);
             }
 
-            writer.endElement("OPTION");
+            writer.endElement(IHtmlWriter.OPTION);
         } else {
             SelectItemsJsContext selectItemsJsContext = (SelectItemsJsContext) selectItemsContext;
             if (hasChildren) {
@@ -282,7 +283,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
 
         if (hasChildren) {
             if (jsVersion == false) {
-                writer.endElement("OPTGROUP");
+                writer.endElement(IHtmlWriter.OPTGROUP);
 
             } else {
                 ((SelectItemsJsContext) selectItemsContext).popVarId();

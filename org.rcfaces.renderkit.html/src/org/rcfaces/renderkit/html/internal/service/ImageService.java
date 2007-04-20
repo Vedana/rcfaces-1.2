@@ -54,6 +54,8 @@ public class ImageService extends AbstractHtmlService {
 
     private static final int INITIAL_SIZE = 8000;
 
+    private static final String IMAGE_SERVICE_VERSION = "1.0.0";
+
     public ImageService() {
     }
 
@@ -119,6 +121,8 @@ public class ImageService extends AbstractHtmlService {
         setNoCache(response);
         response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
                 + "; charset=" + RESPONSE_CHARSET);
+
+        setCameliaResponse(response, IMAGE_SERVICE_VERSION);
 
         boolean useGzip = canUseGzip(facesContext);
 

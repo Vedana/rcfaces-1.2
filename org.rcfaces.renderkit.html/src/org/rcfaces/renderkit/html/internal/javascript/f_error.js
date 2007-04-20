@@ -52,6 +52,10 @@ var __static = {
 	 */
 	RESPONSE_EVALUATION_SERVICE_ERROR: 0x2000005,
 
+	/**
+	 * @field public static final number
+	 */
+	INVALID_SERVICE_RESPONSE_ERROR: 0x2000006,
 		
 	/**
 	 * @field public static final number

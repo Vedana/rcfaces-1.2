@@ -1,26 +1,26 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IValueLockedCapability;
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import java.lang.Object;
-import javax.faces.el.ValueBinding;
-import java.util.Collections;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.Collections;
 import java.util.HashSet;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.internal.manager.IServerDataManager;
+import java.util.Map;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
  * <p>The hiddenValue Component is a non-visual component. It is equivalent to and Input hidden type HTML tag.</p>
@@ -285,25 +285,33 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
 	}
 
-	public final boolean isValueLocked() {
+	public boolean isValueLocked() {
 		return isValueLocked(null);
 	}
 
 	/**
 	 * See {@link #isValueLocked() isValueLocked()} for more details
 	 */
-	public final boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
+	public boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VALUE_LOCKED, false, facesContext);
 	}
 
-	public final void setValueLocked(boolean valueLocked) {
+	/**
+	 * Returns <code>true</code> if the attribute "valueLocked" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isValueLockedSetted() {
+		return engine.isPropertySetted(Properties.VALUE_LOCKED);
+	}
+
+	public void setValueLocked(boolean valueLocked) {
 		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 
 	/**
 	 * See {@link #setValueLocked(boolean) setValueLocked(boolean)} for more details
 	 */
-	public final void setValueLocked(ValueBinding valueLocked) {
+	public void setValueLocked(ValueBinding valueLocked) {
 		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
 	}
 

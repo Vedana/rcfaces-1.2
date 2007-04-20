@@ -92,8 +92,9 @@ public class CameliaComponentHandler extends ComponentHandler {
                         method.invoke(instance, new Object[] { expression });
 
                     } catch (Throwable th) {
-                        throw new FaceletException("Can not set enumeration '"
-                                + attributeName + "'", th);
+                        throw new FaceletException(
+                                "Can not set the value of attribute '"
+                                        + attributeName + "'. (Use String parameter setter)", th);
                     }
                 }
 

@@ -88,7 +88,7 @@ var __static={
 var __prototype={
 
 	fa_compositeEntry: function() {
-		var inputs=this.getElementsByTagName("INPUT");
+		var inputs=this.getElementsByTagName("input");
 		f_core.Assert(inputs.length, "fa_compositeEntry(): Can not find any Input !");
 		
 		this._inputs=inputs;

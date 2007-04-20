@@ -295,6 +295,9 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
             return Integer.parseInt(size);
 
         } catch (NumberFormatException ex) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can not parse int '" + size + "'.", ex);
+            }
             return -1;
         }
     }

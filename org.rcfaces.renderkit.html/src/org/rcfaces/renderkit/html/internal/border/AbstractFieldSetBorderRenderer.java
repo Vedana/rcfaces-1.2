@@ -47,7 +47,7 @@ public abstract class AbstractFieldSetBorderRenderer extends
             return super.writeCellBorderNorth(writer);
         }
 
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass(getCellHeadClassName(writer));
         if (horizontalSpan > 1) {
             writer.writeColSpan(horizontalSpan);
@@ -60,19 +60,18 @@ public abstract class AbstractFieldSetBorderRenderer extends
             writer.writeWidth("100%");
         }
 
-        writer.startElement("TABLE");
+        writer.startElement(IHtmlWriter.TABLE);
         writer.writeClass(getTableHeadClassName(writer));
         writer.writeCellSpacing(0);
         writer.writeCellPadding(0);
 
-        writer.startElement("TR");
+        writer.startElement(IHtmlWriter.TR);
         writer.writeClass(getRowHeadClassName(writer));
 
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
 
-        writer.startElement("LABEL");
+        writer.startElement(IHtmlWriter.LABEL);
         writer.writeClass(getLabelClassName(writer));
-
 
         ICssWriter cssWriter = writer.writeStyle(64);
 
@@ -83,7 +82,7 @@ public abstract class AbstractFieldSetBorderRenderer extends
         if (component instanceof IFontCapability) {
             cssWriter.writeFont((IFontCapability) component);
         }
-        
+
         if (component instanceof ITextAlignmentCapability) {
             cssWriter.writeTextAlignment((ITextAlignmentCapability) component);
         }
@@ -97,20 +96,20 @@ public abstract class AbstractFieldSetBorderRenderer extends
             writer.writeText(title);
         }
 
-        writer.endElement("LABEL");
+        writer.endElement(IHtmlWriter.LABEL);
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
-        writer.startElement("TD");
+        writer.startElement(IHtmlWriter.TD);
         writer.writeClass(getBorderNorthClassName(writer));
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
-        writer.endElement("TR");
+        writer.endElement(IHtmlWriter.TR);
 
-        writer.endElement("TABLE");
+        writer.endElement(IHtmlWriter.TABLE);
 
-        writer.endElement("TD");
+        writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }

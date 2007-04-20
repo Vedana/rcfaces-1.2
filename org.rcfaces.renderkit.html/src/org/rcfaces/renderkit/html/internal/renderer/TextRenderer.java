@@ -29,7 +29,7 @@ import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 public class TextRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
 
-    private static final String DEFAULT_TEXT_ELEMENT = "LABEL";
+    private static final String DEFAULT_TEXT_ELEMENT = IHtmlWriter.LABEL;
 
     protected boolean useHtmlAccessKeyAttribute() {
         return true;
@@ -61,7 +61,8 @@ public class TextRenderer extends AbstractCssRenderer {
         if (ac != null) {
             // On peut pas calculer la véritable ID car le composant est peut
             // etre pas encore présent.
-            // Il faut le calculer coté Javascript
+            // On considere que nous sommes dans le même namingContainer que le
+            // for ! (si un namespace separator n'est pas spécifié dans l'id)
 
             IComponentRenderContext componentRenderContext = htmlWriter
                     .getComponentRenderContext();

@@ -1,21 +1,20 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.capability.IPreferenceCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.iterator.ICardIterator;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.CardComponent;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.iterator.ICardIterator;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.tools.CardBoxTools;
-import org.rcfaces.core.component.capability.IVariableScopeCapability;
 
 /**
  * <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>
@@ -99,84 +98,116 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
-	public final int getAsyncRenderMode() {
+	public int getAsyncRenderMode() {
 		return getAsyncRenderMode(null);
 	}
 
 	/**
 	 * See {@link #getAsyncRenderMode() getAsyncRenderMode()} for more details
 	 */
-	public final int getAsyncRenderMode(javax.faces.context.FacesContext facesContext) {
+	public int getAsyncRenderMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ASYNC_RENDER_MODE,0, facesContext);
 	}
 
-	public final void setAsyncRenderMode(int asyncRenderMode) {
+	/**
+	 * Returns <code>true</code> if the attribute "asyncRenderMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAsyncRenderModeSetted() {
+		return engine.isPropertySetted(Properties.ASYNC_RENDER_MODE);
+	}
+
+	public void setAsyncRenderMode(int asyncRenderMode) {
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
 	/**
 	 * See {@link #setAsyncRenderMode(int) setAsyncRenderMode(int)} for more details
 	 */
-	public final void setAsyncRenderMode(ValueBinding asyncRenderMode) {
+	public void setAsyncRenderMode(ValueBinding asyncRenderMode) {
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
-	public final org.rcfaces.core.preference.IComponentPreference getPreference() {
+	public org.rcfaces.core.preference.IComponentPreference getPreference() {
 		return getPreference(null);
 	}
 
 	/**
 	 * See {@link #getPreference() getPreference()} for more details
 	 */
-	public final org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
+	public org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.preference.IComponentPreference)engine.getProperty(Properties.PREFERENCE, facesContext);
 	}
 
-	public final void setPreference(org.rcfaces.core.preference.IComponentPreference preference) {
+	/**
+	 * Returns <code>true</code> if the attribute "preference" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPreferenceSetted() {
+		return engine.isPropertySetted(Properties.PREFERENCE);
+	}
+
+	public void setPreference(org.rcfaces.core.preference.IComponentPreference preference) {
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
 
 	/**
 	 * See {@link #setPreference(org.rcfaces.core.preference.IComponentPreference) setPreference(org.rcfaces.core.preference.IComponentPreference)} for more details
 	 */
-	public final void setPreference(ValueBinding preference) {
+	public void setPreference(ValueBinding preference) {
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
 
-	public final javax.faces.el.ValueBinding getScopeValue() {
+	public javax.faces.el.ValueBinding getScopeValue() {
 		return getScopeValue(null);
 	}
 
 	/**
 	 * See {@link #getScopeValue() getScopeValue()} for more details
 	 */
-	public final javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
+	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
 	}
 
-	public final void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+	/**
+	 * Returns <code>true</code> if the attribute "scopeValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeValueSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_VALUE);
+	}
+
+	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
 		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
 	}
 
-	public final java.lang.String getScopeVar() {
+	public java.lang.String getScopeVar() {
 		return getScopeVar(null);
 	}
 
 	/**
 	 * See {@link #getScopeVar() getScopeVar()} for more details
 	 */
-	public final java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
 	}
 
-	public final void setScopeVar(java.lang.String scopeVar) {
+	/**
+	 * Returns <code>true</code> if the attribute "scopeVar" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeVarSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_VAR);
+	}
+
+	public void setScopeVar(java.lang.String scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
 	/**
 	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
 	 */
-	public final void setScopeVar(ValueBinding scopeVar) {
+	public void setScopeVar(ValueBinding scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 

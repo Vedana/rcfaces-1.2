@@ -1,25 +1,28 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
+
 import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.internal.tools.ToolBarTools;
-import org.rcfaces.core.component.iterator.IToolFolderIterator;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.iterator.IToolFolderIterator;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.tools.ToolBarTools;
 
 /**
  * <b>EXPERIMENTAL</b>
  */
 public class ToolBarComponent extends AbstractBasicComponent implements 
 	IInitEventCapability,
-	IVerticalAlignmentCapability {
+	IVerticalAlignmentCapability,
+	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolBar";
 
@@ -63,25 +66,33 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final java.lang.String getVerticalAlignment() {
+	public java.lang.String getVerticalAlignment() {
 		return getVerticalAlignment(null);
 	}
 
 	/**
 	 * See {@link #getVerticalAlignment() getVerticalAlignment()} for more details
 	 */
-	public final java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
 	}
 
-	public final void setVerticalAlignment(java.lang.String verticalAlignment) {
+	/**
+	 * Returns <code>true</code> if the attribute "verticalAlignment" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalAlignmentSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_ALIGNMENT);
+	}
+
+	public void setVerticalAlignment(java.lang.String verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
 	/**
 	 * See {@link #setVerticalAlignment(String) setVerticalAlignment(String)} for more details
 	 */
-	public final void setVerticalAlignment(ValueBinding verticalAlignment) {
+	public void setVerticalAlignment(ValueBinding verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 

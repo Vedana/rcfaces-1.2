@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.capability.IComponentEngine;
+
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -66,6 +68,10 @@ public class ComponentsFactory implements IFactory {
         pa.setCameliaFactory(this);
 
         return pa;
+    }
+
+    public IInitializationState createInitializationState() {
+        return new BasicInitializationState();
     }
 
 }

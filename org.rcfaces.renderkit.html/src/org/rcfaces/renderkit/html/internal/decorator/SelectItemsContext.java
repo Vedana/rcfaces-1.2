@@ -20,7 +20,6 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -60,7 +59,7 @@ public class SelectItemsContext {
 
     private int depth = 0;
 
-    private int preloadedLevelDepth;
+    private int preloadedLevelDepth = -1;
 
     private Set selectionValues = null;
 
@@ -172,8 +171,7 @@ public class SelectItemsContext {
         IRenderContext renderContext = componentRenderContext
                 .getRenderContext();
 
-        cachedComponentClientId = renderContext.getComponentClientId(
-                component);
+        cachedComponentClientId = renderContext.getComponentClientId(component);
 
         return cachedComponentClientId;
     }

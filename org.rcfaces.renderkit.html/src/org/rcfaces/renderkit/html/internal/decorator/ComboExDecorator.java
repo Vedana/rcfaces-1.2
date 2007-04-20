@@ -61,7 +61,7 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
      * 
      * writer.enableJavaScript();
      * 
-     * writer.startElement("TR");
+     * writer.startElement(IHtmlWriter.TR");
      * 
      * String blankImageURL = htmlRenderContext.getHtmlExternalContext()
      * .getStyleSheetURI(ARROW_BLANK_URI);
@@ -71,14 +71,14 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
      * 
      * String className = getClassName();
      * 
-     * writer.startElement("TD"); writer.startElement("IMG");
+     * writer.startElement(IHtmlWriter.TD"); writer.startElement(IHtmlWriter.IMG");
      * writer.writeAttribute("class", className + "_itemImage");
-     * writer.writeAttribute("src", blankImageURL); writer.endElement("TD"); }
+     * writer.writeAttribute("src", blankImageURL); writer.endElement(IHtmlWriter.TD"); }
      * 
-     * writer.startElement("TD"); if (component.getWidth() != null) {
+     * writer.startElement(IHtmlWriter.TD"); if (component.getWidth() != null) {
      * writer.writeAttribute("width", "100%"); }
      * 
-     * writer.startElement("INPUT"); writer.writeAttribute("type", "text");
+     * writer.startElement(IHtmlWriter.INPUT"); writer.writeAttribute("type", "text");
      * writer.writeAttribute("name", componentRenderContext.getComponentId());
      * 
      * int maxTextLength = component.getMaxTextLength(facesContext); if
@@ -101,16 +101,16 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
      * 
      * String className = getClassName();
      * 
-     * writer.writeAttribute("value", txt); writer.endElement("TD");
-     * writer.startElement("TD"); writer.writeAttribute("class", className +
+     * writer.writeAttribute("value", txt); writer.endElement(IHtmlWriter.TD");
+     * writer.startElement(IHtmlWriter.TD"); writer.writeAttribute("class", className +
      * "_cimage");
      * 
-     * writer.startElement("IMG"); if (component.isDisabled(facesContext)) {
+     * writer.startElement(IHtmlWriter.IMG"); if (component.isDisabled(facesContext)) {
      * writer.writeAttribute("class", className + "_image_disabled"); } else {
      * writer.writeAttribute("class", className + "_image"); }
      * writer.writeAttribute("src", blankImageURL);
      * 
-     * writer.endElement("TD"); writer.endElement("TR");
+     * writer.endElement(IHtmlWriter.TD"); writer.endElement(IHtmlWriter.TR");
      * 
      * super.preEncodeContainer(); }
      * 

@@ -93,7 +93,7 @@ var __static = {
 	WAIT_IMAGE_HEIGHT: 16,
 	
 	/**
-	 * @method public static
+	 * @method hidden static
 	 */
 	Create: function(parentElement, lookId, inlineMode, message, alignment, marginH, marginV) {
 	
@@ -102,7 +102,7 @@ var __static = {
 		}
 	
 		f_core.Assert(parentElement.tagName, "parent is not a DOM element !");
-		var node=document.createElement("DIV");
+		var node=document.createElement("div");
 		
 		var className="f_waiting";
 		node.className=className+((inlineMode)?" f_waiting_inline":" f_waiting_absolute");
@@ -119,7 +119,7 @@ var __static = {
 		
 		node.appendChild(document.createTextNode(message));
 		
-		if (parentElement.tagName.toUpperCase()=="SELECT") {
+		if (parentElement.tagName.toLowerCase()=="select") {
 			parentElement=parentElement.parentNode;
 		}
 

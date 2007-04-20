@@ -32,7 +32,7 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        htmlWriter.startElement("IFRAME");
+        htmlWriter.startElement(IHtmlWriter.IFRAME);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -62,7 +62,7 @@ public class TextEditorRenderer extends AbstractInputRenderer {
 
         }
 
-        htmlWriter.endElement("IFRAME");
+        htmlWriter.endElement(IHtmlWriter.IFRAME);
 
         htmlWriter.enableJavaScript();
     }

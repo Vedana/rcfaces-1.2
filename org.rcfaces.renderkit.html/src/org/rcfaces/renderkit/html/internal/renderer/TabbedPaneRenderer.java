@@ -43,7 +43,7 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        htmlWriter.startElement("TABLE");
+        htmlWriter.startElement(IHtmlWriter.TABLE);
 
         htmlWriter.writeRole(IAccessibilityRoles.TAB);
 
@@ -52,15 +52,15 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
         htmlWriter.writeCellSpacing(0);
         htmlWriter.writeln();
 
-        htmlWriter.startElement("TR");
-        htmlWriter.endElement("TR");
+        htmlWriter.startElement(IHtmlWriter.TR);
+        htmlWriter.endElement(IHtmlWriter.TR);
 
-        htmlWriter.startElement("TR");
-        htmlWriter.endElement("TR");
+        htmlWriter.startElement(IHtmlWriter.TR);
+        htmlWriter.endElement(IHtmlWriter.TR);
 
-        htmlWriter.endElement("TABLE");
+        htmlWriter.endElement(IHtmlWriter.TABLE);
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
         /*
          * String w = tabbedPaneComponent.getWidth(); if (w != null) {
          * htmlWriter.writeAttribute("width", w); }
@@ -99,7 +99,7 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         super.encodeEnd(htmlWriter);
     }

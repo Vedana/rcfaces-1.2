@@ -59,6 +59,13 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>componentsColumn</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.componentsColumn</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>dataColumn</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.dataColumn</component-type>

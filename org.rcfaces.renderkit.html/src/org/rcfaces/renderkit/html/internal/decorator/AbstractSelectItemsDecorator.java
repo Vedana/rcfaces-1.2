@@ -45,10 +45,12 @@ import org.rcfaces.core.item.ISelectItemGroup;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
+import org.rcfaces.core.model.IFiltredCollection2;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -533,7 +535,14 @@ public abstract class AbstractSelectItemsDecorator extends
                 }
             }
 
-            Iterator it = filtredList.iterator(filterProperties, max);
+            Iterator it;
+            if (value instanceof IFiltredCollection2) {
+                it = ((IFiltredCollection2) value).iterator(getComponent(),
+                        filterProperties, max);
+            } else {
+                it = filtredList.iterator(filterProperties, max);
+            }
+
             try {
                 int sic = 0;
 
@@ -873,33 +882,40 @@ public abstract class AbstractSelectItemsDecorator extends
 
     protected static void writeItemClientDatas(IClientDataItem iim,
             IJavaScriptWriter javaScriptWriter, String managerVarId,
-            String methodName, String varId) throws WriterException {
+            String varId, IObjectLiteralWriter objectLiteralWriter)
+            throws WriterException {
 
-        if (managerVarId != null) {
-            javaScriptWriter.writeCall(managerVarId, "f_setItemClientDatas");
-
-        } else {
-            javaScriptWriter.writeMethodCall("f_setItemClientDatas");
+        if (iim.isClientDataEmpty()) {
+            return;
         }
 
-        javaScriptWriter.write(varId).write(", {");
+        if (objectLiteralWriter != null) {
+            objectLiteralWriter.writeSymbol("_clientDatas");
+
+        } else {
+            if (managerVarId != null) {
+                javaScriptWriter
+                        .writeCall(managerVarId, "f_setItemClientDatas");
+
+            } else {
+                javaScriptWriter.writeMethodCall("f_setItemClientDatas");
+            }
+
+            javaScriptWriter.write(varId).write(',');
+        }
+
+        IObjectLiteralWriter clientObjectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(false);
 
         Map map = iim.getClientDataMap();
 
-        boolean first = true;
         for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
             String key = (String) entry.getKey();
             Object data = entry.getValue();
 
-            if (first) {
-                first = false;
-            } else {
-                javaScriptWriter.write(',');
-            }
-
-            javaScriptWriter.write(key).write(':');
+            clientObjectLiteralWriter.writeProperty(key);
 
             if (data instanceof Integer) {
                 javaScriptWriter.writeInt(((Integer) data).intValue());
@@ -916,13 +932,18 @@ public abstract class AbstractSelectItemsDecorator extends
             javaScriptWriter.writeString((String) data);
         }
 
-        javaScriptWriter.writeln("});");
+        clientObjectLiteralWriter.end();
+
+        if (objectLiteralWriter == null) {
+            javaScriptWriter.writeln(");");
+
+        }
     }
 
     protected static void writeSelectItemImages(IImagesItem iim,
             IJavaScriptWriter javaScriptWriter, String managerVarId,
-            String methodName, String varId, boolean ignoreExpand)
-            throws WriterException {
+            String varId, boolean ignoreExpand,
+            IObjectLiteralWriter objectLiteralWriter) throws WriterException {
 
         FacesContext facesContext = javaScriptWriter.getFacesContext();
 
@@ -1003,7 +1024,11 @@ public abstract class AbstractSelectItemsDecorator extends
         if (imageAccessor != null) {
             imageURL = imageAccessor.resolveURL(facesContext, null, null);
             if (imageURL != null) {
-                imageVar = javaScriptWriter.allocateString(imageURL);
+                if (objectLiteralWriter != null) {
+                    imageVar = imageURL;
+                } else {
+                    imageVar = javaScriptWriter.allocateString(imageURL);
+                }
             }
         }
 
@@ -1012,7 +1037,12 @@ public abstract class AbstractSelectItemsDecorator extends
             disabledImageURL = disabledImageAccessor.resolveURL(facesContext,
                     null, null);
             if (disabledImageURL != null) {
-                disabledVar = javaScriptWriter.allocateString(disabledImageURL);
+                if (objectLiteralWriter != null) {
+                    disabledVar = disabledImageURL;
+                } else {
+                    disabledVar = javaScriptWriter
+                            .allocateString(disabledImageURL);
+                }
             }
         }
 
@@ -1021,7 +1051,11 @@ public abstract class AbstractSelectItemsDecorator extends
             hoverImageURL = hoverImageAccessor.resolveURL(facesContext, null,
                     null);
             if (hoverImageURL != null) {
-                hoverVar = javaScriptWriter.allocateString(hoverImageURL);
+                if (objectLiteralWriter != null) {
+                    hoverVar = hoverImageURL;
+                } else {
+                    hoverVar = javaScriptWriter.allocateString(hoverImageURL);
+                }
             }
         }
 
@@ -1030,7 +1064,12 @@ public abstract class AbstractSelectItemsDecorator extends
             selectedImageURL = selectedImageAccessor.resolveURL(facesContext,
                     null, null);
             if (selectedImageURL != null) {
-                selectedVar = javaScriptWriter.allocateString(selectedImageURL);
+                if (objectLiteralWriter != null) {
+                    selectedVar = selectedImageURL;
+                } else {
+                    selectedVar = javaScriptWriter
+                            .allocateString(selectedImageURL);
+                }
             }
         }
 
@@ -1039,8 +1078,38 @@ public abstract class AbstractSelectItemsDecorator extends
             expandedImageURL = expandedImageAccessor.resolveURL(facesContext,
                     null, null);
             if (expandedImageURL != null) {
-                expandVar = javaScriptWriter.allocateString(expandedImageURL);
+                if (objectLiteralWriter != null) {
+                    expandVar = expandedImageURL;
+                } else {
+                    expandVar = javaScriptWriter
+                            .allocateString(expandedImageURL);
+                }
             }
+        }
+
+        if (objectLiteralWriter != null) {
+            if (imageVar != null) {
+                objectLiteralWriter.writeSymbol("_imageURL").writeString(
+                        imageVar);
+            }
+            if (expandVar != null) {
+                objectLiteralWriter.writeSymbol("_expandedImageURL")
+                        .writeString(expandVar);
+            }
+            if (disabledVar != null) {
+                objectLiteralWriter.writeSymbol("_disabledImageURL")
+                        .writeString(disabledVar);
+            }
+            if (hoverVar != null) {
+                objectLiteralWriter.writeSymbol("_hoverImageURL").writeString(
+                        hoverVar);
+            }
+            if (selectedVar != null) {
+                objectLiteralWriter.writeSymbol("_selectedImageURL")
+                        .writeString(selectedVar);
+            }
+
+            return;
         }
 
         if (managerVarId != null) {
@@ -1072,7 +1141,6 @@ public abstract class AbstractSelectItemsDecorator extends
             } else {
                 pred++;
             }
-
         }
 
         if (disabledVar != null) {
@@ -1083,6 +1151,7 @@ public abstract class AbstractSelectItemsDecorator extends
         } else {
             pred++;
         }
+
         if (hoverVar != null) {
             for (; pred > 0; pred--) {
                 javaScriptWriter.write(',').writeNull();

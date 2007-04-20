@@ -1,34 +1,36 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IMenuCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.internal.converter.CardinalityConverter;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.IMenuComponent;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.faces.component.UISelectItem;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Set;
-import java.util.HashSet;
+
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.internal.util.ComponentIterators;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The tree Component shows informations in an arborescent view.
@@ -54,19 +56,21 @@ public class TreeComponent extends AbstractInputComponent implements
 	IBorderCapability,
 	IReadOnlyCapability,
 	IMenuCapability,
+	IShowValueCapability,
 	ICheckableCapability,
 	ICheckCardinalityCapability,
 	ICheckEventCapability,
 	ICheckedValuesCapability,
 	ISelectableCapability,
 	ISelectionCardinalityCapability,
-	ISelectionEventCapability {
+	ISelectionEventCapability,
+	IPreloadedLevelDepthCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tree";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","selectable","defaultExpandedLeafImageURL","expansionValues","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","clientSelectionFullState","checkListener","preloadedLevelDepth","userExpandable","selectionCardinality","readOnly","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","selectable","showValue","defaultExpandedLeafImageURL","expansionValues","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","clientSelectionFullState","checkListener","preloadedLevelDepth","userExpandable","selectionCardinality","readOnly","selectedValues"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -206,91 +210,123 @@ public class TreeComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
 	}
 
-	public final int getHorizontalScrollPosition() {
+	public int getHorizontalScrollPosition() {
 		return getHorizontalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getHorizontalScrollPosition() getHorizontalScrollPosition()} for more details
 	 */
-	public final int getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
+	public int getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HORIZONTAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setHorizontalScrollPosition(int horizontalScrollPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalScrollPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalScrollPositionSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_SCROLL_POSITION);
+	}
+
+	public void setHorizontalScrollPosition(int horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
 	/**
 	 * See {@link #setHorizontalScrollPosition(int) setHorizontalScrollPosition(int)} for more details
 	 */
-	public final void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
-	public final int getVerticalScrollPosition() {
+	public int getVerticalScrollPosition() {
 		return getVerticalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getVerticalScrollPosition() getVerticalScrollPosition()} for more details
 	 */
-	public final int getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
+	public int getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.VERTICAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setVerticalScrollPosition(int verticalScrollPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "verticalScrollPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalScrollPositionSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_SCROLL_POSITION);
+	}
+
+	public void setVerticalScrollPosition(int verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
 	/**
 	 * See {@link #setVerticalScrollPosition(int) setVerticalScrollPosition(int)} for more details
 	 */
-	public final void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
-	public final boolean isBorder() {
+	public boolean isBorder() {
 		return isBorder(null);
 	}
 
 	/**
 	 * See {@link #isBorder() isBorder()} for more details
 	 */
-	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
+	public boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
 
-	public final void setBorder(boolean border) {
+	/**
+	 * Returns <code>true</code> if the attribute "border" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderSetted() {
+		return engine.isPropertySetted(Properties.BORDER);
+	}
+
+	public void setBorder(boolean border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
 	/**
 	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
 	 */
-	public final void setBorder(ValueBinding border) {
+	public void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
-	public final boolean isReadOnly() {
+	public boolean isReadOnly() {
 		return isReadOnly(null);
 	}
 
 	/**
 	 * See {@link #isReadOnly() isReadOnly()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	/**
 	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
+	public void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
@@ -315,47 +351,93 @@ public class TreeComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final boolean isCheckable() {
+	public java.lang.Object getShowValue() {
+		return getShowValue(null);
+	}
+
+	/**
+	 * See {@link #getShowValue() getShowValue()} for more details
+	 */
+	public java.lang.Object getShowValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SHOW_VALUE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowValueSetted() {
+		return engine.isPropertySetted(Properties.SHOW_VALUE);
+	}
+
+	public void setShowValue(java.lang.Object showValue) {
+		engine.setProperty(Properties.SHOW_VALUE, showValue);
+	}
+
+	/**
+	 * See {@link #setShowValue(Object) setShowValue(Object)} for more details
+	 */
+	public void setShowValue(ValueBinding showValue) {
+		engine.setProperty(Properties.SHOW_VALUE, showValue);
+	}
+
+	public boolean isCheckable() {
 		return isCheckable(null);
 	}
 
 	/**
 	 * See {@link #isCheckable() isCheckable()} for more details
 	 */
-	public final boolean isCheckable(javax.faces.context.FacesContext facesContext) {
+	public boolean isCheckable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CHECKABLE, false, facesContext);
 	}
 
-	public final void setCheckable(boolean checkable) {
+	/**
+	 * Returns <code>true</code> if the attribute "checkable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckableSetted() {
+		return engine.isPropertySetted(Properties.CHECKABLE);
+	}
+
+	public void setCheckable(boolean checkable) {
 		engine.setProperty(Properties.CHECKABLE, checkable);
 	}
 
 	/**
 	 * See {@link #setCheckable(boolean) setCheckable(boolean)} for more details
 	 */
-	public final void setCheckable(ValueBinding checkable) {
+	public void setCheckable(ValueBinding checkable) {
 		engine.setProperty(Properties.CHECKABLE, checkable);
 	}
 
-	public final int getCheckCardinality() {
+	public int getCheckCardinality() {
 		return getCheckCardinality(null);
 	}
 
 	/**
 	 * See {@link #getCheckCardinality() getCheckCardinality()} for more details
 	 */
-	public final int getCheckCardinality(javax.faces.context.FacesContext facesContext) {
+	public int getCheckCardinality(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.CHECK_CARDINALITY,0, facesContext);
 	}
 
-	public final void setCheckCardinality(int checkCardinality) {
+	/**
+	 * Returns <code>true</code> if the attribute "checkCardinality" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckCardinalitySetted() {
+		return engine.isPropertySetted(Properties.CHECK_CARDINALITY);
+	}
+
+	public void setCheckCardinality(int checkCardinality) {
 		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
 	}
 
 	/**
 	 * See {@link #setCheckCardinality(int) setCheckCardinality(int)} for more details
 	 */
-	public final void setCheckCardinality(ValueBinding checkCardinality) {
+	public void setCheckCardinality(ValueBinding checkCardinality) {
 		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
 	}
 
@@ -371,32 +453,40 @@ public class TreeComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
 	}
 
-	public final java.lang.Object getCheckedValues() {
+	public java.lang.Object getCheckedValues() {
 		return getCheckedValues(null);
 	}
 
 	/**
 	 * See {@link #getCheckedValues() getCheckedValues()} for more details
 	 */
-	public final java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
+	public java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
 		return engine.getProperty(Properties.CHECKED_VALUES, facesContext);
 	}
 
-	public final void setCheckedValues(java.lang.Object checkedValues) {
+	/**
+	 * Returns <code>true</code> if the attribute "checkedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckedValuesSetted() {
+		return engine.isPropertySetted(Properties.CHECKED_VALUES);
+	}
+
+	public void setCheckedValues(java.lang.Object checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
 	 * See {@link #setCheckedValues(Object) setCheckedValues(Object)} for more details
 	 */
-	public final void setCheckedValues(ValueBinding checkedValues) {
+	public void setCheckedValues(ValueBinding checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
 	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
 	 */
-	public final Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
+	public Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
 		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.CHECKED_VALUES);
 		if (valueBinding==null) {
 			return null;
@@ -407,47 +497,77 @@ public class TreeComponent extends AbstractInputComponent implements
 		return valueBinding.getType(facesContext);
 	}
 
-	public final boolean isSelectable() {
+	public final int getCheckedValuesCount() {
+
+
+			return CheckTools.getCount(getCheckedValues());
+		
+	}
+
+	public final Object getFirstCheckedValue() {
+
+
+			return CheckTools.getFirst(getCheckedValues());
+		
+	}
+
+	public boolean isSelectable() {
 		return isSelectable(null);
 	}
 
 	/**
 	 * See {@link #isSelectable() isSelectable()} for more details
 	 */
-	public final boolean isSelectable(javax.faces.context.FacesContext facesContext) {
+	public boolean isSelectable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SELECTABLE, false, facesContext);
 	}
 
-	public final void setSelectable(boolean selectable) {
+	/**
+	 * Returns <code>true</code> if the attribute "selectable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectableSetted() {
+		return engine.isPropertySetted(Properties.SELECTABLE);
+	}
+
+	public void setSelectable(boolean selectable) {
 		engine.setProperty(Properties.SELECTABLE, selectable);
 	}
 
 	/**
 	 * See {@link #setSelectable(boolean) setSelectable(boolean)} for more details
 	 */
-	public final void setSelectable(ValueBinding selectable) {
+	public void setSelectable(ValueBinding selectable) {
 		engine.setProperty(Properties.SELECTABLE, selectable);
 	}
 
-	public final int getSelectionCardinality() {
+	public int getSelectionCardinality() {
 		return getSelectionCardinality(null);
 	}
 
 	/**
 	 * See {@link #getSelectionCardinality() getSelectionCardinality()} for more details
 	 */
-	public final int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
+	public int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
 	}
 
-	public final void setSelectionCardinality(int selectionCardinality) {
+	/**
+	 * Returns <code>true</code> if the attribute "selectionCardinality" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectionCardinalitySetted() {
+		return engine.isPropertySetted(Properties.SELECTION_CARDINALITY);
+	}
+
+	public void setSelectionCardinality(int selectionCardinality) {
 		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
 	}
 
 	/**
 	 * See {@link #setSelectionCardinality(int) setSelectionCardinality(int)} for more details
 	 */
-	public final void setSelectionCardinality(ValueBinding selectionCardinality) {
+	public void setSelectionCardinality(ValueBinding selectionCardinality) {
 		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
 	}
 
@@ -461,6 +581,36 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listSelectionListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public int getPreloadedLevelDepth() {
+		return getPreloadedLevelDepth(null);
+	}
+
+	/**
+	 * See {@link #getPreloadedLevelDepth() getPreloadedLevelDepth()} for more details
+	 */
+	public int getPreloadedLevelDepth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.PRELOADED_LEVEL_DEPTH,-1, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "preloadedLevelDepth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPreloadedLevelDepthSetted() {
+		return engine.isPropertySetted(Properties.PRELOADED_LEVEL_DEPTH);
+	}
+
+	public void setPreloadedLevelDepth(int preloadedLevelDepth) {
+		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
+	}
+
+	/**
+	 * See {@link #setPreloadedLevelDepth(int) setPreloadedLevelDepth(int)} for more details
+	 */
+	public void setPreloadedLevelDepth(ValueBinding preloadedLevelDepth) {
+		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
 	}
 
 	/**
@@ -813,46 +963,6 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public final boolean isHideRootExpandSignSetted() {
 		return engine.isPropertySetted(Properties.HIDE_ROOT_EXPAND_SIGN);
-	}
-
-	/**
-	 * Returns an int value specifying the number of levels that should be preloaded when a node is displayed.
-	 * @return number of preloaded levels
-	 */
-	public final int getPreloadedLevelDepth() {
-		return getPreloadedLevelDepth(null);
-	}
-
-	/**
-	 * Returns an int value specifying the number of levels that should be preloaded when a node is displayed.
-	 * @return number of preloaded levels
-	 */
-	public final int getPreloadedLevelDepth(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.PRELOADED_LEVEL_DEPTH, 0, facesContext);
-	}
-
-	/**
-	 * Sets an int value specifying the number of levels that should be preloaded when a node is displayed.
-	 * @param preloadedLevelDepth number of levels to preload
-	 */
-	public final void setPreloadedLevelDepth(int preloadedLevelDepth) {
-		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
-	}
-
-	/**
-	 * Sets an int value specifying the number of levels that should be preloaded when a node is displayed.
-	 * @param preloadedLevelDepth number of levels to preload
-	 */
-	public final void setPreloadedLevelDepth(ValueBinding preloadedLevelDepth) {
-		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "preloadedLevelDepth" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isPreloadedLevelDepthSetted() {
-		return engine.isPropertySetted(Properties.PRELOADED_LEVEL_DEPTH);
 	}
 
 	/**

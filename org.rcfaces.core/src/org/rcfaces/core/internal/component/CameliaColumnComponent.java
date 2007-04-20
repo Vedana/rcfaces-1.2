@@ -2,37 +2,28 @@
  */
 package org.rcfaces.core.internal.component;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import java.io.IOException;
 
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
+import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import javax.faces.convert.Converter;
-import org.rcfaces.core.internal.component.IConvertValueHolder;
-
-
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IRCFacesComponent;
-import org.rcfaces.core.internal.component.CameliaComponents;
-import org.rcfaces.core.internal.component.TemplatesEngine;
-import org.rcfaces.core.internal.component.IComponentEngine;
-import org.rcfaces.core.internal.component.IFactory;
-import org.rcfaces.core.internal.component.IStateChildrenList;
+import org.rcfaces.core.internal.capability.IComponentEngine;
+import org.rcfaces.core.internal.capability.IRCFacesComponent;
+import org.rcfaces.core.internal.capability.IStateChildrenList;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
@@ -43,7 +34,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
  * @author Olivier Oeuillot
  */
 public abstract class CameliaColumnComponent extends javax.faces.component.UIColumn implements
-		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder {
+		IRCFacesComponent, IContainerManager, ITransientAttributesManager {
 	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory.getLog(CameliaColumnComponent.class);
@@ -60,23 +51,42 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 
 		this.engine = factory.createComponentEngine();
 
-        initializeComponent();
+		IInitializationState state=factory.createInitializationState();
+        initializeComponent(state);	
     }
 
-    protected void initializeComponent() {
+    protected void initializeComponent(IInitializationState state) {
     	if (Constants.TEMPLATE_ENGINE_SUPPORT) {
-	        if (isTemplateComponent() && TemplatesEngine.isConstructPhase()) {
-	            constructTemplate();
+	        if (isTemplateComponent(state) && state.isConstructionState()) {
+	        	if (LOG.isDebugEnabled()) {
+	        		LOG.debug("Call construct template method.");
+	        	}
+	            constructTemplate(state);
 	        }
 	    }
+	    if (Constants.COMPONENT_DEFAULT_PROPERTIES_SUPPORT) {
+	        if (hasDefaultProperties(state) && state.isConstructionState()) {
+	        	if (LOG.isDebugEnabled()) {
+	        		LOG.debug("Call setDefaultProperties method.");
+	        	}
+	            setDefaultProperties(state);
+	        }
+	    }
+	    
     }
-    
-
-    protected boolean isTemplateComponent() {
+ 
+    protected boolean isTemplateComponent(IInitializationState state) {
         return false;
     }
 
-    protected void constructTemplate() {
+    protected void constructTemplate(IInitializationState state) {
+    }
+
+    protected boolean hasDefaultProperties(IInitializationState state) {
+        return false;
+    }
+
+    protected void setDefaultProperties(IInitializationState state) {
     }
 
 	public String getFamily() {
@@ -371,7 +381,7 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait référence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait rï¿½fï¿½rence qu'a des ActionEvent
 		if (e instanceof ActionEvent) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;
@@ -388,12 +398,5 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 		super.queueEvent(e);
     }
 	
-	public final Converter getConverter(FacesContext facesContext) {
-
-
-        	return (Converter)engine.getProperty("converter", facesContext);
-		
-	}
-
 
 }

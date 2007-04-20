@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.ExpandableItemComponent;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.MenuTools;
 
 /**
  * A menu item
@@ -53,69 +53,93 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 		
 	}
 
-	public final java.lang.String getAccessKey() {
+	public java.lang.String getAccessKey() {
 		return getAccessKey(null);
 	}
 
 	/**
 	 * See {@link #getAccessKey() getAccessKey()} for more details
 	 */
-	public final java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
 	}
 
-	public final void setAccessKey(java.lang.String accessKey) {
+	/**
+	 * Returns <code>true</code> if the attribute "accessKey" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAccessKeySetted() {
+		return engine.isPropertySetted(Properties.ACCESS_KEY);
+	}
+
+	public void setAccessKey(java.lang.String accessKey) {
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
 	/**
 	 * See {@link #setAccessKey(String) setAccessKey(String)} for more details
 	 */
-	public final void setAccessKey(ValueBinding accessKey) {
+	public void setAccessKey(ValueBinding accessKey) {
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
-	public final java.lang.String getAcceleratorKey() {
+	public java.lang.String getAcceleratorKey() {
 		return getAcceleratorKey(null);
 	}
 
 	/**
 	 * See {@link #getAcceleratorKey() getAcceleratorKey()} for more details
 	 */
-	public final java.lang.String getAcceleratorKey(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getAcceleratorKey(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ACCELERATOR_KEY, facesContext);
 	}
 
-	public final void setAcceleratorKey(java.lang.String acceleratorKey) {
+	/**
+	 * Returns <code>true</code> if the attribute "acceleratorKey" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAcceleratorKeySetted() {
+		return engine.isPropertySetted(Properties.ACCELERATOR_KEY);
+	}
+
+	public void setAcceleratorKey(java.lang.String acceleratorKey) {
 		engine.setProperty(Properties.ACCELERATOR_KEY, acceleratorKey);
 	}
 
 	/**
 	 * See {@link #setAcceleratorKey(String) setAcceleratorKey(String)} for more details
 	 */
-	public final void setAcceleratorKey(ValueBinding acceleratorKey) {
+	public void setAcceleratorKey(ValueBinding acceleratorKey) {
 		engine.setProperty(Properties.ACCELERATOR_KEY, acceleratorKey);
 	}
 
-	public final java.lang.String getStyleClass() {
+	public java.lang.String getStyleClass() {
 		return getStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getStyleClass() getStyleClass()} for more details
 	 */
-	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
 
-	public final void setStyleClass(java.lang.String styleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "styleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isStyleClassSetted() {
+		return engine.isPropertySetted(Properties.STYLE_CLASS);
+	}
+
+	public void setStyleClass(java.lang.String styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
 	/**
 	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
 	 */
-	public final void setStyleClass(ValueBinding styleClass) {
+	public void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 

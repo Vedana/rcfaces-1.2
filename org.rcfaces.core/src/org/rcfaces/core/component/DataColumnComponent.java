@@ -1,37 +1,49 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IOrderCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAlignmentCapability;
+import org.rcfaces.core.component.capability.IAutoFilterCapability;
+import org.rcfaces.core.component.capability.ICellImageCapability;
+import org.rcfaces.core.component.capability.ICellStyleClassCapability;
+import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.internal.component.CameliaColumnComponent;
-import javax.faces.component.ValueHolder;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IAlignmentCapability;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.internal.converter.OrderConverter;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWidthRangeCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.ICellImageSettings;
+import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
+import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.converter.OrderConverter;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * Specify a column.
  */
-public class DataColumnComponent extends CameliaColumnComponent implements 
+public class DataColumnComponent extends CameliaValueColumnComponent implements 
 	IVisibilityCapability,
 	IHiddenModeCapability,
 	ITextCapability,
@@ -45,13 +57,24 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 	IResizableCapability,
 	IStatesImageCapability,
 	IImageSizeCapability,
+	IMenuPopupIdCapability,
+	IWidthRangeCapability,
+	IVerticalAlignmentCapability,
+	IAutoFilterCapability,
+	ICellImageCapability,
+	ICellStyleClassCapability,
+	ICellToolTipTextCapability,
+	ICellToolTipTextSettings,
+	ICellImageSettings,
+	IImageAccessorsCapability,
+	ICellStyleClassSettings,
 	ValueHolder {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dataColumn";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaValueColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","imageURL","width","alignment","hiddenMode","cellImageURL","foregroundColor","styleClass","sortListener","sortComparator","selectedImageURL","hoverImageURL","imageHeight","maxWidth","value","disabledImageURL","ascending","toolTipText","cellToolTipText","minWidth","resizable","text","imageWidth","verticalAlign","cellStyleClass","visible","backgroundColor","autoFilter"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","imageURL","width","verticalAlignment","defaultCellStyleClass","alignment","hiddenMode","cellImageURL","foregroundColor","menuPopupId","styleClass","sortListener","sortComparator","selectedImageURL","value","hoverImageURL","imageHeight","maxWidth","disabledImageURL","ascending","toolTipText","cellToolTipText","minWidth","resizable","text","imageWidth","cellStyleClass","cellDefaultToolTipText","visible","backgroundColor","autoFilter"}));
 	}
 
 	public DataColumnComponent() {
@@ -102,6 +125,13 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		
 	}
 
+	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
+	}
+
 	public final void setConverter(String converterId) {
 
 
@@ -138,13 +168,6 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
-
-
-			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
-		
-	}
-
 	public final Object getValue(FacesContext context) {
 
 
@@ -173,25 +196,33 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		
 	}
 
-	public final boolean isVisible() {
+	public boolean isVisible() {
 		return isVisible(null);
 	}
 
 	/**
 	 * See {@link #isVisible() isVisible()} for more details
 	 */
-	public final boolean isVisible(javax.faces.context.FacesContext facesContext) {
+	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
 	}
 
-	public final void setVisible(boolean visible) {
+	/**
+	 * Returns <code>true</code> if the attribute "visible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVisibleSetted() {
+		return engine.isPropertySetted(Properties.VISIBLE);
+	}
+
+	public void setVisible(boolean visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
 	/**
 	 * See {@link #setVisible(boolean) setVisible(boolean)} for more details
 	 */
-	public final void setVisible(ValueBinding visible) {
+	public void setVisible(ValueBinding visible) {
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
@@ -202,135 +233,183 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		
 	}
 
-	public final int getHiddenMode() {
+	public int getHiddenMode() {
 		return getHiddenMode(null);
 	}
 
 	/**
 	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
-	public final int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
 	}
 
-	public final void setHiddenMode(int hiddenMode) {
+	/**
+	 * Returns <code>true</code> if the attribute "hiddenMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHiddenModeSetted() {
+		return engine.isPropertySetted(Properties.HIDDEN_MODE);
+	}
+
+	public void setHiddenMode(int hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	/**
 	 * See {@link #setHiddenMode(int) setHiddenMode(int)} for more details
 	 */
-	public final void setHiddenMode(ValueBinding hiddenMode) {
+	public void setHiddenMode(ValueBinding hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public final java.lang.String getText() {
+	public java.lang.String getText() {
 		return getText(null);
 	}
 
 	/**
 	 * See {@link #getText() getText()} for more details
 	 */
-	public final java.lang.String getText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TEXT, facesContext);
 	}
 
-	public final void setText(java.lang.String text) {
+	/**
+	 * Returns <code>true</code> if the attribute "text" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextSetted() {
+		return engine.isPropertySetted(Properties.TEXT);
+	}
+
+	public void setText(java.lang.String text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
 	/**
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
-	public final void setText(ValueBinding text) {
+	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
 	}
 
-	public final java.lang.String getToolTipText() {
+	public java.lang.String getToolTipText() {
 		return getToolTipText(null);
 	}
 
 	/**
 	 * See {@link #getToolTipText() getToolTipText()} for more details
 	 */
-	public final java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
 	}
 
-	public final void setToolTipText(java.lang.String toolTipText) {
+	/**
+	 * Returns <code>true</code> if the attribute "toolTipText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isToolTipTextSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
+	}
+
+	public void setToolTipText(java.lang.String toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
 	/**
 	 * See {@link #setToolTipText(String) setToolTipText(String)} for more details
 	 */
-	public final void setToolTipText(ValueBinding toolTipText) {
+	public void setToolTipText(ValueBinding toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
-	public final java.lang.String getAlignment() {
+	public java.lang.String getAlignment() {
 		return getAlignment(null);
 	}
 
 	/**
 	 * See {@link #getAlignment() getAlignment()} for more details
 	 */
-	public final java.lang.String getAlignment(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getAlignment(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ALIGNMENT, facesContext);
 	}
 
-	public final void setAlignment(java.lang.String alignment) {
+	/**
+	 * Returns <code>true</code> if the attribute "alignment" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlignmentSetted() {
+		return engine.isPropertySetted(Properties.ALIGNMENT);
+	}
+
+	public void setAlignment(java.lang.String alignment) {
 		engine.setProperty(Properties.ALIGNMENT, alignment);
 	}
 
 	/**
 	 * See {@link #setAlignment(String) setAlignment(String)} for more details
 	 */
-	public final void setAlignment(ValueBinding alignment) {
+	public void setAlignment(ValueBinding alignment) {
 		engine.setProperty(Properties.ALIGNMENT, alignment);
 	}
 
-	public final java.lang.String getBackgroundColor() {
+	public java.lang.String getBackgroundColor() {
 		return getBackgroundColor(null);
 	}
 
 	/**
 	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
 	 */
-	public final java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
 	}
 
-	public final void setBackgroundColor(java.lang.String backgroundColor) {
+	/**
+	 * Returns <code>true</code> if the attribute "backgroundColor" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBackgroundColorSetted() {
+		return engine.isPropertySetted(Properties.BACKGROUND_COLOR);
+	}
+
+	public void setBackgroundColor(java.lang.String backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
 	/**
 	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
 	 */
-	public final void setBackgroundColor(ValueBinding backgroundColor) {
+	public void setBackgroundColor(ValueBinding backgroundColor) {
 		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
 	}
 
-	public final java.lang.String getForegroundColor() {
+	public java.lang.String getForegroundColor() {
 		return getForegroundColor(null);
 	}
 
 	/**
 	 * See {@link #getForegroundColor() getForegroundColor()} for more details
 	 */
-	public final java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
 	}
 
-	public final void setForegroundColor(java.lang.String foregroundColor) {
+	/**
+	 * Returns <code>true</code> if the attribute "foregroundColor" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isForegroundColorSetted() {
+		return engine.isPropertySetted(Properties.FOREGROUND_COLOR);
+	}
+
+	public void setForegroundColor(java.lang.String foregroundColor) {
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
 	/**
 	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
 	 */
-	public final void setForegroundColor(ValueBinding foregroundColor) {
+	public void setForegroundColor(ValueBinding foregroundColor) {
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
@@ -346,179 +425,243 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISortListener.class);
 	}
 
-	public final java.lang.String getStyleClass() {
+	public java.lang.String getStyleClass() {
 		return getStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getStyleClass() getStyleClass()} for more details
 	 */
-	public final java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
 
-	public final void setStyleClass(java.lang.String styleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "styleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isStyleClassSetted() {
+		return engine.isPropertySetted(Properties.STYLE_CLASS);
+	}
+
+	public void setStyleClass(java.lang.String styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
 	/**
 	 * See {@link #setStyleClass(String) setStyleClass(String)} for more details
 	 */
-	public final void setStyleClass(ValueBinding styleClass) {
+	public void setStyleClass(ValueBinding styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
-	public final boolean isAscending() {
+	public boolean isAscending() {
 		return isAscending(null);
 	}
 
 	/**
 	 * See {@link #isAscending() isAscending()} for more details
 	 */
-	public final boolean isAscending(javax.faces.context.FacesContext facesContext) {
+	public boolean isAscending(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.ASCENDING, false, facesContext);
 	}
 
-	public final void setAscending(boolean ascending) {
+	/**
+	 * Returns <code>true</code> if the attribute "ascending" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAscendingSetted() {
+		return engine.isPropertySetted(Properties.ASCENDING);
+	}
+
+	public void setAscending(boolean ascending) {
 		engine.setProperty(Properties.ASCENDING, ascending);
 	}
 
 	/**
 	 * See {@link #setAscending(boolean) setAscending(boolean)} for more details
 	 */
-	public final void setAscending(ValueBinding ascending) {
+	public void setAscending(ValueBinding ascending) {
 		engine.setProperty(Properties.ASCENDING, ascending);
 	}
 
-	public final java.util.Comparator getSortComparator() {
+	public java.util.Comparator getSortComparator() {
 		return getSortComparator(null);
 	}
 
 	/**
 	 * See {@link #getSortComparator() getSortComparator()} for more details
 	 */
-	public final java.util.Comparator getSortComparator(javax.faces.context.FacesContext facesContext) {
+	public java.util.Comparator getSortComparator(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Comparator)engine.getProperty(Properties.SORT_COMPARATOR, facesContext);
 	}
 
-	public final void setSortComparator(java.util.Comparator sortComparator) {
+	/**
+	 * Returns <code>true</code> if the attribute "sortComparator" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSortComparatorSetted() {
+		return engine.isPropertySetted(Properties.SORT_COMPARATOR);
+	}
+
+	public void setSortComparator(java.util.Comparator sortComparator) {
 		engine.setProperty(Properties.SORT_COMPARATOR, sortComparator);
 	}
 
 	/**
 	 * See {@link #setSortComparator(java.util.Comparator) setSortComparator(java.util.Comparator)} for more details
 	 */
-	public final void setSortComparator(ValueBinding sortComparator) {
+	public void setSortComparator(ValueBinding sortComparator) {
 		engine.setProperty(Properties.SORT_COMPARATOR, sortComparator);
 	}
 
-	public final boolean isResizable() {
+	public boolean isResizable() {
 		return isResizable(null);
 	}
 
 	/**
 	 * See {@link #isResizable() isResizable()} for more details
 	 */
-	public final boolean isResizable(javax.faces.context.FacesContext facesContext) {
+	public boolean isResizable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.RESIZABLE, false, facesContext);
 	}
 
-	public final void setResizable(boolean resizable) {
+	/**
+	 * Returns <code>true</code> if the attribute "resizable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isResizableSetted() {
+		return engine.isPropertySetted(Properties.RESIZABLE);
+	}
+
+	public void setResizable(boolean resizable) {
 		engine.setProperty(Properties.RESIZABLE, resizable);
 	}
 
 	/**
 	 * See {@link #setResizable(boolean) setResizable(boolean)} for more details
 	 */
-	public final void setResizable(ValueBinding resizable) {
+	public void setResizable(ValueBinding resizable) {
 		engine.setProperty(Properties.RESIZABLE, resizable);
 	}
 
-	public final java.lang.String getDisabledImageURL() {
+	public java.lang.String getDisabledImageURL() {
 		return getDisabledImageURL(null);
 	}
 
 	/**
 	 * See {@link #getDisabledImageURL() getDisabledImageURL()} for more details
 	 */
-	public final java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DISABLED_IMAGE_URL, facesContext);
 	}
 
-	public final void setDisabledImageURL(java.lang.String disabledImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "disabledImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDisabledImageURLSetted() {
+		return engine.isPropertySetted(Properties.DISABLED_IMAGE_URL);
+	}
+
+	public void setDisabledImageURL(java.lang.String disabledImageURL) {
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
 
 	/**
 	 * See {@link #setDisabledImageURL(String) setDisabledImageURL(String)} for more details
 	 */
-	public final void setDisabledImageURL(ValueBinding disabledImageURL) {
+	public void setDisabledImageURL(ValueBinding disabledImageURL) {
 		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
 	}
 
-	public final java.lang.String getHoverImageURL() {
+	public java.lang.String getHoverImageURL() {
 		return getHoverImageURL(null);
 	}
 
 	/**
 	 * See {@link #getHoverImageURL() getHoverImageURL()} for more details
 	 */
-	public final java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOVER_IMAGE_URL, facesContext);
 	}
 
-	public final void setHoverImageURL(java.lang.String hoverImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "hoverImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHoverImageURLSetted() {
+		return engine.isPropertySetted(Properties.HOVER_IMAGE_URL);
+	}
+
+	public void setHoverImageURL(java.lang.String hoverImageURL) {
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
 
 	/**
 	 * See {@link #setHoverImageURL(String) setHoverImageURL(String)} for more details
 	 */
-	public final void setHoverImageURL(ValueBinding hoverImageURL) {
+	public void setHoverImageURL(ValueBinding hoverImageURL) {
 		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
 	}
 
-	public final java.lang.String getSelectedImageURL() {
+	public java.lang.String getSelectedImageURL() {
 		return getSelectedImageURL(null);
 	}
 
 	/**
 	 * See {@link #getSelectedImageURL() getSelectedImageURL()} for more details
 	 */
-	public final java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SELECTED_IMAGE_URL, facesContext);
 	}
 
-	public final void setSelectedImageURL(java.lang.String selectedImageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "selectedImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectedImageURLSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_IMAGE_URL);
+	}
+
+	public void setSelectedImageURL(java.lang.String selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
 
 	/**
 	 * See {@link #setSelectedImageURL(String) setSelectedImageURL(String)} for more details
 	 */
-	public final void setSelectedImageURL(ValueBinding selectedImageURL) {
+	public void setSelectedImageURL(ValueBinding selectedImageURL) {
 		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
 	}
 
-	public final java.lang.String getImageURL() {
+	public java.lang.String getImageURL() {
 		return getImageURL(null);
 	}
 
 	/**
 	 * See {@link #getImageURL() getImageURL()} for more details
 	 */
-	public final java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
 	}
 
-	public final void setImageURL(java.lang.String imageURL) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageURLSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_URL);
+	}
+
+	public void setImageURL(java.lang.String imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
 	/**
 	 * See {@link #setImageURL(String) setImageURL(String)} for more details
 	 */
-	public final void setImageURL(ValueBinding imageURL) {
+	public void setImageURL(ValueBinding imageURL) {
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
@@ -529,120 +672,105 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		
 	}
 
-	public final int getImageHeight() {
+	public int getImageHeight() {
 		return getImageHeight(null);
 	}
 
 	/**
 	 * See {@link #getImageHeight() getImageHeight()} for more details
 	 */
-	public final int getImageHeight(javax.faces.context.FacesContext facesContext) {
+	public int getImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_HEIGHT,0, facesContext);
 	}
 
-	public final void setImageHeight(int imageHeight) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageHeight" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageHeightSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_HEIGHT);
+	}
+
+	public void setImageHeight(int imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
 	/**
 	 * See {@link #setImageHeight(int) setImageHeight(int)} for more details
 	 */
-	public final void setImageHeight(ValueBinding imageHeight) {
+	public void setImageHeight(ValueBinding imageHeight) {
 		engine.setProperty(Properties.IMAGE_HEIGHT, imageHeight);
 	}
 
-	public final int getImageWidth() {
+	public int getImageWidth() {
 		return getImageWidth(null);
 	}
 
 	/**
 	 * See {@link #getImageWidth() getImageWidth()} for more details
 	 */
-	public final int getImageWidth(javax.faces.context.FacesContext facesContext) {
+	public int getImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.IMAGE_WIDTH,0, facesContext);
 	}
 
-	public final void setImageWidth(int imageWidth) {
+	/**
+	 * Returns <code>true</code> if the attribute "imageWidth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImageWidthSetted() {
+		return engine.isPropertySetted(Properties.IMAGE_WIDTH);
+	}
+
+	public void setImageWidth(int imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
 	/**
 	 * See {@link #setImageWidth(int) setImageWidth(int)} for more details
 	 */
-	public final void setImageWidth(ValueBinding imageWidth) {
+	public void setImageWidth(ValueBinding imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	/**
-	 * Returns a string value (as specified by CSS) for the width of the component.
-	 * @return width
-	 */
-	public final String getWidth() {
-		return getWidth(null);
+	public java.lang.String getMenuPopupId() {
+		return getMenuPopupId(null);
 	}
 
 	/**
-	 * Returns a string value (as specified by CSS) for the width of the component.
-	 * @return width
+	 * See {@link #getMenuPopupId() getMenuPopupId()} for more details
 	 */
-	public final String getWidth(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.WIDTH, facesContext);
+	public java.lang.String getMenuPopupId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MENU_POPUP_ID, facesContext);
 	}
 
 	/**
-	 * Sets a string value (as specified by CSS) for the width of the component.
-	 * @param width width
-	 */
-	public final void setWidth(String width) {
-		engine.setProperty(Properties.WIDTH, width);
-	}
-
-	/**
-	 * Sets a string value (as specified by CSS) for the width of the component.
-	 * @param width width
-	 */
-	public final void setWidth(ValueBinding width) {
-		engine.setProperty(Properties.WIDTH, width);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "width" is set.
+	 * Returns <code>true</code> if the attribute "menuPopupId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isWidthSetted() {
-		return engine.isPropertySetted(Properties.WIDTH);
+	public final boolean isMenuPopupIdSetted() {
+		return engine.isPropertySetted(Properties.MENU_POPUP_ID);
+	}
+
+	public void setMenuPopupId(java.lang.String menuPopupId) {
+		engine.setProperty(Properties.MENU_POPUP_ID, menuPopupId);
 	}
 
 	/**
-	 * Returns an int value specifying the maximum width in pixels (if resizeable).
-	 * @return max width
+	 * See {@link #setMenuPopupId(String) setMenuPopupId(String)} for more details
 	 */
-	public final int getMaxWidth() {
+	public void setMenuPopupId(ValueBinding menuPopupId) {
+		engine.setProperty(Properties.MENU_POPUP_ID, menuPopupId);
+	}
+
+	public int getMaxWidth() {
 		return getMaxWidth(null);
 	}
 
 	/**
-	 * Returns an int value specifying the maximum width in pixels (if resizeable).
-	 * @return max width
+	 * See {@link #getMaxWidth() getMaxWidth()} for more details
 	 */
-	public final int getMaxWidth(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.MAX_WIDTH, 0, facesContext);
-	}
-
-	/**
-	 * Sets an int value specifying the maximum width in pixels (if resizeable).
-	 * @param maxWidth max width
-	 */
-	public final void setMaxWidth(int maxWidth) {
-		engine.setProperty(Properties.MAX_WIDTH, maxWidth);
-	}
-
-	/**
-	 * Sets an int value specifying the maximum width in pixels (if resizeable).
-	 * @param maxWidth max width
-	 */
-	public final void setMaxWidth(ValueBinding maxWidth) {
-		engine.setProperty(Properties.MAX_WIDTH, maxWidth);
+	public int getMaxWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.MAX_WIDTH,0, facesContext);
 	}
 
 	/**
@@ -653,36 +781,26 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return engine.isPropertySetted(Properties.MAX_WIDTH);
 	}
 
+	public void setMaxWidth(int maxWidth) {
+		engine.setProperty(Properties.MAX_WIDTH, maxWidth);
+	}
+
 	/**
-	 * Returns an int value specifying the minimum width in pixels (if resizeable).
-	 * @return min width
+	 * See {@link #setMaxWidth(int) setMaxWidth(int)} for more details
 	 */
-	public final int getMinWidth() {
+	public void setMaxWidth(ValueBinding maxWidth) {
+		engine.setProperty(Properties.MAX_WIDTH, maxWidth);
+	}
+
+	public int getMinWidth() {
 		return getMinWidth(null);
 	}
 
 	/**
-	 * Returns an int value specifying the minimum width in pixels (if resizeable).
-	 * @return min width
+	 * See {@link #getMinWidth() getMinWidth()} for more details
 	 */
-	public final int getMinWidth(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.MIN_WIDTH, 0, facesContext);
-	}
-
-	/**
-	 * Sets an int value specifying the minimum width in pixels (if resizeable).
-	 * @param minWidth min width
-	 */
-	public final void setMinWidth(int minWidth) {
-		engine.setProperty(Properties.MIN_WIDTH, minWidth);
-	}
-
-	/**
-	 * Sets an int value specifying the minimum width in pixels (if resizeable).
-	 * @param minWidth min width
-	 */
-	public final void setMinWidth(ValueBinding minWidth) {
-		engine.setProperty(Properties.MIN_WIDTH, minWidth);
+	public int getMinWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.MIN_WIDTH,0, facesContext);
 	}
 
 	/**
@@ -693,116 +811,116 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return engine.isPropertySetted(Properties.MIN_WIDTH);
 	}
 
-	/**
-	 * Returns a string that represent the vertical alignement of the data in the component.
-	 * @return vertical alignement : top|center|bottom
-	 */
-	public final String getVerticalAlign() {
-		return getVerticalAlign(null);
+	public void setMinWidth(int minWidth) {
+		engine.setProperty(Properties.MIN_WIDTH, minWidth);
 	}
 
 	/**
-	 * Returns a string that represent the vertical alignement of the data in the component.
-	 * @return vertical alignement : top|center|bottom
+	 * See {@link #setMinWidth(int) setMinWidth(int)} for more details
 	 */
-	public final String getVerticalAlign(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VERTICAL_ALIGN, facesContext);
+	public void setMinWidth(ValueBinding minWidth) {
+		engine.setProperty(Properties.MIN_WIDTH, minWidth);
+	}
+
+	public java.lang.String getWidth() {
+		return getWidth(null);
 	}
 
 	/**
-	 * Sets a string that represent the vertical alignement of the data in the component.
-	 * @param verticalAlign vertical alignement : top|center|bottom
+	 * See {@link #getWidth() getWidth()} for more details
 	 */
-	public final void setVerticalAlign(String verticalAlign) {
-		engine.setProperty(Properties.VERTICAL_ALIGN, verticalAlign);
+	public java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WIDTH, facesContext);
 	}
 
 	/**
-	 * Sets a string that represent the vertical alignement of the data in the component.
-	 * @param verticalAlign vertical alignement : top|center|bottom
-	 */
-	public final void setVerticalAlign(ValueBinding verticalAlign) {
-		engine.setProperty(Properties.VERTICAL_ALIGN, verticalAlign);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "verticalAlign" is set.
+	 * Returns <code>true</code> if the attribute "width" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isVerticalAlignSetted() {
-		return engine.isPropertySetted(Properties.VERTICAL_ALIGN);
+	public final boolean isWidthSetted() {
+		return engine.isPropertySetted(Properties.WIDTH);
+	}
+
+	public void setWidth(java.lang.String width) {
+		engine.setProperty(Properties.WIDTH, width);
 	}
 
 	/**
-	 * Returns an url string pointing to the default image.
-	 * @return image url
+	 * See {@link #setWidth(String) setWidth(String)} for more details
 	 */
-	public final String getDefaultCellImageURL() {
-		return getDefaultCellImageURL(null);
+	public void setWidth(ValueBinding width) {
+		engine.setProperty(Properties.WIDTH, width);
+	}
+
+	public java.lang.String getVerticalAlignment() {
+		return getVerticalAlignment(null);
 	}
 
 	/**
-	 * Returns an url string pointing to the default image.
-	 * @return image url
+	 * See {@link #getVerticalAlignment() getVerticalAlignment()} for more details
 	 */
-	public final String getDefaultCellImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_CELL_IMAGE_URL, facesContext);
+	public java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
 	}
 
 	/**
-	 * Sets an url string pointing to the default image.
-	 * @param defaultCellImageURL image url
-	 */
-	public final void setDefaultCellImageURL(String defaultCellImageURL) {
-		engine.setProperty(Properties.DEFAULT_CELL_IMAGE_URL, defaultCellImageURL);
-	}
-
-	/**
-	 * Sets an url string pointing to the default image.
-	 * @param defaultCellImageURL image url
-	 */
-	public final void setDefaultCellImageURL(ValueBinding defaultCellImageURL) {
-		engine.setProperty(Properties.DEFAULT_CELL_IMAGE_URL, defaultCellImageURL);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "defaultCellImageURL" is set.
+	 * Returns <code>true</code> if the attribute "verticalAlignment" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultCellImageURLSetted() {
-		return engine.isPropertySetted(Properties.DEFAULT_CELL_IMAGE_URL);
+	public final boolean isVerticalAlignmentSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_ALIGNMENT);
+	}
+
+	public void setVerticalAlignment(java.lang.String verticalAlignment) {
+		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
 	/**
-	 * Returns an url string pointing to the image.
-	 * @return image url
+	 * See {@link #setVerticalAlignment(String) setVerticalAlignment(String)} for more details
 	 */
-	public final String getCellImageURL() {
+	public void setVerticalAlignment(ValueBinding verticalAlignment) {
+		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
+	}
+
+	public boolean isAutoFilter() {
+		return isAutoFilter(null);
+	}
+
+	/**
+	 * See {@link #isAutoFilter() isAutoFilter()} for more details
+	 */
+	public boolean isAutoFilter(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.AUTO_FILTER, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "autoFilter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAutoFilterSetted() {
+		return engine.isPropertySetted(Properties.AUTO_FILTER);
+	}
+
+	public void setAutoFilter(boolean autoFilter) {
+		engine.setProperty(Properties.AUTO_FILTER, autoFilter);
+	}
+
+	/**
+	 * See {@link #setAutoFilter(boolean) setAutoFilter(boolean)} for more details
+	 */
+	public void setAutoFilter(ValueBinding autoFilter) {
+		engine.setProperty(Properties.AUTO_FILTER, autoFilter);
+	}
+
+	public java.lang.String getCellImageURL() {
 		return getCellImageURL(null);
 	}
 
 	/**
-	 * Returns an url string pointing to the image.
-	 * @return image url
+	 * See {@link #getCellImageURL() getCellImageURL()} for more details
 	 */
-	public final String getCellImageURL(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getCellImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CELL_IMAGE_URL, facesContext);
-	}
-
-	/**
-	 * Sets an url string pointing to the image.
-	 * @param cellImageURL image url for the cell
-	 */
-	public final void setCellImageURL(String cellImageURL) {
-		engine.setProperty(Properties.CELL_IMAGE_URL, cellImageURL);
-	}
-
-	/**
-	 * Sets an url string pointing to the image.
-	 * @param cellImageURL image url for the cell
-	 */
-	public final void setCellImageURL(ValueBinding cellImageURL) {
-		engine.setProperty(Properties.CELL_IMAGE_URL, cellImageURL);
 	}
 
 	/**
@@ -813,36 +931,56 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return engine.isPropertySetted(Properties.CELL_IMAGE_URL);
 	}
 
+	public void setCellImageURL(java.lang.String cellImageURL) {
+		engine.setProperty(Properties.CELL_IMAGE_URL, cellImageURL);
+	}
+
 	/**
-	 * Returns a space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
-	 * @return list of CSS style classes
+	 * See {@link #setCellImageURL(String) setCellImageURL(String)} for more details
 	 */
-	public final String getCellStyleClass() {
+	public void setCellImageURL(ValueBinding cellImageURL) {
+		engine.setProperty(Properties.CELL_IMAGE_URL, cellImageURL);
+	}
+
+	public java.lang.String getDefaultCellImageURL() {
+		return getDefaultCellImageURL(null);
+	}
+
+	/**
+	 * See {@link #getDefaultCellImageURL() getDefaultCellImageURL()} for more details
+	 */
+	public java.lang.String getDefaultCellImageURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DEFAULT_CELL_IMAGE_URL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultCellImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDefaultCellImageURLSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_CELL_IMAGE_URL);
+	}
+
+	public void setDefaultCellImageURL(java.lang.String defaultCellImageURL) {
+		engine.setProperty(Properties.DEFAULT_CELL_IMAGE_URL, defaultCellImageURL);
+	}
+
+	/**
+	 * See {@link #setDefaultCellImageURL(String) setDefaultCellImageURL(String)} for more details
+	 */
+	public void setDefaultCellImageURL(ValueBinding defaultCellImageURL) {
+		engine.setProperty(Properties.DEFAULT_CELL_IMAGE_URL, defaultCellImageURL);
+	}
+
+	public java.lang.String getCellStyleClass() {
 		return getCellStyleClass(null);
 	}
 
 	/**
-	 * Returns a space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
-	 * @return list of CSS style classes
+	 * See {@link #getCellStyleClass() getCellStyleClass()} for more details
 	 */
-	public final String getCellStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getCellStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CELL_STYLE_CLASS, facesContext);
-	}
-
-	/**
-	 * Sets a space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
-	 * @param cellStyleClass list of CSS style classes
-	 */
-	public final void setCellStyleClass(String cellStyleClass) {
-		engine.setProperty(Properties.CELL_STYLE_CLASS, cellStyleClass);
-	}
-
-	/**
-	 * Sets a space-separated list of CSS style class(es) to be applied when this cell is rendered. This value will be passed through as the "class" attribute on generated markup.
-	 * @param cellStyleClass list of CSS style classes
-	 */
-	public final void setCellStyleClass(ValueBinding cellStyleClass) {
-		engine.setProperty(Properties.CELL_STYLE_CLASS, cellStyleClass);
 	}
 
 	/**
@@ -853,36 +991,86 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return engine.isPropertySetted(Properties.CELL_STYLE_CLASS);
 	}
 
+	public void setCellStyleClass(java.lang.String cellStyleClass) {
+		engine.setProperty(Properties.CELL_STYLE_CLASS, cellStyleClass);
+	}
+
 	/**
-	 * Returns a string value containing the text that will appear when the pointer hover the component.
-	 * @return tool tip text
+	 * See {@link #setCellStyleClass(String) setCellStyleClass(String)} for more details
 	 */
-	public final String getCellToolTipText() {
+	public void setCellStyleClass(ValueBinding cellStyleClass) {
+		engine.setProperty(Properties.CELL_STYLE_CLASS, cellStyleClass);
+	}
+
+	public java.lang.String getDefaultCellStyleClass() {
+		return getDefaultCellStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getDefaultCellStyleClass() getDefaultCellStyleClass()} for more details
+	 */
+	public java.lang.String getDefaultCellStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DEFAULT_CELL_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultCellStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDefaultCellStyleClassSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_CELL_STYLE_CLASS);
+	}
+
+	public void setDefaultCellStyleClass(java.lang.String defaultCellStyleClass) {
+		engine.setProperty(Properties.DEFAULT_CELL_STYLE_CLASS, defaultCellStyleClass);
+	}
+
+	/**
+	 * See {@link #setDefaultCellStyleClass(String) setDefaultCellStyleClass(String)} for more details
+	 */
+	public void setDefaultCellStyleClass(ValueBinding defaultCellStyleClass) {
+		engine.setProperty(Properties.DEFAULT_CELL_STYLE_CLASS, defaultCellStyleClass);
+	}
+
+	public java.lang.String getCellDefaultToolTipText() {
+		return getCellDefaultToolTipText(null);
+	}
+
+	/**
+	 * See {@link #getCellDefaultToolTipText() getCellDefaultToolTipText()} for more details
+	 */
+	public java.lang.String getCellDefaultToolTipText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CELL_DEFAULT_TOOL_TIP_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "cellDefaultToolTipText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCellDefaultToolTipTextSetted() {
+		return engine.isPropertySetted(Properties.CELL_DEFAULT_TOOL_TIP_TEXT);
+	}
+
+	public void setCellDefaultToolTipText(java.lang.String cellDefaultToolTipText) {
+		engine.setProperty(Properties.CELL_DEFAULT_TOOL_TIP_TEXT, cellDefaultToolTipText);
+	}
+
+	/**
+	 * See {@link #setCellDefaultToolTipText(String) setCellDefaultToolTipText(String)} for more details
+	 */
+	public void setCellDefaultToolTipText(ValueBinding cellDefaultToolTipText) {
+		engine.setProperty(Properties.CELL_DEFAULT_TOOL_TIP_TEXT, cellDefaultToolTipText);
+	}
+
+	public java.lang.String getCellToolTipText() {
 		return getCellToolTipText(null);
 	}
 
 	/**
-	 * Returns a string value containing the text that will appear when the pointer hover the component.
-	 * @return tool tip text
+	 * See {@link #getCellToolTipText() getCellToolTipText()} for more details
 	 */
-	public final String getCellToolTipText(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getCellToolTipText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CELL_TOOL_TIP_TEXT, facesContext);
-	}
-
-	/**
-	 * Sets a string value containing the text that will appear when the pointer hover the component.
-	 * @param cellToolTipText tool tip text
-	 */
-	public final void setCellToolTipText(String cellToolTipText) {
-		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
-	}
-
-	/**
-	 * Sets a string value containing the text that will appear when the pointer hover the component.
-	 * @param cellToolTipText tool tip text
-	 */
-	public final void setCellToolTipText(ValueBinding cellToolTipText) {
-		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
 	}
 
 	/**
@@ -893,44 +1081,15 @@ public class DataColumnComponent extends CameliaColumnComponent implements
 		return engine.isPropertySetted(Properties.CELL_TOOL_TIP_TEXT);
 	}
 
-	/**
-	 * Returns a boolean value indicating if the component should apply filter automatically.
-	 * @return true if the component should apply filter
-	 */
-	public final boolean isAutoFilter() {
-		return isAutoFilter(null);
+	public void setCellToolTipText(java.lang.String cellToolTipText) {
+		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
 	}
 
 	/**
-	 * Returns a boolean value indicating if the component should apply filter automatically.
-	 * @return true if the component should apply filter
+	 * See {@link #setCellToolTipText(String) setCellToolTipText(String)} for more details
 	 */
-	public final boolean isAutoFilter(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.AUTO_FILTER, false, facesContext);
-	}
-
-	/**
-	 * Sets a boolean value indicating if the component should apply filter automatically.
-	 * @param autoFilter true if the component should apply filter
-	 */
-	public final void setAutoFilter(boolean autoFilter) {
-		engine.setProperty(Properties.AUTO_FILTER, autoFilter);
-	}
-
-	/**
-	 * Sets a boolean value indicating if the component should apply filter automatically.
-	 * @param autoFilter true if the component should apply filter
-	 */
-	public final void setAutoFilter(ValueBinding autoFilter) {
-		engine.setProperty(Properties.AUTO_FILTER, autoFilter);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "autoFilter" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isAutoFilterSetted() {
-		return engine.isPropertySetted(Properties.AUTO_FILTER);
+	public void setCellToolTipText(ValueBinding cellToolTipText) {
+		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
 	}
 
 	protected Set getCameliaFields() {

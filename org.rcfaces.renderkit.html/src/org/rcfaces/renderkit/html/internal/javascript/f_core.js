@@ -231,11 +231,11 @@ var f_core = {
 			if (level!==undefined) {
 				if (typeof(name)!="string" && name.f_getName) {
 					var className=name.f_getName();
-					f_core.Assert(typeof(className)=="string", "Invalid class name of object '"+name+"'.");
+					f_core.Assert(typeof(className)=="string", "f_core._AddLog: Invalid class name of object '"+name+"'.");
 					name=className;
 				}
 				
-				f_core.Assert(typeof(name)=="string", "Invalid name of log '"+name+"'.");
+				f_core.Assert(typeof(name)=="string", "f_core._AddLog: Invalid name of log '"+name+"'.");
 				
 				if (window._ignoreLog) {
 					if (level===0) {
@@ -367,7 +367,7 @@ var f_core = {
 	IsDebugEnabled: function(name) {
 		if (typeof(name)!="string" && name.f_getName) {
 			var className=name.f_getName();
-			f_core.Assert(typeof(className)=="string", "Invalid class name of object '"+name+"'.");
+			f_core.Assert(typeof(className)=="string", "f_core.IsDebugEnabled: Invalid class name of object '"+name+"'.");
 			name=className;
 		}
 
@@ -728,6 +728,18 @@ var f_core = {
 					title.push("PROFILER");
 				}
 				
+				var version=window.rcfacesBuildId;
+				if (version) {
+					var compiledVersion=version.indexOf('c');
+					if (compiledVersion>=0) {
+						title.push("version="+version.substring(0, compiledVersion));
+						title.push("COMPILED");
+						
+					} else {
+						title.push("version="+version);
+					}
+				}
+				
 				if (title.length>0) {
 					window.document.title+="  [Camelia: "+title.join(",")+"]";
 				}
@@ -882,7 +894,7 @@ var f_core = {
 	 * @method static hidden
 	 */
 	SetInputHidden: function(form, name, val) {
-		f_core.Assert(form && form.tagName.toUpperCase()=="FORM", "f_core.SetInputHidden: Invalid form component ! "+form);
+		f_core.Assert(form && form.tagName.toLowerCase()=="form", "f_core.SetInputHidden: Invalid form component ! "+form);
 		f_core.Assert(name, "f_core.SetInputHidden: Invalid name of hidden input ! ("+name+")");
 		
 		if (val) {
@@ -900,7 +912,7 @@ var f_core = {
 			}
 		}
 		
-		var inputs=f_core.GetElementsByTagName(form, "INPUT");
+		var inputs=f_core.GetElementsByTagName(form, "input");
 				
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
@@ -909,7 +921,7 @@ var f_core = {
 				continue;
 			}
 			
-			f_core.Assert(input.type && input.type.toUpperCase()=="HIDDEN", "Input type is not hidden !");
+			f_core.Assert(input.type && input.type.toUpperCase()=="HIDDEN", "f_core.SetInputHidden: Input type is not hidden !");
 			
 			if (val===null) {
 				input.parentNode.removeChild(input);
@@ -926,7 +938,7 @@ var f_core = {
 			return;
 		}
 		
-		var input = form.ownerDocument.createElement("INPUT");
+		var input = form.ownerDocument.createElement("input");
 		
 		// Il faut specifier les caracteristiques avant le appendChild !
 		input.type = "hidden";
@@ -964,7 +976,7 @@ var f_core = {
 				continue;
 			}
 			
-			if (tagName.toUpperCase()!="FORM") {
+			if (tagName.toLowerCase()!="form") {
 				continue;
 			}
 			
@@ -1013,7 +1025,7 @@ var f_core = {
 					component.appendChild(doc.createTextNode(text.substring(0, idx)));
 				}
 
-				var ul=doc.createElement("U");
+				var ul=doc.createElement("u");
 				component.appendChild(ul);
 				ul.className="f_accessKey";
 				
@@ -1091,7 +1103,7 @@ var f_core = {
 		var form;
 		
 		var tagName=this.tagName;
-		if (!tagName || tagName.toUpperCase()!="FORM") {
+		if (!tagName || tagName.toLowerCase()!="form") {
 			// C'est une window ?
 
 			if (evt.relatedTarget) {
@@ -1107,10 +1119,10 @@ var f_core = {
 			win=f_core.GetWindow(form);
 		}
 		
-		f_core.Assert(form && form.tagName.toUpperCase()=="FORM", "Can not identify form ! ("+form+")");
-		f_core.Assert(win, "Can not identify window !");
+		f_core.Assert(form && form.tagName.toLowerCase()=="form", "f_core._OnReset: Can not identify form ! ("+form+")");
+		f_core.Assert(win, "f_core._OnReset: Can not identify window !");
 
-		f_core.Info("f_core", "Catch reset event from form '"+form.id+"'.");
+		f_core.Info("f_core", "_OnReset: Catch reset event from form '"+form.id+"'.");
 
 		if (win.f_event) {
 			if (win.f_event.GetEventLocked(true)) {
@@ -1145,7 +1157,7 @@ var f_core = {
 			var win;
 			var form;
 			
-			if (!this.tagName || this.tagName.toUpperCase()!="FORM") {
+			if (!this.tagName || this.tagName.toLowerCase()!="form") {
 				// C'est une window ?
 	
 				if (evt.relatedTarget) {
@@ -1161,10 +1173,10 @@ var f_core = {
 				win=f_core.GetWindow(form);
 			}
 			
-			f_core.Assert(form && form.tagName.toUpperCase()=="FORM", "Can not identify form ! ("+form+")");
-			f_core.Assert(win, "Can not identify window !");
+			f_core.Assert(form && form.tagName.toLowerCase()=="form", "f_core._OnSubmit: Can not identify form ! ("+form+")");
+			f_core.Assert(win, "f_core._OnSubmit: Can not identify window !");
 	
-			f_core.Info("f_core", "Catch submit event from form '"+form.id+"'.");
+			f_core.Info("f_core", "_OnSubmit: Catch submit event from form '"+form.id+"'.");
 	
 			if (win.f_event) {
 				if (win.f_event.GetEventLocked(true)) {
@@ -1173,7 +1185,7 @@ var f_core = {
 			}
 	
 			if (!form._initialized) {
-				//f_core.Assert(form._initialized, "Not initialized form '"+form.id+"'.");
+				//f_core.Assert(form._initialized, "f_core._OnSubmit: Not initialized form '"+form.id+"'.");
 	
 				// Cas ou l'utilisateur va plus vite que la musique ! (avant le onload de la page)
 				
@@ -1235,11 +1247,10 @@ var f_core = {
 	 * @method private static
 	 */
 	_Submit: function(form, elt, event, url, target, createWindowParameters, closeWindow, modal) {
-		f_core.Assert(createWindowParameters===undefined || createWindowParameters===null || typeof(createWindowParameters)=="object", "Submit: createWindowParameters parameter must be undefined or an object.");
-		f_core.Assert(closeWindow===undefined || closeWindow===null || typeof(closeWindow)=="boolean", "Submit: closeWindow parameter must be undefined or a boolean.");
-		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "Submit: modal parameter must be undefined or a boolean.");
-		
-		
+		f_core.Assert(createWindowParameters===undefined || createWindowParameters===null || typeof(createWindowParameters)=="object", "f_core._Submit: createWindowParameters parameter must be undefined or an object.");
+		f_core.Assert(closeWindow===undefined || closeWindow===null || typeof(closeWindow)=="boolean", "f_core._Submit: closeWindow parameter must be undefined or a boolean.");
+		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "f_core._Submit: modal parameter must be undefined or a boolean.");
+				
 		f_core.Profile(false, "f_core._submit("+url+")");
 
 		try {
@@ -1284,7 +1295,7 @@ var f_core = {
 			}
 	
 			// Double check this is a real FORM
-			f_core.Assert((form.tagName.toUpperCase()=="FORM"),"f_core._Submit: Invalid form '"+form.tagName+"'.");
+			f_core.Assert((form.tagName.toLowerCase()=="form"),"f_core._Submit: Invalid form '"+form.tagName+"'.");
 	
 			// Call onsubmit hook
 			try {
@@ -1794,11 +1805,11 @@ var f_core = {
 	 * @method public static hidden
 	 */
 	AddCheckListener: function(component, listener) {
-		f_core.Assert(typeof(listener)=="object", "Listener must be an object ! ("+listener+")");
+		f_core.Assert(typeof(listener)=="object", "f_core.AddCheckListener: Listener must be an object ! ("+listener+")");
 		f_core.Assert(component.nodeType, "f_core.AddCheckListener: Invalid component parameter ("+component+")");
 
 		var form=this.GetParentForm(component);
-		f_core.Assert(form, "Can not get form of component '"+component.id+"'.");
+		f_core.Assert(form, "f_core.AddCheckListener: Can not get form of component '"+component.id+"'.");
 		
 		var checkListeners=form._checkListeners;
 		if (!checkListeners) {
@@ -1812,10 +1823,10 @@ var f_core = {
 	 * @method public static hidden
 	 */
 	AddResetListener: function(component) {
-		f_core.Assert(typeof(component)=="object", "Listener is invalid !");
+		f_core.Assert(typeof(component)=="object", "f_core.AddResetListener: Listener is invalid !");
 
 		var form=this.GetParentForm(component);
-		f_core.Assert(form, "Can not get form of component '"+component.id+"'.");
+		f_core.Assert(form, "f_core.AddResetListener: Can not get form of component '"+component.id+"'.");
 		
 		var resetListeners=form._resetListeners;
 		if (!resetListeners) {
@@ -1829,10 +1840,10 @@ var f_core = {
 	 * @method public static hidden
 	 */
 	RemoveResetListener: function(component) {
-		f_core.Assert(typeof(component)=="object", "Listener is invalid !");
+		f_core.Assert(typeof(component)=="object", "f_core.RemoveResetListener: Listener is invalid !");
 
 		var form=this.GetParentForm(component);
-		f_core.Assert(form, "Can not get form of component '"+component.id+"'.");
+		f_core.Assert(form, "f_core.RemoveResetListener: Can not get form of component '"+component.id+"'.");
 		
 		var resetListeners=form._resetListeners;
 		if (!resetListeners) {
@@ -1971,7 +1982,7 @@ var f_core = {
 	/**
 	 * Find a child with a specified css class.
 	 *
-	 * @method public static
+	 * @method hidden static
 	 * @param HTMLElement elt Start node.
 	 * @param String claz Css class name. 
 	 * @return HTMLElement
@@ -2017,7 +2028,7 @@ var f_core = {
 	/**
 	 * Find a child with a specified class.
 	 *
-	 * @method public static
+	 * @method hidden static
 	 * @param HTMLElement elt Start node.
 	 * @param String claz Class name.
 	 * @param hidden boolean css Search Css class.
@@ -2131,8 +2142,8 @@ var f_core = {
 	 * @param Element 
 	 */
 	GetAttribute: function(object, attributeName, defaultValue) {
-		f_core.Assert(object && object.nodeType==f_core._ELEMENT_NODE, "Object parameter is node a valid node ! ("+object+")");
-		f_core.Assert(typeof(attributeName)=="string", "attributeName parameter is invalid.");
+		f_core.Assert(object && object.nodeType==f_core._ELEMENT_NODE, "f_core.GetAttribute: Object parameter is not a valid node ! ("+object+")");
+		f_core.Assert(typeof(attributeName)=="string", "f_core.GetAttribute: attributeName parameter is invalid.");
 
 		try {
 			var value=object.getAttribute(attributeName);
@@ -2150,9 +2161,12 @@ var f_core = {
 	 * Returns true if component (and its ancestors) is visible.
 	 *
 	 * @method hidden static
+	 * @param f_component component
+	 * @return boolean
 	 */
 	IsComponentVisible: function(component) {
-		f_core.Assert(component, "Component is null !");
+		f_core.Assert(component, "f_core.IsComponentVisible: Component is null !");
+		f_core.Assert(component.nodeType==f_core._ELEMENT_NODE, "f_core.IsComponentVisible: Component parameter is invalid ("+component+")");
 
 		for(;component;component=component.parentNode) {
 			var style=component.style;
@@ -2243,7 +2257,7 @@ var f_core = {
 	 * @return Object 
 	 */
 	GetAbsolutePosition: function(component) {
-		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "Invalid component parameter '"+component+"'.");
+		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "f_core.GetAbsolutePosition: Invalid component parameter '"+component+"'.");
 
 		var curTop = 0;
 		var curLeft= 0;
@@ -2418,7 +2432,7 @@ var f_core = {
 				}
 			}
 
-			f_core.Debug("f_core", "Browser version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
+			f_core.Debug(f_core, "Browser version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
 
 			if (f_core._browser_major==2) {			
 				f_core._browser=f_core.FIREFOX_2_0;
@@ -2446,7 +2460,7 @@ var f_core = {
 			return false;
 		}
 
-		f_core.Assert(false, "Unknown browser '"+agt+"'.");
+		f_core.Assert(false, "f_core._SearchBrowser: Unknown browser '"+agt+"'.");
 	},
 	/**
 	 * @method hidden static
@@ -2529,7 +2543,6 @@ var f_core = {
 			}
 		}		
 
-
 		evt.cancelBubble = true;
 
 		if (evt.preventDefault) {
@@ -2603,7 +2616,7 @@ var f_core = {
 	 * @return number[]
 	 */
 	GetJsEventPosition: function(event, doc) {
-		f_core.Assert(event && event.type, "Invalid event parameter '"+event+"'.");
+		f_core.Assert(event && event.type, "f_core.GetJsEventPosition: Invalid event parameter '"+event+"'.");
 	
 		if (!doc) {
 			var target=event.relatedTarget;
@@ -2646,8 +2659,8 @@ var f_core = {
 	 * @return boolean
 	 */
 	IsComponentInside: function(component, event) {			
-		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "Invalid component parameter '"+component+"'.");
-		f_core.Assert(event && event.type, "Invalid event parameter '"+event+"'.");
+		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "f_core.IsComponentInside: Invalid component parameter '"+component+"'.");
+		f_core.Assert(event && event.type, "f_core.IsComponentInside: Invalid event parameter '"+event+"'.");
 	
 		var p=f_core.GetAbsolutePosition(component);
 	
@@ -2785,8 +2798,8 @@ var f_core = {
 	 * @return boolean <code>true</code> is success !
 	 */
 	SetFocus: function(component, asyncMode) {
-		f_core.Assert(component, "Component is NULL");
-		f_core.Assert(component.nodeType==f_core._ELEMENT_NODE, "Parameter is not a component.");
+		f_core.Assert(component, "f_core.SetFocus: Component is NULL");
+		f_core.Assert(component.nodeType==f_core._ELEMENT_NODE, "f_core.SetFocus: Parameter is not a component.");
 
 		f_core.Debug(f_core, "SetFocus: component="+component.id+" asyncMode="+asyncMode);
 
@@ -2872,13 +2885,11 @@ var f_core = {
 	 * @method hidden static
 	 */
 	GetFirstElementByTagName: function(parent, tagName, assertIfNotFound) {
-		f_core.Assert(parent && parent.nodeType, "Parent '"+parent+"' is not a Dom node !");
+		f_core.Assert(parent && parent.nodeType, "f_core.GetFirstElementByTagName: Parent '"+parent+"' is not a Dom node !");
 		
 		var components=parent.getElementsByTagName(tagName);
 		if (!components || !components.length) {
-			if (assertIfNotFound) {
-				f_core.Assert(false, "Component '"+tagName+"' not found !");
-			}
+			f_core.Assert(!assertIfNotFound, "f_core.GetFirstElementByTagName: Component '"+tagName+"' not found !");
 			return null;
 		}
 		
@@ -2937,7 +2948,7 @@ var f_core = {
 			return component.ownerDocument.defaultView.getComputedStyle(component, '').getPropertyValue(attributeId);
 		}
 		
-		f_core.Assert(false, "Browser not supported !");
+		f_core.Assert(false, "f_core.GetCurrentStyleProperty: Browser not supported !");
 		return null;
 	},
 	/**
@@ -3040,7 +3051,7 @@ var f_core = {
 		for(var i=0;i<ss.length;i++) {
 			var s=ss[i];
 			var idx=s.indexOf('=');
-			f_core.Assert(idx>0, "Bad format ! '"+s+"'.");
+			f_core.Assert(idx>0, "f_core.DecodeObject: Bad format ! '"+s+"'.");
 			
 			var name=s.substring(0, idx);
 			name=name.replace(/\+/g, ' ');
@@ -3109,7 +3120,7 @@ var f_core = {
 
 				
 			default:
-				f_core.Error(f_core, "Unknown type '"+type+"' !");
+				f_core.Error(f_core, "DecodeObject: Unknown type '"+type+"' !");
 				data=undefined;
 			}
 			
@@ -3326,7 +3337,7 @@ var f_core = {
 	 * @return String value associated to the cookie, or <code>null</code>.
 	 */
 	GetCookieValue: function(cookieName, doc) {
-		f_core.Assert(typeof(cookieName)=="string", "Bad cookieName ! ("+cookieName+")");
+		f_core.Assert(typeof(cookieName)=="string", "f_core.GetCookieValue: Bad cookieName ! ("+cookieName+")");
 		
 		if (!doc) {
 			doc=document;
@@ -3337,7 +3348,7 @@ var f_core = {
 			cookies=doc.cookie;
 			
 		} catch (x) {
-			f_core.Error(f_core, "Can not list cookies of document.", x);
+			f_core.Error(f_core, "GetCookieValue: Can not list cookies of document.", x);
 		
 			return null;			
 		}
@@ -3379,7 +3390,7 @@ var f_core = {
 	 * @return boolean Returns <code>true</code> if success.
 	 */
 	SetCookieValue: function(cookieName, cookieValue, doc) {
-		f_core.Assert(typeof(cookieName)=="string", "Bad cookieName ! ("+cookieName+")");
+		f_core.Assert(typeof(cookieName)=="string", "f_core.SetCookieValue: Bad cookieName ! ("+cookieName+")");
 
 		if (!doc) {
 			doc=document;
@@ -3395,7 +3406,7 @@ var f_core = {
 			return true;
 			
 		} catch (x) {
-			f_core.Error(f_core, "Can not set cookie '"+cookieName+"', value='"+cookieValue+"'.", x);
+			f_core.Error(f_core, "SetCookieValue: Can not set cookie '"+cookieName+"', value='"+cookieValue+"'.", x);
 	
 			if (f_core.DebugMode) {
 				throw x;
@@ -3445,12 +3456,12 @@ var f_core = {
 	 * @return f_effect An f_effect object. 
 	 */
 	CreateEffectByName: function(effectName, body, callback) {
-		f_core.Assert(typeof(effectName)=="string", "The name of the effect is not a string !");
-		f_core.Assert(body && body.nodeType!==undefined, "Body parameter is not a HTMLElement");
+		f_core.Assert(typeof(effectName)=="string", "f_core.CreateEffectByName: The name of the effect is not a string !");
+		f_core.Assert(body && body.nodeType!==undefined, "f_core.CreateEffectByName: Body parameter is not a HTMLElement");
 	
 		var effectClass=window._classLoader.f_getClass("f_effect");
 		if (!effectClass) {
-			f_core.Error(f_core, "Effect class has not been loaded. (name="+effectName+")");
+			f_core.Error(f_core, "CreateEffectByName: Effect class has not been loaded. (name="+effectName+")");
 			return null;
 		}
 		
@@ -3630,7 +3641,7 @@ var f_core = {
 	 *		<b>NOT VISIBLE, DISABLED, HIDDEN TYPE, NO FOCUS METHOD</b>
 	 *
 	 * @method hidden static 
-	 * @param HTMLElement component composant précédant dans l'ordre de tabulation
+	 * @param HTMLElement component composant précédent dans l'ordre de tabulation
 	 * @return HTMLElement composant suivant dans l'ordre de tabulation
 	 */
 	GetNextFocusableComponent: function(component) {
@@ -3864,8 +3875,8 @@ var f_core = {
 	 * @return String
 	 */
 	FormatMessage: function(message, parameters) {
-		f_core.Assert(typeof(message)=="string", "Message parameter is invalid '"+message+"'.");
-//		f_core.Assert(parameters instanceof Array, "parameters parameter is invalid '"+parameters+"'.");
+		f_core.Assert(typeof(message)=="string", "f_core.FormatMessage: Message parameter is invalid '"+message+"'.");
+//		f_core.Assert(parameters instanceof Array, "f_core.FormatMessage: parameters parameter is invalid '"+parameters+"'.");
 		
 		var ret="";
 		var pos=0;
@@ -3969,7 +3980,7 @@ var f_core = {
 		if (forms.length==1 || !component || component.nodeType==f_core._DOCUMENT_NODE) {
 			form=forms[0];
 
-		} else if (component.tagName.toUpperCase()!="FORM") {
+		} else if (component.tagName.toLowerCase()!="form") {
 			form=f_core.GetParentForm(component);
 		}
 		
@@ -4002,7 +4013,7 @@ var f_core = {
 	 * @return any
 	 */
 	AddFacesHiddenInputParameters: function(form, acceptFunction, data, onlyOne) {
-		var inputs=f_core.GetElementsByTagName(form, "INPUT");
+		var inputs=f_core.GetElementsByTagName(form, "input");
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
 			
@@ -4130,7 +4141,8 @@ var f_core = {
 	 * @return void
 	 */
 	SetOpacity: function(component, opacity) {
-		f_core.Assert(component && component.tagName, "Invalid component parameter ("+component+")");
+		f_core.Assert(component && component.nodeType==1, "f_core.SetOpacity: Invalid component parameter ("+component+")");
+		f_core.Assert(typeof(opacity)=="number" && opacity>=0 && opacity<=1, "f_core.SetOpacity: Invalid opacity parameter ("+opacity+")");
 
 		if (component.style.opacity!==undefined) {
 			// CSS 3  on peut toujours réver !

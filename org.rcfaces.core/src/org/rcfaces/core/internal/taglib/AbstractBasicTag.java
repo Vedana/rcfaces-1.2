@@ -1,15 +1,16 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.AbstractBasicComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
@@ -22,8 +23,8 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	private String waiRole;
 	private String x;
 	private String y;
-	private String height;
 	private String width;
+	private String height;
 	private String marginBottom;
 	private String marginLeft;
 	private String marginRight;
@@ -86,20 +87,20 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		this.y = y;
 	}
 
-	public final String getHeight() {
-		return height;
-	}
-
-	public final void setHeight(String height) {
-		this.height = height;
-	}
-
 	public final String getWidth() {
 		return width;
 	}
 
 	public final void setWidth(String width) {
 		this.width = width;
+	}
+
+	public final String getHeight() {
+		return height;
+	}
+
+	public final void setHeight(String height) {
+		this.height = height;
 	}
 
 	public final String getMarginBottom() {
@@ -219,8 +220,8 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
-			LOG.debug("  height='"+height+"'");
 			LOG.debug("  width='"+width+"'");
+			LOG.debug("  height='"+height+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
@@ -291,16 +292,6 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (height != null) {
-			if (isValueReference(height)) {
-				ValueBinding vb = application.createValueBinding(height);
-
-				component.setHeight(vb);
-			} else {
-				component.setHeight(height);
-			}
-		}
-
 		if (width != null) {
 			if (isValueReference(width)) {
 				ValueBinding vb = application.createValueBinding(width);
@@ -308,6 +299,16 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 				component.setWidth(vb);
 			} else {
 				component.setWidth(width);
+			}
+		}
+
+		if (height != null) {
+			if (isValueReference(height)) {
+				ValueBinding vb = application.createValueBinding(height);
+
+				component.setHeight(vb);
+			} else {
+				component.setHeight(height);
 			}
 		}
 
@@ -456,8 +457,8 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		waiRole = null;
 		x = null;
 		y = null;
-		height = null;
 		width = null;
+		height = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;

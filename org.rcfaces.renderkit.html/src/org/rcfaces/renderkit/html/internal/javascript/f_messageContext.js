@@ -132,7 +132,7 @@ var __prototype = {
 			return;
 		}
 	
-		f_core.Assert(form && form.tagName && form.tagName.toUpperCase()=="FORM", "Form parameter is not a form ! ("+form+")");
+		f_core.Assert(form && form.tagName && form.tagName.toLowerCase()=="form", "Form parameter is not a form ! ("+form+")");
 	
 		this._form=form;
 		var parent=f_messageContext.Get();

@@ -62,7 +62,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         NumberEntryComponent numberEntryComponent = (NumberEntryComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement("DIV");
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -142,7 +142,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
         encodeSubComponents(htmlWriter, numberEntryComponent, number,
                 numberFormat, decimalFormatSymbols, locale);
 
-        htmlWriter.endElement("DIV");
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         htmlWriter.enableJavaScript();
     }
@@ -268,9 +268,9 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
 
                     String text = sb.toString();
 
-                    // htmlWriter.startElement("SPAN");
+                    // htmlWriter.startElement(IHtmlWriter.SPAN");
                     htmlWriter.writeText(text);
-                    // htmlWriter.endElement("SPAN");
+                    // htmlWriter.endElement(IHtmlWriter.SPAN");
 
                     sb.setLength(0);
                 }

@@ -27,11 +27,13 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
+import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -51,6 +53,8 @@ public class DataGridService extends AbstractHtmlService {
     private static final Log LOG = LogFactory.getLog(DataGridService.class);
 
     private static final int DEFAULT_BUFFER_SIZE = 4096;
+
+    private static final String DATAGRID_SERVICE_VERSION = "1.0.0";
 
     public DataGridService() {
     }
@@ -136,9 +140,9 @@ public class DataGridService extends AbstractHtmlService {
 
         String sortIndex_s = (String) parameters.get("sortIndex");
         if (sortIndex_s != null) {
-            DataColumnComponent columns[] = dgc.listColumns().toArray();
+            DataColumnComponent columns[] = dgc.listDataColumns().toArray();
 
-            StringTokenizer st1 = new StringTokenizer(sortIndex_s, ",");
+            StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
 
             sortedComponents = new ISortedComponent[st1.countTokens() / 2];
 
@@ -168,6 +172,8 @@ public class DataGridService extends AbstractHtmlService {
         setNoCache(response);
         response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
                 + "; charset=" + RESPONSE_CHARSET);
+
+        setCameliaResponse(response, DATAGRID_SERVICE_VERSION);
 
         boolean useGzip = canUseGzip(facesContext);
 
@@ -227,13 +233,13 @@ public class DataGridService extends AbstractHtmlService {
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
-            DataGridComponent dgc, String componentId, DataGridRenderer dgr,
-            int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
-            String filterExpression) throws IOException {
+            DataGridComponent dgc, String componentClientId,
+            DataGridRenderer dgr, int rowIndex, int forcedRows,
+            ISortedComponent sortedComponents[], String filterExpression)
+            throws IOException {
 
-        DataGridRenderer.TableRenderContext tableContext = dgr
-                .createTableContext(facesContext, dgc, rowIndex, forcedRows,
-                        sortedComponents, filterExpression);
+        IProcessContext processContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext);
 
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;
@@ -243,15 +249,20 @@ public class DataGridService extends AbstractHtmlService {
         }
 
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, dgc, componentId);
+                pw, dgc, componentClientId);
+
+        DataGridRenderer.DataGridRenderContext tableContext = dgr
+                .createTableContext(processContext, jsWriter
+                        .getJavaScriptRenderContext(), dgc, rowIndex,
+                        forcedRows, sortedComponents, filterExpression);
 
         String varId = jsWriter.getComponentVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentId).writeln(
+                "GetElementByClientId").writeString(componentClientId).writeln(
                 ", document);");
 
-        jsWriter.writeMethodCall("_startNewPage").writeInt(rowIndex).writeln(
+        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
                 ");");
 
         String rowVarId = jsWriter.getJavaScriptRenderContext()
@@ -260,7 +271,7 @@ public class DataGridService extends AbstractHtmlService {
 
         dgr.encodeJsTransactionalRows(jsWriter, tableContext, false);
 
-        jsWriter.writeMethodCall("_updateNewPage").writeln(");");
+        jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
         if (LOG.isTraceEnabled()) {
             pw.flush();

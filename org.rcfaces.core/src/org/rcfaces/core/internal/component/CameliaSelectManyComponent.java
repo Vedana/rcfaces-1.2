@@ -2,40 +2,31 @@
  */
 package org.rcfaces.core.internal.component;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Collections;
 import java.util.Set;
-import java.io.IOException;
 
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
+import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import java.lang.String;
-import javax.faces.convert.Converter;
-import java.util.Arrays;
-import java.util.HashSet;
-import org.rcfaces.core.internal.component.IConvertValueHolder;
-
-
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IRCFacesComponent;
-import org.rcfaces.core.internal.component.CameliaComponents;
-import org.rcfaces.core.internal.component.TemplatesEngine;
-import org.rcfaces.core.internal.component.IComponentEngine;
-import org.rcfaces.core.internal.component.IFactory;
-import org.rcfaces.core.internal.component.IStateChildrenList;
+import org.rcfaces.core.internal.capability.IComponentEngine;
+import org.rcfaces.core.internal.capability.IConvertValueHolder;
+import org.rcfaces.core.internal.capability.IRCFacesComponent;
+import org.rcfaces.core.internal.capability.IStateChildrenList;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
@@ -63,23 +54,42 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 
 		this.engine = factory.createComponentEngine();
 
-        initializeComponent();
+		IInitializationState state=factory.createInitializationState();
+        initializeComponent(state);	
     }
 
-    protected void initializeComponent() {
+    protected void initializeComponent(IInitializationState state) {
     	if (Constants.TEMPLATE_ENGINE_SUPPORT) {
-	        if (isTemplateComponent() && TemplatesEngine.isConstructPhase()) {
-	            constructTemplate();
+	        if (isTemplateComponent(state) && state.isConstructionState()) {
+	        	if (LOG.isDebugEnabled()) {
+	        		LOG.debug("Call construct template method.");
+	        	}
+	            constructTemplate(state);
 	        }
 	    }
+	    if (Constants.COMPONENT_DEFAULT_PROPERTIES_SUPPORT) {
+	        if (hasDefaultProperties(state) && state.isConstructionState()) {
+	        	if (LOG.isDebugEnabled()) {
+	        		LOG.debug("Call setDefaultProperties method.");
+	        	}
+	            setDefaultProperties(state);
+	        }
+	    }
+	    
     }
-    
-
-    protected boolean isTemplateComponent() {
+ 
+    protected boolean isTemplateComponent(IInitializationState state) {
         return false;
     }
 
-    protected void constructTemplate() {
+    protected void constructTemplate(IInitializationState state) {
+    }
+
+    protected boolean hasDefaultProperties(IInitializationState state) {
+        return false;
+    }
+
+    protected void setDefaultProperties(IInitializationState state) {
     }
 
 	public String getFamily() {
@@ -374,7 +384,7 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait référence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait rï¿½fï¿½rence qu'a des ActionEvent
 		if (e instanceof ActionEvent) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

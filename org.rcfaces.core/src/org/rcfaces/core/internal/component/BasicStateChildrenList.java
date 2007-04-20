@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.rcfaces.core.internal.capability.IStateChildrenList;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

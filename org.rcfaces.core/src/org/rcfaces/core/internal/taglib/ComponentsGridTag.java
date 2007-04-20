@@ -1,35 +1,89 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.ComponentsGridComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ComponentsGridComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public class ComponentsGridTag extends AbstractDataTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ComponentsGridTag.class);
 
+	private String selectionListeners;
+	private String selectable;
+	private String selectionCardinality;
+	private String selectedValues;
+	private String doubleClickListeners;
+	private String required;
 	private String border;
-	private String borderType;
+	private String rowStyleClass;
 	private String horizontalScrollPosition;
 	private String verticalScrollPosition;
-	private String rows;
-	private String first;
-	private String value;
-	private String var;
+	private String preference;
+	private String paged;
 	private String rowCountVar;
 	private String rowIndexVar;
-	private String rowStyleClass;
-	private String columnStyleClass;
+	private String rowValue;
+	private String rowValueConverter;
+	private String clientSelectionFullState;
 	public String getComponentType() {
 		return ComponentsGridComponent.COMPONENT_TYPE;
+	}
+
+	public final String getSelectionListener() {
+		return selectionListeners;
+	}
+
+	public final void setSelectionListener(String selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
+
+	public final String getSelectable() {
+		return selectable;
+	}
+
+	public final void setSelectable(String selectable) {
+		this.selectable = selectable;
+	}
+
+	public final String getSelectionCardinality() {
+		return selectionCardinality;
+	}
+
+	public final void setSelectionCardinality(String selectionCardinality) {
+		this.selectionCardinality = selectionCardinality;
+	}
+
+	public final String getSelectedValues() {
+		return selectedValues;
+	}
+
+	public final void setSelectedValues(String selectedValues) {
+		this.selectedValues = selectedValues;
+	}
+
+	public final String getDoubleClickListener() {
+		return doubleClickListeners;
+	}
+
+	public final void setDoubleClickListener(String doubleClickListeners) {
+		this.doubleClickListeners = doubleClickListeners;
+	}
+
+	public final String getRequired() {
+		return required;
+	}
+
+	public final void setRequired(String required) {
+		this.required = required;
 	}
 
 	public final String getBorder() {
@@ -40,12 +94,12 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.border = border;
 	}
 
-	public final String getBorderType() {
-		return borderType;
+	public final String getRowStyleClass() {
+		return rowStyleClass;
 	}
 
-	public final void setBorderType(String borderType) {
-		this.borderType = borderType;
+	public final void setRowStyleClass(String rowStyleClass) {
+		this.rowStyleClass = rowStyleClass;
 	}
 
 	public final String getHorizontalScrollPosition() {
@@ -64,36 +118,20 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
-	public final String getRows() {
-		return rows;
+	public final String getPreference() {
+		return preference;
 	}
 
-	public final void setRows(String rows) {
-		this.rows = rows;
+	public final void setPreference(String preference) {
+		this.preference = preference;
 	}
 
-	public final String getFirst() {
-		return first;
+	public final String getPaged() {
+		return paged;
 	}
 
-	public final void setFirst(String first) {
-		this.first = first;
-	}
-
-	public final String getValue() {
-		return value;
-	}
-
-	public final void setValue(String value) {
-		this.value = value;
-	}
-
-	public final String getVar() {
-		return var;
-	}
-
-	public final void setVar(String var) {
-		this.var = var;
+	public final void setPaged(String paged) {
+		this.paged = paged;
 	}
 
 	public final String getRowCountVar() {
@@ -112,20 +150,28 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.rowIndexVar = rowIndexVar;
 	}
 
-	public final String getRowStyleClass() {
-		return rowStyleClass;
+	public final String getRowValue() {
+		return rowValue;
 	}
 
-	public final void setRowStyleClass(String rowStyleClass) {
-		this.rowStyleClass = rowStyleClass;
+	public final void setRowValue(String rowValue) {
+		this.rowValue = rowValue;
 	}
 
-	public final String getColumnStyleClass() {
-		return columnStyleClass;
+	public final String getRowValueConverter() {
+		return rowValueConverter;
 	}
 
-	public final void setColumnStyleClass(String columnStyleClass) {
-		this.columnStyleClass = columnStyleClass;
+	public final void setRowValueConverter(String rowValueConverter) {
+		this.rowValueConverter = rowValueConverter;
+	}
+
+	public final String getClientSelectionFullState() {
+		return clientSelectionFullState;
+	}
+
+	public final void setClientSelectionFullState(String clientSelectionFullState) {
+		this.clientSelectionFullState = clientSelectionFullState;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -133,18 +179,21 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			if (ComponentsGridComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  selectable='"+selectable+"'");
+			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
+			LOG.debug("  required='"+required+"'");
 			LOG.debug("  border='"+border+"'");
-			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
-			LOG.debug("  rows='"+rows+"'");
-			LOG.debug("  first='"+first+"'");
-			LOG.debug("  value='"+value+"'");
-			LOG.debug("  var='"+var+"'");
+			LOG.debug("  preference='"+preference+"'");
+			LOG.debug("  paged='"+paged+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
-			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
-			LOG.debug("  columnStyleClass='"+columnStyleClass+"'");
+			LOG.debug("  rowValue='"+rowValue+"'");
+			LOG.debug("  rowValueConverter='"+rowValueConverter+"'");
+			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -159,6 +208,50 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
+		if (selectionListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
+		if (selectable != null) {
+			if (isValueReference(selectable)) {
+				ValueBinding vb = application.createValueBinding(selectable);
+
+				component.setSelectable(vb);
+			} else {
+				component.setSelectable(getBool(selectable));
+			}
+		}
+
+		if (selectionCardinality != null) {
+			if (isValueReference(selectionCardinality)) {
+				ValueBinding vb = application.createValueBinding(selectionCardinality);
+
+				component.setSelectionCardinality(vb);
+			} else {
+				component.setSelectionCardinality(selectionCardinality);
+			}
+		}
+
+		if (selectedValues != null) {
+				ValueBinding vb = application.createValueBinding(selectedValues);
+
+				component.setSelectedValues(vb);
+		}
+
+		if (doubleClickListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+		}
+
+		if (required != null) {
+			if (isValueReference(required)) {
+				ValueBinding vb = application.createValueBinding(required);
+
+				component.setRequired(vb);
+			} else {
+				component.setRequired(getBool(required));
+			}
+		}
+
 		if (border != null) {
 			if (isValueReference(border)) {
 				ValueBinding vb = application.createValueBinding(border);
@@ -169,13 +262,13 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
-		if (borderType != null) {
-			if (isValueReference(borderType)) {
-				ValueBinding vb = application.createValueBinding(borderType);
+		if (rowStyleClass != null) {
+			if (isValueReference(rowStyleClass)) {
+				ValueBinding vb = application.createValueBinding(rowStyleClass);
 
-				component.setBorderType(vb);
+				component.setRowStyleClass(vb);
 			} else {
-				component.setBorderType(borderType);
+				component.setRowStyleClass(rowStyleClass);
 			}
 		}
 
@@ -199,39 +292,19 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
-		if (rows != null) {
-			if (isValueReference(rows)) {
-				ValueBinding vb = application.createValueBinding(rows);
-				component.setRows(vb);
-			} else {
-				component.setRows(getInt(rows));
-			}
+		if (preference != null) {
+				ValueBinding vb = application.createValueBinding(preference);
+
+				component.setPreference(vb);
 		}
 
-		if (first != null) {
-			if (isValueReference(first)) {
-				ValueBinding vb = application.createValueBinding(first);
-				component.setFirst(vb);
-			} else {
-				component.setFirst(getInt(first));
-			}
-		}
+		if (paged != null) {
+			if (isValueReference(paged)) {
+				ValueBinding vb = application.createValueBinding(paged);
 
-		if (value != null) {
-			if (isValueReference(value)) {
-				ValueBinding vb = application.createValueBinding(value);
-				component.setValue(vb);
+				component.setPaged(vb);
 			} else {
-				component.setValue(value);
-			}
-		}
-
-		if (var != null) {
-			if (isValueReference(var)) {
-				ValueBinding vb = application.createValueBinding(var);
-				component.setVar(vb);
-			} else {
-				component.setVar(var);
+				component.setPaged(getBool(paged));
 			}
 		}
 
@@ -249,38 +322,52 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 				component.setRowIndexVar(rowIndexVar);
 		}
 
-		if (rowStyleClass != null) {
-			if (isValueReference(rowStyleClass)) {
-				ValueBinding vb = application.createValueBinding(rowStyleClass);
-				component.setRowStyleClass(vb);
+		if (rowValue != null) {
+			if (isValueReference(rowValue)) {
+				ValueBinding vb = application.createValueBinding(rowValue);
+				component.setRowValue(vb);
 			} else {
-				component.setRowStyleClass(rowStyleClass);
+				throw new javax.faces.FacesException("Attribute 'rowValue' accept only a binding expression !");
 			}
 		}
 
-		if (columnStyleClass != null) {
-			if (isValueReference(columnStyleClass)) {
-				ValueBinding vb = application.createValueBinding(columnStyleClass);
-				component.setColumnStyleClass(vb);
+		if (rowValueConverter != null) {
+			if (isValueReference(rowValueConverter)) {
+				ValueBinding vb = application.createValueBinding(rowValueConverter);
+				component.setRowValueConverter(vb);
 			} else {
-				component.setColumnStyleClass(columnStyleClass);
+				component.setRowValueConverter(rowValueConverter);
+			}
+		}
+
+		if (clientSelectionFullState != null) {
+			if (isValueReference(clientSelectionFullState)) {
+				ValueBinding vb = application.createValueBinding(clientSelectionFullState);
+				component.setClientSelectionFullState(vb);
+			} else {
+				component.setClientSelectionFullState(getBool(clientSelectionFullState));
 			}
 		}
 	}
 
 	public void release() {
+		selectionListeners = null;
+		selectable = null;
+		selectionCardinality = null;
+		selectedValues = null;
+		doubleClickListeners = null;
+		required = null;
 		border = null;
-		borderType = null;
+		rowStyleClass = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
-		rows = null;
-		first = null;
-		value = null;
-		var = null;
+		preference = null;
+		paged = null;
 		rowCountVar = null;
 		rowIndexVar = null;
-		rowStyleClass = null;
-		columnStyleClass = null;
+		rowValue = null;
+		rowValueConverter = null;
+		clientSelectionFullState = null;
 
 		super.release();
 	}

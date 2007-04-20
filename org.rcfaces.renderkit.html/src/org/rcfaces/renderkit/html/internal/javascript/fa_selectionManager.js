@@ -157,8 +157,10 @@ var __prototype = {
 			}
 		}
 	},
-	
-	_moveCursor: function(element, show, evt, selection) {
+	/**
+	 * @method protected
+	 */
+	f_moveCursor: function(element, show, evt, selection) {
 		f_core.Assert(element && element.tagName, "Invalid parameter to move cursor !");
 		
 		var old=this._cursor;
@@ -235,8 +237,15 @@ var __prototype = {
 			f_core.Debug("fa_selectionManager", s);
 		}
 	},
-	// Suivant l'état enregistré, on recalcule l'état !
-	_updateElementSelection: function(element, selected) {
+	/**
+	 * @method protected
+	 * @param HtmlElement element
+	 * @param boolean selected
+	 * @return boolean
+	 */
+	f_updateElementSelection: function(element, selected) {
+		// Suivant l'état enregistré, on recalcule l'état !
+
 		var value=this.fa_getElementValue(element);
 	
 		selected=this._isElementValueSelected(value, selected);

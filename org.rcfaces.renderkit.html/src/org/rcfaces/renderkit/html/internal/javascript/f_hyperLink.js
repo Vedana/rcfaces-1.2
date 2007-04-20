@@ -18,7 +18,7 @@ var __prototype = {
 		this.f_setForcedEventReturn(f_event.SELECTION, false);
 		
 		var input=this._input;
-		if (input.tagName.toUpperCase()=="A") {
+		if (input.tagName.toLowerCase()=="a") {
 			if (!input.href) {
 				input.href=f_core.JAVASCRIPT_VOID;
 			}

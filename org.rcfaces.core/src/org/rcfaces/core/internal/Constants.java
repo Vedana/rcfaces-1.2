@@ -40,6 +40,8 @@ public class Constants {
 
     public static final boolean TEMPLATE_ENGINE_SUPPORT = true;
 
+    public static final boolean COMPONENT_DEFAULT_PROPERTIES_SUPPORT = true;
+
     public static final boolean RESOURCE_CONTENT_VERSION_SUPPORT = true;
 
     public static final boolean CACHED_COMPONENT_ITERATOR = true;

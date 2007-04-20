@@ -1,12 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.AbstractMessagesComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The messages Component is a placeholder for error messages (several messages can be shown simultaneously).</p>
@@ -41,91 +42,123 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 		setId(componentId);
 	}
 
-	public final java.lang.String getErrorStyleClass() {
+	public java.lang.String getErrorStyleClass() {
 		return getErrorStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
 	 */
-	public final java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
 	}
 
-	public final void setErrorStyleClass(java.lang.String errorStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "errorStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isErrorStyleClassSetted() {
+		return engine.isPropertySetted(Properties.ERROR_STYLE_CLASS);
+	}
+
+	public void setErrorStyleClass(java.lang.String errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
 	/**
 	 * See {@link #setErrorStyleClass(String) setErrorStyleClass(String)} for more details
 	 */
-	public final void setErrorStyleClass(ValueBinding errorStyleClass) {
+	public void setErrorStyleClass(ValueBinding errorStyleClass) {
 		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
 	}
 
-	public final java.lang.String getFatalStyleClass() {
+	public java.lang.String getFatalStyleClass() {
 		return getFatalStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
 	 */
-	public final java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
 	}
 
-	public final void setFatalStyleClass(java.lang.String fatalStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "fatalStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFatalStyleClassSetted() {
+		return engine.isPropertySetted(Properties.FATAL_STYLE_CLASS);
+	}
+
+	public void setFatalStyleClass(java.lang.String fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
 	/**
 	 * See {@link #setFatalStyleClass(String) setFatalStyleClass(String)} for more details
 	 */
-	public final void setFatalStyleClass(ValueBinding fatalStyleClass) {
+	public void setFatalStyleClass(ValueBinding fatalStyleClass) {
 		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
 	}
 
-	public final java.lang.String getInfoStyleClass() {
+	public java.lang.String getInfoStyleClass() {
 		return getInfoStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
 	 */
-	public final java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
 	}
 
-	public final void setInfoStyleClass(java.lang.String infoStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "infoStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isInfoStyleClassSetted() {
+		return engine.isPropertySetted(Properties.INFO_STYLE_CLASS);
+	}
+
+	public void setInfoStyleClass(java.lang.String infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
 	/**
 	 * See {@link #setInfoStyleClass(String) setInfoStyleClass(String)} for more details
 	 */
-	public final void setInfoStyleClass(ValueBinding infoStyleClass) {
+	public void setInfoStyleClass(ValueBinding infoStyleClass) {
 		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
 	}
 
-	public final java.lang.String getWarnStyleClass() {
+	public java.lang.String getWarnStyleClass() {
 		return getWarnStyleClass(null);
 	}
 
 	/**
 	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
 	 */
-	public final java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
 	}
 
-	public final void setWarnStyleClass(java.lang.String warnStyleClass) {
+	/**
+	 * Returns <code>true</code> if the attribute "warnStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWarnStyleClassSetted() {
+		return engine.isPropertySetted(Properties.WARN_STYLE_CLASS);
+	}
+
+	public void setWarnStyleClass(java.lang.String warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
 	/**
 	 * See {@link #setWarnStyleClass(String) setWarnStyleClass(String)} for more details
 	 */
-	public final void setWarnStyleClass(ValueBinding warnStyleClass) {
+	public void setWarnStyleClass(ValueBinding warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 

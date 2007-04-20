@@ -268,7 +268,7 @@ var __prototype = {
 		if (old==menuBarItem) {
 			// Le selectionné est le méme que l'ancien selectionné !
 		
-			if (openMode) {
+			if (!this.f_isItemDisabled(old) && openMode) {
 				this.f_openUIPopup(menuBarItem, jsEvt, false);
 			}
 			
@@ -581,10 +581,36 @@ var __prototype = {
 	 * @method hidden
 	 * @return Object item
 	 */
+	f_declareBarItem2: function(id, properties) {
+		var item=this.f_declareBarItem(id, properties._label, properties._value, properties._accessKey, properties._disabled);
+		
+		if (properties._imageURL) {
+			this.f_setItemImages(item, 
+				properties._imageURL, 
+				properties._disabledImageURL, 
+				properties._hoverImageURL, 
+				properties._selectedImageURL);
+		}
+		
+		if (properties._clientDatas) {
+			this.f_setItemClientDatas(item, properties._clientDatas);
+		}
+		
+		if (properties._styleClass) {
+			item._styleClass=properties._styleClass;
+		}
+		
+		return item;
+	},
+	
+	/**
+	 * @method hidden
+	 * @return Object item
+	 */
 	f_declareBarItem: function(id, label, value, accessKey, disabled) {
 		var menuBarItem=this.f_appendItem(this, id, label, value, accessKey, null, disabled);
 		
-		var uiItem=document.createElement("BUTTON");
+		var uiItem=document.createElement("button");
 		this._uiMenuItems[menuBarItem]=uiItem; // Ben oui 
 		uiItem._item=menuBarItem;
 		
@@ -613,7 +639,7 @@ var __prototype = {
 		this.f_updateMenuBarItemStyle(menuBarItem);
 
 		if (this._items.length==1) {
-			var dummies=this.getElementsByTagName("A");
+			var dummies=this.getElementsByTagName("a");
 			
 			for(var i=0;i<dummies.length;i++) {
 				this.removeChild(dummies[i]);

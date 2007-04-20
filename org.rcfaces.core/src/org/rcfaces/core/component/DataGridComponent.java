@@ -1,39 +1,51 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.internal.converter.CardinalityConverter;
-import org.rcfaces.core.component.capability.ISelectionValuesCapability;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.AbstractGridComponent;
-import java.lang.String;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.iterator.IDataColumnIterator;
-import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.component.DataColumnComponent;
+import java.util.Set;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
+import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import org.rcfaces.core.component.capability.IPagedCapability;
+import org.rcfaces.core.component.capability.IPreferenceCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISelectionValuesCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.iterator.IDataColumnIterator;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.internal.tools.SortTools;
+import org.rcfaces.core.lang.provider.ICursorProvider;
+import org.rcfaces.core.model.ISortedComponent;
 
 /**
  * <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
@@ -63,18 +75,28 @@ public class DataGridComponent extends AbstractGridComponent implements
 	IDoubleClickEventCapability,
 	IRequiredCapability,
 	IBorderCapability,
+	IRowStyleClassCapability,
 	IReadOnlyCapability,
 	IDisabledCapability,
 	IMenuCapability,
 	IScrollableCapability,
 	IFilterCapability,
-	IPreferenceCapability {
+	IShowValueCapability,
+	IPreferenceCapability,
+	IPagedCapability,
+	IClientSelectionFullStateCapability,
+	IClientCheckFullStateCapability,
+	ICursorProvider,
+	IOrderedChildrenCapability,
+	ISortedComponentsCapability,
+	IGridComponent,
+	ISortedChildrenCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dataGrid";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","rowValueColumnId","horizontalScrollPosition","doubleClickListener","sortedColumnIds","rowIndexVar","selectable","filterProperties","checkable","checkedValues","preference","border","checkCardinality","verticalScrollPosition","paged","columnsOrder","required","disabled","cursorValue","clientCheckFullState","headerVisible","rowCountVar","clientSelectionFullState","checkListener","readOnly","selectionCardinality","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","rowValueColumnId","horizontalScrollPosition","doubleClickListener","rowIndexVar","selectable","showValue","filterProperties","checkable","checkedValues","preference","border","checkCardinality","verticalScrollPosition","paged","required","disabled","cursorValue","clientCheckFullState","rowStyleClass","headerVisible","rowCountVar","clientSelectionFullState","checkListener","readOnly","selectionCardinality","selectedValues"}));
 	}
 
 	public DataGridComponent() {
@@ -86,11 +108,46 @@ public class DataGridComponent extends AbstractGridComponent implements
 		setId(componentId);
 	}
 
-	public final IDataColumnIterator listColumns() {
+	public final void setSortedChildren(UIComponent[] components) {
 
 
-		return GridTools.listColumns(this);
-		
+				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, components);
+			
+	}
+
+	public final UIComponent[] getSortedChildren() {
+
+
+				return SortTools.getSortedChildren(null, this, engine, DataColumnComponent.class);
+			
+	}
+
+	public final UIComponent[] getOrderedChildren() {
+
+
+				return OrderTools.getOrderedChildren(null, this, engine, DataColumnComponent.class);
+			
+	}
+
+	public final void setOrderedChildren(UIComponent[] components) {
+
+
+				OrderTools.setOrderedChildren(null, this, engine, DataColumnComponent.class, components);
+			
+	}
+
+	public final IColumnIterator listColumns() {
+
+
+			return GridTools.listColumns(this, org.rcfaces.core.component.DataColumnComponent.class);
+			
+	}
+
+	public final IDataColumnIterator listDataColumns() {
+
+
+			return GridTools.listDataColumns(this);
+			
 	}
 
 	public final void setSelectionCardinality(String cardinality) {
@@ -107,66 +164,59 @@ public class DataGridComponent extends AbstractGridComponent implements
 		
 	}
 
-	public final int getSelectedRowsCount() {
+	public final int getSelectedValuesCount() {
 
 
-				return GridTools.getCount(getSelectedValues());
+				return GridTools.getCount(getSelectedValues(), GridTools.SELECTION_VALUES_TYPE);
 			
 	}
 
-	public final int getCheckedRowsCount() {
+	public final Object getFirstSelectedValue() {
 
 
-				return GridTools.getCount(getCheckedValues());
+				return GridTools.getFirst(getValue(), getSelectedValues(), GridTools.SELECTION_VALUES_TYPE);
 			
 	}
 
-	public final Object getFirstSelectedRow() {
+	public final int getCheckedValuesCount() {
 
 
-				return GridTools.getFirst(getDataModel(null), getSelectedValues());
+				return GridTools.getCount(getCheckedValues(), GridTools.CHECK_VALUES_TYPE);
 			
 	}
 
-	public final Object getFirstCheckedRow() {
+	public final Object getFirstCheckedValue() {
 
 
-				return GridTools.getFirst(getDataModel(null), getCheckedValues());
+				return GridTools.getFirst(getValue(), getCheckedValues(), GridTools.CHECK_VALUES_TYPE);
 			
 	}
 
-	public final boolean setSortedColumn(DataColumnComponent dataColumn) {
+	public final DataColumnComponent[] getSortedColumns() {
 
 
-				return GridTools.setSortedColumn(this, dataColumn);
-			
-	}
-
-	public final boolean setSortedColumns(DataColumnComponent[] dataColumns) {
-
-
-				return GridTools.setSortedColumns(this, dataColumns);
+				return (DataColumnComponent[])getSortedChildren();
 			
 	}
 
 	public final DataColumnComponent getFirstSortedColumn() {
 
 
-				return getFirstSortedColumn(null);
+				return (DataColumnComponent)SortTools.getFirstSortedChild(null, this, engine, DataColumnComponent.class );
 			
 	}
 
-	public final DataColumnComponent getFirstSortedColumn(FacesContext context) {
+	public final void setSortedColumn(DataColumnComponent dataColumn) {
 
 
-				return GridTools.getFirstSortedColumn(context, this);
+				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, new DataColumnComponent[] { dataColumn });
 			
 	}
 
-	public final ISortedComponent[] listSortedComponents() {
+	public final void setSortedColumns(DataColumnComponent[] dataColumns) {
 
 
-				return listSortedComponents(null);
+				setSortedChildren(dataColumns);
 			
 	}
 
@@ -183,7 +233,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void select(Object rowValue) {
 
 
-				GridTools.select(this, rowValue);
+				GridTools.select(null, this, rowValue);
 			
 	}
 
@@ -194,7 +244,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void select(int index) {
 
 
-				GridTools.select(this, index);
+				GridTools.select(null, this, index);
 			
 	}
 
@@ -206,7 +256,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void select(int[] indices) {
 
 
-				GridTools.select(this, indices);
+				GridTools.select(null, this, indices);
 			
 	}
 
@@ -219,7 +269,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void select(int start, int end) {
 
 
-				GridTools.select(this, start, end);
+				GridTools.select(null, this, start, end);
 			
 	}
 
@@ -230,14 +280,14 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void selectAll() {
 
 
-				GridTools.selectAll(this);
+				GridTools.selectAll(null, this);
 			
 	}
 
 	public final void deselect(Object rowValue) {
 
 
-				GridTools.deselect(this, rowValue);
+				GridTools.deselect(null, this, rowValue);
 			
 	}
 
@@ -248,7 +298,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void deselect(int index) {
 
 
-				GridTools.deselect(this, index);
+				GridTools.deselect(null, this, index);
 			
 	}
 
@@ -259,7 +309,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void deselect(int[] indices) {
 
 
-				GridTools.deselect(this, indices);
+				GridTools.deselect(null, this, indices);
 			
 	}
 
@@ -271,7 +321,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void deselect(int start, int end) {
 
 
-				GridTools.deselect(this, start, end);
+				GridTools.deselect(null, this, start, end);
 			
 	}
 
@@ -281,7 +331,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final void deselectAll() {
 
 
-				GridTools.deselectAll(this);
+				GridTools.deselectAll(null, this);
 			
 	}
 
@@ -342,69 +392,93 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
-	public final boolean isSelectable() {
+	public boolean isSelectable() {
 		return isSelectable(null);
 	}
 
 	/**
 	 * See {@link #isSelectable() isSelectable()} for more details
 	 */
-	public final boolean isSelectable(javax.faces.context.FacesContext facesContext) {
+	public boolean isSelectable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SELECTABLE, false, facesContext);
 	}
 
-	public final void setSelectable(boolean selectable) {
+	/**
+	 * Returns <code>true</code> if the attribute "selectable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectableSetted() {
+		return engine.isPropertySetted(Properties.SELECTABLE);
+	}
+
+	public void setSelectable(boolean selectable) {
 		engine.setProperty(Properties.SELECTABLE, selectable);
 	}
 
 	/**
 	 * See {@link #setSelectable(boolean) setSelectable(boolean)} for more details
 	 */
-	public final void setSelectable(ValueBinding selectable) {
+	public void setSelectable(ValueBinding selectable) {
 		engine.setProperty(Properties.SELECTABLE, selectable);
 	}
 
-	public final int getSelectionCardinality() {
+	public int getSelectionCardinality() {
 		return getSelectionCardinality(null);
 	}
 
 	/**
 	 * See {@link #getSelectionCardinality() getSelectionCardinality()} for more details
 	 */
-	public final int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
+	public int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
 	}
 
-	public final void setSelectionCardinality(int selectionCardinality) {
+	/**
+	 * Returns <code>true</code> if the attribute "selectionCardinality" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectionCardinalitySetted() {
+		return engine.isPropertySetted(Properties.SELECTION_CARDINALITY);
+	}
+
+	public void setSelectionCardinality(int selectionCardinality) {
 		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
 	}
 
 	/**
 	 * See {@link #setSelectionCardinality(int) setSelectionCardinality(int)} for more details
 	 */
-	public final void setSelectionCardinality(ValueBinding selectionCardinality) {
+	public void setSelectionCardinality(ValueBinding selectionCardinality) {
 		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
 	}
 
-	public final java.lang.Object getSelectedValues() {
+	public java.lang.Object getSelectedValues() {
 		return getSelectedValues(null);
 	}
 
-	public final void setSelectedValues(java.lang.Object selectedValues) {
+	/**
+	 * Returns <code>true</code> if the attribute "selectedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectedValuesSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_VALUES);
+	}
+
+	public void setSelectedValues(java.lang.Object selectedValues) {
 		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
 	}
 
 	/**
 	 * See {@link #setSelectedValues(Object) setSelectedValues(Object)} for more details
 	 */
-	public final void setSelectedValues(ValueBinding selectedValues) {
+	public void setSelectedValues(ValueBinding selectedValues) {
 		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
 	}
 
 	/**
 	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
 	 */
-	public final Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
+	public Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
 		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.SELECTED_VALUES);
 		if (valueBinding==null) {
 			return null;
@@ -427,69 +501,93 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ICheckListener.class);
 	}
 
-	public final boolean isCheckable() {
+	public boolean isCheckable() {
 		return isCheckable(null);
 	}
 
 	/**
 	 * See {@link #isCheckable() isCheckable()} for more details
 	 */
-	public final boolean isCheckable(javax.faces.context.FacesContext facesContext) {
+	public boolean isCheckable(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CHECKABLE, false, facesContext);
 	}
 
-	public final void setCheckable(boolean checkable) {
+	/**
+	 * Returns <code>true</code> if the attribute "checkable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckableSetted() {
+		return engine.isPropertySetted(Properties.CHECKABLE);
+	}
+
+	public void setCheckable(boolean checkable) {
 		engine.setProperty(Properties.CHECKABLE, checkable);
 	}
 
 	/**
 	 * See {@link #setCheckable(boolean) setCheckable(boolean)} for more details
 	 */
-	public final void setCheckable(ValueBinding checkable) {
+	public void setCheckable(ValueBinding checkable) {
 		engine.setProperty(Properties.CHECKABLE, checkable);
 	}
 
-	public final int getCheckCardinality() {
+	public int getCheckCardinality() {
 		return getCheckCardinality(null);
 	}
 
 	/**
 	 * See {@link #getCheckCardinality() getCheckCardinality()} for more details
 	 */
-	public final int getCheckCardinality(javax.faces.context.FacesContext facesContext) {
+	public int getCheckCardinality(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.CHECK_CARDINALITY,0, facesContext);
 	}
 
-	public final void setCheckCardinality(int checkCardinality) {
+	/**
+	 * Returns <code>true</code> if the attribute "checkCardinality" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckCardinalitySetted() {
+		return engine.isPropertySetted(Properties.CHECK_CARDINALITY);
+	}
+
+	public void setCheckCardinality(int checkCardinality) {
 		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
 	}
 
 	/**
 	 * See {@link #setCheckCardinality(int) setCheckCardinality(int)} for more details
 	 */
-	public final void setCheckCardinality(ValueBinding checkCardinality) {
+	public void setCheckCardinality(ValueBinding checkCardinality) {
 		engine.setProperty(Properties.CHECK_CARDINALITY, checkCardinality);
 	}
 
-	public final java.lang.Object getCheckedValues() {
+	public java.lang.Object getCheckedValues() {
 		return getCheckedValues(null);
 	}
 
-	public final void setCheckedValues(java.lang.Object checkedValues) {
+	/**
+	 * Returns <code>true</code> if the attribute "checkedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCheckedValuesSetted() {
+		return engine.isPropertySetted(Properties.CHECKED_VALUES);
+	}
+
+	public void setCheckedValues(java.lang.Object checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
 	 * See {@link #setCheckedValues(Object) setCheckedValues(Object)} for more details
 	 */
-	public final void setCheckedValues(ValueBinding checkedValues) {
+	public void setCheckedValues(ValueBinding checkedValues) {
 		engine.setProperty(Properties.CHECKED_VALUES, checkedValues);
 	}
 
 	/**
 	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
 	 */
-	public final Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
+	public Class getCheckedValuesType(javax.faces.context.FacesContext facesContext) {
 		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.CHECKED_VALUES);
 		if (valueBinding==null) {
 			return null;
@@ -512,91 +610,153 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
 	}
 
-	public final boolean isRequired() {
+	public boolean isRequired() {
 		return isRequired(null);
 	}
 
 	/**
 	 * See {@link #isRequired() isRequired()} for more details
 	 */
-	public final boolean isRequired(javax.faces.context.FacesContext facesContext) {
+	public boolean isRequired(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.REQUIRED, false, facesContext);
 	}
 
-	public final void setRequired(boolean required) {
+	/**
+	 * Returns <code>true</code> if the attribute "required" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRequiredSetted() {
+		return engine.isPropertySetted(Properties.REQUIRED);
+	}
+
+	public void setRequired(boolean required) {
 		engine.setProperty(Properties.REQUIRED, required);
 	}
 
 	/**
 	 * See {@link #setRequired(boolean) setRequired(boolean)} for more details
 	 */
-	public final void setRequired(ValueBinding required) {
+	public void setRequired(ValueBinding required) {
 		engine.setProperty(Properties.REQUIRED, required);
 	}
 
-	public final boolean isBorder() {
+	public boolean isBorder() {
 		return isBorder(null);
 	}
 
 	/**
 	 * See {@link #isBorder() isBorder()} for more details
 	 */
-	public final boolean isBorder(javax.faces.context.FacesContext facesContext) {
+	public boolean isBorder(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
 	}
 
-	public final void setBorder(boolean border) {
+	/**
+	 * Returns <code>true</code> if the attribute "border" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBorderSetted() {
+		return engine.isPropertySetted(Properties.BORDER);
+	}
+
+	public void setBorder(boolean border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
 	/**
 	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
 	 */
-	public final void setBorder(ValueBinding border) {
+	public void setBorder(ValueBinding border) {
 		engine.setProperty(Properties.BORDER, border);
 	}
 
-	public final boolean isReadOnly() {
+	public java.lang.String getRowStyleClass() {
+		return getRowStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getRowStyleClass() getRowStyleClass()} for more details
+	 */
+	public java.lang.String getRowStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRowStyleClassSetted() {
+		return engine.isPropertySetted(Properties.ROW_STYLE_CLASS);
+	}
+
+	public void setRowStyleClass(java.lang.String rowStyleClass) {
+		engine.setProperty(Properties.ROW_STYLE_CLASS, rowStyleClass);
+	}
+
+	/**
+	 * See {@link #setRowStyleClass(String) setRowStyleClass(String)} for more details
+	 */
+	public void setRowStyleClass(ValueBinding rowStyleClass) {
+		engine.setProperty(Properties.ROW_STYLE_CLASS, rowStyleClass);
+	}
+
+	public boolean isReadOnly() {
 		return isReadOnly(null);
 	}
 
 	/**
 	 * See {@link #isReadOnly() isReadOnly()} for more details
 	 */
-	public final boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
 	}
 
-	public final void setReadOnly(boolean readOnly) {
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	/**
 	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
 	 */
-	public final void setReadOnly(ValueBinding readOnly) {
+	public void setReadOnly(ValueBinding readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public final boolean isDisabled() {
+	public boolean isDisabled() {
 		return isDisabled(null);
 	}
 
 	/**
 	 * See {@link #isDisabled() isDisabled()} for more details
 	 */
-	public final boolean isDisabled(javax.faces.context.FacesContext facesContext) {
+	public boolean isDisabled(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
 	}
 
-	public final void setDisabled(boolean disabled) {
+	/**
+	 * Returns <code>true</code> if the attribute "disabled" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDisabledSetted() {
+		return engine.isPropertySetted(Properties.DISABLED);
+	}
+
+	public void setDisabled(boolean disabled) {
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
 	/**
 	 * See {@link #setDisabled(boolean) setDisabled(boolean)} for more details
 	 */
-	public final void setDisabled(ValueBinding disabled) {
+	public void setDisabled(ValueBinding disabled) {
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
@@ -621,92 +781,266 @@ public class DataGridComponent extends AbstractGridComponent implements
 		
 	}
 
-	public final int getHorizontalScrollPosition() {
+	public int getHorizontalScrollPosition() {
 		return getHorizontalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getHorizontalScrollPosition() getHorizontalScrollPosition()} for more details
 	 */
-	public final int getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
+	public int getHorizontalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.HORIZONTAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setHorizontalScrollPosition(int horizontalScrollPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalScrollPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalScrollPositionSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_SCROLL_POSITION);
+	}
+
+	public void setHorizontalScrollPosition(int horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
 	/**
 	 * See {@link #setHorizontalScrollPosition(int) setHorizontalScrollPosition(int)} for more details
 	 */
-	public final void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueBinding horizontalScrollPosition) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
 	}
 
-	public final int getVerticalScrollPosition() {
+	public int getVerticalScrollPosition() {
 		return getVerticalScrollPosition(null);
 	}
 
 	/**
 	 * See {@link #getVerticalScrollPosition() getVerticalScrollPosition()} for more details
 	 */
-	public final int getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
+	public int getVerticalScrollPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.VERTICAL_SCROLL_POSITION,0, facesContext);
 	}
 
-	public final void setVerticalScrollPosition(int verticalScrollPosition) {
+	/**
+	 * Returns <code>true</code> if the attribute "verticalScrollPosition" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalScrollPositionSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_SCROLL_POSITION);
+	}
+
+	public void setVerticalScrollPosition(int verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
 	/**
 	 * See {@link #setVerticalScrollPosition(int) setVerticalScrollPosition(int)} for more details
 	 */
-	public final void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueBinding verticalScrollPosition) {
 		engine.setProperty(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
 	}
 
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {
 		return getFilterProperties(null);
 	}
 
 	/**
 	 * See {@link #getFilterProperties() getFilterProperties()} for more details
 	 */
-	public final org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
 	}
 
-	public final void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+	/**
+	 * Returns <code>true</code> if the attribute "filterProperties" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFilterPropertiesSetted() {
+		return engine.isPropertySetted(Properties.FILTER_PROPERTIES);
+	}
+
+	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
 	/**
 	 * See {@link #setFilterProperties(org.rcfaces.core.model.IFilterProperties) setFilterProperties(org.rcfaces.core.model.IFilterProperties)} for more details
 	 */
-	public final void setFilterProperties(ValueBinding filterProperties) {
+	public void setFilterProperties(ValueBinding filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
-	public final org.rcfaces.core.preference.IComponentPreference getPreference() {
+	public java.lang.Object getShowValue() {
+		return getShowValue(null);
+	}
+
+	/**
+	 * See {@link #getShowValue() getShowValue()} for more details
+	 */
+	public java.lang.Object getShowValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SHOW_VALUE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowValueSetted() {
+		return engine.isPropertySetted(Properties.SHOW_VALUE);
+	}
+
+	public void setShowValue(java.lang.Object showValue) {
+		engine.setProperty(Properties.SHOW_VALUE, showValue);
+	}
+
+	/**
+	 * See {@link #setShowValue(Object) setShowValue(Object)} for more details
+	 */
+	public void setShowValue(ValueBinding showValue) {
+		engine.setProperty(Properties.SHOW_VALUE, showValue);
+	}
+
+	public org.rcfaces.core.preference.IComponentPreference getPreference() {
 		return getPreference(null);
 	}
 
 	/**
 	 * See {@link #getPreference() getPreference()} for more details
 	 */
-	public final org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
+	public org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
 		return (org.rcfaces.core.preference.IComponentPreference)engine.getProperty(Properties.PREFERENCE, facesContext);
 	}
 
-	public final void setPreference(org.rcfaces.core.preference.IComponentPreference preference) {
+	/**
+	 * Returns <code>true</code> if the attribute "preference" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPreferenceSetted() {
+		return engine.isPropertySetted(Properties.PREFERENCE);
+	}
+
+	public void setPreference(org.rcfaces.core.preference.IComponentPreference preference) {
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
 
 	/**
 	 * See {@link #setPreference(org.rcfaces.core.preference.IComponentPreference) setPreference(org.rcfaces.core.preference.IComponentPreference)} for more details
 	 */
-	public final void setPreference(ValueBinding preference) {
+	public void setPreference(ValueBinding preference) {
 		engine.setProperty(Properties.PREFERENCE, preference);
+	}
+
+	public boolean isPaged() {
+		return isPaged(null);
+	}
+
+	/**
+	 * See {@link #isPaged() isPaged()} for more details
+	 */
+	public boolean isPaged(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PAGED, false, facesContext);
+	}
+
+	public final boolean isPagedSetted() {
+
+
+			return engine.isPropertySetted(Properties.PAGED);
+		
+	}
+
+	public void setPaged(boolean paged) {
+		engine.setProperty(Properties.PAGED, paged);
+	}
+
+	/**
+	 * See {@link #setPaged(boolean) setPaged(boolean)} for more details
+	 */
+	public void setPaged(ValueBinding paged) {
+		engine.setProperty(Properties.PAGED, paged);
+	}
+
+	public boolean isClientSelectionFullState() {
+		return isClientSelectionFullState(null);
+	}
+
+	/**
+	 * See {@link #isClientSelectionFullState() isClientSelectionFullState()} for more details
+	 */
+	public boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "clientSelectionFullState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClientSelectionFullStateSetted() {
+		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
+	}
+
+	public void setClientSelectionFullState(boolean clientSelectionFullState) {
+		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
+	}
+
+	/**
+	 * See {@link #setClientSelectionFullState(boolean) setClientSelectionFullState(boolean)} for more details
+	 */
+	public void setClientSelectionFullState(ValueBinding clientSelectionFullState) {
+		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
+	}
+
+	public boolean isClientCheckFullState() {
+		return isClientCheckFullState(null);
+	}
+
+	/**
+	 * See {@link #isClientCheckFullState() isClientCheckFullState()} for more details
+	 */
+	public boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "clientCheckFullState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClientCheckFullStateSetted() {
+		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
+	}
+
+	public void setClientCheckFullState(boolean clientCheckFullState) {
+		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
+	}
+
+	/**
+	 * See {@link #setClientCheckFullState(boolean) setClientCheckFullState(boolean)} for more details
+	 */
+	public void setClientCheckFullState(ValueBinding clientCheckFullState) {
+		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
+	}
+
+	public java.lang.Object getCursorValue() {
+		return getCursorValue(null);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "cursorValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCursorValueSetted() {
+		return engine.isPropertySetted(Properties.CURSOR_VALUE);
+	}
+
+	public void setCursorValue(java.lang.Object cursorValue) {
+		engine.setProperty(Properties.CURSOR_VALUE, cursorValue);
+	}
+
+	/**
+	 * See {@link #setCursorValue(Object) setCursorValue(Object)} for more details
+	 */
+	public void setCursorValue(ValueBinding cursorValue) {
+		engine.setProperty(Properties.CURSOR_VALUE, cursorValue);
 	}
 
 	/**
@@ -750,136 +1084,6 @@ public class DataGridComponent extends AbstractGridComponent implements
 	}
 
 	/**
-	 * Returns a boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
-	 * It is ignored if the attribute "rows" is undefined.
-	 * The default value is true.
-	 * If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
-	 * @return true if display by page
-	 */
-	public final boolean isPaged() {
-		return isPaged(null);
-	}
-
-	/**
-	 * Returns a boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
-	 * It is ignored if the attribute "rows" is undefined.
-	 * The default value is true.
-	 * If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
-	 * @return true if display by page
-	 */
-	public final boolean isPaged(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.PAGED, true, facesContext);
-	}
-
-	/**
-	 * Sets a boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
-	 * It is ignored if the attribute "rows" is undefined.
-	 * The default value is true.
-	 * If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
-	 * @param paged true if display by page
-	 */
-	public final void setPaged(boolean paged) {
-		engine.setProperty(Properties.PAGED, paged);
-	}
-
-	/**
-	 * Sets a boolean value specifying wether the results should be displayed by page (thus letting the user choose what page to display via the pager).
-	 * It is ignored if the attribute "rows" is undefined.
-	 * The default value is true.
-	 * If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
-	 * @param paged true if display by page
-	 */
-	public final void setPaged(ValueBinding paged) {
-		engine.setProperty(Properties.PAGED, paged);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "paged" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isPagedSetted() {
-		return engine.isPropertySetted(Properties.PAGED);
-	}
-
-	/**
-	 * Returns a string value giving the ordered list of the sorted column ids. read-only
-	 * @return ordered list of the sorted column ids
-	 */
-	public final String getSortedColumnIds() {
-		return getSortedColumnIds(null);
-	}
-
-	/**
-	 * Returns a string value giving the ordered list of the sorted column ids. read-only
-	 * @return ordered list of the sorted column ids
-	 */
-	public final String getSortedColumnIds(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SORTED_COLUMN_IDS, facesContext);
-	}
-
-	/**
-	 * read-only
-	 */
-	public final void setSortedColumnIds(String sortedColumnIds) {
-		engine.setProperty(Properties.SORTED_COLUMN_IDS, sortedColumnIds);
-	}
-
-	/**
-	 * read-only
-	 */
-	public final void setSortedColumnIds(ValueBinding sortedColumnIds) {
-		engine.setProperty(Properties.SORTED_COLUMN_IDS, sortedColumnIds);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "sortedColumnIds" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSortedColumnIdsSetted() {
-		return engine.isPropertySetted(Properties.SORTED_COLUMN_IDS);
-	}
-
-	/**
-	 * Returns a list of the columns' id which represents their order from left to right.
-	 * @return ordered list of columns' id
-	 */
-	public final String getColumnsOrder() {
-		return getColumnsOrder(null);
-	}
-
-	/**
-	 * Returns a list of the columns' id which represents their order from left to right.
-	 * @return ordered list of columns' id
-	 */
-	public final String getColumnsOrder(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.COLUMNS_ORDER, facesContext);
-	}
-
-	/**
-	 * Sets a list of the columns' id which represents their order from left to right.
-	 * @param columnsOrder ordered list of columns' id
-	 */
-	public final void setColumnsOrder(String columnsOrder) {
-		engine.setProperty(Properties.COLUMNS_ORDER, columnsOrder);
-	}
-
-	/**
-	 * Sets a list of the columns' id which represents their order from left to right.
-	 * @param columnsOrder ordered list of columns' id
-	 */
-	public final void setColumnsOrder(ValueBinding columnsOrder) {
-		engine.setProperty(Properties.COLUMNS_ORDER, columnsOrder);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "columnsOrder" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isColumnsOrderSetted() {
-		return engine.isPropertySetted(Properties.COLUMNS_ORDER);
-	}
-
-	/**
 	 * Returns the id for the column containing the key for the row.
 	 * @return column id
 	 */
@@ -917,26 +1121,6 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 */
 	public final boolean isRowValueColumnIdSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE_COLUMN_ID);
-	}
-
-	public final Object getCursorValue() {
-		return getCursorValue(null);
-	}
-
-	public final void setCursorValue(Object cursorValue) {
-		engine.setValue(Properties.CURSOR_VALUE, cursorValue);
-	}
-
-	public final void setCursorValue(ValueBinding cursorValue) {
-		engine.setValueBinding(Properties.CURSOR_VALUE, cursorValue);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "cursorValue" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isCursorValueSetted() {
-		return engine.isPropertySetted(Properties.CURSOR_VALUE);
 	}
 
 	/**
@@ -1017,86 +1201,6 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 */
 	public final boolean isRowIndexVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_INDEX_VAR);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @return boolean
-	 */
-	public final boolean isClientSelectionFullState() {
-		return isClientSelectionFullState(null);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @return boolean
-	 */
-	public final boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @param clientSelectionFullState boolean
-	 */
-	public final void setClientSelectionFullState(boolean clientSelectionFullState) {
-		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @param clientSelectionFullState boolean
-	 */
-	public final void setClientSelectionFullState(ValueBinding clientSelectionFullState) {
-		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "clientSelectionFullState" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isClientSelectionFullStateSetted() {
-		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @return boolean
-	 */
-	public final boolean isClientCheckFullState() {
-		return isClientCheckFullState(null);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @return boolean
-	 */
-	public final boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @param clientCheckFullState boolean
-	 */
-	public final void setClientCheckFullState(boolean clientCheckFullState) {
-		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @param clientCheckFullState boolean
-	 */
-	public final void setClientCheckFullState(ValueBinding clientCheckFullState) {
-		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "clientCheckFullState" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isClientCheckFullStateSetted() {
-		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
 	}
 
 	protected Set getCameliaFields() {
