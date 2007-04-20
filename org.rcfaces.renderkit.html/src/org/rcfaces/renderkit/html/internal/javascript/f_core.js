@@ -4134,23 +4134,23 @@ var f_core = {
 
 		if (component.style.opacity!==undefined) {
 			// CSS 3  on peut toujours réver !
-			component.style.opacity = cur;
+			component.style.opacity = opacity;
 			return;
 		}
 		
 		if (f_core.IsInternetExplorer()) {
-			if (cur==1) {
+			if (opacity==1) {
 				component.style.filter = "";
 				
 			} else {
-				component.style.filter = "alpha(opacity="+Math.floor(cur*100)+")";
+				component.style.filter = "alpha(opacity="+Math.floor(opacity*100)+")";
 			}
 			
 			return;
 		}
 		
 		if (f_core.IsGecko()) {
-			component.style.MozOpacity = cur;
+			component.style.MozOpacity = opacity;
 			return;
 		}
 	},
