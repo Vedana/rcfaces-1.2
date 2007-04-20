@@ -1,5 +1,6 @@
-#Thu Sep 28 18:28:10 CEST 2006
+#Tue Apr 17 15:50:53 CEST 2007
 eclipse.preferences.version=1
+encoding//src/org/rcfaces/renderkit/html/internal/css/f_dataGrid.css=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_accelerator.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_actionList.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/f_aspect.js=UTF-8
