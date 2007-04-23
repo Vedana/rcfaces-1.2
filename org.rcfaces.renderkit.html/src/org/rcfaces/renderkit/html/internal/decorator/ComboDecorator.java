@@ -325,22 +325,21 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
+        String itemValue = null;
         String value = componentData.getStringProperty("selectedItems");
         if (value != null) {
             StringTokenizer st = new StringTokenizer(value,
                     HtmlTools.LIST_SEPARATORS);
-            if (st.hasMoreTokens() == false) {
-                input.setSubmittedValue(null);
-                return;
+
+            if (st.hasMoreTokens()) {
+                itemValue = st.nextToken();
             }
 
-            input.setSubmittedValue(st.nextToken());
-            return;
+        } else {
+            itemValue = componentData.getComponentParameter();
         }
 
-        value = componentData.getComponentParameter();
-
-        input.setSubmittedValue(value);
+        input.setSubmittedValue(itemValue);
     }
 
     protected Converter getConverter() {

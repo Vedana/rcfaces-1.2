@@ -74,8 +74,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 .put(ISortEventCapability.SORT_TIME, "f_dataGrid.Sort_Time");
         SORT_ALIASES
                 .put(ISortEventCapability.SORT_DATE, "f_dataGrid.Sort_Date");
-        SORT_ALIASES.put(ISortEventCapability.SORT_SERVER,
-                "f_dataGrid.Sort_Server");
+        SORT_ALIASES.put(ISortEventCapability.SORT_SERVER, SORT_SERVER_COMMAND);
     }
 
     protected String getJavaScriptClassName() {
@@ -89,16 +88,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
         Object sort = tableContext.getSortCommand(columnIndex);
         if (sort != null) {
             if (sort instanceof String) {
-                String aliasCommand = (String) sort;
+                String aliasCommand;
 
                 if (tableContext.getSortClientSide(columnIndex) == false) {
-                    aliasCommand = (String) SORT_ALIASES
-                            .get(ISortEventCapability.SORT_SERVER);
-
-                    if (aliasCommand != null) {
-                        aliasCommand = tableContext
-                                .translateJavascriptMethod(aliasCommand);
-                    }
+                    aliasCommand = tableContext
+                            .translateJavascriptMethod(ISortEventCapability.SORT_SERVER);
+                    
+                } else {
+                    aliasCommand = ((String) sort).trim();
                 }
 
                 IJavaScriptWriter jsWriter = objectWriter
@@ -125,12 +122,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
                         scriptListener);
 
             } else if (sort instanceof IServerActionListener) {
-                // Le tri se fait cot� serveur !
+                // Le tri se fait coté serveur !
 
-                String aliasCommand = (String) SORT_ALIASES
-                        .get(ISortEventCapability.SORT_SERVER);
+                String aliasCommand = tableContext
+                        .translateJavascriptMethod(ISortEventCapability.SORT_SERVER);
 
-                objectWriter.writeSymbol("_sorter").writeString(aliasCommand);
+                objectWriter.writeSymbol("_sorter").write(aliasCommand);
             }
         }
 
@@ -202,14 +199,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
     protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
-        encodeJsColumns(htmlWriter, gridRenderContext, false);
+        encodeJsColumns(htmlWriter, gridRenderContext, GENERATE_CELL_IMAGES);
     }
 
     protected void encodeJsColumns(IJavaScriptWriter jsWriter,
-            AbstractGridRenderContext tableContext, boolean ignoreUI)
+            AbstractGridRenderContext tableContext, int generatorMask)
             throws WriterException {
 
-        super.encodeJsColumns(jsWriter, tableContext, ignoreUI);
+        super.encodeJsColumns(jsWriter, tableContext, generatorMask);
 
         UIColumn rowValueColumn = ((DataGridRenderContext) tableContext)
                 .getRowValueColumn();
@@ -509,7 +506,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             boolean checked = false;
             String rowId = null;
 
-            DataColumnComponent rowValueColumn = (DataColumnComponent) tableContext
+            DataColumnComponent rowValueColumn = tableContext
                     .getRowValueColumn();
 
             int rowValueColumnIndex = -1;
@@ -725,8 +722,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
         UIColumn dcs[] = tableContext.listColumns();
         int columnNumber = dcs.length;
 
-        String trClassName=null; // Pas d'évaluation pour chaque ligne 
-        
+        String trClassName = null; // Pas d'évaluation pour chaque ligne
+
         String rowVarName = tableContext.getRowVarName();
 
         String values[] = null;

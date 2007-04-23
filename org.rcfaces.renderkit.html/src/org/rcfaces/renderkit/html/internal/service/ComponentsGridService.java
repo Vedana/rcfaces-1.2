@@ -26,34 +26,36 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.ComponentsListComponent;
+import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
+import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.renderer.ComponentsListRenderer;
+import org.rcfaces.renderkit.html.internal.renderer.ComponentsGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ComponentsListService extends AbstractHtmlService {
+public class ComponentsGridService extends AbstractHtmlService {
     private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
-            + ".ComponentsList";
+            + ".ComponentsGrid";
 
     private static final Log LOG = LogFactory
-            .getLog(ComponentsListService.class);
+            .getLog(ComponentsGridService.class);
 
     private static final int DEFAULT_BUFFER_SIZE = 4096;
 
@@ -63,10 +65,10 @@ public class ComponentsListService extends AbstractHtmlService {
 
     private static final String COMPONENTS_LIST_SERVICE_VERSION = "1.0.0";
 
-    public ComponentsListService() {
+    public ComponentsGridService() {
     }
 
-    public static ComponentsListService getInstance(FacesContext facesContext) {
+    public static ComponentsGridService getInstance(FacesContext facesContext) {
 
         IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
                 facesContext).getServicesRegistry();
@@ -75,7 +77,7 @@ public class ComponentsListService extends AbstractHtmlService {
             return null;
         }
 
-        return (ComponentsListService) serviceRegistry.getService(facesContext,
+        return (ComponentsGridService) serviceRegistry.getService(facesContext,
                 RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
     }
 
@@ -83,8 +85,8 @@ public class ComponentsListService extends AbstractHtmlService {
         Map parameters = facesContext.getExternalContext()
                 .getRequestParameterMap();
 
-        String componentsListId = (String) parameters.get("componentsListId");
-        if (componentsListId == null) {
+        String componentsGridId = (String) parameters.get("componentsGridId");
+        if (componentsGridId == null) {
             sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
                     "Can not find 'componentsListId' parameter.", null);
             return;
@@ -92,14 +94,14 @@ public class ComponentsListService extends AbstractHtmlService {
 
         UIViewRoot viewRoot = facesContext.getViewRoot();
         if (viewRoot.getChildCount() == 0) {
-            sendJsError(facesContext, componentsListId,
+            sendJsError(facesContext, componentsGridId,
                     SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
             return;
         }
 
         String index_s = (String) parameters.get("index");
         if (index_s == null) {
-            sendJsError(facesContext, componentsListId,
+            sendJsError(facesContext, componentsGridId,
                     INVALID_PARAMETER_SERVICE_ERROR,
                     "Can not find 'index' parameter.", null);
             return;
@@ -107,30 +109,39 @@ public class ComponentsListService extends AbstractHtmlService {
 
         String filterExpression = (String) parameters.get("filterExpression");
 
+        String forcedRows_s = (String) parameters.get("rows");
+
         int rowIndex = Integer.parseInt(index_s);
+        int forcedRows = -1;
+        if (forcedRows_s != null && forcedRows_s.length() > 0) {
+            forcedRows = Integer.parseInt(forcedRows_s);
+            if (forcedRows < 1) {
+                forcedRows = -1;
+            }
+        }
 
         UIComponent component = HtmlTools.getForComponent(facesContext,
-                componentsListId, viewRoot);
+                componentsGridId, viewRoot);
         if (component == null) {
             // Cas special: la session a du expir�e ....
 
-            sendJsError(facesContext, componentsListId,
+            sendJsError(facesContext, componentsGridId,
                     INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find componentsListComponent (id='"
-                            + componentsListId + "').", null);
+                    "Can not find componentsGrid component (id='"
+                            + componentsGridId + "').", null);
 
             return;
         }
 
-        if ((component instanceof ComponentsListComponent) == false) {
-            sendJsError(facesContext, componentsListId,
+        if ((component instanceof ComponentsGridComponent) == false) {
+            sendJsError(facesContext, componentsGridId,
                     INVALID_PARAMETER_SERVICE_ERROR,
-                    "Invalid componentsListComponent (id='" + componentsListId
+                    "Invalid componentsGrid component (id='" + componentsGridId
                             + "').", null);
             return;
         }
 
-        ComponentsListComponent dgc = (ComponentsListComponent) component;
+        ComponentsGridComponent dgc = (ComponentsGridComponent) component;
 
         ISortedComponent sortedComponents[] = null;
 
@@ -158,12 +169,13 @@ public class ComponentsListService extends AbstractHtmlService {
          * order); } }
          */
 
-        ComponentsListRenderer dgr = getDataListRenderer(facesContext, dgc);
+        ComponentsGridRenderer dgr = getComponentsGridRenderer(facesContext,
+                dgc);
         if (dgr == null) {
-            sendJsError(facesContext, componentsListId,
+            sendJsError(facesContext, componentsGridId,
                     INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find componentsListRenderer. (dataListId='"
-                            + componentsListId + "')", null);
+                    "Can not find componentsGrid renderer. (componentsGridId='"
+                            + componentsGridId + "')", null);
             return;
         }
 
@@ -198,12 +210,13 @@ public class ComponentsListService extends AbstractHtmlService {
                 printWriter = new PrintWriter(writer, false);
             }
 
-            writeJs(facesContext, printWriter, dgc, componentsListId, dgr,
-                    rowIndex, sortedComponents, filterExpression);
+            writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
+                    rowIndex, forcedRows, sortedComponents, filterExpression);
 
         } catch (IOException ex) {
 
-            throw new FacesException("Can not write componentsList rows !", ex);
+            throw new FacesException(
+                    "Can not write dataGrid javascript rows !", ex);
 
         } catch (RuntimeException ex) {
             LOG.error("Catch runtime exception !", ex);
@@ -219,27 +232,26 @@ public class ComponentsListService extends AbstractHtmlService {
         facesContext.responseComplete();
     }
 
-    private ComponentsListRenderer getDataListRenderer(
-            FacesContext facesContext, ComponentsListComponent component) {
+    private ComponentsGridRenderer getComponentsGridRenderer(
+            FacesContext facesContext, ComponentsGridComponent component) {
 
         Renderer renderer = getRenderer(facesContext, component);
 
-        if ((renderer instanceof ComponentsListRenderer) == false) {
+        if ((renderer instanceof ComponentsGridRenderer) == false) {
             return null;
         }
 
-        return (ComponentsListRenderer) renderer;
+        return (ComponentsGridRenderer) renderer;
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
-            ComponentsListComponent dgc, String componentClientId,
-            ComponentsListRenderer dgr, int rowIndex,
+            ComponentsGridComponent dgc, String componentClientId,
+            ComponentsGridRenderer dgr, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression)
             throws IOException {
 
-        ComponentsListRenderer.ListContext listContext = dgr
-                .createListContext(facesContext, dgc, rowIndex,
-                        sortedComponents, filterExpression);
+        IProcessContext processContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext);
 
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;
@@ -285,6 +297,11 @@ public class ComponentsListService extends AbstractHtmlService {
 
             // IComponentTreeRenderProcessor
             // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
+
+            ComponentsGridRenderer.ComponentsGridRenderContext listContext = dgr
+                    .createComponentsGridContext(processContext, jsWriter
+                            .getJavaScriptRenderContext(), dgc, rowIndex,
+                            forcedRows, sortedComponents, filterExpression);
 
             dgr.encodeChildren(writer, listContext);
 

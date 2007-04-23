@@ -294,9 +294,9 @@ public class ValuesTools {
     public static String convertValueToString(Object value,
             UIComponent component, FacesContext facesContext) {
 
-        if (value instanceof String) {
-            return (String) value;
-        }
+        /*
+         * Bah non ! if (value instanceof String) { return (String) value; }
+         */
 
         Converter converter = null;
         if (component instanceof IConvertValueHolder) {
@@ -309,14 +309,12 @@ public class ValuesTools {
         return convertValueToString(value, converter, component, facesContext);
     }
 
-    public static String convertValueToString(Object value,
+    private static String convertValueToString(Object value,
             Converter converter, UIComponent component,
             FacesContext facesContext) {
-        if (value instanceof String) {
-            return (String) value;
-        }
 
-        if (converter == null && value != null) {
+        if (converter == null
+                && (value != null && (value instanceof String) == false)) {
             if (facesContext == null) {
                 facesContext = FacesContext.getCurrentInstance();
             }
@@ -332,6 +330,10 @@ public class ValuesTools {
             }
 
             return converter.getAsString(facesContext, component, value);
+        }
+
+        if (value instanceof String) {
+            return (String) value;
         }
 
         return (String) Convertor.convert(value, String.class);
@@ -430,9 +432,10 @@ public class ValuesTools {
 
     public static String valueToString(Object value, UIComponent component,
             FacesContext facesContext) {
-        if (value instanceof String) {
-            return (String) value;
-        }
+
+        /*
+         * Bah non ! if (value instanceof String) { return (String) value; }
+         */
 
         Converter converter = null;
         if (component instanceof IConvertValueHolder) {
@@ -447,11 +450,9 @@ public class ValuesTools {
 
     public static String valueToString(Object value, Converter converter,
             UIComponent component, FacesContext facesContext) {
-        if (value instanceof String) {
-            return (String) value;
-        }
 
-        if (converter == null && value != null) {
+        if (converter == null && value != null
+                && (value instanceof String) == false) {
             if (facesContext == null) {
                 facesContext = FacesContext.getCurrentInstance();
             }
@@ -467,6 +468,10 @@ public class ValuesTools {
             }
 
             return converter.getAsString(facesContext, component, value);
+        }
+
+        if (value instanceof String) {
+            return (String) value;
         }
 
         return (String) Convertor.convert(value, String.class);

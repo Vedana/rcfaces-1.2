@@ -106,7 +106,7 @@ var __prototype = {
 	
 		if (this._interactive) {
 			this._appendCommand(function(dataGrid) {
-				dataGrid._callServer(index, cursorIndex);
+				dataGrid.f_callServer(index, cursorIndex);
 			});
 			
 			return false;
@@ -146,7 +146,7 @@ var __prototype = {
 	 * @method private
 	 * @return void
 	 */
-	_callServer: function(firstIndex, cursorIndex) {
+	f_callServer: function(firstIndex, cursorIndex) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		
 		var params=new Object;
@@ -377,7 +377,7 @@ var __prototype = {
 				dataGrid._maxRows=dataGrid._rows;
 			}
 			
-			dataGrid._callServer(0);
+			dataGrid.f_callServer(0);
 		});
 		
 		return false;

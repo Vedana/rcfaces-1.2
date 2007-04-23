@@ -22,6 +22,8 @@ public interface ICssWriter {
 
     String ABSOLUTE = "absolute";
 
+    String AUTO = "auto";
+
     String BOLD = "bold";
 
     String HIDDEN = "hidden";
@@ -35,6 +37,8 @@ public interface ICssWriter {
     String NONE = "none";
 
     String NORMAL = "normal";
+
+    String RELATIVE = "relative";
 
     String REPEAT_X = "repeat-x";
 

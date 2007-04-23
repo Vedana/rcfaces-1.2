@@ -26,12 +26,13 @@ var __prototype = {
 	f_componentsGrid: function() {
 		this.f_super(arguments);
 		
+		this._cellStyleClass="f_grid_cell2";
 		this.f_setCursorVisibility(false);
 	},
 	f_finalize: function() {
 		this.f_super(arguments);
 	},
-	_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting) {
+	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
 			selection=0;
@@ -382,39 +383,31 @@ var __prototype = {
 
 		this.f_performPagedComponentInitialized();
 	},
-	/**
-	 * @method private
-	 * @return void
-	 */
-	_installSorter: function(column, method) {
-		f_core.Assert(column._head, "f_componentsGrid._installSorter: No Title for column '"+column._index+"'.");
-	
-		this._columnCanBeSorted=true;
-		
-		if (typeof(method)!="function") {
-			try {
-				method=eval(method);
-				
-			} catch (x) {
-				f_core.Error(f_componentsGrid, "_installSorter: Can not eval sort method '"+method+"'.", x);
-				
-				throw x;
-			}
-			
-			f_core.Assert(typeof(method)=="function", "f_componentsGrid._installSorter: Bad sort method for column '"+column._index+"' !");
-		}
-	
-		column._method=method;
-	
-		var th=column._head;
-		
-		th.style.cursor="pointer";
-		th.style.cursor="hand";		
-	},
 	f_update: function() {
 		var rows=f_grid.ListRows(this._table);
 	
 		var rowClasses= this._rowStyleClass;
+	
+		var cellStyleClassSetted=null;
+		var columns=this._columns;
+		
+		var cellIdx=0;
+		for(var i=0;i<columns.length;i++) {
+			var col=columns[i];
+			if (!col._visibility) {
+				continue;
+			}	
+			cellIdx++;
+			
+			if (!col._cellStyleClassSetted) {			
+				continue;
+			}
+			
+			if (!cellStyleClassSetted) {
+				cellStyleClassSetted=new Array;
+			}
+			cellStyleClassSetted.push(cellIdx-1);
+		}
 	
 		for(var i=0;i<rows.length;i++) {
 			var row=rows[i];
@@ -424,16 +417,27 @@ var __prototype = {
 			
 			var rowIdx=this._rowsPool.length;
 			
-			var idx=0;
 			row._index=f_core.GetAttribute(row, "v:index");
-			row.id="row"+row._index;
+			row.id=this.id+":row"+i;
 
 			row._className=rowClasses[i % rowClasses.length];
 			
+			if (cellStyleClassSetted) {
+				var cells=row.cells;
+				
+				for(var j=0;j<cellStyleClassSetted.length;j++) {
+					var cellIdx=cellStyleClassSetted[j];
+					
+					var cell=cells[cellIdx];
+					
+					cell._cellStyleClass=f_core.GetAttribute(cell, "v:class");
+				}
+			}
+			
 			if (this._selectable) {
 				row.onmousedown=f_grid.RowMouseDown;
-				row.onmouseup=f_core.CancelJsEventHandler;
-				row.onclick=f_core.CancelJsEventHandler;
+				row.onmouseup=f_grid.FiltredCancelJsEventHandler;
+				row.onclick=f_grid.FiltredCancelJsEventHandler;
 				row.ondblclick=f_grid.RowMouseDblClick;
 				row.onfocus=f_grid.GotFocus;
 			
@@ -447,7 +451,73 @@ var __prototype = {
 		}
 		
 		this.f_super(arguments);		
-	}
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_sortClientSide: function(methods, ascendings, tdIndexes) {
+			
+		function internalSort(obj1, obj2) {	
+			for(var i=0;i<methods.length;i++) {
+				var tdIndex=tdIndexes[i];
+				
+				var tc1 = obj1.childNodes[tdIndex];
+				var tc2 = obj2.childNodes[tdIndex];
+
+				 var ret=methods[i].call(this, tc1, tc2, tc1._index, tc2._index);
+				 if (!ret) {
+					continue;
+				 }
+				 
+				return (ascendings[i])? ret:-ret;
+			}
+			
+			return 0;
+		}
+		
+		var body=this._table.tBodies[0];
+		f_core.Assert(body, "f_grid._sortTable: No body for data table of dataGrid !");
+		
+		var trs=new Array;
+		var childNodes=body.rows;
+		var idx=0;
+		for(var i=0;i<childNodes.length;i++) {
+			var row=childNodes[i];
+			if (row._index===undefined) {
+				continue;
+			}
+			
+			trs.push(row);
+		}
+		
+		trs.sort(internalSort);
+
+		this._table.removeChild(body);
+		
+		while(body.firstChild) {
+			body.removeChild(body.firstChild);
+		}
+
+		for(var i=0;i<trs.length;i++) {
+			var row=trs[i];
+			row._curIndex=null;
+			
+			body.appendChild(row);
+		}
+
+		var rowClasses= this._rowStyleClass;
+
+		for(var i=0;i<trs.length;i++) {
+			var row=trs[i];
+			
+			row._className=rowClasses[i % rowClasses.length];
+			
+			this.fa_updateElementStyle(row);
+		}
+	
+		this._table.appendChild(body);	
+	}	
 }
  
 new f_class("f_componentsGrid", null, __static, __prototype, f_grid);

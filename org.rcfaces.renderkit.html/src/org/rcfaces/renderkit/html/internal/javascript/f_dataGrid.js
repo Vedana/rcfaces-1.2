@@ -17,6 +17,24 @@ var __static = {
 	/**
 	 * @method private static
 	 */
+	_ReturnFalse: function(evt) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (!f_grid.VerifyTarget(evt)) {
+			return true;
+		}
+	
+		if (f_core.IsPopupButton(evt)) {
+			return f_core.CancelJsEvent(evt);
+		}
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 */
 	_CheckSelect: function(evt) {
 		var row=this._row;
 		var dataGrid=row._dataGrid;
@@ -173,15 +191,6 @@ var __static = {
 		}
 				
 		return 0;
-	},
-	/**
-	 * @method hidden static
-	 * @param String text1
-	 * @param String text2
-	 * @return number
-	 */
-	Sort_Server: function(text1, text2) {
-		// Pas d'implementation, car la fonction est filtrée avant !
 	}
 }
  
@@ -282,7 +291,7 @@ var __prototype = {
 		
 		var idx=0;
 		row._index=arguments[idx++];
-		row.id="row"+row._index;
+		row.id=this.id+":row"+rowIdx;
 		
 		if (this._selectable || this._checkable) {
 			row.onmousedown=f_grid.RowMouseDown;
@@ -399,10 +408,10 @@ var __prototype = {
 					}
 
 					if (this._selectable) {
-//						td.onmouseup=f_grid.ReturnFalse;
-//						td.onmousedown=f_grid.ReturnFalse;
+//						td.onmouseup=f_dataGrid._ReturnFalse;
+//						td.onmousedown=f_dataGrid._ReturnFalse;
 //						td.ondblclick=f_core.CancelJsEventHandler;
-						td.onclick=f_grid.ReturnFalse;
+						td.onclick=f_dataGrid._ReturnFalse;
 						
 						td._dataGrid=this;
 						td.onfocus=f_grid.GotFocus;
@@ -719,7 +728,7 @@ var __prototype = {
 		
 		return null;
 	},
-	_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting) {
+	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
 			selection=0;
@@ -1238,35 +1247,6 @@ var __prototype = {
 		}
 	},
 	/**
-	 * @method private
-	 * @return void
-	 */
-	_installSorter: function(column, method) {
-		f_core.Assert(column._head, "f_dataGrid._installSorter: No Title for column '"+column._index+"'.");
-	
-		this._columnCanBeSorted=true;
-		
-		if (typeof(method)!="function") {
-			try {
-				method=eval(method);
-				
-			} catch (x) {
-				f_core.Error(f_dataGrid, "_installSorter: Can not eval sort method '"+method+"'.", x);
-				
-				throw x;
-			}
-			
-			f_core.Assert(typeof(method)=="function", "f_dataGrid._installSorter: Bad sort method for column '"+column._index+"' !");
-		}
-	
-		column._method=method;
-	
-		var th=column._head;
-		
-		th.style.cursor="pointer";
-		th.style.cursor="hand";		
-	},
-	/**
 	 * Check a row.
 	 *
 	 * @method public
@@ -1325,7 +1305,73 @@ var __prototype = {
 		row._checked=checked;
 	},
 	fa_updateReadOnly: function() {
-	}
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_sortClientSide: function(methods, ascendings,tdIndexes) {
+			
+		function internalSort(obj1, obj2) {	
+			for(var i=0;i<methods.length;i++) {
+				var tdIndex=tdIndexes[i];
+				
+				var tc1 = obj1.childNodes[tdIndex];
+				var tc2 = obj2.childNodes[tdIndex];
+
+				 var ret=methods[i].call(this, tc1._text, tc2._text, tc1, tc2, tc1._index, tc2._index);
+				 if (!ret) {
+					continue;
+				 }
+				 
+				return (ascendings[i])? ret:-ret;
+			}
+			
+			return 0;
+		}
+		
+		var body=this._table.tBodies[0];
+		f_core.Assert(body, "f_grid._sortTable: No body for data table of dataGrid !");
+		
+		var trs=new Array;
+		var childNodes=body.rows;
+		var idx=0;
+		for(var i=0;i<childNodes.length;i++) {
+			var row=childNodes[i];
+			if (row._index===undefined) {
+				continue;
+			}
+			
+			trs.push(row);
+		}
+		
+		trs.sort(internalSort);
+
+		this._table.removeChild(body);
+		
+		while(body.firstChild) {
+			body.removeChild(body.firstChild);
+		}
+
+		for(var i=0;i<trs.length;i++) {
+			var row=trs[i];
+			row._curIndex=null;
+			
+			body.appendChild(row);
+		}
+
+		var rowClasses= this._rowStyleClass;
+
+		for(var i=0;i<trs.length;i++) {
+			var row=trs[i];
+			
+			row._className=rowClasses[i % rowClasses.length];
+			
+			this.fa_updateElementStyle(row);
+		}
+	
+		this._table.appendChild(body);	
+	}	
 }
  
 new f_class("f_dataGrid", null, __static, __prototype, f_grid, fa_readOnly, fa_checkManager);

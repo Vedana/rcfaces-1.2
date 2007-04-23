@@ -14,6 +14,10 @@
 				<command id="componentsList.update" />
 			</service>
 			
+			<service id="org.rcfaces.renderkit.html.ComponentsGrid" class="org.rcfaces.renderkit.html.internal.service.ComponentsGridService">
+				<command id="componentsGrid.update" />
+			</service>
+			
 			<service id="org.rcfaces.renderkit.html.Tree" class="org.rcfaces.renderkit.html.internal.service.TreeService">
 				<command id="tree.request" />
 			</service>

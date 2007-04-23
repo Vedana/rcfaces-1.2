@@ -47,6 +47,7 @@ import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
+import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.component.IImageAccessors;
@@ -96,6 +97,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderer.class);
 
+    protected static final String SORT_SERVER_COMMAND = "f_grid.Sort_Server";
+
     private static final String TABLE = "_table";
 
     private static final String TITLE_ROW = "_title";
@@ -125,6 +128,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     private static final int SORT_PADDING = 10;
 
     private static final String GRID_STYLE_CLASS = "f_grid";
+
+    protected static final int GENERATE_CELL_STYLE_CLASS = 0x0001;
+
+    protected static final int GENERATE_CELL_IMAGES = 0x0002;
 
     public String getComponentStyleClassName() {
         return GRID_STYLE_CLASS;
@@ -938,7 +945,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext gridRenderContext) throws WriterException;
 
     protected void encodeJsColumns(IJavaScriptWriter jsWriter,
-            AbstractGridRenderContext gridRenderContext, boolean ignoreCellUI)
+            AbstractGridRenderContext gridRenderContext, int generationMask)
             throws WriterException {
 
         String defaultCellImageURLs[] = null;
@@ -950,60 +957,62 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         String hoverImageURLs[] = null;
         String selectedImageURLs[] = null;
 
-        if (ignoreCellUI == false) {
+        if ((generationMask & GENERATE_CELL_IMAGES) > 0) {
             defaultCellImageURLs = gridRenderContext.getDefaultCellImageURLs();
             if (defaultCellImageURLs != null) {
                 defaultCellImageURLs = allocateStrings(jsWriter,
                         defaultCellImageURLs, null);
             }
 
-            defaultCellStyleClasses = gridRenderContext
-                    .getDefaultCellStyleClasses();
-            if (defaultCellStyleClasses != null) {
-                String s[][] = new String[defaultCellStyleClasses.length][];
-                for (int i = 0; i < defaultCellStyleClasses.length; i++) {
-                    s[i] = allocateStrings(jsWriter,
-                            defaultCellStyleClasses[i], null);
-                }
-
-                defaultCellStyleClasses = s;
+            imageURLs = gridRenderContext.getCellTitleImageURLs();
+            if (imageURLs != null) {
+                imageURLs = allocateStrings(jsWriter, imageURLs, null);
             }
 
-            defaultCellToolTipTexts = gridRenderContext
-                    .getDefaultCellToolTipTexts();
-            if (defaultCellToolTipTexts != null) {
-                defaultCellToolTipTexts = allocateStrings(jsWriter,
-                        defaultCellToolTipTexts, null);
+            disabledImageURLs = gridRenderContext
+                    .getCellTitleDisabledImageURLs();
+            if (disabledImageURLs != null) {
+                disabledImageURLs = allocateStrings(jsWriter,
+                        disabledImageURLs, null);
             }
 
-            defaultCellHorizontalAligments = gridRenderContext
-                    .getDefaultCellHorizontalAlignments();
-            if (defaultCellHorizontalAligments != null) {
-                defaultCellHorizontalAligments = allocateStrings(jsWriter,
-                        defaultCellHorizontalAligments, null);
+            hoverImageURLs = gridRenderContext.getCellTitleHoverImageURLs();
+            if (hoverImageURLs != null) {
+                hoverImageURLs = allocateStrings(jsWriter, hoverImageURLs, null);
+            }
+
+            selectedImageURLs = gridRenderContext
+                    .getCellTitleSelectedImageURLs();
+            if (selectedImageURLs != null) {
+                selectedImageURLs = allocateStrings(jsWriter,
+                        selectedImageURLs, null);
             }
         }
 
-        imageURLs = gridRenderContext.getCellTitleImageURLs();
-        if (imageURLs != null) {
-            imageURLs = allocateStrings(jsWriter, imageURLs, null);
+        defaultCellStyleClasses = gridRenderContext
+                .getDefaultCellStyleClasses();
+        if (defaultCellStyleClasses != null) {
+            String s[][] = new String[defaultCellStyleClasses.length][];
+            for (int i = 0; i < defaultCellStyleClasses.length; i++) {
+                s[i] = allocateStrings(jsWriter, defaultCellStyleClasses[i],
+                        null);
+            }
+
+            defaultCellStyleClasses = s;
         }
 
-        disabledImageURLs = gridRenderContext.getCellTitleDisabledImageURLs();
-        if (disabledImageURLs != null) {
-            disabledImageURLs = allocateStrings(jsWriter, disabledImageURLs,
-                    null);
+        defaultCellToolTipTexts = gridRenderContext
+                .getDefaultCellToolTipTexts();
+        if (defaultCellToolTipTexts != null) {
+            defaultCellToolTipTexts = allocateStrings(jsWriter,
+                    defaultCellToolTipTexts, null);
         }
 
-        hoverImageURLs = gridRenderContext.getCellTitleHoverImageURLs();
-        if (hoverImageURLs != null) {
-            hoverImageURLs = allocateStrings(jsWriter, hoverImageURLs, null);
-        }
-
-        selectedImageURLs = gridRenderContext.getCellTitleSelectedImageURLs();
-        if (selectedImageURLs != null) {
-            selectedImageURLs = allocateStrings(jsWriter, selectedImageURLs,
-                    null);
+        defaultCellHorizontalAligments = gridRenderContext
+                .getDefaultCellHorizontalAlignments();
+        if (defaultCellHorizontalAligments != null) {
+            defaultCellHorizontalAligments = allocateStrings(jsWriter,
+                    defaultCellHorizontalAligments, null);
         }
 
         UIColumn columns[] = gridRenderContext.listColumns();
@@ -1047,6 +1056,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 if (((ICellImageSettings) columnComponent)
                         .isCellImageURLSetted()) {
                     objectWriter.writeSymbol("_cellImage").writeBoolean(true);
+                }
+            }
+
+            if ((generationMask & GENERATE_CELL_STYLE_CLASS) > 0) {
+                if (columnComponent instanceof ICellStyleClassSettings) {
+                    if (((ICellStyleClassSettings) columnComponent)
+                            .isCellStyleClassSetted()) {
+                        objectWriter.writeSymbol("_cellStyleClassSetted")
+                                .writeBoolean(true);
+                    }
                 }
             }
 

@@ -730,13 +730,22 @@ var f_core = {
 				
 				var version=window.rcfacesBuildId;
 				if (version) {
+					var compiled=false;					
 					var compiledVersion=version.indexOf('c');
 					if (compiledVersion>=0) {
-						title.push("version="+version.substring(0, compiledVersion));
+						compiled=true;
+						version=version.substring(0, compiledVersion);
+					}
+					
+					if (!version.indexOf("0.")) {
+						var d=new Date();
+						d.setTime(parseInt(version.substring(2)));
+						version=d;
+					}
+					title.push("version="+version);					
+											
+					if (compiled) {
 						title.push("COMPILED");
-						
-					} else {
-						title.push("version="+version);
 					}
 				}
 				
