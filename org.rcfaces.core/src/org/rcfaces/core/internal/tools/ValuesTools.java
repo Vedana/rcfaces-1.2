@@ -4,6 +4,9 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import java.io.Externalizable;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +28,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import org.rcfaces.core.internal.capability.IEditableValueHolder;
+import org.rcfaces.core.internal.capability.ISubmittedExternalValue;
 import org.rcfaces.core.internal.util.Convertor;
 
 /**
@@ -37,6 +40,8 @@ public class ValuesTools {
     private static final String REVISION = "$Revision$";
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
+
+    public static final Object NULL_VALUE = new NullValue();
 
     public static final Set valueToSet(Object value, boolean copy) {
         if (value == null) {
@@ -350,7 +355,17 @@ public class ValuesTools {
     }
 
     public static final Boolean valueToBoolean(ValueHolder valueHolder) {
-        if (valueHolder instanceof EditableValueHolder) {
+        if (valueHolder instanceof ISubmittedExternalValue) {
+            ISubmittedExternalValue submittedExternalValue = (ISubmittedExternalValue) valueHolder;
+
+            if (submittedExternalValue.isSubmittedValueSetted()) {
+                Object submittedValue = ((ISubmittedExternalValue) valueHolder)
+                        .getSubmittedExternalValue();
+
+                return (Boolean) submittedValue;
+            }
+
+        } else if (valueHolder instanceof EditableValueHolder) {
             Object submittedValue = ((EditableValueHolder) valueHolder)
                     .getSubmittedValue();
             if (submittedValue != null) {
@@ -372,7 +387,20 @@ public class ValuesTools {
     }
 
     public static final int valueToInt(ValueHolder valueHolder) {
-        if (valueHolder instanceof EditableValueHolder) {
+        if (valueHolder instanceof ISubmittedExternalValue) {
+            ISubmittedExternalValue submittedExternalValue = (ISubmittedExternalValue) valueHolder;
+
+            if (submittedExternalValue.isSubmittedValueSetted()) {
+                Object submittedValue = ((ISubmittedExternalValue) valueHolder)
+                        .getSubmittedExternalValue();
+                if (submittedValue != null) {
+                    return ((Integer) submittedValue).intValue();
+                }
+
+                return 0;
+            }
+
+        } else if (valueHolder instanceof EditableValueHolder) {
             Object submittedValue = ((EditableValueHolder) valueHolder)
                     .getSubmittedValue();
             if (submittedValue != null) {
@@ -401,12 +429,12 @@ public class ValuesTools {
     public static String valueToString(ValueHolder valueHolder,
             FacesContext facesContext) {
 
-        if (valueHolder instanceof IEditableValueHolder) {
-            IEditableValueHolder editableValueHolder = (IEditableValueHolder) valueHolder;
+        if (valueHolder instanceof ISubmittedExternalValue) {
+            ISubmittedExternalValue submittedExternalValue = (ISubmittedExternalValue) valueHolder;
 
-            if (editableValueHolder.isSubmittedValueSet()) {
-                Object submittedValue = editableValueHolder.getSubmittedValue();
-
+            if (submittedExternalValue.isSubmittedValueSetted()) {
+                Object submittedValue = ((ISubmittedExternalValue) valueHolder)
+                        .getSubmittedExternalValue();
                 return ValuesTools.valueToString(submittedValue,
                         (UIComponent) valueHolder, facesContext);
             }
@@ -534,6 +562,79 @@ public class ValuesTools {
 
         throw new FacesException(
                 "Bad type of value for attribute selectedValues/checkedValues !");
+    }
+
+    public static Object getValue(UIComponent component) {
+        if (component instanceof ISubmittedExternalValue) {
+            ISubmittedExternalValue submittedExternalValue = (ISubmittedExternalValue) component;
+
+            if (submittedExternalValue.isSubmittedValueSetted()) {
+                return ((ISubmittedExternalValue) component)
+                        .getSubmittedExternalValue();
+            }
+
+        } else if (component instanceof EditableValueHolder) {
+            Object submittedValue = ((EditableValueHolder) component)
+                    .getSubmittedValue();
+            if (submittedValue != null) {
+                return submittedValue;
+            }
+        }
+
+        if (component instanceof ValueHolder) {
+            return ((ValueHolder) component).getValue();
+        }
+
+        throw new FacesException("Component '" + component.getId()
+                + "' does not contain value !");
+    }
+
+    public static void setValue(UIComponent component, Object value) {
+        if (component instanceof ISubmittedExternalValue) {
+            ISubmittedExternalValue submittedExternalValue = (ISubmittedExternalValue) component;
+
+            submittedExternalValue.setSubmittedExternalValue(value);
+            return;
+        }
+
+        if (component instanceof EditableValueHolder) {
+            ((EditableValueHolder) component).setSubmittedValue(value);
+            return;
+        }
+
+        if (component instanceof ValueHolder) {
+            ((ValueHolder) component).setValue(value);
+            return;
+        }
+
+        throw new FacesException("Component '" + component.getId()
+                + "' does not support value !");
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static class NullValue implements Externalizable {
+        private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = -2586084278685773691L;
+
+        public void readExternal(ObjectInput in) {
+        }
+
+        public void writeExternal(ObjectOutput out) {
+        }
+
+        public boolean equals(Object obj) {
+            return (obj instanceof NullValue);
+        }
+
+        public int hashCode() {
+            return 0;
+        }
+
     }
 
 }

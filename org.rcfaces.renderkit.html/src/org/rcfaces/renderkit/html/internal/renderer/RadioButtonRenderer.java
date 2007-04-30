@@ -205,7 +205,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         }
 
         if (radioButton.isValueLocked(facesContext) == false) {
-            radioButton.setSubmittedValue(submittedValue);
+            radioButton.setSubmittedExternalValue(submittedValue);
         }
 
         if (radioButton.isSelected(facesContext) != selected) {

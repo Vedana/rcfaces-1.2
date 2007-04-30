@@ -12,6 +12,12 @@
 
 var __static = {
 
+
+	/**
+	 * @field public static final number
+	 */
+	ERROR_MIME_TYPE: "x-camelia/error",
+
 	/**
 	 * @field public static final number
 	 */
@@ -78,6 +84,11 @@ var __static = {
 	RESPONSE_EVALUATION_ASYNC_RENDER_ERROR: 0x3000004,
 
 	/**
+	 * @field public static final number
+	 */
+	APPLICATION_ERROR: 0x0000000,
+
+	/**
 	 * @method hidden static
 	 * @param f_component component
 	 * @param number messageCode
@@ -87,8 +98,12 @@ var __static = {
 	 */
 	PerformErrorEvent: function(component, messageCode, message, param) {
 
-		alert("ERROR: "+messageCode+": "+message);
+		if (f_core.IsDebugEnabled(f_error)) {
+			var code=(messageCode)?("[0x"+messageCode.toString(16)+"]"):"";
 
+			alert("ERROR: "+code+": "+message);
+		}
+		
 		if (component.f_isActionListEmpty(f_event.ERROR)) {
 			// Pas d'évènements !
 			
@@ -98,11 +113,11 @@ var __static = {
 			}
 		
 			if (messageCode) {
-				messageCode="[0x"+messageCode.toString(16)+"]";				
+				messageCode="[0x"+messageCode.toString(16)+"]";
+				
 			} else {
 				messageCode="";
-			}
-	
+			}	
 		
 			f_core.Error(component.f_getClass(), "Error"+messageCode+"  "+message, x);
 			return;

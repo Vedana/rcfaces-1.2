@@ -35,4 +35,6 @@ public interface IGridComponent {
     String getRowIndexVar();
 
     void setFirst(int position);
+
+    boolean isRowAvailable();
 }

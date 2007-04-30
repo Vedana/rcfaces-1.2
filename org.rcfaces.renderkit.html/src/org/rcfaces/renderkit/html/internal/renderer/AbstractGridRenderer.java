@@ -55,6 +55,8 @@ import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.listener.IScriptListener;
+import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -74,6 +76,7 @@ import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.preference.IComponentPreference;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
@@ -621,12 +624,15 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
+        /* Ca sert à qq chose ?
         if (firstColumn) {
             if (sa == null) {
                 sa = new StringAppender(mainClassName);
             }
             sa.append(' ').append(mainClassName).append("_left");
         }
+        */
+        
         if (disabled) {
             if (sa == null) {
                 sa = new StringAppender(mainClassName);
@@ -956,6 +962,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         String disabledImageURLs[] = null;
         String hoverImageURLs[] = null;
         String selectedImageURLs[] = null;
+        String columnStyleClasses[] = null;
 
         if ((generationMask & GENERATE_CELL_IMAGES) > 0) {
             defaultCellImageURLs = gridRenderContext.getDefaultCellImageURLs();
@@ -987,6 +994,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 selectedImageURLs = allocateStrings(jsWriter,
                         selectedImageURLs, null);
             }
+        }
+
+        columnStyleClasses = gridRenderContext.getColumnStyleClasses();
+        if (columnStyleClasses != null) {
+            columnStyleClasses = allocateStrings(jsWriter, columnStyleClasses,
+                    null);
         }
 
         defaultCellStyleClasses = gridRenderContext
@@ -1043,6 +1056,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             } else if (rowState == AbstractGridRenderContext.CLIENT_HIDDEN) {
                 objectWriter.writeSymbol("_hiddenMode").writeBoolean(false);
+            }
+
+            if (columnStyleClasses != null) {
+                String styleClass = columnStyleClasses[i];
+                if (styleClass != null) {
+                    objectWriter.writeSymbol("_styleClass").write(styleClass);
+                }
             }
 
             if (defaultCellImageURLs != null) {
@@ -1200,6 +1220,50 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     protected void writeGridColumnProperties(IObjectLiteralWriter objectWriter,
             AbstractGridRenderContext tableContext, UIColumn columnComponent,
             int columnIndex) throws WriterException {
+
+        Object sort = tableContext.getSortCommand(columnIndex);
+        if (sort != null) {
+            String command = null;
+
+            if (sort instanceof String) {
+                if (tableContext.getSortClientSide(columnIndex) == false) {
+                    command = tableContext
+                            .translateJavascriptMethod(SORT_SERVER_COMMAND);
+
+                } else {
+                    command = ((String) sort).trim();
+                }
+
+            } else if (sort instanceof IScriptListener) {
+                IScriptListener scriptListener = (IScriptListener) sort;
+
+                command = scriptListener.getCommand();
+
+            } else if (sort instanceof IServerActionListener) {
+                // Le tri se fait coté serveur !
+
+                command = tableContext
+                        .translateJavascriptMethod(SORT_SERVER_COMMAND);
+            }
+
+            if (command != null) {
+                IJavaScriptWriter jsWriter = objectWriter
+                        .writeSymbol("_sorter");
+
+                if (Constants.VERIFY_SORT_COMMAND) {
+                    String delimiters = " (),;:";
+                    StringTokenizer st = new StringTokenizer(command,
+                            delimiters, true);
+                    if (st.countTokens() > 1) {
+                        throw new FacesException(
+                                "The comparator must be a function name ! ('"
+                                        + command + "')");
+                    }
+                }
+
+                jsWriter.write(command);
+            }
+        }
     }
 
     private interface IBooleanStateCallback {

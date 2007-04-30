@@ -1163,6 +1163,11 @@ var __prototype = {
 				}
 
 				var responseContentType=request.f_getResponseContentType();
+				if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+			 		tree.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+					return;
+				}
+				
 				if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
 		 			tree.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
 

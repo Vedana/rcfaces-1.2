@@ -5,6 +5,8 @@ package org.rcfaces.core.internal.component;
 
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.listener.CameliaPhaseListener;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -23,8 +25,7 @@ public class BasicInitializationState implements IInitializationState {
 
         FacesContext facesContext = getFacesContext();
 
-        boolean ret = (RestoreViewPhaseListener
-                .isRestoreViewPhase(facesContext) == false);
+        boolean ret = (CameliaPhaseListener.isRestoreViewPhase(facesContext) == false);
 
         isConstructionState = Boolean.valueOf(ret);
 

@@ -19,7 +19,6 @@
 	padding: 0;	
 	line-height: 18px;
 	text-align: left;
-	-moz-user-select: none;
 	user-select: none;
 	background-color: white;
  	position: relative;
@@ -45,6 +44,10 @@
  	background:#D9D9D9;
 }
 
+.f_grid_disabled .f_grid_dataBody_scroll {
+	background-color: #ECE9D8;
+}
+
 .f_grid_fttitle {
 	empty-cells: show;
 	border-spacing: 0;
@@ -60,12 +63,13 @@
 	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
 	margin: 0px;
 	background-color: white;
+	-moz-user-select: none;
 }
 
 .f_grid_tcell {
 	font-weight: bold;
 	color: #000;
-/*	text-overflow: ellipsis; */
+/*	text-overflow: ellipsis; Ca fait planter IE dans certains cas */
 	text-overflow: clip;
 	vertical-align: middle;
 	padding: 2px 4px 2px 4px;
@@ -118,40 +122,13 @@
 }
 
 .f_grid_ttext {
-	color: #000;
+/*	color: #000; Ca sert à qq chose ? */
 /*	text-overflow: ellipsis; */
 	text-overflow: clip;
 	white-space:nowrap;
 	overflow: hidden;
 	vertical-align: middle;
 	line-height: 16px;
-}
-
-.f_grid_shadowCell,
-.f_grid_cell {
-	empty-cells: show;
-	padding: 1px 4px 1px 4px;
-	height: 20px;
-	vertical-align: middle;
-	white-space:nowrap;
-	overflow: hidden;
-}
-
-.f_grid_shadowCell2,
-.f_grid_cell2 {
-	empty-cells: show;
-	padding: 1px 4px 1px 4px;
-	vertical-align: middle;
-	white-space:nowrap;
-	overflow: hidden;
-	
-	// Et oui ! Sinon sous firefox les champs INPUTs peuvent se superposer/anhiler 
-	position: relative;
-}
-
-.f_grid_cell {
-	border-left: 1px solid #D9D9D9;
-	padding-left: 3px;
 }
 
 .f_grid_cell_cursor {
@@ -174,10 +151,15 @@
 	vertical-align: middle;
 	line-height: 18px;
 	-moz-user-focus: ignore;
+	-moz-user-select: none;
 	padding: 0;
 	margin: 0 2px 0 0;
 	width: 16px;  // Pour la compatibilité IE
 	height: 16px;  // Pour la compatibilité IE
+}
+
+.f_grid_row {
+//	height: 20px;
 }
 
 .f_grid_row_even, 
@@ -232,6 +214,7 @@
 	-moz-outline-style: none;
 	-moz-outline-width: 0;
 	-moz-user-focus: normal;
+	-moz-user-select: none;
 }
 
 .f_grid_dataBody_scroll {

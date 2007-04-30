@@ -123,6 +123,11 @@ var __prototype = {
 					//	alert("Ret="+ret);
 
 					var responseContentType=request.f_getResponseContentType();
+					if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+				 		component.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+						return;
+					}
+				
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
 						try {
 							eval(ret);

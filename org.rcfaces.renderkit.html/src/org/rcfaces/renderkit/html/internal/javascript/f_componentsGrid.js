@@ -26,8 +26,8 @@ var __prototype = {
 	f_componentsGrid: function() {
 		this.f_super(arguments);
 		
-		this._cellStyleClass="f_grid_cell2";
-		this.f_setCursorVisibility(false);
+		this._cellStyleClass="f_cGrid_cell";
+		this._rowStyleClass="f_cGrid_row";
 	},
 	f_finalize: function() {
 		this.f_super(arguments);
@@ -39,7 +39,7 @@ var __prototype = {
 		}		
 		
 		var params=new Object;
-		params.dataGridId=this.id;
+		params.componentsGridId=this.id;
 		params.index=firstIndex;
 		if (length>0) {
 			params.rows=length;
@@ -72,16 +72,10 @@ var __prototype = {
 			}
 						
 			if (tbody) {
-				this._releaseRows();
-				this._releaseCells();
+				this.f_releaseRows();
+				this.f_releaseCells();
 			
-				// Detache temporairement !
-				if (tbody.parentNode) {
-					
-					f_core.Assert(tbody.parentNode==this._table, "CallServer: Not same parent ? ("+tbody.parentNode+")");
-					
-					this._table.removeChild(tbody);
-				}
+//				this._table.style.display="none";
 
 				if (this._waitingMode==f_grid.END_WAITING) {
 					this.f_removePagedWait();
@@ -161,19 +155,25 @@ var __prototype = {
 						dataGrid.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
 					}
-	
-					var responseContentType=request.f_getResponseContentType();
-					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
-				 		dataGrid.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
-						return;
-					}
-					
+
 					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
 					if (!cameliaServiceVersion) {
 						dataGrid.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
 						return;					
 					}
-				
+	
+					var responseContentType=request.f_getResponseContentType();
+					
+					if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+				 		dataGrid.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+						return;
+					}
+
+					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+				 		dataGrid.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+						return;
+					}
+					
 					var ret=request.f_getResponse();
 					
 					if (dataGrid._waitingLoading) {
@@ -218,7 +218,7 @@ var __prototype = {
 		});
 
 		this._loading=true;
-		request.f_setRequestHeader("X-Camelia", "dataGrid.update");
+		request.f_setRequestHeader("X-Camelia", "componentsGrid.update");
 		request.f_doFormRequest(params);
 	},
 	/**
@@ -235,25 +235,7 @@ var __prototype = {
 			scrollBody.style.height=this._oldHeightStyle;
 			this._oldHeight=undefined;
 			this._oldHeightStyle=undefined;
-		}
-		
-		if (false) {
-			// Pas 2 fois !
-			// Ca peut poser des problemes lors d'enchainement de filtres !
-			
-			if (tbody && tbody.parentNode) {		
-				this._releaseRows();
-				this._releaseCells();
-				
-				f_core.Assert(tbody.parentNode==this._table, "StartNewPage: Not same parent ? ("+tbody.parentNode+"/"+this._table+")");
-				this._table.removeChild(tbody);
-				this._tbody=undefined;	
-	
-				while (tbody.hasChildNodes()) {
-					tbody.removeChild(tbody.lastChild);
-				}	
-			}
-		}
+		}		
 
 		if (!this._waitingLoading) {
 			this._first=rowIndex;
@@ -273,20 +255,6 @@ var __prototype = {
 					}
 				}
 			}
-			if (this._checkable) {
-				var oldCurrentChecks=(this._currentChecks.length);
-				this._currentChecks=new Array;
-				
-				// Reset des lignes selectionnées ...
-				if (oldCurrentChecks) {
-					// On avait des selections !
-					
-					if (!this._checkFullState) {
-						// Pas de fullstate: elles sont perdues !
-						this.fa_fireSelectionChangedEvent();
-					}
-				}			
-			}
 		}		
 		this.fa_componentUpdated=false;
 	},
@@ -294,7 +262,7 @@ var __prototype = {
 	 * @method hidden
 	 * @return void
 	 */
-	f_updateNewPage: function() {
+	f_updateNewPage: function(rowCount) {
 		// Appeler par la génération du serveur !
 
 		f_core.Debug(f_componentsGrid, "f_updateNewPage: Update new page _rowCount='"+this._rowCount+"' _maxRows="+this._maxRows+"' _rows='"+this._rows+"'.");
@@ -309,13 +277,13 @@ var __prototype = {
 		var cursorRow=undefined;
 		var tbody=this._tbody;
 		if (tbody && !this._partialWaiting) {
-			f_core.Assert(tbody.parentNode!=this._table, "f_componentsGrid.f_updateNewPage: Tbody has not been detached !");
+			var newDisplay="table";
+			if (f_core.IsInternetExplorer()) {
+				newDisplay="block";
+			}
+			this._table.style.display=newDisplay;
 			
-			this._table.appendChild(tbody);
-			
-			var rows=tbody.childNodes;
-			//alert("rows="+rows.length);
-					
+			var rows=tbody.childNodes;				
 			for(var i=0;i<rows.length;i++) {
 				var row=rows[i];
 				var index=row._index;
@@ -325,10 +293,9 @@ var __prototype = {
 				if (this._first+i==this._waitingIndex) {
 					cursorRow=row;
 					this._waitingIndex=undefined;
+					break;
 				}
 			}
-			
-			this._table.appendChild(tbody);
 		
 			if (f_core.IsGecko()) {
 				// On a un probleme de layout avec le DIV ! arg !
@@ -365,8 +332,6 @@ var __prototype = {
 
 		if (this._interactiveShow || !this._titleLayout ) {
 			this._interactiveShow=undefined;
-			
-			f_grid.UpdateTitle(this);
 		}
 
 		if (cursorRow) {
@@ -386,7 +351,7 @@ var __prototype = {
 	f_update: function() {
 		var rows=f_grid.ListRows(this._table);
 	
-		var rowClasses= this._rowStyleClass;
+		var rowClasses= this._rowStyleClasses;
 	
 		var cellStyleClassSetted=null;
 		var columns=this._columns;
@@ -445,7 +410,7 @@ var __prototype = {
 				
 				// Nous sommes en fullstate ?
 				if (!this._selectionFullState && f_core.GetAttribute(row, "v:selected")) {
-					this.f_updateElementSelection(row, true);		
+					this.f_updateElementSelection(row, true);	
 				}
 			}
 		}
@@ -517,7 +482,152 @@ var __prototype = {
 		}
 	
 		this._table.appendChild(body);	
-	}	
+	},
+	
+	/**
+	 * @method hidden
+	 * @param String rowId
+	 * @param Object rowProperties
+	 * @return Object
+	 */
+	f_addRow2: function(rowId, rowProperties, cell1Properties, cell1Content) {
+		f_core.Assert(this._tbody, "f_dataGrid.f_addRow2: No table body !");
+		
+		var row;
+		var firstCell;
+		var shadowRows=this._shadowRows;
+		if (shadowRows && shadowRows.length) {
+			row=shadowRows.shift();
+			firstCell=row.firstChild;
+			
+			while (firstCell.hasChildNodes()) {
+				firstCell.removeChild(firstCell.lastChild);
+			}
+			
+			f_core.Assert(row.tagName.toLowerCase()=="tr", "Invalid row ! "+row);
+			
+		} else {
+			row=document.createElement("tr");
+			this._tbody.appendChild(row);
+		}
+		this._rowsPool.push(row);
+		row._dataGrid=this;
+		
+		var rowIdx=this._rowsPool.length;
+		
+		var idx=0;
+		row._index=arguments[idx++];
+		row.id=rowId;
+		
+		if (this._selectable) {
+			row.onmousedown=f_grid.RowMouseDown;
+			row.onmouseup=f_core.CancelJsEventHandler;
+			row.onclick=f_core.CancelJsEventHandler;
+			row.ondblclick=f_grid.RowMouseDblClick;
+			row.onfocus=f_grid.GotFocus;
+		}
+		
+		var properties=arguments[idx++];
+		
+		var className=null;
+		
+		if (properties) {
+			className=properties._styleClass;
+		}
+		if (!className) {
+			className=this._rowStyleClasses[rowIdx % this._rowStyleClasses.length];
+		}
+		row.className=className;
+		row._className=className;
+				
+		if (this._selectable) {
+			var selected=false;
+			
+			if (!this._selectionFullState && properties) {
+				selected=properties._selected;
+			}
+			
+			this.f_updateElementSelection(row, selected);
+		}
+		
+		var cells=new Array;
+		row._cells=cells;
+		var rowValueColumnIndex=this._rowValueColumnIndex;
+		var columns=this._columns;
+		for(var i=0;i<columns.length;i++) {
+			var col=columns[i];
+
+			var td;
+			if (col._visibility===null) {
+				cells.push(null);
+				continue;
+			}
+				
+			properties=arguments[idx++];
+			
+			if (!col._visibility) {
+				if (!properties) {
+					properties=new Object;
+				}
+				
+				td=properties;
+				//td._text=cellText;
+				cells.push(td);
+				continue;
+			}
+
+			var content=arguments[idx++];
+			
+			if (firstCell) {
+				td=firstCell;
+				td.colSpan=1; // pour le shadow
+				td.className="";
+				firstCell=undefined;
+				
+			} else {
+				td=document.createElement("td");
+				row.appendChild(td);
+			}
+			
+			this._cellsPool.push(td);
+					
+			td.valign="top";
+			td.noWrap=true;
+			
+			var align=col._align;
+			if (properties) {
+				if (properties._styleClass) {
+					row._cellsStyleClass=true;
+					td._cellStyleClass=properties._styleClass;
+				}
+				if (properties._toolTipText) {
+					td.tooltip=properties._toolTipText;
+				}
+				if (properties._align) {
+					align=properties._align;
+				}
+			}
+			td.align=align;
+				
+			try {
+				window._classLoader._load(this, td, content);
+				
+			} catch (x) {
+					alert(x);
+	 			f_core.Error(f_componentsGrid, "Can not load content of componentsGrid cell '"+content+"'");
+			}
+		}
+		
+		var initCursorValue=this._initCursorValue;
+		if (!this._cursor && row._index==initCursorValue) {
+			this._cursor=row;
+			this._initCursorValue=undefined;
+		}
+		
+		this.fa_updateElementStyle(row);
+		
+		return row;
+	}
 }
  
 new f_class("f_componentsGrid", null, __static, __prototype, f_grid);

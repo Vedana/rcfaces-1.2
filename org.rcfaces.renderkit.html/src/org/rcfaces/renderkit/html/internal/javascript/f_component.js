@@ -771,6 +771,7 @@ var __prototype = {
 		var kclazz=this._kclass;
 		if (kclazz) {
 			s+=" class=\""+kclazz.f_getName()+"\"";
+			
 		} else {
 			s+=" class=*undefined*";
 		}

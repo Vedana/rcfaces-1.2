@@ -168,10 +168,14 @@ var __static = {
 			target = evt.srcElement;
 		}
 		
-		if (target && target.tagName.toLowerCase()=="input") {
-			return false;
-		}
 		
+		if (target && target.nodeType==1) {
+			var tagName=target.tagName;
+			if (tagName && tagName.toLowerCase()=="input") {
+				return false;
+			}
+		}
+				
 		return true;
 	},
 	/**
@@ -562,7 +566,13 @@ var __static = {
 		if (dataGrid.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = f_core.GetJsEvent(this);
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (!f_grid.VerifyTarget(evt)) {
+			return true;
+		}
 
 		var code=evt.charCode;
 		if (code===undefined) {
@@ -588,7 +598,13 @@ var __static = {
 		if (dataGrid.f_getEventLocked(!dataGrid._waitingLoading)) {
 			return false;
 		}
-		if (!evt) evt = f_core.GetJsEvent(this);
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+	
+		if (!f_grid.VerifyTarget(evt)) {
+			return true;
+		}
 
 		if (!dataGrid._focus) {
 			return true;
@@ -606,7 +622,14 @@ var __static = {
 		if (dataGrid.f_getEventLocked(false)) {
 			return false;
 		}
-		if (!evt) evt = f_core.GetJsEvent(this);
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+	
+		if (!f_grid.VerifyTarget(evt)) {
+			return true;
+		}
 
 		if (!dataGrid._focus) {
 			return true;
@@ -1112,6 +1135,7 @@ var __prototype = {
 		this._showCursor=false;
 		
 		this._cellStyleClass="f_grid_cell";
+		this._rowStyleClass="f_grid_row";
 		
 		if (f_core.GetAttribute(this, "v:resizable")) {
 			this._resizable=true;
@@ -1121,10 +1145,10 @@ var __prototype = {
 
 		var rowStyleClass=f_core.GetAttribute(this, "v:rowStyleClass");
 		if (rowStyleClass) {
-			this._rowStyleClass=rowStyleClass.split(",");
+			this._rowStyleClasses=rowStyleClass.split(",");
 			
 		} else  {
-			this._rowStyleClass= f_grid._DEFAULT_ROW_STYLE_CLASSES;
+			this._rowStyleClasses=this.f_getDefaultRowStyleClasses();
 		}
 		
 		var tableClass="f_grid_table";
@@ -1143,7 +1167,7 @@ var __prototype = {
 			table.removeChild(firstTBody);
 		}
 
-//		this.f_openActionList(f_event.MOUSEDOWN);
+		this.f_openActionList(f_event.MOUSEDOWN);
 		this.f_openActionList(f_event.MOUSEUP);
 		this.f_openActionList(f_event.SELECTION);
 
@@ -1247,12 +1271,12 @@ var __prototype = {
 		}
 	
 		if (this._rowsPool) {
-			this._releaseRows();
+			this.f_releaseRows();
 			this._rowsPool=undefined;
 		}
 	
 		if (this._cellsPool) {
-			this._releaseCells();
+			this.f_releaseCells();
 			this._cellsPool=undefined;
 		}
 /*	
@@ -1261,6 +1285,9 @@ var __prototype = {
 			this._colsPool=null;
 		}
 	*/	
+
+//		this._cellStyleClass=undefined; // String
+//		this._rowStyleClass=undefined; // String
 	
 //		this._showCursor=undefined; // boolean
 	
@@ -1424,6 +1451,13 @@ var __prototype = {
 	f_getMainStyleClass: function() {
 		return "f_grid";
 	},
+	/** 
+	 * @method protected
+	 * @return String[]
+	 */
+	f_getDefaultRowStyleClasses: function() {
+		return f_grid._DEFAULT_ROW_STYLE_CLASSES;
+	},
 	f_serialize: function() {
 		
 		if (this._resizable) {
@@ -1432,7 +1466,7 @@ var __prototype = {
 			for(var i=0;i<columns.length;i++) {
 				var col=columns[i];
 
-				if (!col._resizable) {
+				if (!col._visibility || !col._resizable) { 
 					continue;
 				}
 
@@ -1483,7 +1517,7 @@ var __prototype = {
 			this._waitingMode=f_grid.FULL_WAITING
 		}
 
-		if (this._tbody && !this._tbody.parentNode) {
+		if (this._tbody && !f_core.GetParentNode(this._tbody)) {
 //			f_core.Assert(this._tbody.parentNode!=this._table, "Tbody has not been detached !");
 // C'est normal dans un componentsGrid
 
@@ -1505,8 +1539,8 @@ var __prototype = {
 		var menu=this.f_getSubMenuById(f_grid._BODY_MENU_ID);
 		if (menu) {
 			scrollBody.onmousedown=f_grid._BodyMouseDown;
-			scrollBody.onmouseup=f_core.CancelJsEventHandler;
-			scrollBody.onclick=f_core.CancelJsEventHandler;
+			scrollBody.onmouseup=f_core.FiltredCancelJsEventHandler;
+			scrollBody.onclick=f_core.FiltredCancelJsEventHandler;
 		}					
 	
 		this.f_performPagedComponentInitialized();
@@ -1557,16 +1591,6 @@ var __prototype = {
 			this.f_setFirst(this._first, this._cursor);			
 		}
 	},
-	
-	/**
-	 * @method protected
-	 * @param boolean visibility
-	 * @return void
-	 */
-	f_setCursorVisibility: function(visibility) {
-		this._showCursor=visibility;
-	},
-	
 	/**
 	 * @method protected
 	 */
@@ -1619,7 +1643,7 @@ var __prototype = {
 			
 			var td=document.createElement("td");
 			td.colSpan=this._visibleColumnsCount;
-			td.className="f_grid_shadowCell";
+			td.className=this._cellStyleClass+"_shadow";
 
 			tr.appendChild(td);
 			
@@ -1661,7 +1685,7 @@ var __prototype = {
 		
 		var rowIdx=this._rowsPool.length;
 		
-		waitTR.className=this._rowStyleClass[rowIdx % this._rowStyleClass.length];
+		waitTR.className=this._rowStyleClasses[rowIdx % this._rowStyleClasses.length];
 		
 		var td=document.createElement("td");
 		waitTR.appendChild(td);
@@ -1807,6 +1831,7 @@ var __prototype = {
 				column._titleHoverImageURL=properties._hoverImageURL;
 				column._titleSelectedImageURL=properties._selectedImageURL;
 				column._cellStyleClassSetted=properties._cellStyleClassSetted;
+				column._styleClass=properties._styleClass;
 
 				if (this._resizable && properties._resizable) {
 					column._minWidth=properties._minWidth;
@@ -1944,7 +1969,7 @@ var __prototype = {
 			suffix="_normal";
 		}
 		
-		var className="f_grid_row";
+		var className=this._rowStyleClass;
 		var cl=className;
 		var rowClassName=row._className;		
 		if (rowClassName) {
@@ -1952,7 +1977,7 @@ var __prototype = {
 		}
 		
 		if (suffix) {
-			cl+=" "+className+suffix;
+			cl+=" f_grid_row"+suffix;
 		
 			if (rowClassName) {
 				cl+=" "+rowClassName+suffix;
@@ -1981,8 +2006,8 @@ var __prototype = {
 	 * @method private
 	 */
 	_updateCellsStyle: function(row, firstOnly) {
-		var tds=row.cells;
-		var tdsLength=(firstOnly)?1:tds.length;
+		var td=row.firstChild;
+		for(;td && td.tagName.toLowerCase()!="td";td=td.nextSibling);
 
 		if (row._selected) {
 			var className=this._cellStyleClass+" f_grid_cell_selected";
@@ -1991,14 +2016,19 @@ var __prototype = {
 			if (row._hasCursor && this._focus && this._showCursor) {
 				firstClassName+=" f_grid_cell_cursor";
 			}
-
-			for(var i=0;i<tdsLength;i++) {
+			
+			for(var i=0;td;i++) {
 				if (!i) {
-					tds[i].className=firstClassName;
-					continue;
+					td.className=firstClassName;
+				} else {
+					td.className=className;
 				}
 				
-				tds[i].className=className;
+				if (firstOnly) {
+					break;
+				}
+				
+				for(td=td.nextSibling;td && td.tagName.toLowerCase()!="td";td=td.nextSibling);
 			}
 			
 			return;
@@ -2007,17 +2037,12 @@ var __prototype = {
 		var cols=this._columns;
 		var idx=0;
 		
-		for(var i=0;i<cols.length;i++) {
+		for(var i=0;i<cols.length && td;i++) {
 			var col=cols[i];
 			if (!col._visibility) {
 				continue;
 			}
 			
-			if (idx>=tdsLength) {
-				break;
-			}
-
-			var td=tds[idx++];
 			var cclassName=td._cellStyleClass;
 			
 			if (!cclassName) {
@@ -2033,18 +2058,24 @@ var __prototype = {
 				className+=" "+cclassName;
 			}
 
-			if (idx==1) {
+			if (!idx) {
 				className+=" f_grid_cell_left";
 				if (this._cursor==row && this._focus && this._showCursor) {
 					className+=" f_grid_cell_cursor";
 				}
 			}
 			
-			if (td.className==className) {
-				continue;
+			if (td.className!=className) {
+				td.className=className;
 			}
 			
-			td.className=className;
+			if (firstOnly) {
+				break;
+			}
+			
+			for(td=td.nextSibling;td && td.tagName.toLowerCase()!="td";td=td.nextSibling);			
+			
+			idx++;
 		}
 	},
 	/**
@@ -2081,8 +2112,8 @@ var __prototype = {
 			}
 			
 			var input=row._input;
-			if (row && row.disabled!=disabled) {
-				row.disabled=disabled;
+			if (input) {
+				input.disabled=disabled;
 			}
 			
 			this.fa_updateElementStyle(row);
@@ -2464,7 +2495,11 @@ var __prototype = {
 			f_core.VerifyProperties(column);
 		}
 	},
-	_releaseRows: function() {
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_releaseRows: function() {
 		this._cursor=undefined; // HTMLRowElement
 
 		var list=this._rowsPool;
@@ -2518,7 +2553,11 @@ var __prototype = {
 		//	f_core.VerifyProperties(row);
 		}
 	},
-	_releaseCells: function() {
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_releaseCells: function() {
 		var list=this._cellsPool;
 		if (!list || !list.length) {
 			return;
@@ -2611,6 +2650,11 @@ var __prototype = {
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @return void
+	 */
 	_openContextMenu: function(evt) {
 		if (!this._cursor) {
 			return;
@@ -3249,17 +3293,30 @@ var __prototype = {
 	 */
 	_updateTitleStyle: function(column) {
 		f_core.Assert(column && column._head, "f_grid._updateTitleStyle: Invalid column parameter ("+column+")");
-	
-		var className="f_grid_tcell";
 
+		var suffix="";
 		if (this.f_isDisabled()) {
 		  // rien
 
 		} else if (this._columnSelected==column) {
-			className+=" "+className+"_selected";
+			suffix+="_selected";
 
 		} else if (this._columnOver==column) {
-			className+=" "+className+"_over";
+			suffix+="_over";
+		}
+
+		var tcellClassName="f_grid_tcell";
+		var columnStyleClass=column._styleClass;
+		
+		var className=tcellClassName;
+		if (columnStyleClass) {
+			className+=" "+columnStyleClass;
+		}
+		if (suffix) {
+			className+=" "+tcellClassName+suffix;
+			if (columnStyleClass) {
+				className+=" "+columnStyleClass+suffix;
+			}			
 		}
 
 		var head=column._head;
@@ -3294,6 +3351,9 @@ var __prototype = {
 		}
 		
 		swidth-=f_grid._TEXT_RIGHT_PADDING;
+		if (swidth<0) {
+			swidth=0;
+		}
 		
 //		document.title="swidth='"+swidth+"' cur='"+column._label.style.width+"' col="+column._col.style.width;
 		
@@ -3307,6 +3367,9 @@ var __prototype = {
 	
 		if (suffix) {
 			swidth-=f_grid._SORT_PADDING;
+			if (swidth<0) {
+				swidth=0;
+			}
 		}
 		
 		var sw=swidth+"px";
@@ -3367,6 +3430,9 @@ var __prototype = {
 		
 		return false;
 	},	
+	/**
+	 * @method protected
+	 */
 	fa_componentCaptureMenuEvent: function() {
 		return null;
 	},
@@ -3378,7 +3444,7 @@ var __prototype = {
 		var scrollBody=this._scrollBody;
 
 		var waitingRow=this._waitingRow;
-		if (waitingRow && waitingRow.parentNode) {
+		if (waitingRow && f_core.GetParentNode(waitingRow)) {
 			var sbTop=scrollBody.scrollTop+scrollBody.offsetHeight;
 		
 			var pos=waitingRow.offsetTop-sbTop;

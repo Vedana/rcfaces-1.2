@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.component.iterator.ICardIterator;
+import org.rcfaces.core.internal.listener.CameliaPhaseListener;
 import org.rcfaces.core.internal.util.ComponentIterators;
 
 /**
@@ -36,7 +37,7 @@ public class CardBoxTools {
     }
 
     public static CardComponent getSelectedCard(CardBoxComponent component) {
-        Object value = component.getSubmittedValue();
+        Object value = component.getSubmittedExternalValue();
 
         if (value == null) {
             value = component.getValue();
@@ -97,7 +98,14 @@ public class CardBoxTools {
     }
 
     public static void selectCard(CardBoxComponent component, CardComponent card) {
+        boolean applyingRequestValues = CameliaPhaseListener
+                .isApplyingRequestValues();
+
         if (card == null) {
+            if (applyingRequestValues) {
+                component.setSubmittedExternalValue(null);
+                return;
+            }
             component.setValue(null);
             return;
         }
@@ -107,6 +115,10 @@ public class CardBoxTools {
             value = card.getId();
         }
 
+        if (applyingRequestValues) {
+            component.setSubmittedExternalValue(value);
+            return;
+        }
         component.setValue(value);
     }
 

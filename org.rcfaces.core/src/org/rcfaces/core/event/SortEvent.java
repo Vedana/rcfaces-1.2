@@ -20,12 +20,15 @@ public class SortEvent extends ActionEvent {
 
     private static final long serialVersionUID = -2421248938907618744L;
 
+    private final Object dataModel;
+
     private Comparator sortComparator;
 
     private ISortConverter sortConverter;
 
-    public SortEvent(UIComponent component) {
+    public SortEvent(UIComponent component, Object dataModel) {
         super(component);
+        this.dataModel = dataModel;
     }
 
     public boolean isAppropriateListener(FacesListener listener) {
@@ -50,6 +53,10 @@ public class SortEvent extends ActionEvent {
 
     public final void setSortConverter(ISortConverter converter) {
         this.sortConverter = converter;
+    }
+
+    public final Object getDataModel() {
+        return dataModel;
     }
 
     /**

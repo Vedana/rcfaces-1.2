@@ -11,7 +11,6 @@ import javax.faces.context.ResponseWriter;
 
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -258,7 +257,7 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    public IComponentWriter endComponent() throws WriterException {
+    public ISgmlWriter endComponent() throws WriterException {
         closeCssWriter();
 
         try {

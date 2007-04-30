@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.item;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,9 @@ import org.rcfaces.core.component.DateItemComponent;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.internal.util.Convertor;
+import org.rcfaces.core.lang.Period;
 
 /**
  * 
@@ -54,7 +58,7 @@ public class DateItem extends SelectItem implements IDateItem {
     }
 
     public DateItem(UISelectItem component) {
-        super(((DateItemComponent) component).getDate(), component
+        super(convertValue((DateItemComponent) component), component
                 .getItemLabel(), component.getItemDescription(), component
                 .isItemDisabled());
 
@@ -83,6 +87,22 @@ public class DateItem extends SelectItem implements IDateItem {
                 getClientDataMap().putAll(map);
             }
         }
+    }
+
+    private static Object convertValue(DateItemComponent component) {
+        Object value = component.getItemValue();
+
+        if (value == null || (value instanceof Date)
+                || (value instanceof Period)) {
+            return value;
+        }
+
+        if (value instanceof String) {
+            return LiteralDateConverter.SINGLETON.getAsObject(null, component,
+                    (String) value);
+        }
+
+        return Convertor.convert(value, Date.class);
     }
 
     public String getStyleClass() {

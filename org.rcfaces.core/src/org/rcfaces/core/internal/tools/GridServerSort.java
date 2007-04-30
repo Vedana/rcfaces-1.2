@@ -14,16 +14,19 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIColumn;
+import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesListener;
 import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.DataColumnComponent;
-import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.event.SortEvent;
+import org.rcfaces.core.event.SortEvent.ISortConverter;
+import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.SortActionListener;
 import org.rcfaces.core.model.IRangeDataModel;
@@ -33,10 +36,10 @@ import org.rcfaces.core.model.ISortedComponent;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public final class DataGridServerSort {
+public final class GridServerSort {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(DataGridServerSort.class);
+    private static final Log LOG = LogFactory.getLog(GridServerSort.class);
 
     private static final Long LONG_0 = new Long(0l);
 
@@ -55,16 +58,21 @@ public final class DataGridServerSort {
     }
 
     public static int[] computeSortedTranslation(FacesContext facesContext,
-            DataGridComponent data, DataModel dataModel,
+            IGridComponent data, DataModel dataModel,
             ISortedComponent sortedComponents[]) {
 
         ISortMethod sortMethods[] = new ISortMethod[sortedComponents.length];
 
         for (int i = 0; i < sortMethods.length; i++) {
-            DataColumnComponent columnComponent = (DataColumnComponent) sortedComponents[i]
+            UIColumn columnComponent = (UIColumn) sortedComponents[i]
                     .getComponent();
 
-            sortMethods[i] = getSortMethod(columnComponent, dataModel);
+            if ((columnComponent instanceof ISortEventCapability) == false) {
+                continue;
+            }
+
+            sortMethods[i] = getSortMethod(
+                    (ISortEventCapability) columnComponent, data);
         }
 
         int rowCount = data.getRowCount();
@@ -92,14 +100,33 @@ public final class DataGridServerSort {
                     break;
                 }
 
+                Object rowData = null;
+                boolean rowDataInitialized = false;
+
                 for (int i = 0; i < datas.length; i++) {
-                    DataColumnComponent column = (DataColumnComponent) sortedComponents[i]
-                            .getComponent();
+                    UIComponent column = sortedComponents[i].getComponent();
 
-                    Object value = column.getValue(facesContext);
+                    Object value = null;
 
-                    value = sortMethods[i].convertValue(facesContext, column,
-                            value);
+                    if (column instanceof ValueHolder) {
+                        value = ValuesTools.getValue(column);
+                    }
+
+                    ISortMethod sortMethod = sortMethods[i];
+                    if (sortMethod instanceof ISortConverter) {
+                        value = ((ISortConverter) sortMethod).convertValue(
+                                facesContext, column, value);
+                    }
+
+                    if (value == null) {
+                        if (rowDataInitialized == false) {
+                            rowDataInitialized = true;
+
+                            rowData = data.getRowData();
+                        }
+
+                        value = rowData;
+                    }
 
                     datas[i].add(value);
                 }
@@ -175,7 +202,7 @@ public final class DataGridServerSort {
     }
 
     private static ISortMethod getSortMethod(
-            DataColumnComponent columnComponent, DataModel dataModel) {
+            ISortEventCapability columnComponent, IGridComponent gridComponent) {
 
         FacesListener facesListeners[] = columnComponent.listSortListeners();
 
@@ -186,7 +213,7 @@ public final class DataGridServerSort {
             // deuxieme temps ...
             if (facesListener instanceof SortActionListener) {
                 return new SortAction((SortActionListener) facesListener,
-                        columnComponent);
+                        (UIComponent) columnComponent, gridComponent);
             }
 
             if ((facesListener instanceof IScriptListener) == false) {
@@ -216,8 +243,8 @@ public final class DataGridServerSort {
 
         Comparator getComparator();
 
-        Object convertValue(FacesContext facesContext,
-                DataColumnComponent component, Object value);
+        Object convertValue(FacesContext facesContext, UIComponent component,
+                Object value);
 
     }
 
@@ -256,7 +283,7 @@ public final class DataGridServerSort {
         private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
-                DataColumnComponent component, Object value) {
+                UIComponent component, Object value) {
             if (value == null) {
                 return LONG_0;
             }
@@ -292,7 +319,7 @@ public final class DataGridServerSort {
         private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
-                DataColumnComponent component, Object value) {
+                UIComponent component, Object value) {
             if (value == null) {
                 return DOUBLE_0;
             }
@@ -328,7 +355,7 @@ public final class DataGridServerSort {
         private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
-                DataColumnComponent component, Object value) {
+                UIComponent component, Object value) {
             if (value == null) {
                 return "";
             }
@@ -356,7 +383,7 @@ public final class DataGridServerSort {
         private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
-                DataColumnComponent component, Object value) {
+                UIComponent component, Object value) {
             if (value == null) {
                 return "";
             }
@@ -383,7 +410,7 @@ public final class DataGridServerSort {
         private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
-                DataColumnComponent component, Object value) {
+                UIComponent component, Object value) {
             if (value == null) {
                 return null;
             }
@@ -409,8 +436,8 @@ public final class DataGridServerSort {
         private final SortEvent.ISortConverter converter;
 
         public SortAction(SortActionListener listener,
-                DataColumnComponent dataColumnComponent) {
-            SortEvent sortEvent = new SortEvent(dataColumnComponent);
+                UIComponent dataColumnComponent, IGridComponent dataModel) {
+            SortEvent sortEvent = new SortEvent(dataColumnComponent, dataModel);
 
             listener.processSort(sortEvent);
 
@@ -423,7 +450,7 @@ public final class DataGridServerSort {
         }
 
         public Object convertValue(FacesContext facesContext,
-                DataColumnComponent component, Object value) {
+                UIComponent component, Object value) {
             if (converter == null) {
                 return value;
             }

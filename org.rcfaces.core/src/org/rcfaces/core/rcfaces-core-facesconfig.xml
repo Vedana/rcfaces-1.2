@@ -332,6 +332,6 @@
 	</converter>
 	<lifecycle>
 		<phase-listener>org.rcfaces.core.internal.config.ServicesRegistryImpl</phase-listener>
-		<phase-listener>org.rcfaces.core.internal.component.RestoreViewPhaseListener</phase-listener>
+		<phase-listener>org.rcfaces.core.internal.listener.CameliaPhaseListener</phase-listener>
 	</lifecycle>
 </faces-config>

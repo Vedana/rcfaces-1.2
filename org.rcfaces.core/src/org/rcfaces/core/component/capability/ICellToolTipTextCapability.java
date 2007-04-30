@@ -22,7 +22,7 @@ public interface ICellToolTipTextCapability {
      * Sets a string value containing the text that will appear when the pointer
      * hover the component.
      * 
-     * @param cellToolTipText
+     * @param cellDefaultToolTipText
      *            default tool tip text
      */
     void setCellDefaultToolTipText(String cellDefaultToolTipText);

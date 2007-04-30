@@ -9,7 +9,6 @@ import java.util.Set;
 
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
@@ -28,9 +27,9 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import org.rcfaces.core.internal.capability.IEditableValueHolder;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
 import org.rcfaces.core.internal.capability.IStateChildrenList;
+import org.rcfaces.core.internal.capability.ISubmittedExternalValue;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
@@ -41,7 +40,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
  * @author Olivier Oeuillot
  */
 public abstract class CameliaInputComponent extends javax.faces.component.UIInput implements
-		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder, IEditableValueHolder {
+		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder, ISubmittedExternalValue {
 	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory.getLog(CameliaInputComponent.class);
@@ -52,7 +51,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 	private transient IStateChildrenList stateChildrenList;
 
-	 protected boolean submittedValueSet = false;
+	 private static final Object NULL_VALUE = org.rcfaces.core.internal.tools.ValuesTools.NULL_VALUE;
 
 
 	protected CameliaInputComponent() {
@@ -466,66 +465,77 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 			
 	}
 
-	public final void setSubmittedValue(Object value) {
+	public final Object getLocalValue() {
 
 
-				this.submittedValueSet=true;
+				Object value=super.getLocalValue();
 				
-				super.setSubmittedValue(value);
+				if (NULL_VALUE.equals(value)) {
+					value=null;
+				}
+				
+				return value;
 			
 	}
 
-	public final boolean isSubmittedValueSet() {
+	protected Object getConvertedValue(FacesContext context, Object submittedValue) {
 
-
-				return submittedValueSet;
+				
+				if (NULL_VALUE.equals(submittedValue)) {
+					submittedValue=null;
+				}
+				
+				return super.getConvertedValue(context, submittedValue);
 			
 	}
 
-	public final void clearSubmittedValue() {
+	public final Object getSubmittedExternalValue() {
 
 
-				setSubmittedValue(null);
-				this.submittedValueSet=false;			
+				Object value=super.getSubmittedValue();
+				
+				if (NULL_VALUE.equals(value)) {
+					value=null;
+				}
+				
+				return value;
 			
 	}
 
-	public final void validate(FacesContext context) {
+	public final void setSubmittedExternalValue(Object submittedValue) {
 
 
-		        if (context == null) {
-		            throw new NullPointerException();
-		        }
-		
-		        // Submitted value == null means "the component was not submitted
-		        // at all";  validation should not continue
-		        Object submittedValue = getSubmittedValue();
-		        if (this.submittedValueSet==false) {
-		            return;
-		        }
-		
-				Object newValue = null;
+				if (submittedValue==null) {
+					submittedValue=NULL_VALUE;
+				}
+				
+				super.setSubmittedValue(submittedValue);
 			
-				try {
-				    newValue = getConvertedValue(context, submittedValue);
+	}
 
-				} catch (ConverterException ce) {
-			            ComponentTools.addConversionErrorMessage(context, this, ce, submittedValue);
-			            setValid(false);
-			    }	
+	public final boolean isSubmittedValueSetted() {
+
+
+				Object value=super.getSubmittedValue();
+				
+				if (NULL_VALUE.equals(value)) {
+					return true;
+				}
+				
+				return value!=null;
 			
-				validateValue(context, newValue);
-			            
-				// If our value is valid, store the new value, erase the
-			        // "submitted" value, and emit a ValueChangeEvent if appropriate
-				if (isValid()) {
-				    Object previous = getValue();
-			        setValue(newValue);
-		            clearSubmittedValue();
-		            if (compareValues(previous, newValue)) {
-		                queueEvent(new ValueChangeEvent(this, previous, newValue));
-		            }			
-			    }
+	}
+
+	public final Object getValue() {
+
+
+				Object value=super.getValue();
+				
+				if (NULL_VALUE.equals(value)) {
+					value=null;
+				}
+				
+				return value;
 			
 	}
 

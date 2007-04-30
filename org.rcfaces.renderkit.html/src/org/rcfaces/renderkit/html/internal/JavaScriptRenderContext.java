@@ -196,6 +196,10 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
             waitingRequiredClasses.clear();
         }
 
+        if (filesToRequire == null) {
+            return false;
+        }
+
         return filesToRequire.length > 0;
     }
 

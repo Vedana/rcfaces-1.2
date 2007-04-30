@@ -171,7 +171,7 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
     protected void encodeChildren(IComponentWriter writer)
             throws WriterException {
 
-        writer.endComponent();
+        ((IHtmlWriter) writer).endComponent();
 
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();

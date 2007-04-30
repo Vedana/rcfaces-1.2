@@ -475,7 +475,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
                 }
             }
 
-            numberEntryComponent.setSubmittedValue(numberValue);
+            numberEntryComponent.setSubmittedExternalValue(numberValue);
         }
     }
 

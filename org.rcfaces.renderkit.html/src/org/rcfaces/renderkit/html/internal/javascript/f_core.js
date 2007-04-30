@@ -2591,6 +2591,108 @@ var f_core = {
 		};
 	},
 	/**
+	 * Returns the size of the document.
+	 *
+	 * @method public static 
+	 * @param optional Document doc
+	 * @return Object Object which defines 2 fields: width and height 
+	 */
+	GetDocumentSize: function(doc) {
+		if (!doc) {
+			doc=document;
+		}
+		
+		if (f_core.IsInternetExplorer()) {
+			var width=doc.documentElement.offsetWidth;
+			var height=doc.documentElement.offsetHeight;
+		
+			return {
+				width: width,
+				height: height
+			};
+		}
+				
+		// Firefox
+		return {
+			width: doc.body.offsetWidth,
+			height: doc.body.offsetHeight
+		};
+	},
+	/**
+	 * Copy the styleSheets from a document source to a document destination.
+	 *
+	 * @method hidden static 
+	 * @param Document targetDocument
+	 * @param Document sourceDocument
+	 * @param optional number startIndex Index of the first styleSheets
+	 * @param optional number length
+	 * @return void
+	 */
+	CopyStyleSheets: function(targetDocument, sourceDocument, startIndex, length) {
+		f_core.Assert(targetDocument && targetDocument.nodeType==f_core._DOCUMENT_NODE, "f_core.CopyStyleSheets: Invalid targetDocument parameter '"+targetDocument+"'.");
+		f_core.Assert(sourceDocument && sourceDocument.nodeType==f_core._DOCUMENT_NODE, "f_core.CopyStyleSheets: Invalid sourceDocument parameter '"+sourceDocument+"'.");
+		f_core.Assert(startIndex===undefined || typeof(startIndex)=="number", "f_core.CopyStyleSheets: Invalid startIndex parameter '"+startIndex+"'.");
+		f_core.Assert(length===undefined || typeof(length)=="number", "f_core.CopyStyleSheets: Invalid length parameter '"+length+"'.");
+
+		if (startIndex===undefined) {
+			startIndex=0;
+		}
+		if (length===undefined) {
+			length=links.length;
+		}
+
+		var links=sourceDocument.styleSheets;
+		if (startIndex>=length) {
+			return;
+		}
+
+		if (f_core.IsInternetExplorer()) {
+			for(var i=startIndex;i<length;i++) {
+				var link=links[i];
+	
+				if (link.href) {
+					targetDocument.createStyleSheet(link.href);
+					continue;
+				}
+				
+				// C'est du texte
+				targetDocument.createStyleSheet().cssText=link.cssText;						
+			}	
+			
+			return;
+		}
+		
+		var head=f_core.GetFirstElementByTagName(targetDocument, "head");
+		if (!head) {
+			head=targetDocument.createElement("head");
+			targetDocument.appendChild(head);
+		}
+		
+		if (f_core.IsGecko()) {
+			for(var i=startIndex;i<length;i++) {
+				var link=links[i];
+	
+				var newLink=targetDocument.createElement("link");
+				newLink.rel="stylesheet";
+				newLink.type="text/css";
+	
+				if (link.href) {
+					// C'est un lien
+					newLink.href=link.href;
+					
+					head.appendChild(newLink);
+					continue;
+				}		
+	
+				newLink.nodeValue=link.ownerNode.nodeValue;
+				
+				head.appendChild(newLink);
+			}
+			
+			return;
+		}
+	},
+	/**
 	 * Returns the position of the Window.
 	 *
 	 * @method public static 
@@ -3072,9 +3174,8 @@ var f_core = {
 			var data=s.substring(idx);
 			switch(type) {
 			case 'S':
-				if (data) {
-					data=data.replace(/\+/g, ' ');
-					data=decodeURIComponent(data);
+				if (data.length) {
+					data=decodeURIComponent(data.replace(/\+/g, ' '));
 				}
 				break;
 
@@ -3255,7 +3356,36 @@ var f_core = {
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
+	 * Returns the parent of a HTML element.
+	 *
 	 * @method hidden static
+	 * @param HTMLElement A HTML element
+	 * @return HTMLElement Parent of the element  (or <code>null</code> if no parent)
+	 */
+	GetParentNode: function(component) {
+		if (!component) {
+			return null;
+		}
+		
+		var parent=component.parentNode;
+		if (!parent) {
+			return null;
+		}
+		
+		switch(parent.nodeType) {
+		case f_core._ELEMENT_NODE:
+		case f_core._DOCUMENT_NODE:
+			return parent;
+		}
+		
+		return null;
+	},
+	/**
+	 * Returns an Event attached to the window of the component. (if known)
+	 * 
+	 * @method hidden static
+	 * @param HTMLElement component
+	 * @return Event Returns event if known.
 	 */
 	GetJsEvent: function(component) {
 		if (!f_core.IsInternetExplorer()) {

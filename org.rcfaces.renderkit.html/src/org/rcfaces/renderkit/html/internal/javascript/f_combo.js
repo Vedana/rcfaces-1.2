@@ -370,19 +370,25 @@ var __prototype = {
 						combo.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
 					}
-	
-					var responseContentType=request.f_getResponseContentType();
-					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
-				 		combo.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
-						return;
-					}
 				
 					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
 					if (!cameliaServiceVersion) {
 						combo.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
 						return;					
 					}
-	
+		
+					var responseContentType=request.f_getResponseContentType();
+					
+					if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+				 		combo.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+						return;
+					}
+					
+					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+			 			combo.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+						return;
+					}
+		
 					var ret=request.f_getResponse();
 					try {
 						eval(ret);

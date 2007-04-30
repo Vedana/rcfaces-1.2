@@ -771,17 +771,23 @@ public abstract class AbstractGridRenderContext {
 
         int idx = command.indexOf('.');
         String className = command.substring(0, idx);
-        className = scriptRenderContext.convertSymbol(null, className);
+        String newClassName = scriptRenderContext
+                .convertSymbol(null, className);
 
         String memberName = command.substring(idx + 1);
-        memberName = scriptRenderContext.convertSymbol(className, memberName);
+        String newMemberName = scriptRenderContext.convertSymbol(className,
+                memberName);
 
-        StringAppender sa = new StringAppender(className.length() + 1
-                + memberName.length());
+        if (className == newClassName && memberName == newMemberName) {
+            return command;
+        }
 
-        sa.append(className);
+        StringAppender sa = new StringAppender(newClassName.length() + 1
+                + newMemberName.length());
+
+        sa.append(newClassName);
         sa.append('.');
-        sa.append(memberName);
+        sa.append(newMemberName);
 
         return sa.toString();
     }

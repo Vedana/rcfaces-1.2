@@ -185,7 +185,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         Number value = componentData.getNumberProperty("value");
         if (value != null) {
-            progressBar.setSubmittedValue(value);
+            progressBar.setSubmittedExternalValue(value);
         }
 
         Number min = componentData.getNumberProperty("min");

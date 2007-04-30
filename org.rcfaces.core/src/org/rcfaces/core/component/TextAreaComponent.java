@@ -80,7 +80,11 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	}
 
 	public void setText(java.lang.String text) {
-		setValue(text);
+		if (org.rcfaces.core.internal.listener.CameliaPhaseListener.isApplyingRequestValues()) {
+			setSubmittedExternalValue(text);
+		} else {
+			setValue(text);
+		}
 	}
 
 	/**

@@ -151,7 +151,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	public final Time getTime() {
 
 
-				Object submittedValue=getSubmittedValue();
+				Object submittedValue=getSubmittedExternalValue();
 				if (submittedValue!=null) {
 					return (Time)submittedValue;
 				}

@@ -20,6 +20,7 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -339,7 +340,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
             itemValue = componentData.getComponentParameter();
         }
 
-        input.setSubmittedValue(itemValue);
+        ValuesTools.setValue(input, itemValue);
     }
 
     protected Converter getConverter() {

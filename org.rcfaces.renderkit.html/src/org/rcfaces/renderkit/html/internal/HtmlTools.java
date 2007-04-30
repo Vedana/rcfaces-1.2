@@ -142,6 +142,10 @@ public class HtmlTools {
                 char type = values.charAt(valueStart++);
                 switch (type) {
                 case STRING_TYPE:
+                    if (valueStart == valueEnd) {
+                        vs = "";
+                        break;
+                    }
                     vs = URLFormCodec.decodeURL(cs, valueStart, valueEnd);
                     break;
 
@@ -840,6 +844,7 @@ public class HtmlTools {
 
         if (value.equals("")) {
             // String vide !
+            sb.append(STRING_TYPE);
             return;
         }
 

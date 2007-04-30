@@ -483,10 +483,10 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                     && tree.isValueLocked(facesContext) == false) {
 
                 if (values.isEmpty()) {
-                    tree.setSubmittedValue(OBJECT_EMPTY_ARRAY);
+                    ValuesTools.setValue(tree, OBJECT_EMPTY_ARRAY);
 
                 } else {
-                    tree.setSubmittedValue(values.toArray());
+                    ValuesTools.setValue(tree, values.toArray());
                 }
             }
         }
@@ -520,17 +520,18 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                         // On prend le premier seulement !
 
                         if (values.isEmpty()) {
-                            tree.setSubmittedValue(null);
+                            ValuesTools.setValue(tree, null);
 
                         } else {
-                            tree.setSubmittedValue(values.iterator().next());
+                            ValuesTools
+                                    .setValue(tree, values.iterator().next());
                         }
 
                     } else if (values.isEmpty()) {
-                        tree.setSubmittedValue(OBJECT_EMPTY_ARRAY);
+                        ValuesTools.setValue(tree, OBJECT_EMPTY_ARRAY);
 
                     } else {
-                        tree.setSubmittedValue(values.toArray());
+                        ValuesTools.setValue(tree, values.toArray());
                     }
                 }
             } else {

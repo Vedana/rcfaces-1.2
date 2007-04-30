@@ -203,7 +203,11 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 	}
 
 	public void setSelectedState(java.lang.String selectedState) {
-		setValue(selectedState);
+		if (org.rcfaces.core.internal.listener.CameliaPhaseListener.isApplyingRequestValues()) {
+			setSubmittedExternalValue(selectedState);
+		} else {
+			setValue(selectedState);
+		}
 	}
 
 	/**

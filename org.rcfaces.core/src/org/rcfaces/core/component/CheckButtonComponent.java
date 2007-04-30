@@ -188,7 +188,12 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 	}
 
 	public void setSelected(boolean selected) {
-		setValue(Boolean.valueOf(selected));
+		Object value=Boolean.valueOf(selected);
+		if (org.rcfaces.core.internal.listener.CameliaPhaseListener.isApplyingRequestValues()) {
+			setSubmittedExternalValue(value);
+		} else {
+			setValue(value);
+		}
 	}
 
 	/**

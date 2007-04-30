@@ -151,7 +151,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	public final Number getNumber() {
 
 
-				Object submittedValue=getSubmittedValue();
+				Object submittedValue=getSubmittedExternalValue();
 				if (submittedValue!=null) {
 					return (Number)submittedValue;
 				}

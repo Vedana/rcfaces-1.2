@@ -116,6 +116,14 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
 
+            if (imageButtonFamilly.isDisabled(facesContext)) {
+                writer.writeAttribute("v:disabled", "true");
+            }
+
+            if (imageButtonFamilly.isReadOnly(facesContext)) {
+                writer.writeAttribute("v:readOnly", "true");
+            }
+
             IComponentRenderContext componentRenderContext = writer
                     .getComponentRenderContext();
             DateChooserComponent dateChooserComponent = (DateChooserComponent) componentRenderContext

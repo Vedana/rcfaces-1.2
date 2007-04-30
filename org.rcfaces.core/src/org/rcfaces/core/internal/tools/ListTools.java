@@ -428,24 +428,24 @@ public class ListTools {
     }
 */
     /**
-     * @param item
+     * 
      */
-    public static void select(ComboComponent ComboComponent, UISelectItem item) {
-        if ((ComboComponent instanceof IMultipleSelectCapability) == false) {
+    public static void select(ComboComponent comboComponent, UISelectItem item) {
+        if ((comboComponent instanceof IMultipleSelectCapability) == false) {
             // Selection simple, c'ets le cas d'une Combo
 
             if (USE_ARRAY_VALUE_FOR_Combo) {
-                ComboComponent.setValue(new Object[] { item.getItemValue() });
+                comboComponent.setValue(new Object[] { item.getItemValue() });
                 return;
             }
 
-            ComboComponent.setValue(item.getItemValue());
+            comboComponent.setValue(item.getItemValue());
             return;
         }
 
-        Object value = ComboComponent.getValue();
+        Object value = comboComponent.getValue();
         if (value == null) {
-            ComboComponent.setValue(new Object[] { item.getItemValue() });
+            comboComponent.setValue(new Object[] { item.getItemValue() });
             return;
         }
 
@@ -461,7 +461,7 @@ public class ListTools {
 
         ids.add(item.getItemValue());
 
-        ComboComponent.setValue(ids.toArray());
+        comboComponent.setValue(ids.toArray());
     }
 
     public static Set listAllSelectedItemsSet(ComboComponent component) {

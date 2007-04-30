@@ -67,7 +67,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
 
             if (twoDigitYearStart != null) {
                 sb.setLength(0);
-                HtmlTools.formatDate(maxDate, sb, processContext,
+                HtmlTools.formatDate(twoDigitYearStart, sb, processContext,
                         calendarComponent, true);
                 htmlWriter.writeAttribute("v:twoDigitYearStart", sb.toString());
             }

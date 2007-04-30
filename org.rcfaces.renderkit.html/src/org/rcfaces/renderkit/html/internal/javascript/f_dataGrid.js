@@ -10,10 +10,12 @@
  */
 
 var __static = {
+	
 	/**
 	 * @method private static
 	 */
 	_CheckMouseButtons: f_core.CancelJsEventHandler,
+	
 	/**
 	 * @method private static
 	 */
@@ -32,6 +34,7 @@ var __static = {
 		
 		return true;
 	},
+	
 	/**
 	 * @method private static
 	 */
@@ -76,6 +79,7 @@ var __static = {
 		 		 
 		return true;
 	},
+	
 	/**
 	 * @method hidden static
 	 * @param String text1
@@ -198,10 +202,16 @@ var __prototype = {
 	
 	f_dataGrid: function() {
 		this.f_super(arguments);
+
+		this._showCursor=true;
+		this._cellStyleClass="f_dataGrid_cell";
+		this._rowStyleClass="f_dataGrid_row";
 	},
+	/*	
 	f_finalize: function() {
 		this.f_super(arguments);
 	},
+	*/
 	fa_isElementChecked: function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_dataGrid.fa_isElementChecked: Invalid element parameter ! ("+row+")");
 
@@ -309,7 +319,7 @@ var __prototype = {
 			className=properties._styleClass;
 		}
 		if (!className) {
-			className=((rowIdx % 2)?"f_grid_row_odd":"f_grid_row_even");
+			className=this._rowStyleClasses[rowIdx % this._rowStyleClasses.length];
 		}
 		row.className=className;
 		row._className=className;
@@ -404,7 +414,7 @@ var __prototype = {
 							cellImages=new Array;
 							row._cellImages=cellImages;
 						}
-						cellImages.push(cellImage);
+						cellImages[countTd]=cellImage;
 					}
 
 					if (this._selectable) {
@@ -768,8 +778,8 @@ var __prototype = {
 			}
 						
 			if (tbody) {
-				this._releaseRows();
-				this._releaseCells();
+				this.f_releaseRows();
+				this.f_releaseCells();
 			
 				// Detache temporairement !
 				if (tbody.parentNode) {
@@ -857,19 +867,24 @@ var __prototype = {
 						dataGrid.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
 					}
-	
-					var responseContentType=request.f_getResponseContentType();
-					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
-				 		dataGrid.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
-						return;
-					}
-					
+
 					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
 					if (!cameliaServiceVersion) {
 						dataGrid.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
 						return;					
 					}
-				
+	
+					var responseContentType=request.f_getResponseContentType();
+					if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+				 		dataGrid.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+						return;
+					}
+		
+					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+				 		dataGrid.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+						return;
+					}
+					
 					var ret=request.f_getResponse();
 					
 					if (dataGrid._waitingLoading) {
@@ -938,8 +953,8 @@ var __prototype = {
 			// Ca peut poser des problemes lors d'enchainement de filtres !
 			
 			if (tbody && tbody.parentNode) {		
-				this._releaseRows();
-				this._releaseCells();
+				this.f_releaseRows();
+				this.f_releaseCells();
 				
 				f_core.Assert(tbody.parentNode==this._table, "StartNewPage: Not same parent ? ("+tbody.parentNode+"/"+this._table+")");
 				this._table.removeChild(tbody);
@@ -1009,9 +1024,7 @@ var __prototype = {
 			
 			this._table.appendChild(tbody);
 			
-			var rows=tbody.childNodes;
-			//alert("rows="+rows.length);
-					
+			var rows=f_grid.ListRows(tbody);
 			for(var i=0;i<rows.length;i++) {
 				var row=rows[i];
 				var index=row._index;
@@ -1021,11 +1034,10 @@ var __prototype = {
 				if (this._first+i==this._waitingIndex) {
 					cursorRow=row;
 					this._waitingIndex=undefined;
+					break;
 				}
 			}
 			
-			this._table.appendChild(tbody);
-		
 			if (f_core.IsGecko()) {
 				// On a un probleme de layout avec le DIV ! arg !
 				
@@ -1061,8 +1073,6 @@ var __prototype = {
 
 		if (this._interactiveShow || !this._titleLayout ) {
 			this._interactiveShow=undefined;
-			
-			f_grid.UpdateTitle(this);
 		}
 
 		if (cursorRow) {
@@ -1210,10 +1220,7 @@ var __prototype = {
 			
 			var toolTipText=properties._toolTipText;
 			if (toolTipText) {
-				td._cellToolTipText=toolTipText;
 				td.title=toolTipText;				
-
-				row._cellsToolTipText=true;
 			}
 			
 			var imageURL=properties._imageURL;
@@ -1360,7 +1367,7 @@ var __prototype = {
 			body.appendChild(row);
 		}
 
-		var rowClasses= this._rowStyleClass;
+		var rowClasses= this._rowStyleClasses;
 
 		for(var i=0;i<trs.length;i++) {
 			var row=trs[i];

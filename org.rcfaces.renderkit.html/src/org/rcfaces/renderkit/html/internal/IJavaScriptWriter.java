@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal;
 
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
@@ -14,7 +15,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  * @version $Revision$ $Date$
  */
 
-public interface IJavaScriptWriter {
+public interface IJavaScriptWriter extends IComponentWriter {
 
     IJavaScriptRenderContext getJavaScriptRenderContext();
 
@@ -74,7 +75,8 @@ public interface IJavaScriptWriter {
 
     IJavaScriptWriter writeNull() throws WriterException;
 
-    IObjectLiteralWriter writeObjectLiteral(boolean writeNullIfEmpty) throws WriterException;
+    IObjectLiteralWriter writeObjectLiteral(boolean writeNullIfEmpty)
+            throws WriterException;
 
     void end() throws WriterException;
 

@@ -422,7 +422,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         if (newValue != null
                 && textEntryComponent.isValueLocked(facesContext) == false) {
-            textEntryComponent.setSubmittedValue(newValue);
+            textEntryComponent.setSubmittedExternalValue(newValue);
         }
 
         Boolean autoComplete = componentData.getBooleanProperty("autoComplete");

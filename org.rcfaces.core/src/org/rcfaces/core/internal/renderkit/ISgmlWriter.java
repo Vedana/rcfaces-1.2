@@ -47,4 +47,5 @@ public interface ISgmlWriter extends IComponentWriter {
 
     ISgmlWriter writeln() throws WriterException;
 
+    ISgmlWriter endComponent() throws WriterException;
 }

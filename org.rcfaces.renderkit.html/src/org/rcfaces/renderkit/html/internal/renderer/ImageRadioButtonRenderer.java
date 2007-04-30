@@ -14,6 +14,7 @@ import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -50,7 +51,7 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
         // La selection pouvait être déjà faite !
         if (imageRadioButtonComponent.isSelected()
                 && imageRadioButtonComponent.isValueLocked(facesContext) == false) {
-            imageRadioButtonComponent.setSubmittedValue(radioValue);
+            ValuesTools.setValue(imageRadioButtonComponent, radioValue);
         }
     }
 
@@ -71,7 +72,7 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
             return imageRadioButtonComponent.isSelected(facesContext);
         }
 
-        Object currentValue = getSubmittedValue(imageRadioButtonComponent);
+        Object currentValue = getValue(imageRadioButtonComponent);
 
         return radioValue.equals(currentValue);
     }

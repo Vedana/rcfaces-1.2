@@ -13,6 +13,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
@@ -48,6 +49,8 @@ public class JavaScriptResponseWriter extends
     private IJavaScriptRenderContext javaScriptRenderContext;
 
     private ServletContext servletContext;
+
+    private IRenderContext renderContext;
 
     public JavaScriptResponseWriter(FacesContext facesContext, PrintWriter out,
             UIComponent component, String componentId) {
@@ -208,6 +211,10 @@ public class JavaScriptResponseWriter extends
         return this;
     }
 
+    public IComponentRenderContext getComponentRenderContext() {
+        return getHtmlComponentRenderContext();
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -217,7 +224,7 @@ public class JavaScriptResponseWriter extends
         // Y en a pas !
         // Par contre, il ne faut pas envoyer d'exception,
         // car le RewritingURL l'appelle !
-        return null;
+        return renderContext;
         // throw new FacesException("Not supported !");
     }
 
@@ -355,6 +362,10 @@ public class JavaScriptResponseWriter extends
 
     public IObjectLiteralWriter writeObjectLiteral(boolean writeNullIfEmpty) {
         return new JavaScriptObjectLiteralWriter(this, writeNullIfEmpty);
+    }
+
+    public final void setRenderContext(IRenderContext renderContext) {
+        this.renderContext = renderContext;
     }
 
 }

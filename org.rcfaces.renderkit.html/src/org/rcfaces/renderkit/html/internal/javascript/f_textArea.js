@@ -77,7 +77,7 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getInputTagName: function() {
-		return "TEXTAREA";
+		return "textarea";
 	},
 	f_setDomEvent: function(type, target) {
 		switch(type) {

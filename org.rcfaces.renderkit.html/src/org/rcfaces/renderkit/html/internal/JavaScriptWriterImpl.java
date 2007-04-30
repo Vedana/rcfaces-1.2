@@ -60,6 +60,10 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         return (IHtmlComponentRenderContext) writer.getComponentRenderContext();
     }
 
+    public final IComponentRenderContext getComponentRenderContext() {
+        return getHtmlComponentRenderContext();
+    }
+
     public final IJavaScriptRenderContext getJavaScriptRenderContext() {
         return javascriptRenderContext;
     }

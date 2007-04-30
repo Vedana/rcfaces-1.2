@@ -18,7 +18,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
  * @version $Revision$ $Date$
  */
 
-class SelectItemsJsContext extends SelectItemsContext {
+public class SelectItemsJsContext extends SelectItemsContext {
     private static final String REVISION = "$Revision$";
 
     private final List varIds = new ArrayList(8);

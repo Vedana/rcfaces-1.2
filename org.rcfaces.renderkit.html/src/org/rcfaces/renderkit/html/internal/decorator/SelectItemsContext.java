@@ -69,7 +69,7 @@ public class SelectItemsContext {
 
     private boolean expandValuesModified = false;
 
-    protected SelectItemsContext(ISelectItemNodeWriter renderer,
+    public SelectItemsContext(ISelectItemNodeWriter renderer,
             IComponentRenderContext componentRenderContext,
             UIComponent rootComponent, Object value) {
         this.selectItemNodeWriter = renderer;

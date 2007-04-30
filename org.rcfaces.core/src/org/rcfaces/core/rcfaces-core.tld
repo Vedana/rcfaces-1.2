@@ -4964,6 +4964,13 @@ A space-separated list of CSS style class(es) to be applied to the component. Th
 			<name>literalTimeZone</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>date</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+The date value. (format : according the the declared locale)
+]]></description>
+		</attribute>
 	</tag>
 	<tag>
 		<name>calendar</name>

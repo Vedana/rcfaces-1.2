@@ -11,9 +11,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -29,18 +31,17 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
+import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.renderer.ComponentsGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -145,29 +146,25 @@ public class ComponentsGridService extends AbstractHtmlService {
 
         ISortedComponent sortedComponents[] = null;
 
-        /*
-         * String sortIndex_s = (String) parameters.get("sortIndex"); if
-         * (sortIndex_s != null) { DataColumnComponent columns[] =
-         * dgc.listColumns().toArray();
-         * 
-         * String sortOrder_s = (String) parameters.get("sortOrder");
-         * 
-         * StringTokenizer st1 = new StringTokenizer(sortIndex_s, ",");
-         * StringTokenizer st2 = null; if (sortOrder_s != null) { st2 = new
-         * StringTokenizer(sortOrder_s, ","); }
-         * 
-         * sortedComponents = new ISortedComponent[st1.countTokens()];
-         * 
-         * for (int i = 0; st1.hasMoreTokens(); i++) { String tok1 =
-         * st1.nextToken(); String tok2 = null; if (st2 != null) { tok2 =
-         * st2.nextToken(); }
-         * 
-         * int idx = Integer.parseInt(tok1); boolean order =
-         * "true".equalsIgnoreCase(tok2);
-         * 
-         * sortedComponents[i] = new DefaultSortedComponent(columns[idx], idx,
-         * order); } }
-         */
+        String sortIndex_s = (String) parameters.get("sortIndex");
+        if (sortIndex_s != null) {
+            UIColumn columns[] = dgc.listColumns().toArray();
+
+            StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
+
+            sortedComponents = new ISortedComponent[st1.countTokens() / 2];
+
+            for (int i = 0; st1.hasMoreTokens(); i++) {
+                String tok1 = st1.nextToken();
+                String tok2 = st1.nextToken();
+
+                int idx = Integer.parseInt(tok1);
+                boolean order = "true".equalsIgnoreCase(tok2);
+
+                sortedComponents[i] = new DefaultSortedComponent(columns[idx],
+                        idx, order);
+            }
+        }
 
         ComponentsGridRenderer dgr = getComponentsGridRenderer(facesContext,
                 dgc);
@@ -264,8 +261,8 @@ public class ComponentsGridService extends AbstractHtmlService {
                 RENDER_CONTEXT_STATE);
         String contentType = (String) states[1];
 
-        IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, dgc, componentClientId);
+        JavaScriptResponseWriter jsWriter = new JavaScriptResponseWriter(
+                facesContext, pw, dgc, componentClientId);
 
         String varId = jsWriter.getComponentVarName();
 
@@ -280,7 +277,7 @@ public class ComponentsGridService extends AbstractHtmlService {
         ResponseStream oldStream = facesContext.getResponseStream();
 
         try {
-            CharArrayWriter myWriter = new CharArrayWriter(INITIAL_SIZE);
+            CharArrayWriter myWriter = new CharArrayWriter(1);
 
             ResponseWriter newWriter = facesContext.getRenderKit()
                     .createResponseWriter(myWriter, contentType,
@@ -293,7 +290,7 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             renderContext.pushComponent(dgc, componentClientId);
 
-            IComponentWriter writer = renderContext.getComponentWriter();
+            jsWriter.setRenderContext(renderContext);
 
             // IComponentTreeRenderProcessor
             // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
@@ -303,16 +300,10 @@ public class ComponentsGridService extends AbstractHtmlService {
                             .getJavaScriptRenderContext(), dgc, rowIndex,
                             forcedRows, sortedComponents, filterExpression);
 
-            dgr.encodeChildren(writer, listContext);
-
-            newWriter.flush();
-
-            String buffer = myWriter.toString();
-
-            int rowCount = 10;
+            int rowCount = dgr.encodeChildren(jsWriter, listContext, true);
 
             jsWriter.writeMethodCall("f_updateNewPage").writeInt(rowCount)
-                    .write(',').writeString(buffer).writeln(");");
+                    .writeln(");");
 
         } finally {
             if (oldWriter != null) {

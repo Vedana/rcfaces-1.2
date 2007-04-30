@@ -12,7 +12,7 @@ var __resources = {
 	FIRST: "Premier",
 	LAST: "Dernier",
 	NEXT: "Suivant",
-	PREVIOUS: "Précédant",
+	PREVIOUS: "Précédent",
 	FIRST_TOOLTIP: "Voir la première page",
 	NEXT_TOOLTIP: "Voir la page suivante",
 	LAST_TOOLTIP: "Voir la dernière page",

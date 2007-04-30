@@ -104,7 +104,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
         if (newValue != null
                 && textAreaComponent.isValueLocked(context.getFacesContext()) == false) {
-            textAreaComponent.setSubmittedValue(newValue);
+            textAreaComponent.setSubmittedExternalValue(newValue);
         }
     }
 }

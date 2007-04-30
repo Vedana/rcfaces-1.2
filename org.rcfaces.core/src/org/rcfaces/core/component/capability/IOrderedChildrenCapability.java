@@ -23,7 +23,7 @@ public interface IOrderedChildrenCapability {
      * Sets a list of the columns' id which represents their order from left to
      * right.
      * 
-     * @param columnsOrder
+     * @param children
      *            ordered list of columns' id
      */
     void setOrderedChildren(UIComponent children[]);

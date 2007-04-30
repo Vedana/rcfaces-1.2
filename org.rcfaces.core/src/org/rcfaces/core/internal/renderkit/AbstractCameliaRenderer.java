@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
@@ -18,7 +17,6 @@ import javax.faces.render.Renderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
-import org.rcfaces.core.internal.capability.IEditableValueHolder;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 
@@ -58,7 +56,9 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             throw new WriterException(null, e, component);
         }
 
-        writer.endComponent();
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
     }
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
@@ -137,7 +137,9 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         IComponentWriter writer = renderContext.getComponentWriter();
 
-        writer.endComponent();
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
 
         renderContext.encodeEnd(component);
 
@@ -156,7 +158,9 @@ public abstract class AbstractCameliaRenderer extends Renderer {
 
         super.encodeEnd(context, component);
 
-        writer.endComponent();
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
 
         renderContext.popComponent(component);
     }
@@ -277,23 +281,7 @@ public abstract class AbstractCameliaRenderer extends Renderer {
         return renderer;
     }
 
-    protected Object getSubmittedValue(UIInput input) {
-
-        if (input instanceof IEditableValueHolder) {
-            IEditableValueHolder editableValueHolder = (IEditableValueHolder) input;
-
-            if (editableValueHolder.isSubmittedValueSet()) {
-                return input.getSubmittedValue();
-            }
-            
-        } else {
-            Object submittedValue = input.getSubmittedValue();
-            if (submittedValue != null) {
-                return submittedValue;
-            }
-        }
-
-        return input.getValue();
-
+    protected Object getValue(UIComponent component) {
+        return ValuesTools.getValue(component);
     }
 }

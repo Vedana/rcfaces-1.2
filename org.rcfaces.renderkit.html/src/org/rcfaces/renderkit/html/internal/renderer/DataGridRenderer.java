@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
@@ -23,12 +22,10 @@ import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.listener.IScriptListener;
-import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.DataGridServerSort;
+import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.ValuesTools;
@@ -40,7 +37,6 @@ import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.model.ITransactionalDataModel;
-import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -79,58 +75,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.DATA_GRID;
-    }
-
-    protected void writeGridColumnProperties(IObjectLiteralWriter objectWriter,
-            AbstractGridRenderContext tableContext, UIColumn columnComponent,
-            int columnIndex) throws WriterException {
-
-        Object sort = tableContext.getSortCommand(columnIndex);
-        if (sort != null) {
-            if (sort instanceof String) {
-                String aliasCommand;
-
-                if (tableContext.getSortClientSide(columnIndex) == false) {
-                    aliasCommand = tableContext
-                            .translateJavascriptMethod(ISortEventCapability.SORT_SERVER);
-                    
-                } else {
-                    aliasCommand = ((String) sort).trim();
-                }
-
-                IJavaScriptWriter jsWriter = objectWriter
-                        .writeSymbol("_sorter");
-
-                String delimiters = " (),;:";
-                StringTokenizer st = new StringTokenizer(aliasCommand,
-                        delimiters, true);
-                if (st.countTokens() == 1
-                        && delimiters.indexOf(st.nextToken()) < 0) {
-                    jsWriter.write(aliasCommand);
-
-                } else {
-                    jsWriter.writeString(aliasCommand);
-                }
-
-            } else if (sort instanceof IScriptListener) {
-                IScriptListener scriptListener = (IScriptListener) sort;
-
-                IJavaScriptWriter jsWriter = objectWriter
-                        .writeSymbol("_sorter");
-
-                EventsRenderer.encodeJavaScriptCommmand(jsWriter,
-                        scriptListener);
-
-            } else if (sort instanceof IServerActionListener) {
-                // Le tri se fait coté serveur !
-
-                String aliasCommand = tableContext
-                        .translateJavascriptMethod(ISortEventCapability.SORT_SERVER);
-
-                objectWriter.writeSymbol("_sorter").write(aliasCommand);
-            }
-        }
-
     }
 
     protected void encodeBodyBegin(IHtmlWriter htmlWriter,
@@ -336,9 +280,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
             } else {
                 // Il faut faire le tri à la main !
 
-                sortTranslations = DataGridServerSort.computeSortedTranslation(
-                        jsWriter.getFacesContext(), dataGridComponent,
-                        dataModel, sortedComponents);
+                sortTranslations = GridServerSort.computeSortedTranslation(
+                        facesContext, dataGridComponent, dataModel,
+                        sortedComponents);
             }
 
             // Apres le tri, on connait peu etre la taille

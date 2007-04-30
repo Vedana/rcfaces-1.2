@@ -58,6 +58,8 @@ public class ClientService extends AbstractClientService {
 
     private static final String CAMELIA_PROGRESS_MONITOR = "X-Camelia-ProgressMonitor";
 
+    private static final String CLIENT_SERVICE_VERSION = "1.0.0";
+
     public void service(FacesContext facesContext, String commandId) {
 
         try {
@@ -230,6 +232,8 @@ public class ClientService extends AbstractClientService {
         response.setContentType(contenType + "; charset="
                 + AbstractHtmlService.RESPONSE_CHARSET);
         response.setHeader(CAMELIA_CONTENT_TYPE, type);
+        AbstractHtmlService
+                .setCameliaResponse(response, CLIENT_SERVICE_VERSION);
 
         try {
             PrintWriter pw = response.getWriter();

@@ -409,7 +409,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
             time = timeValue;
         }
 
-        timeEntryComponent.setSubmittedValue(time);
+        timeEntryComponent.setSubmittedExternalValue(time);
     }
 
     protected String getActionEventName(INameSpace nameSpace) {

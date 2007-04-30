@@ -122,13 +122,25 @@ var __prototype = {
 					image.className=this.f_computeStyleClass();
 
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-						f_core.Error(f_image, "Bad Status ! ("+request.f_getStatusText()+")");
+						image.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
+					}
+
+					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+					if (!cameliaServiceVersion) {
+						image.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+						return;					
 					}
 	
 					var responseContentType=request.f_getResponseContentType();
+					
+					if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+				 		image.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+						return;
+					}
+
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
-						f_core.Error(f_image, "Unsupported content type: "+responseContentType);
+				 		image.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
 						return;
 					}
 
@@ -159,6 +171,13 @@ var __prototype = {
 		image._loading=true;
 		request.f_setRequestHeader("X-Camelia", "image.request");
 		request.f_doFormRequest(params);
+	},
+	/**
+	 * @method protected
+	 */
+	f_performErrorEvent: function(param, messageCode, message) {
+
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	/**
 	 * @method hidden

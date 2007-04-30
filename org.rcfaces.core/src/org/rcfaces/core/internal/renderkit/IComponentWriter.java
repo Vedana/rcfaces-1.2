@@ -11,6 +11,4 @@ package org.rcfaces.core.internal.renderkit;
 public interface IComponentWriter {
 
     IComponentRenderContext getComponentRenderContext();
-
-    IComponentWriter endComponent() throws WriterException;
 }

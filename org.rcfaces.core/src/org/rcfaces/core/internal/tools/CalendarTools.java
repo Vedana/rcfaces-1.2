@@ -28,6 +28,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.tools.LocaleTools.LocaleDateTimeFormatNormalizer;
+import org.rcfaces.core.lang.Period;
 
 /**
  * 
@@ -39,11 +40,9 @@ public class CalendarTools {
 
     private static final Log LOG = LogFactory.getLog(CalendarTools.class);
 
-    private static final Date EMPTY_PERIOD[] = new Date[0];
-
     private static final Date EMPTY_DATE[] = new Date[0];
 
-    private static final Date EMPTY_PERIODS[][] = new Date[0][0];
+    private static final Period EMPTY_PERIODS[] = new Period[0];
 
     private static final int DEFAULT_CENTURY = 1900;
 
@@ -127,28 +126,28 @@ public class CalendarTools {
      * component.setValue(ds); }
      */
 
-    private static Date[] parsePeriod(DateFormat dateFormat, String dates) {
+    private static Period parsePeriod(DateFormat dateFormat, String dates) {
         StringTokenizer st = new StringTokenizer(dates, ":");
         int cnt = st.countTokens();
         if (cnt == 0) {
-            return EMPTY_PERIOD;
+            return null;
         }
 
         Date d = parseDate(dateFormat, st.nextToken());
         if (d == null) {
-            return EMPTY_PERIOD;
+            return null;
         }
 
         if (cnt == 1) {
-            return new Date[] { d };
+            return new Period(d, d);
         }
 
         Date d2 = parseDate(dateFormat, st.nextToken());
         if (d2 == null) {
-            return EMPTY_PERIOD;
+            return null;
         }
 
-        return new Date[] { d, d2 };
+        return new Period(d, d2);
     }
 
     /*
@@ -161,14 +160,14 @@ public class CalendarTools {
      * return calendar.getTime(); }
      */
 
-    private static Date[][] parsePeriods(DateFormat dateFormat, String dates) {
+    private static Period[] parsePeriods(DateFormat dateFormat, String dates) {
         List l = null;
         StringTokenizer st = new StringTokenizer(dates, ",");
         for (; st.hasMoreTokens();) {
             String token = st.nextToken();
 
-            Date ds[] = parsePeriod(dateFormat, token);
-            if (ds == null || ds.length < 2) {
+            Period ds = parsePeriod(dateFormat, token);
+            if (ds == null) {
                 continue;
             }
 
@@ -179,9 +178,9 @@ public class CalendarTools {
             l.add(ds);
         }
 
-        Date ds[][] = EMPTY_PERIODS;
+        Period ds[] = EMPTY_PERIODS;
         if (l != null) {
-            ds = (Date[][]) l.toArray(new Date[l.size()][]);
+            ds = (Period[]) l.toArray(new Period[l.size()]);
         }
 
         return ds;

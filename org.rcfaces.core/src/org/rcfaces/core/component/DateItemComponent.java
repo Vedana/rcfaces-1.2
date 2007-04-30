@@ -35,7 +35,7 @@ public class DateItemComponent extends AbstractItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"menuPopupId","literalTimeZone","styleClass","literalLocale","text"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"menuPopupId","literalTimeZone","styleClass","literalLocale","text","date"}));
 	}
 
 	public DateItemComponent() {
@@ -76,6 +76,13 @@ public class DateItemComponent extends AbstractItemComponent implements
 	}
 
 	public final void setDate(Date date) {
+
+
+				setItemValue(date);
+			
+	}
+
+	public final void setDate(String date) {
 
 
 				setItemValue(date);

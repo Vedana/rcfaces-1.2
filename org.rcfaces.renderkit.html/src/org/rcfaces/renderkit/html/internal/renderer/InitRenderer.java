@@ -28,6 +28,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.PageConfiguration;
@@ -977,6 +978,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         public IHtmlComponentRenderContext getHtmlComponentRenderContext() {
             return writer.getHtmlComponentRenderContext();
+        }
+
+        public IComponentRenderContext getComponentRenderContext() {
+            return getHtmlComponentRenderContext();
         }
 
         public IHtmlWriter getWriter() {

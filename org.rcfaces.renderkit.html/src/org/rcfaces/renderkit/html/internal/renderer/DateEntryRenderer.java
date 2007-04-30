@@ -445,7 +445,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
             date = dateValue;
         }
 
-        dateEntryComponent.setSubmittedValue(date);
+        dateEntryComponent.setSubmittedExternalValue(date);
     }
 
     protected String getActionEventName(INameSpace nameSpace) {

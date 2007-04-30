@@ -17,6 +17,10 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.adapter.IAdapterManager;
+import org.rcfaces.core.lang.IAdaptable;
+
 /**
  * Classe de conversion de certains types/objets java en d'autres ...
  * 
@@ -55,7 +59,8 @@ public final class Convertor {
             }
 
             throw new FacesException("Can not convert primitive class '"
-                    + classRequested.getName() + "' value=null", null);
+                    + classRequested.getName() + "' (value=null) to class '"
+                    + classRequested.getName() + "'.", null);
         }
 
         Class cl = data.getClass();
@@ -76,6 +81,23 @@ public final class Convertor {
         if (cv != null) {
             Object ret = cv.convert(cl, data);
 
+            if (ret != null) {
+                return ret;
+            }
+        }
+
+        if (data instanceof IAdaptable) {
+            Object ret = ((IAdaptable) data).getAdapter(classRequested, null);
+            if (ret != null) {
+                return ret;
+            }
+        }
+
+        IAdapterManager adapterManager = RcfacesContext.getCurrentInstance()
+                .getAdapterManager();
+
+        if (adapterManager != null) {
+            Object ret = adapterManager.getAdapter(data, classRequested, null);
             if (ret != null) {
                 return ret;
             }

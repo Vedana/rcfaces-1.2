@@ -166,34 +166,49 @@ var __prototype={
 
 		var ret=this._sendRequest(request, params, progressMonitor);
 		
-		if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-			f_core.Error(f_service, "Bad Status ! ("+request.f_getStatusText()+")");
-			this._setRequestState(requestId, f_service.ERRORED_STATE);
-
-			throw new Error("Bad status of http response '"+request.f_getStatus()+"'.");
-		}
-
-		if (request.f_isXmlResponse()) {
-			this._setRequestState(requestId, f_service.LOADED_STATE);
-			return request.f_getXmlResponse();
-		}
-		
-		var content=request.f_getResponse();
-
-		var state;
-		var contentType=request.f_getResponseHeader(f_httpRequest.HTTP_CONTENT_TYPE);
-		if (contentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
-			content=eval(content);
+		var state= f_service.ERRORED_STATE;
+		try {	
+			if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+				var errorMessage="Bad http response status ! ("+request.f_getStatusText()+")";
+				this.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, errorMessage);
+				throw new Error(errorMessage);
+			}	
+	
+			var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+			if (!cameliaServiceVersion) {
+				var errorMessage="Not a service response !"
+				this.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+				throw new Error(errorMessage);
+			}
+	
+			var responseContentType=request.f_getResponseContentType();
 			
-			state = f_service.ERRORED_STATE;
+			if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+		 		this.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+				
+				throw new Error("Application error");
+			}
+	
+			if (request.f_isXmlResponse()) {
+				state = f_service.LOADED_STATE;
+				return request.f_getXmlResponse();
+			}
 			
-		} else {					
-			content = this.f_decodeResponse(content, contentType, request);
-
-			state = f_service.LOADED_STATE;
+			var content=request.f_getResponse();
+	
+			var state;
+			if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
+				content=eval(content);
+				
+			} else {					
+				content = this.f_decodeResponse(content, responseContentType, request);
+	
+				state = f_service.LOADED_STATE;
+			}
+			
+		} finally {
+			this._setRequestState(requestId, state);
 		}
-		
-		this._setRequestState(requestId, state);
 		
 		return content;
 	},
@@ -299,32 +314,53 @@ var __prototype={
 
 	 			var loading=false;
 				try {
-					var state = f_service.LOADED_STATE;
+					var state = f_service.ERRORED_STATE;					
+					
+					var call=false;
 					
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-						f_core.Error(f_service, "Bad Status ! ("+request.f_getStatusText()+")");
-						state = f_service.ERRORED_STATE;
-						content = undefined;
-						
-					} else if (contentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
-						eval(content);
-						
+		
 						content=null;
-						state = f_service.ERRORED_STATE;
-						
-					} else {					
-						content = service.f_decodeResponse(content, contentType, request);
-					}
+						service.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+												
+					} else {
+						var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+						if (!cameliaServiceVersion) {
+							content=null;
+							service.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+							
+						} else {			
+							call=true;
 
-					service._setRequestState(requestId, state);
-				
-					try {
-						resultCallback.call(service, state, parameter, content);
-
-					} catch (x) {
-						f_core.Error(f_service, "Call of callback throws an exception : "+resultCallback+".", x);
+							var responseContentType=request.f_getResponseContentType();
+							
+							if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+								// Rien,  etat erreur, le contenu contient les infos de l'erreur
+							
+							} else if (contentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
+								eval(content);
+								
+								content=null;
+								
+							} else {		
+								content = service.f_decodeResponse(content, contentType, request);
+								
+								state = f_service.LOADED_STATE;
+							}
+						}
 					}
 					
+					service._setRequestState(requestId, state);
+				
+					if (call) {
+						try {
+							resultCallback.call(service, state, parameter, content);
+	
+						} catch (x) {
+							f_core.Error(f_service, "Call of callback throws an exception : "+resultCallback+".", x);
+						}
+					}
+										
 					if (subProgressMonitor) {
 						subProgressMonitor.f_done();
 					}			
@@ -420,6 +456,12 @@ var __prototype={
 		}
 
 		return content;
+	},
+	/**
+	 * @method protected
+	 */
+	f_performErrorEvent: function(param, messageCode, message) {
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	/**
 	 * @method public

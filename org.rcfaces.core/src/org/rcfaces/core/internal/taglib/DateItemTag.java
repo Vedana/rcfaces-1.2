@@ -21,6 +21,7 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 	private String menuPopupId;
 	private String literalLocale;
 	private String literalTimeZone;
+	private String date;
 	public String getComponentType() {
 		return DateItemComponent.COMPONENT_TYPE;
 	}
@@ -65,6 +66,14 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 		this.literalTimeZone = literalTimeZone;
 	}
 
+	public final String getDate() {
+		return date;
+	}
+
+	public final void setDate(String date) {
+		this.date = date;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (DateItemComponent.COMPONENT_TYPE==getComponentType()) {
@@ -75,6 +84,7 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 			LOG.debug("  menuPopupId='"+menuPopupId+"'");
 			LOG.debug("  literalLocale='"+literalLocale+"'");
 			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
+			LOG.debug("  date='"+date+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -138,6 +148,15 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 				component.setLiteralTimeZone(literalTimeZone);
 			}
 		}
+
+		if (date != null) {
+			if (isValueReference(date)) {
+				ValueBinding vb = application.createValueBinding(date);
+				component.setDate(vb);
+			} else {
+				component.setDate(date);
+			}
+		}
 	}
 
 	public void release() {
@@ -146,6 +165,7 @@ public class DateItemTag extends AbstractItemTag implements Tag {
 		menuPopupId = null;
 		literalLocale = null;
 		literalTimeZone = null;
+		date = null;
 
 		super.release();
 	}
