@@ -2643,7 +2643,6 @@ var f_core = {
 			length=links.length;
 		}
 
-		var links=sourceDocument.styleSheets;
 		if (startIndex>=length) {
 			return;
 		}
