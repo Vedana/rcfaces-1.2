@@ -228,7 +228,7 @@ var __prototype={
 			type="null";
 
 		} else if (typeof(parameter)=="object") {	
-			if (parameter.nodeType==9) {
+			if (parameter.nodeType==f_core.DOCUMENT_NODE) {
 				// OK !
 				type="xml";
 				params=parameter;
@@ -420,7 +420,7 @@ var __prototype={
 	 */	
 	_sendRequest: function(request, params, progressMonitor) {			
 		var ctype=f_httpRequest.TEXT_PLAIN_MIME_TYPE;
-		if (params && params.nodeType==9) {
+		if (params && params.nodeType==f_core.DOCUMENT_NODE) {
 			ctype=f_httpRequest.TEXT_XML_MIME_TYPE;
 		}
 		

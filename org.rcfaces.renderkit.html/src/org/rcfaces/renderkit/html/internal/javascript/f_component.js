@@ -41,7 +41,7 @@ var __static = {
 	 * @return HTMLElement Underline zone component
 	 */
 	AddLabelWithAccessKey: function(parent, label, accessKey, removeText) {
-		f_core.Assert(parent.nodeType==1, "Invalid parent parameter '"+parent+"'.");
+		f_core.Assert(parent.nodeType==f_core.ELEMENT_NODE, "Invalid parent parameter '"+parent+"'.");
 		f_core.Assert(typeof(label)=="string", "Invalid label parameter '"+label+"'.");
 		
 		if (removeText) {			

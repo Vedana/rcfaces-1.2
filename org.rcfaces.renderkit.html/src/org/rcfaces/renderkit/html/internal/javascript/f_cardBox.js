@@ -42,7 +42,7 @@ var __prototype={
 		for(var i=0;i<cards.length;i++) {
 			var card=cards[i];
 		
-			var ccard=f_core.GetElementByClientId(card._id, this.ownerDocument);
+			var ccard=f_core.GetElementByClientId(card._id);
 			f_core.Assert(ccard, "f_cardBox.f_updateCards: Can not find card component of card '"+card._id+"'.");
 
 			f_core.Debug(f_cardBox, "Update card#"+i+" card="+card+" ccard="+ccard);
@@ -135,7 +135,7 @@ var __prototype={
 	f_selectCard: function(cardComponent, setFocus) {
 		if (typeof(cardComponent)=="string") {
 			var id=cardComponent;
-			cardComponent=f_core.GetElementByClientId(id, this.ownerDocument);
+			cardComponent=f_core.GetElementByClientId(id);
 	
 			f_core.Assert(cardComponent, "Can not find card '"+id+"'.");
 		}

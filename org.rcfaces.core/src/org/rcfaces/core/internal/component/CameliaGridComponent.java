@@ -45,7 +45,7 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value"}));
 
-	protected final transient IComponentEngine engine;
+	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
@@ -402,7 +402,7 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 		}
 		
 		super.queueEvent(e);
-    }
+    }	
 	
 	public final boolean isRowAvailable() {
 

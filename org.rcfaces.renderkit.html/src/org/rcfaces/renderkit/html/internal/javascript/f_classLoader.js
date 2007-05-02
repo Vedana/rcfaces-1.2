@@ -385,7 +385,7 @@ f_classLoader.prototype = {
 			throw "This classloader is exiting ... [requiresBundle]";
 		}
 	
-		f_core.Assert(doc && doc.nodeType==9, "Document parameter is not a valid document node !");
+		f_core.Assert(doc && doc.nodeType==f_core.DOCUMENT_NODE, "Document parameter is not a valid document node !");
 	
 		var parentClassloader=this._parent;
 		
@@ -514,7 +514,7 @@ f_classLoader.prototype = {
 			// C'est donc le frere !
 			var prev=component.previousSibling;
 			for(;prev;prev=prev.previousSibling) {
-				if (prev.nodeType!=1 || !prev.tagName) {
+				if (prev.nodeType!=f_core.ELEMENT_NODE || !prev.tagName) {
 					continue;
 				}
 				
@@ -680,44 +680,47 @@ f_classLoader.prototype = {
 			var pool=(obj.tagName)?this._componentPool:this._objectPool;
 			f_core.Assert(pool, "f_classLoader._destroy: Invalid Objects pool for object "+obj);
 		
-			for (var i=0;i<pool.length;i++) {
-				if (pool[i]!=obj) {
+			for (var j=0;j<pool.length;j++) {
+				if (pool[j]!=obj) {
 					continue;
 				}
 				
-				pool[i]=undefined;
+				pool.splice(j, 1);
 		
 				toClean.push(obj);
 				obj=undefined;
 		
-				f_core.Debug("f_classLoader", "_destroy: Object '"+obj+"' has been removed from the pool !");
+				f_core.Debug(f_classLoader, "_destroy: Object '"+obj+"' has been removed from the pool !");
 				
 				break;
 			}
 	
 			if (obj) {
-				f_core.Warn("f_classLoader", "_destroy: Object '"+obj+"' is not found into pool, and can not be destroyed !");
+				f_core.Warn(f_classLoader, "_destroy: Object '"+obj+"' is not found into pool, and can not be destroyed !");
 			}
 		}	
 				
-		if (toClean.length>0) {
+		if (toClean.length) {
 			f_class.Clean(toClean);
 		}
 	},
-	
+
 	/**
 	 * @method hidden
+	 * @param HTMLElement[] components
+	 * @return String
 	 */
-	serialize: function(form) {
+	f_serializeComponents: function(components) {
 		var serial = "";
 	
 		try {
 			this._serializing=true;
 		
-			var a = this._componentPool;
-			for (var i=0; i<a.length; i++) {
-				var obj = a[i];
-				if (!obj || !obj.id) {
+			for (var i=0; i<components.length; i++) {
+				var obj = components[i];
+				var objectId=obj.id;
+				
+				if (!obj || !objectId) {
 					continue;
 				}
 				
@@ -726,18 +729,18 @@ f_classLoader.prototype = {
 					continue;
 				}
 							
-				f_core.Assert(typeof(f)=="function", "Field f_serialize0 is not a method !");
+				f_core.Assert(typeof(f)=="function", "f_classLoader.f_serializeComponents: Field f_serialize0 is not a method for object '"+objectId+"'.");
 				
 				var ser;
 				try {
 					ser = f.call(obj);
 					
 				} catch (x) {
-					f_core.Error("f_classLoader", "Serialization of object '"+obj.id+"' throws exception.", x);
+					f_core.Error(f_classLoader, "f_serializeComponents: Serialization of object '"+objectId+"' throws exception.", x);
 					continue;
 				}
 				
-				f_core.Assert(ser!==undefined, "Serialization of object returns undefined !");
+				f_core.Assert(ser!==undefined, "f_classLoader.f_serializeComponents: Serialization of object '"+objectId+"' returns undefined !");
 				
 				if (!ser) {
 					continue;
@@ -747,18 +750,28 @@ f_classLoader.prototype = {
 					serial += ",";
 				}
 				
-				serial += (obj.id + "=[" + ser + "]");
+				serial += objectId + "=[" + ser + "]";
 			}
 			
 		} finally {
 			this._serializing=undefined;
 		}
-	
-		f_core.Debug("f_classLoader", "Serialized form of component '"+form.id+"'='"+serial+"'.");
 		
-		if (!serial) {
-			return;
-		}
+		return serial;
+	},
+	
+	/**
+	 * @method hidden
+	 * @param HTMLFormElement form
+	 * @return String
+	 */
+	f_serialize: function(form) {
+
+		var components = this._componentPool;
+		
+		var serial=this.f_serializeComponents(components);
+	
+		f_core.Debug(f_classLoader, "f_serialize: Serialized form '"+form.id+"' => '"+serial+"'.");
 		
 		f_core.SetInputHidden(form, f_core.SERIALIZED_DATA, serial);
 	},
@@ -829,10 +842,12 @@ f_classLoader.prototype = {
 	
 	/**
 	 * @method hidden
+	 * @param optional boolean serializeState
+	 * @return String serialized state
 	 */
-	garbageObjects: function() {
+	f_garbageObjects: function(serializeState) {
 		var componentPool=this._componentPool;
-		f_core.Assert(componentPool, "f_classLoader._garbageObjects: Invalid Objects pool !");
+		f_core.Assert(componentPool, "f_classLoader.f_garbageObjects: Invalid Objects pool !");
 	
 		if (this._exiting) {
 			throw "This classloader is exiting ... [garbageObjects]";
@@ -844,7 +859,7 @@ f_classLoader.prototype = {
 			
 			var p=obj;
 			for(;p;p=p.parentNode) {
-				if (p.nodeType==9) {
+				if (p.nodeType==f_core.DOCUMENT_NODE) {
 					break;
 				}
 			}
@@ -854,22 +869,33 @@ f_classLoader.prototype = {
 				continue;
 			}
 			
+			f_core.Debug(f_classLoader, "f_garbageObjects: Mark object '"+obj+"' to garbage");
+			
 			if (!toClean) {
 				toClean=new Array;
 			}
-			
-			f_core.Debug("f_classLoader", "Garbage object: "+obj);
 			
 			toClean.push(obj);
 			
 			componentPool.splice(i, 1);
 		}
 	
-		if (toClean) {		
-			f_class.Clean(toClean);
+		if (!toClean) {						
+			f_core.Debug(f_classLoader, "f_garbageObjects: no object garbaged.");
+			return;
 		}
 		
-		f_core.Debug("f_classLoader", ((toClean)?toClean.length:0)+" objects garbaged.");
+		var serializedForm=null;
+		
+		if (serializeState) {
+			serializedForm=this.f_serializeComponents(toClean);
+		}
+		
+		f_class.Clean(toClean);
+		
+		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged.");
+		
+		return serializedForm;
 	},
 	
 	/**
@@ -983,8 +1009,7 @@ f_classLoader._InitializeStaticMembers=function(claz) {
 
 /**
  * @method hidden static
- * @param Object object
- * @param optional Object object2
+ * @param Object... object
  * @return void
  */
 f_classLoader.Destroy=function(object1, object2) {
@@ -995,11 +1020,17 @@ f_classLoader.Destroy=function(object1, object2) {
 	for(var i=0;i<arguments.length;i++) {
 		var object=arguments[i];
 		
-		f_core.Assert(typeof(object)=="object", "f_classLoader.Destroy: Invalid object: "+object);
+		f_core.Assert(typeof(object)=="object", "f_classLoader.Destroy: Invalid object type: "+object);
 		
 		var klass=object._kclass;
 		if (!klass) {
-			var finalizer=object.f_finalize;	
+			var finalizer=object.f_finalize;
+			
+			if (finalizer===undefined) {
+				// Object sans finalizer !
+				continue;
+			}
+			
 			f_core.Assert(typeof(finalizer)=="function", "f_classLoader.Destroy: finalizer field must be a function. ("+finalizer+")");
 
 			finalizer.call(object);
@@ -1009,6 +1040,7 @@ f_classLoader.Destroy=function(object1, object2) {
 		var classLoader=klass._classLoader;
 		f_core.Assert(classLoader, "f_classLoader.Destroy: Classloader is not defined for '"+object+"'.");
 		
+		// On regroupe par classLoader ...
 		if (!lastClassLoader || (lastClassLoader && lastClassLoader!=classLoader)) {
 			if (lastClassLoader) {
 				lastClassLoader._destroy(toDestroy);
@@ -1023,6 +1055,57 @@ f_classLoader.Destroy=function(object1, object2) {
 	
 	if (lastClassLoader) {
 		lastClassLoader._destroy(toDestroy);
+	}
+}
+
+/**
+ * @method hidden static
+ * @param Object parameters
+ * @param HTMLElement component
+ * @return void
+ */
+f_classLoader.SerializeInputs=function(parameters, component) {
+	f_core.Assert(parameters && typeof(parameters)=="object", "f_classLoader.SerializeInputs: Invalid parameters parameter '"+parameters+"'.");
+	f_core.Assert(component && (component.nodeType==f_core.ELEMENT_NODE || component.nodeType==f_core.DOCUMENT_NODE), "f_classLoader.SerializeInputs: Invalid parameters parameter '"+parameters+"'.");
+
+	var inputs=f_core.GetElementsByTagName(component, "input");
+	for(var i=0;i<inputs.length;i++) {
+		var input=inputs[i];
+		var inputName=input.name;
+		if (!inputName) {
+			continue;
+		}
+
+		var value="";
+		
+		switch(input.type.toLowerCase()) {
+		case "checkbox":
+		case "radio":
+			if (!input.checked) {
+				break;
+			}
+			// On continue ...
+		
+		case "text":
+		case "password":
+		case "hidden":
+			 value=input.value;
+			 break;
+		}
+		
+		parameters[inputName]=value;
+	}
+	
+	
+	var selects=f_core.GetElementsByTagName(component, "select");
+	for(var i=0;i<selects.length;i++) {
+		var select=selects[i];
+		var selectName=select.name;
+		if (!selectName) {
+			continue;
+		}
+		
+		parameters[selectName]="x";
 	}
 }
 

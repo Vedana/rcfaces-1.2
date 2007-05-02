@@ -110,7 +110,7 @@ var __prototype = {
 	f_eventTarget: function() {
 		// this.f_super(arguments); // On appelle pas le super à cause d'un problème de profondeur de pile IE
 		
-		if (this.nodeType==1) {
+		if (this.nodeType==f_core.ELEMENT_NODE) {
 			this.f_initEventAtts(f_eventTarget._EVENTS);
 		}
 	},	

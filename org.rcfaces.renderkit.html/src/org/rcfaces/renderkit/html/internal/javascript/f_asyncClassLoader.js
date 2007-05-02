@@ -9,12 +9,63 @@
  * @version $Revision$ $Date$
  */
 
-f_classLoader.prototype._load = function(component, htmlNode, content) {
+/**
+ * @method hidden
+ * @param HTMLElement component
+ * @param HTMLElement htmlNode
+ * @param String content
+ * @param boolean processScripts
+ * @return void
+ */
+f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, processScripts) {
 
-	f_core.Assert(component && component._kclass, "f_asyncClassLoader._load: component parameter is invalid : "+component);
-	f_core.Assert(htmlNode && htmlNode.tagName, "f_asyncClassLoader._load: htmlNode parameter is invalid : "+htmlNode);
-	f_core.Assert(typeof(content)=="string", "f_asyncClassLoader._load: component parameter is invalid : "+content);
+	f_core.Assert(component && component._kclass, "f_asyncClassLoader.f_loadContent: component parameter is invalid : "+component);
+	f_core.Assert(htmlNode && htmlNode.nodeType==f_core.ELEMENT_NODE, "f_asyncClassLoader.f_loadContent: htmlNode parameter is invalid : "+htmlNode);
+	f_core.Assert(typeof(content)=="string", "f_asyncClassLoader.f_loadContent: component parameter is invalid : "+content);
+	f_core.Assert(processScripts===undefined || typeof(processScripts)=="boolean", "f_asyncClassLoader.f_loadContent: processScripts parameter is invalid : "+processScripts);
 
+	var disableScripts=(f_core.IsInternetExplorer() && window._camelia_scriptDefer);	
+	if (disableScripts) {	
+		f_core.Debug("f_asyncClassLoader", "f_loadContent: Add defer to script tags");
+		
+		var lowerContent=content.toLowerCase();
+		
+		var pos=content.length();
+		for(;;) {
+			pos=lowerContent.lastIndexOf("<script", pos);
+			if (pos<0) {
+				break;
+			}
+			
+			content=content.substring(0, pos+7)+" defer"+content.substring(pos+7);
+			pos--;
+		}
+	}
+		
+	f_core.Debug("f_asyncClassLoader", "f_loadContent: Set content on component id='"+component.id+"' htmlNode='"+htmlNode+"', htmlNode.tag='"+htmlNode.tagName+"' :\n"+content);
+	
+	try {
+		htmlNode.innerHTML=content;
+
+	} catch (x) {
+		f_core.Debug("f_asyncClassLoader", "f_loadContent: Exception when setting innerHTML for component id='"+component.id+"' htmlNode='"+htmlNode.tagName+"':\n"+content, x);
+	}
+	
+	if (processScripts!==false) {
+		this.f_processScripts(component, htmlNode);
+	}
+}
+
+/**
+ * @method hidden
+ * @param HTMLElement component
+ * @param HTMLElement htmlNode
+ * @return void
+ */
+f_classLoader.prototype.f_processScripts = function(component, htmlNode) {
+	f_core.Assert(component && component._kclass, "f_asyncClassLoader.f_processScripts: Invalid component parameter '"+component+"'.");
+	f_core.Assert(htmlNode && htmlNode.nodeType==f_core.ELEMENT_NODE, "f_asyncClassLoader.f_processScripts: Invalid htmlNode parameter '"+htmlNode+"'.");
+	
 	var classLoader=this;
 	var interactiveMode={
 		_component: component,
@@ -25,7 +76,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 		_scripts: new Array,
 		
 		addRequireBundle: function(bundleName) {
-			f_core.Debug("f_asyncClassLoader", "Add require bundle '"+bundleName+"'.");
+			f_core.Debug("f_asyncClassLoader", "f_processScripts: Add require bundle '"+bundleName+"'.");
 
 			this._loads.push(bundleName);
 			
@@ -52,7 +103,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 	
 						var url=f_env.ComputeJavaScriptURI(bundleName);
 
-						f_core.Debug("f_asyncClassLoader", "Load script '"+bundleName+"' url='"+url+"'.");
+						f_core.Debug("f_asyncClassLoader", "f_processScripts: Load script '"+bundleName+"' url='"+url+"'.");
 							
 						var interactive=this;
 	
@@ -74,26 +125,26 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 
 								default:
 	//								alert("State "+script.readyState); 
-									f_core.Debug("f_asyncClassLoader", "Script '"+url+"' state="+script.readyState);
+									f_core.Debug("f_asyncClassLoader", "f_processScripts: Script '"+url+"' state="+script.readyState);
 									return;
 								}
 								
 								script.onreadystatechange=null;
 	
-								f_core.Debug("f_asyncClassLoader", "Script '"+url+"' loaded.");
+								f_core.Debug("f_asyncClassLoader", "f_processScripts: Script '"+url+"' loaded.");
 								
 								try {
 									interactive.run();
 									
 								} catch (x) {
-									f_core.Error("f_asyncClassLoader", "Run async script throws exception.", x);
+									f_core.Error("f_asyncClassLoader", "f_processScripts: Run async script throws exception.", x);
 								}
 							};
 					
 						} else {
 							script.onload=function() {
 	//							alert("URL "+url+" loaded !");
-								f_core.Debug("f_asyncClassLoader", "Script '"+url+"' loaded.");
+								f_core.Debug("f_asyncClassLoader", "f_processScripts: Script '"+url+"' loaded.");
 	
 								script.onload=null; 
 
@@ -101,12 +152,12 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 									interactive.run();
 									
 								} catch (x) {
-									f_core.Error("f_asyncClassLoader", "Run async script throws exception.", x);
+									f_core.Error("f_asyncClassLoader", "f_processScripts: Run async script throws exception.", x);
 								}
 							};
 						}
 						
-						doc.body.appendChild(script);
+						this._htmlNode.appendChild(script);
 						
 						return;
 					}
@@ -131,7 +182,7 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 							}							
 							scriptElement.defer=false;
 							
-							document.body.appendChild(scriptElement);
+							this._htmlNode.appendChild(scriptElement);
 							
 							continue;
 						}
@@ -145,26 +196,26 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 								var newScript=script.substring(5, v);
 								newScript=f_core.Trim(newScript);
 
-								f_core.Debug("f_asyncClassLoader", "Simplify script '"+script+"' newScript='"+newScript+"'.");
+								f_core.Debug("f_asyncClassLoader", "f_processScripts: Simplify script '"+script+"' newScript='"+newScript+"'.");
 							
 								script=newScript;
 							}
 						}
 											
-						f_core.Debug("f_asyncClassLoader", "Eval script '"+script+"'.");
+						f_core.Debug("f_asyncClassLoader", "f_processScripts: Eval script '"+script+"'.");
 						
 						if (script.length) {
 							try {
 								f_core.WindowScopeEval(script);
 								
 							} catch (x) {
-								f_core.Error("f_asyncClassLoader", "Eval throws exception; script='"+script+"'.", x);
+								f_core.Error("f_asyncClassLoader", "f_processScripts: Eval throws exception; script='"+script+"'.", x);
 							}
 						}
 						continue;
 					}
 				
-					f_core.Debug("f_asyncClassLoader", "End of scripts evaluation.");
+					f_core.Debug("f_asyncClassLoader", "f_processScripts: End of scripts evaluation.");
 									
 	//				alert("Fin !");
 					classLoader._interactiveMode=undefined;
@@ -172,49 +223,15 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 					return;
 				}
 			} catch (x) {
-				f_core.Error("f_asyncClassLoader", "Async script loading exception.", x);
+				f_core.Error("f_asyncClassLoader", "f_processScripts: Async script loading exception.", x);
 			}
 		}
 	};
 	this._interactiveMode=interactiveMode;
 
-//	content=content.replace(/^\s+|\s+$/g, "");
-
-	var disableScripts=false;
-	if (f_core.IsInternetExplorer()) {
-		if (window._camelia_scriptDefer) {
-		
-			f_core.Debug("f_asyncClassLoader", "Add defer to script tags");
-		
-			disableScripts=true;
-			
-			var lowerContent=content.toLowerCase();
-			
-			var pos=content.length();
-			for(;;) {
-				pos=lowerContent.lastIndexOf("<script", pos);
-				if (pos<0) {
-					break;
-				}
-				
-				content=content.substring(0, pos+7)+" defer"+content.substring(pos+7);
-				pos--;
-			}
-		}
-	}
-		
-	f_core.Debug("f_asyncClassLoader", "Set content on component id='"+component.id+"' htmlNode='"+htmlNode+"', htmlNode.tag='"+htmlNode.tagName+"' :\n"+content);
-	
-	try {
-		htmlNode.innerHTML=content;
-
-	} catch (x) {
-		f_core.Debug("f_asyncClassLoader", "Exception when setting innerHTML for component id='"+component.id+"' htmlNode='"+htmlNode.tagName+"':\n"+content, x);
-	}
-	
 	var forms=f_core.GetElementsByTagName(htmlNode, "form");	
 	if (forms.length) {
-		f_core.Debug("f_asyncClassLoader", forms.length+" form(s) detected !");
+		f_core.Debug("f_asyncClassLoader", "f_processScripts: "+forms.length+" form(s) detected !");
 		
 		for(var i=0;i<forms.length;i++) {
 			var f=forms[i];
@@ -223,9 +240,10 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 		}
 	}
 
+	var disableScripts=(f_core.IsInternetExplorer() && window._camelia_scriptDefer);	
 	if (!disableScripts) {
 		var scripts=f_core.GetElementsByTagName(htmlNode, "script");
-		f_core.Debug("f_asyncClassLoader", scripts.length+" script(s) detected !");
+		f_core.Debug("f_asyncClassLoader", "f_processScripts: "+scripts.length+" script(s) detected !");
 		
 		var interactiveScripts=interactiveMode._scripts;
 		for(var i=0;i<scripts.length;i++) {
@@ -238,20 +256,20 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 						type: type, 
 						charset: script.charset };
 	
-				f_core.Debug("f_asyncClassLoader", "Add element script: src="+src+" type="+type+" charset="+script.charset);
+				f_core.Debug("f_asyncClassLoader", "f_processScripts: Add element script: src="+src+" type="+type+" charset="+script.charset);
 	
 				interactiveScripts.push(js);
 				continue;
 			}
 			
 			if (typeof(type)=="string" && type.length && type.toLowerCase().indexOf("text/javascript")<0) {
-				f_core.Error("f_asyncClassLoader", "Unknown script type: "+script.type);
+				f_core.Error("f_asyncClassLoader", "f_processScripts: Unknown script type: "+script.type);
 				continue;
 			}
 	
 			var js=script.text;
 	
-			f_core.Debug("f_asyncClassLoader", "Add text script: "+js);
+			f_core.Debug("f_asyncClassLoader", "f_processScripts: Add text script: "+js);
 			
 			interactiveScripts.push(js);
 		}
@@ -259,12 +277,18 @@ f_classLoader.prototype._load = function(component, htmlNode, content) {
 		
 	interactiveMode.run();
 }
+
+/**
+ * @method private
+ * @param boolean interactiveMode
+ * @return void
+ */
 f_classLoader.prototype._postLoad=function(interactiveMode) {
 	
 	if (this._documentCompleted) {
 		var pool=this._componentPool;
 
-		f_core.Info("f_asyncClassLoader", "Call of method f_documentComplete for "+(pool.length-interactiveMode._componentPoolLevel)+" objects.");
+		f_core.Info("f_asyncClassLoader", "_postLoad: Call of method f_documentComplete for "+(pool.length-interactiveMode._componentPoolLevel)+" objects.");
 
 		for (var nb=interactiveMode._componentPoolLevel; nb<pool.length; nb++) {
 			var obj = pool[nb];
@@ -274,18 +298,18 @@ f_classLoader.prototype._postLoad=function(interactiveMode) {
 				continue;
 			}
 	
-			f_core.Assert(typeof(documentComplete)=="function", "Type of f_documentComplete method of class '"+obj._kclass._name+"' is not a function  ! ("+documentComplete+")");
+			f_core.Assert(typeof(documentComplete)=="function", "f_asyncClassLoader._postLoad: Type of f_documentComplete method of class '"+obj._kclass._name+"' is not a function  ! ("+documentComplete+")");
 			
 			try {
 				documentComplete.call(obj);
 				
 			} catch (x) {
-				f_core.Error("f_asyncClassLoader", "f_documentComplete throws exception for component '"+obj.id+"'.", x);
+				f_core.Error("f_asyncClassLoader", "_postLoad: f_documentComplete throws exception for component '"+obj.id+"'.", x);
 			}
 		}
 	}
 
-	f_core.Debug("f_asyncClassLoader", "Call load event for interactiveMode component: "+interactiveMode._component);
+	f_core.Debug("f_asyncClassLoader", "_postLoad: Call load event for interactiveMode component: "+interactiveMode._component);
 	
 	// Appel du onload des composants parents !
 	interactiveMode._component.f_fireEvent("load");

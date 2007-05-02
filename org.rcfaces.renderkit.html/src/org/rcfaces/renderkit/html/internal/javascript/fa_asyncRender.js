@@ -146,7 +146,7 @@ var __prototype = {
 						}
 						
 						try {
-							window._classLoader._load(component, component, component.innerHTML+ret);
+							component.f_getClass().f_getClassLoader().f_loadContent(component, component, component.innerHTML+ret);
 							
 						} catch (x) {
 				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");

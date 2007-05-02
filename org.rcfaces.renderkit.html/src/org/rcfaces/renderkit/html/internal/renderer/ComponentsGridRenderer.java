@@ -6,16 +6,24 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
@@ -23,12 +31,15 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
+import org.rcfaces.core.component.capability.ISelectionValuesCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -39,6 +50,7 @@ import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -60,6 +72,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     private static final String DEFAULT_ROW_CLASSNAMES[] = { "f_grid_row_even",
             "f_grid_row_odd" };
 
+    private static final boolean NOT_SUPPORTED_SERVER_SORT = true;
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMPONENTS_GRID;
     }
@@ -73,6 +87,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
         super.writeGridComponentAttributes(htmlWriter, tableContext, dg);
+
         if (ENABLE_SERVER_REQUEST) {
             ComponentsGridService componentsGridServer = ComponentsGridService
                     .getInstance(htmlWriter.getComponentRenderContext()
@@ -259,6 +274,12 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         DataModel dataModel = componentsGridComponent.getDataModelValue();
 
         if (sortedComponents != null && sortedComponents.length > 0) {
+
+            if (NOT_SUPPORTED_SERVER_SORT) {
+                throw new FacesException(
+                        "Can not sort dataModel in server side !");
+            }
+
             if (dataModel instanceof ISortedDataModel) {
                 // On delegue au modele, le tri !
 
@@ -730,6 +751,153 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         componentsListComponent.setRowIndex(-1);
 
         super.encodeEnd(writer);
+    }
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+
+        FacesContext facesContext = context.getFacesContext();
+
+        ComponentsGridComponent componentsGridComponent = (ComponentsGridComponent) component;
+
+        boolean rowValueSetted = componentsGridComponent.isRowValueSetted();
+
+        String selectedRows = componentData.getStringProperty("selectedItems");
+        String deselectedRows = componentData
+                .getStringProperty("deselectedItems");
+        if (selectedRows != null || deselectedRows != null) {
+            if (rowValueSetted) {
+                Object selected = componentsGridComponent.getSelectedValues();
+
+                Set values = updateSelection(facesContext, selected,
+                        selectedRows, deselectedRows, componentsGridComponent);
+
+                Class cls = ((ISelectionValuesCapability) componentsGridComponent)
+                        .getSelectedValuesType(facesContext);
+
+                if (cls == null && selected != null) {
+                    cls = selected.getClass();
+                }
+
+                selected = ValuesTools.adaptValues(cls, values);
+
+                componentsGridComponent.setSelectedValues(selected);
+
+            } else {
+                int indexes[] = parseIndexes(selectedRows);
+                int dindexes[] = null;
+                boolean all = false;
+
+                if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
+                    all = true;
+                    dindexes = EMPTY_INDEXES;
+                } else {
+                    dindexes = parseIndexes(deselectedRows);
+                }
+
+                if (indexes.length > 0 || all || dindexes.length > 0) {
+                    setSelectedIndexes(facesContext, componentsGridComponent,
+                            indexes, dindexes, all);
+                }
+            }
+        }
+
+        super.decode(context, component, componentData);
+    }
+
+    private Set updateSelection(FacesContext facesContext, Object selected,
+            String selectedRows, String deselectedRows,
+            ComponentsGridComponent componentsGridComponent) {
+        Set set;
+
+        if (selected == null) {
+            set = new HashSet(8);
+
+        } else {
+            set = ValuesTools.convertSelection(selected);
+        }
+
+        if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
+            set.clear();
+
+        } else if (set.size() > 0 && deselectedRows != null
+                && deselectedRows.length() > 0) {
+            List deselect = parseValues(facesContext, componentsGridComponent,
+                    deselectedRows);
+
+            if (deselect.isEmpty() == false) {
+                set.removeAll(deselect);
+            }
+        }
+
+        if (selectedRows != null && selectedRows.length() > 0) {
+            List select = parseValues(facesContext, componentsGridComponent,
+                    selectedRows);
+
+            if (select.isEmpty() == false) {
+                set.addAll(select);
+            }
+
+        }
+
+        return set;
+    }
+
+    public static List parseValues(FacesContext facesContext,
+            ComponentsGridComponent componentsGridComponent, String values) {
+        StringTokenizer st = new StringTokenizer(values,
+                HtmlTools.LIST_SEPARATORS);
+        if (st.hasMoreTokens() == false) {
+            return Collections.EMPTY_LIST;
+        }
+
+        List tokens = new ArrayList(st.countTokens());
+        for (; st.hasMoreTokens();) {
+            tokens.add(st.nextToken());
+        }
+
+        Object vs[] = convertStringsToValues(facesContext,
+                componentsGridComponent, (String[]) tokens
+                        .toArray(new String[tokens.size()]));
+
+        return Arrays.asList(vs);
+    }
+
+    protected static final Object[] convertStringsToValues(
+            FacesContext facesContext, ComponentsGridComponent component,
+            String values[]) throws ConverterException {
+
+        if (values == null || values.length < 1) {
+            return values;
+        }
+
+        Converter converter = null;
+
+        String converterId = component.getRowValueConverter(facesContext);
+        if (converterId != null) {
+            try {
+                Application application = facesContext.getApplication();
+
+                converter = application.createConverter(converterId);
+
+            } catch (Throwable th) {
+                throw new FacesException("Can not create converter for type '"
+                        + converterId + "'.", th);
+            }
+        }
+
+        if (converter != null) {
+            Object converted[] = new Object[values.length];
+
+            for (int i = 0; i < converted.length; i++) {
+                converted[i] = converter.getAsObject(facesContext, component,
+                        values[i]);
+            }
+
+            return converted;
+        }
+
+        return values;
     }
 
     /**

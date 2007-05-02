@@ -18,5 +18,5 @@ public interface IObjectLiteralWriter {
 
     IJavaScriptWriter writeSymbol(String symbol) throws WriterException;
 
-    void end() throws WriterException;
+    IJavaScriptWriter end() throws WriterException;
 }

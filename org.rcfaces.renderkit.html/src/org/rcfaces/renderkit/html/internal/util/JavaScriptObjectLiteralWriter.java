@@ -56,18 +56,15 @@ public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
         return writeProperty(convertedSymbol);
     }
 
-    public void end() throws WriterException {
+    public IJavaScriptWriter end() throws WriterException {
         if (firstProperty) {
             if (writeNullIfEmpty == false) {
-                parent.write("{}");
-
-                return;
+                return parent.write("{}");
             }
 
-            parent.writeNull();
-            return;
+            return parent.writeNull();
         }
 
-        parent.write('}');
+        return parent.write('}');
     }
 }

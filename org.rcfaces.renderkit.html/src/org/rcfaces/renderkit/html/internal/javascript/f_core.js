@@ -59,24 +59,24 @@ var f_core = {
 	_FOCUS_TIMEOUT_DELAY: 100,
 	
 	/**
-	 * @field private static final number
+	 * @field hidden static final number
 	 */
-	_ELEMENT_NODE: 1,
+	ELEMENT_NODE: 1,
 	
 	/**
-	 * @field private static final number
+	 * @field hidden static final number
 	 */
-	_TEXT_NODE: 3,
+	TEXT_NODE: 3,
 	
 	/**
-	 * @field private static final number
+	 * @field hidden static final number
 	 */
-	_CDATA_SECTION_NODE: 4,
+	CDATA_SECTION_NODE: 4,
 	
 	/**
-	 * @field private static final number
+	 * @field hidden static final number
 	 */
-	_DOCUMENT_NODE: 9,
+	DOCUMENT_NODE: 9,
 	
 	/**
 	 * @field private static final number
@@ -917,7 +917,7 @@ var f_core = {
 				break;
 			
 			default:
-				f_core.Error(f_core, "Can not set a input hidden '"+name+"' with value '"+val+"'.");
+				f_core.Error(f_core, "SetInputHidden: Can not set a input hidden '"+name+"' with value '"+val+"'.");
 			}
 		}
 		
@@ -981,7 +981,7 @@ var f_core = {
 	
 		for(var f=elt;f;f=f.parentNode) {
 			var tagName=f.tagName;
-			if (!tagName || f.nodeType!=f_core._ELEMENT_NODE) {
+			if (!tagName || f.nodeType!=f_core.ELEMENT_NODE) {
 				continue;
 			}
 			
@@ -1017,7 +1017,7 @@ var f_core = {
 	 * @return void
 	 */
 	SetTextNode: function(component, text, accessKey) {
-		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "f_core.SetTextNode: Invalid component ! ("+component+")");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.SetTextNode: Invalid component ! ("+component+")");
 		f_core.Assert(text===null || typeof(text)=="string", "f_core.SetTextNode: Invalid text parameter ("+text+")");
 		f_core.Assert(accessKey===undefined || accessKey===null || typeof(accessKey)=="string", "f_core.SetTextNode: Invalid accessKey parameter ("+accessKey+")");
 		
@@ -1051,7 +1051,7 @@ var f_core = {
 		var children=component.childNodes;
 		for(var i=0;i<children.length;) {
 			var child=children[i];
-			if (child.nodeType!=f_core._TEXT_NODE) {
+			if (child.nodeType!=f_core.TEXT_NODE) {
 				//i++;
 				component.removeChild(child);
 				continue;
@@ -1075,7 +1075,7 @@ var f_core = {
 	 * @method static hidden
 	 */
 	GetTextNode: function(component, concatChildren) {
-		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "f_core.GetTextNode: Invalid component ! ("+component+")");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetTextNode: Invalid component ! ("+component+")");
 
 		var children=component.childNodes;
 
@@ -1084,12 +1084,12 @@ var f_core = {
 			var child=children[i];
 			
 			switch(child.nodeType) {
-			case f_core._TEXT_NODE:
-			case f_core._CDATA_SECTION_NODE:
+			case f_core.TEXT_NODE:
+			case f_core.CDATA_SECTION_NODE:
 				text+=child.data;
 				break;
 				
-			case f_core._ELEMENT_NODE:
+			case f_core.ELEMENT_NODE:
 				if (concatChildren) {
 					text+=f_core.GetTextNode(child, true);
 				}
@@ -1242,7 +1242,7 @@ var f_core = {
 			
 			var classLoader=win._classLoader;
 			if (classLoader) {
-				classLoader.serialize(form);
+				classLoader.f_serialize(form);
 				
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
 			}
@@ -1927,7 +1927,7 @@ var f_core = {
 	 * @return Window Window associated to the element.
 	 */
 	GetWindow: function(elt) {		
-		f_core.Assert(elt && (elt.nodeType==f_core._ELEMENT_NODE || elt.nodeType==f_core._DOCUMENT_NODE), "f_core.GetWindow: Invalid elt parameter ("+elt+")");
+		f_core.Assert(elt && (elt.nodeType==f_core.ELEMENT_NODE || elt.nodeType==f_core.DOCUMENT_NODE), "f_core.GetWindow: Invalid elt parameter ("+elt+")");
 
 		// Cas de IE, si elt est déjà un Document !
 		var view=elt.window;
@@ -1936,10 +1936,10 @@ var f_core = {
 		}
 		
 		var doc;
-		if (elt.nodeType==f_core._DOCUMENT_NODE) { // nodeType=9 => Document
+		if (elt.nodeType==f_core.DOCUMENT_NODE) { // nodeType=9 => Document
 			doc=elt;
 	
-		} else { // nodeType=1 => Element
+		} else { // nodeType=f_core.ELEMENT_NODE => Element
 			doc=elt.ownerDocument;
 		}
 		
@@ -1983,7 +1983,7 @@ var f_core = {
 		if (kclass && kclass._name==claz) {
 			return elt;
 		}
-		if (elt.nodeType==f_core._ELEMENT_NODE && f_core.GetAttribute(elt, "v:class")==claz) {
+		if (elt.nodeType==f_core.ELEMENT_NODE && f_core.GetAttribute(elt, "v:class")==claz) {
 			return f_core.GetWindow(elt)._classLoader._init(elt);
 		}
 		return null;
@@ -2060,7 +2060,7 @@ var f_core = {
 			
 			for(var i=0;i<cn.length;i++) {
 				n=cn[i];
-				if (n.nodeType!=f_core._ELEMENT_NODE) {
+				if (n.nodeType!=f_core.ELEMENT_NODE) {
 					continue;
 				}
 				
@@ -2080,7 +2080,7 @@ var f_core = {
 	 */
 	FindComponent: function(id, doc) {
 		f_core.Assert(typeof(id)=="string", "f_core.FindComponent: Invalid id parameter '"+id+"'.");
-		f_core.Assert(doc===undefined || (doc && doc.nodeType==f_core._DOCUMENT_NODE), "f_core.FindComponent: Invalid document parameter '"+doc+"'.");
+		f_core.Assert(doc===undefined || (doc && doc.nodeType==f_core.DOCUMENT_NODE), "f_core.FindComponent: Invalid document parameter '"+doc+"'.");
 
 		if (!doc) {
 			doc=document;
@@ -2110,7 +2110,7 @@ var f_core = {
 	 */
 	GetElementByClientId: function(id, doc, noCompleteComponent) {
 		f_core.Assert(typeof(id)=="string", "f_core.GetElementByClientId: Invalid id parameter '"+id+"'.");
-		f_core.Assert(doc===undefined || (doc && doc.nodeType==f_core._DOCUMENT_NODE), "f_core.GetElementByClientId: Invalid document parameter '"+doc+"'.");
+		f_core.Assert(doc===undefined || (doc && doc.nodeType==f_core.DOCUMENT_NODE), "f_core.GetElementByClientId: Invalid document parameter '"+doc+"'.");
 		
 		if (!doc) {
 			doc=document;
@@ -2151,7 +2151,7 @@ var f_core = {
 	 * @param Element 
 	 */
 	GetAttribute: function(object, attributeName, defaultValue) {
-		f_core.Assert(object && object.nodeType==f_core._ELEMENT_NODE, "f_core.GetAttribute: Object parameter is not a valid node ! ("+object+")");
+		f_core.Assert(object && object.nodeType==f_core.ELEMENT_NODE, "f_core.GetAttribute: Object parameter is not a valid node ! ("+object+")");
 		f_core.Assert(typeof(attributeName)=="string", "f_core.GetAttribute: attributeName parameter is invalid.");
 
 		try {
@@ -2175,7 +2175,7 @@ var f_core = {
 	 */
 	IsComponentVisible: function(component) {
 		f_core.Assert(component, "f_core.IsComponentVisible: Component is null !");
-		f_core.Assert(component.nodeType==f_core._ELEMENT_NODE, "f_core.IsComponentVisible: Component parameter is invalid ("+component+")");
+		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.IsComponentVisible: Component parameter is invalid ("+component+")");
 
 		for(;component;component=component.parentNode) {
 			var style=component.style;
@@ -2266,7 +2266,7 @@ var f_core = {
 	 * @return Object 
 	 */
 	GetAbsolutePosition: function(component) {
-		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "f_core.GetAbsolutePosition: Invalid component parameter '"+component+"'.");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetAbsolutePosition: Invalid component parameter '"+component+"'.");
 
 		var curTop = 0;
 		var curLeft= 0;
@@ -2629,8 +2629,8 @@ var f_core = {
 	 * @return void
 	 */
 	CopyStyleSheets: function(targetDocument, sourceDocument, startIndex, length) {
-		f_core.Assert(targetDocument && targetDocument.nodeType==f_core._DOCUMENT_NODE, "f_core.CopyStyleSheets: Invalid targetDocument parameter '"+targetDocument+"'.");
-		f_core.Assert(sourceDocument && sourceDocument.nodeType==f_core._DOCUMENT_NODE, "f_core.CopyStyleSheets: Invalid sourceDocument parameter '"+sourceDocument+"'.");
+		f_core.Assert(targetDocument && targetDocument.nodeType==f_core.DOCUMENT_NODE, "f_core.CopyStyleSheets: Invalid targetDocument parameter '"+targetDocument+"'.");
+		f_core.Assert(sourceDocument && sourceDocument.nodeType==f_core.DOCUMENT_NODE, "f_core.CopyStyleSheets: Invalid sourceDocument parameter '"+sourceDocument+"'.");
 		f_core.Assert(startIndex===undefined || typeof(startIndex)=="number", "f_core.CopyStyleSheets: Invalid startIndex parameter '"+startIndex+"'.");
 		f_core.Assert(length===undefined || typeof(length)=="number", "f_core.CopyStyleSheets: Invalid length parameter '"+length+"'.");
 
@@ -2735,10 +2735,10 @@ var f_core = {
 				target=event.scrElement;
 			}
 			if (target) {
-				if (target.nodeType==f_core._DOCUMENT_NODE) {
+				if (target.nodeType==f_core.DOCUMENT_NODE) {
 					doc=target;
 					
-				} else if (target.nodeType==f_core._ELEMENT_NODE) {
+				} else if (target.nodeType==f_core.ELEMENT_NODE) {
 					doc=target.ownerDocument;
 	//				alert("Get doc: "+doc);
 				}
@@ -2770,7 +2770,7 @@ var f_core = {
 	 * @return boolean
 	 */
 	IsComponentInside: function(component, event) {			
-		f_core.Assert(component && component.nodeType==f_core._ELEMENT_NODE, "f_core.IsComponentInside: Invalid component parameter '"+component+"'.");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.IsComponentInside: Invalid component parameter '"+component+"'.");
 		f_core.Assert(event && event.type, "f_core.IsComponentInside: Invalid event parameter '"+event+"'.");
 	
 		var p=f_core.GetAbsolutePosition(component);
@@ -2910,7 +2910,7 @@ var f_core = {
 	 */
 	SetFocus: function(component, asyncMode) {
 		f_core.Assert(component, "f_core.SetFocus: Component is NULL");
-		f_core.Assert(component.nodeType==f_core._ELEMENT_NODE, "f_core.SetFocus: Parameter is not a component.");
+		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.SetFocus: Parameter is not a component.");
 
 		f_core.Debug(f_core, "SetFocus: component="+component.id+" asyncMode="+asyncMode);
 
@@ -3373,8 +3373,8 @@ var f_core = {
 		}
 		
 		switch(parent.nodeType) {
-		case f_core._ELEMENT_NODE:
-		case f_core._DOCUMENT_NODE:
+		case f_core.ELEMENT_NODE:
+		case f_core.DOCUMENT_NODE:
 			return parent;
 		}
 		
@@ -3392,7 +3392,7 @@ var f_core = {
 			return null;
 		}
 		
-		if (component.nodeType==f_core._DOCUMENT_NODE) {
+		if (component.nodeType==f_core.DOCUMENT_NODE) {
 			// component=document
 			return component.parentWindow.event;
 		}
@@ -3422,7 +3422,7 @@ var f_core = {
 		}
 		var textRange=textRanges[0];
 		
-		for(;component && component.nodeType==f_core._ELEMENT_NODE;component=component.parentNode) {
+		for(;component && component.nodeType==f_core.ELEMENT_NODE;component=component.parentNode) {
 			var style=component.currentStyle;
 			if (!style) {
 				continue;
@@ -3719,7 +3719,7 @@ var f_core = {
 	 * @return HTMLElement[] A list of HTMLElements
 	 */
 	ListAllHtmlComponents: function(doc) {
-		f_core.Assert(doc && doc.nodeType==f_core._DOCUMENT_NODE, "f_core.ListAllHtmlComponents: Doc parameter must be a document object.");
+		f_core.Assert(doc && doc.nodeType==f_core.DOCUMENT_NODE, "f_core.ListAllHtmlComponents: Doc parameter must be a document object.");
 	
 		// On peut toujours essayer ;-)
 		var elts=doc.all;
@@ -3735,7 +3735,7 @@ var f_core = {
 		for(;e.length;) {
 			var p=e.pop();
 		
-			if (p.nodeType==f_core._ELEMENT_NODE) {
+			if (p.nodeType==f_core.ELEMENT_NODE) {
 				elts.push(p);
 			}
 			
@@ -4116,7 +4116,7 @@ var f_core = {
 	UpdateAjaxParameters: function(component, url, data) {
 		var forms=document.forms;
 		var form=component;
-		if (forms.length==1 || !component || component.nodeType==f_core._DOCUMENT_NODE) {
+		if (forms.length==1 || !component || component.nodeType==f_core.DOCUMENT_NODE) {
 			form=forms[0];
 
 		} else if (component.tagName.toLowerCase()!="form") {
@@ -4280,7 +4280,7 @@ var f_core = {
 	 * @return void
 	 */
 	SetOpacity: function(component, opacity) {
-		f_core.Assert(component && component.nodeType==1, "f_core.SetOpacity: Invalid component parameter ("+component+")");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.SetOpacity: Invalid component parameter ("+component+")");
 		f_core.Assert(typeof(opacity)=="number" && opacity>=0 && opacity<=1, "f_core.SetOpacity: Invalid opacity parameter ("+opacity+")");
 
 		if (component.style.opacity!==undefined) {

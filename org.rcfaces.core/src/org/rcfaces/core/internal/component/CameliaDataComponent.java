@@ -34,7 +34,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 /**
  * @author Olivier Oeuillot
  */
-public abstract class CameliaDataComponent extends javax.faces.component.UIData implements
+public abstract class CameliaDataComponent extends org.rcfaces.core.internal.component.UIData2 implements
 		IRCFacesComponent, IContainerManager, ITransientAttributesManager {
 	private static final String REVISION = "$Revision$";
 
@@ -42,7 +42,7 @@ public abstract class CameliaDataComponent extends javax.faces.component.UIData 
 
 	protected static final Set CAMELIA_ATTRIBUTES=Collections.EMPTY_SET;
 
-	protected final transient IComponentEngine engine;
+	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
@@ -397,17 +397,19 @@ public abstract class CameliaDataComponent extends javax.faces.component.UIData 
 		}
 		
 		super.queueEvent(e);
-    }
+    }	
 	
 	public final DataModel getDataModelValue() {
 
 
+				return getDataModel();
+				/*
 				Object value=getValue();
 				if (value instanceof DataModel) {
 					return (DataModel)value;
 				}
 				
-				return null;
+				return null; */
 			
 	}
 

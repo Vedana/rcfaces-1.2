@@ -49,7 +49,7 @@ var __prototype = {
 	 * @return Object The item object or <code>null</code> if the item is not found.
 	 */
 	f_getItemByValue: function(value) {
-		if (value.nodeType==1 && value.tagName.toLowerCase()=="option") {
+		if (value.nodeType==f_core.ELEMENT_NODE && value.tagName.toLowerCase()=="option") {
 			return value;
 		}
 		

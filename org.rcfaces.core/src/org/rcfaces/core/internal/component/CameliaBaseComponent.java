@@ -41,7 +41,7 @@ public abstract class CameliaBaseComponent extends javax.faces.component.UICompo
 
 	protected static final Set CAMELIA_ATTRIBUTES=Collections.EMPTY_SET;
 
-	protected final transient IComponentEngine engine;
+	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
@@ -396,7 +396,7 @@ public abstract class CameliaBaseComponent extends javax.faces.component.UICompo
 		}
 		
 		super.queueEvent(e);
-    }
+    }	
 	
 
 }

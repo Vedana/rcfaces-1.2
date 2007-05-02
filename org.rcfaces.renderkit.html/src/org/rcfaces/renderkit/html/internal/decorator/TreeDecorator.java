@@ -284,7 +284,9 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         String value = convertItemValue(javaScriptWriter
                 .getHtmlComponentRenderContext(), selectItemValue);
-        objectLiteralWriter.writeSymbol("_value").writeString(value);
+        if (value != null) {
+            objectLiteralWriter.writeSymbol("_value").writeString(value);
+        }
 
         String text = selectItem.getLabel();
         if (text != null) {
@@ -346,9 +348,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        objectLiteralWriter.end();
-
-        javaScriptWriter.writeln(");");
+        objectLiteralWriter.end().writeln(");");
 
         return EVAL_NODE;
     }

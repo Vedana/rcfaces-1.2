@@ -43,7 +43,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value","immediate"}));
 
-	protected final transient IComponentEngine engine;
+	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
@@ -398,7 +398,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		}
 		
 		super.queueEvent(e);
-    }
+    }	
 	
 	public final void setImmediate(ValueBinding immediate) {
 

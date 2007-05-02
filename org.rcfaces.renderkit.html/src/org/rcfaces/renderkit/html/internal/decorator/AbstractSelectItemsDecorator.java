@@ -936,7 +936,6 @@ public abstract class AbstractSelectItemsDecorator extends
 
         if (objectLiteralWriter == null) {
             javaScriptWriter.writeln(");");
-
         }
     }
 

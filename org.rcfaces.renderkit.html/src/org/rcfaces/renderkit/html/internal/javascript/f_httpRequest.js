@@ -213,10 +213,11 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getResponseHeader: function(name) {
+		f_core.Assert(this._ready, "f_httpRequest.f_getResponseHeader: This request is not ready yet !");
+		f_core.Assert(typeof(name)=="string", "f_httpRequest.f_getResponseHeader: Name of property must be a string ! ("+name+")");
+
 		var request=this._request;
 		f_core.Assert(request, "f_httpRequest.f_getResponseHeader: No request to get response header '"+name+"' !");
-		f_core.Assert(this._ready, "f_httpRequest.f_getResponseHeader: This request is not ready yet !");
-		f_core.Assert(typeof(name)=="string", "f_httpRequest.f_getResponseHeader: Name of property must be a string !");
 		
 		try {
 			return request.getResponseHeader(name);
@@ -320,11 +321,12 @@ var __prototype = {
 			}
 			document.body.style.cursor = "wait";
 		}
+		
 		try {
 			return this._doRequest.apply(this, arguments);
 
 		} catch (x) {
-			f_core.Error(f_httpRequest, "f_doRequest: Can not send request to "+this._url+" data="+data);
+			f_core.Error(f_httpRequest, "f_doRequest: Can not send request to "+this._url+" data="+data, x);
 			throw x;
 			
 		} finally {
@@ -352,7 +354,7 @@ var __prototype = {
 	
 			this._date=new Date().getTime();
 		
-			f_core.Assert(typeof(this._url)=="string", "URL is invalid !");
+			f_core.Assert(typeof(this._url)=="string", "f_httpRequest._doRequest: URL is invalid !");
 		
 			// Create new object
 			var req = null;
@@ -361,7 +363,7 @@ var __prototype = {
 					req = new XMLHttpRequest(); 
 	
 				} catch(ex) {
-					f_core.Error(f_httpRequest, "_doRequest: Can not create XMLHttpRequest !");
+					f_core.Error(f_httpRequest, "_doRequest: Can not create XMLHttpRequest !", ex);
 					
 					throw ex;
 				}
@@ -377,7 +379,7 @@ var __prototype = {
 						req = new ActiveXObject("Microsoft.XMLHTTP"); 
 						
 					} catch(ex) {
-						f_core.Error(f_httpRequest, "_doRequest: Can not find ActiveX XmlHttp !");
+						f_core.Error(f_httpRequest, "_doRequest: Can not find ActiveX XmlHttp !", ex);
 						
 						throw ex;
 					}
@@ -424,7 +426,8 @@ var __prototype = {
 						var statusText;
 						try {
 							status = req.status;
-							statusText=req.statusText;					
+							statusText=req.statusText;
+									
 						} catch(ex) {
 							// C'est pas grave s'il y a des erreurs !
 						}
@@ -453,7 +456,7 @@ var __prototype = {
 			}
 		
 			if (contentType) {		
-				req.setRequestHeader(f_httpRequest.HTTP_CONTENT_TYPE,contentType);
+				req.setRequestHeader(f_httpRequest.HTTP_CONTENT_TYPE, contentType);
 			}
 						
 			if (this._acceptType) {
@@ -480,7 +483,7 @@ var __prototype = {
 				}
 				
 			} catch (x) {
-				f_core.Error(f_httpRequest, "Can not send data '"+data+"'.", x);
+				f_core.Error(f_httpRequest, "_doRequest: Can not send data '"+data+"'.", x);
 				throw x;
 			}
 				
@@ -498,9 +501,9 @@ var __prototype = {
 				}
 				
 				if (!this._noLog) {
-					f_core.Info(f_httpRequest, "Response of url="+this._url+" received.");
+					f_core.Info(f_httpRequest, "_doRequest: Response of url="+this._url+" received.");
 	
-					f_core.Debug(f_httpRequest, "Response of url="+this._url+"\n"+(this._responseXML)?this._responseXML:this._response);
+					f_core.Debug(f_httpRequest, "_doRequest: Response of url="+this._url+"\n"+(this._responseXML)?this._responseXML:this._response);
 				}
 	
 				this._ready = true;
@@ -572,185 +575,190 @@ var __prototype = {
 	_onReadyStateChange: function() {
 		var req = this._request;
 		if (!req) {
-			f_core.Info(f_httpRequest, "Request has been canceled !");
+			f_core.Info(f_httpRequest, "_onReadyStateChange: Request has been canceled !");
 			return;
 		}
 		
 		var url = this._url;
 		
 		switch (req.readyState) {
-			// UNINITIALIZED, Object created but not initialized, open not called
-			case 0:
-			default: 
-				return;
-	
-			// LOADING, Object created, send not called
-			case 1: {
-				f_core.Profile(null, "f_httpRequest.stateChange.loading("+url+")");
+		// LOADING, Object created, send not called
+		case 1: {
+			f_core.Profile(null, "f_httpRequest.stateChange.loading("+url+")");
 
-				if (this._initialized) {
-					return;
-				}
-				this._initialized=true;
-				
-				var onInit=this._listener.onInit;
-				if (typeof(onInit)=="function") {
-					if (!this._noLog) {
-						f_core.Info(f_httpRequest, "Call onInit for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)");
-					}
-
-					try {
-						onInit.call(this, this);
-
-					} catch (ex) {
-						f_core.Error(f_httpRequest, "Exception when calling onInit for url="+url+".\n"+onInit,ex);
-					}
-				}
+			if (this._initialized) {
 				return;
 			}
-	
-			// LOADED, Send called, status and headers available but no response
-			case 2: {
-				f_core.Profile(null, "f_httpRequest.stateChange.loaded("+url+")");
-
-				if (f_core.IsInternetExplorer()) {
-					// Inutile de tester qq chose !
-					return;
-				}
-				if (this._error) {
-					// On peut continuer a recevoir des infos, meme si il y a eu des problemes !
-					return;
-				}
-				
-				var status;
-				var statusText;
-				try {
-					status = req.status;
-					if (status==f_httpRequest.OK_STATUS) {
-						return;
-					}
-					
-					statusText=req.statusText;
-					
-				} catch(ex) {
-					f_core.Error(f_httpRequest, "Can not get status of request !", ex);
-				}
-				
-				this._callError(status, statusText);
-				return;
-			}
-	
-			// INTERACTIVE Some data received, partial results in responseBody/Text
-			case 3: {
-				if (this._error) {
-					// On peut continuer a recevoir des infos, meme si il y a eu des problemes !
-					return;
-				}
-				
-				var len = 0;
-				var response = null;
-				var contentType = null;
-				try {
-					len = req.getResponseHeader("Content-Length");
-					
-				} catch(ex) {
-					len = NaN;
-				}
-				try {
-					contentType=req.getResponseHeader(f_httpRequest.HTTP_CONTENT_TYPE);
-					if (contentType) {
-						this._responseContentType=contentType;
-					}
-				} catch (ex) {
-				}
-				
-				if (!contentType || contentType.indexOf(f_httpRequest.TEXT_XML_MIME_TYPE)<0) {
-					try {
-						response = req.responseText;
-					} catch(ex) {
-					}
-				}
-				
-				var onProgress=this._listener.onProgress;
-				if (typeof(onProgress)=="function") {				
-					if (!this._noLog) {
-						f_core.Info(f_httpRequest, "Call onProgress for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)");
-					}
-
-					try {
-						onProgress.call(this, this, response, len, contentType);
-
-					} catch (ex) {
-						f_core.Error(f_httpRequest, "Exception when calling onProgress method for url='"+url+"'.\n"+onProgress, ex);
-					}
-				}
-				
-				return;
-			}
-	
-			// COMPLETE, All data received headers and status updated
-			case 4: {
-				f_core.Profile(null, "f_httpRequest.stateChange.complete("+url+")");
-				
-				if (this._error) {
-					// On peut continuer a recevoir des infos, meme si il y a eu des problemes !
-					return;
-				}
-
-				try {
-					this._responseContentType=req.getResponseHeader(f_httpRequest.HTTP_CONTENT_TYPE);
-					
-				} catch (x) {
-					// Il peut y avoir des cas ou la reponse n'est pas prete car c'est un RELOAD forcé par l'utilisateur !
-					return;
-				}
+			this._initialized=true;
 			
-				var response=null;
-				if (this._responseContentType && this._responseContentType.indexOf(f_httpRequest.TEXT_XML_MIME_TYPE)>=0) {
-					this._response = false;
-					response=this._responseXML = req.responseXML;
-					
-				} else {
-					response=this._response = req.responseText;
-					this._responseXML = false;
+			var onInit=this._listener.onInit;
+			if (typeof(onInit)=="function") {
+				if (!this._noLog) {
+					f_core.Info(f_httpRequest, "_onReadyStateChange: Call onInit for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)");
 				}
-				
-				this._ready = true;
-				var status;
-				var statusText;
-				try {
-					status=req.status;
-					statusText=req.statusText;
-					
-				} catch (ex) {
-					f_core.Error(f_httpRequest, "Can not get status of request !", ex);
-				}
-				
-				f_core.Debug(f_httpRequest, "Response='"+response+"' status='"+status+"'.");
 
-				if (status!=f_httpRequest.OK_STATUS) {
-					this._callError(status, req.statusText);
-					return;		
+				try {
+					onInit.call(this, this);
+
+				} catch (ex) {
+					f_core.Error(f_httpRequest, "_onReadyStateChange: Exception when calling onInit for url="+url+".\n"+onInit,ex);
 				}
-				
-				var onLoad=this._listener.onLoad;
-				if (typeof(onLoad)!="function") {
+			}
+			return;
+		}
+
+		// LOADED, Send called, status and headers available but no response
+		case 2: {
+			f_core.Profile(null, "f_httpRequest.stateChange.loaded("+url+")");
+
+			if (f_core.IsInternetExplorer()) {
+				// Inutile de tester qq chose !
+				return;
+			}
+			if (this._error) {
+				// On peut continuer a recevoir des infos, meme si il y a eu des problemes !
+				return;
+			}
+			
+			var status;
+			var statusText;
+			try {
+				status = req.status;
+				if (status==f_httpRequest.OK_STATUS) {
 					return;
 				}
 				
-				try {
-					if (!this._noLog) {
-						f_core.Info(f_httpRequest, "Call onLoad for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)\nresponse size="+((response)?(response.length+" bytes"):"null"));
-					}
+				statusText=req.statusText;
+				
+			} catch(ex) {
+				f_core.Error(f_httpRequest, "_onReadyStateChange: Can not get status of request !", ex);
+			}
+			
+			this._callError(status, statusText);
+			return;
+		}
 
-					onLoad.call(this, this, response, this._responseContentType);
-					
-				} catch (ex) {
-					f_core.Error(f_httpRequest, "Exception when calling onLoad method for url '"+url+"'.\n"+onLoad, ex);
-				}
-
+		// INTERACTIVE Some data received, partial results in responseBody/Text
+		case 3: {
+			if (this._error) {
+				// On peut continuer a recevoir des infos, meme si il y a eu des problemes !
 				return;
 			}
+			
+			var len = 0;
+			var response = null;
+			var contentType = null;
+			try {
+				len = req.getResponseHeader("Content-Length");
+				
+			} catch(ex) {
+				f_core.Debug(f_httpRequest, "_onReadyStateChange: Can not get length of response of url="+url+".");
+				len = NaN;
+			}
+			try {
+				contentType=req.getResponseHeader(f_httpRequest.HTTP_CONTENT_TYPE);
+				if (contentType) {
+					this._responseContentType=contentType;
+				}
+			} catch (ex) {
+				f_core.Debug(f_httpRequest, "_onReadyStateChange: Can not get content type of response of url="+url+".");
+			}
+			
+			if (!contentType || contentType.indexOf(f_httpRequest.TEXT_XML_MIME_TYPE)<0) {
+				try {
+					response = req.responseText;
+				} catch(ex) {
+					f_core.Debug(f_httpRequest, "_onReadyStateChange: Can not get response text of url="+url+".");
+				}
+			}
+			
+			var onProgress=this._listener.onProgress;
+			if (typeof(onProgress)=="function") {				
+				if (!this._noLog) {
+					f_core.Info(f_httpRequest, "_onReadyStateChange: Call onProgress for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)");
+				}
+
+				try {
+					onProgress.call(this, this, response, len, contentType);
+
+				} catch (ex) {
+					f_core.Error(f_httpRequest, "_onReadyStateChange: Exception when calling onProgress method for url='"+url+"'.\n"+onProgress, ex);
+				}
+			}
+			
+			return;
+		}
+
+		// COMPLETE, All data received headers and status updated
+		case 4: {
+			f_core.Profile(null, "f_httpRequest.stateChange.complete("+url+")");
+			
+			if (this._error) {
+				// On peut continuer a recevoir des infos, meme si il y a eu des problemes !
+				return;
+			}
+
+			var responseContentType
+			try {
+				responseContentType=req.getResponseHeader(f_httpRequest.HTTP_CONTENT_TYPE);
+				
+			} catch (x) {
+				f_core.Debug(f_httpRequest, "_onReadyStateChange: getResponseHeader exception !", ex);
+				// Il peut y avoir des cas ou la reponse n'est pas prete car c'est un RELOAD forcé par l'utilisateur !
+				return;
+			}
+			this._responseContentType=responseContentType;
+		
+			var response=null;
+			if (responseContentType && responseContentType.indexOf(f_httpRequest.TEXT_XML_MIME_TYPE)>=0) {
+				this._response = false;
+				response=this._responseXML = req.responseXML;
+				
+			} else {
+				response=this._response = req.responseText;
+				this._responseXML = false;
+			}
+			
+			this._ready = true;
+			var status;
+			var statusText;
+			try {
+				status=req.status;
+				statusText=req.statusText;
+				
+			} catch (ex) {
+				f_core.Error(f_httpRequest, "_onReadyStateChange: Can not get status of request !", ex);
+			}
+			
+			f_core.Debug(f_httpRequest, "_onReadyStateChange: Response='"+response+"' status='"+status+"' statusText='"+statusText+"'");
+
+			if (status!=f_httpRequest.OK_STATUS) {
+				this._callError(status, statusText);
+				return;		
+			}
+			
+			var onLoad=this._listener.onLoad;
+			if (typeof(onLoad)!="function") {
+				return;
+			}
+			
+			try {
+				if (!this._noLog) {
+					f_core.Info(f_httpRequest, "_onReadyStateChange: Call onLoad for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)\nresponse size="+((response)?(response.length+" bytes"):"null"));
+				}
+
+				onLoad.call(this, this, response, responseContentType);
+				
+			} catch (ex) {
+				f_core.Error(f_httpRequest, "_onReadyStateChange: Exception when calling onLoad method for url '"+url+"'.\n"+onLoad, ex);
+			}
+
+			return;
+		}
+		
+		// UNINITIALIZED, Object created but not initialized, open not called
+		default: 
+			return;
 		}
 	},
 	/**
@@ -772,13 +780,13 @@ var __prototype = {
 		
 		try {
 			if (!this._noLog) {
-				f_core.Info(f_httpRequest, "Call onError for url="+this._url+" . (+"+(new Date().getTime()-this._date)+"ms)");
+				f_core.Info(f_httpRequest, "_callError: Call onError for url="+this._url+" . (+"+(new Date().getTime()-this._date)+"ms)");
 			}
 
 			onError.call(this, this, status, statusText);
 			
 		} catch (ex) {
-			f_core.Error(f_httpRequest, "Exception when calling onError.\n"+onError,ex);
+			f_core.Error(f_httpRequest, "_callError: Exception when calling onError.\n"+onError, ex);
 		}
 	},
 	/**

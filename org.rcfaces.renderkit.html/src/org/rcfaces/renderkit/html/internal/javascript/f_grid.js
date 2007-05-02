@@ -169,7 +169,7 @@ var __static = {
 		}
 		
 		
-		if (target && target.nodeType==1) {
+		if (target && target.nodeType==f_core.ELEMENT_NODE) {
 			var tagName=target.tagName;
 			if (tagName && tagName.toLowerCase()=="input") {
 				return false;
@@ -1497,7 +1497,7 @@ var __prototype = {
 		var rowCount=this._rowCount;
 		
 		if (this._rows>0 && !this._paged) {
-			// Pas de mode page, pourtout il y a une limite ....
+			// Pas de mode page,
 			// On affiche un wait !
 			
 			if (rowCount>=0) {

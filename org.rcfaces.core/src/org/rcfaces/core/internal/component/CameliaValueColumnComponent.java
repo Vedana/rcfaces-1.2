@@ -43,7 +43,7 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
 
 	protected static final Set CAMELIA_ATTRIBUTES=Collections.EMPTY_SET;
 
-	protected final transient IComponentEngine engine;
+	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
@@ -398,7 +398,7 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
 		}
 		
 		super.queueEvent(e);
-    }
+    }	
 	
 	public final Converter getConverter(FacesContext facesContext) {
 

@@ -144,6 +144,8 @@ public class ComponentsGridService extends AbstractHtmlService {
 
         ComponentsGridComponent dgc = (ComponentsGridComponent) component;
 
+        decodeSubComponents(facesContext, dgc, parameters);
+
         ISortedComponent sortedComponents[] = null;
 
         String sortIndex_s = (String) parameters.get("sortIndex");
@@ -227,6 +229,22 @@ public class ComponentsGridService extends AbstractHtmlService {
         }
 
         facesContext.responseComplete();
+    }
+
+    private void decodeSubComponents(FacesContext facesContext,
+            ComponentsGridComponent dgc, Map parameters) {
+
+        String serializedFirst = (String) parameters.get("serializedFirst");
+        if (serializedFirst != null) {
+            dgc.setFirst(Integer.parseInt(serializedFirst));
+        }
+
+        String serializedRows = (String) parameters.get("serializedRows");
+        if (serializedRows != null) {
+            dgc.setRows(Integer.parseInt(serializedRows));
+        }
+
+        dgc.processDecodes(facesContext);
     }
 
     private ComponentsGridRenderer getComponentsGridRenderer(

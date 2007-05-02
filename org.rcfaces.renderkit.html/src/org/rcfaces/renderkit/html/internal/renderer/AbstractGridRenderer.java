@@ -5,7 +5,6 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -23,7 +22,6 @@ import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ICardinality;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
@@ -33,7 +31,6 @@ import org.rcfaces.core.component.capability.IPreferenceCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
-import org.rcfaces.core.component.capability.ISelectionValuesCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
@@ -65,10 +62,8 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ArrayIndexesModel;
-import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.provider.ICheckProvider;
-import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
@@ -78,7 +73,6 @@ import org.rcfaces.core.preference.IComponentPreference;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -120,7 +114,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected static final boolean ENABLE_SERVER_REQUEST = true;
 
-    private static final int[] EMPTY_INDEXES = new int[0];
+    protected static final int[] EMPTY_INDEXES = new int[0];
 
     protected static final String NULL_VALUE = "*$& NULL VALUE *$& O.O.";
 
@@ -624,15 +618,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        /* Ca sert à qq chose ?
-        if (firstColumn) {
-            if (sa == null) {
-                sa = new StringAppender(mainClassName);
-            }
-            sa.append(' ').append(mainClassName).append("_left");
-        }
-        */
-        
+        /*
+         * Ca sert à qq chose ? if (firstColumn) { if (sa == null) { sa = new
+         * StringAppender(mainClassName); } sa.append('
+         * ').append(mainClassName).append("_left"); }
+         */
+
         if (disabled) {
             if (sa == null) {
                 sa = new StringAppender(mainClassName);
@@ -1379,103 +1370,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        UIColumn rowValueColumn = getRowValueColumn(gridComponent);
-
-        if (gridComponent instanceof ISelectionProvider) {
-            ISelectionProvider selectionProvider = (ISelectionProvider) gridComponent;
-
-            String selectedRows = componentData
-                    .getStringProperty("selectedItems");
-            String deselectedRows = componentData
-                    .getStringProperty("deselectedItems");
-            if (selectedRows != null || deselectedRows != null) {
-                if (rowValueColumn != null) {
-                    Object selected = selectionProvider.getSelectedValues();
-
-                    Set values = updateSelection(facesContext, rowValueColumn,
-                            selected, selectedRows, deselectedRows);
-
-                    Class cls = null;
-                    if (selectionProvider instanceof ISelectionValuesCapability) {
-                        cls = ((ISelectionValuesCapability) selectionProvider)
-                                .getSelectedValuesType(facesContext);
-                    }
-
-                    if (cls == null && selected != null) {
-                        cls = selected.getClass();
-                    }
-
-                    selected = ValuesTools.adaptValues(cls, values);
-
-                    selectionProvider.setSelectedValues(selected);
-
-                } else {
-                    int indexes[] = parseIndexes(selectedRows);
-                    int dindexes[] = null;
-                    boolean all = false;
-
-                    if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
-                        all = true;
-                        dindexes = EMPTY_INDEXES;
-                    } else {
-                        dindexes = parseIndexes(deselectedRows);
-                    }
-
-                    if (indexes.length > 0 || all || dindexes.length > 0) {
-                        setSelectedIndexes(facesContext, selectionProvider,
-                                indexes, dindexes, all);
-                    }
-                }
-            }
-        }
-
-        if (gridComponent instanceof ICheckProvider) {
-            ICheckProvider checkProvider = (ICheckProvider) gridComponent;
-
-            String checkedRows = componentData
-                    .getStringProperty("checkedItems");
-            String uncheckedRows = componentData
-                    .getStringProperty("uncheckedItems");
-            if (checkedRows != null || uncheckedRows != null) {
-                if (rowValueColumn != null) {
-                    Object checked = checkProvider.getCheckedValues();
-
-                    Set values = updateSelection(facesContext, rowValueColumn,
-                            checked, checkedRows, uncheckedRows);
-
-                    Class cls = null;
-                    if (checkProvider instanceof ICheckedValuesCapability) {
-                        cls = ((ICheckedValuesCapability) checkProvider)
-                                .getCheckedValuesType(facesContext);
-                    }
-                    if (cls == null && checked != null) {
-                        cls = checked.getClass();
-                    }
-
-                    checked = ValuesTools.adaptValues(cls, values);
-
-                    checkProvider.setCheckedValues(checked);
-
-                } else {
-                    int cindexes[] = parseIndexes(checkedRows);
-                    int uindexes[] = null;
-                    boolean all = false;
-
-                    if (HtmlTools.ALL_VALUE.equals(uncheckedRows)) {
-                        all = true;
-                        uindexes = EMPTY_INDEXES;
-                    } else {
-                        uindexes = parseIndexes(uncheckedRows);
-                    }
-
-                    if (cindexes.length > 0 || uindexes.length > 0 || all) {
-                        setCheckedIndexes(facesContext, checkProvider,
-                                cindexes, uindexes, all);
-                    }
-                }
-            }
-        }
-
         if (gridComponent instanceof ISortedChildrenCapability) {
             ISortedChildrenCapability sortedChildrenCapability = (ISortedChildrenCapability) gridComponent;
 
@@ -1590,31 +1484,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        if (gridComponent instanceof ICursorProvider) {
-            ICursorProvider cursorProvider = (ICursorProvider) gridComponent;
-
-            String cursorValue = componentData.getStringProperty("cursor");
-            if (cursorValue != null) {
-                Object cursorValueObject = cursorValue;
-
-                if (rowValueColumn != null) {
-                    cursorValueObject = ValuesTools.convertStringToValue(
-                            facesContext, rowValueColumn, cursorValueObject);
-                }
-
-                Object oldCursorValueObject = cursorProvider.getCursorValue();
-                if (isEquals(oldCursorValueObject, cursorValueObject) == false) {
-
-                    cursorProvider.setCursorValue(cursorValueObject);
-
-                    component.queueEvent(new PropertyChangeEvent(component,
-                            Properties.CURSOR_VALUE, oldCursorValueObject,
-                            cursorValueObject));
-
-                }
-            }
-        }
-
         if (gridComponent instanceof IPreferenceCapability) {
             IPreferenceCapability preferenceCapability = (IPreferenceCapability) gridComponent;
 
@@ -1625,48 +1494,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                         (UIComponent) preferenceCapability);
             }
         }
-    }
-
-    protected UIColumn getRowValueColumn(IGridComponent dg) {
-        return null;
-    }
-
-    private Set updateSelection(FacesContext facesContext,
-            UIColumn columnComponent, Object selected, String selectedRows,
-            String deselectedRows) {
-        Set set;
-
-        if (selected == null) {
-            set = new HashSet(8);
-
-        } else {
-            set = ValuesTools.convertSelection(selected);
-        }
-
-        if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
-            set.clear();
-
-        } else if (set.size() > 0 && deselectedRows != null
-                && deselectedRows.length() > 0) {
-            List deselect = HtmlValuesTools.parseValues(facesContext,
-                    columnComponent, true, false, deselectedRows);
-
-            if (deselect.isEmpty() == false) {
-                set.removeAll(deselect);
-            }
-        }
-
-        if (selectedRows != null && selectedRows.length() > 0) {
-            List select = HtmlValuesTools.parseValues(facesContext,
-                    columnComponent, true, false, selectedRows);
-
-            if (select.isEmpty() == false) {
-                set.addAll(select);
-            }
-
-        }
-
-        return set;
     }
 
     protected void decodeEvent(IRequestContext context, UIComponent component,

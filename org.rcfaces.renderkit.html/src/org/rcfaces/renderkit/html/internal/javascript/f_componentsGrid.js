@@ -29,9 +29,11 @@ var __prototype = {
 		this._cellStyleClass="f_cGrid_cell";
 		this._rowStyleClass="f_cGrid_row";
 	},
+	/*
 	f_finalize: function() {
 		this.f_super(arguments);
 	},
+	*/
 	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
@@ -59,7 +61,7 @@ var __prototype = {
 		this._waitingSelection=selection;
 		this._partialWaiting=partialWaiting;
 		
-		f_core.Debug(f_componentsGrid, "Call server  firstIndex="+firstIndex+" cursorIndex="+cursorIndex+" selection="+selection);
+		f_core.Debug(f_componentsGrid, "f_callServer: Call server  firstIndex="+firstIndex+" cursorIndex="+cursorIndex+" selection="+selection);
 
 		if (!partialWaiting) {
 			var tbody=this._tbody;
@@ -74,7 +76,7 @@ var __prototype = {
 			if (tbody) {
 				this.f_releaseRows();
 				this.f_releaseCells();
-			
+				
 //				this._table.style.display="none";
 
 				if (this._waitingMode==f_grid.END_WAITING) {
@@ -82,10 +84,21 @@ var __prototype = {
 				}
 				this._shadowRows=undefined;
 				this._endRowIndex=undefined;
-	
+
+				f_classLoader.SerializeInputs(params, tbody);
+
 				while (tbody.hasChildNodes()) {
 					tbody.removeChild(tbody.lastChild);
 				}
+			
+				var serializedForm=this.f_getClass().f_getClassLoader().f_garbageObjects(true);
+				f_core.Debug(f_componentsGrid, "f_callServer: serializedForm="+serializedForm);
+				if (serializedForm) {
+					params[f_core.SERIALIZED_DATA]=serializedForm;
+				}
+				
+				params.serializedFirst=this._first;
+				params.serializedRows=this._rows;
 			}
 		}
 		
@@ -267,6 +280,14 @@ var __prototype = {
 
 		f_core.Debug(f_componentsGrid, "f_updateNewPage: Update new page _rowCount='"+this._rowCount+"' _maxRows="+this._maxRows+"' _rows='"+this._rows+"'.");
 
+		var tbody=this._tbody;
+		try {
+			this.f_getClass().f_getClassLoader().f_processScripts(this, tbody);
+			
+		} catch (x) {
+ 			f_core.Error(f_componentsGrid, "f_updateNewPage: Can not load content of componentsGrid cell '"+content+"'", x);
+		}
+
 		if (this._rowCount<0) {
 			var poolSize=this._rowsPool.length+this._first;
 			if (this._maxRows<poolSize) {
@@ -275,8 +296,7 @@ var __prototype = {
 		}
 
 		var cursorRow=undefined;
-		var tbody=this._tbody;
-		if (tbody && !this._partialWaiting) {
+		if (!this._partialWaiting) {
 			var newDisplay="table";
 			if (f_core.IsInternetExplorer()) {
 				newDisplay="block";
@@ -504,7 +524,7 @@ var __prototype = {
 				firstCell.removeChild(firstCell.lastChild);
 			}
 			
-			f_core.Assert(row.tagName.toLowerCase()=="tr", "Invalid row ! "+row);
+			f_core.Assert(row.tagName.toLowerCase()=="tr", "f_componentsGrid.f_addRow2: Invalid row ! "+row);
 			
 		} else {
 			row=document.createElement("tr");
@@ -610,11 +630,10 @@ var __prototype = {
 			td.align=align;
 				
 			try {
-				window._classLoader._load(this, td, content);
+				this.f_getClass().f_getClassLoader().f_loadContent(this, td, content, false);
 				
 			} catch (x) {
-					alert(x);
-	 			f_core.Error(f_componentsGrid, "Can not load content of componentsGrid cell '"+content+"'");
+	 			f_core.Error(f_componentsGrid, "f_addRow2: Can not load content of componentsGrid cell '"+content+"'");
 			}
 		}
 		

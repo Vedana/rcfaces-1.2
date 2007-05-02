@@ -41,7 +41,7 @@ public abstract class CameliaMessageComponent extends javax.faces.component.UIMe
 
 	protected static final Set CAMELIA_ATTRIBUTES=Collections.EMPTY_SET;
 
-	protected final transient IComponentEngine engine;
+	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
@@ -396,7 +396,7 @@ public abstract class CameliaMessageComponent extends javax.faces.component.UIMe
 		}
 		
 		super.queueEvent(e);
-    }
+    }	
 	
 	public final void setFor(ValueBinding forVal) {
 

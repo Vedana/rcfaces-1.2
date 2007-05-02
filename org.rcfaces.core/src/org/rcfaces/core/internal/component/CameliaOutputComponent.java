@@ -44,7 +44,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value","converter"}));
 
-	protected final transient IComponentEngine engine;
+	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
@@ -399,7 +399,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		}
 		
 		super.queueEvent(e);
-    }
+    }	
 	
 	public final void setConverter(String converterId) {
 

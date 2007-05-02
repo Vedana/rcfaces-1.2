@@ -172,7 +172,7 @@ var __prototype = {
 				tbody.removeChild(tbody.lastChild);
 			}
 			
-			this.f_getClass().f_getClassLoader().garbageObjects();
+			this.f_getClass().f_getClassLoader().f_garbageObjects();
 		}
 
 		var url=f_env.GetViewURI();
@@ -348,7 +348,7 @@ var __prototype = {
 			component=this;
 		}
 		
-		this.f_getClass().f_getClassLoader()._load(this, component, buffer);
+		this.f_getClass().f_getClassLoader().f_loadContent(this, component, buffer);
 
 		if (component==this) {
 			this._scrollBody=f_core.GetFirstElementByTagName(this, "table");

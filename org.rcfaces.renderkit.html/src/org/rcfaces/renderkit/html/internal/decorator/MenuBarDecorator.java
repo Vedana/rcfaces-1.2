@@ -103,8 +103,7 @@ public class MenuBarDecorator extends MenuDecorator {
                     javaScriptWriter, null, null, objectLiteralWriter);
         }
 
-        objectLiteralWriter.end();
-        javaScriptWriter.writeln(");");
+        objectLiteralWriter.end().writeln(");");
 
         if (hasChild == false) {
             return;

@@ -56,7 +56,7 @@ var __prototype={
 					if (source.f_link) {
 						source=source.f_link;
 						
-					} else if (!f_class.IsObjectInitialized(source) && source.nodeType==1) {
+					} else if (!f_class.IsObjectInitialized(source) && source.nodeType==f_core.ELEMENT_NODE) {
 						var containerId=f_core.GetAttribute(source, "v:container");
 						
 						if (containerId) {
@@ -152,7 +152,7 @@ var __prototype={
 	 * @return boolean
 	 */
 	f_setFocus: function(focus, async) {
-		f_core.Assert(typeof(focus)=="string" || (focus && focus.nodeType==1), "Focus component parameter is not invalid ("+focus+").");
+		f_core.Assert(typeof(focus)=="string" || (focus && focus.nodeType==f_core.ELEMENT_NODE), "Focus component parameter is not invalid ("+focus+").");
 		
 		var component=focus;
 		

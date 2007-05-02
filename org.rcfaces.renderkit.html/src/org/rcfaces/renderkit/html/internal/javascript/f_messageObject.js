@@ -48,7 +48,7 @@ var __static = {
      * @method hidden static
      */
     CreateFromTag: function(tag) {
-    	f_core.Assert(tag && tag.nodeType==1, "f_messageObject.CreateFromTag: Invalid tag parameter '"+tag+"'.");
+    	f_core.Assert(tag && tag.nodeType==f_core.ELEMENT_NODE, "f_messageObject.CreateFromTag: Invalid tag parameter '"+tag+"'.");
     	
 		var detail=f_core.GetAttribute(tag, "v:detail");
 		var summary=f_core.GetAttribute(tag, "v:summary");

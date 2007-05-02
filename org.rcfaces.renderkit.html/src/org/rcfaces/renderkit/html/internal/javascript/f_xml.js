@@ -29,7 +29,7 @@ var __static = {
 		
 		for (var i=0; i<acn.length; i++) {
 			var cn = acn[i];
-			if (cn.nodeType!=1) {
+			if (cn.nodeType!=f_core.ELEMENT_NODE) {
 				continue;
 			}
 			if (tagName && cn.nodeName!=tagName) {
@@ -63,7 +63,7 @@ var __static = {
 		
 		for (var i=0; i<acn.length; i++) {
 			var cn = acn[i];
-			if (cn.nodeType!=1) {
+			if (cn.nodeType!=f_core.ELEMENT_NODE) {
 				continue;
 			}
 			if (tagName && cn.nodeName!=tagName) {
@@ -89,7 +89,7 @@ var __static = {
 		var ret = null;
 		for (var i=0; i<childNodes.length; i++) {
 			var childNode = childNodes[i];
-			if (childNode.nodeType!=3 && childNode.nodeType!=4) {
+			if (childNode.nodeType!=f_core.TEXT_NODE && childNode.nodeType!=f_core.CDATA_SECTION_NODE) {
 				continue;
 			}
 			

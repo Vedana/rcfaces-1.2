@@ -5,12 +5,15 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 
@@ -18,16 +21,22 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.component.capability.ISelectionValuesCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
+import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
+import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.model.IFilterProperties;
@@ -37,6 +46,8 @@ import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.model.ITransactionalDataModel;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -1043,6 +1054,154 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
 
         }
+    }
 
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+
+        FacesContext facesContext = context.getFacesContext();
+
+        DataGridComponent dataGridComponent = (DataGridComponent) component;
+
+        UIColumn rowValueColumn = getRowValueColumn(dataGridComponent);
+
+        String selectedRows = componentData.getStringProperty("selectedItems");
+        String deselectedRows = componentData
+                .getStringProperty("deselectedItems");
+        if (selectedRows != null || deselectedRows != null) {
+            if (rowValueColumn != null) {
+                Object selected = dataGridComponent.getSelectedValues();
+
+                Set values = updateSelection(facesContext, rowValueColumn,
+                        selected, selectedRows, deselectedRows);
+
+                Class cls = ((ISelectionValuesCapability) dataGridComponent)
+                        .getSelectedValuesType(facesContext);
+
+                if (cls == null && selected != null) {
+                    cls = selected.getClass();
+                }
+
+                selected = ValuesTools.adaptValues(cls, values);
+
+                dataGridComponent.setSelectedValues(selected);
+
+            } else {
+                int indexes[] = parseIndexes(selectedRows);
+                int dindexes[] = null;
+                boolean all = false;
+
+                if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
+                    all = true;
+                    dindexes = EMPTY_INDEXES;
+                } else {
+                    dindexes = parseIndexes(deselectedRows);
+                }
+
+                if (indexes.length > 0 || all || dindexes.length > 0) {
+                    setSelectedIndexes(facesContext, dataGridComponent,
+                            indexes, dindexes, all);
+                }
+            }
+        }
+
+        String checkedRows = componentData.getStringProperty("checkedItems");
+        String uncheckedRows = componentData
+                .getStringProperty("uncheckedItems");
+        if (checkedRows != null || uncheckedRows != null) {
+            if (rowValueColumn != null) {
+                Object checked = dataGridComponent.getCheckedValues();
+
+                Set values = updateSelection(facesContext, rowValueColumn,
+                        checked, checkedRows, uncheckedRows);
+
+                Class cls = ((ICheckedValuesCapability) dataGridComponent)
+                        .getCheckedValuesType(facesContext);
+                if (cls == null && checked != null) {
+                    cls = checked.getClass();
+                }
+
+                checked = ValuesTools.adaptValues(cls, values);
+
+                dataGridComponent.setCheckedValues(checked);
+
+            } else {
+                int cindexes[] = parseIndexes(checkedRows);
+                int uindexes[] = null;
+                boolean all = false;
+
+                if (HtmlTools.ALL_VALUE.equals(uncheckedRows)) {
+                    all = true;
+                    uindexes = EMPTY_INDEXES;
+
+                } else {
+                    uindexes = parseIndexes(uncheckedRows);
+                }
+
+                if (cindexes.length > 0 || uindexes.length > 0 || all) {
+                    setCheckedIndexes(facesContext, dataGridComponent,
+                            cindexes, uindexes, all);
+                }
+            }
+        }
+
+        String cursorValue = componentData.getStringProperty("cursor");
+        if (cursorValue != null) {
+            Object cursorValueObject = cursorValue;
+
+            if (rowValueColumn != null) {
+                cursorValueObject = ValuesTools.convertStringToValue(
+                        facesContext, rowValueColumn, cursorValueObject);
+            }
+
+            Object oldCursorValueObject = dataGridComponent.getCursorValue();
+            if (isEquals(oldCursorValueObject, cursorValueObject) == false) {
+                dataGridComponent.setCursorValue(cursorValueObject);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.CURSOR_VALUE, oldCursorValueObject,
+                        cursorValueObject));
+            }
+        }
+
+        super.decode(context, component, componentData);
+    }
+
+    private Set updateSelection(FacesContext facesContext,
+            UIColumn columnComponent, Object selected, String selectedRows,
+            String deselectedRows) {
+        Set set;
+
+        if (selected == null) {
+            set = new HashSet(8);
+
+        } else {
+            set = ValuesTools.convertSelection(selected);
+        }
+
+        if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
+            set.clear();
+
+        } else if (set.size() > 0 && deselectedRows != null
+                && deselectedRows.length() > 0) {
+            List deselect = HtmlValuesTools.parseValues(facesContext,
+                    columnComponent, true, false, deselectedRows);
+
+            if (deselect.isEmpty() == false) {
+                set.removeAll(deselect);
+            }
+        }
+
+        if (selectedRows != null && selectedRows.length() > 0) {
+            List select = HtmlValuesTools.parseValues(facesContext,
+                    columnComponent, true, false, selectedRows);
+
+            if (select.isEmpty() == false) {
+                set.addAll(select);
+            }
+
+        }
+
+        return set;
     }
 }

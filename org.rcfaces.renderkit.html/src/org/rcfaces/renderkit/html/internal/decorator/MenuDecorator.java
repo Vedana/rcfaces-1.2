@@ -167,11 +167,11 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         Object selectItemValue = selectItem.getValue();
         String value = convertItemValue(componentContext, selectItemValue);
 
-        /* Finalement en laisse en String !
+        /*
+         * Finalement en laisse en String !
          * 
-         if (value != null) {
-            value = javaScriptWriter.allocateString(value);
-        }*/
+         * if (value != null) { value = javaScriptWriter.allocateString(value); }
+         */
 
         javaScriptWriter.write("var ").write(varId).write('=');
 
@@ -313,8 +313,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
                     javaScriptWriter, null, null, objectLiteralWriter);
         }
 
-        objectLiteralWriter.end();
-        javaScriptWriter.writeln(");");
+        objectLiteralWriter.end().writeln(");");
 
         if (hasChild == false) {
             return;

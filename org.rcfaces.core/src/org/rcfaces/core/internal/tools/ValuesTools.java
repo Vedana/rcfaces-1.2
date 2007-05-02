@@ -156,10 +156,10 @@ public class ValuesTools {
 
                     converter = application.createConverter(converterType);
 
-                } catch (Exception e) {
+                } catch (Throwable th) {
                     throw new FacesException(
                             "Can not create converter for type '"
-                                    + converterType + "'.", e);
+                                    + converterType + "'.", th);
                 }
             }
         }
