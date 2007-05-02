@@ -2634,6 +2634,8 @@ var f_core = {
 		f_core.Assert(startIndex===undefined || typeof(startIndex)=="number", "f_core.CopyStyleSheets: Invalid startIndex parameter '"+startIndex+"'.");
 		f_core.Assert(length===undefined || typeof(length)=="number", "f_core.CopyStyleSheets: Invalid length parameter '"+length+"'.");
 
+		var links=sourceDocument.styleSheets;
+
 		if (startIndex===undefined) {
 			startIndex=0;
 		}
