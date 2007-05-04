@@ -322,22 +322,22 @@ var __static = {
      * @return string fully formed url
      */
     ResolveContentUrl: function(myWindow, url) {
-    	f_core.Assert(typeof(myWindow)=="object", "f_modalShell.ResolveContentUrl: Invalid parameter window '"+myWindow+"'."+typeof(myWindow));
-    	f_core.Assert(myWindow.location, "f_modalShell.ResolveContentUrl: Invalid parameter window has no location '"+myWindow+"'.");
-    	f_core.Assert((typeof(url)=="string"), "f_modalShell.ResolveContentUrl: Invalid parameter url '"+url+"'.");
-	    f_core.Debug(f_modalShell, "ResolveContentUrl : entering with ("+myWindow+", "+url+")");
+    	f_core.Assert(typeof(myWindow)=="object", "f_env.ResolveContentUrl: Invalid parameter window '"+myWindow+"'."+typeof(myWindow));
+    	f_core.Assert(myWindow.location, "f_env.ResolveContentUrl: Invalid parameter window has no location '"+myWindow+"'.");
+    	f_core.Assert((typeof(url)=="string"), "f_env.ResolveContentUrl: Invalid parameter url '"+url+"'.");
+	    f_core.Debug(f_env, "ResolveContentUrl : entering with ("+myWindow+", "+url+")");
 	    
     	// Check for protocol in url
     	var pos=url.indexOf(":");
     	if (pos>0 && pos<url.indexOf("/")) {
-		    f_core.Debug(f_modalShell, "ResolveContentUrl : url already formed");
+		    f_core.Debug(f_env, "ResolveContentUrl : url already formed");
     		return url;
     	}
     	// check for window protocol
     	var windowUrl=myWindow.location.toString();
     	pos=windowUrl.indexOf("//");
     	if (pos<0) {
-		    f_core.Debug(f_modalShell, "ResolveContentUrl : window.location does not have a protocol ...");
+		    f_core.Debug(f_env, "ResolveContentUrl : window.location does not have a protocol ...");
     		return url;
     	}
     	// extract protocol://domain:port from windowUrl into base and rest into remain
