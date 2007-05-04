@@ -74,6 +74,11 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.comboGrid</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ComboGridRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.componentsList</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ComponentsListRenderer</renderer-class>
 		</renderer>

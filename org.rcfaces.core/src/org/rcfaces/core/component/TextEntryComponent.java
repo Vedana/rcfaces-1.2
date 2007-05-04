@@ -1,32 +1,34 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAutoTabCapability;
-import org.rcfaces.core.component.capability.IClientValidationCapability;
-import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.component.Properties;
+import java.lang.Object;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import java.util.Collections;
+import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IClientValidationCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import java.util.HashMap;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
+import java.util.HashSet;
 import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The textEntry Component is based on the standard HTML tag &lt;INPUT TYPE="text"&gt;.</p>

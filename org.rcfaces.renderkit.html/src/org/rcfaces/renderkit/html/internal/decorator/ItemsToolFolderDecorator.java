@@ -42,6 +42,7 @@ import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
+import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -70,6 +71,7 @@ import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.SeparatorSelectItem;
 import org.rcfaces.core.item.ToolItem;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
@@ -93,7 +95,11 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
     private final String borderType;
 
-    private final List itemComponentId = new ArrayList(8);
+    private final List menuDecoratorStack = new ArrayList(8);
+
+    private final boolean showDropDownMark;
+
+    private final List itemsId = new ArrayList(8);
 
     private IToolBarImageAccessors toolBarImageAccessors;
 
@@ -103,6 +109,9 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         super(component, null);
 
         borderType = ((ItemsToolFolderComponent) component).getBorderType();
+
+        showDropDownMark = ((IShowDropDownMarkCapability) component)
+                .isShowDropDownMark();
     }
 
     protected void preEncodeContainer() throws WriterException {
@@ -121,80 +130,67 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         super.preEncodeContainer();
     }
 
-    protected void encodeComponentsEnd() throws WriterException {
-        if (javaScriptWriter == null) {
-            super.encodeComponentsEnd();
+    public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
+            boolean hasChild, boolean isVisible) throws WriterException {
+
+        if (javaScriptWriter != null) {
+            return encodeToolItemPopupBegin(component, selectItem, hasChild,
+                    isVisible);
+        }
+
+        if (SeparatorSelectItem.isSeparator(selectItem)) {
+            encodeToolItemSeparator(component, selectItem);
+            return EVAL_NODE;
+        }
+
+        if (getContext().getDepth() == 1) {
+            encodeToolItemBegin(component, selectItem, hasChild);
+            return EVAL_NODE;
+        }
+
+        // encodeToolItemBegin(component, selectItem, hasChild);
+
+        // C'est un popup menu ?
+
+        return EVAL_NODE;
+    }
+
+    public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
+            boolean hasChild, boolean isVisible) throws WriterException {
+
+        if (javaScriptWriter != null) {
+            // pas de Javascript
+
+            int depth = getContext().getDepth();
+
+            if (hasChild || depth > 1) {
+                encodeToolItemPopupEnd(component, selectItem, hasChild,
+                        isVisible);
+            }
             return;
         }
 
-        if (itemComponentId.isEmpty()) {
-            super.encodeComponentsEnd();
-            return;
+    }
+
+    protected int encodeToolItemPopupBegin(UIComponent component,
+            SelectItem selectItem, boolean hasChild, boolean isVisible)
+            throws WriterException {
+
+        ItemsMenuDecorator menuDecorator = null;
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Encode node BEGIN value='" + selectItem.getValue()
+                    + "' hasChild=" + hasChild + " isVisible=" + isVisible
+                    + "  detph=" + getContext().getDepth(), null);
         }
 
-        /*
-         * List hiddenItems = null;
-         * 
-         * javaScriptWriter.writeMethodCall("f_appendToolItems");
-         * 
-         * int cnt = 0;
-         * 
-         * for (Iterator it = itemComponentId.iterator(); it.hasNext(); cnt++) {
-         * SelectItem selectItem = (SelectItem) it.next(); String componentId =
-         * (String) it.next();
-         * 
-         * int inputType = IInputTypeCapability.AS_PUSH_BUTTON;
-         * 
-         * if (SeparatorSelectItem.isSeparator(selectItem)) { inputType =
-         * IInputTypeCapability.AS_SEPARATOR; } else if (selectItem instanceof
-         * IInputTypeItem) { inputType = ((IInputTypeItem)
-         * selectItem).getInputType(); }
-         * 
-         * if (inputType == 0) { inputType = DEFAULT_INPUT_TYPE; }
-         * 
-         * if (cnt > 0) { javaScriptWriter.write(','); }
-         * 
-         * javaScriptWriter.writeString(componentId).write(',').writeInt(
-         * inputType);
-         * 
-         * String selectItemValue = null; Object si = selectItem.getValue();
-         * 
-         * if (si != null) { selectItemValue = convertItemValue(javaScriptWriter
-         * .getHtmlComponentRenderContext(), selectItem.getValue()); }
-         * 
-         * if (selectItemValue == null) { throw new FacesException( "Item of a
-         * toolbar must have a value. itemsToolFolderId=" + component.getId()); }
-         * 
-         * javaScriptWriter.write(',').writeString(selectItemValue);
-         * javaScriptWriter.write(',').writeBoolean(selectItem.isDisabled());
-         * 
-         * if (selectItem instanceof IVisibleItem) { if (((IVisibleItem)
-         * selectItem).isVisible() == false) { if (hiddenItems == null) {
-         * hiddenItems = new ArrayList(); }
-         * 
-         * hiddenItems.add(selectItemValue); } } }
-         * 
-         * javaScriptWriter.writeln(");");
-         * 
-         * if (hiddenItems != null) {
-         * javaScriptWriter.writeMethodCall("f_hideToolItems");
-         * 
-         * int idx = 0; for (Iterator it = hiddenItems.iterator(); it.hasNext();
-         * idx++) { String itemValue = (String) it.next();
-         * 
-         * if (idx > 0) { javaScriptWriter.write(','); }
-         * 
-         * javaScriptWriter.writeString(itemValue); }
-         * 
-         * javaScriptWriter.write(");"); }
-         */
+        if (getContext().getDepth() == 1) {
+            String componentId = nextItemId();
+            if (componentId == null) {
+                return SKIP_NODE;
+            }
 
-        // int cnt = 0;
-        for (Iterator it = itemComponentId.iterator(); it.hasNext();) {
-            SelectItem selectItem = (SelectItem) it.next();
-            String componentId = (String) it.next();
-
-            int inputType = IInputTypeCapability.AS_PUSH_BUTTON;
+            int inputType = 0;
 
             if (SeparatorSelectItem.isSeparator(selectItem)) {
                 inputType = IInputTypeCapability.AS_SEPARATOR;
@@ -204,11 +200,19 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             }
 
             if (inputType == 0) {
-                inputType = DEFAULT_INPUT_TYPE;
+                if (hasChild) {
+                    inputType = IInputTypeCapability.AS_DROP_DOWN_MENU;
+                } else {
+                    inputType = DEFAULT_INPUT_TYPE;
+                }
             }
 
-            javaScriptWriter.writeMethodCall("f_appendToolItem2").writeString(
-                    componentId).write(',');
+            String selectItemVarName = javaScriptWriter
+                    .getJavaScriptRenderContext().allocateVarName();
+
+            javaScriptWriter.write(selectItemVarName).write('=')
+                    .writeMethodCall("f_appendToolItem2").writeString(
+                            componentId).write(',');
 
             IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
                     .writeObjectLiteral(false);
@@ -279,101 +283,49 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
              */
 
             objectLiteralWriter.end().writeln(");");
-        }
 
-        super.encodeComponentsEnd();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeTreeNodeBegin(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.TreeContext,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem)
-     */
-    public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
-            boolean hasChild, boolean isVisible) throws WriterException {
-
-        if (javaScriptWriter != null) {
-            // pas de Javascript
-
-            if (getContext().getDepth() > 1) {
-                encodeToolItemPopupBegin(component, selectItem, hasChild,
-                        isVisible);
+            if (hasChild == false) {
+                return SKIP_NODE;
             }
-            return SKIP_NODE;
+
+            String componentVarName = javaScriptWriter
+                    .getJavaScriptRenderContext().allocateVarName();
+
+            javaScriptWriter.write("var ").write(componentVarName).write('=')
+                    .writeMethodCall("f_getItemComponent").write(
+                            selectItemVarName).writeln(");");
+
+            menuDecorator = pushMenuDecorator(componentVarName, componentId,
+                    javaScriptWriter);
+
+        } else {
+            menuDecorator = peekMenuDecorator();
+
+            menuDecorator.encodeNodeBegin(component, selectItem, hasChild,
+                    isVisible);
         }
-
-        if (SeparatorSelectItem.isSeparator(selectItem)) {
-            encodeToolItemSeparator(component, selectItem);
-            return EVAL_NODE;
-        }
-
-        if (getContext().getDepth() == 1) {
-            encodeToolItemBegin(component, selectItem, hasChild);
-            return EVAL_NODE;
-        }
-
-        // encodeToolItemBegin(component, selectItem, hasChild);
-
-        // C'est un popup menu ?
 
         return EVAL_NODE;
     }
 
-    public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
-            boolean hasChild, boolean isVisible) throws WriterException {
-
-        if (javaScriptWriter != null) {
-            // pas de Javascript
-
-            if (getContext().getDepth() > 1) {
-                encodeToolItemPopupEnd(component, selectItem);
-            }
-            return;
-        }
-
-    }
-
-    protected void encodeToolItemPopupBegin(UIComponent component,
+    protected void encodeToolItemPopupEnd(UIComponent component,
             SelectItem selectItem, boolean hasChild, boolean isVisible)
             throws WriterException {
 
-        ToolBarContext toolBarRenderContext = (ToolBarContext) getContext();
+        ItemsMenuDecorator menuDecorator = peekMenuDecorator();
 
-        MenuDecorator menuDecorator = null;
-
-        if (toolBarRenderContext.countVarId() == 2) {
-            /*
-             * String varId = javaScriptWriter.getJavaScriptRenderContext()
-             * .allocateVarName();
-             * 
-             * jsRenderContext.pushVarId(varId);
-             * 
-             * javaScriptWriter.write("var ").write(varId);
-             * 
-             * javaScriptWriter.write('=').writeCall("f_core",
-             * "GetElementByClientId").writeString("").write(");");
-             */
-
-            menuDecorator = toolBarRenderContext.pushMenuDecorator(selectItem);
-
-        } else {
-            menuDecorator = toolBarRenderContext.peekMenuDecorator();
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Encode node end value='" + selectItem.getValue()
+                    + "' hasChild=" + hasChild + " isVisible=" + isVisible
+                    + "  detph=" + getContext().getDepth(), null);
         }
 
-        menuDecorator.encodeNodeBegin(component, selectItem, hasChild,
-                isVisible);
+        if (getContext().getDepth() == 1) {
+            popupMenuDecorator();
 
-    }
-
-    protected void encodeToolItemPopupEnd(UIComponent component,
-            SelectItem selectItem) {
-
-        if (getContext().getDepth() == 2) {
-
-            ToolBarContext toolBarRenderContext = (ToolBarContext) getContext();
-
-            toolBarRenderContext.popupMenuDecorator();
+        } else {
+            menuDecorator.encodeNodeEnd(component, selectItem, hasChild,
+                    isVisible);
         }
     }
 
@@ -393,8 +345,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         writer.writeAttribute("v:separator", "true");
 
-        itemComponentId.add(selectItem);
-        itemComponentId.add(null);
+        allocateItemSeparator();
 
         if (separatorImageURL != null) {
 
@@ -446,11 +397,9 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         Object selectItemValue = selectItem.getValue();
 
-        String componentId = "_item" + itemComponentId.size();
-        itemComponentId.add(selectItem);
-        itemComponentId.add(componentId);
+        String componentId = allocateItemId();
 
-        int style = IInputTypeCapability.AS_PUSH_BUTTON;
+        int style = 0;
         if (selectItem instanceof IInputTypeItem) {
             style = ((IInputTypeItem) selectItem).getInputType();
 
@@ -459,6 +408,15 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         } else if (selectItem instanceof ICheckSelectItem) {
             style = IInputTypeCapability.AS_CHECK_BUTTON;
+        }
+
+        if (style == 0) {
+            if (hasChild) {
+                style = IInputTypeCapability.AS_DROP_DOWN_MENU;
+
+            } else {
+                style = DEFAULT_INPUT_TYPE;
+            }
         }
 
         UIComponent itemComponent = null;
@@ -677,6 +635,11 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
+        if (itemComponent instanceof IShowDropDownMarkCapability) {
+            ((IShowDropDownMarkCapability) itemComponent)
+                    .setShowDropDownMark(showDropDownMark);
+        }
+
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
 
@@ -870,4 +833,48 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         return super.convertToSelectItem(value);
     }
 
+    public String nextItemId() {
+        return (String) itemsId.remove(0);
+    }
+
+    public String allocateItemId() {
+        String id = "_item" + itemsId.size();
+
+        itemsId.add(id);
+
+        return id;
+    }
+
+    public void allocateItemSeparator() {
+
+        itemsId.add(null);
+    }
+
+    public ItemsMenuDecorator pushMenuDecorator(String selectItemVarName,
+            String selectItemComponentId, IJavaScriptWriter javascriptWriter)
+            throws WriterException {
+
+        ItemsMenuDecorator itemsMenuDecorator = new ItemsMenuDecorator(
+                javascriptWriter.getComponentRenderContext().getComponent(),
+                selectItemComponentId, selectItemVarName);
+
+        itemsMenuDecorator.initializeItemContext(javascriptWriter);
+
+        menuDecoratorStack.add(itemsMenuDecorator);
+
+        return itemsMenuDecorator;
+    }
+
+    public void popupMenuDecorator() {
+
+        ItemsMenuDecorator itemsMenuDecorator = (ItemsMenuDecorator) menuDecoratorStack
+                .remove(menuDecoratorStack.size() - 1);
+
+        itemsMenuDecorator.finalizeItemContext();
+    }
+
+    public ItemsMenuDecorator peekMenuDecorator() {
+        return (ItemsMenuDecorator) menuDecoratorStack.get(menuDecoratorStack
+                .size() - 1);
+    }
 }

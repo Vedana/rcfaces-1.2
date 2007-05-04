@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -101,7 +102,7 @@ public class MessageRenderer extends AbstractCssRenderer {
             if (imageURL != null) {
                 htmlWriter.writeSrc(imageURL);
             } else {
-                htmlWriter.writeStyle().writeDisplay("none");
+                htmlWriter.writeStyle().writeDisplay(ICssWriter.NONE);
             }
 
             int imageWidth = messageComponent.getImageWidth(facesContext);

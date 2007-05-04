@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -77,6 +78,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     private static final String REPOSITORY_DEV_MODE_PARAMETER = PARAMETER_PREFIX
             + ".REPOSITORY_DEV_MODE";
+
+    private static final String REPOSITORIES_PARAMETER = PARAMETER_PREFIX
+            + ".REPOSITORIES";
 
     private static final String NO_CACHE_PARAMETER = Constants
             .getPackagePrefix()
@@ -220,29 +224,72 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                 mainRepositoryURI, repositoryVersion);
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 
-        Object container = servletContext;
-        InputStream in = servletContext
-                .getResourceAsStream(MAIN_REPOSITORY_LOCATION);
-        if (in == null) {
-            in = getClass().getClassLoader().getResourceAsStream(
-                    MAIN_REPOSITORY_LOCATION);
+        List repositoriesLocation = new ArrayList();
+        repositoriesLocation.add(MAIN_REPOSITORY_LOCATION);
 
-            container = getClass().getClassLoader();
+        String repositoryParameter = config
+                .getInitParameter(REPOSITORIES_PARAMETER);
+        if (repositoryParameter != null) {
+            for (StringTokenizer st = new StringTokenizer(repositoryParameter,
+                    ","); st.hasMoreTokens();) {
+                String repositoryLocation = st.nextToken().trim();
+
+                if (repositoriesLocation.contains(repositoryLocation)) {
+                    continue;
+                }
+
+                repositoriesLocation.add(repositoryLocation);
+
+                LOG.debug("Add repository location '" + repositoryLocation
+                        + "'.");
+            }
         }
-        if (in != null) {
+
+        Object container = null;
+
+        for (Iterator it = repositoriesLocation.iterator(); it.hasNext();) {
+            String repositoryLocation = (String) it.next();
+
+            LOG.debug("Load repository location '" + repositoryLocation
+                    + "' ...");
+
+            Object repositoryContainer = servletContext;
+            InputStream in = servletContext
+                    .getResourceAsStream(repositoryLocation);
+            if (in == null) {
+                in = getClass().getClassLoader().getResourceAsStream(
+                        repositoryLocation);
+
+                repositoryContainer = getClass().getClassLoader();
+            }
+
+            if (in == null) {
+                LOG.info("Can not find repository '" + repositoryLocation
+                        + "'.");
+                continue;
+            }
+
+            if (container == null) {
+                container = repositoryContainer;
+            }
+
             try {
-                repository.loadRepository(in,
-                        MAIN_REPOSITORY_DIRECTORY_LOCATION, container);
+                repository.loadRepository(in, repositoryContainer);
 
             } finally {
                 try {
                     in.close();
 
                 } catch (IOException ex) {
-                    LOG.error("Can not close '"
-                            + MAIN_REPOSITORY_DIRECTORY_LOCATION + "'.", ex);
+                    LOG
+                            .error("Can not close '" + repositoryLocation
+                                    + "'.", ex);
                 }
             }
+
+            LOG
+                    .debug("Repository location '" + repositoryLocation
+                            + "' loaded");
         }
 
         IFile file = null;
@@ -256,6 +303,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             }
 
         } catch (IllegalArgumentException ex) {
+            LOG.error("Load symbols file", ex);
         }
 
         if (file == null) {

@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.ItemsToolFolderComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.ItemsToolFolderComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 
@@ -25,6 +24,7 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 	private String checkedValues;
 	private String readOnly;
 	private String verticalAlignment;
+	private String showDropDownMark;
 	private String itemHiddenMode;
 	public String getComponentType() {
 		return ItemsToolFolderComponent.COMPONENT_TYPE;
@@ -94,6 +94,14 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 		this.verticalAlignment = verticalAlignment;
 	}
 
+	public final String getShowDropDownMark() {
+		return showDropDownMark;
+	}
+
+	public final void setShowDropDownMark(String showDropDownMark) {
+		this.showDropDownMark = showDropDownMark;
+	}
+
 	public final String getItemHiddenMode() {
 		return itemHiddenMode;
 	}
@@ -112,6 +120,7 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
+			LOG.debug("  showDropDownMark='"+showDropDownMark+"'");
 			LOG.debug("  itemHiddenMode='"+itemHiddenMode+"'");
 		}
 		super.setProperties(uiComponent);
@@ -185,6 +194,16 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (showDropDownMark != null) {
+			if (isValueReference(showDropDownMark)) {
+				ValueBinding vb = application.createValueBinding(showDropDownMark);
+
+				component.setShowDropDownMark(vb);
+			} else {
+				component.setShowDropDownMark(getBool(showDropDownMark));
+			}
+		}
+
 		if (itemHiddenMode != null) {
 			if (isValueReference(itemHiddenMode)) {
 				ValueBinding vb = application.createValueBinding(itemHiddenMode);
@@ -204,6 +223,7 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 		checkedValues = null;
 		readOnly = null;
 		verticalAlignment = null;
+		showDropDownMark = null;
 		itemHiddenMode = null;
 
 		super.release();

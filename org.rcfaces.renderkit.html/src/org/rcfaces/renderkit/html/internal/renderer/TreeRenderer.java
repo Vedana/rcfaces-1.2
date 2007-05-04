@@ -210,11 +210,11 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
         if (treeComponent.getWidth(facesContext) != null
                 || treeComponent.getHeight(facesContext) != null) {
-            cssWriter.writeOverflow("auto");
+            cssWriter.writeOverflow(ICssWriter.AUTO);
         }
 
         if (treeComponent.isBorder(facesContext) == false) {
-            cssWriter.writeBorderStyle("none");
+            cssWriter.writeBorderStyle(ICssWriter.NONE);
         }
     }
 

@@ -904,35 +904,9 @@ public abstract class AbstractSelectItemsDecorator extends
             javaScriptWriter.write(varId).write(',');
         }
 
-        IObjectLiteralWriter clientObjectLiteralWriter = javaScriptWriter
-                .writeObjectLiteral(false);
-
         Map map = iim.getClientDataMap();
 
-        for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
-
-            String key = (String) entry.getKey();
-            Object data = entry.getValue();
-
-            clientObjectLiteralWriter.writeProperty(key);
-
-            if (data instanceof Integer) {
-                javaScriptWriter.writeInt(((Integer) data).intValue());
-                continue;
-            }
-            if (data instanceof Boolean) {
-                javaScriptWriter.writeBoolean(((Boolean) data).booleanValue());
-                continue;
-            }
-            if (data != null) {
-                data = String.valueOf(data);
-            }
-
-            javaScriptWriter.writeString((String) data);
-        }
-
-        clientObjectLiteralWriter.end();
+        HtmlTools.writeObjectLiteralMap(javaScriptWriter, map, true);
 
         if (objectLiteralWriter == null) {
             javaScriptWriter.writeln(");");

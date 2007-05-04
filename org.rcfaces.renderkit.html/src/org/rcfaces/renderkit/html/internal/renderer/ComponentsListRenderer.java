@@ -360,7 +360,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         htmlWriter.endElement(IHtmlWriter.DIV);
 
         htmlWriter.enableJavaScript();
-        
+
         super.encodeEnd(htmlWriter);
     }
 
@@ -410,7 +410,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
         if (componentsListComponent.isBorder(facesContext) == false) {
-            cssWriter.writeBorderStyle("none");
+            cssWriter.writeBorderStyle(ICssWriter.NONE);
         }
 
         String w = componentsListComponent.getWidth(facesContext);
@@ -418,7 +418,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         if (w != null || h != null) {
             cssWriter.writeSize(componentsListComponent);
             if (h != null) {
-                cssWriter.writeOverflow("auto");
+                cssWriter.writeOverflow(ICssWriter.AUTO);
             }
         }
 

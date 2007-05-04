@@ -18,49 +18,9 @@ var __static = {
 	/**
 	 * @field private static final String
 	 */
-	_CHANGED_PROPERTY: "changed",
-
-	/**
-	 * @method hidden static final
-	 * @param f_component component
-	 * @param optional HTMLElement Node which defines v_data attribute.
-	 * @return Object
-	 */
-	InitializeDataAttribute: function(component, node) {
-		if (!node) {
-			node=component;
-		}
-		
-		var clientData=new Object;
-		component._clientDatas=clientData;
-		
-		var att=f_core.GetAttribute(node, "v:data");
-		if (!att) {
-			return clientData;
-		}
-		
-		var ds=att.split(",");
-		for(var i=0;i<ds.length;i++) {
-			var d=ds[i];
-			var vname=d;
-			var value="";
-			
-			var p=d.indexOf("=");
-			if (p>=0) {
-				vname=d.substring(0, p).replace(/\+/g, " ");
-				vname=decodeURIComponent(vname);
-				
-				value=d.substring(p+1);
-				value=value.replace(/\+/g," ");
-				value=decodeURIComponent(value);
-			}
-								
-			clientData[vname]=value;
-		}
-
-		return clientData;
-	}
+	_CHANGED_PROPERTY: "changed"
 }
+
 var __prototype = {
 /*
 	f_finalize: function() {
@@ -79,12 +39,12 @@ var __prototype = {
 	f_getClientData: function(name) {
 		f_core.Assert(typeof(name)=="string", "Name of clientData must be a string !");
 
-		var clientData=this._clientDatas;
-		if (clientData===undefined) {
-			clientData=fa_clientData.InitializeDataAttribute(this);
+		var clientDatas=this._clientDatas;
+		if (clientDatas===undefined) {
+			clientDatas=fa_clientData.InitializeDataAttribute(this);
 		}
 		
-		return clientData[name];
+		return clientDatas[name];
 	},
 	/**
 	 * 
@@ -195,10 +155,6 @@ var __prototype = {
 
 				var value=data[name];
 				v.push("S", name, value);
-			}
-			
-			if (v.length<1) {
-				return;
 			}
 			
 			this.f_setProperty(f_prop.DATA, v, true);

@@ -293,7 +293,8 @@ var __static = {
 	 * @return HTMLTrElement
 	 */
 	ListRows: function(element) {
-		f_core.Assert(element && element.tagName.toLowerCase()=="table", "f_grid.ListRows: Invalid table parameter ("+element+")");
+		f_core.Assert(element && 
+			element.tagName.toLowerCase()=="table", "f_grid.ListRows: Invalid table parameter ("+element+")");
 
 		var rows=null;
 		var child=element.firstChild;
@@ -327,6 +328,8 @@ var __static = {
 		if (!dataGrid._title) {
 			return;
 		}
+				
+		var doc=dataGrid._tableDocument;
 	
 		var tr=f_grid.GetFirstRow(dataGrid._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr");
 		if (!tr) {
@@ -407,7 +410,7 @@ var __static = {
 		if (!dataGrid._createFakeTH && (dataGrid._resizable || offsetWidth>clientWidth)) {
 			dataGrid._createFakeTH=true;
 			
-			var col=document.createElement("col");
+			var col=doc.createElement("col");
 			col.style.width=scrollBarWidth+"px";
 		
 			var colsPos=dataGrid._title.getElementsByTagName("col");
@@ -418,7 +421,7 @@ var __static = {
 				dataGrid._title.insertBefore(col, lastCol.nextSibling);
 			}
 		
-			var th=document.createElement("th");
+			var th=doc.createElement("th");
 			var thClassName="f_grid_tcell";
 			if (dataGrid.f_isDisabled()) {
 				//thClassName+=" "+thClassName+"_disabled"; // On part du f_grid_disabled
@@ -885,13 +888,15 @@ var __static = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
+		
+		var doc=dataGrid._tableDocument;
 
-		f_core.AddEventListener(document, "mousemove", f_grid._TitleCursorDragMove, dataGrid);
-		f_core.AddEventListener(document, "mouseup",   f_grid._TitleCursorDragStop, dataGrid);
+		f_core.AddEventListener(doc, "mousemove", f_grid._TitleCursorDragMove, dataGrid);
+		f_core.AddEventListener(doc, "mouseup",   f_grid._TitleCursorDragStop, dataGrid);
 
 		if (f_core.IsInternetExplorer()) {
 			if (false) {
-				document.onlosecapture=function() {
+				doc.onlosecapture=function() {
 					alert("Lose capture !");
 				}
 			}
@@ -899,7 +904,7 @@ var __static = {
 
 	 	f_core.CancelJsEvent(evt);
 
-		var eventPos=f_core.GetJsEventPosition(evt, document);
+		var eventPos=f_core.GetJsEventPosition(evt, doc);
 		var cursorPos=f_core.GetAbsolutePosition(this);
 		dataGrid._dragDeltaX=eventPos.x-cursorPos.x+dataGrid._scrollTitle.scrollLeft;
 
@@ -913,8 +918,8 @@ var __static = {
 			ths[i].style.cursor="e-resize";
 		}
 		
-		f_grid._DragOldCursor=document.body.style.cursor;
-		document.body.style.cursor="e-resize";
+		f_grid._DragOldCursor=doc.body.style.cursor;
+		doc.body.style.cursor="e-resize";
 		
 		return false;
 	},
@@ -928,9 +933,13 @@ var __static = {
 		}
 		
 		var dataGrid=column._dataGrid;
-		if (!evt) evt = f_core.GetJsEvent(this);
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		var doc=dataGrid._tableDocument;
 
-		var eventPos=f_core.GetJsEventPosition(evt, document);
+		var eventPos=f_core.GetJsEventPosition(evt, doc);
 		var cursorPos=f_core.GetAbsolutePosition(column._cursor);
 		dataGrid._dragMousePosition=eventPos.x;
 		
@@ -963,8 +972,10 @@ var __static = {
 	 */
 	_DragCursorMove: function(dataGrid, column, dw) {
 		
+		var doc=dataGrid._tableDocument;
+		
 		if (dataGrid._dragTimerId) {
-			window.clearTimeout(dataGrid._dragTimerId);
+			f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
 			dataGrid._dragTimerId=undefined;
 		}
 
@@ -1073,7 +1084,7 @@ var __static = {
 //		window.status="deltaTitle="+(dataGrid._title.offsetWidth-dataGrid._table.offsetWidth)+"pixels ";
 		
 		if (dataGrid._scrollTitle.scrollLeft>0) {
-			dataGrid._dragTimerId=window.setTimeout(f_grid._TimerDragMove, f_grid._DRAG_TIMER);
+			dataGrid._dragTimerId=f_core.GetWindow(doc).setTimeout(f_grid._TimerDragMove, f_grid._DRAG_TIMER);
 		}
 	},
 	/**
@@ -1087,16 +1098,18 @@ var __static = {
 		}
 		
 		var dataGrid=column._dataGrid;
+				
+		var doc=dataGrid._tableDocument;
 		
 		if (dataGrid._dragTimerId) {
-			window.clearTimeout(dataGrid._dragTimerId);
+			f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
 			dataGrid._dragTimerId=undefined;
 		}
 
-		f_core.RemoveEventListener(document, "mousemove", f_grid._TitleCursorDragMove, dataGrid);
-		f_core.RemoveEventListener(document, "mouseup",   f_grid._TitleCursorDragStop, dataGrid);
+		f_core.RemoveEventListener(doc, "mousemove", f_grid._TitleCursorDragMove, dataGrid);
+		f_core.RemoveEventListener(doc, "mouseup",   f_grid._TitleCursorDragStop, dataGrid);
 
-		document.body.style.cursor=f_grid._DragOldCursor;
+		doc.body.style.cursor=f_grid._DragOldCursor;
 		f_grid._DragOldCursor=undefined;
 
 		var ths=dataGrid._title.getElementsByTagName("th");
@@ -1125,9 +1138,14 @@ var __static = {
  
 var __prototype = {
 	
-	f_grid: function() {
+	f_grid: function(doc) {
 		this.f_super(arguments);
-				
+		
+		if (!doc) {
+			doc=this.ownerDocument;
+		}
+		this._tableDocument=doc;
+		
 		this._rowsPool=new Array;
 		this._cellsPool=new Array;
 //		this._colsPool=new Array;
@@ -1206,7 +1224,7 @@ var __prototype = {
 			}
 			
 		} else {
-			focus=document.createElement("a");
+			focus=doc.createElement("a");
 			this._cfocus=focus;
 			focus.className="f_grid_focus";
 			focus.onfocus=f_grid._Link_onfocus;
@@ -1402,8 +1420,10 @@ var __prototype = {
 		
 //		this._initSort=undefined;  // boolean
 //		this._resizable=undefined; // boolean
-		
+
 		this.f_super(arguments);
+			
+		this._tableDocument=undefined; // Document
 	},
 	f_setDomEvent: function(type, target) {
 		switch(type) {
@@ -1618,6 +1638,8 @@ var __prototype = {
 	f_addWaitingRows: function() {
 		f_core.Debug(f_grid, "f_addWaitingRows: rowCount="+this._rowCount+" rows="+this._rows);
 		
+		var doc=this._tableDocument;
+		
 		if (this._rows==this._rowCount) {
 //		alert("RowCount="+this._rowCount+"/"+this._rows);
 			this._waitingRow=undefined;
@@ -1637,11 +1659,11 @@ var __prototype = {
 		var body=this._tbody;
 		
 		for (var i=this._rows;i<this._rowCount;i++) {
-			var tr=document.createElement("tr");
+			var tr=doc.createElement("tr");
 			shadows.push(tr);
 			body.appendChild(tr);
 			
-			var td=document.createElement("td");
+			var td=doc.createElement("td");
 			td.colSpan=this._visibleColumnsCount;
 			td.className=this._cellStyleClass+"_shadow";
 
@@ -1655,7 +1677,7 @@ var __prototype = {
 		// On verifie qu'il n'est pas visible ?
 		
 		var dataGrid=this;
-		window.setTimeout(function() {
+		f_core.GetWindow(doc).setTimeout(function() {
 			dataGrid._verifyWaitingPosition();
 		}, 100);
 	},
@@ -1666,6 +1688,8 @@ var __prototype = {
 		f_core.Assert(this._waitingMode==f_grid.END_WAITING, "f_grid.f_addPagedWait: Invalid waiting mode !");
 	
 		f_core.Debug(f_grid, "f_addPagedWait: rowCount="+this._rowCount+" rows="+this._rows);
+				
+		var doc=this._tableDocument;
 		
 		var poolSize=this._rowsPool.length;
 		if (poolSize==this._rowCount) {
@@ -1678,7 +1702,7 @@ var __prototype = {
 		var tbody=this._tbody;
 		f_core.Assert(tbody, "f_grid.f_addPagedWait: No Tbody for dataGrid ???");
 	
-		var waitTR=document.createElement("tr");
+		var waitTR=doc.createElement("tr");
 		tbody.appendChild(waitTR);
 		this._waitingRow=waitTR;
 		this._waitingLoading=undefined;
@@ -1687,7 +1711,7 @@ var __prototype = {
 		
 		waitTR.className=this._rowStyleClasses[rowIdx % this._rowStyleClasses.length];
 		
-		var td=document.createElement("td");
+		var td=doc.createElement("td");
 		waitTR.appendChild(td);
 		td.colSpan=this._visibleColumnsCount;
 	
@@ -1699,7 +1723,7 @@ var __prototype = {
 		// On verifie qu'il n'est pas visible ?
 		
 		var dataGrid=this;
-		window.setTimeout(function() {
+		f_core.GetWindow(doc).setTimeout(function() {
 			dataGrid._verifyWaitingPosition();
 		}, 100);
 	},
@@ -1794,6 +1818,8 @@ var __prototype = {
 		var resourceBundle=f_resourceBundle.Get(f_grid);
 		var headCursorTitle=resourceBundle.f_get("COLUMN_RESIZE");
 
+		var doc=this._tableDocument;
+
 		var isInternetExplorer=f_core.IsInternetExplorer();
 		var v=0;
 		for(var i=0;i<arguments.length;) {
@@ -1878,7 +1904,7 @@ var __prototype = {
 					}
 
 					if (column._resizable) {
-						var cursor=document.createElement("div");
+						var cursor=doc.createElement("div");
 						cursor.title=headCursorTitle; //"Maintenez appuyer pour redimensionner la colonne";
 						cursor.className="f_grid_colCursor";
 						column._box.appendChild(cursor);
@@ -3478,7 +3504,7 @@ var __prototype = {
 						i+=Math.floor(this._rows/2); // On prend une petite marge ...
 						
 						var dataGrid=this;
-						window.setTimeout(function() {
+						f_core.GetWindow(dataGrid._tableDocument).setTimeout(function() {
 							dataGrid._performRowsLoading(evt, i);
 						}, 100);
 					}

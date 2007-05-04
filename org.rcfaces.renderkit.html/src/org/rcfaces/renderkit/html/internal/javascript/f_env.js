@@ -101,7 +101,7 @@ var __static = {
 	/**
 	 * @method public static  
 	 * @param String name
-	 * @param any defaultValue
+	 * @param optional any defaultValue
 	 * @return any Value associated to name, or specified default value.
 	 */
 	Get: function(name, defaultValue) {
@@ -202,10 +202,10 @@ var __static = {
 		
 		f_env._ViewURI=viewURI;
 		
-		f_core.Debug(f_env, "Set Page base URI to '"+baseURI+"'.");
-		f_core.Debug(f_env, "Set View base URI to '"+viewURI+"'.");
-		f_core.Debug(f_env, "Set Javascript base URI to '"+jsBaseURI+"'.");
-		f_core.Debug(f_env, "Set Css base URI to '"+styleSheetBaseURI+"'.");
+		f_core.Debug(f_env, "Initialize: Set Page base URI to '"+baseURI+"'.");
+		f_core.Debug(f_env, "Initialize: Set View base URI to '"+viewURI+"'.");
+		f_core.Debug(f_env, "Initialize: Set Javascript base URI to '"+jsBaseURI+"'.");
+		f_core.Debug(f_env, "Initialize: Set Css base URI to '"+styleSheetBaseURI+"'.");
 	},
 	
 	/**
@@ -337,7 +337,7 @@ var __static = {
     	var windowUrl=myWindow.location.toString();
     	pos=windowUrl.indexOf("//");
     	if (pos<0) {
-		    f_core.Debug(f_env, "ResolveContentUrl : window.location does not have a protocol ...");
+		    f_core.Debug(f_env, "ResolveContentUrl: window.location does not have a protocol ...");
     		return url;
     	}
     	// extract protocol://domain:port from windowUrl into base and rest into remain

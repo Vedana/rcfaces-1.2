@@ -825,9 +825,7 @@ public class HtmlTools {
                 component, false);
         synchronized (calendar) {
             calendar.set(year, month, date + 1, hours, minutes, seconds);
-            if (millis > 0) {
-                calendar.set(Calendar.MILLISECOND, millis);
-            }
+            calendar.set(Calendar.MILLISECOND, millis);
 
             return calendar.getTime();
         }
@@ -926,5 +924,39 @@ public class HtmlTools {
         } catch (IOException e) {
             throw new FacesException("Can not format xml document !", e);
         }
+    }
+
+    public static void writeObjectLiteralMap(
+            IJavaScriptWriter javaScriptWriter, Map map,
+            boolean writeNullIfEmpty) throws WriterException {
+
+        IObjectLiteralWriter clientObjectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(writeNullIfEmpty);
+
+        for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            String key = (String) entry.getKey();
+            Object data = entry.getValue();
+
+            clientObjectLiteralWriter.writeProperty(key);
+
+            if (data instanceof Integer) {
+                javaScriptWriter.writeInt(((Integer) data).intValue());
+                continue;
+            }
+            if (data instanceof Boolean) {
+                javaScriptWriter.writeBoolean(((Boolean) data).booleanValue());
+                continue;
+            }
+            if (data != null) {
+                data = String.valueOf(data);
+            }
+
+            javaScriptWriter.writeString((String) data);
+        }
+
+        clientObjectLiteralWriter.end();
+
     }
 }

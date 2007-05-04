@@ -128,7 +128,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         ICssWriter cssWriter = htmlWriter.writeStyle(128);
         if (selected == false) {
-            cssWriter.writeDisplay("none");
+            cssWriter.writeDisplay(ICssWriter.NONE);
         }
 
         if (cardBoxComponent.getWidth(facesContext) != null) {

@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
-import javax.faces.application.Application;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -871,20 +870,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             return values;
         }
 
-        Converter converter = null;
-
-        String converterId = component.getRowValueConverter(facesContext);
-        if (converterId != null) {
-            try {
-                Application application = facesContext.getApplication();
-
-                converter = application.createConverter(converterId);
-
-            } catch (Throwable th) {
-                throw new FacesException("Can not create converter for type '"
-                        + converterId + "'.", th);
-            }
-        }
+        Converter converter = component.getRowValueConverter(facesContext);
 
         if (converter != null) {
             Object converted[] = new Object[values.length];
@@ -937,13 +923,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             FacesContext facesContext = processContext.getFacesContext();
 
-            String converterId = getComponentsGridComponent()
+            rowValueConverter = getComponentsGridComponent()
                     .getRowValueConverter(facesContext);
-
-            if (converterId != null) {
-                rowValueConverter = facesContext.getApplication()
-                        .createConverter(converterId);
-            }
         }
 
         public Converter getRowValueConverter() {

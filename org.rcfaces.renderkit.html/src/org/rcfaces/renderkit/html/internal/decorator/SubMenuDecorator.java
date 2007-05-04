@@ -13,6 +13,7 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 
 /**
@@ -58,8 +59,6 @@ public class SubMenuDecorator extends MenuDecorator {
         javaScriptWriter.write("var ").write(menuVarName).write("=")
                 .writeMethodCall("f_newSubMenu").writeString(menuId);
 
-        int pred = 0;
-
         String id = context.getComponentClientId(getComponent());
 
         if (suffixMenuId != null) {
@@ -80,44 +79,29 @@ public class SubMenuDecorator extends MenuDecorator {
             }
         }
 
-        if (id != null) {
-            javaScriptWriter.write(',').writeString(id);
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter.write(',')
+                .writeObjectLiteral(true);
 
-        } else {
-            pred++;
+        if (id != null) {
+            objectLiteralWriter.writeSymbol("_id").writeString(id);
         }
 
         if (removeAllWhenShown) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-
-            javaScriptWriter.write(',').writeBoolean(true);
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_removeAllWhenShown")
+                    .writeBoolean(true);
         }
 
-        if (itemImageWidth >= 0) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-
-            javaScriptWriter.write(',').writeInt(itemImageWidth);
-        } else {
-            pred++;
+        if (itemImageWidth > 0) {
+            objectLiteralWriter.writeSymbol("_itemImageWidth").writeInt(
+                    itemImageWidth);
         }
 
-        if (itemImageHeight >= 0) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-
-            javaScriptWriter.write(',').writeInt(itemImageHeight);
-        } else {
-            pred++;
+        if (itemImageHeight > 0) {
+            objectLiteralWriter.writeSymbol("_itemImageHeight").writeInt(
+                    itemImageHeight);
         }
 
-        javaScriptWriter.writeln(");");
+        objectLiteralWriter.end().writeln(");");
 
         context.pushVarId(menuVarName);
 

@@ -23,7 +23,7 @@ var __prototype = {
 			form.reset();
 			
 		} else {
-			f_core.Error(f_imageResetButton, "FORM component was not found !");
+			f_core.Error(f_imageResetButton, "f_performImageSelection: FORM component was not found !");
 		}
 		
 		return true;

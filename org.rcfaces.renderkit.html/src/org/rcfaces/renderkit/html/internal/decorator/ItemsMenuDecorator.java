@@ -4,16 +4,14 @@
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
-import java.util.Map;
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.Constants;
-import org.rcfaces.renderkit.html.internal.EventsRenderer;
-import org.rcfaces.renderkit.html.internal.util.ListenerTools;
+import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -23,11 +21,13 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 public class ItemsMenuDecorator extends MenuDecorator {
     private static final String REVISION = "$Revision$";
 
+    private static final String MENU_POPUPID = "popup";
+
     protected final String menuId;
 
-    protected String menuVarName;
+    private String itemId;
 
-    private String suffixMenuId;
+    private final String selectItemVarName;
 
     private boolean removeAllWhenShown;
 
@@ -35,16 +35,16 @@ public class ItemsMenuDecorator extends MenuDecorator {
 
     private int itemImageHeight;
 
-    public ItemsMenuDecorator(UIComponent component, String menuId,
-            String suffixMenuId, boolean removeAllWhenShown,
-            int itemImageWidth, int itemImageHeight) {
+    public ItemsMenuDecorator(UIComponent component, String itemId,
+            String selectItemVarName) {
         super(component);
 
-        this.suffixMenuId = suffixMenuId;
-        this.menuId = menuId;
-        this.removeAllWhenShown = removeAllWhenShown;
-        this.itemImageWidth = itemImageWidth;
-        this.itemImageHeight = itemImageHeight;
+        this.itemId = itemId;
+        this.menuId = "#popup";
+        this.selectItemVarName = selectItemVarName;
+        // this.removeAllWhenShown = removeAllWhenShown;
+        // this.itemImageWidth = itemImageWidth;
+        // this.itemImageHeight = itemImageHeight;
     }
 
     protected SelectItemsContext createJavaScriptContext()
@@ -52,75 +52,54 @@ public class ItemsMenuDecorator extends MenuDecorator {
         SelectItemsJsContext context = (SelectItemsJsContext) super
                 .createJavaScriptContext();
 
-        menuVarName = javaScriptWriter.getJavaScriptRenderContext()
+        String menuVarName = javaScriptWriter.getJavaScriptRenderContext()
                 .allocateVarName();
 
-        javaScriptWriter.write("var ").write(menuVarName).write("=")
-                .writeMethodCall("f_newSubMenu").writeString(menuId);
-
-        int pred = 0;
+        javaScriptWriter.write("var ").write(menuVarName).write("=").writeCall(
+                selectItemVarName, "f_newSubMenu").writeString(menuId);
 
         String id = context.getComponentClientId(getComponent());
 
-        if (suffixMenuId != null) {
+        if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
+            IProcessContext processContext = getComponentRenderContext()
+                    .getRenderContext().getProcessContext();
 
-            if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
-                IProcessContext processContext = getComponentRenderContext()
-                        .getRenderContext().getProcessContext();
+            String namingSeparator = processContext.getNamingSeparator();
+            if (namingSeparator != null) {
+                id += namingSeparator + itemId + namingSeparator + MENU_POPUPID;
 
-                String namingSeparator = processContext.getNamingSeparator();
-                if (namingSeparator != null) {
-                    id += namingSeparator + suffixMenuId;
-
-                } else {
-                    id += NamingContainer.SEPARATOR_CHAR + suffixMenuId;
-                }
             } else {
-                id += NamingContainer.SEPARATOR_CHAR + suffixMenuId;
+                id += NamingContainer.SEPARATOR_CHAR + itemId
+                        + NamingContainer.SEPARATOR_CHAR + MENU_POPUPID;
             }
+        } else {
+            id += NamingContainer.SEPARATOR_CHAR + itemId
+                    + NamingContainer.SEPARATOR_CHAR + MENU_POPUPID;
         }
 
-        if (id != null) {
-            javaScriptWriter.write(',').writeString(id);
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter.write(',')
+                .writeObjectLiteral(true);
 
-        } else {
-            pred++;
+        if (id != null) {
+            objectLiteralWriter.writeSymbol("_id").writeString(id);
         }
 
         if (removeAllWhenShown) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-
-            javaScriptWriter.write(',').writeBoolean(true);
-            
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_removeAllWhenShown")
+                    .writeBoolean(true);
         }
 
-        if (itemImageWidth >= 0) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-
-            javaScriptWriter.write(',').writeInt(itemImageWidth);
-            
-        } else {
-            pred++;
+        if (itemImageWidth > 0) {
+            objectLiteralWriter.writeSymbol("_itemImageWidth").writeInt(
+                    itemImageWidth);
         }
 
-        if (itemImageHeight >= 0) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-
-            javaScriptWriter.write(',').writeInt(itemImageHeight);
-            
-        } else {
-            pred++;
+        if (itemImageHeight > 0) {
+            objectLiteralWriter.writeSymbol("_itemImageHeight").writeInt(
+                    itemImageHeight);
         }
 
-        javaScriptWriter.writeln(");");
+        objectLiteralWriter.end().writeln(");");
 
         context.pushVarId(menuVarName);
 
@@ -129,19 +108,15 @@ public class ItemsMenuDecorator extends MenuDecorator {
         return context;
     }
 
-    protected void encodeComponentsBegin() throws WriterException {
-        if (javaScriptWriter != null) {
-            if (suffixMenuId == null) {
-                SelectItemsJsContext context = (SelectItemsJsContext) getContext();
-
-                Map listenersByType = ListenerTools.getListenersByType(
-                        ListenerTools.JAVASCRIPT_NAME_SPACE, component);
-
-                EventsRenderer.encodeEventListeners(javaScriptWriter, context
-                        .peekVarId(), listenersByType, null);
-            }
-
-        }
-        super.encodeComponentsBegin();
+    public void initializeItemContext(IJavaScriptWriter javascriptWriter)
+            throws WriterException {
+        this.javaScriptWriter = javascriptWriter;
+        this.selectItemsContext = createJavaScriptContext();
     }
+
+    public void finalizeItemContext() {
+        this.javaScriptWriter = null;
+        this.selectItemsContext = null;
+    }
+
 }

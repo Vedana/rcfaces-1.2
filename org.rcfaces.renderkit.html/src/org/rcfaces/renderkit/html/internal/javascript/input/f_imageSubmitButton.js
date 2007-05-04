@@ -21,7 +21,7 @@ var __prototype = {
 			form.submit();
 			
 		} else {
-			f_core.Error(f_imageSubmitButton, "FORM component was not found !");
+			f_core.Error(f_imageSubmitButton, "f_performImageSelection: FORM component was not found !");
 		}
 				
 		return true;

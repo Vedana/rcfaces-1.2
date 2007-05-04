@@ -200,7 +200,7 @@ var __prototype = {
 		}
 	},
 	fa_updateItemStyle: function(item) {
-		var component=this._getItemComponent(item);
+		var component=this.f_getItemComponent(item);
 		if (!component) {
 			return;
 		}
@@ -221,10 +221,10 @@ var __prototype = {
 	},
 	*/
 	/**
-	 * @method private
+	 * @method hidden
 	 * @return f_component
 	 */
-	_getItemComponent: function(item) {
+	f_getItemComponent: function(item) {
 		var itemValue=item;
 		
 		if (typeof(item)=="object") {

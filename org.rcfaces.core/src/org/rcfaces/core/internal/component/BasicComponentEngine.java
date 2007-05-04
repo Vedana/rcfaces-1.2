@@ -206,7 +206,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         IPropertiesAccessor pa = getPropertiesAccessor(true);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("setInernalProperty(\"" + propertyName + "\", " + value
+            LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
                     + ")");
         }
 

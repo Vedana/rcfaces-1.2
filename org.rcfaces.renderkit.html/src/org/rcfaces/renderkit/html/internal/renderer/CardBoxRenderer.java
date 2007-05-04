@@ -149,7 +149,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
 
         if (cardBoxComponent.getWidth(facesContext) != null
                 && cardBoxComponent.getHeight(facesContext) != null) {
-            cssWriter.writeOverflow("hidden");
+            cssWriter.writeOverflow(ICssWriter.HIDDEN);
         }
     }
 }

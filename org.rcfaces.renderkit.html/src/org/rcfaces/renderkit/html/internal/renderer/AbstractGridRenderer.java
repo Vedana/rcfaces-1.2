@@ -175,7 +175,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         if (dataGridComponent instanceof IBorderCapability) {
             if (((IBorderCapability) dataGridComponent).isBorder() == false) {
-                cssWriter.writeBorderStyle("none");
+                cssWriter.writeBorderStyle(ICssWriter.NONE);
             }
         }
     }

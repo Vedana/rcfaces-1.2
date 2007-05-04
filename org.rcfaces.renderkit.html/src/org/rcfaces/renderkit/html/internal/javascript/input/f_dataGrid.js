@@ -277,6 +277,8 @@ var __prototype = {
 	f_addRow2: function() {
 		f_core.Assert(this._tbody, "f_dataGrid.f_addRow2: No table body !");
 		
+		var doc=this._tableDocument;
+		
 		var row;
 		var firstCell;
 		var shadowRows=this._shadowRows;
@@ -291,7 +293,7 @@ var __prototype = {
 			f_core.Assert(row.tagName.toLowerCase()=="tr", "Invalid row ! "+row);
 			
 		} else {
-			row=document.createElement("tr");
+			row=doc.createElement("tr");
 			this._tbody.appendChild(row);
 		}
 		this._rowsPool.push(row);
@@ -371,7 +373,7 @@ var __prototype = {
 						firstCell=undefined;
 						
 					} else {
-						td=document.createElement("td");
+						td=doc.createElement("td");
 						row.appendChild(td);
 					}
 					
@@ -385,7 +387,7 @@ var __prototype = {
 
 					var cellImage=null;
 					if (col._cellImage || col._defaultCellImageURL) {
-						cellImage=document.createElement("img");
+						cellImage=doc.createElement("img");
 						cellImage.className="f_grid_imageCell";
 						cellImage.width=f_grid.IMAGE_WIDTH;
 						cellImage.height=f_grid.IMAGE_HEIGHT;
@@ -429,7 +431,7 @@ var __prototype = {
 								
 					if (this._checkable) {
 						if (!countTd) {
-							var input=document.createElement("input");
+							var input=doc.createElement("input");
 							row._input=input;
 							
 							input.id=this.id+"::"+rowIdx;
@@ -463,10 +465,10 @@ var __prototype = {
 								td.appendChild(cellImage);
 							}
 
-							var label=document.createElement("label");
+							var label=doc.createElement("label");
 							row._label=label;
 							if (cellText && cellText.length) {
-								label.appendChild(document.createTextNode(cellText));
+								label.appendChild(doc.createTextNode(cellText));
 							}
 							label.className="f_grid_label";
 							td.appendChild(label);
@@ -480,14 +482,14 @@ var __prototype = {
 							td.appendChild(cellImage);
 						}
 						
-						var span=document.createElement("label");
+						var span=doc.createElement("label");
 						span.className="f_grid_label";
 						td.appendChild(span);
 						
 						if (!cellText) {
 							cellText=" ";
 						}
-						span.appendChild(document.createTextNode(cellText));							
+						span.appendChild(doc.createTextNode(cellText));							
 					}
 					countTd++;
 				} else {
@@ -1024,7 +1026,7 @@ var __prototype = {
 			
 			this._table.appendChild(tbody);
 			
-			var rows=f_grid.ListRows(tbody);
+			var rows=f_grid.ListRows(this._table);
 			for(var i=0;i<rows.length;i++) {
 				var row=rows[i];
 				var index=row._index;

@@ -135,7 +135,7 @@ var __static = {
 			parent=pi;
 		}
 
-		f_core.Debug(fa_menuCore, "OnKeyDown code="+evt.keyCode+" menu="+menu+" menuItem='"+menuItem+"'.");
+		f_core.Debug(fa_menuCore, "OnKeyDown: key down code="+evt.keyCode+" menu="+menu+" menuItem='"+menuItem+"'.");
 
 		var code=evt.keyCode;
 
@@ -196,7 +196,7 @@ var __static = {
 			break;
 		
 		default:
-			f_core.Debug(fa_menuCore, "Default key: menu="+menu+" menuItem="+menuItem);
+			f_core.Debug(fa_menuCore, "OnKeyDown: Default key: menu="+menu+" menuItem="+menuItem);
 
 			if (!evt.altKey) {
 				cancel=true;
@@ -231,7 +231,7 @@ var __prototype = {
 			}
 			
 			if (itemImageWidth || itemImageHeight) {
-				f_core.Debug(fa_menuCore, "Set item image width/height by tag attributes width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
+				f_core.Debug(fa_menuCore, "fa_menuCore: Set item image width/height by tag attributes width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
 			}
 		}
 		
@@ -265,7 +265,7 @@ var __prototype = {
 	 * @return Object
 	 */
 	f_appendRadioItem: function(parentItem, id, groupName, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
-		f_core.Assert(typeof(groupName)=="string", "groupName parameter is invalid. ("+groupName+")");
+		f_core.Assert(typeof(groupName)=="string", "fa_menuCore.f_appendRadioItem: groupName parameter is invalid. ("+groupName+")");
 
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
 		
@@ -392,9 +392,9 @@ var __prototype = {
 	 * @return Object
 	 */
 	f_appendItem: function(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey) {
-		f_core.Assert(parentItem===null || typeof(parentItem)=="object", "parentItem parameter is invalid. ("+parentItem+")");
-		f_core.Assert(id===null || typeof(id)=="string", "id parameter is invalid. ("+id+")");
-		f_core.Assert(typeof(label)=="string", "label parameter is invalid. ("+label+")");
+		f_core.Assert(parentItem===null || typeof(parentItem)=="object", "fa_menuCore.f_appendItem: parentItem parameter is invalid. ("+parentItem+")");
+		f_core.Assert(id===null || typeof(id)=="string", "fa_menuCore.f_appendItem: id parameter is invalid. ("+id+")");
+		f_core.Assert(typeof(label)=="string", "fa_menuCore.f_appendItem: label parameter is invalid. ("+label+")");
 		
 		if (!parentItem) {
 			parentItem=this;
@@ -514,7 +514,7 @@ var __prototype = {
 		if (!this._itemImageHeight) {
 			this._itemImageHeight=fa_menuCore._ITEM_IMAGE_HEIGHT;
 
-			f_core.Debug(fa_menuCore, "Use default size for item image width/height, width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
+			f_core.Debug(fa_menuCore, "fa_menuCore.f_createPopup: Use default size for item image width/height, width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
 		}
 		
 		var sep=true;
@@ -679,7 +679,7 @@ var __prototype = {
 
 			var accessKey=this.f_getItemAccessKey(menuItem);
 			
-			f_core.Debug(fa_menuCore, "Compare '"+accessKey+"' and '"+key+"'.");
+			f_core.Debug(fa_menuCore, "f_accessKeyMenuItem: Compare '"+accessKey+"' and '"+key+"'.");
 			if (accessKey!=key) {
 				continue;
 			}
@@ -711,7 +711,7 @@ var __prototype = {
 		
 		var menuItemParent=this.f_getParentItem(menuItem);
 		f_core.Assert(typeof(menuItemParent)=="object" && (!menuItemParent.nodeType || menuItemParent==this) && menuItemParent._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItemParent parameter ("+menuItemParent+")");
-		f_core.Assert(menuItemParent!=menuItem, "Invalid menuItem, same as parent. (parent="+menuItemParent+")");
+		f_core.Assert(menuItemParent!=menuItem, "fa_menuCore.f_uiSelectItem: Invalid menuItem, same as parent. (parent="+menuItemParent+")");
 		
 		var popup=this.f_getUIPopup(menuItemParent, true);
 		f_core.Assert(popup, "fa_menuCore.f_uiSelectItem: Invalid popup for item="+menuItemParent);
@@ -741,11 +741,11 @@ var __prototype = {
 	 * @return void 
 	 */	 
 	f_uiDeselectItem: function(menuItem) {
-		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItem parameter ("+menuItem+")");
+		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiDeselectItem: Invalid menuItem parameter ("+menuItem+")");
 		
 		var menuItemParent=this.f_getParentItem(menuItem);
 		f_core.Assert(typeof(menuItemParent)=="object" && (!menuItemParent.nodeType || menuItemParent==this) && menuItemParent._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItemParent parameter ("+menuItemParent+")");
-		f_core.Assert(menuItemParent!=menuItem, "Invalid menuItem, same as parent. (parent="+menuItemParent+")");
+		f_core.Assert(menuItemParent!=menuItem, "fa_menuCore.f_uiDeselectItem: Invalid menuItem, same as parent. (parent="+menuItemParent+")");
 		
 		var popup=this.f_getUIPopup(menuItemParent, true);
 		f_core.Assert(popup, "fa_menuCore.f_uiSelectItem: Invalid popup for item="+menuItemParent);
@@ -946,7 +946,7 @@ var __prototype = {
 	 * @return Object its parent.
 	 */
 	f_getParentItem: function(item) {
-		f_core.Assert(typeof(item)=="object", "Item parameter must be an object !");
+		f_core.Assert(typeof(item)=="object", "fa_menuCore.f_getParentItem: Item parameter must be an object !");
 		return item._parentItem;
 	},
 	/**
@@ -1495,13 +1495,13 @@ var __prototype = {
 	 * @return void
 	 */
 	f_closeUIPopup: function(menuItem, popup) {
-		f_core.Assert(!popup || this._uiMenuPopups[menuItem]==popup, "Invalid popup or menuItem. menuItem="+menuItem+" popup="+popup);
+		f_core.Assert(!popup || this._uiMenuPopups[menuItem]==popup, "fa_menuCore.f_closeUIPopup: Invalid popup or menuItem. menuItem="+menuItem+" popup="+popup);
 
 		if (!popup) {
 			popup=this.f_getUIPopup(menuItem);
 	
 			if (!popup) {
-				f_core.Debug(fa_menuCore, "Popup menu '"+menuItem+"' is already closed !");
+				f_core.Debug(fa_menuCore, "f_closeUIPopup: Popup menu '"+menuItem+"' is already closed !");
 				return;
 			}
 		}
@@ -1509,7 +1509,7 @@ var __prototype = {
 		if (popup._item===undefined) {
 			// Déjà fermé !
 			
-			f_core.Debug(fa_menuCore, "Popup menu '"+menuItem+"' is already closed !");
+			f_core.Debug(fa_menuCore, "f_closeUIPopup: Popup menu '"+menuItem+"' is already closed !");
 			return;
 		}
 

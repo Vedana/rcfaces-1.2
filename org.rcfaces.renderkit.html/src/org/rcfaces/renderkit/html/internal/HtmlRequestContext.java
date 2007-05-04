@@ -60,11 +60,6 @@ class HtmlRequestContext extends AbstractRequestContext implements
 
     private IHtmlProcessContext processContext;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractRequestContext#setFacesContext(javax.faces.context.FacesContext)
-     */
     public void setFacesContext(FacesContext facesContext) {
         super.setFacesContext(facesContext);
 
@@ -75,6 +70,9 @@ class HtmlRequestContext extends AbstractRequestContext implements
                 .getRequestParameterValuesMap();
 
         properties = parseProperties(parameters);
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Parsed camelia properties => " + properties);
+        }
 
         Set keys = new HashSet(parameters.size() + properties.size());
         keys.addAll(parameters.keySet());
@@ -86,27 +84,28 @@ class HtmlRequestContext extends AbstractRequestContext implements
             putComponentData(key, Boolean.FALSE);
         }
 
-        if (parameters != null) {
-            eventComponentId = getStringParameter(parameters,
-                    EVENT_COMPONENT_ID);
+        eventComponentId = getStringParameter(parameters, EVENT_COMPONENT_ID);
+        if (eventComponentId != null) {
+            putComponentData(eventComponentId, Boolean.FALSE);
 
-            if (eventComponentId != null) {
-
-                putComponentData(eventComponentId, Boolean.FALSE);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Event component id detected: " + eventComponentId);
             }
 
         } else {
-            eventComponentId = null;
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("No event component id detected");
+            }
         }
     }
 
     protected Map parseProperties(Map parameters) {
-        Object facesDatas = this.parameters.get(EVENT_SERIAL);
+        Object facesDatas = parameters.get(EVENT_SERIAL);
         if (facesDatas == null) {
             return Collections.EMPTY_MAP;
         }
 
-        return parseRCFacesData(facesDatas);
+        return parseCameliaData(facesDatas);
     }
 
     public String getComponentId(FacesContext facesContext,
@@ -174,6 +173,11 @@ class HtmlRequestContext extends AbstractRequestContext implements
         } else if ((properties == null || properties.isEmpty())
                 && (parameterValues == null)) {
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("No properites, no parameters for component '"
+                        + componentId + "'.");
+            }
+
             return emptyComponentData();
         }
 
@@ -182,6 +186,10 @@ class HtmlRequestContext extends AbstractRequestContext implements
                 properties = filterProperties(
                         (IUnlockedClientAttributesCapability) component,
                         properties);
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Filtred properties => '" + properties + "'.");
+                }
 
             } else {
                 properties = Collections.EMPTY_MAP;
@@ -248,19 +256,17 @@ class HtmlRequestContext extends AbstractRequestContext implements
         return value.toString();
     }
 
-    private Map parseRCFacesData(Object object) {
+    private Map parseCameliaData(Object object) {
         String datas;
         if (object instanceof String) {
             datas = (String) object;
 
-        } else if (object instanceof String[]) {
-            String s[] = (String[]) object;
-
-            if (s.length < 1) {
+        } else if (object.getClass().isArray()) {
+            if (Array.getLength(object) == 0) {
                 return Collections.EMPTY_MAP;
             }
 
-            datas = s[0];
+            return parseCameliaData(Array.get(object, 0));
 
         } else {
             return Collections.EMPTY_MAP;
@@ -502,19 +508,13 @@ class HtmlRequestContext extends AbstractRequestContext implements
             return false;
         }
 
-        public void release() {
-            properties = null;
-            component = null;
-            componentId = null;
-
-            super.release();
-        }
-
         /*
-         * (non-Javadoc)
+         * public void release() { properties = null; component = null;
+         * componentId = null;
          * 
-         * @see org.rcfaces.core.internal.renderkit.IComponentData#getComponentValue()
+         * super.release(); }
          */
+
         public final String getComponentParameter() {
             String key = getComponentId();
             if (key == null) {
@@ -523,11 +523,6 @@ class HtmlRequestContext extends AbstractRequestContext implements
             return getParameter(key);
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.internal.renderkit.IComponentData#getComponentValues()
-         */
         public final String[] getComponentParameters() {
             String key = getComponentId();
             if (key == null) {

@@ -554,14 +554,10 @@ var __prototype = {
 			return clientDatas;
 		}
 
-		var att=f_core.GetAttribute(item, "v:data");
-		if (!att) {
-			clientDatas=new Object;
-			item._clientDatas=clientDatas;
-			return clientDatas;
-		}
+		clientDatas=f_core.ParseDataAttribute(item);
+		item._clientDatas=clientDatas;
 		
-		return fa_clientData.InitializeDataAttribute(item);
+		return clientDatas;
 	},
 	/**
 	 * @method hidden

@@ -31,7 +31,7 @@ var __static = {
 		
 		var storage=globalStorage[domain];
 		
-		f_core.Debug(f_domClientStorage, "Use global storage (domain="+storage+") = "+storage);
+		f_core.Debug(f_domClientStorage, "Initializer: Use global storage (domain="+storage+") = "+storage);
 		
 		f_domClientStorage._Storage=storage;
 	},
@@ -53,7 +53,7 @@ var __prototype = {
 		return f_domClientStorage._STORAGE_MAX_SIZE;
 	},
 	f_get: function(name) {
-		f_core.Assert(typeof(name)=="string", "Invalid name parameter ("+name+")");
+		f_core.Assert(typeof(name)=="string", "f_domClientStorage.f_get: Invalid name parameter ("+name+")");
 
 		var item=f_domClientStorage._Storage.getItem(name);
 		if (!item) {
@@ -63,7 +63,7 @@ var __prototype = {
 		return item.value;
 	},
 	f_set: function(name, value) {
-		f_core.Assert(typeof(name)=="string", "Invalid name parameter ("+name+")");
+		f_core.Assert(typeof(name)=="string", "f_domClientStorage.f_set: Invalid name parameter ("+name+")");
 		f_core.Assert(value===null || typeof(value)=="string", "Invalid value parameter ("+value+")");
 	
 		var storage=f_domClientStorage._Storage;

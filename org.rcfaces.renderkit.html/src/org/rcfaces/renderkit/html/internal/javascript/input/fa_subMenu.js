@@ -28,12 +28,17 @@ var __prototype = {
 	},
 	/**
 	 * @method hidden
+	 * @param String menuId
+	 * @param Object properties
+	 * @return object
 	 */
-	f_newSubMenu: function(menuId, id, removeAllWhenShown, itemImageWidth, itemImageHeight) {
+	f_newSubMenu: function(menuId, properties) {
 		f_class.IsClassDefined("f_menu", true);
 		
+		var id=properties._id;		
+		
 		if (!id) {
-			// La forme de menuId n'est peut-etre pas normalisée !
+		// La forme de menuId n'est peut-etre pas normalisée !
 			
 			var cnt=this._subMenuCount;
 			if (!cnt) {
@@ -52,7 +57,7 @@ var __prototype = {
 			selectionProvider=this;
 		}
 		
-		var menu=f_menu.f_newInstance(this, selectionProvider, componentEventRedirect, id, menuId, itemImageWidth, itemImageHeight, removeAllWhenShown);
+		var menu=f_menu.f_newInstance(this, selectionProvider, componentEventRedirect, id, menuId, properties._itemImageWidth, properties._itemImageHeight, properties._removeAllWhenShown);
 
 		var subMenus=this._subMenus;
 		if (!subMenus) {
@@ -62,7 +67,7 @@ var __prototype = {
 		
 		subMenus[menuId]=menu;
 
-		f_core.Debug("fa_subMenu", "Define new menuId='"+menuId+"' id='"+id+"' for component '"+this.id+"'.");
+		f_core.Debug(fa_subMenu, "f_newSubMenu: Define new menuId='"+menuId+"' id='"+id+"' for component '"+this.id+"'.");
 		
 		return menu;
 	},

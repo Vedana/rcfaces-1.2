@@ -76,7 +76,7 @@ public abstract class AbstractFieldSetBorderRenderer extends
         ICssWriter cssWriter = writer.writeStyle(64);
 
         if (title == null) {
-            cssWriter.writeDisplay("none");
+            cssWriter.writeDisplay(ICssWriter.NONE);
         }
 
         if (component instanceof IFontCapability) {

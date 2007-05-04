@@ -581,9 +581,9 @@ f_classLoader.prototype = {
 				continue;
 			}
 			
-			var clientData=f_core.GetAttribute(node, "v:data");
-			if (clientData) {
-				fa_clientData.InitializeDataAttribute(o, node);
+			var clientDatas=f_core.ParseDataAttribute(node);
+			if (clientDatas) {
+				o._clientDatas=clientDatas;
 			}
 				
 			var completeComponent=o.f_completeComponent;

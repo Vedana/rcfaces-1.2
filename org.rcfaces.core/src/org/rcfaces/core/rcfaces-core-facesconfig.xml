@@ -43,6 +43,10 @@
 		<component-class>org.rcfaces.core.component.DataColumnComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.comboColumn</component-type>
+		<component-class>org.rcfaces.core.component.ComboColumnComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.pager</component-type>
 		<component-class>org.rcfaces.core.component.PagerComponent</component-class>
 	</component>
@@ -53,6 +57,10 @@
 	<component>
 		<component-type>org.rcfaces.core.componentsGrid</component-type>
 		<component-class>org.rcfaces.core.component.ComponentsGridComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.comboGrid</component-type>
+		<component-class>org.rcfaces.core.component.ComboGridComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.componentsList</component-type>

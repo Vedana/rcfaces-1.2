@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.ImageComboComponent;
+import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -74,6 +75,15 @@ public class ImageComboRenderer extends ImageButtonRenderer {
         return IComponentDecorator.VALIGN_CENTER;
     }
 
+    protected boolean isShowDropDownMark(IImageButtonFamilly imageButtonFamilly) {
+        if ((imageButtonFamilly instanceof IShowDropDownMarkCapability) == false) {
+            return false;
+        }
+
+        return ((IShowDropDownMarkCapability) imageButtonFamilly)
+                .isShowDropDownMark();
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -82,14 +92,18 @@ public class ImageComboRenderer extends ImageButtonRenderer {
     protected class ImageComboDecorator extends ImageButtonDecorator {
         private static final String REVISION = "$Revision$";
 
+        private final boolean showDropDownMark;
+
         private boolean firstLine = true;
 
         public ImageComboDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);
+
+            showDropDownMark = isShowDropDownMark(imageButtonFamilly);
         }
 
         protected void writeEndRow(int nextRowCount) throws WriterException {
-            if (firstLine == false) {
+            if (firstLine == false || showDropDownMark == false) {
                 super.writeEndRow(nextRowCount);
                 return;
             }
@@ -101,7 +115,13 @@ public class ImageComboRenderer extends ImageButtonRenderer {
         }
 
         protected int computeHorizontalSpan() {
-            return super.computeHorizontalSpan() + 1;
+            int span = super.computeHorizontalSpan();
+
+            if (showDropDownMark) {
+                span++;
+            }
+
+            return span;
         }
 
         protected boolean isCompositeComponent() {
@@ -109,7 +129,7 @@ public class ImageComboRenderer extends ImageButtonRenderer {
         }
 
         protected void writeEndCompositeComponent() throws WriterException {
-            if (htmlBorderWriter == null) {
+            if (htmlBorderWriter == null && showDropDownMark) {
                 writeComboImage();
             }
 

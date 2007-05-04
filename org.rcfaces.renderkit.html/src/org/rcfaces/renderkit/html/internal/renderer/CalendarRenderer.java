@@ -73,7 +73,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
             IBorderCapability borderCapability = (IBorderCapability) component;
 
             if (borderCapability.isBorder() == false) {
-                cssWriter.writeBorderStyle("none");
+                cssWriter.writeBorderStyle(ICssWriter.NONE);
             }
         }
     }

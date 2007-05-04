@@ -51,9 +51,8 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
         super(servletURI, repositoryVersion);
     }
 
-    public void loadRepository(InputStream input,
-            String contentLocationDirectory, Object container) {
-        super.loadRepository(input, contentLocationDirectory, container);
+    public void loadRepository(InputStream input, Object container) {
+        super.loadRepository(input, container);
 
         String moduleName = AbstractFacesImplementation.get()
                 .getJavaScriptModuleName();
@@ -139,9 +138,8 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
         }
     }
 
-    protected void addRules(Digester digester, String contentLocationDirectory,
-            Object container) {
-        super.addRules(digester, contentLocationDirectory, container);
+    protected void addRules(Digester digester, Object container) {
+        super.addRules(digester, container);
 
         digester.addRule("repository/module/file/class", new Rule() {
             private static final String REVISION = "$Revision$";

@@ -4372,6 +4372,41 @@ var f_core = {
 
 		eval(code);	// Other ?
 	},
+
+	/**
+	 * @method hidden static 
+	 * @param HTMLElement Node which defines v:data attribute.
+	 * @return Object
+	 */
+	ParseDataAttribute: function(node) {
+		var clientData=new Object;
+		
+		var att=f_core.GetAttribute(node, "v:data");
+		if (!att) {
+			return clientData;
+		}
+		
+		var ds=att.split(",");
+		for(var i=0;i<ds.length;i++) {
+			var d=ds[i];
+			var vname=d;
+			var value="";
+			
+			var p=d.indexOf("=");
+			if (p>=0) {
+				vname=d.substring(0, p).replace(/\+/g, " ");
+				vname=decodeURIComponent(vname);
+				
+				value=d.substring(p+1);
+				value=value.replace(/\+/g," ");
+				value=decodeURIComponent(value);
+			}
+								
+			clientData[vname]=value;
+		}
+
+		return clientData;
+	},
 	/**
 	 * @method public static
 	 * @return String

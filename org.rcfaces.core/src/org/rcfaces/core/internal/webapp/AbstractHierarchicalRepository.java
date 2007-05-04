@@ -74,17 +74,11 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
         return URLContentProvider.SINGLETON;
     }
 
-    public void loadRepository(InputStream input,
-            String contentLocationDirectory, Object container) {
-
-        if (contentLocationDirectory.length() > 0
-                && contentLocationDirectory.endsWith("/") == false) {
-            contentLocationDirectory += "/";
-        }
+    public void loadRepository(InputStream input, Object container) {
 
         Digester digester = new Digester();
 
-        addRules(digester, contentLocationDirectory, container);
+        addRules(digester, container);
 
         try {
             digester.parse(input);
@@ -94,8 +88,30 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
         }
     }
 
-    protected void addRules(Digester digester,
-            final String contentLocationDirectory, final Object container) {
+    protected void addRules(Digester digester, final Object container) {
+
+        final String baseDirectory[] = new String[1];
+
+        digester.addRule("repository", new Rule() {
+            private static final String REVISION = "$Revision$";
+
+            public void begin(String namespace, String name,
+                    Attributes attributes) throws Exception {
+
+                String contentLocationDirectory = attributes
+                        .getValue("baseDirectory");
+
+                if (contentLocationDirectory != null) {
+                    if (contentLocationDirectory.length() > 0
+                            && contentLocationDirectory.endsWith("/") == false) {
+                        contentLocationDirectory += "/";
+                    }
+
+                    baseDirectory[0] = contentLocationDirectory;
+                }
+
+            }
+        });
 
         digester.addRule("repository/module", new Rule() {
             private static final String REVISION = "$Revision$";
@@ -197,9 +213,8 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
 
                 IModule module = (IModule) this.digester.peek();
 
-                IHierarchicalFile f = declareFile(name,
-                        contentLocationDirectory, module, ds, container,
-                        contentProvider);
+                IHierarchicalFile f = declareFile(name, baseDirectory[0],
+                        module, ds, container, contentProvider);
 
                 String uri = getURI(name);
                 filesByURI.put(uri, f);
@@ -224,13 +239,17 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
         }
 
         if (url == null && (container instanceof ServletContext)) {
+            if (contentLocation.startsWith("/") == false) {
+                contentLocation = "/" + contentLocation;
+            }
+
             try {
                 url = ((ServletContext) container).getResource(contentLocation);
 
             } catch (MalformedURLException e) {
                 IllegalArgumentException ex = new IllegalArgumentException(
-                        "Bad url for location '" + contentLocation + "' (file="
-                                + name + ").");
+                        "Can not get resource '" + contentLocation
+                                + "' into servlet context (file=" + name + ").");
                 ex.initCause(e);
 
                 throw ex;
@@ -238,9 +257,8 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
         }
 
         if (url == null) {
-            throw new IllegalArgumentException(
-                    "Can not find location of file '" + name + "'  (location='"
-                            + contentLocation + "')");
+            throw new IllegalArgumentException("Can not locate file '" + name
+                    + "'  (location='" + contentLocation + "')");
         }
 
         String rname = "f:" + name;
@@ -263,6 +281,9 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
     }
 
     private String getContentLocation(String name, String directory) {
+        if (directory == null) {
+            return name;
+        }
         return directory + name;
     }
 

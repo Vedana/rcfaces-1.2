@@ -1,38 +1,41 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
-import org.rcfaces.core.component.capability.IPagedCapability;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ISelectionValuesCapability;
-import org.rcfaces.core.component.capability.ISortedChildrenCapability;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.CardinalityConverter;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.ComponentsColumnComponent;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.internal.tools.SortTools;
+import java.util.Arrays;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.component.capability.ISelectionValuesCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.lang.String;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IPreferenceCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.component.capability.IPagedCapability;
 
 /**
  * Reserved for future use
@@ -103,6 +106,22 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 			return GridTools.listColumns(this, javax.faces.component.UIColumn.class);
 			
+	}
+
+	public final void setRowValueConverter(String converterId) {
+
+			
+			setRowValueConverter(converterId, null);
+		
+	}
+
+	public final void setRowValueConverter(String converterId, FacesContext facesContext) {
+
+
+			Converter converter=ComponentTools.createConverter(facesContext, converterId);
+
+			setRowValueConverter(converter);
+		
 	}
 
 	public final void setSelectionCardinality(String cardinality) {
@@ -746,15 +765,15 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.ROW_VALUE);
 	}
 
-	public final String getRowValueConverter() {
+	public final javax.faces.convert.Converter getRowValueConverter() {
 		return getRowValueConverter(null);
 	}
 
-	public final String getRowValueConverter(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_VALUE_CONVERTER, facesContext);
+	public final javax.faces.convert.Converter getRowValueConverter(javax.faces.context.FacesContext facesContext) {
+		return (javax.faces.convert.Converter)engine.getValue(Properties.ROW_VALUE_CONVERTER, facesContext);
 	}
 
-	public final void setRowValueConverter(String rowValueConverter) {
+	public final void setRowValueConverter(javax.faces.convert.Converter rowValueConverter) {
 		engine.setProperty(Properties.ROW_VALUE_CONVERTER, rowValueConverter);
 	}
 

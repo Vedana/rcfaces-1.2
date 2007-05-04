@@ -1,13 +1,12 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractMessagesComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The messages Component is a placeholder for error messages (several messages can be shown simultaneously).</p>

@@ -80,9 +80,9 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setFilterProperties: function(properties) {
-		f_core.Assert(this._filtred, "This component does not support filter properties !");
+		f_core.Assert(this._filtred, "fa_filterProperties.f_setFilterProperties: This component does not support filter properties !");
 
-		f_core.Assert(typeof(properties)=="object", "Filter properties must be an Object or null !");
+		f_core.Assert(typeof(properties)=="object", "fa_filterProperties.f_setFilterProperties: Filter properties must be an Object or null !");
 	
 		var expression="";
 		if (properties) {

@@ -201,7 +201,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 writer.startElement(mainComponent);
 
                 if (displayInline) {
-                    writer.writeStyle().writeDisplay("inline");
+                    writer.writeStyle().writeDisplay(ICssWriter.INLINE);
                 }
 
             } else {

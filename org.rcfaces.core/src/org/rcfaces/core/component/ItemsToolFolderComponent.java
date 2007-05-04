@@ -1,31 +1,35 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.component.NamingContainer;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
+import org.rcfaces.core.component.capability.ITextPositionCapability;
+import org.rcfaces.core.internal.tools.ToolBarTools;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import java.lang.String;
+import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ITextPositionCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.ToolBarComponent;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.internal.tools.MenuTools;
+import javax.faces.component.NamingContainer;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class ItemsToolFolderComponent extends AbstractInputComponent implements 
 	IInitEventCapability,
@@ -40,13 +44,14 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	IDisabledCapability,
 	IReadOnlyCapability,
 	IVerticalAlignmentCapability,
+	IShowDropDownMarkCapability,
 	NamingContainer {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.itemsToolFolder";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","verticalAlignment","disabled","doubleClickListener","mouseOverListener","itemHiddenMode","checkListener","checkedValues","initListener","mouseOutListener","borderType","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","verticalAlignment","disabled","doubleClickListener","mouseOverListener","itemHiddenMode","showDropDownMark","checkListener","checkedValues","initListener","mouseOutListener","borderType","readOnly","textPosition"}));
 	}
 
 	public ItemsToolFolderComponent() {
@@ -319,6 +324,36 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	 */
 	public void setVerticalAlignment(ValueBinding verticalAlignment) {
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
+	}
+
+	public boolean isShowDropDownMark() {
+		return isShowDropDownMark(null);
+	}
+
+	/**
+	 * See {@link #isShowDropDownMark() isShowDropDownMark()} for more details
+	 */
+	public boolean isShowDropDownMark(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SHOW_DROP_DOWN_MARK, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showDropDownMark" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowDropDownMarkSetted() {
+		return engine.isPropertySetted(Properties.SHOW_DROP_DOWN_MARK);
+	}
+
+	public void setShowDropDownMark(boolean showDropDownMark) {
+		engine.setProperty(Properties.SHOW_DROP_DOWN_MARK, showDropDownMark);
+	}
+
+	/**
+	 * See {@link #setShowDropDownMark(boolean) setShowDropDownMark(boolean)} for more details
+	 */
+	public void setShowDropDownMark(ValueBinding showDropDownMark) {
+		engine.setProperty(Properties.SHOW_DROP_DOWN_MARK, showDropDownMark);
 	}
 
 	public final int getItemHiddenMode() {

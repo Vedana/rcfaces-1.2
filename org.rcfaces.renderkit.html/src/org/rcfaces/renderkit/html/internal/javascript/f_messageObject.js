@@ -58,6 +58,8 @@ var __static = {
 			severity=parseInt(severity);
 		}
 		
+		var clientDatas=f_core.ParseDataAttribute(tag);
+		
 		var component=null;
 		
 		var forClientId=f_core.GetAttribute(tag, "v:for");			
@@ -65,7 +67,7 @@ var __static = {
 			component=f_core.GetElementById(forClientId);
 		}
 		
-		var messageObject = new f_messageObject(severity, summary, detail);
+		var messageObject = new f_messageObject(severity, summary, detail, clientDatas);
 		
 		f_messageContext.Get(component).f_addMessageObject(component, messageObject, true);
     }
@@ -80,10 +82,20 @@ var __prototype = {
 	 * @param optional number severity the severity
 	 * @param optional String summary Localized summary message text
 	 * @param optional String detail Localized detail message text
+	 * @param optional Object clientDatas Client datas.
 	 */
-	f_messageObject: function(severity, summary, detail) {
+	f_messageObject: function(severity, summary, detail, clientDatas) {
 	//	f_core.Assert(typeof(severity)=="number", "Bad type of severity");
 	//	f_core.Assert(summary, "Bad summary"); // Summary can be null
+	
+		if (typeof(severity)=="object" && severity) {
+			var properties=severity;
+			
+			summary=properties._summary;
+			detail=properties._detail;
+			severity=properties._severity;
+			clientDatas=properties._clientDatas;	
+		}
 	
 		if (typeof(severity)!="number") {
 			severity=f_messageObject.SEVERITY_INFO;
@@ -92,13 +104,15 @@ var __prototype = {
 		this._severity=severity;
 		this._summary=summary;
 		this._detail=detail;
+		this._clientDatas=clientDatas;
 	},
 
 /*
 	f_finalize: function() {
 		this._severity=undefined; // number
-		this._summary=undefined; // string
-		this._detail=undefined; // string
+		this._summary=undefined; // String
+		this._detail=undefined; // String
+		this._clientDatas=undefined; // Map<String,String>
 	},
 */
 	
@@ -141,6 +155,20 @@ var __prototype = {
 		}
 		
 		return this._summary;
+	},
+	/**
+	 * 
+	 * @method public
+	 * @param String name Name of property
+	 * @return String
+	 */
+	f_getClientData: function(name) {
+		var clientDatas=this._clientDatas;
+		if (!clientDatas) {
+			return null;
+		}
+		
+		return clientDatas[name];
 	},
 	/**
 	 * @method public

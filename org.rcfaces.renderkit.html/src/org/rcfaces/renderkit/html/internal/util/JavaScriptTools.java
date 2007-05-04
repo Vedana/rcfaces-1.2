@@ -7,10 +7,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ContextTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -177,33 +180,37 @@ public class JavaScriptTools {
         js.write("var ").write(key).write('=').writeConstructor(
                 "f_messageObject");
 
-        int pred = 0;
+        IObjectLiteralWriter objectLiteralWriter = js.writeObjectLiteral(true);
 
         Severity severity = facesMessage.getSeverity();
         // La severity ne peut etre null !
-        js.writeInt(severity.getOrdinal());
+        if (severity != null) {
+            objectLiteralWriter.writeSymbol("_severity").writeInt(
+                    severity.getOrdinal());
+        }
 
         if (summary != null) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-
-            js.write(',').write(summary);
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_summary").write(summary);
         }
 
-        if (detail != null && detail.equals(summary) == false) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-            js.write(',').write(detail);
-
-        } else {
-            pred++;
+        if (detail != null) {
+            objectLiteralWriter.writeSymbol("_detail").write(detail);
         }
 
-        js.writeln(");");
+        if (facesMessage instanceof IClientDataCapability) {
+            IClientDataCapability clientDataCapability = (IClientDataCapability) facesMessage;
+
+            if (clientDataCapability.getClientDataCount() > 0) {
+
+                IJavaScriptWriter paramWriter = objectLiteralWriter
+                        .writeSymbol("_clientDatas");
+
+                HtmlTools.writeObjectLiteralMap(paramWriter,
+                        clientDataCapability.getClientDataMap(), true);
+            }
+        }
+
+        objectLiteralWriter.end().writeln(");");
 
         return key;
     }

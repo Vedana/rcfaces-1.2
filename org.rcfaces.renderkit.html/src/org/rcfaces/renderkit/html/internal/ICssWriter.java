@@ -30,6 +30,8 @@ public interface ICssWriter {
 
     String INHERIT = "inherit";
 
+    String INLINE = "inline";
+
     String ITALIC = "italic";
 
     String NO_REPEAT = "no-repeat";

@@ -73,6 +73,13 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>comboColumn</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.comboColumn</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>pager</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.pager</component-type>
@@ -93,6 +100,14 @@
 		<component>
 			<component-type>org.rcfaces.core.componentsGrid</component-type>
 			<renderer-type>org.rcfaces.core.componentsGrid</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>comboGrid</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.comboGrid</component-type>
+			<renderer-type>org.rcfaces.core.comboGrid</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>

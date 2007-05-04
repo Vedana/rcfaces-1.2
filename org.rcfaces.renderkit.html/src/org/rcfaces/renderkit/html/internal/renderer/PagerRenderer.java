@@ -11,6 +11,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -39,7 +40,7 @@ public class PagerRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.DIV);
         if (pagerComponent.getWidth(facesContext) == null
                 && pagerComponent.getHeight(facesContext) == null) {
-            htmlWriter.writeStyle().writeDisplay("inline");
+            htmlWriter.writeStyle().writeDisplay(ICssWriter.INLINE);
         }
 
         writeHtmlAttributes(htmlWriter);

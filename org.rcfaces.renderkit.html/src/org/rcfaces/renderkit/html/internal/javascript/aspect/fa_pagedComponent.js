@@ -45,18 +45,18 @@ var __static = {
 		// Le dataGrid n'existe pas forcement lors de son enregistrement !		
 		if (dp && f_class.IsObjectInitialized(dp)) {
 
-			f_core.Debug(fa_pagedComponent, "Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Initialize now ! ");
+			f_core.Debug(fa_pagedComponent, "RegisterPager: Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Initialize now ! ");
 			try {		
 				pager.fa_pagedComponentInitialized(dp);
 		
 			} catch (x) {
-				f_core.Error(fa_pagedComponent, "Call of fa_pagedComponentInitialized() throws an exception ! (pager="+pager.id+")", x);
+				f_core.Error(fa_pagedComponent, "RegisterPager: Call of fa_pagedComponentInitialized() throws an exception ! (pager="+pager.id+")", x);
 			}
 							
 			return;
 		}
 
-		f_core.Debug(fa_pagedComponent, "Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Waiting initialization ! ");
+		f_core.Debug(fa_pagedComponent, "RegisterPager: Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Waiting initialization ! ");
 	},
 	/**
 	 * @method hidden static
@@ -115,13 +115,13 @@ var __prototype = {
 		var dps=fa_pagedComponent._DataPagers;
 
 		if (!dps) {
-			f_core.Debug(fa_pagedComponent, "Perform page component initialized:  NO pagers !");
+			f_core.Debug(fa_pagedComponent, "f_performPagedComponentInitialized: Perform page component initialized:  NO pagers !");
 
 			return;
 		}
 		
 		var lst=dps[this.id];
-		f_core.Debug(fa_pagedComponent, "Perform page component initialized ("+this.id+") list="+lst);
+		f_core.Debug(fa_pagedComponent, "f_performPagedComponentInitialized: Perform page component initialized ("+this.id+") list="+lst);
 		
 		if (!lst) {
 			return;
@@ -137,7 +137,7 @@ var __prototype = {
 				p.fa_pagedComponentInitialized(this);
 
 			} catch (x) {
-				f_core.Error(fa_pagedComponent, "Call of fa_pagedComponentInitialized() throws an exception ! (pager="+p.id+")", x);
+				f_core.Error(fa_pagedComponent, "f_performPagedComponentInitialized: Call of fa_pagedComponentInitialized() throws an exception ! (pager="+p.id+")", x);
 				
 				lst[i]=undefined;
 			}
