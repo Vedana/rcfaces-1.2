@@ -314,6 +314,10 @@
 		<component-type>org.rcfaces.core.service</component-type>
 		<component-class>org.rcfaces.core.component.ServiceComponent</component-class>
 	</component>
+	<component>
+		<component-type>org.rcfaces.core.messageDialog</component-type>
+		<component-class>org.rcfaces.core.component.MessageDialogComponent</component-class>
+	</component>
 	<converter>
 		<converter-id>org.rcfaces.Byte</converter-id>
 		<converter-class>org.rcfaces.core.converter.ByteConverter</converter-class>

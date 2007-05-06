@@ -1227,4 +1227,28 @@
 			<class name="f_md5" />
 		</file>
 	</module>
+
+	<module id="dialog">
+		 <file name="ui/f_modalShell.js">
+			<class name="f_modalShell">
+				<required-class name="f_core" />
+				<required-class name="f_object" />
+			</class>
+		 </file>
+		 <file name="ui/f_waitingShell.js">
+			<class name="f_waitingShell">
+				<required-class name="f_modalShell" />
+			</class>
+		 </file>
+		 <file name="ui/f_dialog.js">
+			<class name="f_dialog">
+				<required-class name="f_modalShell" />
+			</class>
+		 </file>
+		 <file name="ui/f_messageDialog.js">
+			<class name="f_messageDialog">
+				<required-class name="f_dialog" />
+			</class>
+		 </file>
+	</module>
 </repository>
