@@ -1,21 +1,24 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IDialogPriorityCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 public class MessageDialogComponent extends CameliaInputComponent implements 
 	IImageCapability,
@@ -24,13 +27,14 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	ITextDirectionCapability,
 	IVisibilityCapability,
 	IDialogPriorityCapability,
+	IImmediateCapability,
 	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messageDialog";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"callback","styleClass","text","imageURL","defaultValue","title","dialogPriority","visible","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"callback","styleClass","text","imageURL","defaultValue","title","dialogPriority","immediate","visible","textDirection"}));
 	}
 
 	public MessageDialogComponent() {
@@ -46,6 +50,13 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
+	}
+
+	public final void setImmediate(ValueBinding immediate) {
+
+
+			setValueBinding("immediate", immediate);
 		
 	}
 

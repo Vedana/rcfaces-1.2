@@ -10,27 +10,101 @@
  * @version $Revision$ $Date$
  */
 var __static = {
+	
+	/**
+	 * Style constant for resize area trim
+	 * 
+	 * @field public static final number
+	 */
+	RESIZE_STYLE: 1<<4,
+	
+	/**
+	 * Style constant for title area trim
+	 * 
+	 * @field public static final number
+	 */
+	TITLE_STYLE: 1<<5,
+	
+	/**
+	 * Style constant for close box trim
+	 * 
+	 * @field public static final number
+	 */
+	CLOSE_STYLE: 1<<6,
+	
+	/**
+	 * Style constant for minimize box trim
+	 * 
+	 * @field public static final number
+	 */
+	MIN_STYLE: 1<<7,
+	
+	/**
+	 * Style constant for horizontal scrollbar behavior
+	 * 
+	 * @field public static final number
+	 */
+	H_SCROLL_STYLE: 1<<8,
+	
+	/**
+	 * Style constant for vertical scrollbar behavior
+	 * 
+	 * @field public static final number
+	 */
+	V_SCROLL_STYLE: 1<<9,
+	
+	/**
+	 * Style constant for maximize box trim
+	 * 
+	 * @field public static final number
+	 */
+	MAX_STYLE: 1<<10,
+	
+	/**
+	 * Style constant for modeless behavior
+	 * 
+	 * @field public static final number
+	 */
+	MODELESS_HINT: 0,
+	
+	/**
+	 * Style constant for primary modal behavior
+	 * 
+	 * @field public static final number
+	 */
+	PRIMARY_MODAL_HINT: 1<<15,
+	
+	/**
+	 * Style constant for application modal behavior
+	 * 
+	 * @field public static final number
+	 */
+	APPLICATION_MODAL_HINT: 1<<16,
+	
+	
     /**
      * @field private static Object
      */
 	_ObjIFrame: undefined,
+	
     /**
      * @field private static boolean
      */
 	_IE6: undefined,
+	
      /**
      * Class Constructor (called in the head ...
      * @method public static
      */
     Initializer: function() {
-    	f_shell._IE6 = f_core.IsInternetExplorer('iexplorer.6'); 
+    	f_shell._IE6 = f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6); 
 	 },
      /**
      * Class Destructor (called in the head ...
      * @method public static
      */
     Finalizer: function() {
-    	f_shell._ObjIFrame = undefined;
+    	f_shell._ObjIFrame = undefined; // Object
     	// f_shell._IE6 = undefined; // boolean
 	 },
      /**
@@ -190,21 +264,30 @@ var __static = {
 var __prototype = {
 
 	/**
+	 * @field private number
+	 */
+	_style: undefined,
+
+	/**
 	 * @field private String
 	 */
 	_div: undefined,
+	
 	/**
 	 * @field private String
 	 */
 	_iframe: undefined,
+	
 	/**
 	 * @field private String
 	 */
 	_cssClassBase: undefined,
+	
 	/**
 	 * @field private String
 	 */
 	_backgroundMode: undefined,
+	
 	/**
 	 * @field private String
 	 */
@@ -215,10 +298,12 @@ var __prototype = {
      * initial values.</p>
 	 *
 	 * @method public
+	 * @param number style the style of control to construct
 	 */
-	f_shell: function() {
+	f_shell: function(style) {
 		this.f_super(arguments);
 		
+		this._style=style;
 		this._cssClassBase="f_shell";
 		this._backgroundMode="greyed";
 	},
@@ -229,10 +314,21 @@ var __prototype = {
 		// this._cssClassBase=undefined; // string
 		// this._backgroundMode=undefined; //string
 		// this._imageURL=undefined; //string
+		// this._style=undefined; //number
 		this._div=undefined; //HTMLElement
 		this._iframe=undefined; //HTMLElement
 
 		this.f_super(arguments);
+	},
+
+	/**
+	 *  <p>Return the style of the shell.</p>
+	 *
+	 * @method public 
+	 * @return number The style
+	 */
+	f_getStyle: function() {
+		return this._style;
 	},
 
 	/**
@@ -273,7 +369,7 @@ var __prototype = {
 	 * @param object iframe
 	 */
 	f_setIframe: function(iframe) {
-    	f_core.Assert((typeof(iframe)=="object"), "f_shell.f_setIframe: Invalid parameter '"+iframe+"'.");
+    	f_core.Assert(typeof(iframe)=="object", "f_shell.f_setIframe: Invalid parameter '"+iframe+"'.");
 		this._iframe = iframe;
 	},
 	
@@ -294,7 +390,7 @@ var __prototype = {
 	 * @param String cssClassBase a base name for the style classes
 	 */
 	f_setCssClassBase: function(cssClassBase) {
-    	f_core.Assert((typeof(cssClassBase)=="string"), "f_shell.f_setCssClassBase: Invalid parameter '"+cssClassBase+"'.");
+    	f_core.Assert(typeof(cssClassBase)=="string", "f_shell.f_setCssClassBase: Invalid parameter '"+cssClassBase+"'.");
 		this._cssClassBase = cssClassBase;
 	},
 	
@@ -315,7 +411,7 @@ var __prototype = {
 	 * @param String backgroundMode background mode : transparent, greyed, opaque
 	 */
 	f_setBackgroundMode: function(backgroundMode) {
-    	f_core.Assert((typeof(backgroundMode)=="string"), "f_shell.f_setBackgroundMode: Invalid parameter '"+backgroundMode+"'.");
+    	f_core.Assert(typeof(backgroundMode)=="string", "f_shell.f_setBackgroundMode: Invalid parameter '"+backgroundMode+"'.");
 		this._backgroundMode = backgroundMode;
 	},
 	
@@ -346,10 +442,11 @@ var __prototype = {
 	 *  <p>Sets the image URL.</p>
 	 *
 	 * @method public 
-	 * @param String imageURL 
+	 * @param String imageURL  (or <code>null</code>)
 	 */
 	f_setImageURL: function(imageURL) {
-    	f_core.Assert((typeof(imageURL)=="string"), "f_shell.f_setImageURL: Invalid parameter '"+imageURL+"'.");
+    	f_core.Assert(imageURL===null || typeof(imageURL)=="string", "f_shell.f_setImageURL: Invalid parameter '"+imageURL+"'.");
+    	
 		this._imageURL = imageURL;
 	},
 
@@ -491,7 +588,6 @@ var __prototype = {
 		
 		f_core.Debug(f_shell, "_drawModIFrame: callback ");
 		iframe.onload=f_shell._OnIframeLoad;
-
 	},
 
 	/**

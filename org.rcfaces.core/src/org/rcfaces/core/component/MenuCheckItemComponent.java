@@ -1,10 +1,8 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.MenuItemComponent;
+import java.util.Set;
 
 /**
  * A menu item with a check.

@@ -1,22 +1,19 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.ToolBarComponent;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.AbstractBasicComponent;
-import org.rcfaces.core.internal.tools.ToolBarTools;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.MenuTools;
 
 /**
  * <b>EXPERIMENTAL</b>

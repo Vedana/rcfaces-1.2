@@ -1,17 +1,16 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.TextComponent;
-import org.rcfaces.core.internal.component.Properties;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.component.IInitializationState;
-import javax.faces.el.ValueBinding;
-import javax.faces.FacesException;
-import org.rcfaces.core.component.ProgressBarComponent;
-import java.util.Arrays;
-import javax.faces.component.NamingContainer;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The progressIndicator Component indicates the evolution of a task. It uses the <a href="/comps/progressBarComponent.html">porgressBar Component</a> and add text information to it.</p>

@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.MessageDialogComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.MessageDialogComponent;
 
 public class MessageDialogTag extends CameliaTag implements Tag {
 
@@ -22,6 +22,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 	private String textDirection;
 	private String visible;
 	private String dialogPriority;
+	private String immediate;
 	private String title;
 	private String defaultValue;
 	private String callback;
@@ -79,6 +80,14 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		this.dialogPriority = dialogPriority;
 	}
 
+	public final String getImmediate() {
+		return immediate;
+	}
+
+	public final void setImmediate(String immediate) {
+		this.immediate = immediate;
+	}
+
 	public final String getTitle() {
 		return title;
 	}
@@ -130,6 +139,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  dialogPriority='"+dialogPriority+"'");
+			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  title='"+title+"'");
 			LOG.debug("  defaultValue='"+defaultValue+"'");
 			LOG.debug("  callback='"+callback+"'");
@@ -207,6 +217,16 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (immediate != null) {
+			if (isValueReference(immediate)) {
+				ValueBinding vb = application.createValueBinding(immediate);
+
+				component.setImmediate(vb);
+			} else {
+				component.setImmediate(getBool(immediate));
+			}
+		}
+
 		if (title != null) {
 			if (isValueReference(title)) {
 				ValueBinding vb = application.createValueBinding(title);
@@ -260,6 +280,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		textDirection = null;
 		visible = null;
 		dialogPriority = null;
+		immediate = null;
 		title = null;
 		defaultValue = null;
 		callback = null;
