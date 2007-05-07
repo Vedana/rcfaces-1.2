@@ -107,7 +107,9 @@ var __static = {
 			var iframe = msgBox.f_getIframe();
 
 		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: before calling ");
+		    
 			functionToCall.call(msgBox, callback, iframe.contentWindow.document.body);
+			
 		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: after calling ");
 
 			return;
@@ -184,7 +186,7 @@ var __prototype = {
 	 * @param optional String defaultValue the value returned if the popup is closed without selecting a button
 	 */
 	f_messageDialog: function(title, text, defaultValue) {
-		this.f_super(arguments);
+		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			var tag = this;

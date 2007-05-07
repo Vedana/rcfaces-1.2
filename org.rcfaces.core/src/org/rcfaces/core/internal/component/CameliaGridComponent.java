@@ -363,7 +363,7 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 		return true;
 	}
 	
-	public final boolean isRendered() {
+	public boolean isRendered() {
 		if (super.isRendered()==false) {
 			return false;
 		}
@@ -371,7 +371,7 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 		return isClientRendered();
 	}
 	
-	public final void setRendered(ValueBinding binding) {
+	public void setRendered(ValueBinding binding) {
 		setValueBinding("rendered", binding);
 	}
 	

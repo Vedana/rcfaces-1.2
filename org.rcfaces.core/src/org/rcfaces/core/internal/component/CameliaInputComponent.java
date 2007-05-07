@@ -365,7 +365,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		return true;
 	}
 	
-	public final boolean isRendered() {
+	public boolean isRendered() {
 		if (super.isRendered()==false) {
 			return false;
 		}
@@ -373,7 +373,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		return isClientRendered();
 	}
 	
-	public final void setRendered(ValueBinding binding) {
+	public void setRendered(ValueBinding binding) {
 		setValueBinding("rendered", binding);
 	}
 	

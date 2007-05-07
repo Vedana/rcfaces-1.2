@@ -2975,25 +2975,25 @@ var f_core = {
 		if (typeof(component.f_show)=="function") {
 			try {
 				if (!component.f_show()) {
-					f_core.Info("f_core", "Can not set focus to a not visible component");
+					f_core.Info(f_core, "SetFocus: Can not set focus to a not visible component");
 					return;
 				}
 				
 			} catch (ex) {
-				f_core.Error(f_core, "Exception while calling f_show() of '"+component.id+"' [camelia method].", ex);
+				f_core.Error(f_core, "SetFocus: Exception while calling f_show() of '"+component.id+"' [camelia method].", ex);
 				
 				return false;
 			}
 		}
 
 		if (typeof(component.f_setFocus)=="function") {
-			f_core.Debug(f_core, "Try to call f_setFocus() method to set the focus. (componentId="+component.id+"/tagName="+component.tagName+")");
+			f_core.Debug(f_core, "SetFocus: Try to call f_setFocus() method to set the focus. (componentId="+component.id+"/tagName="+component.tagName+")");
 			try {
 				component.f_setFocus();
 				return true;
 				
 			} catch (ex) {
-				f_core.Error(f_core, "Exception while setting focus of '"+component.id+"' [camelia method].", ex);
+				f_core.Error(f_core, "SetFocus: Exception while setting focus of '"+component.id+"' [camelia method].", ex);
 			}
 			
 			return false;
@@ -3003,7 +3003,7 @@ var f_core = {
 //			component.setActive();
 		}
 
-		f_core.Debug(f_core, "Try to call focus() method to set the focus. (componentId="+component.id+"/tagName="+component.tagName+")");
+		f_core.Debug(f_core, "SetFocus: Try to call focus() method to set the focus. (componentId="+component.id+"/tagName="+component.tagName+")");
 
 		try {
 			component.focus();
@@ -3015,7 +3015,7 @@ var f_core = {
 				return true;
 			}
 
-			f_core.Error(f_core, "Exception while setting focus of '"+component.id+"'.", ex);
+			f_core.Error(f_core, "SetFocus: Exception while setting focus of '"+component.id+"'.", ex);
 		}
 		
 		return false;

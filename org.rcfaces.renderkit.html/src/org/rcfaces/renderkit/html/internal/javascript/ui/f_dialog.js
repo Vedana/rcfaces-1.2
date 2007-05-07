@@ -103,9 +103,10 @@ var __prototype = {
      * initial values.</p>
 	 *
 	 * @method public
+	 * @param number style the style of control to construct
 	 */
-	f_dialog: function() {
-		this.f_super(arguments);
+	f_dialog: function(style) {
+		this.f_super(arguments, style);
 		
 		this.f_setCssClassBase("f_dialog");
 		this.f_setBackgroundMode("greyed");

@@ -358,7 +358,7 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
 		return true;
 	}
 	
-	public final boolean isRendered() {
+	public boolean isRendered() {
 		if (super.isRendered()==false) {
 			return false;
 		}
@@ -366,7 +366,7 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
 		return isClientRendered();
 	}
 	
-	public final void setRendered(ValueBinding binding) {
+	public void setRendered(ValueBinding binding) {
 		setValueBinding("rendered", binding);
 	}
 	

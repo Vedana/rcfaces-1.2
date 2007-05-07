@@ -65,21 +65,21 @@ var __static = {
 	 * 
 	 * @field public static final number
 	 */
-	MODELESS_HINT: 0,
+	MODELESS_STYLE: 0,
 	
 	/**
 	 * Style constant for primary modal behavior
 	 * 
 	 * @field public static final number
 	 */
-	PRIMARY_MODAL_HINT: 1<<15,
+	PRIMARY_MODAL_STYLE: 1<<15,
 	
 	/**
 	 * Style constant for application modal behavior
 	 * 
 	 * @field public static final number
 	 */
-	APPLICATION_MODAL_HINT: 1<<16,
+	APPLICATION_MODAL_STYLE: 1<<16,
 	
 	
     /**
@@ -170,21 +170,28 @@ var __static = {
 	_DelModIFrame: function() {
      	f_core.Debug(f_shell, "_DelModIFrame: entering");
      	
-		if (f_shell._ObjIFrame) {
-			//Detach
-			document.body.removeChild(f_shell._ObjIFrame._div);
-			f_shell._ObjIFrame._iframe._modalShell = undefined;
-			document.body.removeChild(f_shell._ObjIFrame._iframe);
-			f_shell._ObjIFrame._iframe = undefined;
-			f_shell._ObjIFrame._div = undefined;
+     	var objIFrame=f_shell._ObjIFrame;
+		if (objIFrame) {
 			f_shell._ObjIFrame = undefined;
+
+			var shell=objIFrame._iframe._modalShell;
+			objIFrame._iframe._modalShell = undefined;
+
+			shell.f_uninstallModalStyle();
+			
+
+			//Detach
+			document.body.removeChild(objIFrame._div);
+			objIFrame._div = undefined;
+			
+			document.body.removeChild(objIFrame._iframe);
+			objIFrame._iframe = undefined;
 
 			// Return from Modal ...
 		}
 
 		//Show Selects
 		f_shell._ShowSelect();
-		
 	},
 
 	/**
@@ -258,6 +265,75 @@ var __static = {
      */
      DocumentComplete: function() {
      	f_core.Debug(f_shell, "DocumentComplete: entering;");
+     },
+     
+     
+    /**
+     *
+     * @method private static
+     * @param Event evt
+     * @return boolean
+     */
+     _OnFocus: function(evt) {
+     	if (!window.f_core) {
+     		// On sait jamais, nous sommes peut etre dans un context foireux ...
+     		return;
+     	}
+ 
+ 		var iframe=f_shell.GetIframe();
+ 		if (!iframe) {
+ 			// On a un gros probleme ...
+     		f_core.Error(f_shell, "_OnFocus: No frame opened ?");
+			return;
+ 		}
+     	
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+     	 			
+		var target;
+		if (evt.target) {
+			target = evt.target;
+			
+		} else if (evt.srcElement) {
+			target = evt.srcElement;
+		}
+		
+		if (!target) {
+    		f_core.Info(f_shell, "_OnFocus: No target identified");
+			return true;
+		}
+
+		switch(target.nodeType) {
+		case f_core.DOCUMENT_NODE:
+			break;
+			
+		case f_core.ELEMENT_NODE:
+			target=target.ownerDocument;
+			break;
+
+		default:
+			// Qu'est que c'est ????
+			target=document; // On bloque donc
+		}
+ 		
+ 		var frameDocument = iframe.contentWindow.document;
+ 		     	
+     	if (target==frameDocument) {
+     		// C'est dans notre frame
+     		
+     		f_core.Debug(f_shell, "_OnFocus: Focus on our frame !");
+     		return true;
+     	}
+ 
+   		var nextFocusable=f_core.GetNextFocusableComponent(frameDocument.body);
+   		if (nextFocusable) {
+     		f_core.Debug(f_shell, "_OnFocus: Set focus on "+nextFocusable.id);
+
+	     	f_core.SetFocus(nextFocusable, true);	     	
+   		}
+     	
+     	return f_core.CancelJsEvent(evt);
      }
 }
 
@@ -588,6 +664,39 @@ var __prototype = {
 		
 		f_core.Debug(f_shell, "_drawModIFrame: callback ");
 		iframe.onload=f_shell._OnIframeLoad;
+		
+		this.f_installModalStyle();
+	},
+
+
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_installModalStyle: function() {
+		var style=this.f_getStyle();
+		if (!(style & (f_shell.PRIMARY_MODAL_STYLE | f_shell.APPLICATION_MODAL_STYLE))) {
+			return;
+		}
+
+     	f_core.Debug(f_shell, "f_installModalStyle: Install modal hooks");
+		
+		f_core.AddEventListener(document, "focus", this._OnFocus, true);
+	},
+
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_uninstallModalStyle: function() {
+		var style=this.f_getStyle();
+		if (!(style & (f_shell.PRIMARY_MODAL_STYLE | f_shell.APPLICATION_MODAL_STYLE))) {
+			return;
+		}
+
+     	f_core.Debug(f_shell, "f_uninstallModalStyle: Uninstall modal hooks");
+		
+		f_core.RemoveEventListener(document, "focus", this._OnFocus, true);
 	},
 
 	/**

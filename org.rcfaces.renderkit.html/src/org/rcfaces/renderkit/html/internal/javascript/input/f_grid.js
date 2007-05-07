@@ -167,8 +167,7 @@ var __static = {
 		} else if (evt.srcElement) {
 			target = evt.srcElement;
 		}
-		
-		
+			
 		if (target && target.nodeType==f_core.ELEMENT_NODE) {
 			var tagName=target.tagName;
 			if (tagName && tagName.toLowerCase()=="input") {

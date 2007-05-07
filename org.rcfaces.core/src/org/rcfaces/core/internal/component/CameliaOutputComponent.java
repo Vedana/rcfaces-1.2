@@ -360,7 +360,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return true;
 	}
 	
-	public final boolean isRendered() {
+	public boolean isRendered() {
 		if (super.isRendered()==false) {
 			return false;
 		}
@@ -368,7 +368,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return isClientRendered();
 	}
 	
-	public final void setRendered(ValueBinding binding) {
+	public void setRendered(ValueBinding binding) {
 		setValueBinding("rendered", binding);
 	}
 	
