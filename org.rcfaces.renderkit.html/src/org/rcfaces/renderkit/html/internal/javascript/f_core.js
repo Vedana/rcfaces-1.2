@@ -1481,7 +1481,7 @@ var f_core = {
 	 * @return void
 	 */
 	AddPostSubmitListener: function(listener) {
-		f_ocre.Assert(typeof(listener)=="function", "f_core.AddPostSubmitListener: invalid listener parameter ("+listener+")");
+		f_core.Assert(typeof(listener)=="function", "f_core.AddPostSubmitListener: invalid listener parameter ("+listener+")");
 		
 		var postSubmitListeners=f_core._PostSubmitListeners;		
 		if (!postSubmitListeners) {
