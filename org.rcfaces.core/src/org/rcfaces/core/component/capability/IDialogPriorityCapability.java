@@ -6,9 +6,8 @@ package org.rcfaces.core.component.capability;
 
 
 /**
- * A int indicating the cardinality (number of check allowed) for this componenent.
- * Authorized values are : 	?|+|*|1|one|zeroMany|oneMany|optional|default
- * default=zeroMany
+ * A int indicating the priority for this component.
+ * Permits to show a higher priority dialog before a lower priority one.
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
