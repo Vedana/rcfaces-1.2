@@ -67,7 +67,7 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
                     styleClass).writeln(");");
         }
 
-        int priority = component.getPriority(facesContext);
+        int priority = component.getDialogPriority(facesContext);
         if (priority != 0) {
             javaScriptWriter.writeMethodCall("f_setPriority")
                     .writeInt(priority).writeln(");");
@@ -124,8 +124,8 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
         if (hasChildren) {
             if (getContext().getDepth() > 1) {
                 throw new WriterException(
-                        "Optgroup does not support more 1 level !", null,
-                        component);
+                        "MessageDialog select items do not support more 1 level !",
+                        null, component);
             }
         }
 

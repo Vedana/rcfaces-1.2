@@ -96,6 +96,8 @@ public final class JavaScriptClasses {
 
     public static final String MESSAGES = "f_messages";
 
+    public static final String MESSAGE_DIALOG = "f_messageDialog";
+
     public static final String MESSAGE_FIELD_SET = "f_messageFieldSet";
 
     public static final String NUMBER_ENTRY = "f_numberEntry";

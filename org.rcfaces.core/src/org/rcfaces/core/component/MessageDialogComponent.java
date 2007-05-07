@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.internal.component.CameliaInputComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IDialogPriorityCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
@@ -20,13 +21,14 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	IStyleClassCapability,
 	ITextCapability,
 	IVisibilityCapability,
+	IDialogPriorityCapability,
 	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messageDialog";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"callback","styleClass","text","imageURL","defaultValue","title","visible","priority"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"callback","styleClass","text","imageURL","defaultValue","title","dialogPriority","visible"}));
 	}
 
 	public MessageDialogComponent() {
@@ -190,6 +192,36 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 		
 	}
 
+	public int getDialogPriority() {
+		return getDialogPriority(null);
+	}
+
+	/**
+	 * See {@link #getDialogPriority() getDialogPriority()} for more details
+	 */
+	public int getDialogPriority(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.DIALOG_PRIORITY,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dialogPriority" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDialogPrioritySetted() {
+		return engine.isPropertySetted(Properties.DIALOG_PRIORITY);
+	}
+
+	public void setDialogPriority(int dialogPriority) {
+		engine.setProperty(Properties.DIALOG_PRIORITY, dialogPriority);
+	}
+
+	/**
+	 * See {@link #setDialogPriority(int) setDialogPriority(int)} for more details
+	 */
+	public void setDialogPriority(ValueBinding dialogPriority) {
+		engine.setProperty(Properties.DIALOG_PRIORITY, dialogPriority);
+	}
+
 	/**
 	 * Returns a string value specifying the title for the document.
 	 * @return title
@@ -276,30 +308,6 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 */
 	public final boolean isCallbackSetted() {
 		return engine.isPropertySetted(Properties.CALLBACK);
-	}
-
-	public final int getPriority() {
-		return getPriority(null);
-	}
-
-	public final int getPriority(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.PRIORITY, 0, facesContext);
-	}
-
-	public final void setPriority(int priority) {
-		engine.setProperty(Properties.PRIORITY, priority);
-	}
-
-	public final void setPriority(ValueBinding priority) {
-		engine.setProperty(Properties.PRIORITY, priority);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "priority" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isPrioritySetted() {
-		return engine.isPropertySetted(Properties.PRIORITY);
 	}
 
 	protected Set getCameliaFields() {

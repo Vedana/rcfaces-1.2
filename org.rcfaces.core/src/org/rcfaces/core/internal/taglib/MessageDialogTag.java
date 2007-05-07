@@ -20,10 +20,10 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 	private String styleClass;
 	private String text;
 	private String visible;
+	private String dialogPriority;
 	private String title;
 	private String defaultValue;
 	private String callback;
-	private String priority;
 	private String value;
 	private String converter;
 	public String getComponentType() {
@@ -62,6 +62,14 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		this.visible = visible;
 	}
 
+	public final String getDialogPriority() {
+		return dialogPriority;
+	}
+
+	public final void setDialogPriority(String dialogPriority) {
+		this.dialogPriority = dialogPriority;
+	}
+
 	public final String getTitle() {
 		return title;
 	}
@@ -84,14 +92,6 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 
 	public final void setCallback(String callback) {
 		this.callback = callback;
-	}
-
-	public final String getPriority() {
-		return priority;
-	}
-
-	public final void setPriority(String priority) {
-		this.priority = priority;
 	}
 
 	public final String getValue() {
@@ -119,10 +119,10 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  dialogPriority='"+dialogPriority+"'");
 			LOG.debug("  title='"+title+"'");
 			LOG.debug("  defaultValue='"+defaultValue+"'");
 			LOG.debug("  callback='"+callback+"'");
-			LOG.debug("  priority='"+priority+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -177,6 +177,16 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (dialogPriority != null) {
+			if (isValueReference(dialogPriority)) {
+				ValueBinding vb = application.createValueBinding(dialogPriority);
+
+				component.setDialogPriority(vb);
+			} else {
+				component.setDialogPriority(getInt(dialogPriority));
+			}
+		}
+
 		if (title != null) {
 			if (isValueReference(title)) {
 				ValueBinding vb = application.createValueBinding(title);
@@ -204,15 +214,6 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (priority != null) {
-			if (isValueReference(priority)) {
-				ValueBinding vb = application.createValueBinding(priority);
-				component.setPriority(vb);
-			} else {
-				component.setPriority(getInt(priority));
-			}
-		}
-
 		if (value != null) {
 			if (isValueReference(value)) {
 				ValueBinding vb = application.createValueBinding(value);
@@ -237,10 +238,10 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		styleClass = null;
 		text = null;
 		visible = null;
+		dialogPriority = null;
 		title = null;
 		defaultValue = null;
 		callback = null;
-		priority = null;
 		value = null;
 		converter = null;
 

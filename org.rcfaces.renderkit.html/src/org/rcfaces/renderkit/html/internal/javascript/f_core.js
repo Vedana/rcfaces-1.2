@@ -1153,7 +1153,7 @@ var f_core = {
 		f_core.Profile(false, "f_core.SubmitEvent");
 		try {
 			if (!evt) {
-				evt = window.event;
+				evt = f_core.GetJsEvent(this); //window.event;
 			}
 	
 			// f_core.Assert(evt, "f_core._OnSubmit: Event is not known ?");
@@ -1167,7 +1167,7 @@ var f_core = {
 			var form;
 			
 			if (!this.tagName || this.tagName.toLowerCase()!="form") {
-				// C'est une window ?
+				// this est une window ?
 	
 				if (evt.relatedTarget) {
 					form = evt.relatedTarget;
@@ -1185,7 +1185,7 @@ var f_core = {
 			f_core.Assert(form && form.tagName.toLowerCase()=="form", "f_core._OnSubmit: Can not identify form ! ("+form+")");
 			f_core.Assert(win, "f_core._OnSubmit: Can not identify window !");
 	
-			f_core.Info("f_core", "_OnSubmit: Catch submit event from form '"+form.id+"'.");
+			f_core.Info(f_core, "_OnSubmit: Catch submit event from form '"+form.id+"'.");
 	
 			if (win.f_event) {
 				if (win.f_event.GetEventLocked(true)) {
@@ -1215,17 +1215,18 @@ var f_core = {
 			
 			var immediate;
 			if (win.f_event.GetType()==f_event.ERROR) {
-				f_core.Debug("f_core", "Event is an Error, bypass check validation !");
+				f_core.Debug(f_core, "Event is an Error, bypass check validation !");
 
 				immediate=true;
 				
 			} else if (component) {			
-				f_core.Debug("f_core", "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
+				f_core.Debug(f_core, "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
 		
-				if (typeof(component.f_isImmediate)=="function") {
-					immediate=component.f_isImmediate();
+				var immediateFunction=component.f_isImmediate;
+				if (typeof(immediateFunction)=="function") {
+					immediate=immediateFunction.call(component);
 		
-					f_core.Debug("f_core", "Test immediate property of '"+component.id+"' = "+immediate);
+					f_core.Debug(f_core, "Test immediate property of '"+component.id+"' = "+immediate);
 				}
 			}
 						
@@ -1239,7 +1240,8 @@ var f_core = {
 					return f_core.CancelJsEvent(evt);
 				}
 			}
-			
+
+			// On sérialise ICI car on est pas sure d'appeler le _Submit()			
 			var classLoader=win._classLoader;
 			if (classLoader) {
 				classLoader.f_serialize(form);
@@ -1291,7 +1293,7 @@ var f_core = {
 			}
 			if (!form) {
 				var ex=new Error("Can not find form !");
-				f_core.Error(f_core, "Can not find form !", ex);
+				f_core.Error(f_core, "_Submit: Can not find form !", ex);
 				throw ex;
 				//return false;
 			}
@@ -3398,7 +3400,12 @@ var f_core = {
 			return component.parentWindow.event;
 		}
 		
-		return component.ownerDocument.parentWindow.event;
+		if (component.ownerDocument) {
+			return component.ownerDocument.parentWindow.event;
+		}
+		
+		// Component est une window ?
+		return component.event;
 	},
 	/**
 	 * @method private static
