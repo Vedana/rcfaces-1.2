@@ -1392,7 +1392,7 @@ var f_core = {
 				}
 	
 				f_core.Profile(null, "f_core._submit.preSubmit");
-					
+				
 				// Don't replace the current handler form.submit() and call the previous
 				form._oldSubmit();
 	
@@ -1444,6 +1444,7 @@ var f_core = {
 			}
 
 			return true;
+			
 		} finally {		
 			f_core.Profile(true, "f_core._submit("+url+")");
 		}

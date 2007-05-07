@@ -40,6 +40,7 @@ public class ButtonRenderer extends AbstractInputRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
+        writeTextDirection(htmlWriter, button);
 
         String txt = button.getText(htmlWriter.getComponentRenderContext()
                 .getFacesContext());

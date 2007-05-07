@@ -19,6 +19,7 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 	private String required;
 	private String autoTab;
 	private String text;
+	private String textDirection;
 	private String emptyMessage;
 	private String readOnly;
 	private String valueChangeListeners;
@@ -60,6 +61,14 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 
 	public final void setText(String text) {
 		this.text = text;
+	}
+
+	public final String getTextDirection() {
+		return textDirection;
+	}
+
+	public final void setTextDirection(String textDirection) {
+		this.textDirection = textDirection;
 	}
 
 	public final String getEmptyMessage() {
@@ -190,6 +199,7 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  autoTab='"+autoTab+"'");
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  emptyMessage='"+emptyMessage+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
@@ -244,6 +254,16 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 				component.setText(vb);
 			} else {
 				component.setText(text);
+			}
+		}
+
+		if (textDirection != null) {
+			if (isValueReference(textDirection)) {
+				ValueBinding vb = application.createValueBinding(textDirection);
+
+				component.setTextDirection(vb);
+			} else {
+				component.setTextDirection(getInt(textDirection));
 			}
 		}
 
@@ -375,6 +395,7 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 		required = null;
 		autoTab = null;
 		text = null;
+		textDirection = null;
 		emptyMessage = null;
 		readOnly = null;
 		valueChangeListeners = null;

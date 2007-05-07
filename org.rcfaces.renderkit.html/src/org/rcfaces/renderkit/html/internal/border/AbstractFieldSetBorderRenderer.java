@@ -10,9 +10,11 @@ import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.ITitledBorderRenderer;
+import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
@@ -72,6 +74,11 @@ public abstract class AbstractFieldSetBorderRenderer extends
 
         writer.startElement(IHtmlWriter.LABEL);
         writer.writeClass(getLabelClassName(writer));
+
+        if (component instanceof ITextDirectionCapability) {
+            AbstractHtmlRenderer.writeTextDirection(writer,
+                    (ITextDirectionCapability) component);
+        }
 
         ICssWriter cssWriter = writer.writeStyle(64);
 

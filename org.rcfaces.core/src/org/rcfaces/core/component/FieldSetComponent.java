@@ -1,6 +1,7 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
@@ -14,8 +15,8 @@ import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 
@@ -39,6 +40,7 @@ import org.rcfaces.core.component.capability.IVariableScopeCapability;
 public class FieldSetComponent extends AbstractOutputComponent implements 
 	IFontCapability,
 	ITextCapability,
+	ITextDirectionCapability,
 	ITextAlignmentCapability,
 	IVerticalAlignmentCapability,
 	IBorderTypeCapability,
@@ -51,7 +53,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","imageHeight","imageURL","scopeValue","verticalAlignment","fontSize","fontItalic","fontBold","text","scopeVar","textAlignment","imageWidth","borderType","fontName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","imageHeight","scopeValue","imageURL","verticalAlignment","fontSize","fontItalic","textDirection","fontBold","text","scopeVar","textAlignment","imageWidth","borderType","fontName"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -249,6 +251,36 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 	 */
 	public void setText(ValueBinding text) {
 		setValue(text);
+	}
+
+	public int getTextDirection() {
+		return getTextDirection(null);
+	}
+
+	/**
+	 * See {@link #getTextDirection() getTextDirection()} for more details
+	 */
+	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "textDirection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextDirectionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+	}
+
+	public void setTextDirection(int textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+	}
+
+	/**
+	 * See {@link #setTextDirection(int) setTextDirection(int)} for more details
+	 */
+	public void setTextDirection(ValueBinding textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
 	}
 
 	public java.lang.String getTextAlignment() {

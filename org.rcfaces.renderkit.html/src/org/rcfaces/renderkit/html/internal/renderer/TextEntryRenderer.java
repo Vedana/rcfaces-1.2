@@ -193,8 +193,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         TextEntryComponent textEntryComponent = (TextEntryComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
-                .getFacesContext();
+      //  FacesContext facesContext = htmlWriter.getComponentRenderContext().getFacesContext();
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
 
@@ -207,6 +206,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeTextEntryAttributes(htmlWriter);
         writeValidatorAttributes(htmlWriter);
         writeValueAttributes(htmlWriter);
+        writeTextDirection(htmlWriter, textEntryComponent);
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
     }

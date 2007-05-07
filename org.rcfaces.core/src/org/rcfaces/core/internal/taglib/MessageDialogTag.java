@@ -19,6 +19,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 	private String imageURL;
 	private String styleClass;
 	private String text;
+	private String textDirection;
 	private String visible;
 	private String dialogPriority;
 	private String title;
@@ -52,6 +53,14 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 
 	public final void setText(String text) {
 		this.text = text;
+	}
+
+	public final String getTextDirection() {
+		return textDirection;
+	}
+
+	public final void setTextDirection(String textDirection) {
+		this.textDirection = textDirection;
 	}
 
 	public final String getVisible() {
@@ -118,6 +127,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  dialogPriority='"+dialogPriority+"'");
 			LOG.debug("  title='"+title+"'");
@@ -164,6 +174,16 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 				component.setText(vb);
 			} else {
 				component.setText(text);
+			}
+		}
+
+		if (textDirection != null) {
+			if (isValueReference(textDirection)) {
+				ValueBinding vb = application.createValueBinding(textDirection);
+
+				component.setTextDirection(vb);
+			} else {
+				component.setTextDirection(getInt(textDirection));
 			}
 		}
 
@@ -237,6 +257,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		imageURL = null;
 		styleClass = null;
 		text = null;
+		textDirection = null;
 		visible = null;
 		dialogPriority = null;
 		title = null;

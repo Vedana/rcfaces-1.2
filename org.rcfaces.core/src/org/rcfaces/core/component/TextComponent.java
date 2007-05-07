@@ -2,6 +2,7 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
@@ -29,6 +30,7 @@ import org.rcfaces.core.component.capability.IForCapability;
  */
 public class TextComponent extends AbstractOutputComponent implements 
 	ITextCapability,
+	ITextDirectionCapability,
 	IFontCapability,
 	ITextAlignmentCapability,
 	IAccessKeyCapability,
@@ -38,7 +40,7 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","text","type","textAlignment","fontSize","accessKey","fontName","fontItalic","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","text","type","textAlignment","fontSize","accessKey","fontName","fontItalic","for","textDirection"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -79,6 +81,36 @@ public class TextComponent extends AbstractOutputComponent implements
 	 */
 	public void setText(ValueBinding text) {
 		setValue(text);
+	}
+
+	public int getTextDirection() {
+		return getTextDirection(null);
+	}
+
+	/**
+	 * See {@link #getTextDirection() getTextDirection()} for more details
+	 */
+	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "textDirection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextDirectionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+	}
+
+	public void setTextDirection(int textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+	}
+
+	/**
+	 * See {@link #setTextDirection(int) setTextDirection(int)} for more details
+	 */
+	public void setTextDirection(ValueBinding textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
 	}
 
 	public java.lang.Boolean getFontBold() {

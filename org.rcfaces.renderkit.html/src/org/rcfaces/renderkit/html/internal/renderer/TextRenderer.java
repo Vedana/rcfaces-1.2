@@ -57,6 +57,7 @@ public class TextRenderer extends AbstractCssRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+        writeTextDirection(htmlWriter, textComponent);
 
         if (ac != null) {
             // On peut pas calculer la véritable ID car le composant est peut

@@ -1,6 +1,7 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import javax.faces.el.ValueBinding;
@@ -29,6 +30,7 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
  */
 public class CheckButtonComponent extends AbstractInputComponent implements 
 	ITextCapability,
+	ITextDirectionCapability,
 	IHorizontalTextPositionCapability,
 	ISelectionEventCapability,
 	IReadOnlyCapability,
@@ -38,7 +40,7 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","selected","text","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","selected","text","readOnly","textPosition","textDirection"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="selected";
 
@@ -93,6 +95,36 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 	 */
 	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
+	}
+
+	public int getTextDirection() {
+		return getTextDirection(null);
+	}
+
+	/**
+	 * See {@link #getTextDirection() getTextDirection()} for more details
+	 */
+	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "textDirection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextDirectionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+	}
+
+	public void setTextDirection(int textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+	}
+
+	/**
+	 * See {@link #setTextDirection(int) setTextDirection(int)} for more details
+	 */
+	public void setTextDirection(ValueBinding textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
 	}
 
 	public int getTextPosition() {

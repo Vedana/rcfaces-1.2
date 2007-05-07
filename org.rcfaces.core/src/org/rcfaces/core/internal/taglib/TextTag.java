@@ -19,6 +19,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(TextTag.class);
 
 	private String text;
+	private String textDirection;
 	private String fontBold;
 	private String fontItalic;
 	private String fontName;
@@ -38,6 +39,14 @@ public class TextTag extends AbstractOutputTag implements Tag {
 
 	public final void setText(String text) {
 		this.text = text;
+	}
+
+	public final String getTextDirection() {
+		return textDirection;
+	}
+
+	public final void setTextDirection(String textDirection) {
+		this.textDirection = textDirection;
 	}
 
 	public final String getFontBold() {
@@ -118,6 +127,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
 			LOG.debug("  fontName='"+fontName+"'");
@@ -148,6 +158,16 @@ public class TextTag extends AbstractOutputTag implements Tag {
 				component.setText(vb);
 			} else {
 				component.setText(text);
+			}
+		}
+
+		if (textDirection != null) {
+			if (isValueReference(textDirection)) {
+				ValueBinding vb = application.createValueBinding(textDirection);
+
+				component.setTextDirection(vb);
+			} else {
+				component.setTextDirection(getInt(textDirection));
 			}
 		}
 
@@ -243,6 +263,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 
 	public void release() {
 		text = null;
+		textDirection = null;
 		fontBold = null;
 		fontItalic = null;
 		fontName = null;

@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
@@ -51,6 +52,10 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+
+        if (combo instanceof ITextDirectionCapability) {
+            writeTextDirection(htmlWriter, (ITextDirectionCapability) combo);
+        }
 
         htmlWriter.writeName(htmlWriter.getComponentRenderContext()
                 .getComponentClientId());

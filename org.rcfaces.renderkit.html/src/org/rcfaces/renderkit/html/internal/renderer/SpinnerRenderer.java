@@ -87,6 +87,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         htmlWriter.writeClass(getInputClassName(htmlWriter));
         writeInputAttributes(htmlWriter);
         writeTextEntryAttributes(htmlWriter);
+        writeTextDirection(htmlWriter, spinner);
         writeValueAttributes(htmlWriter);
         htmlWriter.endElement(IHtmlWriter.INPUT);
 

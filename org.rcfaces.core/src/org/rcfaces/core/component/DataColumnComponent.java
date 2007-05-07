@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
@@ -46,6 +47,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	IVisibilityCapability,
 	IHiddenModeCapability,
 	ITextCapability,
+	ITextDirectionCapability,
 	IToolTipCapability,
 	IAlignmentCapability,
 	IForegroundBackgroundColorCapability,
@@ -73,7 +75,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaValueColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","imageURL","width","verticalAlignment","defaultCellStyleClass","alignment","hiddenMode","cellImageURL","foregroundColor","menuPopupId","styleClass","sortListener","sortComparator","selectedImageURL","value","hoverImageURL","imageHeight","maxWidth","disabledImageURL","ascending","toolTipText","cellToolTipText","minWidth","resizable","text","imageWidth","cellStyleClass","cellDefaultToolTipText","visible","backgroundColor","autoFilter"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","imageURL","width","verticalAlignment","defaultCellStyleClass","alignment","hiddenMode","cellImageURL","foregroundColor","menuPopupId","styleClass","sortListener","sortComparator","selectedImageURL","value","hoverImageURL","imageHeight","maxWidth","disabledImageURL","ascending","toolTipText","cellToolTipText","minWidth","textDirection","resizable","text","imageWidth","cellStyleClass","cellDefaultToolTipText","visible","backgroundColor","autoFilter"}));
 	}
 
 	public DataColumnComponent() {
@@ -290,6 +292,36 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	 */
 	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
+	}
+
+	public int getTextDirection() {
+		return getTextDirection(null);
+	}
+
+	/**
+	 * See {@link #getTextDirection() getTextDirection()} for more details
+	 */
+	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "textDirection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextDirectionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+	}
+
+	public void setTextDirection(int textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+	}
+
+	/**
+	 * See {@link #setTextDirection(int) setTextDirection(int)} for more details
+	 */
+	public void setTextDirection(ValueBinding textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
 	}
 
 	public java.lang.String getToolTipText() {

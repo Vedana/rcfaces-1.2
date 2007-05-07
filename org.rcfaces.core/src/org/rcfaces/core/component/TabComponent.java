@@ -1,8 +1,9 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IMenuCapability;
@@ -27,6 +28,7 @@ import org.rcfaces.core.component.familly.IContentAccessors;
  */
 public class TabComponent extends CardComponent implements 
 	ITextCapability,
+	ITextDirectionCapability,
 	IFontCapability,
 	IDisabledCapability,
 	IStatesImageCapability,
@@ -38,7 +40,7 @@ public class TabComponent extends CardComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","hoverImageURL","fontUnderline","imageURL","text","disabledImageURL","selectedImageURL","disabled","fontSize","accessKey","fontName","fontItalic"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","hoverImageURL","imageURL","disabledImageURL","disabled","fontSize","accessKey","fontItalic","textDirection","fontBold","text","selectedImageURL","fontName"}));
 	}
 
 	public TabComponent() {
@@ -92,6 +94,36 @@ public class TabComponent extends CardComponent implements
 	 */
 	public void setText(ValueBinding text) {
 		engine.setProperty(Properties.TEXT, text);
+	}
+
+	public int getTextDirection() {
+		return getTextDirection(null);
+	}
+
+	/**
+	 * See {@link #getTextDirection() getTextDirection()} for more details
+	 */
+	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "textDirection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextDirectionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+	}
+
+	public void setTextDirection(int textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+	}
+
+	/**
+	 * See {@link #setTextDirection(int) setTextDirection(int)} for more details
+	 */
+	public void setTextDirection(ValueBinding textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
 	}
 
 	public java.lang.Boolean getFontBold() {

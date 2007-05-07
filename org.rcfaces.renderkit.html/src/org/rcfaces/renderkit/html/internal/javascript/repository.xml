@@ -1229,20 +1229,20 @@
 	</module>
 
 	<module id="dialog">
-		 <file name="ui/f_modalShell.js">
-			<class name="f_modalShell">
+		 <file name="ui/f_shell.js">
+			<class name="f_shell">
 				<required-class name="f_core" />
 				<required-class name="f_object" />
 			</class>
 		 </file>
 		 <file name="ui/f_waitingShell.js">
 			<class name="f_waitingShell">
-				<required-class name="f_modalShell" />
+				<required-class name="f_shell" />
 			</class>
 		 </file>
 		 <file name="ui/f_dialog.js">
 			<class name="f_dialog">
-				<required-class name="f_modalShell" />
+				<required-class name="f_shell" />
 			</class>
 		 </file>
 		 <file name="ui/f_messageDialog.js">

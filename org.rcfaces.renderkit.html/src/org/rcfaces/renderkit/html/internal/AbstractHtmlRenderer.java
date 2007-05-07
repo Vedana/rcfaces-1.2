@@ -36,6 +36,7 @@ import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
@@ -88,6 +89,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
     private static final String COMPONENT_DECORATOR = "camelia.component.decorator";
 
     private static final Map EVENT_DECODERS;
+
+    private static final String RIGHT_TO_LEFT = "RTL";
 
     static {
         EVENT_DECODERS = new HashMap(32);
@@ -493,6 +496,21 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         writeRole(writer, component);
 
         return writer;
+    }
+
+    public static final IHtmlWriter writeTextDirection(IHtmlWriter htmlWriter,
+            ITextDirectionCapability textDirectionCapability)
+            throws WriterException {
+
+        int textDirection = textDirectionCapability.getTextDirection();
+        if (textDirection != ITextDirectionCapability.DEFAULT_TEXT_DIRECTION) {
+            switch (textDirection) {
+            case ITextDirectionCapability.RIGHT_LEFT_TEXT_DIRECTION:
+                htmlWriter.writeAttribute("dir", RIGHT_TO_LEFT);
+            }
+        }
+
+        return htmlWriter;
     }
 
     protected final IHtmlWriter writeScroll(IHtmlWriter writer,

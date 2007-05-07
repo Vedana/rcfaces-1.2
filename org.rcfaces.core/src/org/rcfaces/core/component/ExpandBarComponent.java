@@ -1,28 +1,29 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ICollapsableCapability;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import java.util.Set;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
-import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Set;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
@@ -48,6 +49,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	IDisabledCapability,
 	IReadOnlyCapability,
 	ITextCapability,
+	ITextDirectionCapability,
 	ITextAlignmentCapability,
 	ICollapsableCapability,
 	IBorderCapability,
@@ -64,7 +66,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","focusListener","collapseEffect","asyncRenderMode","disabled","fontSize","accessKey","groupName","fontItalic","fontBold","loadListener","text","scopeVar","textAlignment","collapsed","collapsedText","border","readOnly","blurListener","tabIndex","fontName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","focusListener","collapseEffect","asyncRenderMode","disabled","fontSize","accessKey","groupName","fontItalic","textDirection","fontBold","loadListener","text","scopeVar","textAlignment","collapsed","collapsedText","border","readOnly","blurListener","tabIndex","fontName"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -352,6 +354,36 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 */
 	public void setText(ValueBinding text) {
 		setValue(text);
+	}
+
+	public int getTextDirection() {
+		return getTextDirection(null);
+	}
+
+	/**
+	 * See {@link #getTextDirection() getTextDirection()} for more details
+	 */
+	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "textDirection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextDirectionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+	}
+
+	public void setTextDirection(int textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+	}
+
+	/**
+	 * See {@link #setTextDirection(int) setTextDirection(int)} for more details
+	 */
+	public void setTextDirection(ValueBinding textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
 	}
 
 	public java.lang.String getTextAlignment() {

@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
 
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -84,6 +86,11 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
         htmlWriter.writeName(subId);
         htmlWriter.writeMaxLength(length);
         htmlWriter.writeSize(length);
+
+        UIComponent component = componentRenderContext.getComponent();
+        if (component instanceof ITextDirectionCapability) {
+            writeTextDirection(htmlWriter, (ITextDirectionCapability) component);
+        }
 
         if (writeSize) {
             double em = (length * 5);

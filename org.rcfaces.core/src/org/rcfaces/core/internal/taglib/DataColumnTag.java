@@ -19,6 +19,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private String visible;
 	private String hiddenMode;
 	private String text;
+	private String textDirection;
 	private String toolTipText;
 	private String alignment;
 	private String backgroundColor;
@@ -75,6 +76,14 @@ public class DataColumnTag extends CameliaTag implements Tag {
 
 	public final void setText(String text) {
 		this.text = text;
+	}
+
+	public final String getTextDirection() {
+		return textDirection;
+	}
+
+	public final void setTextDirection(String textDirection) {
+		this.textDirection = textDirection;
 	}
 
 	public final String getToolTipText() {
@@ -317,6 +326,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  alignment='"+alignment+"'");
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
@@ -385,6 +395,16 @@ public class DataColumnTag extends CameliaTag implements Tag {
 				component.setText(vb);
 			} else {
 				component.setText(text);
+			}
+		}
+
+		if (textDirection != null) {
+			if (isValueReference(textDirection)) {
+				ValueBinding vb = application.createValueBinding(textDirection);
+
+				component.setTextDirection(vb);
+			} else {
+				component.setTextDirection(getInt(textDirection));
 			}
 		}
 
@@ -670,6 +690,7 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		visible = null;
 		hiddenMode = null;
 		text = null;
+		textDirection = null;
 		toolTipText = null;
 		alignment = null;
 		backgroundColor = null;

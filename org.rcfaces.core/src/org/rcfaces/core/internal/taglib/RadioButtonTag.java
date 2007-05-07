@@ -17,6 +17,7 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(RadioButtonTag.class);
 
 	private String text;
+	private String textDirection;
 	private String textPosition;
 	private String selectionListeners;
 	private String readOnly;
@@ -34,6 +35,14 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 
 	public final void setText(String text) {
 		this.text = text;
+	}
+
+	public final String getTextDirection() {
+		return textDirection;
+	}
+
+	public final void setTextDirection(String textDirection) {
+		this.textDirection = textDirection;
 	}
 
 	public final String getTextPosition() {
@@ -98,6 +107,7 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  selected='"+selected+"'");
@@ -125,6 +135,16 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 				component.setText(vb);
 			} else {
 				component.setText(text);
+			}
+		}
+
+		if (textDirection != null) {
+			if (isValueReference(textDirection)) {
+				ValueBinding vb = application.createValueBinding(textDirection);
+
+				component.setTextDirection(vb);
+			} else {
+				component.setTextDirection(getInt(textDirection));
 			}
 		}
 
@@ -195,6 +215,7 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 
 	public void release() {
 		text = null;
+		textDirection = null;
 		textPosition = null;
 		selectionListeners = null;
 		readOnly = null;

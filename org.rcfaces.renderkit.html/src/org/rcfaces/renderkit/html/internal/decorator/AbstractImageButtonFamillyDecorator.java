@@ -16,6 +16,7 @@ import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.RcfacesContext;
@@ -30,6 +31,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.ICssRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -750,10 +752,15 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         writer.startElement(IHtmlWriter.SPAN);
         writer.writeClass(getTextClassName(htmlBorderWriter));
 
-        ICssWriter cssWriter = writer.writeStyle(128);
-
         UIComponent mainComponent = writer.getComponentRenderContext()
                 .getComponent();
+
+        if (mainComponent instanceof ITextDirectionCapability) {
+            AbstractHtmlRenderer.writeTextDirection(writer,
+                    (ITextDirectionCapability) mainComponent);
+        }
+
+        ICssWriter cssWriter = writer.writeStyle(128);
         if (mainComponent instanceof IFontCapability) {
             cssWriter.writeFont((IFontCapability) mainComponent);
         }

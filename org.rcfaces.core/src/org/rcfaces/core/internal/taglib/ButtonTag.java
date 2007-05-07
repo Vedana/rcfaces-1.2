@@ -17,6 +17,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(ButtonTag.class);
 
 	private String text;
+	private String textDirection;
 	private String selectionListeners;
 	private String readOnly;
 	private String action;
@@ -31,6 +32,14 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 
 	public final void setText(String text) {
 		this.text = text;
+	}
+
+	public final String getTextDirection() {
+		return textDirection;
+	}
+
+	public final void setTextDirection(String textDirection) {
+		this.textDirection = textDirection;
 	}
 
 	public final String getSelectionListener() {
@@ -71,6 +80,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
@@ -95,6 +105,16 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 				component.setText(vb);
 			} else {
 				component.setText(text);
+			}
+		}
+
+		if (textDirection != null) {
+			if (isValueReference(textDirection)) {
+				ValueBinding vb = application.createValueBinding(textDirection);
+
+				component.setTextDirection(vb);
+			} else {
+				component.setTextDirection(getInt(textDirection));
 			}
 		}
 
@@ -123,6 +143,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 
 	public void release() {
 		text = null;
+		textDirection = null;
 		selectionListeners = null;
 		readOnly = null;
 		action = null;

@@ -129,6 +129,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
         htmlWriter.writeAttribute("class", claz);
+        writeTextDirection(htmlWriter, button);
 
         String inputId = componentId + "_input";
         htmlWriter.writeAttribute("for", inputId);

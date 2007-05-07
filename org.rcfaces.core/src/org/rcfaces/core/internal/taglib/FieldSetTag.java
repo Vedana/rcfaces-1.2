@@ -22,6 +22,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private String fontSize;
 	private String fontUnderline;
 	private String text;
+	private String textDirection;
 	private String textAlignment;
 	private String verticalAlignment;
 	private String borderType;
@@ -80,6 +81,14 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 
 	public final void setText(String text) {
 		this.text = text;
+	}
+
+	public final String getTextDirection() {
+		return textDirection;
+	}
+
+	public final void setTextDirection(String textDirection) {
+		this.textDirection = textDirection;
 	}
 
 	public final String getTextAlignment() {
@@ -157,6 +166,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  fontSize='"+fontSize+"'");
 			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 			LOG.debug("  borderType='"+borderType+"'");
@@ -236,6 +246,16 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 				component.setText(vb);
 			} else {
 				component.setText(text);
+			}
+		}
+
+		if (textDirection != null) {
+			if (isValueReference(textDirection)) {
+				ValueBinding vb = application.createValueBinding(textDirection);
+
+				component.setTextDirection(vb);
+			} else {
+				component.setTextDirection(getInt(textDirection));
 			}
 		}
 
@@ -323,6 +343,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		fontSize = null;
 		fontUnderline = null;
 		text = null;
+		textDirection = null;
 		textAlignment = null;
 		verticalAlignment = null;
 		borderType = null;

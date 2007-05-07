@@ -36,6 +36,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
+        writeTextDirection(htmlWriter, textAreaComponent);
 
         int col = textAreaComponent.getColumnNumber(facesContext);
         if (col > 0) {

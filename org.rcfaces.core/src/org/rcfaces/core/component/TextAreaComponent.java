@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
@@ -36,6 +37,7 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
 public class TextAreaComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
 	ITextCapability,
+	ITextDirectionCapability,
 	IEmptyMessageCapability,
 	IReadOnlyCapability,
 	IValueChangeEventCapability,
@@ -48,7 +50,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","valueChangeListener","columnNumber","warnStyleClass","styleClass","text","rowNumber","infoStyleClass","readOnly","focusStyleClass","emptyMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","valueChangeListener","columnNumber","warnStyleClass","textDirection","styleClass","text","rowNumber","infoStyleClass","readOnly","focusStyleClass","emptyMessage"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -93,6 +95,36 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 */
 	public void setText(ValueBinding text) {
 		setValue(text);
+	}
+
+	public int getTextDirection() {
+		return getTextDirection(null);
+	}
+
+	/**
+	 * See {@link #getTextDirection() getTextDirection()} for more details
+	 */
+	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "textDirection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextDirectionSetted() {
+		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+	}
+
+	public void setTextDirection(int textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+	}
+
+	/**
+	 * See {@link #setTextDirection(int) setTextDirection(int)} for more details
+	 */
+	public void setTextDirection(ValueBinding textDirection) {
+		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
 	}
 
 	public java.lang.String getEmptyMessage() {
