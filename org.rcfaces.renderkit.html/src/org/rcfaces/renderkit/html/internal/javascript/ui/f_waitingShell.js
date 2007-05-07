@@ -5,7 +5,7 @@
 /**
  * <p><strong>f_waitingShell</strong> represents popup modal window.
  *
- * @class public final f_waitingShell extends f_modalShell
+ * @class public final f_waitingShell extends f_shell
  * @author Fred Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -21,19 +21,22 @@ var __prototype = {
 	 * @method public
 	 */
 	f_waitingShell: function() {
+		this.f_super(arguments);
+		
 		this.f_setCssClassBase("f_waitingShell");
 		this.f_setBackgroundMode("greyed");
 		this.f_setImageURL("images/3MA_processingbar.gif")
 	},
 
-	/**
+	/*
 	 * <p>Destruct a new <code>f_messageDialog</code>.</p>
 	 *
 	 * @method public
-	 */
+	 *
 	f_finalize: function() {
 		this.f_super(arguments);
 	},
+	*/
 
 	/**
 	 *  <p>Fill a modal iFrame. 
@@ -42,12 +45,12 @@ var __prototype = {
 	 * @method protected
 	 */
 	_fillModIFrame: function() {
-     	f_core.Debug(f_modalShell, "_FillModIFrame: entering");
+     	f_core.Debug(f_shell, "_FillModIFrame: entering");
 
 		this.f_super(arguments);
 
 		//Hide Selects
-		f_modalShell._HideSelect();
+		f_shell._HideSelect();
 
 		var iframe=this.f_getIframe();
 		var docBase = iframe.contentWindow.document;
@@ -98,7 +101,7 @@ var __prototype = {
      	f_core.Debug(f_waitingShell, "f_hide : entering ");
 		
 		// Hide the blocking Div
-		f_modalShell._DelModIFrame();
+		f_shell._DelModIFrame();
 	},
 
 	/**
@@ -110,4 +113,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_waitingShell", null, __static, __prototype, f_modalShell);
+new f_class("f_waitingShell", null, __static, __prototype, f_shell);

@@ -23,22 +23,23 @@ var __static = {
      * @method public static
      */
     Finalizer: function() {
-    	f_messageDialog._Messages = undefined;
-    	f_messageDialog._DocComplete = undefined;
+    	f_messageDialog._Messages = undefined; // List<Object>
+    	// f_messageDialog._DocComplete = undefined; // boolean
  	},
      /**
      * @method private static
-     * @param Object evt the event
+     * @param Event evt the event
+     * @return boolean
      */
     _OnClick: function(evt) {
 		var button=this;
 		var base=button._base;
 		var messageBox=base._messageBox;
 		
-		f_core.Debug(f_messageDialog, "entering f_messageDialog._OnClick");
+		f_core.Debug(f_messageDialog, "_OnClick: entering");
 		
 		if (messageBox.f_getEventLocked(true)) {
-			f_core.Debug(f_messageDialog, "f_messageDialog._OnClick : messageBox.f_getEventLocked(true)");
+			f_core.Debug(f_messageDialog, "_OnClick : messageBox.f_getEventLocked(true)");
 			return false;
 		}
 
@@ -46,7 +47,7 @@ var __static = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		f_core.Debug(f_messageDialog, "f_messageDialog._OnClick : before messageBox.f_buttonOnClick(button);");
+		f_core.Debug(f_messageDialog, "_OnClick: before messageBox.f_buttonOnClick(button);");
 		messageBox.f_buttonOnClick(button);
 		
 		return f_core.CancelJsEvent(evt);
@@ -58,6 +59,7 @@ var __static = {
      * @param function functionOpen
      * @param function callback
      * @param number priority
+     * @return void
      */
     _AddMessage: function(msgBox, functionOpen, callback, priority) {
 		if (!f_messageDialog._Messages) {
@@ -75,12 +77,13 @@ var __static = {
      * <p>Call the next stored messageBox</p>
      *
      * @method private static
+     * @return void
      */
     _ShowNextMsgStored: function() {
-	    f_core.Debug(f_messageDialog, "_ShowNextMsgStored : entering");
+	    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: entering");
     	var msgBoxes = f_messageDialog._Messages;
 
-    	if (msgBoxes && msgBoxes.length > 0) {
+    	if (msgBoxes && msgBoxes.length) {
 		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: "+msgBoxes.length+" Items");
 
 			var maxPriority = 0;
@@ -110,7 +113,7 @@ var __static = {
 			return;
 		}
 		
-		f_modalShell._DelModIFrame();
+		f_shell._DelModIFrame();
     },
     
     /**
@@ -119,11 +122,13 @@ var __static = {
      * @method public static
      * @param String value 
      * @param f_meesageDialog messageDialog
+     * @return void
      */
     SubmitValue: function(value, messageDialog) {
-	    f_core.Debug(f_messageDialog, "SubmitValue : entering ("+value+", "+messageDialog+")");
     	f_core.Assert(typeof(value)=="string", "f_messageDialog.SubmitValue: Invalid parameter value '"+value+"'.");
     	f_core.Assert(messageDialog.nodeType==1, "f_messageDialog.SubmitValue: messageDialog is not a tag '"+messageDialog+"'.");
+
+	    f_core.Debug(f_messageDialog, "SubmitValue: entering ("+value+", "+messageDialog+")");
 
 		var event=new f_event(messageDialog, f_event.SELECTION, null, null, value);
 
@@ -136,7 +141,8 @@ var __static = {
      * @method public static
      */
      DocumentComplete: function() {
-     	f_core.Debug(f_messageDialog, "DocumentComplete : entering;");
+     	f_core.Debug(f_messageDialog, "DocumentComplete: entering");
+     	
      	f_messageDialog._DocComplete=true;
      	f_messageDialog._ShowNextMsgStored();
      }
@@ -178,16 +184,20 @@ var __prototype = {
 	 * @param optional String defaultValue the value returned if the popup is closed without selecting a button
 	 */
 	f_messageDialog: function(title, text, defaultValue) {
-		if (this.nodeType==1) {
+		this.f_super(arguments);
+		
+		if (this.nodeType==f_core.ELEMENT_NODE) {
 			var tag = this;
 			this._title = tag.getAttribute("v:title");
 			this._text=tag.getAttribute("v:text");
 			this._defaultValue=tag.getAttribute("v:defaultValue");
+
 		} else {
 			this._title=title;
 			this._text=text;
 			this._defaultValue=defaultValue;
 		}
+
    		this._actions = new Array();
 		this._priority=0;
 		this.f_setCssClassBase("f_messageDialog");
@@ -199,15 +209,16 @@ var __prototype = {
 	 *
 	 * @method public
 	 */
-	f_finalize: function() {
-		this.f_super(arguments);
-		this._title=undefined; // string
-		this._text=undefined; // string
-		this._defaultValue=undefined; // string
-		this._actions=undefined; // array
+	f_finalize: function() {		
+		// this._title=undefined; // string
+		// this._text=undefined; // string
+		// this._defaultValue=undefined; // string
+		this._actions=undefined; // List<Object>
 		this._callback=undefined; // function
-		this._styleClass=undefined; // string
-		this._priority=undefined; // int
+		//this._styleClass=undefined; // string
+		//this._priority=undefined; // int
+
+		this.f_super(arguments);
 	},
 
 	/**
@@ -279,7 +290,8 @@ var __prototype = {
 	 * @param String defaultValue the default Value
 	 */
 	f_setDefaultValue: function(defaultValue) {
-    	f_core.Assert((typeof(defaultValue)=="string"), "f_messageDialog.f_setDefaultValue: Invalid parameter '"+defaultValue+"'.");
+    	f_core.Assert(typeof(defaultValue)=="string", "f_messageDialog.f_setDefaultValue: Invalid parameter '"+defaultValue+"'.");
+
 		this._defaultValue = defaultValue;
 	},
 	
@@ -300,7 +312,8 @@ var __prototype = {
 	 * @param String styleClass an additional style Class
 	 */
 	f_setStyleClass: function(styleClass) {
-    	f_core.Assert((typeof(styleClass)=="string"), "f_messageDialog.f_setStyleClass: Invalid parameter '"+styleClass+"'.");
+    	f_core.Assert(typeof(styleClass)=="string", "f_messageDialog.f_setStyleClass: Invalid parameter '"+styleClass+"'.");
+
 		this._styleClass = styleClass;
 	},
 	
@@ -319,9 +332,11 @@ var __prototype = {
 	 *
 	 * @method public 
 	 * @param int priority
+	 * @return void
 	 */
 	f_setPriority: function(priority) {
-    	f_core.Assert((typeof(priority)=="number"), "f_messageDialog.f_setPriority: Invalid parameter '"+priority+"'."+typeof(priority));
+    	f_core.Assert(typeof(priority)=="number", "f_messageDialog.f_setPriority: Invalid parameter '"+priority+"'."+typeof(priority));
+
 		this._priority = priority;
 	},
 	
@@ -333,6 +348,7 @@ var __prototype = {
 	 * @param String text the text displayed for the action
 	 * @param optionnal boolean disabled true if the button must be disabled
 	 * @param optionnal boolean submitButton true if the button is the default value for the messageDialog
+	 * @return void
 	 */
 	f_addAction: function(value, text, disabled, submitButton) {
     	f_core.Assert((typeof(value)=="string"), "f_messageDialog.f_addAction: Invalid parameter value '"+value+"'.");
@@ -365,10 +381,12 @@ var __prototype = {
 	 *
 	 * @method public 
 	 * @param Function callback The callback function to be called when the messageBox is closed
+	 * @return void
 	 */
 	f_open: function(callback) {
-     	f_core.Debug(f_messageDialog, "f_messageDialog.f_open : entering ("+callback+")");
-		f_core.Assert(!arguments.length || typeof(callback) == "function", "f_messageDialog.f_open : Invalid Callback parameter ("+callback+")");
+		f_core.Assert(!arguments.length || typeof(callback) == "function", "f_messageDialog.f_open: Invalid Callback parameter ("+callback+")");
+
+     	f_core.Debug(f_messageDialog, "f_open: entering ("+callback+")");
 		
 		// Create a blocking Div
 		this._drawModIFrame();
@@ -387,15 +405,17 @@ var __prototype = {
 	 *  </p>
 	 *
 	 * @method private 
-	 * @param Function callback The callback function to be called when the messageBox is closed
+	 * @param optional Function callback The callback function to be called when the messageBox is closed
+	 * @return void
 	 */
 	_open: function(callback, base) {
-     	f_core.Debug(f_messageDialog, "_open : entering ("+callback+", "+base+")");
-		f_core.Assert(callback === undefined || typeof(callback) == "function", "f_messageDialog._open : Invalid Callback parameter ("+callback+")");
-		f_core.Assert(base != undefined, "f_messageDialog._open : Invalid base parameter ("+base+")");
+		f_core.Assert(callback === undefined || typeof(callback) == "function", "f_messageDialog._open: Invalid Callback parameter ("+callback+")");
+		f_core.Assert(base != undefined, "f_messageDialog._open: Invalid base parameter ("+base+")");
+
+     	f_core.Debug(f_messageDialog, "_open: entering ("+callback+", "+base+")");
 		
 		//Hide Selects
-		f_modalShell._HideSelect();
+		f_shell._HideSelect();
 		
 		var cssClassBase = this.f_getCssClassBase();
 		if (!cssClassBase) {
@@ -501,7 +521,7 @@ var __prototype = {
 		var actTr = docBase.createElement("tr");
 		
 		var actions=this._actions;
-		if (actions.length == 0) {
+		if (!actions.length) {
 			var def = this._defaultValue;
 			if (!def) {
 				def = "OK";
@@ -545,18 +565,19 @@ var __prototype = {
 		base.appendChild(table);
 		
 		// Hide the select
-		f_modalShell._HideSelect();
+		f_shell._HideSelect();
 		
 	},
 	
 	/**
 	 *  <p>callBack that will call the user provided callBack</p>
 	 *
-	 * @method public 
-	 * @param HTMLInputElement button The button that was pushed
+	 * @method protected 
+	 * @param HTMLInputElement selectedButton The button that was pushed
+	 * @return void
 	 */
 	f_buttonOnClick: function(selectedButton) {
-     	f_core.Debug(f_messageDialog, "f_buttonOnClick : entering ("+selectedButton+")");
+     	f_core.Debug(f_messageDialog, "f_buttonOnClick: entering ("+selectedButton+")");
 	
 		var base=selectedButton._base;
 		var messageBox=base._messageBox;
@@ -602,8 +623,7 @@ var __prototype = {
 		}
 
 		//delete the iFrame
-		f_modalShell._DelModIFrame();
-		
+		f_shell._DelModIFrame();
 	},
 	
 	
