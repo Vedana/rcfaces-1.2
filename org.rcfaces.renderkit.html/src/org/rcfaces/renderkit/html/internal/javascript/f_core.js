@@ -192,6 +192,12 @@ var f_core = {
 	 */
 	_FocusComponent: undefined,
 	
+	
+	/**
+	 * @field private static List<function>
+	 */
+	_PostSubmitListeners: undefined,
+	
 	/**
 	 * Throws a message if the expression is true.
 	 *
@@ -851,7 +857,8 @@ var f_core = {
 					f_core._FocusTimeoutID=undefined;
 					window.clearTimeout(timeoutID);
 				}
-				f_core._FocusComponent=undefined;
+				f_core._FocusComponent=undefined; // HTMLElement
+				f_core._PostSubmitListeners=undefined; // List<function>
 		
 				var forms = document.forms;
 				for (var i=0; i<forms.length; i++) {
@@ -1241,13 +1248,15 @@ var f_core = {
 				}
 			}
 
-			// On sérialise ICI car on est pas sure d'appeler le _Submit()			
+			/*
+			// On ne sérialise pas ICI, car on peut assister à 2 sérialisations ...
 			var classLoader=win._classLoader;
 			if (classLoader) {
 				classLoader.f_serialize(form);
 				
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
 			}
+			*/
 				
 			return true;
 		} finally {
@@ -1405,6 +1414,23 @@ var f_core = {
 				
 				if (createWindowParameters) {
 					unlockEvents=true;
+
+				} else {
+					var postSubmitListeners=f_core._PostSubmitListeners;
+					if (postSubmitListeners) {
+						for(var i=0;i<postSubmitListeners.length;i++) {
+							var postSubmitListener=postSubmitListener[i];
+							
+							try {
+								postSubmitListener.call(f_core, form);
+								
+							} catch (x) {
+								f_core.Error(f_core, "_Submit: PostSubmitListener ("+pos+") threw an exception.", x);
+							}
+						}
+	
+						f_core.Profile(null, "f_core._submit.postSubmitListeners("+postSubmitListeners.length+")");
+					}
 				}
 				
 			} catch (ex) {
@@ -1448,6 +1474,22 @@ var f_core = {
 		} finally {		
 			f_core.Profile(true, "f_core._submit("+url+")");
 		}
+	},
+	/**
+	 * @method hidden static
+	 * @param function listener
+	 * @return void
+	 */
+	AddPostSubmitListener: function(listener) {
+		f_ocre.Assert(typeof(listener)=="function", "f_core.AddPostSubmitListener: invalid listener parameter ("+listener+")");
+		
+		var postSubmitListeners=f_core._PostSubmitListeners;		
+		if (!postSubmitListeners) {
+			postSubmitListeners=new Array;
+			f_core._PostSubmitListeners=postSubmitListeners;
+		}
+		
+		postSubmitListeners.push(listener);
 	},
 	/**
 	 * @method private static
