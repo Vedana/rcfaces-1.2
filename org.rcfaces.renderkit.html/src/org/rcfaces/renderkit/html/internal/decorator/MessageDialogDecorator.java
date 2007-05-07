@@ -22,12 +22,11 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
      */
     protected String getCssClassBase(MessageDialogComponent component,
             FacesContext facesContext) {
-        return component.getCssClassBase(facesContext);
+        return null;
     }
 
     public MessageDialogDecorator(UIComponent component) {
         super(component, null);
-
     }
 
     protected SelectItemsContext createHtmlContext() {

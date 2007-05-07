@@ -15,6 +15,9 @@ import org.rcfaces.renderkit.html.internal.decorator.MessageDialogDecorator;
 
 public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
 	
+	public static final String JS_CLASS = "f_messageDialog";
+	public static final String JS_SUBMITVALUE_CALLBACK = JS_CLASS+".SubmitValue";
+
 	protected IComponentDecorator createComponentDecorator(FacesContext facesContext, UIComponent component) {
 		return createMessageBoxDecorator(facesContext, component);
 	}
@@ -32,7 +35,7 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
 	}
 
     protected String getJavaScriptClassName() {
-        return "f_messageDialog";
+        return JS_CLASS;
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
