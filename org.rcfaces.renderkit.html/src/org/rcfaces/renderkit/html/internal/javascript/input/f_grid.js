@@ -336,7 +336,7 @@ var __static = {
 			// Le tableau est vide ?
 //			dataGrid._title.style.width=dataGrid.offsetWidth+"px";
 			
-			f_core.Debug(f_grid, "No rows !");
+			f_core.Debug(f_grid, "UpdateTitle: No rows !");
 			return;
 		}
 		
@@ -524,9 +524,10 @@ var __static = {
 			
 			dataGrid.f_onFocus(evt);
 	
-			return true;		
+			return true;
+			
 		} catch (x) {
-			f_core.Error(f_grid, "_Link_onfocus throws exception.", x);
+			f_core.Error(f_grid, "_Link_onfocus: throws exception.", x);
 		}
 	},
 	/**
@@ -557,8 +558,9 @@ var __static = {
 			dataGrid.f_onBlur(evt);
 	
 			return true;
+			
 		} catch (x) {
-			f_core.Error(f_grid, "_Link_onfocus throws exception.", x);
+			f_core.Error(f_grid, "_Link_onfocus: throws exception.", x);
 		}
 	},
 	/**

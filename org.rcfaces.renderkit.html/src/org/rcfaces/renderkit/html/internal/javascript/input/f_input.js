@@ -25,7 +25,7 @@ var __prototype = {
 			this.f_insertEventListenerFirst(f_event.BLUR, this._focusBlurEvent);
 		}
 		
-		f_core.Debug(f_input, "Input associated to component '"+this.id+"' is id='"+input.id+"', tagName="+input.tagName+", name='"+input.name+"'.");
+		f_core.Debug(f_input, "f_input: Input associated to component '"+this.id+"' is id='"+input.id+"', tagName="+input.tagName+", name='"+input.name+"'.");
 	},
 	f_finalize: function() {
 //		this._hasFocus=undefined; // boolean
@@ -108,7 +108,7 @@ var __prototype = {
 		
 		var input=this.f_getInput();
 	
-		f_core.Debug(f_input, "f_input.f_setFocus: of input '"+this.id+"' component="+input+" componentId="+input.id);
+		f_core.Debug(f_input, "f_setFocus: Input '"+this.id+"' component="+input+" componentId="+input.id);
 		
 		try {
 			input.focus();
@@ -119,6 +119,7 @@ var __prototype = {
 		
 		if (input.tagName.toLowerCase()=="textarea") {
 			input.select();
+			
 		} else {  		
 			var type=input.type;
 			if (type) {
@@ -325,7 +326,7 @@ var __prototype = {
 			}
 		} catch (x) {
 			// f_messageContext n'existe peut etre pas !
-			f_core.Debug("f_input", "No message context !", x);
+			f_core.Debug(f_input, "f_isValid: No message context !", x);
 		}
 		
 		return this.f_validValue();

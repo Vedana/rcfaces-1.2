@@ -9,7 +9,6 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$ 
  */
- 
 
 .f_radioButton {
  	-moz-user-select: none;
@@ -23,7 +22,6 @@
 	vertical-align: middle;
 }
 
-
 .f_radioButton_text {
 	vertical-align: middle;
 	display: inline;
@@ -33,7 +31,7 @@
 	cursor: pointer;
 }
 
-.f_radioButton_text_disabled {
+.f_radioButton_disabled .f_radioButton_text {
 	color: #A1A192;
 	cursor: default;
 }

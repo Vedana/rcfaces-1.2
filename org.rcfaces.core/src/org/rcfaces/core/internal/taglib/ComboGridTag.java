@@ -16,6 +16,7 @@ public class ComboGridTag extends AbstractDataTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(ComboGridTag.class);
 
+	private String disabled;
 	private String required;
 	private String border;
 	private String rowStyleClass;
@@ -28,8 +29,18 @@ public class ComboGridTag extends AbstractDataTag implements Tag {
 	private String labelColumnId;
 	private String selectedValue;
 	private String selectionValueConverter;
+	private String popupWidth;
+	private String popupHeight;
 	public String getComponentType() {
 		return ComboGridComponent.COMPONENT_TYPE;
+	}
+
+	public final String getDisabled() {
+		return disabled;
+	}
+
+	public final void setDisabled(String disabled) {
+		this.disabled = disabled;
 	}
 
 	public final String getRequired() {
@@ -128,11 +139,28 @@ public class ComboGridTag extends AbstractDataTag implements Tag {
 		this.selectionValueConverter = selectionValueConverter;
 	}
 
+	public final String getPopupWidth() {
+		return popupWidth;
+	}
+
+	public final void setPopupWidth(String popupWidth) {
+		this.popupWidth = popupWidth;
+	}
+
+	public final String getPopupHeight() {
+		return popupHeight;
+	}
+
+	public final void setPopupHeight(String popupHeight) {
+		this.popupHeight = popupHeight;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ComboGridComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  disabled='"+disabled+"'");
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
@@ -145,6 +173,8 @@ public class ComboGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  labelColumnId='"+labelColumnId+"'");
 			LOG.debug("  selectedValue='"+selectedValue+"'");
 			LOG.debug("  selectionValueConverter='"+selectionValueConverter+"'");
+			LOG.debug("  popupWidth='"+popupWidth+"'");
+			LOG.debug("  popupHeight='"+popupHeight+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -158,6 +188,16 @@ public class ComboGridTag extends AbstractDataTag implements Tag {
 		ComboGridComponent component = (ComboGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
+
+		if (disabled != null) {
+			if (isValueReference(disabled)) {
+				ValueBinding vb = application.createValueBinding(disabled);
+
+				component.setDisabled(vb);
+			} else {
+				component.setDisabled(getBool(disabled));
+			}
+		}
 
 		if (required != null) {
 			if (isValueReference(required)) {
@@ -268,9 +308,28 @@ public class ComboGridTag extends AbstractDataTag implements Tag {
 				component.setSelectionValueConverter(selectionValueConverter);
 			}
 		}
+
+		if (popupWidth != null) {
+			if (isValueReference(popupWidth)) {
+				ValueBinding vb = application.createValueBinding(popupWidth);
+				component.setPopupWidth(vb);
+			} else {
+				component.setPopupWidth(getInt(popupWidth));
+			}
+		}
+
+		if (popupHeight != null) {
+			if (isValueReference(popupHeight)) {
+				ValueBinding vb = application.createValueBinding(popupHeight);
+				component.setPopupHeight(vb);
+			} else {
+				component.setPopupHeight(getInt(popupHeight));
+			}
+		}
 	}
 
 	public void release() {
+		disabled = null;
 		required = null;
 		border = null;
 		rowStyleClass = null;
@@ -283,6 +342,8 @@ public class ComboGridTag extends AbstractDataTag implements Tag {
 		labelColumnId = null;
 		selectedValue = null;
 		selectionValueConverter = null;
+		popupWidth = null;
+		popupHeight = null;
 
 		super.release();
 	}

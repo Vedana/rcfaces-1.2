@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
 
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
@@ -22,7 +23,7 @@ public class ResetButtonRenderer extends ButtonRenderer {
      * @see org.rcfaces.core.internal.renderkit.html.AbstractInputRenderer#getInputType()
      */
     protected String getInputType(UIComponent component) {
-        return RESET_TYPE;
+        return IHtmlWriter.RESET_INPUT_TYPE;
     }
 
     protected String getJavaScriptClassName() {

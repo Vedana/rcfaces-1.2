@@ -52,7 +52,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_isSelected: function() {
-		f_core.Assert(this._input, "Input is not found for selected property !");
+		f_core.Assert(this._input, "f_checkButton.f_isSelected: Input is not found for selected property !");
 
 		return (this._input.checked==true);
 	},
@@ -63,7 +63,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setSelected: function(set) {
-		f_core.Assert(this._input, "Input is not found for selected property !");
+		f_core.Assert(this._input, "f_checkButton.f_setSelected: Input is not found for selected property !");
 
 		if (this._input.checked==set) {
 			return;
@@ -127,27 +127,6 @@ var __prototype = {
 		}
 		f_core.SetTextNode(this._label, text);
 		this.f_setProperty(f_prop.TEXT,text);
-	},
-
-	/**
-	 * @method protected
-	 * @param boolean disabled
-	 * @return void
-	 */
-	f_updateDisabled: function(disabled) {
-		var label=this._label;
-		if (!label) {
-			return;
-		}
-		var clz=this.f_getMainStyleClass()+"_text";
-		
-		if (disabled) {
-			clz+=" "+clz+"_disabled";
-		}
-		
-		if (label.className!=clz) {
-			label.className=clz;
-		}
 	},
 	/**
 	 * @method protected

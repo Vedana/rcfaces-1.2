@@ -70,4 +70,21 @@ public interface IHtmlElements {
 
     String UL = "ul";
 
+    String BUTTON_INPUT_TYPE = "button";
+
+    String CHECKBOX_INPUT_TYPE = "checkbox";
+
+    String HIDDEN_INPUT_TYPE = "hidden";
+
+    String IMAGE_INPUT_TYPE = "image";
+
+    String PASSWORD_INPUT_TYPE = "password";
+
+    String RADIO_INPUT_TYPE = "radio";
+
+    String RESET_INPUT_TYPE = "reset";
+
+    String SUBMIT_INPUT_TYPE = "submit";
+
+    String TEXT_INPUT_TYPE = "text";
 }

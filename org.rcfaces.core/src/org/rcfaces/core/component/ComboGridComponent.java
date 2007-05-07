@@ -1,31 +1,33 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import java.util.Arrays;
+import org.rcfaces.core.internal.tools.SortTools;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
 import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.SortTools;
-import java.util.Arrays;
-import org.rcfaces.core.internal.tools.GridTools;
 import java.util.Set;
-import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.capability.IPagedCapability;
-import org.rcfaces.core.component.AbstractDataComponent;
-import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.ComboColumnComponent;
-import org.rcfaces.core.component.capability.IRequiredCapability;
 
 public class ComboGridComponent extends AbstractDataComponent implements 
+	IDisabledCapability,
 	IRequiredCapability,
 	IBorderCapability,
 	IRowStyleClassCapability,
@@ -39,7 +41,7 @@ public class ComboGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"rowCountVar","verticalScrollPosition","selectionValueConverter","paged","required","horizontalScrollPosition","selectedValue","border","labelColumnId","rowStyleClass","valueColumnId","rowIndexVar"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","verticalScrollPosition","paged","selectionValueConverter","required","horizontalScrollPosition","disabled","selectedValue","rowStyleClass","rowIndexVar","valueColumnId","rowCountVar","popupWidth","border","labelColumnId"}));
 	}
 
 	public ComboGridComponent() {
@@ -142,6 +144,36 @@ public class ComboGridComponent extends AbstractDataComponent implements
 
 				return GridTools.listSortedComponents(context, this);
 			
+	}
+
+	public boolean isDisabled() {
+		return isDisabled(null);
+	}
+
+	/**
+	 * See {@link #isDisabled() isDisabled()} for more details
+	 */
+	public boolean isDisabled(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DISABLED, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "disabled" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDisabledSetted() {
+		return engine.isPropertySetted(Properties.DISABLED);
+	}
+
+	public void setDisabled(boolean disabled) {
+		engine.setProperty(Properties.DISABLED, disabled);
+	}
+
+	/**
+	 * See {@link #setDisabled(boolean) setDisabled(boolean)} for more details
+	 */
+	public void setDisabled(ValueBinding disabled) {
+		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
 	public boolean isRequired() {
@@ -497,6 +529,54 @@ public class ComboGridComponent extends AbstractDataComponent implements
 	 */
 	public final boolean isSelectionValueConverterSetted() {
 		return engine.isPropertySetted(Properties.SELECTION_VALUE_CONVERTER);
+	}
+
+	public final int getPopupWidth() {
+		return getPopupWidth(null);
+	}
+
+	public final int getPopupWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.POPUP_WIDTH, 0, facesContext);
+	}
+
+	public final void setPopupWidth(int popupWidth) {
+		engine.setProperty(Properties.POPUP_WIDTH, popupWidth);
+	}
+
+	public final void setPopupWidth(ValueBinding popupWidth) {
+		engine.setProperty(Properties.POPUP_WIDTH, popupWidth);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "popupWidth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPopupWidthSetted() {
+		return engine.isPropertySetted(Properties.POPUP_WIDTH);
+	}
+
+	public final int getPopupHeight() {
+		return getPopupHeight(null);
+	}
+
+	public final int getPopupHeight(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.POPUP_HEIGHT, 0, facesContext);
+	}
+
+	public final void setPopupHeight(int popupHeight) {
+		engine.setProperty(Properties.POPUP_HEIGHT, popupHeight);
+	}
+
+	public final void setPopupHeight(ValueBinding popupHeight) {
+		engine.setProperty(Properties.POPUP_HEIGHT, popupHeight);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "popupHeight" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPopupHeightSetted() {
+		return engine.isPropertySetted(Properties.POPUP_HEIGHT);
 	}
 
 	protected Set getCameliaFields() {

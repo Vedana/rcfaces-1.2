@@ -183,33 +183,138 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
 
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
+        encodeGrid((IHtmlWriter) writer);
+    }
+
+    protected void encodeGrid(IHtmlWriter htmlWriter) throws WriterException {
+
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        IGridComponent dg = (IGridComponent) componentRenderContext
+        IGridComponent gridComponent = (IGridComponent) componentRenderContext
                 .getComponent();
 
-        if (dg instanceof IPreferenceCapability) {
-            IPreferenceCapability preferenceCapability = (IPreferenceCapability) dg;
+        if (gridComponent instanceof IPreferenceCapability) {
+            IPreferenceCapability preferenceCapability = (IPreferenceCapability) gridComponent;
 
             IComponentPreference preference = preferenceCapability
                     .getPreference();
             if (preference != null) {
-                preference.loadPreference(facesContext, (UIComponent) dg);
+                preference.loadPreference(facesContext,
+                        (UIComponent) gridComponent);
             }
         }
 
-        AbstractGridRenderContext gridRenderContext = createTableContext((IHtmlComponentRenderContext) writer
-                .getComponentRenderContext());
+        AbstractGridRenderContext gridRenderContext = createTableContext(componentRenderContext);
         componentRenderContext.setAttribute(TABLE_CONTEXT, gridRenderContext);
+
+        htmlWriter.startElement(IHtmlWriter.DIV, (UIComponent) gridComponent);
+
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter);
+
+        if (gridRenderContext.isSelectable()) {
+            htmlWriter.writeAttribute("v:selectionCardinality",
+                    gridRenderContext.getSelectionCardinality());
+
+            if (gridRenderContext.isClientSelectionFullState()) {
+                htmlWriter.writeAttribute("v:clientSelectionFullState", "true");
+            }
+        }
+        if (gridRenderContext.isCheckable()) {
+            htmlWriter.writeAttribute("v:checkCardinality", gridRenderContext
+                    .getCheckCardinality());
+
+            if (gridRenderContext.getCheckCardinality() == ICardinality.ONEMANY_CARDINALITY) {
+                int checkedCount = ((ICheckProvider) gridComponent)
+                        .getCheckedValuesCount();
+
+                if (checkedCount > 0) {
+                    htmlWriter.writeAttribute("v:checkedCount", checkedCount);
+                }
+            }
+
+            if (gridRenderContext.isClientCheckFullState()) {
+                htmlWriter.writeAttribute("v:clientCheckFullState", "true");
+            }
+        }
+
+        if (gridComponent instanceof IReadOnlyCapability) {
+            if (((IReadOnlyCapability) gridComponent).isReadOnly()) {
+                htmlWriter.writeAttribute("v:readOnly", "true");
+            }
+        }
+
+        if (gridRenderContext.isDisabled()) {
+            htmlWriter.writeAttribute("v:disabled", "true");
+        }
+
+        if (gridComponent instanceof IRequiredCapability) {
+            if (((IRequiredCapability) gridComponent).isRequired()) {
+                htmlWriter.writeAttribute("v:required", "true");
+            }
+        }
+
+        Object dataModel = gridRenderContext.getDataModel();
+        if (dataModel instanceof IFiltredModel) {
+            htmlWriter.writeAttribute("v:filtred", "true");
+
+            IFilterProperties filterMap = gridRenderContext.getFiltersMap();
+            if (filterMap != null && filterMap.isEmpty() == false) {
+                String filterExpression = HtmlTools.encodeFilterExpression(
+                        filterMap, componentRenderContext.getRenderContext()
+                                .getProcessContext(), componentRenderContext
+                                .getComponent());
+                htmlWriter.writeAttribute("v:filterExpression",
+                        filterExpression);
+            }
+        }
+
+        int rows = gridRenderContext.getRows();
+        if (rows > 0) {
+            htmlWriter.writeAttribute("v:rows", rows);
+        }
+
+        int rowCount = gridRenderContext.getRowCount();
+        if (rowCount >= 0) {
+            htmlWriter.writeAttribute("v:rowCount", rowCount);
+        }
+
+        int first = gridRenderContext.getFirst();
+        if (first > 0) {
+            htmlWriter.writeAttribute("v:first", first);
+        }
+        if (gridRenderContext.isPaged() == false) {
+            htmlWriter.writeAttribute("v:paged", "false");
+        }
+
+        String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
+
+        if (rowStyleClasses != null) {
+            StringAppender sa = new StringAppender(rowStyleClasses.length * 32);
+
+            for (int i = 0; i < rowStyleClasses.length; i++) {
+                String token = rowStyleClasses[i];
+
+                if (sa.length() > 0) {
+                    sa.append(',');
+                }
+                sa.append(token);
+            }
+
+            htmlWriter.writeAttribute("v:rowStyleClass", sa.toString());
+        }
+
+        writeGridComponentAttributes(htmlWriter, gridRenderContext,
+                gridComponent);
 
         boolean scrollBars = false;
 
-        String height = ((ISizeCapability) dg).getHeight();
-        String width = ((ISizeCapability) dg).getWidth();
-        int rows = gridRenderContext.getRows();
+        String height = ((ISizeCapability) gridComponent).getHeight();
+        String width = ((ISizeCapability) gridComponent).getWidth();
         if (height != null || width != null) {
             scrollBars = true;
             /*
@@ -264,113 +369,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
         gridRenderContext.setResizable(resizable, totalResize);
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        htmlWriter.startElement(IHtmlWriter.DIV, (UIComponent) dg);
-
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter);
-
-        if (gridRenderContext.isSelectable()) {
-            htmlWriter.writeAttribute("v:selectionCardinality",
-                    gridRenderContext.getSelectionCardinality());
-
-            if (gridRenderContext.isClientSelectionFullState()) {
-                htmlWriter.writeAttribute("v:clientSelectionFullState", "true");
-            }
-        }
-        if (gridRenderContext.isCheckable()) {
-            htmlWriter.writeAttribute("v:checkCardinality", gridRenderContext
-                    .getCheckCardinality());
-
-            if (gridRenderContext.getCheckCardinality() == ICardinality.ONEMANY_CARDINALITY) {
-                int checkedCount = ((ICheckProvider) dg)
-                        .getCheckedValuesCount();
-
-                if (checkedCount > 0) {
-                    htmlWriter.writeAttribute("v:checkedCount", checkedCount);
-                }
-            }
-
-            if (gridRenderContext.isClientCheckFullState()) {
-                htmlWriter.writeAttribute("v:clientCheckFullState", "true");
-            }
-        }
-
-        if (dg instanceof IReadOnlyCapability) {
-            if (((IReadOnlyCapability) dg).isReadOnly()) {
-                htmlWriter.writeAttribute("v:readOnly", "true");
-            }
-        }
-
-        if (gridRenderContext.isDisabled()) {
-            htmlWriter.writeAttribute("v:disabled", "true");
-        }
-
-        if (dg instanceof IRequiredCapability) {
-            if (((IRequiredCapability) dg).isRequired()) {
-                htmlWriter.writeAttribute("v:required", "true");
-            }
-        }
-
         if (resizable) {
             htmlWriter.writeAttribute("v:resizable", "true");
         }
 
-        Object dataModel = gridRenderContext.getDataModel();
-        if (dataModel instanceof IFiltredModel) {
-            htmlWriter.writeAttribute("v:filtred", "true");
-
-            IFilterProperties filterMap = gridRenderContext.getFiltersMap();
-            if (filterMap != null && filterMap.isEmpty() == false) {
-                String filterExpression = HtmlTools.encodeFilterExpression(
-                        filterMap, componentRenderContext.getRenderContext()
-                                .getProcessContext(), componentRenderContext
-                                .getComponent());
-                htmlWriter.writeAttribute("v:filterExpression",
-                        filterExpression);
-            }
-        }
-
-        if (rows > 0) {
-            htmlWriter.writeAttribute("v:rows", rows);
-        }
-
-        int rowCount = gridRenderContext.getRowCount();
-        if (rowCount >= 0) {
-            htmlWriter.writeAttribute("v:rowCount", rowCount);
-        }
-
-        int first = gridRenderContext.getFirst();
-        if (first > 0) {
-            htmlWriter.writeAttribute("v:first", first);
-        }
-        if (gridRenderContext.isPaged() == false) {
-            htmlWriter.writeAttribute("v:paged", "false");
-        }
-
-        String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
-
-        if (rowStyleClasses != null) {
-            StringAppender sa = new StringAppender(rowStyleClasses.length * 32);
-
-            for (int i = 0; i < rowStyleClasses.length; i++) {
-                String token = rowStyleClasses[i];
-
-                if (sa.length() > 0) {
-                    sa.append(',');
-                }
-                sa.append(token);
-            }
-
-            htmlWriter.writeAttribute("v:rowStyleClass", sa.toString());
-        }
-
-        writeGridComponentAttributes(htmlWriter, gridRenderContext, dg);
-
-        int dataGridPixelWidth = getPixelSize(((IWidthCapability) dg)
-                .getWidth(), -1);
+        int dataGridPixelWidth = getPixelSize(
+                ((IWidthCapability) gridComponent).getWidth(), -1);
 
         boolean headerVisible = true; // dg.isHeaderVisible(facesContext);
 
@@ -417,7 +421,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeCellSpacing(0);
 
         if (tableWidth > 0) {
-            int ttw = getPixelSize(((IWidthCapability) dg).getWidth(), -1);
+            int ttw = getPixelSize(((IWidthCapability) gridComponent)
+                    .getWidth(), -1);
             if (ttw > 0 && ttw > tableWidth) {
                 tableWidth = -1;
             }

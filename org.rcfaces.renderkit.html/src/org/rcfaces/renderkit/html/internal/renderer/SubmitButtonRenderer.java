@@ -5,6 +5,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
 
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
@@ -16,7 +17,7 @@ public class SubmitButtonRenderer extends ButtonRenderer {
     private static final String REVISION = "$Revision$";
 
     protected String getInputType(UIComponent component) {
-        return SUBMIT_TYPE;
+        return IHtmlWriter.SUBMIT_INPUT_TYPE;
     }
 
     protected String getJavaScriptClassName() {

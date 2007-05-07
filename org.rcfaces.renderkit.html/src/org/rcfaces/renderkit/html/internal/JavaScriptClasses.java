@@ -32,6 +32,8 @@ public final class JavaScriptClasses {
 
     public static final String COMBO_EX = "f_comboEx";
 
+    public static final String COMBO_GRID = "f_comboGrid";
+
     public static final String COMPONENTS_LIST = "f_componentsList";
 
     public static final String COMPONENTS_GRID = "f_componentsGrid";

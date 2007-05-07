@@ -43,7 +43,7 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
 
         htmlWriter.writeName(componentRenderContext.getComponentClientId());
 
-        htmlWriter.writeType("hidden");
+        htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
 
         Object value = getValue(hiddenValueComponent);
         if (value != null) {

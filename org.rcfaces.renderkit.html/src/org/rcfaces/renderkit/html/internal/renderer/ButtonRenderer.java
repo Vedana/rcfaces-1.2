@@ -57,7 +57,7 @@ public class ButtonRenderer extends AbstractInputRenderer {
     }
 
     protected String getInputType(UIComponent component) {
-        return BUTTON_TYPE;
+        return IHtmlWriter.BUTTON_INPUT_TYPE;
     }
 
     protected void decode(IRequestContext context, UIComponent component,

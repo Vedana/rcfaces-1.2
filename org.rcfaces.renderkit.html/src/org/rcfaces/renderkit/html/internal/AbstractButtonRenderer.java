@@ -17,7 +17,7 @@ public abstract class AbstractButtonRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
 
     protected String getButtonType(UIComponent component) {
-        return "button";
+        return IHtmlWriter.BUTTON_INPUT_TYPE;
     }
 
     protected final IHtmlWriter writeButtonAttributes(IHtmlWriter writer)

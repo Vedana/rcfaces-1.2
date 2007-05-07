@@ -220,7 +220,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         String buttonId = componentContext.getComponentClientId() + "__button";
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
-        htmlWriter.writeType("IMAGE");
+        htmlWriter.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
         htmlWriter.writeClass(getInputClassName(htmlWriter));
         htmlWriter.writeId(buttonId);
 

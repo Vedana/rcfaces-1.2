@@ -62,12 +62,12 @@ var __prototype={
 						if (containerId) {
 							source=document.getElementById(containerId);
 							if (!source) {
-								f_core.Error(f_focusManager, "Can not find containerId '"+containerId+"'.");
+								f_core.Error(f_focusManager, "_onfocus: Can not find containerId '"+containerId+"'.");
 							}
 						}
 					}
 	
-					f_core.Debug(f_focusManager, "OnFocus: target="+event.target+" currentTarget="+event.currentTarget+" source="+source+" ");
+					f_core.Debug(f_focusManager, "_onfocus: target="+event.target+" currentTarget="+event.currentTarget+" source="+source+" ");
 					
 					var id=source.id;
 					if (!id) {
@@ -75,8 +75,9 @@ var __prototype={
 					}
 					
 					focusManager._recordFocus(id);
+					
 				} catch (x) {
-					f_core.Error(f_focusManager, "Exception on onFocus()",x);
+					f_core.Error(f_focusManager, "_onfocus: Exception on onFocus()",x);
 				}
 			}
 		
@@ -85,7 +86,7 @@ var __prototype={
 					focusManager._recordFocus(null);
 					
 				} catch (x) {
-					f_core.Error(f_focusManager, "Exception on onBlur()", x);
+					f_core.Error(f_focusManager, "f_focusManager: Exception on onBlur()", x);
 				}
 			}
 			
@@ -157,7 +158,7 @@ var __prototype={
 		var component=focus;
 		
 		if (typeof(focus)=="string") {
-			f_core.Debug(f_focusManager, "f_setFocus search component id='"+focus+"' async='"+async+"'.");
+			f_core.Debug(f_focusManager, "f_setFocus: search component id='"+focus+"' async='"+async+"'.");
 		
 			try {
 				component=f_core.GetElementByClientId(focus, document);
@@ -170,11 +171,11 @@ var __prototype={
 		}
 			
 		if (!component) {
-			f_core.Info(f_focusManager, "Can not find component '"+focus+"' to set focus !");
+			f_core.Info(f_focusManager, "f_setFocus: Can not find component '"+focus+"' to set focus !");
 			return false;
 		}
 
-		f_core.Debug(f_focusManager, "Set focus to component '"+component.id+"'.");
+		f_core.Debug(f_focusManager, "f_setFocus: Set focus to component '"+component.id+"'.");
 		
 		if (!f_core.SetFocus(component, async)) {
 			return false;
@@ -192,7 +193,7 @@ var __prototype={
 			focusId=null;
 		}
 		
-		f_core.Debug(f_focusManager, "Focus changed to component '"+focusId+"'.");
+		f_core.Debug(f_focusManager, "_recordFocus: Focus changed to component '"+focusId+"'.");
 
 		this._focusId=focusId;
 		this.f_setProperty(f_prop.FOCUS_ID, focusId);

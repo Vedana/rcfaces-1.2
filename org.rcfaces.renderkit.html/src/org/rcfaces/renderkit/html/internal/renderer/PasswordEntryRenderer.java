@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
 
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
@@ -17,7 +18,7 @@ public class PasswordEntryRenderer extends TextEntryRenderer {
     private static final String REVISION = "$Revision$";
 
     protected String getInputType(UIComponent component) {
-        return PASSWORD_TYPE;
+        return IHtmlWriter.PASSWORD_INPUT_TYPE;
     }
 
     protected String getJavaScriptClassName() {

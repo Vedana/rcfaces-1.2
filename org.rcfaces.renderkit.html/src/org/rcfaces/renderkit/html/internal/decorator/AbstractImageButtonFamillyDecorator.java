@@ -315,7 +315,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 writeImageAttributes(writer, imageButtonFamilly);
 
                 if (mainComponent.equals(IHtmlWriter.INPUT)) {
-                    writer.writeType("image");
+                    writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
                     writeInputAttributes(writer);
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly); // jbos@unedic.fr

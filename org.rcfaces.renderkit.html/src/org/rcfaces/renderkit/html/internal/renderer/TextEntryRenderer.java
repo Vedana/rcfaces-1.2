@@ -397,7 +397,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
      * @see org.rcfaces.core.internal.renderkit.html.AbstractInputRenderer#getInputType()
      */
     protected String getInputType(UIComponent component) {
-        return TEXT_TYPE;
+        return IHtmlWriter.TEXT_INPUT_TYPE;
     }
 
     protected void decode(IRequestContext context, UIComponent component,

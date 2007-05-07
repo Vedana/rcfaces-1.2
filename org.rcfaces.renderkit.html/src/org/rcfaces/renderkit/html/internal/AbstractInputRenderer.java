@@ -30,22 +30,6 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
     private static final String INPUT_MESSAGES_PROPERTY = "org.rcfaces.html.INPUT_MESSAGES";
 
-    public static final String BUTTON_TYPE = "button";
-
-    public static final String RADIO_TYPE = "radio";
-
-    public static final String CHECKBOX_TYPE = "checkbox";
-
-    public static final String TEXT_TYPE = "text";
-
-    public static final String PASSWORD_TYPE = "password";
-
-    public static final String RESET_TYPE = "reset";
-
-    public static final String SUBMIT_TYPE = "submit";
-
-    public static final String IMAGE_TYPE = "image";
-
     protected abstract String getInputType(UIComponent component);
 
     /*
@@ -79,7 +63,7 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
         // On active le javascript pour le traitement des facesMessages !
         htmlWriter.enableJavaScript();
-        
+
         super.encodeEnd(writer);
     }
 
@@ -204,5 +188,38 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
                         getJavaScriptClassName(), "menu");
             }
         }
+    }
+
+    protected IHtmlWriter writeStyleClass(IHtmlWriter writer, String classSuffix)
+            throws WriterException {
+
+        UIComponent component = writer.getComponentRenderContext()
+                .getComponent();
+
+        boolean disabled = false;
+
+        if (component instanceof IDisabledCapability) {
+            if (((IDisabledCapability) component).isDisabled()) {
+                disabled = true;
+
+                if (classSuffix == null) {
+                    classSuffix = getMainStyleClassName() + "_disabled";
+                } else {
+                    classSuffix += "_disabled";
+                }
+            }
+        }
+
+        if (disabled == false && (component instanceof IReadOnlyCapability)) {
+            if (((IReadOnlyCapability) component).isReadOnly()) {
+                if (classSuffix == null) {
+                    classSuffix = getMainStyleClassName() + "_readOnly";
+                } else {
+                    classSuffix += "_readOnly";
+                }
+            }
+        }
+
+        return super.writeStyleClass(writer, classSuffix);
     }
 }

@@ -49,6 +49,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+
         if (button.isDisabled(facesContext)) {
             htmlWriter.writeAttribute("DISABLED");
         }
@@ -127,9 +128,6 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
-        if (button.isDisabled(facesContext)) {
-            claz += "_disabled";
-        }
         htmlWriter.writeAttribute("class", claz);
 
         String inputId = componentId + "_input";
@@ -161,7 +159,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
     }
 
     protected String getInputType(UIComponent component) {
-        return CHECKBOX_TYPE;
+        return IHtmlWriter.CHECKBOX_INPUT_TYPE;
     }
 
     protected void decode(IRequestContext context, UIComponent element,

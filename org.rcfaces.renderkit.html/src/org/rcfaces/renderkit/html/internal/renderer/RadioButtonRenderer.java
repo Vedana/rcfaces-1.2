@@ -143,9 +143,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         htmlWriter.startElement(IHtmlWriter.LABEL);
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
-        if (button.isDisabled(facesContext)) {
-            className += "_disabled";
-        }
+
         htmlWriter.writeClass(className);
         String inputId = componentId + "_input";
         htmlWriter.writeFor(inputId);
@@ -222,7 +220,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
     }
 
     protected String getInputType(UIComponent component) {
-        return RADIO_TYPE;
+        return IHtmlWriter.RADIO_INPUT_TYPE;
     }
 
     protected String getInputName(
