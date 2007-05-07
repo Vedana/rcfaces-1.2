@@ -43,14 +43,15 @@ var __prototype = {
 	 *  </p>
 	 *
 	 * @method protected
+	 * @return void
 	 */
-	_fillModIFrame: function() {
-     	f_core.Debug(f_shell, "_FillModIFrame: entering");
+	f_fillModIFrame: function() {
+     	f_core.Debug(f_waitingShell, "f_fillModIFrame: entering");
 
 		this.f_super(arguments);
 
 		//Hide Selects
-		f_shell._HideSelect();
+		f_shell.HideSelect();
 
 		var iframe=this.f_getIframe();
 		var docBase = iframe.contentWindow.document;
@@ -78,30 +79,30 @@ var __prototype = {
 	 * @return Function 
 	 */
 	f_getIFrameDrawingCallBack: function() {
-		return this._fillModIFrame;
+		return this.f_fillModIFrame;
 	},
 
 	/**
 	 * @method public
-	 * @return 
+	 * @return void
 	 */
 	f_show: function() {
      	f_core.Debug(f_waitingShell, "f_show: entering ");
 		
 		// Create a blocking Div
-		this._drawModIFrame();
+		this.f_drawModIFrame();
 
 	},
 
 	/**
 	 * @method public
-	 * @return 
+	 * @return void
 	 */
 	f_hide: function() {
      	f_core.Debug(f_waitingShell, "f_hide : entering ");
 		
 		// Hide the blocking Div
-		f_shell._DelModIFrame();
+		f_shell.DelModIFrame();
 	},
 
 	/**

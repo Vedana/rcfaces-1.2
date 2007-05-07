@@ -75,7 +75,7 @@ var __static = {
 			}
 		    f_core.Debug(f_dialog, "_OnMouseMove: evt "+evt+" : "+evt.clientX+", "+evt.clientY);
 	    	
-	    	var iframe = f_shell._ObjIFrame._iframe;
+	    	var iframe = f_shell.GetIframe();
 	    	
 			// memorize the position
 			var posX = evt.clientX;

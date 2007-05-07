@@ -124,7 +124,7 @@ var __static = {
      *
      * @method protected static
      */
-    _HideSelect: function() {
+    HideSelect: function() {
 		if (!f_shell._IE6) {
 			return;
 		}
@@ -145,7 +145,7 @@ var __static = {
      *
      * @method protected static
      */
-    _ShowSelect: function() {
+    ShowSelect: function() {
 		if (!f_shell._IE6) {
 			return;
 		}
@@ -167,8 +167,8 @@ var __static = {
 	 *
 	 * @method protected static
 	 */
-	_DelModIFrame: function() {
-     	f_core.Debug(f_shell, "_DelModIFrame: entering");
+	DelModIFrame: function() {
+     	f_core.Debug(f_shell, "DelModIFrame: entering");
      	
      	var objIFrame=f_shell._ObjIFrame;
 		if (objIFrame) {
@@ -220,6 +220,27 @@ var __static = {
      	this.onload=null;
  	},
 
+    /**
+     * <p>Resize Callback called on the div</p>
+     *
+     * @method protected static
+     */
+	_OnResize: function() {
+		var shell=this._shell;
+		if (shell.f_getEventLocked(false)) {
+			return false;
+		}
+		
+		if (!evt) {
+			evt=f_core.GetJsEvent(this);
+		}
+		
+		shell._resize();
+		
+		return true;
+		
+    },
+    
 	/**
 	 *  <p>get the iFrame from the iframe object. 
 	 *  </p>
@@ -258,6 +279,9 @@ var __static = {
      	f_core.Debug(f_shell, "ClearInstance: entering");
 		if (f_shell._ObjIFrame && f_shell._ObjIFrame._iframe) {
 			f_shell._ObjIFrame._iframe._modalShell = undefined;
+		}
+		if (f_shell._ObjIFrame && f_shell._ObjIFrame._div) {
+			f_shell._ObjIFrame._div._shell = undefined;
 		}
 	},
 
@@ -424,6 +448,7 @@ var __prototype = {
 	 *
 	 * @method public 
 	 * @param object div
+	 * @return void
 	 */
 	f_setDiv: function(div) {
     	f_core.Assert((typeof(div)=="object"), "f_shell.f_setDiv: Invalid parameter '"+div+"'.");
@@ -445,6 +470,7 @@ var __prototype = {
 	 *
 	 * @method public 
 	 * @param object iframe
+	 * @return void
 	 */
 	f_setIframe: function(iframe) {
     	f_core.Assert(typeof(iframe)=="object", "f_shell.f_setIframe: Invalid parameter '"+iframe+"'.");
@@ -466,6 +492,7 @@ var __prototype = {
 	 *
 	 * @method public 
 	 * @param String cssClassBase a base name for the style classes
+	 * @return void
 	 */
 	f_setCssClassBase: function(cssClassBase) {
     	f_core.Assert(typeof(cssClassBase)=="string", "f_shell.f_setCssClassBase: Invalid parameter '"+cssClassBase+"'.");
@@ -488,6 +515,7 @@ var __prototype = {
 	 *
 	 * @method public 
 	 * @param String backgroundMode background mode : transparent, greyed, opaque
+	 * @return void
 	 */
 	f_setBackgroundMode: function(backgroundMode) {
     	f_core.Assert(typeof(backgroundMode)=="string", "f_shell.f_setBackgroundMode: Invalid parameter '"+backgroundMode+"'.");
@@ -522,6 +550,7 @@ var __prototype = {
 	 *
 	 * @method public 
 	 * @param String imageURL  (or <code>null</code>)
+	 * @return void
 	 */
 	f_setImageURL: function(imageURL) {
     	f_core.Assert(imageURL===null || typeof(imageURL)=="string", "f_shell.f_setImageURL: Invalid parameter '"+imageURL+"'.");
@@ -530,20 +559,43 @@ var __prototype = {
 	},
 
 	/**
+	 *  <p>Resize the greying div 
+	 *  </p>
+	 *
+	 * @method private
+	 * @return void
+	 */
+	_resize: function() {
+     	f_core.Debug(f_shell, "_resize: entering");
+
+		// Get the document' size
+		var size=f_shell.GetOwnDocumentSize();
+		
+		//get the greying div
+		var div = this.f_getDiv();
+		
+		//Modify the size
+		div.style.width=size.width+"px";
+		div.style.height=size.height+"px";
+
+	},
+
+	/**
 	 *  <p>Fill a modal iFrame. 
 	 *  </p>
 	 *
 	 * @method protected
+	 * @return void
 	 */
-	_fillModIFrame: function() {
-     	f_core.Debug(f_shell, "_fillModIFrame: entering");
+	f_fillModIFrame: function() {
+     	f_core.Debug(f_shell, "f_fillModIFrame: entering");
 
 		try {
 			if (!f_shell._ObjIFrame) {
 		     	f_core.Debug(f_shell, "_fillModIFrame : exit No iFrame");
 				return;
 			}
-			f_shell._HideSelect();
+			f_shell.HideSelect();
 			
 //			var iframe = f_shell._ObjIFrame._iframe;
 			var iframe = this.f_getIframe();
@@ -574,7 +626,7 @@ var __prototype = {
 	 * @return Function 
 	 */
 	f_getIFrameDrawingCallBack: function() {
-		return this._fillModIFrame;
+		return this.f_fillModIFrame;
 	},
 
 	/**
@@ -592,14 +644,14 @@ var __prototype = {
 	 *  <p>draw a modal iFrame with a greying div around. 
 	 *  </p>
 	 *
-	 * @method private
+	 * @method protected
 	 * @return Object _div holds the gray div and _iframe holds the iframe
 	 */
-	_drawModIFrame: function() {
-     	f_core.Debug(f_shell, "_drawModIFrame: entering");
+	f_drawModIFrame: function() {
+     	f_core.Debug(f_shell, "f_drawModIFrame: entering");
 
 		if (f_shell._ObjIFrame) {
-	     	f_core.Debug(f_shell, "_drawModIFrame: exit : already done !");
+	     	f_core.Debug(f_shell, "f_drawModIFrame: exit : already done !");
 	     	if (!this._iframe) {
 		     	this._iframe=f_shell._ObjIFrame._iframe;
 		    }
@@ -628,9 +680,17 @@ var __prototype = {
 		div.style.left=0;
 		div.style.width=size.width+"px";
 		div.style.height=size.height+"px";
+
+		//Associate this to the div
+		div._shell = this;
+
+		this.f_setDiv(div);
+
+		//Resize Handler
+		f_core.AddResizeEventListener(div, f_shell._OnResize);
 		
 		//Hide Selects
-		f_shell._HideSelect();
+		f_shell.HideSelect();
 		
 		//Attach
 		document.body.insertBefore(div, document.body.firstChild);
@@ -639,7 +699,8 @@ var __prototype = {
 		var iframe = document.createElement("iframe");
 
 		//Hide Selects
-		f_shell._HideSelect();
+		// Twice is too much (Fred)
+//		f_shell.HideSelect();
 		
 		iframe.className = cssClassBase+"_frame";
 		iframe.frameBorder = 0;
@@ -665,12 +726,11 @@ var __prototype = {
 		//Attach
 		document.body.insertBefore(iframe, document.body.firstChild);
 		
-		f_core.Debug(f_shell, "_drawModIFrame: callback ");
+		f_core.Debug(f_shell, "f_drawModIFrame: callback ");
 		iframe.onload=f_shell._OnIframeLoad;
 		
 		this.f_installModalStyle();
 	},
-
 
 	/**
 	 * @method protected

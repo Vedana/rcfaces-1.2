@@ -117,7 +117,7 @@ var __static = {
 			return;
 		}
 		
-		f_shell._DelModIFrame();
+		f_shell.DelModIFrame();
     },
     
     /**
@@ -393,7 +393,7 @@ var __prototype = {
      	f_core.Debug(f_messageDialog, "f_open: entering ("+callback+")");
 		
 		// Create a blocking Div
-		this._drawModIFrame();
+		this.f_drawModIFrame();
 
 		f_messageDialog._AddMessage(this, this._open, callback, this.f_getPriority());
 
@@ -419,7 +419,7 @@ var __prototype = {
      	f_core.Debug(f_messageDialog, "_open: entering ("+callback+", "+base+")");
 		
 		//Hide Selects
-		f_shell._HideSelect();
+		f_shell.HideSelect();
 		
 		var cssClassBase = this.f_getCssClassBase();
 		if (!cssClassBase) {
@@ -569,7 +569,7 @@ var __prototype = {
 		base.appendChild(table);
 		
 		// Hide the select
-		f_shell._HideSelect(); // ??? Pourquoi ICI ??? fred ???
+		f_shell.HideSelect();
 		
 	},
 	
@@ -627,7 +627,7 @@ var __prototype = {
 		}
 
 		//delete the iFrame
-		f_shell._DelModIFrame();
+		f_shell.DelModIFrame();
 	},
 	
 	
