@@ -91,16 +91,16 @@ var __prototype={
 			}
 			
 		
-			f_core.AddEventListener(document, "focus", this._onFocus, true);
-			f_core.AddEventListener(document, "blur", this._onBlur, true);
+			f_core.AddEventListener(document, "focus", this._onFocus, document);
+			f_core.AddEventListener(document, "blur", this._onBlur, document);
 		}
 	},
 	f_finalize: function() {
 		if (f_core.IsGecko()) {
-			f_core.RemoveEventListener(document, "focus", this._onFocus, true);
+			f_core.RemoveEventListener(document, "focus", this._onFocus, document);
 			this._onFocus=undefined;
 
-			f_core.RemoveEventListener(document, "blur", this._onBlur, true);
+			f_core.RemoveEventListener(document, "blur", this._onBlur, document);
 			this._onBlur=undefined;
 		}
 

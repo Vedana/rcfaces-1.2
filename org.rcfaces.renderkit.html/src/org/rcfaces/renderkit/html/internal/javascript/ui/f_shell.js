@@ -182,11 +182,12 @@ var __static = {
 
 			//Detach
 			document.body.removeChild(objIFrame._div);
-			objIFrame._div = undefined;
+			objIFrame._div = undefined; // HTMLDivElement
 			
 			document.body.removeChild(objIFrame._iframe);
-			objIFrame._iframe = undefined;
+			objIFrame._iframe = undefined; // HTMLIFrameElement
 
+			objIFrame._lastValidFocus=undefined; //HTMLElement
 			// Return from Modal ...
 		}
 
@@ -201,7 +202,7 @@ var __static = {
 	 * @method private static
 	 */
 	_OnIframeLoad: function() {
-     	f_core.Debug(f_shell, "_OnIframeLoad: entering with this"+this);
+     	f_core.Debug(f_shell, "_OnIframeLoad: entering with this="+this);
      	
      	var inst=this._modalShell;
      	if (!inst) {
@@ -212,11 +213,12 @@ var __static = {
      	var callBack=inst.f_getIFrameDrawingCallBack();
      	if (typeof(callBack) == "function") {
 	     	callBack.call(inst);
+	     	
 	    } else {
 	    	f_core.Debug(f_shell, "_OnIframeLoad: the callBack specified is not a function "+callBack);
 	    }
      	this.onload=null;
-	},
+ 	},
 
 	/**
 	 *  <p>get the iFrame from the iframe object. 
@@ -275,7 +277,7 @@ var __static = {
      * @return boolean
      */
      _OnFocus: function(evt) {
-     	if (!window.f_core) {
+     	if (!window.f_shell) {
      		// On sait jamais, nous sommes peut etre dans un context foireux ...
      		return;
      	}
@@ -304,34 +306,33 @@ var __static = {
 			return true;
 		}
 
+		var targetDocument=target;
 		switch(target.nodeType) {
 		case f_core.DOCUMENT_NODE:
 			break;
 			
 		case f_core.ELEMENT_NODE:
-			target=target.ownerDocument;
+			targetDocument=target.ownerDocument;
 			break;
 
 		default:
 			// Qu'est que c'est ????
-			target=document; // On bloque donc
+			targetDocument=document; // On bloque donc
 		}
  		
  		var frameDocument = iframe.contentWindow.document;
  		     	
-     	if (target==frameDocument) {
+     	if (targetDocument==frameDocument) {
      		// C'est dans notre frame
-     		
+     
+     		// Pour l'instant ce n'est pas possible ... car la callback n'est pas installée
+      		
+     		iframe._lastValidFocus=target;
      		f_core.Debug(f_shell, "_OnFocus: Focus on our frame !");
      		return true;
      	}
- 
-   		var nextFocusable=f_core.GetNextFocusableComponent(frameDocument.body);
-   		if (nextFocusable) {
-     		f_core.Debug(f_shell, "_OnFocus: Set focus on "+nextFocusable.id);
-
-	     	f_core.SetFocus(nextFocusable, true);	     	
-   		}
+  
+  		iframe._modalShell.f_setFocus();
      	
      	return f_core.CancelJsEvent(evt);
      }
@@ -377,9 +378,10 @@ var __prototype = {
 	 * @param number style the style of control to construct
 	 */
 	f_shell: function(style) {
+		f_core.Assert(style===undefined || typeof(style)=="number", "f_shell.f_shell: Invalid style parameter ("+style+")");
 		this.f_super(arguments);
 		
-		this._style=style;
+		this._style=(style)?style:0;
 		this._cssClassBase="f_shell";
 		this._backgroundMode="greyed";
 	},
@@ -467,6 +469,7 @@ var __prototype = {
 	 */
 	f_setCssClassBase: function(cssClassBase) {
     	f_core.Assert(typeof(cssClassBase)=="string", "f_shell.f_setCssClassBase: Invalid parameter '"+cssClassBase+"'.");
+    	
 		this._cssClassBase = cssClassBase;
 	},
 	
@@ -681,7 +684,7 @@ var __prototype = {
 
      	f_core.Debug(f_shell, "f_installModalStyle: Install modal hooks");
 		
-		f_core.AddEventListener(document, "focus", this._OnFocus, true);
+		f_core.AddEventListener(document, "focus", f_shell._OnFocus, document);
 	},
 
 	/**
@@ -696,7 +699,42 @@ var __prototype = {
 
      	f_core.Debug(f_shell, "f_uninstallModalStyle: Uninstall modal hooks");
 		
-		f_core.RemoveEventListener(document, "focus", this._OnFocus, true);
+		f_core.RemoveEventListener(document, "focus", f_shell._OnFocus, document);
+	},
+	
+	f_setFocus: function(firstTime) {
+		var iframe=this._iframe;
+		var frameDoc=iframe.contentWindow.document;
+		
+		var nextFocusable=null;
+		if (firstTime) {
+			var inputs=f_core.GetElementsByTagName(frameDoc, "input");
+			
+			for(var i=0;i<inputs.length;i++) {
+				var input=inputs[i];
+			    		
+				if (!input.type) {
+					continue;
+				}
+				
+				if (input.type.toLowerCase()!="submit") {
+					continue;
+				}
+				
+				nextFocusable=input;
+				break;
+			}
+		}
+
+  		if (!nextFocusable) {
+   			nextFocusable=f_core.GetNextFocusableComponent(frameDoc.body);
+  		}
+  		
+   		if (nextFocusable) {
+     		f_core.Debug(f_shell, "f_setFocus: Set focus on "+nextFocusable.id);
+
+	     	f_core.SetFocus(nextFocusable, false);
+   		}
 	},
 
 	/**

@@ -56,7 +56,7 @@ var f_core = {
 	/**
 	 * @field private static final number
 	 */
-	_FOCUS_TIMEOUT_DELAY: 100,
+	_FOCUS_TIMEOUT_DELAY: 50,
 	
 	/**
 	 * @field hidden static final number
@@ -532,6 +532,8 @@ var f_core = {
 	 * @return void
 	 */
 	SetDebugMode: function(debugMode) {
+		f_core.Assert(debugMode===undefined || typeof(debugMode)=="function", "f_core.SetDebugMode: Invalid debugMode parameter ("+debugMode+")");
+
 		if (debugMode===undefined) {
 			debugMode=true;
 		}
@@ -539,9 +541,12 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param function profilerMode
 	 * @return void
 	 */
 	SetProfilerMode: function(profilerMode) {
+		f_core.Assert(profilerMode===undefined || typeof(profilerMode)=="function", "f_core.SetProfilerMode: Invalid profilerMode parameter ("+profilerMode+")");
+
 		if (profilerMode===undefined) {
 			profilerMode=true;
 		}
@@ -551,9 +556,12 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param boolean designerMode
 	 * @return void
 	 */
 	SetDesignerMode: function(designerMode) {
+		f_core.Assert(typeof(designerMode)=="function", "f_core.SetDesignerMode: Invalid designerMode parameter ("+designerMode+")");
+
 		f_core.DesignerMode=designerMode;
 	},
 	/**
@@ -607,6 +615,17 @@ var f_core = {
 	 * @return void
 	 */
 	AddEventListener: function(component, name, fct, capture) {
+		f_core.Assert(component && 
+			(component.nodeType==f_core.ELEMENT_NODE || 
+				component.nodeType==f_core.DOCUMENT_NODE || 
+				component.screen /* window ? */), "f_core.AddEventListener: Invalid component parameter ("+component+")");
+		f_core.Assert(typeof(name)=="string", "f_core.AddEventListener: Invalid name parameter ("+name+")");
+		f_core.Assert(typeof(fct)=="function", "f_core.AddEventListener: Invalid function parameter ("+fct+")");
+		f_core.Assert(capture===undefined || 		
+			(capture.nodeType==f_core.ELEMENT_NODE || 
+				capture.nodeType==f_core.DOCUMENT_NODE || 
+				capture.screen /* window ? */), "f_core.AddEventListener: Invalid capture parameter ("+capture+")");
+
 	 	if (f_core.IsInternetExplorer()) {
 		    component.attachEvent("on"+name, fct);
 			    
@@ -630,6 +649,17 @@ var f_core = {
 	 * @return void
 	 */
 	RemoveEventListener: function(component, name, fct, capture) {
+		f_core.Assert(component && 
+			(component.nodeType==f_core.ELEMENT_NODE || 
+				component.nodeType==f_core.DOCUMENT_NODE || 
+				component.screen /* window ? */), "f_core.RemoveEventListener: Invalid component parameter ("+component+")");
+		f_core.Assert(typeof(name)=="string", "f_core.RemoveEventListener: Invalid name parameter ("+name+")");
+		f_core.Assert(typeof(fct)=="function", "f_core.RemoveEventListener: Invalid function parameter ("+fct+")");
+		f_core.Assert(capture===undefined || 		
+			(capture.nodeType==f_core.ELEMENT_NODE || 
+				capture.nodeType==f_core.DOCUMENT_NODE || 
+				capture.screen /* window ? */), "f_core.RemoveEventListener: Invalid capture parameter ("+capture+")");
+
 	 	if (f_core.IsInternetExplorer()) {
 		    if (capture) {
 				capture.releaseCapture();

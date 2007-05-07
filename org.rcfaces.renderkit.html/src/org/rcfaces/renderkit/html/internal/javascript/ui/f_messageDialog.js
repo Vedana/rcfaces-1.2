@@ -112,6 +112,8 @@ var __static = {
 			
 		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: after calling ");
 
+			iframe._modalShell.f_setFocus(true);
+
 			return;
 		}
 		
@@ -567,7 +569,7 @@ var __prototype = {
 		base.appendChild(table);
 		
 		// Hide the select
-		f_shell._HideSelect();
+		f_shell._HideSelect(); // ??? Pourquoi ICI ??? fred ???
 		
 	},
 	
