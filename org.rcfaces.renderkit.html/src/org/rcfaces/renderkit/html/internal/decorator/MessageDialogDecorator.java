@@ -5,9 +5,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.MessageDialogComponent;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.internal.component.IImageAccessors;
-import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
@@ -15,15 +12,6 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
 
     // private String newVar;
     private String defaultValue;
-
-    /**
-     * 
-     * @return String the base css name for all the classes
-     */
-    protected String getCssClassBase(MessageDialogComponent component,
-            FacesContext facesContext) {
-        return null;
-    }
 
     public MessageDialogDecorator(UIComponent component) {
         super(component, null);
@@ -54,41 +42,7 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
         MessageDialogComponent component = (MessageDialogComponent) getComponent();
         FacesContext facesContext = javaScriptWriter.getFacesContext();
 
-        String styleClass = getCssClassBase(component, facesContext);
-        if (styleClass != null) {
-            // titi.setCssClassBase(cssClassBase);
-            javaScriptWriter.writeMethodCall("f_setCssClassBase").writeString(
-                    styleClass).writeln(");");
-        }
-        styleClass = component.getStyleClass(facesContext);
-        if (styleClass != null) {
-            // titi.f_setStyleClass(styleClass);
-            javaScriptWriter.writeMethodCall("f_setStyleClass").writeString(
-                    styleClass).writeln(");");
-        }
-
-        int priority = component.getDialogPriority(facesContext);
-        if (priority != 0) {
-            javaScriptWriter.writeMethodCall("f_setPriority")
-                    .writeInt(priority).writeln(");");
-        }
-
-        IContentAccessors contentAccessors = component
-                .getImageAccessors(facesContext);
-        if (contentAccessors instanceof IImageAccessors) {
-            IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
-            IContentAccessor imageAccessor = imageAccessors.getImageAccessor();
-            if (imageAccessor != null) {
-                String imageSrc = imageAccessor.resolveURL(facesContext, null,
-                        null);
-                if (imageSrc != null) {
-                    javaScriptWriter.writeMethodCall("f_setImageURL")
-                            .writeString(imageSrc).writeln(");");
-                }
-            }
-        }
-
-        defaultValue = component.getDefaultValue();
+        defaultValue = component.getDefaultValue(facesContext);
 
     }
 

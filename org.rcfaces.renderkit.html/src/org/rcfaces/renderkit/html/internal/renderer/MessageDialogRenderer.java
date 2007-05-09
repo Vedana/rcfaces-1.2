@@ -5,6 +5,9 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.MessageDialogComponent;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.component.IImageAccessors;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -21,9 +24,6 @@ import org.rcfaces.renderkit.html.internal.decorator.MessageDialogDecorator;
  * @version $Revision$ $Date$
  */
 public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
-
-    public static final String JS_SUBMITVALUE_CALLBACK = JavaScriptClasses.MESSAGE_DIALOG
-            + ".SubmitValue";
 
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
@@ -46,6 +46,16 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MESSAGE_DIALOG;
     }
+
+    /**
+     * 
+     * @return String the base css name for all the classes
+     */
+    protected String getCssClassBase(MessageDialogComponent component,
+            FacesContext facesContext) {
+        return null;
+    }
+
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
@@ -93,6 +103,33 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
         if (chaine != null) {
             htmlWriter.writeAttribute("v:waiRole", chaine);
         }
+        if (component.isDialogPrioritySetted()) {
+            htmlWriter.writeAttribute("v:dialogPriority", component.getDialogPriority(facesContext));
+        }
+        chaine = component.getStyleClass(facesContext);
+        if (chaine != null) {
+            htmlWriter.writeAttribute("v:styleClass", chaine);
+        }
+        chaine = getCssClassBase(component, facesContext);
+        if (chaine != null) {
+            htmlWriter.writeAttribute("v:cssClassBase", chaine);
+        }
+        chaine = component.getLookId(facesContext);
+        if (chaine != null) {
+            htmlWriter.writeAttribute("v:lookId", chaine);
+        }
+        IContentAccessors contentAccessors = component.getImageAccessors(facesContext);
+		if (contentAccessors instanceof IImageAccessors) {
+		    IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+		    IContentAccessor imageAccessor = imageAccessors.getImageAccessor();
+		    if (imageAccessor != null) {
+		        String imageSrc = imageAccessor.resolveURL(facesContext, null,
+		                null);
+		        if (imageSrc != null) {
+		        	htmlWriter.writeAttribute("v:imageURL", chaine);
+		        }
+		    }
+		}
 
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
