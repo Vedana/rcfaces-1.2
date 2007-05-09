@@ -40,24 +40,28 @@
 }
 
 .f_messageDialog_frame {
-	width: 500px;
+/*	width: 500px;
 	height: 300px;
+*/
 	background-color: transparent;
-	position:absolute;
+/*	position:absolute;
 	top: 50%;
 	left: 50%; 
 	margin-top: -150px;
 	margin-left: -250px;
+*/
     z-index: 1000;/
 }
 
 .f_messageDialog_dialog {
 	background-color: #FFFFFF;
+/*
 	position:absolute;
 	top: 0px;
 	left: 0px; 
 	width: 500px;
 	height: 100%;
+*/
 	text-align: center;
 /*    z-index: 1000; */
 }
@@ -75,7 +79,8 @@
 	background-color: blue;
 	color: white;
 	font-weight: bold;
-	height: 30px;
+/*	height: 30px;
+*/
 }
 
 .handleToMove {
@@ -83,12 +88,12 @@
 }
 
 .f_messageDialog_title_td{
-	width: 400px;
+/*	width: 400px; */
 }
 .f_messageDialog_text_tr {
-	height: 210px;
+/*	height: 210px; */
 }
 
 .f_messageDialog_actions_tr {
-	height: 60px;
+/*	height: 60px; */
 }
