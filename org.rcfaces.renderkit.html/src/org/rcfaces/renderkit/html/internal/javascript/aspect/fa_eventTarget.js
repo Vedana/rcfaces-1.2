@@ -12,6 +12,8 @@
  
 var __static = {
 	/**
+	 * Last event identifier (for debug)
+	 * 
 	 * @field private static number
 	 */
 	 _EventId: undefined
@@ -44,6 +46,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method hidden
+	 * @param Object eventTypes 
 	 */
 	f_initEventAtts: function(eventTypes) {
 		var value=f_core.GetAttribute(this, "v:events");
@@ -61,7 +64,7 @@ var __prototype = {
 			var eventType=eventTypes[eventName];
 			f_core.Assert(eventType, "fa_eventTarget.f_initEventAtts: Unknown eventType '"+eventName+"' for component '"+this.id+"'.");
 			
-			f_core.Debug(fa_eventTarget, "Register event '"+eventName+"' on component '"+this.id+"' => "+commands);
+			f_core.Debug(fa_eventTarget, "f_initEventAtts: Register event '"+eventName+"' on component '"+this.id+"' => "+commands);
 
 			if (commands.length==2 && commands[1]=="submit") {
 				this.f_addEventListener(eventType, f_core.Submit);
@@ -78,6 +81,9 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param boolean showAlert
+	 * @param number event type mask
+	 * @return boolean
 	 */
 	f_getEventLocked: function(showAlert, mask) {
 		if (!window.f_event) {
@@ -179,6 +185,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method hidden
+	 * @param String type Type of event.
+	 * @return f_actionList
 	 */
 	f_getActionList: function(type) {
 		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_getActionList: Bad type of event name '"+type+"'");
@@ -193,6 +201,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
+	 * @param String type Type of event.
 	 * @return boolean
 	 */
 	f_isActionListEmpty: function(type) {
@@ -265,6 +274,8 @@ var __prototype = {
 	/**
 	 * 
 	 * @method hidden
+	 * @param String Type of the event.
+	 * @return f_actionList
 	 */
 	f_openActionList: function(type) {
 		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_openActionList: Bad type of event '"+type+"'");
