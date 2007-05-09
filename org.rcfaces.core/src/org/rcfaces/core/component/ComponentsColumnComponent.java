@@ -1,40 +1,39 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.component.capability.ICellStyleClassCapability;
-import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
-import org.rcfaces.core.component.capability.IOrderCapability;
-import org.rcfaces.core.component.capability.IResizableCapability;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
-import org.rcfaces.core.component.capability.ISortEventCapability;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
-import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.internal.component.CameliaColumnComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.internal.converter.OrderConverter;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
+import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IResizableCapability;
+import org.rcfaces.core.component.capability.IAlignmentCapability;
+import org.rcfaces.core.internal.converter.OrderConverter;
+import org.rcfaces.core.component.capability.ISortEventCapability;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.ICellStyleClassCapability;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 
 public class ComponentsColumnComponent extends CameliaColumnComponent implements 
 	IVisibilityCapability,

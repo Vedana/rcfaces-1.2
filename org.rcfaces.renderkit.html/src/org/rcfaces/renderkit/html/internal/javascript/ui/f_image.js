@@ -50,7 +50,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setImageURL: function(url) {
-		f_core.Assert(url===null || typeof(url)=="string", "Invalid imageURL parameter. ("+url+")");
+		f_core.Assert(url===null || typeof(url)=="string", "f_image.f_setImageURL: Invalid imageURL parameter. ("+url+")");
 
 		this._imageURL = url;
 		var u=url;
@@ -95,7 +95,7 @@ var __prototype = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_image, "Bad status: "+request.f_getStatus());
+	 			f_core.Info(f_image, "_callServer.onError: Bad status: "+request.f_getStatus());
 	 			
 				if (image.f_processNextCommand()) {
 					return;
@@ -149,7 +149,7 @@ var __prototype = {
 						eval(ret);
 						
 					} catch (x) {
-						f_core.Error(f_image, "Can not eval response '"+ret+"'.", x);
+						f_core.Error(f_image, "_callServer.onLoad: Can not eval response '"+ret+"'.", x);
 					}
 
 				} finally {

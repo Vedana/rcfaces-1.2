@@ -14489,6 +14489,57 @@ A boolean value indicating that this component's value must be
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>hiddenMode</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the management of invisible state on the client.
+		Authorized values are :
+		<ul><li>
+		server : if not visible, nothing is sent to the client
+		</li><li>
+		phantom : if not visible, the data is sent to the client and the page estate is reserved for a futur eventual display of the component
+		</li><li>
+		ignore : if not visible, the data is sent to the client but no page estate is reserved
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>lookId</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the choosen look of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>waiRole</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>selectionListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component is selected.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>title</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -14497,10 +14548,6 @@ A string value specifying the title for the document.
 		</attribute>
 		<attribute>
 			<name>defaultValue</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>callback</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

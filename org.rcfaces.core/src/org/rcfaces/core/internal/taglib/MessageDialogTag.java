@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.MessageDialogComponent;
+import javax.faces.application.Application;
 
 public class MessageDialogTag extends CameliaTag implements Tag {
 
@@ -23,9 +23,14 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 	private String visible;
 	private String dialogPriority;
 	private String immediate;
+	private String width;
+	private String height;
+	private String hiddenMode;
+	private String lookId;
+	private String waiRole;
+	private String selectionListeners;
 	private String title;
 	private String defaultValue;
-	private String callback;
 	private String value;
 	private String converter;
 	public String getComponentType() {
@@ -88,6 +93,54 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		this.immediate = immediate;
 	}
 
+	public final String getWidth() {
+		return width;
+	}
+
+	public final void setWidth(String width) {
+		this.width = width;
+	}
+
+	public final String getHeight() {
+		return height;
+	}
+
+	public final void setHeight(String height) {
+		this.height = height;
+	}
+
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
+
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
+	}
+
+	public final String getLookId() {
+		return lookId;
+	}
+
+	public final void setLookId(String lookId) {
+		this.lookId = lookId;
+	}
+
+	public final String getWaiRole() {
+		return waiRole;
+	}
+
+	public final void setWaiRole(String waiRole) {
+		this.waiRole = waiRole;
+	}
+
+	public final String getSelectionListener() {
+		return selectionListeners;
+	}
+
+	public final void setSelectionListener(String selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
+
 	public final String getTitle() {
 		return title;
 	}
@@ -102,14 +155,6 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 
 	public final void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
-	}
-
-	public final String getCallback() {
-		return callback;
-	}
-
-	public final void setCallback(String callback) {
-		this.callback = callback;
 	}
 
 	public final String getValue() {
@@ -140,9 +185,13 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  dialogPriority='"+dialogPriority+"'");
 			LOG.debug("  immediate='"+immediate+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  height='"+height+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  title='"+title+"'");
 			LOG.debug("  defaultValue='"+defaultValue+"'");
-			LOG.debug("  callback='"+callback+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -227,6 +276,60 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (width != null) {
+			if (isValueReference(width)) {
+				ValueBinding vb = application.createValueBinding(width);
+
+				component.setWidth(vb);
+			} else {
+				component.setWidth(width);
+			}
+		}
+
+		if (height != null) {
+			if (isValueReference(height)) {
+				ValueBinding vb = application.createValueBinding(height);
+
+				component.setHeight(vb);
+			} else {
+				component.setHeight(height);
+			}
+		}
+
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+
+				component.setHiddenMode(vb);
+			} else {
+				component.setHiddenMode(hiddenMode);
+			}
+		}
+
+		if (lookId != null) {
+			if (isValueReference(lookId)) {
+				ValueBinding vb = application.createValueBinding(lookId);
+
+				component.setLookId(vb);
+			} else {
+				component.setLookId(lookId);
+			}
+		}
+
+		if (waiRole != null) {
+			if (isValueReference(waiRole)) {
+				ValueBinding vb = application.createValueBinding(waiRole);
+
+				component.setWaiRole(vb);
+			} else {
+				component.setWaiRole(waiRole);
+			}
+		}
+
+		if (selectionListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
 		if (title != null) {
 			if (isValueReference(title)) {
 				ValueBinding vb = application.createValueBinding(title);
@@ -242,15 +345,6 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 				component.setDefaultValue(vb);
 			} else {
 				component.setDefaultValue(defaultValue);
-			}
-		}
-
-		if (callback != null) {
-			if (isValueReference(callback)) {
-				ValueBinding vb = application.createValueBinding(callback);
-				component.setCallback(vb);
-			} else {
-				component.setCallback(callback);
 			}
 		}
 
@@ -281,9 +375,14 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		visible = null;
 		dialogPriority = null;
 		immediate = null;
+		width = null;
+		height = null;
+		hiddenMode = null;
+		lookId = null;
+		waiRole = null;
+		selectionListeners = null;
 		title = null;
 		defaultValue = null;
-		callback = null;
 		value = null;
 		converter = null;
 
