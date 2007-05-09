@@ -630,7 +630,11 @@ var f_core = {
 		    component.attachEvent("on"+name, fct);
 			    
 		    if (capture) {
-			    capture.setCapture();
+		    	if (capture.setCapture) {
+				    capture.setCapture();
+				} else {
+					f_core.Debug(f_core, "AddEventListener: IE : setCapture non available on "+capture);
+				}
 			}
 		    return;
 		}
