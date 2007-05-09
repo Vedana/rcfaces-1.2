@@ -16,7 +16,17 @@ var __static = {
 	 * 
 	 * @field private static number
 	 */
-	 _EventId: undefined
+	 _EventId: undefined,
+	/**
+	 * 
+	 * @method private static
+	 * @param f_event event 
+	 * @return boolean
+	 */
+	 _Submit: function(event) {
+	 	f_core.Submit(event);
+	 	return false;
+	 }
 }
 
 var __prototype = {
@@ -67,7 +77,7 @@ var __prototype = {
 			f_core.Debug(fa_eventTarget, "f_initEventAtts: Register event '"+eventName+"' on component '"+this.id+"' => "+commands);
 
 			if (commands.length==2 && commands[1]=="submit") {
-				this.f_addEventListener(eventType, f_core.Submit);
+				this.f_addEventListener(eventType, fa_eventTarget._Submit);
 				continue;
 			}
 
