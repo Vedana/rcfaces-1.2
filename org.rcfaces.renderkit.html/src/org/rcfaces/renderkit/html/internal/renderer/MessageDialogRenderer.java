@@ -118,19 +118,20 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
         if (chaine != null) {
             htmlWriter.writeAttribute("v:lookId", chaine);
         }
-        IContentAccessors contentAccessors = component.getImageAccessors(facesContext);
-		if (contentAccessors instanceof IImageAccessors) {
-		    IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
-		    IContentAccessor imageAccessor = imageAccessors.getImageAccessor();
-		    if (imageAccessor != null) {
-		        String imageSrc = imageAccessor.resolveURL(facesContext, null,
-		                null);
-		        if (imageSrc != null) {
-		        	htmlWriter.writeAttribute("v:imageURL", chaine);
-		        }
-		    }
-		}
-
+        if (component.isImageURLSetted()) {
+	        IContentAccessors contentAccessors = component.getImageAccessors(facesContext);
+			if (contentAccessors instanceof IImageAccessors) {
+			    IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+			    IContentAccessor imageAccessor = imageAccessors.getImageAccessor();
+			    if (imageAccessor != null) {
+			        String imageSrc = imageAccessor.resolveURL(facesContext, null,
+			                null);
+			        if (imageSrc != null) {
+			        	htmlWriter.writeAttribute("v:imageURL", imageSrc);
+			        }
+			    }
+			}
+        }
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
         setAlreadyLazyComponent(htmlWriter);
