@@ -197,7 +197,7 @@ var __prototype = {
 			this._defaultValue=f_core.GetAttribute(this, "v:defaultValue");
 			
 			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 300));
-			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 300));
+			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 500));
 			
 			this._priority=f_core.GetNumberAttribute(this, "v:dialogPriority", 0);
 			this._styleClass=f_core.GetAttribute(this, "v:styleClass");
