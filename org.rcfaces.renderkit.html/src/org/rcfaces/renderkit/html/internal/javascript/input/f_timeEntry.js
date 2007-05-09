@@ -102,7 +102,8 @@ var __prototype={
 	 * @return void
 	 */
 	f_setTime: function(time) {
-		f_core.Assert(time instanceof f_time, "Invalid time parameter ("+time+").");
+		f_core.Assert(time instanceof f_time, "f_timeEntry.f_setTime: Invalid time parameter ("+time+").");
+		
 		var inputs=this._inputs;
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];

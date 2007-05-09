@@ -21,21 +21,13 @@ var __static={
 var __prototype={
 
 	fa_initializeInput: function(input) {
-		var min=f_core.GetAttribute(input, "v:min");
-		if (min) {
-			input._min=parseInt(min);
-		}
-		var max=f_core.GetAttribute(input, "v:max");
-		if (max) {
-			input._max=parseInt(max);
-		}
-		var defaultValue=f_core.GetAttribute(input, "v:default");
-		if (defaultValue) {
-			input._default=parseInt(defaultValue);
-		}
-		input._cycle=(f_core.GetAttribute(input, "v:cycle")!=null);
+		input._min=f_core.GetNumberAttribute(input, "v:min");
+		input._max=f_core.GetNumberAttribute(input, "v:max");
+		input._default=f_core.GetNumberAttribute(input, "v:default");
+
+		input._cycle=f_core.GetBooleanAttribute(input, "v:cycle");
 				
-		input._autoCompletion=(f_core.GetAttribute(input, "v:auto")=="true");
+		input._autoCompletion=f_core.GetBooleanAttribute(input, "v:auto");
 		
 		var step=f_core.GetAttribute(input, "v:step");
 		if (step) {
@@ -96,7 +88,7 @@ var __prototype={
 
 		var fv=parseInt(inputValue, 10);
 		
-		f_core.Debug(fa_compositeNumEntry, "_performSet  fv="+fv+" newValue="+newValue+" step="+step);
+		f_core.Debug(fa_compositeNumEntry, "fa_performSet:  fv="+fv+" newValue="+newValue+" step="+step);
 		if (fv==newValue) {
 			return false;
 		}
@@ -213,7 +205,7 @@ var __prototype={
 			var min=input._min;
 			var max=input._max;
 		
-			f_core.Debug(fa_compositeNumEntry, "Supposed value '"+futureValue+"' int="+fv+" min="+min+" max="+max);
+			f_core.Debug(fa_compositeNumEntry, "fa_keyPressed: Supposed value '"+futureValue+"' int="+fv+" min="+min+" max="+max);
 	
 			if ((fv || futureValue.length==maxLength) 
 					&& ((min!==undefined && min>fv && futureValue.length==maxLength)  // On ne peut pas determiner le min si le champ n'est pas complet !
@@ -294,7 +286,7 @@ var __prototype={
 					}
 				}
 				
-				f_core.Debug(fa_compositeNumEntry, " Diff="+diff+" fv="+fv);
+				f_core.Debug(fa_compositeNumEntry, "fa_keyPressed: Diff="+diff+" fv="+fv);
 				
 				if (!diff) {
 					// Il est complet !

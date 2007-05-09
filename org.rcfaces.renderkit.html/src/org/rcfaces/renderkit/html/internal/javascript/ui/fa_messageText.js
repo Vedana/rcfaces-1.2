@@ -25,8 +25,7 @@ var __prototype = {
 	 */
 	f_isShowSummary: function() {
 		if (this._showSummary===undefined) {
-			var b=f_core.GetAttribute(this, "v:showSummary");			
-			this._showSummary=(b)?true:false;			
+			this._showSummary=f_core.GetBooleanAttribute(this, "v:showSummary", false);
 		}
 		
 		return this._showSummary;
@@ -61,8 +60,7 @@ var __prototype = {
 	 */
 	f_isShowDetail: function() {
 		if (this._showDetail===undefined) {
-			var b=f_core.GetAttribute(this, "v:showDetail");
-			this._showDetail=(b)?true:false;
+			this._showDetail=f_core.GetBooleanAttribute(this, "v:showDetail", false);
 		}
 		
 		return this._showDetail;

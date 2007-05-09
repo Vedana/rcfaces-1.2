@@ -180,25 +180,16 @@ var __static = {
 			calendar.f_setHomeDate(homeDate, homeDateLabel);
 		}
 
-		var clientDatesStrategy=f_core.GetAttribute(component, "v:clientDatesStrategy");
-		if (clientDatesStrategy) {
-			calendar._clientDatesStrategy=parseInt(clientDatesStrategy, 10);
-		}
+		calendar._clientDatesStrategy=f_core.GetNumberAttribute(component, "v:clientDatesStrategy");
 
 		var disabledWeekDays=f_core.GetAttribute(component, "v:disabledWeekDays");
 		if (disabledWeekDays) {
 			calendar.f_setDisabledWeekDays(disabledWeekDays);
 		}
 		
-		var firstDayOfWeek=f_core.GetAttribute(component, "v:firstDayOfWeek");
-		if (firstDayOfWeek) {
-			calendar._firstDayOfWeek=parseInt(firstDayOfWeek, 10);
-		}
+		calendar._firstDayOfWeek=f_core.GetNumberAttribute(component, "v:firstDayOfWeek");
 
-		var mode=f_core.GetAttribute(component, "v:mode");
-		if (mode) {
-			calendar._mode=parseInt(mode, 10);
-		}
+		calendar._mode=f_core.GetNumberAttribute(component, "v:mode");
 		
 		var date=f_core.GetAttribute(component, "v:value");
 		if (date) {

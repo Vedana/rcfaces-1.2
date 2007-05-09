@@ -15,7 +15,7 @@ var __prototype = {
 		
 		this._type=f_core.GetAttribute(this, "v:type");
 		this._for=f_core.GetAttribute(this, "v:for");
-		this._hideIfDisabled=(f_core.GetAttribute(this, "v:hideIfDisabled")!=null);
+		this._hideIfDisabled=f_core.GetBooleanAttribute(this, "v:hideIfDisabled", false);
 		
 		// this.f_setDisabled(true); // D'office !  on attend la synchro !
 		// C'est fait sur le serveur !

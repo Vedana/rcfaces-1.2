@@ -22,9 +22,7 @@ var __prototype = {
 	f_isReadOnly: function() {
 		if (this._readOnly===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var b=f_core.GetAttribute(this, "v:readOnly");
-			
-			this._readOnly = (b)?true:false;
+			this._readOnly=f_core.GetBooleanAttribute(this, "v:readOnly", false);
 		}
 
 		return this._readOnly;

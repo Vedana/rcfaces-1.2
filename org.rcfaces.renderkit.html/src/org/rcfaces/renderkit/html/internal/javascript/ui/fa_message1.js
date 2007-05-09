@@ -91,8 +91,7 @@ var __prototype = {
 	 */
 	f_isSetFocusIfMessage: function() {
 		if (this._setFocusIfMessage===undefined) {
-			var s=f_core.GetAttribute(this, "v:setFocusIfMessage");		
-			this._setFocusIfMessage=(s)?true:false;
+			this._setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", false);
 		}
 		
 		return this._setFocusIfMessage;

@@ -24,9 +24,7 @@ var __prototype = {
 	f_getValue: function() {
 		if (this._value===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var b=f_core.GetAttribute(this, "v:value");
-			
-			this._value=(typeof(b)=="string")?b:null;
+			this._value=f_core.GetAttribute(this, "v:value", null);
 		}
 		
 		return this._value;

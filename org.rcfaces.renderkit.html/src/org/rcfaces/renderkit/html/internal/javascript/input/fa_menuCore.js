@@ -220,17 +220,10 @@ var __prototype = {
 		this._menu=this;
 
 		if (this.tagName) {
-			var itemImageWidth=f_core.GetAttribute(this, "v:itemImageWidth");
-			if (itemImageWidth) {
-				this._itemImageWidth=parseInt(itemImageWidth);
-			}
-	
-			var itemImageHeight=f_core.GetAttribute(this, "v:itemImageHeight");
-			if (itemImageHeight) {
-				this._itemImageHeight=parseInt(itemImageHeight);
-			}
+			this._itemImageWidth=f_core.GetNumberAttribute(this, "v:itemImageWidth");
+			this._itemImageHeight=f_core.GetNumberAttribute(this, "v:itemImageHeight");
 			
-			if (itemImageWidth || itemImageHeight) {
+			if (this._itemImageWidth || this._itemImageHeight) {
 				f_core.Debug(fa_menuCore, "fa_menuCore: Set item image width/height by tag attributes width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
 			}
 		}

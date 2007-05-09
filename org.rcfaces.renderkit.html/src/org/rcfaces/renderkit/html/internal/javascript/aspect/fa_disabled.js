@@ -24,9 +24,7 @@ var __prototype = {
 	f_isDisabled: function() {
 		if (this._disabled===undefined) {
 			// Appel depuis le constructor de l'objet !
-		  	var b=f_core.GetAttribute(this, "v:disabled");
-			
-			this._disabled=(b)?true:false;
+		  	this._disabled=f_core.GetBooleanAttribute(this, "v:disabled", false);
 		}
 		
 		return this._disabled;

@@ -12,9 +12,7 @@
  
 var __prototype = {
 	fa_filterProperties: function() {
-		if (f_core.GetAttribute(this, "v:filtred")) {
-			this._filtred=true;
-		}
+		this._filtred=f_core.GetBooleanAttribute(this, "v:filtred", false);
 		
 		var filterExpression=f_core.GetAttribute(this, "v:filterExpression");
 		if (filterExpression) {

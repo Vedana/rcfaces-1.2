@@ -22,15 +22,8 @@ var __prototype = {
 	_initialVerticalScrollPosition: undefined,
 
 	fa_scrollPositions: function() {			
-		var hsp=f_core.GetAttribute(this, "v:hsp");
-		if (hsp) {
-			this._initialHorizontalScrollPosition=parseInt(hsp, 10);
-		}
-			
-		var vsp=f_core.GetAttribute(this, "v:vsp");
-		if (vsp) {
-			this._initialVerticalScrollPosition=parseInt(vsp, 10);
-		}
+		this._initialHorizontalScrollPosition=f_core.GetNumberAttribute(this, "v:hsp");			
+		this._initialVerticalScrollPosition=f_core.GetNumberAttribute(this, "v:vsp");
 	},
 /*
 	f_finalize: function() {

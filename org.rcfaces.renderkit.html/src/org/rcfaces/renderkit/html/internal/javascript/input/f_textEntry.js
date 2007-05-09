@@ -14,10 +14,7 @@ var __prototype = {
 	f_textEntry: function() {
 		this.f_super(arguments);
 		
-		var autoTab=f_core.GetAttribute(this, "v:autoTab");
-		if (autoTab) {
-			this._autoTab=true;
-		}
+		this._autoTab=f_core.GetBooleanAttribute(this, "v:autoTab");
 				
 		if (f_class.IsClassDefined("f_clientValidator")) {
 			f_clientValidator.InstallValidator(this);

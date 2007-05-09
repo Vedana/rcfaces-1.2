@@ -1156,9 +1156,7 @@ var __prototype = {
 		this._cellStyleClass="f_grid_cell";
 		this._rowStyleClass="f_grid_row";
 		
-		if (f_core.GetAttribute(this, "v:resizable")) {
-			this._resizable=true;
-		}
+		this._resizable=f_core.GetBooleanAttribute(this, "v:resizable");
 		
 		this._initCursorValue=f_core.GetAttribute(this, "v:cursorValue");
 

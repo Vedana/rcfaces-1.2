@@ -90,7 +90,7 @@ var __prototype = {
 					border._className=border.className;
 				}
 				
-				this._flatType=(f_core.GetAttribute(this, "v:flatMode")!=null);
+				this._flatType=f_core.GetBooleanAttribute(this, "v:flatMode", false);
 			}
 		}
 	

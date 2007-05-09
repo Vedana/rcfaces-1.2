@@ -5,6 +5,8 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComboGridComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -18,6 +20,9 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ComboGridRenderer extends AbstractGridRenderer {
+    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(ComboGridRenderer.class);
 
     private static final int ARROW_IMAGE_WIDTH = 20;
 
@@ -48,6 +53,15 @@ public class ComboGridRenderer extends AbstractGridRenderer {
             classSuffix = getMainStyleClassName() + "_disabled";
         }
 
+        String width = comboGridComponent.getWidth(facesContext);
+
+        int colWidth = -1;
+        if (width != null) {
+            int totalWidth = computeSize(width, 0, 2);
+
+            colWidth = totalWidth - ARROW_IMAGE_WIDTH - 2;
+        }
+
         htmlWriter.startElement(IHtmlWriter.TABLE);
         htmlWriter.writeAttribute("cellspacing", "0");
         htmlWriter.writeAttribute("cellpadding", "0");
@@ -57,7 +71,11 @@ public class ComboGridRenderer extends AbstractGridRenderer {
         writeCssAttributes(htmlWriter, classSuffix, CSS_ALL_MASK);
 
         htmlWriter.startElement(IHtmlWriter.COL);
-        htmlWriter.writeWidth("1*");
+        if (colWidth > 0) {
+            htmlWriter.writeWidth(colWidth);
+        } else {
+            htmlWriter.writeWidth("1*");
+        }
         htmlWriter.endElement(IHtmlWriter.COL);
 
         htmlWriter.startElement(IHtmlWriter.COL);
@@ -73,6 +91,10 @@ public class ComboGridRenderer extends AbstractGridRenderer {
                 "_inputCell"));
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
+        if (colWidth > 0) {
+            htmlWriter.writeStyle().writeWidth(colWidth + "px");
+        }
+
         htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
 
         htmlWriter.writeClass(getMainStyleClassName() + "_input");

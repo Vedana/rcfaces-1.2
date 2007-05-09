@@ -24,9 +24,7 @@ var __prototype = {
 	f_isSelected: function() {
 		if (this._selected===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var b=f_core.GetAttribute(this, "v:selected");
-			
-			this._selected=(b)?true:false;
+			this._selected=f_core.GetBooleanAttribute(this, "v:selected", false);
 		}
 		
 		return this._selected;

@@ -172,11 +172,11 @@ var __prototype = {
 	 */
 	_priority: undefined,
 	/**
-	 * @field private String
+	 * @field private number
 	 */
 	_height: undefined,
 	/**
-	 * @field private String
+	 * @field private number
 	 */
 	_width: undefined,
 	/**
@@ -196,12 +196,13 @@ var __prototype = {
 		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var tag = this;
-			this._title = tag.getAttribute("v:title");
-			this._text=tag.getAttribute("v:text");
-			this._defaultValue=tag.getAttribute("v:defaultValue");
-			this._height=tag.getAttribute("v:height");
-			this._width=tag.getAttribute("v:width");
+			this._title = f_core.GetAttribute(this, "v:title");
+			this._text=f_core.GetAttribute(this, "v:text");
+			this._defaultValue=f_core.GetAttribute(this, "v:defaultValue");
+			
+			this._height=f_core.GetNumberAttribute(this, "v:height");
+			this._width=f_core.GetNumberAttribute(this, "v:width");
+			
 			this.f_initEventAtts(f_messageDialog._EVENTS);
 
 		} else {
@@ -228,8 +229,8 @@ var __prototype = {
 		this._actions=undefined; // List<Object>
 		//this._styleClass=undefined; // string
 		//this._priority=undefined; // int
-		//this._height=undefined; // string
-		//this._width=undefined; // string
+		//this._height=undefined; // number
+		//this._width=undefined; // number
 
 		this.f_super(arguments);
 	},
@@ -346,7 +347,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setPriority: function(priority) {
-    	f_core.Assert(typeof(priority)=="number", "f_messageDialog.f_setPriority: Invalid parameter '"+priority+"'."+typeof(priority));
+    	f_core.Assert(typeof(priority)=="number", "f_messageDialog.f_setPriority: Invalid priority parameter '"+priority+"'."+typeof(priority));
 
 		this._priority = priority;
 	},
@@ -364,10 +365,11 @@ var __prototype = {
 	 *  <p>Sets Height.</p>
 	 *
 	 * @method public 
-	 * @param String height
+	 * @param number height
+	 * @return void
 	 */
 	f_setHeight: function(height) {
-    	f_core.Assert(typeof(height)=="string", "f_messageDialog.f_setHeight: Invalid parameter '"+height+"'.");
+    	f_core.Assert(typeof(height)=="number", "f_messageDialog.f_setHeight: Invalid height parameter '"+height+"'.");
 
 		this._height = height;
 	},
@@ -376,7 +378,7 @@ var __prototype = {
 	 *  <p>Return the width.</p>
 	 *
 	 * @method public 
-	 * @return String width
+	 * @return number width
 	 */
 	f_getWidth: function() {
 		return this._width;
@@ -385,10 +387,11 @@ var __prototype = {
 	 *  <p>Sets width.</p>
 	 *
 	 * @method public 
-	 * @param String width
+	 * @param number width
+	 * @return void
 	 */
 	f_setWidth: function(width) {
-    	f_core.Assert(typeof(width)=="string", "f_messageDialog.f_setWidth: Invalid parameter '"+width+"'.");
+    	f_core.Assert(typeof(width)=="number", "f_messageDialog.f_setWidth: Invalid width parameter '"+width+"'.");
 
 		this._width = width;
 	},

@@ -63,7 +63,7 @@ var __prototype = {
 			return this._globalOnly;
 		}
 		
-		var b=f_core.GetAttribute(this, "v:globalOnly")?true:false;
+		var b=f_core.GetBooleanAttribute(this, "v:globalOnly", false);
 		this._globalOnly=b;
 		return b;
 	},

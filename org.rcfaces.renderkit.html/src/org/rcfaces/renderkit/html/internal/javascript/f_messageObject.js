@@ -51,12 +51,8 @@ var __static = {
     	f_core.Assert(tag && tag.nodeType==f_core.ELEMENT_NODE, "f_messageObject.CreateFromTag: Invalid tag parameter '"+tag+"'.");
     	
 		var detail=f_core.GetAttribute(tag, "v:detail");
-		var summary=f_core.GetAttribute(tag, "v:summary");
-		
-		var severity=f_core.GetAttribute(tag, "v:severity");	
-		if (typeof(severity)=="string") {			
-			severity=parseInt(severity);
-		}
+		var summary=f_core.GetAttribute(tag, "v:summary");		
+		var severity=f_core.GetNumberAttribute(tag, "v:severity");	
 		
 		var clientDatas=f_core.ParseDataAttribute(tag);
 		

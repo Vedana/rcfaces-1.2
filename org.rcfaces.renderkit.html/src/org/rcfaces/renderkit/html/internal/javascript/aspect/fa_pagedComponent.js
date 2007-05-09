@@ -69,30 +69,19 @@ var __static = {
  
 var __prototype = {
 	fa_pagedComponent: function() {
-		if (f_core.GetAttribute(this, "v:asyncRender")) {
-			this._interactive=true;
-		}
+		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
 		
-		if (f_core.GetAttribute(this, "v:interactiveShow")) {
-			this._interactiveShow=true;
-		}
+		this._interactiveShow=f_core.GetBooleanAttribute(this, "v:interactiveShow");
 		
-		var rows=f_core.GetAttribute(this, "v:rows"); // Nombre ligne a afficher
-		this._rows=(rows)?parseInt(rows):0;
+		this._rows=f_core.GetNumberAttribute(this, "v:rows", 0); // Nombre ligne a afficher
 		
-		var first=f_core.GetAttribute(this, "v:first");  // La premiere ligne
-		this._first=(first)?parseInt(first):0;
+		this._first=f_core.GetNumberAttribute(this, "v:first", 0);  // La premiere ligne
 
-		var paged=f_core.GetAttribute(this, "v:paged");
-		this._paged=(paged!="false");
+		this._paged=f_core.GetBooleanAttribute(this, "v:paged", true);
 
-		this._rowCount=f_core.GetAttribute(this, "v:rowCount"); // Nombre ligne au total
-		if (!this._rowCount) {
-			this._rowCount=-1;
+		this._rowCount=f_core.GetNumberAttribute(this, "v:rowCount", -1); // Nombre ligne au total
+		if (this._rowCount<0) {
 			this._maxRows=this._first+this._rows;
-			
-		} else {
-			this._rowCount=parseInt(this._rowCount);
 		}
 	},
 	/*

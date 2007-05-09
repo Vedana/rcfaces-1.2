@@ -29,7 +29,7 @@ var __prototype={
 	},
 	*/
 	fa_initializeInput: function(input) {
-		input._forced=parseInt(f_core.GetAttribute(input, "v:auto"));
+		input._forced=f_core.GetNumberAttribute(input, "v:auto");
 		if (input._forced<1) {
 			input._forced=1;
 		}
@@ -95,7 +95,8 @@ var __prototype={
 	 * @return void
 	 */
 	f_setNumber: function(num) {
-		f_core.Assert(typeof(num)!="number", "Invalid number parameter ("+num+").");
+		f_core.Assert(typeof(num)!="number", "f_numberEntry.f_setNumber: Invalid number parameter ("+num+").");
+		
 		var inputs=this._inputs;
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];

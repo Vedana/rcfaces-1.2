@@ -309,7 +309,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
         }
 
         if (listenersByType.isEmpty() == false) {
-            StringAppender sb = new StringAppender(128);
+            StringAppender sa = new StringAppender(128);
 
             IRenderContext renderContext = writer.getComponentRenderContext()
                     .getRenderContext();
@@ -320,12 +320,12 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
                 String listenerType = (String) entry.getKey();
                 FacesListener listeners[] = (FacesListener[]) entry.getValue();
 
-                EventsRenderer.encodeAttributeEventListeners(renderContext, sb,
+                EventsRenderer.encodeAttributeEventListeners(renderContext, sa,
                         listenerType, listeners);
             }
 
-            if (sb.length() > 0) {
-                writer.writeAttribute("v:events", sb.toString());
+            if (sa.length() > 0) {
+                writer.writeAttribute("v:events", sa.toString());
                 initJavascript = true;
             }
         }

@@ -22,9 +22,7 @@ var __prototype = {
 	f_isRequired: function() {
 		if (this._required===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var b=f_core.GetAttribute(this, "v:required");
-			
-			this._required=(b)?true:false;
+			this._required=f_core.GetBooleanAttribute(this, "v:required", false);
 		}
 
 		return this._required;

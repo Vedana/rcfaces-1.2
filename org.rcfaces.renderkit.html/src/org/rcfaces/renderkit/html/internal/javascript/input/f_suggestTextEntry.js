@@ -36,35 +36,15 @@ var __prototype = {
 		this._filtred=true;
 		this._rowCount=0;
 		
-		var rows=f_suggestTextEntry._DEFAULT_ROWS_NUMBER;
-		var rowsAtt=f_core.GetAttribute(this, "v:maxResultNumber");
-		if (rowsAtt) {
-			rows=parseInt(rowsAtt);
-		}
-		this._maxResultNumber=rows;
+		this._maxResultNumber=f_core.GetNumberAttribute(this, "v:maxResultNumber", f_suggestTextEntry._DEFAULT_ROWS_NUMBER);
 		
-		var suggestionDelayMs=f_suggestTextEntry._DEFAULT_SUGGESTION_DELAY_MS;
-		var suggestionDelayMsAtt=f_core.GetAttribute(this, "v:suggestionDelayMs");
-		if (suggestionDelayMsAtt) {
-			suggestionDelayMs=parseInt(suggestionDelayMsAtt);
-		}
-		this._suggestionDelayMs=suggestionDelayMs;
+		this._suggestionDelayMs=f_core.GetNumberAttribute(this, "v:suggestionDelayMs", f_suggestTextEntry._DEFAULT_SUGGESTION_DELAY_MS);
 		
-		var caseSensitiveAtt=f_core.GetAttribute(this, "v:caseSensitive");
-		if (caseSensitiveAtt) {
-			this._caseSensitive=true;
-		}
+		this._caseSensitive=f_core.GetBooleanAttribute(this, "v:caseSensitive", false);
 		
-		var forceProposalAtt=f_core.GetAttribute(this, "v:forceProposal");
-		if (forceProposalAtt) {
-			this._forceProposal=true;
-		}
+		this._forceProposal=f_core.GetBooleanAttribute(this, "v:forceProposal", false);
 		
-		this._suggestionMinChars=0;
-		var suggestionMinCharsAtt=f_core.GetAttribute(this, "v:suggestionMinChars");
-		if (suggestionMinCharsAtt) {
-			this._suggestionMinChars=parseInt(suggestionMinCharsAtt);
-		}
+		this._suggestionMinChars=f_core.GetNumberAttribute(this, "v:suggestionMinChars", 0);
 		
 		// Permet d'optimiser les propositions !
 		this._orderedResult=f_core.GetAttribute(this, "v:orderedResult");

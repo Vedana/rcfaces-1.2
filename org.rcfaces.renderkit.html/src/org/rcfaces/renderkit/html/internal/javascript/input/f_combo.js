@@ -34,7 +34,7 @@ var __prototype = {
 		this.f_super(arguments);
 	},
 	f_update: function() {
-		if (f_core.GetAttribute(this, "v:noSelection")) {
+		if (f_core.GetBooleanAttribute(this, "v:noSelection")) {
 			this.selectedIndex = -1;
 		}
 		

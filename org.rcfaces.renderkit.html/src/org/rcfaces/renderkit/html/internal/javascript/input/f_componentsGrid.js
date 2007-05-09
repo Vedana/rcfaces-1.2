@@ -429,7 +429,7 @@ var __prototype = {
 				// La ligne peut être sélectionnée	
 				
 				// Nous sommes en fullstate ?
-				if (!this._selectionFullState && f_core.GetAttribute(row, "v:selected")) {
+				if (!this._selectionFullState && f_core.GetBooleanAttribute(row, "v:selected")) {
 					this.f_updateElementSelection(row, true);	
 				}
 			}

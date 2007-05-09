@@ -58,19 +58,14 @@ var __prototype={
 	f_accelerator: function() {
 		this.f_super(arguments);
 
-		var ch=f_core.GetAttribute(this, "v:character");
-		if (ch) {
-			this._character =  ch;
-		}
+		this._character=f_core.GetAttribute(this, "v:character", undefined);
+
 		var vk=f_core.GetAttribute(this, "v:virtualKey");
 		if (vk) {
 			this._virtualKeys = [ parseInt(vk) ];
 		}
 
-		var kf=f_core.GetAttribute(this, "v:keyFlags");
-		if (kf) {
-			this._keyFlags = parseInt(kf);
-		}
+		this._keyFlags = f_core.GetNumberAttribute(this, "v:keyFlags");
 
 		f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent);
 		

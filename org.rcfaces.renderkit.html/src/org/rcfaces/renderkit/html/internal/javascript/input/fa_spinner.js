@@ -189,7 +189,7 @@ var __prototype = {
 	fa_spinner: function() {			
 		var disabledSuffix=(this.f_isDisabled())?"_disabled":"";
 		
-		this._cycleValue=(f_core.GetAttribute(this, "v:cycle")=="true");
+		this._cycleValue=f_core.GetBooleanAttribute(this, "v:cycle", false);
 		
 		this._spinnerUp=f_core.GetChildByCssClass(this, "f_spinner_up"+disabledSuffix);
 		this._installSpinnerButton(this._spinnerUp, "_up",  1);

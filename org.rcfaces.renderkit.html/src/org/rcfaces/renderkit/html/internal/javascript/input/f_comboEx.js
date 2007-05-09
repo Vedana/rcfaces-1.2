@@ -723,7 +723,7 @@ var __prototype = {
 		
 		var buttonClassName=this.className+"_image";
 		var cl=buttonClassName;
-		if (f_core.GetAttribute(this, "v:disabled")) {
+		if (f_core.GetBooleanAttribute(this, "v:disabled")) {
 			cl+="_disabled";
 		}
 
@@ -749,20 +749,15 @@ var __prototype = {
 			button._className=buttonClassName;
 		}
 
-		var v_editable=f_core.GetAttribute(this, "v:editable");
-		if (v_editable=="false") {
+		if (!f_core.GetBooleanAttribute(this, "v:editable", true)) {
 			this.f_setEditable(false);
 		}
 
-		var v_autoCompletion=f_core.GetAttribute(this, "v:autoCompletion");
-		if (v_autoCompletion) {
+		if (f_core.GetBooleanAttribute(this, "v:autoCompletion")) {
 			this.f_setAutoCompletion(true);
 		}
 		
-		var v_row=f_core.GetAttribute(this, "v:popupRowNumber");
-		if (v_row) {
-			this._popupRowNumber=parseInt(v_row, 10);
-		}
+		this._popupRowNumber=f_core.GetNumberAttribute(this, "v:popupRowNumber");
 		
 		if (!this._popupRowNumber || this._popupRowNumber<1) {
 			this._popupRowNumber=f_comboEx._DEFAULT_ROW_NUMBER;

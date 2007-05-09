@@ -2223,20 +2223,57 @@ var f_core = {
 	},
 	/** 
 	 * @method hidden static
-	 * @param Element 
+	 * @param Element element
+	 * @param String attributeName
+	 * @param optional any defaultValue
+	 * @return any
 	 */
-	GetAttribute: function(object, attributeName, defaultValue) {
-		f_core.Assert(object && object.nodeType==f_core.ELEMENT_NODE, "f_core.GetAttribute: Object parameter is not a valid node ! ("+object+")");
-		f_core.Assert(typeof(attributeName)=="string", "f_core.GetAttribute: attributeName parameter is invalid.");
+	GetAttribute: function(element, attributeName, defaultValue) {
+		f_core.Assert(element && element.nodeType==f_core.ELEMENT_NODE, "f_core.GetAttribute: Object parameter is not a valid node ! ("+element+")");
+		f_core.Assert(typeof(attributeName)=="string" && attributeName.length, "f_core.GetAttribute: attributeName parameter is invalid. ("+attributeName+")");
 
 		try {
-			var value=object.getAttribute(attributeName);
-			if (defaultValue===undefined || (value!==undefined && value!==null)) {
+			var value=element.getAttribute(attributeName);
+			if (value!==undefined && value!==null) {
 				return value;
 			}
 			
 		} catch (x) {
 			/* ignore, in IE6 calling on a table results in an exception */
+		}
+
+		return defaultValue;
+	},	
+	/** 
+	 * @method hidden static
+	 * @param Element element
+	 * @param String attributeName
+	 * @param optional number defaultValue
+	 * @return number
+	 */
+	GetNumberAttribute: function(element, attributeName, defaultValue) {
+		f_core.Assert(defaultValue===undefined || typeof(defaultValue)=="number", "f_core.GetNumberAttribute: defaultValue parameter is invalid. ("+defaultValue+")");
+
+		var value=f_core.GetAttribute(element, attributeName)
+		if (value) {
+			return parseInt(value, 10);
+		}
+
+		return defaultValue;
+	},	
+	/** 
+	 * @method hidden static
+	 * @param Element element
+	 * @param String attributeName
+	 * @param optional boolean defaultValue
+	 * @return boolean
+	 */
+	GetBooleanAttribute: function(element, attributeName, defaultValue) {
+		f_core.Assert(defaultValue===undefined || typeof(defaultValue)=="boolean", "f_core.GetBooleanAttribute: defaultValue parameter is invalid. ("+defaultValue+")");
+
+		var value=f_core.GetAttribute(element, attributeName)
+		if (value) {
+			return !(value.toLowerCase()!="false");
 		}
 
 		return defaultValue;

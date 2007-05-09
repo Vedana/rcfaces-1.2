@@ -22,9 +22,7 @@ var __prototype = {
 	f_isImmediate: function() {
 		if (this._immediate===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var b=f_core.GetAttribute(this, "v:immediate");
-			
-			this._immediate=(b)?true:false;
+			this._immediate=f_core.GetBooleanAttribute(this, "v:immediate", false);
 		}
 		
 		return this._immediate;

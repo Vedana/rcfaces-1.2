@@ -11,12 +11,7 @@
  */
 var __prototype = {
 	fa_asyncRender: function() {
-		var v_interactive=f_core.GetAttribute(this, "v:asyncRender");
-		if (!v_interactive) {
-			return;
-		}
-
-		this._interactive=true;	
+		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
 	},
 	f_finalize: function() {
 //		this._interactive=undefined; // boolean

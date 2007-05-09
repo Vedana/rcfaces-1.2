@@ -22,9 +22,7 @@ var __prototype = {
 	f_isCollapsed: function() {
 		if (this._collapsed===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var b=f_core.GetAttribute(this, "v:collapsed");
-			
-			this._collapsed = (b)?true:false;
+			this._collapsed =f_core.GetBooleanAttribute(this, "v:collapsed", false);
 		}
 
 		return this._collapsed;

@@ -426,27 +426,15 @@ var __prototype = {
 		
 		this._nodesList=new Array();
 
-		var v_interactive=f_core.GetAttribute(this, "v:asyncRender");
-		if (v_interactive) {
-			this._interactive=true;
-		}
+		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender", false);
 
-		var v_hideRootExpandSign=f_core.GetAttribute(this, "v:hideRootExpandSign");
-		if (v_hideRootExpandSign) {
-			this._hideRootExpandSign=true;
-		}
+		this._hideRootExpandSign=f_core.GetBooleanAttribute(this, "v:hideRootExpandSign", false);
 				
-		var v_userExpandable=f_core.GetAttribute(this, "v:userExpandable");
-		this._userExpandable=(v_userExpandable!="false");
+		this._userExpandable=f_core.GetAttribute(this, "v:userExpandable", false);
 		
-		if (f_core.GetAttribute(this, "v:images")) {
-			this._images=true;
-		}
+		this._images=f_core.GetBooleanAttribute(this, "v:images");
 		
-		var pld=f_core.GetAttribute(this, "v:preloadedLevelDepth");
-		if (pld) {
-			this._preloadedLevelDepth=parseInt(pld);
-		}
+		this._preloadedLevelDepth=f_core.GetNumberAttribute(this, "v:preloadedLevelDepth");
 		
 		this._initCursorValue=f_core.GetAttribute(this, "v:cursorValue");
 		
