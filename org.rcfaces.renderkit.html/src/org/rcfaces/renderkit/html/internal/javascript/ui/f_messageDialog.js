@@ -10,6 +10,13 @@
  * @version $Revision$ $Date$
  */
 var __static = {
+	/**
+	 * @field private static final
+	 */
+	_EVENTS: {
+			selection: f_event.SELECTION
+	},
+	
     /**
      * @field private static Array
      */
@@ -48,7 +55,7 @@ var __static = {
 		}
 		
 		f_core.Debug(f_messageDialog, "_OnClick: before messageBox.f_buttonOnClick(button);");
-		messageBox.f_buttonOnClick(button);
+		messageBox.f_buttonOnClick(button, evt);
 		
 		return f_core.CancelJsEvent(evt);
     },
@@ -57,18 +64,16 @@ var __static = {
      * @method private static
      * @param f_messageDialog msgBox
      * @param function functionOpen
-     * @param function callback
      * @param number priority
      * @return void
      */
-    _AddMessage: function(msgBox, functionOpen, callback, priority) {
+    _AddMessage: function(msgBox, functionOpen, priority) {
 		if (!f_messageDialog._Messages) {
 			f_messageDialog._Messages = new Array();
 		}
 		f_messageDialog._Messages.push({
 			_msgBox: msgBox,
 			_function: functionOpen,
-			_callback: callback,
 			_priority: priority
 		});
     },
@@ -103,12 +108,11 @@ var __static = {
 	     	msgBoxes.shift();
     		var msgBox = msg._msgBox;
 			var functionToCall = msg._function;
-			var callback = msg._callback;
 			var iframe = msgBox.f_getIframe();
 
 		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: before calling ");
 		    
-			functionToCall.call(msgBox, callback, iframe.contentWindow.document.body);
+			functionToCall.call(msgBox, iframe.contentWindow.document.body);
 			
 		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: after calling ");
 
@@ -121,23 +125,16 @@ var __static = {
     },
     
     /**
-     * <p>js Callback that submit the value</p>
+     * <p>js listener example</p>
+     * dans le tag : SelectionListener="return ListenerExample(event);"
      *
      * @method public static
-     * @param String value 
-     * @param f_meesageDialog messageDialog
-     * @return void
+     * @param f_event evt
+     * @return boolean
      */
-    SubmitValue: function(value, messageDialog) {
-    	f_core.Assert(typeof(value)=="string", "f_messageDialog.SubmitValue: Invalid parameter value '"+value+"'.");
-    	f_core.Assert(messageDialog.nodeType==1, "f_messageDialog.SubmitValue: messageDialog is not a tag '"+messageDialog+"'.");
-
-	    f_core.Debug(f_messageDialog, "SubmitValue: entering ("+value+", "+messageDialog+")");
-
-		var event=new f_event(messageDialog, f_event.SELECTION, null, null, value);
-
-		f_core.Submit(event);
-
+    ListenerExample: function(evt) {
+    	var value = evt.f_getValue();
+    	return true;
     },
     
     /**
@@ -175,6 +172,14 @@ var __prototype = {
 	 */
 	_priority: undefined,
 	/**
+	 * @field private String
+	 */
+	_height: undefined,
+	/**
+	 * @field private String
+	 */
+	_width: undefined,
+	/**
 	 * @field private Array
 	 */
 	_actions: undefined,
@@ -195,6 +200,9 @@ var __prototype = {
 			this._title = tag.getAttribute("v:title");
 			this._text=tag.getAttribute("v:text");
 			this._defaultValue=tag.getAttribute("v:defaultValue");
+			this._height=tag.getAttribute("v:height");
+			this._width=tag.getAttribute("v:width");
+			this.f_initEventAtts(f_messageDialog._EVENTS);
 
 		} else {
 			this._title=title;
@@ -218,9 +226,10 @@ var __prototype = {
 		// this._text=undefined; // string
 		// this._defaultValue=undefined; // string
 		this._actions=undefined; // List<Object>
-		this._callback=undefined; // function
 		//this._styleClass=undefined; // string
 		//this._priority=undefined; // int
+		//this._height=undefined; // string
+		//this._width=undefined; // string
 
 		this.f_super(arguments);
 	},
@@ -308,7 +317,6 @@ var __prototype = {
 	f_getStyleClass: function() {
 		return this._styleClass;
 	},
-	
 	/**
 	 *  <p>Sets an additional Style Class.</p>
 	 *
@@ -330,7 +338,6 @@ var __prototype = {
 	f_getPriority: function() {
 		return this._priority;
 	},
-	
 	/**
 	 *  <p>Sets the priority.</p>
 	 *
@@ -342,6 +349,48 @@ var __prototype = {
     	f_core.Assert(typeof(priority)=="number", "f_messageDialog.f_setPriority: Invalid parameter '"+priority+"'."+typeof(priority));
 
 		this._priority = priority;
+	},
+	
+	/**
+	 *  <p>Return the height.</p>
+	 *
+	 * @method public 
+	 * @return String height
+	 */
+	f_getHeight: function() {
+		return this._height;
+	},
+	/**
+	 *  <p>Sets Height.</p>
+	 *
+	 * @method public 
+	 * @param String height
+	 */
+	f_setHeight: function(height) {
+    	f_core.Assert(typeof(height)=="string", "f_messageDialog.f_setHeight: Invalid parameter '"+height+"'.");
+
+		this._height = height;
+	},
+	
+	/**
+	 *  <p>Return the width.</p>
+	 *
+	 * @method public 
+	 * @return String width
+	 */
+	f_getWidth: function() {
+		return this._width;
+	},
+	/**
+	 *  <p>Sets width.</p>
+	 *
+	 * @method public 
+	 * @param String width
+	 */
+	f_setWidth: function(width) {
+    	f_core.Assert(typeof(width)=="string", "f_messageDialog.f_setWidth: Invalid parameter '"+width+"'.");
+
+		this._width = width;
 	},
 	
 	/**
@@ -389,13 +438,21 @@ var __prototype = {
 	 */
 	f_open: function(callback) {
 		f_core.Assert(!arguments.length || typeof(callback) == "function", "f_messageDialog.f_open: Invalid Callback parameter ("+callback+")");
+		
+		// If a callback is passed : clean the selection listeners and add this callback to the listeners
+		if (callback) {
+			var actionList=this.f_getActionList(f_event.SELECTION);
+			actionList.f_clearActions();
+			
+			this.f_addEventListener(f_event.SELECTION, callback);
+		}
 
      	f_core.Debug(f_messageDialog, "f_open: entering ("+callback+")");
 		
 		// Create a blocking Div
 		this.f_drawModIFrame();
 
-		f_messageDialog._AddMessage(this, this._open, callback, this.f_getPriority());
+		f_messageDialog._AddMessage(this, this._open, this.f_getPriority());
 
 		if (f_messageDialog._DocComplete) {
 			f_messageDialog._ShowNextMsgStored();
@@ -403,20 +460,17 @@ var __prototype = {
 
 	},
 	/**
-	 *  <p>draw a message box. 
-	 *  The first parameter is a callback that must take a String as a first parameter and a f_messageDialog as second parameter.
-	 *  the callback can be null;
+	 *  <p>draw a message box.
 	 *  </p>
 	 *
 	 * @method private 
-	 * @param optional Function callback The callback function to be called when the messageBox is closed
+	 * @param HTMLElement the base html element to construct the dialog
 	 * @return void
 	 */
-	_open: function(callback, base) {
-		f_core.Assert(callback === undefined || typeof(callback) == "function", "f_messageDialog._open: Invalid Callback parameter ("+callback+")");
+	_open: function(base) {
 		f_core.Assert(base != undefined, "f_messageDialog._open: Invalid base parameter ("+base+")");
 
-     	f_core.Debug(f_messageDialog, "_open: entering ("+callback+", "+base+")");
+     	f_core.Debug(f_messageDialog, "_open: entering ("+base+")");
 		
 		//Hide Selects
 		f_shell.HideSelect();
@@ -440,7 +494,6 @@ var __prototype = {
 		baseMem._buttons=new Array();
 		
 		// Memorisation de la call-back et de l'instance de f_messageDialog
-		baseMem._callback = callback;
 		baseMem._messageBox=this;
 
 		table.className = cssClassBase+"_dialog";
@@ -578,14 +631,14 @@ var __prototype = {
 	 *
 	 * @method protected 
 	 * @param HTMLInputElement selectedButton The button that was pushed
+	 * @param Event jsEvent
 	 * @return void
 	 */
-	f_buttonOnClick: function(selectedButton) {
+	f_buttonOnClick: function(selectedButton, jsEvent) {
      	f_core.Debug(f_messageDialog, "f_buttonOnClick: entering ("+selectedButton+")");
 	
 		var base=selectedButton._base;
 		var messageBox=base._messageBox;
-		var callback=base._callback;
 		var buttons=base._buttons;
 		var value=selectedButton._value;
 	
@@ -601,7 +654,6 @@ var __prototype = {
 		
 		// Table cleaning
 		base._messageBox=undefined;
-		base._callback=undefined;
 		base._buttons=undefined;
 			
 		f_core.VerifyProperties(base);
@@ -610,17 +662,7 @@ var __prototype = {
 		var parent = base.parentNode;
 		parent.removeChild(base);
 
-		var ret = true;
-		if (callback) {
-			// Call the callback
-			try {
-				ret = callback.call(this, value, this);
-	
-			} catch (e) {
-				f_core.Error(f_messageDialog, "f_buttonClick: Pb calling the callback : "+callback+"('"+value+"', this)", e);
-			}
-		}
-		
+		var ret = this.f_fireEvent(f_event.SELECTION, jsEvent, null, value);
 		if (ret) {
 			f_messageDialog._ShowNextMsgStored();
 			return;
@@ -640,4 +682,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_messageDialog", null, __static, __prototype, f_dialog);
+new f_class("f_messageDialog", null, __static, __prototype, f_dialog, fa_eventTarget);

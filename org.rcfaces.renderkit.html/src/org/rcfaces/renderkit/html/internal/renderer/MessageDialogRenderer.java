@@ -4,6 +4,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.MessageDialogComponent;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -55,7 +56,7 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
                 .getComponent();
 
         // Pas visible : rien à faire !
-        if (!component.isVisible(facesContext)) {
+        if (!component.isVisible(facesContext) && component.getHiddenMode(facesContext)==IHiddenModeCapability.SERVER_HIDDEN_MODE) {
             super.encodeEnd(writer);
             return;
         }
@@ -66,6 +67,7 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
 
         htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
         writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
 
         String chaine = component.getTitle(facesContext);
         if (chaine != null) {
@@ -78,6 +80,18 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
         chaine = component.getDefaultValue(facesContext);
         if (chaine != null) {
             htmlWriter.writeAttribute("v:defaultValue", chaine);
+        }
+        chaine = component.getWidth(facesContext);
+        if (chaine != null) {
+            htmlWriter.writeAttribute("v:width", chaine);
+        }
+        chaine = component.getHeight(facesContext);
+        if (chaine != null) {
+            htmlWriter.writeAttribute("v:height", chaine);
+        }
+        chaine = component.getWaiRole(facesContext);
+        if (chaine != null) {
+            htmlWriter.writeAttribute("v:waiRole", chaine);
         }
 
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);

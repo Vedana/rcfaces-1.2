@@ -96,18 +96,13 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
 
         MessageDialogComponent component = (MessageDialogComponent) getComponent();
         FacesContext facesContext = javaScriptWriter.getFacesContext();
-
-        // titi.open(callback)
-
-        javaScriptWriter.writeMethodCall("f_open");
-
-        String jsCallBack = component.getCallback(facesContext);
-        if (jsCallBack != null) {
-            javaScriptWriter.write(jsCallBack);
+        
+        // call open only if the component is visible
+        if (component.isVisible(facesContext)) {
+            // titi.open()
+            // le callback sera déclenché par le fireEvent (fa_event)
+            javaScriptWriter.writeMethodCall("f_open").writeln(");");
         }
-
-        javaScriptWriter.writeln(");");
-
         super.encodeComponentsEnd();
     }
 
