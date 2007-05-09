@@ -393,6 +393,15 @@ var __prototype = {
 	 * @field private String
 	 */
 	_imageURL: undefined,
+
+	/**
+	 * @field private number
+	 */
+	_height: undefined,
+	/**
+	 * @field private number
+	 */
+	_width: undefined,
 	
 	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
@@ -419,6 +428,8 @@ var __prototype = {
 		// this._style=undefined; //number
 		this._div=undefined; //HTMLElement
 		this._iframe=undefined; //HTMLElement
+		//this._height=undefined; // number
+		//this._width=undefined; // number
 
 		this.f_super(arguments);
 	},
@@ -557,6 +568,51 @@ var __prototype = {
     	
 		this._imageURL = imageURL;
 	},
+
+	/**
+	 *  <p>Return the height.</p>
+	 *
+	 * @method public 
+	 * @return String height
+	 */
+	f_getHeight: function() {
+		return this._height;
+	},
+	/**
+	 *  <p>Sets Height.</p>
+	 *
+	 * @method public 
+	 * @param number height
+	 * @return void
+	 */
+	f_setHeight: function(height) {
+    	f_core.Assert(typeof(height)=="number", "f_shell.f_setHeight: Invalid height parameter '"+height+"'.");
+
+		this._height = height;
+	},
+	
+	/**
+	 *  <p>Return the width.</p>
+	 *
+	 * @method public 
+	 * @return number width
+	 */
+	f_getWidth: function() {
+		return this._width;
+	},
+	/**
+	 *  <p>Sets width.</p>
+	 *
+	 * @method public 
+	 * @param number width
+	 * @return void
+	 */
+	f_setWidth: function(width) {
+    	f_core.Assert(typeof(width)=="number", "f_shell.f_setWidth: Invalid width parameter '"+width+"'.");
+
+		this._width = width;
+	},
+	
 
 	/**
 	 *  <p>Resize the greying div 
@@ -707,6 +763,32 @@ var __prototype = {
 		if (!f_shell._IE6) {
 			iframe.allowTransparency = true;
 		}
+		
+		// calculate iframe size and position
+		var viewSize=f_core.GetViewSize();
+		if (!this._height) {
+			this._height=100;
+		}
+		var y=0;
+		if (viewSize.height > this._height) {
+			y = (viewSize.height - this._height)/2;
+		} else {
+			this._height = viewSize.height;
+		}
+		if (!this._width) {
+			this._width=100;
+		}
+		var x=0;
+		if (viewSize.width > this._width) {
+			x = (viewSize.width - this._width)/2;
+		} else {
+			this._width = viewSize.width;
+		}
+		// Def pos and size
+		iframe.style.top = y;
+		iframe.style.left = x;
+		iframe.style.height = this._height+"px";
+		iframe.style.width = this._width+"px";
 		
 		iframe._modalShell = this;
 		

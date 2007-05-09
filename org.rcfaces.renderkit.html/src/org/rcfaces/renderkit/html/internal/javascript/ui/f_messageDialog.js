@@ -39,7 +39,11 @@ var __static = {
      * @return boolean
      */
     _OnClick: function(evt) {
-		var button=this;
+    	var button=this;
+    	if (this._button) {
+    		// called by the form
+    		button=this._button;
+    	}
 		var base=button._base;
 		var messageBox=base._messageBox;
 		
@@ -172,14 +176,6 @@ var __prototype = {
 	 */
 	_priority: undefined,
 	/**
-	 * @field private number
-	 */
-	_height: undefined,
-	/**
-	 * @field private number
-	 */
-	_width: undefined,
-	/**
 	 * @field private Array
 	 */
 	_actions: undefined,
@@ -188,7 +184,7 @@ var __prototype = {
      * initial values.</p>
 	 *
 	 * @method public
-	 * @param optional String title the title
+	 * @param optional String title the title or HTMLElement the suporting v:init tag
 	 * @param optional String text the text to display
 	 * @param optional String defaultValue the value returned if the popup is closed without selecting a button
 	 */
@@ -200,21 +196,30 @@ var __prototype = {
 			this._text=f_core.GetAttribute(this, "v:text");
 			this._defaultValue=f_core.GetAttribute(this, "v:defaultValue");
 			
-			this._height=f_core.GetNumberAttribute(this, "v:height");
-			this._width=f_core.GetNumberAttribute(this, "v:width");
+			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 300));
+			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 300));
 			
+			this._priority=f_core.GetNumberAttribute(this, "v:dialogPriority", 0);
+			this._styleClass=f_core.GetAttribute(this, "v:styleClass");
+			//v:lookId
+			
+			this.f_setImageURL(f_core.GetAttribute(this, "v:imageURL");
+			this.f_setCssClassBase(f_core.GetAttribute(this, "v:cssClassBase", "f_messageDialog"));
+			this.f_setBackgroundMode("greyed");
+
 			this.f_initEventAtts(f_messageDialog._EVENTS);
 
 		} else {
 			this._title=title;
 			this._text=text;
 			this._defaultValue=defaultValue;
+
+			this._priority=0;
+			this.f_setCssClassBase("f_messageDialog");
+			this.f_setBackgroundMode("greyed");
 		}
 
    		this._actions = new Array();
-		this._priority=0;
-		this.f_setCssClassBase("f_messageDialog");
-		this.f_setBackgroundMode("greyed");
 	},
 
 	/**
@@ -229,8 +234,6 @@ var __prototype = {
 		this._actions=undefined; // List<Object>
 		//this._styleClass=undefined; // string
 		//this._priority=undefined; // int
-		//this._height=undefined; // number
-		//this._width=undefined; // number
 
 		this.f_super(arguments);
 	},
@@ -353,50 +356,6 @@ var __prototype = {
 	},
 	
 	/**
-	 *  <p>Return the height.</p>
-	 *
-	 * @method public 
-	 * @return String height
-	 */
-	f_getHeight: function() {
-		return this._height;
-	},
-	/**
-	 *  <p>Sets Height.</p>
-	 *
-	 * @method public 
-	 * @param number height
-	 * @return void
-	 */
-	f_setHeight: function(height) {
-    	f_core.Assert(typeof(height)=="number", "f_messageDialog.f_setHeight: Invalid height parameter '"+height+"'.");
-
-		this._height = height;
-	},
-	
-	/**
-	 *  <p>Return the width.</p>
-	 *
-	 * @method public 
-	 * @return number width
-	 */
-	f_getWidth: function() {
-		return this._width;
-	},
-	/**
-	 *  <p>Sets width.</p>
-	 *
-	 * @method public 
-	 * @param number width
-	 * @return void
-	 */
-	f_setWidth: function(width) {
-    	f_core.Assert(typeof(width)=="number", "f_messageDialog.f_setWidth: Invalid width parameter '"+width+"'.");
-
-		this._width = width;
-	},
-	
-	/**
 	 *  <p>Adds an action to the popup.</p>
 	 *
 	 * @method public 
@@ -485,6 +444,9 @@ var __prototype = {
 
 		var docBase = base.ownerDocument;
 		
+		// form to catch the return
+		var actForm = docBase.createElement("form");
+		
 		// Creation de la table
 		var table = docBase.createElement("table");
 		var baseMem = table;
@@ -500,12 +462,22 @@ var __prototype = {
 		baseMem._messageBox=this;
 
 		table.className = cssClassBase+"_dialog";
+		
+		//set size and pos
+		table.style.top=0;
+		table.style.left=0;
+		table.style.width=this.f_getWidth()+"px";
+		table.style.height=this.f_getHeight()+"px";
+		table.sellPadding=0;
+		table.cellSpacing=0;
+		table.width=this.f_getWidth()+"px";
 
 		var tbod = docBase.createElement("tbody");
 		
 		// Creation de la ligne de titre
 		var ligne = docBase.createElement("tr");
 		ligne.className = cssClassBase+"_title_tr";
+		ligne.style.height = "30px";
 		
 		var cell = docBase.createElement("td");
 		cell.colSpan = 2;
@@ -532,6 +504,7 @@ var __prototype = {
 		// Creation de la ligne de texte
 		ligne = docBase.createElement("tr");
 		ligne.className = cssClassBase+"_text_tr";
+		ligne.style.height = (this.f_getHeight() - 60 -30)+"px";
 		
 		// cell for image
 		cell = docBase.createElement("td");
@@ -567,6 +540,7 @@ var __prototype = {
 		// Creation de la ligne de boutons
 		ligne = docBase.createElement("tr");
 		ligne.className = cssClassBase+"_actions_tr";
+		ligne.style.height = "60px";
 		
 		cell = docBase.createElement("td");
 		cell.colSpan = 2;
@@ -574,8 +548,6 @@ var __prototype = {
 		cell.className = cssClassBase+"_actions_td";
 		cell.align = "center";
 		
-		var actForm = docBase.createElement("form");
-		actForm.onsubmit="alert('coucou !');";
 		var actTable = docBase.createElement("table");
 		var actTbod = docBase.createElement("tbody");
 		var actTr = docBase.createElement("tr");
@@ -596,6 +568,9 @@ var __prototype = {
 			
 			if (action._submitButton) {
 				button.type="submit";
+
+				actForm.onsubmit=f_messageDialog._OnClick;
+				actForm._button=button;
 			} else {
 				button.type="button";
 			}
@@ -615,14 +590,15 @@ var __prototype = {
 
 		actTbod.appendChild(actTr);
 		actTable.appendChild(actTbod);
-		actForm.appendChild(actTable);
-		cell.appendChild(actForm);
+
+		cell.appendChild(actTable);
 		ligne.appendChild(cell);
 		tbod.appendChild(ligne);
 		
 		table.appendChild(tbod);
+		actForm.appendChild(table);
 
-		base.appendChild(table);
+		base.appendChild(actForm);
 		
 		// Hide the select
 		f_shell.HideSelect();
