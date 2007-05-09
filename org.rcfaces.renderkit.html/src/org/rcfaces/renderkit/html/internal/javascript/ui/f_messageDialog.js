@@ -654,4 +654,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_messageDialog", null, __static, __prototype, f_dialog, fa_eventTarget);
+new f_class("f_messageDialog", null, __static, __prototype, f_dialog);
