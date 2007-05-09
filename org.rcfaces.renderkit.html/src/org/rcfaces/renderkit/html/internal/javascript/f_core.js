@@ -2273,7 +2273,7 @@ var f_core = {
 
 		var value=f_core.GetAttribute(element, attributeName)
 		if (value) {
-			return !(value.toLowerCase()!="false");
+			return (value.toLowerCase()!="false");
 		}
 
 		return defaultValue;

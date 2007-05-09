@@ -430,7 +430,7 @@ var __prototype = {
 
 		this._hideRootExpandSign=f_core.GetBooleanAttribute(this, "v:hideRootExpandSign", false);
 				
-		this._userExpandable=f_core.GetAttribute(this, "v:userExpandable", false);
+		this._userExpandable=f_core.GetBooleanAttribute(this, "v:userExpandable", true);
 		
 		this._images=f_core.GetBooleanAttribute(this, "v:images");
 		
