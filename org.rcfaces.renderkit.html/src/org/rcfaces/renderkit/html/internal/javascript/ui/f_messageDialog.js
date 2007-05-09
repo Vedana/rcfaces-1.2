@@ -50,7 +50,7 @@ var __static = {
 		f_core.Debug(f_messageDialog, "_OnClick: entering");
 		
 		if (messageBox.f_getEventLocked(true)) {
-			f_core.Debug(f_messageDialog, "_OnClick : messageBox.f_getEventLocked(true) returned true");
+			f_core.Debug(f_messageDialog, "_OnClick : messageBox.f_getEventLocked(true)");
 			return false;
 		}
 
@@ -203,7 +203,7 @@ var __prototype = {
 			this._styleClass=f_core.GetAttribute(this, "v:styleClass");
 			//v:lookId
 			
-			this.f_setImageURL(f_core.GetAttribute(this, "v:imageURL");
+			this.f_setImageURL(f_core.GetAttribute(this, "v:imageURL"));
 			this.f_setCssClassBase(f_core.GetAttribute(this, "v:cssClassBase", "f_messageDialog"));
 			this.f_setBackgroundMode("greyed");
 
@@ -651,4 +651,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_messageDialog", null, __static, __prototype, f_dialog);
+new f_class("f_messageDialog", null, __static, __prototype, f_dialog, fa_eventTarget);

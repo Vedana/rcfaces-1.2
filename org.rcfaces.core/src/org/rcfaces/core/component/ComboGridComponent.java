@@ -9,9 +9,9 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.AbstractGridComponent;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
@@ -26,7 +26,7 @@ import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.component.ComboColumnComponent;
 
-public class ComboGridComponent extends AbstractDataComponent implements 
+public class ComboGridComponent extends AbstractGridComponent implements 
 	IDisabledCapability,
 	IRequiredCapability,
 	IBorderCapability,
@@ -39,7 +39,7 @@ public class ComboGridComponent extends AbstractDataComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.comboGrid";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","verticalScrollPosition","paged","selectionValueConverter","required","horizontalScrollPosition","disabled","selectedValue","rowStyleClass","rowIndexVar","valueColumnId","rowCountVar","popupWidth","border","labelColumnId"}));
 	}

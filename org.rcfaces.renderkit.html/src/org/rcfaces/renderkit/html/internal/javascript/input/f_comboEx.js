@@ -1368,7 +1368,7 @@ var __prototype = {
 			if (filter) {
 				continue;
 			}
-			if (it._items && it._items.length>0) {
+			if (it._items && it._items.length) {
 				this._constructItem(it._items, filter, container, value, depth+1, blankImageURL);
 			}
 		}
@@ -1426,7 +1426,7 @@ var __prototype = {
 				return item;
 			}
 			
-			if (item._items && item._items.length>0) {
+			if (item._items && item._items.length) {
 				var ret=this._searchInputStyle(item._items, value);
 				if (ret) {
 					return ret;

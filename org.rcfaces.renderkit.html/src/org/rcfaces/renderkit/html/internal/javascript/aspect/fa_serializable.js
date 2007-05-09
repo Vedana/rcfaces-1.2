@@ -47,7 +47,7 @@ var __prototype = {
 
 		if (isList) {		
 			if (!value || !value.length) {
-				f_core.Debug(fa_serializable, "No values to set for property '"+name+"'. (value='"+value+"')");
+				f_core.Debug(fa_serializable, "f_setProperty: No values to set for property '"+name+"'. (value='"+value+"')");
 				return;
 			}
 			
@@ -73,7 +73,7 @@ var __prototype = {
 			}
 		
 			if (!values) {
-				f_core.Debug(fa_serializable, "No values to set for property '"+name+"'. (value='"+value+"')");
+				f_core.Debug(fa_serializable, "f_setProperty: No values to set for property '"+name+"'. (value='"+value+"')");
 				return;
 			}
 			
@@ -96,10 +96,10 @@ var __prototype = {
 			properties=new Object;
 			this._properties = properties;
 
-			f_core.Debug(fa_serializable, "Create property map for object '"+this.id+"'.");
+			f_core.Debug(fa_serializable, "f_setProperty: Create property map for object '"+this.id+"'.");
 		}
 		
-		f_core.Info(fa_serializable, "Set property '"+name+"' to '"+value+"' (type='"+typeof(value)+"').");
+		f_core.Info(fa_serializable, "f_setProperty: Set property '"+name+"' to '"+value+"' (type='"+typeof(value)+"').");
 		
 		if (this._kclass._classLoader._serializing) {
 			// Pas d'evenement dans ce cas !

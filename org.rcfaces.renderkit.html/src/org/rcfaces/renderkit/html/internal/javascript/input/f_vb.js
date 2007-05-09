@@ -56,7 +56,7 @@ var __static = {
 	 *	\/.*+?|()[]{}-^
 	 */
 	_BuildEscaped: function(str) {
-		if (!str || !str.length) {
+		if (!str) {
 			return "";
 		}
 		return str.replace(f_vb._ESCAPE_REGEXP, "\\$1");

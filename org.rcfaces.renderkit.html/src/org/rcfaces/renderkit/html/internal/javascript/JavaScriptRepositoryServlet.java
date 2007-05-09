@@ -303,7 +303,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             }
 
         } catch (IllegalArgumentException ex) {
-            LOG.error("Load symbols file", ex);
+            LOG.debug("Can not load symbols file", ex);
         }
 
         if (file == null) {

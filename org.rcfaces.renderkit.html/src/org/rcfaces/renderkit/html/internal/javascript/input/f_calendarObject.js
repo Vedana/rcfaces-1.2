@@ -460,7 +460,7 @@ var __static = {
 		}
 
 		var f=null;
-		if (calendar._dates.length>0) {
+		if (calendar._dates.length) {
 			f=calendar._dates[0][0];
 		}
 		if (!f) {
@@ -541,7 +541,7 @@ var __static = {
 
 		calendar._onUnitClick(evt, this, delta, f_calendarObject._MONTH_UNIT);
 		
-		if (calendar._dates.length>0) {
+		if (calendar._dates.length) {
 			var ds=calendar._dates[0][0];
 			f_calendarObject._Focus(calendar._monthButtons[ds.getMonth()]);
 		}
@@ -721,7 +721,7 @@ var __static = {
 		}
 		
 		calendar._onUnitClick(evt, this, delta, f_calendarObject._WEEK_UNIT);
-		if (calendar._dates.length>0) {
+		if (calendar._dates.length) {
 			var ds=new Date(calendar._dates[0][0].getTime());
 			var dday=(ds.getDay()-calendar._firstDayOfWeek) % 7;
 			if (dday<0) {
@@ -814,7 +814,7 @@ var __static = {
 		var dates=calendar._dates;
 
 		var day;
-		if (dates.length>0) {
+		if (dates.length) {
 			day=dates[0][0].getDay();
 
 		} else {		

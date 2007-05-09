@@ -24,9 +24,9 @@ public class ComboGridRenderer extends AbstractGridRenderer {
 
     private static final Log LOG = LogFactory.getLog(ComboGridRenderer.class);
 
-    private static final int ARROW_IMAGE_WIDTH = 20;
+    private static final int ARROW_IMAGE_WIDTH = 16;
 
-    private static final int ARROW_IMAGE_HEIGHT = 20;
+    private static final int ARROW_IMAGE_HEIGHT = 16;
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMBO_GRID;
@@ -59,7 +59,7 @@ public class ComboGridRenderer extends AbstractGridRenderer {
         if (width != null) {
             int totalWidth = computeSize(width, 0, 2);
 
-            colWidth = totalWidth - ARROW_IMAGE_WIDTH - 2;
+            colWidth = totalWidth - ARROW_IMAGE_WIDTH - 4;
         }
 
         htmlWriter.startElement(IHtmlWriter.TABLE);
@@ -87,12 +87,11 @@ public class ComboGridRenderer extends AbstractGridRenderer {
         htmlWriter.startElement(IHtmlWriter.TR);
 
         htmlWriter.startElement(IHtmlWriter.TD);
-        htmlWriter.writeClass(computeComponentStyleClass(comboGridComponent,
-                "_inputCell"));
+        htmlWriter.writeClass(getMainStyleClassName() + "_inputCell");
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
         if (colWidth > 0) {
-            htmlWriter.writeStyle().writeWidth(colWidth + "px");
+            htmlWriter.writeStyle().writeWidth((colWidth - 4) + "px");
         }
 
         htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
@@ -108,10 +107,15 @@ public class ComboGridRenderer extends AbstractGridRenderer {
         htmlWriter.writeClass(getMainStyleClassName() + "_buttonCell");
 
         htmlWriter.startElement(IHtmlWriter.IMG);
+        htmlWriter.writeClass(getMainStyleClassName() + "_button");
         htmlWriter.writeWidth(ARROW_IMAGE_WIDTH);
         htmlWriter.writeHeight(ARROW_IMAGE_HEIGHT);
 
-        htmlWriter.writeClass(getMainStyleClassName() + "_button");
+        String url = componentRenderContext.getHtmlRenderContext()
+                .getHtmlProcessContext()
+                .getStyleSheetURI(BLANK_IMAGE_URL, true);
+
+        htmlWriter.writeSrc(url);
 
         htmlWriter.endElement(IHtmlWriter.IMG);
 

@@ -83,7 +83,7 @@ var __static = {
 	 */
 	_SearchButtons: function(list, parent) {
 		var children=parent.childNodes;
-		if (!children || children.length<1) {
+		if (!children || !children.length) {
 			return;
 		}
 		for(var i=0;i<children.length;i++) {

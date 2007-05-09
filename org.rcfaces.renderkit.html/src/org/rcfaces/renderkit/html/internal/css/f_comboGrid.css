@@ -1,0 +1,56 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_comboGrid
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_comboGrid {
+	border: 1px solid #7F9DB9;
+	position: relative;
+	-moz-box-sizing: border-box;
+	padding: 2px 1px;
+}
+
+.f_comboGrid_disabled {
+	border-color: #BBB;
+}
+
+.f_comboGrid TD {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.f_comboGrid_input {
+	border: 0;
+	padding: 0;
+	margin: 0 2px;
+}
+
+.f_comboGrid_button {
+	border: 0;
+	padding: 0;
+	-moz-user-select: none;
+}
+
+.f_comboGrid_button {
+	background: transparent url('comboGrid/arrow.gif') no-repeat 0 0;
+}
+
+.f_comboGrid_button_hover {
+	background-position: -16px 0;
+}
+
+.f_comboGrid_button_selected {
+	background-position: -32px 0;
+}
+
+.f_comboGrid_disabled .f_comboGrid_button {
+	background-position: -48px 0;
+}

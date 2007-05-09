@@ -544,7 +544,7 @@ var __prototype = {
 			return false;
 		}
 
-		f_core.Debug("f_imageButton", "f_setFocus of imageButton '"+this.id+"'.");
+		f_core.Debug(f_imageButton, "f_setFocus: Set focus on imageButton '"+this.id+"'.");
 		
 		var cmp=this._link;
 		if (!cmp) {

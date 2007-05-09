@@ -38,7 +38,7 @@ var __prototype={
 			return false;
 		}
 
-		return this._openCalendarPopup(event);
+		return this.f_openCalendarPopup(event);
 	},
 	f_setDomEvent: function(type, target) {
 		if (type==f_event.CHANGE) {
@@ -53,7 +53,7 @@ var __prototype={
 		return this.f_super(arguments, type, target);
 	},
 	_onDateSelected: function(date, jsEvent) {
-		f_core.Debug(f_dateChooser, "Selected date: "+date);
+		f_core.Debug(f_dateChooser, "_onDateSelected: Selected date: "+date);
 		
 		return this.f_fireEvent(f_event.CHANGE, jsEvent, null, date);
 	}

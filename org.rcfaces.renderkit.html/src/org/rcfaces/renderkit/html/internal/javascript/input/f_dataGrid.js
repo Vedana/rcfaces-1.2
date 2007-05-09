@@ -467,7 +467,7 @@ var __prototype = {
 
 							var label=doc.createElement("label");
 							row._label=label;
-							if (cellText && cellText.length) {
+							if (cellText) {
 								label.appendChild(doc.createTextNode(cellText));
 							}
 							label.className="f_grid_label";

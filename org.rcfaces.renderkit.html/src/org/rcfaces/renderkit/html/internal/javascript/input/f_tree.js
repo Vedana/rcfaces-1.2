@@ -1808,7 +1808,7 @@ var __prototype = {
 	},
 	_lastTreeNode: function(evt, selection) {
 		var lis=this.fa_listVisibleElements();
-		if (!lis || lis.length<1) {
+		if (!lis || !lis.length) {
 			return;
 		}
 		
@@ -1857,7 +1857,7 @@ var __prototype = {
 	},
 	_firstTreeNode: function(evt, selection) {		
 		var lis=this.fa_listVisibleElements();
-		if (!lis || lis.length<1) {
+		if (!lis || !lis.length) {
 			return;
 		}
 
@@ -1972,7 +1972,7 @@ var __prototype = {
 		
 		if (cursorNode._container && cursorNode._opened) {
 			var nodes=cursorNode._nodes;
-			if (!nodes && nodes.length<1) {
+			if (!nodes && !nodes.length) {
 				return;
 			}
 			
@@ -2093,7 +2093,7 @@ var __prototype = {
 				
 				var label=li._node._label;
 				
-				if (!label || label.length<1) {
+				if (!label) {
 					continue;
 				}
 				

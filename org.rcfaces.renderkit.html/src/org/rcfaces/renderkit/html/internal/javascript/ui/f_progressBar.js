@@ -34,7 +34,7 @@ var __prototype = {
 		this._cursor=cursor;
 		var tds=this.getElementsByTagName("td");
 		
-		f_core.Assert(tds.length==3, "f_progressBar(): TD.length!=3. ("+tds.length+")");
+		f_core.Assert(tds.length==3, "f_progressBar.f_progressBar: TD.length!=3. ("+tds.length+")");
 		
 		tds[1].appendChild(cursor);
 	},
@@ -71,7 +71,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setMin: function(min) {
-		f_core.Assert(typeof(min)=="number", "Min parameter must be a number. ("+min+")");
+		f_core.Assert(typeof(min)=="number", "f_setMin: Min parameter must be a number. ("+min+")");
 		
 		this._min=min;
 		
@@ -96,7 +96,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setMax: function(max) {
-		f_core.Assert(typeof(max)=="number", "Max parameter must be a number. ("+max+")");
+		f_core.Assert(typeof(max)=="number", "f_setMax: Max parameter must be a number. ("+max+")");
 		
 		this._max=max;
 		this.f_setProperty(f_prop.MAX, max);
@@ -120,7 +120,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setValue: function(value) {
-		f_core.Assert(typeof(value)=="number", "Value parameter must be a number. ("+value+")");
+		f_core.Assert(typeof(value)=="number", "f_setValue: Value parameter must be a number. ("+value+")");
 		this._value=value;
 
 		this.f_setProperty(f_prop.VALUE, value);
@@ -158,7 +158,7 @@ var __prototype = {
 		var parentNode=cursor.parentNode;
 		var parentWidth=parentNode.offsetWidth;
 		
-		f_core.Debug(f_progressBar, "UpdateBar: min="+min+" max="+max+" value="+this._value+" parentWidth="+parentWidth);
+		f_core.Debug(f_progressBar, "_updateBar: min="+min+" max="+max+" value="+this._value+" parentWidth="+parentWidth);
 		if (parentWidth<1) {
 			return;
 		}

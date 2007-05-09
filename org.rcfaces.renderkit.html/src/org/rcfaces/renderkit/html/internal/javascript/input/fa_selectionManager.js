@@ -206,7 +206,7 @@ var __prototype = {
 		if (f_core.IsDebugEnabled(fa_selectionManager)) {
 			var s="SelectedValues=";
 			var selectedElementValues=this._selectedElementValues;
-			if (selectedElementValues.length<1) {
+			if (!selectedElementValues.length) {
 				s+="EMPTY";
 			} else {
 				s+=selectedElementValues.join(",");
@@ -214,7 +214,7 @@ var __prototype = {
 			
 			s+="\ndeselectedValues=";
 			var deselectedElementValues=this._deselectedElementValues;
-			if (deselectedElementValues.length<1) {
+			if (!deselectedElementValues.length) {
 				s+="EMPTY";
 				
 			} else {
@@ -227,7 +227,7 @@ var __prototype = {
 			
 			s+="\nselection=";
 			var currentSelection=this._currentSelection;
-			if (currentSelection.length<1) {
+			if (!currentSelection.length) {
 				s+="EMPTY";
 				
 			} else {
@@ -362,7 +362,7 @@ var __prototype = {
 			append=true;			
 		}	
 	
-		if (append || l.length<1) {
+		if (append || !l.length) {
 			// Y a un probleme !
 			// Ou on selectionne un truc non selectionnable !
 			return;
@@ -374,7 +374,7 @@ var __prototype = {
 		if (f_core.IsDebugEnabled(fa_selectionManager)) {
 			var s="Range select: "+l.length+" elements: ";
 
-			if (l.length<1) {
+			if (!l.length) {
 				s+=" EMPTY ???";
 				
 			} else {

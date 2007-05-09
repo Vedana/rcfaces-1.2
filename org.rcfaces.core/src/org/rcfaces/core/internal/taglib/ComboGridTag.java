@@ -11,7 +11,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
-public class ComboGridTag extends AbstractDataTag implements Tag {
+public class ComboGridTag extends AbstractGridTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ComboGridTag.class);

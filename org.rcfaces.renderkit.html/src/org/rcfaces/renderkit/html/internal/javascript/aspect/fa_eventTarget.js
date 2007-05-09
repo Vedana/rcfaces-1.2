@@ -121,7 +121,7 @@ var __prototype = {
 		try {				
 			var al=this.f_getActionList(type);
 			if (!al) {
-				f_core.Debug(fa_eventTarget, "No listeners for event '"+type+"' on '"+this.id+"'"+((event)?("item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"'"):"")+".");
+				f_core.Debug(fa_eventTarget, "f_fireEvent: No listeners for event '"+type+"' on '"+this.id+"'"+((event)?("item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"'"):"")+".");
 				
 				// On retourne TRUE par défaut.
 				return true;
@@ -139,7 +139,7 @@ var __prototype = {
 			var ret=true;
 			
 			try {
-				f_core.Debug(fa_eventTarget, "Fire event '"+event._type+"' on '"+this.id+"' item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"' detail='"+event._detail+"'.");
+				f_core.Debug(fa_eventTarget, "f_fireEvent: Fire event '"+event._type+"' on '"+this.id+"' item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"' detail='"+event._detail+"'.");
 				
 				ret = al.f_callActions(event);
 								
@@ -155,7 +155,7 @@ var __prototype = {
 	
 			if (event && event._eventReturn!==undefined) {
 				ret=event._eventReturn;
-				f_core.Debug(fa_eventTarget, "Call actions: eventReturn is forced (by _eventReturn) to "+ret);
+				f_core.Debug(fa_eventTarget, "f_fireEvent: Call actions: eventReturn is forced (by _eventReturn) to "+ret);
 			}
 			
 			var fer=this._forcedEventReturns;
@@ -164,7 +164,7 @@ var __prototype = {
 				
 				if (forcedReturn!==undefined) {
 					ret=forcedReturn;
-					f_core.Debug(fa_eventTarget, "Call actions: eventReturn is forced (by forcedValue) to "+ret);
+					f_core.Debug(fa_eventTarget, "f_fireEvent: Call actions: eventReturn is forced (by forcedValue) to "+ret);
 				}
 			}
 

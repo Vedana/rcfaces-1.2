@@ -62,7 +62,7 @@ var __static={
 	_OpenPopup: function(dateChooser, position, offsetX, offsetY, offsetWidth, autoSelect) {
 		var calendar=dateChooser.f_getCalendarObject();
 		
-		f_core.Debug(fa_calendarPopup, "Open popup for date chooser '"+dateChooser.id+"'. (popupOpened='"+dateChooser._popupOpened+"')");
+		f_core.Debug(fa_calendarPopup, "_OpenPopup: Open popup for date chooser '"+dateChooser.id+"'. (popupOpened='"+dateChooser._popupOpened+"')");
 		
 		if (dateChooser._popupOpened) {
 			return;
@@ -126,7 +126,7 @@ var __static={
 			
 			if (body) {
 				calendar.f_constructComponent(body);
-				f_core.Debug(fa_calendarPopup, "Create new popup for dateChooser='"+dateChooser.id+"'.");
+				f_core.Debug(fa_calendarPopup, "_OpenPopup: Create new popup for dateChooser='"+dateChooser.id+"'.");
 				
 				if (this._initialSelection) {
 					calendar.f_setSelection(this._initialSelection);
@@ -147,7 +147,7 @@ var __static={
 				 * @method public
 				 */
 				keyDown: function(evt) {
-					f_core.Debug(fa_calendarPopup, "popup keyDown: "+evt.keyCode);
+					f_core.Debug(fa_calendarPopup, "_OpenPopup: popup keyDown: "+evt.keyCode);
 					/*if (menu._filterKey("down", evt)===true) {
 						return true;
 					}
@@ -166,7 +166,7 @@ var __static={
 				 * @method public
 				 */
 				keyUp: function(evt) {
-					f_core.Debug(fa_calendarPopup, "popup keyUp: "+evt.keyCode);
+					f_core.Debug(fa_calendarPopup, "_OpenPopup: popup keyUp: "+evt.keyCode);
 					/*return menu._filterKey("up", evt);*/
 					return true;
 				},
@@ -174,7 +174,7 @@ var __static={
 				 * @method public
 				 */
 				keyPress: function(evt) {
-					f_core.Debug(fa_calendarPopup, "popup keyPress: "+evt.keyCode);
+					f_core.Debug(fa_calendarPopup, "_OpenPopup: popup keyPress: "+evt.keyCode);
 					/*switch(evt.keyCode) {
 					case f_key.VK_RETURN:
 				 	case f_key.VK_ENTER:
@@ -185,7 +185,7 @@ var __static={
 				}
 			}, dateChooser, popup)==false) {
 			
-			f_core.Debug(fa_calendarPopup, "Register refused to open the popup of dateChooser='"+dateChooser.id+"'.");
+			f_core.Debug(fa_calendarPopup, "_OpenPopup: Register refused to open the popup of dateChooser='"+dateChooser.id+"'.");
 			return;
 		}
 		
@@ -249,10 +249,10 @@ var __static={
 		
 		var value=evt.f_getValue();
 
-		if (value && value.length>0) {
+		if (value && value.length) {
 			value=value[0];
 			
-			if (value && value.length>0) {
+			if (value && value.length) {
 				value=value[0];
 			}
 		}
@@ -274,11 +274,11 @@ var __static={
 					fa_calendarPopup._SetDateToComponent(component, value, dateChooser._forValueFormat, calendar);
 					
 				} catch (x) {
-					f_core.Error(fa_calendarPopup, "Set date of component '"+component.id+"' throws exception.", x);
+					f_core.Error(fa_calendarPopup, "_DateSelectedEvent: Set date of component '"+component.id+"' throws exception.", x);
 				}
 				
 			} else {
-				f_core.Info(fa_calendarPopup, "Can not find componentId '"+forComponent+"' to set date !");
+				f_core.Info(fa_calendarPopup, "_DateSelectedEvent: Can not find componentId '"+forComponent+"' to set date !");
 			}
 		}
 		
@@ -391,12 +391,15 @@ var __prototype={
 			}
 		}
 	},
-	_openCalendarPopup: function(event) {
-		f_core.Debug(fa_calendarPopup, "_openCalendarPopup: "+event+" detail="+event.f_getDetail());
+	/**
+	 * @method public
+	 * @param f_event event
+	 * @return boolean
+	 */
+	f_openCalendarPopup: function(event) {
+		f_core.Debug(fa_calendarPopup, "f_openCalendarPopup: "+event+" detail="+event.f_getDetail());
 		
 		// Ouverture du calendrier !
-		
-		
 		var forComponent=this._forComponent;
 		if (forComponent) {
 			var component=this.f_findComponent(forComponent);
@@ -412,15 +415,13 @@ var __prototype={
 					}
 					
 				} catch (x) {
-					f_core.Error(fa_calendarPopup, "Get date of component '"+component.id+"' throws exception.", x);
+					f_core.Error(fa_calendarPopup, "f_openCalendarPopup: Get date of component '"+component.id+"' throws exception.", x);
 				}
 				
 			} else {
-				f_core.Info(fa_calendarPopup, "Can not find componentId '"+forComponent+"' to get date !");
+				f_core.Info(fa_calendarPopup, "f_openCalendarPopup: Can not find componentId '"+forComponent+"' to get date !");
 			}
 		}
-
-		
 		
 		if (this.f_fireEvent(f_event.MENU, event.f_getJsEvent())===false) {
 			return false;
@@ -448,7 +449,7 @@ var __prototype={
 		return this._calendar;
 	},
 	_clickOutside: function(jsEvt) {
-		f_core.Debug(fa_calendarPopup, "popup click outside");
+		f_core.Debug(fa_calendarPopup, "_clickOutside: popup click outside");
 		
 		fa_calendarPopup._ClosePopup(this, jsEvt);
 		return false;
@@ -464,7 +465,7 @@ var __prototype={
 		}
 		
 		var selection=calendar.f_getSelection();
-		if (!selection || selection.length<1) {
+		if (!selection || !selection.length) {
 			return null;
 		}
 		

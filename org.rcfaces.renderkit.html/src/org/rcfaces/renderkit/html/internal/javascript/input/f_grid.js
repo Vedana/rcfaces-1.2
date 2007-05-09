@@ -1489,7 +1489,7 @@ var __prototype = {
 					continue;
 				}
 
-				if (v.length) {
+				if (v) {
 					v+=",";
 				}
 				

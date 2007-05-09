@@ -73,7 +73,7 @@ var __prototype={
 		
 		var forComponent=f_core.GetAttribute(this, "v:for");
 		
-		if (forComponent && forComponent.length) {
+		if (forComponent) {
 			this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
 			this._forItemValue=f_core.GetAttribute(this, "v:forItemValue");
 				

@@ -191,7 +191,7 @@ var __static = {
 				}
 				
 				var content=f_xml.serialize(cn);
-				if (content.length<1) {
+				if (!content.length) {
 					ret+="/>";
 					break;
 				}

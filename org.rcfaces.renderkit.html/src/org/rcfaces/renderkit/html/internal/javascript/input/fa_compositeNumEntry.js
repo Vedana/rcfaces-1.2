@@ -217,7 +217,7 @@ var __prototype={
 				
 				// probleme !
 				// Si le champ est vide : on prend le defaut !
-				if (inputValue.length==0) {
+				if (!inputValue.length) {
 					var defaultValue=input._default;
 					if (defaultValue===undefined) {
 						// meme pas de valeur par defaut

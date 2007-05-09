@@ -54,7 +54,7 @@ var __prototype = {
 		var keys=new Array();
 		this._forsTranslated=keys;
 		
-		if (!s || !s.length) {
+		if (!s) {
 			return fors;
 		}
 		
