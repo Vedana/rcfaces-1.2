@@ -185,6 +185,22 @@ var __prototype= {
 	 * 
 	 * @method hidden
 	 */
+	f_clearActions: function() {
+		this._actions=undefined;
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
+	f_clearActionFirsts: function() {
+		this._firsts=undefined;
+	},
+	
+	/**
+	 * 
+	 * @method hidden
+	 */
 	f_isEmpty: function() {
 		var actions=this._actions;
 		if (actions && actions.length) {
