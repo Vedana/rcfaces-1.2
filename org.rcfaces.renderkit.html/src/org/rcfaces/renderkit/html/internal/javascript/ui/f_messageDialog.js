@@ -50,7 +50,7 @@ var __static = {
 		f_core.Debug(f_messageDialog, "_OnClick: entering");
 		
 		if (messageBox.f_getEventLocked(true)) {
-			f_core.Debug(f_messageDialog, "_OnClick : messageBox.f_getEventLocked(true)");
+			f_core.Debug(f_messageDialog, "_OnClick : messageBox.f_getEventLocked(true) returned true");
 			return false;
 		}
 
@@ -238,16 +238,6 @@ var __prototype = {
 		this.f_super(arguments);
 	},
 
-	/**
-	 * 
-	 * @method protected
-	 * @param boolean showAlert should we show an alert ?
-	 * @return boolean
-	 */
-	f_getEventLocked: function(showAlert) {
-		return f_event.GetEventLocked(showAlert);
-	},
-	
 	/**
 	 *  <p>Return the title.</p>
 	 *
@@ -661,4 +651,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_messageDialog", null, __static, __prototype, f_dialog, fa_eventTarget);
+new f_class("f_messageDialog", null, __static, __prototype, f_dialog);
