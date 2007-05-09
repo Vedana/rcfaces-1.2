@@ -192,7 +192,7 @@ var __static = {
 		}
 
 		//Show Selects
-		f_shell._ShowSelect();
+		f_shell.ShowSelect();
 	},
 
 	/**
