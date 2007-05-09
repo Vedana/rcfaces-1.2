@@ -203,7 +203,10 @@ var __prototype = {
 			this._styleClass=f_core.GetAttribute(this, "v:styleClass");
 			//v:lookId
 			
-			this.f_setImageURL(f_core.GetAttribute(this, "v:imageURL"));
+			var imageURL=f_core.GetAttribute(this, "v:imageURL");
+			if (imageURL) {
+				this.f_setImageURL(imageURL);
+			}
 			this.f_setCssClassBase(f_core.GetAttribute(this, "v:cssClassBase", "f_messageDialog"));
 			this.f_setBackgroundMode("greyed");
 
