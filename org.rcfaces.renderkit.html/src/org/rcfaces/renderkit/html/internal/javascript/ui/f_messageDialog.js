@@ -397,7 +397,9 @@ var __prototype = {
 		// If a callback is passed : clean the selection listeners and add this callback to the listeners
 		if (callback) {
 			var actionList=this.f_getActionList(f_event.SELECTION);
-			actionList.f_clearActions();
+			if (actionList) {
+				actionList.f_clearActions();
+			}
 			
 			this.f_addEventListener(f_event.SELECTION, callback);
 		}
@@ -410,7 +412,7 @@ var __prototype = {
 		f_messageDialog._AddMessage(this, this._open, this.f_getPriority());
 
 		if (f_messageDialog._DocComplete) {
-			f_messageDialog._ShowNextMsgStored();
+			this.f_drawContent(f_messageDialog._ShowNextMsgStored);
 		}
 
 	},
@@ -461,7 +463,7 @@ var __prototype = {
 		table.style.left=0;
 		table.style.width=this.f_getWidth()+"px";
 		table.style.height=this.f_getHeight()+"px";
-		table.sellPadding=0;
+		table.cellPadding=0;
 		table.cellSpacing=0;
 		table.width=this.f_getWidth()+"px";
 

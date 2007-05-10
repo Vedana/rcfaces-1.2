@@ -92,12 +92,18 @@ var __static = {
      */
 	_IE6: undefined,
 	
+    /**
+     * @field private static boolean
+     */
+	_IE: undefined,
+	
      /**
      * Class Constructor (called in the head ...
      * @method public static
      */
     Initializer: function() {
     	f_shell._IE6 = f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6); 
+    	f_shell._IE = f_core.IsInternetExplorer(); 
 	 },
      /**
      * Class Destructor (called in the head ...
@@ -106,6 +112,7 @@ var __static = {
     Finalizer: function() {
     	f_shell._ObjIFrame = undefined; // Object
     	// f_shell._IE6 = undefined; // boolean
+    	// f_shell._IE = undefined; // boolean
 	 },
      /**
      * @method public static
@@ -219,13 +226,26 @@ var __static = {
 	    }
      	this.onload=null;
  	},
-
+	
+	/**
+	 *  <p>onload for the iframe object. 
+	 *  </p>
+	 *
+	 * @method private static
+	 */
+	_OnIframeRS: function() {
+     	f_core.Debug(f_shell, "_OnIframeRS: entering with this="+this);
+		if (this.readyState == "interactive") {
+			f_shell._OnIframeLoad.call(this);
+		}
+ 	},
+	
     /**
      * <p>Resize Callback called on the div</p>
      *
      * @method protected static
      */
-	_OnResize: function() {
+	_OnResize: function(evt) {
 		var shell=this._shell;
 		if (shell.f_getEventLocked(false)) {
 			return false;
@@ -404,6 +424,16 @@ var __prototype = {
 	_width: undefined,
 	
 	/**
+	 * @field private boolean
+	 */
+	_iframeDraw: false,
+	
+	/**
+	 * @field private function
+	 */
+	_drawingFunction: undefined,
+	
+	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
      * initial values.</p>
 	 *
@@ -430,6 +460,8 @@ var __prototype = {
 		this._iframe=undefined; //HTMLElement
 		//this._height=undefined; // number
 		//this._width=undefined; // number
+		//this._iframeDraw: undefined; // boolean
+		this._drawingFunction=null; //function
 
 		this.f_super(arguments);
 	},
@@ -643,6 +675,34 @@ var __prototype = {
 	 * @method protected
 	 * @return void
 	 */
+	f_drawContent: function(drawingFunction) {
+		f_core.Assert(typeof(drawingFunction) == "function", "f_shell.f_drawContent: bad parameter type: drawingFunction is not a function "+drawingFunction);
+     	f_core.Debug(f_shell, "f_drawContent: entering");
+
+		try {
+			if (!this._iframeDraw) {
+				f_core.Debug(f_shell, "f_drawContent: not ready yet");
+		     	this._drawingFunction=drawingFunction;
+				return;
+			}
+
+			f_core.Debug(f_shell, "f_drawContent: ready call");
+			drawingFunction.call(this);
+
+		} catch (e) {
+	     	f_core.Error(f_shell, "f_drawContent: catch error", e);
+		}
+
+	},
+
+	
+	/**
+	 *  <p>Fill a modal iFrame. 
+	 *  </p>
+	 *
+	 * @method protected
+	 * @return void
+	 */
 	f_fillModIFrame: function() {
      	f_core.Debug(f_shell, "f_fillModIFrame: entering");
 
@@ -667,6 +727,12 @@ var __prototype = {
 			}
 			//style
 			base.className = cssBaseName+"_global";
+			
+			if (this._drawingFunction) {
+				this._drawingFunction();
+			} else {
+				this._iframeDraw=true;
+			}
 
 		} catch (e) {
 	     	f_core.Error(f_shell, "_fillModIFrame: catch error", e);
@@ -732,6 +798,7 @@ var __prototype = {
 		// Creation de la div recouvrant la page
 		var div = document.createElement("div");
 		div.className = cssClassBase+"_background_"+this._backgroundMode;
+		div.style.position="absolute";
 		div.style.top=0;
 		div.style.left=0;
 		div.style.width=size.width+"px";
@@ -771,7 +838,7 @@ var __prototype = {
 		}
 		var y=0;
 		if (viewSize.height > this._height) {
-			y = (viewSize.height - this._height)/2;
+			y = Math.round((viewSize.height - this._height)/2);
 		} else {
 			this._height = viewSize.height;
 		}
@@ -780,23 +847,22 @@ var __prototype = {
 		}
 		var x=0;
 		if (viewSize.width > this._width) {
-			x = (viewSize.width - this._width)/2;
+			x = Math.round((viewSize.width - this._width)/2);
 		} else {
 			this._width = viewSize.width;
 		}
 		// Def pos and size
-		iframe.style.top = y;
-		iframe.style.left = x;
+		iframe.style.top = y+"px";
+		iframe.style.left = x+"px";
 		iframe.style.height = this._height+"px";
 		iframe.style.width = this._width+"px";
 		
 		iframe._modalShell = this;
 		
-		if (!url || typeof(url) != "string" || url == "") {
-			iframe.src="about:blank";
-		} else {
-			iframe.src=url;
+		if (!url || typeof(url) != "string") {
+			url="about:blank";
 		}
+		iframe.src=url;
 
 		f_shell._ObjIFrame = { 
 			_div: div, 
@@ -807,9 +873,13 @@ var __prototype = {
 
 		//Attach
 		document.body.insertBefore(iframe, document.body.firstChild);
-		
-		f_core.Debug(f_shell, "f_drawModIFrame: callback ");
-		iframe.onload=f_shell._OnIframeLoad;
+
+		if (f_shell._IE) {
+			f_core.Debug(f_shell, "f_drawModIFrame: IE use onreadystatechange ");
+			iframe.onreadystatechange=f_shell._OnIframeRS;
+		} else {
+			iframe.onload=f_shell._OnIframeLoad;
+		}
 		
 		this.f_installModalStyle();
 	},

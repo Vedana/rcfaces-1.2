@@ -10,6 +10,14 @@
  * @version $Revision$ $Date$
  */
 var __static = {
+     /**
+     * @method public static
+     * @return void
+     */
+    WaitForSubmit: function() {
+ 		var waitingShell=f_waitingShell.f_newInstance();
+ 		waitingShell.f_show();
+	}
 }
 
 var __prototype = {
@@ -25,7 +33,8 @@ var __prototype = {
 		
 		this.f_setCssClassBase("f_waitingShell");
 		this.f_setBackgroundMode("greyed");
-		this.f_setImageURL("images/3MA_processingbar.gif")
+		this.f_setWidth(150);
+		this.f_setHeight(150);
 	},
 
 	/*
@@ -45,10 +54,10 @@ var __prototype = {
 	 * @method protected
 	 * @return void
 	 */
-	f_fillModIFrame: function() {
-     	f_core.Debug(f_waitingShell, "f_fillModIFrame: entering");
+	f_fillWaitingShell: function() {
+     	f_core.Debug(f_waitingShell, "f_fillWaitingShell: entering");
 
-		this.f_super(arguments);
+		this.f_fillModIFrame(arguments);
 
 		//Hide Selects
 		f_shell.HideSelect();
@@ -62,12 +71,18 @@ var __prototype = {
 		}
 
 		var url=this.f_getImageResolvedURL();
-		if (url) {
-			var img = docBase.createElement("img");
-			img.className=cssClassBase+"_image"
-			img.src=url;
-			base.appendChild(img);
+		if (!url) {
+			url=f_env.GetStyleSheetBase()+"/waiting/waitingShell.gif";
+			url=f_env.ResolveContentUrl(window, url);
 		}
+		var img = docBase.createElement("img");
+		img.className=cssClassBase+"_image"
+		img.style.top=0;
+		img.style.left=0;
+		img.style.width=this.f_getWidth();
+		img.style.height=this.f_getHeight();
+		img.src=url;
+		base.appendChild(img);
 		
 	},
 
@@ -79,7 +94,7 @@ var __prototype = {
 	 * @return Function 
 	 */
 	f_getIFrameDrawingCallBack: function() {
-		return this.f_fillModIFrame;
+		return this.f_fillWaitingShell;
 	},
 
 	/**
