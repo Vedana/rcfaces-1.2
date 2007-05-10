@@ -110,11 +110,13 @@ var __static = {
      * @method public static
      */
     Finalizer: function() {
-    	if (f_shell._ObjIFrame && f_shell._ObjIFrame._iframe) {
-    		f_shell._ObjIFrame._iframe.onload=null;
-    		f_shell._ObjIFrame._iframe.onreadystatechange=null;
+    	var objIframe=f_shell._ObjIFrame;
+    	if (objIframe && objIframe._iframe) {
+    		var iframe=objIframe._iframe;
+    		iframe.onload=null;
+    		iframe.onreadystatechange=null;
     	}
-    	f_shell._ObjIFrame = undefined; // Object
+    	objIframe = undefined; // Object
     	// f_shell._IE6 = undefined; // boolean
     	// f_shell._IE = undefined; // boolean
 	 },
