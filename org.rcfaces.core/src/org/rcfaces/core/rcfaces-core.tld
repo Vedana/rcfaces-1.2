@@ -14953,6 +14953,10 @@ A boolean value indicating wether the component should be get the focus when a m
 A boolean value indicating wether the component should be shown when a message is fired.
 ]]></description>
 		</attribute>
+		<attribute>
+			<name>showActiveComponentMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<name>messageFieldSet</name>
@@ -15426,6 +15430,10 @@ An url string pointing to the image used by the component.
 <description><![CDATA[
 A boolean value indicating wether the component should be get the focus when a message is fired.
 ]]></description>
+		</attribute>
+		<attribute>
+			<name>showActiveComponentMessage</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	<tag>

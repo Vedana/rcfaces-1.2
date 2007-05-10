@@ -1,17 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.RadioButtonComponent;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * <p>The imageRadioButton Component is a <a href="/comps/radioButtonComponent.html">radioButton Component</a> with an image instead of the rounded box.</p>

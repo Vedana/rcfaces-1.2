@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.FieldSetComponent;
-import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.ISeverityImagesCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The messageFieldSet Component is a <a href="/comps/fieldSetComponent.html">fieldSet Component</a> combined with a <a href="/comps/messageComponent.html">message COmponent</a> in the title part.</p>
@@ -37,7 +37,7 @@ public class MessageFieldSetComponent extends FieldSetComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(FieldSetComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","warnImageURL","styleClass","imageURL","fatalStyleClass","infoStyleClass","infoImageURL","errorImageURL","setFocusIfMessage","fatalImageURL","warnStyleClass","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","showActiveComponentMessage","warnImageURL","styleClass","infoStyleClass","infoImageURL","fatalImageURL","setFocusIfMessage","for"}));
 	}
 
 	public MessageFieldSetComponent() {
@@ -341,6 +341,30 @@ public class MessageFieldSetComponent extends FieldSetComponent implements
 	 */
 	public final boolean isSetFocusIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SET_FOCUS_IF_MESSAGE);
+	}
+
+	public final boolean isShowActiveComponentMessage() {
+		return isShowActiveComponentMessage(null);
+	}
+
+	public final boolean isShowActiveComponentMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, false, facesContext);
+	}
+
+	public final void setShowActiveComponentMessage(boolean showActiveComponentMessage) {
+		engine.setProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, showActiveComponentMessage);
+	}
+
+	public final void setShowActiveComponentMessage(ValueBinding showActiveComponentMessage) {
+		engine.setProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, showActiveComponentMessage);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showActiveComponentMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowActiveComponentMessageSetted() {
+		return engine.isPropertySetted(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE);
 	}
 
 	protected Set getCameliaFields() {

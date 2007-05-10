@@ -1,19 +1,20 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.AbstractMessageComponent;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ISeverityImagesCapability;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.ISeverityImagesCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * <p>The message Component is a placeholder for error messages (only one is shown).</p>
@@ -40,7 +41,7 @@ public class MessageComponent extends AbstractMessageComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","imageHeight","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","showIfMessage","warnImageURL","styleClass","text","imageWidth","infoStyleClass","infoImageURL","setFocusIfMessage","fatalImageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","imageHeight","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","showActiveComponentMessage","showIfMessage","warnImageURL","styleClass","text","imageWidth","infoStyleClass","infoImageURL","setFocusIfMessage","fatalImageURL"}));
 	}
 
 	public MessageComponent() {
@@ -472,6 +473,30 @@ public class MessageComponent extends AbstractMessageComponent implements
 	 */
 	public final boolean isShowIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SHOW_IF_MESSAGE);
+	}
+
+	public final boolean isShowActiveComponentMessage() {
+		return isShowActiveComponentMessage(null);
+	}
+
+	public final boolean isShowActiveComponentMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, false, facesContext);
+	}
+
+	public final void setShowActiveComponentMessage(boolean showActiveComponentMessage) {
+		engine.setProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, showActiveComponentMessage);
+	}
+
+	public final void setShowActiveComponentMessage(ValueBinding showActiveComponentMessage) {
+		engine.setProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, showActiveComponentMessage);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showActiveComponentMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowActiveComponentMessageSetted() {
+		return engine.isPropertySetted(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE);
 	}
 
 	protected Set getCameliaFields() {

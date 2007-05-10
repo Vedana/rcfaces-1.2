@@ -3,12 +3,19 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.io.CharArrayWriter;
+
+import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComboGridComponent;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -23,6 +30,8 @@ public class ComboGridRenderer extends DataGridRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ComboGridRenderer.class);
+
+    private static final String GRID_HTML_CONTENT = "org.rcfaces.renderkit.html.GRID_HTML_CONTENT";
 
     private static final int ARROW_IMAGE_WIDTH = 16;
 
@@ -137,33 +146,83 @@ public class ComboGridRenderer extends DataGridRenderer {
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
         htmlWriter.enableJavaScript();
-        
-        
-        
+
+        htmlWriter.endComponent();
+
+        CharArrayWriter buffer = new CharArrayWriter(1024);
+
+        htmlWriter.getComponentRenderContext().setAttribute(GRID_HTML_CONTENT,
+                Boolean.TRUE);
+
+        ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
+        try {
+            ResponseWriter newResponseWriter = oldResponseWriter
+                    .cloneWithWriter(buffer);
+
+            facesContext.setResponseWriter(newResponseWriter);
+
+            IHtmlWriter newHtmlWriter = (IHtmlWriter) ((HtmlRenderContext) htmlWriter
+                    .getHtmlComponentRenderContext().getRenderContext())
+                    .createWriter(comboGridComponent, newResponseWriter);
+
+            super.encodeGrid(newHtmlWriter);
+
+            newHtmlWriter.endComponent();
+
+        } finally {
+            facesContext.setResponseWriter(oldResponseWriter);
+        }
+
+        htmlWriter.getComponentRenderContext().setAttribute(GRID_HTML_CONTENT,
+                buffer.toString());
     }
 
-    public AbstractGridRenderContext createTableContext(
-            IHtmlComponentRenderContext componentRenderContext) {
-        // TODO Auto-generated method stub
-        return null;
+    protected IHtmlWriter writeIdAttribute(IHtmlWriter htmlWriter)
+            throws WriterException {
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
+
+        if (Boolean.TRUE.equals(componentRenderContext
+                .getAttribute(GRID_HTML_CONTENT))) {
+            return super.writeIdAttribute(htmlWriter);
+        }
+
+        StringAppender id = new StringAppender(componentRenderContext
+                .getComponentClientId(), 16);
+
+        String separator = componentRenderContext.getRenderContext()
+                .getProcessContext().getNamingSeparator();
+        if (separator != null) {
+            id.append(separator);
+        } else {
+            id.append(NamingContainer.SEPARATOR_CHAR);
+        }
+
+        id.append("grid");
+
+        htmlWriter.writeId(id.toString());
+
+        return htmlWriter;
     }
 
-    protected void encodeJsHeader(IJavaScriptWriter htmlWriter,
-            AbstractGridRenderContext gridRenderContext) {
+    protected String getRowValueColumnId(IGridComponent gridComponent) {
+        return ((ComboGridComponent) gridComponent).getValueColumnId();
     }
 
-    protected void encodeJsBody(IJavaScriptWriter htmlWriter,
+    protected void encodeJsBodyRows(IJavaScriptWriter jsWriter,
+            AbstractGridRenderContext tableContext) {
+        // On génère rien
+    }
+
+    protected void encodeJsHeader(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
+
+        String htmlContent = (String) jsWriter.getComponentRenderContext()
+                .removeAttribute(GRID_HTML_CONTENT);
+
+        if (htmlContent != null) {
+            jsWriter.writeMethodCall("f_setGridInnerHTML").writeString(
+                    htmlContent).write(");");
+        }
     }
-
-    protected void encodeJsFooter(IJavaScriptWriter htmlWriter,
-            AbstractGridRenderContext data) {
-    }
-
-    protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
-            AbstractGridRenderContext gridRenderContext) throws WriterException {
-        // TODO Auto-generated method stub
-
-    }
-
 }

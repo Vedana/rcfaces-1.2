@@ -349,6 +349,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return new HtmlWriterImpl(this);
     }
 
+    public IComponentWriter createWriter(UIComponent component, ResponseWriter responseWriter) {
+        return new HtmlWriterImpl(this, responseWriter);
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)

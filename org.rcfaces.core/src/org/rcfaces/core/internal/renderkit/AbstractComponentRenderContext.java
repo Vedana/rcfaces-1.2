@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.manager.ITransientAttributesManager;
+
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -16,6 +18,8 @@ import javax.faces.context.FacesContext;
 public abstract class AbstractComponentRenderContext implements
         IComponentRenderContext {
     private static final String REVISION = "$Revision$";
+
+    private static final String ATTRIBUTES_MAP = "org.rcfaces.core.RENDER_CONTEXT_ATTRIBUTES";
 
     private final UIComponent component;
 
@@ -30,13 +34,13 @@ public abstract class AbstractComponentRenderContext implements
         this.facesContext = facesContext;
         this.component = component;
         this.componentClientId = componentClientId;
+
+        if (component instanceof ITransientAttributesManager) {
+            attributes = (Map) ((ITransientAttributesManager) component)
+                    .getTransientAttribute(ATTRIBUTES_MAP);
+        }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.IComponentRenderContext#getFacesContext()
-     */
     public final FacesContext getFacesContext() {
         if (facesContext == null) {
             facesContext = FacesContext.getCurrentInstance();
@@ -71,6 +75,9 @@ public abstract class AbstractComponentRenderContext implements
     public Object setAttribute(String key, Object value) {
         if (attributes == null) {
             attributes = new HashMap();
+
+            ((ITransientAttributesManager) component).setTransientAttribute(
+                    ATTRIBUTES_MAP, attributes);
         }
 
         return attributes.put(key, value);

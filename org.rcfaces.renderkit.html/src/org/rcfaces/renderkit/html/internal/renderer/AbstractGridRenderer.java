@@ -919,7 +919,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     protected void encodeJsHeader(IJavaScriptWriter htmlWriter,
-            AbstractGridRenderContext gridRenderContext) {
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
     }
 
     protected void encodeJsBody(IJavaScriptWriter htmlWriter,

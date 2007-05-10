@@ -266,15 +266,24 @@ public class ComponentIterators {
 
         public UIComponent[] toArray(UIComponent[] array) {
             if (count < 1) {
-                // Ca doit peter ici !
-                iterator.next();
-                return EMPTY_COMPONENT_ARRAY;
+                // Ca doit peter ici ! iterator.next(); // Pourquoi ?
+
+                if (array == null) {
+                    return EMPTY_COMPONENT_ARRAY;
+                }
+
+                if (array.length == 0) {
+                    return array;
+                }
+
+                return (UIComponent[]) Array.newInstance(array.getClass()
+                        .getComponentType(), 0);
             }
 
             if (array == null) {
                 array = new UIComponent[count];
 
-            } else if (array.length < count) {
+            } else if (array.length != count) {
                 array = (UIComponent[]) Array.newInstance(array.getClass()
                         .getComponentType(), count);
             }
@@ -287,7 +296,6 @@ public class ComponentIterators {
 
             return array;
         }
-
     }
 
     /**

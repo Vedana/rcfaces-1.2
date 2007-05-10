@@ -52,7 +52,6 @@ import org.rcfaces.core.model.ITransactionalDataModel;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -183,30 +182,36 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
     }
 
-    protected void encodeJsBody(IJavaScriptWriter htmlWriter,
+    protected void encodeJsBody(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext tableContext) throws WriterException {
 
-        super.encodeJsBody(htmlWriter, tableContext);
+        super.encodeJsBody(jsWriter, tableContext);
 
-        IJavaScriptRenderContext javascriptRenderContext = ((IHtmlRenderContext) htmlWriter
-                .getHtmlComponentRenderContext().getRenderContext())
+        encodeJsBodyRows(jsWriter, tableContext);
+    }
+
+    protected void encodeJsBodyRows(IJavaScriptWriter jsWriter,
+            AbstractGridRenderContext tableContext) throws WriterException {
+
+        IJavaScriptRenderContext javascriptRenderContext = jsWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getJavaScriptRenderContext();
 
         String rowVarName = javascriptRenderContext.allocateVarName();
         tableContext.setRowVarName(rowVarName);
 
-        encodeJsTransactionalRows(htmlWriter,
+        encodeJsTransactionalRows(jsWriter,
                 (DataGridRenderContext) tableContext, true);
     }
 
-    public void encodeJsTransactionalRows(IJavaScriptWriter htmlWriter,
+    public void encodeJsTransactionalRows(IJavaScriptWriter jsWriter,
             DataGridRenderContext tableContext, boolean sendFullStates)
             throws WriterException {
 
         DataModel dataModel = tableContext.getDataModel();
 
         if ((dataModel instanceof ITransactionalDataModel) == false) {
-            encodeJsRows(htmlWriter, tableContext, sendFullStates);
+            encodeJsRows(jsWriter, tableContext, sendFullStates);
             return;
         }
 
@@ -215,9 +220,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         try {
             transactionalDataModel.enableTransactionalObjects(true);
 
-            encodeJsRows(htmlWriter, tableContext, sendFullStates);
-
-            return;
+            encodeJsRows(jsWriter, tableContext, sendFullStates);
 
         } finally {
             transactionalDataModel.enableTransactionalObjects(false);
@@ -954,6 +957,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
         return tableContext;
     }
 
+    protected String getRowValueColumnId(IGridComponent gridComponent) {
+        return ((DataGridComponent) gridComponent).getRowValueColumnId();
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -971,33 +978,37 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 ISortedComponent[] sortedComponents, String filterExpression) {
             super(processContext, scriptRenderContext, dg, rowIndex,
                     forcedRows, sortedComponents, filterExpression);
+
+            initializeDataGridRendererContext();
         }
 
         public DataGridRenderContext(
                 IHtmlComponentRenderContext componentRenderContext) {
             super(componentRenderContext);
+
+            initializeDataGridRendererContext();
         }
 
-        protected void initialize(boolean checkTitleImages) {
-            super.initialize(checkTitleImages);
+        protected void initializeDataGridRendererContext() {
 
-            String rowValueColumnId = ((DataGridComponent) gridComponent)
-                    .getRowValueColumnId();
+            String rowValueColumnId = getRowValueColumnId(gridComponent);
+            if (rowValueColumnId != null) {
+                for (int i = 0; i < columns.length; i++) {
+                    UIColumn column = columns[i];
 
-            for (int i = 0; i < columns.length; i++) {
-                UIColumn column = columns[i];
-
-                if (rowValueColumnId != null && rowValueColumn == null) {
-                    if (rowValueColumnId.equals(column.getId())) {
-                        rowValueColumn = column;
+                    if (rowValueColumn == null) {
+                        if (rowValueColumnId.equals(column.getId())) {
+                            rowValueColumn = column;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (rowValueColumnId != null && rowValueColumn == null) {
-                throw new FacesException("Can not find column '"
-                        + rowValueColumnId
-                        + "' specified by 'rowValueColumnId' attribute.");
+                if (rowValueColumn == null) {
+                    throw new FacesException("Can not find column '"
+                            + rowValueColumnId
+                            + "' specified by 'rowValueColumnId' attribute.");
+                }
             }
         }
 

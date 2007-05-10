@@ -2,41 +2,33 @@
  */
 package org.rcfaces.core.internal.component;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import java.io.IOException;
 
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
+import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-
-
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.capability.IRCFacesComponent;
-import org.rcfaces.core.internal.component.CameliaComponents;
-import org.rcfaces.core.internal.component.RestoreViewPhaseListener;
 import org.rcfaces.core.internal.capability.IComponentEngine;
-import org.rcfaces.core.internal.component.IFactory;
+import org.rcfaces.core.internal.capability.IRCFacesComponent;
 import org.rcfaces.core.internal.capability.IStateChildrenList;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IRendererExtension;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.component.IInitializationState;
 
 /**
  * @author Olivier Oeuillot
@@ -389,7 +381,7 @@ public abstract class CameliaItemComponent extends javax.faces.component.UISelec
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait référence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait rï¿½fï¿½rence qu'a des ActionEvent
 		if (e instanceof ActionEvent) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

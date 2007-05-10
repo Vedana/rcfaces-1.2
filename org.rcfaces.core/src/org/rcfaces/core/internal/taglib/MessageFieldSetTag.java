@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.MessageFieldSetComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.MessageFieldSetComponent;
 
 public class MessageFieldSetTag extends FieldSetTag implements Tag {
 
@@ -26,6 +26,7 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 	private String infoImageURL;
 	private String warnImageURL;
 	private String setFocusIfMessage;
+	private String showActiveComponentMessage;
 	public String getComponentType() {
 		return MessageFieldSetComponent.COMPONENT_TYPE;
 	}
@@ -110,6 +111,14 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 		this.setFocusIfMessage = setFocusIfMessage;
 	}
 
+	public final String getShowActiveComponentMessage() {
+		return showActiveComponentMessage;
+	}
+
+	public final void setShowActiveComponentMessage(String showActiveComponentMessage) {
+		this.showActiveComponentMessage = showActiveComponentMessage;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (MessageFieldSetComponent.COMPONENT_TYPE==getComponentType()) {
@@ -125,6 +134,7 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 			LOG.debug("  infoImageURL='"+infoImageURL+"'");
 			LOG.debug("  warnImageURL='"+warnImageURL+"'");
 			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
+			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -237,6 +247,15 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 				component.setSetFocusIfMessage(getBool(setFocusIfMessage));
 			}
 		}
+
+		if (showActiveComponentMessage != null) {
+			if (isValueReference(showActiveComponentMessage)) {
+				ValueBinding vb = application.createValueBinding(showActiveComponentMessage);
+				component.setShowActiveComponentMessage(vb);
+			} else {
+				component.setShowActiveComponentMessage(getBool(showActiveComponentMessage));
+			}
+		}
 	}
 
 	public void release() {
@@ -250,6 +269,7 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 		infoImageURL = null;
 		warnImageURL = null;
 		setFocusIfMessage = null;
+		showActiveComponentMessage = null;
 
 		super.release();
 	}
