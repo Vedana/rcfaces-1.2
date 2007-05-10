@@ -20,6 +20,8 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 	private String fatalStyleClass;
 	private String infoStyleClass;
 	private String warnStyleClass;
+	private String showIfMessage;
+	private String showActiveComponentMessage;
 	public String getComponentType() {
 		return MessagesComponent.COMPONENT_TYPE;
 	}
@@ -56,6 +58,22 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		this.warnStyleClass = warnStyleClass;
 	}
 
+	public final String getShowIfMessage() {
+		return showIfMessage;
+	}
+
+	public final void setShowIfMessage(String showIfMessage) {
+		this.showIfMessage = showIfMessage;
+	}
+
+	public final String getShowActiveComponentMessage() {
+		return showActiveComponentMessage;
+	}
+
+	public final void setShowActiveComponentMessage(String showActiveComponentMessage) {
+		this.showActiveComponentMessage = showActiveComponentMessage;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (MessagesComponent.COMPONENT_TYPE==getComponentType()) {
@@ -65,6 +83,8 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
 			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
+			LOG.debug("  showIfMessage='"+showIfMessage+"'");
+			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -118,6 +138,24 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 				component.setWarnStyleClass(warnStyleClass);
 			}
 		}
+
+		if (showIfMessage != null) {
+			if (isValueReference(showIfMessage)) {
+				ValueBinding vb = application.createValueBinding(showIfMessage);
+				component.setShowIfMessage(vb);
+			} else {
+				component.setShowIfMessage(getBool(showIfMessage));
+			}
+		}
+
+		if (showActiveComponentMessage != null) {
+			if (isValueReference(showActiveComponentMessage)) {
+				ValueBinding vb = application.createValueBinding(showActiveComponentMessage);
+				component.setShowActiveComponentMessage(vb);
+			} else {
+				component.setShowActiveComponentMessage(getBool(showActiveComponentMessage));
+			}
+		}
 	}
 
 	public void release() {
@@ -125,6 +163,8 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		fatalStyleClass = null;
 		infoStyleClass = null;
 		warnStyleClass = null;
+		showIfMessage = null;
+		showActiveComponentMessage = null;
 
 		super.release();
 	}

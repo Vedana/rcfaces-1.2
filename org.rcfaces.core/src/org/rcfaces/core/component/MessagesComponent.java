@@ -30,7 +30,7 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessagesComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","styleClass","fatalStyleClass","infoStyleClass","warnStyleClass"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showActiveComponentMessage","errorStyleClass","showIfMessage","styleClass","fatalStyleClass","infoStyleClass","warnStyleClass"}));
 	}
 
 	public MessagesComponent() {
@@ -160,6 +160,54 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 	 */
 	public void setWarnStyleClass(ValueBinding warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+	}
+
+	public final boolean isShowIfMessage() {
+		return isShowIfMessage(null);
+	}
+
+	public final boolean isShowIfMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SHOW_IF_MESSAGE, false, facesContext);
+	}
+
+	public final void setShowIfMessage(boolean showIfMessage) {
+		engine.setProperty(Properties.SHOW_IF_MESSAGE, showIfMessage);
+	}
+
+	public final void setShowIfMessage(ValueBinding showIfMessage) {
+		engine.setProperty(Properties.SHOW_IF_MESSAGE, showIfMessage);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showIfMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowIfMessageSetted() {
+		return engine.isPropertySetted(Properties.SHOW_IF_MESSAGE);
+	}
+
+	public final boolean isShowActiveComponentMessage() {
+		return isShowActiveComponentMessage(null);
+	}
+
+	public final boolean isShowActiveComponentMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, false, facesContext);
+	}
+
+	public final void setShowActiveComponentMessage(boolean showActiveComponentMessage) {
+		engine.setProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, showActiveComponentMessage);
+	}
+
+	public final void setShowActiveComponentMessage(ValueBinding showActiveComponentMessage) {
+		engine.setProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, showActiveComponentMessage);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showActiveComponentMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowActiveComponentMessageSetted() {
+		return engine.isPropertySetted(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE);
 	}
 
 	protected Set getCameliaFields() {

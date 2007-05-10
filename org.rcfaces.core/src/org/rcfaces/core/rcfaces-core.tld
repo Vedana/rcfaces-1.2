@@ -15726,6 +15726,17 @@ A space-separated list of CSS style class(es) to be applied for warning messages
 A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
 ]]></description>
 		</attribute>
+		<attribute>
+			<name>showIfMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the component should be shown when a message is fired.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>showActiveComponentMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<name>menu</name>
