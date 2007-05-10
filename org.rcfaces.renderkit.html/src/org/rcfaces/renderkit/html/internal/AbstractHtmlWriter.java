@@ -37,12 +37,17 @@ public abstract class AbstractHtmlWriter extends
     private ICssWriter cssWriter;
 
     public AbstractHtmlWriter(AbstractRenderContext renderContext) {
+        this(renderContext, renderContext.getFacesContext().getResponseWriter());
+    }
+
+    protected AbstractHtmlWriter(AbstractRenderContext renderContext,
+            ResponseWriter responseWriter) {
         super(renderContext.getFacesContext(), renderContext.getComponent(),
                 renderContext.getComponentClientId());
 
         this.renderContext = renderContext;
 
-        this.responseWriter = getFacesContext().getResponseWriter();
+        this.responseWriter = responseWriter;
     }
 
     public final IComponentRenderContext getComponentRenderContext() {

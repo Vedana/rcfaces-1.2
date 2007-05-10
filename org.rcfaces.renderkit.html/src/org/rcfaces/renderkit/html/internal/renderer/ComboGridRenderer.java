@@ -8,7 +8,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComboGridComponent;
-import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -20,7 +19,7 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ComboGridRenderer extends AbstractGridRenderer {
+public class ComboGridRenderer extends DataGridRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ComboGridRenderer.class);
@@ -138,6 +137,9 @@ public class ComboGridRenderer extends AbstractGridRenderer {
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
         htmlWriter.enableJavaScript();
+        
+        
+        
     }
 
     public AbstractGridRenderContext createTableContext(

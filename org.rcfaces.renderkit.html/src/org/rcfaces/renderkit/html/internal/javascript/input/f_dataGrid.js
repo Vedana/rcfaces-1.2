@@ -200,8 +200,12 @@ var __static = {
  
 var __prototype = {
 	
-	f_dataGrid: function() {
-		this.f_super(arguments);
+	/**
+	 * @method 
+	 * @param hidden HTMLElement parent
+	 */
+	f_dataGrid: function(parent) {
+		this.f_super(arguments, parent);
 
 		this._showCursor=true;
 		this._cellStyleClass="f_dataGrid_cell";

@@ -1,3 +1,14 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_messageDialog
+ *
+ * @author Fred (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
 .f_messageDialog_global {
 	overflow: hidden;
 	background-color: transparent;

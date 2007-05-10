@@ -633,7 +633,7 @@ var f_core = {
 		    	if (capture.setCapture) {
 				    capture.setCapture();
 				} else {
-					f_core.Debug(f_core, "AddEventListener: IE : setCapture not available on "+capture+" for "+name+" on "+component+" (id = "+component.id+", tagName="+component.tagName+")");
+					f_core.Debug(f_core, "AddEventListener: IE : setCapture not available on "+capture+" for "+name+" on "+component+" (id = "+component.id+", tagName="+component.tagName+", nodeType="+component.nodeType+")");
 				}
 			}
 		    return;

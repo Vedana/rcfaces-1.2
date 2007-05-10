@@ -268,7 +268,6 @@ var __static = {
 		shell._resize();
 		
 		return true;
-		
     },
     
 	/**

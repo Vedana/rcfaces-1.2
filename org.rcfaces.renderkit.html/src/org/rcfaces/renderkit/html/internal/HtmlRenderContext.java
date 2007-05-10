@@ -15,6 +15,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -361,7 +362,12 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         private boolean javaScriptEnabled = false;
 
         public HtmlWriterImpl(HtmlRenderContext context) {
-            super(context);
+            this(context, context.getFacesContext().getResponseWriter());
+        }
+
+        protected HtmlWriterImpl(HtmlRenderContext context,
+                ResponseWriter responseWriter) {
+            super(context, responseWriter);
 
             javaScriptEnabled = ((ITransientAttributesManager) getComponent())
                     .getTransientAttribute(ENABLE_JAVASCRIPT) != null;

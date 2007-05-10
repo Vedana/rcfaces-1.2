@@ -1,3 +1,15 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_waitingShell
+ *
+ * @author Fred (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+
 .f_waitingShell_global {
 	overflow: hidden;
 	background-color: transparent;
