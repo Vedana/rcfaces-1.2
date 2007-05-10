@@ -77,10 +77,8 @@ var __prototype = {
 		}
 		var img = docBase.createElement("img");
 		img.className=cssClassBase+"_image"
-		img.style.top=0;
-		img.style.left=0;
-		img.style.width=this.f_getWidth();
-		img.style.height=this.f_getHeight();
+		img.style.width=this.f_getWidth()+"px";
+		img.style.height=this.f_getHeight()+"px";
 		img.src=url;
 		base.appendChild(img);
 		
