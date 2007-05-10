@@ -180,7 +180,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		
 	}
 
-	public final Boolean getVisibleState(FacesContext facesContext) {
+	public Boolean getVisibleState(FacesContext facesContext) {
 
 
 			if (engine.isPropertySetted(Properties.VISIBLE)==false) {

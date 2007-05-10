@@ -171,7 +171,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Boolean getVisibleState(FacesContext facesContext) {
+	public Boolean getVisibleState(FacesContext facesContext) {
 
 
 			if (engine.isPropertySetted(Properties.VISIBLE)==false) {

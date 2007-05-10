@@ -18,6 +18,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 	private String disabled;
 	private String required;
+	private String readOnly;
 	private String border;
 	private String rowStyleClass;
 	private String horizontalScrollPosition;
@@ -49,6 +50,14 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 	public final void setRequired(String required) {
 		this.required = required;
+	}
+
+	public final String getReadOnly() {
+		return readOnly;
+	}
+
+	public final void setReadOnly(String readOnly) {
+		this.readOnly = readOnly;
 	}
 
 	public final String getBorder() {
@@ -162,6 +171,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			}
 			LOG.debug("  disabled='"+disabled+"'");
 			LOG.debug("  required='"+required+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
@@ -206,6 +216,16 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 				component.setRequired(vb);
 			} else {
 				component.setRequired(getBool(required));
+			}
+		}
+
+		if (readOnly != null) {
+			if (isValueReference(readOnly)) {
+				ValueBinding vb = application.createValueBinding(readOnly);
+
+				component.setReadOnly(vb);
+			} else {
+				component.setReadOnly(getBool(readOnly));
 			}
 		}
 
@@ -331,6 +351,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	public void release() {
 		disabled = null;
 		required = null;
+		readOnly = null;
 		border = null;
 		rowStyleClass = null;
 		horizontalScrollPosition = null;

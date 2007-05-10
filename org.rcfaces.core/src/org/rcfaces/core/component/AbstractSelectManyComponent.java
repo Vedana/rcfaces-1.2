@@ -181,7 +181,7 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		
 	}
 
-	public final Boolean getVisibleState(FacesContext facesContext) {
+	public Boolean getVisibleState(FacesContext facesContext) {
 
 
 			if (engine.isPropertySetted(Properties.VISIBLE)==false) {

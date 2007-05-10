@@ -245,7 +245,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
-	public Boolean getVisibleState() {
+	public final Boolean getVisibleState() {
 
 
 			return getVisibleState(null);

@@ -158,7 +158,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 		
 	}
 
-	public final Boolean getVisibleState(FacesContext facesContext) {
+	public Boolean getVisibleState(FacesContext facesContext) {
 
 
 			if (engine.isPropertySetted(Properties.VISIBLE)==false) {

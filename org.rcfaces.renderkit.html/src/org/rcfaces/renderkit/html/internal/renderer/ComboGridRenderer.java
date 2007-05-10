@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComboGridComponent;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -47,10 +48,14 @@ public class ComboGridRenderer extends AbstractGridRenderer {
                 .getComponent();
 
         boolean disabled = comboGridComponent.isDisabled(facesContext);
+        boolean readOnly = comboGridComponent.isReadOnly(facesContext);
 
         String classSuffix = null;
         if (disabled) {
             classSuffix = getMainStyleClassName() + "_disabled";
+
+        } else if (readOnly) {
+            classSuffix = getMainStyleClassName() + "_readOnly";
         }
 
         String width = comboGridComponent.getWidth(facesContext);
@@ -98,6 +103,13 @@ public class ComboGridRenderer extends AbstractGridRenderer {
 
         htmlWriter.writeClass(getMainStyleClassName() + "_input");
 
+        if (disabled) {
+            htmlWriter.writeDisabled();
+        }
+        if (readOnly) {
+            htmlWriter.writeReadOnly();
+        }
+
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
         htmlWriter.endElement(IHtmlWriter.TD);
@@ -124,6 +136,8 @@ public class ComboGridRenderer extends AbstractGridRenderer {
         htmlWriter.endElement(IHtmlWriter.TR);
         htmlWriter.endElement(IHtmlWriter.TBODY);
         htmlWriter.endElement(IHtmlWriter.TABLE);
+
+        htmlWriter.enableJavaScript();
     }
 
     public AbstractGridRenderContext createTableContext(

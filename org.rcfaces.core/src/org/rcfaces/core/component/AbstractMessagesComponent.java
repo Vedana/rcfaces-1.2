@@ -63,7 +63,7 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessagesComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","globalOnly","margins","initListener","propertyChangeListener","mouseOutListener","waiRole","toolTipText","mouseOverListener","showDetail","userEventListener","marginBottom","helpURL","showSummary","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","globalOnly","initListener","margins","propertyChangeListener","mouseOutListener","waiRole","toolTipText","mouseOverListener","showDetail","userEventListener","marginBottom","helpURL","showSummary","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -145,7 +145,7 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 		
 	}
 
-	public final Boolean getVisibleState(FacesContext facesContext) {
+	public Boolean getVisibleState(FacesContext facesContext) {
 
 
 			if (engine.isPropertySetted(Properties.VISIBLE)==false) {

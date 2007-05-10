@@ -20,9 +20,11 @@ var __static = {
 
 var __prototype = {
 
+	/*
 	f_combo: function() {
 		this.f_super(arguments);
 	},
+	*/
 
 	f_finalize: function() {
 //		this._loading=undefined; // boolean

@@ -41,6 +41,7 @@
 
 .f_comboGrid_button {
 	background: transparent url('comboGrid/arrow.gif') no-repeat 0 0;
+	cursor: pointer;
 }
 
 .f_comboGrid_button_hover {
@@ -53,4 +54,5 @@
 
 .f_comboGrid_disabled .f_comboGrid_button {
 	background-position: -48px 0;
+	cursor: default;
 }

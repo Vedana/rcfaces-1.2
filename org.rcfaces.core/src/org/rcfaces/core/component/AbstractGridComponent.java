@@ -212,7 +212,7 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
-	public final Boolean getVisibleState(FacesContext facesContext) {
+	public Boolean getVisibleState(FacesContext facesContext) {
 
 
 			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
@@ -1083,30 +1083,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final int getRows() {
-		return getRows(null);
-	}
-
-	public final int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
-	}
-
-	public final void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
-	}
-
-	public final void setRows(ValueBinding rows) {
-		engine.setProperty(Properties.ROWS, rows);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "rows" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
-	}
-
 	public final int getFirst() {
 		return getFirst(null);
 	}
@@ -1155,6 +1131,30 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public final boolean isVarSetted() {
 		return engine.isPropertySetted(Properties.VAR);
+	}
+
+	public final int getRows() {
+		return getRows(null);
+	}
+
+	public final int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	}
+
+	public final void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
+	}
+
+	public final void setRows(ValueBinding rows) {
+		engine.setProperty(Properties.ROWS, rows);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	protected Set getCameliaFields() {

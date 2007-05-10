@@ -180,7 +180,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		
 	}
 
-	public final Boolean getVisibleState(FacesContext facesContext) {
+	public Boolean getVisibleState(FacesContext facesContext) {
 
 
 			if (engine.isPropertySetted(Properties.VISIBLE)==false) {

@@ -147,7 +147,7 @@ var __static={
 				 * @method public
 				 */
 				keyDown: function(evt) {
-					f_core.Debug(fa_calendarPopup, "_OpenPopup: popup keyDown: "+evt.keyCode);
+					f_core.Debug(fa_calendarPopup, "_OpenPopup.keyDown: popup keyDown: "+evt.keyCode);
 					/*if (menu._filterKey("down", evt)===true) {
 						return true;
 					}
@@ -166,7 +166,7 @@ var __static={
 				 * @method public
 				 */
 				keyUp: function(evt) {
-					f_core.Debug(fa_calendarPopup, "_OpenPopup: popup keyUp: "+evt.keyCode);
+					f_core.Debug(fa_calendarPopup, "_OpenPopup.keyUp: popup keyUp: "+evt.keyCode);
 					/*return menu._filterKey("up", evt);*/
 					return true;
 				},
@@ -174,7 +174,7 @@ var __static={
 				 * @method public
 				 */
 				keyPress: function(evt) {
-					f_core.Debug(fa_calendarPopup, "_OpenPopup: popup keyPress: "+evt.keyCode);
+					f_core.Debug(fa_calendarPopup, "_OpenPopup.keyPress: popup keyPress: "+evt.keyCode);
 					/*switch(evt.keyCode) {
 					case f_key.VK_RETURN:
 				 	case f_key.VK_ENTER:
@@ -189,7 +189,7 @@ var __static={
 			return;
 		}
 		
-		f_core.Debug(fa_calendarPopup, "Open popup "+popup+" of dateChooser='"+dateChooser.id+"'.");
+		f_core.Debug(fa_calendarPopup, "_OpenPopup: Open popup "+popup+" of dateChooser='"+dateChooser.id+"'.");
 		if (popup) {
 			f_key.EnterScope(fa_calendarPopup._CALENDAR_KEY_SCOPE_ID);
 
@@ -202,7 +202,7 @@ var __static={
 				var p1=f_core.GetAbsolutePosition(position);
 				var parentPos=f_core.GetAbsolutePosition(popup.offsetParent);
 			
-				f_core.Debug(fa_calendarPopup, "Popup absolute pos x="+p1.x+" y="+p1.y+" offsetX="+offsetX+" offsetY="+offsetY+" parentX="+parentPos.x+" parentY="+parentPos.y);
+				f_core.Debug(fa_calendarPopup, "_OpenPopup: Popup absolute pos x="+p1.x+" y="+p1.y+" offsetX="+offsetX+" offsetY="+offsetY+" parentX="+parentPos.x+" parentY="+parentPos.y);
 			
 				var x=p1.x+offsetX-parentPos.x;
 				var y=p1.y+offsetY-parentPos.y;
@@ -214,7 +214,7 @@ var __static={
 				
 				f_core.ComputePopupPosition(popup, pos);
 
-				f_core.Debug(fa_calendarPopup, "Computed pos x="+p1.x+" y="+p1.y+" offsetX="+offsetX+" offsetY="+offsetY);
+				f_core.Debug(fa_calendarPopup, "_OpenPopup: Computed pos x="+p1.x+" y="+p1.y+" offsetX="+offsetX+" offsetY="+offsetY);
 					
 				popup.style.left=pos.x+"px";
 				popup.style.top=pos.y+"px";

@@ -277,7 +277,7 @@ var __prototype = {
 	f_addRow2: function() {
 		f_core.Assert(this._tbody, "f_dataGrid.f_addRow2: No table body !");
 		
-		var doc=this._tableDocument;
+		var doc=this.ownerDocument;
 		
 		var row;
 		var firstCell;

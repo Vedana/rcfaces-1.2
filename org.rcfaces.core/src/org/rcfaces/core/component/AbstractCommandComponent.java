@@ -161,7 +161,7 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 		
 	}
 
-	public final Boolean getVisibleState(FacesContext facesContext) {
+	public Boolean getVisibleState(FacesContext facesContext) {
 
 
 			if (engine.isPropertySetted(Properties.VISIBLE)==false) {

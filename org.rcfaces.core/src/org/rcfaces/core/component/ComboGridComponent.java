@@ -24,11 +24,13 @@ import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.component.capability.IPagedCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.ComboColumnComponent;
 
 public class ComboGridComponent extends AbstractGridComponent implements 
 	IDisabledCapability,
 	IRequiredCapability,
+	IReadOnlyCapability,
 	IBorderCapability,
 	IRowStyleClassCapability,
 	IScrollableCapability,
@@ -41,7 +43,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","verticalScrollPosition","paged","selectionValueConverter","required","horizontalScrollPosition","disabled","selectedValue","rowStyleClass","rowIndexVar","valueColumnId","rowCountVar","popupWidth","border","labelColumnId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","verticalScrollPosition","selectionValueConverter","paged","required","horizontalScrollPosition","disabled","selectedValue","rowStyleClass","rowIndexVar","valueColumnId","rowCountVar","popupWidth","border","readOnly","labelColumnId"}));
 	}
 
 	public ComboGridComponent() {
@@ -204,6 +206,36 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 */
 	public void setRequired(ValueBinding required) {
 		engine.setProperty(Properties.REQUIRED, required);
+	}
+
+	public boolean isReadOnly() {
+		return isReadOnly(null);
+	}
+
+	/**
+	 * See {@link #isReadOnly() isReadOnly()} for more details
+	 */
+	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "readOnly" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isReadOnlySetted() {
+		return engine.isPropertySetted(Properties.READ_ONLY);
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		engine.setProperty(Properties.READ_ONLY, readOnly);
+	}
+
+	/**
+	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
+	 */
+	public void setReadOnly(ValueBinding readOnly) {
+		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
 	public boolean isBorder() {

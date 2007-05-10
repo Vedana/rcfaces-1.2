@@ -328,7 +328,7 @@ var __static = {
 			return;
 		}
 				
-		var doc=dataGrid._tableDocument;
+		var doc=dataGrid.ownerDocument;
 	
 		var tr=f_grid.GetFirstRow(dataGrid._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr");
 		if (!tr) {
@@ -890,7 +890,7 @@ var __static = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		var doc=dataGrid._tableDocument;
+		var doc=dataGrid.ownerDocument;
 
 		f_core.AddEventListener(doc, "mousemove", f_grid._TitleCursorDragMove, dataGrid);
 		f_core.AddEventListener(doc, "mouseup",   f_grid._TitleCursorDragStop, dataGrid);
@@ -938,7 +938,7 @@ var __static = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		var doc=dataGrid._tableDocument;
+		var doc=dataGrid.ownerDocument;
 
 		var eventPos=f_core.GetJsEventPosition(evt, doc);
 		var cursorPos=f_core.GetAbsolutePosition(column._cursor);
@@ -973,7 +973,7 @@ var __static = {
 	 */
 	_DragCursorMove: function(dataGrid, column, dw) {
 		
-		var doc=dataGrid._tableDocument;
+		var doc=dataGrid.ownerDocument;
 		
 		if (dataGrid._dragTimerId) {
 			f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
@@ -1100,7 +1100,7 @@ var __static = {
 		
 		var dataGrid=column._dataGrid;
 				
-		var doc=dataGrid._tableDocument;
+		var doc=dataGrid.ownerDocument;
 		
 		if (dataGrid._dragTimerId) {
 			f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
@@ -1139,13 +1139,15 @@ var __static = {
  
 var __prototype = {
 	
-	f_grid: function(doc) {
+	f_grid: function(parent) {
 		this.f_super(arguments);
 		
-		if (!doc) {
+		if (!parent) {
 			doc=this.ownerDocument;
+			
+		} else {
+			doc=parent.ownerDocument;
 		}
-		this._tableDocument=doc;
 		
 		this._rowsPool=new Array;
 		this._cellsPool=new Array;
@@ -1420,9 +1422,7 @@ var __prototype = {
 //		this._initSort=undefined;  // boolean
 //		this._resizable=undefined; // boolean
 
-		this.f_super(arguments);
-			
-		this._tableDocument=undefined; // Document
+		this.f_super(arguments);			
 	},
 	f_setDomEvent: function(type, target) {
 		switch(type) {
@@ -1637,7 +1637,7 @@ var __prototype = {
 	f_addWaitingRows: function() {
 		f_core.Debug(f_grid, "f_addWaitingRows: rowCount="+this._rowCount+" rows="+this._rows);
 		
-		var doc=this._tableDocument;
+		var doc=this.ownerDocument;
 		
 		if (this._rows==this._rowCount) {
 //		alert("RowCount="+this._rowCount+"/"+this._rows);
@@ -1688,7 +1688,7 @@ var __prototype = {
 	
 		f_core.Debug(f_grid, "f_addPagedWait: rowCount="+this._rowCount+" rows="+this._rows);
 				
-		var doc=this._tableDocument;
+		var doc=this.ownerDocument;
 		
 		var poolSize=this._rowsPool.length;
 		if (poolSize==this._rowCount) {
@@ -1817,7 +1817,7 @@ var __prototype = {
 		var resourceBundle=f_resourceBundle.Get(f_grid);
 		var headCursorTitle=resourceBundle.f_get("COLUMN_RESIZE");
 
-		var doc=this._tableDocument;
+		var doc=this.ownerDocument;
 
 		var isInternetExplorer=f_core.IsInternetExplorer();
 		var v=0;
@@ -3503,7 +3503,7 @@ var __prototype = {
 						i+=Math.floor(this._rows/2); // On prend une petite marge ...
 						
 						var dataGrid=this;
-						f_core.GetWindow(dataGrid._tableDocument).setTimeout(function() {
+						f_core.GetWindow(dataGrid.ownerDocument).setTimeout(function() {
 							dataGrid._performRowsLoading(evt, i);
 						}, 100);
 					}
