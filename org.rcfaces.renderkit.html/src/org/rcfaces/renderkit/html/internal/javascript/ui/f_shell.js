@@ -110,6 +110,10 @@ var __static = {
      * @method public static
      */
     Finalizer: function() {
+    	if (f_shell._ObjIFrame && f_shell._ObjIFrame._iframe) {
+    		f_shell._ObjIFrame._iframe.onload=null;
+    		f_shell._ObjIFrame._iframe.onreadystatechange=null;
+    	}
     	f_shell._ObjIFrame = undefined; // Object
     	// f_shell._IE6 = undefined; // boolean
     	// f_shell._IE = undefined; // boolean
@@ -191,7 +195,12 @@ var __static = {
 			document.body.removeChild(objIFrame._div);
 			objIFrame._div = undefined; // HTMLDivElement
 			
-			document.body.removeChild(objIFrame._iframe);
+			if (objIFrame._iframe) {
+				objIFrame._iframe.onload=null;
+	    		objIFrame._iframe.onreadystatechange=null;
+				
+				document.body.removeChild(objIFrame._iframe);
+			}	
 			objIFrame._iframe = undefined; // HTMLIFrameElement
 
 			objIFrame._lastValidFocus=undefined; //HTMLElement
@@ -225,6 +234,7 @@ var __static = {
 	    	f_core.Debug(f_shell, "_OnIframeLoad: the callBack specified is not a function "+callBack);
 	    }
      	this.onload=null;
+     	this.onreadystatechange=null;
  	},
 	
 	/**
