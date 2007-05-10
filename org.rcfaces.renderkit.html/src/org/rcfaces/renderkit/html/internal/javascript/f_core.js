@@ -633,7 +633,7 @@ var f_core = {
 		    	if (capture.setCapture) {
 				    capture.setCapture();
 				} else {
-					f_core.Debug(f_core, "AddEventListener: IE : setCapture non available on "+capture);
+					f_core.Debug(f_core, "AddEventListener: IE : setCapture not available on "+capture+" for "+name+" on "+component+" (id = "+component.id+", tagName="+component.tagName+")");
 				}
 			}
 		    return;
@@ -1453,7 +1453,7 @@ var f_core = {
 					var postSubmitListeners=f_core._PostSubmitListeners;
 					if (postSubmitListeners) {
 						for(var i=0;i<postSubmitListeners.length;i++) {
-							var postSubmitListener=postSubmitListener[i];
+							var postSubmitListener=postSubmitListeners[i];
 							
 							try {
 								postSubmitListener.call(f_core, form);
