@@ -71,16 +71,14 @@ var __prototype = {
 		}
 
 		var url=this.f_getImageResolvedURL();
-		if (!url) {
-			url=f_env.GetStyleSheetBase()+"/waiting/waitingShell.gif";
-			url=f_env.ResolveContentUrl(window, url);
+		if (url) {
+			var img = docBase.createElement("img");
+			img.className=cssClassBase+"_image"
+			img.style.width=this.f_getWidth()+"px";
+			img.style.height=this.f_getHeight()+"px";
+			img.src=url;
+			base.appendChild(img);
 		}
-		var img = docBase.createElement("img");
-		img.className=cssClassBase+"_image"
-		img.style.width=this.f_getWidth()+"px";
-		img.style.height=this.f_getHeight()+"px";
-		img.src=url;
-		base.appendChild(img);
 		
 	},
 
@@ -101,7 +99,12 @@ var __prototype = {
 	 */
 	f_show: function() {
      	f_core.Debug(f_waitingShell, "f_show: entering ");
-		
+
+		var url=this.f_getImageURL();
+		if (!url) {
+			this.f_setWidth(1);
+			this.f_setHeight(1);
+		}
 		// Create a blocking Div
 		this.f_drawModIFrame();
 
