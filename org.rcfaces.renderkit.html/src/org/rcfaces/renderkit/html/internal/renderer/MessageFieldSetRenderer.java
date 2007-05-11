@@ -43,6 +43,10 @@ public class MessageFieldSetRenderer extends FieldSetRenderer {
             htmlWriter.writeAttribute("v:for", forValue);
         }
 
+        if (messageFieldSetComponent.isShowActiveComponentMessage(facesContext)) {
+            htmlWriter.writeAttribute("v:showActiveComponentMessage", "true");
+        }
+
         htmlWriter.enableJavaScript();
     }
 

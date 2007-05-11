@@ -51,6 +51,10 @@ public class MessagesRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:showDetail", "true");
         }
 
+        if (messagesComponent.isShowActiveComponentMessage()) {
+            htmlWriter.writeAttribute("v:showActiveComponentMessage", "true");
+        }
+
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
         htmlWriter.enableJavaScript();

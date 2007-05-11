@@ -83,6 +83,10 @@ public class MessageRenderer extends AbstractCssRenderer {
         if (messageComponent.isShowDetail()) {
             htmlWriter.writeAttribute("v:showDetail", "true");
         }
+        
+        if (messageComponent.isShowActiveComponentMessage(facesContext)) {
+            htmlWriter.writeAttribute("v:showActiveComponentMessage", "true");
+        }
 
         ISeverityImageAccessors accessors = (ISeverityImageAccessors) messageComponent
                 .getImageAccessors(facesContext);
