@@ -348,6 +348,7 @@ var __static = {
 	    	base=windowUrl.substring(0,pos);
 	    	remain=windowUrl.substring(pos+1);
     	}
+    	base=base+f_env._BaseURI;
     	// If url absolute
     	if (url.indexOf("/")==0) {
     		return base+url;
@@ -360,6 +361,11 @@ var __static = {
     	var remains=remain.split("/");
     	if (remain.charAt(remain.length-1) != "/") {
     		remains.pop();
+    	}
+    	if (remains.length) {
+	    	if ("/"+remains[0] == f_env._BaseURI) {
+    			remains.shift();
+    		}
     	}
     	// del .. from url
     	var adds=url.split("/");
