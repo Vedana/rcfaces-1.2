@@ -627,9 +627,22 @@ var f_core = {
 				capture.screen /* window ? */), "f_core.AddEventListener: Invalid capture parameter ("+capture+")");
 
 	 	if (f_core.IsInternetExplorer()) {
+	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
+	 			if (name == "focus") {
+	 				component = component.body;
+	 				name = "focusin";
+	 			}
+	 			if (name == "blur") {
+	 				component = component.body;
+	 				name = "focusout";
+	 			}
+	 		}
 		    component.attachEvent("on"+name, fct);
 			    
 		    if (capture) {
+		 		if (capture.nodeType==f_core.DOCUMENT_NODE) {
+		 			capture = capture.body;
+		 		}
 		    	if (capture.setCapture) {
 				    capture.setCapture();
 				} else {
@@ -666,10 +679,23 @@ var f_core = {
 
 	 	if (f_core.IsInternetExplorer()) {
 		    if (capture) {
+		 		if (capture.nodeType==f_core.DOCUMENT_NODE) {
+		 			capture = capture.body;
+		 		}
 				capture.releaseCapture();
 			}
 
-			document.detachEvent("on"+name, fct);
+	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
+	 			if (name == "focus") {
+	 				component = component.body;
+	 				name = "focusin";
+	 			}
+	 			if (name == "blur") {
+	 				component = component.body;
+	 				name = "focusout";
+	 			}
+	 		}
+			component.detachEvent("on"+name, fct);
 			    
 		    return;
 		}
