@@ -33,10 +33,10 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
     protected IComponentDecorator createMessageBoxDecorator(
             FacesContext facesContext, UIComponent component) {
 
-        if (((MessageDialogComponent) component).isVisible(facesContext)) {
+//        if (((MessageDialogComponent) component).isVisible(facesContext)) {
             return new MessageDialogDecorator(component);
-        }
-        return null;
+//        }
+//        return null;
     }
 
     protected boolean sendCompleteComponent() {
