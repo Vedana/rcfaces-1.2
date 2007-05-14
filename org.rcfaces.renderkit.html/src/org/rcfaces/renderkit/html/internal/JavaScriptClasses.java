@@ -148,6 +148,8 @@ public final class JavaScriptClasses {
 
     public static final String TREE = "f_tree";
 
+    public static final String WAITING_SHELL = "f_waitingShell";
+
     public static final String EVENT_CHECK = "check";
 
     public static final String EVENT_CHECK_CST = "f_event.CHECK";
