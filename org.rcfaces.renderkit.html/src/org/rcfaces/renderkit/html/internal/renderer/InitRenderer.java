@@ -259,7 +259,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 // href=\"");
             }
 
-            if (base.startsWith("$context")) {
+            if (base.startsWith(IContentAccessor.CONTEXT_KEYWORD)) {
                 StringAppender sa = new StringAppender(facesContext
                         .getExternalContext().getRequestContextPath(), base
                         .length());

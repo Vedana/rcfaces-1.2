@@ -29,6 +29,8 @@ public interface IContentAccessor {
     int EXTERNAL_PATH_TYPE = 4;
 
     int FILTER_PATH_TYPE = 5;
+    
+    String CONTEXT_KEYWORD = "$context";
 
     IContentType getType();
 

@@ -143,11 +143,11 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
 
         int slash = url.indexOf('/');
         if (url.length() > 1 && url.charAt(0) == '$') {
-            if (url.startsWith("$context") && (slash < 0 || slash == 8)) {
+            if (url.startsWith(CONTEXT_KEYWORD) && (slash < 0 || slash == CONTEXT_KEYWORD.length())) {
                 setPathType(CONTEXT_PATH_TYPE);
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Macro $context for url '" + url + "'.");
+                    LOG.debug("Macro "+CONTEXT_KEYWORD+" for url '" + url + "'.");
                 }
 
                 if (slash > 0) {
