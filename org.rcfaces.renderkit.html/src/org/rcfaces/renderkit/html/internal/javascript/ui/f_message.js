@@ -55,6 +55,15 @@ var __static = {
 	}
 }
 var __prototype = {
+	/**
+	 * @field private function
+	 */
+	_onFocusCb: undefined,
+	/**
+	 * @field private function
+	 */
+	_onBlurCb: undefined,
+	
 	f_message: function() {
 		this.f_super(arguments);
 		
@@ -74,7 +83,11 @@ var __prototype = {
 			this._fatalImageURL=f_core.GetAttribute(this, "v:fatalImageURL");
 		}
 
-		this._showIfMessage=f_core.GetAttribute(this, "v:showIfMessage");
+		this._showIfMessage=f_core.GetBooleanAttribute(this, "v:showIfMessage", false);
+		this._showActiveComponentMessage=f_core.GetBooleanAttribute(this, "v:showActiveComponentMessage", false);
+		if (this._showActiveComponentMessage && !this.f_getFor()) {
+			this.f_addFocusAndBlurListener();
+		}
 	},
 	
 	f_finalize: function() {
@@ -92,7 +105,10 @@ var __prototype = {
 		// this._errorImageURL=undefined; // string
 		// this._fatalImageURL=undefined; // string
 		// this._showIfMessage=undefined; // boolean
-
+		// this._showActiveComponentMessage=undefined; //boolean
+		
+		this.f_removeFocusAndBlurListener();
+		
 		this.f_super(arguments);
 	},
 	fa_updateMessages: function() {
@@ -216,6 +232,121 @@ var __prototype = {
 			style.display="none";
 		}
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_removeFocusAndBlurListener: function() {
+     	f_core.Debug(f_message, "f_removeFocusAndBlurListener: remove focus & blur hooks");
+		
+		if (this._onFocusCb) {
+			f_core.RemoveEventListener(document.body, "focusin", this._onFocusCb);
+			this._onFocusCb=undefined; // function
+		}
+	
+		if (this._onBlurCb) {
+			f_core.RemoveEventListener(document.body, "focusout", this._onBlurCb);
+			this._onBlurCb=undefined; // function
+		}
+	},
+
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_addFocusAndBlurListener: function() {
+     	f_core.Debug(f_message, "f_addFocusAndBlurListener: Install focus eblur hooks");
+		
+		var message=this;
+		
+		this._onFocusCb=function(evt) {
+	    	if (!window.f_message) {
+	     		// On sait jamais, nous sommes peut etre dans un context foireux ...
+	     		return;
+	     	}
+	 
+	 		if (!evt) {
+				evt = f_core.GetJsEvent(this);
+			}
+  			
+  			message._performOnFocus(evt);
+		}
+		
+		f_core.AddEventListener(document.body, "focusin", this._onFocusCb);
+
+		this._onBlurCb=function(evt) {
+	    	if (!window.f_message) {
+	     		// On sait jamais, nous sommes peut etre dans un context foireux ...
+	     		return;
+	     	}
+	 
+	 		if (!evt) {
+				evt = f_core.GetJsEvent(this);
+			}
+  			
+  			message._performOnBlur(evt);
+		}
+		
+		f_core.AddEventListener(document.body, "focusout", this._onBlurCb);
+	},
+
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @return void
+	 */
+	_performOnFocus: function(evt) {
+     	f_core.Debug(f_message, "_performOnFocus: entering");
+
+		if (!evt) {
+				evt = f_core.GetJsEvent(this);
+		}
+
+		var target;
+		if (evt.target) {
+			target = evt.target;
+			
+		} else if (evt.srcElement) {
+			target = evt.srcElement;
+		}
+		var componentId=null;
+		var compId = target.id;
+		if (compId) {
+			var msgCtx=f_messageContext.Get(target);
+			var listMsg=msgCtx.f_listMessages(compId);
+			if (listMsg.length == 0) {
+				compId=null;
+			}
+		}		
+		this._fors=this._forsTranslated=[componentId];
+		this.f_performMessageChanges();
+		
+	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @return void
+	 */
+	_performOnBlur: function(evt) {
+     	f_core.Debug(f_message, "_performOnBlur: entering");
+
+		if (!evt) {
+				evt = f_core.GetJsEvent(this);
+		}
+
+		var target;
+		if (evt.target) {
+			target = evt.target;
+			
+		} else if (evt.srcElement) {
+			target = evt.srcElement;
+		}
+		
+		this._fors=this._forsTranslated=[null];
+		this.f_performMessageChanges();
+		
+	},
+
 	/**
 	 * @method public
 	 * @return String Text if no message is shown.
