@@ -1260,5 +1260,10 @@
 				<required-class name="f_dialog" />
 			</class>
 		 </file>
+		 <file name="ui/f_viewDialog.js">
+			<class name="f_viewDialog">
+				<required-class name="f_dialog" />
+			</class>
+		 </file>
 	</module>
 </repository>
