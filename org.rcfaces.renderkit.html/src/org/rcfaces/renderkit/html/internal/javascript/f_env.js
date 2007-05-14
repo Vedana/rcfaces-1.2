@@ -34,6 +34,10 @@ var __static = {
 	/**
 	 * @field private static String
 	 */
+	_CONTEXT_KEYWORD: "$context",
+	/**
+	 * @field private static String
+	 */
 	_BaseURI: undefined,
 	
 	/**
@@ -348,10 +352,12 @@ var __static = {
 	    	base=windowUrl.substring(0,pos);
 	    	remain=windowUrl.substring(pos+1);
     	}
-    	base=base+f_env._BaseURI;
     	// If url absolute
     	if (url.indexOf("/")==0) {
     		return base+url;
+    	} else if (url.indexOf(f_env._CONTEXT_KEYWORD)==0) {
+    		// if $context : return 
+    		return base+f_env._BaseURI+url.substring(f_env._CONTEXT_KEYWORD.length);
     	}
     	//if no remain
     	if (remain.length==0) {
