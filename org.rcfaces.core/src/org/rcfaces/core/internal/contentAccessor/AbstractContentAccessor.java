@@ -87,8 +87,10 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
             return null;
         }
 
+        String resolvedURLs = (String) resolvedURL;
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Resolved URL: " + resolvedURL + " (pathType="
+            LOG.debug("Resolved URL: " + resolvedURLs + " (pathType="
                     + getPathTypeName(contentAccessor.getPathType()) + ")");
         }
 
@@ -97,8 +99,21 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
                 facesContext = FacesContext.getCurrentInstance();
             }
 
-            return facesContext.getExternalContext().getRequestContextPath()
-                    + resolvedURL;
+            String contextPath = facesContext.getExternalContext()
+                    .getRequestContextPath();
+            if (contextPath.endsWith("/")) {
+                if (resolvedURLs.startsWith("/")) {
+                    return contextPath + resolvedURLs.substring(1);
+                }
+
+                return contextPath + resolvedURLs;
+            }
+
+            if (resolvedURLs.startsWith("/")) {
+                return contextPath + resolvedURLs;
+            }
+
+            return contextPath + "/" + resolvedURLs;
         }
 
         return (String) resolvedURL;
