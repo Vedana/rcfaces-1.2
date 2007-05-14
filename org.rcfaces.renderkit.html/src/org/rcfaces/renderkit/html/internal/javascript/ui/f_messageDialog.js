@@ -643,7 +643,7 @@ var __prototype = {
 		}
 
 		//delete the iFrame
-		f_shell.DelModIFrame();
+		this.f_delModIFrame();
 	},
 	
 	

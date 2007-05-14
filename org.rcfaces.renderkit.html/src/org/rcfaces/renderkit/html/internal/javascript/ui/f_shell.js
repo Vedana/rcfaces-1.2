@@ -231,9 +231,9 @@ var __static = {
      	var callBack=inst.f_getIFrameDrawingCallBack();
      	if (typeof(callBack) == "function") {
 	     	callBack.call(inst);
-	     	
 	    } else {
-	    	f_core.Debug(f_shell, "_OnIframeLoad: the callBack specified is not a function "+callBack);
+	    	f_core.Debug(f_shell, "_OnIframeLoad: the callBack specified is not a function "+callBack+"\n trying url");
+    		inst.f_drawIframeWithUrl();
 	    }
      	this.onload=null;
      	this.onreadystatechange=null;
@@ -372,6 +372,7 @@ var __static = {
 
 		default:
 			// Qu'est que c'est ????
+			f_core.Debug(f_shell, "_OnFocus: type de noeud "+target.nodeType);
 			targetDocument=document; // On bloque donc
 		}
  		
@@ -724,7 +725,6 @@ var __prototype = {
 			}
 			f_shell.HideSelect();
 			
-//			var iframe = f_shell._ObjIFrame._iframe;
 			var iframe = this.f_getIframe();
 			
 			var iframeDocument = iframe.contentWindow.document;
@@ -751,6 +751,23 @@ var __prototype = {
 
 	},
 
+	/**
+	 *  <p>returns the callback to use to draw the iFrame 
+	 *  </p>
+	 *
+	 * @method protected
+	 * @return Function 
+	 */
+	f_drawIframeWithUrl: function() {
+    	var srcUrl=this.f_getIFrameUrl();
+    	if (srcUrl && typeof(srcUrl) == "string") {
+    		var iframe=this.f_getIframe();
+    		iframe.src=srcUrl;
+    		return;
+    	}
+    	f_core.Debug(f_shell, "f_drawIframeWithUrl: bad url = "+srcUrl);
+    	
+	},
 	/**
 	 *  <p>returns the callback to use to draw the iFrame 
 	 *  </p>
@@ -800,9 +817,6 @@ var __prototype = {
 		
 		var cssClassBase = this._cssClassBase;
 
-//		var callback = this.f_getIFrameDrawingCallBack();
-		var url = this.f_getIFrameUrl();
-		
 		// Recuperation de la taille de la fenetre
 		var size=f_shell.GetOwnDocumentSize();
 		
@@ -870,10 +884,7 @@ var __prototype = {
 		
 		iframe._modalShell = this;
 		
-		if (!url || typeof(url) != "string") {
-			url="about:blank";
-		}
-		iframe.src=url;
+		iframe.src="about:blank";
 
 		f_shell._ObjIFrame = { 
 			_div: div, 
@@ -895,6 +906,22 @@ var __prototype = {
 		this.f_installModalStyle();
 	},
 
+	/**
+	 *  <p>delete the modal iframe and div. 
+	 *  </p>
+	 *
+	 * @method public
+	 * @return void
+	 */
+	f_delModIFrame: function() {
+     	f_core.Debug(f_shell, "f_delModIFrame: entering");
+
+     	this.f_uninstallModalStyle();
+
+		f_shell.DelModIFrame();     	
+
+	},
+	
 	/**
 	 * @method protected
 	 * @return void
