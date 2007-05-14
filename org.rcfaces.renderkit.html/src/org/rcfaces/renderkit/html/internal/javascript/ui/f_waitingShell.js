@@ -30,11 +30,30 @@ var __prototype = {
 	 */
 	f_waitingShell: function() {
 		this.f_super(arguments);
+		if (this.nodeType==f_core.ELEMENT_NODE) {
+			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 150));
+			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 150));
+			
+			var imageURL=f_core.GetAttribute(this, "v:imageURL");
+			if (imageURL) {
+				this.f_setImageURL(imageURL);
+			}
+			this.f_setCssClassBase(f_core.GetAttribute(this, "v:cssClassBase", "f_waitingShell"));
+			this.f_setBackgroundMode(f_core.GetAttribute(this, "v:backgroundMode", "greyed"));
+			var waitingShell=this;
+
+			var submitCb=function() {
+				waitingShell.f_show();
+			}
+			f_core.AddPostSubmitListener(submitCb);
+
+		} else {
+			this.f_setCssClassBase("f_waitingShell");
+			this.f_setBackgroundMode("greyed");
+			this.f_setWidth(150);
+			this.f_setHeight(150);
+		}
 		
-		this.f_setCssClassBase("f_waitingShell");
-		this.f_setBackgroundMode("greyed");
-		this.f_setWidth(150);
-		this.f_setHeight(150);
 	},
 
 	/*
