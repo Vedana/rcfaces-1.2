@@ -240,12 +240,12 @@ var __prototype = {
      	f_core.Debug(f_message, "f_removeFocusAndBlurListener: remove focus & blur hooks");
 		
 		if (this._onFocusCb) {
-			f_core.RemoveEventListener(document.body, "focusin", this._onFocusCb);
+			f_core.RemoveEventListener(document, "focus", this._onFocusCb);
 			this._onFocusCb=undefined; // function
 		}
 	
 		if (this._onBlurCb) {
-			f_core.RemoveEventListener(document.body, "focusout", this._onBlurCb);
+			f_core.RemoveEventListener(document, "blur", this._onBlurCb);
 			this._onBlurCb=undefined; // function
 		}
 	},
