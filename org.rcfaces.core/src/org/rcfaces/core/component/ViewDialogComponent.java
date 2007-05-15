@@ -8,50 +8,46 @@ import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IDialogPriorityCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.internal.component.CameliaOutputComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
-import org.rcfaces.core.component.capability.IImmediateCapability;
 
-public class MessageDialogComponent extends CameliaInputComponent implements 
+public class ViewDialogComponent extends CameliaOutputComponent implements 
 	IImageCapability,
 	IStyleClassCapability,
 	ITextCapability,
 	ITextDirectionCapability,
 	IVisibilityCapability,
 	IDialogPriorityCapability,
-	IImmediateCapability,
 	ISizeCapability,
 	IHiddenModeCapability,
 	ILookAndFeelCapability,
 	IWAIRoleCapability,
-	ISelectionEventCapability,
 	IImageAccessorsCapability {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.messageDialog";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.viewDialog";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","imageURL","width","defaultValue","title","waiRole","hiddenMode","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","dialogPriority","waiRole","visible","hiddenMode","lookId","textDirection"}));
 	}
 
-	public MessageDialogComponent() {
+	public ViewDialogComponent() {
 		setRendererType(COMPONENT_TYPE);
 	}
 
-	public MessageDialogComponent(String componentId) {
+	public ViewDialogComponent(String componentId) {
 		this();
 		setId(componentId);
 	}
@@ -60,13 +56,6 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
-		
-	}
-
-	public final void setImmediate(ValueBinding immediate) {
-
-
-			setValueBinding("immediate", immediate);
 		
 	}
 
@@ -430,82 +419,6 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 */
 	public void setWaiRole(ValueBinding waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
-	}
-
-	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-	}
-
-	/**
-	 * Returns a string value specifying the title for the document.
-	 * @return title
-	 */
-	public final String getTitle() {
-		return getTitle(null);
-	}
-
-	/**
-	 * Returns a string value specifying the title for the document.
-	 * @return title
-	 */
-	public final String getTitle(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TITLE, facesContext);
-	}
-
-	/**
-	 * Sets a string value specifying the title for the document.
-	 * @param title title
-	 */
-	public final void setTitle(String title) {
-		engine.setProperty(Properties.TITLE, title);
-	}
-
-	/**
-	 * Sets a string value specifying the title for the document.
-	 * @param title title
-	 */
-	public final void setTitle(ValueBinding title) {
-		engine.setProperty(Properties.TITLE, title);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "title" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTitleSetted() {
-		return engine.isPropertySetted(Properties.TITLE);
-	}
-
-	public final String getDefaultValue() {
-		return getDefaultValue(null);
-	}
-
-	public final String getDefaultValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_VALUE, facesContext);
-	}
-
-	public final void setDefaultValue(String defaultValue) {
-		engine.setProperty(Properties.DEFAULT_VALUE, defaultValue);
-	}
-
-	public final void setDefaultValue(ValueBinding defaultValue) {
-		engine.setProperty(Properties.DEFAULT_VALUE, defaultValue);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "defaultValue" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isDefaultValueSetted() {
-		return engine.isPropertySetted(Properties.DEFAULT_VALUE);
 	}
 
 	protected Set getCameliaFields() {

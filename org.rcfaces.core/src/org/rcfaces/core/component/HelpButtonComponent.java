@@ -1,13 +1,12 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.ImageButtonComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IForCapability;
 
 /**
  * <p>The helpButton Component is an <A href="/comps/imageButtonComponent.html">ImageButton</A>. It opens a new page showing the url specified in the "helpUrl" property of a component linked by the "for" property.</p>

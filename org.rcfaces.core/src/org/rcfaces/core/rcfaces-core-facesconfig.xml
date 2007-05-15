@@ -159,6 +159,10 @@
 		<component-class>org.rcfaces.core.component.MessageDialogComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.viewDialog</component-type>
+		<component-class>org.rcfaces.core.component.ViewDialogComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.message</component-type>
 		<component-class>org.rcfaces.core.component.MessageComponent</component-class>
 	</component>

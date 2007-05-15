@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IExpandImageCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IExpandImageCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.UIImageItemComponent;
 
 public abstract class ExpandableItemComponent extends UIImageItemComponent implements 
 	IForegroundBackgroundColorCapability,

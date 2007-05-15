@@ -1,31 +1,31 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.component.Properties;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
+import org.rcfaces.core.internal.tools.SortTools;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.AbstractGridComponent;
+import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ISortedChildrenCapability;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.internal.tools.OrderTools;
-import org.rcfaces.core.internal.tools.SortTools;
-import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.component.ComboColumnComponent;
 
 public class ComboGridComponent extends AbstractGridComponent implements 
 	IDisabledCapability,

@@ -40,10 +40,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private String waiRole;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String showSummary;
-	private String margins;
-	private String showDetail;
 	private String forVal;
+	private String margins;
+	private String showSummary;
+	private String showDetail;
 	public final String getVisible() {
 		return visible;
 	}
@@ -236,12 +236,12 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final String getShowSummary() {
-		return showSummary;
+	public final String getFor() {
+		return forVal;
 	}
 
-	public final void setShowSummary(String showSummary) {
-		this.showSummary = showSummary;
+	public final void setFor(String forVal) {
+		this.forVal = forVal;
 	}
 
 	public final String getMargins() {
@@ -252,20 +252,20 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.margins = margins;
 	}
 
+	public final String getShowSummary() {
+		return showSummary;
+	}
+
+	public final void setShowSummary(String showSummary) {
+		this.showSummary = showSummary;
+	}
+
 	public final String getShowDetail() {
 		return showDetail;
 	}
 
 	public final void setShowDetail(String showDetail) {
 		this.showDetail = showDetail;
-	}
-
-	public final String getFor() {
-		return forVal;
-	}
-
-	public final void setFor(String forVal) {
-		this.forVal = forVal;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -288,10 +288,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-			LOG.debug("  showSummary='"+showSummary+"'");
-			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  forVal='"+forVal+"'");
+			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  showSummary='"+showSummary+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -510,12 +510,12 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (showSummary != null) {
-			if (isValueReference(showSummary)) {
-				ValueBinding vb = application.createValueBinding(showSummary);
-				component.setShowSummary(vb);
+		if (forVal != null) {
+			if (isValueReference(forVal)) {
+				ValueBinding vb = application.createValueBinding(forVal);
+				component.setFor(vb);
 			} else {
-				component.setShowSummary(getBool(showSummary));
+				component.setFor(forVal);
 			}
 		}
 
@@ -526,21 +526,21 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 				component.setMargins(margins);
 		}
 
+		if (showSummary != null) {
+			if (isValueReference(showSummary)) {
+				ValueBinding vb = application.createValueBinding(showSummary);
+				component.setShowSummary(vb);
+			} else {
+				component.setShowSummary(getBool(showSummary));
+			}
+		}
+
 		if (showDetail != null) {
 			if (isValueReference(showDetail)) {
 				ValueBinding vb = application.createValueBinding(showDetail);
 				component.setShowDetail(vb);
 			} else {
 				component.setShowDetail(getBool(showDetail));
-			}
-		}
-
-		if (forVal != null) {
-			if (isValueReference(forVal)) {
-				ValueBinding vb = application.createValueBinding(forVal);
-				component.setFor(vb);
-			} else {
-				component.setFor(forVal);
 			}
 		}
 	}
@@ -570,10 +570,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		waiRole = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		showSummary = null;
-		margins = null;
-		showDetail = null;
 		forVal = null;
+		margins = null;
+		showSummary = null;
+		showDetail = null;
 
 		super.release();
 	}

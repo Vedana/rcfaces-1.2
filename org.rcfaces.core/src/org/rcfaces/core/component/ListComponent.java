@@ -1,14 +1,13 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IMultipleSelectCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.ComboComponent;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The list Component is based on the standard HTML tag &lt;SELECT&gt;.</p>

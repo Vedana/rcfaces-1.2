@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.el.ValueBinding;
-
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.CardBoxComponent;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.CardBoxTools;
 
 /**
  * An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.

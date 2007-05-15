@@ -4103,19 +4103,17 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4128,10 +4126,12 @@ An int value specifying the number of rows to display, starting with the one ide
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>first</name>
+			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4618,10 +4618,19 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>value</name>
+			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string value holding the current value of the component.
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rows</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4641,19 +4650,10 @@ A string value holding the name of a request-scope attribute under which the mod
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>first</name>
+			<name>value</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>rows</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5083,19 +5083,17 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5108,10 +5106,12 @@ An int value specifying the number of rows to display, starting with the one ide
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>first</name>
+			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5470,10 +5470,19 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>value</name>
+			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string value holding the current value of the component.
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rows</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5493,19 +5502,10 @@ A string value holding the name of a request-scope attribute under which the mod
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>first</name>
+			<name>value</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>rows</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -14594,6 +14594,124 @@ A string value specifying the title for the document.
 		</attribute>
 	</tag>
 	<tag>
+		<name>viewDialog</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ViewDialogTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>converter</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+The converter id to use. as specified in faces-config.xml.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>imageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to the image used by the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the text (literal or binding) to be shown.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>textDirection</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>visible</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>dialogPriority</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>hiddenMode</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the management of invisible state on the client.
+		Authorized values are :
+		<ul><li>
+		server : if not visible, nothing is sent to the client
+		</li><li>
+		phantom : if not visible, the data is sent to the client and the page estate is reserved for a futur eventual display of the component
+		</li><li>
+		ignore : if not visible, the data is sent to the client but no page estate is reserved
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>lookId</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the choosen look of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>waiRole</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
 		<name>message</name>
 		<tag-class>org.rcfaces.core.internal.taglib.MessageTag</tag-class>
 		<body-content>JSP</body-content>
@@ -14819,11 +14937,10 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>showSummary</name>
+			<name>for</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
+A component's id that express the link between the two components.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -14834,18 +14951,19 @@ A string value specifying the margins for the component (compliant to CSS margin
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>showSummary</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
+]]></description>
+		</attribute>
+		<attribute>
 			<name>showDetail</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "true".
-]]></description>
-		</attribute>
-		<attribute>
-			<name>for</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A component's id that express the link between the two components.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15662,10 +15780,11 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>globalOnly</name>
+			<name>showDetail</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component specific messages should be shown or not.
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15684,11 +15803,10 @@ A boolean value indicating whether the summary portion of displayed messages
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>showDetail</name>
+			<name>globalOnly</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
+A boolean value indicating if the component specific messages should be shown or not.
 ]]></description>
 		</attribute>
 		<attribute>
