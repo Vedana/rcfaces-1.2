@@ -305,7 +305,6 @@ var __prototype = {
 		} else if (evt.srcElement) {
 			target = evt.srcElement;
 		}
-		var componentId=null;
 		var compId = target.id;
 		if (compId) {
 			var msgCtx=f_messageContext.Get(target);
@@ -314,7 +313,7 @@ var __prototype = {
 				compId=null;
 			}
 		}		
-		this._fors=this._forsTranslated=[componentId];
+		this._fors=this._forsTranslated=[compId];
 		this.f_performMessageChanges();
 		
 	},
@@ -326,18 +325,6 @@ var __prototype = {
 	_performOnBlur: function(evt) {
      	f_core.Debug(f_message, "_performOnBlur: entering");
 
-		if (!evt) {
-				evt = f_core.GetJsEvent(this);
-		}
-
-		var target;
-		if (evt.target) {
-			target = evt.target;
-			
-		} else if (evt.srcElement) {
-			target = evt.srcElement;
-		}
-		
 		this._fors=this._forsTranslated=[null];
 		this.f_performMessageChanges();
 		
