@@ -18,13 +18,14 @@ var __prototype = {
 	f_performImageSelection: function(event) {		
 		var form = f_core.GetParentForm(this);
 		if (form) {
+			f_core.Debug(f_imageSubmitButton, "f_performImageSelection: Submit form !");
 			form.submit();
 			
 		} else {
 			f_core.Error(f_imageSubmitButton, "f_performImageSelection: FORM component was not found !");
 		}
 				
-		return true;
+		return false;
 	}
 }
 
