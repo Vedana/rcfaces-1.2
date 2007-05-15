@@ -13,16 +13,10 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	_AddSpan: function(container, spanClass, text) {
-		var span=document.createElement("span");
-		span.className="f_pager_value f_pager_value_"+spanClass;
-		span.appendChild(document.createTextNode(text));
-		
-		container.appendChild(span);
-		
-		return span;
-	},
-	
+	_AddSpan: function(container, spanClass, text) {		
+		return f_core.CreateElement(container, "span", {className: "f_pager_value f_pager_value_"+spanClass, textNode: text });
+	},	
+
 	/**
 	 * @method private static
 	 */
@@ -36,13 +30,15 @@ var __static = {
 	_AddButton: function(dataPager, container, buttonClass, text, tooltip, index) {
 		var button;
 		
+		var doc=dataPager.ownerDocument;
+		
 		var suffix="";
 		if (index===undefined || index<0) {
-			button=document.createElement("span");
+			button=doc.createElement("span");
 			suffix+="_disabled";
 			
 		} else {
-			button=document.createElement("a");
+			button=doc.createElement("a");
 			button._index=index;
 			button.href=f_core.JAVASCRIPT_VOID;
 			button.onclick=f_pager._PositionSelect;
@@ -63,7 +59,7 @@ var __static = {
 			button.title=tooltip;
 		}
 		
-		button.appendChild(document.createTextNode(text));
+		button.appendChild(doc.createTextNode(text));
 		
 		container.appendChild(button);
 		
@@ -207,6 +203,26 @@ var __static = {
 		dataPager.f_changePosition(v_index);
 		
 		return f_core.CancelJsEvent(evt);
+	},
+	/**
+	 * @method hidden
+	 */
+	Create: function(parent, refComponent, forId) {
+		
+		var properties={
+			id: refComponent.id+":pager",
+			className: "f_pager",
+			"v:for": forId
+		};
+		
+		f_dataGridPopup.CopyProperties(properties, refComponent, 
+			"v:message", "v:zeroResultMessage", "v:oneResultMessage", "v:manyResultMessage", "v:manyResultMessage2", "v:noPagedMessage");
+		
+		var pager=f_core.CreateElement(parent, "div", properties);
+
+		f_class.Init(pager, f_pager, [parent]);
+		
+		return pager;		
 	}
 }
  
@@ -265,7 +281,7 @@ var __prototype = {
 			fa_pagedComponent.RegisterPager(this._for, this);
 
 		} else  {
-			f_core.Error(f_pager, "'for' attribute is not defined !");
+			f_core.Error(f_pager, "f_pager: 'for' attribute is not defined !");
 		}
 	},
 	f_finalize: function() {
@@ -350,7 +366,7 @@ var __prototype = {
 			message=this._message;
 		}
 		
-		f_core.Debug(f_pager, "Format message '"+message+"' rows="+rows+" rowCount="+rowCount+" first="+first+" maxRows="+maxRows);
+		f_core.Debug(f_pager, "fa_pagedComponentInitialized: Format message '"+message+"' rows="+rows+" rowCount="+rowCount+" first="+first+" maxRows="+maxRows);
 		
 		var span="";
 		for(var i=0;i<message.length;) {

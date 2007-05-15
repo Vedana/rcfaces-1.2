@@ -264,10 +264,26 @@ var __prototype = {
 		
 	//	dataGrid=f_dataGrid.Create(parent, this._columns, this._rows, );
 
-		dataGrid=f_dataGridPopup.Create(parent, this);
-						
+		
+		var dataGridContainer=f_core.CreateElement(parent, "table", {cellSpacing: 0, cellPadding: 0 });
+		
+		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");
+		
+		var width=f_core.GetNumberAttribute(this, "v:popupWidth", 320);
+		var height=f_core.GetNumberAttribute(this, "v:popupHeight", 200);
+
+		var rows=f_core.GetNumberAttribute(this, "v:rows");
+
+		var td=f_core.CreateElement(tBodyContainer, "tr", null, "td");									
+		dataGrid=f_dataGridPopup.Create(td, this, width, (rows)?(height-26):height);
 		this._dataGrid=dataGrid;
 		
+		if (rows) {
+			td=f_core.CreateElement(tBodyContainer, "tr", null, "td");
+			pager=f_pager.Create(td, this, ":"+dataGrid.id);
+			this._pager=pager;
+		}
+				
 		return dataGrid;
 	},
 	f_destroyDataGrid: function() {

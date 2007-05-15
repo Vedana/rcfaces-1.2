@@ -27,6 +27,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 	private String hiddenMode;
 	private String lookId;
 	private String waiRole;
+	private String viewURL;
 	private String value;
 	private String converter;
 	public String getComponentType() {
@@ -121,6 +122,14 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
+	public final String getViewURL() {
+		return viewURL;
+	}
+
+	public final void setViewURL(String viewURL) {
+		this.viewURL = viewURL;
+	}
+
 	public final String getValue() {
 		return value;
 	}
@@ -153,6 +162,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  viewURL='"+viewURL+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -277,6 +287,15 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (viewURL != null) {
+			if (isValueReference(viewURL)) {
+				ValueBinding vb = application.createValueBinding(viewURL);
+				component.setViewURL(vb);
+			} else {
+				component.setViewURL(viewURL);
+			}
+		}
+
 		if (value != null) {
 			if (isValueReference(value)) {
 				ValueBinding vb = application.createValueBinding(value);
@@ -308,6 +327,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		hiddenMode = null;
 		lookId = null;
 		waiRole = null;
+		viewURL = null;
 		value = null;
 		converter = null;
 

@@ -204,8 +204,8 @@ var __prototype = {
 	 * @method 
 	 * @param hidden HTMLElement parent
 	 */
-	f_dataGrid: function(parent) {
-		this.f_super(arguments, parent);
+	f_dataGrid: function() {
+		this.f_super(arguments);
 
 		this._showCursor=true;
 		this._cellStyleClass="f_dataGrid_cell";

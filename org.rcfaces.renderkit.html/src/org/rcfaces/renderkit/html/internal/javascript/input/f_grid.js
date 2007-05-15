@@ -1010,15 +1010,8 @@ var __static = {
  
 var __prototype = {
 	
-	f_grid: function(parent) {
+	f_grid: function() {
 		this.f_super(arguments);
-		
-		if (!parent) {
-			doc=this.ownerDocument;
-			
-		} else {
-			doc=parent.ownerDocument;
-		}
 		
 		this._rowsPool=new Array;
 		this._cellsPool=new Array;
@@ -1081,7 +1074,9 @@ var __prototype = {
 				this._dataGrid=this;
 			}
 			
-		} else {
+		} else {	
+			var doc=this.ownerDocument;
+
 			focus=doc.createElement("a");
 			this._cfocus=focus;
 			focus.className="f_grid_focus";

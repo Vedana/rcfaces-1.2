@@ -179,34 +179,36 @@ public class ComboGridRenderer extends DataGridRenderer {
 
         htmlWriter.endComponent();
 
-        CharArrayWriter buffer = new CharArrayWriter(1024);
+        if (false) {
+            CharArrayWriter buffer = new CharArrayWriter(1024);
 
-        htmlWriter.getComponentRenderContext().setAttribute(GRID_HTML_CONTENT,
-                Boolean.TRUE);
+            htmlWriter.getComponentRenderContext().setAttribute(
+                    GRID_HTML_CONTENT, Boolean.TRUE);
 
-        ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
-        try {
-            ResponseWriter newResponseWriter = oldResponseWriter
-                    .cloneWithWriter(buffer);
+            ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
+            try {
+                ResponseWriter newResponseWriter = oldResponseWriter
+                        .cloneWithWriter(buffer);
 
-            facesContext.setResponseWriter(newResponseWriter);
+                facesContext.setResponseWriter(newResponseWriter);
 
-            IHtmlWriter newHtmlWriter = (IHtmlWriter) ((HtmlRenderContext) htmlWriter
-                    .getHtmlComponentRenderContext().getRenderContext())
-                    .createWriter(comboGridComponent, newResponseWriter);
+                IHtmlWriter newHtmlWriter = (IHtmlWriter) ((HtmlRenderContext) htmlWriter
+                        .getHtmlComponentRenderContext().getRenderContext())
+                        .createWriter(comboGridComponent, newResponseWriter);
 
-            super.encodeGrid(newHtmlWriter);
+                super.encodeGrid(newHtmlWriter);
 
-            newHtmlWriter.endComponent();
+                newHtmlWriter.endComponent();
 
-        } finally {
-            facesContext.setResponseWriter(oldResponseWriter);
+            } finally {
+                facesContext.setResponseWriter(oldResponseWriter);
+            }
+
+            System.out.println("Buffer=" + buffer);
+
+            htmlWriter.getComponentRenderContext().setAttribute(
+                    GRID_HTML_CONTENT, buffer.toString());
         }
-        
-        System.out.println("Buffer="+buffer);
-
-        htmlWriter.getComponentRenderContext().setAttribute(GRID_HTML_CONTENT, buffer.toString());
-                
     }
 
     protected IHtmlWriter writeIdAttribute(IHtmlWriter htmlWriter)

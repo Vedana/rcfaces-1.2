@@ -40,7 +40,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","dialogPriority","waiRole","visible","hiddenMode","lookId","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","dialogPriority","waiRole","visible","hiddenMode","lookId","viewURL","textDirection"}));
 	}
 
 	public ViewDialogComponent() {
@@ -419,6 +419,30 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 */
 	public void setWaiRole(ValueBinding waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	public final String getViewURL() {
+		return getViewURL(null);
+	}
+
+	public final String getViewURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VIEW_URL, facesContext);
+	}
+
+	public final void setViewURL(String viewURL) {
+		engine.setProperty(Properties.VIEW_URL, viewURL);
+	}
+
+	public final void setViewURL(ValueBinding viewURL) {
+		engine.setProperty(Properties.VIEW_URL, viewURL);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "viewURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isViewURLSetted() {
+		return engine.isPropertySetted(Properties.VIEW_URL);
 	}
 
 	protected Set getCameliaFields() {
