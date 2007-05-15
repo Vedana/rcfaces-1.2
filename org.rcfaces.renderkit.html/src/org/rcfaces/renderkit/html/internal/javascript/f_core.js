@@ -1081,25 +1081,48 @@ var f_core = {
 	 * @return void
 	 */
 	CreateElement: function(parent, tagName, properties) {
-		f_core.Assert(parent && parent.nodeType==f_core.ELEMENT_NODE, "f_core.CreateElement: Invalid component ! ("+parent+")");
-		f_core.Assert(typeof(tagName)=="string", "f_core.CreateElement: Invalid tagName parameter ("+tagName+")");
-		f_core.Assert(properties===undefined || typeof(properties)=="object", "f_core.CreateElement: Invalid properties parameter ("+properties+")");
+		f_core.Assert(parent && parent.nodeType==f_core.ELEMENT_NODE, "f_core.CreateElement: Invalid component ! ("+parent+")");		
 		
-		var element=parent.ownerDocument.createElement(tagName);
+		var doc=parent.ownerDocument;
 		
-		if (properties) {
-			for(var name in properties) {
-				if (name=="className") {
-					element.className=properties[name];
-					continue;
-				}
+		for(var i=1;i<arguments.length;) {
+			tagName=arguments[i++];
+			properties=arguments[i++];
+			
+			f_core.Assert(typeof(tagName)=="string", "f_core.CreateElement: Invalid tagName parameter ("+tagName+")");
+			f_core.Assert(properties===undefined || typeof(properties)=="object", "f_core.CreateElement: Invalid properties parameter ("+properties+")");
+			
+			var element=doc.createElement(tagName);
+			
+			var textNode=null;
+			if (properties) {
+				for(var name in properties) {
+					var value=properties[name];
 				
-				element.setAttribute(name, properties[name]);
+					switch(name) {
+					case "className":
+						element.className=value;
+						break;
+						
+					case "textNode":
+						textNode=value;
+						break;
+						
+					default:					
+						element.setAttribute(name, value);
+					}
+				}
 			}
+			
+			parent.appendChild(element);
+			
+			if (textNode) {
+				element.appendChild(doc.createTextNode(textNode));
+			}
+			
+			parent=element;
 		}
-		
-		parent.appendChild(element);
-		
+				
 		return element;
 	},
 	/**
