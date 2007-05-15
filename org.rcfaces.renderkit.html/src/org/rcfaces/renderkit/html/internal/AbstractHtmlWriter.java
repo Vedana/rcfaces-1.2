@@ -62,6 +62,10 @@ public abstract class AbstractHtmlWriter extends
         return renderContext.getComponentContextAttribute(key);
     }
 
+    public final Object removeAttribute(String key) {
+        return renderContext.removeComponentContextAttribute(key);
+    }
+
     public final Object setAttribute(String key, Object value) {
         return renderContext.setComponentContextAttribute(key, value);
     }

@@ -3,13 +3,8 @@
  */
 package org.rcfaces.core.internal.tools;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.lang.IAdaptable;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.lang.provider.ICheckProvider;
 
 /**
@@ -17,100 +12,73 @@ import org.rcfaces.core.lang.provider.ICheckProvider;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class CheckTools {
+public class CheckTools extends CollectionTools {
+    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(CheckTools.class);
+
+    private static final IValuesAccessor CHECK_PROVIDER_VALUES_ACCESSOR = new IValuesAccessor() {
+        private static final String REVISION = "$Revision$";
+
+        public int getCount(Object checkProvider) {
+            return ((ICheckProvider) checkProvider).getCheckedValuesCount();
+        }
+
+        public Object getFirst(Object checkProvider, Object refValues) {
+            return ((ICheckProvider) checkProvider).getFirstCheckedValue();
+        }
+
+        public Object[] listValues(Object checkProvider, Object refValues) {
+            return convertToObjectArray(((ICheckProvider) checkProvider)
+                    .getCheckedValues());
+        }
+
+        public Object adaptValue(Object value) {
+            return value;
+        }
+
+    };
 
     public static int getCount(Object checkedValues) {
-        if (checkedValues == null) {
+        IValuesAccessor valuesAccessor = getValuesAccessor(checkedValues,
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true);
+
+        if (valuesAccessor == null) {
             return 0;
         }
-
-        if (checkedValues.getClass().isArray()) {
-            return Array.getLength(checkedValues);
-        }
-
-        if (checkedValues instanceof Collection) {
-            return ((Collection) checkedValues).size();
-        }
-
-        if (checkedValues instanceof Map) {
-            return ((Map) checkedValues).size();
-        }
-
-        ICheckProvider checkProvider = getCheckProvider(checkedValues);
-
-        if (checkProvider != null) {
-            return checkProvider.getCheckedValuesCount();
-        }
-
-        return 0;
+        return valuesAccessor.getCount(checkedValues);
     }
 
-    public static Object getFirst(Object checkedValues) {
-        if (checkedValues == null) {
+    public static Object getFirst(Object checkedValues, Object refValue) {
+        IValuesAccessor valuesAccessor = getValuesAccessor(checkedValues,
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true);
+
+        if (valuesAccessor == null) {
             return null;
         }
 
-        if (checkedValues.getClass().isArray()) {
-            if (Array.getLength(checkedValues) < 1) {
-                return null;
-            }
-
-            return Array.get(checkedValues, 0);
-        }
-
-        if (checkedValues instanceof List) {
-            if (((List) checkedValues).isEmpty()) {
-                return null;
-            }
-
-            return ((List) checkedValues).get(0);
-        }
-
-        if (checkedValues instanceof Collection) {
-            if (((Collection) checkedValues).isEmpty()) {
-                return null;
-            }
-
-            return ((Collection) checkedValues).iterator().next();
-        }
-
-        if (checkedValues instanceof Map) {
-            if (((Map) checkedValues).isEmpty()) {
-                return null;
-            }
-
-            return ((Map) checkedValues).values().iterator().next();
-        }
-
-        ICheckProvider checkProvider = getCheckProvider(checkedValues);
-
-        if (checkProvider != null) {
-            return checkProvider.getFirstCheckedValue();
-        }
-
-        return null;
+        return valuesAccessor.getFirst(checkedValues, refValue);
     }
 
-    static ICheckProvider getCheckProvider(Object checkedValues) {
-        if (checkedValues instanceof ICheckProvider) {
-            return (ICheckProvider) checkedValues;
+    public static Object[] listValues(Object checkedValues, Object refValue) {
+        IValuesAccessor valuesAccessor = getValuesAccessor(checkedValues,
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true);
 
+        if (valuesAccessor == null) {
+            return EMPTY_VALUES;
         }
 
-        if (checkedValues instanceof IAdaptable) {
-            ICheckProvider checkProvider = (ICheckProvider) ((IAdaptable) checkedValues)
-                    .getAdapter(ICheckProvider.class, null);
-
-            if (checkProvider != null) {
-                return checkProvider;
-            }
-        }
-
-        ICheckProvider checkProvider = (ICheckProvider) RcfacesContext
-                .getCurrentInstance().getAdapterManager().getAdapter(
-                        checkedValues, ICheckProvider.class, null);
-
-        return checkProvider;
+        return valuesAccessor.listValues(checkedValues, refValue);
     }
 
+    public static Object adaptValue(Object value) {
+        IValuesAccessor valuesAccessor = getValuesAccessor(value,
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, false);
+
+        if (valuesAccessor == null) {
+            return EMPTY_VALUES;
+        }
+
+        return valuesAccessor.adaptValue(value);
+    }
 }

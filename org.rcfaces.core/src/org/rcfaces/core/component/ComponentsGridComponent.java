@@ -32,6 +32,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.SortTools;
 import org.rcfaces.core.model.ISortedComponent;
 
@@ -132,29 +133,32 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public final int getSelectedValuesCount() {
 
 
-				return GridTools.getCount(getSelectedValues(), GridTools.SELECTION_VALUES_TYPE);
+				return SelectionTools.getCount(getSelectedValues());
 			
 	}
 
 	public final Object getFirstSelectedValue() {
 
 
-				return GridTools.getFirst(getValue(), getSelectedValues(), GridTools.SELECTION_VALUES_TYPE);
+				return SelectionTools.getFirst(getSelectedValues(), null);
 			
 	}
 
 	public final Object getSelectedValues(FacesContext facesContext) {
 
 
-				Object selectedValues=engine.getValue(Properties.SELECTED_VALUES, facesContext);
-				if (selectedValues!=null) {
-					return selectedValues;
+				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
+					return engine.getValue(Properties.SELECTED_VALUES, facesContext);
 				}
 				
-				Object value=getValue();
-				selectedValues=ComponentTools.getSelectedValues(value, this, facesContext);
-								
-				return selectedValues;				
+					return SelectionTools.adaptValue(getValue());
+			
+	}
+
+	public final Object[] listSelectedValues() {
+
+
+				return SelectionTools.listValues(getSelectedValues(), getValue());
 			
 	}
 

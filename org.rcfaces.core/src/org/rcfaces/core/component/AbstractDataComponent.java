@@ -96,8 +96,8 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	public final void setFirst(ValueBinding first) {
 
 
-				super.setValueBinding("first", first);
-			
+			super.setValueBinding("first", first);
+		
 	}
 
 	public final Map getClientDataMap(FacesContext facesContext) {
@@ -142,8 +142,8 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	public final void setVar(ValueBinding var) {
 
 
-				super.setValueBinding("var", var);
-			
+			super.setValueBinding("var", var);
+		
 	}
 
 	public final String[] listServerDataKeys(FacesContext facesContext) {

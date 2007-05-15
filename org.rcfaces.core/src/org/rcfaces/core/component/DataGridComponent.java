@@ -39,10 +39,12 @@ import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.SortTools;
 import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.model.ISortedComponent;
@@ -167,28 +169,53 @@ public class DataGridComponent extends AbstractGridComponent implements
 	public final int getSelectedValuesCount() {
 
 
-				return GridTools.getCount(getSelectedValues(), GridTools.SELECTION_VALUES_TYPE);
+				return SelectionTools.getCount(getSelectedValues());
 			
 	}
 
 	public final Object getFirstSelectedValue() {
 
 
-				return GridTools.getFirst(getValue(), getSelectedValues(), GridTools.SELECTION_VALUES_TYPE);
+				return SelectionTools.getFirst(getSelectedValues(), null);
+			
+	}
+
+	public final Object getSelectedValues(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
+					return engine.getValue(Properties.SELECTED_VALUES, facesContext);
+				}
+				
+				return SelectionTools.adaptValue(getValue());
+			
+	}
+
+	public final Object[] listSelectedValues() {
+
+
+				return SelectionTools.listValues(getSelectedValues(), getValue());
 			
 	}
 
 	public final int getCheckedValuesCount() {
 
 
-				return GridTools.getCount(getCheckedValues(), GridTools.CHECK_VALUES_TYPE);
+				return CheckTools.getCount(getCheckedValues());
 			
 	}
 
 	public final Object getFirstCheckedValue() {
 
 
-				return GridTools.getFirst(getValue(), getCheckedValues(), GridTools.CHECK_VALUES_TYPE);
+				return CheckTools.getFirst(getCheckedValues(), null);
+			
+	}
+
+	public final Object[] listCheckedValues() {
+
+
+				return CheckTools.listValues(getCheckedValues(), getValue());
 			
 	}
 
@@ -343,40 +370,18 @@ public class DataGridComponent extends AbstractGridComponent implements
 					return cursorValue;
 				}
 				
-				Object value=getValue();
-				cursorValue=ComponentTools.getCursorValue(value, this, facesContext);
-								
-				return cursorValue;				
-			
-	}
-
-	public final Object getSelectedValues(FacesContext facesContext) {
-
-
-				Object selectedValues=engine.getValue(Properties.SELECTED_VALUES, facesContext);
-				if (selectedValues!=null) {
-					return selectedValues;
-				}
-				
-				Object value=getValue();
-				selectedValues=ComponentTools.getSelectedValues(value, this, facesContext);
-								
-				return selectedValues;				
+				return ComponentTools.getCursorValue(getValue(), this, facesContext);
 			
 	}
 
 	public final Object getCheckedValues(FacesContext facesContext) {
 
 
-				Object checkedValues=engine.getValue(Properties.CHECKED_VALUES, facesContext);
-				if (checkedValues!=null) {
-					return checkedValues;
+				if (engine.isPropertySetted(Properties.CHECKED_VALUES)) {
+					return engine.getValue(Properties.CHECKED_VALUES, facesContext);
 				}
 				
-				Object value=getValue();
-				checkedValues=ComponentTools.getCheckedValues(value, this, facesContext);
-								
-				return checkedValues;				
+				return CheckTools.adaptValue(getValue());
 			
 	}
 

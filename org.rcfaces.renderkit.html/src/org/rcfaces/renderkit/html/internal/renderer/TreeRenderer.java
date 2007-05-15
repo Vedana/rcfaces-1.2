@@ -88,7 +88,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             }
         }
 
-        if (treeComponent.isUserExpandable(facesContext) == false) {
+        if (treeComponent.isExpandable(facesContext) == false) {
             htmlWriter.writeAttribute("v:userExpandable", "false");
         }
 

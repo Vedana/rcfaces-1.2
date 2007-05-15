@@ -14,6 +14,8 @@ import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IExpandableCapability;
+import org.rcfaces.core.component.capability.IExpansionValuesCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
@@ -22,13 +24,16 @@ import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISelectionValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.CardinalityConverter;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.ExpansionTools;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.internal.util.ComponentIterators;
 
@@ -64,13 +69,16 @@ public class TreeComponent extends AbstractInputComponent implements
 	ISelectableCapability,
 	ISelectionCardinalityCapability,
 	ISelectionEventCapability,
-	IPreloadedLevelDepthCapability {
+	ISelectionValuesCapability,
+	IPreloadedLevelDepthCapability,
+	IExpandableCapability,
+	IExpansionValuesCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tree";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","selectable","showValue","defaultExpandedLeafImageURL","expansionValues","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","clientSelectionFullState","checkListener","preloadedLevelDepth","userExpandable","selectionCardinality","readOnly","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","selectable","showValue","defaultExpandedLeafImageURL","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","expandable","clientSelectionFullState","checkListener","preloadedLevelDepth","selectionCardinality","readOnly","selectedValues"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -171,30 +179,41 @@ public class TreeComponent extends AbstractInputComponent implements
 	public final Object getSelectedValues(FacesContext facesContext) {
 
 
-				Object selectedValues=engine.getValue(Properties.SELECTED_VALUES, facesContext);
-				if (selectedValues!=null) {
-					return selectedValues;
+				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
+					return engine.getValue(Properties.SELECTED_VALUES, facesContext);
 				}
 				
-				Object value=getValue();
-				selectedValues=ComponentTools.getSelectedValues(value, this, facesContext);
-								
-				return selectedValues;				
+				return getValue();
 			
 	}
 
-	public final Object getCheckValues(FacesContext facesContext) {
+	public final Object getCheckedValues(FacesContext facesContext) {
 
 
-				Object checkedValues=engine.getValue(Properties.CHECKED_VALUES, facesContext);
-				if (checkedValues!=null) {
-					return checkedValues;
+				if (engine.isPropertySetted(Properties.CHECKED_VALUES)) {
+					return engine.getValue(Properties.CHECKED_VALUES, facesContext);
+				}
+								
+				if (this.isSelectable(facesContext)==false) {				
+					return getValue();
+				}
+					
+				return CheckTools.getEmptyValues();
+			
+	}
+
+	public final Object getExpandedValues(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.EXPANDED_VALUES)) {
+					return engine.getValue(Properties.EXPANDED_VALUES, facesContext);
 				}
 				
-				Object value=getValue();
-				checkedValues=ComponentTools.getCheckedValues(value, this, facesContext);
-								
-				return checkedValues;				
+				if (this.isSelectable(facesContext)==false && this.isCheckable(facesContext)==false) {				
+					return getValue();
+				}
+												
+				return ExpansionTools.getEmptyValues();
 			
 	}
 
@@ -458,13 +477,6 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	/**
-	 * See {@link #getCheckedValues() getCheckedValues()} for more details
-	 */
-	public java.lang.Object getCheckedValues(javax.faces.context.FacesContext facesContext) {
-		return engine.getProperty(Properties.CHECKED_VALUES, facesContext);
-	}
-
-	/**
 	 * Returns <code>true</code> if the attribute "checkedValues" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
@@ -504,10 +516,17 @@ public class TreeComponent extends AbstractInputComponent implements
 		
 	}
 
+	public final Object[] listCheckedValues() {
+
+
+			return CheckTools.listValues(getCheckedValues(), getValue());
+		
+	}
+
 	public final Object getFirstCheckedValue() {
 
 
-			return CheckTools.getFirst(getCheckedValues());
+			return CheckTools.getFirst(getCheckedValues(), getValue());
 		
 	}
 
@@ -583,6 +602,64 @@ public class TreeComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
+	public java.lang.Object getSelectedValues() {
+		return getSelectedValues(null);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectedValuesSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_VALUES);
+	}
+
+	public void setSelectedValues(java.lang.Object selectedValues) {
+		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
+	}
+
+	/**
+	 * See {@link #setSelectedValues(Object) setSelectedValues(Object)} for more details
+	 */
+	public void setSelectedValues(ValueBinding selectedValues) {
+		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.SELECTED_VALUES);
+		if (valueBinding==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueBinding.getType(facesContext);
+	}
+
+	public final Object getFirstSelectedValue() {
+
+
+			return SelectionTools.getFirst(getSelectedValues(), getValue());
+		
+	}
+
+	public final int getSelectedValuesCount() {
+
+
+			return SelectionTools.getCount(getSelectedValues());
+		
+	}
+
+	public final Object[] listSelectedValues() {
+
+
+			return SelectionTools.listValues(getSelectedValues(), getValue());
+		
+	}
+
 	public int getPreloadedLevelDepth() {
 		return getPreloadedLevelDepth(null);
 	}
@@ -611,6 +688,87 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public void setPreloadedLevelDepth(ValueBinding preloadedLevelDepth) {
 		engine.setProperty(Properties.PRELOADED_LEVEL_DEPTH, preloadedLevelDepth);
+	}
+
+	public boolean isExpandable() {
+		return isExpandable(null);
+	}
+
+	/**
+	 * See {@link #isExpandable() isExpandable()} for more details
+	 */
+	public boolean isExpandable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.EXPANDABLE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "expandable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isExpandableSetted() {
+		return engine.isPropertySetted(Properties.EXPANDABLE);
+	}
+
+	public void setExpandable(boolean expandable) {
+		engine.setProperty(Properties.EXPANDABLE, expandable);
+	}
+
+	/**
+	 * See {@link #setExpandable(boolean) setExpandable(boolean)} for more details
+	 */
+	public void setExpandable(ValueBinding expandable) {
+		engine.setProperty(Properties.EXPANDABLE, expandable);
+	}
+
+	public java.lang.Object getExpandedValues() {
+		return getExpandedValues(null);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "expandedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isExpandedValuesSetted() {
+		return engine.isPropertySetted(Properties.EXPANDED_VALUES);
+	}
+
+	public void setExpandedValues(java.lang.Object expandedValues) {
+		engine.setProperty(Properties.EXPANDED_VALUES, expandedValues);
+	}
+
+	/**
+	 * See {@link #setExpandedValues(Object) setExpandedValues(Object)} for more details
+	 */
+	public void setExpandedValues(ValueBinding expandedValues) {
+		engine.setProperty(Properties.EXPANDED_VALUES, expandedValues);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueBinding}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public Class getExpandedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueBinding valueBinding=engine.getValueBindingProperty(Properties.EXPANDED_VALUES);
+		if (valueBinding==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueBinding.getType(facesContext);
+	}
+
+	public final int getExpandedValuesCount() {
+
+
+			return ExpansionTools.getCount(getExpandedValues());
+		
+	}
+
+	public final Object[] listExpandedValues() {
+
+
+			return ExpansionTools.listValues(getExpandedValues(), getValue());
+		
 	}
 
 	/**
@@ -886,46 +1044,6 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	/**
-	 * Returns a boolean value indicating wether the user can expand the component.
-	 * @return true if the user can expand the component
-	 */
-	public final boolean isUserExpandable() {
-		return isUserExpandable(null);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the user can expand the component.
-	 * @return true if the user can expand the component
-	 */
-	public final boolean isUserExpandable(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.USER_EXPANDABLE, true, facesContext);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the user can expand the component.
-	 * @param userExpandable true if the user can expand the component
-	 */
-	public final void setUserExpandable(boolean userExpandable) {
-		engine.setProperty(Properties.USER_EXPANDABLE, userExpandable);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the user can expand the component.
-	 * @param userExpandable true if the user can expand the component
-	 */
-	public final void setUserExpandable(ValueBinding userExpandable) {
-		engine.setProperty(Properties.USER_EXPANDABLE, userExpandable);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "userExpandable" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isUserExpandableSetted() {
-		return engine.isPropertySetted(Properties.USER_EXPANDABLE);
-	}
-
-	/**
 	 * Returns a boolean value indicating wether the expand sign should be visible for the topmost node.
 	 * @return true if the head node's expand sign is hidden
 	 */
@@ -963,62 +1081,6 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public final boolean isHideRootExpandSignSetted() {
 		return engine.isPropertySetted(Properties.HIDE_ROOT_EXPAND_SIGN);
-	}
-
-	/**
-	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
-	 * @return table of values
-	 */
-	public final Object getSelectedValues() {
-		return getSelectedValues(null);
-	}
-
-	/**
-	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
-	 * @param selectedValues table of values
-	 */
-	public final void setSelectedValues(Object selectedValues) {
-		engine.setValue(Properties.SELECTED_VALUES, selectedValues);
-	}
-
-	/**
-	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
-	 * @param selectedValues table of values
-	 */
-	public final void setSelectedValues(ValueBinding selectedValues) {
-		engine.setValueBinding(Properties.SELECTED_VALUES, selectedValues);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectedValuesSetted() {
-		return engine.isPropertySetted(Properties.SELECTED_VALUES);
-	}
-
-	public final Object[] getExpansionValues() {
-		return getExpansionValues(null);
-	}
-
-	public final Object[] getExpansionValues(javax.faces.context.FacesContext facesContext) {
-		return (Object[])engine.getValue(Properties.EXPANSION_VALUES, facesContext);
-	}
-
-	public final void setExpansionValues(Object[] expansionValues) {
-		engine.setProperty(Properties.EXPANSION_VALUES, expansionValues);
-	}
-
-	public final void setExpansionValues(ValueBinding expansionValues) {
-		engine.setValueBinding(Properties.EXPANSION_VALUES, expansionValues);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "expansionValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isExpansionValuesSetted() {
-		return engine.isPropertySetted(Properties.EXPANSION_VALUES);
 	}
 
 	public final Object getCursorValue() {

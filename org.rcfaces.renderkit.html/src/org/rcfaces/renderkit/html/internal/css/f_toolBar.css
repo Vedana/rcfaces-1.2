@@ -14,7 +14,7 @@
 }
 
 .f_toolBar_itemSeparator {
-	display: relative;
+	position: relative;
 	vertical-align: middle;
 }
 

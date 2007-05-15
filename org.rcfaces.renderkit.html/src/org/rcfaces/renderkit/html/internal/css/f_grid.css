@@ -32,13 +32,14 @@
 
 .f_grid_table {
 	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
- 	border-spacing: 0px;
+ 	border-spacing: 0;
 	empty-cells: show;
  	margin: 0;
  	padding: 0;
+ 	border: 0;
  	table-layout: fixed;
  	background-color: white;
-}
+ }
 
 .f_grid_table TBODY {
  	background:#D9D9D9;
@@ -72,26 +73,25 @@
 /*	text-overflow: ellipsis; Ca fait planter IE dans certains cas */
 	text-overflow: clip;
 	vertical-align: middle;
-	padding: 2px 4px 2px 4px;
+	padding: 2px 4px 2px 3px;
 	margin: 0px;
 	height: 20px;
 	overflow:hidden;
 	white-space:nowrap;
 	background: url('grid/titleNormal.gif') repeat-x bottom #EBEADB;
 	cursor: normal;
-}
 
-.f_grid_tcell {
 	border-left: 1px solid #D9D9D9;
-	padding-left: 3px;
 }
 
-/* Pas beau !
-.f_grid_disabled .f_grid_tcell {
- 	background-color: #BBB;
-	color: #9292B7;
+.f_grid_tcell_sorter {		
+	cursor: pointer;
+	cursor: hand;
 }
-*/
+
+.f_grid_disabled .f_grid_tcell_sorter {
+	cursor: default;
+}
 
 .f_grid_tcell_over {
 	background: url('grid/titleOver.gif') repeat-x bottom white;
@@ -235,6 +235,7 @@
 	background: url('grid/titleNormal.gif') repeat-x bottom #EBEADB;
 	text-align: left;
 	-moz-outline-style: none;
+	height: 20px;
 }
 
 .f_grid_imageCell {
@@ -253,6 +254,10 @@
 	cursor: e-resize;
 //	xbackground: url('grid/blank.gif') repeat;
 	z-index:100;
+}
+
+.f_grid_disabled .f_grid_colCursor {
+	cursor: auto;
 }
 
 .f_grid_shadowCell {

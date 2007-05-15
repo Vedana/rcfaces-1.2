@@ -100,20 +100,30 @@ var __static = {
 		}
 		
 		return keySelection;
-	}
+	},
+	/**
+	 * @hidden
+	 */
+	SetSelectionCardinality: function(object, cardinality, selectionFullState) {
+		object._selectionCardinality=cardinality;
+		object._selectionFullState=(selectionFullState)?(new Array):null;
+	}	
 }
 var __prototype = {
 	fa_selectionManager: function() {
-		var v_selectionCardinality=f_core.GetAttribute(this, "v:selectionCardinality");
-		if (!v_selectionCardinality) {
-			return;
+		if (this._selectionCardinality===undefined) {
+			var v_selectionCardinality=f_core.GetNumberAttribute(this, "v:selectionCardinality", undefined);
+	
+			if (v_selectionCardinality===undefined) {
+				return;
+			}
+			this._selectionCardinality=v_selectionCardinality;
+							
+			if (f_core.GetAttribute(this, "v:clientSelectionFullState")) {
+				this._selectionFullState=new Array;
+			}
 		}
 		
-		if (f_core.GetAttribute(this, "v:clientSelectionFullState")) {
-			this._selectionFullState=new Array;
-		}
-		
-		this._selectionCardinality=parseInt(v_selectionCardinality);
 		this._selectable=true;
 		
 		this._selectedElementValues=new Array;
@@ -134,7 +144,6 @@ var __prototype = {
 		//	this._selectionCardinality=undefined; // boolean
 		//  this._clientSelectionFullState=undefined // boolean
 	},
-
 	f_serialize: {
 		before: function() {
 			if (!this._selectable) {
@@ -161,7 +170,7 @@ var __prototype = {
 	 * @method protected
 	 */
 	f_moveCursor: function(element, show, evt, selection) {
-		f_core.Assert(element && element.tagName, "Invalid parameter to move cursor !");
+		f_core.Assert(element && element.tagName, "fa_selectionManager.f_moveCursor: Invalid parameter to move cursor !");
 		
 		var old=this._cursor;
 		
@@ -181,7 +190,7 @@ var __prototype = {
 			return;
 		}
 
-		f_core.Debug(fa_selectionManager, "Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
+		f_core.Debug(fa_selectionManager, "f_moveCursor: Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
 		
 		if (selection) {
 			if (this._performElementSelection(element, show, evt, selection)) {
@@ -199,11 +208,11 @@ var __prototype = {
 		
 		if ((selection & fa_selectionManager.STARTRANGE_SELECTION) 
 				&& !this.fa_isElementDisabled(element)) {
-			f_core.Debug(fa_selectionManager, "Set lastSelectedElement to '"+this.fa_getElementValue(element)+"'.");
+			f_core.Debug(fa_selectionManager, "f_moveCursor: Set lastSelectedElement to '"+this.fa_getElementValue(element)+"'.");
 			this._lastSelectedElement=element;
 		}
 		
-		if (f_core.IsDebugEnabled(fa_selectionManager)) {
+		if (false && f_core.IsDebugEnabled(fa_selectionManager)) {
 			var s="SelectedValues=";
 			var selectedElementValues=this._selectedElementValues;
 			if (!selectedElementValues.length) {
@@ -325,7 +334,7 @@ var __prototype = {
 	_selectRange: function(first, last, appendSelection) {
 		// on deselectionne tout ... puis on selectionne le range !
 		
-		f_core.Debug("fa_selectionManager", "Select range from '"+this.fa_getElementValue(first)+"'=>'"+this.fa_getElementValue(last)+"' appendMode="+appendSelection);
+		f_core.Debug(fa_selectionManager, "_selectRange: Select range from '"+this.fa_getElementValue(first)+"'=>'"+this.fa_getElementValue(last)+"' appendMode="+appendSelection);
 		
 		var elements=this.fa_listVisibleElements();
 		if (!elements) {
@@ -483,7 +492,7 @@ var __prototype = {
 			return false;
 		}
 		
-		f_core.Debug("fa_selectionManager", "performElementSelection "+
+		f_core.Debug(fa_selectionManager, "_performElementSelection: "+
 			" exclusive='"+((selection & fa_selectionManager.EXCLUSIVE_SELECTION)>0)+"'"+
 			" append='"+((selection & fa_selectionManager.APPEND_SELECTION)>0)+"'"+
 			" range='"+((selection & fa_selectionManager.RANGE_SELECTION)>0)+"'  disabled="+this.fa_isElementDisabled(element));
@@ -537,7 +546,7 @@ var __prototype = {
 			if (rangeMode) {
 				var lastSelectedElement=this._lastSelectedElement;
 				if (!lastSelectedElement) {
-					f_core.Debug("fa_selectionManager", "No lastSelectedElement set to '"+this.fa_getElementValue(element)+"'.");
+					f_core.Debug(fa_selectionManager, "_performElementSelection: No lastSelectedElement set to '"+this.fa_getElementValue(element)+"'.");
 
 					this._lastSelectedElement=element;
 					lastSelectedElement=element;
@@ -664,7 +673,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setSelection: function(selection, show) {
-		f_core.Debug("fa_selectionManager", "Set selection to '"+selection+"' show='"+show+"'.");
+		f_core.Debug(fa_selectionManager, "f_setSelection: Set selection to '"+selection+"' show='"+show+"'.");
 		
 		if (!selection) {
 			this._deselectAllElements();

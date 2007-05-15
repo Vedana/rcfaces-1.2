@@ -806,6 +806,11 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
             return;
         }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Decode event type='" + eventData.getEventName()
+                    + "' for component='" + component.getId() + "'.");
+        }
+
         eventDecoder.decodeEvent(component, eventData);
     }
 

@@ -107,7 +107,7 @@ public class SelectItemsContext {
         this.checkValues = ValuesTools.valueToSet(values, false);
     }
 
-    protected void initializeExpansionValue(Object values[]) {
+    protected void initializeExpansionValue(Object values) {
         this.expandValues = ValuesTools.valueToSet(values, false);
     }
 

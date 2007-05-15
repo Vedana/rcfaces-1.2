@@ -5,7 +5,7 @@
 
 /**
  * 
- * @class f_comboGrid extends f_combo, fa_disabled, fa_required, fa_readOnly
+ * @class f_comboGrid extends f_component, fa_disabled, fa_required, fa_readOnly, fa_dataGridPopup
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
@@ -31,16 +31,9 @@ var __static = {
 	},
 	_OnButtonMouseUp: function(evt) {
 		var comboGrid=this._comboGrid;
-		if (comboGrid.f_getEventLocked(false)) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
-		}
-		
-		if (comboGrid.f_isDisabled()) {
-			return f_core.CancelJsEvent(evt);
 		}
 		
 		comboGrid._onButtonMouseUp(evt);
@@ -67,16 +60,9 @@ var __static = {
 	},
 	_OnButtonMouseOut: function(evt) {
 		var comboGrid=this._comboGrid;
-		if (comboGrid.f_getEventLocked(false)) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
-		}
-		
-		if (comboGrid.f_isDisabled()) {
-			return f_core.CancelJsEvent(evt);
 		}
 		
 		comboGrid._onButtonMouseOut(evt);
@@ -86,6 +72,16 @@ var __static = {
 }
 
 var __prototype = {
+	
+	/**
+	 * @field private boolean
+	 */
+	_buttonOver: undefined,
+	
+	/**
+	 * @field private boolean
+	 */
+	_buttonDown: undefined,
 
 	f_comboGrid: function() {
 		this.f_super(arguments);
@@ -102,7 +98,6 @@ var __prototype = {
 		var input=f_core.GetFirstElementByTagName(this, "input", true);
 		this._input=input;
 		input._comboGrid=this;
-		
 	},
 
 	f_finalize: function() {
@@ -135,6 +130,11 @@ var __prototype = {
 		
 		this.f_super(arguments);
 	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @return void
+	 */
 	_onButtonMouseDown: function(evt) {
 		this._buttonDown=true;
 		this.f_updateButtonStyle();
@@ -142,15 +142,36 @@ var __prototype = {
 		this.f_setFocus();
 		this.f_openPopup(evt);
 	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @return void
+	 */
 	_onButtonMouseUp: function(evt) {
+		if (!this._buttonDown) {
+			return;
+		}
 		this._buttonDown=false;
 		this.f_updateButtonStyle();	
 	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @return void
+	 */
 	_onButtonMouseOver: function(evt) {
 		this._buttonOver=true;
 		this.f_updateButtonStyle();
 	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @return void
+	 */
 	_onButtonMouseOut: function(evt) {
+		if (!this._buttonOver) {
+			return;
+		}
 		this._buttonDown=false; // Obligé sinon sous IE on sait plus quand c'est relaché
 		this._buttonOver=false;
 		this.f_updateButtonStyle();	
@@ -220,11 +241,15 @@ var __prototype = {
 	},
 	/**
 	 * @method protected
+	 * @param Event jsEvent
+	 * @return void
 	 */
 	f_openPopup: function(jsEvent) {
 		if (this.f_isReadOnly()) {
 			return;
 		}
+		
+		this.f_openDataGridPopup(jsEvent);
 	},
 	/**
 	 * Set the focus to this component.
@@ -249,7 +274,39 @@ var __prototype = {
 		}
 		
 		cmp.focus();
+	},
+	fa_getDataGridFilter: function() {
+		return this.f_getValue();
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @return String The value associated.
+	 */
+	f_getValue: function() {
+		return this._input.value;
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @return boolean If value is recognized.
+	 */
+	f_setValue: function(value) {
+		if (typeof(value)=="number") {
+			value=String(value);
+		}
+
+		if (typeof(value)!="string") {
+			f_core.Debug(f_input, "f_setValue: Invalid value: "+value);
+			return false;
+		}
+		
+		this._input.value=value;
+		
+		// On filtre ?
 	}
 }
 
-new f_class("f_comboGrid", null, __static, __prototype, f_component, fa_disabled, fa_required, fa_readOnly);
+new f_class("f_comboGrid", null, __static, __prototype, f_component, fa_disabled, fa_required, fa_readOnly, fa_dataGridPopup);

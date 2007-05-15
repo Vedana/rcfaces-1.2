@@ -5,16 +5,23 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.io.CharArrayWriter;
 
+import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.UIColumn;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComboGridComponent;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -39,10 +46,6 @@ public class ComboGridRenderer extends DataGridRenderer {
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMBO_GRID;
-    }
-
-    public String getComponentStyleClassName() {
-        return getJavaScriptClassName();
     }
 
     protected void encodeGrid(IHtmlWriter htmlWriter) throws WriterException {
@@ -82,6 +85,33 @@ public class ComboGridRenderer extends DataGridRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter, classSuffix, CSS_ALL_MASK);
+
+        AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
+
+        int rows = gridRenderContext.getRows();
+        if (rows > 0) {
+            htmlWriter.writeAttribute("v:rows", rows);
+        }
+        if (gridRenderContext.isPaged() == false) {
+            htmlWriter.writeAttribute("v:paged", "false");
+        }
+
+        String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
+
+        if (rowStyleClasses != null) {
+            StringAppender sa = new StringAppender(rowStyleClasses.length * 32);
+
+            for (int i = 0; i < rowStyleClasses.length; i++) {
+                String token = rowStyleClasses[i];
+
+                if (sa.length() > 0) {
+                    sa.append(',');
+                }
+                sa.append(token);
+            }
+
+            htmlWriter.writeAttribute("v:rowStyleClass", sa.toString());
+        }
 
         htmlWriter.startElement(IHtmlWriter.COL);
         if (colWidth > 0) {
@@ -172,9 +202,11 @@ public class ComboGridRenderer extends DataGridRenderer {
         } finally {
             facesContext.setResponseWriter(oldResponseWriter);
         }
+        
+        System.out.println("Buffer="+buffer);
 
-        htmlWriter.getComponentRenderContext().setAttribute(GRID_HTML_CONTENT,
-                buffer.toString());
+        htmlWriter.getComponentRenderContext().setAttribute(GRID_HTML_CONTENT, buffer.toString());
+                
     }
 
     protected IHtmlWriter writeIdAttribute(IHtmlWriter htmlWriter)
@@ -182,8 +214,7 @@ public class ComboGridRenderer extends DataGridRenderer {
         IHtmlComponentRenderContext componentRenderContext = htmlWriter
                 .getHtmlComponentRenderContext();
 
-        if (Boolean.TRUE.equals(componentRenderContext
-                .getAttribute(GRID_HTML_CONTENT))) {
+        if (isDataGridRenderer(htmlWriter) == false) {
             return super.writeIdAttribute(htmlWriter);
         }
 
@@ -205,10 +236,6 @@ public class ComboGridRenderer extends DataGridRenderer {
         return htmlWriter;
     }
 
-    protected String getRowValueColumnId(IGridComponent gridComponent) {
-        return ((ComboGridComponent) gridComponent).getValueColumnId();
-    }
-
     protected void encodeJsBodyRows(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext tableContext) {
         // On génère rien
@@ -222,7 +249,99 @@ public class ComboGridRenderer extends DataGridRenderer {
 
         if (htmlContent != null) {
             jsWriter.writeMethodCall("f_setGridInnerHTML").writeString(
-                    htmlContent).write(");");
+                    htmlContent).writeln(");");
         }
+    }
+
+    public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
+
+        if (isDataGridRenderer(htmlWriter)) {
+            return super.getComponentStyleClassName(htmlWriter);
+        }
+
+        return getJavaScriptClassName();
+    }
+
+    protected boolean isDataGridRenderer(IHtmlWriter htmlWriter) {
+        return Boolean.TRUE.equals(htmlWriter.getComponentRenderContext()
+                .getAttribute(GRID_HTML_CONTENT));
+    }
+
+    public AbstractGridRenderContext createTableContext(
+            IHtmlComponentRenderContext componentRenderContext) {
+        AbstractGridRenderContext tableContext = new ComboGridRenderContext(
+                componentRenderContext);
+
+        return tableContext;
+    }
+
+    public DataGridRenderContext createTableContext(
+            IProcessContext processContext,
+            IScriptRenderContext scriptRenderContext, IGridComponent dg,
+            int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
+            String filterExpression) {
+        DataGridRenderContext tableContext = new ComboGridRenderContext(
+                processContext, scriptRenderContext, dg, rowIndex, forcedRows,
+                sortedComponents, filterExpression);
+
+        return tableContext;
+    }
+
+    protected UIColumn getRowValueColumn(IGridComponent dg) {
+        ComboGridComponent dataGridComponent = (ComboGridComponent) dg;
+
+        String valueColumnId = dataGridComponent.getValueColumnId();
+        if (valueColumnId != null) {
+            for (IColumnIterator it = dg.listColumns(); it.hasNext();) {
+                UIColumn column = it.next();
+                if (valueColumnId.equals(column.getId()) == false) {
+                    continue;
+                }
+
+                return column;
+            }
+
+            throw new FacesException("Can not find column '" + valueColumnId
+                    + "'.");
+        }
+
+        return null;
+    }
+
+    protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        encodeJsColumns(htmlWriter, gridRenderContext, GENERATE_CELL_IMAGES
+                | GENERATE_CELL_TEXT | GENERATE_CELL_WIDTH);
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public class ComboGridRenderContext extends DataGridRenderContext {
+
+        private static final String REVISION = "$Revision$";
+
+        public ComboGridRenderContext(IProcessContext processContext,
+                IScriptRenderContext scriptRenderContext, IGridComponent dg,
+                int rowIndex, int forcedRows,
+                ISortedComponent[] sortedComponents, String filterExpression) {
+            super(processContext, scriptRenderContext, dg, rowIndex,
+                    forcedRows, sortedComponents, filterExpression);
+        }
+
+        public ComboGridRenderContext(
+                IHtmlComponentRenderContext componentRenderContext) {
+            super(componentRenderContext);
+        }
+
+        protected void computeGridSize(ISizeCapability sizeCapability) {
+            this.gridWidth = ((ComboGridComponent) gridComponent)
+                    .getPopupWidth();
+            this.gridHeight = ((ComboGridComponent) gridComponent)
+                    .getPopupHeight();
+        }
+
     }
 }

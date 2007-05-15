@@ -400,7 +400,7 @@ var __prototype = {
 				
 				// Ben oui, c'est la joie du context de création des fonctions.
 				req.onreadystatechange =  function() {
-					if (!window.f_core) {
+					if (window._f_exiting) {
 						// Nous ne sommes pas dans un contexte sain ....
 						// Par exemple, échanges HTTP aprés un onExit de f_core !
 						return false;
@@ -411,7 +411,7 @@ var __prototype = {
 				
 				if (f_core.IsGecko()) {
 					req.onerror = function() {
-						if (!window.f_core) {
+						if (window._f_exiting) {
 							// Nous ne sommes pas dans un contexte sain ....
 							// Par exemple, échanges HTTP aprés un onExit de f_core !
 							return false;

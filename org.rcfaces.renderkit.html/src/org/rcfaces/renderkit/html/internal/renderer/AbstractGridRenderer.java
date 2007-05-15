@@ -31,7 +31,6 @@ import org.rcfaces.core.component.capability.IPreferenceCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -130,14 +129,27 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected static final int GENERATE_CELL_IMAGES = 0x0002;
 
-    public String getComponentStyleClassName() {
+    protected static final int GENERATE_CELL_TEXT = 0x0004;
+
+    protected static final int GENERATE_CELL_WIDTH = 0x0008;
+
+    public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         return GRID_STYLE_CLASS;
     }
 
     protected final AbstractGridRenderContext getGridRenderContext(
-            IComponentWriter componentWriter) {
-        return (AbstractGridRenderContext) componentWriter
-                .getComponentRenderContext().getAttribute(TABLE_CONTEXT);
+            IHtmlComponentRenderContext componentRenderContext) {
+        AbstractGridRenderContext gridRenderContext = (AbstractGridRenderContext) componentRenderContext
+                .getAttribute(TABLE_CONTEXT);
+
+        if (gridRenderContext != null) {
+            return gridRenderContext;
+        }
+
+        gridRenderContext = createTableContext(componentRenderContext);
+        componentRenderContext.setAttribute(TABLE_CONTEXT, gridRenderContext);
+
+        return gridRenderContext;
     }
 
     protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
@@ -207,14 +219,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        AbstractGridRenderContext gridRenderContext = createTableContext(componentRenderContext);
-        componentRenderContext.setAttribute(TABLE_CONTEXT, gridRenderContext);
+        AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
         htmlWriter.startElement(IHtmlWriter.DIV, (UIComponent) gridComponent);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter, null, ~CSS_SIZE_MASK);
 
         if (gridRenderContext.isSelectable()) {
             htmlWriter.writeAttribute("v:selectionCardinality",
@@ -311,91 +322,52 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         writeGridComponentAttributes(htmlWriter, gridRenderContext,
                 gridComponent);
 
-        boolean scrollBars = false;
-
-        String height = ((ISizeCapability) gridComponent).getHeight();
-        String width = ((ISizeCapability) gridComponent).getWidth();
-        if (height != null || width != null) {
-            scrollBars = true;
+        final int gridHeight = gridRenderContext.getGridHeight();
+        final int gridWidth = gridRenderContext.getGridWidth();
+        if (gridHeight > 0 || gridWidth > 0) {
             /*
              * writer.setComponentRenderAttribute(SCROLLBARS_PROPERTY,
              * Boolean.TRUE);
              */
-        }
 
-        boolean resizable = false;
-        int totalResize = 0;
-        {
-            boolean widthNotSpecified = false;
-
-            UIColumn dccs[] = gridRenderContext.listColumns();
-            for (int i = 0; i < dccs.length; i++) {
-                if (gridRenderContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
-                    continue;
-                }
-
-                UIColumn dc = dccs[i];
-                String dw = null;
-
-                if (dc instanceof IWidthCapability) {
-                    dw = ((IWidthCapability) dc).getWidth();
-                }
-
-                if (dw == null) {
-                    widthNotSpecified = true;
-
-                } else {
-                    try {
-                        int idw = Integer.parseInt(dw);
-                        if (idw < 0) {
-                            idw = 0;
-                        }
-
-                        totalResize += idw;
-
-                    } catch (NumberFormatException ex) {
-                        LOG.error("Bad width of column #" + i + ": " + dw, ex);
-                    }
-                }
-
-                if (dc instanceof IResizableCapability) {
-                    resizable |= ((IResizableCapability) dc).isResizable();
-                }
+            ICssWriter cssWriter = htmlWriter.writeStyle();
+            if (gridWidth > 0) {
+                cssWriter.writeWidth(gridWidth + "px");
             }
-
-            if (resizable && (scrollBars == false || widthNotSpecified)) {
-                resizable = false;
+            if (gridHeight > 0) {
+                cssWriter.writeHeight(gridHeight + "px");
             }
         }
-        gridRenderContext.setResizable(resizable, totalResize);
+
+        boolean resizable = gridRenderContext.isResizable();
+        int totalResize = gridRenderContext.getTotalSize();
 
         if (resizable) {
             htmlWriter.writeAttribute("v:resizable", "true");
         }
 
-        int dataGridPixelWidth = getPixelSize(
-                ((IWidthCapability) gridComponent).getWidth(), -1);
-
         boolean headerVisible = true; // dg.isHeaderVisible(facesContext);
 
+        if (serverTitleGeneration() == false) {
+            htmlWriter.writeAttribute("v:sb", (gridRenderContext
+                    .hasScrollBars() ? "true" : "false"));
+            return;
+        }
+
         int tableWidth = 0;
-        if (scrollBars) {
-            String w = null;
-            // dataGridPixelWidth-=2;
-            if (dataGridPixelWidth > 0) {
-                w = String.valueOf(dataGridPixelWidth) + "px";
-            }
+        if (gridRenderContext.hasScrollBars()) {
+            int w = gridRenderContext.getGridWidth();
 
             if (headerVisible) {
                 htmlWriter.startElement(IHtmlWriter.DIV);
                 htmlWriter.writeClass(getDataTitleScroll(htmlWriter));
-                if (w != null) {
-                    htmlWriter.writeStyle().writeWidth(w);
+                if (w > 0) {
+                    htmlWriter.writeStyle().writeWidth(w + "px");
                 }
             }
 
             tableWidth = encodeFixedHeader(htmlWriter, gridRenderContext,
-                    dataGridPixelWidth);
+                    gridWidth);
             htmlWriter.endElement(IHtmlWriter.DIV);
 
             htmlWriter.startElement(IHtmlWriter.DIV);
@@ -403,12 +375,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             ICssWriter cssWriter = htmlWriter.writeStyle(32);
 
-            if (height != null) {
-                cssWriter.writeHeight(computeSizeInPixel(height, -1,
-                        -getTitleHeight()));
+            if (gridHeight > 0) {
+                cssWriter.writeHeight((gridHeight - getTitleHeight()) + "px");
             }
-            if (w != null) {
-                cssWriter.writeWidth(w);
+            if (w > 0) {
+                cssWriter.writeWidth(w + "px");
             }
         }
 
@@ -421,9 +392,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeCellSpacing(0);
 
         if (tableWidth > 0) {
-            int ttw = getPixelSize(((IWidthCapability) gridComponent)
-                    .getWidth(), -1);
-            if (ttw > 0 && ttw > tableWidth) {
+            if (gridWidth > 0 && gridWidth > tableWidth) {
                 tableWidth = -1;
             }
         }
@@ -439,8 +408,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeWidth("100%");
         }
 
-        gridRenderContext.setHasScrollBars(scrollBars);
-
         encodeHeader(htmlWriter, gridRenderContext);
 
         htmlWriter.startElement(IHtmlWriter.TBODY);
@@ -448,9 +415,14 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         encodeBodyBegin(htmlWriter, gridRenderContext);
     }
 
+    protected boolean serverTitleGeneration() {
+        return true;
+    }
+
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
-        AbstractGridRenderContext tableContext = getGridRenderContext(writer);
+        AbstractGridRenderContext tableContext = getGridRenderContext(((IHtmlWriter) writer)
+                .getHtmlComponentRenderContext());
 
         encodeBodyEnd((IHtmlWriter) writer, tableContext);
 
@@ -501,10 +473,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             // OO2: htmlWriter.writeAttribute("width",
             // tableContext.getResizeTotalSize());
             htmlWriter.writeStyle().writeWidth(
-                    tableContext.getResizeTotalSize() + "px");
+                    tableContext.getTotalSize() + "px");
         }
-
-        int tableWidth = 0;
 
         UIColumn columns[] = tableContext.listColumns();
 
@@ -513,7 +483,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 continue;
             }
 
+            UIColumn column = columns[i];
+
             htmlWriter.startElement(IHtmlWriter.COL);
+            String width = null;
+            if (column instanceof IWidthCapability) {
+                width = ((IWidthCapability) column).getWidth();
+                if (width != null) {
+                    htmlWriter.writeStyle().writeWidth(width);
+                }
+            }
 
             htmlWriter.endElement(IHtmlWriter.COL);
         }
@@ -523,6 +502,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.TR);
         htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
 
+        int tableWidth = 0;
         boolean first = true;
         for (int i = 0; i < columns.length; i++) {
             if (tableContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
@@ -597,10 +577,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         if (column instanceof IWidthCapability) {
             width = ((IWidthCapability) column).getWidth();
             if (width != null) {
-                htmlWriter.writeWidth(width);
+                /*
+                 * Probleme de bordure ! htmlWriter.writeWidth(width);
+                 */
             }
         }
-
         encodeTitleText(htmlWriter, tableContext, column, width);
 
         htmlWriter.endElement(IHtmlWriter.TH);
@@ -800,7 +781,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             encodeTitleCol(htmlWriter, dc);
         }
 
-        if (tableContext.isHasScrollBars() == false) {
+        if (tableContext.hasScrollBars() == false) {
             htmlWriter.startElement(IHtmlWriter.THEAD);
             htmlWriter.startElement(IHtmlWriter.TR);
             htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
@@ -905,14 +886,18 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext gridRenderContext) throws WriterException {
     }
 
-    protected void encoreBodyTableEnd(IHtmlWriter htmlWriter,
+    protected void encodeBodyTableEnd(IHtmlWriter htmlWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
-        htmlWriter.endElement(IHtmlWriter.TBODY);
 
-        htmlWriter.endElement(IHtmlWriter.TABLE);
+        if (serverTitleGeneration()) {
 
-        if (gridRenderContext.isHasScrollBars()) {
-            htmlWriter.endElement(IHtmlWriter.DIV);
+            htmlWriter.endElement(IHtmlWriter.TBODY);
+
+            htmlWriter.endElement(IHtmlWriter.TABLE);
+
+            if (gridRenderContext.hasScrollBars()) {
+                htmlWriter.endElement(IHtmlWriter.DIV);
+            }
         }
 
         htmlWriter.endElement(IHtmlWriter.DIV);
@@ -1045,13 +1030,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             int rowState = gridRenderContext.getColumnState(i);
             if (rowState == AbstractGridRenderContext.SERVER_HIDDEN) {
-                objectWriter.writeSymbol("_hiddenMode").writeNull();
+                objectWriter.writeSymbol("_visibility").writeNull();
 
                 objectWriter.end();
                 continue;
 
             } else if (rowState == AbstractGridRenderContext.CLIENT_HIDDEN) {
-                objectWriter.writeSymbol("_hiddenMode").writeBoolean(false);
+                objectWriter.writeSymbol("_visibility").writeBoolean(false);
             }
 
             if (columnStyleClasses != null) {
@@ -1118,21 +1103,21 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (defaultCellHorizontalAligments != null) {
                 String halign = defaultCellHorizontalAligments[i];
                 if (halign != null) {
-                    objectWriter.writeSymbol("_horizontalAlign").write(halign);
+                    objectWriter.writeSymbol("_align").write(halign);
                 }
             }
 
             if (imageURLs != null) {
                 String imageURL = imageURLs[i];
                 if (imageURL != null) {
-                    objectWriter.writeSymbol("_imageURL").write(imageURL);
+                    objectWriter.writeSymbol("_titleImageURL").write(imageURL);
                 }
             }
 
             if (disabledImageURLs != null) {
                 String disabledImageURL = disabledImageURLs[i];
                 if (disabledImageURL != null) {
-                    objectWriter.writeSymbol("_disabledImageURL").write(
+                    objectWriter.writeSymbol("_titleDisabledImageURL").write(
                             disabledImageURL);
                 }
             }
@@ -1140,7 +1125,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (selectedImageURLs != null) {
                 String selectedImageURL = selectedImageURLs[i];
                 if (selectedImageURL != null) {
-                    objectWriter.writeSymbol("_selectedImageURL").write(
+                    objectWriter.writeSymbol("_titleSelectedImageURL").write(
                             selectedImageURL);
                 }
             }
@@ -1148,7 +1133,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (hoverImageURLs != null) {
                 String hoverImageURL = hoverImageURLs[i];
                 if (hoverImageURL != null) {
-                    objectWriter.writeSymbol("_hoverImageURL").write(
+                    objectWriter.writeSymbol("_titleHoverImageURL").write(
                             hoverImageURL);
                 }
             }
@@ -1174,6 +1159,33 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                                         max);
                             }
                         }
+                    }
+                }
+            }
+
+            if ((generationMask & GENERATE_CELL_WIDTH) > 0) {
+                if (columnComponent instanceof IWidthCapability) {
+                    String width = ((IWidthCapability) columnComponent)
+                            .getWidth();
+                    if (width != null) {
+                        objectWriter.writeSymbol("_width").writeString(width);
+                    }
+                }
+            }
+
+            if ((generationMask & GENERATE_CELL_TEXT) > 0) {
+                if (columnComponent instanceof ITextCapability) {
+                    String text = ((ITextCapability) columnComponent).getText();
+                    if (text != null) {
+                        objectWriter.writeSymbol("_text").writeString(text);
+                    }
+                }
+                if (columnComponent instanceof IToolTipCapability) {
+                    String toolTip = ((IToolTipCapability) columnComponent)
+                            .getToolTipText();
+                    if (toolTip != null) {
+                        objectWriter.writeSymbol("_toolTip").writeString(
+                                toolTip);
                     }
                 }
             }

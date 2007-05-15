@@ -121,11 +121,11 @@ var __static = {
 	 */
 	_OnErrorHandler: function() {
 
-		if (!window.f_core) {
+		if (window._f_exiting) {
 			return;
 		}
 
-		f_core.Error(f_imageRepository, "Error while loading image '"+this.src+"'.");
+		f_core.Error(f_imageRepository, "_OnErrorHandler: Error while loading image '"+this.src+"'.");
 
 //		this.onload=null;
 //		this.onerror=null;
@@ -137,11 +137,11 @@ var __static = {
 	 * @return void
 	 */
 	_OnLoadHandler: function() {
-		if (!window.f_core) {
+		if (window._f_exiting) {
 			return;
 		}
 
-		f_core.Debug(f_imageRepository, "Image '"+this.src+"' loaded.");
+		f_core.Debug(f_imageRepository, "_OnLoadHandler: Image '"+this.src+"' loaded.");
 
 //		this.onload=null;
 //		this.onerror=null;

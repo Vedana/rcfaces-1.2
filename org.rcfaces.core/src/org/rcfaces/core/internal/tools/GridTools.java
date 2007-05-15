@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
@@ -39,7 +38,6 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.lang.IAdaptable;
-import org.rcfaces.core.lang.provider.ICheckProvider;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.IDataModel;
@@ -216,134 +214,6 @@ public class GridTools {
      * 
      * return new CollectionIndexesModel(l); }
      */
-
-    public static final Object getFirst(Object value, Object selection,
-            int valuesType) {
-        if (selection == null) {
-            return null;
-        }
-
-        if (selection.getClass().isArray()) {
-            if (Array.getLength(selection) == 0) {
-                return null;
-            }
-
-            return Array.get(selection, 0);
-        }
-
-        if (selection instanceof List) {
-            List collection = (List) selection;
-
-            if (collection.isEmpty()) {
-                return null;
-            }
-
-            return collection.get(0);
-        }
-
-        if (selection instanceof Collection) {
-            Collection collection = (Collection) selection;
-
-            if (collection.isEmpty()) {
-                return null;
-            }
-
-            return collection.iterator().next();
-        }
-
-        if (selection instanceof IIndexesModel) {
-            IIndexesModel indexesModel = (IIndexesModel) selection;
-
-            return indexesModel.getFirstSelectedObject(value);
-        }
-
-        switch (valuesType) {
-        case SELECTION_VALUES_TYPE:
-            ISelectionProvider selectionProvider = getSelectionProvider(selection);
-            if (selectionProvider != null) {
-                return selectionProvider.getFirstSelectedValue();
-            }
-            break;
-
-        case CHECK_VALUES_TYPE:
-            ICheckProvider checkProvider = CheckTools
-                    .getCheckProvider(selection);
-
-            if (checkProvider != null) {
-                return checkProvider.getFirstCheckedValue();
-            }
-            break;
-        }
-
-        return null;
-    }
-
-    public static int getCount(Object selection, int valuesType) {
-        if (selection == null) {
-            return 0;
-        }
-
-        if (selection.getClass().isArray()) {
-            return Array.getLength(selection);
-        }
-
-        if (selection instanceof Collection) {
-            Collection collection = (Collection) selection;
-
-            return collection.size();
-        }
-
-        if (selection instanceof Map) {
-            return ((Map) selection).size();
-        }
-
-        if (selection instanceof IIndexesModel) {
-            IIndexesModel indexesModel = (IIndexesModel) selection;
-
-            return indexesModel.countIndexes();
-        }
-
-        switch (valuesType) {
-        case SELECTION_VALUES_TYPE:
-            ISelectionProvider selectionProvider = getSelectionProvider(selection);
-            if (selectionProvider != null) {
-                return selectionProvider.getSelectedValuesCount();
-            }
-            break;
-
-        case CHECK_VALUES_TYPE:
-            ICheckProvider checkProvider = CheckTools
-                    .getCheckProvider(selection);
-
-            if (checkProvider != null) {
-                return checkProvider.getCheckedValuesCount();
-            }
-            break;
-        }
-
-        return 0;
-    }
-
-    private static ISelectionProvider getSelectionProvider(Object selection) {
-        if (selection instanceof ISelectionProvider) {
-            return (ISelectionProvider) selection;
-        }
-
-        if (selection instanceof IAdaptable) {
-            ISelectionProvider selectionProvider = (ISelectionProvider) ((IAdaptable) selection)
-                    .getAdapter(ISelectionProvider.class, null);
-
-            if (selectionProvider != null) {
-                return selectionProvider;
-            }
-        }
-
-        ISelectionProvider selectionProvider = (ISelectionProvider) RcfacesContext
-                .getCurrentInstance().getAdapterManager().getAdapter(selection,
-                        ISelectionProvider.class, null);
-
-        return selectionProvider;
-    }
 
     public static ISortedComponent[] listSortedComponents(FacesContext context,
             ISortedChildrenCapability dataGridComponent) {

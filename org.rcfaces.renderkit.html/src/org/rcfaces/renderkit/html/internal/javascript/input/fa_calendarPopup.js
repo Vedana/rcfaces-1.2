@@ -26,7 +26,7 @@ var __static={
 	_ClosePopup: function(dateChooser, jsEvt) {	
 		var calendar=dateChooser.f_getCalendarObject();
 
-		f_core.Debug(fa_calendarPopup, "Close the popup of dateChooser='"+dateChooser.id+"'.");
+		f_core.Debug(fa_calendarPopup, "_ClosePopup: Close the popup of dateChooser='"+dateChooser.id+"'.");
 
 		if (!dateChooser._popupOpened) {
 			return;

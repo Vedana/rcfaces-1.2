@@ -56,7 +56,7 @@
 	z-index:1000;
 	margin: 0;
 	padding: 0;
-	display: bloc;
+	display: block;
 	visibility: hidden;
 	cursor: default;
 	width: 140px;

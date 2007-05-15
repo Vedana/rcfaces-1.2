@@ -14,7 +14,7 @@ var __static = {
 	 * @method hidden static
 	 */
 	GlobalScope: function() {
-		return window;
+		return fa_groupName;
 	},
 	
 	/**
@@ -22,7 +22,7 @@ var __static = {
 	 * @return void
 	 */
 	Finalizer: function() {
-		window._Groups=undefined;
+		fa_groupName._Groups=undefined;
 	}
 }
 var __prototype = {
@@ -86,7 +86,7 @@ var __prototype = {
 	
 		var scope=this.fa_getRadioScope();
 		if (!scope) {
-			scope=window;
+			scope=fa_groupName;
 		}
 		
 		var wg=scope._Groups;

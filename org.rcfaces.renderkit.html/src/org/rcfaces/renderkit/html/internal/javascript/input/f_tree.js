@@ -1490,7 +1490,7 @@ var __prototype = {
 		
 		var node=this.f_appendNode(parent, properties._label, properties._value, properties._description, properties._disabled);
 
-		if (properties._opened) {
+		if (properties._expanded) {
 			node._opened=true;
 		}
 
@@ -2451,8 +2451,8 @@ var __prototype = {
 		node._container=true;
 		node._interactive=true;
 	},
-	f_serialize: function() {		
-		if (this._userExpandable) {
+	f_serialize: function() {
+		if (this._userExpandable) {			
 			var expandedValues=this._expandedValues;
 			if (expandedValues) {
 				this.f_setProperty(f_prop.EXPANDED_ITEMS, expandedValues, true);

@@ -185,6 +185,19 @@ public abstract class AbstractRenderContext implements IRenderContext {
         return map.put(key, value);
     }
 
+    public final Object removeComponentContextAttribute(String key) {
+        int componentContextLevel = getStackLevel() + 2;
+
+        Object object = stack.get(componentContextLevel);
+        if (object == Boolean.FALSE) {
+            return null;
+        }
+
+        Map map = (Map) object;
+
+        return map.remove(key);
+    }
+
     public final Object getAttribute(String key) {
         if (attributes == null) {
             return null;

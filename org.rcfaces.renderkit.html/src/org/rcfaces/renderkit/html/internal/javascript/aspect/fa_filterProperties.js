@@ -87,6 +87,8 @@ var __prototype = {
 			expression=f_core.EncodeObject(properties);
 		}
 	
+		f_core.Debug(fa_filterProperties, "f_setFilterProperties: Expression of properties='"+expression+"'.");
+	
 		//if (this._filterExpression==expression) {
 			// return;
 			// NON: Car il peut y avoir une mise à jour !

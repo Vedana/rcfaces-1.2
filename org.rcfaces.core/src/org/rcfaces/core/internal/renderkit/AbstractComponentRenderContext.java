@@ -21,6 +21,8 @@ public abstract class AbstractComponentRenderContext implements
 
     private static final String ATTRIBUTES_MAP = "org.rcfaces.core.RENDER_CONTEXT_ATTRIBUTES";
 
+    private static final boolean PUT_ATTRIBUTES_MAP_INTO_COMPONENT = false;
+
     private final UIComponent component;
 
     private final String componentClientId;
@@ -35,9 +37,11 @@ public abstract class AbstractComponentRenderContext implements
         this.component = component;
         this.componentClientId = componentClientId;
 
-        if (component instanceof ITransientAttributesManager) {
-            attributes = (Map) ((ITransientAttributesManager) component)
-                    .getTransientAttribute(ATTRIBUTES_MAP);
+        if (PUT_ATTRIBUTES_MAP_INTO_COMPONENT) {
+            if (component instanceof ITransientAttributesManager) {
+                attributes = (Map) ((ITransientAttributesManager) component)
+                        .getTransientAttribute(ATTRIBUTES_MAP);
+            }
         }
     }
 
@@ -76,8 +80,12 @@ public abstract class AbstractComponentRenderContext implements
         if (attributes == null) {
             attributes = new HashMap();
 
-            ((ITransientAttributesManager) component).setTransientAttribute(
-                    ATTRIBUTES_MAP, attributes);
+            if (PUT_ATTRIBUTES_MAP_INTO_COMPONENT) {
+                if (component instanceof ITransientAttributesManager) {
+                    ((ITransientAttributesManager) component)
+                            .setTransientAttribute(ATTRIBUTES_MAP, attributes);
+                }
+            }
         }
 
         return attributes.put(key, value);

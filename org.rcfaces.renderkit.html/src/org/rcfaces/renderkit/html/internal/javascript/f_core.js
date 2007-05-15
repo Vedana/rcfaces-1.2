@@ -163,7 +163,7 @@ var f_core = {
 	DesignerMode:	undefined,
 
 	/**
-	 * @field private static
+	 * @field private static function
 	 */
 	_AjaxParametersUpdater: undefined,
 	
@@ -192,9 +192,8 @@ var f_core = {
 	 */
 	_FocusComponent: undefined,
 	
-	
 	/**
-	 * @field private static List<function>
+	 * @field private static function[]
 	 */
 	_PostSubmitListeners: undefined,
 	
@@ -679,23 +678,10 @@ var f_core = {
 
 	 	if (f_core.IsInternetExplorer()) {
 		    if (capture) {
-		 		if (capture.nodeType==f_core.DOCUMENT_NODE) {
-		 			capture = capture.body;
-		 		}
 				capture.releaseCapture();
 			}
 
-	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
-	 			if (name == "focus") {
-	 				component = component.body;
-	 				name = "focusin";
-	 			}
-	 			if (name == "blur") {
-	 				component = component.body;
-	 				name = "focusout";
-	 			}
-	 		}
-			component.detachEvent("on"+name, fct);
+			document.detachEvent("on"+name, fct);
 			    
 		    return;
 		}
@@ -917,8 +903,6 @@ var f_core = {
 					f_core._FocusTimeoutID=undefined;
 					window.clearTimeout(timeoutID);
 				}
-				f_core._FocusComponent=undefined; // HTMLElement
-				f_core._PostSubmitListeners=undefined; // List<function>
 		
 				var forms = document.forms;
 				for (var i=0; i<forms.length; i++) {
@@ -949,10 +933,10 @@ var f_core = {
 					}
 				}
 		
-			//	document._lazyIndex=undefined; // number
-		
 				// Terminate packages here
 				win._classLoader._onExit();
+				
+				f_core.Finalizer();
 				
 				if (win._f_closeWindow) {		
 					win._f_closeWindow=undefined;
@@ -967,7 +951,17 @@ var f_core = {
 		}
 	},
 	/**
-	 * @method static hidden
+	 * @method hidden static
+	 */
+	Finalizer: function() {
+		//	document._lazyIndex=undefined; // number
+		f_core._AjaxParametersUpdater=undefined; // function
+		f_core._FocusComponent=undefined; // HTMLElement
+		f_core._PostSubmitListeners=undefined; // List<function>
+		f_core._FocusTimeoutID=undefined; // any ???
+	},
+	/**
+	 * @method hidden static
 	 */
 	SetInputHidden: function(form, name, val) {
 		f_core.Assert(form && form.tagName.toLowerCase()=="form", "f_core.SetInputHidden: Invalid form component ! "+form);
@@ -1078,6 +1072,35 @@ var f_core = {
 		}
 		
 		return null;
+	},
+	/**
+	 * @method static hidden
+	 * @param HTLMElement parent
+	 * @param String tagName
+	 * @param Object properties
+	 * @return void
+	 */
+	CreateElement: function(parent, tagName, properties) {
+		f_core.Assert(parent && parent.nodeType==f_core.ELEMENT_NODE, "f_core.CreateElement: Invalid component ! ("+parent+")");
+		f_core.Assert(typeof(tagName)=="string", "f_core.CreateElement: Invalid tagName parameter ("+tagName+")");
+		f_core.Assert(properties===undefined || typeof(properties)=="object", "f_core.CreateElement: Invalid properties parameter ("+properties+")");
+		
+		var element=parent.ownerDocument.createElement(tagName);
+		
+		if (properties) {
+			for(var name in properties) {
+				if (name=="className") {
+					element.className=properties[name];
+					continue;
+				}
+				
+				element.setAttribute(name, properties[name]);
+			}
+		}
+		
+		parent.appendChild(element);
+		
+		return element;
 	},
 	/**
 	 * @method static hidden
@@ -1308,15 +1331,12 @@ var f_core = {
 				}
 			}
 
-			/*
-			// On ne sérialise pas ICI, car on peut assister à 2 sérialisations ...
 			var classLoader=win._classLoader;
 			if (classLoader) {
 				classLoader.f_serialize(form);
 				
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
 			}
-			*/
 				
 			return true;
 		} finally {
@@ -3123,7 +3143,7 @@ var f_core = {
 	 */
 	_FocusTimeout: function() {
 		// On sait jamais !
-		if (!window.f_core) {
+		if (window._f_exiting) {
 			return;
 		}
 		f_core._FocusTimeoutID=undefined;
@@ -4345,6 +4365,8 @@ var f_core = {
 	 * @return String Html form of text.
 	 */
 	EncodeHtml: function(text) {
+		f_core.Assert(typeof(text)=="string", "f_core.EncodeHtml: Invalid text parameter ("+text+").");
+
 		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 	},
 	/** 
@@ -4356,6 +4378,11 @@ var f_core = {
 	 * @return Array
 	 */
 	PushArguments: function(dest, args, index, length) {
+		f_core.Assert(dest===undefined || dest===null || (dest instanceof Array), "f_core.PushArguments: Invalid dest parameter ("+dest+").");
+		f_core.Assert(typeof(args)=="object", "f_core.PushArguments: Invalid args parameter ("+args+").");
+		f_core.Assert(index===undefined || typeof(index)=="number", "f_core.PushArguments: Invalid index parameter ("+index+").");
+		f_core.Assert(length===undefined || typeof(length)=="number", "f_core.PushArguments: Invalid length parameter ("+length+").");
+		
 		if (index===undefined) {
 			index=0;
 		}
@@ -4394,6 +4421,8 @@ var f_core = {
 	 * @return String
 	 */
 	Trim: function(text) {
+		f_core.Assert(typeof(text)=="string", "f_core.Trim: Invalid text parameter ("+text+").");
+
 		return text.replace(/^\s*|\s*$/g, "");
 	},
 	/** 
@@ -4402,6 +4431,8 @@ var f_core = {
 	 * @return void
 	 */
 	VerifyBrowserCompatibility: function(url) {
+		f_core.Assert(typeof(url)=="string", "f_core.VerifyBrowserCompatibility: Invalid url parameter ("+url+").");
+
 		if (f_core.IsGecko() || f_core.IsInternetExplorer()) {
 			return;
 		}
@@ -4415,7 +4446,9 @@ var f_core = {
 	 * @return String
 	 */
 	UpperCaseFirstChar: function(text) {
-		if (text.length<1) {
+		f_core.Assert(typeof(text)=="string", "f_core.UpperCaseFirstChar: Invalid text parameter ("+text+").");
+
+		if (!text.length) {
 			return text;
 		}
 		

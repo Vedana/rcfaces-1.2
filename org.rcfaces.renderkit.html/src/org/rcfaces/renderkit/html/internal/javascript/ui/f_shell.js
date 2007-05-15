@@ -332,7 +332,7 @@ var __static = {
      * @return boolean
      */
      _OnFocus: function(evt) {
-     	if (!window.f_shell) {
+     	if (window._f_exiting) {
      		// On sait jamais, nous sommes peut etre dans un context foireux ...
      		return;
      	}

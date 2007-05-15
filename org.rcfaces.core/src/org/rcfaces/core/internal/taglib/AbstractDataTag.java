@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.AbstractDataComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
@@ -45,10 +44,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private String waiRole;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String first;
+	private String value;
 	private String margins;
 	private String var;
-	private String value;
+	private String first;
 	private String rows;
 	public final String getVisible() {
 		return visible;
@@ -274,12 +273,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final String getFirst() {
-		return first;
+	public final String getValue() {
+		return value;
 	}
 
-	public final void setFirst(String first) {
-		this.first = first;
+	public final void setValue(String value) {
+		this.value = value;
 	}
 
 	public final String getMargins() {
@@ -298,12 +297,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.var = var;
 	}
 
-	public final String getValue() {
-		return value;
+	public final String getFirst() {
+		return first;
 	}
 
-	public final void setValue(String value) {
-		this.value = value;
+	public final void setFirst(String first) {
+		this.first = first;
 	}
 
 	public final String getRows() {
@@ -335,10 +334,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-			LOG.debug("  first='"+first+"'");
+			LOG.debug("  value='"+value+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  var='"+var+"'");
-			LOG.debug("  value='"+value+"'");
+			LOG.debug("  first='"+first+"'");
 			LOG.debug("  rows='"+rows+"'");
 		}
 		super.setProperties(uiComponent);
@@ -580,12 +579,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (first != null) {
-			if (isValueReference(first)) {
-				ValueBinding vb = application.createValueBinding(first);
-				component.setFirst(vb);
+		if (value != null) {
+			if (isValueReference(value)) {
+				ValueBinding vb = application.createValueBinding(value);
+				component.setValue(vb);
 			} else {
-				component.setFirst(getInt(first));
+				component.setValue(value);
 			}
 		}
 
@@ -605,12 +604,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (value != null) {
-			if (isValueReference(value)) {
-				ValueBinding vb = application.createValueBinding(value);
-				component.setValue(vb);
+		if (first != null) {
+			if (isValueReference(first)) {
+				ValueBinding vb = application.createValueBinding(first);
+				component.setFirst(vb);
 			} else {
-				component.setValue(value);
+				component.setFirst(getInt(first));
 			}
 		}
 
@@ -653,10 +652,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		waiRole = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		first = null;
+		value = null;
 		margins = null;
 		var = null;
-		value = null;
+		first = null;
 		rows = null;
 
 		super.release();

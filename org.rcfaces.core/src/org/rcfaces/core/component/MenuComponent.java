@@ -178,10 +178,17 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 		
 	}
 
+	public final Object[] listCheckedValues() {
+
+
+			return CheckTools.listValues(getCheckedValues(), getValue());
+		
+	}
+
 	public final Object getFirstCheckedValue() {
 
 
-			return CheckTools.getFirst(getCheckedValues());
+			return CheckTools.getFirst(getCheckedValues(), getValue());
 		
 	}
 

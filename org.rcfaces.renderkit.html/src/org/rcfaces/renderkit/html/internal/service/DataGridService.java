@@ -78,7 +78,7 @@ public class DataGridService extends AbstractHtmlService {
 
         UIViewRoot viewRoot = facesContext.getViewRoot();
 
-        String dataGridId = (String) parameters.get("dataGridId");
+        String dataGridId = (String) parameters.get("gridId");
         if (dataGridId == null) {
             sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
                     "Can not find 'dataGridId' parameter.", null);

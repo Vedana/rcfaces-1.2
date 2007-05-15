@@ -898,7 +898,7 @@
 				<required-style name="f_dataGrid.css" />
 			</class>
 		</file>
-		
+			
 		<file name="input/f_componentsGrid.js">
 			<class name="f_componentsGrid">
 				<required-class name="f_grid" />
@@ -906,13 +906,30 @@
 				<required-style name="f_componentsGrid.css" />
 			</class>
 		</file>
-			
+
+		<file name="input/f_dataGridPopup.js">
+			<class name="f_dataGridPopup">
+				<required-class name="f_dataGrid" />
+			</class>
+		</file>
+		
+		<file name="input/fa_dataGridPopup.js">
+			<class name="fa_dataGridPopup">
+				<required-class name="f_aspect" />
+				<required-class name="f_popup" />
+				<required-class name="f_dataGridPopup" />
+			</class>
+		</file>
+					
 		<file name="input/f_comboGrid.js">
 			<class name="f_comboGrid">
-				<required-class name="f_dataGrid" />
+				<required-class name="f_component" />
 				<required-class name="fa_readOnly" />
-				<required-class name="fa_checkManager" />
+				<required-class name="fa_disabled" />
+				<required-class name="fa_required" />
 
+				<required-class name="fa_dataGridPopup" />
+				
 				<required-style name="f_comboGrid.css" />
 			</class>
 		</file>

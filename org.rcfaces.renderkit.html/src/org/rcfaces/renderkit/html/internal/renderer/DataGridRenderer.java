@@ -20,8 +20,10 @@ import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.component.capability.ICellImageCapability;
+import org.rcfaces.core.component.capability.ICellStyleClassCapability;
+import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.ISelectionValuesCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
@@ -93,9 +95,16 @@ public class DataGridRenderer extends AbstractGridRenderer {
     protected void encodeBodyBegin(IHtmlWriter htmlWriter,
             AbstractGridRenderContext data) throws WriterException {
 
-        encoreBodyTableEnd(htmlWriter, data);
 
+        if (serverTitleGeneration() == false) {
+            encodeBodyTableEnd(htmlWriter, data);
+        }
         super.encodeBodyBegin(htmlWriter, data);
+    }
+
+    protected void encodeBodyEnd(IHtmlWriter htmlWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        encodeBodyTableEnd(htmlWriter, gridRenderContext);
     }
 
     protected void writeFullStates(IJavaScriptWriter jsWriter,
@@ -148,6 +157,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                 return column;
             }
+
+            throw new FacesException("Can not find column '" + rowValueColumnId
+                    + "'.");
         }
 
         return null;
@@ -161,6 +173,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
     protected void encodeJsColumns(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext tableContext, int generatorMask)
             throws WriterException {
+
+        if (serverTitleGeneration() == false) {
+            generatorMask |= GENERATE_CELL_TEXT | GENERATE_CELL_WIDTH;
+        }
 
         super.encodeJsColumns(jsWriter, tableContext, generatorMask);
 
@@ -470,7 +486,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             int rowValueColumnIndex = -1;
             if (designerMode && rowValueColumn != null) {
                 for (int i = 0; i < columns.length; i++) {
-                    DataColumnComponent dataColumnComponent = (DataColumnComponent) columns[i];
+                    UIColumn dataColumnComponent = columns[i];
                     if (dataColumnComponent != rowValueColumn) {
                         continue;
                     }
@@ -598,8 +614,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     }
 
                     if (rowId == null) {
-                        throw new FacesException("Value of row #" + rowIndex
-                                + " is null !");
+                        throw new FacesException(
+                                "Value associated to the row at index "
+                                        + rowIndex + " is null !");
                     }
                 }
 
@@ -736,7 +753,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
 
         for (int i = 0; i < columnNumber; i++) {
-            DataColumnComponent dc = (DataColumnComponent) dcs[i];
+            UIColumn dc = dcs[i];
 
             int rowState = tableContext.getColumnState(i);
             if (rowState == AbstractGridRenderContext.SERVER_HIDDEN) {
@@ -751,8 +768,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
                         svalue = designerData[i];
                     }
 
-                } else {
-                    Object value = dc.getValue(facesContext);
+                } else if (dc instanceof ValueHolder) {
+                    Object value = ((ValueHolder) dc).getValue();
 
                     if (value != null) {
                         svalue = convertValue(facesContext, dc, value);
@@ -776,7 +793,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
 
             if (tableContext.isColumnImageURL(i)) {
-                String imageURL = dc.getCellImageURL(facesContext);
+                String imageURL = ((ICellImageCapability) dc).getCellImageURL();
                 if (imageURL != null) {
                     if (images == null) {
                         images = new String[columnNumber];
@@ -786,7 +803,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
 
             if (tableContext.isCellStyleClass(i)) {
-                String cs = dc.getCellStyleClass(facesContext);
+                String cs = ((ICellStyleClassCapability) dc)
+                        .getCellStyleClass();
                 if (cs != null) {
                     if (cellStyleClasses == null) {
                         cellStyleClasses = new String[columnNumber];
@@ -797,7 +815,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
 
             if (tableContext.isCellToolTipText(i)) {
-                String ct = dc.getCellToolTipText(facesContext);
+                String ct = ((ICellToolTipTextCapability) dc)
+                        .getCellToolTipText();
                 if (ct != null) {
                     if (cellToolTipTexts == null) {
                         cellToolTipTexts = new String[columnNumber];
@@ -957,10 +976,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
         return tableContext;
     }
 
-    protected String getRowValueColumnId(IGridComponent gridComponent) {
-        return ((DataGridComponent) gridComponent).getRowValueColumnId();
-    }
-
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -979,37 +994,19 @@ public class DataGridRenderer extends AbstractGridRenderer {
             super(processContext, scriptRenderContext, dg, rowIndex,
                     forcedRows, sortedComponents, filterExpression);
 
-            initializeDataGridRendererContext();
+            initializeDataGrid();
         }
 
         public DataGridRenderContext(
                 IHtmlComponentRenderContext componentRenderContext) {
             super(componentRenderContext);
 
-            initializeDataGridRendererContext();
+            initializeDataGrid();
         }
 
-        protected void initializeDataGridRendererContext() {
-
-            String rowValueColumnId = getRowValueColumnId(gridComponent);
-            if (rowValueColumnId != null) {
-                for (int i = 0; i < columns.length; i++) {
-                    UIColumn column = columns[i];
-
-                    if (rowValueColumn == null) {
-                        if (rowValueColumnId.equals(column.getId())) {
-                            rowValueColumn = column;
-                            break;
-                        }
-                    }
-                }
-
-                if (rowValueColumn == null) {
-                    throw new FacesException("Can not find column '"
-                            + rowValueColumnId
-                            + "' specified by 'rowValueColumnId' attribute.");
-                }
-            }
+        protected void initializeDataGrid() {
+            rowValueColumn = DataGridRenderer.this
+                    .getRowValueColumn(getGridComponent());
         }
 
         protected String convertAliasCommand(String command) {
@@ -1019,7 +1016,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
         public UIColumn getRowValueColumn() {
             return rowValueColumn;
         }
-
     }
 
     protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,

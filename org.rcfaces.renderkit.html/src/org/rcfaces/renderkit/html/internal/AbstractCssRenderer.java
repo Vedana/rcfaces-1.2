@@ -50,7 +50,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     protected static final int SEVERITY_CLASSES_MASK = 4;
 
-    public String getComponentStyleClassName() {
+    public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         return getMainStyleClassName();
     }
 
@@ -65,7 +65,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         StringAppender cssClass = new StringAppender(64);
 
-        String componentStyleClassName = getComponentStyleClassName();
+        String componentStyleClassName = getComponentStyleClassName(writer);
         cssClass.append(componentStyleClassName);
 
         if (component instanceof IStyleClassCapability) {

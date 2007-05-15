@@ -256,10 +256,17 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 		
 	}
 
+	public final Object[] listCheckedValues() {
+
+
+			return CheckTools.listValues(getCheckedValues(), getValue());
+		
+	}
+
 	public final Object getFirstCheckedValue() {
 
 
-			return CheckTools.getFirst(getCheckedValues());
+			return CheckTools.getFirst(getCheckedValues(), getValue());
 		
 	}
 

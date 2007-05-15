@@ -29,13 +29,16 @@ import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.component.capability.IPagedCapability;
+import org.rcfaces.core.component.capability.IResizableCapability;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
@@ -55,6 +58,7 @@ import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -126,7 +130,7 @@ public abstract class AbstractGridRenderContext {
 
     private int first;
 
-    private int rowCount;
+    private int rowCount = -2;
 
     private boolean columnImageURLs[];
 
@@ -170,6 +174,10 @@ public abstract class AbstractGridRenderContext {
 
     private String rowStyleClasses[];
 
+    protected int gridWidth;
+
+    protected int gridHeight;
+
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -180,8 +188,24 @@ public abstract class AbstractGridRenderContext {
         this.gridComponent = gridComponent;
         this.sortedComponents = sortedComponents;
 
+        if (gridComponent instanceof ISizeCapability) {
+            computeGridSize((ISizeCapability) gridComponent);
+        }
+
         initialize(checkTitleImages);
 
+    }
+
+    protected void computeGridSize(ISizeCapability sizeCapability) {
+        String width = sizeCapability.getWidth();
+        if (width != null) {
+            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 9);
+        }
+
+        String height = sizeCapability.getHeight();
+        if (height != null) {
+            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 9);
+        }
     }
 
     protected void initialize(boolean checkTitleImages) {
@@ -295,6 +319,8 @@ public abstract class AbstractGridRenderContext {
 
         FacesContext facesContext = processContext.getFacesContext();
 
+        boolean widthNotSpecified = false;
+
         for (int i = 0; i < columns.length; i++) {
             UIColumn column = columns[i];
 
@@ -330,6 +356,37 @@ public abstract class AbstractGridRenderContext {
 
             if (columnStates[i] != VISIBLE) {
                 continue;
+            }
+
+            String dw = null;
+
+            if (column instanceof IWidthCapability) {
+                dw = ((IWidthCapability) column).getWidth();
+            }
+
+            if (dw == null) {
+                widthNotSpecified = true;
+
+            } else {
+                int idw = AbstractCssRenderer.computeSize(dw, -1, 0);
+                if (idw < 0) {
+                    throw new FacesException(
+                            "Width of column can not be negative (" + idw + ")");
+                }
+
+                totalSize += idw;
+            }
+
+            if (column instanceof IResizableCapability) {
+                if (((IResizableCapability) column).isResizable()) {
+
+                    resizable |= true;
+
+                    if (dw == null) {
+                        throw new FacesException(
+                                "You must specify a width for a resizable column !");
+                    }
+                }
             }
 
             boolean sortSetted = false;
@@ -559,6 +616,14 @@ public abstract class AbstractGridRenderContext {
             }
         }
 
+        if (getGridHeight() > 0 || getGridWidth() > 0) {
+            hasScrollBars = true;
+        }
+
+        if (resizable && (hasScrollBars == false || widthNotSpecified)) {
+            resizable = false;
+        }
+
         dataModel = gridComponent.getDataModelValue();
 
         // Le dataModel peut etre NULL, car dans des cas de structures
@@ -589,15 +654,6 @@ public abstract class AbstractGridRenderContext {
         return columns.length;
     }
 
-    public void setResizable(boolean resizable, int totalSize) {
-        this.resizable = resizable;
-        this.totalSize = totalSize;
-    }
-
-    public final int getResizeTotalSize() {
-        return totalSize;
-    }
-
     public UIColumn[] listColumns() {
         return columns;
     }
@@ -614,8 +670,6 @@ public abstract class AbstractGridRenderContext {
                 .getProcessContext().isDesignerMode();
 
         first = gridComponent.getFirst();
-
-        rowCount = -2;
 
         if (gridComponent instanceof IFilterCapability) {
             filtersMap = ((IFilterCapability) gridComponent)
@@ -646,7 +700,7 @@ public abstract class AbstractGridRenderContext {
         this.first = rowIndex;
         this.forcedRows = forcedRows;
 
-        if (gridComponent instanceof IFilterCapability) {
+        if (filterExpression != null) {
             this.filtersMap = HtmlTools.decodeFilterExpression(null,
                     (UIComponent) gridComponent, filterExpression);
         }
@@ -816,12 +870,8 @@ public abstract class AbstractGridRenderContext {
         return checkCardinality;
     }
 
-    public final boolean isHasScrollBars() {
+    public final boolean hasScrollBars() {
         return hasScrollBars;
-    }
-
-    public final void setHasScrollBars(boolean hasScrollBars) {
-        this.hasScrollBars = hasScrollBars;
     }
 
     public String[] getDefaultCellImageURLs() {
@@ -864,4 +914,15 @@ public abstract class AbstractGridRenderContext {
         return rowStyleClasses;
     }
 
+    public int getGridHeight() {
+        return gridHeight;
+    }
+
+    public int getGridWidth() {
+        return gridWidth;
+    }
+
+    public int getTotalSize() {
+        return totalSize;
+    }
 }

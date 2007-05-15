@@ -53,7 +53,7 @@ public class TreeRenderContext extends SelectItemsJsContext {
             writeSelectionState = false;
         }
 
-        userExpandable = treeComponent.isUserExpandable(facesContext);
+        userExpandable = treeComponent.isExpandable(facesContext);
 
         int preloadLevel = treeComponent.getPreloadedLevelDepth(facesContext);
 
@@ -116,7 +116,7 @@ public class TreeRenderContext extends SelectItemsJsContext {
             }
         }
 
-        initializeExpansionValue(treeComponent.getExpansionValues(facesContext));
+        initializeExpansionValue(treeComponent.getExpandedValues(facesContext));
     }
 
     public final boolean writeCheckFullState() {

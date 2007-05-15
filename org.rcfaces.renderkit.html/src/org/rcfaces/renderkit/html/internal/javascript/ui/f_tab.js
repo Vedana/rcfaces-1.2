@@ -180,7 +180,6 @@ var __prototype = {
 	 * @return void
 	 */
 	f_forceChildVisibility: function(component) {
-		//alert("Test: "+component);
 		return false;
 	}
 }

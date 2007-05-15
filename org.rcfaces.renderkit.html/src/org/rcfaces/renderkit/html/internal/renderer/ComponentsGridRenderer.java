@@ -82,6 +82,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         return new ComponentsGridRenderContext(componentRenderContext);
     }
 
+    protected boolean serverTitleGeneration() {
+        return true;
+    }
+
     protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
@@ -125,7 +129,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     protected void encodeBodyEnd(IHtmlWriter writer,
             AbstractGridRenderContext tableContext) throws WriterException {
 
-        encoreBodyTableEnd(writer, tableContext);
+        encodeBodyTableEnd(writer, tableContext);
 
         writer.enableJavaScript();
 
@@ -143,7 +147,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
-        ComponentsGridRenderContext tableContext = (ComponentsGridRenderContext) getGridRenderContext(htmlWriter);
+        ComponentsGridRenderContext tableContext = (ComponentsGridRenderContext) getGridRenderContext(htmlWriter
+                .getHtmlComponentRenderContext());
 
         // Dans tous les cas il faut positionner le renderContext !
         ComponentsListService componentsListServer = ComponentsListService

@@ -42,6 +42,7 @@ var __prototype = {
 	 */
 	f_setProperty: function(name, value, isList, listSep) {
 		if (this.fa_componentUpdated===false || this._noPropertyUpdates) {
+			f_core.Debug(fa_serializable, "f_setProperty: Ignore set property (component is not updated !)");
 			return;
 		}
 

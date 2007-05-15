@@ -39,7 +39,6 @@ import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.lang.IAdaptable;
-import org.rcfaces.core.lang.provider.ICheckProvider;
 import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 
@@ -414,82 +413,6 @@ public final class ComponentTools {
         }
     }
 
-    public static Object getSelectedValues(Object value, UIComponent component,
-            FacesContext facesContext) {
-        if (value == null) {
-            return null;
-        }
-
-        ISelectionProvider selectionProvider = null;
-
-        if (value instanceof IAdaptable) {
-            selectionProvider = (ISelectionProvider) ((IAdaptable) value)
-                    .getAdapter(ISelectionProvider.class, component);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Try to adapt '" + value
-                        + "' to ISelectionProvider => " + selectionProvider);
-            }
-        }
-
-        if (selectionProvider == null) {
-            IAdapterManager adapterManager = RcfacesContext.getInstance(
-                    facesContext).getAdapterManager();
-
-            selectionProvider = (ISelectionProvider) adapterManager.getAdapter(
-                    value, ISelectionProvider.class, component);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Ask adapterManager to adapt '" + value
-                        + "' to ISelectionProvider => " + selectionProvider);
-            }
-        }
-
-        if (selectionProvider == null) {
-            return null;
-        }
-
-        return selectionProvider.getSelectedValues();
-    }
-
-    public static Object getCheckedValues(Object value, UIComponent component,
-            FacesContext facesContext) {
-        if (value == null) {
-            return null;
-        }
-
-        ICheckProvider checkProvider = null;
-
-        if (value instanceof IAdaptable) {
-            checkProvider = (ICheckProvider) ((IAdaptable) value).getAdapter(
-                    ICheckProvider.class, component);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Try to adapt '" + value + "' to ICheckProvider => "
-                        + checkProvider);
-            }
-        }
-
-        if (checkProvider == null) {
-            IAdapterManager adapterManager = RcfacesContext.getInstance(
-                    facesContext).getAdapterManager();
-
-            checkProvider = (ICheckProvider) adapterManager.getAdapter(value,
-                    ICheckProvider.class, component);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Ask adapterManager to adapt '" + value
-                        + "' to ICheckProvider => " + checkProvider);
-            }
-        }
-
-        if (checkProvider == null) {
-            return null;
-        }
-
-        return checkProvider.getCheckedValues();
-    }
-
     public static Object getCursorValue(Object value, UIComponent component,
             FacesContext facesContext) {
         if (value == null) {
@@ -665,7 +588,7 @@ public final class ComponentTools {
                 break;
             }
         }
-        
+
         if (childClass == null) {
             childClass = UIComponent.class;
         }

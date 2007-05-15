@@ -1,16 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.TreeComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TreeTag extends AbstractInputTag implements Tag {
 
@@ -31,7 +30,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String selectable;
 	private String selectionCardinality;
 	private String selectionListeners;
+	private String selectedValues;
 	private String preloadedLevelDepth;
+	private String expandable;
+	private String expandedValues;
 	private String defaultImageURL;
 	private String defaultSelectedImageURL;
 	private String defaultExpandedImageURL;
@@ -40,10 +42,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String defaultSelectedLeafImageURL;
 	private String defaultExpandedLeafImageURL;
 	private String defaultDisabledLeafImageURL;
-	private String userExpandable;
 	private String hideRootExpandSign;
-	private String selectedValues;
-	private String expansionValues;
 	private String cursorValue;
 	private String expansionUseValue;
 	private String clientSelectionFullState;
@@ -164,12 +163,36 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.selectionListeners = selectionListeners;
 	}
 
+	public final String getSelectedValues() {
+		return selectedValues;
+	}
+
+	public final void setSelectedValues(String selectedValues) {
+		this.selectedValues = selectedValues;
+	}
+
 	public final String getPreloadedLevelDepth() {
 		return preloadedLevelDepth;
 	}
 
 	public final void setPreloadedLevelDepth(String preloadedLevelDepth) {
 		this.preloadedLevelDepth = preloadedLevelDepth;
+	}
+
+	public final String getExpandable() {
+		return expandable;
+	}
+
+	public final void setExpandable(String expandable) {
+		this.expandable = expandable;
+	}
+
+	public final String getExpandedValues() {
+		return expandedValues;
+	}
+
+	public final void setExpandedValues(String expandedValues) {
+		this.expandedValues = expandedValues;
 	}
 
 	public final String getDefaultImageURL() {
@@ -236,36 +259,12 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.defaultDisabledLeafImageURL = defaultDisabledLeafImageURL;
 	}
 
-	public final String getUserExpandable() {
-		return userExpandable;
-	}
-
-	public final void setUserExpandable(String userExpandable) {
-		this.userExpandable = userExpandable;
-	}
-
 	public final String getHideRootExpandSign() {
 		return hideRootExpandSign;
 	}
 
 	public final void setHideRootExpandSign(String hideRootExpandSign) {
 		this.hideRootExpandSign = hideRootExpandSign;
-	}
-
-	public final String getSelectedValues() {
-		return selectedValues;
-	}
-
-	public final void setSelectedValues(String selectedValues) {
-		this.selectedValues = selectedValues;
-	}
-
-	public final String getExpansionValues() {
-		return expansionValues;
-	}
-
-	public final void setExpansionValues(String expansionValues) {
-		this.expansionValues = expansionValues;
 	}
 
 	public final String getCursorValue() {
@@ -316,7 +315,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  checkedValues='"+checkedValues+"'");
 			LOG.debug("  selectable='"+selectable+"'");
 			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  preloadedLevelDepth='"+preloadedLevelDepth+"'");
+			LOG.debug("  expandable='"+expandable+"'");
+			LOG.debug("  expandedValues='"+expandedValues+"'");
 			LOG.debug("  defaultImageURL='"+defaultImageURL+"'");
 			LOG.debug("  defaultSelectedImageURL='"+defaultSelectedImageURL+"'");
 			LOG.debug("  defaultExpandedImageURL='"+defaultExpandedImageURL+"'");
@@ -325,10 +327,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  defaultSelectedLeafImageURL='"+defaultSelectedLeafImageURL+"'");
 			LOG.debug("  defaultExpandedLeafImageURL='"+defaultExpandedLeafImageURL+"'");
 			LOG.debug("  defaultDisabledLeafImageURL='"+defaultDisabledLeafImageURL+"'");
-			LOG.debug("  userExpandable='"+userExpandable+"'");
 			LOG.debug("  hideRootExpandSign='"+hideRootExpandSign+"'");
-			LOG.debug("  selectedValues='"+selectedValues+"'");
-			LOG.debug("  expansionValues='"+expansionValues+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
@@ -465,6 +464,12 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
+		if (selectedValues != null) {
+				ValueBinding vb = application.createValueBinding(selectedValues);
+
+				component.setSelectedValues(vb);
+		}
+
 		if (preloadedLevelDepth != null) {
 			if (isValueReference(preloadedLevelDepth)) {
 				ValueBinding vb = application.createValueBinding(preloadedLevelDepth);
@@ -473,6 +478,22 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			} else {
 				component.setPreloadedLevelDepth(getInt(preloadedLevelDepth));
 			}
+		}
+
+		if (expandable != null) {
+			if (isValueReference(expandable)) {
+				ValueBinding vb = application.createValueBinding(expandable);
+
+				component.setExpandable(vb);
+			} else {
+				component.setExpandable(getBool(expandable));
+			}
+		}
+
+		if (expandedValues != null) {
+				ValueBinding vb = application.createValueBinding(expandedValues);
+
+				component.setExpandedValues(vb);
 		}
 
 		if (defaultImageURL != null) {
@@ -547,39 +568,12 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			}
 		}
 
-		if (userExpandable != null) {
-			if (isValueReference(userExpandable)) {
-				ValueBinding vb = application.createValueBinding(userExpandable);
-				component.setUserExpandable(vb);
-			} else {
-				component.setUserExpandable(getBool(userExpandable));
-			}
-		}
-
 		if (hideRootExpandSign != null) {
 			if (isValueReference(hideRootExpandSign)) {
 				ValueBinding vb = application.createValueBinding(hideRootExpandSign);
 				component.setHideRootExpandSign(vb);
 			} else {
 				component.setHideRootExpandSign(getBool(hideRootExpandSign));
-			}
-		}
-
-		if (selectedValues != null) {
-			if (isValueReference(selectedValues)) {
-				ValueBinding vb = application.createValueBinding(selectedValues);
-				component.setSelectedValues(vb);
-			} else {
-				component.setSelectedValues(selectedValues);
-			}
-		}
-
-		if (expansionValues != null) {
-			if (isValueReference(expansionValues)) {
-				ValueBinding vb = application.createValueBinding(expansionValues);
-				component.setExpansionValues(vb);
-			} else {
-				throw new javax.faces.FacesException("Attribute 'expansionValues' accept only a binding expression !");
 			}
 		}
 
@@ -635,7 +629,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		selectable = null;
 		selectionCardinality = null;
 		selectionListeners = null;
+		selectedValues = null;
 		preloadedLevelDepth = null;
+		expandable = null;
+		expandedValues = null;
 		defaultImageURL = null;
 		defaultSelectedImageURL = null;
 		defaultExpandedImageURL = null;
@@ -644,10 +641,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		defaultSelectedLeafImageURL = null;
 		defaultExpandedLeafImageURL = null;
 		defaultDisabledLeafImageURL = null;
-		userExpandable = null;
 		hideRootExpandSign = null;
-		selectedValues = null;
-		expansionValues = null;
 		cursorValue = null;
 		expansionUseValue = null;
 		clientSelectionFullState = null;

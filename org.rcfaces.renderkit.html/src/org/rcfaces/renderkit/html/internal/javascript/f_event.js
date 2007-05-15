@@ -518,7 +518,7 @@ var __static = {
 	 */
 	GetEventLocked: function(showAlert, mask) {
 	
-		if (!window.f_event) {
+		if (window._f_exiting) {
 			return true;
 		}
 

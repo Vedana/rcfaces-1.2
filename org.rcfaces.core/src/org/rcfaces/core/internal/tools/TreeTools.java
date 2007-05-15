@@ -26,7 +26,7 @@ public class TreeTools {
 
     public static void collapseAll(FacesContext facesContext,
             TreeComponent treeComponent) {
-        treeComponent.setExpansionValues((Object[]) null);
+        treeComponent.setExpandedValues((Object[]) null);
     }
 
     public static void expandAll(FacesContext facesContext,
@@ -62,11 +62,11 @@ public class TreeTools {
         }
 
         if (values.isEmpty()) {
-            treeComponent.setExpansionValues((Object[]) null);
+            treeComponent.setExpandedValues((Object[]) null);
             return;
         }
 
-        treeComponent.setExpansionValues(values.toArray());
+        treeComponent.setExpandedValues(values.toArray());
     }
 
     public static boolean isExpanded(FacesContext facesContext,
@@ -97,7 +97,7 @@ public class TreeTools {
     private static Set getExpansionValues(FacesContext facesContext,
             TreeComponent treeComponent) {
 
-        Object values[] = treeComponent.getExpansionValues(facesContext);
+        Object values = treeComponent.getExpandedValues(facesContext);
 
         return ValuesTools.valueToSet(values, true);
     }

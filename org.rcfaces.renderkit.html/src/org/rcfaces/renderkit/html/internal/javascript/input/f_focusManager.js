@@ -189,7 +189,7 @@ var __prototype={
 	 */
 	_recordFocus: function(focusId) {
 		f_core.Assert(focusId===null || typeof(focusId)=="string", "f_focusManager._recordFocus: Invalid focusId parameter ! ("+typeof(focusId)+":"+focusId+")");
-		if (focusId=="") {
+		if (!focusId) {
 			focusId=null;
 		}
 		

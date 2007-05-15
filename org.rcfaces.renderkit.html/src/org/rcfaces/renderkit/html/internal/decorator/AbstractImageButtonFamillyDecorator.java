@@ -517,7 +517,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return className;
         }
 
-        className = ((ICssRenderer) renderer).getComponentStyleClassName();
+        className = ((ICssRenderer) renderer).getComponentStyleClassName(writer);
 
         if (className == null) {
             throw new NullPointerException("Component className is null !");

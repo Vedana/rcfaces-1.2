@@ -171,7 +171,7 @@ var __prototype = {
 			return false;
 		}
 		
-		f_core.Debug("fa_checkManager", "performElementCheck '"+this.fa_getElementValue(element)+"' disabled="+this.fa_isElementDisabled(element)+" cardinality="+cardinality);
+		f_core.Debug(fa_checkManager, "fa_performElementCheck: performElementCheck '"+this.fa_getElementValue(element)+"' disabled="+this.fa_isElementDisabled(element)+" cardinality="+cardinality);
 	
 		if (this.fa_isElementDisabled(element)) {
 			return false;

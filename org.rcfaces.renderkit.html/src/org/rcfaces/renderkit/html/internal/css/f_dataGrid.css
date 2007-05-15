@@ -19,10 +19,9 @@
 .f_dataGrid_cell_shadow,
 .f_dataGrid_cell {
 	empty-cells: show;
-	padding: 1px 4px 1px 4px;
-//	height: 20px;
+	padding: 1px 4px;
 	vertical-align: middle;
-	white-space:nowrap;
+	white-space: nowrap;
 	overflow: hidden;
 }
  

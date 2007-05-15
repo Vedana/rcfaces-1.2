@@ -19,6 +19,7 @@ import javax.faces.model.SelectItem;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.TreeNodeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -545,12 +546,12 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 HtmlValuesTools.updateValues(facesContext, tree, true, values,
                         selectedValues, deselectedValues);
 
-                if (values.isEmpty()) {
-                    tree.setSelectedValues(OBJECT_EMPTY_ARRAY);
-
-                } else {
-                    tree.setSelectedValues(values.toArray());
+                Class cls = tree.getSelectedValuesType(facesContext);
+                if (cls == null) {
+                    cls = Object[].class;
                 }
+
+                tree.setSelectedValues(ValuesTools.adaptValues(cls, values));
             }
         }
 
@@ -559,19 +560,19 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         String collapsedValues = componentData
                 .getStringProperty("collapsedItems");
         if (collapsedValues != null || expandedValues != null) {
-            Object v = tree.getExpansionValues(facesContext);
+            Object v = tree.getExpandedValues(facesContext);
 
             Set values = ValuesTools.valueToSet(v, true);
 
             if (HtmlValuesTools.updateValues(facesContext, tree, true, values,
                     expandedValues, collapsedValues)) {
 
-                if (values.isEmpty()) {
-                    tree.setExpansionValues(OBJECT_EMPTY_ARRAY);
-
-                } else {
-                    tree.setExpansionValues(values.toArray());
+                Class cls = tree.getExpandedValuesType(facesContext);
+                if (cls == null && v != null) {
+                    cls = v.getClass();
                 }
+
+                tree.setExpandedValues(ValuesTools.adaptValues(cls, values));
             }
         }
     }

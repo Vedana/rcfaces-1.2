@@ -348,7 +348,7 @@ var __prototype = {
 	
 		this.fa_componentUpdated=true;
 
-		f_grid.UpdateTitle(this);
+		this.f_updateTitle();
 
 		if (this._interactiveShow || !this._titleLayout ) {
 			this._interactiveShow=undefined;
@@ -505,6 +505,128 @@ var __prototype = {
 	},
 	
 	/**
+	 * @method protected
+	 */
+	f_initializeTableLayout0: function() {
+		var table = f_core.GetChildByCssClass(this, "f_grid_table");
+		f_core.Assert(table, "f_componentsGrid.f_initializeTableLayout: Can not find table 'f_grid_table'");
+		this._table = table;
+		table._dataGrid=this;	
+
+		f_core.Assert(table.tBodies.length<=1, "f_componentsGrid.f_initializeTableLayout: Too many TBODY ! ("+table.tBodies.length+")");	
+		var firstTBody=table.tBodies[0];
+		
+		this._tbody=firstTBody; //bodies[0];
+		if (firstTBody && !firstTBody.firstChild) {			
+			table.removeChild(firstTBody);
+		}
+
+		var scrollBody=this;
+		var catchScrollEvent=false;
+		this._title=f_core.GetChildByCssClass(this,"f_grid_fttitle");
+		if (this._title) {
+			this._scrollTitle=f_core.GetChildByCssClass(this, "f_grid_dataTitle_scroll");
+			if (this._scrollTitle) {
+				var dataBodyClassName="f_grid_dataBody_scroll";
+
+				scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
+				
+				catchScrollEvent=true;
+			}			
+		}
+		
+		if (scrollBody) {
+			this._scrollBody=scrollBody;
+			scrollBody._dataGrid=this;
+		
+			if (catchScrollEvent) {								
+				scrollBody.onscroll=f_grid._OnScroll;
+			}
+
+			if (f_core.IsGecko()) {
+				scrollBody.addEventListener("DOMMouseScroll", f_grid._Link_onmousewheel, false);
+			}
+		}		
+	},
+	
+	/**
+	 * @method hidden
+	 */
+	f_updateColumnsLayout0: function(columns) {
+		var heads;
+		var cols;
+		var cols2;
+		
+		if (this._title) {
+			heads=this._title.getElementsByTagName("th");
+			cols=this._title.getElementsByTagName("col");
+			cols2=this._table.getElementsByTagName("col");			
+			
+		} else {
+			heads=this._table.getElementsByTagName("th");
+			cols=this._table.getElementsByTagName("col");			
+		}
+				
+		/* on part du f_grid_disabled
+		if (this.f_isDisabled()) {
+			var className="f_grid_tcell f_grid_tcell_disabled";
+		
+			for(var i=0;i<heads.length;i++) {
+				heads[i].className=className;
+			}
+		}
+		*/
+
+		var resourceBundle=f_resourceBundle.Get(f_grid);
+		var headCursorTitle=resourceBundle.f_get("COLUMN_RESIZE");
+
+		var isInternetExplorer=f_core.IsInternetExplorer();
+		
+		var v=0;
+		for(var i=0;i<columns.length;) {
+			var column=columns[i++];			
+									
+			if (column._visibility) {
+				var head=heads[v];
+
+				head.onmouseover=f_grid._Title_onMouseOver;
+				head.onmouseout=f_grid._Title_onMouseOut;
+				head.onmousedown=f_grid._Title_onMouseDown;
+				head.onmouseup=f_grid._Title_onMouseUp;
+				
+				column._head=head;
+				column._col=cols[v];
+				if (cols2) {
+					column._col2=cols2[v];
+				}
+				head._column=column;
+				column._box=f_core.GetFirstElementByTagName(head, "div", true);
+				column._label=f_core.GetFirstElementByTagName(column._box, "div");
+
+				var image=f_core.GetFirstElementByTagName(column._label, "img");
+				if (image) {
+					column._image=image;
+				}
+
+				if (column._resizable) {
+					var cursor=f_core.CreateElement(column._box, "div", { title: headCursorTitle, className:  "f_grid_colCursor" });
+					column._cursor=cursor;
+					cursor._column=column;
+					cursor.onmousedown=f_grid._TitleCursorMouseDown;
+					cursor.onclick=f_core.CancelJsEventHandler;
+			
+					if (isInternetExplorer) {
+						// Ben oui ... il faut bien !
+						cursor.style.right="-8px";
+					}
+				}
+
+				v++;
+			}			
+		}
+	},
+	
+	/**
 	 * @method hidden
 	 * @param String rowId
 	 * @param Object rowProperties
@@ -646,7 +768,148 @@ var __prototype = {
 		this.fa_updateElementStyle(row);
 		
 		return row;
-	}
+	},
+	/**
+	 * @method protected
+	 */
+	f_updateTitle0: function() {
+		if (!this._title) {
+			return;
+		}
+				
+		var doc=this.ownerDocument;
+	
+		var tr=f_grid.GetFirstRow(this._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr");
+		if (!tr) {
+			// Le tableau est vide ?
+//			dataGrid._title.style.width=dataGrid.offsetWidth+"px";
+			
+			f_core.Debug(f_componentsGrid, "f_updateTitle: No rows !");
+			return;
+		}
+		
+		this._titleLayout=true;		
+
+		var ttr=f_grid.GetFirstRow(this._title); //f_core.GetFirstElementByTagName(dataGrid._title, "tr");
+		var tths=ttr.getElementsByTagName("th");
+		
+		var ths=tr.getElementsByTagName("td");
+
+		var body=this._scrollBody;
+		var clientWidth=body.clientWidth;
+		var offsetWidth=body.offsetWidth;
+		var scrollBarWidth=offsetWidth-clientWidth;
+		if (scrollBarWidth<=0) {
+			// Ben si y a pas de scrollbar a droite, on cherche en bas !
+			scrollBarWidth=body.offsetHeight-body.clientHeight;
+			
+			if (scrollBarWidth<=0) {
+				scrollBarWidth=1;
+			}
+		}
+
+		var cols=this._title.getElementsByTagName("col");
+		var tcols=null;
+		var tds=null;
+		var columns=this._columns;
+		if (!columns[0]._tcol) {
+			tcols=this._table.getElementsByTagName("col");
+			var tr=f_grid.GetFirstRow(this._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr", false);
+			
+			if (tr) {
+				// Quid ?
+				tds=tr.getElementsByTagName("td");
+			}
+		}
+		
+		var total=0;
+		var ci=0;
+		for(var i=0;i<ths.length;i++) {
+			var col=cols[i];
+			if (!col) {
+				break;
+			}
+			tths[i].width="";
+			
+			var w=ths[i].offsetWidth;
+			col.style.width=w+"px";
+			total+=w;
+			
+			var cs;
+			for(;;ci) {
+				cs=columns[ci++];
+				if (cs._head) {
+					break;
+				}
+			}
+
+			if (!cs) {
+				continue;
+			}
+
+			if (tcols) {
+				cs._tcol=tcols[i];
+			}
+			if (tds) {
+				cs._tcell=tds[i];
+			}			
+		}
+		
+		if (!this._createFakeTH && (this._resizable || offsetWidth>clientWidth)) {
+			this._createFakeTH=true;
+			
+			var col=doc.createElement("col");
+			col.style.width=scrollBarWidth+"px";
+		
+			var colsPos=this._title.getElementsByTagName("col");
+			var lastCol=colsPos[colsPos.length-1];
+			if (!lastCol.nextSibling) {
+				this._title.appendChild(col);
+			} else {
+				this._title.insertBefore(col, lastCol.nextSibling);
+			}
+		
+			var th=doc.createElement("th");
+			var thClassName="f_grid_tcell";
+			if (this.f_isDisabled()) {
+				//thClassName+=" "+thClassName+"_disabled"; // On part du f_grid_disabled
+			}
+			th.className=thClassName;
+			th.innerHTML="&nbsp;";
+			
+			var ths0=f_grid.GetFirstRow(this._title, true); //f_core.GetFirstElementByTagName(dataGrid._title, "tr", true);
+			ths0.appendChild(th);
+			
+			total+=scrollBarWidth;
+			
+			// On verifie que la scrollbar V reste bien visible
+			
+			if (f_core.IsInternetExplorer()) {
+				body.style.overflowY="scroll";
+
+			} else if (f_core.IsGecko()) {
+				var overflow=f_core.GetCurrentStyleProperty(body, "overflow");
+
+				if (overflow=="auto" && !this._resizable) {
+					body.style.overflow="-moz-scrollbars-vertical";
+				}
+			}
+		}
+		
+		if (total>clientWidth || this._resizable) {
+			this._title.style.width=total+"px";
+			
+		} else {
+			this._title.style.width=offsetWidth+"px";
+		}
+		
+		if (scrollBarWidth>0) {
+			var h=this.offsetHeight-this._title.offsetHeight-2;
+			body.style.height=h+"px";
+		}
+		
+		this._title.scrollLeft=this._scrollBody.scrollLeft;
+	}	
 }
  
 new f_class("f_componentsGrid", null, __static, __prototype, f_grid);

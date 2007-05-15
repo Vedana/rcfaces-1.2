@@ -398,7 +398,7 @@ var __static = {
 	 * @return boolean
 	 */
 	_OnMouseDown: function(evt) {	
-		f_core.Debug(f_popup, "OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className+"  popupComponent="+f_popup.Component);
+		f_core.Debug(f_popup, "_OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className+"  popupComponent="+f_popup.Component);
 
 		if (!f_popup.Component) {
 			return;
@@ -406,7 +406,7 @@ var __static = {
 		
 		// Si la target n'est pas dans une popup on ferme !
 		
-		var found=f_popup._IsChildOfDocument(evt.target);
+		var found=f_popup.IsChildOfDocument(evt.target);
 		f_core.Debug(f_popup, "OnMouseDown search parent="+found);
 
 		if (found) {
@@ -418,7 +418,7 @@ var __static = {
 			return true;
 		}
 	
-		f_core.Debug(f_popup, "OnMouseDown outside: close the popup !");
+		f_core.Debug(f_popup, "_OnMouseDown: click outside: close the popup !");
 		var clb=f_popup.Callbacks;
 		f_popup.Callbacks=undefined;
 		
@@ -427,33 +427,41 @@ var __static = {
 		return true;
 	},
 	/**
-	 * @method private static
+	 * @method hidden static
 	 */
-	_IsChildOfDocument: function(target) {
+	IsChildOfDocument: function(target) {
+		f_core.Debug(f_popup, "IsChildOfDocument: Search parent target='"+target+"' document='"+f_popup.Popup+"'.");
+
 		var popupDocument=f_popup.Popup;
+		if (!popupDocument) {
+			f_core.Debug(f_popup, "IsChildOfDocument: no popup document => false");
+			return false;
+		}
 		
-		//f_core.Debug(f_popup, "Search parent target='"+target+"' document='"+popupDocument+"'.");
 		
 		for(;target;target=target.parentNode) {
 		
 			// f_core.Debug(f_popup, "Test child '"+target+"' popupParent='"+target._popupParent+"'");
 		
 			if (target==popupDocument) {
+				f_core.Debug(f_popup, "IsChildOfDocument: parent is popup document => true");
 				return true;
 			}
 
 			if (target._menu==popupDocument || target._popupObject) {
+				f_core.Debug(f_popup, "IsChildOfDocument: menu or popupObject => true");
 				return true;
 			}
 		}
 		
+		f_core.Debug(f_popup, "IsChildOfDocument: no parent popup => false");
 		return false;
 	},
 	/**
 	 * @method private static
 	 */
 	_OnClick: function(evt) {	
-		f_core.Debug(f_popup, "OnClick on "+this+" target="+evt.target+"/"+evt.target.className);
+		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
 			return;
@@ -487,14 +495,17 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	_OnFocus: function(evt) {	
+	_OnFocus: function(evt) {
+		if (window._f_exiting) {
+			return;
+		}
 		f_core.Debug(f_popup, "OnFocus on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
 			return;
 		}
 		
-		var found=f_popup._IsChildOfDocument(evt.target);
+		var found=f_popup.IsChildOfDocument(evt.target);
 		f_core.Debug(f_popup, "OnFocus search parent="+found);
 
 		if (found) {

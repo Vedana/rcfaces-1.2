@@ -67,16 +67,12 @@ var __prototype = {
 	f_message: function() {
 		this.f_super(arguments);
 		
-		var labels=this.getElementsByTagName("label");
-		if (labels.length) {
-			this._textLabel=labels[0];
-		}
+		this._textLabel=f_core.GetFirstElementByTagName(this, "label");
 
-		var images=this.getElementsByTagName("img");
-		if (images.length) {
-			this._image=images[0];
-			
-			this._imageURL=this._image.src;
+		var image=f_core.GetFirstElementByTagName(this, "img");
+		if (image) {
+			this._image=image;
+			this._imageURL=image.src;
 			this._infoImageURL=f_core.GetAttribute(this, "v:infoImageURL");
 			this._warnImageURL=f_core.GetAttribute(this, "v:warnImageURL");
 			this._errorImageURL=f_core.GetAttribute(this, "v:errorImageURL");
@@ -260,7 +256,7 @@ var __prototype = {
 		var message=this;
 		
 		this._onFocusCb=function(evt) {
-	    	if (!window.f_message) {
+	    	if (window._f_exiting) {
 	     		// On sait jamais, nous sommes peut etre dans un context foireux ...
 	     		return;
 	     	}
@@ -275,7 +271,7 @@ var __prototype = {
 		f_core.AddEventListener(document.body, "focusin", this._onFocusCb);
 
 		this._onBlurCb=function(evt) {
-	    	if (!window.f_message) {
+	    	if (window._f_exiting) {
 	     		// On sait jamais, nous sommes peut etre dans un context foireux ...
 	     		return;
 	     	}

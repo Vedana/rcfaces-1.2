@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$ 
  */
  
-DIV.f_calendar {
+.f_calendar {
 	font-family: arial, helvetica;
 	-moz-user-select: none;
 	user-select: none;
@@ -18,74 +18,74 @@ DIV.f_calendar {
 	vertical-align: baseline;
 }
 
-IMG.f_calendar_weekImage,
-IMG.f_calendar_prevUnit,
-IMG.f_calendar_nextUnit,
-IMG.f_calendar_prevMonth,
-IMG.f_calendar_nextMonth,
-IMG.f_calendar_prevYear,
-IMG.f_calendar_nextYear {
+.f_calendar_weekImage,
+.f_calendar_prevUnit,
+.f_calendar_nextUnit,
+.f_calendar_prevMonth,
+.f_calendar_nextMonth,
+.f_calendar_prevYear,
+.f_calendar_nextYear {
 	cursor: pointer;
 	border: 0;
 }
 
-IMG.f_calendar_weekImage,
-IMG.f_calendar_prevUnit,
-IMG.f_calendar_nextUnit,
-IMG.f_calendar_prevUnit_disabled,
-IMG.f_calendar_nextUnit_disabled,
-IMG.f_calendar_prevMonth,
-IMG.f_calendar_nextMonth,
-IMG.f_calendar_prevMonth_disabled,
-IMG.f_calendar_nextMonth_disabled,
-IMG.f_calendar_prevYear,
-IMG.f_calendar_nextYear,
-IMG.f_calendar_prevYear_disabled,
-IMG.f_calendar_nextYear_disabled {
+.f_calendar_weekImage,
+.f_calendar_prevUnit,
+.f_calendar_nextUnit,
+.f_calendar_prevUnit_disabled,
+.f_calendar_nextUnit_disabled,
+.f_calendar_prevMonth,
+.f_calendar_nextMonth,
+.f_calendar_prevMonth_disabled,
+.f_calendar_nextMonth_disabled,
+.f_calendar_prevYear,
+.f_calendar_nextYear,
+.f_calendar_prevYear_disabled,
+.f_calendar_nextYear_disabled {
 		background: url('calendar/arrows.gif') no-repeat 0 0;
 }
 
-IMG.f_calendar_weekImage {
+.f_calendar_weekImage {
 	background-position: -64px 0;
 }
 
-.f_calendar_week_disabled IMG.f_calendar_weekImage {
+.f_calendar_week_disabled .f_calendar_weekImage {
 	background-position: -80px 0;
 }
 
-IMG.f_calendar_prevMonth,
-IMG.f_calendar_prevYear {
+.f_calendar_prevMonth,
+.f_calendar_prevYear {
 	background-position: 0 0;
 }
 
-IMG.f_calendar_nextMonth,
-IMG.f_calendar_nextYear {
+.f_calendar_nextMonth,
+.f_calendar_nextYear {
 	background-position: -16px 0;
 }
 
-IMG.f_calendar_prevMonth_disabled,
-IMG.f_calendar_prevYear_disabled {
+.f_calendar_prevMonth_disabled,
+.f_calendar_prevYear_disabled {
 	background-position: -32px 0;
 }
 
-IMG.f_calendar_nextMonth_disabled,
-IMG.f_calendar_nextYear_disabled {
+.f_calendar_nextMonth_disabled,
+.f_calendar_nextYear_disabled {
 	background-position: -48px 0;
 }
 
-IMG.f_calendar_prevUnit {
+.f_calendar_prevUnit {
 	background-position: -96px 0;
 }
 
-IMG.f_calendar_nextUnit {
+.f_calendar_nextUnit {
 	background-position: -112px 0;
 }
 
-IMG.f_calendar_prevUnit_disabled {
+.f_calendar_prevUnit_disabled {
 	background-position: -128px 0;
 }
 
-IMG.f_calendar_nextUnit_disabled {
+.f_calendar_nextUnit_disabled {
 	background-position: -144px 0;
 }
 
@@ -97,7 +97,7 @@ IMG.f_calendar_nextUnit_disabled {
 	display: block;
 }
 
-A.f_calendar_year:hover {
+.f_calendar_year:hover {
 	text-decoration: underline;
 }
 
@@ -149,7 +149,7 @@ A.f_calendar_year:hover {
 	text-decoration: none;
 }
 
-A.f_calendar_weekDay:hover {
+.f_calendar_weekDay:hover {
 	text-decoration: underline;
 }
 

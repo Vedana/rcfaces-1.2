@@ -294,7 +294,7 @@ var __prototype = {
 		}
 
 		if (typeof(value)!="string") {
-			f_core.Debug(f_input, "Invalid value: "+value);
+			f_core.Debug(f_input, "f_setValue: Invalid value: "+value);
 			return false;
 		}
 		
