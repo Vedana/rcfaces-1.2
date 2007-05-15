@@ -627,13 +627,15 @@ var f_core = {
 
 	 	if (f_core.IsInternetExplorer()) {
 	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
-	 			if (name == "focus") {
+	 			switch (name) {
+	 			case "focus":
 	 				component = component.body;
 	 				name = "focusin";
-	 			}
-	 			if (name == "blur") {
+	 				break;
+	 			case "blur":
 	 				component = component.body;
 	 				name = "focusout";
+	 				break;
 	 			}
 	 		}
 		    component.attachEvent("on"+name, fct);
@@ -678,10 +680,26 @@ var f_core = {
 
 	 	if (f_core.IsInternetExplorer()) {
 		    if (capture) {
+		 		if (capture.nodeType==f_core.DOCUMENT_NODE) {
+		 			capture = capture.body;
+		 		}
 				capture.releaseCapture();
 			}
 
-			document.detachEvent("on"+name, fct);
+	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
+	 			switch (name) {
+	 			case "focus":
+	 				component = component.body;
+	 				name = "focusin";
+	 				break;
+	 				
+	 			case "blur":
+	 				component = component.body;
+	 				name = "focusout";
+	 				break;
+	 			}
+	 		}
+			component.detachEvent("on"+name, fct);
 			    
 		    return;
 		}
