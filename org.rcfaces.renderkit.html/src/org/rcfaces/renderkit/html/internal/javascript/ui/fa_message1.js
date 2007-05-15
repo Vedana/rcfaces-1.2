@@ -123,7 +123,8 @@ var __prototype = {
 			f_core.Debug(fa_message1, "f_performMessageChanges: key#"+i+"="+key);
 			
 			var messages;
-			if (key===null) {
+			// Fred : (key===null) pas suffisant : key peut etre "" sous IE en tout cas
+			if (!key) {
 				messages=f_messageContext.Get(this).f_listMessages(null);
 			
 				f_core.Debug(fa_message1, "f_performMessageChanges: Get messages for key=null : "+ messages);
