@@ -270,6 +270,7 @@ var __prototype = {
 		
 		f_core.AddEventListener(document.body, "focusin", this._onFocusCb);
 
+/*
 		this._onBlurCb=function(evt) {
 	    	if (window._f_exiting) {
 	     		// On sait jamais, nous sommes peut etre dans un context foireux ...
@@ -284,6 +285,7 @@ var __prototype = {
 		}
 		
 		f_core.AddEventListener(document.body, "focusout", this._onBlurCb);
+*/
 	},
 
 	/**
