@@ -268,7 +268,7 @@ var __prototype = {
   			message._performOnFocus(evt);
 		}
 		
-		f_core.AddEventListener(document.body, "focusin", this._onFocusCb);
+		f_core.AddEventListener(document, "focus", this._onFocusCb);
 
 /*
 		this._onBlurCb=function(evt) {
@@ -284,7 +284,7 @@ var __prototype = {
   			message._performOnBlur(evt);
 		}
 		
-		f_core.AddEventListener(document.body, "focusout", this._onBlurCb);
+		f_core.AddEventListener(document, "blur", this._onBlurCb);
 */
 	},
 
