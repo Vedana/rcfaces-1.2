@@ -180,16 +180,25 @@ var __static = {
 			calendar.f_setHomeDate(homeDate, homeDateLabel);
 		}
 
-		calendar._clientDatesStrategy=f_core.GetNumberAttribute(component, "v:clientDatesStrategy");
+		var clientDatesStrategy=f_core.GetAttribute(component, "v:clientDatesStrategy");
+		if (clientDatesStrategy) {
+			calendar._clientDatesStrategy=parseInt(clientDatesStrategy, 10);
+		}
 
 		var disabledWeekDays=f_core.GetAttribute(component, "v:disabledWeekDays");
 		if (disabledWeekDays) {
 			calendar.f_setDisabledWeekDays(disabledWeekDays);
 		}
 		
-		calendar._firstDayOfWeek=f_core.GetNumberAttribute(component, "v:firstDayOfWeek");
+		var firstDayOfWeek=f_core.GetAttribute(component, "v:firstDayOfWeek");
+		if (firstDayOfWeek) {
+			calendar._firstDayOfWeek=parseInt(firstDayOfWeek, 10);
+		}
 
-		calendar._mode=f_core.GetNumberAttribute(component, "v:mode");
+		var mode=f_core.GetAttribute(component, "v:mode");
+		if (mode) {
+			calendar._mode=parseInt(mode, 10);
+		}
 		
 		var date=f_core.GetAttribute(component, "v:value");
 		if (date) {
@@ -254,11 +263,13 @@ var __static = {
 	 */
 	_OnHomeDateClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		var date=this._date;
@@ -276,13 +287,13 @@ var __static = {
 	 */
 	_OnDayClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
 		
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
+		}
 		var date=this._date;
 		if ((date instanceof Date)==false) {
 			return f_core.CancelJsEvent(evt);
@@ -299,11 +310,12 @@ var __static = {
 	_OnDayKey: function(evt) {
 		var calendar=this._calendar;
 	
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 				
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 7, true, true);
@@ -477,11 +489,11 @@ var __static = {
 	 */
 	_OnMonthClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		var date=this._date;
@@ -500,11 +512,12 @@ var __static = {
 	_OnMonthKey: function(evt) {
 		var calendar=this._calendar;
 
-		if (calendar.f_getEventLocked2()) {
-			return null;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (calendar.f_getEventLocked(evt)) {
+			return null;
 		}
 			
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 6, true);
@@ -599,11 +612,13 @@ var __static = {
 	 */
 	_OnYearClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		var date=this._date;
@@ -621,7 +636,12 @@ var __static = {
 	 */
 	_OnYearKey: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (calendar.f_getEventLocked(evt)) {
 			return false;
 		}
 			
@@ -670,11 +690,13 @@ var __static = {
 	_OnWeekClick: function(evt) {
 		try {
 			var calendar=this._calendar;
-			if (calendar.f_getEventLocked2()) {
-				return false;
-			}
+
 			if (!evt) {
 				evt = f_core.GetJsEvent(this);
+			}
+
+			if (calendar.f_getEventLocked(evt)) {
+				return false;
 			}
 				
 			var date=this._date;
@@ -696,12 +718,13 @@ var __static = {
 	_OnWeekKey: function(evt) {
 		var calendar=this._calendar;
 
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}		
+
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
+		}
 		
 		var delta=f_calendarObject._GetDeltaKey(evt, 10, 1);
 		
@@ -763,11 +786,12 @@ var __static = {
 	 */
 	_OnWeekDayClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		var date=this._date;
@@ -786,12 +810,13 @@ var __static = {
 	_OnWeekDayKey: function(evt) {
 		var calendar=this._calendar;
 
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}		
+
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
+		}
 	
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 10);
 		
@@ -831,11 +856,12 @@ var __static = {
 	 */
 	_OnNextUnitClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		calendar._onUnitClick(evt, this, 1);
@@ -848,11 +874,11 @@ var __static = {
 	 */
 	_OnPrevUnitClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		calendar._onUnitClick(evt, this, -1);
@@ -866,12 +892,12 @@ var __static = {
 	_OnUnitKey: function(evt) {
 		var calendar=this._calendar;
 
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}		
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
+		}
 
 		switch(evt.keyCode) {
 		case f_key.VK_RIGHT: // FLECHE VERS LA DROITE
@@ -904,11 +930,11 @@ var __static = {
 	 */
 	_OnNextYearClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		calendar._onUnitClick(evt, this, 1, f_calendarObject._YEAR_UNIT);
@@ -921,11 +947,11 @@ var __static = {
 	 */
 	_OnPrevYearClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		calendar._onUnitClick(evt, this, -1, f_calendarObject._YEAR_UNIT);
@@ -938,11 +964,11 @@ var __static = {
 	 */
 	_OnNextMonthClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 	
 		calendar._onUnitClick(evt, this, 1, f_calendarObject._MONTH_UNIT);
@@ -955,11 +981,11 @@ var __static = {
 	 */
 	_OnPrevMonthClick: function(evt) {
 		var calendar=this._calendar;
-		if (calendar.f_getEventLocked2()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		if (calendar.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		calendar._onUnitClick(evt, this, -1, f_calendarObject._MONTH_UNIT);
@@ -1089,6 +1115,7 @@ var __prototype = {
 		this._mode=f_calendarObject.DATE_MODE;
 	
 		this._firstDayOfWeek=this._locale.f_getFirstDayOfWeek();
+		f_core.Assert(typeof(this._firstDayOfWeek)=="number", "f_calendarObject.f_calendarObject: Invalid firstDayOfWeek ("+this._firstDayOfWeek+")");
 
 		this._dates=new Array;
 	},
@@ -1448,7 +1475,7 @@ var __prototype = {
 		img.height=16;
 		img.src=blankImageURL;
 		img.alt="<";
-		img.className=className+"_prevUnit";
+		img.className=className+"_prevUnitImg";
 		link.appendChild(img);
 		
 		var td=doc.createElement("td");		
@@ -1487,7 +1514,7 @@ var __prototype = {
 		img.height=16;
 		img.src=blankImageURL;
 		img.alt=">";
-		img.className=className+"_nextUnit";
+		img.className=className+"_nextUnitImg";
 		link.appendChild(img);
 		
 		var nextUnitLabel=f_resourceBundle.Get(f_calendarObject).f_get("NEXT_UNIT");
@@ -1519,6 +1546,8 @@ var __prototype = {
 		
 		this._weekDayButtons=new Array;
 
+		var locale=this._locale;
+
 		var dof=this._firstDayOfWeek;
 		for(var j=0;j<7;j++) {
 			var td=doc.createElement("td");
@@ -1543,10 +1572,11 @@ var __prototype = {
 			
 			var d=(j+dof) % 7;
 			
-			var dayName=this._locale.f_getDayName(d, f_locale.SHORT);
+			var dayName=locale.f_getDayName(d, f_locale.SHORT);
 			var name=doc.createTextNode(dayName);
 			
-			var dayLongName=this._locale.f_getDayName(d, f_locale.LONG);
+			var dayLongName=locale.f_getDayName(d, f_locale.LONG);
+
 			if (dayLongName) {
 				link.title=f_core.UpperCaseFirstChar(dayLongName);
 			}
@@ -2918,21 +2948,6 @@ var __prototype = {
 	 */
 	f_formatDate: function(date, format) {
 		return f_dateFormat.FormatDate(date, format, this._locale);
-	},
-	/** 
-	 * @method protected
-	 */
-	f_getEventLocked2: function(showAlert, mask) {
-
-		if (this._popupMode) {
-			if (!mask) {
-				mask=0;
-			}	
-			
-			mask|=f_event.POPUP_LOCK;
-		}
-
-		return this.f_getEventLocked(showAlert, mask);
 	},
 	_longFormatDate: function(date) {
 		var format=this._locale.f_getDateFormat(f_locale.LONG);

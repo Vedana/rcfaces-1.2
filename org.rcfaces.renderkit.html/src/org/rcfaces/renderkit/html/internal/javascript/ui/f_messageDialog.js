@@ -48,14 +48,14 @@ var __static = {
 		var messageBox=base._messageBox;
 		
 		f_core.Debug(f_messageDialog, "_OnClick: entering");
-		
-		if (messageBox.f_getEventLocked(true)) {
-			f_core.Debug(f_messageDialog, "_OnClick : messageBox.f_getEventLocked(true)");
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (messageBox.f_getEventLocked(evt, true)) {
+			f_core.Debug(f_messageDialog, "_OnClick : messageBox.f_getEventLocked(true)");
+			return false;
 		}
 		
 		f_core.Debug(f_messageDialog, "_OnClick: before messageBox.f_buttonOnClick(button);");

@@ -67,7 +67,7 @@ var __prototype = {
 				break;			
 
 			default:
-				var pageN=parseInt(type);
+				var pageN=parseInt(type, 10);
 				if (!isNaN(pageN) && (first/rows)!=pageN) {
 					disabled=(rowCount>=0 && pageN*rows>rowCount);
 				}

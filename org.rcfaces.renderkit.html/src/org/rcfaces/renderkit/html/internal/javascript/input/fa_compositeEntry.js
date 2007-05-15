@@ -21,12 +21,13 @@ var __static={
 	 */
 	_OnInputKeyDown: function(evt) {
 		var compositeEntry=this._compositeEntry;
-		if (compositeEntry.f_getEventLocked()) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (compositeEntry.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {
@@ -45,12 +46,13 @@ var __static={
 	 */
 	_OnInputKeyPress: function(evt) {
 		var compositeEntry=this._compositeEntry;
-		if (compositeEntry.f_getEventLocked(false)) {
-			return false;
-		}
 	
 		if (!evt) {
 			evt = window.event;
+		}
+
+		if (compositeEntry.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {
@@ -69,12 +71,13 @@ var __static={
 	 */
 	_OnInputBlur: function(evt) {
 		var compositeEntry=this._compositeEntry;
-		if (compositeEntry.f_getEventLocked(false)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (compositeEntry.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		if (compositeEntry.f_isDisabled() || compositeEntry.f_isReadOnly()) {

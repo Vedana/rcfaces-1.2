@@ -152,8 +152,24 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
 					return engine.getValue(Properties.SELECTED_VALUES, facesContext);
 				}
+
+				return SelectionTools.adaptValue(getValue(), null);
+				/*
+				if (values!=null) {
+					return values;
+				}
 				
-					return SelectionTools.adaptValue(getValue());
+				if (this.isRowValueColumnIdSetted()) {
+					values=new Object[0];
+					
+				} else {
+					values=new ArrayIndexesModel();
+				}
+				
+				setSelectedValues(values);
+				
+				return values;
+				*/
 			
 	}
 

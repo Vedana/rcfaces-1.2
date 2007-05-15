@@ -60,7 +60,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
 
             if (minDate != null) {
                 sb.setLength(0);
-                HtmlTools.formatDate(maxDate, sb, processContext,
+                HtmlTools.formatDate(minDate, sb, processContext,
                         calendarComponent, true);
                 htmlWriter.writeAttribute("v:minDate", sb.toString());
             }

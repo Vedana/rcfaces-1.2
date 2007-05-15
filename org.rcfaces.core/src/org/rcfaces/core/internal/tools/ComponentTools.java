@@ -40,7 +40,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.lang.provider.ICursorProvider;
-import org.rcfaces.core.lang.provider.ISelectionProvider;
 
 /**
  * 

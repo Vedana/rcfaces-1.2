@@ -157,7 +157,7 @@ var __prototype = {
 			return null;
 		}
 		
-		return parseInt(size);
+		return parseInt(size, 10);
 	},
 	/**
 	 * @method public
@@ -424,7 +424,7 @@ var __prototype = {
 
 		hiddenMode=f_core.GetAttribute(this, "v:hiddenMode");
 		if (hiddenMode) {
-			hiddenMode=parseInt(hiddenMode);
+			hiddenMode=parseInt(hiddenMode, 10);
 
 		} else {
 			hiddenMode=f_component.GetDefaultHiddenMode();

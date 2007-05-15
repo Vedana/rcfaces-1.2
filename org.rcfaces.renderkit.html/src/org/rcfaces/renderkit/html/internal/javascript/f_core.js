@@ -1265,7 +1265,7 @@ var f_core = {
 		f_core.Info("f_core", "_OnReset: Catch reset event from form '"+form.id+"'.");
 
 		if (win.f_event) {
-			if (win.f_event.GetEventLocked(true)) {
+			if (win.f_event.GetEventLocked(evt, true)) {
 				return false;
 			}
 		}
@@ -1319,7 +1319,7 @@ var f_core = {
 			f_core.Info(f_core, "_OnSubmit: Catch submit event from form '"+form.id+"'.");
 	
 			if (win.f_event) {
-				if (win.f_event.GetEventLocked(true)) {
+				if (win.f_event.GetEventLocked(evt, true)) {
 					return f_core.CancelJsEvent(evt);
 				}
 			}
@@ -1431,7 +1431,7 @@ var f_core = {
 			var document=form.ownerDocument;
 			var win=f_core.GetWindow(document);
 			
-			if (win.f_event.GetEventLocked(true)) {
+			if (win.f_event.GetEventLocked((event)?event.f_getJsEvent():null, true)) {
 				return false;
 			}
 	
@@ -2712,12 +2712,12 @@ var f_core = {
 	 * @return boolean
 	 */
 	CancelJsEventHandler: function(evt) {
-		if (f_event.GetEventLocked(false)) {
-			return false;
-		}
-	
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+	
+		if (f_event.GetEventLocked(evt, false)) {
+			return false;
 		}
 	
 		return f_core.CancelJsEvent(evt);
@@ -2728,12 +2728,12 @@ var f_core = {
 	 * @return boolean
 	 */
 	CancelJsEventHandlerTrue: function(evt) {
-		if (f_event.GetEventLocked(false)) {
-			return false;
-		}
-
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (f_event.GetEventLocked(evt, false)) {
+			return false;
 		}
 			
 		f_core.CancelJsEvent(evt);
@@ -4244,7 +4244,7 @@ var f_core = {
 				
 				ret+=message.substring(pos, idx);
 				
-				var num=parseInt(message.substring(idx+1, idx2));
+				var num=parseInt(message.substring(idx+1, idx2), 10);
 				if (parameters && num<parameters.length) {
 					ret+=parameters[num];
 				}
@@ -4489,7 +4489,7 @@ var f_core = {
 	UpperCaseFirstChar: function(text) {
 		f_core.Assert(typeof(text)=="string", "f_core.UpperCaseFirstChar: Invalid text parameter ("+text+").");
 
-		if (!text.length) {
+		if (!text) {
 			return text;
 		}
 		

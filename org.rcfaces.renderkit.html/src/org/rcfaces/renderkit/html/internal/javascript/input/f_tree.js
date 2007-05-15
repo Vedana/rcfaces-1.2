@@ -48,7 +48,12 @@ var __static = {
 	_NodeLabel_mouseOver: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
-		if (tree.f_getEventLocked(false) || li._labelOver) {
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (tree.f_getEventLocked(evt, false) || li._labelOver) {
 			return false;
 		}
 			
@@ -80,7 +85,11 @@ var __static = {
 
 		f_core.Assert(tree && tree.tagName, "f_tree._DivNode_mouseOver: Invalid tree this=("+this.id+"/"+this.tagname+") li=("+li.id+"/"+li.tagName+")");
 
-		if (!tree || tree.f_getEventLocked(false) || li._over) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (!tree || tree.f_getEventLocked(evt, false) || li._over) {
 			return false;
 		}
 			
@@ -111,11 +120,12 @@ var __static = {
 	_DivNode_dblClick: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
-		if (tree.f_getEventLocked()) {
-			return false;
-		}
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (tree.f_getEventLocked(evt)) {
+			return false;
 		}
 	
 		var node=li._node;
@@ -130,11 +140,11 @@ var __static = {
 	_DivNode_mouseDown: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
-		if (tree.f_getEventLocked()) {
-			return false;
-		}
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+		if (tree.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		if (!tree._focus) {
@@ -162,13 +172,14 @@ var __static = {
 	_BodyMouseDown: function(evt) {
 		var tree=this;
 		
-		if (tree.f_getEventLocked()) {
-			return false;
-		}
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}
 
+		if (tree.f_getEventLocked(evt)) {
+			return false;
+		}
+		
 		if (tree.f_isDisabled()) {
 			return f_core.CancelJsEvent(evt);
 		}
@@ -202,11 +213,13 @@ var __static = {
 	_Command_mouseDown: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
-		if (tree.f_getEventLocked()) {
-			return false;
-		}
+
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (tree.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		var node=li._node;
@@ -231,12 +244,13 @@ var __static = {
 	 */
 	_Link_bodyOnfocus: function(evt) {
 		var tree=this._tree;
-		if (tree.f_getEventLocked(false)) {
-			return false;
-		}
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
-		 }
+		}
+
+		if (tree.f_getEventLocked(evt, false)) {
+			return false;
+		}
 		
 		tree.f_setFocus();
 	},
@@ -245,12 +259,13 @@ var __static = {
 	 */
 	_Link_onfocus: function(evt) {
 		var tree=this._tree;
-		if (tree.f_getEventLocked(false)) {
-			return false;
-		}
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}		
+
+		if (tree.f_getEventLocked(evt, false)) {
+			return false;
+		}
 
 		if (tree._focus) {
 			return true;
@@ -296,15 +311,15 @@ var __static = {
 	 */
 	_Link_onblur: function(evt) {
 		var tree=this._tree;
-
-		// On verouille pas l'accés !
-		//if (tree.f_getEventLocked(false)) {
-		// return false;
-		//}
 		
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}
+
+		// On verouille pas l'accés !
+		//if (tree.f_getEventLocked(evt, false)) {
+		// return false;
+		//}
 		
 		if (!tree._focus) {
 			return true;
@@ -329,11 +344,12 @@ var __static = {
 	 */
 	_Link_onkeydown: function(evt) {
 		var tree=this._tree;
-		if (tree.f_getEventLocked(true)) {
-			return false;
-		}
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (tree.f_getEventLocked(evt, true)) {
+			return false;
 		}
 		
 		if (!tree._focus) {
@@ -347,12 +363,13 @@ var __static = {
 	 */
 	_Link_onkeyup: function(evt) {
 		var tree=this._tree;
-		if (tree.f_getEventLocked(false)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (tree.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		if (!tree._focus) {
@@ -366,12 +383,13 @@ var __static = {
 	 */
 	_Link_onkeypress: function(evt) {
 		var tree=this._tree;
-		if (tree.f_getEventLocked(false)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (tree.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		if (!tree._focus) {
@@ -386,12 +404,13 @@ var __static = {
 	_NodeInput_mouseClick: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
-		if (tree.f_getEventLocked()) {
-			return false;
-		}
 
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (tree.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		evt.cancelBubble = true;

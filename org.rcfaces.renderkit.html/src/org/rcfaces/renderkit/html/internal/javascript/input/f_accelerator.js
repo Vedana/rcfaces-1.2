@@ -62,7 +62,7 @@ var __prototype={
 
 		var vk=f_core.GetAttribute(this, "v:virtualKey");
 		if (vk) {
-			this._virtualKeys = [ parseInt(vk) ];
+			this._virtualKeys = [ parseInt(vk, 10) ];
 		}
 
 		this._keyFlags = f_core.GetNumberAttribute(this, "v:keyFlags");

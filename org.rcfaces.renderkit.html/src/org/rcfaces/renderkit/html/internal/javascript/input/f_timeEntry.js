@@ -108,7 +108,7 @@ var __prototype={
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
 			var type=input._type;
-			var maxLength=parseInt(input.maxLength);
+			var maxLength=parseInt(input.maxLength, 10);
 			
 			var v=-1;
 			switch(type) {
@@ -150,7 +150,7 @@ var __prototype={
 		
 		minTime=f_core.GetAttribute(this, "v:minTime");
 		if (minTime) {
-			minTime=new f_time(parseInt(minTime));
+			minTime=new f_time(parseInt(minTime, 10));
 		} else {
 			minTime=null;
 		}
@@ -172,7 +172,7 @@ var __prototype={
 		
 		maxTime=f_core.GetAttribute(this, "v:maxTime");
 		if (maxTime) {
-			maxTime=new f_time(parseInt(maxTime));
+			maxTime=new f_time(parseInt(maxTime, 10));
 		} else {
 			maxTime=null;
 		}

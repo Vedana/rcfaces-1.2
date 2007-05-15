@@ -21,7 +21,7 @@ var __prototype = {
 			this._checkFullState=new Array;
 		}
 		
-		this._checkCardinality=parseInt(v_checkCardinality);
+		this._checkCardinality=parseInt(v_checkCardinality, 10);
 		this._checkable=true;
 		
 		this._checkedElementValues=new Array;

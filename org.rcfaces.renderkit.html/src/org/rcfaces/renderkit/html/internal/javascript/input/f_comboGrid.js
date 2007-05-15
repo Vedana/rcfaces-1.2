@@ -13,12 +13,12 @@
 var __static = {
 	_OnButtonMouseDown: function(evt) {
 		var comboGrid=this._comboGrid;
-		if (comboGrid.f_getEventLocked()) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		if (comboGrid.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		if (comboGrid.f_isDisabled()) {
@@ -42,12 +42,13 @@ var __static = {
 	},
 	_OnButtonMouseOver: function(evt) {
 		var comboGrid=this._comboGrid;
-		if (comboGrid.f_getEventLocked(false)) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (comboGrid.f_getEventLocked(evt, false)) {
+			return false;
 		}
 		
 		if (comboGrid.f_isDisabled()) {

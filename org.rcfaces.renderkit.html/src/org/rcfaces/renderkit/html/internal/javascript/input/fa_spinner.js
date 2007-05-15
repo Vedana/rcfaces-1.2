@@ -56,12 +56,13 @@ var __static = {
 	 */
 	_OnSpinnerButtonOver: function(evt) {
 		var spinner=this._spinner;
-		if (spinner.f_getEventLocked(false) || spinner.f_isDisabled()) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (spinner.f_getEventLocked(evt, false) || spinner.f_isDisabled()) {
+			return false;
 		}
 	
 		if (!f_core.GetEvtButton(evt) && this._pushed) {
@@ -102,12 +103,13 @@ var __static = {
 	 */
 	_OnSpinnerButtonDown: function(evt) {
 		var spinner=this._spinner;
-		if (spinner.f_getEventLocked() || spinner.f_isDisabled()) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (spinner.f_getEventLocked(evt) || spinner.f_isDisabled()) {
+			return false;
 		}
 		
 		this._pushed=true;
@@ -153,7 +155,7 @@ var __static = {
 		}
 		
 		var spinner=button._spinner;
-		if (spinner.f_getEventLocked() || spinner.f_isDisabled()) {
+		if (spinner.f_getEventLocked(null) || spinner.f_isDisabled()) {
 			return false;
 		}
 	

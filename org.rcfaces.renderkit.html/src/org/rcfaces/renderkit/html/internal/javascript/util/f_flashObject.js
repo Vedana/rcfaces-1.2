@@ -154,7 +154,7 @@ var __static = {
 		for(var i=0;i<arguments.length;i++) {		
 			var v=0;
 			if (i<vs.length) {
-				v=parseInt(vs[i]);
+				v=parseInt(vs[i], 10);
 			}
 		
 			var rv=arguments[i];

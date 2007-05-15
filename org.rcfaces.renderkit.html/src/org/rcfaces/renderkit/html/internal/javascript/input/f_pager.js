@@ -108,12 +108,14 @@ var __static = {
 	 */
 	_PositionKey: function(evt) {
 		var dataPager=this.f_link;
-		if (dataPager.f_getEventLocked()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
+
+		if (dataPager.f_getEventLocked(evt)) {
+			return false;
+		}
+
 		var code=evt.keyCode;
 		var cancel=false;
 		
@@ -183,12 +185,13 @@ var __static = {
 	 */
 	_PositionSelect: function(evt) {
 		var dataPager=this.f_link;
-		if (dataPager.f_getEventLocked()) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (dataPager.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		var v_index=f_core.GetAttribute(this, "v:index");		

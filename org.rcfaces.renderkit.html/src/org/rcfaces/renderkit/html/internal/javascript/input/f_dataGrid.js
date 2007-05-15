@@ -41,13 +41,13 @@ var __static = {
 	_CheckSelect: function(evt) {
 		var row=this._row;
 		var dataGrid=row._dataGrid;
-		
-		if (dataGrid.f_getEventLocked()) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		// Il faut bloquer le bubble !
@@ -1135,7 +1135,7 @@ var __prototype = {
 				var h=f_core.GetCurrentStyleProperty(this._scrollTitle, "height");
 				
 				if (h) {
-					tableBody.style.height=(parseInt(gridHeight)-parseInt(h))+"px";
+					tableBody.style.height=(parseInt(gridHeight, 10)-parseInt(h, 10))+"px";
 				}
 			}
 			
@@ -1193,9 +1193,9 @@ var __prototype = {
 			var colWidth=column._width;
 			if (colWidth) {
 				if (this._resizable) {
-					totalWidth+=parseInt(colWidth);
+					totalWidth+=parseInt(colWidth, 10);
 				}
-				if (parseInt(colWidth)==colWidth){
+				if (parseInt(colWidth, 10)==colWidth){
 					colWidth+="px";
 				}
 			}

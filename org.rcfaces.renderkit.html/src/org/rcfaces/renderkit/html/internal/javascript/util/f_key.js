@@ -445,7 +445,7 @@ var __static = {
 			return true;
 		}
 
-		if (f_event.GetEventLocked()) {
+		if (f_event.GetEventLocked(jsEvent)) {
 			return f_core.CancelJsEvent(jsEvent);
 		}
 		

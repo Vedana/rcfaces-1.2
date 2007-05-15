@@ -46,6 +46,7 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.tools.ArrayIndexesModel;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.component.capability.IPagedCapability;
@@ -179,17 +180,6 @@ public class DataGridComponent extends AbstractGridComponent implements
 
 
 				return SelectionTools.getFirst(getSelectedValues(), null);
-			
-	}
-
-	public final Object getSelectedValues(FacesContext facesContext) {
-
-
-				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
-					return engine.getValue(Properties.SELECTED_VALUES, facesContext);
-				}
-				
-				return SelectionTools.adaptValue(getValue());
 			
 	}
 
@@ -376,6 +366,34 @@ public class DataGridComponent extends AbstractGridComponent implements
 			
 	}
 
+	public final Object getSelectedValues(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
+					return engine.getValue(Properties.SELECTED_VALUES, facesContext);
+				}
+				
+				Object values=SelectionTools.adaptValue(getValue(), null);
+				return values;
+				/*
+				if (values!=null) {
+					return values;
+				}
+				
+				if (this.isRowValueColumnIdSetted()) {
+					values=new Object[0];
+					
+				} else {
+					values=new ArrayIndexesModel();
+				}
+				
+				setSelectedValues(values);
+				
+				return values;
+				*/
+			
+	}
+
 	public final Object getCheckedValues(FacesContext facesContext) {
 
 
@@ -383,7 +401,24 @@ public class DataGridComponent extends AbstractGridComponent implements
 					return engine.getValue(Properties.CHECKED_VALUES, facesContext);
 				}
 				
-				return CheckTools.adaptValue(getValue());
+				Object values=CheckTools.adaptValue(getValue(), null);
+				return values;
+				/*
+				if (values!=null) {
+					return values;
+				}
+				
+				if (this.isRowValueColumnIdSetted()) {
+					values=new Object[0];
+					
+				} else {
+					values=new ArrayIndexesModel();
+				}
+				
+				setCheckedValues(values);
+				
+				return values;
+				*/
 			
 	}
 

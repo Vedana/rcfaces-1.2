@@ -839,7 +839,7 @@ var __prototype = {
 	/**
 	 * @method protected
 	 */
-	f_getEventLocked: function(showAlert, mask) {
+	f_getEventLocked: function(evt, showAlert, mask) {
 		var menu=this.f_getSubMenuById(f_suggestTextEntry._SUGGESTION_MENU_ID);
 					
 		var menuOpened=(menu && menu.f_isOpened());
@@ -853,7 +853,7 @@ var __prototype = {
 
 		f_core.Debug(f_suggestTextEntry, "f_getEventLocked: menu="+menu+" menuOpened="+menuOpened+" mask="+mask+" showAlert="+showAlert);
 
-		return this.f_super(arguments, showAlert, mask);
+		return this.f_super(arguments, evt, showAlert, mask);
 	},
 	/**
 	 * @method hidden

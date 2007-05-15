@@ -14,9 +14,14 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	_MouseDown: function() {
+	_MouseDown: function(evt) {
 		var customButton=this.f_link;
-		if (customButton.f_getEventLocked()) {
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (customButton.f_getEventLocked(evt)) {
 			return false;
 		}
 		
@@ -25,9 +30,14 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	_MouseUp: function() {
+	_MouseUp: function(evt) {
 		var customButton=this.f_link;
-		if (customButton.f_getEventLocked(false)) {
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (customButton.f_getEventLocked(evt, false)) {
 			return false;
 		}
 

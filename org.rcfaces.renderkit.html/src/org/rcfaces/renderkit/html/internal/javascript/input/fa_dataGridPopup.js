@@ -63,7 +63,6 @@ var __static = {
 					body.style.visibility="inherit";
 	
 					pdoc.body.appendChild(body);
-					body._popupParent=true;
 				}
 								
 			} else {
@@ -86,7 +85,6 @@ var __static = {
 				}
 				
 				parent.appendChild(popup);
-				popup._popupParent=true;
 			}
 			dataGridPopup._popup=popup;
 		

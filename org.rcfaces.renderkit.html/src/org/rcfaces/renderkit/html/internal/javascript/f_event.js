@@ -514,18 +514,25 @@ var __static = {
 	},
 	/**
 	 * @method hidden static
+	 * @param Event jsEvent
+	 * @param optional boolean showAlert
+	 * @param optional number mask
 	 * @return boolean Returns <code>true</code> if lock is setted !
 	 */
-	GetEventLocked: function(showAlert, mask) {
+	GetEventLocked: function(jsEvent, showAlert, mask) {
 	
 		if (window._f_exiting) {
 			return true;
 		}
+	
+		f_core.Assert(jsEvent===null || (jsEvent instanceof  Event), "f_event.GetEventLocked: Invalid jsEvent parameter ("+jsEvent+").");
+		f_core.Assert(showAlert===undefined || typeof(showAlert)=="boolean", "f_event.GetEventLocked: Invalid showAlert parameter ("+showAlert+").");
+		f_core.Assert(mask===undefined || typeof(mask)=="number", "f_event.GetEventLocked: Invalid mask parameter ("+mask+").");
 
 		var currentLock=f_event._EvtLock;
 
 		if (mask) {
-			currentLock &= ~mask;
+			//currentLock &= ~mask;
 		}
 					
 		if (!currentLock) {
@@ -540,8 +547,44 @@ var __static = {
 			// On passe le focus dessus normalement, donc pas de boite d'alerte !
 			return true;
 		}
-	
-		if (currentLock==f_event.POPUP_LOCK) {
+
+		if (f_event._EvtLock & f_event.POPUP_LOCK) {
+			if (f_popup.VerifyLock()===false) {
+				// FInalement nous ne sommes plus en LOCK ...
+				// 					
+				currentLock=f_event._EvtLock;
+				if (mask) {
+					currentLock &= ~mask;
+				}
+				if (!currentLock) {
+					return false;
+				}
+				
+			} else if (jsEvent) {
+				var target=jsEvent.target;
+				if (!target) {
+					target = jsEvent.srcElement;
+				}
+			
+				var ret;
+				if (target) {
+					ret=f_popup.IsChildOfDocument(target);
+				}
+				
+				f_core.Debug(f_event, "GetEventLocked: Search popup child: target="+target+" return="+ret);
+
+				if (ret) {
+					// C'est un composant dans la popup !
+					return false;
+				}
+
+			} else {
+				f_core.Debug(f_event, "GetEventLocked: Can not test popup case !");
+			}
+		}
+		
+		/*
+		if (currentock==f_event.POPUP_LOCK) {
 			var ret=f_popup.VerifyLock();
 			
 			if (ret!==undefined) {
@@ -557,6 +600,7 @@ var __static = {
 				return false;
 			}
 		}
+		*/
 	
 		var currentMode=f_event._EvtLockMode;
 		if (currentLock==f_event.SUBMIT_LOCK && currentMode===false) {

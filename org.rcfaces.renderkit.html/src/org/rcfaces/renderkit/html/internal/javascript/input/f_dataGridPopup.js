@@ -128,14 +128,14 @@ var __prototype = {
 	/**
 	 * @method protected
 	 */
-	f_getEventLocked: function(showAlert) {
+	f_getEventLocked: function(evt, showAlert) {
 		if (showAlert!==false) {
 			if (f_popup.IsChildOfDocument(this)) {
 				return false;
 			}			
 		}
 		
-		if (!this.f_super(arguments, showAlert)) {
+		if (!this.f_super(arguments, evt, showAlert)) {
 			return false;
 		}
 		

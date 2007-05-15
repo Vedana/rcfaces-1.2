@@ -443,10 +443,10 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         return true;
     }
 
-    public void decode(IRequestContext context, UIComponent component,
+    public void decode(IRequestContext context, UIComponent decodedComponent,
             IComponentData componentData) {
 
-        super.decode(context, component, componentData);
+        super.decode(context, decodedComponent, componentData);
 
         Map childrenClientIds = null;
 

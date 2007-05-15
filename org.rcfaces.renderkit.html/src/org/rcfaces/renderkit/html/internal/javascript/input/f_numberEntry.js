@@ -84,7 +84,7 @@ var __prototype={
 		if (decimal) {
 			t=parseFloat(t+"."+decimal);
 		} else {
-			t=parseInt(t);
+			t=parseInt(t, 10);
 		}
 		
 		return t;
@@ -101,7 +101,7 @@ var __prototype={
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
 			var type=input._type;
-			var maxLength=parseInt(input.maxLength);
+			var maxLength=parseInt(input.maxLength, 10);
 			
 			var v=-1;
 			switch(type) {
@@ -142,7 +142,7 @@ var __prototype={
 			if (minNumber.indexOf('.')>=0) {
 				minNumber=parseFloat(minNumber);
 			} else {
-				minNumber=parseInt(minNumber);
+				minNumber=parseInt(minNumber, 10);
 			}
 		} else {
 			minNumber=null;
@@ -168,7 +168,7 @@ var __prototype={
 			if (maxNumber.indexOf('.')>=0) {
 				maxNumber=parseFloat(maxNumber);
 			} else {
-				maxNumber=parseInt(maxNumber);
+				maxNumber=parseInt(maxNumber, 10);
 			}
 		} else {
 			maxNumber=null;

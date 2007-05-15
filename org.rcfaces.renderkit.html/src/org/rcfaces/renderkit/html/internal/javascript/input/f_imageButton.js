@@ -15,7 +15,6 @@ var __static = {
 	 * @field private static final String
 	 */
 	_EMPTY_IMAGE_URL: "/imageButton/blank.gif"
-
 }
  
 var __prototype = {
@@ -282,8 +281,8 @@ var __prototype = {
 	/**
 	 * @method private
 	 */
-	_onMouseOver: function() {
-		if (this.f_getEventLocked(false)) {
+	_onMouseOver: function(event) {
+		if (this.f_getEventLocked(event.f_getJsEvent(), false)) {
 			return false;
 		}
 		

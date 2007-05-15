@@ -71,12 +71,12 @@ public class CheckTools extends CollectionTools {
         return valuesAccessor.listValues(checkedValues, refValue);
     }
 
-    public static Object adaptValue(Object value) {
+    public static Object adaptValue(Object value, Object defaultValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
                 ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, false);
 
         if (valuesAccessor == null) {
-            return EMPTY_VALUES;
+            return defaultValue;
         }
 
         return valuesAccessor.adaptValue(value);

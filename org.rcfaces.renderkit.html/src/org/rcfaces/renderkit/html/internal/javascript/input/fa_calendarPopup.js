@@ -58,6 +58,7 @@ var __static={
 
 	/**
 	 * @method private static
+	 * @return void
 	 */
 	_OpenPopup: function(dateChooser, position, offsetX, offsetY, offsetWidth, autoSelect) {
 		var calendar=dateChooser.f_getCalendarObject();
@@ -97,7 +98,6 @@ var __static={
 					body.style.visibility="inherit";
 	
 					pdoc.body.appendChild(body);
-					body._popupParent=true;
 				}
 								
 			} else {
@@ -120,11 +120,12 @@ var __static={
 				}
 				
 				parent.appendChild(popup);
-				popup._popupParent=true;
 			}
 			dateChooser._popupCalendar=popup;
 			
 			if (body) {
+				body._popupObject=true;
+
 				calendar.f_constructComponent(body);
 				f_core.Debug(fa_calendarPopup, "_OpenPopup: Create new popup for dateChooser='"+dateChooser.id+"'.");
 				

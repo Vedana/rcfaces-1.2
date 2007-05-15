@@ -18,12 +18,13 @@ var __static = {
 	_MenuBarItem_mouseOver: function(evt) {
 		var item=this._item;
 		var menuBar=item._menu;
-		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (menuBar.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		menuBar._menuBarItem_over(item, evt);
@@ -56,12 +57,12 @@ var __static = {
 	
 		f_core.Debug(f_menuBar, "_MenuBarItemInput_click: click on item='"+menuItem+"' menuBar='"+menuBar+"'.");
 
-		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
-			return false;
-		}
-
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (menuBar.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		try {
@@ -98,13 +99,13 @@ var __static = {
 		var menuBar=menuItem._menu;
 	
 		f_core.Debug(f_menuBar, "_MenuBarItem_keyDown: key item='"+menuItem+"' menuBar='"+menuBar+"'.");
-
-		if (menuBar.f_getEventLocked(true, f_event.POPUP_LOCK)) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (menuBar.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		return fa_menuCore.OnKeyDown(menuBar, evt);
@@ -118,15 +119,15 @@ var __static = {
 
 		f_core.Debug(f_menuBar, "_MenuBarItem_focus: focus item='"+menuItem+"' menuBar='"+menuBar+"'.");
 
-		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (menuBar.f_getEventLocked(evt, false)) {
 			return false;
 		}
 
 		menuBar._hasFocus=true;
-
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
 		
 		var old=menuBar.f_uiGetSelectedItem(menuBar);
 		
@@ -162,13 +163,13 @@ var __static = {
 		var menuBar=menuItem._menu;
 	
 		f_core.Debug(f_menuBar, "_MenuBarItem_blur: blur item='"+menuItem+"' menuBar='"+menuBar+"'.");
-		
-		if (menuBar.f_getEventLocked(false, f_event.POPUP_LOCK)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (menuBar.f_getEventLocked(evt)) {
+			return false;
 		}
 	
 //		menuBar._openMode=undefined;

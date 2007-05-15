@@ -524,6 +524,7 @@
 				<required-class name="fa_immediate" />
 			</class>
 		</file>
+		<!--
 		<file name="input/f_comboEx.js">
 			<class name="f_comboEx">
 				<required-class name="f_component" />
@@ -535,6 +536,7 @@
 				<required-style name="f_comboEx.css" />
 			</class>
 		</file>
+		-->
 		<file name="input/f_imageCombo.js">
 			<class name="f_imageCombo">
 				<required-class name="f_imageButton" />

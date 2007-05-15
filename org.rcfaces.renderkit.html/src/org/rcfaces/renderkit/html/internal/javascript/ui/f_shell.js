@@ -259,12 +259,13 @@ var __static = {
      */
 	_OnResize: function(evt) {
 		var shell=this._shell;
-		if (shell.f_getEventLocked(false)) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (shell.f_getEventLocked(evt, false)) {
+			return false;
 		}
 		
 		shell._resize();

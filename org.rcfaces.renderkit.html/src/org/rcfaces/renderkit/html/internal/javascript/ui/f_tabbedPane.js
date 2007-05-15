@@ -27,12 +27,13 @@ var __static = {
 	 */
 	_TabbedPane_onresize: function(evt) {
 		var tabbedPane=this._tabbedPane;
-		if (tabbedPane.f_getEventLocked(false)) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+
+		if (tabbedPane.f_getEventLocked(evt, false)) {
+			return false;
 		}
 		
 		tabbedPane._resize();
@@ -45,12 +46,13 @@ var __static = {
 	_TabbedPane_click: function(evt) {
 		var tab=this._tab;
 		var tabbedPane=tab._cardBox;
-		if (tabbedPane.f_getEventLocked()) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (tabbedPane.f_getEventLocked(evt)) {
+			return false;
 		}
 
 		var old=tabbedPane._selectedCard;
@@ -65,12 +67,13 @@ var __static = {
 	_TabbedPane_focus: function(evt) {
 		var tab=this._tab;
 		var tabbedPane=tab._cardBox;
-		if (tabbedPane.f_getEventLocked(false)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (tabbedPane.f_getEventLocked(evt, false)) {
+			return false;
 		}
 				
 		return true;
@@ -81,12 +84,13 @@ var __static = {
 	_TabbedPane_keyPress: function(evt) {
 		var tab=this._tab;
 		var tabbedPane=tab._cardBox;
-		if (tabbedPane.f_getEventLocked(false)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (tabbedPane.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		switch(evt.keyCode) {
@@ -106,12 +110,13 @@ var __static = {
 	_TabbedPane_keyDown: function(evt) {
 		var tab=this._tab;
 		var tabbedPane=tab._cardBox;
-		if (tabbedPane.f_getEventLocked()) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (tabbedPane.f_getEventLocked(evt)) {
+			return false;
 		}
 			
 		switch(evt.keyCode) {
@@ -165,12 +170,13 @@ var __static = {
 	_TabbedPane_mouseover: function(evt) {
 		var tab=this._tab;
 		var tabbedPane=tab._cardBox;
-		if (tabbedPane.f_getEventLocked(false)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (tabbedPane.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		tabbedPane._tabMouseOver(this._tab, evt);
@@ -183,12 +189,13 @@ var __static = {
 	_TabbedPane_mouseout: function(evt) {
 		var tab=this._tab;
 		var tabbedPane=tab._cardBox;
-		if (tabbedPane.f_getEventLocked(false)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (tabbedPane.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		tabbedPane._tabMouseOut(this._tab, evt);
@@ -371,7 +378,7 @@ var __prototype = {
 				borderSize=f_core.GetCurrentStyleProperty(_tab, "borderLeftWidth");
 			}
 			
-			var borderSize=parseInt(borderSize);
+			var borderSize=parseInt(borderSize, 10);
 			if (!isNaN(borderSize)) {
 				mleft+=1-borderSize;
 				mright+=1-borderSize;

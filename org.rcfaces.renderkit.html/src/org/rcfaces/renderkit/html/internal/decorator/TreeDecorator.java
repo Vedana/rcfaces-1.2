@@ -19,7 +19,6 @@ import javax.faces.model.SelectItem;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.TreeNodeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;

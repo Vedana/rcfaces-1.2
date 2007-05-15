@@ -12,7 +12,8 @@
  
 var __prototype = {
 	fa_filterProperties: function() {
-		this._filtred=f_core.GetBooleanAttribute(this, "v:filtred", false);
+		// Au mieux on prend l'ancien !
+		this._filtred=f_core.GetBooleanAttribute(this, "v:filtred", this._filtred); 		
 		
 		var filterExpression=f_core.GetAttribute(this, "v:filterExpression");
 		if (filterExpression) {

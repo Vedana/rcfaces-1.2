@@ -29,13 +29,17 @@ var __prototype = {
 	/**
 	 * @method hidden
 	 * @param String menuId
-	 * @param Object properties
+	 * @param optional Object properties
 	 * @return object
 	 */
 	f_newSubMenu: function(menuId, properties) {
 		f_class.IsClassDefined("f_menu", true);
 		
-		var id=properties._id;		
+		if (!properties) {
+			properties=new Object;
+		}
+		
+		var id=properties._id;
 		
 		if (!id) {
 		// La forme de menuId n'est peut-etre pas normalisée !

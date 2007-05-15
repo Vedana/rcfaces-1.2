@@ -183,7 +183,7 @@ var __prototype={
 			}
 			
 			var type=input._type;
-			var maxLength=parseInt(input.maxLength);
+			var maxLength=parseInt(input.maxLength, 10);
 			
 			var v=-1;
 			switch(type) {

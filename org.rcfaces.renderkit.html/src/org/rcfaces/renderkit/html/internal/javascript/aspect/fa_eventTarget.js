@@ -91,15 +91,22 @@ var __prototype = {
 	/**
 	 * 
 	 * @method protected
-	 * @param boolean showAlert
-	 * @param number event type mask
+	 * @param Event jsEvent
+	 * @param optional boolean showAlert
+	 * @param optional number event type mask
 	 * @return boolean
 	 */
-	f_getEventLocked: function(showAlert, mask) {
+	f_getEventLocked: function(jsEvent, showAlert, mask) {
+
 		if (window._f_exiting) {
 			return true;
 		}
-		return f_event.GetEventLocked(showAlert, mask);
+
+		f_core.Assert(jsEvent===null || (jsEvent instanceof  Event), "fa_eventTarget.f_getEventLocked: Invalid jsEvent parameter ("+jsEvent+").");
+		f_core.Assert(showAlert===undefined || typeof(showAlert)=="boolean", "fa_eventTarget.f_getEventLocked: Invalid showAlert parameter ("+showAlert+").");
+		f_core.Assert(mask===undefined || typeof(mask)=="number", "fa_eventTarget.f_getEventLocked: Invalid mask parameter ("+mask+").");
+
+		return f_event.GetEventLocked(jsEvent, showAlert, mask);
 	},
 	/**
 	 * 

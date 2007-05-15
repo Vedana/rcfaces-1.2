@@ -46,13 +46,13 @@ var __static = {
 		var item=this._item;
 		var menu=item._menu;
 		f_core.Debug(fa_menuCore, "_MenuItem_mouseOver: menu="+menu+" item="+item);
-		
-		if (menu.f_getEventLocked(false, f_event.POPUP_LOCK)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
+		}
+		
+		if (menu.f_getEventLocked(evt, false)) {
+			return false;
 		}
 		
 		menu.f_menuItem_over(item, true, evt);
@@ -85,14 +85,15 @@ var __static = {
 	_MenuItem_mouseDown: function(evt) {
 		var item=this._item;
 		var menu=item._menu;
-		if (menu.f_getEventLocked(true, f_event.POPUP_LOCK)) {
-			return false;
-		}
-		
+	
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-	
+
+		if (menu.f_getEventLocked(evt)) {
+			return false;
+		}
+		
 		menu.f_menuItem_select(item, evt);
 			
 		return f_core.CancelJsEvent(evt);

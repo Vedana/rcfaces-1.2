@@ -119,13 +119,13 @@ var __static = {
 		var dataGrid=this._dataGrid;
 
 		f_core.Debug(f_grid, "RowMouseDown: mouse down on row of '"+dataGrid+"'");
-
-		if (dataGrid.f_getEventLocked()) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		if (!f_grid.VerifyTarget(evt)) {
@@ -199,11 +199,12 @@ var __static = {
 	 */
 	RowMouseDblClick: function(evt) {
 		var dataGrid=this._dataGrid;
-		if (dataGrid.f_getEventLocked()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		if (!f_grid.VerifyTarget(evt)) {
@@ -224,12 +225,12 @@ var __static = {
 	_BodyMouseDown: function(evt) {
 		var dataGrid=this._dataGrid;
 		
-		if (dataGrid.f_getEventLocked()) {
-			return false;
-		}
-		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
 		}
 	
 		if (!f_grid.VerifyTarget(evt)) {
@@ -336,12 +337,12 @@ var __static = {
 
 			f_core.Debug(f_grid, "_Link_onfocus: Get focus for '"+dataGrid+"'");
 			
-			if (!dataGrid._loading && dataGrid.f_getEventLocked(false)) {
-				return false;
-			}
-			
 			if (!evt) {
 				evt = f_core.GetJsEvent(this);
+			}
+			
+			if (!dataGrid._loading && dataGrid.f_getEventLocked(evt, false)) {
+				return false;
 			}
 			
 			if (!f_grid.VerifyTarget(evt)) {
@@ -408,13 +409,14 @@ var __static = {
 
 			f_core.Debug(f_grid, "_Link_onblur: Lost focus for '"+dataGrid+"'");
 
-	// On bloque pas le "blur" car lors d'une ouverture d'une popup, il faut le traiter !
-	//		if (dataGrid.f_getEventLocked(false)) {
-	//			return false;
-	//		}
 			if (!evt) {
 				evt = f_core.GetJsEvent(this);
 			}
+
+	// On bloque pas le "blur" car lors d'une ouverture d'une popup, il faut le traiter !
+	//		if (dataGrid.f_getEventLocked(evt, false)) {
+	//			return false;
+	//		}
 			
 			if (!dataGrid._focus) {
 				return true;
@@ -437,11 +439,12 @@ var __static = {
 	 */
 	_Link_onkeypress: function(evt) {
 		var dataGrid=this._dataGrid;
-		if (dataGrid.f_getEventLocked(false)) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		if (!f_grid.VerifyTarget(evt)) {
@@ -468,12 +471,13 @@ var __static = {
 	 */
 	_Link_onkeydown: function(evt) {
 		var dataGrid=this._dataGrid;
-		// On peut vouloir faire PAGE-DOWN/UP avec un repeat ! => pas de boite d'alerte !
-		if (dataGrid.f_getEventLocked(!dataGrid._waitingLoading)) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		// On peut vouloir faire PAGE-DOWN/UP avec un repeat ! => pas de boite d'alerte !
+		if (dataGrid.f_getEventLocked(evt, !dataGrid._waitingLoading)) {
+			return false;
 		}
 	
 		if (!f_grid.VerifyTarget(evt)) {
@@ -492,13 +496,14 @@ var __static = {
 	 */
 	_Link_onkeyup: function(evt) {
 		var dataGrid=this._dataGrid;
-		// On peut vouloir faire PAGE-DOWN/UP avec un repeat ! => pas de boite d'alerte !
-		if (dataGrid.f_getEventLocked(false)) {
-			return false;
-		}
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		// On peut vouloir faire PAGE-DOWN/UP avec un repeat ! => pas de boite d'alerte !
+		if (dataGrid.f_getEventLocked(evt, false)) {
+			return false;
 		}
 	
 		if (!f_grid.VerifyTarget(evt)) {
@@ -522,7 +527,7 @@ var __static = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		if (dataGrid.f_getEventLocked(false)) {
+		if (dataGrid.f_getEventLocked(evt, false)) {
 			// Il faut bloquer ... sinon ca risque de scroller la page !
 			return f_core.CancelJsEvent(evt);
 		}
@@ -555,13 +560,13 @@ var __static = {
 			return false;
 		}
 		
-		var dataGrid=column._dataGrid;
-		if (dataGrid.f_getEventLocked(false) || !dataGrid._columnCanBeSorted) {
-			return false;
-		}
-		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+		
+		var dataGrid=column._dataGrid;
+		if (dataGrid.f_getEventLocked(evt, false) || !dataGrid._columnCanBeSorted) {
+			return false;
 		}
 		
 		// En drag ?
@@ -633,14 +638,15 @@ var __static = {
 			return false;
 		}
 	
-		var dataGrid=column._dataGrid;
-		if (dataGrid.f_getEventLocked()) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
 	
+		var dataGrid=column._dataGrid;
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
+		}
+		
 		if (dataGrid.f_isDisabled()) {
 			return f_core.CancelJsEvent(evt);
 		}
@@ -673,11 +679,12 @@ var __static = {
 	_Title_onMouseUp: function(evt) {
 		var column=this._column;
 		var dataGrid=column._dataGrid;
-		if (dataGrid.f_getEventLocked(false)) {
-			return false;
-		}
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt, false)) {
+			return false;
 		}
 
 		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted) {
@@ -751,13 +758,13 @@ var __static = {
 	_TitleCursorMouseDown: function(evt) {
 		var column=this._column;
 		var dataGrid=column._dataGrid;
-
-		if (dataGrid.f_getEventLocked()) {
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
 		}
 		
 		var doc=dataGrid.ownerDocument;
@@ -942,7 +949,7 @@ var __static = {
 			for(var i=0;i<columns.length;i++) {
 				var column=columns[i];
 				
-				totalCols+=parseInt(column._col.style.width);
+				totalCols+=parseInt(column._col.style.width, 10);
 			}
 
 			var fakeCol=dataGrid._fakeColWidth;
@@ -1275,7 +1282,7 @@ var __prototype = {
 	/**
 	 * @method protected
 	 */
-	f_getEventLocked: function(showAlert) {
+	f_getEventLocked: function(evt, showAlert) {
 		if (this._loading) {
 			if (showAlert!==false) {
 				var resourceBundle=f_resourceBundle.Get(f_grid);
@@ -1285,7 +1292,7 @@ var __prototype = {
 			return true;
 		}
 		
-		return this.f_super(arguments, showAlert);
+		return this.f_super(arguments, evt, showAlert);
 	},
 	f_getMainStyleClass: function() {
 		return "f_grid";
@@ -3119,10 +3126,10 @@ var __prototype = {
 		var cw=column._col.style.width;
 		var swidth;
 		if (cw) {
-			swidth=parseInt(cw);
+			swidth=parseInt(cw, 10);
 			
 		} else {
-			swidth=parseInt(column._head.width);
+			swidth=parseInt(column._head.width, 10);
 		}
 		
 		swidth-=f_grid._TEXT_RIGHT_PADDING;

@@ -236,10 +236,10 @@ var __static = {
 	 * @method hidden static
 	 */
 	RegisterWindowClick: function(callbacks, component, popup, keyProvider) {
-		f_core.Assert(component, "f_popup: Component parameter is null !");
-		f_core.Assert(typeof(callbacks)=="object", "f_popup: Callback parameter is null !");
+		f_core.Assert(component, "f_popup.RegisterWindowClick: Component parameter is null !");
+		f_core.Assert(typeof(callbacks)=="object", "f_popup.RegisterWindowClick: Callback parameter is null !");
 
-		f_core.Debug(f_popup, "Register callbacks on component='"+component.id+"'.");
+		f_core.Debug(f_popup, "RegisterWindowClick: Register callbacks on component='"+component.id+"'.");
 
 		if (!f_popup._OldContextMenu) {
 			var oldContextMenu=document.body.oncontextmenu;
@@ -437,10 +437,8 @@ var __static = {
 			f_core.Debug(f_popup, "IsChildOfDocument: no popup document => false");
 			return false;
 		}
-		
-		
+				
 		for(;target;target=target.parentNode) {
-		
 			// f_core.Debug(f_popup, "Test child '"+target+"' popupParent='"+target._popupParent+"'");
 		
 			if (target==popupDocument) {
@@ -659,14 +657,13 @@ var __static = {
 				
 				var cbs=f_popup.Callbacks;
 				if (cbs) {
-					cbs.exit.call(f_popup.Component, null);
 					f_popup.Callbacks=undefined;
+
+					cbs.exit.call(f_popup.Component, null);
 				}
 				
-				return; // undefined
+				return false; // undefined
 			}	
-			
-			return true;				
 		}
 	},
 	/**

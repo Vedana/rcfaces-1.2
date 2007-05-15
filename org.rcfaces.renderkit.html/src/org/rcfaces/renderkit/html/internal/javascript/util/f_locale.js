@@ -8,7 +8,69 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
- 
+
+
+var __static = {
+
+	/**
+	 * Short form.
+	 *
+	 * @field public static final number
+	 */
+	SHORT: 0,
+
+	/**
+	 * Medium form.
+	 *
+	 * @field public static final number
+	 */
+	MEDIUM: 1,
+
+	/**
+	 * Long form.
+	 *
+	 * @field public static final number
+	 */
+	LONG: 2,
+
+	/**
+	 * @field private static f_locale
+	 */
+	_Instance: undefined,
+	 
+	/**
+	 * @method public static final
+	 * @return f_locale
+	 */
+	Get: function() {
+		if (!f_locale._Instance) {
+			f_locale._Instance=new f_locale();
+		}
+		
+		return f_locale._Instance;
+	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
+	Finalizer: function() {
+		f_locale._Instance=undefined; // f_locale
+	},
+	/**
+	 * @method private static final
+	 * @param number idx
+	 * @return String
+	 */
+	_GetLocaleNamePart: function(idx) {
+		var seps=f_env.GetLocaleName().split("_");
+		if (seps.length<=idx) {
+			return null;
+		}
+		
+		return seps[idx];
+	}
+}
+
 var __prototype = {
 	f_locale: function() {
 		var resourceBundle=f_resourceBundle.Get(f_locale);
@@ -54,6 +116,8 @@ var __prototype = {
 	 * @see #MEDIUM
 	 */
 	f_getMonthName: function(n, form) {
+		f_core.Assert(typeof(n)=="number" && n>=0 && n<=11, "f_locale.f_getMonthName: Invalid month number parameter ("+n+")");
+		f_core.Assert(typeof(form)=="number" && (form==f_locale.SHORT || form==f_locale.MEDIUM || form==f_locale.LONG), "f_locale.f_getMonthName: Invalid form parameter ("+form+")");
 	
 		var a=this._monthMedNames;
 	
@@ -83,6 +147,9 @@ var __prototype = {
 	 * @see #MEDIUM
 	 */
 	f_getDayName: function(n, form) {
+		f_core.Assert(typeof(n)=="number" && n>=0 && n<=6, "f_locale.f_getDayName: Invalid day number parameter ("+n+")");
+		f_core.Assert(typeof(form)=="number" && (form==f_locale.SHORT || form==f_locale.MEDIUM || form==f_locale.LONG), "f_locale.f_getDayName: Invalid form parameter ("+form+")");
+
 		var a=this._dayMedNames;
 	
 		switch(form) {
@@ -99,6 +166,8 @@ var __prototype = {
 			return null;
 		}
 		
+		f_core.Assert(typeof(a[n])=="string", "f_locale.f_getDayName: Invalid day name for index "+n+" form="+form);
+		
 		return a[n];
 	},
 	/**
@@ -106,6 +175,7 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getFirstDayOfWeek: function() {
+		f_core.Assert(typeof(this._firstDayOfWeek)=="number", "f_locale.f_getFirstDayOfWeek: Invalid first day of week ! ("+this._firstDayOfWeek+")")
 		return this._firstDayOfWeek;
 	},
 	/**
@@ -113,6 +183,7 @@ var __prototype = {
 	 * @return number
 	 */
 	f_getTwoDigitYearStart: function() {
+		f_core.Assert(typeof(this._twoDigitYearStart)=="number", "f_locale.f_getFirstDayOfWeek: Invalid two digit year start ! ("+this._twoDigitYearStart+")")
 		return this._twoDigitYearStart;
 	},
 	/**
@@ -124,6 +195,8 @@ var __prototype = {
 	 * @see #MEDIUM
 	 */
 	f_getDateFormat: function(form) {
+		f_core.Assert(typeof(form)=="number" && (form==f_locale.SHORT || form==f_locale.MEDIUM || form==f_locale.LONG), "f_locale.f_getDateFormat: Invalid form parameter ("+form+")");
+
 		var ds=this._dateFormats;
 	
 		switch(form) {
@@ -163,67 +236,6 @@ var __prototype = {
      */
 	f_getVariant: function() {
 		return f_locale._GetLocaleNamePart(2);
-	}
-}
-
-var __static = {
-
-	/**
-	 * Short form.
-	 *
-	 * @field public static final number
-	 */
-	SHORT: 0,
-
-	/**
-	 * Medium form.
-	 *
-	 * @field public static final number
-	 */
-	MEDIUM: 1,
-
-	/**
-	 * Long form.
-	 *
-	 * @field public static final number
-	 */
-	LONG: 2,
-
-	/**
-	 * @field private static
-	 */
-	_Instance: undefined,
-	 
-	/**
-	 * @method public static final
-	 * @return f_locale
-	 */
-	Get: function() {
-		if (!f_locale._Instance) {
-			f_locale._Instance=new f_locale();
-		}
-		
-		return f_locale._Instance;
-	},
-	/**
-	 * @method hidden static
-	 * @return void
-	 */
-	Finalizer: function() {
-		f_locale._Instance=undefined; // f_locale
-	},
-	/**
-	 * @method private static final
-	 * @param number idx
-	 * @return String
-	 */
-	_GetLocaleNamePart: function(idx) {
-		var seps=f_env.GetLocaleName().split("_");
-		if (seps.length<=idx) {
-			return null;
-		}
-		
-		return seps[idx];
 	}
 }
 

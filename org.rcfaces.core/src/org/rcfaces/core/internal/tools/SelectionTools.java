@@ -69,12 +69,12 @@ public class SelectionTools extends CollectionTools {
         return valuesAccessor.listValues(selectedValues, refValue);
     }
 
-    public static Object adaptValue(Object value) {
+    public static Object adaptValue(Object value, Object defaultValues) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
                 ISelectionProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR,
                 false);
         if (valuesAccessor == null) {
-            return null;
+            return defaultValues;
         }
         return valuesAccessor.adaptValue(value);
     }

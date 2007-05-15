@@ -76,7 +76,7 @@ var __prototype={
 		var next=this._computeNextValue(fv, unit, limitMin, limitMax, step, input._cycle);
 		
 		input.value=this.fa_formatNumber(input, next);
-		f_core.SelectText(input, 0, parseInt(input.maxLength));
+		f_core.SelectText(input, 0, parseInt(input.maxLength, 10));
 	
 		return false;
 	},
@@ -96,7 +96,7 @@ var __prototype={
 		var next=this._computeNextValue(newValue, 0, limitMin, limitMax, step, input._cycle);
 		
 		input.value=this.fa_formatNumber(input, next);
-		f_core.SelectText(input, 0, parseInt(input.maxLength));
+		f_core.SelectText(input, 0, parseInt(input.maxLength, 10));
 	
 		return false;
 	},
@@ -163,7 +163,7 @@ var __prototype={
 		var sel=f_core.GetTextSelection(input);
 
 		var inputValue=input.value;
-		var maxLength=parseInt(input.maxLength);
+		var maxLength=parseInt(input.maxLength, 10);
 		
 		f_core.Debug(fa_compositeNumEntry, "fa_keyPressed: inputValue='"+inputValue+"' maxLength='"+maxLength+"' sel0="+sel[0]+" sel1="+sel[1]+" autocompletion="+input._autoCompletion);
 		
