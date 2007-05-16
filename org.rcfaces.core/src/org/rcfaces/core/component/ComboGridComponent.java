@@ -1,31 +1,32 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
-import org.rcfaces.core.component.capability.IPagedCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ISortedChildrenCapability;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.internal.tools.OrderTools;
+import java.util.Arrays;
 import org.rcfaces.core.internal.tools.SortTools;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.IPagerMessageCapability;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.AbstractGridComponent;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.component.capability.IPagedCapability;
+import org.rcfaces.core.component.ComboColumnComponent;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class ComboGridComponent extends AbstractGridComponent implements 
 	IDisabledCapability,
@@ -33,6 +34,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	IReadOnlyCapability,
 	IBorderCapability,
 	IRowStyleClassCapability,
+	IPagerMessageCapability,
 	IScrollableCapability,
 	IPagedCapability,
 	IOrderedChildrenCapability,
@@ -43,7 +45,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","verticalScrollPosition","selectionValueConverter","paged","required","horizontalScrollPosition","disabled","selectedValue","rowStyleClass","rowIndexVar","valueColumnId","rowCountVar","popupWidth","border","readOnly","labelColumnId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","verticalScrollPosition","selectionValueConverter","paged","required","horizontalScrollPosition","disabled","message","selectedValue","rowStyleClass","valueColumnId","rowIndexVar","rowCountVar","manyResultsMessage","oneResultMessage","popupWidth","zeroResultMessage","border","readOnly","labelColumnId"}));
 	}
 
 	public ComboGridComponent() {
@@ -296,6 +298,126 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 */
 	public void setRowStyleClass(ValueBinding rowStyleClass) {
 		engine.setProperty(Properties.ROW_STYLE_CLASS, rowStyleClass);
+	}
+
+	public java.lang.String getManyResultsMessage() {
+		return getManyResultsMessage(null);
+	}
+
+	/**
+	 * See {@link #getManyResultsMessage() getManyResultsMessage()} for more details
+	 */
+	public java.lang.String getManyResultsMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MANY_RESULTS_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "manyResultsMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isManyResultsMessageSetted() {
+		return engine.isPropertySetted(Properties.MANY_RESULTS_MESSAGE);
+	}
+
+	public void setManyResultsMessage(java.lang.String manyResultsMessage) {
+		engine.setProperty(Properties.MANY_RESULTS_MESSAGE, manyResultsMessage);
+	}
+
+	/**
+	 * See {@link #setManyResultsMessage(String) setManyResultsMessage(String)} for more details
+	 */
+	public void setManyResultsMessage(ValueBinding manyResultsMessage) {
+		engine.setProperty(Properties.MANY_RESULTS_MESSAGE, manyResultsMessage);
+	}
+
+	public java.lang.String getMessage() {
+		return getMessage(null);
+	}
+
+	/**
+	 * See {@link #getMessage() getMessage()} for more details
+	 */
+	public java.lang.String getMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "message" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isMessageSetted() {
+		return engine.isPropertySetted(Properties.MESSAGE);
+	}
+
+	public void setMessage(java.lang.String message) {
+		engine.setProperty(Properties.MESSAGE, message);
+	}
+
+	/**
+	 * See {@link #setMessage(String) setMessage(String)} for more details
+	 */
+	public void setMessage(ValueBinding message) {
+		engine.setProperty(Properties.MESSAGE, message);
+	}
+
+	public java.lang.String getOneResultMessage() {
+		return getOneResultMessage(null);
+	}
+
+	/**
+	 * See {@link #getOneResultMessage() getOneResultMessage()} for more details
+	 */
+	public java.lang.String getOneResultMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ONE_RESULT_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "oneResultMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOneResultMessageSetted() {
+		return engine.isPropertySetted(Properties.ONE_RESULT_MESSAGE);
+	}
+
+	public void setOneResultMessage(java.lang.String oneResultMessage) {
+		engine.setProperty(Properties.ONE_RESULT_MESSAGE, oneResultMessage);
+	}
+
+	/**
+	 * See {@link #setOneResultMessage(String) setOneResultMessage(String)} for more details
+	 */
+	public void setOneResultMessage(ValueBinding oneResultMessage) {
+		engine.setProperty(Properties.ONE_RESULT_MESSAGE, oneResultMessage);
+	}
+
+	public java.lang.String getZeroResultMessage() {
+		return getZeroResultMessage(null);
+	}
+
+	/**
+	 * See {@link #getZeroResultMessage() getZeroResultMessage()} for more details
+	 */
+	public java.lang.String getZeroResultMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ZERO_RESULT_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "zeroResultMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isZeroResultMessageSetted() {
+		return engine.isPropertySetted(Properties.ZERO_RESULT_MESSAGE);
+	}
+
+	public void setZeroResultMessage(java.lang.String zeroResultMessage) {
+		engine.setProperty(Properties.ZERO_RESULT_MESSAGE, zeroResultMessage);
+	}
+
+	/**
+	 * See {@link #setZeroResultMessage(String) setZeroResultMessage(String)} for more details
+	 */
+	public void setZeroResultMessage(ValueBinding zeroResultMessage) {
+		engine.setProperty(Properties.ZERO_RESULT_MESSAGE, zeroResultMessage);
 	}
 
 	public int getHorizontalScrollPosition() {

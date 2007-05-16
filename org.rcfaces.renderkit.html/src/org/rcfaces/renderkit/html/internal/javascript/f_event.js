@@ -525,14 +525,15 @@ var __static = {
 			return true;
 		}
 	
-		f_core.Assert(jsEvent===null || (jsEvent instanceof  Event), "f_event.GetEventLocked: Invalid jsEvent parameter ("+jsEvent+").");
+		//f_core.Assert(jsEvent===null || (jsEvent instanceof  Event), "f_event.GetEventLocked: Invalid jsEvent parameter ("+jsEvent+").");
+		// Le type  Event n'existe pas sous IE
 		f_core.Assert(showAlert===undefined || typeof(showAlert)=="boolean", "f_event.GetEventLocked: Invalid showAlert parameter ("+showAlert+").");
 		f_core.Assert(mask===undefined || typeof(mask)=="number", "f_event.GetEventLocked: Invalid mask parameter ("+mask+").");
 
 		var currentLock=f_event._EvtLock;
 
 		if (mask) {
-			//currentLock &= ~mask;
+			currentLock &= ~mask;
 		}
 					
 		if (!currentLock) {

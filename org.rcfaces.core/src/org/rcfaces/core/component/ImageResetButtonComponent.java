@@ -1,8 +1,10 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.ImageButtonComponent;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The imageResetButton Component is a <a href="/comps/resetButtonComponent.html">resetButton Component</a> that can show an image.</p>

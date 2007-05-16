@@ -28,6 +28,7 @@ import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IPagerMessageCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
@@ -412,6 +413,52 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         }
 
         return writer;
+    }
+
+    protected void writePagerMessage(IHtmlWriter htmlWriter,
+            IPagerMessageCapability pagerMessageCapability)
+            throws WriterException {
+
+        String message = pagerMessageCapability.getMessage();
+        if (message != null) {
+            message = ParamUtils.formatMessage(
+                    (UIComponent) pagerMessageCapability, message);
+
+            htmlWriter.writeAttribute("v:message", message);
+
+            String zeroResultMessage = pagerMessageCapability
+                    .getZeroResultMessage();
+            if (zeroResultMessage != null) {
+                zeroResultMessage = ParamUtils
+                        .formatMessage((UIComponent) pagerMessageCapability,
+                                zeroResultMessage);
+
+                htmlWriter.writeAttribute("v:zeroResultMessage",
+                        zeroResultMessage);
+            }
+
+            String oneResultMessage = pagerMessageCapability
+                    .getOneResultMessage();
+            if (oneResultMessage != null) {
+                oneResultMessage = ParamUtils.formatMessage(
+                        (UIComponent) pagerMessageCapability, oneResultMessage);
+
+                htmlWriter.writeAttribute("v:oneResultMessage",
+                        oneResultMessage);
+            }
+
+            String manyResultsMessage = pagerMessageCapability
+                    .getManyResultsMessage();
+            if (manyResultsMessage != null) {
+                manyResultsMessage = ParamUtils.formatMessage(
+                        (UIComponent) pagerMessageCapability,
+                        manyResultsMessage);
+
+                htmlWriter.writeAttribute("v:manyResultMessage",
+                        manyResultsMessage);
+            }
+        }
+
     }
 
     protected IHtmlWriter writeCoreAttributes(IHtmlWriter writer)

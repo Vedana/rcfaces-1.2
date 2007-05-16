@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.PagerComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class PagerTag extends AbstractBasicTag implements Tag {
 
@@ -17,10 +17,10 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(PagerTag.class);
 
 	private String forValue;
-	private String message;
-	private String zeroResultMessage;
-	private String oneResultMessage;
 	private String manyResultsMessage;
+	private String message;
+	private String oneResultMessage;
+	private String zeroResultMessage;
 	private String noPagedMessage;
 	public String getComponentType() {
 		return PagerComponent.COMPONENT_TYPE;
@@ -34,20 +34,20 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 		this.forValue = forValue;
 	}
 
+	public final String getManyResultsMessage() {
+		return manyResultsMessage;
+	}
+
+	public final void setManyResultsMessage(String manyResultsMessage) {
+		this.manyResultsMessage = manyResultsMessage;
+	}
+
 	public final String getMessage() {
 		return message;
 	}
 
 	public final void setMessage(String message) {
 		this.message = message;
-	}
-
-	public final String getZeroResultMessage() {
-		return zeroResultMessage;
-	}
-
-	public final void setZeroResultMessage(String zeroResultMessage) {
-		this.zeroResultMessage = zeroResultMessage;
 	}
 
 	public final String getOneResultMessage() {
@@ -58,12 +58,12 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 		this.oneResultMessage = oneResultMessage;
 	}
 
-	public final String getManyResultsMessage() {
-		return manyResultsMessage;
+	public final String getZeroResultMessage() {
+		return zeroResultMessage;
 	}
 
-	public final void setManyResultsMessage(String manyResultsMessage) {
-		this.manyResultsMessage = manyResultsMessage;
+	public final void setZeroResultMessage(String zeroResultMessage) {
+		this.zeroResultMessage = zeroResultMessage;
 	}
 
 	public final String getNoPagedMessage() {
@@ -80,10 +80,10 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  forValue='"+forValue+"'");
-			LOG.debug("  message='"+message+"'");
-			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
-			LOG.debug("  oneResultMessage='"+oneResultMessage+"'");
 			LOG.debug("  manyResultsMessage='"+manyResultsMessage+"'");
+			LOG.debug("  message='"+message+"'");
+			LOG.debug("  oneResultMessage='"+oneResultMessage+"'");
+			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
 			LOG.debug("  noPagedMessage='"+noPagedMessage+"'");
 		}
 		super.setProperties(uiComponent);
@@ -109,39 +109,43 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
+		if (manyResultsMessage != null) {
+			if (isValueReference(manyResultsMessage)) {
+				ValueBinding vb = application.createValueBinding(manyResultsMessage);
+
+				component.setManyResultsMessage(vb);
+			} else {
+				component.setManyResultsMessage(manyResultsMessage);
+			}
+		}
+
 		if (message != null) {
 			if (isValueReference(message)) {
 				ValueBinding vb = application.createValueBinding(message);
+
 				component.setMessage(vb);
 			} else {
 				component.setMessage(message);
 			}
 		}
 
-		if (zeroResultMessage != null) {
-			if (isValueReference(zeroResultMessage)) {
-				ValueBinding vb = application.createValueBinding(zeroResultMessage);
-				component.setZeroResultMessage(vb);
-			} else {
-				component.setZeroResultMessage(zeroResultMessage);
-			}
-		}
-
 		if (oneResultMessage != null) {
 			if (isValueReference(oneResultMessage)) {
 				ValueBinding vb = application.createValueBinding(oneResultMessage);
+
 				component.setOneResultMessage(vb);
 			} else {
 				component.setOneResultMessage(oneResultMessage);
 			}
 		}
 
-		if (manyResultsMessage != null) {
-			if (isValueReference(manyResultsMessage)) {
-				ValueBinding vb = application.createValueBinding(manyResultsMessage);
-				component.setManyResultsMessage(vb);
+		if (zeroResultMessage != null) {
+			if (isValueReference(zeroResultMessage)) {
+				ValueBinding vb = application.createValueBinding(zeroResultMessage);
+
+				component.setZeroResultMessage(vb);
 			} else {
-				component.setManyResultsMessage(manyResultsMessage);
+				component.setZeroResultMessage(zeroResultMessage);
 			}
 		}
 
@@ -157,10 +161,10 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 
 	public void release() {
 		forValue = null;
-		message = null;
-		zeroResultMessage = null;
-		oneResultMessage = null;
 		manyResultsMessage = null;
+		message = null;
+		oneResultMessage = null;
+		zeroResultMessage = null;
 		noPagedMessage = null;
 
 		super.release();

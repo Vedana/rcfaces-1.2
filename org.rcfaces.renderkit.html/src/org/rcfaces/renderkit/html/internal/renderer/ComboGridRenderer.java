@@ -21,6 +21,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -112,6 +113,8 @@ public class ComboGridRenderer extends DataGridRenderer {
 
             htmlWriter.writeAttribute("v:rowStyleClass", sa.toString());
         }
+
+        writePagerMessage(htmlWriter, comboGridComponent);
 
         htmlWriter.startElement(IHtmlWriter.COL);
         if (colWidth > 0) {

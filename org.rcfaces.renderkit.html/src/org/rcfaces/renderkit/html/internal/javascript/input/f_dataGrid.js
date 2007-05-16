@@ -838,7 +838,7 @@ var __prototype = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_dataGrid, "Bad status: "+request.f_getStatus());
+	 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+request.f_getStatus());
 	 				 				 			
 		 		if (dataGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text)===false) {
 					dataGrid._loading=undefined;		

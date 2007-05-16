@@ -102,7 +102,8 @@ var __prototype = {
 			return true;
 		}
 
-		f_core.Assert(jsEvent===null || (jsEvent instanceof  Event), "fa_eventTarget.f_getEventLocked: Invalid jsEvent parameter ("+jsEvent+").");
+		// f_core.Assert(jsEvent===null || (jsEvent instanceof Event), "fa_eventTarget.f_getEventLocked: Invalid jsEvent parameter ("+jsEvent+").");
+		// Le type  Event n'existe pas sous IE
 		f_core.Assert(showAlert===undefined || typeof(showAlert)=="boolean", "fa_eventTarget.f_getEventLocked: Invalid showAlert parameter ("+showAlert+").");
 		f_core.Assert(mask===undefined || typeof(mask)=="number", "fa_eventTarget.f_getEventLocked: Invalid mask parameter ("+mask+").");
 

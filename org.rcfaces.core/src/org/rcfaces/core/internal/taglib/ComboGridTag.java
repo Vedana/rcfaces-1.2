@@ -1,15 +1,15 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.ComboGridComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ComboGridTag extends AbstractGridTag implements Tag {
 
@@ -21,6 +21,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private String readOnly;
 	private String border;
 	private String rowStyleClass;
+	private String manyResultsMessage;
+	private String message;
+	private String oneResultMessage;
+	private String zeroResultMessage;
 	private String horizontalScrollPosition;
 	private String verticalScrollPosition;
 	private String paged;
@@ -74,6 +78,38 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 	public final void setRowStyleClass(String rowStyleClass) {
 		this.rowStyleClass = rowStyleClass;
+	}
+
+	public final String getManyResultsMessage() {
+		return manyResultsMessage;
+	}
+
+	public final void setManyResultsMessage(String manyResultsMessage) {
+		this.manyResultsMessage = manyResultsMessage;
+	}
+
+	public final String getMessage() {
+		return message;
+	}
+
+	public final void setMessage(String message) {
+		this.message = message;
+	}
+
+	public final String getOneResultMessage() {
+		return oneResultMessage;
+	}
+
+	public final void setOneResultMessage(String oneResultMessage) {
+		this.oneResultMessage = oneResultMessage;
+	}
+
+	public final String getZeroResultMessage() {
+		return zeroResultMessage;
+	}
+
+	public final void setZeroResultMessage(String zeroResultMessage) {
+		this.zeroResultMessage = zeroResultMessage;
 	}
 
 	public final String getHorizontalScrollPosition() {
@@ -174,6 +210,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
+			LOG.debug("  manyResultsMessage='"+manyResultsMessage+"'");
+			LOG.debug("  message='"+message+"'");
+			LOG.debug("  oneResultMessage='"+oneResultMessage+"'");
+			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  paged='"+paged+"'");
@@ -246,6 +286,46 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 				component.setRowStyleClass(vb);
 			} else {
 				component.setRowStyleClass(rowStyleClass);
+			}
+		}
+
+		if (manyResultsMessage != null) {
+			if (isValueReference(manyResultsMessage)) {
+				ValueBinding vb = application.createValueBinding(manyResultsMessage);
+
+				component.setManyResultsMessage(vb);
+			} else {
+				component.setManyResultsMessage(manyResultsMessage);
+			}
+		}
+
+		if (message != null) {
+			if (isValueReference(message)) {
+				ValueBinding vb = application.createValueBinding(message);
+
+				component.setMessage(vb);
+			} else {
+				component.setMessage(message);
+			}
+		}
+
+		if (oneResultMessage != null) {
+			if (isValueReference(oneResultMessage)) {
+				ValueBinding vb = application.createValueBinding(oneResultMessage);
+
+				component.setOneResultMessage(vb);
+			} else {
+				component.setOneResultMessage(oneResultMessage);
+			}
+		}
+
+		if (zeroResultMessage != null) {
+			if (isValueReference(zeroResultMessage)) {
+				ValueBinding vb = application.createValueBinding(zeroResultMessage);
+
+				component.setZeroResultMessage(vb);
+			} else {
+				component.setZeroResultMessage(zeroResultMessage);
 			}
 		}
 
@@ -354,6 +434,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		readOnly = null;
 		border = null;
 		rowStyleClass = null;
+		manyResultsMessage = null;
+		message = null;
+		oneResultMessage = null;
+		zeroResultMessage = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		paged = null;

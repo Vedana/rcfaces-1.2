@@ -272,12 +272,12 @@ var __prototype = {
 
 		var rows=f_core.GetNumberAttribute(this, "v:rows");
 
-		var td=f_core.CreateElement(tBodyContainer, "tr", null, "td");									
+		var td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {align: "center", valign: "middle" });									
 		dataGrid=f_dataGridPopup.Create(td, this, width, (rows)?(height-26):height);
 		this._dataGrid=dataGrid;
 		
 		if (rows) {
-			td=f_core.CreateElement(tBodyContainer, "tr", null, "td");
+			td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {align: "center", valign: "middle" });
 			pager=f_pager.Create(td, this, ":"+dataGrid.id);
 			this._pager=pager;
 		}
