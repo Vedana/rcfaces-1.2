@@ -792,38 +792,21 @@ var __prototype = {
 	},
 
 	/**
-	 *  <p>draw a modal iFrame with a greying div around. 
+	 *  <p>decorate the div
 	 *  </p>
 	 *
 	 * @method protected
-	 * @return Object _div holds the gray div and _iframe holds the iframe
+	 * @param HTMLElement div
+	 * @return void
 	 */
-	f_drawModIFrame: function() {
-     	f_core.Debug(f_shell, "f_drawModIFrame: entering");
-
-		if (f_shell._ObjIFrame) {
-	     	f_core.Debug(f_shell, "f_drawModIFrame: exit : already done !");
-	     	if (!this._iframe) {
-		     	this._iframe=f_shell._ObjIFrame._iframe;
-		    }
-	     	if (!this._div) {
-		     	this._div=f_shell._ObjIFrame._div;
-		     }
-//	     	var div = f_shell._ObjIFrame._div;
-//	     	div.className = this._cssClassBase+"_background_"+this._backgroundMode;
-//			var iframe = f_shell._ObjIFrame._iframe;
-//	     	iframe.className = this._cssClassBase+"_frame";
-			return;
-		}
-		
-		var cssClassBase = this._cssClassBase;
+	f_decorateDiv: function(div) {
+     	f_core.Debug(f_shell, "f_decorateDiv: entering");
+     	f_core.Assert(div.nodeType==f_core.ELEMENT_NODE, "f_shell.f_decorateDiv: bad parameter type "+div);
 
 		// Recuperation de la taille de la fenetre
 		var size=f_shell.GetOwnDocumentSize();
-		
-		// Creation de la div recouvrant la page
-		var div = document.createElement("div");
-		div.className = cssClassBase+"_background_"+this._backgroundMode;
+
+		div.className = this.f_getCssClassBase()+"_background_"+this.f_getBackgroundMode();
 		div.style.position="absolute";
 		div.style.top=0;
 		div.style.left=0;
@@ -833,29 +816,21 @@ var __prototype = {
 		//Associate this to the div
 		div._shell = this;
 
-		this.f_setDiv(div);
+	},
 
-		//Resize Handler
-		f_core.AddResizeEventListener(div, f_shell._OnResize);
-		
-		//Hide Selects
-		f_shell.HideSelect();
-		
-		//Attach
-		document.body.insertBefore(div, document.body.firstChild);
-		
-		// Creation de l'iFrame
-		var iframe = document.createElement("iframe");
+	/**
+	 *  <p>decorate the iframe
+	 *  </p>
+	 *
+	 * @method protected
+	 * @param HTMLElement iframe
+	 * @return void
+	 */
+	f_decorateIframe: function(iframe) {
+     	f_core.Debug(f_shell, "f_decorateIframe: entering");
+     	f_core.Assert(iframe.nodeType==f_core.ELEMENT_NODE, "f_shell.f_decorateIframe: bad parameter type "+iframe);
 
-		//Hide Selects
-		// Twice is too much (Fred)
-//		f_shell.HideSelect();
-		
-		iframe.className = cssClassBase+"_frame";
-		iframe.frameBorder = 0;
-		if (!f_shell._IE6) {
-			iframe.allowTransparency = true;
-		}
+		iframe.className = this.f_getCssClassBase()+"_frame";
 		
 		// calculate iframe size and position
 		var viewSize=f_core.GetViewSize();
@@ -884,6 +859,57 @@ var __prototype = {
 		iframe.style.width = this._width+"px";
 		
 		iframe._modalShell = this;
+
+	},
+
+	/**
+	 *  <p>draw a modal iFrame with a greying div around. 
+	 *  </p>
+	 *
+	 * @method protected
+	 * @return Object _div holds the gray div and _iframe holds the iframe
+	 */
+	f_drawModIFrame: function() {
+     	f_core.Debug(f_shell, "f_drawModIFrame: entering");
+
+		var cssClassBase = this.f_getCssClassBase();
+
+		if (f_shell._ObjIFrame) {
+	     	f_core.Debug(f_shell, "f_drawModIFrame: exit : already done !");
+	     	if (!this._iframe) {
+		     	this.f_setIframe(f_shell._ObjIFrame._iframe);
+		    }
+	     	if (!this._div) {
+		     	this.f_setDiv(f_shell._ObjIFrame._div);
+		     }
+			return;
+		}
+
+		// Creation de la div recouvrant la page
+		var div = document.createElement("div");
+		
+		this.f_decorateDiv(div);
+
+		//Resize Handler
+		f_core.AddResizeEventListener(div, f_shell._OnResize);
+
+		this.f_setDiv(div);
+
+		//Hide Selects
+		f_shell.HideSelect();
+		
+		//Attach
+		document.body.insertBefore(div, document.body.firstChild);
+		
+		// Creation de l'iFrame
+		var iframe = document.createElement("iframe");
+
+		iframe.frameBorder = 0;
+		if (!f_shell._IE6) {
+			iframe.allowTransparency = true;
+		}
+		
+		this.f_decorateIframe(iframe);
 		
 		iframe.src="about:blank";
 
@@ -891,7 +917,7 @@ var __prototype = {
 			_div: div, 
 			_iframe: iframe
 		};
-		this.f_setDiv(div);
+
 		this.f_setIframe(iframe);
 
 		//Attach
@@ -978,7 +1004,9 @@ var __prototype = {
 		}
 
   		if (!nextFocusable) {
-   			nextFocusable=f_core.GetNextFocusableComponent(frameDoc.body);
+  			if (frameDoc.body) {
+	   			nextFocusable=f_core.GetNextFocusableComponent(frameDoc.body);
+	   		}
   		}
   		
    		if (nextFocusable) {
@@ -992,7 +1020,7 @@ var __prototype = {
 	 * @method public
 	 * @return String
 	 */
-	toString: function() {
+	_toString: function() {
 		return "[f_shell cssClassBase='"+this._cssClassBase+"' backgroundMode='"+this._backgroundMode+"']";
 	}
 }

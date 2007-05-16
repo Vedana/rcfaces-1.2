@@ -17,7 +17,7 @@ var __prototype = {
 	/**
 	 * @field private String
 	 */
-	_src: undefined,
+	_viewURL: undefined,
 
 	/**
 	 * <p>Construct a new <code>f_viewDialog</code> with the specified
@@ -32,19 +32,22 @@ var __prototype = {
 			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 500));
 			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 400));
 			
-			this.f_setSrc(f_core.GetAttribute(this, "v:src", "about:blank"));
+			this.f_setViewURL(f_core.GetAttribute(this, "v:viewURL", "about:blank"));
 
 			this.f_setCssClassBase(f_core.GetAttribute(this, "v:cssClassBase", "f_viewDialog"));
 			this.f_setBackgroundMode(f_core.GetAttribute(this, "v:backgroundMode", "greyed"));
+
+			this.f_setPriority(f_core.GetNumberAttribute(this, "v:dialogPriority", 0));
 			
 			if (f_core.GetBooleanAttribute(this, "v:visible", true)) {
-				this.f_open();
+				this.f_openURL();
 			}
 		} else {
 			this.f_setCssClassBase("f_viewDialog");
 			this.f_setBackgroundMode("greyed");
 			this.f_setWidth(500);
 			this.f_setHeight(400);
+			this.f_setPriority(0);
 		}
 		
 	},
@@ -57,30 +60,30 @@ var __prototype = {
 	f_finalize: function() {
 		this.f_super(arguments);
 		
-		_src=undefined // string
+		_viewURL=undefined // string
 	},
 	*/
 
 	/**
-	 *  <p>Return the src URL.</p>
+	 *  <p>Return the viewURL URL.</p>
 	 *
 	 * @method public 
-	 * @return string src
+	 * @return string viewURL
 	 */
-	f_getSrc: function() {
-		return this._src;
+	f_getViewURL: function() {
+		return this._viewURL;
 	},
 	
 	/**
-	 *  <p>Sets the src URL.</p>
+	 *  <p>Sets the viewURL URL.</p>
 	 *
 	 * @method public 
-	 * @param string src
+	 * @param string viewURL
 	 * @return void
 	 */
-	f_setSrc: function(src) {
-    	f_core.Assert((typeof(src)=="string"), "f_shell.f_setSrc: Invalid parameter '"+src+"'.");
-		this._src = f_env.ResolveContentUrl(window, src);
+	f_setViewURL: function(viewURL) {
+    	f_core.Assert((typeof(viewURL)=="string"), "f_shell.f_setViewURL: Invalid parameter '"+viewURL+"'.");
+		this._viewURL = f_env.ResolveContentUrl(window, viewURL);
 	},
 	
 	/**
@@ -101,37 +104,42 @@ var __prototype = {
 	 * @method protected
 	 * @return String 
 	 */
-	f_getIFrameUrl: function() {
-		return this.f_getSrc();
+/*	f_getIFrameUrl: function() {
+		return this.f_getViewURL();
 	},
-
+*/
 	/**
 	 * @method public
-	 * @param optionnal string src : the url to be shown in the iframe
+	 * @param optionnal string viewURL : the url to be shown in the iframe
 	 * @return void
 	 */
-	f_open: function(src) {
-     	f_core.Debug(f_viewDialog, "f_open: entering ("+src+")");
-		f_core.Assert(arguments.length==0 || src || typeof(src)=="string", "f_viewDialog.f_open: first parameter is optionnal but must be a string");
+	f_openURL: function(viewURL) {
+     	f_core.Debug(f_viewDialog, "f_open: entering ("+viewURL+")");
+		f_core.Assert(arguments.length==0 || viewURL || typeof(viewURL)=="string", "f_viewDialog.f_open: first parameter is optionnal but must be a string");
 		
-		if (src) {
-			this.f_setSrc(src);
+		if (viewURL) {
+			this.f_setViewURL(viewURL);
 		}
 
-		// Create a blocking Div
-		this.f_drawModIFrame();
+		this.f_openDialog(null, this.f_getViewURL());
+		
 
 	},
 
 	/**
 	 * @method public
+	 * @param boolean aSuivre : true if we're to draw the next Dialog
 	 * @return void
 	 */
-	f_close: function() {
-     	f_core.Debug(f_viewDialog, "f_close: entering ");
+	f_close: function(aSuivre) {
+     	f_core.Debug(f_viewDialog, "f_close: entering ("+aSuivre+")");
 
-		// Create a blocking Div
-		this.f_drawModIFrame();
+		if (aSuivre) {
+			f_dialog.ShowNextDialogStored();
+			return;
+		}
+		//delete the iFrame
+		this.f_delModIFrame();
 
 	},
 
@@ -139,8 +147,10 @@ var __prototype = {
 	 * @method public
 	 * @return String
 	 */
-	toString: function() {
-		return "[f_viewDialog]";
+	_toString: function() {
+		var ts = this.f_super(arguments);
+		ts = ts + "\n[f_viewDialog viewURL='"+this._viewURL+"']";
+		return ts;
 	}
 }
 

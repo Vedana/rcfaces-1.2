@@ -55,7 +55,7 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
         if (component.isVisible(facesContext)) {
             // titi.open()
             // le callback sera déclenché par le fireEvent (fa_event)
-            javaScriptWriter.writeMethodCall("f_open").writeln(");");
+            javaScriptWriter.writeMethodCall("f_openMessage").writeln(");");
         }
         super.encodeComponentsEnd();
     }

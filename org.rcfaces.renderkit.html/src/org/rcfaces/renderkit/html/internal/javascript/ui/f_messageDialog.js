@@ -17,22 +17,6 @@ var __static = {
 			selection: f_event.SELECTION
 	},
 	
-    /**
-     * @field private static Array
-     */
-	_Messages: undefined,
-    /**
-     * @field private static boolean
-     */
-	_DocComplete: undefined,
-     /**
-     * Class Destructor (called in the head ...
-     * @method public static
-     */
-    Finalizer: function() {
-    	f_messageDialog._Messages = undefined; // List<Object>
-    	// f_messageDialog._DocComplete = undefined; // boolean
- 	},
      /**
      * @method private static
      * @param Event evt the event
@@ -64,70 +48,6 @@ var __static = {
 		return f_core.CancelJsEvent(evt);
     },
 
-     /**
-     * @method private static
-     * @param f_messageDialog msgBox
-     * @param function functionOpen
-     * @param number priority
-     * @return void
-     */
-    _AddMessage: function(msgBox, functionOpen, priority) {
-		if (!f_messageDialog._Messages) {
-			f_messageDialog._Messages = new Array();
-		}
-		f_messageDialog._Messages.push({
-			_msgBox: msgBox,
-			_function: functionOpen,
-			_priority: priority
-		});
-    },
-
-    /**
-     * <p>Call the next stored messageBox</p>
-     *
-     * @method private static
-     * @return void
-     */
-    _ShowNextMsgStored: function() {
-	    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: entering");
-    	var msgBoxes = f_messageDialog._Messages;
-
-    	if (msgBoxes && msgBoxes.length) {
-		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: "+msgBoxes.length+" Items");
-
-			var maxPriority = 0;
-			var maxIndex = 0;
-			
-			// Search for the highest priority
-			for (var i=0; i<msgBoxes.length; i++) {
-		     	var msg = msgBoxes[i];
-				if (msg._priority > maxPriority) {
-					maxPriority = msg._priority;
-					maxIndex = i;
-				}
-			}
-			
-			var msg = msgBoxes[maxIndex];
-			msgBoxes[maxIndex] = msgBoxes[0];
-	     	msgBoxes.shift();
-    		var msgBox = msg._msgBox;
-			var functionToCall = msg._function;
-			var iframe = msgBox.f_getIframe();
-
-		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: before calling ");
-		    
-			functionToCall.call(msgBox, iframe.contentWindow.document.body);
-			
-		    f_core.Debug(f_messageDialog, "_ShowNextMsgStored: after calling ");
-
-			iframe._modalShell.f_setFocus(true);
-
-			return;
-		}
-		
-		f_shell.DelModIFrame();
-    },
-    
     /**
      * <p>js listener example</p>
      * dans le tag : SelectionListener="return ListenerExample(event);"
@@ -139,18 +59,8 @@ var __static = {
     ListenerExample: function(evt) {
     	var value = evt.f_getValue();
     	return true;
-    },
+    }
     
-    /**
-     *
-     * @method public static
-     */
-     DocumentComplete: function() {
-     	f_core.Debug(f_messageDialog, "DocumentComplete: entering");
-     	
-     	f_messageDialog._DocComplete=true;
-     	f_messageDialog._ShowNextMsgStored();
-     }
 }
 
 var __prototype = {
@@ -171,10 +81,6 @@ var __prototype = {
 	 * @field private String
 	 */
 	_styleClass: undefined,
-	/**
-	 * @field private String
-	 */
-	_priority: undefined,
 	/**
 	 * @field private Array
 	 */
@@ -198,8 +104,8 @@ var __prototype = {
 			
 			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 300));
 			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 500));
-			
-			this._priority=f_core.GetNumberAttribute(this, "v:dialogPriority", 0);
+			this.f_setPriority(f_core.GetNumberAttribute(this, "v:dialogPriority", 0));
+
 			this._styleClass=f_core.GetAttribute(this, "v:styleClass");
 			//v:lookId
 			
@@ -217,7 +123,7 @@ var __prototype = {
 			this._text=text;
 			this._defaultValue=defaultValue;
 
-			this._priority=0;
+			this.f_setPriority(0);
 			this.f_setCssClassBase("f_messageDialog");
 			this.f_setBackgroundMode("greyed");
 		}
@@ -236,7 +142,6 @@ var __prototype = {
 		// this._defaultValue=undefined; // string
 		this._actions=undefined; // List<Object>
 		//this._styleClass=undefined; // string
-		//this._priority=undefined; // int
 
 		this.f_super(arguments);
 	},
@@ -327,28 +232,6 @@ var __prototype = {
 	},
 	
 	/**
-	 *  <p>Return the priority.</p>
-	 *
-	 * @method public 
-	 * @return int priority
-	 */
-	f_getPriority: function() {
-		return this._priority;
-	},
-	/**
-	 *  <p>Sets the priority.</p>
-	 *
-	 * @method public 
-	 * @param int priority
-	 * @return void
-	 */
-	f_setPriority: function(priority) {
-    	f_core.Assert(typeof(priority)=="number", "f_messageDialog.f_setPriority: Invalid priority parameter '"+priority+"'."+typeof(priority));
-
-		this._priority = priority;
-	},
-	
-	/**
 	 *  <p>Adds an action to the popup.</p>
 	 *
 	 * @method public 
@@ -391,8 +274,10 @@ var __prototype = {
 	 * @param Function callback The callback function to be called when the messageBox is closed
 	 * @return void
 	 */
-	f_open: function(callback) {
+	f_openMessage: function(callback) {
 		f_core.Assert(!arguments.length || typeof(callback) == "function", "f_messageDialog.f_open: Invalid Callback parameter ("+callback+")");
+		
+     	f_core.Debug(f_messageDialog, "f_open: entering ("+callback+")");
 		
 		// If a callback is passed : clean the selection listeners and add this callback to the listeners
 		if (callback) {
@@ -403,18 +288,9 @@ var __prototype = {
 			
 			this.f_addEventListener(f_event.SELECTION, callback);
 		}
-
-     	f_core.Debug(f_messageDialog, "f_open: entering ("+callback+")");
 		
-		// Create a blocking Div
-		this.f_drawModIFrame();
-
-		f_messageDialog._AddMessage(this, this._open, this.f_getPriority());
-
-		if (f_messageDialog._DocComplete) {
-			this.f_drawContent(f_messageDialog._ShowNextMsgStored);
-		}
-
+		this.f_openDialog(this._open, null);
+		
 	},
 	/**
 	 *  <p>draw a message box.
@@ -638,7 +514,7 @@ var __prototype = {
 
 		var ret = this.f_fireEvent(f_event.SELECTION, jsEvent, null, value);
 		if (ret) {
-			f_messageDialog._ShowNextMsgStored();
+			f_dialog.ShowNextDialogStored();
 			return;
 		}
 
@@ -651,8 +527,10 @@ var __prototype = {
 	 * @method public
 	 * @return String
 	 */
-	toString: function() {
-		return "[f_messageDialog title='"+this._title+"' text='"+this._text+"' defaultValue='"+this._defaultValue+"']";
+	_toString: function() {
+		var ts = this.f_super(arguments);
+		ts = ts + "\n[f_messageDialog title='"+this._title+"' text='"+this._text+"' defaultValue='"+this._defaultValue+"']";
+		return ts;
 	}
 }
 
