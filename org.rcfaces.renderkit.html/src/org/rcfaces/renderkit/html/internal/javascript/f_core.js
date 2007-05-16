@@ -3993,17 +3993,11 @@ var f_core = {
 	 * @return HTMLElement composant suivant dans l'ordre de tabulation
 	 */
 	GetNextFocusableComponent: function(component) {
-		// Check view elements
-		var doc;
-		if (!component) {
-			doc = document;
-		} else if (component.nodeType == f_core.DOCUMENT_NODE) {
-			doc = component;
-		} else {
-			doc = component.ownerDocument;
-		}
+		f_core.Debug(f_core, "GetNextFocusableComponent: entering ("+component+") "+component.nodeType);
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetNextFocusableComponent: bad parameter type "+component);
 		
-		var elts = f_core.ListAllHtmlComponents(doc);
+		// Check view elements
+		var elts = f_core.ListAllHtmlComponents(component.ownerDocument);
 		
 		var len = elts.length;
 		if (!len) {
