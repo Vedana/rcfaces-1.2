@@ -78,12 +78,15 @@
 	cursor: move;
 }
 
+.f_messageDialog_title_td,
+.f_messageDialog_text_td,
+.f_messageDialog_actions_td {
+	vertical-align: middle;
+}
+
 /*
-.f_messageDialog_title_td
 .f_messageDialog_title_text
-.f_messageDialog_text_td
 .f_messageDialog_text_text
-.f_messageDialog_actions_td
 .f_messageDialog_button
 .f_messageDialog_title_td
 .f_messageDialog_text_tr
