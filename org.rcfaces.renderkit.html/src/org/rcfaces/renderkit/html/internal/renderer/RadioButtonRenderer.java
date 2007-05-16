@@ -108,17 +108,8 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
-        String svalue = null;
-        Object value = radioButtonComponent.getRadioValue(facesContext);
-        if (value != null) {
-            svalue = ValuesTools.convertValueToString(value,
-                    radioButtonComponent, facesContext);
-        }
-
-        if (svalue == null) {
-            svalue = getValueAsText(facesContext, radioButtonComponent);
-        }
-        if (value != null) {
+        String svalue = getValueAsText(facesContext, radioButtonComponent);
+        if (svalue != null) {
             htmlWriter.writeValue(svalue);
         }
 
@@ -181,24 +172,35 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
                 radioButton, gb);
 
         Object submittedValue = null;
-        String svalue = clientData.getParameter(gb);
-        if (svalue != null) {
-            submittedValue = getConvertedValue(facesContext, radioButton,
-                    svalue);
-        }
-
         boolean selected = false;
 
-        Object radioValue = radioButton.getRadioValue(facesContext);
-        if (radioValue != null) {
-            selected = (radioValue.equals(submittedValue));
+        String svalue = clientData.getStringProperty("selected");
+        if (svalue != null) {
+            selected = true;
+
+            submittedValue = getConvertedValue(facesContext, radioButton,
+                    svalue);
 
         } else {
-            String text = clientData.getParameter(gb);
-            if (text != null) {
+            svalue = clientData.getParameter(gb); // Non du bouton qui a la
+            // selection
+            if (svalue != null) {
+                submittedValue = getConvertedValue(facesContext, radioButton,
+                        svalue);
+            }
+
+            // Submitted value contient la valeur pour LE GROUPE
+
+            Object radioValue = radioButton.getRadioValue(facesContext);
+            if (radioValue != null) {
+                selected = (radioValue.equals(submittedValue)); // C'est la
+                // value de
+                // notre bouton
+
+            } else if (svalue != null) {
                 String value = getValueAsText(facesContext, radioButton);
 
-                selected = (text.equals(value));
+                selected = (svalue.equals(value));
             }
         }
 
@@ -241,7 +243,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
     protected String getValueAsText(FacesContext facesContext,
             RadioButtonComponent component) {
-        Object value = component.getValue();
+        Object value = component.getRadioValue();
 
         String v = convertValue(facesContext, component, value);
         if (v != null) {
@@ -253,7 +255,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
     private String getUndefinedValue(FacesContext facesContext,
             RadioButtonComponent component) {
-        return component.getId();
+        return component.getClientId(facesContext);
     }
 
     protected IHtmlWriter writeChecked(IHtmlWriter writer,

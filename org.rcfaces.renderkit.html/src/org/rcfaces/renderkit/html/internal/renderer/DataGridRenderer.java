@@ -95,7 +95,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
     protected void encodeBodyBegin(IHtmlWriter htmlWriter,
             AbstractGridRenderContext data) throws WriterException {
 
-
         if (serverTitleGeneration() == false) {
             encodeBodyTableEnd(htmlWriter, data);
         }
@@ -217,17 +216,18 @@ public class DataGridRenderer extends AbstractGridRenderer {
         tableContext.setRowVarName(rowVarName);
 
         encodeJsTransactionalRows(jsWriter,
-                (DataGridRenderContext) tableContext, true);
+                (DataGridRenderContext) tableContext, true, false);
     }
 
     public void encodeJsTransactionalRows(IJavaScriptWriter jsWriter,
-            DataGridRenderContext tableContext, boolean sendFullStates)
-            throws WriterException {
+            DataGridRenderContext tableContext, boolean sendFullStates,
+            boolean unknownRowCount) throws WriterException {
 
         DataModel dataModel = tableContext.getDataModel();
 
         if ((dataModel instanceof ITransactionalDataModel) == false) {
-            encodeJsRows(jsWriter, tableContext, sendFullStates);
+            encodeJsRows(jsWriter, tableContext, sendFullStates,
+                    unknownRowCount);
             return;
         }
 
@@ -236,7 +236,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
         try {
             transactionalDataModel.enableTransactionalObjects(true);
 
-            encodeJsRows(jsWriter, tableContext, sendFullStates);
+            encodeJsRows(jsWriter, tableContext, sendFullStates,
+                    unknownRowCount);
 
         } finally {
             transactionalDataModel.enableTransactionalObjects(false);
@@ -244,8 +245,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
     }
 
     private void encodeJsRows(IJavaScriptWriter jsWriter,
-            DataGridRenderContext tableContext, boolean sendFullStates)
-            throws WriterException {
+            DataGridRenderContext tableContext, boolean sendFullStates,
+            boolean unknownRowCount) throws WriterException {
 
         FacesContext facesContext = jsWriter.getFacesContext();
 
@@ -574,9 +575,23 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 }
 
                 gridComponent.setRowIndex(translatedRowIndex);
-                if (gridComponent.isRowAvailable() == false) {
+                boolean available = gridComponent.isRowAvailable();
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Set row index " + translatedRowIndex
+                            + " returns " + available + " (rowIndexVar="
+                            + rowIndexVar + ")");
+                }
+
+                if (available == false) {
                     count = rowIndex;
                     break;
+                }
+
+                if (searchEnd) {
+                    // On teste juste la validité de la fin !
+                    if (rows > 0 && i >= rows) {
+                        break;
+                    }
                 }
 
                 if (rowIndexVar != null) {
@@ -620,13 +635,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     }
                 }
 
-                if (searchEnd) {
-                    // On teste juste la validité de la fin !
-                    if (rows > 0 && i >= rows) {
-                        break;
-                    }
-                }
-
                 encodeJsRow(jsWriter, tableContext, i, rowId,
                         translatedRowIndex, selected, checked);
 
@@ -663,8 +671,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
         // * mode page par page, nous sommes à la fin, ou il y a eu un tri
         // * en mode liste, le dataModel ne pouvait pas encore donner le nombre
         // de rows
+
         if (rows > 0) {
-            if (count > firstCount
+            if (count > firstCount || (unknownRowCount && firstCount >= 0)
                     || (gridComponent.getFirst() == 0 && count == 0)) {
                 encodeJsRowCount(jsWriter, tableContext, count);
             }

@@ -120,13 +120,20 @@ var __prototype = {
 		case fa_items.AS_PUSH_BUTTON:
 		case fa_items.AS_CHECK_BUTTON:
 		case fa_items.AS_RADIO_BUTTON:
-		// case fa_items.AS_SUBMIT_BUTTON: // trop tard !?
-		// case fa_items.AS_RESET_BUTTON: // trop tard !?
-
 			var toolFolder=this;
 		
 			var selectionCallback=function(event) {
 				return toolFolder._itemOnSelect(event);
+			}
+		
+			component.f_addEventListener(f_event.SELECTION, selectionCallback);
+			break;
+			
+		case fa_items.AS_DROP_DOWN_MENU:
+			var toolFolder=this;
+		
+			var selectionCallback=function(event) {
+				return toolFolder._itemMenuOnSelect(event);
 			}
 		
 			component.f_addEventListener(f_event.SELECTION, selectionCallback);
@@ -151,14 +158,7 @@ var __prototype = {
 		var itemValue; // Rechercher l'item
 		
 		var itemComponent=event.f_getComponent();
-		
-		var uiItems=this._uiItems;
-		for(var i in uiItems) {					
-			if (uiItems[i]==itemComponent) {
-				itemValue=i;
-				break;
-			}
-		}
+		var itemValue=this._getItemValueByComponent(itemComponent);		
 		
 		if (itemValue===undefined) {
 			f_core.Debug(f_itemsToolFolder, "_itemOnSelect: Can not find item value='"+itemValue+"'.");
@@ -168,6 +168,46 @@ var __prototype = {
 		var item=this.f_getItemByValue(itemValue, true);
 
 		f_core.Debug(f_itemsToolFolder, "_itemOnSelect: Call SELECTION on item='"+item+"' value='"+itemValue+"'.");
+		
+		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue);
+		
+		return false;
+	},
+	/**
+	 * @method private
+	 * @param HTMLElement component
+	 * @return String
+	 */
+	_getItemValueByComponent: function(component) {
+		var uiItems=this._uiItems;
+		
+		for(var itemValue in uiItems) {					
+			if (uiItems[itemValue]==component) {
+				return itemValue;
+			}
+		}
+		
+		return undefined;
+	},
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return void
+	 */
+	_itemMenuOnSelect: function(event) {
+		var itemValue=event.f_getValue(); // Rechercher l'item
+		
+		var itemComponent=event.f_getComponent();
+		var componentValue=this._getItemValueByComponent(itemComponent);
+		
+		if (componentValue===undefined) {
+			f_core.Debug(f_itemsToolFolder, "_itemMenuOnSelect: Can not find item value='"+itemValue+"'.");
+			return true;
+		}
+		
+		var item=this.f_getItemByValue(componentValue, true);
+
+		f_core.Debug(f_itemsToolFolder, "_itemMenuOnSelect: Call SELECTION on item='"+item+"' value='"+itemValue+"'.");
 		
 		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue);
 		

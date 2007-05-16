@@ -208,7 +208,7 @@ var __static = {
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
-	 * @method hidden
+	 * @method hidden static
 	 */
 	Create: function(parent, refComponent, forId) {
 		
@@ -219,11 +219,13 @@ var __static = {
 		};
 		
 		f_dataGridPopup.CopyProperties(properties, refComponent, 
-			"v:message", "v:zeroResultMessage", "v:oneResultMessage", "v:manyResultMessage", "v:manyResultMessage2", "v:noPagedMessage");
+			"v:message", "v:zeroResultMessage", "v:oneResultMessage", "v:manyResultMessage", "v:manyResultMessage2");
 		
 		var pager=f_core.CreateElement(parent, "div", properties);
 
 		f_class.Init(pager, f_pager, [parent]);
+		
+		pager.f_completeComponent();		
 		
 		return pager;		
 	}

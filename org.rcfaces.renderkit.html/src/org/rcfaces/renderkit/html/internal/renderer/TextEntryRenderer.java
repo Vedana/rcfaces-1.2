@@ -182,7 +182,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        String text = convertValue(facesContext, textEntryComponent, null);
+        String text = convertValue(facesContext, textEntryComponent);
         if (text != null) {
             htmlWriter.writeValue(text);
         }
@@ -193,7 +193,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         TextEntryComponent textEntryComponent = (TextEntryComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
-      //  FacesContext facesContext = htmlWriter.getComponentRenderContext().getFacesContext();
+        // FacesContext facesContext =
+        // htmlWriter.getComponentRenderContext().getFacesContext();
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
 

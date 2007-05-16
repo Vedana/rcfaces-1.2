@@ -246,8 +246,6 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	}
 
 	private final Object setValidationParameterData(String name, Object value, boolean client) {
-
-
 		FacesContext facesContext=getFacesContext();
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", true);
 		if (client) {

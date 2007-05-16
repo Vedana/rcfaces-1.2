@@ -84,7 +84,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        String text = convertValue(facesContext, textEntryComponent, null);
+        String text = convertValue(facesContext, textEntryComponent);
         if (text != null) {
             htmlWriter.writeValue(text);
         }

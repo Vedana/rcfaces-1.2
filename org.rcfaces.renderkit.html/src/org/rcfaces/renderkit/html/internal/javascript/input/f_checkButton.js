@@ -133,7 +133,9 @@ var __prototype = {
 	 */
 	f_serialize: function() {
 		if (this.f_isDisabled()) {
-			this.f_setProperty(f_prop.SELECTED,this.f_isSelected());
+			if (this.f_isSelected()) {			
+				this.f_setProperty(f_prop.SELECTED, this._input.value);
+			}
 		}
 		return this.f_super(arguments);
 	}

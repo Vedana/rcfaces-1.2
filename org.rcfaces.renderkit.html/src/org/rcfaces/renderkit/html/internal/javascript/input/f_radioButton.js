@@ -62,6 +62,44 @@ var __prototype = {
 		return this.f_findIntoGroup(this.f_getGroupName(), search);
 	},
 	/**
+	 * Returns the value of the selected button of the group.
+	 * 
+	 * @method public
+	 * @return String
+	 */
+	f_getValue: function() {
+		var button=this.f_getSelectedInGroup();
+		if (!button) {
+			return;
+		}
+		if (!button.f_getRadioValue) {
+			return null;
+		}
+		return button.f_getRadioValue();
+	},
+	/**
+	 * Select the radio button by its RadioValue.
+	 * @method public
+	 * @param String value radioValue of the button 
+	 * @return boolean <code>true</code> if the button has been found.
+	 */
+	f_setValue: function(value) {
+		function search(item) {
+			if (!item.f_getRadioValue) {
+				return false;
+			}
+			
+			if (value!=item.f_getRadioValue()) {
+				return false;
+			}
+			
+			item.f_setSelected(true);
+			return true;
+		}
+
+		return this.f_findIntoGroup(this.f_getGroupName(), search);		
+	},
+	/**
 	 * @method public 
 	 * @return f_radioButton[]
 	 */
@@ -108,6 +146,19 @@ var __prototype = {
 		}
 				
 		input.checked = true;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getRadioValue: function() {
+		var input=this._input;
+		
+		if (!input) {
+			return;
+		}
+		
+		return input.name;
 	},
 	fa_updateRequired: function() {
 	},

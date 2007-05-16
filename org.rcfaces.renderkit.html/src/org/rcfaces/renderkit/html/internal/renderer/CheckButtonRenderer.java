@@ -174,22 +174,31 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
     protected void parseSelectedProperty(FacesContext facesContext,
             CheckButtonComponent button, IComponentData clientData) {
-        String values[] = clientData.getComponentParameters();
 
         boolean selected = false;
-        if (values != null && values.length > 0) {
-            String componentValue = getValue(facesContext, button);
-            if (componentValue != null) {
-                for (int i = 0; i < values.length; i++) {
-                    String value = values[i];
 
-                    if (componentValue.equals(value) == false) {
-                        continue;
+        String componentValue = getValue(facesContext, button);
+
+        if (componentValue != null) {
+            String selectedValue = clientData.getStringProperty("selected");
+            if (selectedValue != null) {
+                selected = componentValue.equals(selectedValue);
+
+            } else {
+                String values[] = clientData.getComponentParameters();
+
+                if (values != null && values.length > 0) {
+                    for (int i = 0; i < values.length; i++) {
+                        String value = values[i];
+
+                        if (componentValue.equals(value) == false) {
+                            continue;
+                        }
+
+                        selected = true;
+
+                        break;
                     }
-
-                    selected = true;
-
-                    break;
                 }
             }
         }

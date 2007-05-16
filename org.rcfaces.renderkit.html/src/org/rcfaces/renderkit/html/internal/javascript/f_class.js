@@ -513,7 +513,7 @@ var __static = {
 				obj.f_finalize();
 				
 			} catch (x) {
-				f_core.Error(f_class, "Call of method f_finalize of class '"+cls+"' throws exception.", x);
+				f_core.Error(f_class, "Call of method f_finalize of class '"+cls._name+"' throws exception.", x);
 			}
 	
 			// Desinherit		

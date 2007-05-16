@@ -1172,10 +1172,12 @@ var __prototype = {
 		var table=this._table;
 		if (table) {		
 			this._table=undefined;
-
+	
 			table._dataGrid=undefined;
 			
-			f_core.VerifyProperties(table);			
+			if (table!=this) {
+				f_core.VerifyProperties(table);
+			}
 		}
 		
 		if (this._columns) {
@@ -1223,9 +1225,13 @@ var __prototype = {
 			}
 		}
 
-		if (this._title) {
-			f_core.VerifyProperties(this._title);
+		var title=this._title;
+		if (title) {
 			this._title=undefined;
+			
+			if (title!=this) {
+				f_core.VerifyProperties(title);
+			}
 		}
 		
 		var scrollTitle=this._scrollTitle;
@@ -1235,11 +1241,13 @@ var __prototype = {
 			scrollTitle.onscroll=null;
 			scrollTitle._dataGrid=undefined;
 			
-			f_core.VerifyProperties(scrollTitle);
+			if (scrollTitle!=this) {
+				f_core.VerifyProperties(scrollTitle);
+			}
 		}
 		
 		// Il faut tester le verify properties qu'a la fin des undefined !
-		if (cfocus) {	
+		if (cfocus && cfocus!=this) {	
 			f_core.VerifyProperties(cfocus);
 		}
 		

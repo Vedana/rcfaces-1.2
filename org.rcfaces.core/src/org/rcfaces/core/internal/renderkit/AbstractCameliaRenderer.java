@@ -227,17 +227,13 @@ public abstract class AbstractCameliaRenderer extends Renderer {
     }
 
     protected String convertValue(FacesContext facesContext,
+            ValueHolder valueHolder) {
+        return ValuesTools.valueToString(valueHolder, facesContext);
+    }
+
+    protected String convertValue(FacesContext facesContext,
             UIComponent component, Object value) {
-        if (component instanceof ValueHolder) {
-            ValueHolder valueHolder = (ValueHolder) component;
-
-            return ValuesTools.valueToString(valueHolder, facesContext);
-        }
-
-        if (value == null) {
-            return null;
-        }
-        return String.valueOf(value);
+        return ValuesTools.valueToString(value, component, facesContext);
     }
 
     public Object getConvertedValue(FacesContext context,

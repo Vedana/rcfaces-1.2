@@ -101,6 +101,9 @@ public class DataGridService extends AbstractHtmlService {
 
         String forcedRows_s = (String) parameters.get("rows");
 
+        boolean unknownRowCount = "true".equals(parameters
+                .get("unknownRowCount"));
+
         String filterExpression = (String) parameters.get("filterExpression");
 
         int rowIndex = Integer.parseInt(index_s);
@@ -199,7 +202,8 @@ public class DataGridService extends AbstractHtmlService {
             }
 
             writeJs(facesContext, printWriter, dgc, dataGridId, dgr, rowIndex,
-                    forcedRows, sortedComponents, filterExpression);
+                    forcedRows, sortedComponents, filterExpression,
+                    unknownRowCount);
 
         } catch (IOException ex) {
 
@@ -235,8 +239,8 @@ public class DataGridService extends AbstractHtmlService {
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             DataGridComponent dgc, String componentClientId,
             DataGridRenderer dgr, int rowIndex, int forcedRows,
-            ISortedComponent sortedComponents[], String filterExpression)
-            throws IOException {
+            ISortedComponent sortedComponents[], String filterExpression,
+            boolean unknownRowCount) throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -269,7 +273,8 @@ public class DataGridService extends AbstractHtmlService {
                 .allocateVarName();
         tableContext.setRowVarName(rowVarId);
 
-        dgr.encodeJsTransactionalRows(jsWriter, tableContext, false);
+        dgr.encodeJsTransactionalRows(jsWriter, tableContext, false,
+                unknownRowCount);
 
         jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 

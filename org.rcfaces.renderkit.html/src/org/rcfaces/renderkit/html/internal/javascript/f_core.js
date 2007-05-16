@@ -3098,7 +3098,7 @@ var f_core = {
 				s="_KClassName: "+object._kclassName+"\n"+s;
 			}
 			
-			s="Oubli de propriétés :\n"+s;
+			s="Not garbaged properties : "+s;
 			
 			var ex=new Error(s);
 			f_core.Error(f_core, s, ex);
@@ -3993,8 +3993,8 @@ var f_core = {
 	 * @return HTMLElement composant suivant dans l'ordre de tabulation
 	 */
 	GetNextFocusableComponent: function(component) {
-		f_core.Debug(f_core, "GetNextFocusableComponent: entering ("+component+") "+component.nodeType);
 		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetNextFocusableComponent: bad parameter type "+component);
+		f_core.Debug(f_core, "GetNextFocusableComponent: entering ("+component+") "+component.nodeType);
 		
 		// Check view elements
 		var elts = f_core.ListAllHtmlComponents(component.ownerDocument);

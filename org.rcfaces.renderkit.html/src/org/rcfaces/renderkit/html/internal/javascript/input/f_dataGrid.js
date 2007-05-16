@@ -763,6 +763,9 @@ var __prototype = {
 		if (length>0) {
 			params.rows=length;
 		}
+		if (this._rows && this._rowCount<0) {			
+	        params.unknownRowCount=true;			
+		}
 
 		var orderColumnIndex=this.f_getProperty(f_prop.SORT_INDEX);
 		if (orderColumnIndex) {
