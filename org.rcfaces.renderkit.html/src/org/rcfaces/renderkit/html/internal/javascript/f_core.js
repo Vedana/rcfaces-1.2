@@ -3994,7 +3994,16 @@ var f_core = {
 	 */
 	GetNextFocusableComponent: function(component) {
 		// Check view elements
-		var elts = f_core.ListAllHtmlComponents(component.ownerDocument);
+		var doc;
+		if (!component) {
+			doc = document;
+		} else if (component.nodeType == f_core.DOCUMENT_NODE) {
+			doc = component;
+		} else {
+			doc = component.ownerDocument;
+		}
+		
+		var elts = f_core.ListAllHtmlComponents(doc);
 		
 		var len = elts.length;
 		if (!len) {
