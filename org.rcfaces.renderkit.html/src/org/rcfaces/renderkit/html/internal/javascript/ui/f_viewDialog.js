@@ -104,18 +104,18 @@ var __prototype = {
 	 * @method protected
 	 * @return String 
 	 */
-/*	f_getIFrameUrl: function() {
+	f_getIFrameUrl: function() {
 		return this.f_getViewURL();
 	},
-*/
+
 	/**
 	 * @method public
 	 * @param optionnal string viewURL : the url to be shown in the iframe
 	 * @return void
 	 */
 	f_openURL: function(viewURL) {
-     	f_core.Debug(f_viewDialog, "f_open: entering ("+viewURL+")");
-		f_core.Assert(arguments.length==0 || viewURL || typeof(viewURL)=="string", "f_viewDialog.f_open: first parameter is optionnal but must be a string");
+     	f_core.Debug(f_viewDialog, "f_openURL: entering ("+viewURL+")");
+		f_core.Assert(arguments.length==0 || viewURL || typeof(viewURL)=="string", "f_viewDialog.f_openURL: first parameter is optionnal but must be a string");
 		
 		if (viewURL) {
 			this.f_setViewURL(viewURL);

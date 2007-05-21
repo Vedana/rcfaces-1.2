@@ -275,9 +275,9 @@ var __prototype = {
 	 * @return void
 	 */
 	f_openMessage: function(callback) {
-		f_core.Assert(!arguments.length || typeof(callback) == "function", "f_messageDialog.f_open: Invalid Callback parameter ("+callback+")");
+		f_core.Assert(!arguments.length || typeof(callback) == "function", "f_messageDialog.f_openMessage: Invalid Callback parameter ("+callback+")");
 		
-     	f_core.Debug(f_messageDialog, "f_open: entering ("+callback+")");
+     	f_core.Debug(f_messageDialog, "f_openMessage: entering ("+callback+")");
 		
 		// If a callback is passed : clean the selection listeners and add this callback to the listeners
 		if (callback) {
@@ -301,9 +301,12 @@ var __prototype = {
 	 * @return void
 	 */
 	_open: function(base) {
-		f_core.Assert(base != undefined, "f_messageDialog._open: Invalid base parameter ("+base+")");
-
      	f_core.Debug(f_messageDialog, "_open: entering ("+base+")");
+		
+		if (!base) {
+			var iframe = this.f_getIframe();
+			base = iframe.contentWindow.document.body;
+		}
 		
 		//Hide Selects
 		f_shell.HideSelect();
@@ -509,8 +512,24 @@ var __prototype = {
 		f_core.VerifyProperties(base);
 		
 		// Deletion of the base HTMLElement
-		var parent = base.parentNode;
-		parent.removeChild(base);
+		var parent = base.parentNode.parentNode;
+		parent.removeChild(base.parentNode);
+
+//		var msgDialog=this;
+//		var toto=function() {
+//			f_dialog.ClearTimeoutId();
+//			var ret = msgDialog.f_fireEvent(f_event.SELECTION, jsEvent, null, value);
+//			if (ret) {
+//				f_dialog.ShowNextDialogStored();
+//				return;
+//			}
+	
+			//delete the iFrame
+//			msgDialog.f_delModIFrame();
+//		};
+
+		// Need to desynchronize the call to the next thing to do
+//		f_dialog.SetTimeoutId(window.setTimeout(toto, 50));
 
 		var ret = this.f_fireEvent(f_event.SELECTION, jsEvent, null, value);
 		if (ret) {

@@ -96,6 +96,57 @@ var __static = {
      * @field private static boolean
      */
 	_IE: undefined,
+
+    /**
+     * @field private static boolean
+     */
+	_DocComplete: undefined,
+	
+    /**
+     * @field private static function
+     */
+	_OnDocComplete: undefined,
+	
+     /**
+     * @method protected static
+     * @return boolean
+     */
+    IsDocComplete: function() {
+	    f_core.Debug(f_shell, "IsDocComplete: entering");
+		return f_shell._DocComplete;
+    },
+     /**
+     * @method protected static
+     * @param function functionToExecute
+     * @return void
+     */
+    ExecuteOnDocComplete: function(functionToExecute) {
+	    f_core.Debug(f_shell, "ExecuteOnDocComplete: entering");
+	    f_core.Assert(typeof(functionToExecute) == "function", "f_shell.ExecuteOnDocComplete bad parameter "+functionToExecute);
+		if (f_shell._DocComplete) {
+		    f_core.Debug(f_shell, "ExecuteOnDocComplete: executing");
+			functionToExecute();
+		} else if (!f_shell._OnDocComplete) {
+		    f_core.Debug(f_shell, "ExecuteOnDocComplete: delaying");
+			f_shell._OnDocComplete = functionToExecute;
+		} else {
+			f_core.Debug(f_shell, "ExecuteOnDocComplete: ignored new function");
+		}
+    },
+    /**
+     *
+     * @method public static
+     */
+     DocumentComplete: function() {
+     	f_core.Debug(f_shell, "DocumentComplete: entering");
+		f_shell.HideSelect();
+     	
+     	f_shell._DocComplete=true;
+     	if (f_shell._OnDocComplete) {
+     		f_shell._OnDocComplete();
+     		f_shell._OnDocComplete=null;
+     	}
+     },
 	
      /**
      * Class Constructor (called in the head ...
@@ -119,6 +170,8 @@ var __static = {
     	objIframe = undefined; // Object
     	// f_shell._IE6 = undefined; // boolean
     	// f_shell._IE = undefined; // boolean
+    	// f_shell._DocComplete = undefined; // boolean
+    	f_shell._OnDocComplete = null; // function
 	 },
      /**
      * @method public static
@@ -197,18 +250,17 @@ var __static = {
 			document.body.removeChild(objIFrame._div);
 			objIFrame._div = undefined; // HTMLDivElement
 			
-			if (objIFrame._iframe) {
-				objIFrame._iframe.onload=null;
-	    		objIFrame._iframe.onreadystatechange=null;
-				
-				document.body.removeChild(objIFrame._iframe);
-			}	
+			shell.f_deleteIframe();				
+
 			objIFrame._iframe = undefined; // HTMLIFrameElement
 
 			objIFrame._lastValidFocus=undefined; //HTMLElement
 			// Return from Modal ...
 		}
-
+		
+		// remove focus hooks if they exist
+		f_core.RemoveEventListener(document, "focus", f_shell._OnFocus, document);
+		
 		//Show Selects
 		f_shell.ShowSelect();
 	},
@@ -222,6 +274,9 @@ var __static = {
 	_OnIframeLoad: function() {
      	f_core.Debug(f_shell, "_OnIframeLoad: entering with this="+this);
      	
+	    this.onreadystatechange=null;
+		this.onload=null;
+	    
      	var inst=this._modalShell;
      	if (!inst) {
 	     	f_core.Debug(f_shell, "_OnIframeLoad: Hack de la mort pour IE ...");
@@ -235,8 +290,6 @@ var __static = {
 	    	f_core.Debug(f_shell, "_OnIframeLoad: the callBack specified is not a function "+callBack+"\n trying url");
     		inst.f_drawIframeWithUrl();
 	    }
-     	this.onload=null;
-     	this.onreadystatechange=null;
  	},
 	
 	/**
@@ -246,7 +299,7 @@ var __static = {
 	 * @method private static
 	 */
 	_OnIframeRS: function() {
-     	f_core.Debug(f_shell, "_OnIframeRS: entering with this="+this);
+     	f_core.Debug(f_shell, "_OnIframeRS: entering with this="+this+" readyState = "+this.readyState);
 		if (this.readyState == "interactive") {
 			f_shell._OnIframeLoad.call(this);
 		}
@@ -319,15 +372,6 @@ var __static = {
 
     /**
      *
-     * @method public static
-     */
-     DocumentComplete: function() {
-     	f_core.Debug(f_shell, "DocumentComplete: entering;");
-     },
-     
-     
-    /**
-     *
      * @method private static
      * @param Event evt
      * @return boolean
@@ -382,7 +426,7 @@ var __static = {
      	if (targetDocument==frameDocument) {
      		// C'est dans notre frame
      
-     		// Pour l'instant ce n'est pas possible ... car la callback n'est pas installée
+     		// Pour l'instant ce n'est pas possible ... car la callback n'est pas installee
       		
      		iframe._lastValidFocus=target;
      		f_core.Debug(f_shell, "_OnFocus: Focus on our frame !");
@@ -689,8 +733,8 @@ var __prototype = {
 	 * @return void
 	 */
 	f_drawContent: function(drawingFunction) {
-		f_core.Assert(typeof(drawingFunction) == "function", "f_shell.f_drawContent: bad parameter type: drawingFunction is not a function "+drawingFunction);
      	f_core.Debug(f_shell, "f_drawContent: entering");
+		f_core.Assert(typeof(drawingFunction) == "function", "f_shell.f_drawContent: bad parameter type: drawingFunction is not a function "+drawingFunction);
 
 		try {
 			if (!this._iframeDraw) {
@@ -740,8 +784,10 @@ var __prototype = {
 			//style
 			base.className = cssBaseName+"_global";
 			
+	     	f_core.Debug(f_shell, "f_fillModIFrame: drawing funtion = "+this._drawingFunction);
 			if (this._drawingFunction) {
-				this._drawingFunction();
+				this._drawingFunction.call(this);
+				this._drawingFunction=null;
 			} else {
 				this._iframeDraw=true;
 			}
@@ -760,7 +806,9 @@ var __prototype = {
 	 * @return Function 
 	 */
 	f_drawIframeWithUrl: function() {
+    	f_core.Debug(f_shell, "f_drawIframeWithUrl: entering");
     	var srcUrl=this.f_getIFrameUrl();
+    	f_core.Debug(f_shell, "f_drawIframeWithUrl: url = "+srcUrl);
     	if (srcUrl && typeof(srcUrl) == "string") {
     		var iframe=this.f_getIframe();
     		iframe.src=srcUrl;
@@ -876,11 +924,11 @@ var __prototype = {
 
 		if (f_shell._ObjIFrame) {
 	     	f_core.Debug(f_shell, "f_drawModIFrame: exit : already done !");
-	     	if (!this._iframe) {
-		     	this.f_setIframe(f_shell._ObjIFrame._iframe);
-		    }
 	     	if (!this._div) {
 		     	this.f_setDiv(f_shell._ObjIFrame._div);
+		     }
+	     	if (!this._iframe && f_shell._ObjIFrame._iframe) {
+		     	this.f_setIframe(f_shell._ObjIFrame._iframe);
 		     }
 			return;
 		}
@@ -900,9 +948,45 @@ var __prototype = {
 		
 		//Attach
 		document.body.insertBefore(div, document.body.firstChild);
+
+		f_shell._ObjIFrame = { 
+			_div: div, 
+			_iframe: undefined
+		};
 		
 		// Creation de l'iFrame
-		var iframe = document.createElement("iframe");
+//		var iframe = this.f_constructIframe(document);
+	},
+	
+	/**
+	 *  <p>construct the iframe. 
+	 *  </p>
+	 *
+	 * @method public
+	 * @return HTMLElement iframe
+	 */
+	f_constructIframe: function() {
+     	f_core.Debug(f_shell, "f_constructIframe: entering");
+		var doc = this.f_deleteIframe();
+		
+		if (!doc) {
+     		f_core.Debug(f_shell, "f_constructIframe: pas de doc");
+			if (this._div) {
+	    	 	f_core.Debug(f_shell, "f_constructIframe: doc from div");
+				doc = this._div.ownerDocument;
+			} 
+			if (!doc) {
+	     		f_core.Debug(f_shell, "f_constructIframe: doc = document");
+				doc = document;
+			}
+		}
+		
+		this._iframeDraw=false;
+		
+		// Creation de l'iFrame
+		var iframe = doc.createElement("iframe");
+		iframe.id = "fred"+iframe.uniqueID;
+		iframe.name = "fred"+iframe.uniqueID+"name";
 
 		iframe.frameBorder = 0;
 		if (!f_shell._IE6) {
@@ -911,28 +995,75 @@ var __prototype = {
 		
 		this.f_decorateIframe(iframe);
 		
-		iframe.src="about:blank";
-
-		f_shell._ObjIFrame = { 
-			_div: div, 
-			_iframe: iframe
-		};
-
+    	var srcUrl=this.f_getIFrameUrl();
+    	f_core.Debug(f_shell, "f_constructIframe: url = "+srcUrl);
+    	if (srcUrl && typeof(srcUrl) == "string") {
+			iframe.src=srcUrl;
+    	} else {
+    		srcUrl = undefined;
+			iframe.src="about:blank";
+		}
+		
 		this.f_setIframe(iframe);
 
 		//Attach
-		document.body.insertBefore(iframe, document.body.firstChild);
+		doc.body.insertBefore(iframe, doc.body.firstChild);
 
-		if (f_shell._IE) {
-			f_core.Debug(f_shell, "f_drawModIFrame: IE use onreadystatechange ");
-			iframe.onreadystatechange=f_shell._OnIframeRS;
-		} else {
-			iframe.onload=f_shell._OnIframeLoad;
+		f_shell._ObjIFrame = { 
+			_div: this.f_getDiv(), 
+			_iframe: iframe
+		};
+
+		if (!srcUrl) {
+			if (f_shell._IE) {
+				f_core.Debug(f_shell, "f_constructIframe: IE use onreadystatechange ");
+				iframe.onreadystatechange=f_shell._OnIframeRS;
+			} else {
+				iframe.onload=f_shell._OnIframeLoad;
+			}
 		}
 		
 		this.f_installModalStyle();
+		
+		return iframe;
 	},
 
+	/**
+	 *  <p>delete the iframe. 
+	 * and return its document
+	 *  </p>
+	 *
+	 * @method public
+	 * @return HTMLElement document
+	 */
+	f_deleteIframe: function() {
+     	f_core.Debug(f_shell, "f_deleteIframe: entering");
+		var iframe = this.f_getIframe();
+		if (!iframe) {
+	     	f_core.Debug(f_shell, "f_deleteIframe: no instance iframe : getting it ...");
+			iframe = f_shell.GetIframe();
+			if (!iframe) {
+				return undefined;
+			}
+		}
+		var doc = iframe.ownerDocument;
+
+		iframe.onload=null;
+	    iframe.onreadystatechange=null;
+
+	    this.f_uninstallModalStyle();
+
+     	f_core.Debug(f_shell, "f_deleteIframe: before removing the iframe from "+doc+" "+doc.body);
+     	try {
+			doc.body.removeChild(iframe);
+		} catch (e) {
+			f_core.Assert("f_shell.f_deleteIframe : iframe is not a child of body\n"+e);
+		}
+     	f_core.Debug(f_shell, "f_deleteIframe: after removing the ifram");
+	    
+		return doc;
+	},
+	
 	/**
 	 *  <p>delete the modal iframe and div. 
 	 *  </p>

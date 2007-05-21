@@ -18,19 +18,29 @@ var __static = {
      * @field private static Array
      */
 	_Dialogs: undefined,
+
     /**
-     * @field private static boolean
+     * @field private static number
      */
-	_DocComplete: undefined,
-	
+	_TimeoutId: undefined,
      /**
      * @method protected static
-     * @return boolean
+     * @param number timeoutId
+     * @return void
      */
-    IsDocComplete: function() {
-	    f_core.Debug(f_dialog, "IsDocComplete: entering");
-		return f_dialog._DocComplete;
-    },
+	SetTimeoutId: function(timeoutId) {
+		f_core.Debug(f_dialog, "SetTimeoutId: entering with "+timeoutId);
+		f_core.Assert(typeof(timeoutId) == "number", "f_dialog.SetTimeoutId: bad parameter type "+timeoutId+" : "+typeof(timeoutId));
+		f_dialog._TimeoutId=timeoutId;
+	},
+     /**
+     * @method protected static
+     * @return void
+     */
+	ClearTimeoutId: function() {
+		f_core.Debug(f_dialog, "ClearTimeoutId: entering ");
+		f_dialog._TimeoutId=undefined;
+	},
 
      /**
      * @method protected static
@@ -42,6 +52,19 @@ var __static = {
 	    	return f_dialog._Dialogs.length;
 	    }
 	    return 0;
+    },
+
+     /**
+     * @method protected static
+     * @return void
+     */
+    CleanDialogs: function() {
+	    f_core.Debug(f_dialog, "CleanDialogs: entering");
+		if (f_dialog._Dialogs) {
+			f_dialog._Dialogs = undefined;
+		}
+		
+		f_shell.DelModIFrame();
     },
 
      /**
@@ -73,6 +96,7 @@ var __static = {
      */
     ShowNextDialogStored: function() {
 	    f_core.Debug(f_dialog, "ShowNextDialogStored: entering");
+	    f_dialog._TimeoutId = undefined;
     	var dialogs = f_dialog._Dialogs;
 
     	if (dialogs && dialogs.length) {
@@ -90,33 +114,34 @@ var __static = {
 				}
 			}
 			
-			var dial = dialogs[maxIndex];
+			var dialObj = dialogs[maxIndex];
 			dialogs[maxIndex] = dialogs[0];
 	     	dialogs.shift();
-    		var dialogInst = dial._dialog;
-			var functionToCall = dial._function;
-			var url = dial._url;
-			var iframe = dialogInst.f_getIframe();
+	     	
+    		var dialogInst = dialObj._dialog;
+			var functionToCall = dialObj._function;
+			var url = dialObj._url;
+			var iframe = dialogInst.f_constructIframe();
 
-			dialogInst.f_decorateIframe(iframe);
 			dialogInst.f_decorateDiv(dialogInst.f_getDiv());
-			
+
 			if (typeof(functionToCall) == "function") {
 			    f_core.Debug(f_dialog, "ShowNextDialogStored: before calling ");
-
-				functionToCall.call(dialogInst, iframe.contentWindow.document.body);
+				dialogInst.f_drawContent(functionToCall);
+//				functionToCall.call(dialogInst, iframe.contentWindow.document.body);
 				
 			    f_core.Debug(f_dialog, "ShowNextDialogStored: after calling ");
-			} else {
-				f_core.Debug(f_dialog, "ShowNextDialogStored: setting an url : "+url);
-
+			}
+/*			 else {
+				f_core.Debug(f_dialog, "ShowNextDialogStored: setting an url : "+url+"\ncurrent = "+iframe.src);
 				if (!url || typeof(url) != "string") {
 					url = "about:blank"
 				}
+
 				iframe.src = url;
 			}
-
-			iframe._modalShell.f_setFocus(true);
+*/
+			dialogInst.f_setFocus(true);
 
 			return;
 		}
@@ -130,8 +155,11 @@ var __static = {
      */
     Finalizer: function() {
     	f_dialog._Dialogs = undefined; // List<Object>
-    	// f_dialog._DocComplete = undefined; // boolean
     	f_dialog._ObjMove = undefined; // Object
+    	if (f_dialog._TimeoutId) {
+    		window.clearTimeout(f_dialog._TimeoutId);
+    		f_dialog._TimeoutId = undefind; // number
+    	}
 	},
     /**
      * <p>On Mouse Down Handler</p>
@@ -203,20 +231,8 @@ var __static = {
 			//}
 			return f_core.CancelJsEvent(evt);
 	    }
-    },
+    }
 
-    /**
-     *
-     * @method public static
-     */
-     DocumentComplete: function() {
-     	f_core.Debug(f_dialog, "DocumentComplete: entering");
-     	
-     	f_dialog._DocComplete=true;
-     	f_dialog.ShowNextDialogStored();
-     }
-    
-    
 }
 
 var __prototype = {
@@ -255,7 +271,7 @@ var __prototype = {
 	 *  <p>Return the priority.</p>
 	 *
 	 * @method public 
-	 * @return int priority
+	 * @return number priority
 	 */
 	f_getPriority: function() {
 		return this._priority;
@@ -264,7 +280,7 @@ var __prototype = {
 	 *  <p>Sets the priority.</p>
 	 *
 	 * @method public 
-	 * @param int priority
+	 * @param number priority
 	 * @return void
 	 */
 	f_setPriority: function(priority) {
@@ -284,16 +300,17 @@ var __prototype = {
 	 * @return void
 	 */
 	f_openDialog: function(drawingFunction, viewURL) {
-     	f_core.Debug(f_dialog, "f_open: entering ");
+     	f_core.Debug(f_dialog, "f_openDialog: entering ");
 		
 		// Create a blocking Div
 		this.f_drawModIFrame();
 
 		f_dialog.AddDialog(this, drawingFunction, viewURL, this.f_getPriority());
 
-		if (f_dialog.IsDocComplete) {
-//			this.f_drawContent(f_dialog.ShowNextDialogStored);
-		}
+		f_shell.ExecuteOnDocComplete(f_dialog.ShowNextDialogStored);
+//		if (f_dialog.IsDocComplete) {
+//			this.f_drawContent();
+//		}
 
 	},
 
