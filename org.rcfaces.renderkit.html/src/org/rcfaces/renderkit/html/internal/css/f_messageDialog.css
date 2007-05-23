@@ -79,6 +79,7 @@
 }
 
 .f_messageDialog_title_td,
+.f_messageDialog_image_td,
 .f_messageDialog_text_td,
 .f_messageDialog_actions_td {
 	vertical-align: middle;
