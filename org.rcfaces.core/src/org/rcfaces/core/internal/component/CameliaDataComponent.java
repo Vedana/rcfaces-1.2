@@ -153,7 +153,7 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
 	public final void setValueBinding(String name, ValueBinding binding) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
-				name="value";
+				name=Properties.VALUE;
 			}
 
 			engine.setProperty(name, binding);
@@ -174,7 +174,7 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
 	public final ValueBinding getValueBinding(String name) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
-				name="value";
+				name=Properties.VALUE;
 			}
 
 			return engine.getValueBindingProperty(name);

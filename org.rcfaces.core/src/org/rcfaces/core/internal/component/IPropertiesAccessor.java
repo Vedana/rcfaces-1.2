@@ -6,6 +6,7 @@ package org.rcfaces.core.internal.component;
 import java.util.Set;
 
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -18,6 +19,9 @@ public interface IPropertiesAccessor {
     Object getProperty(String propertyName);
 
     Object setProperty(FacesContext context, String propertyName, Object value);
+
+    void setProperty(FacesContext context, String propertyName,
+            ValueBinding value);
 
     Object removeProperty(FacesContext context, String name);
 

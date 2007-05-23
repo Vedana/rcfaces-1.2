@@ -129,6 +129,24 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return old;
     }
 
+    public void setProperty(FacesContext context, String propertyName,
+            ValueBinding value) {
+        if (value == null) {
+            if (properties == null) {
+                return;
+            }
+
+            properties.remove(propertyName);
+            return;
+        }
+
+        if (properties == null) {
+            properties = createMap(8);
+        }
+
+        properties.put(propertyName, value);
+    }
+
     public Object removeProperty(FacesContext context, String propertyName) {
         if (properties == null) {
             return null;
@@ -258,7 +276,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
     }
 
     public boolean isPropertySetted(String propertyName) {
-        if (properties==null) {
+        if (properties == null) {
             return false;
         }
         return properties.containsKey(propertyName);

@@ -213,6 +213,17 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         pa.setProperty(null, propertyName, value);
     }
 
+    protected final void setInternalProperty(String propertyName, ValueBinding value) {
+        IPropertiesAccessor pa = getPropertiesAccessor(true);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
+                    + ")");
+        }
+
+        pa.setProperty(null, propertyName, value);
+    }
+
     public final void setProperty(String propertyName, boolean value) {
         if (value) {
             setInternalProperty(propertyName, Boolean.TRUE);

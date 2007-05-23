@@ -566,4 +566,8 @@ class HtmlRequestContext extends AbstractRequestContext implements
 
         return hrc;
     }
+
+    public String getEventComponentId() {
+        return eventComponentId;
+    }
 }

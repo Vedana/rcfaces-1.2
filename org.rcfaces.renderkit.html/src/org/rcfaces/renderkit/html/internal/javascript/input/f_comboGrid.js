@@ -5,12 +5,28 @@
 
 /**
  * 
- * @class f_comboGrid extends f_component, fa_disabled, fa_required, fa_readOnly, fa_dataGridPopup
+ * @class f_comboGrid extends f_textEntry, fa_dataGridPopup
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
  
 var __static = {
+
+	/**
+	 * @field private static final number
+	 */
+	_DEFAULT_SUGGESTION_DELAY_MS: 300,
+
+	/**
+	 * @field private static final number
+	 */
+	_DEFAULT_SUGGESTION_MIN_CHARS: 0,
+
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 */
 	_OnButtonMouseDown: function(evt) {
 		var comboGrid=this._comboGrid;
 		
@@ -29,6 +45,11 @@ var __static = {
 		
 		return f_core.CancelJsEvent(evt);		
 	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 */
 	_OnButtonMouseUp: function(evt) {
 		var comboGrid=this._comboGrid;
 		
@@ -40,6 +61,11 @@ var __static = {
 		
 		return f_core.CancelJsEvent(evt);		
 	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 */
 	_OnButtonMouseOver: function(evt) {
 		var comboGrid=this._comboGrid;
 		
@@ -59,6 +85,11 @@ var __static = {
 		
 		return f_core.CancelJsEvent(evt);		
 	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 */
 	_OnButtonMouseOut: function(evt) {
 		var comboGrid=this._comboGrid;
 		
@@ -86,9 +117,18 @@ var __prototype = {
 
 	f_comboGrid: function() {
 		this.f_super(arguments);
+			
+		this._suggestionDelayMs=f_core.GetNumberAttribute(this, "v:suggestionDelayMs", f_comboGrid._DEFAULT_SUGGESTION_DELAY_MS);
+		
+		this._suggestionMinChars=f_core.GetNumberAttribute(this, "v:suggestionMinChars", f_comboGrid._DEFAULT_SUGGESTION_MIN_CHARS);
+		
+		this._valueFormat=f_core.GetAttribute(this, "v:valueFormat");
 		
 		var button=f_core.GetFirstElementByTagName(this, "img", true);
 		this._button=button;
+		
+		this._formattedValue=f_core.GetAttribute(this, "v:formattedValue", "");
+		this._inputValue="";
 		
 		button._comboGrid=this;
 		button.onmousedown=f_comboGrid._OnButtonMouseDown;
@@ -96,15 +136,29 @@ var __prototype = {
 		button.onmouseover=f_comboGrid._OnButtonMouseOver;
 		button.onmouseout=f_comboGrid._OnButtonMouseOut;
 		
-		var input=f_core.GetFirstElementByTagName(this, "input", true);
-		this._input=input;
-		input._comboGrid=this;
+		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
+		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);
+		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
+		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
 	},
 
 	f_finalize: function() {
 	
 		// this._buttonOver=undefined; // boolean
 		// this._buttonDown=undefined; // boolean
+		// this._suggestionDelayMs=undefined;  // number
+		// this._suggestionMinChars=undefined; // number
+		// this._valueFormat=undefined; // String
+		// this._formattedValue=undefined; // String
+		// this._inputValue=undefined; // String
+		// this._inputSelection=undefined; // int[]
+		// this._focus=undefined; // boolean
+
+		var timerId=this._timerId;
+		if (timerId) {
+			this._timerId=undefined;
+			window.clearTimeout(timerId);
+		}
 	
 		var button=this._button;
 		if (button) {
@@ -119,15 +173,6 @@ var __prototype = {
 
 			f_core.VerifyProperties(button);
 		}
-		
-		var input=this._input;
-		if (input) {
-			this._input=undefined; // HTMLInputElement
-			
-			input._comboGrid=undefined; // f_comboGrid
-
-			f_core.VerifyProperties(input);
-		}	
 		
 		this.f_super(arguments);
 	},
@@ -205,109 +250,247 @@ var __prototype = {
 	},
 	/**
 	 * @method protected
+	 * @param Event jsEvent
+	 * @param optional boolean autoSelect
 	 * @return void
 	 */
-	f_updateStyleClass: function(postSuffix) {
-		var suffix="";
-
-		if (this.f_isDisabled()) {
-			suffix+="_disabled";
-
-		} else if (this.f_isReadOnly()) {
-			suffix+="_readOnly";
+	f_openPopup: function(jsEvent, autoSelect) {
+		if (this.f_isReadOnly()) {
+			return;
 		}
 		
-		if (postSuffix) {
-			suffix+=postSuffix;
-		}
-	
-		var claz=this.f_computeStyleClass(suffix);
-		if (this.className!=claz) {
-			this.className=claz;
-		}
-	},
-	fa_updateDisabled: function() {
-		this.f_updateButtonStyle();
-		
-		var input=this._input;
-		if (input) {
-			input.disabled=this.f_isDisabled();
-		}
-	},
-	fa_updateReadOnly: function() {
-		var input=this._input;
-		if (input) {
-			input.readOnly=this.f_isReadOnly();
-		}
+		this.f_openDataGridPopup(jsEvent, this.f_getText(), autoSelect);
 	},
 	/**
 	 * @method protected
 	 * @param Event jsEvent
 	 * @return void
 	 */
-	f_openPopup: function(jsEvent) {
-		if (this.f_isReadOnly()) {
+	f_closePopup: function(jsEvent) {		
+		this.f_closeDataGridPopup(jsEvent);
+	},
+	/**
+	 * @method protected
+	 */
+	f_getEventLocked: function(evt, showAlert, mask) {
+		if (this.f_isDataGridPopupOpened()) {
+			if (!mask) {
+				mask=0;
+			}	
+			
+			mask|=f_event.POPUP_LOCK;
+		}
+
+		f_core.Debug(f_comboGrid, "f_getEventLocked: menuOpened="+this.f_isDataGridPopupOpened()+" mask="+mask+" showAlert="+showAlert);
+
+		return this.f_super(arguments, evt, showAlert, mask);
+	},
+	/**
+	 * @method private
+	 * @param f_event evt
+	 * @return boolean
+	 */
+	_onCancelDown: function(evt) {
+		var jsEvt=evt.f_getJsEvent();
+		if (jsEvt.cancelBubble) {
+			f_core.Debug(f_comboGrid, "_onCancelDown: Event has been canceled !");
+			return true;
+		}
+
+		f_core.Debug(f_comboGrid, "_onCancelDown: Event keyCode="+jsEvt.keyCode);
+
+		switch(jsEvt.keyCode) {
+		case f_key.VK_DOWN:
+		case f_key.VK_UP:
+		case f_key.VK_ENTER:
+		case f_key.VK_RETURN:
+		case f_key.VK_ESPACE:
+			return f_core.CancelJsEvent(jsEvt);
+		}
+		
+		this._inputValue=this.f_getInput().value;
+		
+		return true;
+	},
+	/**
+	 * @method private
+	 * @param f_event evt
+	 * @return boolean
+	 */
+	_onSuggest: function(evt) {
+		var jsEvt=evt.f_getJsEvent();
+		if (jsEvt.cancelBubble) {
+			f_core.Debug(f_comboGrid, "_onSuggest: Event has been canceled !");
+			return true;
+		}
+		
+		var menuOpened=this.f_isDataGridPopupOpened();
+
+		f_core.Debug(f_comboGrid, "_onSuggest: Charcode ("+jsEvt.keyCode+") menuOpened="+menuOpened);
+
+		var cancel=false;
+		var value=this.f_getValue();
+		var showPopup=false;
+		
+		var newInput=this.f_getInput().value;
+		if (this._inputValue!=newInput) {
+			this._formattedValue="";
+			this._inputValue=newInput;
+		}		
+
+		switch(jsEvt.keyCode) {
+		case f_key.VK_DOWN:
+		case f_key.VK_UP:
+			var direction=(jsEvt.keyCode==f_key.VK_DOWN)?1:-1;
+			
+			if (menuOpened) {
+				//this.f_changeSelection(direction);
+				return true;// f_core.CancelJsEvent(jsEvt);
+			}
+
+			if (value==this._lastValue) {
+				this.f_openPopup(jsEvt, direction);
+
+				return f_core.CancelJsEvent(jsEvt);
+			}
+			
+			showPopup=true;
+			break;
+
+		case f_key.VK_ENTER:
+		case f_key.VK_RETURN:
+		case f_key.VK_TAB:
+			// Le KeyUp vient du popup !
+			if (menuOpened) {
+				// Selection !
+				return f_core.CancelJsEvent(jsEvt);
+			}
+			
+			this.f_closePopup(jsEvt);
+			return true;
+		}
+		
+		var value=this.f_getValue();
+		if (value==this._lastValue) {
+			f_core.Debug(f_comboGrid, "_onSuggest: Same value ! (value="+value+" / last="+this._lastValue+")");
+			return true;
+		}
+		
+		if (menuOpened) {
+			//this.f_clearAllGridRows(); // ???
+		}
+		
+		var keyCode=jsEvt.keyCode;
+		if (!showPopup) {
+			if (keyCode<32) {
+				// On affiche le POPUP que si c'est une touche normale !
+		
+//				return;
+			}
+		}
+		
+		var timerId=this._timerId;
+		if (timerId) {
+			this._timerId=undefined;
+			window.clearTimeout(timerId);
+		}
+		
+		var suggestionDelayMs=this._suggestionDelayMs;		
+		if (suggestionDelayMs<1) {
 			return;
 		}
 		
-		this.f_openDataGridPopup(jsEvent);
+		f_core.Debug(f_comboGrid, "_onSuggest: Set timeout to "+suggestionDelayMs);
+		
+		var delay=suggestionDelayMs;
+		if (menuOpened) {
+			delay/=3.0;
+			if (delay<1) {
+				delay=1;
+			}
+		} else if (!showPopup && keyCode<32) {
+			delay*=2.0;
+		}
+		
+		if (showPopup) {
+			this._lastValue=value;
+			this._onSuggestTimeOut();
+			
+		} else {
+			this._lastValue=value;
+
+			var self=this;
+			this._timerId=window.setTimeout(function() {
+				if (window._f_exiting) {
+					return;
+				}
+							
+				try {
+					self._onSuggestTimeOut();
+					
+				} catch (x) {
+					f_core.Error(f_comboGrid, "_onSuggest.timer: Timeout processing error !", x);
+				}
+			}, delay);
+		}		
+		
+		if (cancel) {
+			return f_core.CancelJsEvent(jsEvt);
+		}
+		
+		return true;
 	},
 	/**
-	 * Set the focus to this component.
-	 *
-	 * @method public
-	 * @return void
+	 * @method private
 	 */
-	f_setFocus: function() {
-		if (!f_core.ForceComponentVisibility(this)) {
+	_onSuggestTimeOut: function(text) {
+		if (!this._focus) {
+			return;
+		}
+		if (!text) {
+			text=this.f_getText();
+		}
+		
+		var minChars=this._suggestionMinChars;
+		f_core.Debug(f_comboGrid, "_onSuggestTimeOut: text='"+text+"'. (minChars="+minChars+")");
+
+		if (minChars>0 && text.length<minChars) {
 			return;
 		}
 
-		if (this.f_isDisabled()) {
-			return false;
+		this.f_openDataGridPopup(null, text);
+	},
+	fa_valueSelected: function(value, label) {
+		this._formattedValue=(label)?label:"";
+		
+		this.f_getInput().value=value;
+	},
+	_onFocus: function() {
+		this._focus=true;
+		
+		// On affiche la clef, ou la valeur saisie
+		var input=this.f_getInput();
+		
+		input.value=this._inputValue;
+		
+		var selection=this._inputSelection;
+		if (selection) {
+			f_core.SelectText(input, selection);
 		}
+		
+	},
+	_onBlur: function(event) {
+		this._focus=undefined;
 
-		f_core.Debug(f_comboGrid, "f_setFocus: Set focus on comboGrid '"+this.id+"'.");
-		
-		var cmp=this._input;
-		if (!cmp) {
-			cmp=this;
-		}
-		
-		cmp.focus();
-	},
-	fa_getDataGridFilter: function() {
-		return this.f_getValue();
-	},
-	/**
-	 * Returns the value associated to the input component.
-	 *
-	 * @method public
-	 * @return String The value associated.
-	 */
-	f_getValue: function() {
-		return this._input.value;
-	},
-	/**
-	 * Returns the value associated to the input component.
-	 *
-	 * @method public
-	 * @return boolean If value is recognized.
-	 */
-	f_setValue: function(value) {
-		if (typeof(value)=="number") {
-			value=String(value);
-		}
+		// On affiche la zone formatée
 
-		if (typeof(value)!="string") {
-			f_core.Debug(f_input, "f_setValue: Invalid value: "+value);
-			return false;
-		}
+		var input=this.f_getInput();
 		
-		this._input.value=value;
+		this._inputSelection=f_core.GetTextSelection(input);
+		input.value=this._formattedValue;
 		
-		// On filtre ?
+		this.f_closePopup(event.f_getJsEvent());
 	}
 }
 
-new f_class("f_comboGrid", null, __static, __prototype, f_component, fa_disabled, fa_required, fa_readOnly, fa_dataGridPopup);
+new f_class("f_comboGrid", null, __static, __prototype, f_textEntry, fa_dataGridPopup);

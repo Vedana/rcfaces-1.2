@@ -152,7 +152,7 @@ public abstract class CameliaMessagesComponent extends javax.faces.component.UIM
 	public final void setValueBinding(String name, ValueBinding binding) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
-				name="value";
+				name=Properties.VALUE;
 			}
 
 			engine.setProperty(name, binding);
@@ -173,7 +173,7 @@ public abstract class CameliaMessagesComponent extends javax.faces.component.UIM
 	public final ValueBinding getValueBinding(String name) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
-				name="value";
+				name=Properties.VALUE;
 			}
 
 			return engine.getValueBindingProperty(name);

@@ -20,6 +20,11 @@ var __static = {
 	 * @field private static final number
 	 */
 	_DEFAULT_SUGGESTION_DELAY_MS: 300,
+
+	/**
+	 * @field private static final number
+	 */
+	_DEFAULT_SUGGESTION_MIN_CHARS: 0,
 	
 	/**
 	 * @field private static final String
@@ -40,11 +45,11 @@ var __prototype = {
 		
 		this._suggestionDelayMs=f_core.GetNumberAttribute(this, "v:suggestionDelayMs", f_suggestTextEntry._DEFAULT_SUGGESTION_DELAY_MS);
 		
+		this._suggestionMinChars=f_core.GetNumberAttribute(this, "v:suggestionMinChars", f_suggestTextEntry._DEFAULT_SUGGESTION_MIN_CHARS);
+		
 		this._caseSensitive=f_core.GetBooleanAttribute(this, "v:caseSensitive", false);
 		
 		this._forceProposal=f_core.GetBooleanAttribute(this, "v:forceProposal", false);
-		
-		this._suggestionMinChars=f_core.GetNumberAttribute(this, "v:suggestionMinChars", 0);
 		
 		// Permet d'optimiser les propositions !
 		this._orderedResult=f_core.GetAttribute(this, "v:orderedResult");
@@ -173,7 +178,7 @@ var __prototype = {
 		var menuOpened=(menu && menu.f_isOpened());
 
 		var cancel=false;
-		var value=this.value;
+		var value=this.f_getValue();
 		var showPopup=false;
 
 		switch(jsEvt.keyCode) {
@@ -201,7 +206,7 @@ var __prototype = {
 
 		f_core.Debug(f_suggestTextEntry, "_onSuggest: Charcode ("+jsEvt.keyCode+").");
 		
-		var value=this.value;
+		var value=this.f_getValue();
 		if (value==this._lastValue) {
 			f_core.Debug(f_suggestTextEntry, "_onSuggest: Same value ! (value="+value+" / last="+this._lastValue+")");
 			return true;
@@ -255,11 +260,15 @@ var __prototype = {
 
 			var suggestTextEntry=this;
 			this._timerId=window.setTimeout(function() {
+				if (window._f_exiting) {
+					return;
+				}
+
 				try {
 					suggestTextEntry._onSuggestTimeOut();
 					
 				} catch (x) {
-					f_core.Error(f_suggestTextEntry, "_onSuggest: Timeout processing error !", x);
+					f_core.Error(f_suggestTextEntry, "_onSuggest.timer: Timeout processing error !", x);
 				}
 			}, delay);
 		}		
@@ -279,7 +288,7 @@ var __prototype = {
 		}
 		
 		var minChars=this._suggestionMinChars;
-		f_core.Debug(f_suggestTextEntry, "_onSuggestTimeOut() text='"+text+"'. (minChars="+minChars+")");
+		f_core.Debug(f_suggestTextEntry, "_onSuggestTimeOut: text='"+text+"'. (minChars="+minChars+")");
 
 		if (minChars>0 && text.length<minChars) {
 			return;
@@ -681,7 +690,7 @@ var __prototype = {
 
 		this.f_setText(label, true);
 		this._setSuggestionValue(value, item, jsEvt);
-		this._lastValue=this.value;
+		this._lastValue=this.f_getValue();
 	},
 	/**
 	 * @method public
@@ -715,7 +724,7 @@ var __prototype = {
 				return true;
 			}
 	
-			text=this.value.substring(0, d.start);
+			text=this.f_getValue().substring(0, d.start);
 		}
 				
 		if (!this._caseSensitive) {

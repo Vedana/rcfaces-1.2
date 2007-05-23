@@ -15,6 +15,7 @@ import java.util.Set;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * 
@@ -131,6 +132,13 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         return old;
     }
 
+    public void setProperty(FacesContext facesContext, String propertyName,
+            ValueBinding valueBinding) {
+
+        throw new FacesException(
+                "Can not set a ValueBinding while a delta phase.");
+    }
+
     public Object removeProperty(FacesContext facesContext, String propertyName) {
 
         Object initialValue = accessor.getProperty(propertyName);
@@ -222,7 +230,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         Object datas[] = (Object[]) params[2];
 
-        if (datas==null || datas.length == 0) {
+        if (datas == null || datas.length == 0) {
             return this;
         }
 

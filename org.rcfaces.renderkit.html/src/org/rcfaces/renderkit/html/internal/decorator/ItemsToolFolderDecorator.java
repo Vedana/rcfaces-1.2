@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.decorator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -49,6 +52,7 @@ import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.internal.component.IToolBarImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -70,6 +74,7 @@ import org.rcfaces.core.item.IToolItem;
 import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.SeparatorSelectItem;
 import org.rcfaces.core.item.ToolItem;
+import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
@@ -93,6 +98,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
     private static final int DEFAULT_ITEM_SEPARATOR_WIDTH = 2;
 
+    private static final String COMPONENT_ID_TO_VALUE_PROPERTY = "org.rcfaces.html.ITEMS_CID";
+
     private final String borderType;
 
     private final List menuDecoratorStack = new ArrayList(8);
@@ -100,6 +107,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     private final boolean showDropDownMark;
 
     private final List itemsId = new ArrayList(8);
+
+    private final Map itemIdToClientId = new HashMap(8);
 
     private IToolBarImageAccessors toolBarImageAccessors;
 
@@ -185,8 +194,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
 
         if (getContext().getDepth() == 1) {
-            String componentId = nextItemId();
-            if (componentId == null) {
+            String itemId = nextItemId();
+            if (itemId == null) {
                 return SKIP_NODE;
             }
 
@@ -202,6 +211,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             if (inputType == 0) {
                 if (hasChild) {
                     inputType = IInputTypeCapability.AS_DROP_DOWN_MENU;
+
                 } else {
                     inputType = DEFAULT_INPUT_TYPE;
                 }
@@ -211,8 +221,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     .getJavaScriptRenderContext().allocateVarName();
 
             javaScriptWriter.write(selectItemVarName).write('=')
-                    .writeMethodCall("f_appendToolItem2").writeString(
-                            componentId).write(',');
+                    .writeMethodCall("f_appendToolItem2").writeString(itemId)
+                    .write(',');
 
             IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
                     .writeObjectLiteral(false);
@@ -226,6 +236,22 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                         "Item of a toolbar must have a value. itemsToolFolderId="
                                 + component.getId());
             }
+
+            String itemCliendId = (String) itemIdToClientId.get(itemId);
+            if (itemCliendId == null) {
+                itemCliendId = itemId;
+            }
+
+            Map componentIdToValue = (Map) getComponent().getAttributes().get(
+                    COMPONENT_ID_TO_VALUE_PROPERTY);
+            if (componentIdToValue == null) {
+                componentIdToValue = new HashMap(8);
+
+                getComponent().getAttributes().put(
+                        COMPONENT_ID_TO_VALUE_PROPERTY, componentIdToValue);
+            }
+
+            componentIdToValue.put(itemCliendId, selectItemValue);
 
             if (inputType == IInputTypeCapability.AS_SEPARATOR) {
                 objectLiteralWriter.writeSymbol("_inputType").writeInt(
@@ -295,7 +321,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     .writeMethodCall("f_getItemComponent").write(
                             selectItemVarName).writeln(");");
 
-            menuDecorator = pushMenuDecorator(componentVarName, componentId,
+            menuDecorator = pushMenuDecorator(componentVarName, itemId,
                     javaScriptWriter);
 
         } else {
@@ -397,7 +423,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         Object selectItemValue = selectItem.getValue();
 
-        String componentId = allocateItemId();
+        String itemId = allocateItemId();
 
         int style = 0;
         if (selectItem instanceof IInputTypeItem) {
@@ -423,27 +449,27 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         switch (style) {
         case IInputTypeCapability.AS_RADIO_BUTTON:
-            itemComponent = new ImageRadioButtonComponent(componentId);
+            itemComponent = new ImageRadioButtonComponent(itemId);
             break;
 
         case IInputTypeCapability.AS_CHECK_BUTTON:
-            itemComponent = new ImageCheckButtonComponent(componentId);
+            itemComponent = new ImageCheckButtonComponent(itemId);
             break;
 
         case IInputTypeCapability.AS_RESET_BUTTON:
-            itemComponent = new ImageResetButtonComponent(componentId);
+            itemComponent = new ImageResetButtonComponent(itemId);
             break;
 
         case IInputTypeCapability.AS_SUBMIT_BUTTON:
-            itemComponent = new ImageSubmitButtonComponent(componentId);
+            itemComponent = new ImageSubmitButtonComponent(itemId);
             break;
 
         case IInputTypeCapability.AS_DROP_DOWN_MENU:
-            itemComponent = new ImageComboComponent(componentId);
+            itemComponent = new ImageComboComponent(itemId);
             break;
 
         default:
-            itemComponent = new ImageButtonComponent(componentId);
+            itemComponent = new ImageButtonComponent(itemId);
         }
 
         if (borderType != null
@@ -667,6 +693,10 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                         component);
             }
 
+            String itemClientId = component.getClientId(facesContext);
+
+            itemIdToClientId.put(itemId, itemClientId);
+
         } finally {
             children.remove(itemComponent);
         }
@@ -784,15 +814,10 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         // ItemsToolFolderComponent itemsToolFolderComponent =
         // (ItemsToolFolderComponent) component;
 
-        Map childrenClientIds = null;
+        Map childrenClientIds = mapChildrenClientId(null, context, component);
 
         String disabledItems = componentData.getStringProperty(DISABLED_ITEMS);
         if (disabledItems != null && disabledItems.length() > 0) {
-            if (childrenClientIds == null) {
-                childrenClientIds = mapChildrenClientId(null, context,
-                        component);
-            }
-
             List l = listComponents(childrenClientIds, disabledItems,
                     IDisabledCapability.class);
 
@@ -806,11 +831,6 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         String enabledItems = componentData.getStringProperty(ENABLED_ITEMS);
         if (enabledItems != null && enabledItems.length() > 0) {
-            if (childrenClientIds == null) {
-                childrenClientIds = mapChildrenClientId(null, context,
-                        component);
-            }
-
             List l = listComponents(childrenClientIds, enabledItems,
                     IDisabledCapability.class);
 
@@ -819,6 +839,43 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                         .next();
 
                 disabledCapability.setDisabled(false);
+            }
+        }
+
+        if (componentData.isEventComponent() == false) {
+            // Si il n'y a pas d'evenement Camelia, on regarde les evenements
+            // HTML !
+
+            String eventComponentId = ((IHtmlRequestContext) context)
+                    .getEventComponentId();
+
+            Map componentIdToValue = (Map) getComponent().getAttributes().get(
+                    COMPONENT_ID_TO_VALUE_PROPERTY);
+            if (componentIdToValue != null) {
+                for (Iterator it = componentIdToValue.entrySet().iterator(); it
+                        .hasNext();) {
+                    Map.Entry entry = (Map.Entry) it.next();
+
+                    String clientId = (String) entry.getKey();
+
+                    if (clientId.equals(eventComponentId)) {
+                        continue;
+                    }
+
+                    String selectItemValue = (String) entry.getValue();
+
+                    Object value = convertToItemValue(
+                            context.getFacesContext(), component,
+                            selectItemValue);
+
+                    ActionEvent actionEvent = new SelectionEvent(component,
+                            value, null, 0);
+
+                    actionEvent.setPhaseId(PhaseId.INVOKE_APPLICATION);
+                    component.queueEvent(actionEvent);
+
+                    break;
+                }
             }
         }
     }

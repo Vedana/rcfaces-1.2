@@ -62,6 +62,11 @@ var __static = {
 	 * @field public static final number
 	 */
 	INVALID_SERVICE_RESPONSE_ERROR: 0x2000006,
+
+	/**
+	 * @field public static final number
+	 */
+	INTERNAL_SERVICE_RESPONSE_ERROR: 0x2000007,
 		
 	/**
 	 * @field public static final number

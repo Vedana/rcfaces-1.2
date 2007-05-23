@@ -210,13 +210,17 @@ var __static = {
 	/**
 	 * @method hidden static
 	 */
-	Create: function(parent, refComponent, forId) {
+	Create: function(parent, refComponent, forId, styleClass) {
 		
 		var properties={
 			id: refComponent.id+":pager",
 			className: "f_pager",
 			"v:for": forId
 		};
+		
+		if (styleClass) {
+			properties["v:styleClass"]=styleClass;
+		}		
 		
 		f_dataGridPopup.CopyProperties(properties, refComponent, 
 			"v:message", "v:zeroResultMessage", "v:oneResultMessage", "v:manyResultMessage", "v:manyResultMessage2");

@@ -7,8 +7,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ItemsToolFolderComponent;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
@@ -67,8 +67,8 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
 
         /*
          * String className = getMainStyleClassName(); // Un dummy pour eviter
-         * des sauts de pages writer.startElement(IHtmlWriter.A"); String cls = className +
-         * "_itemFolder"; writer.writeAttribute("class", cls);
+         * des sauts de pages writer.startElement(IHtmlWriter.A"); String cls =
+         * className + "_itemFolder"; writer.writeAttribute("class", cls);
          * writer.endElement(IHtmlWriter.A");
          */
 
@@ -107,27 +107,9 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         return true;
     }
 
-    protected void decodeEvent(IRequestContext context, UIComponent component,
-            IEventData eventData) {
-
-        /*
-         * if (eventData != null &&
-         * JavaScriptClasses.EVENT_SELECTION.equals(eventData .getEventName())) {
-         * 
-         * Object value = eventData.getEventValue(); // TODO: Il faut converir
-         * la value de l'item ...
-         * 
-         * String itemValue=String.valueOf(value);
-         * 
-         * ActionEvent actionEvent = new SelectionEvent(component, String
-         * .valueOf(value), value, 0);
-         * actionEvent.setPhaseId(PhaseId.INVOKE_APPLICATION);
-         * component.queueEvent(actionEvent);
-         * 
-         * return; }
-         */
-
-        super.decodeEvent(context, component, eventData);
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
     }
 
     protected IComponentDecorator createComponentDecorator(

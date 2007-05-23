@@ -13,4 +13,6 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
  */
 public interface IHtmlRequestContext extends IRequestContext {
     IHtmlProcessContext getHtmlProcessContext();
+
+    String getEventComponentId();
 }

@@ -524,12 +524,11 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
-	 * @param any rowValue1 The value of the row to remove
-	 * @param optional any rowValue2 The value of the next row to remove
+	 * @param any... rowValue1 The value of the row to remove
 	 * @return number of removed rows.
 	 */
-	f_removeRow: function(rowValue1, rowValue2) {
-		f_core.Assert(this._rows==0, "All rows of the DataGrid must be loaded (attribute rows=0)");
+	f_clear: function(rowValue1, rowValue2) {
+		f_core.Assert(this._rows==0, "f_dataGrid.f_clear: All rows of the DataGrid must be loaded (attribute rows=0)");
 		
 		var ret=0;
 		var tbody=this._tbody;
@@ -590,19 +589,28 @@ var __prototype = {
 	 * @param any[] rowValues List of values whose specified rows.
 	 * @return number of removed rows.
 	 */
-	f_removeRows: function(rowValues) {
-		return this.f_removeRow.apply(this, rowValues);
+	f_clearArray: function(rowValues) {
+		return this.f_clear.apply(this, rowValues);
+	},
+	/**
+	 * 
+	 * @method public
+	 * @return number of removed rows.
+	 */
+	f_clearAll: function() {
+		this.f_clear.apply(this, this.fa_listVisibleElements());
 	},
 	/**
 	 * Returns an array of content of each cell of the specified row.
 	 *
 	 * @method public
 	 * @param any rowValue Row value, a row object, or the index of row into the table.
-	 * @param boolean onlyVisible Keey only visible columns.
+	 * @param optional boolean onlyVisible Keey only visible columns.
 	 * @return String[] 
 	 */
 	f_getRowValues: function(rowValue, onlyVisible) {
-		f_core.Assert(rowValue, "Invalid rowValue parameter ! ("+rowValue+")");
+		f_core.Assert(rowValue!==undefined && rowValue!==null, "f_dataGrid.f_getRowValues: Invalid rowValue parameter ! ("+rowValue+")");
+		f_core.Assert(onlyVisible===undefined || typeof(onlyVisible)=="boolean", "f_dataGrid.f_getRowValues: Invalid onlyVisible parameter ! ("+onlyVisible+")");
 		var row;
 		
 		if (rowValue._dataGrid) {
@@ -653,6 +661,9 @@ var __prototype = {
 	 * @return Object
 	 */
 	f_getRowValuesSet: function(rowValue, onlyVisible) {
+		f_core.Assert(rowValue!==undefined && rowValue!==null, "f_dataGrid.f_getRowValuesSet: Invalid value '"+rowValue+"'.");
+		f_core.Assert(onlyVisible===undefined || typeof(onlyVisible)=="boolean", "f_dataGrid.f_getRowValuesSet: Invalid onlyVisible parameter ! ("+onlyVisible+")");
+
 		var row;
 		
 		if (rowValue._dataGrid) {
@@ -701,7 +712,7 @@ var __prototype = {
 	 * @method public
 	 * @param any rowValue Row value, row object or the index of row the into table.
 	 * @param number columnIndex Index of the column.
-	 * @return Object
+	 * @return String
 	 */
 	f_getCellValue: function(rowValue, columnIndex) {	
 		var row=this.f_getRowByValue(rowValue, true);
@@ -714,7 +725,7 @@ var __prototype = {
 			for(var i=0;i<columns.length;i++) {
 				var col=columns[i];
 	
-				if (col._visibility===null) {
+				if (col._visibility===null) { /* Hidden coté serveur ! */
 					if (columnIndex==i) {
 						return null;
 					}
@@ -722,7 +733,7 @@ var __prototype = {
 				}
 
 				if (columnIndex==i) {
-					return cells[index];
+					return cells[index]._text;
 				}
 		
 				index++;
@@ -734,7 +745,7 @@ var __prototype = {
 		for(var i=0;i<columns.length;i++) {
 			var col=columns[i];
 
-			if (col._visibility===null) {
+			if (col._visibility===null) { /* Hidden coté serveur ! */
 				if (col._id==columnIndex) {
 					return null;
 				}
@@ -742,7 +753,7 @@ var __prototype = {
 			}
 
 			if (col._id==columnIndex) {
-				return cells[index];
+				return cells[index]._text;
 			}
 	
 			index++;

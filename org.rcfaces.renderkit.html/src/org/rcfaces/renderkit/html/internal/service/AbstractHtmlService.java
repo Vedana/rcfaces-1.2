@@ -36,6 +36,8 @@ public abstract class AbstractHtmlService extends AbstractService {
 
     public static final int SESSION_EXPIRED_SERVICE_ERROR = 0x2000002;
 
+    public static final int INTERNAL_SERVICE_RESPONSE_ERROR = 0x2000007;
+
     protected static final String RESPONSE_CHARSET = "UTF-8";
 
     private static final String CAMELIA_RESPONSE_HEADER = "X-Camelia-Service";

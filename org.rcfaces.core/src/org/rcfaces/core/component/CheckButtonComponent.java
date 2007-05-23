@@ -231,7 +231,7 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 	 * See {@link #setSelected(boolean) setSelected(boolean)} for more details
 	 */
 	public void setSelected(ValueBinding selected) {
-		setValue(selected);
+		setValueBinding(Properties.VALUE, selected);
 	}
 
 	protected Set getCameliaFields() {

@@ -744,6 +744,20 @@ public abstract class AbstractSelectItemsDecorator extends
                         .getFacesContext());
     }
 
+    protected Object convertToItemValue(
+            IComponentRenderContext componentContext, String selectItemValue) {
+
+        return convertToItemValue(componentContext.getFacesContext(),
+                componentContext.getComponent(), selectItemValue);
+    }
+
+    protected Object convertToItemValue(FacesContext facesContext,
+            UIComponent component, String selectItemValue) {
+
+        return ValuesTools.convertStringToValue(facesContext, component,
+                getConverter(), selectItemValue, null);
+    }
+
     protected final List listComponents(Map childrenClientIds, String itemIds,
             Class capability) {
 

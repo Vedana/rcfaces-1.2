@@ -250,7 +250,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
 	public void setText(ValueBinding text) {
-		setValue(text);
+		setValueBinding(Properties.VALUE, text);
 	}
 
 	public int getTextDirection() {

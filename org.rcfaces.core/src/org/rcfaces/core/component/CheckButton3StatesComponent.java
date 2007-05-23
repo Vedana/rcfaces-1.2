@@ -246,7 +246,7 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 	 * See {@link #setSelectedState(String) setSelectedState(String)} for more details
 	 */
 	public void setSelectedState(ValueBinding selectedState) {
-		setValue(selectedState);
+		setValueBinding(Properties.VALUE, selectedState);
 	}
 
 	protected Set getCameliaFields() {

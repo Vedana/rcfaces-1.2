@@ -246,6 +246,8 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	}
 
 	private final Object setValidationParameterData(String name, Object value, boolean client) {
+
+
 		FacesContext facesContext=getFacesContext();
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", true);
 		if (client) {
@@ -339,7 +341,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * See {@link #setText(String) setText(String)} for more details
 	 */
 	public void setText(ValueBinding text) {
-		setValue(text);
+		setValueBinding(Properties.VALUE, text);
 	}
 
 	public int getTextDirection() {

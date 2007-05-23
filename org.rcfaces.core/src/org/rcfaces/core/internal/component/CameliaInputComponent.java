@@ -162,7 +162,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	public final void setValueBinding(String name, ValueBinding binding) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
-				name="value";
+				name=Properties.VALUE;
 			}
 
 			engine.setProperty(name, binding);
@@ -183,7 +183,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	public final ValueBinding getValueBinding(String name) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
-				name="value";
+				name=Properties.VALUE;
 			}
 
 			return engine.getValueBindingProperty(name);

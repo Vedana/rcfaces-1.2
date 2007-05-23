@@ -17,7 +17,6 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;

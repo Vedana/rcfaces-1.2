@@ -208,15 +208,14 @@ public class ValuesTools {
             return value;
         }
 
-        if (converter == null) {
+        if (converter == null && attributeName != null) {
             ValueBinding valueBinding = component
                     .getValueBinding(attributeName);
 
-            if (valueBinding == null) {
-                return value;
-            }
+            if (valueBinding != null) {
 
-            if (valueBinding.getValue(context) != null) {
+                // On récupère pas la valeur !
+                // if (valueBinding.getValue(context) != null) {
                 Class converterType = valueBinding.getType(context);
                 if (converterType == null || converterType == String.class
                         || converterType == Object.class) {
@@ -235,6 +234,7 @@ public class ValuesTools {
                 }
             }
         }
+        // }
 
         if (converter != null) {
             return converter.getAsObject(context, component, (String) value);

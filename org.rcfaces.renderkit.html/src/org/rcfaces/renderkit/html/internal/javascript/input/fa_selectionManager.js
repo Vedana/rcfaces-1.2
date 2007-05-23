@@ -673,14 +673,18 @@ var __prototype = {
 	 * @return void
 	 */
 	f_setSelection: function(selection, show) {
+		f_core.Assert(typeof(selection)=="object", "fa_selectionManager.f_setSelection: Invalid selection parameter ("+selection+")");
+		f_core.Assert(show===undefined || typeof(show)=="boolean", "fa_selectionManager.f_setSelection: Invalid show parameter ("+show+")");
+		
 		f_core.Debug(fa_selectionManager, "f_setSelection: Set selection to '"+selection+"' show='"+show+"'.");
 		
-		if (!selection) {
+		if (!selection || !selection.length) {
 			this._deselectAllElements();
 			this.fa_fireSelectionChangedEvent();
 			return;
 		}
 		
+		this._deselectAllElements(); // ??
 		this._selectElementsRange(selection, show);
 		
 		this.fa_fireSelectionChangedEvent();

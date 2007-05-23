@@ -213,7 +213,6 @@ public class ComponentsGridService extends AbstractHtmlService {
                     rowIndex, forcedRows, sortedComponents, filterExpression);
 
         } catch (IOException ex) {
-
             throw new FacesException(
                     "Can not write dataGrid javascript rows !", ex);
 

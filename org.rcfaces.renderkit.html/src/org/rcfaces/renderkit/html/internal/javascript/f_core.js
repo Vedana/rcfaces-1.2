@@ -3902,8 +3902,16 @@ var f_core = {
 	 */
 	SelectText: function(component, index, length) {		
 		f_core.Assert(component && component.tagName, "f_core.SelectText: Invalid component !");
-		f_core.Assert(typeof(index)=="number" && index>=0, "f_core.SelectText: Invalid index '"+index+"'.");
-		f_core.Assert(typeof(length)=="number" && length>=0, "f_core.SelectText: Invalid length '"+length+"'.");
+
+		if ((index instanceof Array) && index.length==2) {
+			f_core.Assert(index.length==2, "f_core.SelectText: Invalid index parameter [length of array!=2] ("+index+")");
+
+			length=index[1];
+			index=index[0];
+		}
+		
+		f_core.Assert(typeof(index)=="number" && index>=0, "f_core.SelectText: Invalid index parameter '"+index+"'.");
+		f_core.Assert(typeof(length)=="number" && length>=0, "f_core.SelectText: Invalid length parameter '"+length+"'.");
 	
 		if (f_core.IsInternetExplorer()) {
 			var tr=component.createTextRange();
@@ -4247,11 +4255,18 @@ var f_core = {
 				
 				ret+=message.substring(pos, idx);
 				
-				var num=parseInt(message.substring(idx+1, idx2), 10);
-				if (parameters && num<parameters.length) {
-					ret+=parameters[num];
+				if (parameters) {
+					var p=message.substring(idx+1, idx2);
+					var num=parseInt(p, 10);
+					if (!isNaN(num)) {
+						if (num>=0 && num<parameters.length) {
+							ret+=parameters[num];
+						}
+					} else if (parameters[p]) {
+						ret+=parameters[p];
+					}
 				}
-				
+								
 				pos=idx2+1
 				continue;
 			}

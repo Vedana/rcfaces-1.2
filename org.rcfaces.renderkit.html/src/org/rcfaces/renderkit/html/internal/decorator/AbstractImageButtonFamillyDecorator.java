@@ -318,6 +318,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                 if (mainComponent.equals(IHtmlWriter.INPUT)) {
                     writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
+                    writer.writeName(writer.getComponentRenderContext()
+                            .getComponentClientId());
+                    writer.writeValue(getInputValue());
                     writeInputAttributes(writer);
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly); // jbos@unedic.fr
@@ -517,7 +520,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return className;
         }
 
-        className = ((ICssRenderer) renderer).getComponentStyleClassName(writer);
+        className = ((ICssRenderer) renderer)
+                .getComponentStyleClassName(writer);
 
         if (className == null) {
             throw new NullPointerException("Component className is null !");
@@ -576,6 +580,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return IHtmlWriter.A;
     }
 
+    protected String getInputValue() {
+        return "SELECTED";
+    }
+
     protected void writeImage() throws WriterException {
 
         String inputElement = getInputElement();
@@ -583,7 +591,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         writeInputAttributes(writer);
 
         if (IHtmlWriter.INPUT.equals(inputElement)) {
-            writer.writeType("image");
+            writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
+            writer.writeName(writer.getComponentRenderContext()
+                    .getComponentClientId());
             writeImageAttributes();
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);

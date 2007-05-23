@@ -28,11 +28,11 @@ var __static = {
 	/**
 	 *  @method hidden static
 	 */
-	Create: function(parent, dataGridPopup, width, height) {
+	Create: function(parent, dataGridPopup, width, height, styleClass) {
 		
 		var columns=dataGridPopup._columns;
 		
-		var divAttributes= { 
+		var properties= { 
 			id: dataGridPopup.id+":popup", 
 			"v:nc": "true", 
 			role: "wairole:grid", 
@@ -42,15 +42,19 @@ var __static = {
 		};
 		
 		if (width) {
-			divAttributes.style="width:"+width+"px";
+			properties.style="width:"+width+"px";
 			if (height) {
-				divAttributes.style+=";height:"+height+"px";
+				properties.style+=";height:"+height+"px";
 			}
 		}
 		
-		f_dataGridPopup.CopyProperties(divAttributes, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged");
+		if (styleClass) {
+			properties["v:styleClass"]=styleClass;
+		}
 		
-		var divDataGrid=f_core.CreateElement(parent, "div", divAttributes);
+		f_dataGridPopup.CopyProperties(properties, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged");
+		
+		var divDataGrid=f_core.CreateElement(parent, "div", properties);
 		
 		var divDataTitle=f_core.CreateElement(divDataGrid, "div", { 
 			"class": "f_grid_dataTitle_scroll",
@@ -127,25 +131,57 @@ var __prototype = {
 	},
 	/**
 	 * @method protected
+	 * @return void
 	 */
-	f_getEventLocked: function(evt, showAlert) {
-		if (showAlert!==false) {
-			if (f_popup.IsChildOfDocument(this)) {
-				return false;
-			}			
+	f_updateNewPage: function() {
+		this.f_super(arguments);
+		
+		var autoSelect=this._autoSelect;
+		if (!autoSelect) {
+			return;
+		}
+		this._autoSelect=undefined;
+		
+		this.f_performAutoSelection(autoSelect);
+	},
+	/**
+	 * @method hidden
+	 * @param number autoSelect
+	 * @return void
+	 */
+	f_performAutoSelection: function(autoSelect) {
+		f_core.Assert(typeof(autoSelect)=="number", "f_dataGridPopup.f_performAutoSelection: Invalid autoSelect parameter ("+autoSelect+")");		
+		
+		var rows=this.fa_listVisibleElements();
+
+		f_core.Debug(f_dataGridPopup, "f_performAutoSelection: change selection="+autoSelect+" rows.lengh="+rows.length);
+
+		if (!rows.length) {
+			return;
+		}
+
+		var selection;
+		
+		if (autoSelect>0) {
+			selection=this.fa_getElementValue(rows[0]);
+
+		} else if (autoSelect<0) {
+			selection=this.fa_getElementValue(rows[rows.length-1]);
 		}
 		
-		if (!this.f_super(arguments, evt, showAlert)) {
-			return false;
-		}
+		f_core.Debug(f_dataGridPopup, "f_performAutoSelection: Selection="+selection);
 		
-		if (showAlert===false) {
-			if (f_popup.IsChildOfDocument(this)) {
-				return false;
-			}
+		if (selection!==undefined) {
+			this.f_setSelection([ selection ], true);				
 		}
-				
-		return true;
+	},
+	/**
+	 * @method hidden
+	 * @param number autoSelect
+	 * @return void
+	 */
+	f_setAutoSelection: function(autoSelect) {
+		this._autoSelect=autoSelect;
 	}
 }
  

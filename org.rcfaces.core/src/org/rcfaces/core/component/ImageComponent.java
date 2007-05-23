@@ -90,7 +90,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 	 * See {@link #setImageURL(String) setImageURL(String)} for more details
 	 */
 	public void setImageURL(ValueBinding imageURL) {
-		setValue(imageURL);
+		setValueBinding(Properties.VALUE, imageURL);
 	}
 
 	public final IContentAccessors getImageAccessors() {

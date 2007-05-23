@@ -39,47 +39,45 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         super.encodeComponent(htmlWriter);
     }
 
-    protected IHtmlWriter writeInputAttributes(IHtmlWriter writer)
+    protected IHtmlWriter writeInputAttributes(IHtmlWriter htmlWriter)
             throws WriterException {
-        writer = super.writeInputAttributes(writer);
+        htmlWriter = super.writeInputAttributes(htmlWriter);
 
-        FacesContext facesContext = writer.getComponentRenderContext()
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) writer
+        SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
         int maxResultNumber = suggestTextEntryComponent
                 .getMaxResultNumber(facesContext);
         if (maxResultNumber > 0) {
-            writer.writeAttribute("v:maxResultNumber", String
-                    .valueOf(maxResultNumber));
+            htmlWriter.writeAttribute("v:maxResultNumber", maxResultNumber);
         }
 
         int suggestionDelayMs = suggestTextEntryComponent
                 .getSuggestionDelayMs(facesContext);
         if (suggestionDelayMs > 0) {
-            writer.writeAttribute("v:suggestionDelayMs", String
-                    .valueOf(suggestionDelayMs));
+            htmlWriter.writeAttribute("v:suggestionDelayMs", suggestionDelayMs);
         }
 
         int suggestionMinChars = suggestTextEntryComponent
                 .getSuggestionMinChars(facesContext);
         if (suggestionMinChars > 0) {
-            writer.writeAttribute("v:suggestionMinChars", String
-                    .valueOf(suggestionMinChars));
+            htmlWriter.writeAttribute("v:suggestionMinChars",
+                    suggestionMinChars);
         }
 
         boolean caseSensitive = suggestTextEntryComponent
                 .isCaseSensitive(facesContext);
         if (caseSensitive) {
-            writer.writeAttribute("v:caseSensitive", "true");
+            htmlWriter.writeAttribute("v:caseSensitive", "true");
         }
 
         boolean forceProposal = suggestTextEntryComponent
                 .isForceProposal(facesContext);
         if (forceProposal) {
-            writer.writeAttribute("v:forceProposal", "true");
+            htmlWriter.writeAttribute("v:forceProposal", "true");
         }
 
         Object suggestionValue = suggestTextEntryComponent
@@ -87,16 +85,17 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         if (suggestionValue != null) {
             String value = ValuesTools.convertValueToString(suggestionValue,
                     suggestTextEntryComponent, facesContext);
-            writer.writeAttribute("v:suggestionValue", value);
+            htmlWriter.writeAttribute("v:suggestionValue", value);
         }
 
         String moreResultsMessage = suggestTextEntryComponent
                 .getMoreResultsMessage(facesContext);
         if (moreResultsMessage != null) {
-            writer.writeAttribute("v:moreResultsMessage", moreResultsMessage);
+            htmlWriter.writeAttribute("v:moreResultsMessage",
+                    moreResultsMessage);
         }
 
-        return writer;
+        return htmlWriter;
     }
 
     protected void encodeJavaScript(IJavaScriptWriter writer)

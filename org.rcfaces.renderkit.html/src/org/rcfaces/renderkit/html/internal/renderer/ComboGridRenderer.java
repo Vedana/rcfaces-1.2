@@ -21,7 +21,6 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -112,6 +111,58 @@ public class ComboGridRenderer extends DataGridRenderer {
             }
 
             htmlWriter.writeAttribute("v:rowStyleClass", sa.toString());
+        }
+
+        int suggestionDelayMs = comboGridComponent
+                .getSuggestionDelayMs(facesContext);
+        if (suggestionDelayMs > 0) {
+            htmlWriter.writeAttribute("v:suggestionDelayMs", suggestionDelayMs);
+        }
+
+        int suggestionMinChars = comboGridComponent
+                .getSuggestionMinChars(facesContext);
+        if (suggestionMinChars > 0) {
+            htmlWriter.writeAttribute("v:suggestionMinChars",
+                    suggestionMinChars);
+        }
+
+        String valueFormat = comboGridComponent.getValueFormat(facesContext);
+        if (valueFormat != null) {
+            htmlWriter.writeAttribute("v:valueFormat", valueFormat);
+        }
+
+        String pagerStyleClass = comboGridComponent
+                .getPagerStyleClass(facesContext);
+        if (pagerStyleClass != null) {
+            htmlWriter.writeAttribute("v:pagerStyleClass", pagerStyleClass);
+        }
+
+        String pagerLookId = comboGridComponent.getPagerLookId(facesContext);
+        if (pagerLookId != null) {
+            htmlWriter.writeAttribute("v:pagerLookId", pagerLookId);
+        }
+
+        String gridStyleClass = comboGridComponent
+                .getGridStyleClass(facesContext);
+        if (gridStyleClass != null) {
+            htmlWriter.writeAttribute("v:gridStyleClass", gridStyleClass);
+        }
+
+        String gridLookId = comboGridComponent.getGridLookId(facesContext);
+        if (gridLookId != null) {
+            htmlWriter.writeAttribute("v:gridLookId", gridLookId);
+        }
+
+        String valueColumnId = comboGridComponent
+                .getValueColumnId(facesContext);
+        if (valueColumnId != null) {
+            htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
+        }
+
+        String labelColumnId = comboGridComponent
+                .getLabelColumnId(facesContext);
+        if (labelColumnId != null) {
+            htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
         }
 
         writePagerMessage(htmlWriter, comboGridComponent);

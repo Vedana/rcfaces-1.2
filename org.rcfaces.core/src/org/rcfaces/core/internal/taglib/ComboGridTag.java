@@ -28,6 +28,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private String horizontalScrollPosition;
 	private String verticalScrollPosition;
 	private String paged;
+	private String suggestionDelayMs;
+	private String suggestionMinChars;
 	private String rowCountVar;
 	private String rowIndexVar;
 	private String valueColumnId;
@@ -36,6 +38,11 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private String selectionValueConverter;
 	private String popupWidth;
 	private String popupHeight;
+	private String valueFormat;
+	private String pagerStyleClass;
+	private String pagerLookId;
+	private String gridStyleClass;
+	private String gridLookId;
 	public String getComponentType() {
 		return ComboGridComponent.COMPONENT_TYPE;
 	}
@@ -136,6 +143,22 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.paged = paged;
 	}
 
+	public final String getSuggestionDelayMs() {
+		return suggestionDelayMs;
+	}
+
+	public final void setSuggestionDelayMs(String suggestionDelayMs) {
+		this.suggestionDelayMs = suggestionDelayMs;
+	}
+
+	public final String getSuggestionMinChars() {
+		return suggestionMinChars;
+	}
+
+	public final void setSuggestionMinChars(String suggestionMinChars) {
+		this.suggestionMinChars = suggestionMinChars;
+	}
+
 	public final String getRowCountVar() {
 		return rowCountVar;
 	}
@@ -200,6 +223,46 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.popupHeight = popupHeight;
 	}
 
+	public final String getValueFormat() {
+		return valueFormat;
+	}
+
+	public final void setValueFormat(String valueFormat) {
+		this.valueFormat = valueFormat;
+	}
+
+	public final String getPagerStyleClass() {
+		return pagerStyleClass;
+	}
+
+	public final void setPagerStyleClass(String pagerStyleClass) {
+		this.pagerStyleClass = pagerStyleClass;
+	}
+
+	public final String getPagerLookId() {
+		return pagerLookId;
+	}
+
+	public final void setPagerLookId(String pagerLookId) {
+		this.pagerLookId = pagerLookId;
+	}
+
+	public final String getGridStyleClass() {
+		return gridStyleClass;
+	}
+
+	public final void setGridStyleClass(String gridStyleClass) {
+		this.gridStyleClass = gridStyleClass;
+	}
+
+	public final String getGridLookId() {
+		return gridLookId;
+	}
+
+	public final void setGridLookId(String gridLookId) {
+		this.gridLookId = gridLookId;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ComboGridComponent.COMPONENT_TYPE==getComponentType()) {
@@ -217,6 +280,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  paged='"+paged+"'");
+			LOG.debug("  suggestionDelayMs='"+suggestionDelayMs+"'");
+			LOG.debug("  suggestionMinChars='"+suggestionMinChars+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  valueColumnId='"+valueColumnId+"'");
@@ -225,6 +290,11 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  selectionValueConverter='"+selectionValueConverter+"'");
 			LOG.debug("  popupWidth='"+popupWidth+"'");
 			LOG.debug("  popupHeight='"+popupHeight+"'");
+			LOG.debug("  valueFormat='"+valueFormat+"'");
+			LOG.debug("  pagerStyleClass='"+pagerStyleClass+"'");
+			LOG.debug("  pagerLookId='"+pagerLookId+"'");
+			LOG.debug("  gridStyleClass='"+gridStyleClass+"'");
+			LOG.debug("  gridLookId='"+gridLookId+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -359,6 +429,24 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (suggestionDelayMs != null) {
+			if (isValueReference(suggestionDelayMs)) {
+				ValueBinding vb = application.createValueBinding(suggestionDelayMs);
+				component.setSuggestionDelayMs(vb);
+			} else {
+				component.setSuggestionDelayMs(getInt(suggestionDelayMs));
+			}
+		}
+
+		if (suggestionMinChars != null) {
+			if (isValueReference(suggestionMinChars)) {
+				ValueBinding vb = application.createValueBinding(suggestionMinChars);
+				component.setSuggestionMinChars(vb);
+			} else {
+				component.setSuggestionMinChars(getInt(suggestionMinChars));
+			}
+		}
+
 		if (rowCountVar != null) {
 			if (isValueReference(rowCountVar)) {
 				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
@@ -426,6 +514,51 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 				component.setPopupHeight(getInt(popupHeight));
 			}
 		}
+
+		if (valueFormat != null) {
+			if (isValueReference(valueFormat)) {
+				ValueBinding vb = application.createValueBinding(valueFormat);
+				component.setValueFormat(vb);
+			} else {
+				component.setValueFormat(valueFormat);
+			}
+		}
+
+		if (pagerStyleClass != null) {
+			if (isValueReference(pagerStyleClass)) {
+				ValueBinding vb = application.createValueBinding(pagerStyleClass);
+				component.setPagerStyleClass(vb);
+			} else {
+				component.setPagerStyleClass(pagerStyleClass);
+			}
+		}
+
+		if (pagerLookId != null) {
+			if (isValueReference(pagerLookId)) {
+				ValueBinding vb = application.createValueBinding(pagerLookId);
+				component.setPagerLookId(vb);
+			} else {
+				component.setPagerLookId(pagerLookId);
+			}
+		}
+
+		if (gridStyleClass != null) {
+			if (isValueReference(gridStyleClass)) {
+				ValueBinding vb = application.createValueBinding(gridStyleClass);
+				component.setGridStyleClass(vb);
+			} else {
+				component.setGridStyleClass(gridStyleClass);
+			}
+		}
+
+		if (gridLookId != null) {
+			if (isValueReference(gridLookId)) {
+				ValueBinding vb = application.createValueBinding(gridLookId);
+				component.setGridLookId(vb);
+			} else {
+				component.setGridLookId(gridLookId);
+			}
+		}
 	}
 
 	public void release() {
@@ -441,6 +574,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		paged = null;
+		suggestionDelayMs = null;
+		suggestionMinChars = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		valueColumnId = null;
@@ -449,6 +584,11 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		selectionValueConverter = null;
 		popupWidth = null;
 		popupHeight = null;
+		valueFormat = null;
+		pagerStyleClass = null;
+		pagerLookId = null;
+		gridStyleClass = null;
+		gridLookId = null;
 
 		super.release();
 	}

@@ -45,7 +45,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","verticalScrollPosition","selectionValueConverter","paged","required","horizontalScrollPosition","disabled","message","selectedValue","rowStyleClass","valueColumnId","rowIndexVar","rowCountVar","manyResultsMessage","oneResultMessage","popupWidth","zeroResultMessage","border","readOnly","labelColumnId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionValueConverter","suggestionDelayMs","horizontalScrollPosition","message","pagerStyleClass","rowIndexVar","valueColumnId","pagerLookId","oneResultMessage","zeroResultMessage","border","valueFormat","gridStyleClass","suggestionMinChars","labelColumnId","gridLookId","verticalScrollPosition","paged","required","disabled","selectedValue","rowStyleClass","rowCountVar","manyResultsMessage","popupWidth","readOnly"}));
 	}
 
 	public ComboGridComponent() {
@@ -510,6 +510,86 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	}
 
 	/**
+	 * Returns an int value specifying the delay in milliseconds before showing the suggestion list.
+	 * @return delay in milliseconds
+	 */
+	public final int getSuggestionDelayMs() {
+		return getSuggestionDelayMs(null);
+	}
+
+	/**
+	 * Returns an int value specifying the delay in milliseconds before showing the suggestion list.
+	 * @return delay in milliseconds
+	 */
+	public final int getSuggestionDelayMs(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.SUGGESTION_DELAY_MS, 0, facesContext);
+	}
+
+	/**
+	 * Sets an int value specifying the delay in milliseconds before showing the suggestion list.
+	 * @param suggestionDelayMs delay in milliseconds
+	 */
+	public final void setSuggestionDelayMs(int suggestionDelayMs) {
+		engine.setProperty(Properties.SUGGESTION_DELAY_MS, suggestionDelayMs);
+	}
+
+	/**
+	 * Sets an int value specifying the delay in milliseconds before showing the suggestion list.
+	 * @param suggestionDelayMs delay in milliseconds
+	 */
+	public final void setSuggestionDelayMs(ValueBinding suggestionDelayMs) {
+		engine.setProperty(Properties.SUGGESTION_DELAY_MS, suggestionDelayMs);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "suggestionDelayMs" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSuggestionDelayMsSetted() {
+		return engine.isPropertySetted(Properties.SUGGESTION_DELAY_MS);
+	}
+
+	/**
+	 * Returns an int value specifying the minimum number of characters before the suggestion is calculated.
+	 * @return minimum number of characters
+	 */
+	public final int getSuggestionMinChars() {
+		return getSuggestionMinChars(null);
+	}
+
+	/**
+	 * Returns an int value specifying the minimum number of characters before the suggestion is calculated.
+	 * @return minimum number of characters
+	 */
+	public final int getSuggestionMinChars(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.SUGGESTION_MIN_CHARS, 0, facesContext);
+	}
+
+	/**
+	 * Sets an int value specifying the minimum number of characters before the suggestion is calculated.
+	 * @param suggestionMinChars minimum number of characters
+	 */
+	public final void setSuggestionMinChars(int suggestionMinChars) {
+		engine.setProperty(Properties.SUGGESTION_MIN_CHARS, suggestionMinChars);
+	}
+
+	/**
+	 * Sets an int value specifying the minimum number of characters before the suggestion is calculated.
+	 * @param suggestionMinChars minimum number of characters
+	 */
+	public final void setSuggestionMinChars(ValueBinding suggestionMinChars) {
+		engine.setProperty(Properties.SUGGESTION_MIN_CHARS, suggestionMinChars);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "suggestionMinChars" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSuggestionMinCharsSetted() {
+		return engine.isPropertySetted(Properties.SUGGESTION_MIN_CHARS);
+	}
+
+	/**
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
@@ -731,6 +811,126 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 */
 	public final boolean isPopupHeightSetted() {
 		return engine.isPropertySetted(Properties.POPUP_HEIGHT);
+	}
+
+	public final String getValueFormat() {
+		return getValueFormat(null);
+	}
+
+	public final String getValueFormat(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VALUE_FORMAT, facesContext);
+	}
+
+	public final void setValueFormat(String valueFormat) {
+		engine.setProperty(Properties.VALUE_FORMAT, valueFormat);
+	}
+
+	public final void setValueFormat(ValueBinding valueFormat) {
+		engine.setProperty(Properties.VALUE_FORMAT, valueFormat);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "valueFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isValueFormatSetted() {
+		return engine.isPropertySetted(Properties.VALUE_FORMAT);
+	}
+
+	public final String getPagerStyleClass() {
+		return getPagerStyleClass(null);
+	}
+
+	public final String getPagerStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.PAGER_STYLE_CLASS, facesContext);
+	}
+
+	public final void setPagerStyleClass(String pagerStyleClass) {
+		engine.setProperty(Properties.PAGER_STYLE_CLASS, pagerStyleClass);
+	}
+
+	public final void setPagerStyleClass(ValueBinding pagerStyleClass) {
+		engine.setProperty(Properties.PAGER_STYLE_CLASS, pagerStyleClass);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "pagerStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPagerStyleClassSetted() {
+		return engine.isPropertySetted(Properties.PAGER_STYLE_CLASS);
+	}
+
+	public final String getPagerLookId() {
+		return getPagerLookId(null);
+	}
+
+	public final String getPagerLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.PAGER_LOOK_ID, facesContext);
+	}
+
+	public final void setPagerLookId(String pagerLookId) {
+		engine.setProperty(Properties.PAGER_LOOK_ID, pagerLookId);
+	}
+
+	public final void setPagerLookId(ValueBinding pagerLookId) {
+		engine.setProperty(Properties.PAGER_LOOK_ID, pagerLookId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "pagerLookId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPagerLookIdSetted() {
+		return engine.isPropertySetted(Properties.PAGER_LOOK_ID);
+	}
+
+	public final String getGridStyleClass() {
+		return getGridStyleClass(null);
+	}
+
+	public final String getGridStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.GRID_STYLE_CLASS, facesContext);
+	}
+
+	public final void setGridStyleClass(String gridStyleClass) {
+		engine.setProperty(Properties.GRID_STYLE_CLASS, gridStyleClass);
+	}
+
+	public final void setGridStyleClass(ValueBinding gridStyleClass) {
+		engine.setProperty(Properties.GRID_STYLE_CLASS, gridStyleClass);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "gridStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isGridStyleClassSetted() {
+		return engine.isPropertySetted(Properties.GRID_STYLE_CLASS);
+	}
+
+	public final String getGridLookId() {
+		return getGridLookId(null);
+	}
+
+	public final String getGridLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.GRID_LOOK_ID, facesContext);
+	}
+
+	public final void setGridLookId(String gridLookId) {
+		engine.setProperty(Properties.GRID_LOOK_ID, gridLookId);
+	}
+
+	public final void setGridLookId(ValueBinding gridLookId) {
+		engine.setProperty(Properties.GRID_LOOK_ID, gridLookId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "gridLookId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isGridLookIdSetted() {
+		return engine.isPropertySetted(Properties.GRID_LOOK_ID);
 	}
 
 	protected Set getCameliaFields() {

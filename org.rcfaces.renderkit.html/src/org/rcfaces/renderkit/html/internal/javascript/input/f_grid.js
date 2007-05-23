@@ -215,7 +215,7 @@ var __static = {
 			return f_core.CancelJsEvent(evt);
 		}
 		
-		dataGrid.f_fireEvent(f_event.DBLCLICK, evt, this, this._index);
+		dataGrid.f_fireEvent(f_event.DBLCLICK, evt, this, this._index, dataGrid);
 		
 		return f_core.CancelJsEvent(evt);;
 	},
@@ -1909,50 +1909,6 @@ var __prototype = {
 			this._updateTitleStyle(col);
 		}			
 	},
-	/**
-	 * @method private
-	 */
-	_listTitleCells: function() {
-		var list=new Array;
-		var table=this._title;
-		var tableChildren=table.childNodes;
-		if (tableChildren==null || tableChildren.length<1) {
-			return null;
-		}
-		for(var i=0;i<tableChildren.length;i++) {
-			var tableChild=tableChildren[i];
-			if (tableChild.tagName.toLowerCase()!="thead") { 
-				continue;
-			}
-			
-			var theadChildren=tableChild.childNodes;
-			if (theadChildren==null || theadChildren.length<1) {
-				continue;
-			}
-			for(var j=0;j<theadChildren.length;j++) {
-				var theadChild=theadChildren[j];
-				if (theadChild.tagName.toLowerCase()!="tr") {
-					continue;
-				}
-
-				var trChildren=theadChild.childNodes;
-				if (trChildren==null || trChildren.length<1) {
-					continue;
-				}
-				for(var k=0;k<trChildren.length;k++) {
-					var trChild=trChildren[k];
-					if (trChild.tagName.toLowerCase()!="th") {
-						continue;
-					}
-					list.push(trChild);
-				}
-			}
-			
-			break;
-		}
-		
-		return list;
-	},
 	f_onSelect: function(evt) {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
@@ -2034,7 +1990,7 @@ var __prototype = {
 	 * @return Object row associated or <code>null</code>.
 	 */
 	f_getRowByValue: function(value, throwError) {
-		f_core.Assert(value!==undefined, "f_grid.f_getRowByValue: Invalid value '"+value+"'.");
+		f_core.Assert(value!==undefined && value!==null, "f_grid.f_getRowByValue: Invalid value '"+value+"'.");
 
 		if (value._dataGrid) {
 			return value;
@@ -2042,7 +1998,7 @@ var __prototype = {
 		
 		var rows=this.fa_listVisibleElements();
 		if (!rows) {
-			f_core.Debug(f_grid, "Empty rows to get row by value "+value);
+			f_core.Debug(f_grid, "f_getRowByValue: Empty rows to get row by value "+value);
 			if (throwError) {
 				throw new Error("Can not find row with value '"+value+"'.");
 			}
@@ -2060,7 +2016,7 @@ var __prototype = {
 			return row;
 		}
 		
-		f_core.Debug(f_grid, "Can not find row by value "+value);
+		f_core.Debug(f_grid, "f_getRowByValue: Can not find row by value "+value);
 		
 		if (throwError) {
 			throw new Error("Can not find row with value '"+value+"'.");
@@ -2098,7 +2054,7 @@ var __prototype = {
 	 */
 	f_getRow: function(rowIndex, throwError, indexByValue) {
 		if (!this._tbody) {
-			f_core.Debug(f_grid, "No body to get row #"+rowIndex);
+			f_core.Debug(f_grid, "f_getRow: No body to get row #"+rowIndex);
 
 			if (throwError) {
 				throw new Error("Can not find row '"+rowIndex+"'.");
@@ -2110,13 +2066,13 @@ var __prototype = {
 		
 		if (typeof(rowIndex)!="number") {
 			row=rowIndex;
-			f_core.Assert(row._dataGrid, "Object is not a row of a datagrid !");
+			f_core.Assert(row._dataGrid, "f_grif.f_getRow: Object is not a row of a datagrid !");
 			
 		} else {
-			var rows=this._tbody.rows;
-			if (!rows || rows.length<1) {
+			var rows=this.fa_listVisibleElements(); //this._tbody.rows;
+			if (!rows.length) {
 				if (throwError) {
-					throw new Error("Can not find row #"+rowIndex+".");
+					throw new Error("Can not find row #"+rowIndex+". (no visible rows)");
 				}
 				return null;
 			}
@@ -2152,7 +2108,7 @@ var __prototype = {
 		
 		var cells=row._cells;
 		if (!cells) {
-			f_core.Debug(f_grid, "No cells for row #"+rowIndex);
+			f_core.Debug(f_grid, "f_getRow: No cells for row #"+rowIndex);
 			return null;
 		}
 		
@@ -2365,8 +2321,10 @@ var __prototype = {
 		//	f_core.VerifyProperties(cell);
 		}
 	},
-	_performKeyDown: function(cevt) {
-		var evt=cevt.f_getJsEvent();
+	_performKeyDown: function(evt) {
+		if (evt.f_getJsEvent) {  // Ok, c'est crad ...
+			evt=evt.f_getJsEvent();
+		}
 	
 		var cancel=false;
 
@@ -2429,7 +2387,7 @@ var __prototype = {
 			cancel=true;
 			break;
 		}
-						
+	
 		if (cancel) {
 			return f_core.CancelJsEvent(evt);
 		}

@@ -80,7 +80,7 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
         String subId = sa.toString();
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
-        htmlWriter.writeType("TEXT");
+        htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
         htmlWriter.writeId(subId);
         htmlWriter.writeClass(className);
         htmlWriter.writeName(subId);
