@@ -103,7 +103,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
                     public void decodeEvent(UIComponent component,
                             IEventData eventData) {
                         FacesEvent event = new SelectionEvent(component,
-                                eventData.getEventValue(), eventData
+                                eventData.getEventValue(), null, eventData
                                         .getEventItem(), eventData
                                         .getEventDetail());
                         queueEvent(component, event);

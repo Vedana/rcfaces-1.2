@@ -9,7 +9,7 @@ package org.rcfaces.core.internal.validator;
  * @version $Revision$ $Date$
  */
 public interface IParameter {
-	String getName();
-	
-	String getValue();
+    String getName();
+
+    String getValue();
 }

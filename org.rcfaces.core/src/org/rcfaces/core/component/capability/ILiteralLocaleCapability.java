@@ -13,16 +13,19 @@ import java.util.Locale;
  * @version $Revision$ $Date$
  */
 public interface ILiteralLocaleCapability {
-	
-	/**
-	 * Returns the locale defined for literal attributes. (date, number)
-	 * @return the defined locale
-	 */
+
+    /**
+     * Returns the locale defined for literal attributes. (date, number)
+     * 
+     * @return the defined locale
+     */
     Locale getLiteralLocale();
 
     /**
      * Sets the locale for literal attributes. (date, number)
-     * @param locale locale to define
+     * 
+     * @param locale
+     *            locale to define
      */
     void setLiteralLocale(Locale locale);
 }

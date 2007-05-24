@@ -15,7 +15,7 @@ import org.rcfaces.core.model.IFilterProperties;
  */
 public interface IFilteredItemsRenderer {
     void encodeFilteredItems(IJavaScriptWriter writer,
-            IFilterCapability component, IFilterProperties filterProperties, int maxResultNumber)
-            throws WriterException;
+            IFilterCapability component, IFilterProperties filterProperties,
+            int maxResultNumber) throws WriterException;
 
 }

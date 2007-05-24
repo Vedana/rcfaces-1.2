@@ -1,21 +1,23 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
- * <p>The text Component is a placeholder for displaying text.</p>
- * <p>The text Component has the following capabilities :
+ * <p>
+ * The text Component is a placeholder for displaying text.
+ * </p>
+ * <p>
+ * The text Component has the following capabilities :
  * <ul>
  * <li>Position &amp; Size</li>
  * <li>Foreground &amp; Background Color</li>
@@ -28,376 +30,336 @@ import org.rcfaces.core.component.capability.IForCapability;
  * </ul>
  * </p>
  */
-public class TextComponent extends AbstractOutputComponent implements 
-	ITextCapability,
-	ITextDirectionCapability,
-	IFontCapability,
-	ITextAlignmentCapability,
-	IAccessKeyCapability,
-	IForCapability {
+public class TextComponent extends AbstractOutputComponent implements
+        ITextCapability, ITextDirectionCapability, IFontCapability,
+        ITextAlignmentCapability, IAccessKeyCapability, IForCapability {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.text";
+    public static final String COMPONENT_TYPE = "org.rcfaces.core.text";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","text","type","textAlignment","fontSize","accessKey","fontName","fontItalic","for","textDirection"}));
-	}
-	protected static final String CAMELIA_VALUE_ALIAS="text";
+    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
+            AbstractOutputComponent.CAMELIA_ATTRIBUTES);
+    static {
+        CAMELIA_ATTRIBUTES.addAll(Arrays
+                .asList(new String[] { "fontBold", "fontUnderline", "text",
+                        "type", "textAlignment", "fontSize", "accessKey",
+                        "fontName", "fontItalic", "for", "textDirection" }));
+    }
 
-	public TextComponent() {
-		setRendererType(COMPONENT_TYPE);
-	}
+    protected static final String CAMELIA_VALUE_ALIAS = "text";
 
-	public TextComponent(String componentId) {
-		this();
-		setId(componentId);
-	}
+    public TextComponent() {
+        setRendererType(COMPONENT_TYPE);
+    }
 
-	public java.lang.String getText() {
-		return getText(null);
-	}
+    public TextComponent(String componentId) {
+        this();
+        setId(componentId);
+    }
 
-	/**
-	 * See {@link #getText() getText()} for more details
-	 */
-	public java.lang.String getText(javax.faces.context.FacesContext facesContext) {
-		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
-	}
+    public java.lang.String getText() {
+        return getText(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "text" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTextSetted() {
-		return engine.isPropertySetted(Properties.TEXT);
-	}
+    /**
+     * See {@link #getText() getText()} for more details
+     */
+    public java.lang.String getText(
+            javax.faces.context.FacesContext facesContext) {
+        return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this,
+                facesContext);
+    }
 
-	public void setText(java.lang.String text) {
-		setValue(text);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "text" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isTextSetted() {
+        return engine.isPropertySetted(Properties.TEXT);
+    }
 
-	/**
-	 * See {@link #setText(String) setText(String)} for more details
-	 */
-	public void setText(ValueBinding text) {
-		setValueBinding(Properties.VALUE, text);
-	}
+    public void setText(java.lang.String text) {
+        setValue(text);
+    }
 
-	public int getTextDirection() {
-		return getTextDirection(null);
-	}
+    public int getTextDirection() {
+        return getTextDirection(null);
+    }
 
-	/**
-	 * See {@link #getTextDirection() getTextDirection()} for more details
-	 */
-	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
-	}
+    /**
+     * See {@link #getTextDirection() getTextDirection()} for more details
+     */
+    public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+        return engine
+                .getIntProperty(Properties.TEXT_DIRECTION, 0, facesContext);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "textDirection" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTextDirectionSetted() {
-		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "textDirection" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isTextDirectionSetted() {
+        return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+    }
 
-	public void setTextDirection(int textDirection) {
-		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
-	}
+    public void setTextDirection(int textDirection) {
+        engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+    }
 
-	/**
-	 * See {@link #setTextDirection(int) setTextDirection(int)} for more details
-	 */
-	public void setTextDirection(ValueBinding textDirection) {
-		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
-	}
+    public java.lang.Boolean getFontBold() {
+        return getFontBold(null);
+    }
 
-	public java.lang.Boolean getFontBold() {
-		return getFontBold(null);
-	}
+    /**
+     * See {@link #getFontBold() getFontBold()} for more details
+     */
+    public java.lang.Boolean getFontBold(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
+    }
 
-	/**
-	 * See {@link #getFontBold() getFontBold()} for more details
-	 */
-	public java.lang.Boolean getFontBold(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.FONT_BOLD, facesContext);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "fontBold" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isFontBoldSetted() {
+        return engine.isPropertySetted(Properties.FONT_BOLD);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "fontBold" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isFontBoldSetted() {
-		return engine.isPropertySetted(Properties.FONT_BOLD);
-	}
+    public void setFontBold(java.lang.Boolean fontBold) {
+        engine.setProperty(Properties.FONT_BOLD, fontBold);
+    }
 
-	public void setFontBold(java.lang.Boolean fontBold) {
-		engine.setProperty(Properties.FONT_BOLD, fontBold);
-	}
+    public java.lang.Boolean getFontItalic() {
+        return getFontItalic(null);
+    }
 
-	/**
-	 * See {@link #setFontBold(Boolean) setFontBold(Boolean)} for more details
-	 */
-	public void setFontBold(ValueBinding fontBold) {
-		engine.setProperty(Properties.FONT_BOLD, fontBold);
-	}
+    /**
+     * See {@link #getFontItalic() getFontItalic()} for more details
+     */
+    public java.lang.Boolean getFontItalic(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
+    }
 
-	public java.lang.Boolean getFontItalic() {
-		return getFontItalic(null);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "fontItalic" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isFontItalicSetted() {
+        return engine.isPropertySetted(Properties.FONT_ITALIC);
+    }
 
-	/**
-	 * See {@link #getFontItalic() getFontItalic()} for more details
-	 */
-	public java.lang.Boolean getFontItalic(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.FONT_ITALIC, facesContext);
-	}
+    public void setFontItalic(java.lang.Boolean fontItalic) {
+        engine.setProperty(Properties.FONT_ITALIC, fontItalic);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "fontItalic" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isFontItalicSetted() {
-		return engine.isPropertySetted(Properties.FONT_ITALIC);
-	}
+    public java.lang.String getFontName() {
+        return getFontName(null);
+    }
 
-	public void setFontItalic(java.lang.Boolean fontItalic) {
-		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
-	}
+    /**
+     * See {@link #getFontName() getFontName()} for more details
+     */
+    public java.lang.String getFontName(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FONT_NAME, facesContext);
+    }
 
-	/**
-	 * See {@link #setFontItalic(Boolean) setFontItalic(Boolean)} for more details
-	 */
-	public void setFontItalic(ValueBinding fontItalic) {
-		engine.setProperty(Properties.FONT_ITALIC, fontItalic);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "fontName" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isFontNameSetted() {
+        return engine.isPropertySetted(Properties.FONT_NAME);
+    }
 
-	public java.lang.String getFontName() {
-		return getFontName(null);
-	}
+    public void setFontName(java.lang.String fontName) {
+        engine.setProperty(Properties.FONT_NAME, fontName);
+    }
 
-	/**
-	 * See {@link #getFontName() getFontName()} for more details
-	 */
-	public java.lang.String getFontName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_NAME, facesContext);
-	}
+    public java.lang.String getFontSize() {
+        return getFontSize(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "fontName" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isFontNameSetted() {
-		return engine.isPropertySetted(Properties.FONT_NAME);
-	}
+    /**
+     * See {@link #getFontSize() getFontSize()} for more details
+     */
+    public java.lang.String getFontSize(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
+    }
 
-	public void setFontName(java.lang.String fontName) {
-		engine.setProperty(Properties.FONT_NAME, fontName);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "fontSize" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isFontSizeSetted() {
+        return engine.isPropertySetted(Properties.FONT_SIZE);
+    }
 
-	/**
-	 * See {@link #setFontName(String) setFontName(String)} for more details
-	 */
-	public void setFontName(ValueBinding fontName) {
-		engine.setProperty(Properties.FONT_NAME, fontName);
-	}
+    public void setFontSize(java.lang.String fontSize) {
+        engine.setProperty(Properties.FONT_SIZE, fontSize);
+    }
 
-	public java.lang.String getFontSize() {
-		return getFontSize(null);
-	}
+    public java.lang.Boolean getFontUnderline() {
+        return getFontUnderline(null);
+    }
 
-	/**
-	 * See {@link #getFontSize() getFontSize()} for more details
-	 */
-	public java.lang.String getFontSize(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
-	}
+    /**
+     * See {@link #getFontUnderline() getFontUnderline()} for more details
+     */
+    public java.lang.Boolean getFontUnderline(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getBooleanProperty(Properties.FONT_UNDERLINE,
+                facesContext);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "fontSize" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isFontSizeSetted() {
-		return engine.isPropertySetted(Properties.FONT_SIZE);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "fontUnderline" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isFontUnderlineSetted() {
+        return engine.isPropertySetted(Properties.FONT_UNDERLINE);
+    }
 
-	public void setFontSize(java.lang.String fontSize) {
-		engine.setProperty(Properties.FONT_SIZE, fontSize);
-	}
+    public void setFontUnderline(java.lang.Boolean fontUnderline) {
+        engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
+    }
 
-	/**
-	 * See {@link #setFontSize(String) setFontSize(String)} for more details
-	 */
-	public void setFontSize(ValueBinding fontSize) {
-		engine.setProperty(Properties.FONT_SIZE, fontSize);
-	}
+    public java.lang.String getTextAlignment() {
+        return getTextAlignment(null);
+    }
 
-	public java.lang.Boolean getFontUnderline() {
-		return getFontUnderline(null);
-	}
+    /**
+     * See {@link #getTextAlignment() getTextAlignment()} for more details
+     */
+    public java.lang.String getTextAlignment(
+            javax.faces.context.FacesContext facesContext) {
+        return engine
+                .getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
+    }
 
-	/**
-	 * See {@link #getFontUnderline() getFontUnderline()} for more details
-	 */
-	public java.lang.Boolean getFontUnderline(javax.faces.context.FacesContext facesContext) {
-		return engine.getBooleanProperty(Properties.FONT_UNDERLINE, facesContext);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "textAlignment" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isTextAlignmentSetted() {
+        return engine.isPropertySetted(Properties.TEXT_ALIGNMENT);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "fontUnderline" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isFontUnderlineSetted() {
-		return engine.isPropertySetted(Properties.FONT_UNDERLINE);
-	}
+    public void setTextAlignment(java.lang.String textAlignment) {
+        engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
+    }
 
-	public void setFontUnderline(java.lang.Boolean fontUnderline) {
-		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
-	}
+    public java.lang.String getAccessKey() {
+        return getAccessKey(null);
+    }
 
-	/**
-	 * See {@link #setFontUnderline(Boolean) setFontUnderline(Boolean)} for more details
-	 */
-	public void setFontUnderline(ValueBinding fontUnderline) {
-		engine.setProperty(Properties.FONT_UNDERLINE, fontUnderline);
-	}
+    /**
+     * See {@link #getAccessKey() getAccessKey()} for more details
+     */
+    public java.lang.String getAccessKey(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
+    }
 
-	public java.lang.String getTextAlignment() {
-		return getTextAlignment(null);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "accessKey" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isAccessKeySetted() {
+        return engine.isPropertySetted(Properties.ACCESS_KEY);
+    }
 
-	/**
-	 * See {@link #getTextAlignment() getTextAlignment()} for more details
-	 */
-	public java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
-	}
+    public void setAccessKey(java.lang.String accessKey) {
+        engine.setProperty(Properties.ACCESS_KEY, accessKey);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "textAlignment" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTextAlignmentSetted() {
-		return engine.isPropertySetted(Properties.TEXT_ALIGNMENT);
-	}
+    public java.lang.String getFor() {
+        return getFor(null);
+    }
 
-	public void setTextAlignment(java.lang.String textAlignment) {
-		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
-	}
+    /**
+     * See {@link #getFor() getFor()} for more details
+     */
+    public java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FOR, facesContext);
+    }
 
-	/**
-	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
-	 */
-	public void setTextAlignment(ValueBinding textAlignment) {
-		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "for" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isForSetted() {
+        return engine.isPropertySetted(Properties.FOR);
+    }
 
-	public java.lang.String getAccessKey() {
-		return getAccessKey(null);
-	}
+    public void setFor(java.lang.String forValue) {
+        engine.setProperty(Properties.FOR, forValue);
+    }
 
-	/**
-	 * See {@link #getAccessKey() getAccessKey()} for more details
-	 */
-	public java.lang.String getAccessKey(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ACCESS_KEY, facesContext);
-	}
+    /**
+     * Returns a string value specifying the type of data (Java) to convert to
+     * or from.
+     * 
+     * @return type of data
+     */
+    public final String getType() {
+        return getType(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "accessKey" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isAccessKeySetted() {
-		return engine.isPropertySetted(Properties.ACCESS_KEY);
-	}
+    /**
+     * Returns a string value specifying the type of data (Java) to convert to
+     * or from.
+     * 
+     * @return type of data
+     */
+    public final String getType(javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.TYPE, facesContext);
+    }
 
-	public void setAccessKey(java.lang.String accessKey) {
-		engine.setProperty(Properties.ACCESS_KEY, accessKey);
-	}
+    /**
+     * Sets a string value specifying the type of data (Java) to convert to or
+     * from.
+     * 
+     * @param type
+     *            type of data
+     */
+    public final void setType(String type) {
+        engine.setProperty(Properties.TYPE, type);
+    }
 
-	/**
-	 * See {@link #setAccessKey(String) setAccessKey(String)} for more details
-	 */
-	public void setAccessKey(ValueBinding accessKey) {
-		engine.setProperty(Properties.ACCESS_KEY, accessKey);
-	}
+    /**
+     * Sets a string value specifying the type of data (Java) to convert to or
+     * from.
+     * 
+     * @param type
+     *            type of data
+     */
+    /**
+     * Returns <code>true</code> if the attribute "type" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isTypeSetted() {
+        return engine.isPropertySetted(Properties.TYPE);
+    }
 
-	public java.lang.String getFor() {
-		return getFor(null);
-	}
+    protected Set getCameliaFields() {
+        return CAMELIA_ATTRIBUTES;
+    }
 
-	/**
-	 * See {@link #getFor() getFor()} for more details
-	 */
-	public java.lang.String getFor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOR, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "for" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isForSetted() {
-		return engine.isPropertySetted(Properties.FOR);
-	}
-
-	public void setFor(java.lang.String forValue) {
-		engine.setProperty(Properties.FOR, forValue);
-	}
-
-	/**
-	 * See {@link #setFor(String) setFor(String)} for more details
-	 */
-	public void setFor(ValueBinding forValue) {
-		engine.setProperty(Properties.FOR, forValue);
-	}
-
-	/**
-	 * Returns a string value specifying the type of data (Java) to convert to or from.
-	 * @return type of data
-	 */
-	public final String getType() {
-		return getType(null);
-	}
-
-	/**
-	 * Returns a string value specifying the type of data (Java) to convert to or from.
-	 * @return type of data
-	 */
-	public final String getType(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TYPE, facesContext);
-	}
-
-	/**
-	 * Sets a string value specifying the type of data (Java) to convert to or from.
-	 * @param type type of data
-	 */
-	public final void setType(String type) {
-		engine.setProperty(Properties.TYPE, type);
-	}
-
-	/**
-	 * Sets a string value specifying the type of data (Java) to convert to or from.
-	 * @param type type of data
-	 */
-	public final void setType(ValueBinding type) {
-		engine.setProperty(Properties.TYPE, type);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "type" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTypeSetted() {
-		return engine.isPropertySetted(Properties.TYPE);
-	}
-
-	protected Set getCameliaFields() {
-		return CAMELIA_ATTRIBUTES;
-	}
-
-	protected String getCameliaValueAlias() {
-		return CAMELIA_VALUE_ALIAS;
-	}
+    protected String getCameliaValueAlias() {
+        return CAMELIA_VALUE_ALIAS;
+    }
 }

@@ -8,5 +8,5 @@ package org.rcfaces.core.item;
  * @version $Revision$ $Date$
  */
 public interface IGroupSelectItem {
-	String getGroupName();
+    String getGroupName();
 }

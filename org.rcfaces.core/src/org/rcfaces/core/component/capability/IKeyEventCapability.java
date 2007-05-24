@@ -4,7 +4,6 @@
  */
 package org.rcfaces.core.component.capability;
 
-
 /**
  * 
  * Aggregates keyDown, keyUp and keyPressed capabilities

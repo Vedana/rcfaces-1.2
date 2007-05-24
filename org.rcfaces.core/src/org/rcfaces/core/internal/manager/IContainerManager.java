@@ -11,9 +11,9 @@ import java.util.List;
  * @version $Revision$ $Date$
  */
 public interface IContainerManager {
-	int getChildrenListState();
+    int getChildrenListState();
 
-	int getChildCount();
+    int getChildCount();
 
-	List getChildren();
+    List getChildren();
 }

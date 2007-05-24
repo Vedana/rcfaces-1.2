@@ -9,7 +9,7 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface IShowValueCapability {
-    
+
     /**
      * 
      * @return The value of the item will be shown.
@@ -19,7 +19,8 @@ public interface IShowValueCapability {
     /**
      * Set the value of the item will be shown.
      * 
-     * @param value The value of the item
+     * @param value
+     *            The value of the item
      */
     void setShowValue(Object value);
 }

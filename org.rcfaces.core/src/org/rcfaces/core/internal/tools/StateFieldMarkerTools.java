@@ -117,7 +117,7 @@ public class StateFieldMarkerTools {
             ResponseWriter responseWriter;
             if (oldResponseWriter != null) {
                 responseWriter = oldResponseWriter.cloneWithWriter(writer);
-                
+
             } else {
                 responseWriter = facesContext.getRenderKit()
                         .createResponseWriter(writer, null, "UTF-8");

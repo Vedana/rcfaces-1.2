@@ -128,7 +128,8 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         private final String filter;
 
-        public FiltredImageAccessor(String filter, IContentAccessor parentAccessor) {
+        public FiltredImageAccessor(String filter,
+                IContentAccessor parentAccessor) {
             super(parentAccessor);
             this.filter = filter;
 

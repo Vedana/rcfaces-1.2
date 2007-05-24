@@ -13,5 +13,5 @@ import javax.faces.event.FacesListener;
  */
 public interface ISortListener extends FacesListener {
 
-	void processSort(SortEvent event) throws AbortProcessingException;
+    void processSort(SortEvent event) throws AbortProcessingException;
 }

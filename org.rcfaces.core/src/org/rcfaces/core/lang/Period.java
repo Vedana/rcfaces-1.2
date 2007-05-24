@@ -6,7 +6,6 @@ package org.rcfaces.core.lang;
 import java.io.Serializable;
 import java.util.Date;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

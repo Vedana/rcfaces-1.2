@@ -50,15 +50,15 @@ public class SelectItemsJsContext extends SelectItemsContext {
     }
 
     public void popVarId() {
-        //System.out.println("Pop var Id depth="+varIds.size());
-        
+        // System.out.println("Pop var Id depth="+varIds.size());
+
         varIds.remove(varIds.size() - 1);
     }
 
     public void pushVarId(String varId) {
         varIds.add(varId);
-        //System.out.println("Push var Id="+varId+" depth="+varIds.size());
-   }
+        // System.out.println("Push var Id="+varId+" depth="+varIds.size());
+    }
 
     public String peekVarId() {
         if (varIds.isEmpty()) {

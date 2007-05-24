@@ -36,7 +36,7 @@ public interface IProcessContext {
     TimeZone getUserTimeZone();
 
     Calendar getUserCalendar();
-    
+
     String getAbsolutePath(String uri, boolean containsContextPath);
 
     String getRelativePath(String uri);

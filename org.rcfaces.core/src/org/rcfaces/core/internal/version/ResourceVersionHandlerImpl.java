@@ -172,9 +172,8 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
             sa.append(version);
             sa.append(url);
 
-            return new BasicContentAccessor(
-                    facesContext, sa.toString(), contentAccessor,
-                    IContentAccessor.CONTEXT_PATH_TYPE);
+            return new BasicContentAccessor(facesContext, sa.toString(),
+                    contentAccessor, IContentAccessor.CONTEXT_PATH_TYPE);
         }
 
         StringAppender sa = new StringAppender(prefixURI, 1
@@ -188,9 +187,8 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
 
         sa.append(url);
 
-        return new BasicContentAccessor(facesContext, sa
-                .toString(), contentAccessor,
-                IContentAccessor.CONTEXT_PATH_TYPE);
+        return new BasicContentAccessor(facesContext, sa.toString(),
+                contentAccessor, IContentAccessor.CONTEXT_PATH_TYPE);
     }
 
     public String getResourceVersion(FacesContext facesContext,

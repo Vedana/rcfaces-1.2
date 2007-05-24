@@ -13,5 +13,6 @@ import javax.faces.event.FacesListener;
  */
 public interface IPropertyChangeListener extends FacesListener {
 
-	void processPropertyChange(PropertyChangeEvent event) throws AbortProcessingException;
+    void processPropertyChange(PropertyChangeEvent event)
+            throws AbortProcessingException;
 }

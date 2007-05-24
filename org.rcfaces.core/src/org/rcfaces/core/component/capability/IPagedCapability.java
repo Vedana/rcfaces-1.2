@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.component.capability;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -34,7 +33,7 @@ public interface IPagedCapability {
      *            true if display by page
      */
     void setPaged(boolean paged);
-    
+
     /**
      * 
      */

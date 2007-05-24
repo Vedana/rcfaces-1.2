@@ -13,5 +13,5 @@ import javax.faces.event.FacesListener;
  */
 public interface IMouseOutListener extends FacesListener {
 
-	void processMouseOut(MouseOutEvent event) throws AbortProcessingException;
+    void processMouseOut(MouseOutEvent event) throws AbortProcessingException;
 }

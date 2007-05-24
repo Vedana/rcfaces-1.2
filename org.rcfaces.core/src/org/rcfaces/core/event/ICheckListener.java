@@ -13,6 +13,6 @@ import javax.faces.event.FacesListener;
  */
 public interface ICheckListener extends FacesListener {
 
-	void processCheck(CheckEvent event) throws AbortProcessingException;
-	
+    void processCheck(CheckEvent event) throws AbortProcessingException;
+
 }

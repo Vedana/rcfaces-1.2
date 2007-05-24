@@ -53,17 +53,20 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
 
     private final int modifiersMask;
 
-    private Object value;
+    private String value;
+
+    private Object valueObject;
 
     private Object item;
 
-    public SelectionEvent(UIComponent component, Object value, Object item,
-            int detail) {
+    public SelectionEvent(UIComponent component, String value,
+            Object valueObject, Object item, int detail) {
         this(component, computeTypeFromDetail(detail), UNKNOWN_POSITION,
                 UNKNOWN_POSITION, UNKNOWN_BUTTONS, UNKNOWN_MODIFIERS,
                 UNKNOWN_KEY);
 
         this.value = value;
+        this.valueObject = valueObject;
         this.item = item;
     }
 
@@ -100,8 +103,12 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return item;
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
+    }
+
+    public Object getValueObject() {
+        return valueObject;
     }
 
     public int getButtonsMask() {

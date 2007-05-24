@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.lang;
 
-
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 

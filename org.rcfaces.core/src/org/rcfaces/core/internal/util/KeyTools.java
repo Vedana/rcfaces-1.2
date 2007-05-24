@@ -12,7 +12,6 @@ import org.rcfaces.core.internal.converter.KeyFlagsConverter;
 import org.rcfaces.core.internal.converter.VirtualKeyConverter;
 import org.rcfaces.core.internal.lang.StringAppender;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

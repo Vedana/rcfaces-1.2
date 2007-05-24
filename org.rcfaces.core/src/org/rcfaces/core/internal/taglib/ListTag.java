@@ -1,103 +1,114 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.ListComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ListComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public class ListTag extends ComboTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(ListTag.class);
 
-	private static final Log LOG=LogFactory.getLog(ListTag.class);
+    private String multipleSelect;
 
-	private String multipleSelect;
-	private String doubleClickListeners;
-	private String rowNumber;
-	public String getComponentType() {
-		return ListComponent.COMPONENT_TYPE;
-	}
+    private String doubleClickListeners;
 
-	public final String getMultipleSelect() {
-		return multipleSelect;
-	}
+    private String rowNumber;
 
-	public final void setMultipleSelect(String multipleSelect) {
-		this.multipleSelect = multipleSelect;
-	}
+    public String getComponentType() {
+        return ListComponent.COMPONENT_TYPE;
+    }
 
-	public final String getDoubleClickListener() {
-		return doubleClickListeners;
-	}
+    public final String getMultipleSelect() {
+        return multipleSelect;
+    }
 
-	public final void setDoubleClickListener(String doubleClickListeners) {
-		this.doubleClickListeners = doubleClickListeners;
-	}
+    public final void setMultipleSelect(String multipleSelect) {
+        this.multipleSelect = multipleSelect;
+    }
 
-	public final String getRowNumber() {
-		return rowNumber;
-	}
+    public final String getDoubleClickListener() {
+        return doubleClickListeners;
+    }
 
-	public final void setRowNumber(String rowNumber) {
-		this.rowNumber = rowNumber;
-	}
+    public final void setDoubleClickListener(String doubleClickListeners) {
+        this.doubleClickListeners = doubleClickListeners;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (ListComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  multipleSelect='"+multipleSelect+"'");
-			LOG.debug("  rowNumber='"+rowNumber+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getRowNumber() {
+        return rowNumber;
+    }
 
-		if ((uiComponent instanceof ListComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'ListComponent'.");
-		}
+    public final void setRowNumber(String rowNumber) {
+        this.rowNumber = rowNumber;
+    }
 
-		ListComponent component = (ListComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (ListComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  multipleSelect='" + multipleSelect + "'");
+            LOG.debug("  rowNumber='" + rowNumber + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (multipleSelect != null) {
-			if (isValueReference(multipleSelect)) {
-				ValueBinding vb = application.createValueBinding(multipleSelect);
+        if ((uiComponent instanceof ListComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'ListComponent'.");
+        }
 
-				component.setMultipleSelect(vb);
-			} else {
-				component.setMultipleSelect(getBool(multipleSelect));
-			}
-		}
+        ListComponent component = (ListComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (doubleClickListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
-		}
+        if (multipleSelect != null) {
+            if (isValueReference(multipleSelect)) {
+                ValueBinding vb = application
+                        .createValueBinding(multipleSelect);
+                component.setValueBinding(Properties.MULTIPLE_SELECT, vb);
 
-		if (rowNumber != null) {
-			if (isValueReference(rowNumber)) {
-				ValueBinding vb = application.createValueBinding(rowNumber);
-				component.setRowNumber(vb);
-			} else {
-				component.setRowNumber(getInt(rowNumber));
-			}
-		}
-	}
+            } else {
+                component.setMultipleSelect(getBool(multipleSelect));
+            }
+        }
 
-	public void release() {
-		multipleSelect = null;
-		doubleClickListeners = null;
-		rowNumber = null;
+        if (doubleClickListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.DOUBLE_CLICK_LISTENER_TYPE,
+                    doubleClickListeners);
+        }
 
-		super.release();
-	}
+        if (rowNumber != null) {
+            if (isValueReference(rowNumber)) {
+                ValueBinding vb = application.createValueBinding(rowNumber);
+                component.setValueBinding(Properties.ROW_NUMBER, vb);
+
+            } else {
+                component.setRowNumber(getInt(rowNumber));
+            }
+        }
+    }
+
+    public void release() {
+        multipleSelect = null;
+        doubleClickListeners = null;
+        rowNumber = null;
+
+        super.release();
+    }
 
 }

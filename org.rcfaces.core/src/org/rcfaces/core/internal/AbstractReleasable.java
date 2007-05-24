@@ -9,6 +9,6 @@ package org.rcfaces.core.internal;
  * @version $Revision$ $Date$
  */
 public class AbstractReleasable implements IReleasable {
-	public void release() {
-	}
+    public void release() {
+    }
 }

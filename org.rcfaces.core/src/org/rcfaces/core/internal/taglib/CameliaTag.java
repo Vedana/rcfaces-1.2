@@ -139,7 +139,7 @@ public abstract class CameliaTag extends UIComponentBodyTag {
 
         responseWriter = responseWriter.cloneWithWriter(new Writer() {
             public void close() {
-             //   pageContext.getOut().close();
+                // pageContext.getOut().close();
             }
 
             public void flush() {

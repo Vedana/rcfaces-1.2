@@ -9,7 +9,6 @@ import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.event.ICheckListener;
 
-
 /**
  * 
  * 
@@ -18,23 +17,26 @@ import org.rcfaces.core.event.ICheckListener;
  */
 public interface ICheckEventCapability {
 
-	/**
-	 * Adds a listener to the component for the checked event
-	 * 
-	 * @param checkListener the listener to add
-	 */
-	void addCheckListener(ICheckListener checkListener);
+    /**
+     * Adds a listener to the component for the checked event
+     * 
+     * @param checkListener
+     *            the listener to add
+     */
+    void addCheckListener(ICheckListener checkListener);
 
-	/**
-	 * Removes a listener from the list of listeners
-	 * 
-	 * @param checkListener the listener to remove
-	 */
-	void removeCheckListener(ICheckListener checkListener);
+    /**
+     * Removes a listener from the list of listeners
+     * 
+     * @param checkListener
+     *            the listener to remove
+     */
+    void removeCheckListener(ICheckListener checkListener);
 
-	/**
-	 * Returns the list of check listener for the component
-	 * @return check listeners' list
-	 */
-	FacesListener[] listCheckListeners();
+    /**
+     * Returns the list of check listener for the component
+     * 
+     * @return check listeners' list
+     */
+    FacesListener[] listCheckListeners();
 }

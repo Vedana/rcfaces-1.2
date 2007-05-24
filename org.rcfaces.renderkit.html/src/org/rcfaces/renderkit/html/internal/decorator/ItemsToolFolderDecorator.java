@@ -869,7 +869,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                             selectItemValue);
 
                     ActionEvent actionEvent = new SelectionEvent(component,
-                            value, null, 0);
+                            selectItemValue, value, null, 0);
 
                     actionEvent.setPhaseId(PhaseId.INVOKE_APPLICATION);
                     component.queueEvent(actionEvent);

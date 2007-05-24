@@ -12,6 +12,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public interface IFocusListener extends FacesListener {
-	
-	void processFocus(FocusEvent event) throws AbortProcessingException;
+
+    void processFocus(FocusEvent event) throws AbortProcessingException;
 }

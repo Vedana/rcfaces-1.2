@@ -14,13 +14,16 @@ public interface IVerticalAlignmentCapability {
 
     /**
      * Returns vertical alignment.
+     * 
      * @return vertical alignment
      */
     String getVerticalAlignment();
 
     /**
      * Specifies vertical alignment.
-     * @param verticalAlignment vertical alignment
+     * 
+     * @param verticalAlignment
+     *            vertical alignment
      */
     void setVerticalAlignment(String verticalAlignment);
 }

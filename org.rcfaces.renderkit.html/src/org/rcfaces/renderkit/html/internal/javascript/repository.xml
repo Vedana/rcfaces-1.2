@@ -925,10 +925,7 @@
 					
 		<file name="input/f_comboGrid.js">
 			<class name="f_comboGrid">
-				<required-class name="f_component" />
-				<required-class name="fa_readOnly" />
-				<required-class name="fa_disabled" />
-				<required-class name="fa_required" />
+				<required-class name="f_textEntry" />
 
 				<required-class name="fa_dataGridPopup" />
 				

@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.lang;
 
-
 /**
  * An interface for an adaptable object.
  * 

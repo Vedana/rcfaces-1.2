@@ -13,26 +13,36 @@ package org.rcfaces.core.component.capability;
 public interface IScrollableCapability {
 
     /**
-     * Returns an integer value specifying the position of the horizontal scroolbar (browser dependant).
-     * @return horizontal scroll position 
+     * Returns an integer value specifying the position of the horizontal
+     * scroolbar (browser dependant).
+     * 
+     * @return horizontal scroll position
      */
     int getHorizontalScrollPosition();
 
     /**
-     * Sets an integer value specifying the position of the horizontal scroolbar (browser dependant).
-     * @param position horizontal scroll position 
+     * Sets an integer value specifying the position of the horizontal scroolbar
+     * (browser dependant).
+     * 
+     * @param position
+     *            horizontal scroll position
      */
     void setHorizontalScrollPosition(int position);
 
     /**
-     * Returns an integer value specifying the position of the vertical scroolbar (Browser dependant).
+     * Returns an integer value specifying the position of the vertical
+     * scroolbar (Browser dependant).
+     * 
      * @return vertical scroll position
      */
     int getVerticalScrollPosition();
 
     /**
-     * Sets an integer value specifying the position of the vertical scroolbar (Browser dependant).
-     * @param position vertical scroll position
+     * Sets an integer value specifying the position of the vertical scroolbar
+     * (Browser dependant).
+     * 
+     * @param position
+     *            vertical scroll position
      */
     void setVerticalScrollPosition(int position);
 }

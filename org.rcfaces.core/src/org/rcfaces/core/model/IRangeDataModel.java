@@ -8,5 +8,5 @@ package org.rcfaces.core.model;
  * @version $Revision$ $Date$
  */
 public interface IRangeDataModel {
-	void setRowRange(int index, int length);
+    void setRowRange(int index, int length);
 }

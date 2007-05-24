@@ -18,7 +18,6 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.tools.ValuesTools;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

@@ -1,178 +1,168 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.CardBoxComponent;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.CardBoxTools;
 
 /**
- * An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.
+ * An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox
+ * Component</a> and holding the components.
  */
-public class CardComponent extends AbstractOutputComponent implements 
-	ITextAlignmentCapability,
-	IVerticalAlignmentCapability,
-	IVariableScopeCapability,
-	ILoadEventCapability,
-	IAsyncRenderComponent {
+public class CardComponent extends AbstractOutputComponent implements
+        ITextAlignmentCapability, IVerticalAlignmentCapability,
+        IVariableScopeCapability, ILoadEventCapability, IAsyncRenderComponent {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.card";
+    public static final String COMPONENT_TYPE = "org.rcfaces.core.card";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","scopeValue","scopeVar","verticalAlignment","textAlignment"}));
-	}
+    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
+            AbstractOutputComponent.CAMELIA_ATTRIBUTES);
+    static {
+        CAMELIA_ATTRIBUTES.addAll(Arrays
+                .asList(new String[] { "loadListener", "scopeValue",
+                        "scopeVar", "verticalAlignment", "textAlignment" }));
+    }
 
-	public CardComponent() {
-		setRendererType(COMPONENT_TYPE);
-	}
+    public CardComponent() {
+        setRendererType(COMPONENT_TYPE);
+    }
 
-	public CardComponent(String componentId) {
-		this();
-		setId(componentId);
-	}
+    public CardComponent(String componentId) {
+        this();
+        setId(componentId);
+    }
 
-	public final CardBoxComponent getCardBox() {
+    public final CardBoxComponent getCardBox() {
 
+        return CardBoxTools.getCardBox(this);
 
-				return CardBoxTools.getCardBox(this);
-			
-	}
+    }
 
-	public java.lang.String getTextAlignment() {
-		return getTextAlignment(null);
-	}
+    public java.lang.String getTextAlignment() {
+        return getTextAlignment(null);
+    }
 
-	/**
-	 * See {@link #getTextAlignment() getTextAlignment()} for more details
-	 */
-	public java.lang.String getTextAlignment(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
-	}
+    /**
+     * See {@link #getTextAlignment() getTextAlignment()} for more details
+     */
+    public java.lang.String getTextAlignment(
+            javax.faces.context.FacesContext facesContext) {
+        return engine
+                .getStringProperty(Properties.TEXT_ALIGNMENT, facesContext);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "textAlignment" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTextAlignmentSetted() {
-		return engine.isPropertySetted(Properties.TEXT_ALIGNMENT);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "textAlignment" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isTextAlignmentSetted() {
+        return engine.isPropertySetted(Properties.TEXT_ALIGNMENT);
+    }
 
-	public void setTextAlignment(java.lang.String textAlignment) {
-		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
-	}
+    public void setTextAlignment(java.lang.String textAlignment) {
+        engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
+    }
 
-	/**
-	 * See {@link #setTextAlignment(String) setTextAlignment(String)} for more details
-	 */
-	public void setTextAlignment(ValueBinding textAlignment) {
-		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
-	}
+    public java.lang.String getVerticalAlignment() {
+        return getVerticalAlignment(null);
+    }
 
-	public java.lang.String getVerticalAlignment() {
-		return getVerticalAlignment(null);
-	}
+    /**
+     * See {@link #getVerticalAlignment() getVerticalAlignment()} for more
+     * details
+     */
+    public java.lang.String getVerticalAlignment(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT,
+                facesContext);
+    }
 
-	/**
-	 * See {@link #getVerticalAlignment() getVerticalAlignment()} for more details
-	 */
-	public java.lang.String getVerticalAlignment(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VERTICAL_ALIGNMENT, facesContext);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "verticalAlignment" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isVerticalAlignmentSetted() {
+        return engine.isPropertySetted(Properties.VERTICAL_ALIGNMENT);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "verticalAlignment" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isVerticalAlignmentSetted() {
-		return engine.isPropertySetted(Properties.VERTICAL_ALIGNMENT);
-	}
+    public void setVerticalAlignment(java.lang.String verticalAlignment) {
+        engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
+    }
 
-	public void setVerticalAlignment(java.lang.String verticalAlignment) {
-		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
-	}
+    public javax.faces.el.ValueBinding getScopeValue() {
+        return getScopeValue(null);
+    }
 
-	/**
-	 * See {@link #setVerticalAlignment(String) setVerticalAlignment(String)} for more details
-	 */
-	public void setVerticalAlignment(ValueBinding verticalAlignment) {
-		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
-	}
+    /**
+     * See {@link #getScopeValue() getScopeValue()} for more details
+     */
+    public javax.faces.el.ValueBinding getScopeValue(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
+    }
 
-	public javax.faces.el.ValueBinding getScopeValue() {
-		return getScopeValue(null);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "scopeValue" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isScopeValueSetted() {
+        return engine.isPropertySetted(Properties.SCOPE_VALUE);
+    }
 
-	/**
-	 * See {@link #getScopeValue() getScopeValue()} for more details
-	 */
-	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
-	}
+    public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+        engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "scopeValue" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isScopeValueSetted() {
-		return engine.isPropertySetted(Properties.SCOPE_VALUE);
-	}
+    public java.lang.String getScopeVar() {
+        return getScopeVar(null);
+    }
 
-	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
-		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
-	}
+    /**
+     * See {@link #getScopeVar() getScopeVar()} for more details
+     */
+    public java.lang.String getScopeVar(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
+    }
 
-	public java.lang.String getScopeVar() {
-		return getScopeVar(null);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "scopeVar" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isScopeVarSetted() {
+        return engine.isPropertySetted(Properties.SCOPE_VAR);
+    }
 
-	/**
-	 * See {@link #getScopeVar() getScopeVar()} for more details
-	 */
-	public java.lang.String getScopeVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SCOPE_VAR, facesContext);
-	}
+    public void setScopeVar(java.lang.String scopeVar) {
+        engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "scopeVar" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isScopeVarSetted() {
-		return engine.isPropertySetted(Properties.SCOPE_VAR);
-	}
+    public final void addLoadListener(
+            org.rcfaces.core.event.ILoadListener listener) {
+        addFacesListener(listener);
+    }
 
-	public void setScopeVar(java.lang.String scopeVar) {
-		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
-	}
+    public final void removeLoadListener(
+            org.rcfaces.core.event.ILoadListener listener) {
+        removeFacesListener(listener);
+    }
 
-	/**
-	 * See {@link #setScopeVar(String) setScopeVar(String)} for more details
-	 */
-	public void setScopeVar(ValueBinding scopeVar) {
-		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
-	}
+    public final javax.faces.event.FacesListener[] listLoadListeners() {
+        return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
+    }
 
-	public final void addLoadListener(org.rcfaces.core.event.ILoadListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeLoadListener(org.rcfaces.core.event.ILoadListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listLoadListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
-	}
-
-	protected Set getCameliaFields() {
-		return CAMELIA_ATTRIBUTES;
-	}
+    protected Set getCameliaFields() {
+        return CAMELIA_ATTRIBUTES;
+    }
 }

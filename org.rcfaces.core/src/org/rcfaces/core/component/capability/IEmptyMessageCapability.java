@@ -11,17 +11,19 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface IEmptyMessageCapability {
-    
-	/**
-	 * Returns a string containing the message shown when there is no result.
-	 * 
-	 * @return message
-	 */
-	String getEmptyMessage();
 
-	/**
-	 * Sets the string conatining the message shown when there is no result. 
-	 * @param emptyMessage the message
-	 */
-	void setEmptyMessage(String emptyMessage);
+    /**
+     * Returns a string containing the message shown when there is no result.
+     * 
+     * @return message
+     */
+    String getEmptyMessage();
+
+    /**
+     * Sets the string conatining the message shown when there is no result.
+     * 
+     * @param emptyMessage
+     *            the message
+     */
+    void setEmptyMessage(String emptyMessage);
 }

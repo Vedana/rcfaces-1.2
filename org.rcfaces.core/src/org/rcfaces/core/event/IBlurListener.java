@@ -13,6 +13,6 @@ import javax.faces.event.FacesListener;
  */
 public interface IBlurListener extends FacesListener {
 
-	void processBlur(BlurEvent event) throws AbortProcessingException;
-	
+    void processBlur(BlurEvent event) throws AbortProcessingException;
+
 }

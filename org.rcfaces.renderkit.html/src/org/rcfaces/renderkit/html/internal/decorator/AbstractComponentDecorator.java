@@ -12,7 +12,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

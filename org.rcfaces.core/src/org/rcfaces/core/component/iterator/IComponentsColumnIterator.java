@@ -19,8 +19,8 @@ public interface IComponentsColumnIterator extends IComponentIterator {
     /**
      * Returns the next ComponentsColumnComponent in the iteration. Calling this
      * method repeatedly until the {@link #hasNext()} method returns false will
-     * return each ComponentsColumnComponent in the underlying collection exactly
-     * once.
+     * return each ComponentsColumnComponent in the underlying collection
+     * exactly once.
      * 
      * @return the next ComponentsColumnComponent in the iteration.
      * @exception NoSuchElementException
@@ -29,11 +29,11 @@ public interface IComponentsColumnIterator extends IComponentIterator {
     ComponentsColumnComponent next();
 
     /**
-     * Returns an array containing all of the ComponentsColumnComponents in this list
-     * in proper sequence.
+     * Returns an array containing all of the ComponentsColumnComponents in this
+     * list in proper sequence.
      * 
-     * @return an array containing all of the ComponentsColumnComponents in this list
-     *         in proper sequence.
+     * @return an array containing all of the ComponentsColumnComponents in this
+     *         list in proper sequence.
      */
     ComponentsColumnComponent[] toArray();
 }

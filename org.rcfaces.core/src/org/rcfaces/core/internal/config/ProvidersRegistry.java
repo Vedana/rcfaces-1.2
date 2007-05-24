@@ -98,7 +98,8 @@ public class ProvidersRegistry implements IProvidersRegistry {
             LOG.trace(
                     "Can not get constructor with provider parameter for class '"
                             + className + "' specified by provider id='" + id
-                            + "'  (providerId='" + providerId + "'), TRY with no parameter !", ex);
+                            + "'  (providerId='" + providerId
+                            + "'), TRY with no parameter !", ex);
 
             try {
                 constructor = clazz.getConstructor(null);

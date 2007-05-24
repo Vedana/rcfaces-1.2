@@ -83,7 +83,7 @@ public class MessageRenderer extends AbstractCssRenderer {
         if (messageComponent.isShowDetail()) {
             htmlWriter.writeAttribute("v:showDetail", "true");
         }
-        
+
         if (messageComponent.isShowActiveComponentMessage(facesContext)) {
             htmlWriter.writeAttribute("v:showActiveComponentMessage", "true");
         }

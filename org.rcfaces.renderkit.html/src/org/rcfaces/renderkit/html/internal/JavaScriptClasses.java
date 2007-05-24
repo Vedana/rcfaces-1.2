@@ -150,7 +150,7 @@ public final class JavaScriptClasses {
 
     public static final String WAITING_SHELL = "f_waitingShell";
 
-	public static final String VIEW_DIALOG = "f_viewDialog";
+    public static final String VIEW_DIALOG = "f_viewDialog";
 
     public static final String EVENT_CHECK = "check";
 

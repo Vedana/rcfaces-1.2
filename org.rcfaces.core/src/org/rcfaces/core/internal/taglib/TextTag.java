@@ -1,299 +1,314 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.TextComponent;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.jsp.JspException;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ITextCapability;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TextComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 public class TextTag extends AbstractOutputTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(TextTag.class);
 
-	private static final Log LOG=LogFactory.getLog(TextTag.class);
+    private String text;
 
-	private String text;
-	private String textDirection;
-	private String fontBold;
-	private String fontItalic;
-	private String fontName;
-	private String fontSize;
-	private String fontUnderline;
-	private String textAlignment;
-	private String accessKey;
-	private String forValue;
-	private String type;
-	public String getComponentType() {
-		return TextComponent.COMPONENT_TYPE;
-	}
+    private String textDirection;
 
-	public final String getText() {
-		return text;
-	}
+    private String fontBold;
 
-	public final void setText(String text) {
-		this.text = text;
-	}
+    private String fontItalic;
 
-	public final String getTextDirection() {
-		return textDirection;
-	}
+    private String fontName;
 
-	public final void setTextDirection(String textDirection) {
-		this.textDirection = textDirection;
-	}
+    private String fontSize;
 
-	public final String getFontBold() {
-		return fontBold;
-	}
+    private String fontUnderline;
 
-	public final void setFontBold(String fontBold) {
-		this.fontBold = fontBold;
-	}
+    private String textAlignment;
 
-	public final String getFontItalic() {
-		return fontItalic;
-	}
+    private String accessKey;
 
-	public final void setFontItalic(String fontItalic) {
-		this.fontItalic = fontItalic;
-	}
+    private String forValue;
 
-	public final String getFontName() {
-		return fontName;
-	}
+    private String type;
 
-	public final void setFontName(String fontName) {
-		this.fontName = fontName;
-	}
+    public String getComponentType() {
+        return TextComponent.COMPONENT_TYPE;
+    }
 
-	public final String getFontSize() {
-		return fontSize;
-	}
+    public final String getText() {
+        return text;
+    }
 
-	public final void setFontSize(String fontSize) {
-		this.fontSize = fontSize;
-	}
+    public final void setText(String text) {
+        this.text = text;
+    }
 
-	public final String getFontUnderline() {
-		return fontUnderline;
-	}
+    public final String getTextDirection() {
+        return textDirection;
+    }
 
-	public final void setFontUnderline(String fontUnderline) {
-		this.fontUnderline = fontUnderline;
-	}
+    public final void setTextDirection(String textDirection) {
+        this.textDirection = textDirection;
+    }
 
-	public final String getTextAlignment() {
-		return textAlignment;
-	}
+    public final String getFontBold() {
+        return fontBold;
+    }
 
-	public final void setTextAlignment(String textAlignment) {
-		this.textAlignment = textAlignment;
-	}
+    public final void setFontBold(String fontBold) {
+        this.fontBold = fontBold;
+    }
 
-	public final String getAccessKey() {
-		return accessKey;
-	}
+    public final String getFontItalic() {
+        return fontItalic;
+    }
 
-	public final void setAccessKey(String accessKey) {
-		this.accessKey = accessKey;
-	}
+    public final void setFontItalic(String fontItalic) {
+        this.fontItalic = fontItalic;
+    }
 
-	public final String getFor() {
-		return forValue;
-	}
+    public final String getFontName() {
+        return fontName;
+    }
 
-	public final void setFor(String forValue) {
-		this.forValue = forValue;
-	}
+    public final void setFontName(String fontName) {
+        this.fontName = fontName;
+    }
 
-	public final String getType() {
-		return type;
-	}
+    public final String getFontSize() {
+        return fontSize;
+    }
 
-	public final void setType(String type) {
-		this.type = type;
-	}
+    public final void setFontSize(String fontSize) {
+        this.fontSize = fontSize;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (TextComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  text='"+text+"'");
-			LOG.debug("  textDirection='"+textDirection+"'");
-			LOG.debug("  fontBold='"+fontBold+"'");
-			LOG.debug("  fontItalic='"+fontItalic+"'");
-			LOG.debug("  fontName='"+fontName+"'");
-			LOG.debug("  fontSize='"+fontSize+"'");
-			LOG.debug("  fontUnderline='"+fontUnderline+"'");
-			LOG.debug("  textAlignment='"+textAlignment+"'");
-			LOG.debug("  accessKey='"+accessKey+"'");
-			LOG.debug("  forValue='"+forValue+"'");
-			LOG.debug("  type='"+type+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getFontUnderline() {
+        return fontUnderline;
+    }
 
-		if ((uiComponent instanceof TextComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'TextComponent'.");
-		}
+    public final void setFontUnderline(String fontUnderline) {
+        this.fontUnderline = fontUnderline;
+    }
 
-		TextComponent component = (TextComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getTextAlignment() {
+        return textAlignment;
+    }
 
-		if (text != null) {
-			if (isValueReference(text)) {
-				ValueBinding vb = application.createValueBinding(text);
+    public final void setTextAlignment(String textAlignment) {
+        this.textAlignment = textAlignment;
+    }
 
-				component.setText(vb);
-			} else {
-				component.setText(text);
-			}
-		}
+    public final String getAccessKey() {
+        return accessKey;
+    }
 
-		if (textDirection != null) {
-			if (isValueReference(textDirection)) {
-				ValueBinding vb = application.createValueBinding(textDirection);
+    public final void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
 
-				component.setTextDirection(vb);
-			} else {
-				component.setTextDirection(getInt(textDirection));
-			}
-		}
+    public final String getFor() {
+        return forValue;
+    }
 
-		if (fontBold != null) {
-			if (isValueReference(fontBold)) {
-				ValueBinding vb = application.createValueBinding(fontBold);
+    public final void setFor(String forValue) {
+        this.forValue = forValue;
+    }
 
-				component.setFontBold(vb);
-			} else {
-				component.setFontBold(getBoolean(fontBold));
-			}
-		}
+    public final String getType() {
+        return type;
+    }
 
-		if (fontItalic != null) {
-			if (isValueReference(fontItalic)) {
-				ValueBinding vb = application.createValueBinding(fontItalic);
+    public final void setType(String type) {
+        this.type = type;
+    }
 
-				component.setFontItalic(vb);
-			} else {
-				component.setFontItalic(getBoolean(fontItalic));
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (TextComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  text='" + text + "'");
+            LOG.debug("  textDirection='" + textDirection + "'");
+            LOG.debug("  fontBold='" + fontBold + "'");
+            LOG.debug("  fontItalic='" + fontItalic + "'");
+            LOG.debug("  fontName='" + fontName + "'");
+            LOG.debug("  fontSize='" + fontSize + "'");
+            LOG.debug("  fontUnderline='" + fontUnderline + "'");
+            LOG.debug("  textAlignment='" + textAlignment + "'");
+            LOG.debug("  accessKey='" + accessKey + "'");
+            LOG.debug("  forValue='" + forValue + "'");
+            LOG.debug("  type='" + type + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (fontName != null) {
-			if (isValueReference(fontName)) {
-				ValueBinding vb = application.createValueBinding(fontName);
+        if ((uiComponent instanceof TextComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'TextComponent'.");
+        }
 
-				component.setFontName(vb);
-			} else {
-				component.setFontName(fontName);
-			}
-		}
+        TextComponent component = (TextComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (fontSize != null) {
-			if (isValueReference(fontSize)) {
-				ValueBinding vb = application.createValueBinding(fontSize);
+        if (text != null) {
+            if (isValueReference(text)) {
+                ValueBinding vb = application.createValueBinding(text);
+                component.setValueBinding(Properties.TEXT, vb);
 
-				component.setFontSize(vb);
-			} else {
-				component.setFontSize(fontSize);
-			}
-		}
+            } else {
+                component.setText(text);
+            }
+        }
 
-		if (fontUnderline != null) {
-			if (isValueReference(fontUnderline)) {
-				ValueBinding vb = application.createValueBinding(fontUnderline);
+        if (textDirection != null) {
+            if (isValueReference(textDirection)) {
+                ValueBinding vb = application.createValueBinding(textDirection);
+                component.setValueBinding(Properties.TEXT_DIRECTION, vb);
 
-				component.setFontUnderline(vb);
-			} else {
-				component.setFontUnderline(getBoolean(fontUnderline));
-			}
-		}
+            } else {
+                component.setTextDirection(getInt(textDirection));
+            }
+        }
 
-		if (textAlignment != null) {
-			if (isValueReference(textAlignment)) {
-				ValueBinding vb = application.createValueBinding(textAlignment);
+        if (fontBold != null) {
+            if (isValueReference(fontBold)) {
+                ValueBinding vb = application.createValueBinding(fontBold);
+                component.setValueBinding(Properties.FONT_BOLD, vb);
 
-				component.setTextAlignment(vb);
-			} else {
-				component.setTextAlignment(textAlignment);
-			}
-		}
+            } else {
+                component.setFontBold(getBoolean(fontBold));
+            }
+        }
 
-		if (accessKey != null) {
-			if (isValueReference(accessKey)) {
-				ValueBinding vb = application.createValueBinding(accessKey);
+        if (fontItalic != null) {
+            if (isValueReference(fontItalic)) {
+                ValueBinding vb = application.createValueBinding(fontItalic);
+                component.setValueBinding(Properties.FONT_ITALIC, vb);
 
-				component.setAccessKey(vb);
-			} else {
-				component.setAccessKey(accessKey);
-			}
-		}
+            } else {
+                component.setFontItalic(getBoolean(fontItalic));
+            }
+        }
 
-		if (forValue != null) {
-			if (isValueReference(forValue)) {
-				ValueBinding vb = application.createValueBinding(forValue);
+        if (fontName != null) {
+            if (isValueReference(fontName)) {
+                ValueBinding vb = application.createValueBinding(fontName);
+                component.setValueBinding(Properties.FONT_NAME, vb);
 
-				component.setFor(vb);
-			} else {
-				component.setFor(forValue);
-			}
-		}
+            } else {
+                component.setFontName(fontName);
+            }
+        }
 
-		if (type != null) {
-			if (isValueReference(type)) {
-				ValueBinding vb = application.createValueBinding(type);
-				component.setType(vb);
-			} else {
-				component.setType(type);
-			}
-		}
-	}
+        if (fontSize != null) {
+            if (isValueReference(fontSize)) {
+                ValueBinding vb = application.createValueBinding(fontSize);
+                component.setValueBinding(Properties.FONT_SIZE, vb);
 
-	public void release() {
-		text = null;
-		textDirection = null;
-		fontBold = null;
-		fontItalic = null;
-		fontName = null;
-		fontSize = null;
-		fontUnderline = null;
-		textAlignment = null;
-		accessKey = null;
-		forValue = null;
-		type = null;
+            } else {
+                component.setFontSize(fontSize);
+            }
+        }
 
-		super.release();
-	}
+        if (fontUnderline != null) {
+            if (isValueReference(fontUnderline)) {
+                ValueBinding vb = application.createValueBinding(fontUnderline);
+                component.setValueBinding(Properties.FONT_UNDERLINE, vb);
 
-	protected int getDoStartValue() {
-		return EVAL_BODY_BUFFERED;
-	}
+            } else {
+                component.setFontUnderline(getBoolean(fontUnderline));
+            }
+        }
 
-	public int doEndTag() throws JspException {
-		if (text == null && getBodyContent() != null) {
-			String content = getBodyContent().getString();
-			if (content != null && content.length() > 0) {
-				content = content.trim();
-				if (content.length() > 0) {
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("  [body of tag] text='"+content+"'");
-					}
-					((ITextCapability)getComponentInstance()).setText(content);
-				}
-			}
-		}
-		return super.doEndTag();
-	}
+        if (textAlignment != null) {
+            if (isValueReference(textAlignment)) {
+                ValueBinding vb = application.createValueBinding(textAlignment);
+                component.setValueBinding(Properties.TEXT_ALIGNMENT, vb);
+
+            } else {
+                component.setTextAlignment(textAlignment);
+            }
+        }
+
+        if (accessKey != null) {
+            if (isValueReference(accessKey)) {
+                ValueBinding vb = application.createValueBinding(accessKey);
+                component.setValueBinding(Properties.ACCESS_KEY, vb);
+
+            } else {
+                component.setAccessKey(accessKey);
+            }
+        }
+
+        if (forValue != null) {
+            if (isValueReference(forValue)) {
+                ValueBinding vb = application.createValueBinding(forValue);
+                component.setValueBinding(Properties.FOR, vb);
+
+            } else {
+                component.setFor(forValue);
+            }
+        }
+
+        if (type != null) {
+            if (isValueReference(type)) {
+                ValueBinding vb = application.createValueBinding(type);
+                component.setValueBinding(Properties.TYPE, vb);
+
+            } else {
+                component.setType(type);
+            }
+        }
+    }
+
+    public void release() {
+        text = null;
+        textDirection = null;
+        fontBold = null;
+        fontItalic = null;
+        fontName = null;
+        fontSize = null;
+        fontUnderline = null;
+        textAlignment = null;
+        accessKey = null;
+        forValue = null;
+        type = null;
+
+        super.release();
+    }
+
+    protected int getDoStartValue() {
+        return EVAL_BODY_BUFFERED;
+    }
+
+    public int doEndTag() throws JspException {
+        if (text == null && getBodyContent() != null) {
+            String content = getBodyContent().getString();
+            if (content != null && content.length() > 0) {
+                content = content.trim();
+                if (content.length() > 0) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("  [body of tag] text='" + content + "'");
+                    }
+                    ((ITextCapability) getComponentInstance()).setText(content);
+                }
+            }
+        }
+        return super.doEndTag();
+    }
 }

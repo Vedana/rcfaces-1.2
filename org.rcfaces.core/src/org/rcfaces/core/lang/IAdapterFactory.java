@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.lang;
 
-
 /**
  * <p>
  * An adapter factory defines behavioral extensions for one or more classes that
@@ -32,7 +31,8 @@ public interface IAdapterFactory {
      *         type for the given object
      */
 
-    Object getAdapter(Object adaptableObject, Class adapterType, Object parameter);
+    Object getAdapter(Object adaptableObject, Class adapterType,
+            Object parameter);
 
     /**
      * Returns the collection of adapter types handled by this factory.

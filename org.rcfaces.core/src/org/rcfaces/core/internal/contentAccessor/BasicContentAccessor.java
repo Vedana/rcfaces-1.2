@@ -99,7 +99,7 @@ public class BasicContentAccessor extends AbstractContentAccessor {
             return url;
         }
 
-        return resolvePath(facesContext, (String)url);
+        return resolvePath(facesContext, (String) url);
     }
 
     public String toString() {

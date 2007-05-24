@@ -56,7 +56,8 @@ public class FaceletsTreeRendererProcessor extends
         return false;
     }
 
-    public void writeFilteredContent(Writer writer, String content) throws IOException {
+    public void writeFilteredContent(Writer writer, String content)
+            throws IOException {
 
         writer.write(content);
     }

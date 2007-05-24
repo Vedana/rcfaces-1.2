@@ -9,7 +9,6 @@ import javax.faces.event.AbortProcessingException;
 import org.rcfaces.core.event.IPropertyChangeListener;
 import org.rcfaces.core.event.PropertyChangeEvent;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$

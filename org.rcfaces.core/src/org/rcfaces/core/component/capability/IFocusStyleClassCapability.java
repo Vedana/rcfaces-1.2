@@ -13,7 +13,9 @@ public interface IFocusStyleClassCapability {
 
     /**
      * Specify the style class of the component.
-     * @param cssClass style class 
+     * 
+     * @param cssClass
+     *            style class
      */
     void setFocusStyleClass(String cssClass);
 

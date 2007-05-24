@@ -9,163 +9,163 @@ package org.rcfaces.core.internal.codec;
  * @version $Revision$ $Date$
  */
 public final class SourceFilter {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	public static final String filterSkipSpaces(String content) {
-		char bufs[] = content.toCharArray();
-		int pos = 0;
+    public static final String filterSkipSpaces(String content) {
+        char bufs[] = content.toCharArray();
+        int pos = 0;
 
-		boolean space = false;
-		boolean newLine = false;
-		char lastChar = 0;
+        boolean space = false;
+        boolean newLine = false;
+        char lastChar = 0;
 
-		for (int i = 0; i < bufs.length; i++) {
-			char c = bufs[i];
+        for (int i = 0; i < bufs.length; i++) {
+            char c = bufs[i];
 
-			if (Character.isWhitespace(c)) {
-				if (c == '\n') {
-					if (lastChar != ';' && lastChar != ',' && lastChar != '|'
-							&& lastChar != '&') {
-						newLine = true;
-					}
-				}
-				space = true;
-				continue;
-			}
+            if (Character.isWhitespace(c)) {
+                if (c == '\n') {
+                    if (lastChar != ';' && lastChar != ',' && lastChar != '|'
+                            && lastChar != '&') {
+                        newLine = true;
+                    }
+                }
+                space = true;
+                continue;
+            }
 
-			if (c == '/' && bufs[i + 1] == '*') {
-				for (i++; i < bufs.length; i++) {
-					c = bufs[i];
+            if (c == '/' && bufs[i + 1] == '*') {
+                for (i++; i < bufs.length; i++) {
+                    c = bufs[i];
 
-					if (c == '*' && bufs[i + 1] == '/') {
-						i++;
-						break;
-					}
-				}
+                    if (c == '*' && bufs[i + 1] == '/') {
+                        i++;
+                        break;
+                    }
+                }
 
-				continue;
-			}
+                continue;
+            }
 
-			if (c == '/' && bufs[i + 1] == '/') {
-				for (i++; i < bufs.length; i++) {
-					c = bufs[i];
+            if (c == '/' && bufs[i + 1] == '/') {
+                for (i++; i < bufs.length; i++) {
+                    c = bufs[i];
 
-					if (c == '\n') {
-						break;
-					}
-				}
+                    if (c == '\n') {
+                        break;
+                    }
+                }
 
-				continue;
-			}
+                continue;
+            }
 
-			if (c == '\'' || c == '\"') {
-				bufs[pos++] = c;
-				for (i++; i < bufs.length; i++) {
-					char c2 = bufs[i];
-					bufs[pos++] = c2;
+            if (c == '\'' || c == '\"') {
+                bufs[pos++] = c;
+                for (i++; i < bufs.length; i++) {
+                    char c2 = bufs[i];
+                    bufs[pos++] = c2;
 
-					if (c == c2) {
-						break;
-					}
-				}
+                    if (c == c2) {
+                        break;
+                    }
+                }
 
-				lastChar = c;
+                lastChar = c;
 
-				continue;
-			}
+                continue;
+            }
 
-			if (space) {
-				space = false;
-				if (newLine) {
-					bufs[pos++] = '\n';
-					newLine = false;
+            if (space) {
+                space = false;
+                if (newLine) {
+                    bufs[pos++] = '\n';
+                    newLine = false;
 
-				} else if (lastChar != '}'
-						&& Character.isJavaIdentifierPart(lastChar)
-						&& Character.isJavaIdentifierPart(c)) {
-					bufs[pos++] = ' ';
-				}
-			}
+                } else if (lastChar != '}'
+                        && Character.isJavaIdentifierPart(lastChar)
+                        && Character.isJavaIdentifierPart(c)) {
+                    bufs[pos++] = ' ';
+                }
+            }
 
-			bufs[pos++] = c;
-			lastChar = c;
-		}
+            bufs[pos++] = c;
+            lastChar = c;
+        }
 
-		return new String(bufs, 0, pos);
-	}
+        return new String(bufs, 0, pos);
+    }
 
-	public static final String filter(String content) {
-		char bufs[] = content.toCharArray();
-		int pos = 0;
+    public static final String filter(String content) {
+        char bufs[] = content.toCharArray();
+        int pos = 0;
 
-		boolean space = false;
-		boolean newLine = false;
+        boolean space = false;
+        boolean newLine = false;
 
-		for (int i = 0; i < bufs.length; i++) {
-			char c = bufs[i];
+        for (int i = 0; i < bufs.length; i++) {
+            char c = bufs[i];
 
-			if (Character.isWhitespace(c)) {
-				if (c == '\n') {
-					newLine = true;
-				}
-				space = true;
-				continue;
-			}
+            if (Character.isWhitespace(c)) {
+                if (c == '\n') {
+                    newLine = true;
+                }
+                space = true;
+                continue;
+            }
 
-			if (c == '/' && bufs[i + 1] == '*') {
-				for (i++; i < bufs.length; i++) {
-					c = bufs[i];
+            if (c == '/' && bufs[i + 1] == '*') {
+                for (i++; i < bufs.length; i++) {
+                    c = bufs[i];
 
-					if (c == '*' && bufs[i + 1] == '/') {
-						i++;
-						break;
-					}
-				}
+                    if (c == '*' && bufs[i + 1] == '/') {
+                        i++;
+                        break;
+                    }
+                }
 
-				continue;
-			}
+                continue;
+            }
 
-			if (c == '/' && bufs[i + 1] == '/') {
-				for (i++; i < bufs.length; i++) {
-					c = bufs[i];
+            if (c == '/' && bufs[i + 1] == '/') {
+                for (i++; i < bufs.length; i++) {
+                    c = bufs[i];
 
-					if (c == '\n') {
-						break;
-					}
-				}
+                    if (c == '\n') {
+                        break;
+                    }
+                }
 
-				continue;
-			}
+                continue;
+            }
 
-			if (c == '\'' || c == '\"') {
-				bufs[pos++] = c;
-				for (i++; i < bufs.length; i++) {
-					char c2 = bufs[i];
-					bufs[pos++] = c2;
+            if (c == '\'' || c == '\"') {
+                bufs[pos++] = c;
+                for (i++; i < bufs.length; i++) {
+                    char c2 = bufs[i];
+                    bufs[pos++] = c2;
 
-					if (c == c2) {
-						break;
-					}
-				}
+                    if (c == c2) {
+                        break;
+                    }
+                }
 
-				continue;
-			}
+                continue;
+            }
 
-			if (space) {
-				space = false;
-				if (newLine) {
-					bufs[pos++] = '\n';
-					newLine = false;
+            if (space) {
+                space = false;
+                if (newLine) {
+                    bufs[pos++] = '\n';
+                    newLine = false;
 
-				} else {
-					bufs[pos++] = ' ';
-				}
-			}
+                } else {
+                    bufs[pos++] = ' ';
+                }
+            }
 
-			bufs[pos++] = c;
-		}
+            bufs[pos++] = c;
+        }
 
-		return new String(bufs, 0, pos);
-	}
+        return new String(bufs, 0, pos);
+    }
 
 }

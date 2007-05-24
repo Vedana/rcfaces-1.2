@@ -9,7 +9,6 @@ import javax.faces.event.AbortProcessingException;
 import org.rcfaces.core.event.FocusEvent;
 import org.rcfaces.core.event.IFocusListener;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$

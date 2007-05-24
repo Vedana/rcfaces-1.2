@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.rcfaces.core.image.AbstractBufferedImageOperation;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

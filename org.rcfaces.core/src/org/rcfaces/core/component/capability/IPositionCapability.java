@@ -13,26 +13,36 @@ package org.rcfaces.core.component.capability;
 public interface IPositionCapability {
 
     /**
-     * Returns a string value (as specified by CSS) for the x position of the component.
+     * Returns a string value (as specified by CSS) for the x position of the
+     * component.
+     * 
      * @return as specified by CSS
      */
     String getX();
 
     /**
-     * Sets a string value (as specified by CSS) for the x position of the component.
-     * @param x as specified by CSS
+     * Sets a string value (as specified by CSS) for the x position of the
+     * component.
+     * 
+     * @param x
+     *            as specified by CSS
      */
     void setX(String x);
 
     /**
-     * Returns a string value (as specified by CSS) for the y position of the component.
+     * Returns a string value (as specified by CSS) for the y position of the
+     * component.
+     * 
      * @return as specified by CSS
      */
     String getY();
 
     /**
-     * Sets a string value (as specified by CSS) for the y position of the component.
-     * @param y as specified by CSS
+     * Sets a string value (as specified by CSS) for the y position of the
+     * component.
+     * 
+     * @param y
+     *            as specified by CSS
      */
     void setY(String y);
 }

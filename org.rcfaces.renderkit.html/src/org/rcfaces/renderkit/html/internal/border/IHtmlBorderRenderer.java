@@ -35,7 +35,8 @@ public interface IHtmlBorderRenderer {
 
     IHtmlWriter endChild(IHtmlWriter writer) throws WriterException;
 
-    void writeComboImage(IHtmlWriter writer, String componentClassName) throws WriterException;
+    void writeComboImage(IHtmlWriter writer, String componentClassName)
+            throws WriterException;
 
     int getWestBorderWidth();
 

@@ -9,7 +9,7 @@ package org.rcfaces.core.internal.validator;
  * @version $Revision$ $Date$
  */
 public interface IDescriptor {
-	String [] listRequiredClasses();
-	
-	IParameter [] listParameters();
+    String[] listRequiredClasses();
+
+    IParameter[] listParameters();
 }

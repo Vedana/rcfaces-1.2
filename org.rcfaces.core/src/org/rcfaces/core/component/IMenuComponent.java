@@ -17,14 +17,14 @@ public interface IMenuComponent extends ICheckEventCapability,
         ISelectionEventCapability {
 
     /*
-    int getItemImageWidth();
-
-    void setItemImageWidth(int width);
-
-    int getItemImageHeight();
-
-    void setItemImageHeight(int height);
-*/
+     * int getItemImageWidth();
+     * 
+     * void setItemImageWidth(int width);
+     * 
+     * int getItemImageHeight();
+     * 
+     * void setItemImageHeight(int height);
+     */
     IMenuItemIterator listMenuItems();
 
     boolean isRemoveAllWhenShown();

@@ -10,52 +10,72 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface IMarginCapability {
-   
-	/**
-	 * Returns a string value specifying the margin size for the component's top (compliant to CSS margin-top).
-	 * @return margin-top
-	 */
+
+    /**
+     * Returns a string value specifying the margin size for the component's top
+     * (compliant to CSS margin-top).
+     * 
+     * @return margin-top
+     */
     String getMarginTop();
 
     /**
-     * Sets a string value specifying the margin size for the component's top (compliant to CSS margin-top).
-     * @param marginTop margin-top
+     * Sets a string value specifying the margin size for the component's top
+     * (compliant to CSS margin-top).
+     * 
+     * @param marginTop
+     *            margin-top
      */
     void setMarginTop(String marginTop);
 
     /**
-     * Returns a string value specifying the margin size for the component's right (compliant to CSS margin-right). 
+     * Returns a string value specifying the margin size for the component's
+     * right (compliant to CSS margin-right).
+     * 
      * @return margin-right
      */
     String getMarginRight();
 
     /**
-     * Sets a string value specifying the margin size for the component's right (compliant to CSS margin-right).
-     * @param marginRight margin-right
+     * Sets a string value specifying the margin size for the component's right
+     * (compliant to CSS margin-right).
+     * 
+     * @param marginRight
+     *            margin-right
      */
     void setMarginRight(String marginRight);
 
     /**
-     * Returns a string value specifying the margin size for the component's bottom (compliant to CSS margin-bottom).
+     * Returns a string value specifying the margin size for the component's
+     * bottom (compliant to CSS margin-bottom).
+     * 
      * @return margin-bottom
      */
     String getMarginBottom();
 
     /**
-     * Sets a string value specifying the margin size for the component's bottom (compliant to CSS margin-bottom).
-     * @param marginBottom margin-bottom
+     * Sets a string value specifying the margin size for the component's bottom
+     * (compliant to CSS margin-bottom).
+     * 
+     * @param marginBottom
+     *            margin-bottom
      */
     void setMarginBottom(String marginBottom);
 
     /**
-     * Returns a string value specifying the margin size for the component's left (compliant to CSS margin-left).
+     * Returns a string value specifying the margin size for the component's
+     * left (compliant to CSS margin-left).
+     * 
      * @return margin-left
      */
     String getMarginLeft();
 
     /**
-     * Sets a string value specifying the margin size for the component's left (compliant to CSS margin-left).
-     * @param marginLeft margin-left
+     * Sets a string value specifying the margin size for the component's left
+     * (compliant to CSS margin-left).
+     * 
+     * @param marginLeft
+     *            margin-left
      */
     void setMarginLeft(String marginLeft);
 }

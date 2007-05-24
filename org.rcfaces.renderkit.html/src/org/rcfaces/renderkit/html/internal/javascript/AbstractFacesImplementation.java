@@ -46,15 +46,12 @@ public abstract class AbstractFacesImplementation {
 
             /*
              * Désormais on envoie tous les inputs Hidden lors de requetes AJAX
-             * Aussi 
-            singleton = new AbstractFacesImplementation() {
-                private static final String REVISION = "$Revision$";
-
-                public String getJavaScriptModuleName() {
-                    return "com.sun.faces.RI_1_1_2";
-                }
-            };
-            */
+             * Aussi singleton = new AbstractFacesImplementation() { private
+             * static final String REVISION = "$Revision$";
+             * 
+             * public String getJavaScriptModuleName() { return
+             * "com.sun.faces.RI_1_1_2"; } };
+             */
         } catch (Throwable th) {
             // Pas de RI !
         }

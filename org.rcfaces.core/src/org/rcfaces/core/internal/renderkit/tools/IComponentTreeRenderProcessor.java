@@ -21,6 +21,6 @@ public interface IComponentTreeRenderProcessor {
 
     void writeFilteredContent(Writer writer, String content) throws IOException;
 
-    void encodeChildrenRecursive(UIComponent component,
-            String componentId) throws WriterException;
+    void encodeChildrenRecursive(UIComponent component, String componentId)
+            throws WriterException;
 }

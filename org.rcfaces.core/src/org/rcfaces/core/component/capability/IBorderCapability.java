@@ -10,18 +10,21 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface IBorderCapability {
-    
-	/**
-	 * Returns a boolean value that indicates if the component should show a border or not.
-	 * 
-	 * @return border
-	 */
-	boolean isBorder();
 
     /**
-     * Sets a boolean value that indicates if the component should show a border or not.
+     * Returns a boolean value that indicates if the component should show a
+     * border or not.
      * 
-     * @param border boolean
+     * @return border
      */
-	void setBorder(boolean border);
+    boolean isBorder();
+
+    /**
+     * Sets a boolean value that indicates if the component should show a border
+     * or not.
+     * 
+     * @param border
+     *            boolean
+     */
+    void setBorder(boolean border);
 }

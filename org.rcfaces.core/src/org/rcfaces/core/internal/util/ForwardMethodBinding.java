@@ -13,42 +13,42 @@ import javax.faces.el.MethodBinding;
  * @version $Revision$ $Date$
  */
 public class ForwardMethodBinding extends MethodBinding implements StateHolder {
-	private static final String REVISION="$Revision$";
-	
-	private String forward = null;
+    private static final String REVISION = "$Revision$";
 
-	public ForwardMethodBinding() {
-	}
+    private String forward = null;
 
-	public ForwardMethodBinding(String forward) {
-		this.forward = forward;
-	}
+    public ForwardMethodBinding() {
+    }
 
-	public Object invoke(FacesContext context, Object params[]) {
-		return forward;
-	}
+    public ForwardMethodBinding(String forward) {
+        this.forward = forward;
+    }
 
-	public Class getType(FacesContext context) {
-		return String.class;
-	}
+    public Object invoke(FacesContext context, Object params[]) {
+        return forward;
+    }
 
-	// ----------------------------------------------------- StateHolder Methods
+    public Class getType(FacesContext context) {
+        return String.class;
+    }
 
-	public Object saveState(FacesContext context) {
-		return forward;
-	}
+    // ----------------------------------------------------- StateHolder Methods
 
-	public void restoreState(FacesContext context, Object state) {
-		forward = (String) state;
-	}
+    public Object saveState(FacesContext context) {
+        return forward;
+    }
 
-	private boolean transientFlag = false;
+    public void restoreState(FacesContext context, Object state) {
+        forward = (String) state;
+    }
 
-	public boolean isTransient() {
-		return (this.transientFlag);
-	}
+    private boolean transientFlag = false;
 
-	public void setTransient(boolean transientFlag) {
-		this.transientFlag = transientFlag;
-	}
+    public boolean isTransient() {
+        return (this.transientFlag);
+    }
+
+    public void setTransient(boolean transientFlag) {
+        this.transientFlag = transientFlag;
+    }
 }

@@ -94,7 +94,9 @@ public class CameliaComponentHandler extends ComponentHandler {
                     } catch (Throwable th) {
                         throw new FaceletException(
                                 "Can not set the value of attribute '"
-                                        + attributeName + "'. (Use String parameter setter)", th);
+                                        + attributeName
+                                        + "'. (Use String parameter setter)",
+                                th);
                     }
                 }
 

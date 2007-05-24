@@ -11,18 +11,19 @@ package org.rcfaces.core.component.capability;
  */
 public interface ICheckedCapability {
 
-	/**
-	 * Returns a boolean value indicating the state of the component.
-	 * 
-	 * @return boolean
-	 */
-	boolean isChecked();
+    /**
+     * Returns a boolean value indicating the state of the component.
+     * 
+     * @return boolean
+     */
+    boolean isChecked();
 
-	/**
-	 * Sets a boolean value indicating the state of the component.
-	 * 
-	 * @param checked boolean
-	 */
-	void setChecked(boolean checked);
+    /**
+     * Sets a boolean value indicating the state of the component.
+     * 
+     * @param checked
+     *            boolean
+     */
+    void setChecked(boolean checked);
 
 }

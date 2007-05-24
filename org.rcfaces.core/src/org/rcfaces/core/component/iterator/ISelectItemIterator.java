@@ -14,5 +14,5 @@ public interface ISelectItemIterator extends IComponentIterator {
 
     UISelectItem next();
 
-    UISelectItem [] toArray();
+    UISelectItem[] toArray();
 }

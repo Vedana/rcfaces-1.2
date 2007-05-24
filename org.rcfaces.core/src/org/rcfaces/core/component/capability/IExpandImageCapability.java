@@ -16,13 +16,14 @@ public interface IExpandImageCapability extends IStatesImageCapability {
      * 
      * @return url
      */
-	String getExpandedImageURL();
+    String getExpandedImageURL();
 
-	/**
-	 * Sets the url string pointing to an image used for the expanded state.
-	 * 
-	 * @param url url for image
-	 */
+    /**
+     * Sets the url string pointing to an image used for the expanded state.
+     * 
+     * @param url
+     *            url for image
+     */
     void setExpandedImageURL(String url);
 
 }

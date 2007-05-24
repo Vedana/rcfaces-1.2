@@ -8,13 +8,13 @@ package org.rcfaces.core.model;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractIndexesModel implements IIndexesModel {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	public Object[] listSelectedObjects(Object toArray[], Object value) {
-		return IndexesModels.listSelectedObject(toArray, value, this);
-	}
-	
-	public Object getFirstSelectedObject(Object value) {
-		return IndexesModels.getFirstSelectedObject(value, this);
-	}
+    public Object[] listSelectedObjects(Object toArray[], Object value) {
+        return IndexesModels.listSelectedObject(toArray, value, this);
+    }
+
+    public Object getFirstSelectedObject(Object value) {
+        return IndexesModels.getFirstSelectedObject(value, this);
+    }
 }

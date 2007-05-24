@@ -191,9 +191,8 @@ class FileRenderedImage implements IBufferedImage {
             fileOutputStream.write(buffer);
 
         } catch (IOException ex) {
-            LOG.error(
-                    "Can not write temp file for filtred image ! (imageName="
-                            + imageName + ")", ex);
+            LOG.error("Can not write temp file for filtred image ! (imageName="
+                    + imageName + ")", ex);
 
             throw ex;
 

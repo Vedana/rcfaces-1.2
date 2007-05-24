@@ -11,4 +11,4 @@ import javax.faces.component.ValueHolder;
  * @version $Revision$ $Date$
  */
 public interface IConvertValueHolder extends ValueHolder {
-}	
+}

@@ -9,7 +9,6 @@ import javax.faces.event.AbortProcessingException;
 import org.rcfaces.core.event.ISortListener;
 import org.rcfaces.core.event.SortEvent;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$

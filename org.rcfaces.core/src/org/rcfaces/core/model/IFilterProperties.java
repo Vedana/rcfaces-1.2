@@ -10,7 +10,6 @@ import javax.faces.component.StateHolder;
 
 import org.rcfaces.core.internal.renderkit.IProperties;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

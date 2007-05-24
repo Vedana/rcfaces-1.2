@@ -13,5 +13,6 @@ import javax.faces.event.FacesListener;
  */
 public interface ISelectionListener extends FacesListener {
 
-	void componentSelected(SelectionEvent event) throws AbortProcessingException;
+    void componentSelected(SelectionEvent event)
+            throws AbortProcessingException;
 }

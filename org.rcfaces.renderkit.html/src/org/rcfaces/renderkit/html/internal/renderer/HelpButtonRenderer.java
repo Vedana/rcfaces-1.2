@@ -97,7 +97,7 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
             if (width > 0) {
                 writer.writeAttribute("width", width);
             }
-            
+
             int height = getDefaultHelpImageHeight();
             if (height > 0) {
                 writer.writeAttribute("height", height);

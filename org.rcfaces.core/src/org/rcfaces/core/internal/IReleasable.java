@@ -9,5 +9,5 @@ package org.rcfaces.core.internal;
  * @version $Revision$ $Date$
  */
 public interface IReleasable {
-	void release();
+    void release();
 }

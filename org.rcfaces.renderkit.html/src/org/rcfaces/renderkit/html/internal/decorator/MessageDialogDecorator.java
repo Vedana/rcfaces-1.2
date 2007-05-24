@@ -50,7 +50,7 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
 
         MessageDialogComponent component = (MessageDialogComponent) getComponent();
         FacesContext facesContext = javaScriptWriter.getFacesContext();
-        
+
         // call open only if the component is visible
         if (component.isVisible(facesContext)) {
             // titi.open()

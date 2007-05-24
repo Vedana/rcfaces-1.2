@@ -5,7 +5,6 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

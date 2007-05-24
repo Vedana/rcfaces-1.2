@@ -1,90 +1,95 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.CalendarComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.CalendarComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class CalendarTag extends AbstractCalendarTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(CalendarTag.class);
 
-	private static final Log LOG=LogFactory.getLog(CalendarTag.class);
+    private String border;
 
-	private String border;
-	private String mode;
-	public String getComponentType() {
-		return CalendarComponent.COMPONENT_TYPE;
-	}
+    private String mode;
 
-	public final String getBorder() {
-		return border;
-	}
+    public String getComponentType() {
+        return CalendarComponent.COMPONENT_TYPE;
+    }
 
-	public final void setBorder(String border) {
-		this.border = border;
-	}
+    public final String getBorder() {
+        return border;
+    }
 
-	public final String getMode() {
-		return mode;
-	}
+    public final void setBorder(String border) {
+        this.border = border;
+    }
 
-	public final void setMode(String mode) {
-		this.mode = mode;
-	}
+    public final String getMode() {
+        return mode;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (CalendarComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  border='"+border+"'");
-			LOG.debug("  mode='"+mode+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setMode(String mode) {
+        this.mode = mode;
+    }
 
-		if ((uiComponent instanceof CalendarComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'CalendarComponent'.");
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (CalendarComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  border='" + border + "'");
+            LOG.debug("  mode='" + mode + "'");
+        }
+        super.setProperties(uiComponent);
 
-		CalendarComponent component = (CalendarComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+        if ((uiComponent instanceof CalendarComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'CalendarComponent'.");
+        }
 
-		if (border != null) {
-			if (isValueReference(border)) {
-				ValueBinding vb = application.createValueBinding(border);
+        CalendarComponent component = (CalendarComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-				component.setBorder(vb);
-			} else {
-				component.setBorder(getBool(border));
-			}
-		}
+        if (border != null) {
+            if (isValueReference(border)) {
+                ValueBinding vb = application.createValueBinding(border);
+                component.setValueBinding(Properties.BORDER, vb);
 
-		if (mode != null) {
-			if (isValueReference(mode)) {
-				ValueBinding vb = application.createValueBinding(mode);
+            } else {
+                component.setBorder(getBool(border));
+            }
+        }
 
-				component.setMode(vb);
-			} else {
-				component.setMode(mode);
-			}
-		}
-	}
+        if (mode != null) {
+            if (isValueReference(mode)) {
+                ValueBinding vb = application.createValueBinding(mode);
+                component.setValueBinding(Properties.MODE, vb);
 
-	public void release() {
-		border = null;
-		mode = null;
+            } else {
+                component.setMode(mode);
+            }
+        }
+    }
 
-		super.release();
-	}
+    public void release() {
+        border = null;
+        mode = null;
+
+        super.release();
+    }
 
 }

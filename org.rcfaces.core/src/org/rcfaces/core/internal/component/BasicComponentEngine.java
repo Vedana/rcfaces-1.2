@@ -213,7 +213,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         pa.setProperty(null, propertyName, value);
     }
 
-    protected final void setInternalProperty(String propertyName, ValueBinding value) {
+    protected final void setInternalProperty(String propertyName,
+            ValueBinding value) {
         IPropertiesAccessor pa = getPropertiesAccessor(true);
 
         if (LOG.isDebugEnabled()) {
@@ -592,7 +593,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         if (enableDelta == false) {
             return;
         }
-        
+
         enableDelta = false;
 
         if (dataAccessorsByName != null

@@ -4,14 +4,23 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * A int value that indicates the rendering mode for asynchronous capable component.
- * 		<LI><UL>
- * 		If value is "0:none", the rendering is synchronous (made with the englobing page rendering).
- * 		</UL><UL>
- * 		If value is "1:buffer", the rendering is calculated with the page and may contains HTML elements, it is sent to the client only when needed (asynchrponously).
- * 		</UL><UL>
- * 		If value is "2:tree", the rendering is calculated only when needed (the HTML elements are ignored)
- * 		</UL></LI>
+ * A int value that indicates the rendering mode for asynchronous capable
+ * component.
+ * <LI>
+ * <UL>
+ * If value is "0:none", the rendering is synchronous (made with the englobing
+ * page rendering).
+ * </UL>
+ * <UL>
+ * If value is "1:buffer", the rendering is calculated with the page and may
+ * contains HTML elements, it is sent to the client only when needed
+ * (asynchrponously).
+ * </UL>
+ * <UL>
+ * If value is "2:tree", the rendering is calculated only when needed (the HTML
+ * elements are ignored)
+ * </UL>
+ * </LI>
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -26,17 +35,20 @@ public interface IAsyncRenderModeCapability {
 
     int DEFAULT_ASYNC_RENDER_MODE = NONE_ASYNC_RENDER_MODE;
 
-	/**
-	 * Returns a int value that indicates the rendering mode for asynchronous capable component.
-	 * 
-	 * @return 0:none|1:buffer|2:tree
-	 */
+    /**
+     * Returns a int value that indicates the rendering mode for asynchronous
+     * capable component.
+     * 
+     * @return 0:none|1:buffer|2:tree
+     */
     int getAsyncRenderMode();
 
     /**
-	 * Sets a int value that indicates the rendering mode for asynchronous capable component.
-	 * 
-	 * @param renderMode 0:none|1:buffer|2:tree
-	 */
+     * Sets a int value that indicates the rendering mode for asynchronous
+     * capable component.
+     * 
+     * @param renderMode
+     *            0:none|1:buffer|2:tree
+     */
     void setAsyncRenderMode(int renderMode);
 }

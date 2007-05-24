@@ -13,7 +13,6 @@ import javax.faces.model.DataModel;
 
 import org.rcfaces.core.internal.tools.ArrayIndexesModel;
 
-
 /**
  * IIndexesModel constructors.
  * 
@@ -22,194 +21,196 @@ import org.rcfaces.core.internal.tools.ArrayIndexesModel;
  * @version $Revision$ $Date$
  */
 public class IndexesModels {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];
+    private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];
 
-	/**
-	 * Returns an IIndexesModel which all items are selected.
-	 * 
-	 * @param length
-	 *            Number of item of the selection.
-	 */
-	public static IIndexesModel selectAll(int length) {
-		int s[] = new int[length];
-		for (int i = 0; i < length; i++) {
-			s[i] = i;
-		}
+    /**
+     * Returns an IIndexesModel which all items are selected.
+     * 
+     * @param length
+     *            Number of item of the selection.
+     */
+    public static IIndexesModel selectAll(int length) {
+        int s[] = new int[length];
+        for (int i = 0; i < length; i++) {
+            s[i] = i;
+        }
 
-		return new ArrayIndexesModel(s);
-	}
+        return new ArrayIndexesModel(s);
+    }
 
-	public static IIndexesModel selectAll(Collection collection, int length) {
-		IIndexesModel indexesModel = new CollectionIndexesModel(collection);
+    public static IIndexesModel selectAll(Collection collection, int length) {
+        IIndexesModel indexesModel = new CollectionIndexesModel(collection);
 
-		select(indexesModel, 0, length);
+        select(indexesModel, 0, length);
 
-		return indexesModel;
-	}
+        return indexesModel;
+    }
 
-	public static IIndexesModel selectAll(Map map, int length) {
-		IIndexesModel indexesModel = new MapIndexesModel(map);
+    public static IIndexesModel selectAll(Map map, int length) {
+        IIndexesModel indexesModel = new MapIndexesModel(map);
 
-		select(indexesModel, 0, length);
+        select(indexesModel, 0, length);
 
-		return indexesModel;
-	}
+        return indexesModel;
+    }
 
-	public static void select(IIndexesModel model, int start, int length) {
+    public static void select(IIndexesModel model, int start, int length) {
 
-		for (int i = 0; i < length; i++) {
-			model.addIndex(start + i);
-		}
-	}
+        for (int i = 0; i < length; i++) {
+            model.addIndex(start + i);
+        }
+    }
 
-	public static Object[] listSelectedObject(Object destination[], Object value, IIndexesModel indexesModel) {
-		if (indexesModel==null) {
-			throw new NullPointerException("IndexesModel is null !");
-		}
-		
-		int indexes[]=indexesModel.listSortedIndexes();
-		if (value == null || indexes == null || indexes.length < 1) {
-			return OBJECT_EMPTY_ARRAY;
-		}
+    public static Object[] listSelectedObject(Object destination[],
+            Object value, IIndexesModel indexesModel) {
+        if (indexesModel == null) {
+            throw new NullPointerException("IndexesModel is null !");
+        }
 
-		if (value instanceof Object[]) {
-			Object values[] = (Object[]) value;
+        int indexes[] = indexesModel.listSortedIndexes();
+        if (value == null || indexes == null || indexes.length < 1) {
+            return OBJECT_EMPTY_ARRAY;
+        }
 
-			List l = new ArrayList(indexes.length);
-			for (int i = 0; i < indexes.length; i++) {
-				int idx = indexes[i];
-				if (idx < 0 || idx >= values.length) {
-					continue;
-				}
+        if (value instanceof Object[]) {
+            Object values[] = (Object[]) value;
 
-				l.add(values[idx]);
-			}
+            List l = new ArrayList(indexes.length);
+            for (int i = 0; i < indexes.length; i++) {
+                int idx = indexes[i];
+                if (idx < 0 || idx >= values.length) {
+                    continue;
+                }
 
-			return l.toArray(destination);
-		}
+                l.add(values[idx]);
+            }
 
-		if (value instanceof Collection) {
-			if (value instanceof RandomAccess) {
-				List values = (List) value;
-				int valuesLength = values.size();
+            return l.toArray(destination);
+        }
 
-				List l = new ArrayList(indexes.length);
-				for (int i = 0; i < indexes.length; i++) {
-					int idx = indexes[i];
-					if (idx < 0 || idx >= valuesLength) {
-						continue;
-					}
+        if (value instanceof Collection) {
+            if (value instanceof RandomAccess) {
+                List values = (List) value;
+                int valuesLength = values.size();
 
-					l.add(values.get(idx));
-				}
+                List l = new ArrayList(indexes.length);
+                for (int i = 0; i < indexes.length; i++) {
+                    int idx = indexes[i];
+                    if (idx < 0 || idx >= valuesLength) {
+                        continue;
+                    }
 
-				return l.toArray(destination);
+                    l.add(values.get(idx));
+                }
 
-			}
+                return l.toArray(destination);
 
-			Object values[] = ((Collection) value).toArray();
+            }
 
-			List l = new ArrayList(indexes.length);
-			for (int i = 0; i < indexes.length; i++) {
-				int idx = indexes[i];
-				if (idx < 0 || idx >= values.length) {
-					continue;
-				}
+            Object values[] = ((Collection) value).toArray();
 
-				l.add(values[idx]);
-			}
+            List l = new ArrayList(indexes.length);
+            for (int i = 0; i < indexes.length; i++) {
+                int idx = indexes[i];
+                if (idx < 0 || idx >= values.length) {
+                    continue;
+                }
 
-			return l.toArray(destination);
-		}
+                l.add(values[idx]);
+            }
 
-		if (value instanceof DataModel) {
-			DataModel dataModel=(DataModel)value;
-			
-			boolean closeDataModel=false;
-			try {
-				List l = new ArrayList(indexes.length);
-				for (int i = 0; i < indexes.length; i++) {
-					int idx = indexes[i];
-					if (idx < 0) {
-						continue;
-					}
-					
-					dataModel.setRowIndex(idx);
-					closeDataModel=true;
-					
-					if (dataModel.isRowAvailable()==false) {
-						continue;
-					}
-					
-					l.add(dataModel.getRowData());
-				}
+            return l.toArray(destination);
+        }
 
-				return l.toArray(destination);
-				
-			} finally {
-				if (closeDataModel) {
-					dataModel.setRowIndex(-1);
-				}
-			}
-		}
+        if (value instanceof DataModel) {
+            DataModel dataModel = (DataModel) value;
 
-		throw new IllegalArgumentException("Value type '" + value.getClass()
-				+ "' is not supported !");
-	}
+            boolean closeDataModel = false;
+            try {
+                List l = new ArrayList(indexes.length);
+                for (int i = 0; i < indexes.length; i++) {
+                    int idx = indexes[i];
+                    if (idx < 0) {
+                        continue;
+                    }
 
-	public static Object getFirstSelectedObject(Object value, IIndexesModel indexesModel) {
-		if (indexesModel==null) {
-			throw new NullPointerException("IndexesModel is null !");
-		}
-		
-		int index=indexesModel.getFirstIndex();
-		if (value == null || index < 0) {
-			return null;
-		}
+                    dataModel.setRowIndex(idx);
+                    closeDataModel = true;
 
-		if (value instanceof Object[]) {
-			Object values[] = (Object[]) value;
+                    if (dataModel.isRowAvailable() == false) {
+                        continue;
+                    }
 
-			return values[index];
-		}
+                    l.add(dataModel.getRowData());
+                }
 
-		if (value instanceof List) {
-			List values = (List) value;
+                return l.toArray(destination);
 
-			return values.get(index);
-		}
+            } finally {
+                if (closeDataModel) {
+                    dataModel.setRowIndex(-1);
+                }
+            }
+        }
 
-		if (value instanceof Collection) {
-			if (index==0) {
-				return ((Collection)value).iterator().next();
-			}
-			
-			Object values[] = ((Collection) value).toArray();
+        throw new IllegalArgumentException("Value type '" + value.getClass()
+                + "' is not supported !");
+    }
 
-			return values[index];
-		}
+    public static Object getFirstSelectedObject(Object value,
+            IIndexesModel indexesModel) {
+        if (indexesModel == null) {
+            throw new NullPointerException("IndexesModel is null !");
+        }
 
-		if (value instanceof DataModel) {
-			DataModel dataModel=(DataModel)value;
-			
-			if (dataModel instanceof IRangeDataModel) {
-				((IRangeDataModel)dataModel).setRowRange(index, 1);
-			}
-			dataModel.setRowIndex(index);
-			try {
-				if (dataModel.isRowAvailable()==false) {
-					return null;
-				}
-				
-				return dataModel.getRowData();
-			} finally {
-				dataModel.setRowIndex(-1);
-			}
-		}
-		
-		throw new IllegalArgumentException("Value type '" + value.getClass()
-				+ "' is not supported !");
-	}
+        int index = indexesModel.getFirstIndex();
+        if (value == null || index < 0) {
+            return null;
+        }
+
+        if (value instanceof Object[]) {
+            Object values[] = (Object[]) value;
+
+            return values[index];
+        }
+
+        if (value instanceof List) {
+            List values = (List) value;
+
+            return values.get(index);
+        }
+
+        if (value instanceof Collection) {
+            if (index == 0) {
+                return ((Collection) value).iterator().next();
+            }
+
+            Object values[] = ((Collection) value).toArray();
+
+            return values[index];
+        }
+
+        if (value instanceof DataModel) {
+            DataModel dataModel = (DataModel) value;
+
+            if (dataModel instanceof IRangeDataModel) {
+                ((IRangeDataModel) dataModel).setRowRange(index, 1);
+            }
+            dataModel.setRowIndex(index);
+            try {
+                if (dataModel.isRowAvailable() == false) {
+                    return null;
+                }
+
+                return dataModel.getRowData();
+            } finally {
+                dataModel.setRowIndex(-1);
+            }
+        }
+
+        throw new IllegalArgumentException("Value type '" + value.getClass()
+                + "' is not supported !");
+    }
 }

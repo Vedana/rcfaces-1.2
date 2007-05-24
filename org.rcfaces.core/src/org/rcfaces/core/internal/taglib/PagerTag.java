@@ -1,173 +1,187 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.PagerComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.PagerComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class PagerTag extends AbstractBasicTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(PagerTag.class);
 
-	private static final Log LOG=LogFactory.getLog(PagerTag.class);
+    private String forValue;
 
-	private String forValue;
-	private String manyResultsMessage;
-	private String message;
-	private String oneResultMessage;
-	private String zeroResultMessage;
-	private String noPagedMessage;
-	public String getComponentType() {
-		return PagerComponent.COMPONENT_TYPE;
-	}
+    private String manyResultsMessage;
 
-	public final String getFor() {
-		return forValue;
-	}
+    private String message;
 
-	public final void setFor(String forValue) {
-		this.forValue = forValue;
-	}
+    private String oneResultMessage;
 
-	public final String getManyResultsMessage() {
-		return manyResultsMessage;
-	}
+    private String zeroResultMessage;
 
-	public final void setManyResultsMessage(String manyResultsMessage) {
-		this.manyResultsMessage = manyResultsMessage;
-	}
+    private String noPagedMessage;
 
-	public final String getMessage() {
-		return message;
-	}
+    public String getComponentType() {
+        return PagerComponent.COMPONENT_TYPE;
+    }
 
-	public final void setMessage(String message) {
-		this.message = message;
-	}
+    public final String getFor() {
+        return forValue;
+    }
 
-	public final String getOneResultMessage() {
-		return oneResultMessage;
-	}
+    public final void setFor(String forValue) {
+        this.forValue = forValue;
+    }
 
-	public final void setOneResultMessage(String oneResultMessage) {
-		this.oneResultMessage = oneResultMessage;
-	}
+    public final String getManyResultsMessage() {
+        return manyResultsMessage;
+    }
 
-	public final String getZeroResultMessage() {
-		return zeroResultMessage;
-	}
+    public final void setManyResultsMessage(String manyResultsMessage) {
+        this.manyResultsMessage = manyResultsMessage;
+    }
 
-	public final void setZeroResultMessage(String zeroResultMessage) {
-		this.zeroResultMessage = zeroResultMessage;
-	}
+    public final String getMessage() {
+        return message;
+    }
 
-	public final String getNoPagedMessage() {
-		return noPagedMessage;
-	}
+    public final void setMessage(String message) {
+        this.message = message;
+    }
 
-	public final void setNoPagedMessage(String noPagedMessage) {
-		this.noPagedMessage = noPagedMessage;
-	}
+    public final String getOneResultMessage() {
+        return oneResultMessage;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (PagerComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  forValue='"+forValue+"'");
-			LOG.debug("  manyResultsMessage='"+manyResultsMessage+"'");
-			LOG.debug("  message='"+message+"'");
-			LOG.debug("  oneResultMessage='"+oneResultMessage+"'");
-			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
-			LOG.debug("  noPagedMessage='"+noPagedMessage+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setOneResultMessage(String oneResultMessage) {
+        this.oneResultMessage = oneResultMessage;
+    }
 
-		if ((uiComponent instanceof PagerComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'PagerComponent'.");
-		}
+    public final String getZeroResultMessage() {
+        return zeroResultMessage;
+    }
 
-		PagerComponent component = (PagerComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final void setZeroResultMessage(String zeroResultMessage) {
+        this.zeroResultMessage = zeroResultMessage;
+    }
 
-		if (forValue != null) {
-			if (isValueReference(forValue)) {
-				ValueBinding vb = application.createValueBinding(forValue);
+    public final String getNoPagedMessage() {
+        return noPagedMessage;
+    }
 
-				component.setFor(vb);
-			} else {
-				component.setFor(forValue);
-			}
-		}
+    public final void setNoPagedMessage(String noPagedMessage) {
+        this.noPagedMessage = noPagedMessage;
+    }
 
-		if (manyResultsMessage != null) {
-			if (isValueReference(manyResultsMessage)) {
-				ValueBinding vb = application.createValueBinding(manyResultsMessage);
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (PagerComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  forValue='" + forValue + "'");
+            LOG.debug("  manyResultsMessage='" + manyResultsMessage + "'");
+            LOG.debug("  message='" + message + "'");
+            LOG.debug("  oneResultMessage='" + oneResultMessage + "'");
+            LOG.debug("  zeroResultMessage='" + zeroResultMessage + "'");
+            LOG.debug("  noPagedMessage='" + noPagedMessage + "'");
+        }
+        super.setProperties(uiComponent);
 
-				component.setManyResultsMessage(vb);
-			} else {
-				component.setManyResultsMessage(manyResultsMessage);
-			}
-		}
+        if ((uiComponent instanceof PagerComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'PagerComponent'.");
+        }
 
-		if (message != null) {
-			if (isValueReference(message)) {
-				ValueBinding vb = application.createValueBinding(message);
+        PagerComponent component = (PagerComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-				component.setMessage(vb);
-			} else {
-				component.setMessage(message);
-			}
-		}
+        if (forValue != null) {
+            if (isValueReference(forValue)) {
+                ValueBinding vb = application.createValueBinding(forValue);
+                component.setValueBinding(Properties.FOR, vb);
 
-		if (oneResultMessage != null) {
-			if (isValueReference(oneResultMessage)) {
-				ValueBinding vb = application.createValueBinding(oneResultMessage);
+            } else {
+                component.setFor(forValue);
+            }
+        }
 
-				component.setOneResultMessage(vb);
-			} else {
-				component.setOneResultMessage(oneResultMessage);
-			}
-		}
+        if (manyResultsMessage != null) {
+            if (isValueReference(manyResultsMessage)) {
+                ValueBinding vb = application
+                        .createValueBinding(manyResultsMessage);
+                component.setValueBinding(Properties.MANY_RESULTS_MESSAGE, vb);
 
-		if (zeroResultMessage != null) {
-			if (isValueReference(zeroResultMessage)) {
-				ValueBinding vb = application.createValueBinding(zeroResultMessage);
+            } else {
+                component.setManyResultsMessage(manyResultsMessage);
+            }
+        }
 
-				component.setZeroResultMessage(vb);
-			} else {
-				component.setZeroResultMessage(zeroResultMessage);
-			}
-		}
+        if (message != null) {
+            if (isValueReference(message)) {
+                ValueBinding vb = application.createValueBinding(message);
+                component.setValueBinding(Properties.MESSAGE, vb);
 
-		if (noPagedMessage != null) {
-			if (isValueReference(noPagedMessage)) {
-				ValueBinding vb = application.createValueBinding(noPagedMessage);
-				component.setNoPagedMessage(vb);
-			} else {
-				component.setNoPagedMessage(noPagedMessage);
-			}
-		}
-	}
+            } else {
+                component.setMessage(message);
+            }
+        }
 
-	public void release() {
-		forValue = null;
-		manyResultsMessage = null;
-		message = null;
-		oneResultMessage = null;
-		zeroResultMessage = null;
-		noPagedMessage = null;
+        if (oneResultMessage != null) {
+            if (isValueReference(oneResultMessage)) {
+                ValueBinding vb = application
+                        .createValueBinding(oneResultMessage);
+                component.setValueBinding(Properties.ONE_RESULT_MESSAGE, vb);
 
-		super.release();
-	}
+            } else {
+                component.setOneResultMessage(oneResultMessage);
+            }
+        }
+
+        if (zeroResultMessage != null) {
+            if (isValueReference(zeroResultMessage)) {
+                ValueBinding vb = application
+                        .createValueBinding(zeroResultMessage);
+                component.setValueBinding(Properties.ZERO_RESULT_MESSAGE, vb);
+
+            } else {
+                component.setZeroResultMessage(zeroResultMessage);
+            }
+        }
+
+        if (noPagedMessage != null) {
+            if (isValueReference(noPagedMessage)) {
+                ValueBinding vb = application
+                        .createValueBinding(noPagedMessage);
+                component.setValueBinding(Properties.NO_PAGED_MESSAGE, vb);
+
+            } else {
+                component.setNoPagedMessage(noPagedMessage);
+            }
+        }
+    }
+
+    public void release() {
+        forValue = null;
+        manyResultsMessage = null;
+        message = null;
+        oneResultMessage = null;
+        zeroResultMessage = null;
+        noPagedMessage = null;
+
+        super.release();
+    }
 
 }

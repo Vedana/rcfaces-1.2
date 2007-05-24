@@ -37,7 +37,7 @@ public class AbstractNumberConverter extends
         if (context == null) {
             context = FacesContext.getCurrentInstance();
         }
-        
+
         return super.getAsObject(context, component, value);
     }
 
@@ -46,7 +46,7 @@ public class AbstractNumberConverter extends
         if (context == null) {
             context = FacesContext.getCurrentInstance();
         }
-        
+
         return super.getAsString(context, component, value);
     }
 

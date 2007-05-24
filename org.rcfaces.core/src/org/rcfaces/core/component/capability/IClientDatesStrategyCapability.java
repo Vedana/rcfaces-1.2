@@ -5,8 +5,9 @@
 package org.rcfaces.core.component.capability;
 
 /**
- * A int value indicating the AJAX transfert strategy for the calendar component : the dates' characteristics (styleClass, toolTip ...).
- * Those characteristics can be retrieved by month, year or totally.
+ * A int value indicating the AJAX transfert strategy for the calendar component :
+ * the dates' characteristics (styleClass, toolTip ...). Those characteristics
+ * can be retrieved by month, year or totally.
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -22,14 +23,18 @@ public interface IClientDatesStrategyCapability {
     int DEFAULT_DATES_STRATEGY = ALL_DATES_STRATEGY;
 
     /**
-     * Sets an int value indicating the AJAX transfert strategy for the calendar component : the dates' characteristics (styleClass, toolTip ...).
+     * Sets an int value indicating the AJAX transfert strategy for the calendar
+     * component : the dates' characteristics (styleClass, toolTip ...).
      * 
-     * @param clientDatesStrategy 1:all|2:year|3:month|1:default default=all
+     * @param clientDatesStrategy
+     *            1:all|2:year|3:month|1:default default=all
      */
     void setClientDatesStrategy(int clientDatesStrategy);
 
     /**
-     * Returns an int value indicating the AJAX transfert strategy for the calendar component : the dates' characteristics (styleClass, toolTip ...).
+     * Returns an int value indicating the AJAX transfert strategy for the
+     * calendar component : the dates' characteristics (styleClass, toolTip
+     * ...).
      * 
      * @return 1:all|2:year|3:month
      */

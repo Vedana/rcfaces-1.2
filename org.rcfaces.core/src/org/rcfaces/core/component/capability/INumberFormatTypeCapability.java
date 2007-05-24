@@ -5,15 +5,13 @@ package org.rcfaces.core.component.capability;
 
 /**
  * A string value specifying the data type :
- *		<ul><li>
- *		number
- *		</li><li>
- *		integer
- *		</li><li>
- *		currency
- *		</li><li>
- *		percent
- *		</li></ul>
+ * <ul>
+ * <li> number </li>
+ * <li> integer </li>
+ * <li> currency </li>
+ * <li> percent </li>
+ * </ul>
+ * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -48,13 +46,16 @@ public interface INumberFormatTypeCapability {
 
     /**
      * Returns a int value specifying the data type.
+     * 
      * @return 0:number|1:integer|2:currency|3:percent
      */
     int getNumberFormatType();
 
     /**
      * Sets a int value specifying the data type.
-     * @param numberFormatType 0:number|1:integer|2:currency|3:percent
+     * 
+     * @param numberFormatType
+     *            0:number|1:integer|2:currency|3:percent
      */
     void setNumberFormatType(int numberFormatType);
 

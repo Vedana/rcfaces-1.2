@@ -10,7 +10,6 @@ import org.rcfaces.core.event.CheckEvent;
 import org.rcfaces.core.event.CloseEvent;
 import org.rcfaces.core.event.ICloseListener;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$

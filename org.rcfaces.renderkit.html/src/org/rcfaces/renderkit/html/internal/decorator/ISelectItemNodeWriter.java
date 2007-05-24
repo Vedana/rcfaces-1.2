@@ -9,7 +9,6 @@ import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.internal.renderkit.WriterException;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

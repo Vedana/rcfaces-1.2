@@ -12,16 +12,19 @@ import java.util.Locale;
  * @version $Revision$ $Date$
  */
 public interface IComponentLocaleCapability {
-	
-	/**
-	 * Returns the locale defined for the component
-	 * @return the defined locale
-	 */
+
+    /**
+     * Returns the locale defined for the component
+     * 
+     * @return the defined locale
+     */
     Locale getComponentLocale();
 
     /**
      * Sets the locale for the component
-     * @param locale locale to define
+     * 
+     * @param locale
+     *            locale to define
      */
     void setComponentLocale(Locale locale);
 }

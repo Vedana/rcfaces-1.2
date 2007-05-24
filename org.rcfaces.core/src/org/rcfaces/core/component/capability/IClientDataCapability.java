@@ -13,30 +13,34 @@ import java.util.Map;
  * @version $Revision$ $Date$
  */
 public interface IClientDataCapability {
-    
-	/**
-	 * Associates data to variable name.
-	 * 
-	 * @param name the variable to associate data to
-	 * @param data the data to associate to the variable
-	 * @return the data previously associated with the variable (empty if none)
-	 */
-	String setClientData(String name, String data);
+
+    /**
+     * Associates data to variable name.
+     * 
+     * @param name
+     *            the variable to associate data to
+     * @param data
+     *            the data to associate to the variable
+     * @return the data previously associated with the variable (empty if none)
+     */
+    String setClientData(String name, String data);
 
     /**
      * Removes the variable name and the data associated to it
      * 
-     * @param name the variable to associate data to
+     * @param name
+     *            the variable to associate data to
      * @return the data that was associated to the variable
      */
-	String removeClientData(String name);
+    String removeClientData(String name);
 
-	/**
-	 * Retrieves the data associated to a variable
-	 * 
-	 * @param name the variable to associate data to
-	 * @return the data associated to the variable
-	 */
+    /**
+     * Retrieves the data associated to a variable
+     * 
+     * @param name
+     *            the variable to associate data to
+     * @return the data associated to the variable
+     */
     String getClientData(String name);
 
     /**

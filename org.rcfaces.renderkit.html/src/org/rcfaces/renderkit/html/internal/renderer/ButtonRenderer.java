@@ -87,8 +87,8 @@ public class ButtonRenderer extends AbstractInputRenderer {
         // Si il n'y a pas d'evenement Camelia, on regarde les evenements HTML !
         String value = componentData.getComponentParameter();
         if (value != null) {
-            ActionEvent actionEvent = new SelectionEvent(component, null, null,
-                    0);
+            ActionEvent actionEvent = new SelectionEvent(component, value,
+                    null, null, 0);
             actionEvent.setPhaseId(PhaseId.INVOKE_APPLICATION);
             component.queueEvent(actionEvent);
 

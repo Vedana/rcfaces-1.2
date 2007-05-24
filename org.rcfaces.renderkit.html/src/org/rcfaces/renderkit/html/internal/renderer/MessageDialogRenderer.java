@@ -33,10 +33,10 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
     protected IComponentDecorator createMessageBoxDecorator(
             FacesContext facesContext, UIComponent component) {
 
-//        if (((MessageDialogComponent) component).isVisible(facesContext)) {
-            return new MessageDialogDecorator(component);
-//        }
-//        return null;
+        // if (((MessageDialogComponent) component).isVisible(facesContext)) {
+        return new MessageDialogDecorator(component);
+        // }
+        // return null;
     }
 
     protected boolean sendCompleteComponent() {
@@ -56,7 +56,6 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
         return null;
     }
 
-
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
         IComponentRenderContext componentRenderContext = writer
@@ -66,7 +65,8 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
                 .getComponent();
 
         // Pas visible : rien à faire !
-        if (!component.isVisible(facesContext) && component.getHiddenMode(facesContext)==IHiddenModeCapability.SERVER_HIDDEN_MODE) {
+        if (!component.isVisible(facesContext)
+                && component.getHiddenMode(facesContext) == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
             super.encodeEnd(writer);
             return;
         }
@@ -104,7 +104,8 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.writeAttribute("v:waiRole", chaine);
         }
         if (component.isDialogPrioritySetted()) {
-            htmlWriter.writeAttribute("v:dialogPriority", component.getDialogPriority(facesContext));
+            htmlWriter.writeAttribute("v:dialogPriority", component
+                    .getDialogPriority(facesContext));
         }
         chaine = component.getStyleClass(facesContext);
         if (chaine != null) {
@@ -119,18 +120,20 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.writeAttribute("v:lookId", chaine);
         }
         if (component.isImageURLSetted()) {
-	        IContentAccessors contentAccessors = component.getImageAccessors(facesContext);
-			if (contentAccessors instanceof IImageAccessors) {
-			    IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
-			    IContentAccessor imageAccessor = imageAccessors.getImageAccessor();
-			    if (imageAccessor != null) {
-			        String imageSrc = imageAccessor.resolveURL(facesContext, null,
-			                null);
-			        if (imageSrc != null) {
-			        	htmlWriter.writeAttribute("v:imageURL", imageSrc);
-			        }
-			    }
-			}
+            IContentAccessors contentAccessors = component
+                    .getImageAccessors(facesContext);
+            if (contentAccessors instanceof IImageAccessors) {
+                IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+                IContentAccessor imageAccessor = imageAccessors
+                        .getImageAccessor();
+                if (imageAccessor != null) {
+                    String imageSrc = imageAccessor.resolveURL(facesContext,
+                            null, null);
+                    if (imageSrc != null) {
+                        htmlWriter.writeAttribute("v:imageURL", imageSrc);
+                    }
+                }
+            }
         }
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 

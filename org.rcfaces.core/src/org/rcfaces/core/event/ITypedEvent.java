@@ -13,7 +13,7 @@ import javax.faces.component.UIComponent;
  */
 public interface ITypedEvent {
 
-	UIComponent getComponent();
+    UIComponent getComponent();
 
-	int getType();
+    int getType();
 }

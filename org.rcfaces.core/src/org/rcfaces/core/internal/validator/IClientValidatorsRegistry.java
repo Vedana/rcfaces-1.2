@@ -9,14 +9,13 @@ import javax.faces.validator.Validator;
 
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface IClientValidatorsRegistry {
-    IClientValidatorDescriptor getClientValidatorById(FacesContext facesContext,
-            String clientValidatorId);
+    IClientValidatorDescriptor getClientValidatorById(
+            FacesContext facesContext, String clientValidatorId);
 
     String convertFromValidatorToExpression(IRenderContext renderContext,
             Validator validator);

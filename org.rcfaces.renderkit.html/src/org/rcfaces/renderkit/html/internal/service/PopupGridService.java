@@ -207,7 +207,7 @@ public class PopupGridService extends AbstractHtmlService {
         } catch (IOException ex) {
             throw new FacesException(
                     "Can not write dataGrid javascript rows !", ex);
-            
+
         } catch (RuntimeException ex) {
             LOG.error("Catch runtime exception !", ex);
 

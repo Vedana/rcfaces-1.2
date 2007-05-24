@@ -13,5 +13,6 @@ import javax.faces.event.FacesListener;
  */
 public interface IDoubleClickListener extends FacesListener {
 
-	void processDoubleClick(DoubleClickEvent event) throws AbortProcessingException;
+    void processDoubleClick(DoubleClickEvent event)
+            throws AbortProcessingException;
 }

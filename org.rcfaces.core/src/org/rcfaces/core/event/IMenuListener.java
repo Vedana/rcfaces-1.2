@@ -13,5 +13,5 @@ import javax.faces.event.FacesListener;
  */
 public interface IMenuListener extends FacesListener {
 
-	void menuShown(MenuEvent event) throws AbortProcessingException;
+    void menuShown(MenuEvent event) throws AbortProcessingException;
 }

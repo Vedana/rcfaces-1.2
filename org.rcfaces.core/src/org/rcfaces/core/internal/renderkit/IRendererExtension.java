@@ -12,9 +12,9 @@ import javax.faces.context.FacesContext;
  * @version $Revision$ $Date$
  */
 public interface IRendererExtension {
-	boolean getDecodesChildren();
+    boolean getDecodesChildren();
 
-	void decodeEnd(FacesContext context, UIComponent component);
+    void decodeEnd(FacesContext context, UIComponent component);
 
-	void decodeChildren(FacesContext context, UIComponent component);
+    void decodeChildren(FacesContext context, UIComponent component);
 }

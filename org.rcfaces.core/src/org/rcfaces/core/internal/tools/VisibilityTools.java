@@ -12,15 +12,15 @@ import javax.faces.component.UIComponent;
  * @version $Revision$ $Date$
  */
 public final class VisibilityTools {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	public static final boolean isVisible(UIComponent component) {
-		for (; component != null; component = component.getParent()) {
-			if (component.isRendered() == false) {
-				return false;
-			}
-		}
+    public static final boolean isVisible(UIComponent component) {
+        for (; component != null; component = component.getParent()) {
+            if (component.isRendered() == false) {
+                return false;
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

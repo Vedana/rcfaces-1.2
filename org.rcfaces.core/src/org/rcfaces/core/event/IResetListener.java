@@ -13,5 +13,5 @@ import javax.faces.event.FacesListener;
  */
 public interface IResetListener extends FacesListener {
 
-	void processReset(ResetEvent event) throws AbortProcessingException;
+    void processReset(ResetEvent event) throws AbortProcessingException;
 }

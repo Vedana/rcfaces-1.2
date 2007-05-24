@@ -13,5 +13,5 @@ import javax.faces.event.FacesListener;
  */
 public interface IKeyUpListener extends FacesListener {
 
-	void processKeyUp(KeyUpEvent event) throws AbortProcessingException;
+    void processKeyUp(KeyUpEvent event) throws AbortProcessingException;
 }

@@ -3,7 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

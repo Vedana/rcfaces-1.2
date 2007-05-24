@@ -71,15 +71,17 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
      * 
      * String className = getClassName();
      * 
-     * writer.startElement(IHtmlWriter.TD"); writer.startElement(IHtmlWriter.IMG");
-     * writer.writeAttribute("class", className + "_itemImage");
-     * writer.writeAttribute("src", blankImageURL); writer.endElement(IHtmlWriter.TD"); }
+     * writer.startElement(IHtmlWriter.TD");
+     * writer.startElement(IHtmlWriter.IMG"); writer.writeAttribute("class",
+     * className + "_itemImage"); writer.writeAttribute("src", blankImageURL);
+     * writer.endElement(IHtmlWriter.TD"); }
      * 
      * writer.startElement(IHtmlWriter.TD"); if (component.getWidth() != null) {
      * writer.writeAttribute("width", "100%"); }
      * 
-     * writer.startElement(IHtmlWriter.INPUT"); writer.writeAttribute("type", "text");
-     * writer.writeAttribute("name", componentRenderContext.getComponentId());
+     * writer.startElement(IHtmlWriter.INPUT"); writer.writeAttribute("type",
+     * "text"); writer.writeAttribute("name",
+     * componentRenderContext.getComponentId());
      * 
      * int maxTextLength = component.getMaxTextLength(facesContext); if
      * (maxTextLength > 0) { writer.writeAttribute("maxLength", maxTextLength); }
@@ -102,13 +104,13 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
      * String className = getClassName();
      * 
      * writer.writeAttribute("value", txt); writer.endElement(IHtmlWriter.TD");
-     * writer.startElement(IHtmlWriter.TD"); writer.writeAttribute("class", className +
-     * "_cimage");
+     * writer.startElement(IHtmlWriter.TD"); writer.writeAttribute("class",
+     * className + "_cimage");
      * 
-     * writer.startElement(IHtmlWriter.IMG"); if (component.isDisabled(facesContext)) {
-     * writer.writeAttribute("class", className + "_image_disabled"); } else {
-     * writer.writeAttribute("class", className + "_image"); }
-     * writer.writeAttribute("src", blankImageURL);
+     * writer.startElement(IHtmlWriter.IMG"); if
+     * (component.isDisabled(facesContext)) { writer.writeAttribute("class",
+     * className + "_image_disabled"); } else { writer.writeAttribute("class",
+     * className + "_image"); } writer.writeAttribute("src", blankImageURL);
      * 
      * writer.endElement(IHtmlWriter.TD"); writer.endElement(IHtmlWriter.TR");
      * 
@@ -144,8 +146,8 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
      * 
      * javaScriptWriter.write("var ").write(varId); if (parentVarId != null) {
      * javaScriptWriter.write('=').writeMethodCall("_addSubItem").write(
-     * parentVarId).write(',');
-     *  } else { javaScriptWriter.write('=').writeMethodCall("f_addItem"); }
+     * parentVarId).write(','); } else {
+     * javaScriptWriter.write('=').writeMethodCall("f_addItem"); }
      * 
      * String label = selectItem.getLabel(); if (label == null) { label = ""; }
      * javaScriptWriter.writeString(label);
@@ -154,13 +156,13 @@ public class ComboExDecorator extends AbstractSelectItemsDecorator {
      * 
      * String value = convertItemValue(javaScriptWriter
      * .getComponentRenderContext(), selectItem.getValue()); if (value != null) {
-     * javaScriptWriter.writeString(value);
-     *  } else { javaScriptWriter.writeNull(); }
+     * javaScriptWriter.writeString(value); } else {
+     * javaScriptWriter.writeNull(); }
      * 
      * boolean disabled = selectItem.isDisabled();
      * 
-     * if (imageURL != null) { javaScriptWriter.write(',').write(imageURL);
-     *  } else if (disabled) { javaScriptWriter.write(',').writeNull(); }
+     * if (imageURL != null) { javaScriptWriter.write(',').write(imageURL); }
+     * else if (disabled) { javaScriptWriter.write(',').writeNull(); }
      * 
      * if (disabled) { javaScriptWriter.write(',').writeBoolean(true); }
      * 

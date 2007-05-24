@@ -14,17 +14,18 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
-	
+
     public ViewDialogRenderer() {
-    	super();
-	}
-    
+        super();
+    }
+
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
         FacesContext facesContext = componentRenderContext.getFacesContext();
-        ViewDialogComponent component = (ViewDialogComponent) componentRenderContext.getComponent();
+        ViewDialogComponent component = (ViewDialogComponent) componentRenderContext
+                .getComponent();
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
@@ -44,17 +45,16 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         }
         String src = component.getViewURL(facesContext);
         if (src != null) {
-        	IContentAccessor contentAccessor = ContentAccessorFactory
-                        .createFromWebResource(facesContext, src,
-                                IContentType.USER);
+            IContentAccessor contentAccessor = ContentAccessorFactory
+                    .createFromWebResource(facesContext, src, IContentType.USER);
 
-        	src = contentAccessor.resolveURL(facesContext, null, null);
+            src = contentAccessor.resolveURL(facesContext, null, null);
             if (src != null) {
-            	htmlWriter.writeAttribute("v:viewURL", src);
+                htmlWriter.writeAttribute("v:viewURL", src);
             }
         }
         if (!component.isVisible(facesContext)) {
-        	htmlWriter.writeAttribute("v:visible", "false");
+            htmlWriter.writeAttribute("v:visible", "false");
         }
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
@@ -62,14 +62,13 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
 
         super.encodeEnd(htmlWriter);
     }
-    
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.VIEW_DIALOG;
     }
-    
-	protected boolean sendCompleteComponent() {
-		return false;
-	}
 
+    protected boolean sendCompleteComponent() {
+        return false;
+    }
 
 }

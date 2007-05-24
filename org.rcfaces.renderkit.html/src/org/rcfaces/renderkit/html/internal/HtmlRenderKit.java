@@ -4,8 +4,6 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-
-
 /**
  * 
  * 

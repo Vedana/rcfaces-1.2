@@ -8,5 +8,5 @@ package org.rcfaces.core.item;
  * @version $Revision$ $Date$
  */
 public interface IAccessKeyItem {
-	String getAccessKey();
+    String getAccessKey();
 }

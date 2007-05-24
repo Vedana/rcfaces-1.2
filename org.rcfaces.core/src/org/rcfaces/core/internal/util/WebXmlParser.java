@@ -37,14 +37,14 @@ public class WebXmlParser {
 
     private static final ServletBean[] SERVLET_BEAN_EMPTY_ARRAY = new ServletBean[0];
 
-   // private final ServletContext servletContext;
+    // private final ServletContext servletContext;
 
     private final Map servletByClassName = new HashMap();
 
     private final Map servletByName = new HashMap();
 
     public WebXmlParser(ServletContext servletContext) {
-   //     this.servletContext = servletContext;
+        // this.servletContext = servletContext;
 
         URL url;
         try {

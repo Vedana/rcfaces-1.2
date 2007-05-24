@@ -28,6 +28,6 @@ public interface IClientValidatorDescriptor extends IDescriptor {
 
     String getConverter();
 
-//    IStringAdapterDescriptor getStringFormatter();
+    // IStringAdapterDescriptor getStringFormatter();
 
 }

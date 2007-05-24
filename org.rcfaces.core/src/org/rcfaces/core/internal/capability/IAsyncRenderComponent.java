@@ -8,7 +8,6 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -16,5 +15,5 @@ import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
  */
 public interface IAsyncRenderComponent {
 
-	IAsyncRenderer getAsyncRenderer(FacesContext facesContext);
+    IAsyncRenderer getAsyncRenderer(FacesContext facesContext);
 }

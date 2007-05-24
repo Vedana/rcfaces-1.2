@@ -1,176 +1,145 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.AbstractCommandComponent;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import java.util.HashSet;
+import java.util.Set;
+
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * A button Component highly customizable through its API.
  */
-public class CustomButtonComponent extends AbstractCommandComponent implements 
-	IBorderTypeCapability,
-	IBorderCapability,
-	ISelectionEventCapability,
-	IDoubleClickEventCapability,
-	IReadOnlyCapability {
+public class CustomButtonComponent extends AbstractCommandComponent implements
+        IBorderTypeCapability, IBorderCapability, ISelectionEventCapability,
+        IDoubleClickEventCapability, IReadOnlyCapability {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.customButton";
+    public static final String COMPONENT_TYPE = "org.rcfaces.core.customButton";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","doubleClickListener","border","readOnly","borderType"}));
-	}
+    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
+            AbstractCommandComponent.CAMELIA_ATTRIBUTES);
+    static {
+        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {
+                "selectionListener", "doubleClickListener", "border",
+                "readOnly", "borderType" }));
+    }
 
-	public CustomButtonComponent() {
-		setRendererType(COMPONENT_TYPE);
-	}
+    public CustomButtonComponent() {
+        setRendererType(COMPONENT_TYPE);
+    }
 
-	public CustomButtonComponent(String componentId) {
-		this();
-		setId(componentId);
-	}
+    public CustomButtonComponent(String componentId) {
+        this();
+        setId(componentId);
+    }
 
-	public final void setValue(Object value) {
+    public java.lang.String getBorderType() {
+        return getBorderType(null);
+    }
 
+    /**
+     * See {@link #getBorderType() getBorderType()} for more details
+     */
+    public java.lang.String getBorderType(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
+    }
 
-				if (value instanceof javax.faces.el.ValueBinding) {
-					setValue((javax.faces.el.ValueBinding)value);
-					return;
-				}
-				engine.setValue(Properties.VALUE, value);
-			
-	}
+    /**
+     * Returns <code>true</code> if the attribute "borderType" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isBorderTypeSetted() {
+        return engine.isPropertySetted(Properties.BORDER_TYPE);
+    }
 
-	public final void setValue(ValueBinding value) {
+    public void setBorderType(java.lang.String borderType) {
+        engine.setProperty(Properties.BORDER_TYPE, borderType);
+    }
 
+    public boolean isBorder() {
+        return isBorder(null);
+    }
 
-				engine.setValueBinding(Properties.VALUE, value);
-			
-	}
+    /**
+     * See {@link #isBorder() isBorder()} for more details
+     */
+    public boolean isBorder(javax.faces.context.FacesContext facesContext) {
+        return engine.getBoolProperty(Properties.BORDER, true, facesContext);
+    }
 
-	public java.lang.String getBorderType() {
-		return getBorderType(null);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "border" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isBorderSetted() {
+        return engine.isPropertySetted(Properties.BORDER);
+    }
 
-	/**
-	 * See {@link #getBorderType() getBorderType()} for more details
-	 */
-	public java.lang.String getBorderType(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BORDER_TYPE, facesContext);
-	}
+    public void setBorder(boolean border) {
+        engine.setProperty(Properties.BORDER, border);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "borderType" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isBorderTypeSetted() {
-		return engine.isPropertySetted(Properties.BORDER_TYPE);
-	}
+    public final void addSelectionListener(
+            org.rcfaces.core.event.ISelectionListener listener) {
+        addFacesListener(listener);
+    }
 
-	public void setBorderType(java.lang.String borderType) {
-		engine.setProperty(Properties.BORDER_TYPE, borderType);
-	}
+    public final void removeSelectionListener(
+            org.rcfaces.core.event.ISelectionListener listener) {
+        removeFacesListener(listener);
+    }
 
-	/**
-	 * See {@link #setBorderType(String) setBorderType(String)} for more details
-	 */
-	public void setBorderType(ValueBinding borderType) {
-		engine.setProperty(Properties.BORDER_TYPE, borderType);
-	}
+    public final javax.faces.event.FacesListener[] listSelectionListeners() {
+        return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+    }
 
-	public boolean isBorder() {
-		return isBorder(null);
-	}
+    public final void addDoubleClickListener(
+            org.rcfaces.core.event.IDoubleClickListener listener) {
+        addFacesListener(listener);
+    }
 
-	/**
-	 * See {@link #isBorder() isBorder()} for more details
-	 */
-	public boolean isBorder(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.BORDER, true, facesContext);
-	}
+    public final void removeDoubleClickListener(
+            org.rcfaces.core.event.IDoubleClickListener listener) {
+        removeFacesListener(listener);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "border" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isBorderSetted() {
-		return engine.isPropertySetted(Properties.BORDER);
-	}
+    public final javax.faces.event.FacesListener[] listDoubleClickListeners() {
+        return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
+    }
 
-	public void setBorder(boolean border) {
-		engine.setProperty(Properties.BORDER, border);
-	}
+    public boolean isReadOnly() {
+        return isReadOnly(null);
+    }
 
-	/**
-	 * See {@link #setBorder(boolean) setBorder(boolean)} for more details
-	 */
-	public void setBorder(ValueBinding border) {
-		engine.setProperty(Properties.BORDER, border);
-	}
+    /**
+     * See {@link #isReadOnly() isReadOnly()} for more details
+     */
+    public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+        return engine
+                .getBoolProperty(Properties.READ_ONLY, false, facesContext);
+    }
 
-	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		addFacesListener(listener);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "readOnly" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isReadOnlySetted() {
+        return engine.isPropertySetted(Properties.READ_ONLY);
+    }
 
-	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		removeFacesListener(listener);
-	}
+    public void setReadOnly(boolean readOnly) {
+        engine.setProperty(Properties.READ_ONLY, readOnly);
+    }
 
-	public final javax.faces.event.FacesListener [] listSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-	}
-
-	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listDoubleClickListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
-	}
-
-	public boolean isReadOnly() {
-		return isReadOnly(null);
-	}
-
-	/**
-	 * See {@link #isReadOnly() isReadOnly()} for more details
-	 */
-	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "readOnly" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isReadOnlySetted() {
-		return engine.isPropertySetted(Properties.READ_ONLY);
-	}
-
-	public void setReadOnly(boolean readOnly) {
-		engine.setProperty(Properties.READ_ONLY, readOnly);
-	}
-
-	/**
-	 * See {@link #setReadOnly(boolean) setReadOnly(boolean)} for more details
-	 */
-	public void setReadOnly(ValueBinding readOnly) {
-		engine.setProperty(Properties.READ_ONLY, readOnly);
-	}
-
-	protected Set getCameliaFields() {
-		return CAMELIA_ATTRIBUTES;
-	}
+    protected Set getCameliaFields() {
+        return CAMELIA_ATTRIBUTES;
+    }
 }

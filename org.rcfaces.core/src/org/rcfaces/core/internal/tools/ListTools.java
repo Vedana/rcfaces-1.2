@@ -19,7 +19,6 @@ import org.rcfaces.core.component.iterator.ISelectItemIterator;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.internal.util.IncompatibleValueException;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -422,11 +421,11 @@ public class ListTools {
 
         component.setValue(l.toArray(new String[l.size()]));
     }
-/*
-    public static int[] listIndexOfAllSelectedItems(ListComponent component) {
-        return null;
-    }
-*/
+
+    /*
+     * public static int[] listIndexOfAllSelectedItems(ListComponent component) {
+     * return null; }
+     */
     /**
      * 
      */

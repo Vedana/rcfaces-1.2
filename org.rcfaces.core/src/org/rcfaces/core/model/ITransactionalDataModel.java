@@ -8,5 +8,5 @@ package org.rcfaces.core.model;
  * @version $Revision$ $Date$
  */
 public interface ITransactionalDataModel {
-	void enableTransactionalObjects(boolean enable);
+    void enableTransactionalObjects(boolean enable);
 }

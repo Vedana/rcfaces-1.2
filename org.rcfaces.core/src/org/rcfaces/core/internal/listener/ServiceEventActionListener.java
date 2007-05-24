@@ -13,7 +13,6 @@ import org.rcfaces.core.event.IServiceEventListener;
 import org.rcfaces.core.event.ServiceEvent;
 import org.rcfaces.core.internal.service.IEventReturnValue;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$

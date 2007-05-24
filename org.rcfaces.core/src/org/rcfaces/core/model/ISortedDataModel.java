@@ -10,5 +10,6 @@ import javax.faces.component.UIComponent;
  * @version $Revision$ $Date$
  */
 public interface ISortedDataModel {
-    void setSortParameters(UIComponent component, ISortedComponent sortedComponents[]);
+    void setSortParameters(UIComponent component,
+            ISortedComponent sortedComponents[]);
 }

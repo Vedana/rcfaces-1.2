@@ -10,7 +10,6 @@ import javax.faces.model.DataModel;
 
 import org.rcfaces.core.model.IFilterProperties;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -18,7 +17,8 @@ import org.rcfaces.core.model.IFilterProperties;
 public class FilteredDataModel {
     private static final String REVISION = "$Revision$";
 
-    public static DataModel filter(DataModel dataModel, IFilterProperties filters) {
+    public static DataModel filter(DataModel dataModel,
+            IFilterProperties filters) {
         if (filters == null || filters.size() < 1) {
             return dataModel;
         }

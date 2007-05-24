@@ -12,7 +12,6 @@ import org.rcfaces.core.component.TabbedPaneComponent;
 import org.rcfaces.core.component.iterator.ITabIterator;
 import org.rcfaces.core.internal.util.ComponentIterators;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.component.capability;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -13,13 +12,16 @@ public interface IRadioValueCapability extends IRadioGroupCapability {
 
     /**
      * Returns the object associated with the group valued for this component.
+     * 
      * @return value object
      */
-	Object getRadioValue();
+    Object getRadioValue();
 
-	/**
-	 * Sets the object associated with the group valued for this component.
-	 * @param value value object
-	 */
+    /**
+     * Sets the object associated with the group valued for this component.
+     * 
+     * @param value
+     *            value object
+     */
     void setRadioValue(Object value);
 }

@@ -10,7 +10,8 @@ import javax.faces.context.FacesContext;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractTreeRendererProcessor implements IComponentTreeRenderProcessor {
+public abstract class AbstractTreeRendererProcessor implements
+        IComponentTreeRenderProcessor {
     private static final String REVISION = "$Revision$";
 
     protected final FacesContext facesContext;

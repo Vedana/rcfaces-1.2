@@ -8,7 +8,6 @@ import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

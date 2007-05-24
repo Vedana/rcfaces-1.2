@@ -1,147 +1,135 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IExpandImageCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.UIImageItemComponent;
+import java.util.Set;
 
-public abstract class ExpandableItemComponent extends UIImageItemComponent implements 
-	IForegroundBackgroundColorCapability,
-	ITextCapability,
-	IExpandImageCapability {
+import javax.faces.el.ValueBinding;
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hoverImageURL","imageURL","text","expandedImageURL","disabledImageURL","selectedImageURL","foregroundColor","backgroundColor"}));
-	}
+import org.rcfaces.core.component.capability.IExpandImageCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
 
+public abstract class ExpandableItemComponent extends UIImageItemComponent
+        implements IForegroundBackgroundColorCapability, ITextCapability,
+        IExpandImageCapability {
 
-	public final void setText(String text) {
+    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
+            UIImageItemComponent.CAMELIA_ATTRIBUTES);
+    static {
+        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] { "hoverImageURL",
+                "imageURL", "text", "expandedImageURL", "disabledImageURL",
+                "selectedImageURL", "foregroundColor", "backgroundColor" }));
+    }
 
+    public final void setText(String text) {
 
-			setItemLabel(text);
-			
-	}
+        setItemLabel(text);
 
-	public final void setText(ValueBinding text) {
+    }
 
+    public final String getText() {
 
-			setValueBinding("itemLabel", text);
-			
-	}
+        return getItemLabel();
 
-	public final String getText() {
+    }
 
+    public java.lang.String getBackgroundColor() {
+        return getBackgroundColor(null);
+    }
 
-			return getItemLabel();
-			
-	}
+    /**
+     * See {@link #getBackgroundColor() getBackgroundColor()} for more details
+     */
+    public java.lang.String getBackgroundColor(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.BACKGROUND_COLOR,
+                facesContext);
+    }
 
-	public java.lang.String getBackgroundColor() {
-		return getBackgroundColor(null);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "backgroundColor" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isBackgroundColorSetted() {
+        return engine.isPropertySetted(Properties.BACKGROUND_COLOR);
+    }
 
-	/**
-	 * See {@link #getBackgroundColor() getBackgroundColor()} for more details
-	 */
-	public java.lang.String getBackgroundColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BACKGROUND_COLOR, facesContext);
-	}
+    public void setBackgroundColor(java.lang.String backgroundColor) {
+        engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "backgroundColor" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isBackgroundColorSetted() {
-		return engine.isPropertySetted(Properties.BACKGROUND_COLOR);
-	}
+    public java.lang.String getForegroundColor() {
+        return getForegroundColor(null);
+    }
 
-	public void setBackgroundColor(java.lang.String backgroundColor) {
-		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
-	}
+    /**
+     * See {@link #getForegroundColor() getForegroundColor()} for more details
+     */
+    public java.lang.String getForegroundColor(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FOREGROUND_COLOR,
+                facesContext);
+    }
 
-	/**
-	 * See {@link #setBackgroundColor(String) setBackgroundColor(String)} for more details
-	 */
-	public void setBackgroundColor(ValueBinding backgroundColor) {
-		engine.setProperty(Properties.BACKGROUND_COLOR, backgroundColor);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "foregroundColor" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isForegroundColorSetted() {
+        return engine.isPropertySetted(Properties.FOREGROUND_COLOR);
+    }
 
-	public java.lang.String getForegroundColor() {
-		return getForegroundColor(null);
-	}
+    public void setForegroundColor(java.lang.String foregroundColor) {
+        engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
+    }
 
-	/**
-	 * See {@link #getForegroundColor() getForegroundColor()} for more details
-	 */
-	public java.lang.String getForegroundColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOREGROUND_COLOR, facesContext);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "text" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isTextSetted() {
+        return engine.isPropertySetted(Properties.TEXT);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "foregroundColor" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isForegroundColorSetted() {
-		return engine.isPropertySetted(Properties.FOREGROUND_COLOR);
-	}
+    public java.lang.String getExpandedImageURL() {
+        return getExpandedImageURL(null);
+    }
 
-	public void setForegroundColor(java.lang.String foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
-	}
+    /**
+     * See {@link #getExpandedImageURL() getExpandedImageURL()} for more details
+     */
+    public java.lang.String getExpandedImageURL(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.EXPANDED_IMAGE_URL,
+                facesContext);
+    }
 
-	/**
-	 * See {@link #setForegroundColor(String) setForegroundColor(String)} for more details
-	 */
-	public void setForegroundColor(ValueBinding foregroundColor) {
-		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "expandedImageURL" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isExpandedImageURLSetted() {
+        return engine.isPropertySetted(Properties.EXPANDED_IMAGE_URL);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "text" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTextSetted() {
-		return engine.isPropertySetted(Properties.TEXT);
-	}
+    public void setExpandedImageURL(java.lang.String expandedImageURL) {
+        engine.setProperty(Properties.EXPANDED_IMAGE_URL, expandedImageURL);
+    }
 
-	public java.lang.String getExpandedImageURL() {
-		return getExpandedImageURL(null);
-	}
+    protected Set getCameliaFields() {
+        return CAMELIA_ATTRIBUTES;
+    }
 
-	/**
-	 * See {@link #getExpandedImageURL() getExpandedImageURL()} for more details
-	 */
-	public java.lang.String getExpandedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.EXPANDED_IMAGE_URL, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "expandedImageURL" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isExpandedImageURLSetted() {
-		return engine.isPropertySetted(Properties.EXPANDED_IMAGE_URL);
-	}
-
-	public void setExpandedImageURL(java.lang.String expandedImageURL) {
-		engine.setProperty(Properties.EXPANDED_IMAGE_URL, expandedImageURL);
-	}
-
-	/**
-	 * See {@link #setExpandedImageURL(String) setExpandedImageURL(String)} for more details
-	 */
-	public void setExpandedImageURL(ValueBinding expandedImageURL) {
-		engine.setProperty(Properties.EXPANDED_IMAGE_URL, expandedImageURL);
-	}
-
-	protected Set getCameliaFields() {
-		return CAMELIA_ATTRIBUTES;
-	}
+    public void setValueBinding(String name, ValueBinding binding) {
+        if (Properties.TEXT.equals(name)) {
+            name = Properties.ITEM_LABEL;
+        }
+        super.setValueBinding(name, binding);
+    }
 }

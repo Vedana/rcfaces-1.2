@@ -9,5 +9,5 @@ package org.rcfaces.core.internal.capability;
  * @version $Revision$ $Date$
  */
 public interface IRCFacesComponent {
-    //boolean isClientRendered();
+    // boolean isClientRendered();
 }

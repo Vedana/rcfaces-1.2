@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.component.capability;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

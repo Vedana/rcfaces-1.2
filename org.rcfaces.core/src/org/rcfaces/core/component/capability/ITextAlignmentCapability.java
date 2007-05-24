@@ -12,15 +12,18 @@ package org.rcfaces.core.component.capability;
  */
 public interface ITextAlignmentCapability {
 
-	/**
-	 * Returns horizontal alignment.
-	 * @return alignment
-	 */
-	String getTextAlignment();
+    /**
+     * Returns horizontal alignment.
+     * 
+     * @return alignment
+     */
+    String getTextAlignment();
 
-	/**
-	 * Specifies horizontal alignment.
-	 * @param textAlignment text alignment
-	 */
-	void setTextAlignment(String textAlignment);
+    /**
+     * Specifies horizontal alignment.
+     * 
+     * @param textAlignment
+     *            text alignment
+     */
+    void setTextAlignment(String textAlignment);
 }

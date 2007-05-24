@@ -9,7 +9,7 @@ package org.rcfaces.core.internal.manager;
  * @version $Revision$ $Date$
  */
 public interface ITransientAttributesManager {
-	Object getTransientAttribute(String name);
+    Object getTransientAttribute(String name);
 
-	Object setTransientAttribute(String name, Object value);
+    Object setTransientAttribute(String name, Object value);
 }

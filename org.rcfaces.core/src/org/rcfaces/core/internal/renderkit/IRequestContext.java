@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IRequestContext /*extends IReleasable */{
+public interface IRequestContext /* extends IReleasable */{
 
     IProcessContext getProcessContext();
 

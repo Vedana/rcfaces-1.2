@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

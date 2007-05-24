@@ -248,7 +248,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.writeFor(buttonId);
         htmlWriter.writeClass(getLabelClassName(htmlWriter));
         writeTextDirection(htmlWriter, expandBarComponent);
-        
+
         String text = (String) htmlWriter.getComponentRenderContext()
                 .getAttribute(TITLE_TEXT_ATTRIBUTE);
         if (text != null) {

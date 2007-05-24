@@ -51,12 +51,10 @@ public class MessageFieldSetRenderer extends FieldSetRenderer {
     }
 
     /*
-    protected void encodeJavaScript(IJavaScriptWriter js)
-            throws WriterException {
-        super.encodeJavaScript(js);
-
-        JavaScriptTools.writeFirstMessage(js);
-    }
-    */
+     * protected void encodeJavaScript(IJavaScriptWriter js) throws
+     * WriterException { super.encodeJavaScript(js);
+     * 
+     * JavaScriptTools.writeFirstMessage(js); }
+     */
 
 }

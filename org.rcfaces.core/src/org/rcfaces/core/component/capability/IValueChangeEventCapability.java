@@ -16,24 +16,26 @@ import javax.faces.event.ValueChangeListener;
  */
 public interface IValueChangeEventCapability {
 
-	/**
-	 * Adds a listener to the component for the valueChange event
-	 * 
-	 * @param facesListener the valueChange listener to add 
-	 */
+    /**
+     * Adds a listener to the component for the valueChange event
+     * 
+     * @param facesListener
+     *            the valueChange listener to add
+     */
     void addValueChangeListener(ValueChangeListener facesListener);
 
-	/**
-	 * Removes a listener from the component for the valueChange event
-	 * 
-	 * @param facesListener the valueChange listener to remove
-	 */
+    /**
+     * Removes a listener from the component for the valueChange event
+     * 
+     * @param facesListener
+     *            the valueChange listener to remove
+     */
     void removeValueChangeListener(ValueChangeListener facesListener);
 
-	/**
-	 * Returns a list of valueChange listener for the component
-	 * 
-	 * @return valueChange listeners' list
-	 */
+    /**
+     * Returns a list of valueChange listener for the component
+     * 
+     * @return valueChange listeners' list
+     */
     FacesListener[] listValueChangeListeners();
 }

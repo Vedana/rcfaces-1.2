@@ -263,7 +263,7 @@ public class AdapterManagerImpl extends AbstractProvider implements
 
     public void registerAdapters(IAdapterFactory factory, Class adaptable) {
         registerFactory(factory, adaptable.getName());
-        
+
         flushLookup();
     }
 

@@ -7,12 +7,12 @@ import com.sun.facelets.tag.jsf.ComponentConfig;
 
 public class TextEditorHandler extends CameliaComponentHandler {
 
-	public TextEditorHandler(ComponentConfig config) {
-		super(config);
-	}
+    public TextEditorHandler(ComponentConfig config) {
+        super(config);
+    }
 
-	protected IListenerType getDefaultListenerType() {
-		return ListenersTools.SELECTION_LISTENER_TYPE;
-	}
+    protected IListenerType getDefaultListenerType() {
+        return ListenersTools.SELECTION_LISTENER_TYPE;
+    }
 
 }

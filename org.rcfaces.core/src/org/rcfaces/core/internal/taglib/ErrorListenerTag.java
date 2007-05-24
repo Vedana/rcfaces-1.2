@@ -42,8 +42,7 @@ public class ErrorListenerTag extends AbstractListenerTag {
             return;
         }
 
-        ((IErrorEventCapability) component)
-                .addErrorListener(errorListener);
+        ((IErrorEventCapability) component).addErrorListener(errorListener);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Add an errorListener '" + errorListener

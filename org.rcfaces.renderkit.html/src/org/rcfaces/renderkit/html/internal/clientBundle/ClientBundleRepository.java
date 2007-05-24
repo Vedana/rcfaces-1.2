@@ -331,7 +331,7 @@ class ClientBundleRepository extends AbstractRepository implements
 
         if (false) {
             // On passe les clefs en "" plutot qu'en field !
-            
+
             char cs[] = key.toCharArray();
 
             if (Character.isJavaIdentifierStart(cs[0]) == false) {

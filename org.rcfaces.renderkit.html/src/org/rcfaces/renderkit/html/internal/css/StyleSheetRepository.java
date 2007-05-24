@@ -38,8 +38,7 @@ public class StyleSheetRepository extends SourceRepository {
 
     static String getAllResourceURI(ServletConfig config)
             throws ServletException {
-        String all_sources = config
-                .getInitParameter(CSS_REPOSITORY_PARAMETER);
+        String all_sources = config.getInitParameter(CSS_REPOSITORY_PARAMETER);
 
         if (all_sources == null) {
             all_sources = CSS_REPOSITORY_DEFAULT_URI;
@@ -90,9 +89,8 @@ public class StyleSheetRepository extends SourceRepository {
         URL url = getURL(filename);
 
         if (url == null) {
-            error(
-                    "Can not get css resource '" + filename
-                            + "'. Skip this file !", null);
+            error("Can not get css resource '" + filename
+                    + "'. Skip this file !", null);
             return null;
         }
 

@@ -43,7 +43,7 @@ public class ClassLocator {
             } else {
                 cls = fallback.getClass();
             }
-            
+
             try {
                 return cls.getClassLoader().loadClass(className);
 

@@ -30,9 +30,8 @@ public class DateConverter extends AbstractConverter {
 
     public String getAsString(FacesContext context, UIComponent component,
             Object value) {
-        return CalendarTools.formatDate(component, (Date) value,  isLiteral());
+        return CalendarTools.formatDate(component, (Date) value, isLiteral());
     }
-
 
     protected boolean isLiteral() {
         return false;

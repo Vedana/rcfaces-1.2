@@ -11,7 +11,6 @@ import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

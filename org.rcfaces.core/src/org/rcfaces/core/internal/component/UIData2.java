@@ -1229,7 +1229,7 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         }
 
     }
-    
+
     protected boolean saveComponentEngine() {
         return false;
     }

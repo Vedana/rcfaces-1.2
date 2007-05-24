@@ -13,5 +13,5 @@ import javax.faces.event.FacesListener;
  */
 public interface ICloseListener extends FacesListener {
 
-	void processClose(CloseEvent event) throws AbortProcessingException;
+    void processClose(CloseEvent event) throws AbortProcessingException;
 }

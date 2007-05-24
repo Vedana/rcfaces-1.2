@@ -33,10 +33,10 @@ public class AsyncModeTools {
     }
 
     private static boolean isFaceletsProcessor(FacesContext context) {
-        if (Constants.FACELETS_SUPPORT==false) {
+        if (Constants.FACELETS_SUPPORT == false) {
             return false;
         }
-        
+
         if (context == null) {
             context = FacesContext.getCurrentInstance();
         }
