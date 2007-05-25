@@ -192,6 +192,21 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     + "' hasChild=" + hasChild + " isVisible=" + isVisible
                     + "  detph=" + getContext().getDepth(), null);
         }
+        
+        if (selectItem instanceof IVisibleItem) {
+        	if (component instanceof IVisibilityCapability) {
+        		IVisibilityCapability visibilityCapability = (IVisibilityCapability) component;
+            	FacesContext facesContext = getComponentRenderContext().getFacesContext();
+            	if (!visibilityCapability.isVisible()) {
+            		ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) getComponent();
+            		int hiddenMode = itemsToolFolderComponent.getItemHiddenMode(facesContext);
+            		if (hiddenMode == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
+                        nextItemId();
+            			return SKIP_NODE;
+            		}
+            	}
+        	}
+        }
 
         if (getContext().getDepth() == 1) {
             String itemId = nextItemId();
@@ -527,6 +542,11 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
                         ((IHiddenModeCapability) visibilityCapability)
                                 .setHiddenMode(hiddenMode);
+                        
+                        // if the component is not to be drawn on the client : exit
+                        if (hiddenMode == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
+                        	return;
+                        }
                     }
 
                     visibilityCapability.setVisible(false);
