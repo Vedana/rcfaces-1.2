@@ -858,7 +858,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
                     String clientId = (String) entry.getKey();
 
-                    if (clientId.equals(eventComponentId)) {
+                    if (clientId.equals(eventComponentId) == false) {
                         continue;
                     }
 
