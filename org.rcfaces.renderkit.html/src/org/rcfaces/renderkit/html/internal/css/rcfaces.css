@@ -57,6 +57,7 @@
 @import url(f_tree.css); 					//module:tree
 @import url(f_waiting.css); 				//module:waiting
 @import url(f_messageDialog.css); 			//module:messageDialog
+@import url(f_viewDialog.css); 				//module:messageDialog
 @import url(f_waitingShell.css); 			//module:messageDialog
 		
 @import url(f_consoleAppender.css); 				//module:log
