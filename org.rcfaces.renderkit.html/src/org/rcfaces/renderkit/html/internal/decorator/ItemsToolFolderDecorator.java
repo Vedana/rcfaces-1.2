@@ -693,7 +693,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                         component);
             }
 
-            String itemClientId = component.getClientId(facesContext);
+            String itemClientId = itemComponent.getClientId(facesContext);
 
             itemIdToClientId.put(itemId, itemClientId);
 
