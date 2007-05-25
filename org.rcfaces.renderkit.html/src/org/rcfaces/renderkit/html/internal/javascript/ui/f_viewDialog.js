@@ -105,7 +105,11 @@ var __prototype = {
 	 * @return String 
 	 */
 	f_getIFrameUrl: function() {
-		return this.f_getViewURL();
+		var url=this.f_getViewURL();
+		if (url && url.indexOf("?")<0) {
+			url=url+"?vedvar=1";
+		}
+		return url;
 	},
 
 	/**

@@ -128,20 +128,11 @@ var __static = {
 			if (typeof(functionToCall) == "function") {
 			    f_core.Debug(f_dialog, "ShowNextDialogStored: before calling ");
 				dialogInst.f_drawContent(functionToCall);
-//				functionToCall.call(dialogInst, iframe.contentWindow.document.body);
-				
 			    f_core.Debug(f_dialog, "ShowNextDialogStored: after calling ");
+			} else {
+				f_core.Debug(f_dialog, "ShowNextDialogStored: setting focus ");
+				dialogInst.f_setFocus(true);
 			}
-/*			 else {
-				f_core.Debug(f_dialog, "ShowNextDialogStored: setting an url : "+url+"\ncurrent = "+iframe.src);
-				if (!url || typeof(url) != "string") {
-					url = "about:blank"
-				}
-
-				iframe.src = url;
-			}
-*/
-			dialogInst.f_setFocus(true);
 
 			return;
 		}

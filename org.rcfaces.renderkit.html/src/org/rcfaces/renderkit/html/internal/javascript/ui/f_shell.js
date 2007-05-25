@@ -381,6 +381,7 @@ var __static = {
      		// On sait jamais, nous sommes peut etre dans un context foireux ...
      		return;
      	}
+     	f_core.Debug(f_shell, "_OnFocus: entering on "+this.outerHTML);
  
  		var iframe=f_shell.GetIframe();
  		if (!iframe) {
@@ -422,7 +423,7 @@ var __static = {
 		}
  		
  		var frameDocument = iframe.contentWindow.document;
- 		     	
+
      	if (targetDocument==frameDocument) {
      		// C'est dans notre frame
      
@@ -432,10 +433,18 @@ var __static = {
      		f_core.Debug(f_shell, "_OnFocus: Focus on our frame !");
      		return true;
      	}
-  
-  		iframe._modalShell.f_setFocus();
+     	
+     	iframe.focus();
+		iframe._modalShell.f_setFocus();
+//		var self=iframe._modalShell;
+//  		window.setTimeout(function() {
+//  			f_core.Debug(f_shell, "anonymous timer _OnFocus: entering");
+//  			self.f_getIframe().focus();
+//  			self.f_setFocus();
+// 		}, 50);
      	
      	return f_core.CancelJsEvent(evt);
+
      }
 }
 
@@ -745,6 +754,8 @@ var __prototype = {
 
 			f_core.Debug(f_shell, "f_drawContent: ready call");
 			drawingFunction.call(this);
+			f_core.Debug(f_shell, "f_drawContent: setFocus");
+			this.f_setFocus(true);
 
 		} catch (e) {
 	     	f_core.Error(f_shell, "f_drawContent: catch error", e);
@@ -784,11 +795,15 @@ var __prototype = {
 			//style
 			base.className = cssBaseName+"_global";
 			
-	     	f_core.Debug(f_shell, "f_fillModIFrame: drawing funtion = "+this._drawingFunction);
 			if (this._drawingFunction) {
+		     	f_core.Debug(f_shell, "f_fillModIFrame: call drawing funtion ");
 				this._drawingFunction.call(this);
 				this._drawingFunction=null;
+				
+		     	f_core.Debug(f_shell, "f_fillModIFrame: setFocus");
+				this.f_setFocus(true);
 			} else {
+		     	f_core.Debug(f_shell, "f_fillModIFrame: no drawing funtion ");
 				this._iframeDraw=true;
 			}
 
@@ -1085,6 +1100,7 @@ var __prototype = {
 	 * @return void
 	 */
 	f_installModalStyle: function() {
+		f_core.Debug(f_shell, "f_installModalStyle");
 		var style=this.f_getStyle();
 		if (!(style & (f_shell.PRIMARY_MODAL_STYLE | f_shell.APPLICATION_MODAL_STYLE))) {
 			return;
@@ -1092,7 +1108,7 @@ var __prototype = {
 
      	f_core.Debug(f_shell, "f_installModalStyle: Install modal hooks");
 		
-		f_core.AddEventListener(document, "focus", f_shell._OnFocus, document);
+		f_core.AddEventListener(document, "focus", f_shell._OnFocus);
 	},
 
 	/**
@@ -1107,10 +1123,15 @@ var __prototype = {
 
      	f_core.Debug(f_shell, "f_uninstallModalStyle: Uninstall modal hooks");
 		
-		f_core.RemoveEventListener(document, "focus", f_shell._OnFocus, document);
+		f_core.RemoveEventListener(document, "focus", f_shell._OnFocus);
 	},
 	
 	f_setFocus: function(firstTime) {
+		f_core.Debug(f_shell, "f_setFocus: entering with firstTime = "+firstTime);
+		if (!f_shell.IsDocComplete()) {
+			f_core.Debug(f_shell, "f_setFocus: Doc is not complete yet");
+			return;
+		}
 		var iframe=this._iframe;
 		var frameDoc=iframe.contentWindow.document;
 		
@@ -1141,7 +1162,7 @@ var __prototype = {
   		}
   		
    		if (nextFocusable) {
-     		f_core.Debug(f_shell, "f_setFocus: Set focus on "+nextFocusable.id);
+     		f_core.Debug(f_shell, "f_setFocus: Set focus on "+nextFocusable.outerHTML);
 
 	     	f_core.SetFocus(nextFocusable, false);
    		}

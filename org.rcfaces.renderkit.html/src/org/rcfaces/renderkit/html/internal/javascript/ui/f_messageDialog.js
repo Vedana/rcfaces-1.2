@@ -345,6 +345,7 @@ var __prototype = {
 		table.cellPadding=0;
 		table.cellSpacing=0;
 		table.width=this.f_getWidth()+"px";
+		table.tabIndex=1;
 
 		var tbod = docBase.createElement("tbody");
 		
@@ -355,13 +356,14 @@ var __prototype = {
 		
 		var cell = docBase.createElement("td");
 		cell.colSpan = 2;
+		cell.tabIndex=1;
 		
 		// HandleToMove : to recognize a movable item
 		cell.className = cssClassBase+"_title_td handleToMove";
 		//Handle for Mouse Moves
-		cell.onmousedown = f_dialog._OnMouseDown;
-		cell.onmouseup = f_dialog._OnMouseUp;
-		cell.onmousemove = f_dialog._OnMouseMove;
+//		cell.onmousedown = f_dialog._OnMouseDown;
+//		cell.onmouseup = f_dialog._OnMouseUp;
+//		cell.onmousemove = f_dialog._OnMouseMove;
 		
 		var zone = docBase.createElement("span");
 		zone.className = cssClassBase+"_title_text";
@@ -383,6 +385,7 @@ var __prototype = {
 		// cell for image
 		cell = docBase.createElement("td");
 		cell.className = cssClassBase+"_image_td";
+		cell.tabIndex=1;
 		
 		text=this.f_getImageResolvedURL();
 		if (text) {
@@ -397,6 +400,7 @@ var __prototype = {
 		// cell for text
 		cell = docBase.createElement("td");
 		cell.className = cssClassBase+"_text_td";
+		cell.tabIndex=1;
 		
 		zone = docBase.createElement("span");
 		zone.className = cssClassBase+"_text_text";
@@ -421,6 +425,7 @@ var __prototype = {
 
 		cell.className = cssClassBase+"_actions_td";
 		cell.align = "center";
+		cell.tabIndex=1;
 		
 		var actTable = docBase.createElement("table");
 		var actTbod = docBase.createElement("tbody");
@@ -434,6 +439,15 @@ var __prototype = {
 			}
 			this.f_addAction(def, def, false, true);
 		}
+		
+		var noFocus=function(evt) {
+			f_core.Debug(f_messageDialog, "_open: noFocus on button "+this.value);
+			if (!evt) {
+				evt = f_core.GetJsEvent(this);
+			}
+			return f_core.CancelJsEvent(evt);
+			
+		};
 		
 		for (var i=0; i<actions.length; i++) {
 			var action=actions[i];
@@ -455,6 +469,7 @@ var __prototype = {
 			button.onclick=f_messageDialog._OnClick;
 			button.onClick=null;
 			button._base = baseMem;
+			button.onfocusin=noFocus;
 			baseMem._buttons.push(button);
 			
 			cellb.appendChild(button);
@@ -501,6 +516,7 @@ var __prototype = {
 			button._base=undefined;
 			button._value=undefined;
 			button.onclick=null;
+			button.onfocusin=null;
 			
 			f_core.VerifyProperties(button);
 		}
