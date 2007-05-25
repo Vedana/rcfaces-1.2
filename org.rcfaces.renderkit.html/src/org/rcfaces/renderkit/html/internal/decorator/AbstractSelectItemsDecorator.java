@@ -755,7 +755,7 @@ public abstract class AbstractSelectItemsDecorator extends
             UIComponent component, String selectItemValue) {
 
         return ValuesTools.convertStringToValue(facesContext, component,
-                getConverter(), selectItemValue, null);
+                getConverter(), selectItemValue, null, false);
     }
 
     protected final List listComponents(Map childrenClientIds, String itemIds,
