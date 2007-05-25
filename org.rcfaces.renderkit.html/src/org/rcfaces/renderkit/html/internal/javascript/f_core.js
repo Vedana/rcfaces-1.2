@@ -1117,12 +1117,13 @@ var f_core = {
 				for(var name in properties) {
 					var value=properties[name];
 				
-					switch(name) {
-					case "className":
+					switch(name.toLowerCase()) {
+					case "classname":
+					case "class":
 						element.className=value;
 						break;
 						
-					case "textNode":
+					case "textnode":
 						textNode=value;
 						break;
 						
@@ -2853,14 +2854,19 @@ var f_core = {
 		if (f_core.IsInternetExplorer()) {
 			for(var i=startIndex;i<length;i++) {
 				var link=links[i];
-	
-				if (link.href) {
-					targetDocument.createStyleSheet(link.href);
+				
+				var href=link.href;
+				if (href) {
+					targetDocument.createStyleSheet(href);
 					continue;
 				}
 				
-				// C'est du texte
-				targetDocument.createStyleSheet().cssText=link.cssText;						
+				var cssText=link.cssText;
+				if (cssText) {
+					// C'est du texte
+					targetDocument.createStyleSheet().cssText=cssText;
+					continue;	
+				}
 			}	
 			
 			return;
@@ -3856,7 +3862,7 @@ var f_core = {
 				i++;
 			}
 			
-			f_core.Debug("f_core", "Caret position: "+i+" collapse="+isCollapsed);
+			f_core.Debug(f_core, "GetTextSelection: Caret position: "+i+" collapse="+isCollapsed);
 			
 			if (isCollapsed) {
 				delete caret;
@@ -3879,7 +3885,7 @@ var f_core = {
 				}
 			}
 			
-			f_core.Debug("f_core", "Caret position: "+i+" to "+(i+j)+".");
+			f_core.Debug(f_core, "GetTextSelection: Caret position: "+i+" to "+(i+j)+".");
 			
 			delete caret;
 			return [ i, i+j ];
@@ -3889,7 +3895,7 @@ var f_core = {
 			return [ component.selectionStart, component.selectionEnd ];
 		}
 		
-		f_core.Error(f_core, "Unsupported browser for GetTextSelection() !");
+		f_core.Error(f_core, "GetTextSelection: Unsupported browser for GetTextSelection() !");
 	},
 	/**
 	 * Select a text into a TextEntry or a TextArea
@@ -3926,7 +3932,7 @@ var f_core = {
 			return;
 		}
 		
-		f_core.Error(f_core, "Unsupported browser for SelectText() !");
+		f_core.Error(f_core, "SelectText: Unsupported browser for SelectText() !");
 	},
 	/**
 	 * List all components of a document.
@@ -4009,7 +4015,7 @@ var f_core = {
 		
 		var len = elts.length;
 		if (!len) {
-			f_core.Debug("f_core", "No elements into document !");
+			f_core.Debug(f_core, "GetNextFocusableComponent: No elements into document !");
 			return null;
 		}
 
@@ -4086,12 +4092,12 @@ var f_core = {
 			ts.push(elt);
 		}
 
-		f_core.Debug("f_core", "utabs.length="+utabs.length+" itabs.length="+itabs.length);
+		f_core.Debug(f_core, "GetNextFocusableComponent: utabs.length="+utabs.length+" itabs.length="+itabs.length);
 
 		// Get next form unordered
 		if (prev == undefined || prev == null || (prev<0 && isIE)) {
 		
-			f_core.Debug("f_core", "Search next unordered component. (prev="+prev+")");
+			f_core.Debug(f_core, "GetNextFocusableComponent: Search next unordered component. (prev="+prev+")");
 		
 			return getNextAvailable(utabs, -1);
 		}
@@ -4100,7 +4106,7 @@ var f_core = {
 		if (prev <= 0) {
 			// Get first accessible unordered
 
-			f_core.Debug("f_core", "Get next from unordered starting at offset. (offset="+offset+")");
+			f_core.Debug(f_core, "GetNextFocusableComponent: Get next from unordered starting at offset. (offset="+offset+")");
 			return getNextAvailable(utabs, offset);
 		}
 		
@@ -4122,14 +4128,14 @@ var f_core = {
 			}
 		}
 
-		f_core.Debug("f_core", "Get next from ordered starting at offset. (offset="+offset+")");
+		f_core.Debug(f_core, "GetNextFocusableComponent: Get next from ordered starting at offset. (offset="+offset+")");
 
 		next = getNextAvailable(otabs, offset);
 		if (next) {
 			return next;
 		}
 	
-		f_core.Debug("f_core", "Get next from unordered");
+		f_core.Debug(f_core, "GetNextFocusableComponent: Get next from unordered");
 		
 		return getNextAvailable(utabs, -1);
 	},
@@ -4250,7 +4256,7 @@ var f_core = {
 			if (idx2<0 || (idx>=0 && idx<idx2)) {	
 				idx2=message.indexOf('}', idx);
 				if (idx2<0) {
-					throw new Error("Invalid expression \""+parameters+"\".");
+					throw new Error("Invalid expression \""+message+"\".");
 				}
 				
 				ret+=message.substring(pos, idx);
@@ -4275,7 +4281,7 @@ var f_core = {
 			
 			idx=message.indexOf('\'', idx2+1);
 			if (idx<0) {
-				throw new Error("Invalid expression \""+parameters+"\".");
+				throw new Error("Invalid expression \""+message+"\".");
 			}
 			pos=idx+1;
 

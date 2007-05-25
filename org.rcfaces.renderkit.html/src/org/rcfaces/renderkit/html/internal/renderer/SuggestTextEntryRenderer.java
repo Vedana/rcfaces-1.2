@@ -180,7 +180,7 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
 
             newValue = ValuesTools.convertStringToValue(facesContext,
                     suggestTextEntryComponent, converter, suggestionValue,
-                    "suggestionValue");
+                    "suggestionValue", false);
         }
 
         if (newValue != oldValue) {

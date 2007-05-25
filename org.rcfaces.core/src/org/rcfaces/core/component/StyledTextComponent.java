@@ -1,17 +1,14 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.TextComponent;
+import org.rcfaces.core.internal.component.Properties;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
- * <p>
- * The styledText Component is a placeholder for displaying "enhanced" text. It
- * accepts any HTML tags. it's a <A href="/comps/textComponent.html">text
- * Component</A>
- * </p>
- * <p>
- * The styledText Component has the following capabilities :
+ * <p>The styledText Component is a placeholder for displaying "enhanced" text. It accepts any HTML tags. it's a <A href="/comps/textComponent.html">text Component</A></p>
+ * <p>The styledText Component has the following capabilities :
  * <ul>
  * <li>Position &amp; Size</li>
  * <li>Foreground &amp; Background Color</li>
@@ -26,24 +23,23 @@ import java.util.Set;
  */
 public class StyledTextComponent extends TextComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.styledText";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.styledText";
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            TextComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
+	}
 
-    public StyledTextComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
+	public StyledTextComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public StyledTextComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public StyledTextComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

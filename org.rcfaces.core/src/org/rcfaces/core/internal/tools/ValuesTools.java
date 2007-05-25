@@ -181,10 +181,10 @@ public class ValuesTools {
     }
 
     public static Object convertStringToValue(FacesContext context,
-            UIComponent component, Object submittedValue) {
+            UIComponent component, Object value, boolean testValue) {
 
-        if ((submittedValue instanceof String) == false) {
-            return submittedValue;
+        if ((value instanceof String) == false) {
+            return value;
         }
 
         Converter converter = null;
@@ -196,19 +196,19 @@ public class ValuesTools {
             converter = ((ValueHolder) component).getConverter();
         }
 
-        return convertStringToValue(context, component, converter,
-                submittedValue, "value");
+        return convertStringToValue(context, component, converter, value,
+                "value", testValue);
     }
 
     public static Object convertStringToValue(FacesContext context,
             UIComponent component, Converter converter, Object value,
-            String attributeName) {
+            String attributeName, boolean testValue) {
 
         if ((value instanceof String) == false) {
             return value;
         }
 
-        if (converter == null && attributeName != null) {
+        if (converter == null && attributeName != null && testValue) {
             ValueBinding valueBinding = component
                     .getValueBinding(attributeName);
 

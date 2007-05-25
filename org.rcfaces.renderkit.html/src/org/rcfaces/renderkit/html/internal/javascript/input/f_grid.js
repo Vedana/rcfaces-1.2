@@ -775,7 +775,7 @@ var __static = {
 		if (f_core.IsInternetExplorer()) {
 			if (false) {
 				doc.onlosecapture=function() {
-					alert("Lose capture !");
+					f_core.Debug(f_grid, "Lose capture !");
 				}
 			}
 		}
@@ -1314,7 +1314,7 @@ var __prototype = {
 	},
 	f_serialize: function() {
 		
-		if (this._resizable) {
+		if (this._resizable && this._titleLayout) {
 			var columns=this._columns;
 			var v="";
 			for(var i=0;i<columns.length;i++) {
@@ -2455,6 +2455,8 @@ var __prototype = {
 		this.focus();
 	},
 	f_setFocus: function() {
+		f_core.Debug(f_grid, "f_setFocus: set focus="+this._focus);
+		
 		if (!f_core.ForceComponentVisibility(this)) {
 			return;
 		}
@@ -2705,7 +2707,7 @@ var __prototype = {
 		// 
 		var pos=Math.floor(idx+h/trh);
 		
-		f_core.Debug(f_grid, "Pos="+pos+" idx="+idx+" h="+h+" trh="+trh+" rowCount="+this._rowCount+" trs="+trs.length);
+		f_core.Debug(f_grid, "_nextPageRow: Pos="+pos+" idx="+idx+" h="+h+" trh="+trh+" rowCount="+this._rowCount+" trs="+trs.length);
 		
 		if (pos>=trs.length) {
 			pos=trs.length-1;
@@ -2723,11 +2725,11 @@ var __prototype = {
 			}
 			
 			row=r;
-			f_core.Debug(f_grid, "Found #"+i+" pos="+pos+" next row="+row);
+			f_core.Debug(f_grid, "_nextPageRow: Found #"+i+" pos="+pos+" next row="+row);
 			break;
 		}
 		
-		f_core.Debug(f_grid, "Found next row="+row);
+		f_core.Debug(f_grid, "_nextPageRow: Found next row="+row);
 		
 		if (!row) {
 			// Pas trouvé, alors on cherche juste avant !
@@ -2740,9 +2742,8 @@ var __prototype = {
 				}			
 			}
 
-			f_core.Debug(f_grid, "Found previous row="+row);
+			f_core.Debug(f_grid, "_nextPageRow: Found previous row="+row);
 		}
-		
 		
 		//alert("Paged="+this._paged+" pos="+pos+" trs.length="+trs.length);
 		if (!this._paged && pos==trs.length-1) {		
@@ -3090,13 +3091,15 @@ var __prototype = {
 		}
 		
 		var cw=column._col.style.width;
-		var swidth;
-		if (cw) {
-			swidth=parseInt(cw, 10);
+		if (!cw) {
+			cw=column._head.width;
 			
-		} else {
-			swidth=parseInt(column._head.width, 10);
+			if (!cw) {
+				cw=column._width;
+			}
 		}
+					
+		var swidth=parseInt(cw, 10);
 		
 		swidth-=f_grid._TEXT_RIGHT_PADDING;
 		if (swidth<0) {

@@ -16,6 +16,7 @@ import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
@@ -1164,12 +1165,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         String cursorValue = componentData.getStringProperty("cursor");
         if (cursorValue != null) {
-            Object cursorValueObject = cursorValue;
-
-            if (rowValueColumn != null) {
-                cursorValueObject = ValuesTools.convertStringToValue(
-                        facesContext, rowValueColumn, cursorValueObject);
-            }
+            Object cursorValueObject = ValuesTools.convertStringToValue(
+                    facesContext, rowValueColumn, cursorValue, false);
 
             Object oldCursorValueObject = ((ICursorProvider) dataGridComponent)
                     .getCursorValue();

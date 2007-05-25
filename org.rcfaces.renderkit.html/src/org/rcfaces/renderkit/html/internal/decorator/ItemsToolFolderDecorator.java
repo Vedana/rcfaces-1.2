@@ -192,26 +192,28 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     + "' hasChild=" + hasChild + " isVisible=" + isVisible
                     + "  detph=" + getContext().getDepth(), null);
         }
-        
-        if (selectItem instanceof IVisibleItem) {
-        	if (component instanceof IVisibilityCapability) {
-        		IVisibilityCapability visibilityCapability = (IVisibilityCapability) component;
-            	FacesContext facesContext = getComponentRenderContext().getFacesContext();
-            	if (!visibilityCapability.isVisible()) {
-            		ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) getComponent();
-            		int hiddenMode = itemsToolFolderComponent.getItemHiddenMode(facesContext);
-            		if (hiddenMode == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
-                        nextItemId();
-            			return SKIP_NODE;
-            		}
-            	}
-        	}
-        }
-
         if (getContext().getDepth() == 1) {
             String itemId = nextItemId();
             if (itemId == null) {
                 return SKIP_NODE;
+            }
+
+            if (selectItem instanceof IVisibleItem) {
+                if (component instanceof IVisibilityCapability) {
+                    IVisibilityCapability visibilityCapability = (IVisibilityCapability) component;
+                    if (visibilityCapability.isVisible() == false) {
+                        ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) getComponent();
+
+                        FacesContext facesContext = getComponentRenderContext()
+                                .getFacesContext();
+
+                        int hiddenMode = itemsToolFolderComponent
+                                .getItemHiddenMode(facesContext);
+                        if (hiddenMode == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
+                            return SKIP_NODE;
+                        }
+                    }
+                }
             }
 
             int inputType = 0;
@@ -314,14 +316,6 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                 writeItemClientDatas((IClientDataItem) selectItem,
                         javaScriptWriter, null, null, objectLiteralWriter);
             }
-
-            /*
-             * if (selectItem instanceof IMenuPopupIdCapability) { String
-             * menuPopupId = ((IMenuPopupIdCapability) selectItem)
-             * .getMenuPopupId(); if (menuPopupId != null) {
-             * javaScriptWriter.write(',').writeSymbol("_menuPopupId")
-             * .write(':').writeString(menuPopupId); } }
-             */
 
             objectLiteralWriter.end().writeln(");");
 
@@ -522,32 +516,38 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
 
         if (selectItem instanceof IVisibleItem) {
+
+            ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) getComponent();
+
+            int hiddenMode = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
+
+            if (selectItem instanceof IHiddenModeCapability) {
+                if (itemsToolFolderComponent.isItemHiddenModeSetted()) {
+                    hiddenMode = itemsToolFolderComponent
+                            .getItemHiddenMode(getComponentRenderContext()
+                                    .getFacesContext());
+                }
+
+                if (hiddenMode == 0) {
+                    hiddenMode = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
+                }
+
+                if (itemComponent instanceof IHiddenModeCapability) {
+                    ((IHiddenModeCapability) itemComponent)
+                            .setHiddenMode(hiddenMode);
+                }
+            }
+
             if (((IVisibleItem) selectItem).isVisible() == false) {
+
+                // if the component is not to be drawn on the client :
+                // exit
+                if (hiddenMode == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
+                    return;
+                }
+
                 if (itemComponent instanceof IVisibilityCapability) {
                     IVisibilityCapability visibilityCapability = (IVisibilityCapability) itemComponent;
-
-                    ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) getComponent();
-
-                    if (visibilityCapability instanceof IHiddenModeCapability) {
-                        int hiddenMode = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
-                        if (itemsToolFolderComponent.isItemHiddenModeSetted()) {
-                            hiddenMode = itemsToolFolderComponent
-                                    .getItemHiddenMode(getComponentRenderContext()
-                                            .getFacesContext());
-                        }
-
-                        if (hiddenMode == 0) {
-                            hiddenMode = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
-                        }
-
-                        ((IHiddenModeCapability) visibilityCapability)
-                                .setHiddenMode(hiddenMode);
-                        
-                        // if the component is not to be drawn on the client : exit
-                        if (hiddenMode == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
-                        	return;
-                        }
-                    }
 
                     visibilityCapability.setVisible(false);
                 }

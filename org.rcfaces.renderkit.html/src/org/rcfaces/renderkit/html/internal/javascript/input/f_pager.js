@@ -21,7 +21,7 @@ var __static = {
 	 * @method private static
 	 */
 	_AddText: function(container, text) {
-		container.appendChild(document.createTextNode(text));	
+		container.appendChild(container.ownerDocument.createTextNode(text));	
 	},
 	
 	/**
@@ -508,7 +508,7 @@ var __prototype = {
 				f_pager._AddText(component, message.substring(idx, next));
 			}
 			
-			component.appendChild(document.createElement("br"));
+			component.appendChild(component.ownerDocument.createElement("br"));
 			
 			idx=next+1;
 		}

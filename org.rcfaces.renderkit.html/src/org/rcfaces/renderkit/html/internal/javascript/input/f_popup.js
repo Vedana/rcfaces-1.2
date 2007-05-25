@@ -153,18 +153,7 @@ var __static = {
 			if (!pdocument._resInitialized) {
 				pdocument._resInitialized=true;
 				
-				var links=document.styleSheets;
-				for(var i=pdocument._initializedStyleSheets;i<links.length;i++) {
-					var link=links[i];
-
-					if (!link.href) {
-						// C'est du texte
-						pdocument.createStyleSheet().cssText=link.cssText;						
-						continue;
-					}		
-
-					pdocument.createStyleSheet(link.href);
-				}
+				f_core.CopyStyleSheets(pdocument, document, pdocument.styleSheets.length);
 			}
 		}
 				
@@ -216,19 +205,7 @@ var __static = {
 			pdocument.appendChild(pbase);
 		}
 		
-		var links=document.styleSheets;
-		for(var i=0;i<links.length;i++) {
-			var link=links[i];
-
-			if (!link.href) {
-				// C'est du texte
-				pdocument.createStyleSheet().cssText=link.cssText;						
-				continue;
-			}		
-
-			pdocument.createStyleSheet(link.href);
-		}
-		pdocument._initializedStyleSheets=links.length;
+		f_core.CopyStyleSheets(pdocument, document);
 		
 		return popup;
 	},
@@ -257,7 +234,7 @@ var __static = {
 			f_event.EnterEventLock(f_event.POPUP_LOCK);
 		}
 		
-		f_core.Debug(f_popup, "Register popup on "+component.id);
+		f_core.Debug(f_popup, "RegisterWindowClick: Register popup on "+component.id);
 
 		var oldComponent=f_popup.Component;
 		if (oldComponent) {
@@ -268,6 +245,8 @@ var __static = {
 			
 			var oldCallbacks=f_popup.Callbacks;
 			if (oldCallbacks) {
+				f_core.Debug(f_popup, "RegisterWindowClick: exit old component "+oldComponent.id);
+
 				oldCallbacks.exit.call(oldComponent);
 				f_popup.Callbacks=undefined;
 			}
@@ -497,7 +476,8 @@ var __static = {
 		if (window._f_exiting) {
 			return;
 		}
-		f_core.Debug(f_popup, "OnFocus on "+this+" target="+evt.target+"/"+evt.target.className);
+		
+		f_core.Debug(f_popup, "_OnFocus: on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
 			return;
@@ -534,13 +514,13 @@ var __static = {
 	
 		var component=f_popup.Component;
 		if (!component) {
-			f_core.Debug(f_popup, "OnKeyDown["+evt.keyCode+"] on "+this+" no component");
+			f_core.Debug(f_popup, "_OnKeyDown: keyCode="+evt.keyCode+" on "+this+" no component");
 
 			return true;
 		}
 	
 		var target=evt.target;
-		f_core.Debug(f_popup, "OnKeyDown["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
+		f_core.Debug(f_popup, "_OnKeyDown: keyCode="+evt.keyCode+" on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
 		if (evt.altKey) { // ?
@@ -550,7 +530,7 @@ var __static = {
 				}
 				
 			} catch (x) {
-				f_core.Error(f_popup, "Exit callback throws exception", x);
+				f_core.Error(f_popup, "_OnKeyDown: Exit callback throws exception", x);
 				
 			} finally {
 				f_popup.Callbacks=undefined;
@@ -569,7 +549,7 @@ var __static = {
 				return true;
 			}			
 		} catch (x) {
-			f_core.Error(f_popup, "KeyDown callback throws exception", x);
+			f_core.Error(f_popup, "_OnKeyDown: KeyDown callback throws exception", x);
 		}
 			
 		return f_core.CancelJsEvent(evt);
@@ -655,6 +635,8 @@ var __static = {
 				// Ca va pas !
 				// Le popup est fermé et personne n'est prévenu !
 				
+				f_core.Debug(f_popup, "VerifyLock: close not opened popup !");
+				
 				var cbs=f_popup.Callbacks;
 				if (cbs) {
 					f_popup.Callbacks=undefined;
@@ -714,9 +696,9 @@ var __static = {
 	 * @return void
 	 */
 	Ie_openPopup: function(popup, positionInfos) {
-		f_core.Assert(typeof(popup)=="object", "Invalid popup parameter '"+popup+"'.");
-		f_core.Assert(typeof(positionInfos)=="object", "Invalid positionInfos parameter '"+positionInfos+"'.");
-		f_core.Assert(typeof(positionInfos.position)=="number", "Invalid positionInfos.position parameter '"+positionInfos.position+"'.");
+		f_core.Assert(typeof(popup)=="object", "f_popup.Ie_openPopup: Invalid popup parameter '"+popup+"'.");
+		f_core.Assert(typeof(positionInfos)=="object", "f_popup.Ie_openPopup: Invalid positionInfos parameter '"+positionInfos+"'.");
+		f_core.Assert(typeof(positionInfos.position)=="number", "f_popup.Ie_openPopup: Invalid positionInfos.position parameter '"+positionInfos.position+"'.");
 
 		f_core.Debug(f_popup, "Ie_openPopup: open popup '"+popup+"' positionInfos="+positionInfos.position);
 			
@@ -791,9 +773,11 @@ var __static = {
 			popupH+=positionInfos.deltaHeight;
 		}
 
-		f_core.Debug(f_popup, "Open popup x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" componentPosition="+popupComponent.id+"/"+popupComponent.tagName);
+		f_core.Debug(f_popup, "Ie_openPopup: Open popup x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" componentPosition="+popupComponent.id+"/"+popupComponent.tagName);
 		
 		popup.show(popupX, popupY, popupW, popupH, popupComponent);		
+		
+		window.title="Title= "+popupW+"/"+popupH;
 
 		var seps=popupDocument.getElementsByTagName("li");
 		// Il faut motiver les composants ?????
@@ -811,7 +795,7 @@ var __static = {
 
 		body.onunload=null;	
 				
-		f_core.Debug(f_popup, "Unload popup '"+this.id+"' rootPopup="+doc._rootPopup);		
+		f_core.Debug(f_popup, "_Ie_unload: Unload popup '"+this.id+"' rootPopup="+doc._rootPopup);		
 		
 		if (doc._rootPopup) {
 			var cbs=f_popup.Callbacks;
@@ -831,7 +815,7 @@ var __static = {
 			return;
 		}
 
-		f_core.Debug(f_popup, "Close popup '"+popup.id+"'.");		
+		f_core.Debug(f_popup, "Ie_closePopup: Close popup '"+popup.id+"'.");		
 
 		popup.hide();
 	},
@@ -847,7 +831,7 @@ var __static = {
 				body.removeChild(body.firstChild);
 			}
 		} catch (x) {
-			f_core.Debug(f_popup, "Can not remode body", x);
+			f_core.Debug(f_popup, "Ie_releasePopup: Can not remode body", x);
 		}
 	},
 	/**
@@ -873,9 +857,9 @@ var __static = {
 	 * @return Object
 	 */
 	Gecko_openPopup: function(popup, positionInfos) {
-		f_core.Assert(typeof(popup)=="object", "Invalid popup parameter '"+popup+"'.");
-		f_core.Assert(typeof(positionInfos)=="object", "Invalid positionInfos parameter '"+positionInfos+"'.");
-		f_core.Assert(typeof(positionInfos.position)=="number", "Invalid positionInfos.position parameter '"+positionInfos.position+"'.");
+		f_core.Assert(typeof(popup)=="object", "f_popup.Gecko_openPopup: Invalid popup parameter '"+popup+"'.");
+		f_core.Assert(typeof(positionInfos)=="object", "f_popup.Gecko_openPopup: Invalid positionInfos parameter '"+positionInfos+"'.");
+		f_core.Assert(typeof(positionInfos.position)=="number", "f_popup.Gecko_openPopup: Invalid positionInfos.position parameter '"+positionInfos.position+"'.");
 		
 		var component=positionInfos.component;	
 		var offsetX=0;
@@ -921,7 +905,7 @@ var __static = {
 			offsetX=eventPos.x-cursorPos.x;
 			offsetY=eventPos.y-cursorPos.y;
 
-			f_core.Debug(f_popup, "Gecko_openPopup (mouse position) X="+offsetX+" Y="+offsetY+" eventX="+eventPos.x+" eventY="+eventPos.y+" cursorPosX="+cursorPos.x+" cursorPosY="+cursorPos.y);
+			f_core.Debug(f_popup, "Gecko_openPopup: (mouse position) X="+offsetX+" Y="+offsetY+" eventX="+eventPos.x+" eventY="+eventPos.y+" cursorPosX="+cursorPos.x+" cursorPosY="+cursorPos.y);
 			
 			break;
 		}

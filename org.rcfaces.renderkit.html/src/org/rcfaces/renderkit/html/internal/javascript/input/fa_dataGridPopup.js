@@ -98,7 +98,11 @@ var __static = {
 				/**
 				 * @method public
 				 */
-				exit: dataGridPopup._clickOutside,
+				exit: function(jsEvent) {
+					f_core.Debug(fa_dataGridPopup, "_OpenPopup.exit: Click outside "+jsEvent);
+
+					return dataGridPopup._clickOutside(jsEvent);
+				},
 				/**
 				 * @method public
 				 */
@@ -110,12 +114,16 @@ var __static = {
 				 	case f_key.VK_ENTER:
 				 			
 						dataGridPopup._rowSelection(dataGridPopup._dataGrid, jsEvent);
-				 		return true;
+				 		return false;
+
+				 	case f_key.VK_TAB:
+						dataGridPopup._rowSelection(dataGridPopup._dataGrid, jsEvent);
+				 		return true; // On accepte le TAB
 
 					case f_key.VK_ESCAPE:
 							
 						dataGridPopup.f_closeDataGridPopup(jsEvent);
-				 		return true;
+				 		return false;
 				 		
 					case f_key.VK_DOWN:
 					case f_key.VK_UP:
@@ -287,6 +295,8 @@ var __prototype = {
 		}
 		
 		this._valueFormat=valueFormat;
+		
+		this._iePopup=f_popup.Ie_enablePopup();
 	},
 	f_finalize: function() {
 		
@@ -295,12 +305,19 @@ var __prototype = {
 		// this._valueColumnId=undefined; // String
 		// this._labelColumnId=undefined; // String
 		// this._valueFormat=undefined; // String
+		// this._iePopup=undefined; // boolean
 		
+		this._popup=undefined; // ? HtmlDivElement
 		this._columns=undefined;  // Object[]
 		
 		this.f_destroyDataGrid();
 		this.f_destroyPager();
 	},
+	/**
+	 * @method protected
+	 * @param HTMLElement parent
+	 * @return f_dataGrid
+	 */
 	f_constructDataGrid: function(parent) {
 		var dataGrid=this._dataGrid;
 		if (dataGrid && dataGrid.parentNode && dataGrid.ownerDocument==parent.ownerDocument) {
@@ -314,16 +331,16 @@ var __prototype = {
 		if (pager) {
 			this.f_destroyPager(dataGrid);	
 		}
-		
-		var dataGridContainer=f_core.CreateElement(parent, "table", {cellSpacing: 0, cellPadding: 0 });
-		
-		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");
-		
+
 		var width=f_core.GetNumberAttribute(this, "v:popupWidth", 320);
 		var height=f_core.GetNumberAttribute(this, "v:popupHeight", 200);
 
 		var rows=f_core.GetNumberAttribute(this, "v:rows");
-
+		
+		var dataGridContainer=f_core.CreateElement(parent, "table", {cellSpacing: 0, cellPadding: 0, "style": "width:"+width+"px;height:"+height+"px" });
+		
+		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");		
+		
 		var td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {align: "left", valign: "middle" });									
 		
 		dataGrid=f_dataGridPopup.Create(td, 
@@ -341,6 +358,8 @@ var __prototype = {
 				":"+dataGrid.id,
 				f_core.GetAttribute(this, "v:pagerStyleClass"));
 			this._pager=pager;
+			
+			pager.style.height="26px";
 		}
 				
 		var self=this;
@@ -436,6 +455,10 @@ var __prototype = {
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 * @return boolean
+	 */
 	_clickOutside: function(jsEvent) {
 		f_core.Debug(fa_dataGridPopup, "_clickOutside: popup click outside");
 		

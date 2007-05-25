@@ -17,12 +17,17 @@ var __static = {
 		for(var i=2;i<arguments.length;i++) {
 			var name=arguments[i];
 			
-			var value=element.getAttribute(name);
-			if (!value) {
-				continue;
+			try {
+				var value=element.getAttribute(name);
+				if (!value) {
+					continue;
+				}
+				
+				attributes[name]=value;
+				
+			} catch(x) {
+				// IE peut envoyer une exception en fonction du composant !
 			}
-			
-			attributes[name]=value;
 		}
 	},
 	/**
@@ -33,7 +38,7 @@ var __static = {
 		var columns=dataGridPopup._columns;
 		
 		var properties= { 
-			id: dataGridPopup.id+":popup", 
+			id: dataGridPopup.id+fa_namingContainer.GetSeparator()+"popup", 
 			"v:nc": "true", 
 			role: "wairole:grid", 
 			"class": "f_grid", 
@@ -92,13 +97,13 @@ var __static = {
 		
 		var divDataBody=f_core.CreateElement(divDataGrid, "div", { 
 			"class": "f_grid_dataBody_scroll",
-			style: "width:"+width+"px"
+			style: "width:"+width+"px;height:"+(height-20)+"px"
 		});
 		
 		var tableBody=f_core.CreateElement(divDataBody, "table", { 
 			"class": "f_grid_table",
 			cellpadding: "0",
-			width: "100%"
+			width: "width:"+width+"px"
 		});
 		
 		for(var i=0;i<columns.length;i++) {

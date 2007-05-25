@@ -2092,7 +2092,7 @@ var __prototype = {
 		var now=new Date().getTime();
 		if (this._lastKeyDate!==undefined) {
 			var dt=now-this._lastKeyDate;
-			f_core.Debug(f_tree, "Delay key down "+dt+"ms");
+			f_core.Debug(f_tree, "_searchTreeNode: Delay key down "+dt+"ms");
 			if (dt<f_tree._SEARCH_KEY_DELAY) {
 				key=this._lastKey+key;
 			}
@@ -2145,6 +2145,9 @@ var __prototype = {
 		}
 	},
 	f_setFocus: function() {
+
+		f_core.Debug(f_tree, "f_setFocus: Set focus on tree '"+this.id+"' cfocus="+this._cfocus);
+
 		if (!f_core.ForceComponentVisibility(this)) {
 			return;
 		}
@@ -2164,7 +2167,7 @@ var __prototype = {
 	 * @method private
 	 */
 	_searchComponentByNodeOrValue: function(nodeOrValue) {
-		f_core.Assert(nodeOrValue, "Value parameter is null !");
+		f_core.Assert(nodeOrValue, "f_tree._searchComponentByNodeOrValue: Value parameter is null !");
 
 		var lis=this.getElementsByTagName("li");
 		for(var i=0;i<lis.length;i++) {

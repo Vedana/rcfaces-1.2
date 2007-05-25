@@ -241,7 +241,7 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             throws ConverterException {
 
         return ValuesTools.convertStringToValue(context, component,
-                submittedValue);
+                submittedValue, true);
     }
 
     protected static final Renderer getRenderer(FacesContext facesContext,

@@ -207,6 +207,7 @@ var __static = {
 	
 	/**
 	 * @method hidden static final
+	 * @param String separator
 	 */
 	SetSeparator: function(separator) {
 		if (separator===false) {
@@ -215,6 +216,13 @@ var __static = {
 		}
 		
 		fa_namingContainer.PageSeparator=separator;
+	},
+	/**
+	 * @method hidden static final
+	 * @return String
+	 */
+	GetSeparator: function() {
+		return fa_namingContainer.PageSeparator;
 	},
 	
 	/**

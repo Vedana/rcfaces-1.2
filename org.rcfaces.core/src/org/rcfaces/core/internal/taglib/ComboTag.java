@@ -1,107 +1,100 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.ComboComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.ComboComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ComboTag extends AbstractInputTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(ComboTag.class);
 
-    private String selectionListeners;
+	private static final Log LOG=LogFactory.getLog(ComboTag.class);
 
-    private String required;
+	private String selectionListeners;
+	private String required;
+	private String filterProperties;
+	public String getComponentType() {
+		return ComboComponent.COMPONENT_TYPE;
+	}
 
-    private String filterProperties;
+	public final String getSelectionListener() {
+		return selectionListeners;
+	}
 
-    public String getComponentType() {
-        return ComboComponent.COMPONENT_TYPE;
-    }
+	public final void setSelectionListener(String selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
 
-    public final String getSelectionListener() {
-        return selectionListeners;
-    }
+	public final String getRequired() {
+		return required;
+	}
 
-    public final void setSelectionListener(String selectionListeners) {
-        this.selectionListeners = selectionListeners;
-    }
+	public final void setRequired(String required) {
+		this.required = required;
+	}
 
-    public final String getRequired() {
-        return required;
-    }
+	public final String getFilterProperties() {
+		return filterProperties;
+	}
 
-    public final void setRequired(String required) {
-        this.required = required;
-    }
+	public final void setFilterProperties(String filterProperties) {
+		this.filterProperties = filterProperties;
+	}
 
-    public final String getFilterProperties() {
-        return filterProperties;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ComboComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  required='"+required+"'");
+			LOG.debug("  filterProperties='"+filterProperties+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setFilterProperties(String filterProperties) {
-        this.filterProperties = filterProperties;
-    }
+		if ((uiComponent instanceof ComboComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComboComponent'.");
+		}
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (ComboComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  required='" + required + "'");
-            LOG.debug("  filterProperties='" + filterProperties + "'");
-        }
-        super.setProperties(uiComponent);
+		ComboComponent component = (ComboComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-        if ((uiComponent instanceof ComboComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'ComboComponent'.");
-        }
+		if (selectionListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
 
-        ComboComponent component = (ComboComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+		if (required != null) {
+			if (isValueReference(required)) {
+				ValueBinding vb = application.createValueBinding(required);
+				component.setValueBinding(Properties.REQUIRED, vb);
 
-        if (selectionListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-        }
+			} else {
+				component.setRequired(getBool(required));
+			}
+		}
 
-        if (required != null) {
-            if (isValueReference(required)) {
-                ValueBinding vb = application.createValueBinding(required);
-                component.setValueBinding(Properties.REQUIRED, vb);
+		if (filterProperties != null) {
+				ValueBinding vb = application.createValueBinding(filterProperties);
+				component.setValueBinding(Properties.FILTER_PROPERTIES, vb);
+		}
+	}
 
-            } else {
-                component.setRequired(getBool(required));
-            }
-        }
+	public void release() {
+		selectionListeners = null;
+		required = null;
+		filterProperties = null;
 
-        if (filterProperties != null) {
-            ValueBinding vb = application.createValueBinding(filterProperties);
-            component.setValueBinding(Properties.FILTER_PROPERTIES, vb);
-        }
-    }
-
-    public void release() {
-        selectionListeners = null;
-        required = null;
-        filterProperties = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

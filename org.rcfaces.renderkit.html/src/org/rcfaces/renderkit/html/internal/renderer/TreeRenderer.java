@@ -130,10 +130,8 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
         String cursorValue = componentData.getStringProperty("cursor");
         if (cursorValue != null) {
-            Object cursorValueObject = cursorValue;
-
-            cursorValueObject = ValuesTools.convertStringToValue(facesContext,
-                    treeComponent, cursorValueObject);
+            Object cursorValueObject = ValuesTools.convertStringToValue(
+                    facesContext, treeComponent, cursorValue, false);
 
             Object oldCursorValueObject = treeComponent
                     .getCursorValue(facesContext);

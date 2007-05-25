@@ -100,9 +100,11 @@ var __static = {
 		if (alignment===undefined) {
 			alignment=f_waiting._DEFAULT_ALIGNMENT;
 		}
+		
+		var doc=parentElement.ownerDocument;
 	
 		f_core.Assert(parentElement.tagName, "parent is not a DOM element !");
-		var node=document.createElement("div");
+		var node=doc.createElement("div");
 		
 		var className="f_waiting";
 		node.className=className+((inlineMode)?" f_waiting_inline":" f_waiting_absolute");
@@ -117,7 +119,7 @@ var __static = {
 			message=f_waiting.GetLoadingMessage();
 		}
 		
-		node.appendChild(document.createTextNode(message));
+		node.appendChild(doc.createTextNode(message));
 		
 		if (parentElement.tagName.toLowerCase()=="select") {
 			parentElement=parentElement.parentNode;

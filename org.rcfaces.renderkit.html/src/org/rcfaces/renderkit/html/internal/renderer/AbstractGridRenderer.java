@@ -636,7 +636,14 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         if (width != null) {
             String widthRightPadding = computeSizeInPixel(width, -1,
                     -TEXT_RIGHT_PADDING);
-            htmlWriter.writeStyle().writeWidth(widthRightPadding);
+
+            if (widthRightPadding != null) {
+                htmlWriter.writeStyle().writeWidth(widthRightPadding);
+
+            } else {
+                LOG.debug("Invalid width '" + width + "' -"
+                        + TEXT_RIGHT_PADDING);
+            }
         }
 
         htmlWriter.startElement(IHtmlWriter.DIV);
@@ -655,7 +662,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         if (width != null) { // SORTER
             String widthRightPadding = computeSizeInPixel(width, -1,
                     -TEXT_RIGHT_PADDING);
-            htmlWriter.writeStyle().writeWidth(widthRightPadding);
+            if (widthRightPadding != null) {
+                htmlWriter.writeStyle().writeWidth(widthRightPadding);
+
+            } else {
+                LOG.debug("Invalid width '" + width + "' -"
+                        + TEXT_RIGHT_PADDING);
+            }
         }
 
         if (column instanceof IImageAccessorsCapability) {

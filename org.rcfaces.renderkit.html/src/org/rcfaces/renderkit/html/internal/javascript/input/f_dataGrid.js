@@ -1585,8 +1585,6 @@ var __prototype = {
 		}
 	
 		this._table.appendChild(body);	
-	},
-	f_updateTitle0: function() {
 	}
 }
  

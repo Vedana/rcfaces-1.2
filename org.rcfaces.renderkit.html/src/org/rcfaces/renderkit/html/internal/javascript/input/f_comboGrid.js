@@ -127,8 +127,9 @@ var __prototype = {
 		var button=f_core.GetFirstElementByTagName(this, "img", true);
 		this._button=button;
 		
-		this._formattedValue=f_core.GetAttribute(this, "v:formattedValue", "");
-		this._inputValue="";
+		this._formattedValue=this.f_getInput().value;
+		this._selectedValue=f_core.GetAttribute(this, "v:selectedValue", "");
+		this._inputValue=this._selectedValue;
 		
 		button._comboGrid=this;
 		button.onmousedown=f_comboGrid._OnButtonMouseDown;
@@ -153,6 +154,7 @@ var __prototype = {
 		// this._inputValue=undefined; // String
 		// this._inputSelection=undefined; // int[]
 		// this._focus=undefined; // boolean
+		// this._selectedValue=undefined; // String
 
 		var timerId=this._timerId;
 		if (timerId) {
@@ -175,6 +177,11 @@ var __prototype = {
 		}
 		
 		this.f_super(arguments);
+	},
+	f_serialize: function() {
+		this.f_setProperty(f_prop.SELECTED, this._selectedValue);
+		
+		return this.f_super(arguments);	
 	},
 	/**
 	 * @method private
@@ -306,8 +313,11 @@ var __prototype = {
 		case f_key.VK_RETURN:
 		case f_key.VK_ESPACE:
 			return f_core.CancelJsEvent(jsEvt);
+
+		case f_key.VK_TAB:
+			return true;		
 		}
-		
+
 		this._inputValue=this.f_getInput().value;
 		
 		return true;
@@ -372,7 +382,7 @@ var __prototype = {
 		
 		var value=this.f_getValue();
 		if (value==this._lastValue) {
-			f_core.Debug(f_comboGrid, "_onSuggest: Same value ! (value="+value+" / last="+this._lastValue+")");
+			f_core.Debug(f_comboGrid, "_onSuggest: Same value ! (value='"+value+"' / last='"+this._lastValue+"')");
 			return true;
 		}
 		
@@ -461,11 +471,18 @@ var __prototype = {
 		this.f_openDataGridPopup(null, text);
 	},
 	fa_valueSelected: function(value, label) {
+		f_core.Debug(f_comboGrid, "fa_valueSelected: value='"+value+"' label='"+label+"'");
+		
 		this._formattedValue=(label)?label:"";
+		this._selectedValue=value;
+		this._inputValue=value;
+		this._lastValue=value;
 		
 		this.f_getInput().value=value;
 	},
 	_onFocus: function() {
+		f_core.Debug(f_comboGrid, "_onFocus: inputValue='"+this._inputValue+"'  (formattedValue='"+this._formattedValue+"')");
+
 		this._focus=true;
 		
 		// On affiche la clef, ou la valeur saisie
@@ -480,6 +497,7 @@ var __prototype = {
 		
 	},
 	_onBlur: function(event) {
+		f_core.Debug(f_comboGrid, "_onBlur: formattedValue='"+this._formattedValue+"' (inputValue='"+this._inputValue+"')");
 		this._focus=undefined;
 
 		// On affiche la zone formatée
@@ -487,6 +505,8 @@ var __prototype = {
 		var input=this.f_getInput();
 		
 		this._inputSelection=f_core.GetTextSelection(input);
+		this._inputValue=input.value;
+		
 		input.value=this._formattedValue;
 		
 		this.f_closePopup(event.f_getJsEvent());
