@@ -521,7 +521,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
             int hiddenMode = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
 
-            if (selectItem instanceof IHiddenModeCapability) {
+            if (itemComponent instanceof IHiddenModeCapability) {
                 if (itemsToolFolderComponent.isItemHiddenModeSetted()) {
                     hiddenMode = itemsToolFolderComponent
                             .getItemHiddenMode(getComponentRenderContext()
@@ -532,10 +532,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     hiddenMode = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
                 }
 
-                if (itemComponent instanceof IHiddenModeCapability) {
-                    ((IHiddenModeCapability) itemComponent)
-                            .setHiddenMode(hiddenMode);
-                }
+                ((IHiddenModeCapability) itemComponent).setHiddenMode(hiddenMode);
             }
 
             if (((IVisibleItem) selectItem).isVisible() == false) {
