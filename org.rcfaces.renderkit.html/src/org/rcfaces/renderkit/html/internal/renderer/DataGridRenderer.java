@@ -16,7 +16,6 @@ import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
@@ -179,22 +178,20 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
 
         super.encodeJsColumns(jsWriter, tableContext, generatorMask);
+    }
+
+    protected void writeGridColumnProperties(IObjectLiteralWriter objectWriter,
+            AbstractGridRenderContext tableContext, UIColumn columnComponent,
+            int columnIndex) throws WriterException {
+
+        super.writeGridColumnProperties(objectWriter, tableContext,
+                columnComponent, columnIndex);
 
         UIColumn rowValueColumn = ((DataGridRenderContext) tableContext)
                 .getRowValueColumn();
-        if (rowValueColumn != null) {
-            UIColumn columns[] = tableContext.listColumns();
 
-            for (int i = 0; i < columns.length; i++) {
-                UIColumn columnComponent = columns[i];
-
-                if (rowValueColumn == columnComponent) {
-                    jsWriter.writeMethodCall("f_setRowValueColumn").write(
-                            String.valueOf(i)).writeln(");");
-
-                    break;
-                }
-            }
+        if (rowValueColumn == columnComponent) {
+            objectWriter.writeSymbol("_valueColumn").writeBoolean(true);
         }
     }
 

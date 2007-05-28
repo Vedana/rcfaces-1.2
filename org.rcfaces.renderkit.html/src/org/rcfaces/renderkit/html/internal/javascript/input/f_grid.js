@@ -1638,6 +1638,10 @@ var __prototype = {
 					column._visibility=true;
 				}
 				
+				if (column._valueColumn) {
+					this._rowValueColumnIndex=i-1;
+				}				
+				
 				var defaultCellImage=column._defaultCellImageURL;
 				if (defaultCellImage) {
 					f_imageRepository.PrepareImage(defaultCellImage);				
@@ -2928,12 +2932,6 @@ var __prototype = {
 		var nextPos=0;
 		
 		this.f_setFirst(nextFirst, nextPos, selection);
-	},
-	/**
-	 * @method hidden
-	 */
-	f_setRowValueColumn: function(idx) {
-		this._rowValueColumnIndex=idx;
 	},
 	/**
 	 * @method hidden

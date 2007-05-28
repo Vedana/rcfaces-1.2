@@ -37,6 +37,7 @@ import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.renderer.AbstractGridRenderer;
 import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
@@ -262,8 +263,12 @@ public class PopupGridService extends AbstractHtmlService {
         String varId = jsWriter.getComponentVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentClientId).writeln(
-                ", document).f_getDataGrid();");
+                "GetElementByClientId").writeString(componentClientId).write(
+                ").");
+
+        String methodName = jsWriter.getJavaScriptRenderContext()
+                .convertSymbol(JavaScriptClasses.COMBO_GRID, "f_getDataGrid");
+        jsWriter.write(methodName).writeln("();");
 
         jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
                 ");");

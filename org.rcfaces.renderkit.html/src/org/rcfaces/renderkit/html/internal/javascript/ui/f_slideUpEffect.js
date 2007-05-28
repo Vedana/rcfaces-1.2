@@ -21,7 +21,7 @@ var __static = {
 	_STEP: 0.3,
 
 	/**
-	 * @method hidden static
+	 * @method public static
 	 * @return void
 	 */
 	Initializer: function() {

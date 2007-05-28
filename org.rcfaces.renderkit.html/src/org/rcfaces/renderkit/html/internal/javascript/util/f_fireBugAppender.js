@@ -20,7 +20,7 @@ var __static={
 	},
 	
 	/**
-	 * @method hidden static
+	 * @method public static
 	 * @return void
 	 */
 	Initializer: function() {	

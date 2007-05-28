@@ -294,6 +294,9 @@ var __prototype = {
 		}
 	},
 	f_finalize: function() {
+
+		fa_pagedComponent.UnregisterPager(this);
+
 		this._destroyButtons();
 		
 		this._pagedComponent=undefined; // f_pagedComponent

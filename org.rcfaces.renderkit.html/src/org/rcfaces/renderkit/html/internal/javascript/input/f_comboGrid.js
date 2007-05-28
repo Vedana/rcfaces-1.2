@@ -124,6 +124,8 @@ var __prototype = {
 		
 		this._valueFormat=f_core.GetAttribute(this, "v:valueFormat");
 		
+		this._filtred=true;
+		
 		var button=f_core.GetFirstElementByTagName(this, "img", true);
 		this._button=button;
 		
@@ -275,7 +277,14 @@ var __prototype = {
 			return;
 		}
 		
-		this.f_openDataGridPopup(jsEvent, this.f_getText(), autoSelect);
+		var text;
+		if (this._focus) {
+			text=this.f_getText();
+		} else {
+			text=this._selectedValue;
+		}
+		
+		this.f_openDataGridPopup(jsEvent, text, autoSelect);
 	},
 	/**
 	 * @method protected
@@ -483,6 +492,7 @@ var __prototype = {
 		if (!this._focus) {
 			return;
 		}
+		
 		if (!text) {
 			text=this.f_getText();
 		}
@@ -496,10 +506,19 @@ var __prototype = {
 
 		this.f_openDataGridPopup(null, text);
 	},
+	/**
+	 * Returns the selected value.
+	 * 
+	 * @method public
+	 * @return String 
+	 */
+	f_getSelectedValue: function() {
+		return this._selectedValue;
+	},
 	fa_valueSelected: function(value, label, jsEvent) {
 		f_core.Debug(f_comboGrid, "fa_valueSelected: value='"+value+"' label='"+label+"'");
 		
-		if (this.f_fireEvent(f_event.SELECTION, jsEvent, null, value)==false) {
+		if (this.f_fireEvent(f_event.SELECTION, jsEvent, null, value)===false) {
 			return;
 		}
 		

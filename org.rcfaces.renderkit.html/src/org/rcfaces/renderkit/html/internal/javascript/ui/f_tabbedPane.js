@@ -238,7 +238,7 @@ var __static = {
 		return url;
 	},
 	/**
-	 * @method hidden static
+	 * @method public static
 	 * @return void
 	 */
 	Initializer: function() {

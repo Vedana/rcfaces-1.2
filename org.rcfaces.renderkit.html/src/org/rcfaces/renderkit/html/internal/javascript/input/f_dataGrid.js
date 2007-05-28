@@ -337,6 +337,7 @@ var __prototype = {
 		row._className=className;
 				
 		if (this._selectable) {
+			row._selected=false;
 			var selected=false;
 			
 			if (!this._selectionFullState && properties) {

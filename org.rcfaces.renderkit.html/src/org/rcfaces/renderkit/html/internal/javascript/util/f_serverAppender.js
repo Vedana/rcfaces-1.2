@@ -17,7 +17,7 @@ var __static={
 	_TIMER: 500,
 	
 	/**
-	 * @method hidden static
+	 * @method public static
 	 * @return void
 	 */
 	Initializer: function() {	

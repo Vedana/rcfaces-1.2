@@ -4,7 +4,7 @@
 
 /**
  * 
- * @aspect public fa_dataGridPopup extends f_object
+ * @aspect public fa_dataGridPopup extends f_object, fa_filterProperties
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -216,6 +216,8 @@ var __static = {
 		if (!popup) {
 			return; 
 		}
+	
+		dataGridPopup._popup=undefined;
 		
 		if (!dataGridPopup._iePopup) {
 			f_popup.Gecko_closePopup(popup);
@@ -225,7 +227,6 @@ var __static = {
 		}	
 		
 		f_popup.Ie_closePopup(popup);
-		dataGridPopup._popup=undefined;
 
 		f_popup.Ie_releasePopup(popup);
 	}
@@ -355,8 +356,8 @@ var __prototype = {
 		}
 				
 		var self=this;
-		dataGrid.f_addEventListener(f_event.DBLCLICK, function(event) {
-			return self._doubleClickRowSelection(event);
+		dataGrid.f_addEventListener(f_event.SELECTION, function(event) {
+			return self._rowSelectionEvent(event);
 		});
 		
 		return dataGrid;
@@ -440,10 +441,15 @@ var __prototype = {
 			return false;
 		}
 		
-		if (autoSelect) {
+		var selection=dataGrid.f_getSelection();
+		if (autoSelect && !selection.length) {
 			dataGrid.f_setAutoSelection(autoSelect);
 		}
-		dataGrid.f_setFilterProperty("text", text);
+		
+		var filterProperties=this.f_getFilterProperties();
+		filterProperties.text=text;
+		
+		dataGrid.f_setFilterProperties(filterProperties);
 		
 		return true;
 	},
@@ -499,8 +505,12 @@ var __prototype = {
 	 * @param f_event event
 	 * @return void
 	 */
-	_doubleClickRowSelection: function(event) {
-		f_core.Debug(fa_dataGridPopup, "_doubleClickRowSelection: popup double click");
+	_rowSelectionEvent: function(event) {
+		f_core.Debug(fa_dataGridPopup, "_rowSelectionEvent: selection detail="+event.f_getDetail());
+		
+		if (!(event.f_getDetail() & f_event.ACTIVATE_DETAIL)) {
+			return;
+		}
 		
 		this._rowSelection(event.f_getSelectionProvider(), event.f_getJsEvent());
 	},
@@ -536,6 +546,11 @@ var __prototype = {
 		this.fa_valueSelected(value, message, jsEvent);
 	},
 
+	fa_cancelFilterRequest: function() {
+	},
+	fa_updateFilterProperties: function() {		
+	},
+
 	/**
 	 * @method protected abstract
 	 * @param String value
@@ -546,4 +561,4 @@ var __prototype = {
 	fa_valueSelected: f_class.ABSTRACT
 }
 
-new f_aspect("fa_dataGridPopup", __static, __prototype);
+new f_aspect("fa_dataGridPopup", __static, __prototype, fa_filterProperties);

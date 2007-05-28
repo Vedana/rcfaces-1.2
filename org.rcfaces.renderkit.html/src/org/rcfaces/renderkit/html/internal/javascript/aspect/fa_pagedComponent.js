@@ -59,6 +59,21 @@ var __static = {
 		f_core.Debug(fa_pagedComponent, "RegisterPager: Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Waiting initialization ! ");
 	},
 	/**
+	 * @method hidden static final 
+	 * @param fa_pager pager
+	 * @return void
+	 */
+	UnregisterPager: function(pager) {	
+		var dgp=fa_pagedComponent._DataPagers;
+		if (!dgp) {
+			return;
+		}
+		
+		for(var componentId in dgp) {
+			f_core.RemoveElement(dgp[componentId], pager);
+		}
+	},
+	/**
 	 * @method hidden static
 	 * @return void
 	 */

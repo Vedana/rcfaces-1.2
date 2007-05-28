@@ -924,6 +924,7 @@
 		<file name="input/fa_dataGridPopup.js">
 			<class name="fa_dataGridPopup">
 				<required-class name="f_aspect" />
+				<required-class name="fa_filterProperties" />
 				<required-class name="f_popup" />
 				<required-class name="f_dataGridPopup" />
 				<required-class name="f_pager" />

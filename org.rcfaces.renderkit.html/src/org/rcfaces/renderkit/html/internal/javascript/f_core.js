@@ -1103,8 +1103,6 @@ var f_core = {
 		
 		var doc=parent.ownerDocument;
 		
-		var ie;
-		
 		for(var i=1;i<arguments.length;) {
 			tagName=arguments[i++];
 			properties=arguments[i++];
@@ -1130,22 +1128,14 @@ var f_core = {
 						break;
 					
 					case "style":
-						if (ie===undefined) {
-							ie=f_core.IsInternetExplorer();
-						}
-						
-						if (ie) {							
-							var rs=value.split(';');
-							for(var j=0;j<rs.length;j++) {
-								var rs2=rs[j].split(':');
-								
-								var rname=f_core.Trim(rs2[0]);
-								var rvalue=f_core.Trim(rs2[1]);
-								
-								element.style[rname]=rvalue;
-							}
-						} else {
-							element.style=value;
+						var rs=value.split(';');
+						for(var j=0;j<rs.length;j++) {
+							var rs2=rs[j].split(':');
+							
+							var rname=f_core.Trim(rs2[0]);
+							var rvalue=f_core.Trim(rs2[1]);
+							
+							element.style[rname]=rvalue;
 						}
 						break;
 					
