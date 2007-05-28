@@ -133,7 +133,7 @@ class HtmlRequestContext extends AbstractRequestContext implements
         if (values != null) {
             // Il faut transformer la valeur serialisée en Map
             properties = HtmlTools.decodeParametersToMap(getProcessContext(),
-                    component, values, PROPERTY_SEPARATOR, Boolean.FALSE);
+                    component, values, PROPERTY_SEPARATOR, "");
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Decode component data of '" + componentId + "' to "

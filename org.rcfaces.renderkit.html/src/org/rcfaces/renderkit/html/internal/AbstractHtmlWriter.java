@@ -9,6 +9,8 @@ import java.util.Stack;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
@@ -24,11 +26,20 @@ public abstract class AbstractHtmlWriter extends
         AbstractHtmlComponentlRenderContext implements IHtmlWriter {
     private static final String REVISION = "$Revision$";
 
+    private static final Log LOG = LogFactory.getLog(AbstractHtmlWriter.class);
+
     private static final char LF = '\n';
 
     private static final String TAG_STACK_PROPERTY = "org.rcfaces.core.internal.writer.TAG_STACK";
 
     private static final String NONE_WAI_ROLE_NS = "none";
+
+    protected static final boolean VERIFY_TAG_STACK = LOG.isDebugEnabled();
+    static {
+        if (VERIFY_TAG_STACK) {
+            LOG.debug("Verify tags stack enabled.");
+        }
+    }
 
     private final ResponseWriter responseWriter;
 
@@ -197,18 +208,7 @@ public abstract class AbstractHtmlWriter extends
             throws WriterException {
         closeCssWriter();
 
-        try {
-            responseWriter.startElement(name, component);
-
-        } catch (IOException e) {
-            throw new WriterException(null, e, component);
-        }
-
-        return this;
-    }
-
-    public ISgmlWriter startElement(String name) throws WriterException {
-        if (Constants.VERIFY_TAG_STACK) {
+        if (VERIFY_TAG_STACK) {
             Stack tagStack = (Stack) getFacesContext().getExternalContext()
                     .getRequestMap().get(TAG_STACK_PROPERTY);
             if (tagStack == null) {
@@ -221,13 +221,24 @@ public abstract class AbstractHtmlWriter extends
             tagStack.push(name);
         }
 
+        try {
+            responseWriter.startElement(name, component);
+
+        } catch (IOException e) {
+            throw new WriterException(null, e, component);
+        }
+
+        return this;
+    }
+
+    public ISgmlWriter startElement(String name) throws WriterException {
         return startElement(name, this.getComponent());
     }
 
     public ISgmlWriter endElement(String name) throws WriterException {
         closeCssWriter();
 
-        if (Constants.VERIFY_TAG_STACK) {
+        if (VERIFY_TAG_STACK) {
             Stack tagStack = (Stack) getFacesContext().getExternalContext()
                     .getRequestMap().get(TAG_STACK_PROPERTY);
             if (tagStack == null || tagStack.isEmpty()) {

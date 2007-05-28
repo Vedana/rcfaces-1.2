@@ -287,7 +287,7 @@ public class TextComponent extends AbstractOutputComponent implements
 	 * Returns a string value specifying the type of data (Java) to convert to or from.
 	 * @return type of data
 	 */
-	public final String getType() {
+	public String getType() {
 		return getType(null);
 	}
 
@@ -295,7 +295,7 @@ public class TextComponent extends AbstractOutputComponent implements
 	 * Returns a string value specifying the type of data (Java) to convert to or from.
 	 * @return type of data
 	 */
-	public final String getType(javax.faces.context.FacesContext facesContext) {
+	public String getType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TYPE, facesContext);
 	}
 
@@ -303,7 +303,7 @@ public class TextComponent extends AbstractOutputComponent implements
 	 * Sets a string value specifying the type of data (Java) to convert to or from.
 	 * @param type type of data
 	 */
-	public final void setType(String type) {
+	public void setType(String type) {
 		engine.setProperty(Properties.TYPE, type);
 	}
 
@@ -315,7 +315,7 @@ public class TextComponent extends AbstractOutputComponent implements
 	 * Returns <code>true</code> if the attribute "type" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isTypeSetted() {
+	public boolean isTypeSetted() {
 		return engine.isPropertySetted(Properties.TYPE);
 	}
 

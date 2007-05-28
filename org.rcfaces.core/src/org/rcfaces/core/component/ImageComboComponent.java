@@ -332,21 +332,21 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 	/**
 	 * Experimental : do not use!
 	 */
-	public final int getPopupRowNumber() {
+	public int getPopupRowNumber() {
 		return getPopupRowNumber(null);
 	}
 
 	/**
 	 * Experimental : do not use!
 	 */
-	public final int getPopupRowNumber(javax.faces.context.FacesContext facesContext) {
+	public int getPopupRowNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.POPUP_ROW_NUMBER, 0, facesContext);
 	}
 
 	/**
 	 * Experimental : do not use!
 	 */
-	public final void setPopupRowNumber(int popupRowNumber) {
+	public void setPopupRowNumber(int popupRowNumber) {
 		engine.setProperty(Properties.POPUP_ROW_NUMBER, popupRowNumber);
 	}
 
@@ -357,7 +357,7 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 	 * Returns <code>true</code> if the attribute "popupRowNumber" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPopupRowNumberSetted() {
+	public boolean isPopupRowNumberSetted() {
 		return engine.isPropertySetted(Properties.POPUP_ROW_NUMBER);
 	}
 

@@ -17,6 +17,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(ComboGridTag.class);
 
+	private String selectionListeners;
 	private String disabled;
 	private String required;
 	private String readOnly;
@@ -46,6 +47,14 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private String gridLookId;
 	public String getComponentType() {
 		return ComboGridComponent.COMPONENT_TYPE;
+	}
+
+	public final String getSelectionListener() {
+		return selectionListeners;
+	}
+
+	public final void setSelectionListener(String selectionListeners) {
+		this.selectionListeners = selectionListeners;
 	}
 
 	public final String getDisabled() {
@@ -310,6 +319,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
+		if (selectionListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
 		if (disabled != null) {
 			if (isValueReference(disabled)) {
 				ValueBinding vb = application.createValueBinding(disabled);
@@ -571,6 +584,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	}
 
 	public void release() {
+		selectionListeners = null;
 		disabled = null;
 		required = null;
 		readOnly = null;

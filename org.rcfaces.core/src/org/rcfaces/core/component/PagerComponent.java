@@ -164,7 +164,7 @@ public class PagerComponent extends AbstractBasicComponent implements
 	 * Returns a string specifying the message to display when there is no row to display.
 	 * @return message
 	 */
-	public final String getNoPagedMessage() {
+	public String getNoPagedMessage() {
 		return getNoPagedMessage(null);
 	}
 
@@ -172,7 +172,7 @@ public class PagerComponent extends AbstractBasicComponent implements
 	 * Returns a string specifying the message to display when there is no row to display.
 	 * @return message
 	 */
-	public final String getNoPagedMessage(javax.faces.context.FacesContext facesContext) {
+	public String getNoPagedMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.NO_PAGED_MESSAGE, facesContext);
 	}
 
@@ -180,7 +180,7 @@ public class PagerComponent extends AbstractBasicComponent implements
 	 * Steps a string specifying the message to display when there is no row to display.
 	 * @param noPagedMessage message
 	 */
-	public final void setNoPagedMessage(String noPagedMessage) {
+	public void setNoPagedMessage(String noPagedMessage) {
 		engine.setProperty(Properties.NO_PAGED_MESSAGE, noPagedMessage);
 	}
 
@@ -192,7 +192,7 @@ public class PagerComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "noPagedMessage" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isNoPagedMessageSetted() {
+	public boolean isNoPagedMessageSetted() {
 		return engine.isPropertySetted(Properties.NO_PAGED_MESSAGE);
 	}
 

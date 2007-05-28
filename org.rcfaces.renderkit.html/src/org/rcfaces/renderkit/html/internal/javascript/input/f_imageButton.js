@@ -5,7 +5,7 @@
 /**
  * f_imageButton class
  *
- * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images
+ * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */ 

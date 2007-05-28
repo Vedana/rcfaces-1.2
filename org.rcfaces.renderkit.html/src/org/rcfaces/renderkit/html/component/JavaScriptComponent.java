@@ -57,7 +57,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns an url value pointing to the file to be included.
 	 * @return url
 	 */
-	public final String getSrc() {
+	public String getSrc() {
 		return getSrc(null);
 	}
 
@@ -65,7 +65,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns an url value pointing to the file to be included.
 	 * @return url
 	 */
-	public final String getSrc(javax.faces.context.FacesContext facesContext) {
+	public String getSrc(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SRC, facesContext);
 	}
 
@@ -73,7 +73,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Sets an url value pointing to the file to be included.
 	 * @param src url
 	 */
-	public final void setSrc(String src) {
+	public void setSrc(String src) {
 		engine.setProperty(Properties.SRC, src);
 	}
 
@@ -85,7 +85,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "src" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSrcSetted() {
+	public boolean isSrcSetted() {
 		return engine.isPropertySetted(Properties.SRC);
 	}
 
@@ -93,7 +93,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns a string value sprecifying the charset associated to the "src" files.
 	 * @return charset
 	 */
-	public final String getSrcCharSet() {
+	public String getSrcCharSet() {
 		return getSrcCharSet(null);
 	}
 
@@ -101,7 +101,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns a string value sprecifying the charset associated to the "src" files.
 	 * @return charset
 	 */
-	public final String getSrcCharSet(javax.faces.context.FacesContext facesContext) {
+	public String getSrcCharSet(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SRC_CHAR_SET, facesContext);
 	}
 
@@ -109,7 +109,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Sets a string value sprecifying the charset associated to the "src" files.
 	 * @param srcCharSet charset
 	 */
-	public final void setSrcCharSet(String srcCharSet) {
+	public void setSrcCharSet(String srcCharSet) {
 		engine.setProperty(Properties.SRC_CHAR_SET, srcCharSet);
 	}
 
@@ -121,7 +121,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "srcCharSet" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSrcCharSetSetted() {
+	public boolean isSrcCharSetSetted() {
 		return engine.isPropertySetted(Properties.SRC_CHAR_SET);
 	}
 
@@ -129,7 +129,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns a string value specifying a list of javascript files to include.
 	 * @return list of javascript files
 	 */
-	public final String getRequiredFiles() {
+	public String getRequiredFiles() {
 		return getRequiredFiles(null);
 	}
 
@@ -137,7 +137,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns a string value specifying a list of javascript files to include.
 	 * @return list of javascript files
 	 */
-	public final String getRequiredFiles(javax.faces.context.FacesContext facesContext) {
+	public String getRequiredFiles(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.REQUIRED_FILES, facesContext);
 	}
 
@@ -145,7 +145,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Sets a string value specifying a list of javascript files to include.
 	 * @param requiredFiles list of javascript files
 	 */
-	public final void setRequiredFiles(String requiredFiles) {
+	public void setRequiredFiles(String requiredFiles) {
 		engine.setProperty(Properties.REQUIRED_FILES, requiredFiles);
 	}
 
@@ -157,7 +157,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "requiredFiles" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRequiredFilesSetted() {
+	public boolean isRequiredFilesSetted() {
 		return engine.isPropertySetted(Properties.REQUIRED_FILES);
 	}
 
@@ -165,7 +165,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns a string value specifying a list of javascript classes to include.
 	 * @return list of javascript classes
 	 */
-	public final String getRequiredClasses() {
+	public String getRequiredClasses() {
 		return getRequiredClasses(null);
 	}
 
@@ -173,7 +173,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns a string value specifying a list of javascript classes to include.
 	 * @return list of javascript classes
 	 */
-	public final String getRequiredClasses(javax.faces.context.FacesContext facesContext) {
+	public String getRequiredClasses(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.REQUIRED_CLASSES, facesContext);
 	}
 
@@ -181,7 +181,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Sets a string value specifying a list of javascript classes to include.
 	 * @param requiredClasses list of javascript classes
 	 */
-	public final void setRequiredClasses(String requiredClasses) {
+	public void setRequiredClasses(String requiredClasses) {
 		engine.setProperty(Properties.REQUIRED_CLASSES, requiredClasses);
 	}
 
@@ -193,7 +193,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "requiredClasses" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRequiredClassesSetted() {
+	public boolean isRequiredClassesSetted() {
 		return engine.isPropertySetted(Properties.REQUIRED_CLASSES);
 	}
 

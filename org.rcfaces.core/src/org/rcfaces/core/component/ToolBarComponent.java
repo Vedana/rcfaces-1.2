@@ -88,15 +88,15 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
-	public final String getSeparatorImageURL() {
+	public String getSeparatorImageURL() {
 		return getSeparatorImageURL(null);
 	}
 
-	public final String getSeparatorImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getSeparatorImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SEPARATOR_IMAGE_URL, facesContext);
 	}
 
-	public final void setSeparatorImageURL(String separatorImageURL) {
+	public void setSeparatorImageURL(String separatorImageURL) {
 		engine.setProperty(Properties.SEPARATOR_IMAGE_URL, separatorImageURL);
 	}
 
@@ -104,19 +104,19 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "separatorImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSeparatorImageURLSetted() {
+	public boolean isSeparatorImageURLSetted() {
 		return engine.isPropertySetted(Properties.SEPARATOR_IMAGE_URL);
 	}
 
-	public final int getSeparatorImageWidth() {
+	public int getSeparatorImageWidth() {
 		return getSeparatorImageWidth(null);
 	}
 
-	public final int getSeparatorImageWidth(javax.faces.context.FacesContext facesContext) {
+	public int getSeparatorImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SEPARATOR_IMAGE_WIDTH, 0, facesContext);
 	}
 
-	public final void setSeparatorImageWidth(int separatorImageWidth) {
+	public void setSeparatorImageWidth(int separatorImageWidth) {
 		engine.setProperty(Properties.SEPARATOR_IMAGE_WIDTH, separatorImageWidth);
 	}
 
@@ -124,19 +124,19 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "separatorImageWidth" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSeparatorImageWidthSetted() {
+	public boolean isSeparatorImageWidthSetted() {
 		return engine.isPropertySetted(Properties.SEPARATOR_IMAGE_WIDTH);
 	}
 
-	public final int getSeparatorImageHeight() {
+	public int getSeparatorImageHeight() {
 		return getSeparatorImageHeight(null);
 	}
 
-	public final int getSeparatorImageHeight(javax.faces.context.FacesContext facesContext) {
+	public int getSeparatorImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SEPARATOR_IMAGE_HEIGHT, 0, facesContext);
 	}
 
-	public final void setSeparatorImageHeight(int separatorImageHeight) {
+	public void setSeparatorImageHeight(int separatorImageHeight) {
 		engine.setProperty(Properties.SEPARATOR_IMAGE_HEIGHT, separatorImageHeight);
 	}
 
@@ -144,19 +144,19 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "separatorImageHeight" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSeparatorImageHeightSetted() {
+	public boolean isSeparatorImageHeightSetted() {
 		return engine.isPropertySetted(Properties.SEPARATOR_IMAGE_HEIGHT);
 	}
 
-	public final String getControlImageURL() {
+	public String getControlImageURL() {
 		return getControlImageURL(null);
 	}
 
-	public final String getControlImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getControlImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CONTROL_IMAGE_URL, facesContext);
 	}
 
-	public final void setControlImageURL(String controlImageURL) {
+	public void setControlImageURL(String controlImageURL) {
 		engine.setProperty(Properties.CONTROL_IMAGE_URL, controlImageURL);
 	}
 
@@ -164,19 +164,19 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "controlImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isControlImageURLSetted() {
+	public boolean isControlImageURLSetted() {
 		return engine.isPropertySetted(Properties.CONTROL_IMAGE_URL);
 	}
 
-	public final int getControlImageWidth() {
+	public int getControlImageWidth() {
 		return getControlImageWidth(null);
 	}
 
-	public final int getControlImageWidth(javax.faces.context.FacesContext facesContext) {
+	public int getControlImageWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.CONTROL_IMAGE_WIDTH, 0, facesContext);
 	}
 
-	public final void setControlImageWidth(int controlImageWidth) {
+	public void setControlImageWidth(int controlImageWidth) {
 		engine.setProperty(Properties.CONTROL_IMAGE_WIDTH, controlImageWidth);
 	}
 
@@ -184,19 +184,19 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "controlImageWidth" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isControlImageWidthSetted() {
+	public boolean isControlImageWidthSetted() {
 		return engine.isPropertySetted(Properties.CONTROL_IMAGE_WIDTH);
 	}
 
-	public final int getControlImageHeight() {
+	public int getControlImageHeight() {
 		return getControlImageHeight(null);
 	}
 
-	public final int getControlImageHeight(javax.faces.context.FacesContext facesContext) {
+	public int getControlImageHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.CONTROL_IMAGE_HEIGHT, 0, facesContext);
 	}
 
-	public final void setControlImageHeight(int controlImageHeight) {
+	public void setControlImageHeight(int controlImageHeight) {
 		engine.setProperty(Properties.CONTROL_IMAGE_HEIGHT, controlImageHeight);
 	}
 
@@ -204,19 +204,19 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "controlImageHeight" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isControlImageHeightSetted() {
+	public boolean isControlImageHeightSetted() {
 		return engine.isPropertySetted(Properties.CONTROL_IMAGE_HEIGHT);
 	}
 
-	public final int getItemPadding() {
+	public int getItemPadding() {
 		return getItemPadding(null);
 	}
 
-	public final int getItemPadding(javax.faces.context.FacesContext facesContext) {
+	public int getItemPadding(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ITEM_PADDING, 0, facesContext);
 	}
 
-	public final void setItemPadding(int itemPadding) {
+	public void setItemPadding(int itemPadding) {
 		engine.setProperty(Properties.ITEM_PADDING, itemPadding);
 	}
 
@@ -224,7 +224,7 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "itemPadding" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isItemPaddingSetted() {
+	public boolean isItemPaddingSetted() {
 		return engine.isPropertySetted(Properties.ITEM_PADDING);
 	}
 

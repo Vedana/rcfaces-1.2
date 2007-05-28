@@ -344,15 +344,15 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
-	public final String getViewURL() {
+	public String getViewURL() {
 		return getViewURL(null);
 	}
 
-	public final String getViewURL(javax.faces.context.FacesContext facesContext) {
+	public String getViewURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VIEW_URL, facesContext);
 	}
 
-	public final void setViewURL(String viewURL) {
+	public void setViewURL(String viewURL) {
 		engine.setProperty(Properties.VIEW_URL, viewURL);
 	}
 
@@ -360,7 +360,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 * Returns <code>true</code> if the attribute "viewURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isViewURLSetted() {
+	public boolean isViewURLSetted() {
 		return engine.isPropertySetted(Properties.VIEW_URL);
 	}
 

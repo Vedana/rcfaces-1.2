@@ -321,15 +321,15 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.SHOW_DROP_DOWN_MARK, showDropDownMark);
 	}
 
-	public final int getItemHiddenMode() {
+	public int getItemHiddenMode() {
 		return getItemHiddenMode(null);
 	}
 
-	public final int getItemHiddenMode(javax.faces.context.FacesContext facesContext) {
+	public int getItemHiddenMode(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ITEM_HIDDEN_MODE, 0, facesContext);
 	}
 
-	public final void setItemHiddenMode(int itemHiddenMode) {
+	public void setItemHiddenMode(int itemHiddenMode) {
 		engine.setProperty(Properties.ITEM_HIDDEN_MODE, itemHiddenMode);
 	}
 
@@ -337,7 +337,7 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "itemHiddenMode" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isItemHiddenModeSetted() {
+	public boolean isItemHiddenModeSetted() {
 		return engine.isPropertySetted(Properties.ITEM_HIDDEN_MODE);
 	}
 

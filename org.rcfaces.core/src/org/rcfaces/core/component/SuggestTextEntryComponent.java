@@ -139,7 +139,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns an int value specifying the delay in milliseconds before showing the suggestion list.
 	 * @return delay in milliseconds
 	 */
-	public final int getSuggestionDelayMs() {
+	public int getSuggestionDelayMs() {
 		return getSuggestionDelayMs(null);
 	}
 
@@ -147,7 +147,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns an int value specifying the delay in milliseconds before showing the suggestion list.
 	 * @return delay in milliseconds
 	 */
-	public final int getSuggestionDelayMs(javax.faces.context.FacesContext facesContext) {
+	public int getSuggestionDelayMs(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SUGGESTION_DELAY_MS, 0, facesContext);
 	}
 
@@ -155,7 +155,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Sets an int value specifying the delay in milliseconds before showing the suggestion list.
 	 * @param suggestionDelayMs delay in milliseconds
 	 */
-	public final void setSuggestionDelayMs(int suggestionDelayMs) {
+	public void setSuggestionDelayMs(int suggestionDelayMs) {
 		engine.setProperty(Properties.SUGGESTION_DELAY_MS, suggestionDelayMs);
 	}
 
@@ -167,7 +167,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns <code>true</code> if the attribute "suggestionDelayMs" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSuggestionDelayMsSetted() {
+	public boolean isSuggestionDelayMsSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_DELAY_MS);
 	}
 
@@ -175,7 +175,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns an int value specifying the minimum number of characters before the suggestion is calculated.
 	 * @return minimum number of characters
 	 */
-	public final int getSuggestionMinChars() {
+	public int getSuggestionMinChars() {
 		return getSuggestionMinChars(null);
 	}
 
@@ -183,7 +183,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns an int value specifying the minimum number of characters before the suggestion is calculated.
 	 * @return minimum number of characters
 	 */
-	public final int getSuggestionMinChars(javax.faces.context.FacesContext facesContext) {
+	public int getSuggestionMinChars(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SUGGESTION_MIN_CHARS, 0, facesContext);
 	}
 
@@ -191,7 +191,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Sets an int value specifying the minimum number of characters before the suggestion is calculated.
 	 * @param suggestionMinChars minimum number of characters
 	 */
-	public final void setSuggestionMinChars(int suggestionMinChars) {
+	public void setSuggestionMinChars(int suggestionMinChars) {
 		engine.setProperty(Properties.SUGGESTION_MIN_CHARS, suggestionMinChars);
 	}
 
@@ -203,7 +203,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns <code>true</code> if the attribute "suggestionMinChars" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSuggestionMinCharsSetted() {
+	public boolean isSuggestionMinCharsSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_MIN_CHARS);
 	}
 
@@ -211,7 +211,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns a boolean value indicating if the component should consider the case of the user input when using the data.
 	 * @return true if case sensitive
 	 */
-	public final boolean isCaseSensitive() {
+	public boolean isCaseSensitive() {
 		return isCaseSensitive(null);
 	}
 
@@ -219,7 +219,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns a boolean value indicating if the component should consider the case of the user input when using the data.
 	 * @return true if case sensitive
 	 */
-	public final boolean isCaseSensitive(javax.faces.context.FacesContext facesContext) {
+	public boolean isCaseSensitive(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CASE_SENSITIVE, false, facesContext);
 	}
 
@@ -227,7 +227,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Sets a boolean value indicating if the component should consider the case of the user input when using the data.
 	 * @param caseSensitive <code>true</code> if case sensitive
 	 */
-	public final void setCaseSensitive(boolean caseSensitive) {
+	public void setCaseSensitive(boolean caseSensitive) {
 		engine.setProperty(Properties.CASE_SENSITIVE, caseSensitive);
 	}
 
@@ -239,7 +239,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns <code>true</code> if the attribute "caseSensitive" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isCaseSensitiveSetted() {
+	public boolean isCaseSensitiveSetted() {
 		return engine.isPropertySetted(Properties.CASE_SENSITIVE);
 	}
 
@@ -247,7 +247,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns a boolean value indicating if the first proposed value must be automatically appended to the current entry.
 	 * @return true if proposal is forced
 	 */
-	public final boolean isForceProposal() {
+	public boolean isForceProposal() {
 		return isForceProposal(null);
 	}
 
@@ -255,7 +255,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns a boolean value indicating if the first proposed value must be automatically appended to the current entry.
 	 * @return true if proposal is forced
 	 */
-	public final boolean isForceProposal(javax.faces.context.FacesContext facesContext) {
+	public boolean isForceProposal(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.FORCE_PROPOSAL, false, facesContext);
 	}
 
@@ -263,7 +263,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Sets a boolean value indicating if the first proposed value must be automatically appended to the current entry.
 	 * @param forceProposal if proposal has to be forced
 	 */
-	public final void setForceProposal(boolean forceProposal) {
+	public void setForceProposal(boolean forceProposal) {
 		engine.setProperty(Properties.FORCE_PROPOSAL, forceProposal);
 	}
 
@@ -275,7 +275,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns <code>true</code> if the attribute "forceProposal" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isForceProposalSetted() {
+	public boolean isForceProposalSetted() {
 		return engine.isPropertySetted(Properties.FORCE_PROPOSAL);
 	}
 
@@ -283,7 +283,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns a string value containing the value for the selected select item object.
 	 * @return value selected
 	 */
-	public final Object getSuggestionValue() {
+	public Object getSuggestionValue() {
 		return getSuggestionValue(null);
 	}
 
@@ -291,7 +291,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns a string value containing the value for the selected select item object.
 	 * @return value selected
 	 */
-	public final Object getSuggestionValue(javax.faces.context.FacesContext facesContext) {
+	public Object getSuggestionValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValue(Properties.SUGGESTION_VALUE, facesContext);
 	}
 
@@ -299,7 +299,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Sets a string value containing the value for the selected select item object.
 	 * @param suggestionValue value selected
 	 */
-	public final void setSuggestionValue(Object suggestionValue) {
+	public void setSuggestionValue(Object suggestionValue) {
 		engine.setValue(Properties.SUGGESTION_VALUE, suggestionValue);
 	}
 
@@ -311,7 +311,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns <code>true</code> if the attribute "suggestionValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSuggestionValueSetted() {
+	public boolean isSuggestionValueSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_VALUE);
 	}
 
@@ -319,7 +319,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns a string specifying a converter id or a binding to a converter object. This converter will be used for the values of the list items.
 	 * @return converter id
 	 */
-	public final javax.faces.convert.Converter getSuggestionConverter() {
+	public javax.faces.convert.Converter getSuggestionConverter() {
 		return getSuggestionConverter(null);
 	}
 
@@ -327,7 +327,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns a string specifying a converter id or a binding to a converter object. This converter will be used for the values of the list items.
 	 * @return converter id
 	 */
-	public final javax.faces.convert.Converter getSuggestionConverter(javax.faces.context.FacesContext facesContext) {
+	public javax.faces.convert.Converter getSuggestionConverter(javax.faces.context.FacesContext facesContext) {
 		return (javax.faces.convert.Converter)engine.getValue(Properties.SUGGESTION_CONVERTER, facesContext);
 	}
 
@@ -335,7 +335,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Sets a string specifying a converter id or a binding to a converter object. This converter will be used for the values of the list items.
 	 * @param suggestionConverter converter id
 	 */
-	public final void setSuggestionConverter(javax.faces.convert.Converter suggestionConverter) {
+	public void setSuggestionConverter(javax.faces.convert.Converter suggestionConverter) {
 		engine.setProperty(Properties.SUGGESTION_CONVERTER, suggestionConverter);
 	}
 
@@ -347,19 +347,19 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns <code>true</code> if the attribute "suggestionConverter" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSuggestionConverterSetted() {
+	public boolean isSuggestionConverterSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_CONVERTER);
 	}
 
-	public final String getMoreResultsMessage() {
+	public String getMoreResultsMessage() {
 		return getMoreResultsMessage(null);
 	}
 
-	public final String getMoreResultsMessage(javax.faces.context.FacesContext facesContext) {
+	public String getMoreResultsMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MORE_RESULTS_MESSAGE, facesContext);
 	}
 
-	public final void setMoreResultsMessage(String moreResultsMessage) {
+	public void setMoreResultsMessage(String moreResultsMessage) {
 		engine.setProperty(Properties.MORE_RESULTS_MESSAGE, moreResultsMessage);
 	}
 
@@ -367,7 +367,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 * Returns <code>true</code> if the attribute "moreResultsMessage" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMoreResultsMessageSetted() {
+	public boolean isMoreResultsMessageSetted() {
 		return engine.isPropertySetted(Properties.MORE_RESULTS_MESSAGE);
 	}
 

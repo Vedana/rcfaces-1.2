@@ -81,7 +81,7 @@ public class ListComponent extends ComboComponent implements
 	 * Returns an int value specifying the number of rows to be displayed.
 	 * @return number of rows
 	 */
-	public final int getRowNumber() {
+	public int getRowNumber() {
 		return getRowNumber(null);
 	}
 
@@ -89,7 +89,7 @@ public class ListComponent extends ComboComponent implements
 	 * Returns an int value specifying the number of rows to be displayed.
 	 * @return number of rows
 	 */
-	public final int getRowNumber(javax.faces.context.FacesContext facesContext) {
+	public int getRowNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ROW_NUMBER, 0, facesContext);
 	}
 
@@ -97,7 +97,7 @@ public class ListComponent extends ComboComponent implements
 	 * Sets an int value specifying the number of rows to be displayed.
 	 * @param rowNumber number of rows
 	 */
-	public final void setRowNumber(int rowNumber) {
+	public void setRowNumber(int rowNumber) {
 		engine.setProperty(Properties.ROW_NUMBER, rowNumber);
 	}
 
@@ -109,7 +109,7 @@ public class ListComponent extends ComboComponent implements
 	 * Returns <code>true</code> if the attribute "rowNumber" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowNumberSetted() {
+	public boolean isRowNumberSetted() {
 		return engine.isPropertySetted(Properties.ROW_NUMBER);
 	}
 

@@ -666,7 +666,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @return true if the user entry must completed
 	 */
-	public final boolean isAutoCompletion() {
+	public boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
 
@@ -674,7 +674,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @return true if the user entry must completed
 	 */
-	public final boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
+	public boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_COMPLETION, true, facesContext);
 	}
 
@@ -682,7 +682,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @param autoCompletion true if the user entry must completed
 	 */
-	public final void setAutoCompletion(boolean autoCompletion) {
+	public void setAutoCompletion(boolean autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
@@ -694,7 +694,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "autoCompletion" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isAutoCompletionSetted() {
+	public boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
 	}
 
@@ -702,7 +702,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns a time value indicating the minimum acceptable time for the component. The first accepted value is greater than minTime.
 	 * @return min Time
 	 */
-	public final Time getMinTime() {
+	public Time getMinTime() {
 		return getMinTime(null);
 	}
 
@@ -710,7 +710,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns a time value indicating the minimum acceptable time for the component. The first accepted value is greater than minTime.
 	 * @return min Time
 	 */
-	public final Time getMinTime(javax.faces.context.FacesContext facesContext) {
+	public Time getMinTime(javax.faces.context.FacesContext facesContext) {
 		return (Time)engine.getValue(Properties.MIN_TIME, facesContext);
 	}
 
@@ -718,7 +718,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Sets a time value indicating the minimum acceptable time for the component. The first accepted value is greater than minTime.
 	 * @param minTime min Time
 	 */
-	public final void setMinTime(Time minTime) {
+	public void setMinTime(Time minTime) {
 		engine.setProperty(Properties.MIN_TIME, minTime);
 	}
 
@@ -730,7 +730,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "minTime" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMinTimeSetted() {
+	public boolean isMinTimeSetted() {
 		return engine.isPropertySetted(Properties.MIN_TIME);
 	}
 
@@ -738,7 +738,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns the default value.
 	 * @return default value
 	 */
-	public final Time getDefaultTime() {
+	public Time getDefaultTime() {
 		return getDefaultTime(null);
 	}
 
@@ -746,7 +746,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns the default value.
 	 * @return default value
 	 */
-	public final Time getDefaultTime(javax.faces.context.FacesContext facesContext) {
+	public Time getDefaultTime(javax.faces.context.FacesContext facesContext) {
 		return (Time)engine.getValue(Properties.DEFAULT_TIME, facesContext);
 	}
 
@@ -754,7 +754,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Sets the default value.
 	 * @param defaultTime default value
 	 */
-	public final void setDefaultTime(Time defaultTime) {
+	public void setDefaultTime(Time defaultTime) {
 		engine.setProperty(Properties.DEFAULT_TIME, defaultTime);
 	}
 
@@ -766,7 +766,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultTime" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultTimeSetted() {
+	public boolean isDefaultTimeSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_TIME);
 	}
 
@@ -774,7 +774,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns a time value indicating the maximum acceptable time for the component. The last accepted value is lesser than maxTime.
 	 * @return max time
 	 */
-	public final Time getMaxTime() {
+	public Time getMaxTime() {
 		return getMaxTime(null);
 	}
 
@@ -782,7 +782,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns a time value indicating the maximum acceptable time for the component. The last accepted value is lesser than maxTime.
 	 * @return max time
 	 */
-	public final Time getMaxTime(javax.faces.context.FacesContext facesContext) {
+	public Time getMaxTime(javax.faces.context.FacesContext facesContext) {
 		return (Time)engine.getValue(Properties.MAX_TIME, facesContext);
 	}
 
@@ -790,7 +790,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Sets a time value indicating the maximum acceptable time for the component. The last accepted value is lesser than maxTime.
 	 * @param maxTime max time
 	 */
-	public final void setMaxTime(Time maxTime) {
+	public void setMaxTime(Time maxTime) {
 		engine.setProperty(Properties.MAX_TIME, maxTime);
 	}
 
@@ -802,19 +802,19 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "maxTime" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMaxTimeSetted() {
+	public boolean isMaxTimeSetted() {
 		return engine.isPropertySetted(Properties.MAX_TIME);
 	}
 
-	public final String getTimeFormat() {
+	public String getTimeFormat() {
 		return getTimeFormat(null);
 	}
 
-	public final String getTimeFormat(javax.faces.context.FacesContext facesContext) {
+	public String getTimeFormat(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TIME_FORMAT, facesContext);
 	}
 
-	public final void setTimeFormat(String timeFormat) {
+	public void setTimeFormat(String timeFormat) {
 		engine.setProperty(Properties.TIME_FORMAT, timeFormat);
 	}
 
@@ -822,7 +822,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "timeFormat" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isTimeFormatSetted() {
+	public boolean isTimeFormatSetted() {
 		return engine.isPropertySetted(Properties.TIME_FORMAT);
 	}
 
@@ -830,7 +830,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the hour field when increasing/decreasing the value with the up/down arrows.
 	 * @return step used
 	 */
-	public final String getHourStep() {
+	public String getHourStep() {
 		return getHourStep(null);
 	}
 
@@ -838,7 +838,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the hour field when increasing/decreasing the value with the up/down arrows.
 	 * @return step used
 	 */
-	public final String getHourStep(javax.faces.context.FacesContext facesContext) {
+	public String getHourStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOUR_STEP, facesContext);
 	}
 
@@ -846,7 +846,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value specifying the step used for the hour field when increasing/decreasing the value with the up/down arrows.
 	 * @param hourStep stop to use
 	 */
-	public final void setHourStep(String hourStep) {
+	public void setHourStep(String hourStep) {
 		engine.setProperty(Properties.HOUR_STEP, hourStep);
 	}
 
@@ -858,7 +858,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "hourStep" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isHourStepSetted() {
+	public boolean isHourStepSetted() {
 		return engine.isPropertySetted(Properties.HOUR_STEP);
 	}
 
@@ -866,7 +866,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the minute field when increasing/decreasing the value with the up/down arrows.
 	 * @return step
 	 */
-	public final String getMinuteStep() {
+	public String getMinuteStep() {
 		return getMinuteStep(null);
 	}
 
@@ -874,7 +874,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the minute field when increasing/decreasing the value with the up/down arrows.
 	 * @return step
 	 */
-	public final String getMinuteStep(javax.faces.context.FacesContext facesContext) {
+	public String getMinuteStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
 	}
 
@@ -882,7 +882,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Steps an int value specifying the step used for the minute field when increasing/decreasing the value with the up/down arrows.
 	 * @param minuteStep step
 	 */
-	public final void setMinuteStep(String minuteStep) {
+	public void setMinuteStep(String minuteStep) {
 		engine.setProperty(Properties.MINUTE_STEP, minuteStep);
 	}
 
@@ -894,7 +894,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "minuteStep" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMinuteStepSetted() {
+	public boolean isMinuteStepSetted() {
 		return engine.isPropertySetted(Properties.MINUTE_STEP);
 	}
 
@@ -902,7 +902,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the second field when increasing/decreasing the value with the up/down arrows.
 	 * @return step
 	 */
-	public final String getSecondStep() {
+	public String getSecondStep() {
 		return getSecondStep(null);
 	}
 
@@ -910,7 +910,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the second field when increasing/decreasing the value with the up/down arrows.
 	 * @return step
 	 */
-	public final String getSecondStep(javax.faces.context.FacesContext facesContext) {
+	public String getSecondStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SECOND_STEP, facesContext);
 	}
 
@@ -918,7 +918,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value specifying the step used for the second field when increasing/decreasing the value with the up/down arrows.
 	 * @param secondStep step
 	 */
-	public final void setSecondStep(String secondStep) {
+	public void setSecondStep(String secondStep) {
 		engine.setProperty(Properties.SECOND_STEP, secondStep);
 	}
 
@@ -930,7 +930,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "secondStep" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSecondStepSetted() {
+	public boolean isSecondStepSetted() {
 		return engine.isPropertySetted(Properties.SECOND_STEP);
 	}
 
@@ -938,7 +938,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the millisecond field when increasing/decreasing the value with the up/down arrows.
 	 * @return step
 	 */
-	public final String getMillisStep() {
+	public String getMillisStep() {
 		return getMillisStep(null);
 	}
 
@@ -946,7 +946,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the millisecond field when increasing/decreasing the value with the up/down arrows.
 	 * @return step
 	 */
-	public final String getMillisStep(javax.faces.context.FacesContext facesContext) {
+	public String getMillisStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
 	}
 
@@ -954,7 +954,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value specifying the step used for the millisecond field when increasing/decreasing the value with the up/down arrows.
 	 * @param millisStep step
 	 */
-	public final void setMillisStep(String millisStep) {
+	public void setMillisStep(String millisStep) {
 		engine.setProperty(Properties.MILLIS_STEP, millisStep);
 	}
 
@@ -966,7 +966,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "millisStep" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMillisStepSetted() {
+	public boolean isMillisStepSetted() {
 		return engine.isPropertySetted(Properties.MILLIS_STEP);
 	}
 

@@ -552,7 +552,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * Returns a string value indicating the effect to use when transionning from one state to the other.
 	 * @return the effect : slideUp|slideUpTrans
 	 */
-	public final String getCollapseEffect() {
+	public String getCollapseEffect() {
 		return getCollapseEffect(null);
 	}
 
@@ -560,7 +560,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * Returns a string value indicating the effect to use when transionning from one state to the other.
 	 * @return the effect : slideUp|slideUpTrans
 	 */
-	public final String getCollapseEffect(javax.faces.context.FacesContext facesContext) {
+	public String getCollapseEffect(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.COLLAPSE_EFFECT, facesContext);
 	}
 
@@ -568,7 +568,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * Sets a string value indicating the effect to use when transionning from one state to the other.
 	 * @param collapseEffect the effect : slideUp|slideUpTrans
 	 */
-	public final void setCollapseEffect(String collapseEffect) {
+	public void setCollapseEffect(String collapseEffect) {
 		engine.setProperty(Properties.COLLAPSE_EFFECT, collapseEffect);
 	}
 
@@ -580,7 +580,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * Returns <code>true</code> if the attribute "collapseEffect" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isCollapseEffectSetted() {
+	public boolean isCollapseEffectSetted() {
 		return engine.isPropertySetted(Properties.COLLAPSE_EFFECT);
 	}
 
@@ -588,7 +588,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * Returns a string value specifying the text to show when the component is collapsed.
 	 * @return text
 	 */
-	public final String getCollapsedText() {
+	public String getCollapsedText() {
 		return getCollapsedText(null);
 	}
 
@@ -596,7 +596,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * Returns a string value specifying the text to show when the component is collapsed.
 	 * @return text
 	 */
-	public final String getCollapsedText(javax.faces.context.FacesContext facesContext) {
+	public String getCollapsedText(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.COLLAPSED_TEXT, facesContext);
 	}
 
@@ -604,7 +604,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * Sets a string value specifying the text to show when the component is collapsed.
 	 * @param collapsedText text
 	 */
-	public final void setCollapsedText(String collapsedText) {
+	public void setCollapsedText(String collapsedText) {
 		engine.setProperty(Properties.COLLAPSED_TEXT, collapsedText);
 	}
 
@@ -616,7 +616,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * Returns <code>true</code> if the attribute "collapsedText" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isCollapsedTextSetted() {
+	public boolean isCollapsedTextSetted() {
 		return engine.isPropertySetted(Properties.COLLAPSED_TEXT);
 	}
 

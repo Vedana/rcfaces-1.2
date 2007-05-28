@@ -615,7 +615,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
-	public final String getRowCountVar() {
+	public String getRowCountVar() {
 		return getRowCountVar(null);
 	}
 
@@ -623,7 +623,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
-	public final String getRowCountVar(javax.faces.context.FacesContext facesContext) {
+	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
 	}
 
@@ -631,7 +631,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Sets a string value specifying the name of the variable receiving the number of rows.
 	 * @param rowCountVar variable name
 	 */
-	public final void setRowCountVar(String rowCountVar) {
+	public void setRowCountVar(String rowCountVar) {
 		engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
 	}
 
@@ -643,7 +643,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "rowCountVar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowCountVarSetted() {
+	public boolean isRowCountVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_COUNT_VAR);
 	}
 
@@ -651,7 +651,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns a string value specifying the name of the variable receiving the index of the current row.
 	 * @return variable name
 	 */
-	public final String getRowIndexVar() {
+	public String getRowIndexVar() {
 		return getRowIndexVar(null);
 	}
 
@@ -659,7 +659,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns a string value specifying the name of the variable receiving the index of the current row.
 	 * @return variable name
 	 */
-	public final String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
+	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
 	}
 
@@ -667,7 +667,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Sets a string value specifying the name of the variable receiving the index of the current row.
 	 * @param rowIndexVar variable name
 	 */
-	public final void setRowIndexVar(String rowIndexVar) {
+	public void setRowIndexVar(String rowIndexVar) {
 		engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
 	}
 
@@ -679,19 +679,19 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "rowIndexVar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowIndexVarSetted() {
+	public boolean isRowIndexVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_INDEX_VAR);
 	}
 
-	public final String getRowValue() {
+	public String getRowValue() {
 		return getRowValue(null);
 	}
 
-	public final String getRowValue(javax.faces.context.FacesContext facesContext) {
+	public String getRowValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_VALUE, facesContext);
 	}
 
-	public final void setRowValue(String rowValue) {
+	public void setRowValue(String rowValue) {
 		engine.setProperty(Properties.ROW_VALUE, rowValue);
 	}
 
@@ -699,19 +699,19 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "rowValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowValueSetted() {
+	public boolean isRowValueSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE);
 	}
 
-	public final javax.faces.convert.Converter getRowValueConverter() {
+	public javax.faces.convert.Converter getRowValueConverter() {
 		return getRowValueConverter(null);
 	}
 
-	public final javax.faces.convert.Converter getRowValueConverter(javax.faces.context.FacesContext facesContext) {
+	public javax.faces.convert.Converter getRowValueConverter(javax.faces.context.FacesContext facesContext) {
 		return (javax.faces.convert.Converter)engine.getValue(Properties.ROW_VALUE_CONVERTER, facesContext);
 	}
 
-	public final void setRowValueConverter(javax.faces.convert.Converter rowValueConverter) {
+	public void setRowValueConverter(javax.faces.convert.Converter rowValueConverter) {
 		engine.setProperty(Properties.ROW_VALUE_CONVERTER, rowValueConverter);
 	}
 
@@ -719,7 +719,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "rowValueConverter" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowValueConverterSetted() {
+	public boolean isRowValueConverterSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE_CONVERTER);
 	}
 
@@ -727,7 +727,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @return boolean
 	 */
-	public final boolean isClientSelectionFullState() {
+	public boolean isClientSelectionFullState() {
 		return isClientSelectionFullState(null);
 	}
 
@@ -735,7 +735,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @return boolean
 	 */
-	public final boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
+	public boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
 	}
 
@@ -743,7 +743,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @param clientSelectionFullState boolean
 	 */
-	public final void setClientSelectionFullState(boolean clientSelectionFullState) {
+	public void setClientSelectionFullState(boolean clientSelectionFullState) {
 		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
@@ -755,7 +755,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "clientSelectionFullState" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isClientSelectionFullStateSetted() {
+	public boolean isClientSelectionFullStateSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
 	}
 

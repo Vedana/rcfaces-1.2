@@ -28,8 +28,8 @@ var __static = {
 	/**
 	 * @method private static
 	 */
-	_OpenPopup: function(dataGridPopup, position, offsetX, offsetY, offsetWidth) {
-		f_core.Debug(fa_dataGridPopup, "_OpenPopup: Open popup for dataGridPopup '"+dataGridPopup.id+"'. (popupOpened='"+dataGridPopup._popupOpened+"')");
+	_OpenPopup: function(dataGridPopup, position, offsetX, offsetY) {
+		f_core.Debug(fa_dataGridPopup, "_OpenPopup: Open popup for dataGridPopup '"+dataGridPopup.id+"'. (popupOpened='"+dataGridPopup._popupOpened+"' popup='"+dataGridPopup._popup+"')");
 				
 		var popup=dataGridPopup._popup;
 		if (!popup) {
@@ -58,6 +58,9 @@ var __static = {
 					body=pdoc.createElement("div");
 					body.className="f_dataGridPopup_popup";
 					body.style.visibility="inherit";
+					body.style.position="relative";
+					body.style.width=dataGridPopup._popupWidth+"px";
+					body.style.height=dataGridPopup._popupHeight+"px";
 	
 					pdoc.body.appendChild(body);
 				}
@@ -178,40 +181,16 @@ var __static = {
 		if (popup) {
 			f_key.EnterScope(fa_dataGridPopup._DATAGRID_POPUP_KEY_SCOPE_ID);
 
+			var positionParameters = {
+				component: position, 
+				position: f_popup.BOTTOM_LEFT_COMPONENT 
+			};
+
 			if (dataGridPopup._iePopup) {
-				f_popup.Ie_openPopup(popup, {
-					component: dataGridPopup, 
-					position: f_popup.BOTTOM_LEFT_COMPONENT });
+				f_popup.Ie_openPopup(popup, positionParameters);
 			
 			} else {
-				var p1=f_core.GetAbsolutePosition(position);
-				var parentPos=f_core.GetAbsolutePosition(popup.offsetParent);
-			
-				f_core.Debug(fa_dataGridPopup, "_OpenPopup: Popup absolute pos x="+p1.x+" y="+p1.y+" offsetX="+offsetX+" offsetY="+offsetY+" parentX="+parentPos.x+" parentY="+parentPos.y);
-			
-				var x=p1.x+offsetX-parentPos.x;
-				var y=p1.y+offsetY-parentPos.y;
-
-				x+=0; // Les bordures ....
-				//y+=3;
-			
-				var pos={ x: x, y: y };
-				
-				f_core.ComputePopupPosition(popup, pos);
-
-				f_core.Debug(fa_dataGridPopup, "_OpenPopup: Computed pos x="+p1.x+" y="+p1.y+" offsetX="+offsetX+" offsetY="+offsetY);
-					
-				popup.style.left=pos.x+"px";
-				popup.style.top=pos.y+"px";
-			
-				if (offsetWidth) {
-					popup.style.width=offsetWidth+"px";
-					
-				} else if (offsetWidth!==false) {
-					popup.style.width="auto";
-				}
-			
-				popup.style.visibility="inherit";
+				f_popup.Gecko_openPopup(popup, positionParameters);
 			}			
 		}
 	
@@ -222,7 +201,7 @@ var __static = {
 	 * @method private static
 	 */
 	_ClosePopup: function(dataGridPopup, jsEvt) {	
-		f_core.Debug(fa_dataGridPopup, "_ClosePopup: Close the popup of dataGridPopup='"+dataGridPopup.id+"'.");
+		f_core.Debug(fa_dataGridPopup, "_ClosePopup: Close the popup of dataGridPopup='"+dataGridPopup.id+"' opened="+dataGridPopup._popupOpened+" popup="+dataGridPopup._popup);
 
 		if (!dataGridPopup._popupOpened) {
 			return;
@@ -239,12 +218,16 @@ var __static = {
 		}
 		
 		if (!dataGridPopup._iePopup) {
-			popup.style.visibility="hidden";
+			f_popup.Gecko_closePopup(popup);
+
+			f_popup.Gecko_releasePopup(popup);
 			return;
 		}	
 		
 		f_popup.Ie_closePopup(popup);
 		dataGridPopup._popup=undefined;
+
+		f_popup.Ie_releasePopup(popup);
 	}
 	
 }
@@ -294,6 +277,10 @@ var __prototype = {
 			}
 		}
 		
+		
+		this._popupWidth=f_core.GetNumberAttribute(this, "v:popupWidth", 320);
+		this._popupHeight=f_core.GetNumberAttribute(this, "v:popupHeight", 200);
+		
 		this._valueFormat=valueFormat;
 		
 		this._iePopup=f_popup.Ie_enablePopup();
@@ -306,7 +293,9 @@ var __prototype = {
 		// this._labelColumnId=undefined; // String
 		// this._valueFormat=undefined; // String
 		// this._iePopup=undefined; // boolean
-		
+		// this._popupWidth=undefined; // number
+		// this._popupHeight=undefined; // number
+				
 		this._popup=undefined; // ? HtmlDivElement
 		this._columns=undefined;  // Object[]
 		
@@ -319,9 +308,12 @@ var __prototype = {
 	 * @return f_dataGrid
 	 */
 	f_constructDataGrid: function(parent) {
+		f_core.Debug(fa_dataGridPopup, "f_constructDataGrid: construct components parent="+parent);
+		
 		var dataGrid=this._dataGrid;
 		if (dataGrid && dataGrid.parentNode && dataGrid.ownerDocument==parent.ownerDocument) {
-			return dataGrid;
+		//	return dataGrid;
+		// Pas de cache pour l'instant !
 		}
 		
 		if (dataGrid) {
@@ -332,10 +324,10 @@ var __prototype = {
 			this.f_destroyPager(dataGrid);	
 		}
 
-		var width=f_core.GetNumberAttribute(this, "v:popupWidth", 320);
-		var height=f_core.GetNumberAttribute(this, "v:popupHeight", 200);
-
 		var rows=f_core.GetNumberAttribute(this, "v:rows");
+		
+		var width=this._popupWidth;
+		var height=this._popupHeight;
 		
 		var dataGridContainer=f_core.CreateElement(parent, "table", {cellSpacing: 0, cellPadding: 0, "style": "width:"+width+"px;height:"+height+"px" });
 		
@@ -419,7 +411,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_closeDataGridPopup: function(jsEvent) {
-		fa_dataGridPopup._ClosePopup(this, jsEvent);		
+		fa_dataGridPopup._ClosePopup(this, jsEvent);
 	},
 	/**
 	 * @method hidden
@@ -429,7 +421,7 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_openDataGridPopup: function(jsEvent, text, autoSelect) {
-//		f_core.Debug(js, "f_openDataGridPopup: jsEvent="+jsEvent);
+		f_core.Debug(fa_dataGridPopup, "f_openDataGridPopup: jsEvent="+jsEvent+" text='"+text+"' autoSelect="+autoSelect);
 
 		var popupOpened=this._popupOpened
 		if (!popupOpened) {
@@ -541,13 +533,14 @@ var __prototype = {
 		
 		var value=array[valueColumnId];
 		
-		this.fa_valueSelected(value, message);
+		this.fa_valueSelected(value, message, jsEvent);
 	},
 
 	/**
 	 * @method protected abstract
 	 * @param String value
 	 * @param String label
+	 * @param optional Event jsEvent
 	 * @return void
 	 */	
 	fa_valueSelected: f_class.ABSTRACT

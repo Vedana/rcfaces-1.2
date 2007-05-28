@@ -437,7 +437,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns a boolean value indicating wether the associated <a href="/comps/dateCHooserComponent.html">dateChooser Component</a> should be automatically opened when the component gets the focus.
 	 * @return true if calendar is to be shown
 	 */
-	public final boolean isShowCalendarOnFocus() {
+	public boolean isShowCalendarOnFocus() {
 		return isShowCalendarOnFocus(null);
 	}
 
@@ -445,7 +445,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns a boolean value indicating wether the associated <a href="/comps/dateCHooserComponent.html">dateChooser Component</a> should be automatically opened when the component gets the focus.
 	 * @return true if calendar is to be shown
 	 */
-	public final boolean isShowCalendarOnFocus(javax.faces.context.FacesContext facesContext) {
+	public boolean isShowCalendarOnFocus(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SHOW_CALENDAR_ON_FOCUS, false, facesContext);
 	}
 
@@ -453,7 +453,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Sets a boolean value indicating wether the associated <a href="/comps/dateCHooserComponent.html">dateChooser Component</a> should be automatically opened when the component gets the focus.
 	 * @param showCalendarOnFocus true if calendar is shown
 	 */
-	public final void setShowCalendarOnFocus(boolean showCalendarOnFocus) {
+	public void setShowCalendarOnFocus(boolean showCalendarOnFocus) {
 		engine.setProperty(Properties.SHOW_CALENDAR_ON_FOCUS, showCalendarOnFocus);
 	}
 
@@ -465,7 +465,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns <code>true</code> if the attribute "showCalendarOnFocus" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isShowCalendarOnFocusSetted() {
+	public boolean isShowCalendarOnFocusSetted() {
 		return engine.isPropertySetted(Properties.SHOW_CALENDAR_ON_FOCUS);
 	}
 
@@ -473,7 +473,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @return true if the user entry must completed
 	 */
-	public final boolean isAutoCompletion() {
+	public boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
 
@@ -481,7 +481,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @return true if the user entry must completed
 	 */
-	public final boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
+	public boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_COMPLETION, false, facesContext);
 	}
 
@@ -489,7 +489,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @param autoCompletion true if the user entry must completed
 	 */
-	public final void setAutoCompletion(boolean autoCompletion) {
+	public void setAutoCompletion(boolean autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
@@ -501,7 +501,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns <code>true</code> if the attribute "autoCompletion" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isAutoCompletionSetted() {
+	public boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
 	}
 
@@ -509,7 +509,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns a string specifying the format to apply to the date value.
 	 * @return date format
 	 */
-	public final String getDateFormat() {
+	public String getDateFormat() {
 		return getDateFormat(null);
 	}
 
@@ -517,7 +517,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns a string specifying the format to apply to the date value.
 	 * @return date format
 	 */
-	public final String getDateFormat(javax.faces.context.FacesContext facesContext) {
+	public String getDateFormat(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DATE_FORMAT, facesContext);
 	}
 
@@ -525,7 +525,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Sets a string specifying the format to apply to the date value.
 	 * @param dateFormat format
 	 */
-	public final void setDateFormat(String dateFormat) {
+	public void setDateFormat(String dateFormat) {
 		engine.setProperty(Properties.DATE_FORMAT, dateFormat);
 	}
 
@@ -537,7 +537,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns <code>true</code> if the attribute "dateFormat" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDateFormatSetted() {
+	public boolean isDateFormatSetted() {
 		return engine.isPropertySetted(Properties.DATE_FORMAT);
 	}
 
@@ -545,7 +545,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns the date selected by default.
 	 * @return default date
 	 */
-	public final java.util.Date getDefaultDate() {
+	public java.util.Date getDefaultDate() {
 		return getDefaultDate(null);
 	}
 
@@ -553,7 +553,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Sets the date to select by default.
 	 * @param defaultDate default date
 	 */
-	public final void setDefaultDate(java.util.Date defaultDate) {
+	public void setDefaultDate(java.util.Date defaultDate) {
 		engine.setProperty(Properties.DEFAULT_DATE, defaultDate);
 	}
 
@@ -565,7 +565,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 * Returns <code>true</code> if the attribute "defaultDate" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultDateSetted() {
+	public boolean isDefaultDateSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_DATE);
 	}
 

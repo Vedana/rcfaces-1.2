@@ -38,15 +38,15 @@ public class ProgressBarComponent extends AbstractInputComponent {
 		setId(componentId);
 	}
 
-	public final double getMinimum() {
+	public double getMinimum() {
 		return getMinimum(null);
 	}
 
-	public final double getMinimum(javax.faces.context.FacesContext facesContext) {
+	public double getMinimum(javax.faces.context.FacesContext facesContext) {
 		return engine.getDoubleProperty(Properties.MINIMUM, 0.0, facesContext);
 	}
 
-	public final void setMinimum(double minimum) {
+	public void setMinimum(double minimum) {
 		engine.setProperty(Properties.MINIMUM, minimum);
 	}
 
@@ -54,7 +54,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Returns <code>true</code> if the attribute "minimum" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMinimumSetted() {
+	public boolean isMinimumSetted() {
 		return engine.isPropertySetted(Properties.MINIMUM);
 	}
 
@@ -62,7 +62,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Returns an int value specifying the upper limit for the value of the component.
 	 * @return maximum
 	 */
-	public final double getMaximum() {
+	public double getMaximum() {
 		return getMaximum(null);
 	}
 
@@ -70,7 +70,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Returns an int value specifying the upper limit for the value of the component.
 	 * @return maximum
 	 */
-	public final double getMaximum(javax.faces.context.FacesContext facesContext) {
+	public double getMaximum(javax.faces.context.FacesContext facesContext) {
 		return engine.getDoubleProperty(Properties.MAXIMUM, 0.0, facesContext);
 	}
 
@@ -78,7 +78,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Sets an int value specifying the upper limit for the value of the component.
 	 * @param maximum maximum
 	 */
-	public final void setMaximum(double maximum) {
+	public void setMaximum(double maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
@@ -90,7 +90,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Returns <code>true</code> if the attribute "maximum" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMaximumSetted() {
+	public boolean isMaximumSetted() {
 		return engine.isPropertySetted(Properties.MAXIMUM);
 	}
 
@@ -98,7 +98,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Returns a boolean value indicating wether the value is not determinated.
 	 * @return true if not determinated
 	 */
-	public final boolean isIndeterminate() {
+	public boolean isIndeterminate() {
 		return isIndeterminate(null);
 	}
 
@@ -106,7 +106,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Returns a boolean value indicating wether the value is not determinated.
 	 * @return true if not determinated
 	 */
-	public final boolean isIndeterminate(javax.faces.context.FacesContext facesContext) {
+	public boolean isIndeterminate(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.INDETERMINATE, false, facesContext);
 	}
 
@@ -114,7 +114,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Sets a boolean value indicating wether the value is not determinated.
 	 * @param indeterminate true if not determinated
 	 */
-	public final void setIndeterminate(boolean indeterminate) {
+	public void setIndeterminate(boolean indeterminate) {
 		engine.setProperty(Properties.INDETERMINATE, indeterminate);
 	}
 
@@ -126,7 +126,7 @@ public class ProgressBarComponent extends AbstractInputComponent {
 	 * Returns <code>true</code> if the attribute "indeterminate" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isIndeterminateSetted() {
+	public boolean isIndeterminateSetted() {
 		return engine.isPropertySetted(Properties.INDETERMINATE);
 	}
 

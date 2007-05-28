@@ -79,7 +79,7 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 	 * Returns a string value specifying the type of data (Java) to convert to or from.
 	 * @return type of data
 	 */
-	public final String getType() {
+	public String getType() {
 		return getType(null);
 	}
 
@@ -87,7 +87,7 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 	 * Returns a string value specifying the type of data (Java) to convert to or from.
 	 * @return type of data
 	 */
-	public final String getType(javax.faces.context.FacesContext facesContext) {
+	public String getType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TYPE, facesContext);
 	}
 
@@ -95,7 +95,7 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 	 * Sets a string value specifying the type of data (Java) to convert to or from.
 	 * @param type type of data
 	 */
-	public final void setType(String type) {
+	public void setType(String type) {
 		engine.setProperty(Properties.TYPE, type);
 	}
 
@@ -107,19 +107,19 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 	 * Returns <code>true</code> if the attribute "type" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isTypeSetted() {
+	public boolean isTypeSetted() {
 		return engine.isPropertySetted(Properties.TYPE);
 	}
 
-	public final boolean isHideIfDisabled() {
+	public boolean isHideIfDisabled() {
 		return isHideIfDisabled(null);
 	}
 
-	public final boolean isHideIfDisabled(javax.faces.context.FacesContext facesContext) {
+	public boolean isHideIfDisabled(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.HIDE_IF_DISABLED, false, facesContext);
 	}
 
-	public final void setHideIfDisabled(boolean hideIfDisabled) {
+	public void setHideIfDisabled(boolean hideIfDisabled) {
 		engine.setProperty(Properties.HIDE_IF_DISABLED, hideIfDisabled);
 	}
 
@@ -127,7 +127,7 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 	 * Returns <code>true</code> if the attribute "hideIfDisabled" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isHideIfDisabledSetted() {
+	public boolean isHideIfDisabledSetted() {
 		return engine.isPropertySetted(Properties.HIDE_IF_DISABLED);
 	}
 

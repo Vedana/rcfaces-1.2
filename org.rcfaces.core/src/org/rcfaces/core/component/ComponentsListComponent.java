@@ -157,7 +157,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
-	public final String getRowCountVar() {
+	public String getRowCountVar() {
 		return getRowCountVar(null);
 	}
 
@@ -165,7 +165,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
-	public final String getRowCountVar(javax.faces.context.FacesContext facesContext) {
+	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
 	}
 
@@ -173,7 +173,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Sets a string value specifying the name of the variable receiving the number of rows.
 	 * @param rowCountVar variable name
 	 */
-	public final void setRowCountVar(String rowCountVar) {
+	public void setRowCountVar(String rowCountVar) {
 		engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
 	}
 
@@ -185,7 +185,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "rowCountVar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowCountVarSetted() {
+	public boolean isRowCountVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_COUNT_VAR);
 	}
 
@@ -193,7 +193,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns a string value specifying the name of the variable receiving the index of the current row.
 	 * @return variable name
 	 */
-	public final String getRowIndexVar() {
+	public String getRowIndexVar() {
 		return getRowIndexVar(null);
 	}
 
@@ -201,7 +201,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns a string value specifying the name of the variable receiving the index of the current row.
 	 * @return variable name
 	 */
-	public final String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
+	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
 	}
 
@@ -209,7 +209,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Sets a string value specifying the name of the variable receiving the index of the current row.
 	 * @param rowIndexVar variable name
 	 */
-	public final void setRowIndexVar(String rowIndexVar) {
+	public void setRowIndexVar(String rowIndexVar) {
 		engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
 	}
 
@@ -221,7 +221,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "rowIndexVar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowIndexVarSetted() {
+	public boolean isRowIndexVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_INDEX_VAR);
 	}
 
@@ -229,7 +229,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @return width in characters
 	 */
-	public final int getColumnNumber() {
+	public int getColumnNumber() {
 		return getColumnNumber(null);
 	}
 
@@ -237,7 +237,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @return width in characters
 	 */
-	public final int getColumnNumber(javax.faces.context.FacesContext facesContext) {
+	public int getColumnNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.COLUMN_NUMBER, 0, facesContext);
 	}
 
@@ -245,7 +245,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Sets an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @param columnNumber width in characters
 	 */
-	public final void setColumnNumber(int columnNumber) {
+	public void setColumnNumber(int columnNumber) {
 		engine.setProperty(Properties.COLUMN_NUMBER, columnNumber);
 	}
 
@@ -257,7 +257,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "columnNumber" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isColumnNumberSetted() {
+	public boolean isColumnNumberSetted() {
 		return engine.isPropertySetted(Properties.COLUMN_NUMBER);
 	}
 
@@ -265,7 +265,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns a space-separated list of CSS style class(es) to be applied when the row is rendered. This value will be passed through as the "class" attribute on generated markup.
 	 * @return list of CSS style classes
 	 */
-	public final String getRowStyleClass() {
+	public String getRowStyleClass() {
 		return getRowStyleClass(null);
 	}
 
@@ -273,7 +273,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns a space-separated list of CSS style class(es) to be applied when the row is rendered. This value will be passed through as the "class" attribute on generated markup.
 	 * @return list of CSS style classes
 	 */
-	public final String getRowStyleClass(javax.faces.context.FacesContext facesContext) {
+	public String getRowStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_STYLE_CLASS, facesContext);
 	}
 
@@ -281,7 +281,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Sets a space-separated list of CSS style class(es) to be applied when the row is rendered. This value will be passed through as the "class" attribute on generated markup.
 	 * @param rowStyleClass list of CSS style classes
 	 */
-	public final void setRowStyleClass(String rowStyleClass) {
+	public void setRowStyleClass(String rowStyleClass) {
 		engine.setProperty(Properties.ROW_STYLE_CLASS, rowStyleClass);
 	}
 
@@ -293,7 +293,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "rowStyleClass" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowStyleClassSetted() {
+	public boolean isRowStyleClassSetted() {
 		return engine.isPropertySetted(Properties.ROW_STYLE_CLASS);
 	}
 
@@ -301,7 +301,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns a space-separated list of CSS style class(es) to be applied when this column is rendered. This value will be passed through as the "class" attribute on generated markup.
 	 * @return list of CSS style classes
 	 */
-	public final String getColumnStyleClass() {
+	public String getColumnStyleClass() {
 		return getColumnStyleClass(null);
 	}
 
@@ -309,7 +309,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns a space-separated list of CSS style class(es) to be applied when this column is rendered. This value will be passed through as the "class" attribute on generated markup.
 	 * @return list of CSS style classes
 	 */
-	public final String getColumnStyleClass(javax.faces.context.FacesContext facesContext) {
+	public String getColumnStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.COLUMN_STYLE_CLASS, facesContext);
 	}
 
@@ -317,7 +317,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Sets a space-separated list of CSS style class(es) to be applied when this column is rendered. This value will be passed through as the "class" attribute on generated markup.
 	 * @param columnStyleClass list of CSS style classes
 	 */
-	public final void setColumnStyleClass(String columnStyleClass) {
+	public void setColumnStyleClass(String columnStyleClass) {
 		engine.setProperty(Properties.COLUMN_STYLE_CLASS, columnStyleClass);
 	}
 
@@ -329,7 +329,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * Returns <code>true</code> if the attribute "columnStyleClass" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isColumnStyleClassSetted() {
+	public boolean isColumnStyleClassSetted() {
 		return engine.isPropertySetted(Properties.COLUMN_STYLE_CLASS);
 	}
 

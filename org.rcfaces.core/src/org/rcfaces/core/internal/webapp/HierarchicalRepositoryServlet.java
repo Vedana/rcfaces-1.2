@@ -47,8 +47,11 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
         if (groupAll == null) {
             groupAll = getGroupAllDefaultValue();
         }
-        if (groupAll != null) {
-            if ("all".equalsIgnoreCase("all")) {
+        if ("false".equals(groupAll)) {
+            LOG.debug("Disabled module group.");
+
+        } else if (groupAll != null) {
+            if ("all".equalsIgnoreCase(groupAll)) {
                 LOG.debug("Concat all files for all modules.");
 
             } else {

@@ -80,7 +80,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * Returns a string specifying a value to select in the component identified in the <b>for</b> property.
 	 * @return value to selected
 	 */
-	public final String getForItemValue() {
+	public String getForItemValue() {
 		return getForItemValue(null);
 	}
 
@@ -88,7 +88,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * Returns a string specifying a value to select in the component identified in the <b>for</b> property.
 	 * @return value to selected
 	 */
-	public final String getForItemValue(javax.faces.context.FacesContext facesContext) {
+	public String getForItemValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR_ITEM_VALUE, facesContext);
 	}
 
@@ -96,7 +96,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * Sets a string specifying a value to select in the component identified in the <b>for</b> property.
 	 * @param forItemValue value to select
 	 */
-	public final void setForItemValue(String forItemValue) {
+	public void setForItemValue(String forItemValue) {
 		engine.setProperty(Properties.FOR_ITEM_VALUE, forItemValue);
 	}
 
@@ -108,7 +108,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * Returns <code>true</code> if the attribute "forItemValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isForItemValueSetted() {
+	public boolean isForItemValueSetted() {
 		return engine.isPropertySetted(Properties.FOR_ITEM_VALUE);
 	}
 
@@ -116,7 +116,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * Returns a string value specifying the key associated to the component. for example "Alt+F1"
 	 * @return key
 	 */
-	public final String getKeyBinding() {
+	public String getKeyBinding() {
 		return getKeyBinding(null);
 	}
 
@@ -124,7 +124,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * Returns a string value specifying the key associated to the component. for example "Alt+F1"
 	 * @return key
 	 */
-	public final String getKeyBinding(javax.faces.context.FacesContext facesContext) {
+	public String getKeyBinding(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.KEY_BINDING, facesContext);
 	}
 
@@ -132,7 +132,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * Sets a string value specifying the key associated to the component. for example "Alt+F1"
 	 * @param keyBinding key
 	 */
-	public final void setKeyBinding(String keyBinding) {
+	public void setKeyBinding(String keyBinding) {
 		engine.setProperty(Properties.KEY_BINDING, keyBinding);
 	}
 
@@ -144,7 +144,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * Returns <code>true</code> if the attribute "keyBinding" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isKeyBindingSetted() {
+	public boolean isKeyBindingSetted() {
 		return engine.isPropertySetted(Properties.KEY_BINDING);
 	}
 

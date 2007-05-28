@@ -57,7 +57,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * Returns an url value pointing to the file to be included.
 	 * @return url
 	 */
-	public final String getSrc() {
+	public String getSrc() {
 		return getSrc(null);
 	}
 
@@ -65,7 +65,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * Returns an url value pointing to the file to be included.
 	 * @return url
 	 */
-	public final String getSrc(javax.faces.context.FacesContext facesContext) {
+	public String getSrc(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SRC, facesContext);
 	}
 
@@ -73,7 +73,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * Sets an url value pointing to the file to be included.
 	 * @param src url
 	 */
-	public final void setSrc(String src) {
+	public void setSrc(String src) {
 		engine.setProperty(Properties.SRC, src);
 	}
 
@@ -85,7 +85,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "src" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSrcSetted() {
+	public boolean isSrcSetted() {
 		return engine.isPropertySetted(Properties.SRC);
 	}
 
@@ -93,7 +93,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * Returns a string value sprecifying the charset associated to the "src" files.
 	 * @return charset
 	 */
-	public final String getSrcCharSet() {
+	public String getSrcCharSet() {
 		return getSrcCharSet(null);
 	}
 
@@ -101,7 +101,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * Returns a string value sprecifying the charset associated to the "src" files.
 	 * @return charset
 	 */
-	public final String getSrcCharSet(javax.faces.context.FacesContext facesContext) {
+	public String getSrcCharSet(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.SRC_CHAR_SET, facesContext);
 	}
 
@@ -109,7 +109,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * Sets a string value sprecifying the charset associated to the "src" files.
 	 * @param srcCharSet charset
 	 */
-	public final void setSrcCharSet(String srcCharSet) {
+	public void setSrcCharSet(String srcCharSet) {
 		engine.setProperty(Properties.SRC_CHAR_SET, srcCharSet);
 	}
 
@@ -121,7 +121,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "srcCharSet" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSrcCharSetSetted() {
+	public boolean isSrcCharSetSetted() {
 		return engine.isPropertySetted(Properties.SRC_CHAR_SET);
 	}
 

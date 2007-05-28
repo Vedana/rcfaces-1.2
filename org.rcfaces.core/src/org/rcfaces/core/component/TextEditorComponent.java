@@ -306,15 +306,15 @@ public class TextEditorComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
-	public final String getValueMimeType() {
+	public String getValueMimeType() {
 		return getValueMimeType(null);
 	}
 
-	public final String getValueMimeType(javax.faces.context.FacesContext facesContext) {
+	public String getValueMimeType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VALUE_MIME_TYPE, facesContext);
 	}
 
-	public final void setValueMimeType(String valueMimeType) {
+	public void setValueMimeType(String valueMimeType) {
 		engine.setProperty(Properties.VALUE_MIME_TYPE, valueMimeType);
 	}
 
@@ -322,7 +322,7 @@ public class TextEditorComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "valueMimeType" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isValueMimeTypeSetted() {
+	public boolean isValueMimeTypeSetted() {
 		return engine.isPropertySetted(Properties.VALUE_MIME_TYPE);
 	}
 

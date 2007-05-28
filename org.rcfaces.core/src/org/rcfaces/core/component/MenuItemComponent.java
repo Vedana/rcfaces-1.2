@@ -138,7 +138,7 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 	 * Returns a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 	 * @return true if content is removed when shown
 	 */
-	public final boolean isRemoveAllWhenShown() {
+	public boolean isRemoveAllWhenShown() {
 		return isRemoveAllWhenShown(null);
 	}
 
@@ -146,7 +146,7 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 	 * Returns a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 	 * @return true if content is removed when shown
 	 */
-	public final boolean isRemoveAllWhenShown(javax.faces.context.FacesContext facesContext) {
+	public boolean isRemoveAllWhenShown(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.REMOVE_ALL_WHEN_SHOWN, false, facesContext);
 	}
 
@@ -154,7 +154,7 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 	 * Sets a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 	 * @param removeAllWhenShown true if content is to be removed when shown
 	 */
-	public final void setRemoveAllWhenShown(boolean removeAllWhenShown) {
+	public void setRemoveAllWhenShown(boolean removeAllWhenShown) {
 		engine.setProperty(Properties.REMOVE_ALL_WHEN_SHOWN, removeAllWhenShown);
 	}
 
@@ -166,7 +166,7 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 	 * Returns <code>true</code> if the attribute "removeAllWhenShown" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRemoveAllWhenShownSetted() {
+	public boolean isRemoveAllWhenShownSetted() {
 		return engine.isPropertySetted(Properties.REMOVE_ALL_WHEN_SHOWN);
 	}
 

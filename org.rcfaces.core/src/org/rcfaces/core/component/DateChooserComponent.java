@@ -370,7 +370,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Returns a string specifying the format to use for the value that will be send to the component specified in the <b>for</b> property.
 	 * @return value format
 	 */
-	public final String getForValueFormat() {
+	public String getForValueFormat() {
 		return getForValueFormat(null);
 	}
 
@@ -378,7 +378,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Returns a string specifying the format to use for the value that will be send to the component specified in the <b>for</b> property.
 	 * @return value format
 	 */
-	public final String getForValueFormat(javax.faces.context.FacesContext facesContext) {
+	public String getForValueFormat(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FOR_VALUE_FORMAT, facesContext);
 	}
 
@@ -386,7 +386,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Sets a string specifying the format to use for the value that will be send to the component specified in the <b>for</b> property.
 	 * @param forValueFormat value format
 	 */
-	public final void setForValueFormat(String forValueFormat) {
+	public void setForValueFormat(String forValueFormat) {
 		engine.setProperty(Properties.FOR_VALUE_FORMAT, forValueFormat);
 	}
 
@@ -398,15 +398,15 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Returns <code>true</code> if the attribute "forValueFormat" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isForValueFormatSetted() {
+	public boolean isForValueFormatSetted() {
 		return engine.isPropertySetted(Properties.FOR_VALUE_FORMAT);
 	}
 
-	public final java.util.Date getHomeDate() {
+	public java.util.Date getHomeDate() {
 		return getHomeDate(null);
 	}
 
-	public final void setHomeDate(java.util.Date homeDate) {
+	public void setHomeDate(java.util.Date homeDate) {
 		engine.setProperty(Properties.HOME_DATE, homeDate);
 	}
 
@@ -414,7 +414,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Returns <code>true</code> if the attribute "homeDate" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isHomeDateSetted() {
+	public boolean isHomeDateSetted() {
 		return engine.isPropertySetted(Properties.HOME_DATE);
 	}
 
@@ -422,7 +422,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Returns a string specifying the label associated with the home button.
 	 * @return the label used
 	 */
-	public final String getHomeDateLabel() {
+	public String getHomeDateLabel() {
 		return getHomeDateLabel(null);
 	}
 
@@ -430,7 +430,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Returns a string specifying the label associated with the home button.
 	 * @return the label used
 	 */
-	public final String getHomeDateLabel(javax.faces.context.FacesContext facesContext) {
+	public String getHomeDateLabel(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.HOME_DATE_LABEL, facesContext);
 	}
 
@@ -438,7 +438,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Sets a string specifying the label associated with the home button.
 	 * @param homeDateLabel the label to use
 	 */
-	public final void setHomeDateLabel(String homeDateLabel) {
+	public void setHomeDateLabel(String homeDateLabel) {
 		engine.setProperty(Properties.HOME_DATE_LABEL, homeDateLabel);
 	}
 
@@ -450,7 +450,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * Returns <code>true</code> if the attribute "homeDateLabel" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isHomeDateLabelSetted() {
+	public boolean isHomeDateLabelSetted() {
 		return engine.isPropertySetted(Properties.HOME_DATE_LABEL);
 	}
 

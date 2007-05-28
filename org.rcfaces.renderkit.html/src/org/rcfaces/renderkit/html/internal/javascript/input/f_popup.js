@@ -379,7 +379,8 @@ var __static = {
 	_OnMouseDown: function(evt) {	
 		f_core.Debug(f_popup, "_OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className+"  popupComponent="+f_popup.Component);
 
-		if (!f_popup.Component) {
+		var component=f_popup.Component;
+		if (!component) {
 			return;
 		}
 		
@@ -389,8 +390,8 @@ var __static = {
 		f_core.Debug(f_popup, "OnMouseDown search parent="+found);
 
 		if (found) {
-			if (f_popup.VerifyMouseDown(f_popup.Component, evt)) {
-				f_core.Debug(f_popup, "OnMouseDown event into popup !");
+			if (f_popup.VerifyMouseDown(component, evt)) {
+				f_core.Debug(f_popup, "_OnMouseDown: event into popup !");
 				return true;
 			}
 			evt.cancelBubble=true; // On accepte l'evenement, mais on le passe surtout pas au parent !
@@ -401,9 +402,11 @@ var __static = {
 		var clb=f_popup.Callbacks;
 		f_popup.Callbacks=undefined;
 		
-		clb.exit.call(f_popup.Component, evt);		
+		clb.exit.call(component, evt);		
 		
-		return true;
+		// On Poursuit l'evenement ?
+		evt.cancelBubble=true; // A VERIFIER: On accepte l'evenement, mais on le passe surtout pas au parent !
+		return false;
 	},
 	/**
 	 * @method hidden static
@@ -777,7 +780,7 @@ var __static = {
 		
 		popup.show(popupX, popupY, popupW, popupH, popupComponent);		
 		
-		window.title="Title= "+popupW+"/"+popupH;
+		window.title="Title= "+popupW+"/"+popupH+"/"+popupW+"/"+popupH;
 
 		var seps=popupDocument.getElementsByTagName("li");
 		// Il faut motiver les composants ?????
@@ -841,6 +844,7 @@ var __static = {
 	 */
 	Gecko_closePopup: function(popup) {
 		popup.style.visibility="hidden";
+		popup.style.display="none";
 	},
 	/**
 	 * @method hidden static 
@@ -865,6 +869,8 @@ var __static = {
 		var offsetX=0;
 		var offsetY=0;
 		var offsetWidth;
+		
+		popup.style.display="block"; // On remet le display block pour pouvoir avoir la taille !
 
 		if (component) {
 			var absPos=f_core.GetAbsolutePosition(component);
@@ -936,22 +942,25 @@ var __static = {
 		
 		f_core.ComputePopupPosition(popup, pos);
 
-		var menu=popup._item._menu;
-		var parentPopup=menu.f_getUIPopup(popup._item);		
-		
 		var popupStyle=popup.style;
-		if (!popupStyle.zIndex && parentPopup) {
-			var zbuf=parentPopup.style.zIndex;
-			var ppop=0;
+
+		if (popup._item) {
+			var menu=popup._item._menu;
+			var parentPopup=menu.f_getUIPopup(popup._item);		
 			
-			if (!zbuf) {
-				ppop=1000;
+			if (!popupStyle.zIndex && parentPopup) {
+				var zbuf=parentPopup.style.zIndex;
+				var ppop=0;
 				
-			} else {
-				ppop=parseInt(zbuf, 10);
+				if (!zbuf) {
+					ppop=1000;
+					
+				} else {
+					ppop=parseInt(zbuf, 10);
+				}
+				
+				popupStyle.zIndex=String(ppop+1);
 			}
-			
-			popupStyle.zIndex=String(ppop+1);
 		}
 
 		popupStyle.left=pos.x+"px";

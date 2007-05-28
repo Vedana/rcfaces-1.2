@@ -39,15 +39,15 @@ public class SpinnerComponent extends TextEntryComponent {
 		setId(componentId);
 	}
 
-	public final double getMinimum() {
+	public double getMinimum() {
 		return getMinimum(null);
 	}
 
-	public final double getMinimum(javax.faces.context.FacesContext facesContext) {
+	public double getMinimum(javax.faces.context.FacesContext facesContext) {
 		return engine.getDoubleProperty(Properties.MINIMUM, 0.0, facesContext);
 	}
 
-	public final void setMinimum(double minimum) {
+	public void setMinimum(double minimum) {
 		engine.setProperty(Properties.MINIMUM, minimum);
 	}
 
@@ -55,7 +55,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Returns <code>true</code> if the attribute "minimum" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMinimumSetted() {
+	public boolean isMinimumSetted() {
 		return engine.isPropertySetted(Properties.MINIMUM);
 	}
 
@@ -63,7 +63,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Returns an int value specifying the upper limit for the value of the component.
 	 * @return maximum
 	 */
-	public final double getMaximum() {
+	public double getMaximum() {
 		return getMaximum(null);
 	}
 
@@ -71,7 +71,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Returns an int value specifying the upper limit for the value of the component.
 	 * @return maximum
 	 */
-	public final double getMaximum(javax.faces.context.FacesContext facesContext) {
+	public double getMaximum(javax.faces.context.FacesContext facesContext) {
 		return engine.getDoubleProperty(Properties.MAXIMUM, 0.0, facesContext);
 	}
 
@@ -79,7 +79,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Sets an int value specifying the upper limit for the value of the component.
 	 * @param maximum maximum
 	 */
-	public final void setMaximum(double maximum) {
+	public void setMaximum(double maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
@@ -91,7 +91,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Returns <code>true</code> if the attribute "maximum" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMaximumSetted() {
+	public boolean isMaximumSetted() {
 		return engine.isPropertySetted(Properties.MAXIMUM);
 	}
 
@@ -99,7 +99,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Returns a boolean value indicating wether to start from the beginning when reaching the end or not. And vice versa.
 	 * @return true if the component should cycle
 	 */
-	public final boolean isCycleValue() {
+	public boolean isCycleValue() {
 		return isCycleValue(null);
 	}
 
@@ -107,7 +107,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Returns a boolean value indicating wether to start from the beginning when reaching the end or not. And vice versa.
 	 * @return true if the component should cycle
 	 */
-	public final boolean isCycleValue(javax.faces.context.FacesContext facesContext) {
+	public boolean isCycleValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CYCLE_VALUE, false, facesContext);
 	}
 
@@ -115,7 +115,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Sets a boolean value indicating wether to start from the beginning when reaching the end or not. And vice versa.
 	 * @param cycleValue true if the component should cycle
 	 */
-	public final void setCycleValue(boolean cycleValue) {
+	public void setCycleValue(boolean cycleValue) {
 		engine.setProperty(Properties.CYCLE_VALUE, cycleValue);
 	}
 
@@ -127,19 +127,19 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Returns <code>true</code> if the attribute "cycleValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isCycleValueSetted() {
+	public boolean isCycleValueSetted() {
 		return engine.isPropertySetted(Properties.CYCLE_VALUE);
 	}
 
-	public final String getStep() {
+	public String getStep() {
 		return getStep(null);
 	}
 
-	public final String getStep(javax.faces.context.FacesContext facesContext) {
+	public String getStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.STEP, facesContext);
 	}
 
-	public final void setStep(String step) {
+	public void setStep(String step) {
 		engine.setProperty(Properties.STEP, step);
 	}
 
@@ -147,7 +147,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	 * Returns <code>true</code> if the attribute "step" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isStepSetted() {
+	public boolean isStepSetted() {
 		return engine.isPropertySetted(Properties.STEP);
 	}
 

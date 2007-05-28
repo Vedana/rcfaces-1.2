@@ -16,6 +16,7 @@ import org.rcfaces.core.component.AbstractGridComponent;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import java.util.Set;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.ComboColumnComponent;
 
 public class ComboGridComponent extends AbstractGridComponent implements 
+	ISelectionEventCapability,
 	IDisabledCapability,
 	IRequiredCapability,
 	IReadOnlyCapability,
@@ -45,7 +47,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","suggestionDelayMs","horizontalScrollPosition","message","pagerStyleClass","rowIndexVar","valueColumnId","pagerLookId","filterProperties","oneResultMessage","zeroResultMessage","border","valueFormat","gridStyleClass","suggestionMinChars","labelColumnId","gridLookId","verticalScrollPosition","paged","required","disabled","selectedValue","rowStyleClass","rowCountVar","manyResultsMessage","popupWidth","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","popupHeight","suggestionDelayMs","horizontalScrollPosition","message","pagerStyleClass","rowIndexVar","valueColumnId","pagerLookId","filterProperties","oneResultMessage","zeroResultMessage","border","valueFormat","gridStyleClass","suggestionMinChars","labelColumnId","gridLookId","verticalScrollPosition","paged","required","disabled","selectedValue","rowStyleClass","rowCountVar","manyResultsMessage","popupWidth","readOnly"}));
 	}
 
 	public ComboGridComponent() {
@@ -132,6 +134,18 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 				return GridTools.listSortedComponents(context, this);
 			
+	}
+
+	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
 	public boolean isDisabled() {
@@ -436,7 +450,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns an int value specifying the delay in milliseconds before showing the suggestion list.
 	 * @return delay in milliseconds
 	 */
-	public final int getSuggestionDelayMs() {
+	public int getSuggestionDelayMs() {
 		return getSuggestionDelayMs(null);
 	}
 
@@ -444,7 +458,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns an int value specifying the delay in milliseconds before showing the suggestion list.
 	 * @return delay in milliseconds
 	 */
-	public final int getSuggestionDelayMs(javax.faces.context.FacesContext facesContext) {
+	public int getSuggestionDelayMs(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SUGGESTION_DELAY_MS, 0, facesContext);
 	}
 
@@ -452,7 +466,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Sets an int value specifying the delay in milliseconds before showing the suggestion list.
 	 * @param suggestionDelayMs delay in milliseconds
 	 */
-	public final void setSuggestionDelayMs(int suggestionDelayMs) {
+	public void setSuggestionDelayMs(int suggestionDelayMs) {
 		engine.setProperty(Properties.SUGGESTION_DELAY_MS, suggestionDelayMs);
 	}
 
@@ -464,7 +478,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "suggestionDelayMs" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSuggestionDelayMsSetted() {
+	public boolean isSuggestionDelayMsSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_DELAY_MS);
 	}
 
@@ -472,7 +486,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns an int value specifying the minimum number of characters before the suggestion is calculated.
 	 * @return minimum number of characters
 	 */
-	public final int getSuggestionMinChars() {
+	public int getSuggestionMinChars() {
 		return getSuggestionMinChars(null);
 	}
 
@@ -480,7 +494,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns an int value specifying the minimum number of characters before the suggestion is calculated.
 	 * @return minimum number of characters
 	 */
-	public final int getSuggestionMinChars(javax.faces.context.FacesContext facesContext) {
+	public int getSuggestionMinChars(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.SUGGESTION_MIN_CHARS, 0, facesContext);
 	}
 
@@ -488,7 +502,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Sets an int value specifying the minimum number of characters before the suggestion is calculated.
 	 * @param suggestionMinChars minimum number of characters
 	 */
-	public final void setSuggestionMinChars(int suggestionMinChars) {
+	public void setSuggestionMinChars(int suggestionMinChars) {
 		engine.setProperty(Properties.SUGGESTION_MIN_CHARS, suggestionMinChars);
 	}
 
@@ -500,7 +514,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "suggestionMinChars" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSuggestionMinCharsSetted() {
+	public boolean isSuggestionMinCharsSetted() {
 		return engine.isPropertySetted(Properties.SUGGESTION_MIN_CHARS);
 	}
 
@@ -508,7 +522,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
-	public final String getRowCountVar() {
+	public String getRowCountVar() {
 		return getRowCountVar(null);
 	}
 
@@ -516,7 +530,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
-	public final String getRowCountVar(javax.faces.context.FacesContext facesContext) {
+	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
 	}
 
@@ -524,7 +538,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Sets a string value specifying the name of the variable receiving the number of rows.
 	 * @param rowCountVar variable name
 	 */
-	public final void setRowCountVar(String rowCountVar) {
+	public void setRowCountVar(String rowCountVar) {
 		engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
 	}
 
@@ -536,7 +550,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "rowCountVar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowCountVarSetted() {
+	public boolean isRowCountVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_COUNT_VAR);
 	}
 
@@ -544,7 +558,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns a string value specifying the name of the variable receiving the index of the current row.
 	 * @return variable name
 	 */
-	public final String getRowIndexVar() {
+	public String getRowIndexVar() {
 		return getRowIndexVar(null);
 	}
 
@@ -552,7 +566,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns a string value specifying the name of the variable receiving the index of the current row.
 	 * @return variable name
 	 */
-	public final String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
+	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
 	}
 
@@ -560,7 +574,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Sets a string value specifying the name of the variable receiving the index of the current row.
 	 * @param rowIndexVar variable name
 	 */
-	public final void setRowIndexVar(String rowIndexVar) {
+	public void setRowIndexVar(String rowIndexVar) {
 		engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
 	}
 
@@ -572,15 +586,15 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "rowIndexVar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowIndexVarSetted() {
+	public boolean isRowIndexVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_INDEX_VAR);
 	}
 
-	public final String getValueColumnId() {
+	public String getValueColumnId() {
 		return getValueColumnId(null);
 	}
 
-	public final String getValueColumnId(javax.faces.context.FacesContext facesContext) {
+	public String getValueColumnId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VALUE_COLUMN_ID, facesContext);
 	}
 
@@ -592,19 +606,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "valueColumnId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isValueColumnIdSetted() {
+	public boolean isValueColumnIdSetted() {
 		return engine.isPropertySetted(Properties.VALUE_COLUMN_ID);
 	}
 
-	public final String getLabelColumnId() {
+	public String getLabelColumnId() {
 		return getLabelColumnId(null);
 	}
 
-	public final String getLabelColumnId(javax.faces.context.FacesContext facesContext) {
+	public String getLabelColumnId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.LABEL_COLUMN_ID, facesContext);
 	}
 
-	public final void setLabelColumnId(String labelColumnId) {
+	public void setLabelColumnId(String labelColumnId) {
 		engine.setProperty(Properties.LABEL_COLUMN_ID, labelColumnId);
 	}
 
@@ -612,19 +626,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "labelColumnId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isLabelColumnIdSetted() {
+	public boolean isLabelColumnIdSetted() {
 		return engine.isPropertySetted(Properties.LABEL_COLUMN_ID);
 	}
 
-	public final Object getSelectedValue() {
+	public Object getSelectedValue() {
 		return getSelectedValue(null);
 	}
 
-	public final Object getSelectedValue(javax.faces.context.FacesContext facesContext) {
+	public Object getSelectedValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getValue(Properties.SELECTED_VALUE, facesContext);
 	}
 
-	public final void setSelectedValue(Object selectedValue) {
+	public void setSelectedValue(Object selectedValue) {
 		engine.setValue(Properties.SELECTED_VALUE, selectedValue);
 	}
 
@@ -632,19 +646,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "selectedValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSelectedValueSetted() {
+	public boolean isSelectedValueSetted() {
 		return engine.isPropertySetted(Properties.SELECTED_VALUE);
 	}
 
-	public final int getPopupWidth() {
+	public int getPopupWidth() {
 		return getPopupWidth(null);
 	}
 
-	public final int getPopupWidth(javax.faces.context.FacesContext facesContext) {
+	public int getPopupWidth(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.POPUP_WIDTH, 0, facesContext);
 	}
 
-	public final void setPopupWidth(int popupWidth) {
+	public void setPopupWidth(int popupWidth) {
 		engine.setProperty(Properties.POPUP_WIDTH, popupWidth);
 	}
 
@@ -652,19 +666,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "popupWidth" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPopupWidthSetted() {
+	public boolean isPopupWidthSetted() {
 		return engine.isPropertySetted(Properties.POPUP_WIDTH);
 	}
 
-	public final int getPopupHeight() {
+	public int getPopupHeight() {
 		return getPopupHeight(null);
 	}
 
-	public final int getPopupHeight(javax.faces.context.FacesContext facesContext) {
+	public int getPopupHeight(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.POPUP_HEIGHT, 0, facesContext);
 	}
 
-	public final void setPopupHeight(int popupHeight) {
+	public void setPopupHeight(int popupHeight) {
 		engine.setProperty(Properties.POPUP_HEIGHT, popupHeight);
 	}
 
@@ -672,19 +686,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "popupHeight" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPopupHeightSetted() {
+	public boolean isPopupHeightSetted() {
 		return engine.isPropertySetted(Properties.POPUP_HEIGHT);
 	}
 
-	public final String getValueFormat() {
+	public String getValueFormat() {
 		return getValueFormat(null);
 	}
 
-	public final String getValueFormat(javax.faces.context.FacesContext facesContext) {
+	public String getValueFormat(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.VALUE_FORMAT, facesContext);
 	}
 
-	public final void setValueFormat(String valueFormat) {
+	public void setValueFormat(String valueFormat) {
 		engine.setProperty(Properties.VALUE_FORMAT, valueFormat);
 	}
 
@@ -692,19 +706,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "valueFormat" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isValueFormatSetted() {
+	public boolean isValueFormatSetted() {
 		return engine.isPropertySetted(Properties.VALUE_FORMAT);
 	}
 
-	public final String getPagerStyleClass() {
+	public String getPagerStyleClass() {
 		return getPagerStyleClass(null);
 	}
 
-	public final String getPagerStyleClass(javax.faces.context.FacesContext facesContext) {
+	public String getPagerStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.PAGER_STYLE_CLASS, facesContext);
 	}
 
-	public final void setPagerStyleClass(String pagerStyleClass) {
+	public void setPagerStyleClass(String pagerStyleClass) {
 		engine.setProperty(Properties.PAGER_STYLE_CLASS, pagerStyleClass);
 	}
 
@@ -712,19 +726,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "pagerStyleClass" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPagerStyleClassSetted() {
+	public boolean isPagerStyleClassSetted() {
 		return engine.isPropertySetted(Properties.PAGER_STYLE_CLASS);
 	}
 
-	public final String getPagerLookId() {
+	public String getPagerLookId() {
 		return getPagerLookId(null);
 	}
 
-	public final String getPagerLookId(javax.faces.context.FacesContext facesContext) {
+	public String getPagerLookId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.PAGER_LOOK_ID, facesContext);
 	}
 
-	public final void setPagerLookId(String pagerLookId) {
+	public void setPagerLookId(String pagerLookId) {
 		engine.setProperty(Properties.PAGER_LOOK_ID, pagerLookId);
 	}
 
@@ -732,19 +746,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "pagerLookId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPagerLookIdSetted() {
+	public boolean isPagerLookIdSetted() {
 		return engine.isPropertySetted(Properties.PAGER_LOOK_ID);
 	}
 
-	public final String getGridStyleClass() {
+	public String getGridStyleClass() {
 		return getGridStyleClass(null);
 	}
 
-	public final String getGridStyleClass(javax.faces.context.FacesContext facesContext) {
+	public String getGridStyleClass(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.GRID_STYLE_CLASS, facesContext);
 	}
 
-	public final void setGridStyleClass(String gridStyleClass) {
+	public void setGridStyleClass(String gridStyleClass) {
 		engine.setProperty(Properties.GRID_STYLE_CLASS, gridStyleClass);
 	}
 
@@ -752,19 +766,19 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "gridStyleClass" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isGridStyleClassSetted() {
+	public boolean isGridStyleClassSetted() {
 		return engine.isPropertySetted(Properties.GRID_STYLE_CLASS);
 	}
 
-	public final String getGridLookId() {
+	public String getGridLookId() {
 		return getGridLookId(null);
 	}
 
-	public final String getGridLookId(javax.faces.context.FacesContext facesContext) {
+	public String getGridLookId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.GRID_LOOK_ID, facesContext);
 	}
 
-	public final void setGridLookId(String gridLookId) {
+	public void setGridLookId(String gridLookId) {
 		engine.setProperty(Properties.GRID_LOOK_ID, gridLookId);
 	}
 
@@ -772,7 +786,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "gridLookId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isGridLookIdSetted() {
+	public boolean isGridLookIdSetted() {
 		return engine.isPropertySetted(Properties.GRID_LOOK_ID);
 	}
 

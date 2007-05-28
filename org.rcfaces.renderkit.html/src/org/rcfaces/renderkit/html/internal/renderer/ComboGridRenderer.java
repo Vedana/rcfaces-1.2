@@ -513,6 +513,11 @@ public class ComboGridRenderer extends DataGridRenderer {
         }
     }
 
+    protected void encodeBodyTableEnd(IHtmlWriter htmlWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        // On ferme pas les DIV
+    }
+
     public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
 
         if (isDataGridRenderer(htmlWriter)) {
@@ -582,25 +587,24 @@ public class ComboGridRenderer extends DataGridRenderer {
 
         FacesContext facesContext = context.getFacesContext();
 
+        Object convertedSelectedValue = null;
         String selectedValue = componentData.getStringProperty("selected");
         if (selectedValue != null) {
             UIComponent converterComponent = getColumn(comboGridComponent,
                     comboGridComponent.getValueColumnId(facesContext));
 
-            Object convertedSelectedValue = ValuesTools.convertStringToValue(
+            convertedSelectedValue = ValuesTools.convertStringToValue(
                     facesContext, converterComponent, selectedValue, false);
+        }
 
-            Object old = comboGridComponent.getSelectedValue(facesContext);
+        Object old = comboGridComponent.getSelectedValue(facesContext);
 
-            if (convertedSelectedValue != old
-                    && (old == null || old.equals(convertedSelectedValue) == false)) {
-                comboGridComponent.setSelectedValue(convertedSelectedValue);
+        if (convertedSelectedValue != old
+                && (old == null || old.equals(convertedSelectedValue) == false)) {
+            comboGridComponent.setSelectedValue(convertedSelectedValue);
 
-                component
-                        .queueEvent(new PropertyChangeEvent(component,
-                                Properties.SELECTED_VALUE, old,
-                                convertedSelectedValue));
-            }
+            component.queueEvent(new PropertyChangeEvent(component,
+                    Properties.SELECTED_VALUE, old, convertedSelectedValue));
         }
     }
 

@@ -32,7 +32,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns a string value specifying the name to be used on the client side to access the resource bundle.
 	 * @return bundle name
 	 */
-	public final String getBundleName() {
+	public String getBundleName() {
 		return getBundleName(null);
 	}
 
@@ -40,7 +40,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns a string value specifying the name to be used on the client side to access the resource bundle.
 	 * @return bundle name
 	 */
-	public final String getBundleName(javax.faces.context.FacesContext facesContext) {
+	public String getBundleName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BUNDLE_NAME, facesContext);
 	}
 
@@ -48,7 +48,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Sets a string value specifying the name to be used on the client side to access the resource bundle.
 	 * @param bundleName bundle name
 	 */
-	public final void setBundleName(String bundleName) {
+	public void setBundleName(String bundleName) {
 		engine.setProperty(Properties.BUNDLE_NAME, bundleName);
 	}
 
@@ -60,7 +60,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns <code>true</code> if the attribute "bundleName" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isBundleNameSetted() {
+	public boolean isBundleNameSetted() {
 		return engine.isPropertySetted(Properties.BUNDLE_NAME);
 	}
 
@@ -68,7 +68,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns a string indicating the fully qualified name of a resources bundle (property file).
 	 * @return base name of the resource bundle to be loaded.
 	 */
-	public final String getBaseName() {
+	public String getBaseName() {
 		return getBaseName(null);
 	}
 
@@ -76,7 +76,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns a string indicating the fully qualified name of a resources bundle (property file).
 	 * @return base name of the resource bundle to be loaded.
 	 */
-	public final String getBaseName(javax.faces.context.FacesContext facesContext) {
+	public String getBaseName(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BASE_NAME, facesContext);
 	}
 
@@ -84,7 +84,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Sets a string indicating the fully qualified name of a resources bundle (property file).
 	 * @param baseName base name of the resource bundle to be loaded.
 	 */
-	public final void setBaseName(String baseName) {
+	public void setBaseName(String baseName) {
 		engine.setProperty(Properties.BASE_NAME, baseName);
 	}
 
@@ -96,7 +96,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns <code>true</code> if the attribute "baseName" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isBaseNameSetted() {
+	public boolean isBaseNameSetted() {
 		return engine.isPropertySetted(Properties.BASE_NAME);
 	}
 
@@ -104,7 +104,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns a boolean value indicating wether the resource is available on the server side.
 	 * @return true if the resource is available on the server side
 	 */
-	public final boolean isServerSide() {
+	public boolean isServerSide() {
 		return isServerSide(null);
 	}
 
@@ -112,7 +112,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns a boolean value indicating wether the resource is available on the server side.
 	 * @return true if the resource is available on the server side
 	 */
-	public final boolean isServerSide(javax.faces.context.FacesContext facesContext) {
+	public boolean isServerSide(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SERVER_SIDE, false, facesContext);
 	}
 
@@ -120,7 +120,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Sets a boolean value indicating wether the resource is available on the server side.
 	 * @param serverSide true if the resource is available on the server side
 	 */
-	public final void setServerSide(boolean serverSide) {
+	public void setServerSide(boolean serverSide) {
 		engine.setProperty(Properties.SERVER_SIDE, serverSide);
 	}
 
@@ -132,19 +132,19 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns <code>true</code> if the attribute "serverSide" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isServerSideSetted() {
+	public boolean isServerSideSetted() {
 		return engine.isPropertySetted(Properties.SERVER_SIDE);
 	}
 
-	public final boolean isOverride() {
+	public boolean isOverride() {
 		return isOverride(null);
 	}
 
-	public final boolean isOverride(javax.faces.context.FacesContext facesContext) {
+	public boolean isOverride(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.OVERRIDE, false, facesContext);
 	}
 
-	public final void setOverride(boolean override) {
+	public void setOverride(boolean override) {
 		engine.setProperty(Properties.OVERRIDE, override);
 	}
 
@@ -152,7 +152,7 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 	 * Returns <code>true</code> if the attribute "override" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isOverrideSetted() {
+	public boolean isOverrideSetted() {
 		return engine.isPropertySetted(Properties.OVERRIDE);
 	}
 

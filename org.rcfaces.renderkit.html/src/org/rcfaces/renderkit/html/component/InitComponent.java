@@ -63,7 +63,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a string value indicating the base HRef. If the key word "context" is used the base HRef is calculated from the context.
 	 * @return base HRef
 	 */
-	public final String getBase() {
+	public String getBase() {
 		return getBase(null);
 	}
 
@@ -71,7 +71,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a string value indicating the base HRef. If the key word "context" is used the base HRef is calculated from the context.
 	 * @return base HRef
 	 */
-	public final String getBase(javax.faces.context.FacesContext facesContext) {
+	public String getBase(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.BASE, facesContext);
 	}
 
@@ -79,7 +79,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets a string value indicating the base HRef. If the key word "context" is used the base HRef is calculated from the context.
 	 * @param base base HRef
 	 */
-	public final void setBase(String base) {
+	public void setBase(String base) {
 		engine.setProperty(Properties.BASE, base);
 	}
 
@@ -91,7 +91,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "base" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isBaseSetted() {
+	public boolean isBaseSetted() {
 		return engine.isPropertySetted(Properties.BASE);
 	}
 
@@ -99,7 +99,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a string value specifying the title for the document.
 	 * @return title
 	 */
-	public final String getTitle() {
+	public String getTitle() {
 		return getTitle(null);
 	}
 
@@ -107,7 +107,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a string value specifying the title for the document.
 	 * @return title
 	 */
-	public final String getTitle(javax.faces.context.FacesContext facesContext) {
+	public String getTitle(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TITLE, facesContext);
 	}
 
@@ -115,7 +115,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets a string value specifying the title for the document.
 	 * @param title title
 	 */
-	public final void setTitle(String title) {
+	public void setTitle(String title) {
 		engine.setProperty(Properties.TITLE, title);
 	}
 
@@ -127,7 +127,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "title" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isTitleSetted() {
+	public boolean isTitleSetted() {
 		return engine.isPropertySetted(Properties.TITLE);
 	}
 
@@ -135,7 +135,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns an url string pointing to the image used for a bookmark.
 	 * @return favorite image url
 	 */
-	public final String getFavoriteImageURL() {
+	public String getFavoriteImageURL() {
 		return getFavoriteImageURL(null);
 	}
 
@@ -143,7 +143,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns an url string pointing to the image used for a bookmark.
 	 * @return favorite image url
 	 */
-	public final String getFavoriteImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getFavoriteImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FAVORITE_IMAGE_URL, facesContext);
 	}
 
@@ -151,7 +151,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets an url string pointing to the image used for a bookmark.
 	 * @param favoriteImageURL favorite image url
 	 */
-	public final void setFavoriteImageURL(String favoriteImageURL) {
+	public void setFavoriteImageURL(String favoriteImageURL) {
 		engine.setProperty(Properties.FAVORITE_IMAGE_URL, favoriteImageURL);
 	}
 
@@ -163,7 +163,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "favoriteImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isFavoriteImageURLSetted() {
+	public boolean isFavoriteImageURLSetted() {
 		return engine.isPropertySetted(Properties.FAVORITE_IMAGE_URL);
 	}
 
@@ -171,7 +171,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns an url string pointing to a page shown if scripts are not enabled on the browser.
 	 * @return url
 	 */
-	public final String getDisabledScriptPageURL() {
+	public String getDisabledScriptPageURL() {
 		return getDisabledScriptPageURL(null);
 	}
 
@@ -179,7 +179,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns an url string pointing to a page shown if scripts are not enabled on the browser.
 	 * @return url
 	 */
-	public final String getDisabledScriptPageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDisabledScriptPageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DISABLED_SCRIPT_PAGE_URL, facesContext);
 	}
 
@@ -187,7 +187,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets an url string pointing to a page shown if scripts are not enabled on the browser.
 	 * @param disabledScriptPageURL url
 	 */
-	public final void setDisabledScriptPageURL(String disabledScriptPageURL) {
+	public void setDisabledScriptPageURL(String disabledScriptPageURL) {
 		engine.setProperty(Properties.DISABLED_SCRIPT_PAGE_URL, disabledScriptPageURL);
 	}
 
@@ -199,7 +199,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "disabledScriptPageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDisabledScriptPageURLSetted() {
+	public boolean isDisabledScriptPageURLSetted() {
 		return engine.isPropertySetted(Properties.DISABLED_SCRIPT_PAGE_URL);
 	}
 
@@ -207,7 +207,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a boolean value that inhibits cookies for the page or not.
 	 * @return true if cookies are disabled
 	 */
-	public final String getDisabledCookiesPageURL() {
+	public String getDisabledCookiesPageURL() {
 		return getDisabledCookiesPageURL(null);
 	}
 
@@ -215,7 +215,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a boolean value that inhibits cookies for the page or not.
 	 * @return true if cookies are disabled
 	 */
-	public final String getDisabledCookiesPageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDisabledCookiesPageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DISABLED_COOKIES_PAGE_URL, facesContext);
 	}
 
@@ -223,7 +223,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets a boolean value that inhibits cookies for the page or not.
 	 * @param disabledCookiesPageURL true if cookies are to be disabled
 	 */
-	public final void setDisabledCookiesPageURL(String disabledCookiesPageURL) {
+	public void setDisabledCookiesPageURL(String disabledCookiesPageURL) {
 		engine.setProperty(Properties.DISABLED_COOKIES_PAGE_URL, disabledCookiesPageURL);
 	}
 
@@ -235,7 +235,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "disabledCookiesPageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDisabledCookiesPageURLSetted() {
+	public boolean isDisabledCookiesPageURLSetted() {
 		return engine.isPropertySetted(Properties.DISABLED_COOKIES_PAGE_URL);
 	}
 
@@ -243,7 +243,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns an url pointing to the page to show if the browser is not supported.
 	 * @return url
 	 */
-	public final String getInvalidBrowserPageURL() {
+	public String getInvalidBrowserPageURL() {
 		return getInvalidBrowserPageURL(null);
 	}
 
@@ -251,7 +251,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns an url pointing to the page to show if the browser is not supported.
 	 * @return url
 	 */
-	public final String getInvalidBrowserPageURL(javax.faces.context.FacesContext facesContext) {
+	public String getInvalidBrowserPageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INVALID_BROWSER_PAGE_URL, facesContext);
 	}
 
@@ -259,7 +259,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets an url pointing to the page to show if the browser is not supported.
 	 * @param invalidBrowserPageURL url
 	 */
-	public final void setInvalidBrowserPageURL(String invalidBrowserPageURL) {
+	public void setInvalidBrowserPageURL(String invalidBrowserPageURL) {
 		engine.setProperty(Properties.INVALID_BROWSER_PAGE_URL, invalidBrowserPageURL);
 	}
 
@@ -271,19 +271,19 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "invalidBrowserPageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isInvalidBrowserPageURLSetted() {
+	public boolean isInvalidBrowserPageURLSetted() {
 		return engine.isPropertySetted(Properties.INVALID_BROWSER_PAGE_URL);
 	}
 
-	public final java.util.Locale getLiteralLocale() {
+	public java.util.Locale getLiteralLocale() {
 		return getLiteralLocale(null);
 	}
 
-	public final java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
+	public java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
 		return (java.util.Locale)engine.getValue(Properties.LITERAL_LOCALE, facesContext);
 	}
 
-	public final void setLiteralLocale(java.util.Locale literalLocale) {
+	public void setLiteralLocale(java.util.Locale literalLocale) {
 		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
 	}
 
@@ -291,19 +291,19 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "literalLocale" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isLiteralLocaleSetted() {
+	public boolean isLiteralLocaleSetted() {
 		return engine.isPropertySetted(Properties.LITERAL_LOCALE);
 	}
 
-	public final java.util.TimeZone getLiteralTimeZone() {
+	public java.util.TimeZone getLiteralTimeZone() {
 		return getLiteralTimeZone(null);
 	}
 
-	public final java.util.TimeZone getLiteralTimeZone(javax.faces.context.FacesContext facesContext) {
+	public java.util.TimeZone getLiteralTimeZone(javax.faces.context.FacesContext facesContext) {
 		return (java.util.TimeZone)engine.getValue(Properties.LITERAL_TIME_ZONE, facesContext);
 	}
 
-	public final void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
+	public void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
 		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
 	}
 
@@ -311,7 +311,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "literalTimeZone" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isLiteralTimeZoneSetted() {
+	public boolean isLiteralTimeZoneSetted() {
 		return engine.isPropertySetted(Properties.LITERAL_TIME_ZONE);
 	}
 
@@ -319,7 +319,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a boolean value specifying wether the "image Bar" (contextual menu for images) in Internet Explorer should be hidden.
 	 * @return true if the image bar is disabled
 	 */
-	public final boolean isDisabledIEImageBar() {
+	public boolean isDisabledIEImageBar() {
 		return isDisabledIEImageBar(null);
 	}
 
@@ -327,7 +327,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a boolean value specifying wether the "image Bar" (contextual menu for images) in Internet Explorer should be hidden.
 	 * @return true if the image bar is disabled
 	 */
-	public final boolean isDisabledIEImageBar(javax.faces.context.FacesContext facesContext) {
+	public boolean isDisabledIEImageBar(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.DISABLED_IEIMAGE_BAR, false, facesContext);
 	}
 
@@ -335,7 +335,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets a boolean value specifying wether the "image Bar" (contextual menu for images) in Internet Explorer should be hidden.
 	 * @param disabledIEImageBar true if the image bar is to be disabled
 	 */
-	public final void setDisabledIEImageBar(boolean disabledIEImageBar) {
+	public void setDisabledIEImageBar(boolean disabledIEImageBar) {
 		engine.setProperty(Properties.DISABLED_IEIMAGE_BAR, disabledIEImageBar);
 	}
 
@@ -347,7 +347,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "disabledIEImageBar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDisabledIEImageBarSetted() {
+	public boolean isDisabledIEImageBarSetted() {
 		return engine.isPropertySetted(Properties.DISABLED_IEIMAGE_BAR);
 	}
 
@@ -355,7 +355,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a boolean value that force disabled cache for the page or not.
 	 * @return true if the cache is disabled
 	 */
-	public final boolean isDisableCache() {
+	public boolean isDisableCache() {
 		return isDisableCache(null);
 	}
 
@@ -363,7 +363,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a boolean value that force disabled cache for the page or not.
 	 * @return true if the cache is disabled
 	 */
-	public final boolean isDisableCache(javax.faces.context.FacesContext facesContext) {
+	public boolean isDisableCache(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.DISABLE_CACHE, false, facesContext);
 	}
 
@@ -371,7 +371,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets a boolean value that force disabled cache for the page or not.
 	 * @param disableCache true if the cache is to be disabled
 	 */
-	public final void setDisableCache(boolean disableCache) {
+	public void setDisableCache(boolean disableCache) {
 		engine.setProperty(Properties.DISABLE_CACHE, disableCache);
 	}
 
@@ -383,7 +383,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "disableCache" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDisableCacheSetted() {
+	public boolean isDisableCacheSetted() {
 		return engine.isPropertySetted(Properties.DISABLE_CACHE);
 	}
 
@@ -391,7 +391,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a boolean value that hide context menu for the page or not.
 	 * @return true if the browser context menu is hidden
 	 */
-	public final boolean isDisableContextMenu() {
+	public boolean isDisableContextMenu() {
 		return isDisableContextMenu(null);
 	}
 
@@ -399,7 +399,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a boolean value that hide context menu for the page or not.
 	 * @return true if the browser context menu is hidden
 	 */
-	public final boolean isDisableContextMenu(javax.faces.context.FacesContext facesContext) {
+	public boolean isDisableContextMenu(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.DISABLE_CONTEXT_MENU, false, facesContext);
 	}
 
@@ -407,7 +407,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets a boolean value that hide context menu for the page or not.
 	 * @param disableContextMenu true if the browser context menu is to be hidden
 	 */
-	public final void setDisableContextMenu(boolean disableContextMenu) {
+	public void setDisableContextMenu(boolean disableContextMenu) {
 		engine.setProperty(Properties.DISABLE_CONTEXT_MENU, disableContextMenu);
 	}
 
@@ -419,7 +419,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "disableContextMenu" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDisableContextMenuSetted() {
+	public boolean isDisableContextMenuSetted() {
 		return engine.isPropertySetted(Properties.DISABLE_CONTEXT_MENU);
 	}
 
@@ -427,7 +427,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a string value specifying the HTML base.
 	 * @return HTML base
 	 */
-	public final boolean isRenderBaseTag() {
+	public boolean isRenderBaseTag() {
 		return isRenderBaseTag(null);
 	}
 
@@ -435,7 +435,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns a string value specifying the HTML base.
 	 * @return HTML base
 	 */
-	public final boolean isRenderBaseTag(javax.faces.context.FacesContext facesContext) {
+	public boolean isRenderBaseTag(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.RENDER_BASE_TAG, true, facesContext);
 	}
 
@@ -443,7 +443,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Sets a string value specifying the HTML base.
 	 * @param renderBaseTag HTML base
 	 */
-	public final void setRenderBaseTag(boolean renderBaseTag) {
+	public void setRenderBaseTag(boolean renderBaseTag) {
 		engine.setProperty(Properties.RENDER_BASE_TAG, renderBaseTag);
 	}
 
@@ -455,19 +455,19 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "renderBaseTag" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRenderBaseTagSetted() {
+	public boolean isRenderBaseTagSetted() {
 		return engine.isPropertySetted(Properties.RENDER_BASE_TAG);
 	}
 
-	public final String getClientMessageIdFilter() {
+	public String getClientMessageIdFilter() {
 		return getClientMessageIdFilter(null);
 	}
 
-	public final String getClientMessageIdFilter(javax.faces.context.FacesContext facesContext) {
+	public String getClientMessageIdFilter(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.CLIENT_MESSAGE_ID_FILTER, facesContext);
 	}
 
-	public final void setClientMessageIdFilter(String clientMessageIdFilter) {
+	public void setClientMessageIdFilter(String clientMessageIdFilter) {
 		engine.setProperty(Properties.CLIENT_MESSAGE_ID_FILTER, clientMessageIdFilter);
 	}
 
@@ -475,19 +475,19 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "clientMessageIdFilter" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isClientMessageIdFilterSetted() {
+	public boolean isClientMessageIdFilterSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_MESSAGE_ID_FILTER);
 	}
 
-	public final String getWaiRolesNS() {
+	public String getWaiRolesNS() {
 		return getWaiRolesNS(null);
 	}
 
-	public final String getWaiRolesNS(javax.faces.context.FacesContext facesContext) {
+	public String getWaiRolesNS(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.WAI_ROLES_NS, facesContext);
 	}
 
-	public final void setWaiRolesNS(String waiRolesNS) {
+	public void setWaiRolesNS(String waiRolesNS) {
 		engine.setProperty(Properties.WAI_ROLES_NS, waiRolesNS);
 	}
 
@@ -495,19 +495,19 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "waiRolesNS" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isWaiRolesNSSetted() {
+	public boolean isWaiRolesNSSetted() {
 		return engine.isPropertySetted(Properties.WAI_ROLES_NS);
 	}
 
-	public final boolean isClientValidation() {
+	public boolean isClientValidation() {
 		return isClientValidation(null);
 	}
 
-	public final boolean isClientValidation(javax.faces.context.FacesContext facesContext) {
+	public boolean isClientValidation(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLIENT_VALIDATION, true, facesContext);
 	}
 
-	public final void setClientValidation(boolean clientValidation) {
+	public void setClientValidation(boolean clientValidation) {
 		engine.setProperty(Properties.CLIENT_VALIDATION, clientValidation);
 	}
 
@@ -515,7 +515,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * Returns <code>true</code> if the attribute "clientValidation" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isClientValidationSetted() {
+	public boolean isClientValidationSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_VALIDATION);
 	}
 

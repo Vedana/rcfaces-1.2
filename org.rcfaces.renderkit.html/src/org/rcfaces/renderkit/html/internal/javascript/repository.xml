@@ -31,6 +31,11 @@
 				<required-class name="f_aspect" />
 			</class>
 		</file>
+		<file name="util/f_log.js">
+			<class name="f_log">
+				<required-class name="f_core" />
+			</class>
+		</file>
 		<file name="f_prop.js">
 			<class name="f_prop" />
 		</file>
@@ -357,6 +362,7 @@
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_disabled" />
 				<required-class name="fa_images" />
+				<required-class name="fa_immediate" />
 
 				<required-style name="f_imageButton.css" />
 			</class>
@@ -920,6 +926,7 @@
 				<required-class name="f_aspect" />
 				<required-class name="f_popup" />
 				<required-class name="f_dataGridPopup" />
+				<required-class name="f_pager" />
 			</class>
 		</file>
 					
@@ -1110,14 +1117,6 @@
 				<required-class id="effect" name="f_effect" />
 
 				<required-style name="f_expandBar.css" />
-			</class>
-		</file>
-	</module>
-
-	<module id="log">
-		<file name="util/f_log.js">
-			<class name="f_log">
-				<required-class name="f_core" />
 			</class>
 		</file>
 	</module>

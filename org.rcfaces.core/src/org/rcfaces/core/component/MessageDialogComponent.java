@@ -364,7 +364,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 * Returns a string value specifying the title for the document.
 	 * @return title
 	 */
-	public final String getTitle() {
+	public String getTitle() {
 		return getTitle(null);
 	}
 
@@ -372,7 +372,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 * Returns a string value specifying the title for the document.
 	 * @return title
 	 */
-	public final String getTitle(javax.faces.context.FacesContext facesContext) {
+	public String getTitle(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TITLE, facesContext);
 	}
 
@@ -380,7 +380,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 * Sets a string value specifying the title for the document.
 	 * @param title title
 	 */
-	public final void setTitle(String title) {
+	public void setTitle(String title) {
 		engine.setProperty(Properties.TITLE, title);
 	}
 
@@ -392,19 +392,19 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 * Returns <code>true</code> if the attribute "title" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isTitleSetted() {
+	public boolean isTitleSetted() {
 		return engine.isPropertySetted(Properties.TITLE);
 	}
 
-	public final String getDefaultValue() {
+	public String getDefaultValue() {
 		return getDefaultValue(null);
 	}
 
-	public final String getDefaultValue(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_VALUE, facesContext);
 	}
 
-	public final void setDefaultValue(String defaultValue) {
+	public void setDefaultValue(String defaultValue) {
 		engine.setProperty(Properties.DEFAULT_VALUE, defaultValue);
 	}
 
@@ -412,7 +412,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultValueSetted() {
+	public boolean isDefaultValueSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_VALUE);
 	}
 

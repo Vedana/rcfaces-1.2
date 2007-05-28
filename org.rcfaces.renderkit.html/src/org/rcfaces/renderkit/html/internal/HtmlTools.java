@@ -289,7 +289,7 @@ public class HtmlTools {
             String filterExpression) {
 
         Map filter = HtmlTools.decodeParametersToMap(processContext, component,
-                filterExpression, '&', null);
+                filterExpression, '&', "");
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Decode filter expression to " + filter);

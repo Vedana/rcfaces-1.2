@@ -25,15 +25,15 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 		setId(componentId);
 	}
 
-	public final String getUri() {
+	public String getUri() {
 		return getUri(null);
 	}
 
-	public final String getUri(javax.faces.context.FacesContext facesContext) {
+	public String getUri(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.URI, facesContext);
 	}
 
-	public final void setUri(String uri) {
+	public void setUri(String uri) {
 		engine.setProperty(Properties.URI, uri);
 	}
 
@@ -41,19 +41,19 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 	 * Returns <code>true</code> if the attribute "uri" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isUriSetted() {
+	public boolean isUriSetted() {
 		return engine.isPropertySetted(Properties.URI);
 	}
 
-	public final String getPrefix() {
+	public String getPrefix() {
 		return getPrefix(null);
 	}
 
-	public final String getPrefix(javax.faces.context.FacesContext facesContext) {
+	public String getPrefix(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.PREFIX, facesContext);
 	}
 
-	public final void setPrefix(String prefix) {
+	public void setPrefix(String prefix) {
 		engine.setProperty(Properties.PREFIX, prefix);
 	}
 
@@ -61,7 +61,7 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 	 * Returns <code>true</code> if the attribute "prefix" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPrefixSetted() {
+	public boolean isPrefixSetted() {
 		return engine.isPropertySetted(Properties.PREFIX);
 	}
 

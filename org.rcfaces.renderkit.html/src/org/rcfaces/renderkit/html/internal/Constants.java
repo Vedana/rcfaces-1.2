@@ -67,8 +67,6 @@ public class Constants {
 
     public static final boolean LAZY_TAG_USES_BROTHER_DEFAULT_VALUE = false;
 
-    public static final boolean VERIFY_TAG_STACK = false;
-
     public static final boolean VERIFY_SORT_COMMAND = true;
 
     private static final String version;

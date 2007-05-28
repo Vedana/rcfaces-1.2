@@ -335,15 +335,15 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
-	public final boolean isShowIfMessage() {
+	public boolean isShowIfMessage() {
 		return isShowIfMessage(null);
 	}
 
-	public final boolean isShowIfMessage(javax.faces.context.FacesContext facesContext) {
+	public boolean isShowIfMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SHOW_IF_MESSAGE, false, facesContext);
 	}
 
-	public final void setShowIfMessage(boolean showIfMessage) {
+	public void setShowIfMessage(boolean showIfMessage) {
 		engine.setProperty(Properties.SHOW_IF_MESSAGE, showIfMessage);
 	}
 
@@ -351,19 +351,19 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "showIfMessage" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isShowIfMessageSetted() {
+	public boolean isShowIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SHOW_IF_MESSAGE);
 	}
 
-	public final boolean isSetFocusIfMessage() {
+	public boolean isSetFocusIfMessage() {
 		return isSetFocusIfMessage(null);
 	}
 
-	public final boolean isSetFocusIfMessage(javax.faces.context.FacesContext facesContext) {
+	public boolean isSetFocusIfMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SET_FOCUS_IF_MESSAGE, false, facesContext);
 	}
 
-	public final void setSetFocusIfMessage(boolean setFocusIfMessage) {
+	public void setSetFocusIfMessage(boolean setFocusIfMessage) {
 		engine.setProperty(Properties.SET_FOCUS_IF_MESSAGE, setFocusIfMessage);
 	}
 
@@ -371,7 +371,7 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "setFocusIfMessage" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSetFocusIfMessageSetted() {
+	public boolean isSetFocusIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SET_FOCUS_IF_MESSAGE);
 	}
 

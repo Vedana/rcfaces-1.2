@@ -338,7 +338,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
 	 * @return pivot year
 	 */
-	public final Date getTwoDigitYearStart() {
+	public Date getTwoDigitYearStart() {
 		return getTwoDigitYearStart(null);
 	}
 
@@ -346,7 +346,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Sets a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
 	 * @param twoDigitYearStart pivot year
 	 */
-	public final void setTwoDigitYearStart(Date twoDigitYearStart) {
+	public void setTwoDigitYearStart(Date twoDigitYearStart) {
 		engine.setProperty(Properties.TWO_DIGIT_YEAR_START, twoDigitYearStart);
 	}
 
@@ -358,7 +358,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns <code>true</code> if the attribute "twoDigitYearStart" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isTwoDigitYearStartSetted() {
+	public boolean isTwoDigitYearStartSetted() {
 		return engine.isPropertySetted(Properties.TWO_DIGIT_YEAR_START);
 	}
 
@@ -366,7 +366,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns a date value indicating the minimum acceptable date for the component. the first accepted value is minDate plus one day.
 	 * @return min date
 	 */
-	public final java.util.Date getMinDate() {
+	public java.util.Date getMinDate() {
 		return getMinDate(null);
 	}
 
@@ -374,7 +374,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Sets a date value indicating the minimum acceptable date for the component. the first accepted value is minDate plus one day.
 	 * @param minDate min date
 	 */
-	public final void setMinDate(java.util.Date minDate) {
+	public void setMinDate(java.util.Date minDate) {
 		engine.setProperty(Properties.MIN_DATE, minDate);
 	}
 
@@ -386,7 +386,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns <code>true</code> if the attribute "minDate" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMinDateSetted() {
+	public boolean isMinDateSetted() {
 		return engine.isPropertySetted(Properties.MIN_DATE);
 	}
 
@@ -394,7 +394,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns a date value indicating the maximum acceptable date for the component. The last accepted value is maxDate minus one day.
 	 * @return max date
 	 */
-	public final java.util.Date getMaxDate() {
+	public java.util.Date getMaxDate() {
 		return getMaxDate(null);
 	}
 
@@ -402,7 +402,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Sets a date value indicating the maximum acceptable date for the component. The last accepted value is maxDate minus one day.
 	 * @param maxDate max date
 	 */
-	public final void setMaxDate(java.util.Date maxDate) {
+	public void setMaxDate(java.util.Date maxDate) {
 		engine.setProperty(Properties.MAX_DATE, maxDate);
 	}
 
@@ -414,7 +414,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns <code>true</code> if the attribute "maxDate" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMaxDateSetted() {
+	public boolean isMaxDateSetted() {
 		return engine.isPropertySetted(Properties.MAX_DATE);
 	}
 
@@ -422,7 +422,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns a list of disabled week days (depending on the locale specified for the component).
 	 * @return list of days
 	 */
-	public final int getDisabledWeekDays() {
+	public int getDisabledWeekDays() {
 		return getDisabledWeekDays(null);
 	}
 
@@ -430,7 +430,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns a list of disabled week days (depending on the locale specified for the component).
 	 * @return list of days
 	 */
-	public final int getDisabledWeekDays(javax.faces.context.FacesContext facesContext) {
+	public int getDisabledWeekDays(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.DISABLED_WEEK_DAYS, 0, facesContext);
 	}
 
@@ -438,7 +438,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Sets a list of disabled week days (depending on the locale specified for the component).
 	 * @param disabledWeekDays list of days
 	 */
-	public final void setDisabledWeekDays(int disabledWeekDays) {
+	public void setDisabledWeekDays(int disabledWeekDays) {
 		engine.setProperty(Properties.DISABLED_WEEK_DAYS, disabledWeekDays);
 	}
 
@@ -450,7 +450,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns <code>true</code> if the attribute "disabledWeekDays" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDisabledWeekDaysSetted() {
+	public boolean isDisabledWeekDaysSetted() {
 		return engine.isPropertySetted(Properties.DISABLED_WEEK_DAYS);
 	}
 

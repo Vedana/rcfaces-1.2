@@ -678,7 +678,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image.
 	 * @return image url
 	 */
-	public final String getDefaultImageURL() {
+	public String getDefaultImageURL() {
 		return getDefaultImageURL(null);
 	}
 
@@ -686,7 +686,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image.
 	 * @return image url
 	 */
-	public final String getDefaultImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
 	}
 
@@ -694,7 +694,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets an url string pointing to the default image.
 	 * @param defaultImageURL image url
 	 */
-	public final void setDefaultImageURL(String defaultImageURL) {
+	public void setDefaultImageURL(String defaultImageURL) {
 		engine.setProperty(Properties.DEFAULT_IMAGE_URL, defaultImageURL);
 	}
 
@@ -706,7 +706,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultImageURLSetted() {
+	public boolean isDefaultImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_IMAGE_URL);
 	}
 
@@ -714,7 +714,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image for the selected state.
 	 * @return selected image url
 	 */
-	public final String getDefaultSelectedImageURL() {
+	public String getDefaultSelectedImageURL() {
 		return getDefaultSelectedImageURL(null);
 	}
 
@@ -722,7 +722,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image for the selected state.
 	 * @return selected image url
 	 */
-	public final String getDefaultSelectedImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultSelectedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
 	}
 
@@ -730,7 +730,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets an url string pointing to the default image for the selected state.
 	 * @param defaultSelectedImageURL selected image url
 	 */
-	public final void setDefaultSelectedImageURL(String defaultSelectedImageURL) {
+	public void setDefaultSelectedImageURL(String defaultSelectedImageURL) {
 		engine.setProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, defaultSelectedImageURL);
 	}
 
@@ -742,7 +742,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultSelectedImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultSelectedImageURLSetted() {
+	public boolean isDefaultSelectedImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_SELECTED_IMAGE_URL);
 	}
 
@@ -750,7 +750,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image for an expanded node.
 	 * @return expanded image url
 	 */
-	public final String getDefaultExpandedImageURL() {
+	public String getDefaultExpandedImageURL() {
 		return getDefaultExpandedImageURL(null);
 	}
 
@@ -758,7 +758,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image for an expanded node.
 	 * @return expanded image url
 	 */
-	public final String getDefaultExpandedImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultExpandedImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, facesContext);
 	}
 
@@ -766,7 +766,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets an url string pointing to the default image for an expanded node.
 	 * @param defaultExpandedImageURL expanded image url
 	 */
-	public final void setDefaultExpandedImageURL(String defaultExpandedImageURL) {
+	public void setDefaultExpandedImageURL(String defaultExpandedImageURL) {
 		engine.setProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, defaultExpandedImageURL);
 	}
 
@@ -778,7 +778,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultExpandedImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultExpandedImageURLSetted() {
+	public boolean isDefaultExpandedImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_EXPANDED_IMAGE_URL);
 	}
 
@@ -786,7 +786,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image for the disabled state.
 	 * @return disabled image url
 	 */
-	public final String getDefaultDisabledImageURL() {
+	public String getDefaultDisabledImageURL() {
 		return getDefaultDisabledImageURL(null);
 	}
 
@@ -794,7 +794,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image for the disabled state.
 	 * @return disabled image url
 	 */
-	public final String getDefaultDisabledImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultDisabledImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
 	}
 
@@ -802,7 +802,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets an url string pointing to the default image for the disabled state.
 	 * @param defaultDisabledImageURL disabled image url
 	 */
-	public final void setDefaultDisabledImageURL(String defaultDisabledImageURL) {
+	public void setDefaultDisabledImageURL(String defaultDisabledImageURL) {
 		engine.setProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, defaultDisabledImageURL);
 	}
 
@@ -814,7 +814,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultDisabledImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultDisabledImageURLSetted() {
+	public boolean isDefaultDisabledImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_DISABLED_IMAGE_URL);
 	}
 
@@ -822,7 +822,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image for a leaf.
 	 * @return leaf image url
 	 */
-	public final String getDefaultLeafImageURL() {
+	public String getDefaultLeafImageURL() {
 		return getDefaultLeafImageURL(null);
 	}
 
@@ -830,7 +830,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns an url string pointing to the default image for a leaf.
 	 * @return leaf image url
 	 */
-	public final String getDefaultLeafImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultLeafImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_LEAF_IMAGE_URL, facesContext);
 	}
 
@@ -838,7 +838,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets an url string pointing to the default image for a leaf.
 	 * @param defaultLeafImageURL leaf image url
 	 */
-	public final void setDefaultLeafImageURL(String defaultLeafImageURL) {
+	public void setDefaultLeafImageURL(String defaultLeafImageURL) {
 		engine.setProperty(Properties.DEFAULT_LEAF_IMAGE_URL, defaultLeafImageURL);
 	}
 
@@ -850,19 +850,19 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultLeafImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultLeafImageURLSetted() {
+	public boolean isDefaultLeafImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_LEAF_IMAGE_URL);
 	}
 
-	public final String getDefaultSelectedLeafImageURL() {
+	public String getDefaultSelectedLeafImageURL() {
 		return getDefaultSelectedLeafImageURL(null);
 	}
 
-	public final String getDefaultSelectedLeafImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultSelectedLeafImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, facesContext);
 	}
 
-	public final void setDefaultSelectedLeafImageURL(String defaultSelectedLeafImageURL) {
+	public void setDefaultSelectedLeafImageURL(String defaultSelectedLeafImageURL) {
 		engine.setProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, defaultSelectedLeafImageURL);
 	}
 
@@ -870,19 +870,19 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultSelectedLeafImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultSelectedLeafImageURLSetted() {
+	public boolean isDefaultSelectedLeafImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL);
 	}
 
-	public final String getDefaultExpandedLeafImageURL() {
+	public String getDefaultExpandedLeafImageURL() {
 		return getDefaultExpandedLeafImageURL(null);
 	}
 
-	public final String getDefaultExpandedLeafImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultExpandedLeafImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, facesContext);
 	}
 
-	public final void setDefaultExpandedLeafImageURL(String defaultExpandedLeafImageURL) {
+	public void setDefaultExpandedLeafImageURL(String defaultExpandedLeafImageURL) {
 		engine.setProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, defaultExpandedLeafImageURL);
 	}
 
@@ -890,19 +890,19 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultExpandedLeafImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultExpandedLeafImageURLSetted() {
+	public boolean isDefaultExpandedLeafImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL);
 	}
 
-	public final String getDefaultDisabledLeafImageURL() {
+	public String getDefaultDisabledLeafImageURL() {
 		return getDefaultDisabledLeafImageURL(null);
 	}
 
-	public final String getDefaultDisabledLeafImageURL(javax.faces.context.FacesContext facesContext) {
+	public String getDefaultDisabledLeafImageURL(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, facesContext);
 	}
 
-	public final void setDefaultDisabledLeafImageURL(String defaultDisabledLeafImageURL) {
+	public void setDefaultDisabledLeafImageURL(String defaultDisabledLeafImageURL) {
 		engine.setProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, defaultDisabledLeafImageURL);
 	}
 
@@ -910,7 +910,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultDisabledLeafImageURL" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultDisabledLeafImageURLSetted() {
+	public boolean isDefaultDisabledLeafImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL);
 	}
 
@@ -918,7 +918,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating wether the expand sign should be visible for the topmost node.
 	 * @return true if the head node's expand sign is hidden
 	 */
-	public final boolean isHideRootExpandSign() {
+	public boolean isHideRootExpandSign() {
 		return isHideRootExpandSign(null);
 	}
 
@@ -926,7 +926,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating wether the expand sign should be visible for the topmost node.
 	 * @return true if the head node's expand sign is hidden
 	 */
-	public final boolean isHideRootExpandSign(javax.faces.context.FacesContext facesContext) {
+	public boolean isHideRootExpandSign(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.HIDE_ROOT_EXPAND_SIGN, false, facesContext);
 	}
 
@@ -934,7 +934,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets a boolean value indicating wether the expand sign should be visible for the topmost node.
 	 * @param hideRootExpandSign true if the head node's expand sign is to be hidden
 	 */
-	public final void setHideRootExpandSign(boolean hideRootExpandSign) {
+	public void setHideRootExpandSign(boolean hideRootExpandSign) {
 		engine.setProperty(Properties.HIDE_ROOT_EXPAND_SIGN, hideRootExpandSign);
 	}
 
@@ -946,15 +946,15 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "hideRootExpandSign" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isHideRootExpandSignSetted() {
+	public boolean isHideRootExpandSignSetted() {
 		return engine.isPropertySetted(Properties.HIDE_ROOT_EXPAND_SIGN);
 	}
 
-	public final Object getCursorValue() {
+	public Object getCursorValue() {
 		return getCursorValue(null);
 	}
 
-	public final void setCursorValue(Object cursorValue) {
+	public void setCursorValue(Object cursorValue) {
 		engine.setValue(Properties.CURSOR_VALUE, cursorValue);
 	}
 
@@ -962,7 +962,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "cursorValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isCursorValueSetted() {
+	public boolean isCursorValueSetted() {
 		return engine.isPropertySetted(Properties.CURSOR_VALUE);
 	}
 
@@ -970,7 +970,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns a boolean value that indicates wether a node is identified by it's value or by a complete path.
 	 * @return true if node identification use node value
 	 */
-	public final boolean isExpansionUseValue() {
+	public boolean isExpansionUseValue() {
 		return isExpansionUseValue(null);
 	}
 
@@ -978,7 +978,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns a boolean value that indicates wether a node is identified by it's value or by a complete path.
 	 * @return true if node identification use node value
 	 */
-	public final boolean isExpansionUseValue(javax.faces.context.FacesContext facesContext) {
+	public boolean isExpansionUseValue(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.EXPANSION_USE_VALUE, false, facesContext);
 	}
 
@@ -986,7 +986,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets a boolean value that indicates wether a node is identified by it's value or by a complete path.
 	 * @param expansionUseValue true if node identification should use node value
 	 */
-	public final void setExpansionUseValue(boolean expansionUseValue) {
+	public void setExpansionUseValue(boolean expansionUseValue) {
 		engine.setProperty(Properties.EXPANSION_USE_VALUE, expansionUseValue);
 	}
 
@@ -998,7 +998,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "expansionUseValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isExpansionUseValueSetted() {
+	public boolean isExpansionUseValueSetted() {
 		return engine.isPropertySetted(Properties.EXPANSION_USE_VALUE);
 	}
 
@@ -1006,7 +1006,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @return boolean
 	 */
-	public final boolean isClientSelectionFullState() {
+	public boolean isClientSelectionFullState() {
 		return isClientSelectionFullState(null);
 	}
 
@@ -1014,7 +1014,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @return boolean
 	 */
-	public final boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
+	public boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
 	}
 
@@ -1022,7 +1022,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @param clientSelectionFullState boolean
 	 */
-	public final void setClientSelectionFullState(boolean clientSelectionFullState) {
+	public void setClientSelectionFullState(boolean clientSelectionFullState) {
 		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
@@ -1034,7 +1034,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "clientSelectionFullState" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isClientSelectionFullStateSetted() {
+	public boolean isClientSelectionFullStateSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
 	}
 
@@ -1042,7 +1042,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @return boolean
 	 */
-	public final boolean isClientCheckFullState() {
+	public boolean isClientCheckFullState() {
 		return isClientCheckFullState(null);
 	}
 
@@ -1050,7 +1050,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @return boolean
 	 */
-	public final boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
+	public boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
 	}
 
@@ -1058,7 +1058,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
 	 * @param clientCheckFullState boolean
 	 */
-	public final void setClientCheckFullState(boolean clientCheckFullState) {
+	public void setClientCheckFullState(boolean clientCheckFullState) {
 		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
 	}
 
@@ -1070,7 +1070,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "clientCheckFullState" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isClientCheckFullStateSetted() {
+	public boolean isClientCheckFullStateSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
 	}
 

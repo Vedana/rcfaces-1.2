@@ -3410,11 +3410,11 @@ var __prototype = {
 	},
 	f_initializeTableLayout: function() {
 		var table = f_core.GetChildByCssClass(this, "f_grid_table");
-		f_core.Assert(table, "f_componentsGrid.f_initializeTableLayout: Can not find table 'f_grid_table'");
+		f_core.Assert(table, "f_grid.f_initializeTableLayout: Can not find table 'f_grid_table'");
 		this._table = table;
 		table._dataGrid=this;	
 
-		f_core.Assert(table.tBodies.length<=1, "f_componentsGrid.f_initializeTableLayout: Too many TBODY ! ("+table.tBodies.length+")");	
+		f_core.Assert(table.tBodies.length<=1, "f_grid.f_initializeTableLayout: Too many TBODY ! ("+table.tBodies.length+")");	
 		var firstTBody=table.tBodies[0];
 		
 		this._tbody=firstTBody; //bodies[0];
@@ -3540,7 +3540,7 @@ var __prototype = {
 			// Le tableau est vide ?
 //			dataGrid._title.style.width=dataGrid.offsetWidth+"px";
 			
-			f_core.Debug(f_componentsGrid, "f_updateTitle: No rows !");
+			f_core.Debug(f_grid, "f_updateTitle: No rows !");
 			return;
 		}
 		

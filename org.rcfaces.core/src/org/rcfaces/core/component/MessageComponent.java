@@ -342,15 +342,15 @@ public class MessageComponent extends AbstractMessageComponent implements
 		
 	}
 
-	public final boolean isSetFocusIfMessage() {
+	public boolean isSetFocusIfMessage() {
 		return isSetFocusIfMessage(null);
 	}
 
-	public final boolean isSetFocusIfMessage(javax.faces.context.FacesContext facesContext) {
+	public boolean isSetFocusIfMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SET_FOCUS_IF_MESSAGE, false, facesContext);
 	}
 
-	public final void setSetFocusIfMessage(boolean setFocusIfMessage) {
+	public void setSetFocusIfMessage(boolean setFocusIfMessage) {
 		engine.setProperty(Properties.SET_FOCUS_IF_MESSAGE, setFocusIfMessage);
 	}
 
@@ -358,19 +358,19 @@ public class MessageComponent extends AbstractMessageComponent implements
 	 * Returns <code>true</code> if the attribute "setFocusIfMessage" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isSetFocusIfMessageSetted() {
+	public boolean isSetFocusIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SET_FOCUS_IF_MESSAGE);
 	}
 
-	public final boolean isShowIfMessage() {
+	public boolean isShowIfMessage() {
 		return isShowIfMessage(null);
 	}
 
-	public final boolean isShowIfMessage(javax.faces.context.FacesContext facesContext) {
+	public boolean isShowIfMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SHOW_IF_MESSAGE, false, facesContext);
 	}
 
-	public final void setShowIfMessage(boolean showIfMessage) {
+	public void setShowIfMessage(boolean showIfMessage) {
 		engine.setProperty(Properties.SHOW_IF_MESSAGE, showIfMessage);
 	}
 
@@ -378,19 +378,19 @@ public class MessageComponent extends AbstractMessageComponent implements
 	 * Returns <code>true</code> if the attribute "showIfMessage" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isShowIfMessageSetted() {
+	public boolean isShowIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SHOW_IF_MESSAGE);
 	}
 
-	public final boolean isShowActiveComponentMessage() {
+	public boolean isShowActiveComponentMessage() {
 		return isShowActiveComponentMessage(null);
 	}
 
-	public final boolean isShowActiveComponentMessage(javax.faces.context.FacesContext facesContext) {
+	public boolean isShowActiveComponentMessage(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, false, facesContext);
 	}
 
-	public final void setShowActiveComponentMessage(boolean showActiveComponentMessage) {
+	public void setShowActiveComponentMessage(boolean showActiveComponentMessage) {
 		engine.setProperty(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE, showActiveComponentMessage);
 	}
 
@@ -398,7 +398,7 @@ public class MessageComponent extends AbstractMessageComponent implements
 	 * Returns <code>true</code> if the attribute "showActiveComponentMessage" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isShowActiveComponentMessageSetted() {
+	public boolean isShowActiveComponentMessageSetted() {
 		return engine.isPropertySetted(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE);
 	}
 

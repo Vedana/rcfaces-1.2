@@ -614,7 +614,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @return true if the user entry must completed
 	 */
-	public final boolean isAutoCompletion() {
+	public boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
 
@@ -622,7 +622,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @return true if the user entry must completed
 	 */
-	public final boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
+	public boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_COMPLETION, true, facesContext);
 	}
 
@@ -630,7 +630,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @param autoCompletion true if the user entry must completed
 	 */
-	public final void setAutoCompletion(boolean autoCompletion) {
+	public void setAutoCompletion(boolean autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
@@ -642,7 +642,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "autoCompletion" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isAutoCompletionSetted() {
+	public boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
 	}
 
@@ -650,7 +650,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value indicating the number of digits to show before the decimal separator.
 	 * @return number of integer digits
 	 */
-	public final int getIntegerDigits() {
+	public int getIntegerDigits() {
 		return getIntegerDigits(null);
 	}
 
@@ -658,7 +658,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value indicating the number of digits to show before the decimal separator.
 	 * @return number of integer digits
 	 */
-	public final int getIntegerDigits(javax.faces.context.FacesContext facesContext) {
+	public int getIntegerDigits(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.INTEGER_DIGITS, 0, facesContext);
 	}
 
@@ -666,7 +666,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value indicating the number of digits to show before the decimal separator.
 	 * @param integerDigits number of integer digits
 	 */
-	public final void setIntegerDigits(int integerDigits) {
+	public void setIntegerDigits(int integerDigits) {
 		engine.setProperty(Properties.INTEGER_DIGITS, integerDigits);
 	}
 
@@ -678,7 +678,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "integerDigits" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isIntegerDigitsSetted() {
+	public boolean isIntegerDigitsSetted() {
 		return engine.isPropertySetted(Properties.INTEGER_DIGITS);
 	}
 
@@ -686,7 +686,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value indicating the number of digits to show after the decimal separator.
 	 * @return number of fraction digits
 	 */
-	public final int getFractionDigits() {
+	public int getFractionDigits() {
 		return getFractionDigits(null);
 	}
 
@@ -694,7 +694,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value indicating the number of digits to show after the decimal separator.
 	 * @return number of fraction digits
 	 */
-	public final int getFractionDigits(javax.faces.context.FacesContext facesContext) {
+	public int getFractionDigits(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.FRACTION_DIGITS, 0, facesContext);
 	}
 
@@ -702,7 +702,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value indicating the number of digits to show after the decimal separator.
 	 * @param fractionDigits number of fraction digits
 	 */
-	public final void setFractionDigits(int fractionDigits) {
+	public void setFractionDigits(int fractionDigits) {
 		engine.setProperty(Properties.FRACTION_DIGITS, fractionDigits);
 	}
 
@@ -714,7 +714,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "fractionDigits" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isFractionDigitsSetted() {
+	public boolean isFractionDigitsSetted() {
 		return engine.isPropertySetted(Properties.FRACTION_DIGITS);
 	}
 
@@ -722,7 +722,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns a string value specifying the format to use (compliant with java format).
 	 * @return number format
 	 */
-	public final String getNumberFormat() {
+	public String getNumberFormat() {
 		return getNumberFormat(null);
 	}
 
@@ -730,7 +730,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns a string value specifying the format to use (compliant with java format).
 	 * @return number format
 	 */
-	public final String getNumberFormat(javax.faces.context.FacesContext facesContext) {
+	public String getNumberFormat(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.NUMBER_FORMAT, facesContext);
 	}
 
@@ -738,7 +738,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Sets a string value specifying the format to use (compliant with java format).
 	 * @param numberFormat number format
 	 */
-	public final void setNumberFormat(String numberFormat) {
+	public void setNumberFormat(String numberFormat) {
 		engine.setProperty(Properties.NUMBER_FORMAT, numberFormat);
 	}
 
@@ -750,7 +750,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "numberFormat" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isNumberFormatSetted() {
+	public boolean isNumberFormatSetted() {
 		return engine.isPropertySetted(Properties.NUMBER_FORMAT);
 	}
 
@@ -758,7 +758,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the integer field when increasing/decreasing the value with the up/down arrows.
 	 * @return step
 	 */
-	public final String getIntegerStep() {
+	public String getIntegerStep() {
 		return getIntegerStep(null);
 	}
 
@@ -766,7 +766,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the step used for the integer field when increasing/decreasing the value with the up/down arrows.
 	 * @return step
 	 */
-	public final String getIntegerStep(javax.faces.context.FacesContext facesContext) {
+	public String getIntegerStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.INTEGER_STEP, facesContext);
 	}
 
@@ -774,7 +774,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value specifying the step used for the integer field when increasing/decreasing the value with the up/down arrows.
 	 * @param integerStep step
 	 */
-	public final void setIntegerStep(String integerStep) {
+	public void setIntegerStep(String integerStep) {
 		engine.setProperty(Properties.INTEGER_STEP, integerStep);
 	}
 
@@ -786,28 +786,28 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "integerStep" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isIntegerStepSetted() {
+	public boolean isIntegerStepSetted() {
 		return engine.isPropertySetted(Properties.INTEGER_STEP);
 	}
 
 	/**
 	 * Experimental Do not use.
 	 */
-	public final String getFractionStep() {
+	public String getFractionStep() {
 		return getFractionStep(null);
 	}
 
 	/**
 	 * Experimental Do not use.
 	 */
-	public final String getFractionStep(javax.faces.context.FacesContext facesContext) {
+	public String getFractionStep(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.FRACTION_STEP, facesContext);
 	}
 
 	/**
 	 * Experimental Do not use.
 	 */
-	public final void setFractionStep(String fractionStep) {
+	public void setFractionStep(String fractionStep) {
 		engine.setProperty(Properties.FRACTION_STEP, fractionStep);
 	}
 
@@ -818,19 +818,19 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "fractionStep" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isFractionStepSetted() {
+	public boolean isFractionStepSetted() {
 		return engine.isPropertySetted(Properties.FRACTION_STEP);
 	}
 
-	public final Number getMinimum() {
+	public Number getMinimum() {
 		return getMinimum(null);
 	}
 
-	public final Number getMinimum(javax.faces.context.FacesContext facesContext) {
+	public Number getMinimum(javax.faces.context.FacesContext facesContext) {
 		return (Number)engine.getValue(Properties.MINIMUM, facesContext);
 	}
 
-	public final void setMinimum(Number minimum) {
+	public void setMinimum(Number minimum) {
 		engine.setProperty(Properties.MINIMUM, minimum);
 	}
 
@@ -838,7 +838,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "minimum" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMinimumSetted() {
+	public boolean isMinimumSetted() {
 		return engine.isPropertySetted(Properties.MINIMUM);
 	}
 
@@ -846,7 +846,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns the default value.
 	 * @return default value
 	 */
-	public final Number getDefaultNumber() {
+	public Number getDefaultNumber() {
 		return getDefaultNumber(null);
 	}
 
@@ -854,7 +854,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns the default value.
 	 * @return default value
 	 */
-	public final Number getDefaultNumber(javax.faces.context.FacesContext facesContext) {
+	public Number getDefaultNumber(javax.faces.context.FacesContext facesContext) {
 		return (Number)engine.getValue(Properties.DEFAULT_NUMBER, facesContext);
 	}
 
@@ -862,7 +862,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Sets the default value.
 	 * @param defaultNumber default value
 	 */
-	public final void setDefaultNumber(Number defaultNumber) {
+	public void setDefaultNumber(Number defaultNumber) {
 		engine.setProperty(Properties.DEFAULT_NUMBER, defaultNumber);
 	}
 
@@ -874,7 +874,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "defaultNumber" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isDefaultNumberSetted() {
+	public boolean isDefaultNumberSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_NUMBER);
 	}
 
@@ -882,7 +882,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the upper limit for the value of the component.
 	 * @return maximum
 	 */
-	public final Number getMaximum() {
+	public Number getMaximum() {
 		return getMaximum(null);
 	}
 
@@ -890,7 +890,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the upper limit for the value of the component.
 	 * @return maximum
 	 */
-	public final Number getMaximum(javax.faces.context.FacesContext facesContext) {
+	public Number getMaximum(javax.faces.context.FacesContext facesContext) {
 		return (Number)engine.getValue(Properties.MAXIMUM, facesContext);
 	}
 
@@ -898,7 +898,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value specifying the upper limit for the value of the component.
 	 * @param maximum maximum
 	 */
-	public final void setMaximum(Number maximum) {
+	public void setMaximum(Number maximum) {
 		engine.setProperty(Properties.MAXIMUM, maximum);
 	}
 
@@ -910,7 +910,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "maximum" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMaximumSetted() {
+	public boolean isMaximumSetted() {
 		return engine.isPropertySetted(Properties.MAXIMUM);
 	}
 

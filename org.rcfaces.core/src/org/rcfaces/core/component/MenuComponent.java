@@ -181,7 +181,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * Returns an id used to retreive a specific menu. For example, "#node" is used to call a menu on a tree node while "#body" is used for the menu boody.
 	 * @return menu Id
 	 */
-	public final String getMenuId() {
+	public String getMenuId() {
 		return getMenuId(null);
 	}
 
@@ -189,7 +189,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * Returns an id used to retreive a specific menu. For example, "#node" is used to call a menu on a tree node while "#body" is used for the menu boody.
 	 * @return menu Id
 	 */
-	public final String getMenuId(javax.faces.context.FacesContext facesContext) {
+	public String getMenuId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.MENU_ID, facesContext);
 	}
 
@@ -197,7 +197,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * Sets an id used to retreive a specific menu. For example, "#node" is used to call a menu on a tree node while "#body" is used for the menu boody.
 	 * @param menuId menu Id
 	 */
-	public final void setMenuId(String menuId) {
+	public void setMenuId(String menuId) {
 		engine.setProperty(Properties.MENU_ID, menuId);
 	}
 
@@ -209,7 +209,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * Returns <code>true</code> if the attribute "menuId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMenuIdSetted() {
+	public boolean isMenuIdSetted() {
 		return engine.isPropertySetted(Properties.MENU_ID);
 	}
 
@@ -217,7 +217,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * Returns a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 	 * @return true if content is removed when shown
 	 */
-	public final boolean isRemoveAllWhenShown() {
+	public boolean isRemoveAllWhenShown() {
 		return isRemoveAllWhenShown(null);
 	}
 
@@ -225,7 +225,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * Returns a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 	 * @return true if content is removed when shown
 	 */
-	public final boolean isRemoveAllWhenShown(javax.faces.context.FacesContext facesContext) {
+	public boolean isRemoveAllWhenShown(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.REMOVE_ALL_WHEN_SHOWN, false, facesContext);
 	}
 
@@ -233,7 +233,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * Sets a boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 	 * @param removeAllWhenShown true if content is to be removed when shown
 	 */
-	public final void setRemoveAllWhenShown(boolean removeAllWhenShown) {
+	public void setRemoveAllWhenShown(boolean removeAllWhenShown) {
 		engine.setProperty(Properties.REMOVE_ALL_WHEN_SHOWN, removeAllWhenShown);
 	}
 
@@ -245,7 +245,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * Returns <code>true</code> if the attribute "removeAllWhenShown" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRemoveAllWhenShownSetted() {
+	public boolean isRemoveAllWhenShownSetted() {
 		return engine.isPropertySetted(Properties.REMOVE_ALL_WHEN_SHOWN);
 	}
 

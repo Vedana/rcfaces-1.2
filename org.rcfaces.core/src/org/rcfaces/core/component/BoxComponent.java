@@ -352,7 +352,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 * Returns a boolean value indicating wether the horizontal scroll is shown.
 	 * @return true if the horizontal scrollbar is shown
 	 */
-	public final boolean isHorizontalScroll() {
+	public boolean isHorizontalScroll() {
 		return isHorizontalScroll(null);
 	}
 
@@ -360,7 +360,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 * Returns a boolean value indicating wether the horizontal scroll is shown.
 	 * @return true if the horizontal scrollbar is shown
 	 */
-	public final boolean isHorizontalScroll(javax.faces.context.FacesContext facesContext) {
+	public boolean isHorizontalScroll(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.HORIZONTAL_SCROLL, false, facesContext);
 	}
 
@@ -368,7 +368,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 * Sets a boolean value indicating wether the horizontal scroll is shown.
 	 * @param horizontalScroll true if the horizontal scrollbar is to be shown
 	 */
-	public final void setHorizontalScroll(boolean horizontalScroll) {
+	public void setHorizontalScroll(boolean horizontalScroll) {
 		engine.setProperty(Properties.HORIZONTAL_SCROLL, horizontalScroll);
 	}
 
@@ -380,7 +380,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "horizontalScroll" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isHorizontalScrollSetted() {
+	public boolean isHorizontalScrollSetted() {
 		return engine.isPropertySetted(Properties.HORIZONTAL_SCROLL);
 	}
 
@@ -388,7 +388,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 * Returns a boolean value indicating wether the vertical scroll is shown.
 	 * @return true if vertical scrollbar is shown
 	 */
-	public final boolean isVerticalScroll() {
+	public boolean isVerticalScroll() {
 		return isVerticalScroll(null);
 	}
 
@@ -396,7 +396,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 * Returns a boolean value indicating wether the vertical scroll is shown.
 	 * @return true if vertical scrollbar is shown
 	 */
-	public final boolean isVerticalScroll(javax.faces.context.FacesContext facesContext) {
+	public boolean isVerticalScroll(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.VERTICAL_SCROLL, false, facesContext);
 	}
 
@@ -404,7 +404,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 * Sets a boolean value indicating wether the vertical scroll is shown.
 	 * @param verticalScroll true if vertical scrollbar is to be shown
 	 */
-	public final void setVerticalScroll(boolean verticalScroll) {
+	public void setVerticalScroll(boolean verticalScroll) {
 		engine.setProperty(Properties.VERTICAL_SCROLL, verticalScroll);
 	}
 
@@ -416,7 +416,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 * Returns <code>true</code> if the attribute "verticalScroll" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isVerticalScrollSetted() {
+	public boolean isVerticalScrollSetted() {
 		return engine.isPropertySetted(Properties.VERTICAL_SCROLL);
 	}
 

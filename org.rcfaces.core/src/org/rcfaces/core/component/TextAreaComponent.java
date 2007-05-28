@@ -323,7 +323,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 * Returns an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @return width in characters
 	 */
-	public final int getColumnNumber() {
+	public int getColumnNumber() {
 		return getColumnNumber(null);
 	}
 
@@ -331,7 +331,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 * Returns an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @return width in characters
 	 */
-	public final int getColumnNumber(javax.faces.context.FacesContext facesContext) {
+	public int getColumnNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.COLUMN_NUMBER, 0, facesContext);
 	}
 
@@ -339,7 +339,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 * Sets an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @param columnNumber width in characters
 	 */
-	public final void setColumnNumber(int columnNumber) {
+	public void setColumnNumber(int columnNumber) {
 		engine.setProperty(Properties.COLUMN_NUMBER, columnNumber);
 	}
 
@@ -351,7 +351,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "columnNumber" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isColumnNumberSetted() {
+	public boolean isColumnNumberSetted() {
 		return engine.isPropertySetted(Properties.COLUMN_NUMBER);
 	}
 
@@ -359,7 +359,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the number of rows to be displayed.
 	 * @return number of rows
 	 */
-	public final int getRowNumber() {
+	public int getRowNumber() {
 		return getRowNumber(null);
 	}
 
@@ -367,7 +367,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the number of rows to be displayed.
 	 * @return number of rows
 	 */
-	public final int getRowNumber(javax.faces.context.FacesContext facesContext) {
+	public int getRowNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.ROW_NUMBER, 0, facesContext);
 	}
 
@@ -375,7 +375,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 * Sets an int value specifying the number of rows to be displayed.
 	 * @param rowNumber number of rows
 	 */
-	public final void setRowNumber(int rowNumber) {
+	public void setRowNumber(int rowNumber) {
 		engine.setProperty(Properties.ROW_NUMBER, rowNumber);
 	}
 
@@ -387,7 +387,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "rowNumber" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowNumberSetted() {
+	public boolean isRowNumberSetted() {
 		return engine.isPropertySetted(Properties.ROW_NUMBER);
 	}
 

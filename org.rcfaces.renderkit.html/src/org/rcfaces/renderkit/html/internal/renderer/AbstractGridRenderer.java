@@ -903,7 +903,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext gridRenderContext) throws WriterException {
 
         if (serverTitleGeneration()) {
-
             htmlWriter.endElement(IHtmlWriter.TBODY);
 
             htmlWriter.endElement(IHtmlWriter.TABLE);

@@ -949,7 +949,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns a boolean value indicating wether the header should be visible.
 	 * @return true if the header is visible
 	 */
-	public final boolean isHeaderVisible() {
+	public boolean isHeaderVisible() {
 		return isHeaderVisible(null);
 	}
 
@@ -957,7 +957,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns a boolean value indicating wether the header should be visible.
 	 * @return true if the header is visible
 	 */
-	public final boolean isHeaderVisible(javax.faces.context.FacesContext facesContext) {
+	public boolean isHeaderVisible(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.HEADER_VISIBLE, true, facesContext);
 	}
 
@@ -965,7 +965,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Sets a boolean value indicating wether the header should be visible.
 	 * @param headerVisible true if the header should be visible
 	 */
-	public final void setHeaderVisible(boolean headerVisible) {
+	public void setHeaderVisible(boolean headerVisible) {
 		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
 	}
 
@@ -977,7 +977,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "headerVisible" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isHeaderVisibleSetted() {
+	public boolean isHeaderVisibleSetted() {
 		return engine.isPropertySetted(Properties.HEADER_VISIBLE);
 	}
 
@@ -985,7 +985,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns the id for the column containing the key for the row.
 	 * @return column id
 	 */
-	public final String getRowValueColumnId() {
+	public String getRowValueColumnId() {
 		return getRowValueColumnId(null);
 	}
 
@@ -993,7 +993,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns the id for the column containing the key for the row.
 	 * @return column id
 	 */
-	public final String getRowValueColumnId(javax.faces.context.FacesContext facesContext) {
+	public String getRowValueColumnId(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
 	}
 
@@ -1001,7 +1001,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Sets the id for the column containing the key for the row.
 	 * @param rowValueColumnId column id
 	 */
-	public final void setRowValueColumnId(String rowValueColumnId) {
+	public void setRowValueColumnId(String rowValueColumnId) {
 		engine.setProperty(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
 	}
 
@@ -1013,7 +1013,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "rowValueColumnId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowValueColumnIdSetted() {
+	public boolean isRowValueColumnIdSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE_COLUMN_ID);
 	}
 
@@ -1021,7 +1021,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
-	public final String getRowCountVar() {
+	public String getRowCountVar() {
 		return getRowCountVar(null);
 	}
 
@@ -1029,7 +1029,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
 	 */
-	public final String getRowCountVar(javax.faces.context.FacesContext facesContext) {
+	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
 	}
 
@@ -1037,7 +1037,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Sets a string value specifying the name of the variable receiving the number of rows.
 	 * @param rowCountVar variable name
 	 */
-	public final void setRowCountVar(String rowCountVar) {
+	public void setRowCountVar(String rowCountVar) {
 		engine.setProperty(Properties.ROW_COUNT_VAR, rowCountVar);
 	}
 
@@ -1049,7 +1049,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "rowCountVar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowCountVarSetted() {
+	public boolean isRowCountVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_COUNT_VAR);
 	}
 
@@ -1057,7 +1057,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns a string value specifying the name of the variable receiving the index of the current row.
 	 * @return variable name
 	 */
-	public final String getRowIndexVar() {
+	public String getRowIndexVar() {
 		return getRowIndexVar(null);
 	}
 
@@ -1065,7 +1065,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns a string value specifying the name of the variable receiving the index of the current row.
 	 * @return variable name
 	 */
-	public final String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
+	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
 	}
 
@@ -1073,7 +1073,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Sets a string value specifying the name of the variable receiving the index of the current row.
 	 * @param rowIndexVar variable name
 	 */
-	public final void setRowIndexVar(String rowIndexVar) {
+	public void setRowIndexVar(String rowIndexVar) {
 		engine.setProperty(Properties.ROW_INDEX_VAR, rowIndexVar);
 	}
 
@@ -1085,7 +1085,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Returns <code>true</code> if the attribute "rowIndexVar" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isRowIndexVarSetted() {
+	public boolean isRowIndexVarSetted() {
 		return engine.isPropertySetted(Properties.ROW_INDEX_VAR);
 	}
 

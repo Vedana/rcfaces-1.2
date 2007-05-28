@@ -67,7 +67,7 @@ public class ProgressIndicatorComponent extends AbstractBasicComponent implement
 	 * Returns a boolean value indicating wether the value is not determinated.
 	 * @return true if not determinated
 	 */
-	public final boolean isIndeterminate() {
+	public boolean isIndeterminate() {
 		return isIndeterminate(null);
 	}
 
@@ -75,7 +75,7 @@ public class ProgressIndicatorComponent extends AbstractBasicComponent implement
 	 * Returns a boolean value indicating wether the value is not determinated.
 	 * @return true if not determinated
 	 */
-	public final boolean isIndeterminate(javax.faces.context.FacesContext facesContext) {
+	public boolean isIndeterminate(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.INDETERMINATE, false, facesContext);
 	}
 
@@ -83,7 +83,7 @@ public class ProgressIndicatorComponent extends AbstractBasicComponent implement
 	 * Sets a boolean value indicating wether the value is not determinated.
 	 * @param indeterminate true if not determinated
 	 */
-	public final void setIndeterminate(boolean indeterminate) {
+	public void setIndeterminate(boolean indeterminate) {
 		engine.setProperty(Properties.INDETERMINATE, indeterminate);
 	}
 
@@ -95,7 +95,7 @@ public class ProgressIndicatorComponent extends AbstractBasicComponent implement
 	 * Returns <code>true</code> if the attribute "indeterminate" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isIndeterminateSetted() {
+	public boolean isIndeterminateSetted() {
 		return engine.isPropertySetted(Properties.INDETERMINATE);
 	}
 

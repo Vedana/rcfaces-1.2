@@ -586,7 +586,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the maximum number of characters that the user can enter in the component.
 	 * @return maximum number of characters
 	 */
-	public final int getMaxTextLength() {
+	public int getMaxTextLength() {
 		return getMaxTextLength(null);
 	}
 
@@ -594,7 +594,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value specifying the maximum number of characters that the user can enter in the component.
 	 * @return maximum number of characters
 	 */
-	public final int getMaxTextLength(javax.faces.context.FacesContext facesContext) {
+	public int getMaxTextLength(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.MAX_TEXT_LENGTH, 0, facesContext);
 	}
 
@@ -602,7 +602,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value specifying the maximum number of characters that the user can enter in the component.
 	 * @param maxTextLength maximum number of characters
 	 */
-	public final void setMaxTextLength(int maxTextLength) {
+	public void setMaxTextLength(int maxTextLength) {
 		engine.setProperty(Properties.MAX_TEXT_LENGTH, maxTextLength);
 	}
 
@@ -614,7 +614,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "maxTextLength" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isMaxTextLengthSetted() {
+	public boolean isMaxTextLengthSetted() {
 		return engine.isPropertySetted(Properties.MAX_TEXT_LENGTH);
 	}
 
@@ -622,7 +622,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @return width in characters
 	 */
-	public final int getColumnNumber() {
+	public int getColumnNumber() {
 		return getColumnNumber(null);
 	}
 
@@ -630,7 +630,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @return width in characters
 	 */
-	public final int getColumnNumber(javax.faces.context.FacesContext facesContext) {
+	public int getColumnNumber(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.COLUMN_NUMBER, 0, facesContext);
 	}
 
@@ -638,7 +638,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Sets an int value holding the width of the component in characters : x characters translates into y pixels width.
 	 * @param columnNumber width in characters
 	 */
-	public final void setColumnNumber(int columnNumber) {
+	public void setColumnNumber(int columnNumber) {
 		engine.setProperty(Properties.COLUMN_NUMBER, columnNumber);
 	}
 
@@ -650,7 +650,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "columnNumber" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isColumnNumberSetted() {
+	public boolean isColumnNumberSetted() {
 		return engine.isPropertySetted(Properties.COLUMN_NUMBER);
 	}
 
@@ -658,7 +658,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @return true if the user entry must completed
 	 */
-	public final boolean isAutoCompletion() {
+	public boolean isAutoCompletion() {
 		return isAutoCompletion(null);
 	}
 
@@ -666,7 +666,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @return true if the user entry must completed
 	 */
-	public final boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
+	public boolean isAutoCompletion(javax.faces.context.FacesContext facesContext) {
 		return engine.getBoolProperty(Properties.AUTO_COMPLETION, true, facesContext);
 	}
 
@@ -674,7 +674,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Sets a boolean value indicating if the component should complete automaticaly the user entry.
 	 * @param autoCompletion true if the user entry must completed
 	 */
-	public final void setAutoCompletion(boolean autoCompletion) {
+	public void setAutoCompletion(boolean autoCompletion) {
 		engine.setProperty(Properties.AUTO_COMPLETION, autoCompletion);
 	}
 
@@ -686,7 +686,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 * Returns <code>true</code> if the attribute "autoCompletion" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isAutoCompletionSetted() {
+	public boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
 	}
 

@@ -188,12 +188,21 @@ var __prototype = {
 	 * @param Event evt
 	 * @return void
 	 */
-	_onButtonMouseDown: function(evt) {
+	_onButtonMouseDown: function(jsEvent) {
 		this._buttonDown=true;
-		this.f_updateButtonStyle();
+		this.f_updateButtonStyle();		
+	
+		var menuOpened=this.f_isDataGridPopupOpened();
+		
+		f_core.Debug(f_comboGrid, "_onButtonMouseDown: menuOpened="+menuOpened);
+		
+		if (menuOpened) {
+			this.f_closePopup(jsEvent);
+			return
+		}
 		
 		this.f_setFocus();
-		this.f_openPopup(evt);
+		this.f_openPopup(jsEvent);
 	},
 	/**
 	 * @method private
@@ -306,13 +315,18 @@ var __prototype = {
 
 		f_core.Debug(f_comboGrid, "_onCancelDown: Event keyCode="+jsEvt.keyCode);
 
+		var menuOpened=this.f_isDataGridPopupOpened();
+
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
 		case f_key.VK_ENTER:
 		case f_key.VK_RETURN:
 		case f_key.VK_ESPACE:
-			return f_core.CancelJsEvent(jsEvt);
+			if (menuOpened) {
+				return f_core.CancelJsEvent(jsEvt);
+			}
+			return true;
 
 		case f_key.VK_TAB:
 			return true;		
@@ -344,9 +358,21 @@ var __prototype = {
 		
 		var newInput=this.f_getInput().value;
 		if (this._inputValue!=newInput) {
+			f_core.Debug(f_comboGrid, "_onSuggest: Different values  newInput='"+newInput+
+				"' inputValue='"+this._inputValue+
+				"' formattedValue='"+this._formattedValue+
+				"' selectedValue='"+this._selectedValue+"'.");
+			
 			this._formattedValue="";
 			this._inputValue=newInput;
-		}		
+			
+			
+			if (newInput!=this._selectedValue && this._selectedValue) {
+				this._selectedValue=null;
+	
+				this.f_fireEvent(f_event.SELECTION, jsEvt, null, null);
+			}
+		}
 
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
@@ -470,8 +496,12 @@ var __prototype = {
 
 		this.f_openDataGridPopup(null, text);
 	},
-	fa_valueSelected: function(value, label) {
+	fa_valueSelected: function(value, label, jsEvent) {
 		f_core.Debug(f_comboGrid, "fa_valueSelected: value='"+value+"' label='"+label+"'");
+		
+		if (this.f_fireEvent(f_event.SELECTION, jsEvent, null, value)==false) {
+			return;
+		}
 		
 		this._formattedValue=(label)?label:"";
 		this._selectedValue=value;
@@ -510,6 +540,9 @@ var __prototype = {
 		input.value=this._formattedValue;
 		
 		this.f_closePopup(event.f_getJsEvent());
+	},
+	f_performSelectionEvent: function() {
+		// On traite pas le RETURN !
 	}
 }
 
