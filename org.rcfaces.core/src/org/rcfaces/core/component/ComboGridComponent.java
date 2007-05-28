@@ -584,7 +584,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 		return engine.getStringProperty(Properties.VALUE_COLUMN_ID, facesContext);
 	}
 
-	public final void setValueColumnId(String valueColumnId) {
+	public void setValueColumnId(String valueColumnId) {
 		engine.setProperty(Properties.VALUE_COLUMN_ID, valueColumnId);
 	}
 
