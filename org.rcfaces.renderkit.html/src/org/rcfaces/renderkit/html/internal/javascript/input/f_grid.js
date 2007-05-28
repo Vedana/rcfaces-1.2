@@ -829,6 +829,7 @@ var __static = {
 	},
 	/**
 	 * @method private static
+	 * @return void
 	 */
 	_TimerDragMove: function() {
 		var column=f_grid._DragColumn;
@@ -1372,6 +1373,8 @@ var __prototype = {
 		}
 
 
+		f_core.Debug(f_grid, "f_update: Set waiting mode to '"+this._waitingMode+"' (rows="+this._rows+" paged="+this._paged+" rowCount="+this._rowCount+")");
+
 		if (this._tbody && !f_core.GetParentNode(this._tbody)) {
 //			f_core.Assert(this._tbody.parentNode!=this._table, "Tbody has not been detached !");
 // C'est normal dans un componentsGrid
@@ -1483,28 +1486,27 @@ var __prototype = {
 		
 		var shadows=this._shadowRows;
 		if (shadows) {
-		 	// Deja installé ! On repositionne juste le curseur
-		 	this._waitingRow=shadows[0];
+			this._waitingRow=shadows[0];
 			return;
 		}
-		
 		shadows=new Array;
 		this._shadowRows=shadows;
-		
+				
 		var body=this._tbody;
 		
-		for (var i=this._rows;i<this._rowCount;i++) {
+		var diff=this._rowCount-this._rows-shadows.length;
+		for (var i=0;i<diff;i++) {
 			var tr=doc.createElement("tr");
 			shadows.push(tr);
 			body.appendChild(tr);
 			
 			var td=doc.createElement("td");
 			td.colSpan=this._visibleColumnsCount;
-			td.className=this._cellStyleClass+"_shadow";
+			td.className=this._cellStyleClass+"_shadow f_grid_cell_shadow";
 
 			tr.appendChild(td);
 			
-			td.innerHTML="&nbsp;"; // #"+i;
+			td.innerHTML="&nbsp;";
 		}
 				
 		this._waitingRow=shadows[0];

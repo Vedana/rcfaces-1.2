@@ -326,6 +326,9 @@ var __prototype = {
 		}
 
 		var rows=f_core.GetNumberAttribute(this, "v:rows");
+		var paged=f_core.GetBooleanAttribute(this, "v:paged", true);
+		
+		var hasPager=(rows>0 && paged);
 		
 		var width=this._popupWidth;
 		var height=this._popupHeight;
@@ -339,12 +342,12 @@ var __prototype = {
 		dataGrid=f_dataGridPopup.Create(td, 
 			this, 
 			width, 
-			(rows)?(height-26):height, 
+			(hasPager)?(height-26):height, 
 			f_core.GetAttribute(this, "v:gridStyleClass"));
 		
 		this._dataGrid=dataGrid;
 		
-		if (rows) {
+		if (hasPager) {
 			td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {align: "center", valign: "middle" });
 			pager=f_pager.Create(td, 
 				this, 

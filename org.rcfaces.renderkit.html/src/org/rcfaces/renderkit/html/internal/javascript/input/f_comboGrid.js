@@ -100,6 +100,23 @@ var __static = {
 		comboGrid._onButtonMouseOut(evt);
 		
 		return f_core.CancelJsEvent(evt);		
+	},
+	_OnBeforeDeactivate: function() {
+		var evt = f_core.GetJsEvent(this);
+
+		var comboGrid=evt.srcElement.f_link;
+		
+		var toElement=evt.toElement;
+		
+		for(;toElement.parentNode;toElement=toElement.parentNode) {
+			if (toElement!=comboGrid) {
+				continue;
+			}
+			
+			return f_core.CancelJsEvent(evt);
+		}
+		
+		return true;
 	}
 }
 
@@ -139,6 +156,8 @@ var __prototype = {
 		button.onmouseover=f_comboGrid._OnButtonMouseOver;
 		button.onmouseout=f_comboGrid._OnButtonMouseOut;
 		
+		this.f_getInput().onbeforedeactivate=f_comboGrid._OnBeforeDeactivate;
+		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);
 		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
@@ -146,6 +165,8 @@ var __prototype = {
 	},
 
 	f_finalize: function() {
+
+		this.f_getInput().onbeforedeactivate=null;
 	
 		// this._buttonOver=undefined; // boolean
 		// this._buttonDown=undefined; // boolean
@@ -515,6 +536,27 @@ var __prototype = {
 	f_getSelectedValue: function() {
 		return this._selectedValue;
 	},
+	/**
+	 * @method public
+	 * @param String value
+	 * @return void
+	 */
+	f_setSelectedValue: function(value) {
+		f_core.Assert(value===null || typeof(value)=="string", "f_comboGrid.f_setSelectedValue: Invalid value parameter ("+value+").");
+		
+		if (value!==null) {
+			f_core.Error(f_comboGrid, "f_setSelectedValue: A value different of NULL is not supported yet.");
+		}
+		
+		this._selectedValue=value;		
+		this._inputValue="";
+		this._formattedValue=""; // ???
+		
+		this.f_getInput().value="";
+	},
+	/**
+	 * @method protected
+	 */
 	fa_valueSelected: function(value, label, jsEvent) {
 		f_core.Debug(f_comboGrid, "fa_valueSelected: value='"+value+"' label='"+label+"'");
 		

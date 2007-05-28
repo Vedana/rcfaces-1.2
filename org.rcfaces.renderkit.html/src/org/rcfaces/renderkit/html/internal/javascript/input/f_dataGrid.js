@@ -1066,6 +1066,23 @@ var __prototype = {
 				}
 			}
 			
+			if (!cursorRow) {
+				switch(this._selectionCardinality) {
+				case fa_cardinality.OPTIONAL_CARDINALITY:
+				case fa_cardinality.ONE_CARDINALITY:
+					for(var i=0;i<rows.length;i++) {
+						var row=rows[i];
+					
+						if (!row._selected) {
+							continue;
+						}
+						
+						cursorRow=row;
+					}
+					break;	
+				}
+			}
+			
 			if (f_core.IsGecko()) {
 				// On a un probleme de layout avec le DIV ! arg !
 				
@@ -1081,9 +1098,19 @@ var __prototype = {
 					
 					this._table.parentNode.style.height=h+"px";
 				}
-			}
-			
+			}			
+
 		
+			if (!this._paged) {
+				// On recalcule le mode, car il peut avoir changé !
+				if (this._rowCount>=0) {
+					this._waitingMode=f_grid.ROWS_WAITING;
+					
+				} else {
+					this._waitingMode=f_grid.END_WAITING;
+				}
+			}
+
 			switch(this._waitingMode) {
 			case f_grid.ROWS_WAITING:
 				this.f_addWaitingRows();
