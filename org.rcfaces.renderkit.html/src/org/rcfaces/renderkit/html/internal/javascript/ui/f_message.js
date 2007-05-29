@@ -265,10 +265,15 @@ var __prototype = {
 				evt = f_core.GetJsEvent(this);
 			}
   			
+  			f_core.Debug(f_message, "anonymous this._onFocusCb on :"+this.id);
   			message._performOnFocus(evt);
 		}
 		
-		f_core.AddEventListener(document, "focus", this._onFocusCb);
+		var capture = undefined;
+		if (!f_core.IsInternetExplorer()) {
+			capture = document;
+		}
+		f_core.AddEventListener(document, "focus", this._onFocusCb, capture);
 
 /*
 		this._onBlurCb=function(evt) {
@@ -294,7 +299,7 @@ var __prototype = {
 	 * @return void
 	 */
 	_performOnFocus: function(evt) {
-     	f_core.Debug(f_message, "_performOnFocus: entering");
+     	f_core.Debug(f_message, "_performOnFocus: entering ");
 
 		if (!evt) {
 				evt = f_core.GetJsEvent(this);
@@ -307,6 +312,7 @@ var __prototype = {
 		} else if (evt.srcElement) {
 			target = evt.srcElement;
 		}
+     	f_core.Debug(f_message, "_performOnFocus: target : "+target.id+"\ntarget "+target.tagName);
 		var compId = target.id;
 		if (compId) {
 			var msgCtx=f_messageContext.Get(target);
