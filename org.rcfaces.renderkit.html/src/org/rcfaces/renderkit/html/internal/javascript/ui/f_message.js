@@ -236,7 +236,11 @@ var __prototype = {
      	f_core.Debug(f_message, "f_removeFocusAndBlurListener: remove focus & blur hooks");
 		
 		if (this._onFocusCb) {
-			f_core.RemoveEventListener(document, "focus", this._onFocusCb);
+			var capture = undefined;
+			if (!f_core.IsInternetExplorer()) {
+				capture = document;
+			}
+			f_core.RemoveEventListener(document, "focus", this._onFocusCb, capture);
 			this._onFocusCb=undefined; // function
 		}
 	
