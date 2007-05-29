@@ -625,6 +625,7 @@ var f_core = {
 				capture.nodeType==f_core.DOCUMENT_NODE || 
 				capture.screen /* window ? */), "f_core.AddEventListener: Invalid capture parameter ("+capture+")");
 
+		f_core.Debug(f_core, "AddEventListener: entering with ("+component+", "+name+", fct, "+capture+")");
 	 	if (f_core.IsInternetExplorer()) {
 	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
 	 			switch (name) {
