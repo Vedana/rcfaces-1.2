@@ -106,8 +106,13 @@ var __prototype = {
 	 */
 	f_getIFrameUrl: function() {
 		var url=this.f_getViewURL();
-		if (url && url.indexOf("?")<0) {
-			url=url+"?vedvar=1";
+		if (url) {
+			var pos=url.indexOf("?");
+			if (pos<0) {
+				url=url+"?vedvar=1";
+			} else {
+				url=url.substring(0,pos+1)+"vedvar=1&"+url.substring(pos+1);
+			}
 		}
 		return url;
 	},
