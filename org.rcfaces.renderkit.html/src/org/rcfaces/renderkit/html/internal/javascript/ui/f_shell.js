@@ -1000,8 +1000,8 @@ var __prototype = {
 		
 		// Creation de l'iFrame
 		var iframe = doc.createElement("iframe");
-		iframe.id = "fred"+iframe.uniqueID;
-		iframe.name = "fred"+iframe.uniqueID+"name";
+		iframe.id = "shell_"+iframe.uniqueID;
+		iframe.name = "shell_"+iframe.uniqueID+"_name";
 
 		iframe.frameBorder = 0;
 		if (!f_shell._IE6) {
