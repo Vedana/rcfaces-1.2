@@ -683,6 +683,7 @@ public abstract class AbstractSelectItemsDecorator extends
             SelectItem selectItem, int depth, boolean visible)
             throws WriterException {
 
+    	selectItem = transformSelectItem(selectItem);
         selectItemCount++;
 
         /*
@@ -731,7 +732,16 @@ public abstract class AbstractSelectItemsDecorator extends
         return true;
     }
 
-    protected abstract SelectItemsContext createHtmlContext();
+    /**
+     * Allows the modification of the selectItem before treatment
+     * @param selectItem
+     * @return a selectItem
+     */
+    public SelectItem transformSelectItem(SelectItem selectItem) {
+		return selectItem;
+	}
+
+	protected abstract SelectItemsContext createHtmlContext();
 
     protected abstract SelectItemsContext createJavaScriptContext()
             throws WriterException;
