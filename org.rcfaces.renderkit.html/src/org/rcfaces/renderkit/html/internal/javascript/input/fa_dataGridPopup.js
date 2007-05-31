@@ -134,7 +134,7 @@ var __static = {
 					case f_key.VK_PAGE_UP:
 //					case f_key.VK_END:
 //					case f_key.VK_HOME:
-						return dataGridPopup._dataGrid._performKeyDown(jsEvent);
+						return dataGridPopup._dataGrid.f_performKeyDown(jsEvent);
 					}
 
 					return true;
@@ -222,7 +222,7 @@ var __static = {
 		if (!dataGridPopup._iePopup) {
 			f_popup.Gecko_closePopup(popup);
 
-			f_popup.Gecko_releasePopup(popup);
+//			f_popup.Gecko_releasePopup(popup);
 			return;
 		}	
 		
@@ -339,15 +339,28 @@ var __prototype = {
 		
 		var td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {align: "left", valign: "middle" });									
 		
+		var pagerHeight=30;
+		
 		dataGrid=f_dataGridPopup.Create(td, 
 			this, 
 			width, 
-			(hasPager)?(height-26):height, 
+			(hasPager)?(height-pagerHeight):height, 
 			f_core.GetAttribute(this, "v:gridStyleClass"));
 		
 		this._dataGrid=dataGrid;
 		
 		if (hasPager) {
+			if (!f_core.GetAttribute(this, "v:message")) {
+				var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
+				
+				this.setAttribute("v:message", resourceBundle.f_get("MESSAGE"));
+				this.setAttribute("v:zeroResultMessage", resourceBundle.f_get("ZERO_RESULT_MESSAGE"));			
+				this.setAttribute("v:oneResultMessage", resourceBundle.f_get("ONE_RESULT_MESSAGE"));			
+				this.setAttribute("v:manyResultMessage", resourceBundle.f_get("MANY_RESULTS_MESSAGE"));			
+				this.setAttribute("v:manyResultMessage2", resourceBundle.f_get("MANY_RESULTS_MESSAGE2"));			
+			}
+			
+			
 			td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {align: "center", valign: "middle" });
 			pager=f_pager.Create(td, 
 				this, 
@@ -355,12 +368,18 @@ var __prototype = {
 				f_core.GetAttribute(this, "v:pagerStyleClass"));
 			this._pager=pager;
 			
-			pager.style.height="26px";
+			pager.style.height=pagerHeight+"px";
 		}
 				
 		var self=this;
 		dataGrid.f_addEventListener(f_event.SELECTION, function(event) {
-			return self._rowSelectionEvent(event);
+			f_core.Debug(fa_dataGridPopup, "_rowSelectionEvent: selection detail="+event.f_getDetail());
+
+			if (!(event.f_getDetail() & f_event.ACTIVATE_DETAIL)) {
+				return;
+			}
+			
+			return self._rowSelection(event.f_getSelectionProvider(), event.f_getJsEvent());			
 		});
 		
 		return dataGrid;
@@ -505,18 +524,10 @@ var __prototype = {
 	},
 	/**
 	 * @method private
-	 * @param f_event event
+	 * @param f_dataGrid dataGrid
+	 * @param Event jsEvent
 	 * @return void
 	 */
-	_rowSelectionEvent: function(event) {
-		f_core.Debug(fa_dataGridPopup, "_rowSelectionEvent: selection detail="+event.f_getDetail());
-		
-		if (!(event.f_getDetail() & f_event.ACTIVATE_DETAIL)) {
-			return;
-		}
-		
-		this._rowSelection(event.f_getSelectionProvider(), event.f_getJsEvent());
-	},
 	_rowSelection: function(dataGrid, jsEvent) {
 		var selection=dataGrid.f_getSelection();
 		
@@ -546,7 +557,11 @@ var __prototype = {
 		
 		var value=array[valueColumnId];
 		
-		this.fa_valueSelected(value, message, jsEvent);
+		// A cause de IE !!!! ARG !
+		var self=this;
+		window.setTimeout(function() {
+			self.fa_valueSelected(value, message);
+		}, 0);
 	},
 
 	fa_cancelFilterRequest: function() {

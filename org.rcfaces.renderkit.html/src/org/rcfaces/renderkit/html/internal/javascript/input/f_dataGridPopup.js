@@ -11,6 +11,11 @@
 
 var __static = {
 	/**
+	 * @field private static final number
+	 */
+	_TITLE_HEIGHT: 19,
+	
+	/**
 	 * @method hidden static
 	 */
 	CopyProperties: function(attributes, element, attributesName) {
@@ -57,57 +62,121 @@ var __static = {
 			properties["v:styleClass"]=styleClass;
 		}
 		
-		f_dataGridPopup.CopyProperties(properties, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged");
+		f_dataGridPopup.CopyProperties(properties, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged", "v:headerVisible");
 		
 		var divDataGrid=f_core.CreateElement(parent, "div", properties);
 		
-		var divDataTitle=f_core.CreateElement(divDataGrid, "div", { 
-			"class": "f_grid_dataTitle_scroll",
-			style: "width:"+width+"px"
-		});
-		
-		var tableTTitle=f_core.CreateElement(divDataTitle, "table", { 
-			"class": "f_grid_fttitle",
-			cellpadding: 0,
-			cellspacing: 0
-		});
-		
-		for(var i=0;i<columns.length;i++) {
-			f_core.CreateElement(tableTTitle, "col");
-		}
+		var headerVisible=f_core.GetBooleanAttribute(divDataGrid, "v:headerVisible", true);
 
-		var thead=f_core.CreateElement(tableTTitle, "thead");
+		var vh=height;
 		
-		var tr=f_core.CreateElement(thead, "tr", { "class": "f_grid_title"});
+		var totalSize=0;						
+		for(var i=0;i<columns.length;i++) {
+			var column=columns[i];
+			
+			var w=column._width;
+			var wi=parseInt(w);
+			if (w==wi || w==wi+"px") {
+				totalSize+=wi;
+				continue;
+			}
+					
+			totalSize=-1;
+			break;
+		}
+		
+		if (!headerVisible) {
+			var divDataTitle=f_core.CreateElement(divDataGrid, "div", { 
+				"class": "f_grid_dataTitle_scroll",
+				style: "width:"+width+"px;height:"+f_dataGridPopup._TITLE_HEIGHT+"px"
+			});
+			
+			properties={ 
+				"class": "f_grid_fttitle",
+				cellPadding: 0,
+				cellSpacing: 0
+			};
+			if (totalSize>=0) {
+				properties.style="width:"+totalSize+"px";
+			}
+			
+			var tableTTitle=f_core.CreateElement(divDataTitle, "table", properties);
+
+			var colGroup=f_core.CreateElement(tableTTitle, "colgroup");
+		
+			for(var i=0;i<columns.length;i++) {
+				var column=columns[i];
+
+				properties={};
+				var cw=column._width;
+				if (cw) {
+					if (cw==parseInt(cw)) {
+						cw+="px";
+					}
+					properties.style="width:"+cw;
+				}
+				
+				f_core.CreateElement(colGroup, "col", properties);
+			}
+	
+			var thead=f_core.CreateElement(tableTTitle, "thead");
+			
+			var tr=f_core.CreateElement(thead, "tr", { "class": "f_grid_title"});
+			
+			for(var i=0;i<columns.length;i++) {
+				var column=columns[i];
+				var th=f_core.CreateElement(tr, "th", { "class": "f_grid_tcell"});
+				
+				var align=column._align;
+				if (!align) {
+					align="left";
+				}
+				
+				var divStext=f_core.CreateElement(th, "div", { "class": "f_grid_stext"});
+				var divTtext=f_core.CreateElement(divStext, "div", { "class": "f_grid_ttext", align: align});
+				//f_core.CreateElement(divTtext, "img", { "class": "f_grid_ttext", align: "left"});
+				
+				if (column._text) {
+					f_core.SetTextNode(divTtext, column._text)
+				}
+			}
+			
+			f_core.CreateElement(tableTTitle, "tbody");
+			
+			vh-=f_dataGridPopup._TITLE_HEIGHT;
+		}
+				
+		var divDataBody=f_core.CreateElement(divDataGrid, "div", { 
+			"class": "f_grid_dataBody_scroll",
+			style: "width:"+width+"px;height:"+vh+"px"
+		});
+		
+			
+		properties={ 
+			"class": "f_grid_table",
+			cellPadding: 0,
+			cellSpacing: 0
+		};
+		if (totalSize>=0) {
+			properties.style="width:"+totalSize+"px";
+		}
+		var tableBody=f_core.CreateElement(divDataBody, "table", properties);
+		
+		var colGroup=f_core.CreateElement(tableBody, "colgroup");
 		
 		for(var i=0;i<columns.length;i++) {
 			var column=columns[i];
-			var th=f_core.CreateElement(tr, "th", { "class": "f_grid_tcell"});
-			
-			var divStext=f_core.CreateElement(th, "div", { "class": "f_grid_stext"});
-			var divTtext=f_core.CreateElement(divStext, "div", { "class": "f_grid_ttext", align: "left"});
-			//f_core.CreateElement(divTtext, "img", { "class": "f_grid_ttext", align: "left"});
-			
-			if (column._text) {
-				f_core.SetTextNode(divTtext, column._text)
+
+			properties={};
+			var cw=column._width;
+			if (cw) {
+				if (cw==parseInt(cw)) {
+					cw+="px";
+				}
+				properties.style="width:"+cw;
 			}
-		}
-		
-		var tbody=f_core.CreateElement(tableTTitle, "tbody");
-		
-		var divDataBody=f_core.CreateElement(divDataGrid, "div", { 
-			"class": "f_grid_dataBody_scroll",
-			style: "width:"+width+"px;height:"+(height-20)+"px"
-		});
-		
-		var tableBody=f_core.CreateElement(divDataBody, "table", { 
-			"class": "f_grid_table",
-			cellpadding: "0",
-			width: "width:"+width+"px"
-		});
-		
-		for(var i=0;i<columns.length;i++) {
-			f_core.CreateElement(tableBody, "col");
+				
+			f_core.CreateElement(colGroup, "col", properties);
 		}
 		
 		f_core.CreateElement(tableBody, "tbody");
@@ -187,6 +256,17 @@ var __prototype = {
 	 */
 	f_setAutoSelection: function(autoSelect) {
 		this._autoSelect=autoSelect;
+	},
+	f_performKeyDown: function(evt) {
+		var code=evt.keyCode;
+		switch(code) {
+		case f_key.VK_SPACE:
+		case f_key.VK_HOME:
+		case f_key.VK_END:
+			return true;
+		}	
+		
+		return this.f_super(arguments, evt);
 	}
 }
  

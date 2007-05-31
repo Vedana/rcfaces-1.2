@@ -58,7 +58,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
             IRequiredCapability requiredCapability = (IRequiredCapability) button;
 
             if (requiredCapability.isRequired()) {
-                htmlWriter.writeAttribute("v:required", "true");
+                htmlWriter.writeAttribute("v:required", true);
 
                 htmlWriter.enableJavaScript();
             }

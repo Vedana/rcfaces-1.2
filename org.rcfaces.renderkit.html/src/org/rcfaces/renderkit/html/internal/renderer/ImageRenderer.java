@@ -62,7 +62,7 @@ public class ImageRenderer extends AbstractCssRenderer {
                 componentRenderContext.setAttribute(FILTRED_CONTENT_PROPERTY,
                         Boolean.TRUE);
 
-                htmlWriter.writeAttribute("v:filtred", "true");
+                htmlWriter.writeAttribute("v:filtred", true);
 
                 IFilterProperties filterProperties = image
                         .getFilterProperties();
@@ -83,7 +83,7 @@ public class ImageRenderer extends AbstractCssRenderer {
                     .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL,
                             true);
 
-            htmlWriter.writeAttribute("v:blank", "true");
+            htmlWriter.writeAttribute("v:blank", true);
         }
         htmlWriter.writeSrc(url);
 

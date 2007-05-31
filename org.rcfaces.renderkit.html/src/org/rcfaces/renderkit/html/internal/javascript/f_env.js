@@ -137,6 +137,7 @@ var __static = {
 
 	/**
 	 * @method hidden static  
+	 * @return String
 	 */
 	GetBaseURI: function() {
 		return f_env._BaseURI;
@@ -144,6 +145,8 @@ var __static = {
 	
 	/**
 	 * @method hidden static  
+	 * @param String uri
+	 * @return String
 	 */
 	ComputeJavaScriptURI: function(uri) {
 		f_core.Assert(typeof(uri)=="string", "f_env.ComputeJavaScriptURI: invalid uri parameter '"+uri+"'.");
@@ -157,6 +160,7 @@ var __static = {
 	/**
 	 * @method hidden static  
 	 * @return String The url of the rcfaces resources, or null if it is not defined !
+	 * @return String
 	 */
 	GetStyleSheetBase: function() {
 		if (f_env._StyleSheetBase) {
@@ -174,6 +178,7 @@ var __static = {
 	},
 	/**
 	 * @method hidden static  
+	 * @return String
 	 */
 	GetLocaleName: function() {
 		return f_env._LocaleName;
@@ -214,6 +219,7 @@ var __static = {
 	
 	/**
 	 * @method hidden static 
+	 * @return boolean
 	 */
 	GetCancelExternalSubmit: function() {
 		return f_env.Get(f_env._CANCEL_EXTERNAL_SUBMIT, false);
@@ -221,6 +227,7 @@ var __static = {
 	
 	/**
 	 * @method hidden static 
+	 * @return void
 	 */
 	EnableSubmitLockUntilPageComplete: function() {
 		f_env._LockSubmitUntilPageComplete=true;
@@ -228,6 +235,7 @@ var __static = {
 	
 	/**
 	 * @method hidden static 
+	 * @return boolean
 	 */
 	IsSubmitUntilPageCompleteLocked: function() {
 		return f_env._LockSubmitUntilPageComplete;
@@ -235,6 +243,7 @@ var __static = {
 		
 	/**
 	 * @method hidden static 
+	 * @return String
 	 */
 	GetViewURI: function() {
 		var uri=f_env._ViewURI;
@@ -247,6 +256,7 @@ var __static = {
 	
 	/**
 	 * @method hidden static 
+	 * @return boolean
 	 */
 	GetCheckValidation: function() {
 		return (f_env._ClientValidationDisabled!==true);
@@ -254,6 +264,7 @@ var __static = {
 	
 	/**
 	 * @method public static 
+	 * @return void
 	 */
 	EnableSensitiveCaseTagName: function() {
 		if (f_core.IsGecko()) { // Gecko n'est pas sensitive case !
@@ -266,6 +277,7 @@ var __static = {
 	
 	/**
 	 * @method hidden static 
+	 * @return String
 	 */
 	GetOpenWindowErrorMessage: function() {
 		var bundle=f_resourceBundle.Get(f_env);
@@ -329,7 +341,8 @@ var __static = {
     	f_core.Assert(typeof(myWindow)=="object", "f_env.ResolveContentUrl: Invalid parameter window '"+myWindow+"'."+typeof(myWindow));
     	f_core.Assert(myWindow.location, "f_env.ResolveContentUrl: Invalid parameter window has no location '"+myWindow+"'.");
     	f_core.Assert((typeof(url)=="string"), "f_env.ResolveContentUrl: Invalid parameter url '"+url+"'.");
-	    f_core.Debug(f_env, "ResolveContentUrl : entering with ("+myWindow+", "+url+")");
+	    
+	    f_core.Debug(f_env, "ResolveContentUrl : entering with (myWindow='"+myWindow+"' url='"+url+"')");
 	    
     	// Check for protocol in url
     	var pos=url.indexOf(":");
@@ -337,6 +350,7 @@ var __static = {
 		    f_core.Debug(f_env, "ResolveContentUrl : url already formed");
     		return url;
     	}
+    	
     	// check for window protocol
     	var windowUrl=myWindow.location.toString();
     	pos=windowUrl.indexOf("//");
@@ -344,6 +358,7 @@ var __static = {
 		    f_core.Debug(f_env, "ResolveContentUrl: window.location does not have a protocol ...");
     		return url;
     	}
+    	
     	// extract protocol://domain:port from windowUrl into base and rest into remain
     	pos=windowUrl.indexOf("/",pos+2);
     	var base=windowUrl;
@@ -353,29 +368,31 @@ var __static = {
 	    	remain=windowUrl.substring(pos+1);
     	}
     	// If url absolute
-    	if (url.indexOf("/")==0) {
+    	if (!url.indexOf("/")) {
     		return base+url;
-    	} else if (url.indexOf(f_env._CONTEXT_KEYWORD)==0) {
+
+    	} else if (!url.indexOf(f_env._CONTEXT_KEYWORD)) {
     		// if $context : return 
     		return base+f_env._BaseURI+url.substring(f_env._CONTEXT_KEYWORD.length);
     	}
+    	
     	//if no remain
-    	if (remain.length==0) {
+    	if (!remain.length) {
     		return base+"/"+url;
     	}
+    	
     	// extract the last par of remain (page)
     	var remains=remain.split("/");
     	if (remain.charAt(remain.length-1) != "/") {
     		remains.pop();
     	}
-    	if (remains.length) {
-	    	if ("/"+remains[0] == f_env._BaseURI) {
-    			remains.shift();
-    		}
-    	}
+    	if (remains.length && "/"+remains[0] == f_env._BaseURI) {
+			remains.shift();
+		}
+		
     	// del .. from url
     	var adds=url.split("/");
-    	while (adds.length>0 && remains.length>0 && adds[0]=="..") {
+    	while (adds.length && remains.length && adds[0]=="..") {
     		adds.shift();
     		remains.pop();
     	}

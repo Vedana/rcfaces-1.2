@@ -203,7 +203,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         }
 
         if (spinnerComponent.isCycleValue(facesContext)) {
-            htmlWriter.writeAttribute("v:cycle", "true");
+            htmlWriter.writeAttribute("v:cycle", true);
 
         }
     }

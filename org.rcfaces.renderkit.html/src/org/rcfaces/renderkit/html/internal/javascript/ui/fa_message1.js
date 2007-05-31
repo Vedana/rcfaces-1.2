@@ -68,7 +68,7 @@ var __prototype = {
 
 			var forTranslated=fa_namingContainer.ComputeComponentId(this, f);					
 
-			f_core.Assert(forTranslated, "f_message.f_getForComponents: Component '"+f+"' associated to this message is not defined !");
+			f_core.Assert(forTranslated, "fa_message1.f_getForComponents: Component '"+f+"' associated to this message is not defined !");
 			keys.push(forTranslated);
 
 			f_core.Debug(fa_message1, "f_getForComponentIds: translate '"+f+"' to '"+forTranslated+"'.");

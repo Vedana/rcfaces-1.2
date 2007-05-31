@@ -32,6 +32,9 @@ public interface ISgmlWriter extends IComponentWriter {
 
     ISgmlWriter writeAttribute(String name, long value) throws WriterException;
 
+    ISgmlWriter writeAttribute(String name, boolean value)
+            throws WriterException;
+
     ISgmlWriter write(char[] buffer, int offset, int length)
             throws WriterException;
 

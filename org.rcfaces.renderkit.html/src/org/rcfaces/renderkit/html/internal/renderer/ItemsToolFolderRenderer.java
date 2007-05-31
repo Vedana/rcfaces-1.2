@@ -53,10 +53,10 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         writeCssAttributes(writer);
 
         if (itemsToolFolderComponent.isDisabled(facesContext)) {
-            writer.writeAttribute("v:disabled", "true");
+            writer.writeAttribute("v:disabled", true);
         }
         if (itemsToolFolderComponent.isReadOnly(facesContext)) {
-            writer.writeAttribute("v:readOnly", "true");
+            writer.writeAttribute("v:readOnly", true);
         }
 
         String verticalAlignment = itemsToolFolderComponent

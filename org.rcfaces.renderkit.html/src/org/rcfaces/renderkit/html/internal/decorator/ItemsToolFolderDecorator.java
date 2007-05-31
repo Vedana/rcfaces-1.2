@@ -378,7 +378,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
         writer.writeClass(sa.toString());
 
-        writer.writeAttribute("v:separator", "true");
+        writer.writeAttribute("v:separator", true);
 
         allocateItemSeparator();
 
@@ -532,7 +532,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     hiddenMode = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
                 }
 
-                ((IHiddenModeCapability) itemComponent).setHiddenMode(hiddenMode);
+                ((IHiddenModeCapability) itemComponent)
+                        .setHiddenMode(hiddenMode);
             }
 
             if (((IVisibleItem) selectItem).isVisible() == false) {

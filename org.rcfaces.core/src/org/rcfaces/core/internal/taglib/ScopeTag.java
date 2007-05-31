@@ -1,86 +1,90 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.ScopeComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ScopeComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class ScopeTag extends CameliaTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(ScopeTag.class);
 
-	private static final Log LOG=LogFactory.getLog(ScopeTag.class);
+    private String scopeValue;
 
-	private String scopeValue;
-	private String scopeVar;
-	public String getComponentType() {
-		return ScopeComponent.COMPONENT_TYPE;
-	}
+    private String scopeVar;
 
-	public final String getScopeValue() {
-		return scopeValue;
-	}
+    public String getComponentType() {
+        return ScopeComponent.COMPONENT_TYPE;
+    }
 
-	public final void setScopeValue(String scopeValue) {
-		this.scopeValue = scopeValue;
-	}
+    public final String getScopeValue() {
+        return scopeValue;
+    }
 
-	public final String getScopeVar() {
-		return scopeVar;
-	}
+    public final void setScopeValue(String scopeValue) {
+        this.scopeValue = scopeValue;
+    }
 
-	public final void setScopeVar(String scopeVar) {
-		this.scopeVar = scopeVar;
-	}
+    public final String getScopeVar() {
+        return scopeVar;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (ScopeComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  scopeValue='"+scopeValue+"'");
-			LOG.debug("  scopeVar='"+scopeVar+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setScopeVar(String scopeVar) {
+        this.scopeVar = scopeVar;
+    }
 
-		if ((uiComponent instanceof ScopeComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'ScopeComponent'.");
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (ScopeComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  scopeValue='" + scopeValue + "'");
+            LOG.debug("  scopeVar='" + scopeVar + "'");
+        }
+        super.setProperties(uiComponent);
 
-		ScopeComponent component = (ScopeComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+        if ((uiComponent instanceof ScopeComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'ScopeComponent'.");
+        }
 
-		if (scopeValue != null) {
-				ValueBinding vb = application.createValueBinding(scopeValue);
-				component.setValueBinding(Properties.SCOPE_VALUE, vb);
-		}
+        ScopeComponent component = (ScopeComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (scopeVar != null) {
-			if (isValueReference(scopeVar)) {
-				ValueBinding vb = application.createValueBinding(scopeVar);
-				component.setValueBinding(Properties.SCOPE_VAR, vb);
+        if (scopeValue != null) {
+            ValueBinding vb = application.createValueBinding(scopeValue);
+            component.setValueBinding(Properties.SCOPE_VALUE, vb);
+        }
 
-			} else {
-				component.setScopeVar(scopeVar);
-			}
-		}
-	}
+        if (scopeVar != null) {
+            if (isValueReference(scopeVar)) {
+                ValueBinding vb = application.createValueBinding(scopeVar);
+                component.setValueBinding(Properties.SCOPE_VAR, vb);
 
-	public void release() {
-		scopeValue = null;
-		scopeVar = null;
+            } else {
+                component.setScopeVar(scopeVar);
+            }
+        }
+    }
 
-		super.release();
-	}
+    public void release() {
+        scopeValue = null;
+        scopeVar = null;
+
+        super.release();
+    }
 
 }

@@ -82,7 +82,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
             ComponentsListService componentsListServer = ComponentsListService
                     .getInstance(facesContext);
             if (componentsListServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", "true");
+                htmlWriter.writeAttribute("v:asyncRender", true);
             }
 
             /* Si le tableau n'est pas visible ! */
@@ -290,7 +290,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
                         htmlWriter.writeId(rowId);
                     }
 
-                    htmlWriter.writeAttribute("v:nc", "true");
+                    htmlWriter.writeAttribute("v:nc", true);
 
                     if (rowClasses.length > 0) {
                         int rs = (processed / columnNumber) % rowClasses.length;

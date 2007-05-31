@@ -1,91 +1,95 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.MenuRadioItemComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.MenuRadioItemComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class MenuRadioItemTag extends MenuCheckItemTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(MenuRadioItemTag.class);
 
-	private static final Log LOG=LogFactory.getLog(MenuRadioItemTag.class);
+    private String radioValue;
 
-	private String radioValue;
-	private String groupName;
-	public String getComponentType() {
-		return MenuRadioItemComponent.COMPONENT_TYPE;
-	}
+    private String groupName;
 
-	public final String getRadioValue() {
-		return radioValue;
-	}
+    public String getComponentType() {
+        return MenuRadioItemComponent.COMPONENT_TYPE;
+    }
 
-	public final void setRadioValue(String radioValue) {
-		this.radioValue = radioValue;
-	}
+    public final String getRadioValue() {
+        return radioValue;
+    }
 
-	public final String getGroupName() {
-		return groupName;
-	}
+    public final void setRadioValue(String radioValue) {
+        this.radioValue = radioValue;
+    }
 
-	public final void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
+    public final String getGroupName() {
+        return groupName;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (MenuRadioItemComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  radioValue='"+radioValue+"'");
-			LOG.debug("  groupName='"+groupName+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
-		if ((uiComponent instanceof MenuRadioItemComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'MenuRadioItemComponent'.");
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (MenuRadioItemComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  radioValue='" + radioValue + "'");
+            LOG.debug("  groupName='" + groupName + "'");
+        }
+        super.setProperties(uiComponent);
 
-		MenuRadioItemComponent component = (MenuRadioItemComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+        if ((uiComponent instanceof MenuRadioItemComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'MenuRadioItemComponent'.");
+        }
 
-		if (radioValue != null) {
-			if (isValueReference(radioValue)) {
-				ValueBinding vb = application.createValueBinding(radioValue);
-				component.setValueBinding(Properties.RADIO_VALUE, vb);
+        MenuRadioItemComponent component = (MenuRadioItemComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-			} else {
-				component.setRadioValue(radioValue);
-			}
-		}
+        if (radioValue != null) {
+            if (isValueReference(radioValue)) {
+                ValueBinding vb = application.createValueBinding(radioValue);
+                component.setValueBinding(Properties.RADIO_VALUE, vb);
 
-		if (groupName != null) {
-			if (isValueReference(groupName)) {
-				ValueBinding vb = application.createValueBinding(groupName);
-				component.setValueBinding(Properties.GROUP_NAME, vb);
+            } else {
+                component.setRadioValue(radioValue);
+            }
+        }
 
-			} else {
-				component.setGroupName(groupName);
-			}
-		}
-	}
+        if (groupName != null) {
+            if (isValueReference(groupName)) {
+                ValueBinding vb = application.createValueBinding(groupName);
+                component.setValueBinding(Properties.GROUP_NAME, vb);
 
-	public void release() {
-		radioValue = null;
-		groupName = null;
+            } else {
+                component.setGroupName(groupName);
+            }
+        }
+    }
 
-		super.release();
-	}
+    public void release() {
+        radioValue = null;
+        groupName = null;
+
+        super.release();
+    }
 
 }

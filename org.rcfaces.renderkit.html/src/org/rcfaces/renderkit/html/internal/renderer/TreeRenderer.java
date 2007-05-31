@@ -70,7 +70,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.writeAttribute("v:checkCardinality", cardinality);
 
             if (treeComponent.isClientCheckFullState(facesContext)) {
-                htmlWriter.writeAttribute("v:clientCheckFullState", "true");
+                htmlWriter.writeAttribute("v:clientCheckFullState", true);
             }
         }
 
@@ -84,16 +84,16 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.writeAttribute("v:selectionCardinality", cardinality);
 
             if (treeComponent.isClientSelectionFullState(facesContext)) {
-                htmlWriter.writeAttribute("v:clientSelectionFullState", "true");
+                htmlWriter.writeAttribute("v:clientSelectionFullState", true);
             }
         }
 
         if (treeComponent.isExpandable(facesContext) == false) {
-            htmlWriter.writeAttribute("v:userExpandable", "false");
+            htmlWriter.writeAttribute("v:userExpandable", false);
         }
 
         if (treeComponent.isHideRootExpandSign(facesContext)) {
-            htmlWriter.writeAttribute("v:hideRootExpandSign", "true");
+            htmlWriter.writeAttribute("v:hideRootExpandSign", true);
         }
 
         int depthLevel = treeComponent.getPreloadedLevelDepth(facesContext);

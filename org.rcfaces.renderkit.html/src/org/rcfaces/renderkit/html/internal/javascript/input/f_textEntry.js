@@ -23,6 +23,7 @@ var __prototype = {
 	/*
 	f_finalize: function() {
 		// this._autoTab=undefined;  // boolean
+		// this._requiredInstalled=undefined; // boolean
 		
 		this.f_super(arguments);
 	},
@@ -122,7 +123,7 @@ var __prototype = {
 	_installAutoTab: function() {
 		f_class.IsClassDefined("f_clientValidator", true);
 		
-		f_core.Debug(f_textEntry, "Install autotab processor to component '"+this.id+"' !");
+		f_core.Debug(f_textEntry, "_installAutoTab: Install autotab processor to component '"+this.id+"' !");
 		
 		var validator = f_clientValidator.GetValidator(this);
 		if (!validator) {
@@ -146,7 +147,7 @@ var __prototype = {
 
 		f_class.IsClassDefined("f_clientValidator", true);
 	
-		f_core.Debug(f_textEntry, "Install required behavior to component '"+this.id+"' !");
+		f_core.Debug(f_textEntry, "fa_updateRequired: Install required behavior to component '"+this.id+"' !");
 		
 		var validator = f_clientValidator.GetValidator(this);
 		if (!validator) {
@@ -154,6 +155,17 @@ var __prototype = {
 		}
 		
 		validator.f_addBehavior(f_vb.Behavior_required);		
+	},
+	f_serializeValue: function() {
+		var validator=this._validator;
+		if (validator) {
+			var value=validator.f_serializeValue();
+			
+			this.f_setProperty(f_prop.TEXT, value);
+			return ;
+		}
+		
+		this.f_super(arguments);
 	}
 }
 

@@ -89,7 +89,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         String text = normalText;
         if (collapsed) {
-            htmlWriter.writeAttribute("v:collapsed", "true");
+            htmlWriter.writeAttribute("v:collapsed", true);
 
             if (collapsedText != null) {
                 text = collapsedText;
@@ -141,7 +141,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                         .getAsyncRenderMode(facesContext);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                    htmlWriter.writeAttribute("v:asyncRender", "true");
+                    htmlWriter.writeAttribute("v:asyncRender", true);
 
                     htmlWriter.getHtmlComponentRenderContext()
                             .getHtmlRenderContext()

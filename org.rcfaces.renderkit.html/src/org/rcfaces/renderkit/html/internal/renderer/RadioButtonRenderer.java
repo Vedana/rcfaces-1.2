@@ -56,7 +56,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         }
 
         if (button.isRequired()) {
-            htmlWriter.writeAttribute("v:required", "true");
+            htmlWriter.writeAttribute("v:required", true);
 
             htmlWriter.enableJavaScript();
         }

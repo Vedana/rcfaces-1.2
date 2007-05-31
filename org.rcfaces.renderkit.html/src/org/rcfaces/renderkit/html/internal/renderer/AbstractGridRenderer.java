@@ -232,7 +232,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                     gridRenderContext.getSelectionCardinality());
 
             if (gridRenderContext.isClientSelectionFullState()) {
-                htmlWriter.writeAttribute("v:clientSelectionFullState", "true");
+                htmlWriter.writeAttribute("v:clientSelectionFullState", true);
             }
         }
         if (gridRenderContext.isCheckable()) {
@@ -249,29 +249,34 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
 
             if (gridRenderContext.isClientCheckFullState()) {
-                htmlWriter.writeAttribute("v:clientCheckFullState", "true");
+                htmlWriter.writeAttribute("v:clientCheckFullState", true);
             }
         }
 
         if (gridComponent instanceof IReadOnlyCapability) {
             if (((IReadOnlyCapability) gridComponent).isReadOnly()) {
-                htmlWriter.writeAttribute("v:readOnly", "true");
+                htmlWriter.writeAttribute("v:readOnly", true);
             }
         }
 
         if (gridRenderContext.isDisabled()) {
-            htmlWriter.writeAttribute("v:disabled", "true");
+            htmlWriter.writeAttribute("v:disabled", true);
         }
 
         if (gridComponent instanceof IRequiredCapability) {
             if (((IRequiredCapability) gridComponent).isRequired()) {
-                htmlWriter.writeAttribute("v:required", "true");
+                htmlWriter.writeAttribute("v:required", true);
             }
+        }
+
+        boolean headerVisible = gridRenderContext.isHeaderVisible();
+        if (headerVisible == false) {
+            htmlWriter.writeAttribute("v:headerVisible", false);
         }
 
         Object dataModel = gridRenderContext.getDataModel();
         if (dataModel instanceof IFiltredModel) {
-            htmlWriter.writeAttribute("v:filtred", "true");
+            htmlWriter.writeAttribute("v:filtred", true);
 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
@@ -299,7 +304,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:first", first);
         }
         if (gridRenderContext.isPaged() == false) {
-            htmlWriter.writeAttribute("v:paged", "false");
+            htmlWriter.writeAttribute("v:paged", false);
         }
 
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
@@ -343,14 +348,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         int totalResize = gridRenderContext.getTotalSize();
 
         if (resizable) {
-            htmlWriter.writeAttribute("v:resizable", "true");
+            htmlWriter.writeAttribute("v:resizable", true);
         }
 
-        boolean headerVisible = true; // dg.isHeaderVisible(facesContext);
-
         if (serverTitleGeneration() == false) {
-            htmlWriter.writeAttribute("v:sb", (gridRenderContext
-                    .hasScrollBars() ? "true" : "false"));
+            htmlWriter
+                    .writeAttribute("v:sb", gridRenderContext.hasScrollBars());
             return;
         }
 
@@ -364,11 +367,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 if (w > 0) {
                     htmlWriter.writeStyle().writeWidth(w + "px");
                 }
-            }
 
-            tableWidth = encodeFixedHeader(htmlWriter, gridRenderContext,
-                    gridWidth);
-            htmlWriter.endElement(IHtmlWriter.DIV);
+                tableWidth = encodeFixedHeader(htmlWriter, gridRenderContext,
+                        gridWidth);
+                htmlWriter.endElement(IHtmlWriter.DIV);
+            }
 
             htmlWriter.startElement(IHtmlWriter.DIV);
             htmlWriter.writeClass(getDataBodyScrollClassName(htmlWriter));
@@ -376,7 +379,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             ICssWriter cssWriter = htmlWriter.writeStyle(32);
 
             if (gridHeight > 0) {
-                cssWriter.writeHeight((gridHeight - getTitleHeight()) + "px");
+                int gh = gridHeight;
+                if (headerVisible) {
+                    gh -= getTitleHeight();
+                }
+
+                cssWriter.writeHeight(gh + "px");
             }
             if (w > 0) {
                 cssWriter.writeWidth(w + "px");
@@ -490,7 +498,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (column instanceof IWidthCapability) {
                 width = ((IWidthCapability) column).getWidth();
                 if (width != null) {
-                    htmlWriter.writeStyle().writeWidth(width);
+                    htmlWriter.writeStyle().writeWidth(getSize(width));
                 }
             }
 
@@ -794,7 +802,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             encodeTitleCol(htmlWriter, dc);
         }
 
-        if (tableContext.hasScrollBars() == false) {
+        if (tableContext.hasScrollBars() == false
+                && tableContext.isHeaderVisible()) {
             htmlWriter.startElement(IHtmlWriter.THEAD);
             htmlWriter.startElement(IHtmlWriter.TR);
             htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
@@ -816,7 +825,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             String width = ((IWidthCapability) column).getWidth();
             if (width != null) {
                 // 2: htmlWriter.writeAttribute("width", width);
-                htmlWriter.writeStyle().writeWidth(width + "px");
+                htmlWriter.writeStyle().writeWidth(getSize(width));
             }
         }
 

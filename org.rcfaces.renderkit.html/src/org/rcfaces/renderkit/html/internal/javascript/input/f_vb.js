@@ -849,7 +849,7 @@ var __static = {
 		var d = (r[3])? dec.charAt(0):"";
 		var dp = (r[4])? r[4]:"";
 		if (decimal>0) {
-			dp = (dp.length > decimal)? dp.substr(0,decimal):dp;
+			dp = (dp.length > decimal)? dp.substring(0,decimal):dp;
 
 		} else if (decimal==0) {
 			d="";

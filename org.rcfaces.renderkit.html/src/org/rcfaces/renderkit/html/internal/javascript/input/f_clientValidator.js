@@ -133,6 +133,12 @@ var __static = {
 			validator.f_setConverter(converter);
 		}
 		
+		var value=validator._input.value;
+		validator._applyAutoCheck(value, false);
+		validator._applyOutputValue();
+	
+		validator._initialFormattedValue=validator._input.value;
+	
 		return validator;
 	},
 	/**
@@ -189,6 +195,7 @@ var __static = {
 	 * @method private static
 	 */
 	_OnFocus: function(evt) {
+		f_core.Debug(f_clientValidator, "_OnFocus: focus on client validator ");
 		if (this.f_isReadOnly()) {
 			return true;
 		}
@@ -204,6 +211,8 @@ var __static = {
 	 * @method private static
 	 */
 	_OnBlur: function(evt) {
+		f_core.Debug(f_clientValidator, "_OnFocus: focus on client validator ");
+
 		if (this.f_isReadOnly()) {
 			return true;
 		}
@@ -539,6 +548,7 @@ var __prototype = {
 //		this._checked=undefined; // boolean
 //		this._outputValue=undefined; // string
 //		this._initialValue=undefined; // string
+//		this._initialFormattedValue=undefined; // string
 
 		this._filters = undefined; // function[]
 		this._translators = undefined; // function[]
@@ -557,7 +567,7 @@ var __prototype = {
 		
 		this._checked=(this._applyAutoCheck(value, true)!==false);
 		
-		f_core.Debug(f_clientValidator, "Precheck of component '"+this._component.id+"' returns "+this._checked+" value='"+value+"'.");
+		f_core.Debug(f_clientValidator, "f_performCheckPre: Precheck of component '"+this._component.id+"' returns "+this._checked+" value='"+value+"'.");
 	},
 	f_performCheckValue: function() {
 		if (this._checked) {
@@ -572,7 +582,7 @@ var __prototype = {
 	 * @method private
 	 */
 	_onReset: function() {
-		f_core.Debug(f_clientValidator, "Reset component '"+this._component.id+"' (value='"+this._initialValue+"')");
+		f_core.Debug(f_clientValidator, "_onReset: Reset component '"+this._component.id+"' (value='"+this._initialValue+"')");
 	
 		var bRet = this._applyAutoCheck(this._initialValue, false);
 		
@@ -593,7 +603,7 @@ var __prototype = {
 			value=this._input.value;
 		}
 		
-		f_core.Debug(f_clientValidator, "Update value '"+value+"' (hasFocus="+this._hasFocus+").");
+		f_core.Debug(f_clientValidator, "f_updateValue: Update value '"+value+"' (hasFocus="+this._hasFocus+").");
 		
 		// Check and format the updated value
 		var bRet = this._applyAutoCheck(value, false);
@@ -620,7 +630,7 @@ var __prototype = {
 	},
 	f_setInputValue: function(val) { 
 		if (this._inputValue != val) {
-			f_core.Debug(f_clientValidator, "Change internal input value '"+val+"'.");
+			f_core.Debug(f_clientValidator, "f_setInputValue: Change internal input value '"+val+"'.");
 		}
 		
 		this._inputValue = val; 
@@ -632,7 +642,18 @@ var __prototype = {
 		
 		var v=this.f_getOutputValue();
 		
-		f_core.Debug(f_clientValidator, "Return internal value  input='"+value+"' output='"+v+"'.");
+		f_core.Debug(f_clientValidator, "f_getValue: Return internal value  input='"+value+"' output='"+v+"'.");
+
+		return v;
+	},
+	f_serializeValue: function() {
+		var value=this.f_getInputValue(true);
+
+		this._applyAutoCheck(value, false);
+		
+		var v=this.f_getInputValue(false);
+		
+		f_core.Debug(f_clientValidator, "f_serializeValue: Return serialized value input='"+value+"' serialized='"+v+"'.");
 
 		return v;
 	},
@@ -658,7 +679,7 @@ var __prototype = {
 	},
 	f_setOutputValue: function(val) { 
 		if (this._outputValue != val) {
-			f_core.Debug(f_clientValidator, "Change internal output value '"+val+"'.");
+			f_core.Debug(f_clientValidator, "f_setOutputValue: Change internal output value to '"+val+"'.");
 		}
 		
 		this._outputValue = val; 
@@ -674,17 +695,24 @@ var __prototype = {
 	f_getComponent: function() {
 		return this._component;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_applyInputValue: function() {
 		var input = this._input;
 		var inVal = this.f_getInputValue();
 	
 		this._verifyFirstFocus();
 		
-		f_core.Debug(f_clientValidator, "ApplyInputValue: '"+inVal+"'.");
+		f_core.Debug(f_clientValidator, "_applyInputValue: Set value '"+inVal+"'.");
 		if (input.value != inVal) {
 			input.value = inVal;
 		}
 	},
+	/**
+	 * @method private
+	 */
 	_verifyFirstFocus: function() {
 		if (this._firstApply) {
 			return;
@@ -692,18 +720,24 @@ var __prototype = {
 		this._firstApply=true;
 		
 		var componentValue=this._input.value;
-		if (componentValue==this._initialValue) {
+		if (componentValue==this._initialFormattedValue) {
 			return;
 		}
+		
+		f_core.Debug(f_clientValidator, "_verifyFirstFocus: Value has changed ! modify initial value ...");
 		
 		this._initialValue = componentValue;
 		
 		this.f_setInputValue(componentValue);
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_applyOutputValue: function() {
 		var value=this.f_getOutputValue();
 		
-		f_core.Debug(f_clientValidator, "ApplyOutputValue: '"+value+"'.");
+		f_core.Debug(f_clientValidator, "_applyOutputValue: Set value '"+value+"'.");
 		this._input.value=value;
 	},
 	_applyFilters: function(keyCode,keyChar) {
@@ -855,6 +889,9 @@ var __prototype = {
 	},
 	/**
 	 * @method private
+	 * @param String curVal Current value
+	 * @param boolean check Check mode
+	 * @return boolean
 	 */
 	_applyAutoCheck: function(curVal, check) {
 		var bRet = true;
@@ -906,14 +943,14 @@ var __prototype = {
 		// @JM Checker has to deal with empty string
 		var checkVal = this._applyCheckers(curVal);
 		if (checkVal == null) {
-			f_core.Debug(f_clientValidator, "Applyed Checker returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
+			f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed Checker returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
 			bRet = false;
 			if (fError) {
 				try {
 					handled = fError.call(fError, this, f_clientValidator.CHECKER, this.f_getLastError(), fErrorArguments);
 					
 				} catch (x) {
-					f_core.Error(f_clientValidator, "Call of error function for component '"+this._component.id+"' throws exception.", x);
+					f_core.Error(f_clientValidator, "_applyAutoCheck: Call of error function for component '"+this._component.id+"' throws exception.", x);
 				}
 			}
 		} else {
@@ -922,7 +959,7 @@ var __prototype = {
 					handled = fError.call(fError, this, f_clientValidator.CHECKER);
 					
 				} catch (x) {
-					f_core.Error(f_clientValidator, "Call of error function for component '"+this._component.id+"' throws exception.", x);
+					f_core.Error(f_clientValidator, "_applyAutoCheck: Call of error function for component '"+this._component.id+"' throws exception.", x);
 				}
 			}
 			if (curVal!=checkVal) {
@@ -937,7 +974,7 @@ var __prototype = {
 		if (checkVal) {
 			var formatVal = this._applyFormatters();
 			if (formatVal == null) {
-				f_core.Debug(f_clientValidator, "Applyed formatters returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
+				f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed formatters returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
 
 				bRet = false;
 				if (fError) {
@@ -945,7 +982,7 @@ var __prototype = {
 						handled = fError.call(fError,this,f_clientValidator.FORMATTER,this.f_getLastError(), fErrorArguments);
 						
 					} catch (x) {
-						f_core.Error(f_clientValidator, "Call of error function for component '"+this._component.id+"' throws exception.", x);
+						f_core.Error(f_clientValidator, "_applyAutoCheck: Call of error function for component '"+this._component.id+"' throws exception.", x);
 					}
 				}
 			} else {
@@ -954,7 +991,7 @@ var __prototype = {
 						handled = fError.call(fError, this, f_clientValidator.FORMATTER);
 						
 					} catch (x) {
-						f_core.Error(f_clientValidator, "Call of error function for component '"+this._component.id+"' throws exception.", x);
+						f_core.Error(f_clientValidator, "_applyAutoCheck: Call of error function for component '"+this._component.id+"' throws exception.", x);
 					}
 				}
 				this.f_setOutputValue(formatVal);
@@ -974,7 +1011,7 @@ var __prototype = {
 			try {
 				// Otherwise, check error
 				if (bRet == false) {
-					f_core.Debug(f_clientValidator, "Applyed behaviors returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
+					f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed behaviors returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
 	
 					if (fError && !handled) {
 						handled = fError.call(fError, this, f_clientValidator.BEHAVIOR, this.f_getLastError(), fErrorArguments);
@@ -987,7 +1024,7 @@ var __prototype = {
 				}
 
 			} catch (x) {
-				f_core.Error(f_clientValidator, "Call of error function for component '"+this._component.id+"' throws exception.", x);
+				f_core.Error(f_clientValidator, "_applyAutoCheck: Call of error function for component '"+this._component.id+"' throws exception.", x);
 			}
 		}
 		

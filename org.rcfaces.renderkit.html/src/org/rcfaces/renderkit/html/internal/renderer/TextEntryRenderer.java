@@ -8,12 +8,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
 
 import org.rcfaces.core.component.IClientValidator;
@@ -25,6 +29,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -34,6 +39,7 @@ import org.rcfaces.core.internal.util.CommandParserIterator.ICommand;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.validator.IParameter;
+import org.rcfaces.core.internal.validator.IServerConverter;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -119,7 +125,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         boolean useValidator = false;
 
         if (textEntryComponent.isAutoTab(facesContext)) {
-            htmlWriter.writeAttribute("v:autoTab", "true");
+            htmlWriter.writeAttribute("v:autoTab", true);
 
             // C'est un validateur, il faut forcer le stub pour le RESET
             useValidator = true;
@@ -243,8 +249,14 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             return false;
         }
 
+        IProcessContext processContext = renderContext.getRenderContext()
+                .getProcessContext();
+        Locale locale = processContext.getUserLocale();
+        TimeZone timeZone = processContext.getUserTimeZone();
+
         IClientValidatorDescriptor validatorDescriptor = clientValidatorManager
-                .getClientValidatorById(facesContext, command.getName());
+                .getClientValidatorById(facesContext, command.getName(),
+                        locale, timeZone);
         if (validatorDescriptor == null) {
             throw new FacesException("Can not find validator '"
                     + command.getName() + "' for component '"
@@ -254,7 +266,28 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         renderContext.setAttribute(VALIDATOR_COMMAND, command);
         renderContext.setAttribute(VALIDATOR_DESCRIPTOR, validatorDescriptor);
 
+        UIComponent component = renderContext.getComponent();
+        if (component instanceof ValueHolder) {
+            ValueHolder valueHolder = (ValueHolder) component;
+
+            if (valueHolder.getConverter() == null) {
+                IServerConverter serverConverter = validatorDescriptor
+                        .getServerConverter();
+
+                if (serverConverter != null) {
+                    Converter converter = computeConverter(serverConverter);
+
+                    valueHolder.setConverter(converter);
+                }
+            }
+        }
+
         return true;
+    }
+
+    private Converter computeConverter(IServerConverter serverConverter) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     protected void renderAttributeValidator(IHtmlWriter htmlWriter)

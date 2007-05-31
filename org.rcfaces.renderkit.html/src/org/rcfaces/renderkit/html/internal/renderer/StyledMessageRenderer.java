@@ -73,11 +73,11 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:for", forValue);
         }
         if (showIfMessage) {
-            htmlWriter.writeAttribute("v:showIfMessage", "true");
+            htmlWriter.writeAttribute("v:showIfMessage", true);
         }
 
         if (messageComponent.isSetFocusIfMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:setFocusIfMessage", "true");
+            htmlWriter.writeAttribute("v:setFocusIfMessage", true);
         }
 
         String infoStyleClass = messageComponent

@@ -71,13 +71,13 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         boolean caseSensitive = suggestTextEntryComponent
                 .isCaseSensitive(facesContext);
         if (caseSensitive) {
-            htmlWriter.writeAttribute("v:caseSensitive", "true");
+            htmlWriter.writeAttribute("v:caseSensitive", true);
         }
 
         boolean forceProposal = suggestTextEntryComponent
                 .isForceProposal(facesContext);
         if (forceProposal) {
-            htmlWriter.writeAttribute("v:forceProposal", "true");
+            htmlWriter.writeAttribute("v:forceProposal", true);
         }
 
         Object suggestionValue = suggestTextEntryComponent

@@ -106,7 +106,7 @@ public class ComboGridRenderer extends DataGridRenderer {
             htmlWriter.writeAttribute("v:rows", rows);
         }
         if (gridRenderContext.isPaged() == false) {
-            htmlWriter.writeAttribute("v:paged", "false");
+            htmlWriter.writeAttribute("v:paged", false);
         }
 
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
@@ -176,6 +176,11 @@ public class ComboGridRenderer extends DataGridRenderer {
                 .getLabelColumnId(facesContext);
         if (labelColumnId != null) {
             htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
+        }
+
+        boolean headerVisible = gridRenderContext.isHeaderVisible();
+        if (headerVisible == false) {
+            htmlWriter.writeAttribute("v:headerVisible", false);
         }
 
         String formattedValue = null;
@@ -359,7 +364,7 @@ public class ComboGridRenderer extends DataGridRenderer {
                             column, facesContext);
 
                     columnValues.put(columnId, svalue);
-                    columnValues.put(Integer.valueOf(idx), svalue);
+                    columnValues.put(String.valueOf(idx), svalue);
                 }
 
                 String valueFormat = comboGridComponent
@@ -414,8 +419,9 @@ public class ComboGridRenderer extends DataGridRenderer {
                 if (p.length() > 0 && Character.isDigit(p.charAt(0))) {
                     int num = Integer.parseInt(p);
                     if (num >= 0 && num < parameters.size()) {
-                        ret.append((String) parameters
-                                .get(Integer.valueOf(num)));
+                        ret
+                                .append((String) parameters.get(String
+                                        .valueOf(num)));
                     }
 
                 } else if (parameters.containsKey(p)) {

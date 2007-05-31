@@ -71,11 +71,11 @@ var __prototype = {
 		var messages=messageContext.f_listMessages(null, this.f_isGlobalOnly());
 		
 		if (f_messages._IsEquals(messages, this._currentMessages)) {
-			f_core.Debug("f_messages", "Messages change events: no changes !");
+			f_core.Debug(f_messages, "f_performMessageChanges: Messages change events: no changes !");
 			return;
 		}
 		
-		f_core.Debug("f_messages", "Messages change events: update "+(messages?messages.length:0)+" messages !");
+		f_core.Debug(f_messages, "f_performMessageChanges: Messages change events: update "+(messages?messages.length:0)+" messages !");
 		
 		if (!messages) {
 			this._currentMessages=null;
@@ -95,7 +95,7 @@ var __prototype = {
 		var tbody=this._tbody;
 		if (!tbody) {
 			if (!messages) {
-				f_core.Debug("f_messages", "No body and no messages to update !");
+				f_core.Debug(f_messages, "fa_updateMessages: No body and no messages to update !");
 				return;
 			}
 
@@ -107,17 +107,17 @@ var __prototype = {
 			}	
 
 			if (!messages) {
-				f_core.Debug("f_messages", "Body cleared and no messages to update !");
+				f_core.Debug(f_messages, "fa_updateMessages: Body cleared and no messages to update !");
 				return;
 			}
 		}
 	
-		f_core.Debug("f_messages", "Update "+messages.length+" messages.");
+		f_core.Debug(f_messages, "fa_updateMessages: Update "+messages.length+" messages.");
 		
 		for(var i=0;i<messages.length;i++) {
 			var message=messages[i];
 			
-			f_core.Assert(message, "Null message into list of message !");
+			f_core.Assert(message, "f_messages.fa_updateMessages: Null message into list of message !");
 			
 			var styleMessage=this.f_getStyleClassFromSeverity(message.f_getSeverity());
 			

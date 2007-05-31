@@ -26,6 +26,7 @@ import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.component.capability.IPagedCapability;
@@ -178,6 +179,8 @@ public abstract class AbstractGridRenderContext {
 
     protected int gridHeight;
 
+    private boolean headerVisible = true;
+
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -209,6 +212,11 @@ public abstract class AbstractGridRenderContext {
     }
 
     protected void initialize(boolean checkTitleImages) {
+
+        if (gridComponent instanceof IHeaderVisibilityCapability) {
+            headerVisible = ((IHeaderVisibilityCapability) gridComponent)
+                    .isHeaderVisible();
+        }
 
         if (gridComponent instanceof ISelectableCapability) {
             selectable = ((ISelectableCapability) gridComponent).isSelectable();
@@ -924,5 +932,9 @@ public abstract class AbstractGridRenderContext {
 
     public int getTotalSize() {
         return totalSize;
+    }
+
+    public boolean isHeaderVisible() {
+        return headerVisible;
     }
 }

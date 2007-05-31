@@ -5,7 +5,7 @@
 /**
  * class f_expandBar
  *
- * @class public f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed
+ * @class public f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

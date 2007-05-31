@@ -96,7 +96,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     .getInstance(htmlWriter.getComponentRenderContext()
                             .getFacesContext());
             if (componentsGridServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", "true");
+                htmlWriter.writeAttribute("v:asyncRender", true);
             }
 
             /* Si le tableau n'est pas visible ! */
@@ -538,10 +538,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             htmlWriter.writeId(rowId);
         }
 
-        htmlWriter.writeAttribute("v:nc", "true");
+        htmlWriter.writeAttribute("v:nc", true);
 
         if (selected && writeSelected) {
-            htmlWriter.writeAttribute("v:selected", "true");
+            htmlWriter.writeAttribute("v:selected", true);
         }
 
         UIColumn columns[] = gridRenderContext.listColumns();

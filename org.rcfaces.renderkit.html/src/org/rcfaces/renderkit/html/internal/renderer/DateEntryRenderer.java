@@ -61,7 +61,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         writeCssAttributes(htmlWriter);
 
         if (dateEntryComponent.isShowCalendarOnFocus(facesContext)) {
-            htmlWriter.writeAttribute("v:showOnFocus", "true");
+            htmlWriter.writeAttribute("v:showOnFocus", true);
         }
 
         Locale componentLocale = dateEntryComponent

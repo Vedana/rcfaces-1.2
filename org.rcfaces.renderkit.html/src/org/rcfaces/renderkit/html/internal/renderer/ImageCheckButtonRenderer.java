@@ -83,7 +83,7 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
             if (isSelected((ISelectedCapability) imageButtonFamilly) == false) {
                 return;
             }
-            writer.writeAttribute("v:selected", "true");
+            writer.writeAttribute("v:selected", true);
         }
     }
 }

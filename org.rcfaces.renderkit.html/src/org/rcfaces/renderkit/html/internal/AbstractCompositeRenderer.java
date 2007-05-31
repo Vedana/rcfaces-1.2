@@ -126,7 +126,7 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
          * if (separators != null && separators.length() > 0) {
          * htmlWriter.writeAttribute("v:separators", separators); }
          * 
-         * if (cycle) { htmlWriter.writeAttribute("v:cycle", "true"); }
+         * if (cycle) { htmlWriter.writeAttribute("v:cycle", true); }
          * 
          * if (autoComplete != null) { htmlWriter.writeAttribute("v:auto",
          * autoComplete); }

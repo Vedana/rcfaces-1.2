@@ -550,7 +550,8 @@ var __static = {
 		}
 
 		if (f_event._EvtLock & f_event.POPUP_LOCK) {
-			if (f_popup.VerifyLock()===false) {
+			// On utilise window.f_popup => gros hack pour le compilateur !
+			if (window.f_popup.VerifyLock()===false) {
 				// FInalement nous ne sommes plus en LOCK ...
 				// 					
 				currentLock=f_event._EvtLock;
@@ -569,7 +570,7 @@ var __static = {
 			
 				var ret;
 				if (target) {
-					ret=f_popup.IsChildOfDocument(target);
+					ret=window.f_popup.IsChildOfDocument(target);
 				}
 				
 				f_core.Debug(f_event, "GetEventLocked: Search popup child: target="+target+" return="+ret);

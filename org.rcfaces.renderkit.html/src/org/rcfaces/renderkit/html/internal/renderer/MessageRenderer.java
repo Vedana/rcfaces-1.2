@@ -69,23 +69,23 @@ public class MessageRenderer extends AbstractCssRenderer {
         }
 
         if (showIfMessage) {
-            htmlWriter.writeAttribute("v:showIfMessage", "true");
+            htmlWriter.writeAttribute("v:showIfMessage", true);
         }
 
         if (messageComponent.isSetFocusIfMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:setFocusIfMessage", "true");
+            htmlWriter.writeAttribute("v:setFocusIfMessage", true);
         }
 
         if (messageComponent.isShowSummary()) {
-            htmlWriter.writeAttribute("v:showSummary", "true");
+            htmlWriter.writeAttribute("v:showSummary", true);
         }
 
         if (messageComponent.isShowDetail()) {
-            htmlWriter.writeAttribute("v:showDetail", "true");
+            htmlWriter.writeAttribute("v:showDetail", true);
         }
 
         if (messageComponent.isShowActiveComponentMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:showActiveComponentMessage", "true");
+            htmlWriter.writeAttribute("v:showActiveComponentMessage", true);
         }
 
         ISeverityImageAccessors accessors = (ISeverityImageAccessors) messageComponent

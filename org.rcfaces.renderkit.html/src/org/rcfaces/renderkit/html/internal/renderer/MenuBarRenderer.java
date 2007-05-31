@@ -45,10 +45,10 @@ public class MenuBarRenderer extends AbstractSelectItemsRenderer {
         MenuBarComponent menuComponent = (MenuBarComponent) componentRenderContext
                 .getComponent();
         if (menuComponent.isDisabled(facesContext)) {
-            writer.writeAttribute("v:disabled", "true");
+            writer.writeAttribute("v:disabled", true);
         }
         if (menuComponent.isReadOnly(facesContext)) {
-            writer.writeAttribute("v:readOnly", "true");
+            writer.writeAttribute("v:readOnly", true);
         }
 
         // Un dummy pour eviter des sauts de pages

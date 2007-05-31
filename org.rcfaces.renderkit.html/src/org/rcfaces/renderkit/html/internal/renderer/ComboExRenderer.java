@@ -61,8 +61,8 @@ public class ComboExRenderer extends AbstractSelectItemsRenderer {
      * ComboExComponent comboExComponent = (ComboExComponent) component;
      * 
      * String parameter = componentData.getComponentParameter(); if (parameter !=
-     * null) { comboExComponent.setText(parameter);
-     *  } else { // Le composant etait peut �tre disabled !
+     * null) { comboExComponent.setText(parameter); } else { // Le composant
+     * etait peut �tre disabled !
      * 
      * String text = componentData.getStringProperty("text"); if (text != null) {
      * comboExComponent.setText(text); } }

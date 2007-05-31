@@ -6,7 +6,9 @@ package org.rcfaces.core.internal.config;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
 import javax.faces.validator.DoubleRangeValidator;
@@ -24,6 +26,7 @@ import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.validator.IParameter;
+import org.rcfaces.core.internal.validator.IServerConverter;
 import org.xml.sax.Attributes;
 
 /**
@@ -41,14 +44,15 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
     private static final IParameter[] PARAMETER_EMPTY_ARRAY = new IParameter[0];
 
     public IClientValidatorDescriptor getClientValidatorById(
-            FacesContext facesContext, String validatorId) {
+            FacesContext facesContext, String validatorId, Locale locale,
+            TimeZone timeZone) {
 
         RenderKit renderKit = (RenderKit) getRenderKit(facesContext, null);
         if (renderKit == null) {
             return null;
         }
 
-        return renderKit.getValidatorById(validatorId);
+        return renderKit.getValidatorById(validatorId, locale, timeZone);
     }
 
     /*
@@ -147,6 +151,41 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                         "rcfaces-config/clientValidators/render-kit/clientValidator/parameter",
                         "addParameter");
 
+        digester
+                .addObjectCreate(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/server-converter",
+                        ServerConverter.class);
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/server-converter",
+                        "id", "id");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/server-converter",
+                        "class", "className");
+
+        digester
+                .addObjectCreate(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/server-converter/parameter",
+                        Parameter.class);
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/server-converter/parameter",
+                        "name", "name");
+        digester
+                .addSetProperties(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/server-converter/parameter",
+                        "value", "value");
+        digester
+                .addSetNext(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/server-converter/parameter",
+                        "addParameter");
+
+        digester
+                .addSetNext(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/server-converter",
+                        "setServerConverter");
+
         digester.addSetNext(
                 "rcfaces-config/clientValidators/render-kit/clientValidator",
                 "addclientValidator");
@@ -185,9 +224,57 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
          * @see org.rcfaces.core.internal.validator.IDescriptorManager#getValidatorById(java.lang.String)
          */
         public final IClientValidatorDescriptor getValidatorById(
-                String validatorId) {
-            return (IClientValidatorDescriptor) clientValidatorsById
-                    .get(validatorId);
+                String validatorId, Locale locale, TimeZone timeZone) {
+
+            StringAppender sa = new StringAppender(validatorId, 24);
+            if (locale != null) {
+                sa.append('$');
+                sa.append(locale.toString());
+
+                if (timeZone != null) {
+                    sa.append('$');
+                    sa.append(timeZone.toString());
+                }
+
+                IClientValidatorDescriptor clientValidatorDescriptor = (IClientValidatorDescriptor) clientValidatorsById
+                        .get(sa.toString());
+                if (clientValidatorDescriptor != null) {
+                    return clientValidatorDescriptor;
+                }
+
+                sa.setLength(0);
+                sa.append(validatorId);
+
+                if (timeZone != null) {
+                    sa.append('$');
+                    sa.append(locale.toString());
+
+                    clientValidatorDescriptor = (IClientValidatorDescriptor) clientValidatorsById
+                            .get(sa.toString());
+                    if (clientValidatorDescriptor != null) {
+                        return clientValidatorDescriptor;
+                    }
+
+                    sa.setLength(0);
+                    sa.append(validatorId);
+                }
+            } else if (timeZone != null) {
+                sa.append('$');
+                sa.append(timeZone.toString());
+
+                IClientValidatorDescriptor clientValidatorDescriptor = (IClientValidatorDescriptor) clientValidatorsById
+                        .get(sa.toString());
+                if (clientValidatorDescriptor != null) {
+                    return clientValidatorDescriptor;
+                }
+
+                sa.setLength(0);
+                sa.append(validatorId);
+            }
+
+            IClientValidatorDescriptor clientValidatorDescriptor = (IClientValidatorDescriptor) clientValidatorsById
+                    .get(sa.toString());
+            return clientValidatorDescriptor;
         }
 
         public final void addclientValidator(ClientValidator validator) {
@@ -205,7 +292,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public static class ClientValidator implements IClientValidatorDescriptor {
+    public static class ClientValidator extends ParametersContainer implements
+            IClientValidatorDescriptor {
         private static final String REVISION = "$Revision$";
 
         private String id;
@@ -228,11 +316,9 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         private String oncheckerror;
 
-        private List parametersList;
-
         private String converter;
 
-        private IParameter[] parameters;
+        private IServerConverter serverConverter;
 
         public final String getBehaviorCall() {
             return behavior;
@@ -314,6 +400,30 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             this.id = id;
         }
 
+        public final String getConverter() {
+            return converter;
+        }
+
+        public final void setConverter(String converter) {
+            this.converter = converter;
+        }
+
+        public final IServerConverter getServerConverter() {
+            return serverConverter;
+        }
+
+        public final void setServerConverter(IServerConverter serverConverter) {
+            this.serverConverter = serverConverter;
+        }
+
+    }
+
+    public static class ParametersContainer {
+
+        private IParameter[] parameters;
+
+        private List parametersList;
+
         public IParameter[] listParameters() {
             return parameters;
         }
@@ -341,13 +451,6 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             parametersList.add(parameter);
         }
 
-        public final String getConverter() {
-            return converter;
-        }
-
-        public final void setConverter(String converter) {
-            this.converter = converter;
-        }
     }
 
     /**
@@ -376,6 +479,35 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         public final void setValue(String value) {
             this.value = value;
+        }
+
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static class ServerConverter extends ParametersContainer implements
+            IServerConverter {
+        private String id;
+
+        private String className;
+
+        public final String getClassName() {
+            return className;
+        }
+
+        public final void setClassName(String className) {
+            this.className = className;
+        }
+
+        public final String getId() {
+            return id;
+        }
+
+        public final void setId(String id) {
+            this.id = id;
         }
 
     }

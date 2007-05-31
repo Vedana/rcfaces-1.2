@@ -54,7 +54,7 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
             }
         }
         if (!component.isVisible(facesContext)) {
-            htmlWriter.writeAttribute("v:visible", "false");
+            htmlWriter.writeAttribute("v:visible", false);
         }
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 

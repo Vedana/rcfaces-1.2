@@ -198,11 +198,11 @@ var __prototype={
 					if (keyCode==f_key.VK_HOME) {
 						for(;predInput._predInput;predInput=predInput._predInput);
 						
-						f_core.SelectText(predInput, 0, 0);
+						f_core.SelectText(predInput, 0);
 						setLastPos=0;
 						
 					} else if (keyCode==f_key.VK_LEFT && jsEvent.ctrlKey) {
-						f_core.SelectText(predInput, 0, 0);						
+						f_core.SelectText(predInput, 0);						
 						setLastPos=0;
 						
 					} else {
@@ -212,7 +212,7 @@ var __prototype={
 					predInput.focus();
 					
 					if (setLastPos!==false && f_core.IsInternetExplorer()) {
-						f_core.SelectText(predInput, setLastPos, 0);
+						f_core.SelectText(predInput, setLastPos);
 					}
 				}
 				
@@ -230,11 +230,11 @@ var __prototype={
 						for(;nextInput._nextInput;nextInput=nextInput._nextInput);
 
 						var vnextInputLength=nextInput.value.length;
-						f_core.SelectText(nextInput, vnextInputLength, 0);
+						f_core.SelectText(nextInput, vnextInputLength);
 
 					} else if (keyCode==f_key.VK_RIGHT && jsEvent.ctrlKey) {
 						var vnextInputLength=nextInput.value.length;
-						f_core.SelectText(nextInput, vnextInputLength, 0);
+						f_core.SelectText(nextInput, vnextInputLength);
 					}
 					
 					nextInput.focus();

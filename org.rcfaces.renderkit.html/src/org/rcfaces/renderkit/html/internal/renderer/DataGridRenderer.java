@@ -1034,7 +1034,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getInstance(htmlWriter.getComponentRenderContext()
                             .getFacesContext());
             if (dataGridServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", "true");
+                htmlWriter.writeAttribute("v:asyncRender", true);
             }
         }
 

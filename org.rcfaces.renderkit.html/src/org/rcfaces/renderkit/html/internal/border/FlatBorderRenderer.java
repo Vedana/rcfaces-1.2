@@ -23,7 +23,7 @@ public class FlatBorderRenderer extends AbstractHtmlBorderRenderer {
         super.initialize(writer, width, height, horizontalSpan, verticalSpan,
                 disabled, selected);
 
-        writer.writeAttribute("v:flatMode", "true");
+        writer.writeAttribute("v:flatMode", true);
     }
 
     protected boolean hasBorder() {

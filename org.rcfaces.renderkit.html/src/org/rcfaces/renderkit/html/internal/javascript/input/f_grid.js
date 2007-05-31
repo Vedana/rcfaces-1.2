@@ -489,7 +489,7 @@ var __static = {
 		}
 	
 		return dataGrid.f_onKeyDown(evt);
-		//return dataGrid._performKeyDown(evt);
+		//return dataGrid.f_performKeyDown(evt);
 	},
 	/**
 	 * @method private static
@@ -515,7 +515,7 @@ var __static = {
 		}
 	
 		return dataGrid.f_onKeyUp(evt);
-		//return dataGrid._performKeyDown(evt);
+		//return dataGrid.f_performKeyDown(evt);
 	},
 	/**
 	 * @method private static
@@ -1034,6 +1034,8 @@ var __prototype = {
 		
 		this._initCursorValue=f_core.GetAttribute(this, "v:cursorValue");
 
+		this._headerVisible=f_core.GetBooleanAttribute(this, "v:headerVisible", true);
+	
 		var rowStyleClass=f_core.GetAttribute(this, "v:rowStyleClass");
 		if (rowStyleClass) {
 			this._rowStyleClasses=rowStyleClass.split(",");
@@ -1132,6 +1134,7 @@ var __prototype = {
 		}
 	*/	
 
+//		this._headerVisible=undefined; // boolean
 //		this._sb=undefined; // boolean
 //		this._cellStyleClass=undefined; // String
 //		this._rowStyleClass=undefined; // String
@@ -1703,7 +1706,7 @@ var __prototype = {
 	 * @return void
 	 */
 	_installSorter: function(column, method) {
-		f_core.Assert(column._head, "f_grid._installSorter: No Title for column '"+column._index+"'.");
+		f_core.Assert(column, "f_grid._installSorter: Invalid column parameter '"+column+"'.");
 	
 		this._columnCanBeSorted=true;
 		
@@ -2327,11 +2330,22 @@ var __prototype = {
 		//	f_core.VerifyProperties(cell);
 		}
 	},
+	/**
+	 * @method private
+	 * @param f_event evt
+	 * @return boolean
+	 */
 	_performKeyDown: function(evt) {
-		if (evt.f_getJsEvent) {  // Ok, c'est crad ...
-			evt=evt.f_getJsEvent();
-		}
-	
+		var jsEvent=evt.f_getJsEvent();
+		
+		return this.f_performKeyDown(jsEvent);
+	},
+	/**
+	 * @method protected
+	 * @param Event evt
+	 * @return boolean
+	 */
+	f_performKeyDown: function(evt) {
 		var cancel=false;
 
 		var selection=fa_selectionManager.ComputeKeySelection(evt);
@@ -3463,7 +3477,9 @@ var __prototype = {
 			cols2=this._table.getElementsByTagName("col");			
 			
 		} else {
-			heads=this._table.getElementsByTagName("th");
+			if (this._visibleHeader) {
+				heads=this._table.getElementsByTagName("th");
+			}
 			cols=this._table.getElementsByTagName("col");			
 		}
 				
@@ -3486,43 +3502,51 @@ var __prototype = {
 		for(var i=0;i<columns.length;) {
 			var column=columns[i++];			
 									
-			if (column._visibility) {
-				var head=heads[v];
-
-				head.onmouseover=f_grid._Title_onMouseOver;
-				head.onmouseout=f_grid._Title_onMouseOut;
-				head.onmousedown=f_grid._Title_onMouseDown;
-				head.onmouseup=f_grid._Title_onMouseUp;
+			if (!column._visibility) {
+				continue;
+			}
 				
-				column._head=head;
-				column._col=cols[v];
-				if (cols2) {
-					column._col2=cols2[v];
-				}
-				head._column=column;
-				column._box=f_core.GetFirstElementByTagName(head, "div", true);
-				column._label=f_core.GetFirstElementByTagName(column._box, "div");
+			column._col=cols[v];
+			if (cols2) {
+				column._col2=cols2[v];
+			}
 
-				var image=f_core.GetFirstElementByTagName(column._label, "img");
-				if (image) {
-					column._image=image;
-				}
+			if (!heads) {
+				continue;
+			}
 
-				if (column._resizable) {
-					var cursor=f_core.CreateElement(column._box, "div", { title: headCursorTitle, className:  "f_grid_colCursor" });
-					column._cursor=cursor;
-					cursor._column=column;
-					cursor.onmousedown=f_grid._TitleCursorMouseDown;
-					cursor.onclick=f_core.CancelJsEventHandler;
+			var head=heads[v];
 			
-					if (isInternetExplorer) {
-						// Ben oui ... il faut bien !
-						cursor.style.right="-8px";
-					}
-				}
+			head.onmouseover=f_grid._Title_onMouseOver;
+			head.onmouseout=f_grid._Title_onMouseOut;
+			head.onmousedown=f_grid._Title_onMouseDown;
+			head.onmouseup=f_grid._Title_onMouseUp;
+			
+			head._column=column;
+			column._head=head;
 
-				v++;
-			}			
+			column._box=f_core.GetFirstElementByTagName(head, "div", true);
+			column._label=f_core.GetFirstElementByTagName(column._box, "div");
+
+			var image=f_core.GetFirstElementByTagName(column._label, "img");
+			if (image) {
+				column._image=image;
+			}
+
+			if (column._resizable) {
+				var cursor=f_core.CreateElement(column._box, "div", { title: headCursorTitle, className:  "f_grid_colCursor" });
+				column._cursor=cursor;
+				cursor._column=column;
+				cursor.onmousedown=f_grid._TitleCursorMouseDown;
+				cursor.onclick=f_core.CancelJsEventHandler;
+		
+				if (isInternetExplorer) {
+					// Ben oui ... il faut bien !
+					cursor.style.right="-8px";
+				}
+			}
+
+			v++;
 		}
 	},
 	/**
@@ -3532,7 +3556,7 @@ var __prototype = {
 		if (!this._title) {
 			return;
 		}
-				
+
 		var doc=this.ownerDocument;
 	
 		var tr=f_grid.GetFirstRow(this._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr");

@@ -178,6 +178,11 @@ public abstract class AbstractHtmlWriter extends
         return writeAttribute(name, String.valueOf(value));
     }
 
+    public ISgmlWriter writeAttribute(String name, boolean value)
+            throws WriterException {
+        return writeAttribute(name, String.valueOf(value));
+    }
+
     public ISgmlWriter writeAttribute(String name) throws WriterException {
         closeCssWriter();
 

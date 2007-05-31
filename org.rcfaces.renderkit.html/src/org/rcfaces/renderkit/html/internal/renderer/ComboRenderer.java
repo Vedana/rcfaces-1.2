@@ -82,7 +82,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
                 htmlWriter.getComponentRenderContext().setAttribute(
                         FILTRED_COLLECTION_PROPERTY, Boolean.TRUE);
 
-                htmlWriter.writeAttribute("v:filtred", "true");
+                htmlWriter.writeAttribute("v:filtred", true);
             }
         }
     }

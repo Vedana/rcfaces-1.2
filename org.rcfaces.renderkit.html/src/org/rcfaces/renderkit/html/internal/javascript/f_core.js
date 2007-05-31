@@ -625,7 +625,7 @@ var f_core = {
 				capture.nodeType==f_core.DOCUMENT_NODE || 
 				capture.screen /* window ? */), "f_core.AddEventListener: Invalid capture parameter ("+capture+")");
 
-		f_core.Debug(f_core, "AddEventListener: entering with ("+component+", "+name+", fct, "+capture+")");
+		f_core.Debug(f_core, "AddEventListener: entering with component='"+component+"' name='"+name+"' fct=<not printed> capture='"+capture+"'");
 	 	if (f_core.IsInternetExplorer()) {
 	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
 	 			switch (name) {
@@ -3905,6 +3905,8 @@ var f_core = {
 		}
 						
 		if (f_core.IsGecko()) {
+			f_core.Debug(f_core, "GetTextSelection: Caret position: "+component.selectionStart+" to "+component.selectionEnd+".");
+
 			return [ component.selectionStart, component.selectionEnd ];
 		}
 		
@@ -3915,32 +3917,37 @@ var f_core = {
 	 *
 	 * @method hidden static 
 	 * @param HTMLElement component
-	 * @param number index
-	 * @param number length
+	 * @param number start
+	 * @param optional number end
 	 * @return void
 	 */
-	SelectText: function(component, index, length) {		
+	SelectText: function(component, start, end) {		
 		f_core.Assert(component && component.tagName, "f_core.SelectText: Invalid component !");
 
-		if ((index instanceof Array) && index.length==2) {
-			f_core.Assert(index.length==2, "f_core.SelectText: Invalid index parameter [length of array!=2] ("+index+")");
+		if ((start instanceof Array) && start.length==2) {
+			f_core.Assert(start.length==2, "f_core.SelectText: Invalid start parameter [length of array!=2] ("+start+")");
 
-			length=index[1];
-			index=index[0];
+			end=start[1];
+			start=start[0];
+			
+		} else if (end===undefined) {
+			end=start;
 		}
 		
-		f_core.Assert(typeof(index)=="number" && index>=0, "f_core.SelectText: Invalid index parameter '"+index+"'.");
-		f_core.Assert(typeof(length)=="number" && length>=0, "f_core.SelectText: Invalid length parameter '"+length+"'.");
+		f_core.Assert(typeof(start)=="number" && start>=0, "f_core.SelectText: Invalid start parameter '"+start+"'.");
+		f_core.Assert(typeof(end)=="number" && end>=start, "f_core.SelectText: Invalid end parameter '"+end+"'. (start="+start+")");
+	
+		f_core.Debug(f_core, "SelectText: select text from '"+start+"' to '"+end+"'.");
 	
 		if (f_core.IsInternetExplorer()) {
 			var tr=component.createTextRange();
-			tr.moveStart("character", index, length);
+			tr.moveStart("character", start, end-start);
 			tr.select();
 			return;
 		}
 		
 		if (f_core.IsGecko()) {
-			component.setSelectionRange(index, index+length);
+			component.setSelectionRange(start, end);
 			
 			return;
 		}

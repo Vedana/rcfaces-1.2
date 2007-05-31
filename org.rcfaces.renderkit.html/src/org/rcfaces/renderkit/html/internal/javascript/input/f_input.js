@@ -103,7 +103,7 @@ var __prototype = {
 			return;
 		}
 		if (!this.tabIndex) {
-			this.tabIndex = 0;	// Default tabbing
+			this._tabIndex = 0;	// Default tabbing   NON ???
 		}
 		
 		var input=this.f_getInput();

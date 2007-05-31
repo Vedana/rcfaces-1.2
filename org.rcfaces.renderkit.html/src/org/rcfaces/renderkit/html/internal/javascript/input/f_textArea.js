@@ -53,7 +53,21 @@ var __prototype = {
 		
 		this.f_super(arguments);
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_serialize: function() {
+		
+		this.f_serializeValue();
+		
+		return this.f_super(arguments);
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_serializeValue: function() {
 		if (this.f_isDisabled()) {
 			this.f_setProperty(f_prop.TEXT, this.f_getText());
 
@@ -61,15 +75,15 @@ var __prototype = {
 			// Le probleme est que le TEXT peut persister ... 
 			// et que la valeur soit modifiée par l'utilisateur ...
 			this.f_setProperty(f_prop.TEXT);
-		}
+		}		
 		
 		if (this._showEmptyMessage) {
 			// On ne sérialise pas le message !
 			this._showEmptyMessage=undefined;
-			this.value="";
+			
+			// On remet la zone à vide
+			this.f_getInput().value="";
 		}
-		
-		return this.f_super(arguments);
 	},
 	/**
 	 * 
@@ -213,7 +227,7 @@ var __prototype = {
 			end=start;
 		}
 		
-		f_core.Debug(f_textArea, "SetSelection start="+start+" end="+end+".");
+		f_core.Debug(f_textArea, "f_setSelection: Set selection start="+start+" end="+end+".");
 		
 		f_core.SelectText(this.f_getInput(), start, end);
 		

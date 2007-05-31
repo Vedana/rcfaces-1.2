@@ -70,8 +70,13 @@
 	display: block;
 	visibility: hidden;
 	cursor: default;
+	overflow: hidden;
 }
 
 .f_dataGridPopup_popup .f_grid {
 	border: 0;
+}
+
+.f_dataGridPopup_popup .f_pager {
+	border-width: 1px 0 0 0;
 }

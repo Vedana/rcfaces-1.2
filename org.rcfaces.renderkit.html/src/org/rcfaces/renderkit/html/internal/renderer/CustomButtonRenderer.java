@@ -223,11 +223,11 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
                 .getFacesContext();
 
         if (component.isDisabled(facesContext)) {
-            htmlWriter.writeAttribute("v:disabled", "true");
+            htmlWriter.writeAttribute("v:disabled", true);
         }
 
         if (component.isReadOnly(facesContext)) {
-            htmlWriter.writeAttribute("v:readOnly", "true");
+            htmlWriter.writeAttribute("v:readOnly", true);
         }
 
         Object value = component.getValue();

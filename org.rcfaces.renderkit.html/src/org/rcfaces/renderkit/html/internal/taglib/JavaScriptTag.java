@@ -1,176 +1,184 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
-import org.rcfaces.core.internal.taglib.CameliaTag;
-import javax.servlet.jsp.JspException;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.ITextCapability;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.taglib.CameliaTag;
 import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 
 public class JavaScriptTag extends CameliaTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(JavaScriptTag.class);
 
-	private static final Log LOG=LogFactory.getLog(JavaScriptTag.class);
+    private String text;
 
-	private String text;
-	private String src;
-	private String srcCharSet;
-	private String requiredFiles;
-	private String requiredClasses;
-	public String getComponentType() {
-		return JavaScriptComponent.COMPONENT_TYPE;
-	}
+    private String src;
 
-	public final String getText() {
-		return text;
-	}
+    private String srcCharSet;
 
-	public final void setText(String text) {
-		this.text = text;
-	}
+    private String requiredFiles;
 
-	public final String getSrc() {
-		return src;
-	}
+    private String requiredClasses;
 
-	public final void setSrc(String src) {
-		this.src = src;
-	}
+    public String getComponentType() {
+        return JavaScriptComponent.COMPONENT_TYPE;
+    }
 
-	public final String getSrcCharSet() {
-		return srcCharSet;
-	}
+    public final String getText() {
+        return text;
+    }
 
-	public final void setSrcCharSet(String srcCharSet) {
-		this.srcCharSet = srcCharSet;
-	}
+    public final void setText(String text) {
+        this.text = text;
+    }
 
-	public final String getRequiredFiles() {
-		return requiredFiles;
-	}
+    public final String getSrc() {
+        return src;
+    }
 
-	public final void setRequiredFiles(String requiredFiles) {
-		this.requiredFiles = requiredFiles;
-	}
+    public final void setSrc(String src) {
+        this.src = src;
+    }
 
-	public final String getRequiredClasses() {
-		return requiredClasses;
-	}
+    public final String getSrcCharSet() {
+        return srcCharSet;
+    }
 
-	public final void setRequiredClasses(String requiredClasses) {
-		this.requiredClasses = requiredClasses;
-	}
+    public final void setSrcCharSet(String srcCharSet) {
+        this.srcCharSet = srcCharSet;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (JavaScriptComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  text='"+text+"'");
-			LOG.debug("  src='"+src+"'");
-			LOG.debug("  srcCharSet='"+srcCharSet+"'");
-			LOG.debug("  requiredFiles='"+requiredFiles+"'");
-			LOG.debug("  requiredClasses='"+requiredClasses+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getRequiredFiles() {
+        return requiredFiles;
+    }
 
-		if ((uiComponent instanceof JavaScriptComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'JavaScriptComponent'.");
-		}
+    public final void setRequiredFiles(String requiredFiles) {
+        this.requiredFiles = requiredFiles;
+    }
 
-		JavaScriptComponent component = (JavaScriptComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getRequiredClasses() {
+        return requiredClasses;
+    }
 
-		if (text != null) {
-			if (isValueReference(text)) {
-				ValueBinding vb = application.createValueBinding(text);
-				component.setValueBinding(Properties.TEXT, vb);
+    public final void setRequiredClasses(String requiredClasses) {
+        this.requiredClasses = requiredClasses;
+    }
 
-			} else {
-				component.setText(text);
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (JavaScriptComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  text='" + text + "'");
+            LOG.debug("  src='" + src + "'");
+            LOG.debug("  srcCharSet='" + srcCharSet + "'");
+            LOG.debug("  requiredFiles='" + requiredFiles + "'");
+            LOG.debug("  requiredClasses='" + requiredClasses + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (src != null) {
-			if (isValueReference(src)) {
-				ValueBinding vb = application.createValueBinding(src);
-				component.setValueBinding(Properties.SRC, vb);
+        if ((uiComponent instanceof JavaScriptComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'JavaScriptComponent'.");
+        }
 
-			} else {
-				component.setSrc(src);
-			}
-		}
+        JavaScriptComponent component = (JavaScriptComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (srcCharSet != null) {
-			if (isValueReference(srcCharSet)) {
-				ValueBinding vb = application.createValueBinding(srcCharSet);
-				component.setValueBinding(Properties.SRC_CHAR_SET, vb);
+        if (text != null) {
+            if (isValueReference(text)) {
+                ValueBinding vb = application.createValueBinding(text);
+                component.setValueBinding(Properties.TEXT, vb);
 
-			} else {
-				component.setSrcCharSet(srcCharSet);
-			}
-		}
+            } else {
+                component.setText(text);
+            }
+        }
 
-		if (requiredFiles != null) {
-			if (isValueReference(requiredFiles)) {
-				ValueBinding vb = application.createValueBinding(requiredFiles);
-				component.setValueBinding(Properties.REQUIRED_FILES, vb);
+        if (src != null) {
+            if (isValueReference(src)) {
+                ValueBinding vb = application.createValueBinding(src);
+                component.setValueBinding(Properties.SRC, vb);
 
-			} else {
-				component.setRequiredFiles(requiredFiles);
-			}
-		}
+            } else {
+                component.setSrc(src);
+            }
+        }
 
-		if (requiredClasses != null) {
-			if (isValueReference(requiredClasses)) {
-				ValueBinding vb = application.createValueBinding(requiredClasses);
-				component.setValueBinding(Properties.REQUIRED_CLASSES, vb);
+        if (srcCharSet != null) {
+            if (isValueReference(srcCharSet)) {
+                ValueBinding vb = application.createValueBinding(srcCharSet);
+                component.setValueBinding(Properties.SRC_CHAR_SET, vb);
 
-			} else {
-				component.setRequiredClasses(requiredClasses);
-			}
-		}
-	}
+            } else {
+                component.setSrcCharSet(srcCharSet);
+            }
+        }
 
-	public void release() {
-		text = null;
-		src = null;
-		srcCharSet = null;
-		requiredFiles = null;
-		requiredClasses = null;
+        if (requiredFiles != null) {
+            if (isValueReference(requiredFiles)) {
+                ValueBinding vb = application.createValueBinding(requiredFiles);
+                component.setValueBinding(Properties.REQUIRED_FILES, vb);
 
-		super.release();
-	}
+            } else {
+                component.setRequiredFiles(requiredFiles);
+            }
+        }
 
-	protected int getDoStartValue() {
-		return EVAL_BODY_BUFFERED;
-	}
+        if (requiredClasses != null) {
+            if (isValueReference(requiredClasses)) {
+                ValueBinding vb = application
+                        .createValueBinding(requiredClasses);
+                component.setValueBinding(Properties.REQUIRED_CLASSES, vb);
 
-	public int doEndTag() throws JspException {
-		if (text == null && getBodyContent() != null) {
-			String content = getBodyContent().getString();
-			if (content != null && content.length() > 0) {
-				content = content.trim();
-				if (content.length() > 0) {
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("  [body of tag] text='"+content+"'");
-					}
-					((ITextCapability)getComponentInstance()).setText(content);
-				}
-			}
-		}
-		return super.doEndTag();
-	}
+            } else {
+                component.setRequiredClasses(requiredClasses);
+            }
+        }
+    }
+
+    public void release() {
+        text = null;
+        src = null;
+        srcCharSet = null;
+        requiredFiles = null;
+        requiredClasses = null;
+
+        super.release();
+    }
+
+    protected int getDoStartValue() {
+        return EVAL_BODY_BUFFERED;
+    }
+
+    public int doEndTag() throws JspException {
+        if (text == null && getBodyContent() != null) {
+            String content = getBodyContent().getString();
+            if (content != null && content.length() > 0) {
+                content = content.trim();
+                if (content.length() > 0) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("  [body of tag] text='" + content + "'");
+                    }
+                    ((ITextCapability) getComponentInstance()).setText(content);
+                }
+            }
+        }
+        return super.doEndTag();
+    }
 }

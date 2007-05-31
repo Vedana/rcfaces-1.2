@@ -4103,20 +4103,6 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>first</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
 			<name>rows</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -4132,6 +4118,20 @@ An int value specifying the number of rows to display, starting with the one ide
 A string value holding the name of a request-scope attribute under which the model data for the
           row selected by the current value of the "rowIndex" property (i.e.
           also the current value of the "rowData" property) will be exposed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4313,15 +4313,15 @@ A boolean value indicating wether the client should know about the component's f
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>cursorValue</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>headerVisible</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A boolean value indicating wether the header should be visible.
 ]]></description>
+		</attribute>
+		<attribute>
+			<name>cursorValue</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>rowValueColumnId</name>
@@ -4618,29 +4618,6 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
-			<name>value</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -4654,6 +4631,29 @@ A number identifying the row to be displayed at the top of the component.
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4759,6 +4759,13 @@ A boolean value specifying wether the results should be displayed by page (thus 
 		It is ignored if the attribute "rows" is undefined.
 		The default value is true. 
 		If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>headerVisible</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the header should be visible.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5083,20 +5090,6 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>first</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
 			<name>rows</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -5112,6 +5105,20 @@ An int value specifying the number of rows to display, starting with the one ide
 A string value holding the name of a request-scope attribute under which the model data for the
           row selected by the current value of the "rowIndex" property (i.e.
           also the current value of the "rowData" property) will be exposed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5308,6 +5315,13 @@ A boolean value specifying wether the results should be displayed by page (thus 
 		It is ignored if the attribute "rows" is undefined.
 		The default value is true. 
 		If "rows" is defined and "paged"'s value is set to false, pages are downloaded automatically when the last displayed row is selected.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>headerVisible</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the header should be visible.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5634,29 +5648,6 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
-			<name>value</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -5670,6 +5661,29 @@ A number identifying the row to be displayed at the top of the component.
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15105,11 +15119,10 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>showSummary</name>
+			<name>for</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
+A component's id that express the link between the two components.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15120,18 +15133,19 @@ A string value specifying the margins for the component (compliant to CSS margin
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>for</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A component's id that express the link between the two components.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>showDetail</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "true".
+]]></description>
+		</attribute>
+		<attribute>
+			<name>showSummary</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15948,20 +15962,6 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
-			<name>globalOnly</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A boolean value indicating if the component specific messages should be shown or not.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>showDetail</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -15975,6 +15975,20 @@ A boolean value indicating whether the summary portion of displayed messages
 <description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "false".
+]]></description>
+		</attribute>
+		<attribute>
+			<name>globalOnly</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating if the component specific messages should be shown or not.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 		</attribute>
 		<attribute>

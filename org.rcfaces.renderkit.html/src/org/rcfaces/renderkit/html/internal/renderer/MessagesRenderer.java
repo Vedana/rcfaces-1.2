@@ -40,19 +40,19 @@ public class MessagesRenderer extends AbstractCssRenderer {
 
         boolean globalOnly = messagesComponent.isGlobalOnly();
         if (globalOnly) {
-            htmlWriter.writeAttribute("v:globalOnly", "true");
+            htmlWriter.writeAttribute("v:globalOnly", true);
         }
 
         if (messagesComponent.isShowSummary()) {
-            htmlWriter.writeAttribute("v:showSummary", "true");
+            htmlWriter.writeAttribute("v:showSummary", true);
         }
 
         if (messagesComponent.isShowDetail()) {
-            htmlWriter.writeAttribute("v:showDetail", "true");
+            htmlWriter.writeAttribute("v:showDetail", true);
         }
 
         if (messagesComponent.isShowActiveComponentMessage()) {
-            htmlWriter.writeAttribute("v:showActiveComponentMessage", "true");
+            htmlWriter.writeAttribute("v:showActiveComponentMessage", true);
         }
 
         htmlWriter.endElement(IHtmlWriter.TABLE);

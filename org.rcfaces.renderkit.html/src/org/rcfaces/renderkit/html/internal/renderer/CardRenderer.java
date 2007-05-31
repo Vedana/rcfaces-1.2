@@ -119,7 +119,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
          */
 
         if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-            htmlWriter.writeAttribute("v:asyncRender", "true");
+            htmlWriter.writeAttribute("v:asyncRender", true);
         }
 
         writeHtmlAttributes(htmlWriter);

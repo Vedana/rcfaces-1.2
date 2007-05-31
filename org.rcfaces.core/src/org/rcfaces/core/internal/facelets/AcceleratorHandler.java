@@ -7,12 +7,12 @@ import com.sun.facelets.tag.jsf.ComponentConfig;
 
 public class AcceleratorHandler extends CameliaComponentHandler {
 
-	public AcceleratorHandler(ComponentConfig config) {
-		super(config);
-	}
+    public AcceleratorHandler(ComponentConfig config) {
+        super(config);
+    }
 
-	protected IListenerType getDefaultListenerType() {
-		return ListenersTools.KEY_PRESS_LISTENER_TYPE;
-	}
+    protected IListenerType getDefaultListenerType() {
+        return ListenersTools.KEY_PRESS_LISTENER_TYPE;
+    }
 
 }

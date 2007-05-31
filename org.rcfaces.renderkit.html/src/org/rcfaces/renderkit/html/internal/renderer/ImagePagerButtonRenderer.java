@@ -77,7 +77,7 @@ public class ImagePagerButtonRenderer extends ImageButtonRenderer {
 
             boolean hideIfDisabled = button.isHideIfDisabled(facesContext);
             if (hideIfDisabled) {
-                writer.writeAttribute("v:hideIfDisabled", "true");
+                writer.writeAttribute("v:hideIfDisabled", true);
             }
         }
     }

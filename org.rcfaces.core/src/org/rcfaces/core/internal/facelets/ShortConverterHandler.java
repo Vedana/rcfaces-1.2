@@ -4,12 +4,12 @@ import com.sun.facelets.tag.TagConfig;
 
 public class ShortConverterHandler extends CameliaConverterHandler {
 
-	public ShortConverterHandler(TagConfig config) {
-		super(config);
-	}
+    public ShortConverterHandler(TagConfig config) {
+        super(config);
+    }
 
-	protected String getConverterId() {
-		return "org.rcfaces.Short";
-	}
+    protected String getConverterId() {
+        return "org.rcfaces.Short";
+    }
 
 }

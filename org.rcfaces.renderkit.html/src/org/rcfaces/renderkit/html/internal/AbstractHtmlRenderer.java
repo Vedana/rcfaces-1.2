@@ -374,7 +374,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
     protected final IHtmlWriter writeRequired(IHtmlWriter writer,
             IRequiredCapability component) throws WriterException {
         if (component.isRequired()) {
-            writer.writeAttribute("v:required", "true");
+            writer.writeAttribute("v:required", true);
         }
 
         return writer;
@@ -383,7 +383,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
     protected final IHtmlWriter writeImmediate(IHtmlWriter writer,
             IImmediateCapability component) throws WriterException {
         if (component.isImmediate()) {
-            writer.writeAttribute("v:immediate", "true");
+            writer.writeAttribute("v:immediate", true);
         }
 
         return writer;
@@ -976,7 +976,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
     protected IHtmlWriter writeNamingContainer(IHtmlWriter writer,
             NamingContainer namingContainer) throws WriterException {
 
-        writer.writeAttribute("v:nc", "true");
+        writer.writeAttribute("v:nc", true);
 
         return writer;
     }

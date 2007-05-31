@@ -784,17 +784,19 @@
 				<required-class name="fa_messageText" />
 			</class>
 		</file>
-		<file name="ui/f_messages.js">
-			<class name="f_messages">
-				<required-class name="f_component" />
-				<required-class name="fa_messageText" />
-			</class>
-		</file>
 		<file name="ui/f_message.js">
 			<class name="f_message">
 				<required-class name="f_component" />
 				<required-class name="fa_message1" />
 				<required-class name="f_prop" />
+			</class>
+		</file>
+		<file name="ui/f_messages.js">
+			<class name="f_messages">
+				<required-class name="f_component" />
+				<required-class name="fa_messageText" />
+
+				<required-class name="f_message" />
 			</class>
 		</file>
 		<file name="ui/f_styledMessage.js">
@@ -1112,8 +1114,12 @@
 	<module id="expandBar">
 		<file name="ui/f_expandBar.js">
 			<class name="f_expandBar">
-				<required-class name="f_fieldSet" />
-				<required-class name="fa_asyncRender" />
+				<required-class name="f_component" />
+
+				<required-class name="fa_disabled" />
+				<required-class name="fa_readOnly" />
+				<required-class name="fa_collapsed" />
+				<required-class name="fa_groupName" />
 
 				<required-class id="effect" name="f_effect" />
 

@@ -117,11 +117,11 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
                 throws WriterException {
 
             if (imageButtonFamilly.isDisabled(facesContext)) {
-                writer.writeAttribute("v:disabled", "true");
+                writer.writeAttribute("v:disabled", true);
             }
 
             if (imageButtonFamilly.isReadOnly(facesContext)) {
-                writer.writeAttribute("v:readOnly", "true");
+                writer.writeAttribute("v:readOnly", true);
             }
 
             IComponentRenderContext componentRenderContext = writer

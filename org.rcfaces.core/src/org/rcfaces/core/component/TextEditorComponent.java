@@ -1,336 +1,364 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
 import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.MenuTools;
 
-public class TextEditorComponent extends AbstractInputComponent implements 
-	IRequiredCapability,
-	ITextCapability,
-	ITextDirectionCapability,
-	IEmptyMessageCapability,
-	IReadOnlyCapability,
-	IValueChangeEventCapability,
-	IMenuCapability,
-	IFocusStyleClassCapability,
-	ISeverityStyleClassCapability,
-	ISelectionEventCapability {
+public class TextEditorComponent extends AbstractInputComponent implements
+        IRequiredCapability, ITextCapability, ITextDirectionCapability,
+        IEmptyMessageCapability, IReadOnlyCapability,
+        IValueChangeEventCapability, IMenuCapability,
+        IFocusStyleClassCapability, ISeverityStyleClassCapability,
+        ISelectionEventCapability {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.textEditor";
+    public static final String COMPONENT_TYPE = "org.rcfaces.core.textEditor";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","valueMimeType","valueChangeListener","warnStyleClass","textDirection","styleClass","text","infoStyleClass","readOnly","focusStyleClass","emptyMessage"}));
-	}
-	protected static final String CAMELIA_VALUE_ALIAS="text";
+    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
+            AbstractInputComponent.CAMELIA_ATTRIBUTES);
+    static {
+        CAMELIA_ATTRIBUTES.addAll(Arrays
+                .asList(new String[] { "errorStyleClass", "selectionListener",
+                        "fatalStyleClass", "required", "valueMimeType",
+                        "valueChangeListener", "warnStyleClass",
+                        "textDirection", "styleClass", "text",
+                        "infoStyleClass", "readOnly", "focusStyleClass",
+                        "emptyMessage" }));
+    }
 
-	public TextEditorComponent() {
-		setRendererType(COMPONENT_TYPE);
-	}
+    protected static final String CAMELIA_VALUE_ALIAS = "text";
 
-	public TextEditorComponent(String componentId) {
-		this();
-		setId(componentId);
-	}
+    public TextEditorComponent() {
+        setRendererType(COMPONENT_TYPE);
+    }
 
-	public java.lang.String getText() {
-		return getText(null);
-	}
+    public TextEditorComponent(String componentId) {
+        this();
+        setId(componentId);
+    }
 
-	/**
-	 * See {@link #getText() getText()} for more details
-	 */
-	public java.lang.String getText(javax.faces.context.FacesContext facesContext) {
-		return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this, facesContext);
-	}
+    public java.lang.String getText() {
+        return getText(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "text" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTextSetted() {
-		return engine.isPropertySetted(Properties.TEXT);
-	}
+    /**
+     * See {@link #getText() getText()} for more details
+     */
+    public java.lang.String getText(
+            javax.faces.context.FacesContext facesContext) {
+        return org.rcfaces.core.internal.tools.ValuesTools.valueToString(this,
+                facesContext);
+    }
 
-	public void setText(java.lang.String text) {
-		if (org.rcfaces.core.internal.listener.CameliaPhaseListener.isApplyingRequestValues()) {
-			setSubmittedExternalValue(text);
-		} else {
-			setValue(text);
-		}
-	}
+    /**
+     * Returns <code>true</code> if the attribute "text" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isTextSetted() {
+        return engine.isPropertySetted(Properties.TEXT);
+    }
 
-	public int getTextDirection() {
-		return getTextDirection(null);
-	}
+    public void setText(java.lang.String text) {
+        if (org.rcfaces.core.internal.listener.CameliaPhaseListener
+                .isApplyingRequestValues()) {
+            setSubmittedExternalValue(text);
+        } else {
+            setValue(text);
+        }
+    }
 
-	/**
-	 * See {@link #getTextDirection() getTextDirection()} for more details
-	 */
-	public int getTextDirection(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TEXT_DIRECTION,0, facesContext);
-	}
+    public int getTextDirection() {
+        return getTextDirection(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "textDirection" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTextDirectionSetted() {
-		return engine.isPropertySetted(Properties.TEXT_DIRECTION);
-	}
+    /**
+     * See {@link #getTextDirection() getTextDirection()} for more details
+     */
+    public int getTextDirection(javax.faces.context.FacesContext facesContext) {
+        return engine
+                .getIntProperty(Properties.TEXT_DIRECTION, 0, facesContext);
+    }
 
-	public void setTextDirection(int textDirection) {
-		engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "textDirection" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isTextDirectionSetted() {
+        return engine.isPropertySetted(Properties.TEXT_DIRECTION);
+    }
 
-	public java.lang.String getEmptyMessage() {
-		return getEmptyMessage(null);
-	}
+    public void setTextDirection(int textDirection) {
+        engine.setProperty(Properties.TEXT_DIRECTION, textDirection);
+    }
 
-	/**
-	 * See {@link #getEmptyMessage() getEmptyMessage()} for more details
-	 */
-	public java.lang.String getEmptyMessage(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.EMPTY_MESSAGE, facesContext);
-	}
+    public java.lang.String getEmptyMessage() {
+        return getEmptyMessage(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "emptyMessage" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isEmptyMessageSetted() {
-		return engine.isPropertySetted(Properties.EMPTY_MESSAGE);
-	}
+    /**
+     * See {@link #getEmptyMessage() getEmptyMessage()} for more details
+     */
+    public java.lang.String getEmptyMessage(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.EMPTY_MESSAGE, facesContext);
+    }
 
-	public void setEmptyMessage(java.lang.String emptyMessage) {
-		engine.setProperty(Properties.EMPTY_MESSAGE, emptyMessage);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "emptyMessage" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isEmptyMessageSetted() {
+        return engine.isPropertySetted(Properties.EMPTY_MESSAGE);
+    }
 
-	public boolean isReadOnly() {
-		return isReadOnly(null);
-	}
+    public void setEmptyMessage(java.lang.String emptyMessage) {
+        engine.setProperty(Properties.EMPTY_MESSAGE, emptyMessage);
+    }
 
-	/**
-	 * See {@link #isReadOnly() isReadOnly()} for more details
-	 */
-	public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.READ_ONLY, false, facesContext);
-	}
+    public boolean isReadOnly() {
+        return isReadOnly(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "readOnly" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isReadOnlySetted() {
-		return engine.isPropertySetted(Properties.READ_ONLY);
-	}
+    /**
+     * See {@link #isReadOnly() isReadOnly()} for more details
+     */
+    public boolean isReadOnly(javax.faces.context.FacesContext facesContext) {
+        return engine
+                .getBoolProperty(Properties.READ_ONLY, false, facesContext);
+    }
 
-	public void setReadOnly(boolean readOnly) {
-		engine.setProperty(Properties.READ_ONLY, readOnly);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "readOnly" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isReadOnlySetted() {
+        return engine.isPropertySetted(Properties.READ_ONLY);
+    }
 
-	public final void addValueChangeListener(javax.faces.event.ValueChangeListener listener) {
-		addFacesListener(listener);
-	}
+    public void setReadOnly(boolean readOnly) {
+        engine.setProperty(Properties.READ_ONLY, readOnly);
+    }
 
-	public final void removeValueChangeListener(javax.faces.event.ValueChangeListener listener) {
-		removeFacesListener(listener);
-	}
+    public final void addValueChangeListener(
+            javax.faces.event.ValueChangeListener listener) {
+        addFacesListener(listener);
+    }
 
-	public final javax.faces.event.FacesListener [] listValueChangeListeners() {
-		return getFacesListeners(javax.faces.event.ValueChangeListener.class);
-	}
+    public final void removeValueChangeListener(
+            javax.faces.event.ValueChangeListener listener) {
+        removeFacesListener(listener);
+    }
 
-	public final IMenuComponent getMenu(String menuId) {
+    public final javax.faces.event.FacesListener[] listValueChangeListeners() {
+        return getFacesListeners(javax.faces.event.ValueChangeListener.class);
+    }
 
+    public final IMenuComponent getMenu(String menuId) {
 
-		return MenuTools.getMenu(this, menuId);
-		
-	}
+        return MenuTools.getMenu(this, menuId);
 
-	public final IMenuComponent getMenu() {
+    }
 
+    public final IMenuComponent getMenu() {
 
-		return MenuTools.getMenu(this);
-		
-	}
+        return MenuTools.getMenu(this);
 
-	public final IMenuIterator listMenus() {
+    }
 
+    public final IMenuIterator listMenus() {
 
-		return MenuTools.listMenus(this);
-		
-	}
+        return MenuTools.listMenus(this);
 
-	public java.lang.String getFocusStyleClass() {
-		return getFocusStyleClass(null);
-	}
+    }
 
-	/**
-	 * See {@link #getFocusStyleClass() getFocusStyleClass()} for more details
-	 */
-	public java.lang.String getFocusStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOCUS_STYLE_CLASS, facesContext);
-	}
+    public java.lang.String getFocusStyleClass() {
+        return getFocusStyleClass(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "focusStyleClass" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isFocusStyleClassSetted() {
-		return engine.isPropertySetted(Properties.FOCUS_STYLE_CLASS);
-	}
+    /**
+     * See {@link #getFocusStyleClass() getFocusStyleClass()} for more details
+     */
+    public java.lang.String getFocusStyleClass(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FOCUS_STYLE_CLASS,
+                facesContext);
+    }
 
-	public void setFocusStyleClass(java.lang.String focusStyleClass) {
-		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "focusStyleClass" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isFocusStyleClassSetted() {
+        return engine.isPropertySetted(Properties.FOCUS_STYLE_CLASS);
+    }
 
-	public java.lang.String getErrorStyleClass() {
-		return getErrorStyleClass(null);
-	}
+    public void setFocusStyleClass(java.lang.String focusStyleClass) {
+        engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
+    }
 
-	/**
-	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
-	 */
-	public java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
-	}
+    public java.lang.String getErrorStyleClass() {
+        return getErrorStyleClass(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "errorStyleClass" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isErrorStyleClassSetted() {
-		return engine.isPropertySetted(Properties.ERROR_STYLE_CLASS);
-	}
+    /**
+     * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
+     */
+    public java.lang.String getErrorStyleClass(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.ERROR_STYLE_CLASS,
+                facesContext);
+    }
 
-	public void setErrorStyleClass(java.lang.String errorStyleClass) {
-		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "errorStyleClass" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isErrorStyleClassSetted() {
+        return engine.isPropertySetted(Properties.ERROR_STYLE_CLASS);
+    }
 
-	public java.lang.String getFatalStyleClass() {
-		return getFatalStyleClass(null);
-	}
+    public void setErrorStyleClass(java.lang.String errorStyleClass) {
+        engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+    }
 
-	/**
-	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
-	 */
-	public java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
-	}
+    public java.lang.String getFatalStyleClass() {
+        return getFatalStyleClass(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "fatalStyleClass" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isFatalStyleClassSetted() {
-		return engine.isPropertySetted(Properties.FATAL_STYLE_CLASS);
-	}
+    /**
+     * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
+     */
+    public java.lang.String getFatalStyleClass(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FATAL_STYLE_CLASS,
+                facesContext);
+    }
 
-	public void setFatalStyleClass(java.lang.String fatalStyleClass) {
-		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "fatalStyleClass" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isFatalStyleClassSetted() {
+        return engine.isPropertySetted(Properties.FATAL_STYLE_CLASS);
+    }
 
-	public java.lang.String getInfoStyleClass() {
-		return getInfoStyleClass(null);
-	}
+    public void setFatalStyleClass(java.lang.String fatalStyleClass) {
+        engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+    }
 
-	/**
-	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
-	 */
-	public java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
-	}
+    public java.lang.String getInfoStyleClass() {
+        return getInfoStyleClass(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "infoStyleClass" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isInfoStyleClassSetted() {
-		return engine.isPropertySetted(Properties.INFO_STYLE_CLASS);
-	}
+    /**
+     * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
+     */
+    public java.lang.String getInfoStyleClass(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.INFO_STYLE_CLASS,
+                facesContext);
+    }
 
-	public void setInfoStyleClass(java.lang.String infoStyleClass) {
-		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "infoStyleClass" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isInfoStyleClassSetted() {
+        return engine.isPropertySetted(Properties.INFO_STYLE_CLASS);
+    }
 
-	public java.lang.String getWarnStyleClass() {
-		return getWarnStyleClass(null);
-	}
+    public void setInfoStyleClass(java.lang.String infoStyleClass) {
+        engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+    }
 
-	/**
-	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
-	 */
-	public java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
-	}
+    public java.lang.String getWarnStyleClass() {
+        return getWarnStyleClass(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "warnStyleClass" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isWarnStyleClassSetted() {
-		return engine.isPropertySetted(Properties.WARN_STYLE_CLASS);
-	}
+    /**
+     * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
+     */
+    public java.lang.String getWarnStyleClass(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.WARN_STYLE_CLASS,
+                facesContext);
+    }
 
-	public void setWarnStyleClass(java.lang.String warnStyleClass) {
-		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "warnStyleClass" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isWarnStyleClassSetted() {
+        return engine.isPropertySetted(Properties.WARN_STYLE_CLASS);
+    }
 
-	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		addFacesListener(listener);
-	}
+    public void setWarnStyleClass(java.lang.String warnStyleClass) {
+        engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+    }
 
-	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		removeFacesListener(listener);
-	}
+    public final void addSelectionListener(
+            org.rcfaces.core.event.ISelectionListener listener) {
+        addFacesListener(listener);
+    }
 
-	public final javax.faces.event.FacesListener [] listSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-	}
+    public final void removeSelectionListener(
+            org.rcfaces.core.event.ISelectionListener listener) {
+        removeFacesListener(listener);
+    }
 
-	public String getValueMimeType() {
-		return getValueMimeType(null);
-	}
+    public final javax.faces.event.FacesListener[] listSelectionListeners() {
+        return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+    }
 
-	public String getValueMimeType(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VALUE_MIME_TYPE, facesContext);
-	}
+    public String getValueMimeType() {
+        return getValueMimeType(null);
+    }
 
-	public void setValueMimeType(String valueMimeType) {
-		engine.setProperty(Properties.VALUE_MIME_TYPE, valueMimeType);
-	}
+    public String getValueMimeType(javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.VALUE_MIME_TYPE,
+                facesContext);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "valueMimeType" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isValueMimeTypeSetted() {
-		return engine.isPropertySetted(Properties.VALUE_MIME_TYPE);
-	}
+    public void setValueMimeType(String valueMimeType) {
+        engine.setProperty(Properties.VALUE_MIME_TYPE, valueMimeType);
+    }
 
-	protected Set getCameliaFields() {
-		return CAMELIA_ATTRIBUTES;
-	}
+    /**
+     * Returns <code>true</code> if the attribute "valueMimeType" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public boolean isValueMimeTypeSetted() {
+        return engine.isPropertySetted(Properties.VALUE_MIME_TYPE);
+    }
 
-	protected String getCameliaValueAlias() {
-		return CAMELIA_VALUE_ALIAS;
-	}
+    protected Set getCameliaFields() {
+        return CAMELIA_ATTRIBUTES;
+    }
+
+    protected String getCameliaValueAlias() {
+        return CAMELIA_VALUE_ALIAS;
+    }
 }

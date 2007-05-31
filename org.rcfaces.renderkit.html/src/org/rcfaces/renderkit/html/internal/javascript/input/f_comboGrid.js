@@ -103,10 +103,13 @@ var __static = {
 	},
 	_OnBeforeDeactivate: function() {
 		var evt = f_core.GetJsEvent(this);
-
-		var comboGrid=evt.srcElement.f_link;
 		
 		var toElement=evt.toElement;
+		if (!toElement) {
+			return true;
+		}
+
+		var comboGrid=evt.srcElement.f_link;
 		
 		for(;toElement.parentNode;toElement=toElement.parentNode) {
 			if (toElement!=comboGrid) {
@@ -363,6 +366,7 @@ var __prototype = {
 		}
 
 		this._inputValue=this.f_getInput().value;
+		this._inputSelection=undefined;
 		
 		return true;
 	},
@@ -395,7 +399,7 @@ var __prototype = {
 			
 			this._formattedValue="";
 			this._inputValue=newInput;
-			
+			this._inputSelection=undefined;
 			
 			if (newInput!=this._selectedValue && this._selectedValue) {
 				this._selectedValue=null;
@@ -550,6 +554,7 @@ var __prototype = {
 		
 		this._selectedValue=value;		
 		this._inputValue="";
+		this._inputSelection=undefined;
 		this._formattedValue=""; // ???
 		
 		this.f_getInput().value="";
@@ -557,19 +562,22 @@ var __prototype = {
 	/**
 	 * @method protected
 	 */
-	fa_valueSelected: function(value, label, jsEvent) {
+	fa_valueSelected: function(value, label) {
 		f_core.Debug(f_comboGrid, "fa_valueSelected: value='"+value+"' label='"+label+"'");
 		
-		if (this.f_fireEvent(f_event.SELECTION, jsEvent, null, value)===false) {
+		if (this.f_fireEvent(f_event.SELECTION, null, null, value)===false) {
 			return;
 		}
 		
 		this._formattedValue=(label)?label:"";
 		this._selectedValue=value;
 		this._inputValue=value;
+		this._inputSelection=undefined;
 		this._lastValue=value;
 		
-		this.f_getInput().value=value;
+		var input=this.f_getInput();
+		input.value=value;
+		f_core.SelectText(input, value.length);
 	},
 	_onFocus: function() {
 		f_core.Debug(f_comboGrid, "_onFocus: inputValue='"+this._inputValue+"'  (formattedValue='"+this._formattedValue+"')");
@@ -583,6 +591,8 @@ var __prototype = {
 		
 		var selection=this._inputSelection;
 		if (selection) {
+			this._inputSelection=undefined;
+			
 			f_core.SelectText(input, selection);
 		}
 		

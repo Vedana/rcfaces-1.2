@@ -120,11 +120,11 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
             if (imageButtonFamilly.isDisabled(facesContext)) {
-                writer.writeAttribute("v:disabled", "true");
+                writer.writeAttribute("v:disabled", true);
             }
 
             if (imageButtonFamilly.isReadOnly(facesContext)) {
-                writer.writeAttribute("v:readOnly", "true");
+                writer.writeAttribute("v:readOnly", true);
             }
         }
     }
