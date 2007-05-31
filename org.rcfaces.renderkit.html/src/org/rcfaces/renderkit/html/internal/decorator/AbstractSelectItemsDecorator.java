@@ -683,7 +683,7 @@ public abstract class AbstractSelectItemsDecorator extends
             SelectItem selectItem, int depth, boolean visible)
             throws WriterException {
 
-    	selectItem = transformSelectItem(selectItem);
+    	selectItem = transformSelectItem(selectItem, depth, visible);
         selectItemCount++;
 
         /*
