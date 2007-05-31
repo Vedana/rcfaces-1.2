@@ -693,6 +693,19 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             return;
         }
 
+        encodeItem(facesContext, component, itemComponent, itemId);
+    }
+
+    /**
+     * Ideal placeholder for adding stuff at generation time 
+     * @param facesContext
+     * @param component
+     * @param itemComponent
+     * @param itemId
+     * @throws WriterException
+     */
+    protected void encodeItem(FacesContext facesContext, UIComponent component, UIComponent itemComponent, String itemId) throws WriterException {
+    	
         writer.startElement(IHtmlWriter.TD);
         writer.writeClass("f_toolBar_item");
 
@@ -720,9 +733,9 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
 
         writer.endElement(IHtmlWriter.TD);
-    }
+	}
 
-    private int getDefaultTextPosition(SelectItem selectItem) {
+	private int getDefaultTextPosition(SelectItem selectItem) {
         UIComponent component = getComponent();
 
         if (component instanceof ITextPositionCapability) {
