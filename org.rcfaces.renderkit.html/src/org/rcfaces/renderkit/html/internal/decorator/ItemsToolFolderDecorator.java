@@ -693,7 +693,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             return;
         }
 
-        encodeItem(facesContext, component, itemComponent, itemId);
+        encodeItem(renderer, component, itemComponent, itemId);
     }
 
     /**
@@ -704,9 +704,11 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
      * @param itemId
      * @throws WriterException
      */
-    protected void encodeItem(FacesContext facesContext, UIComponent component, UIComponent itemComponent, String itemId) throws WriterException {
+    protected void encodeItem(Renderer renderer, UIComponent component, UIComponent itemComponent, String itemId) throws WriterException {
     	
-        writer.startElement(IHtmlWriter.TD);
+    	FacesContext facesContext = writer.getComponentRenderContext().getFacesContext(); 
+    	
+    	writer.startElement(IHtmlWriter.TD);
         writer.writeClass("f_toolBar_item");
 
         List children = component.getChildren();
