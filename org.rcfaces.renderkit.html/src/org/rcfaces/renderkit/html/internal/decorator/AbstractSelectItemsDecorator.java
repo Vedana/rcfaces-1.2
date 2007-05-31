@@ -735,9 +735,11 @@ public abstract class AbstractSelectItemsDecorator extends
     /**
      * Allows the modification of the selectItem before treatment
      * @param selectItem
+     * @param depth 
+     * @param visible
      * @return a selectItem
      */
-    public SelectItem transformSelectItem(SelectItem selectItem) {
+    protected SelectItem transformSelectItem(SelectItem selectItem, int depth, boolean visible) {
 		return selectItem;
 	}
 
