@@ -698,7 +698,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
     /**
      * Ideal placeholder for adding stuff at generation time 
-     * @param facesContext
+     * @param renderer
      * @param component
      * @param itemComponent
      * @param itemId
