@@ -37,7 +37,8 @@ var __prototype = {
 		} else {
 			link=f_core.GetFirstElementByTagName(this, "input", false);
 			if (!link) {
-				link=f_core.GetFirstElementByTagName(this, "a", true);
+				// Fred : to allow imageButton without image !
+				link=f_core.GetFirstElementByTagName(this, "a", false);
 			}
 			
 			if (link) {
@@ -82,7 +83,7 @@ var __prototype = {
 				}
 				this._image = image;
 
-				f_core.Assert(image, "Can not find IMAGE tag into ImageButton ! (classname='"+cl+"', id="+this.id+")");
+//				f_core.Assert(image, "Can not find IMAGE tag into ImageButton ! (classname='"+cl+"', id="+this.id+")");
 			}
 		}
 		
@@ -414,7 +415,7 @@ var __prototype = {
 		}
 
 		var image=this._image;		
-		if (url && image.src!=url) {
+		if (image && url && image.src!=url) {
 			image.src = url;
 		}		
 	},

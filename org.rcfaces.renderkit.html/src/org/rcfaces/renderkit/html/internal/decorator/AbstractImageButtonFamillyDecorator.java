@@ -586,6 +586,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     protected void writeImage() throws WriterException {
 
+    	if (imageSrc == null) {
+    		return;
+    	}
         String inputElement = getInputElement();
         writer.startElement(inputElement);
         writeInputAttributes(writer);
