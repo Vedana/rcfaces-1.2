@@ -365,7 +365,7 @@ var __prototype = {
 			var severityClass=this.f_getStyleClassFromSeverity(severity);
 			
 			if (!severityClass && severity>=f_messageObject.SEVERITY_ERROR) {
-				severityClass=this.f_getMainStyleClass()+"_error";
+				severityClass=this.f_getMainStyleClass()+"_error f_input_error";
 			}
 			
 			if (severityClass) {

@@ -37,16 +37,16 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) componentRenderContext
                 .getComponent();
 
-        writer.startElement(IHtmlWriter.TABLE);
+        writer.startElement(IHtmlWriter.UL);
 
         int cellPadding = itemsToolFolderComponent.getToolBar().getItemPadding(
                 facesContext);
         if (cellPadding < 0) {
             cellPadding = 0;
         }
-        writer.writeCellPadding(cellPadding);
+        // writer.writeCellPadding(cellPadding);
 
-        writer.writeCellSpacing(0);
+       // writer.writeCellSpacing(0);
 
         writeHtmlAttributes(writer);
         writeJavaScriptAttributes(writer);
@@ -72,19 +72,15 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
          * writer.endElement(IHtmlWriter.A");
          */
 
-        writer.startElement(IHtmlWriter.TBODY);
+       // writer.startElement(IHtmlWriter.TBODY);
 
-        writer.startElement(IHtmlWriter.TR);
+        // writer.startElement(IHtmlWriter.TR);
     }
 
     protected void encodeAfterDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
 
-        writer.endElement(IHtmlWriter.TR);
-
-        writer.endElement(IHtmlWriter.TBODY);
-
-        writer.endElement(IHtmlWriter.TABLE);
+        writer.endElement(IHtmlWriter.UL);
 
         super.encodeAfterDecorator(writer, componentDecorator);
     }

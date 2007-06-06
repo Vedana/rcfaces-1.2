@@ -69,7 +69,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     }
 
     protected void preEncodeContainer() throws WriterException {
-        writer.enableJavaScript();
+        htmlWriter.enableJavaScript();
 
         super.preEncodeContainer();
     }

@@ -1,17 +1,14 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.ImageButtonComponent;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
- * <p>
- * The ImageSubmitButton Component is a <a
- * href="/comps/submitButtonComponent.html">submitButton Component</a> that can
- * show an image.
- * </p>
- * <p>
- * The ImageSubmitButton Component has the following capabilities :
+ * <p>The ImageSubmitButton Component is a <a href="/comps/submitButtonComponent.html">submitButton Component</a> that can show an image.</p>
+ * <p>The ImageSubmitButton Component has the following capabilities :
  * <ul>
  * <li>Position &amp; Size</li>
  * <li>Foreground &amp; Background Color</li>
@@ -25,24 +22,23 @@ import java.util.Set;
  */
 public class ImageSubmitButtonComponent extends ImageButtonComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.imageSubmitButton";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.imageSubmitButton";
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            ImageButtonComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageButtonComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
+	}
 
-    public ImageSubmitButtonComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
+	public ImageSubmitButtonComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public ImageSubmitButtonComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public ImageSubmitButtonComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

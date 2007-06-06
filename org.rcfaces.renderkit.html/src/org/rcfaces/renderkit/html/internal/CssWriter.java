@@ -57,6 +57,8 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
     protected static final String OVERFLOW = "overflow";
 
+    protected static final String PADDING = "padding";
+
     protected static final String POSITION = "position";
 
     protected static final String TEXT_ALIGN = "text-align";
@@ -552,6 +554,10 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
     public ICssWriter writeMargin(String margin) {
         return writeProperty(MARGIN, margin);
+    }
+
+    public ICssWriter writePadding(String padding) {
+        return writeProperty(PADDING, padding);
     }
 
     public ICssWriter writeURL(String url) {

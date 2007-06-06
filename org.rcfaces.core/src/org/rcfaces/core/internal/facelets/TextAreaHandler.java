@@ -7,12 +7,12 @@ import com.sun.facelets.tag.jsf.ComponentConfig;
 
 public class TextAreaHandler extends CameliaComponentHandler {
 
-    public TextAreaHandler(ComponentConfig config) {
-        super(config);
-    }
+	public TextAreaHandler(ComponentConfig config) {
+		super(config);
+	}
 
-    protected IListenerType getDefaultListenerType() {
-        return ListenersTools.SELECTION_LISTENER_TYPE;
-    }
+	protected IListenerType getDefaultListenerType() {
+		return ListenersTools.SELECTION_LISTENER_TYPE;
+	}
 
 }

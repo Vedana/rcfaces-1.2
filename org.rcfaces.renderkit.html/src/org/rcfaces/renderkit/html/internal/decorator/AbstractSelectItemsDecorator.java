@@ -77,7 +77,7 @@ public abstract class AbstractSelectItemsDecorator extends
 
     protected Renderer renderer;
 
-    protected IHtmlWriter writer;
+    protected IHtmlWriter htmlWriter;
 
     private String className;
 
@@ -93,7 +93,7 @@ public abstract class AbstractSelectItemsDecorator extends
 
     public final void encodeContainer(IHtmlWriter writer, Renderer renderer)
             throws WriterException {
-        this.writer = writer;
+        this.htmlWriter = writer;
         this.renderer = renderer;
         try {
             preEncodeContainer();
@@ -112,7 +112,7 @@ public abstract class AbstractSelectItemsDecorator extends
             postEncodeContainer();
 
         } finally {
-            this.writer = null;
+            this.htmlWriter = null;
             this.selectItemsContext = null;
             this.renderer = null;
         }
@@ -124,7 +124,7 @@ public abstract class AbstractSelectItemsDecorator extends
             throws WriterException {
         super.encodeContainerEnd(writer, renderer);
 
-        this.writer = writer;
+        this.htmlWriter = writer;
         this.renderer = renderer;
         try {
             preEncodeContainerEnd();
@@ -132,7 +132,7 @@ public abstract class AbstractSelectItemsDecorator extends
             postEncodeContainerEnd();
 
         } finally {
-            this.writer = null;
+            this.htmlWriter = null;
             this.renderer = null;
         }
     }
@@ -425,8 +425,8 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected IComponentRenderContext getComponentRenderContext() {
-        if (writer != null) {
-            return writer.getComponentRenderContext();
+        if (htmlWriter != null) {
+            return htmlWriter.getComponentRenderContext();
         }
 
         return javaScriptWriter.getHtmlComponentRenderContext();
@@ -683,7 +683,7 @@ public abstract class AbstractSelectItemsDecorator extends
             SelectItem selectItem, int depth, boolean visible)
             throws WriterException {
 
-    	selectItem = transformSelectItem(selectItem, depth, visible);
+        selectItem = transformSelectItem(selectItem, depth, visible);
         selectItemCount++;
 
         /*
@@ -734,16 +734,18 @@ public abstract class AbstractSelectItemsDecorator extends
 
     /**
      * Allows the modification of the selectItem before treatment
+     * 
      * @param selectItem
-     * @param depth 
+     * @param depth
      * @param visible
      * @return a selectItem
      */
-    protected SelectItem transformSelectItem(SelectItem selectItem, int depth, boolean visible) {
-		return selectItem;
-	}
+    protected SelectItem transformSelectItem(SelectItem selectItem, int depth,
+            boolean visible) {
+        return selectItem;
+    }
 
-	protected abstract SelectItemsContext createHtmlContext();
+    protected abstract SelectItemsContext createHtmlContext();
 
     protected abstract SelectItemsContext createJavaScriptContext()
             throws WriterException;

@@ -113,4 +113,6 @@ public interface ICssWriter {
     ICssWriter writeMargin(String margin);
 
     ICssWriter writeBackgroundColor(String backgroundColor);
+
+    ICssWriter writePadding(String padding);
 }

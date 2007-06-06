@@ -20,6 +20,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.IClientValidator;
 import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.event.PropertyChangeEvent;
@@ -53,6 +55,8 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  */
 public class TextEntryRenderer extends AbstractInputRenderer {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(TextEntryRenderer.class);
 
     private static final IClientValidatorDescriptor AUTO_TAB_VALIDATOR_DESCRIPTOR = new ClientValidator();
 
@@ -275,9 +279,12 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                         .getServerConverter();
 
                 if (serverConverter != null) {
-                    Converter converter = computeConverter(serverConverter);
+                    Converter converter = computeConverter(facesContext,
+                            serverConverter, command.getName());
 
-                    valueHolder.setConverter(converter);
+                    if (converter != null) {
+                        valueHolder.setConverter(converter);
+                    }
                 }
             }
         }
@@ -285,9 +292,17 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         return true;
     }
 
-    private Converter computeConverter(IServerConverter serverConverter) {
-        // TODO Auto-generated method stub
-        return null;
+    private Converter computeConverter(FacesContext facesContext,
+            IServerConverter serverConverter, String validatorId) {
+        Converter converter = serverConverter.getInstance(facesContext);
+
+        if (converter == null) {
+            throw new FacesException(
+                    "Invalid server converter for validatorId='" + validatorId
+                            + "'.");
+        }
+
+        return converter;
     }
 
     protected void renderAttributeValidator(IHtmlWriter htmlWriter)

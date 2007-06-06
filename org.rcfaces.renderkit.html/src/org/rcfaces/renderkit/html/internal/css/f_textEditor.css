@@ -1,0 +1,17 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_textEditor
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+
+.f_textEditor {
+	margin: 0;
+	border: 1px solid black;
+	overflow:auto;
+}

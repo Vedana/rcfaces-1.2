@@ -285,6 +285,8 @@
 				<required-class name="f_component" /> 
 				<required-class name="fa_focusStyleClass" />
 				<required-class name="fa_message" />
+
+				<required-style name="f_input.css" />
 			</class>
 		</file>
 		<file name="input/f_button.js">
@@ -314,16 +316,22 @@
 				<required-class name="f_checkButton" />
 				<required-class name="fa_groupName" />
 				<required-class name="fa_required" />
+
+				<required-style name="f_radioButton.css" />
 			</class>
 		</file>
 		<file name="input/f_resetButton.js">
 			<class name="f_resetButton">
 				<required-class name="f_button" />
+
+				<required-style name="f_resetButton.css" />
 			</class>
 		</file>
 		<file name="input/f_submitButton.js">
 			<class name="f_submitButton">
 				<required-class name="f_button" />
+
+				<required-style name="f_submitButton.css" />
 			</class>
 		</file>
 		<file name="input/f_hiddenValue.js">
@@ -380,16 +388,22 @@
 				<required-class name="f_imageCheckButton" />
 				<required-class name="fa_groupName" />
 				<required-class name="fa_required" />
+
+				<required-style name="f_imageRadioButton.css" />
 			</class>
 		</file>
 		<file name="input/f_imageResetButton.js">
 			<class name="f_imageResetButton">
 				<required-class name="f_imageButton" />
+
+				<required-style name="f_imageResetButton.css" />
 			</class>
 		</file>
 		<file name="input/f_imageSubmitButton.js">
 			<class name="f_imageSubmitButton">
 				<required-class name="f_imageButton" />
+
+				<required-style name="f_imageSubmitButton.css" />
 			</class>
 		</file>
 	</module>
@@ -496,6 +510,7 @@
 		<file name="aspect/fa_itemsManager.js">
 			<class name="fa_itemsManager">
 				<required-class name="f_aspect" />
+				<required-class name="fa_items" />
 				<required-class name="fa_cardinality" />
 			</class>
 		</file>
@@ -549,6 +564,7 @@
 				<required-class name="fa_subMenu" />
 				<required-class name="f_menu" />
 				<required-class name="fa_itemsWrapper" />
+				<required-class name="fa_items" />
 			</class>
 		</file>
 		<file name="input/f_customButton.js">
@@ -597,11 +613,15 @@
 				<required-class id="features" name="f_clientValidator" />
 				<required-class id="features" name="f_vb" />
 				<required-class id="menu" name="f_menu" />
+				
+				<required-style name="f_textEntry.css" />
 			</class>
 		</file>
 		<file name="input/f_passwordEntry.js">
 			<class name="f_passwordEntry">
 				<required-class name="f_input" />
+				
+				<required-style name="f_passwordEntry.css" />
 			</class>
 		</file>
 	</module>
@@ -1006,6 +1026,8 @@
 			<class name="f_spinner">
 				<required-class name="f_textEntry" />
 				<required-class name="fa_spinner" />
+				
+				<required-style name="f_spinner.css" />
 			</class>
 		</file>
 	</module>
@@ -1044,6 +1066,7 @@
 				<required-class name="f_component" />
 				<required-class name="f_calendarObject" />
 				<required-class name="fa_readOnly" />
+				<required-class name="fa_items" />
 				<required-class name="fa_disabled" />
 				<required-class name="fa_itemsWrapper" />
 			</class>
@@ -1287,5 +1310,15 @@
 				<required-class name="f_dialog" />
 			</class>
 		 </file>
+	</module>
+
+	<module id="textEditor">
+		<file name="input/f_textEditor.js">
+			<class name="f_textEditor">
+				<required-class name="f_component" /> 
+				
+				<required-style name="f_textEditor.css" />
+			</class>
+		</file>
 	</module>
 </repository>

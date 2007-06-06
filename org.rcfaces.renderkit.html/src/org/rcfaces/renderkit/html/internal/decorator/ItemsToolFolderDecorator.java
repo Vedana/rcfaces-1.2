@@ -114,17 +114,30 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
     private ToolBarComponent toolBar;
 
+    private boolean itemPaddingSetted;
+
+    private int itemPadding;
+
     public ItemsToolFolderDecorator(UIComponent component) {
         super(component, null);
 
-        borderType = ((ItemsToolFolderComponent) component).getBorderType();
+        ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) component;
+
+        borderType = itemsToolFolderComponent.getBorderType();
 
         showDropDownMark = ((IShowDropDownMarkCapability) component)
                 .isShowDropDownMark();
+
+        if (itemsToolFolderComponent.getToolBar().isItemPaddingSetted()) {
+            itemPaddingSetted = true;
+
+            itemPadding = itemsToolFolderComponent.getToolBar()
+                    .getItemPadding();
+        }
     }
 
     protected void preEncodeContainer() throws WriterException {
-        writer.enableJavaScript();
+        htmlWriter.enableJavaScript();
 
         FacesContext facesContext = getComponentRenderContext()
                 .getFacesContext();
@@ -370,15 +383,15 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         IContentAccessor separatorImageURL = toolBarImageAccessors
                 .getSeparatorImageAccessor();
 
-        writer.startElement(IHtmlWriter.TD);
+        htmlWriter.startElement(IHtmlWriter.LI);
 
         StringAppender sa = new StringAppender("f_toolBar_itemSeparator", 32);
         if (separatorImageURL == null) {
             sa.append(" f_toolBar_autoSeparator");
         }
-        writer.writeClass(sa.toString());
+        htmlWriter.writeClass(sa.toString());
 
-        writer.writeAttribute("v:separator", true);
+        htmlWriter.writeAttribute("v:separator", true);
 
         allocateItemSeparator();
 
@@ -390,31 +403,31 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             String imageURL = separatorImageURL.resolveURL(facesContext, null,
                     null);
             if (imageURL != null) {
-                writer.startElement(IHtmlWriter.IMG);
-                writer.writeClass("f_toolBar_imgSeparator");
+                htmlWriter.startElement(IHtmlWriter.IMG);
+                htmlWriter.writeClass("f_toolBar_imgSeparator");
 
                 int imageWidth = toolBar.getSeparatorImageWidth(facesContext);
                 if (imageWidth > 0) {
-                    writer.writeWidth(imageWidth);
+                    htmlWriter.writeWidth(imageWidth);
                 }
 
                 int imageHeight = toolBar.getSeparatorImageHeight(facesContext);
                 if (imageHeight > 0) {
-                    writer.writeHeight(imageHeight);
+                    htmlWriter.writeHeight(imageHeight);
                 }
 
-                writer.writeSrc(imageURL);
+                htmlWriter.writeSrc(imageURL);
 
                 String tooltip = getSeparatorImageAlt(selectItem);
                 if (tooltip != null) {
-                    writer.writeAlt(tooltip);
+                    htmlWriter.writeAlt(tooltip);
                 }
 
-                writer.endElement(IHtmlWriter.IMG);
+                htmlWriter.endElement(IHtmlWriter.IMG);
             }
         }
 
-        writer.endElement(IHtmlWriter.TD);
+        htmlWriter.endElement(IHtmlWriter.LI);
     }
 
     protected String getSeparatorImageAlt(SelectItem selectItem) {
@@ -684,7 +697,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     .setShowDropDownMark(showDropDownMark);
         }
 
-        FacesContext facesContext = writer.getComponentRenderContext()
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
         Renderer renderer = getRenderer(facesContext, itemComponent);
@@ -697,19 +710,28 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     }
 
     /**
-     * Ideal placeholder for adding stuff at generation time 
+     * Ideal placeholder for adding stuff at generation time
+     * 
      * @param renderer
      * @param component
      * @param itemComponent
      * @param itemId
      * @throws WriterException
      */
-    protected void encodeItem(Renderer renderer, UIComponent component, UIComponent itemComponent, String itemId) throws WriterException {
-    	
-    	FacesContext facesContext = writer.getComponentRenderContext().getFacesContext(); 
-    	
-    	writer.startElement(IHtmlWriter.TD);
-        writer.writeClass("f_toolBar_item");
+    protected void encodeItem(Renderer renderer, UIComponent component,
+            UIComponent itemComponent, String itemId) throws WriterException {
+
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        htmlWriter.startElement(IHtmlWriter.LI);
+        htmlWriter.writeClass("f_toolBar_item");
+
+        if (itemPaddingSetted && itemPadding >= 0) {
+            htmlWriter.writeStyle().writePadding(itemPadding + "px");
+        }
+
+        htmlWriter.endComponent();
 
         List children = component.getChildren();
 
@@ -734,10 +756,10 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             children.remove(itemComponent);
         }
 
-        writer.endElement(IHtmlWriter.TD);
-	}
+        htmlWriter.endElement(IHtmlWriter.LI);
+    }
 
-	private int getDefaultTextPosition(SelectItem selectItem) {
+    private int getDefaultTextPosition(SelectItem selectItem) {
         UIComponent component = getComponent();
 
         if (component instanceof ITextPositionCapability) {
@@ -806,7 +828,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
      * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.IWriter)
      */
     protected SelectItemsContext createHtmlContext() {
-        IComponentRenderContext componentRenderContext = writer
+        IComponentRenderContext componentRenderContext = htmlWriter
                 .getHtmlComponentRenderContext();
 
         ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) componentRenderContext

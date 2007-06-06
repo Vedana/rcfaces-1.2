@@ -320,6 +320,7 @@ var __static = {
 				var selectionEnd=input.selectionEnd;
 				
 				var value=input.value;
+				
 				input.value = value.substring(0, selectionStart)+ ch + value.substring(selectionEnd);
 									
 				input.setSelectionRange(selectionStart + ch.length, selectionStart + ch.length);
@@ -395,7 +396,7 @@ var __static = {
 		return true; // On arrete la, les messages ...
 	},
 	Filter_generic: function(val,expr,keyCode,keyChar) {
-		f_core.Assert(expr instanceof RegExp, "Not a regular expression. '"+expr+"'.");
+		f_core.Assert(expr instanceof RegExp, "f_clientValidator.Filter_generic: Not a regular expression. '"+expr+"'.");
 		
 		return (expr.test(keyChar));
 	},
@@ -434,8 +435,19 @@ var __static = {
 	Error_default: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
 	},
+	/**
+	 * @method hidden static 
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @param boolean useMessage
+	 * @param boolean useColor
+	 * @param boolean useFocus
+	 * @return boolean
+	 */
 	Error_generic: function(validator, type, error, useMessage, useColor, useFocus) {
-		var component = validator.f_getComponent();
+		f_core.Debug(f_clientValidator, "Error_generic: type='"+type+"' error='"+error+"' useMessage="+useMessage+" useColor="+useColor+" useFocus="+useFocus);
+
 		var setMsg = false;
 		var setCol = false;
 		var unsetCol = false;
@@ -450,14 +462,14 @@ var __static = {
 			
 		case f_clientValidator.CHECKER:
 		case f_clientValidator.FORMATTER:
-			setMsg = true;
-			setCol = true;
-			setFoc = true;
+			setMsg = !!error;
+			setCol = setMsg;
+			setFoc = setCol;
 			break;
 
 		case f_clientValidator.BEHAVIOR:
-			setMsg = true;
-			setFoc = true;
+			setMsg = !!error;;
+			setFoc = setMsg;
 			break;
 
 		case f_clientValidator.SUCCESS:
@@ -465,15 +477,17 @@ var __static = {
 			break;
 
 		default:
-			f_core.Error(f_clientValidator, "Unknown Error Type: "+type);
+			f_core.Error(f_clientValidator, "Error_generic: Unknown Error Type: "+type);
 			break;
 		}
 
 //		alert("GENERIC ERROR: "+validator+"/"+type+"/"+error+"/"+useMessage+"\n"+setMsg+"/"+setCol+"/"+setFoc);		
 
+		var component = validator.f_getComponent();
+
 		if (useMessage && setMsg) {
 			//MESSAGE(error[0], "adonis_validatorEx", error[1], error[2]);
-			alert("summary="+error._summary+"\ndetail="+error._detail);
+			alert("summary="+error.f_getSummary()+"\ndetail="+error.f_getDetail());
 		}
 		if (useColor && setCol) {
 			if (this._oldComponentColor === undefined) {
@@ -582,16 +596,19 @@ var __prototype = {
 	 * @method private
 	 */
 	_onReset: function() {
-		f_core.Debug(f_clientValidator, "_onReset: Reset component '"+this._component.id+"' (value='"+this._initialValue+"')");
+		f_core.Debug(f_clientValidator, "_onReset: Reset component '"+this._component.id+"' (initialValue='"+this._initialValue+"')");
 	
-		var bRet = this._applyAutoCheck(this._initialValue, false);
-		
-		if (this._hasFocus) {
-			this._applyInputValue();
+		var self=this;
+		window.setTimeout(function() {
+			var bRet = self._applyAutoCheck(self._initialValue, false);
 			
-		} else {
-			this._applyOutputValue();
-		}
+			if (self._hasFocus) {
+				self._applyInputValue();
+				
+			} else {
+				self._applyOutputValue();
+			}
+		}, 100);
 	},
 	/**
 	 * Called while setting textEntry text !
@@ -709,6 +726,9 @@ var __prototype = {
 		if (input.value != inVal) {
 			input.value = inVal;
 		}
+	
+		// On selectionne car IE remet le focus au début du champ sinon !
+		input.select();
 	},
 	/**
 	 * @method private
@@ -740,7 +760,7 @@ var __prototype = {
 		f_core.Debug(f_clientValidator, "_applyOutputValue: Set value '"+value+"'.");
 		this._input.value=value;
 	},
-	_applyFilters: function(keyCode,keyChar) {
+	_applyFilters: function(keyCode, keyChar) {
 		var filters=this._filters;
 		if (!filters) {
 			return true;
@@ -822,18 +842,19 @@ var __prototype = {
 		var component=this.f_getComponent();
 		for (var i=0; i<checkers.length; i++) {
 			var c = checkers[i];
-			f_core.Assert(typeof(c)=="function", "f_clientValidator: Unknown type of checker '"+c+"'.");
+			f_core.Assert(typeof(c)=="function", "f_clientValidator._applyCheckers: Unknown type of checker '"+c+"'.");
 			
 			var newVal = c.call(component, this, checkVal);
-			if (newVal == null) {
-				break;
+
+			f_core.Debug(f_clientValidator, "_applyCheckers: Check (#"+i+") value current='"+checkVal+"' new='"+newVal+"'.");
+
+			if (newVal === null) { // Une erreur, on arrete la ...
+				return null;
 			}
 
-			if (newVal==checkVal) {
+			if (newVal==checkVal) { // Prochain checker
 				continue;
 			}
-
-			f_core.Debug(f_clientValidator, "Change checked value old='"+checkVal+"' new='"+newVal+"'.");
 
 			this.f_setInputValue(newVal);
 			checkVal=newVal;
@@ -852,7 +873,7 @@ var __prototype = {
 		var component=this.f_getComponent();
 		for (var i=0; i<formatters.length; i++) {
 			var f = formatters[i];
-			f_core.Assert(typeof(f)=="function", "f_clientValidator: Unknown type of translator '"+f+"'.");
+			f_core.Assert(typeof(f)=="function", "f_clientValidator._applyFormatters: Unknown type of translator '"+f+"'.");
 
 			formatVal = f.call(component, this, formatVal);
 			var bRet = (formatVal != null);
@@ -878,7 +899,7 @@ var __prototype = {
 		var bRet=undefined;
 		for (var i=0; i<behaviors.length; i++) {
 			var f = behaviors[i];
-			f_core.Assert(typeof(f)=="function", "f_clientValidator: Unknown type of behavior '"+f+"'.");
+			f_core.Assert(typeof(f)=="function", "f_clientValidator._applyBehaviors: Unknown type of behavior '"+f+"'.");
 			
 			bRet = f.call(component, this, this.f_getOutputValue());
 			if (!bRet) {
@@ -901,12 +922,7 @@ var __prototype = {
 		var handled;
 		
 		if (!fError && check) {
-			if (f_class.IsClassDefined("f_messageContext")) {
-				fError=f_clientValidator.PerformMessageError;
-				
-			} else {
-				fError=f_clientValidator._PerformAlertError;
-			}
+			fError=f_clientValidator.PerformMessageError;
 		}
 		
 		this.f_setInputValue(curVal);
@@ -942,7 +958,9 @@ var __prototype = {
 		// Call checkers
 		// @JM Checker has to deal with empty string
 		var checkVal = this._applyCheckers(curVal);
-		if (checkVal == null) {
+		f_core.Debug(f_clientValidator, "_applyAutoCheck: apply checkers returns '"+checkVal+"' curVal='"+curVal+"'");
+
+		if (checkVal === null) {
 			f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed Checker returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
 			bRet = false;
 			if (fError) {
@@ -973,6 +991,8 @@ var __prototype = {
 		// Call formatters
 		if (checkVal) {
 			var formatVal = this._applyFormatters();
+			f_core.Debug(f_clientValidator, "_applyAutoCheck: apply formatters returns '"+formatVal+"'");
+
 			if (formatVal == null) {
 				f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed formatters returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
 
@@ -1003,6 +1023,8 @@ var __prototype = {
 		if (bRet) {
 			// Call behaviors
 			var ret = this._applyBehaviors();
+			f_core.Debug(f_clientValidator, "_applyAutoCheck: apply behaviors returns '"+ret+"'");
+			
 			// If set, get the returned value
 			if (ret!==undefined) {
 				bRet = ret;
@@ -1039,7 +1061,7 @@ var __prototype = {
 	f_addFilter: function(expr) {
 		f_core.Assert(typeof(expr)=="function" || (expr instanceof RegExp), "f_clientValidator.f_addFilter: Filter parameter must be a function or a regexp. ("+expr+")");
 
-		f_core.Debug(f_clientValidator, "Add filter to validator attached to component '"+this._component.id+"' :\n"
+		f_core.Debug(f_clientValidator, "f_addFilter: Add filter to validator attached to component '"+this._component.id+"' :\n"
 			+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
 		if (!this._keyPressInstalled) {
@@ -1062,7 +1084,7 @@ var __prototype = {
 	f_addProcessor: function(expr) {
 		f_core.Assert(typeof(expr)=="function" || (expr instanceof RegExp), "f_clientValidator.f_addProcessor: Processor parameter must be a function or a regexp. ("+expr+")");
 
-		f_core.Debug(f_clientValidator, "Add processor to validator attached to component '"+this._component.id+"' :\n"
+		f_core.Debug(f_clientValidator, "f_addProcessor: Add processor to validator attached to component '"+this._component.id+"' :\n"
 			+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 		
 		if (!this._keyUpInstalled) {
@@ -1083,7 +1105,7 @@ var __prototype = {
 	f_addTranslator: function(expr) {
 		f_core.Assert(typeof(expr)=="function" || (expr instanceof RegExp), "f_clientValidator.f_addTranslator: Translator parameter must be a function or a regexp. ("+expr+")");
 
-		f_core.Debug(f_clientValidator, "Add translator to validator attached to component '"+this._component.id+"' :\n"
+		f_core.Debug(f_clientValidator, "f_addTranslator: Add translator to validator attached to component '"+this._component.id+"' :\n"
 			+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
 		if (!this._keyPressInstalled) {
@@ -1104,7 +1126,7 @@ var __prototype = {
 	f_addChecker: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_addChecker: Checker parameter must be a function. ("+expr+")");
 
-		f_core.Debug(f_clientValidator, "Add checker function to validator attached to component '"+this._component.id+"' :\n"
+		f_core.Debug(f_clientValidator, "f_addChecker: Add checker function to validator attached to component '"+this._component.id+"' :\n"
 			+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
 		var checkers=this._checkers;
@@ -1120,7 +1142,7 @@ var __prototype = {
 	f_addFormatter: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_addFormatter: Formatter parameter must be a function. ("+expr+")");
 
-		f_core.Debug(f_clientValidator, "Add formatter function to validator attached to component '"+this._component.id+"' :\n"
+		f_core.Debug(f_clientValidator, "f_addFormatter: Add formatter function to validator attached to component '"+this._component.id+"' :\n"
 			+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
 		var formatters=this._formatters;
@@ -1136,7 +1158,7 @@ var __prototype = {
 	f_addBehavior: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_addBehavior: Behavior parameter must be a function. ("+expr+")");
 
-		f_core.Debug(f_clientValidator, "Add behavior function to validator attached to component '"+this._component.id+"' :\n"
+		f_core.Debug(f_clientValidator, "f_addBehavior: Add behavior function to validator attached to component '"+this._component.id+"' :\n"
 			+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
 		var behaviors=this._behaviors;
@@ -1152,7 +1174,7 @@ var __prototype = {
 	f_setOnError: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_setOnError: OnError parameter must be a function. ("+expr+")");
 
-		f_core.Debug(f_clientValidator, "Set onError function to validator attached to component '"+this._component.id+"' :\n"
+		f_core.Debug(f_clientValidator, "f_setOnError: Set onError function to validator attached to component '"+this._component.id+"' :\n"
 		+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
 		this._onError = expr;
@@ -1171,7 +1193,7 @@ var __prototype = {
 	f_setOnCheckError: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_setOnCheckError: OnCheckError parameter must be a function. ("+expr+")");
 
-		f_core.Debug(f_clientValidator, "Set onCheckError function to validator attached to component '"+this._component.id+"' :\n"
+		f_core.Debug(f_clientValidator, "f_setOnCheckError: Set onCheckError function to validator attached to component '"+this._component.id+"' :\n"
 			+((String(expr).length>64)?(String(expr).substring(0, 64)+"  ..."):(String(expr))));
 
 		this._onCheckError = expr;
@@ -1224,12 +1246,17 @@ var __prototype = {
 	/**
 	 * @method public final
 	 */
-	f_getParameter: function(name) {
+	f_getParameter: function(name, def) {
 		if (!this._parameters) {
-			return null;
+			return def;
 		}
 		
-		return this._parameters[name];
+		var r=this._parameters[name];
+		if (r===undefined) {
+			return def;
+		}
+		
+		return r;
 	},
 	/**
 	 * @method public final

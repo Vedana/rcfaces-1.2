@@ -1553,7 +1553,8 @@ var __prototype = {
 	 * @return void
 	 */
 	f_sortClientSide: function(methods, ascendings,tdIndexes) {
-			
+		
+		var self=this;
 		function internalSort(obj1, obj2) {	
 			for(var i=0;i<methods.length;i++) {
 				var tdIndex=tdIndexes[i];
@@ -1561,7 +1562,7 @@ var __prototype = {
 				var tc1 = obj1.childNodes[tdIndex];
 				var tc2 = obj2.childNodes[tdIndex];
 
-				 var ret=methods[i].call(this, tc1._text, tc2._text, tc1, tc2, tc1._index, tc2._index);
+				 var ret=methods[i].call(self, tc1._text, tc2._text, tc1, tc2, tc1._index, tc2._index);
 				 if (!ret) {
 					continue;
 				 }

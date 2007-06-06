@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.capability.IDisabledCapability;
@@ -27,6 +29,9 @@ import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(AbstractInputRenderer.class);
 
     private static final String INPUT_MESSAGES_PROPERTY = "org.rcfaces.html.INPUT_MESSAGES";
 

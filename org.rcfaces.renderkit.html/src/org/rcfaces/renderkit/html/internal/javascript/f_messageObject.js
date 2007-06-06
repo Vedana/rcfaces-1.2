@@ -70,6 +70,27 @@ var __static = {
 }
 
 var __prototype = {
+	
+	/**
+	 * @field private number
+	 */
+	_severity: undefined,
+	
+	/**
+	 * @field private String
+	 */
+	_summary: undefined,
+	
+	/**
+	 * @field private String
+	 */
+	_detail: undefined,
+	
+	/**
+	 * @field private Object
+	 */
+	_clientDatas: undefined,
+	
 	/**
 	 * <p>Construct a new <code>f_messageObject</code> with the specified
      * initial values.</p>

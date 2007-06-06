@@ -3,6 +3,10 @@
  */
 package org.rcfaces.core.internal.config;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +14,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
 import javax.faces.validator.DoubleRangeValidator;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.Validator;
+import javax.faces.webapp.UIComponentTag;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
@@ -23,6 +32,8 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
+import org.rcfaces.core.internal.util.ClassLocator;
+import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.validator.IParameter;
@@ -412,7 +423,9 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             return serverConverter;
         }
 
-        public final void setServerConverter(IServerConverter serverConverter) {
+        public final void setServerConverter(ServerConverter serverConverter) {
+            serverConverter.commitParameters();
+
             this.serverConverter = serverConverter;
         }
 
@@ -510,6 +523,106 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             this.id = id;
         }
 
+        public Converter getInstance(FacesContext facesContext) {
+
+            Converter converter = null;
+
+            boolean setParameters = false;
+
+            String id = getId();
+            if (id != null && id.length() > 0) {
+                Application application = facesContext.getApplication();
+
+                if (UIComponentTag.isValueReference(id)) {
+                    ValueBinding vb = application.createValueBinding(id);
+
+                    converter = (Converter) vb.getValue(facesContext);
+
+                } else {
+                    converter = application.createConverter(id);
+                    setParameters = true;
+                }
+            }
+
+            if (converter == null) {
+                String className = getClassName();
+                if (className != null) {
+                    try {
+                        Class clazz = ClassLocator.load(className, null,
+                                facesContext);
+                        converter = (Converter) clazz.newInstance();
+
+                        setParameters = true;
+
+                    } catch (Throwable th) {
+                        LOG.error("Can not instanciate converter class='"
+                                + className + "'.", th);
+
+                        throw new FacesException(th);
+                    }
+                }
+            }
+
+            if (converter == null) {
+                return converter;
+            }
+
+            IParameter parameters[] = listParameters();
+
+            if (setParameters == false) {
+                if (parameters.length > 1) {
+                    throw new FacesException(
+                            "Can not set parameters to a 'value binding' Converter.");
+                }
+                return converter;
+            }
+
+            BeanInfo beanInfo;
+            try {
+                beanInfo = Introspector.getBeanInfo(converter.getClass());
+
+            } catch (IntrospectionException e) {
+                throw new FacesException(
+                        "Can not introspect bean from validator id='" + getId()
+                                + "' className='" + getClassName() + "'.", e);
+            }
+
+            PropertyDescriptor propertyDescriptors[] = beanInfo
+                    .getPropertyDescriptors();
+
+            for (int i = 0; i < parameters.length; i++) {
+                IParameter parameter = parameters[i];
+
+                String name = parameter.getName();
+
+                for (int j = 0; j < propertyDescriptors.length; j++) {
+                    PropertyDescriptor propertyDescriptor = propertyDescriptors[j];
+
+                    if (propertyDescriptor.getName().equals(name) == false) {
+                        continue;
+                    }
+
+                    Class propertyType = propertyDescriptor.getPropertyType();
+
+                    Object value = Convertor.convert(parameter.getValue(),
+                            propertyType);
+
+                    try {
+                        propertyDescriptor.getWriteMethod().invoke(converter,
+                                new Object[] { value });
+
+                    } catch (Throwable th) {
+                        LOG.error("Can not set property '"
+                                + propertyDescriptor.getPropertyType()
+                                + "' to " + value, th);
+                    }
+
+                    break;
+                }
+            }
+
+            return converter;
+        }
     }
 
     public String convertFromValidatorToExpression(

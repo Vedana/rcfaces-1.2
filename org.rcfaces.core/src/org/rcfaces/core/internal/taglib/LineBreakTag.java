@@ -1,139 +1,133 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.LineBreakComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class LineBreakTag extends CameliaTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(LineBreakTag.class);
 
-    private String styleClass;
+	private static final Log LOG=LogFactory.getLog(LineBreakTag.class);
 
-    private String visible;
+	private String styleClass;
+	private String visible;
+	private String hiddenMode;
+	private String rendered;
+	public String getComponentType() {
+		return LineBreakComponent.COMPONENT_TYPE;
+	}
 
-    private String hiddenMode;
+	public final String getStyleClass() {
+		return styleClass;
+	}
 
-    private String rendered;
+	public final void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
+	}
 
-    public String getComponentType() {
-        return LineBreakComponent.COMPONENT_TYPE;
-    }
+	public final String getVisible() {
+		return visible;
+	}
 
-    public final String getStyleClass() {
-        return styleClass;
-    }
+	public final void setVisible(String visible) {
+		this.visible = visible;
+	}
 
-    public final void setStyleClass(String styleClass) {
-        this.styleClass = styleClass;
-    }
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
 
-    public final String getVisible() {
-        return visible;
-    }
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
+	}
 
-    public final void setVisible(String visible) {
-        this.visible = visible;
-    }
+	public final String getRendered() {
+		return rendered;
+	}
 
-    public final String getHiddenMode() {
-        return hiddenMode;
-    }
+	public final void setRendered(String rendered) {
+		this.rendered = rendered;
+	}
 
-    public final void setHiddenMode(String hiddenMode) {
-        this.hiddenMode = hiddenMode;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (LineBreakComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  rendered='"+rendered+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final String getRendered() {
-        return rendered;
-    }
+		if ((uiComponent instanceof LineBreakComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'LineBreakComponent'.");
+		}
 
-    public final void setRendered(String rendered) {
-        this.rendered = rendered;
-    }
+		LineBreakComponent component = (LineBreakComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (LineBreakComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  styleClass='" + styleClass + "'");
-            LOG.debug("  visible='" + visible + "'");
-            LOG.debug("  hiddenMode='" + hiddenMode + "'");
-            LOG.debug("  rendered='" + rendered + "'");
-        }
-        super.setProperties(uiComponent);
+		if (styleClass != null) {
+			if (isValueReference(styleClass)) {
+				ValueBinding vb = application.createValueBinding(styleClass);
+				component.setValueBinding(Properties.STYLE_CLASS, vb);
 
-        if ((uiComponent instanceof LineBreakComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'LineBreakComponent'.");
-        }
+			} else {
+				component.setStyleClass(styleClass);
+			}
+		}
 
-        LineBreakComponent component = (LineBreakComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+		if (visible != null) {
+			if (isValueReference(visible)) {
+				ValueBinding vb = application.createValueBinding(visible);
+				component.setValueBinding(Properties.VISIBLE, vb);
 
-        if (styleClass != null) {
-            if (isValueReference(styleClass)) {
-                ValueBinding vb = application.createValueBinding(styleClass);
-                component.setValueBinding(Properties.STYLE_CLASS, vb);
+			} else {
+				component.setVisible(getBool(visible));
+			}
+		}
 
-            } else {
-                component.setStyleClass(styleClass);
-            }
-        }
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+				component.setValueBinding(Properties.HIDDEN_MODE, vb);
 
-        if (visible != null) {
-            if (isValueReference(visible)) {
-                ValueBinding vb = application.createValueBinding(visible);
-                component.setValueBinding(Properties.VISIBLE, vb);
+			} else {
+				component.setHiddenMode(hiddenMode);
+			}
+		}
 
-            } else {
-                component.setVisible(getBool(visible));
-            }
-        }
+		if (rendered != null) {
+			if (isValueReference(rendered)) {
+				ValueBinding vb = application.createValueBinding(rendered);
+				component.setValueBinding(Properties.RENDERED, vb);
 
-        if (hiddenMode != null) {
-            if (isValueReference(hiddenMode)) {
-                ValueBinding vb = application.createValueBinding(hiddenMode);
-                component.setValueBinding(Properties.HIDDEN_MODE, vb);
+			} else {
+				component.setRendered(getBool(rendered));
+			}
+		}
+	}
 
-            } else {
-                component.setHiddenMode(hiddenMode);
-            }
-        }
+	public void release() {
+		styleClass = null;
+		visible = null;
+		hiddenMode = null;
+		rendered = null;
 
-        if (rendered != null) {
-            if (isValueReference(rendered)) {
-                ValueBinding vb = application.createValueBinding(rendered);
-                component.setValueBinding(Properties.RENDERED, vb);
-
-            } else {
-                component.setRendered(getBool(rendered));
-            }
-        }
-    }
-
-    public void release() {
-        styleClass = null;
-        visible = null;
-        hiddenMode = null;
-        rendered = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

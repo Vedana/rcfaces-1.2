@@ -52,9 +52,9 @@ public class ToolBarRenderer extends AbstractCssRenderer {
         ToolBarComponent toolBarComponent = (ToolBarComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement(IHtmlWriter.TABLE);
-        htmlWriter.writeCellPadding(0);
-        htmlWriter.writeCellSpacing(0);
+        htmlWriter.startElement(IHtmlWriter.UL);
+        // htmlWriter.writeCellPadding(0);
+        // htmlWriter.writeCellSpacing(0);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -66,19 +66,15 @@ public class ToolBarRenderer extends AbstractCssRenderer {
             htmlWriter.writeVAlign(verticalAlignment);
         }
 
-        htmlWriter.startElement(IHtmlWriter.TBODY);
-
-        htmlWriter.startElement(IHtmlWriter.TR);
+        if (toolBarComponent.isLocked(facesContext)) {
+            htmlWriter.writeAttribute("v:locked", true);
+        }
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.endElement(IHtmlWriter.TR);
-
-        htmlWriter.endElement(IHtmlWriter.TBODY);
-
-        htmlWriter.endElement(IHtmlWriter.TABLE);
+        htmlWriter.endElement(IHtmlWriter.UL);
 
         super.encodeEnd(writer);
     }
@@ -121,11 +117,11 @@ public class ToolBarRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
-        htmlWriter.startElement(IHtmlWriter.TD);
+        htmlWriter.startElement(IHtmlWriter.LI);
 
         ComponentTools.encodeRecursive(facesContext, component);
 
-        htmlWriter.endElement(IHtmlWriter.TD);
+        htmlWriter.endElement(IHtmlWriter.LI);
     }
 
     protected String getJavaScriptClassName() {

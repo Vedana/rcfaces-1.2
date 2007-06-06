@@ -18,8 +18,8 @@ var __prototype = {
 	 * @return String Value associated to the specified property.
 	 */
 	f_getItemClientData: function(item, key) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_getItemClientData: Invalid item object. ("+item+")");
-		f_core.Assert(typeof(key)=="string", "fa_items.f_getItemClientData: Invalid key parameter ! ("+key+")");
+		f_core.Assert(typeof(item)=="object", "fa_itemClientDatas.f_getItemClientData: Invalid item object. ("+item+")");
+		f_core.Assert(typeof(key)=="string", "fa_itemClientDatas.f_getItemClientData: Invalid key parameter ! ("+key+")");
 		
 		var clientDatas=item._clientDatas;
 		if (!clientDatas) {
@@ -34,7 +34,7 @@ var __prototype = {
 	 * @return Object
 	 */
 	f_getItemClientDatas: function(item) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_getItemClientDatas: Invalid item object. ("+item+")");
+		f_core.Assert(typeof(item)=="object", "fa_itemClientDatas.f_getItemClientDatas: Invalid item object. ("+item+")");
 		
 		var clientDatas=item._clientDatas;
 		if (!clientDatas) {
@@ -51,9 +51,9 @@ var __prototype = {
 	 * @return String old value
 	 */
 	f_setItemClientData: function(item, key, value) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_setItemClientData: Invalid item object. ("+item+")");
-		f_core.Assert(typeof(key)=="string", "fa_items.f_setItemClientData: Invalid key parameter ! ("+key+")");
-		f_core.Assert(value===undefined || value===null || typeof(value)=="string", "fa_items.f_setItemClientData: Invalid value parameter ! ("+value+")");
+		f_core.Assert(typeof(item)=="object", "fa_itemClientDatas.f_setItemClientData: Invalid item object. ("+item+")");
+		f_core.Assert(typeof(key)=="string", "fa_itemClientDatas.f_setItemClientData: Invalid key parameter ! ("+key+")");
+		f_core.Assert(value===undefined || value===null || typeof(value)=="string", "fa_itemClientDatas.f_setItemClientData: Invalid value parameter ! ("+value+")");
 		
 		var clientDatas=item._clientDatas;
 		if (!clientDatas) {
@@ -74,8 +74,8 @@ var __prototype = {
 	 * @method hidden
 	 */
 	f_setItemClientDatas: function(item, clientDatas) {
-		f_core.Assert(typeof(item)=="object", "fa_items.f_setItemClientDatas: Invalid item object. ("+item+")");
-		f_core.Assert(typeof(clientDatas)=="object", "fa_items.f_setItemClientDatas: Invalid clientDatas parameter ! ("+clientDatas+")");
+		f_core.Assert(typeof(item)=="object", "fa_itemClientDatas.f_setItemClientDatas: Invalid item object. ("+item+")");
+		f_core.Assert(typeof(clientDatas)=="object", "fa_itemClientDatas.f_setItemClientDatas: Invalid clientDatas parameter ! ("+clientDatas+")");
 		
 		item._clientDatas=clientDatas;
 	}

@@ -7,11 +7,9 @@ package org.rcfaces.core.internal.util;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.FacesException;
@@ -19,6 +17,8 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.lang.IAdaptable;
 
 /**
@@ -30,8 +30,8 @@ import org.rcfaces.core.lang.IAdaptable;
 public final class Convertor {
     private static final String REVISION = "$Revision$";
 
-    private static final DateFormat dateFormat = new SimpleDateFormat(
-            "dd/MM/yyyy", Locale.FRENCH);
+    // private static final DateFormat dateFormat = new
+    // SimpleDateFormat("dd/MM/yyyy", Locale.FRENCH);
 
     private static boolean logConvertor = false;
 
@@ -375,6 +375,9 @@ public final class Convertor {
                 return null;
             }
 
+            DateFormat dateFormat = DateFormat
+                    .getDateInstance(DateFormat.SHORT);
+
             try {
                 toConvert = dateFormat.parse((String) toConvert);
                 if (logConvertor) {
@@ -388,6 +391,34 @@ public final class Convertor {
                 log("Camelia.Convertor:Error parsing date '" + d + "'", e);
                 return null;
             }
+        }
+    };
+
+    private static final Callback String_to_Locale = new Callback() {
+        private static final String REVISION = "$Revision$";
+
+        public Object convert(Object toConvert) {
+            String d = ((String) toConvert).trim();
+            if (d.length() < 1) {
+                return null;
+            }
+
+            return LocaleConverter.SINGLETON.getAsObject(null, null,
+                    (String) toConvert);
+        }
+    };
+
+    private static final Callback String_to_TimeZone = new Callback() {
+        private static final String REVISION = "$Revision$";
+
+        public Object convert(Object toConvert) {
+            String d = ((String) toConvert).trim();
+            if (d.length() < 1) {
+                return null;
+            }
+
+            return TimeZoneConverter.SINGLETON.getAsObject(null, null,
+                    (String) toConvert);
         }
     };
 
@@ -452,11 +483,32 @@ public final class Convertor {
 
         public Object convert(Object toConvert) {
             Date d = (Date) toConvert;
+
+            DateFormat dateFormat = DateFormat
+                    .getDateInstance(DateFormat.SHORT);
+
             toConvert = dateFormat.format(d);
             if (logConvertor) {
                 log("Convertor: CONVERT '" + d + "' => " + toConvert, null);
             }
             return toConvert;
+        }
+    };
+
+    private static final Callback Locale_to_String = new Callback() {
+        private static final String REVISION = "$Revision$";
+
+        public Object convert(Object toConvert) {
+            return LocaleConverter.SINGLETON.getAsString(null, null, toConvert);
+        }
+    };
+
+    private static final Callback TimeZone_to_String = new Callback() {
+        private static final String REVISION = "$Revision$";
+
+        public Object convert(Object toConvert) {
+            return TimeZoneConverter.SINGLETON.getAsString(null, null,
+                    toConvert);
         }
     };
 
@@ -482,6 +534,8 @@ public final class Convertor {
         callbacksToString.put(Boolean.TYPE, boolean_to_String);
         callbacksToString.put(Boolean.class, boolean_to_String);
         callbacksToString.put(java.util.Date.class, Date_to_String);
+        callbacksToString.put(java.util.Locale.class, Locale_to_String);
+        callbacksToString.put(java.util.TimeZone.class, TimeZone_to_String);
 
         callbacksFromString.put(Integer.TYPE, String_to_integer);
         callbacksFromString.put(Integer.class, String_to_integer);
@@ -498,6 +552,8 @@ public final class Convertor {
         callbacksFromString.put(Boolean.TYPE, String_to_boolean);
         callbacksFromString.put(Boolean.class, String_to_boolean);
         callbacksFromString.put(java.util.Date.class, String_to_Date);
+        callbacksFromString.put(java.util.Locale.class, String_to_Locale);
+        callbacksFromString.put(java.util.TimeZone.class, String_to_TimeZone);
 
         classConvertors.put(Double.class, TO_DOUBLE);
         classConvertors.put(Double.TYPE, TO_DOUBLE);

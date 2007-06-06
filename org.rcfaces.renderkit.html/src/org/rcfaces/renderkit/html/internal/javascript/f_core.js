@@ -1874,12 +1874,14 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @param HTMLFormElement form
+	 * @return boolean
 	 */
 	_CallFormCheckListeners: function(form) {
 		var checkListeners=form._checkListeners;
 		if (!checkListeners || !checkListeners.length) {
 		
-			f_core.Debug(f_core, "No check listeners to call ...");
+			f_core.Debug(f_core, "_CallFormCheckListeners: No check listeners to call ...");
 			return true;
 		}
 		
@@ -1915,7 +1917,7 @@ var f_core = {
 			}
 		}
 
-		f_core.Debug(f_core, "PreCheck="+(cfp?cfp.length:0)+" Check="+(ces?ces.length:0)+" PostCheck="+(cfs?cfs.length:0)+".");
+		f_core.Debug(f_core, "_CallFormCheckListeners: PreCheck="+(cfp?cfp.length:0)+" Check="+(ces?ces.length:0)+" PostCheck="+(cfs?cfs.length:0)+".");
 		
 		var ret=true;
 		try {
@@ -1927,7 +1929,7 @@ var f_core = {
 						checkPre.f_performCheckPre(form);
 						
 					} catch (x) {
-						f_core.Error(f_core, "PreCheck value throws an exception : "+checkPre, x);
+						f_core.Error(f_core, "_CallFormCheckListeners: PreCheck value throws an exception : "+checkPre, x);
 					}
 				}
 			}
@@ -1942,7 +1944,7 @@ var f_core = {
 						}
 						
 					} catch (x) {
-						f_core.Error(f_core, "Check value throws an exception : "+checkEvent, x);
+						f_core.Error(f_core, "_CallFormCheckListeners: Check value throws an exception : "+checkEvent, x);
 					}
 				}
 			}
@@ -1956,7 +1958,7 @@ var f_core = {
 						checkPost.f_performCheckPost(ret, form);
 
 					} catch (x) {
-						f_core.Error(f_core, "Post check value throws an exception : "+checkPost, x);
+						f_core.Error(f_core, "_CallFormCheckListeners: Post check value throws an exception : "+checkPost, x);
 					}
 				}
 			}
@@ -1972,7 +1974,7 @@ var f_core = {
 	 */
 	_CallFormResetListeners: function(form, event) {
 		var resetListeners=form._resetListeners;
-		if (!resetListeners || resetListeners.length<1) {
+		if (!resetListeners || !resetListeners.length) {
 			return true;
 		}
 		
@@ -3850,7 +3852,7 @@ var f_core = {
 		f_core.Assert(component && component.tagName, "f_core.GetTextSelection: Invalid component !");
 
 		if (f_core.IsInternetExplorer()) {
-			var caret = component.ownerDocument.selection.createRange()
+			var caret = component.ownerDocument.selection.createRange();
 			if (caret.parentElement()!=component) {
 				// Le composant actuellement sélectionné, n'est pas notre composant !
 				return null;

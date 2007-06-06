@@ -60,10 +60,10 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
     protected void preEncodeContainer() throws WriterException {
 
-        IComponentRenderContext componentContext = writer
+        IComponentRenderContext componentContext = htmlWriter
                 .getComponentRenderContext();
 
-        writer.enableJavaScript();
+        htmlWriter.enableJavaScript();
 
         mapSelectItems(componentContext, SelectItemMappers.SEARCH_IMAGE_MAPPER);
 

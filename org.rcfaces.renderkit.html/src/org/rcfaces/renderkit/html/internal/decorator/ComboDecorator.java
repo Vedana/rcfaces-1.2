@@ -59,7 +59,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
             return null;
         }
 
-        IComponentRenderContext componentRenderContext = writer
+        IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
         UIInput input = (UIInput) getComponent();
@@ -116,31 +116,31 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
 
         if (jsVersion == false) {
             if (hasChildren) {
-                writer.startElement(IHtmlWriter.OPTGROUP);
+                htmlWriter.startElement(IHtmlWriter.OPTGROUP);
 
                 if (text != null) {
-                    writer.writeLabel(text);
+                    htmlWriter.writeLabel(text);
                 }
 
                 return EVAL_NODE;
             }
 
-            writer.startElement(IHtmlWriter.OPTION);
+            htmlWriter.startElement(IHtmlWriter.OPTION);
 
-            writer.writeValue(value);
+            htmlWriter.writeValue(value);
 
             if (getContext().isValueSelected(selectItem, selectItemValue)) {
-                writer.writeSelected();
+                htmlWriter.writeSelected();
                 selectionCount++;
             }
 
             if (selectItem.isDisabled()) {
-                writer.writeDisabled();
+                htmlWriter.writeDisabled();
             }
 
             String description = selectItem.getDescription();
             if (selectItem.getDescription() != null) {
-                writer.writeTitle(description);
+                htmlWriter.writeTitle(description);
             }
 
             if (selectItem instanceof IClientDataItem) {
@@ -149,16 +149,16 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
                 if (clientDataSelectItem.isClientDataEmpty() == false) {
                     Map map = clientDataSelectItem.getClientDataMap();
 
-                    HtmlTools.writeClientData(writer, map);
+                    HtmlTools.writeClientData(htmlWriter, map);
                 }
             }
 
             if (text != null) {
                 // Le Label ne marche pas sous Gecko ! (argggggh !)
-                writer.writeText(text);
+                htmlWriter.writeText(text);
             }
 
-            writer.endElement(IHtmlWriter.OPTION);
+            htmlWriter.endElement(IHtmlWriter.OPTION);
         } else {
             SelectItemsJsContext selectItemsJsContext = (SelectItemsJsContext) selectItemsContext;
             if (hasChildren) {
@@ -284,7 +284,7 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
 
         if (hasChildren) {
             if (jsVersion == false) {
-                writer.endElement(IHtmlWriter.OPTGROUP);
+                htmlWriter.endElement(IHtmlWriter.OPTGROUP);
 
             } else {
                 ((SelectItemsJsContext) selectItemsContext).popVarId();

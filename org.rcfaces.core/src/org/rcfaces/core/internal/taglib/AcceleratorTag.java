@@ -1,211 +1,196 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AcceleratorComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.component.AcceleratorComponent;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class AcceleratorTag extends CameliaTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(AcceleratorTag.class);
 
-    private String keyPressListeners;
+	private static final Log LOG=LogFactory.getLog(AcceleratorTag.class);
 
-    private String forValue;
+	private String keyPressListeners;
+	private String forValue;
+	private String forItemValue;
+	private String keyBinding;
+	private String action;
+	private String actionListeners;
+	private String immediate;
+	private String value;
+	public String getComponentType() {
+		return AcceleratorComponent.COMPONENT_TYPE;
+	}
 
-    private String forItemValue;
+	public final String getKeyPressListener() {
+		return keyPressListeners;
+	}
 
-    private String keyBinding;
+	public final void setKeyPressListener(String keyPressListeners) {
+		this.keyPressListeners = keyPressListeners;
+	}
 
-    private String action;
+	public final String getFor() {
+		return forValue;
+	}
 
-    private String actionListeners;
+	public final void setFor(String forValue) {
+		this.forValue = forValue;
+	}
 
-    private String immediate;
+	public final String getForItemValue() {
+		return forItemValue;
+	}
 
-    private String value;
+	public final void setForItemValue(String forItemValue) {
+		this.forItemValue = forItemValue;
+	}
 
-    public String getComponentType() {
-        return AcceleratorComponent.COMPONENT_TYPE;
-    }
+	public final String getKeyBinding() {
+		return keyBinding;
+	}
 
-    public final String getKeyPressListener() {
-        return keyPressListeners;
-    }
+	public final void setKeyBinding(String keyBinding) {
+		this.keyBinding = keyBinding;
+	}
 
-    public final void setKeyPressListener(String keyPressListeners) {
-        this.keyPressListeners = keyPressListeners;
-    }
+	public final void setAction(String action) {
+		this.action=action;
+	}
 
-    public final String getFor() {
-        return forValue;
-    }
+	public final String getAction() {
+		return action;
+	}
 
-    public final void setFor(String forValue) {
-        this.forValue = forValue;
-    }
+	public final void setActionListener(String listeners) {
+		this.actionListeners = listeners;
+	}
 
-    public final String getForItemValue() {
-        return forItemValue;
-    }
+	public final String getActionListener() {
+		return actionListeners;
+	}
 
-    public final void setForItemValue(String forItemValue) {
-        this.forItemValue = forItemValue;
-    }
+	public final String getImmediate() {
+		return immediate;
+	}
 
-    public final String getKeyBinding() {
-        return keyBinding;
-    }
+	public final void setImmediate(String immediate) {
+		this.immediate = immediate;
+	}
 
-    public final void setKeyBinding(String keyBinding) {
-        this.keyBinding = keyBinding;
-    }
+	public final String getValue() {
+		return value;
+	}
 
-    public final void setAction(String action) {
-        this.action = action;
-    }
+	public final void setValue(String value) {
+		this.value = value;
+	}
 
-    public final String getAction() {
-        return action;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (AcceleratorComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  forValue='"+forValue+"'");
+			LOG.debug("  forItemValue='"+forItemValue+"'");
+			LOG.debug("  keyBinding='"+keyBinding+"'");
+			LOG.debug("  action='"+action+"'");
+			LOG.debug("  actionListeners='"+actionListeners+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setActionListener(String listeners) {
-        this.actionListeners = listeners;
-    }
+		if ((uiComponent instanceof AcceleratorComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'AcceleratorComponent'.");
+		}
 
-    public final String getActionListener() {
-        return actionListeners;
-    }
+		AcceleratorComponent component = (AcceleratorComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final String getImmediate() {
-        return immediate;
-    }
+		if (keyPressListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
+		}
 
-    public final void setImmediate(String immediate) {
-        this.immediate = immediate;
-    }
+		if (forValue != null) {
+			if (isValueReference(forValue)) {
+				ValueBinding vb = application.createValueBinding(forValue);
+				component.setValueBinding(Properties.FOR, vb);
 
-    public final String getValue() {
-        return value;
-    }
+			} else {
+				component.setFor(forValue);
+			}
+		}
 
-    public final void setValue(String value) {
-        this.value = value;
-    }
+		if (forItemValue != null) {
+			if (isValueReference(forItemValue)) {
+				ValueBinding vb = application.createValueBinding(forItemValue);
+				component.setValueBinding(Properties.FOR_ITEM_VALUE, vb);
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (AcceleratorComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  forValue='" + forValue + "'");
-            LOG.debug("  forItemValue='" + forItemValue + "'");
-            LOG.debug("  keyBinding='" + keyBinding + "'");
-            LOG.debug("  action='" + action + "'");
-            LOG.debug("  actionListeners='" + actionListeners + "'");
-        }
-        super.setProperties(uiComponent);
+			} else {
+				component.setForItemValue(forItemValue);
+			}
+		}
 
-        if ((uiComponent instanceof AcceleratorComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'AcceleratorComponent'.");
-        }
+		if (keyBinding != null) {
+			if (isValueReference(keyBinding)) {
+				ValueBinding vb = application.createValueBinding(keyBinding);
+				component.setValueBinding(Properties.KEY_BINDING, vb);
 
-        AcceleratorComponent component = (AcceleratorComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+			} else {
+				component.setKeyBinding(keyBinding);
+			}
+		}
 
-        if (keyPressListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
-        }
+		if (action != null) {
+			ListenersTools.parseAction(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, action);
+		}
 
-        if (forValue != null) {
-            if (isValueReference(forValue)) {
-                ValueBinding vb = application.createValueBinding(forValue);
-                component.setValueBinding(Properties.FOR, vb);
+		if (actionListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, actionListeners, true);
+		}
 
-            } else {
-                component.setFor(forValue);
-            }
-        }
+		if (immediate != null) {
+			if (isValueReference(immediate)) {
+				ValueBinding vb = application.createValueBinding(immediate);
+				component.setValueBinding(Properties.IMMEDIATE, vb);
 
-        if (forItemValue != null) {
-            if (isValueReference(forItemValue)) {
-                ValueBinding vb = application.createValueBinding(forItemValue);
-                component.setValueBinding(Properties.FOR_ITEM_VALUE, vb);
+			} else {
+				component.setImmediate(getBool(immediate));
+			}
+		}
 
-            } else {
-                component.setForItemValue(forItemValue);
-            }
-        }
+		if (value != null) {
+			if (isValueReference(value)) {
+				ValueBinding vb = application.createValueBinding(value);
+				component.setValueBinding(Properties.VALUE, vb);
 
-        if (keyBinding != null) {
-            if (isValueReference(keyBinding)) {
-                ValueBinding vb = application.createValueBinding(keyBinding);
-                component.setValueBinding(Properties.KEY_BINDING, vb);
+			} else {
+				component.setValue(value);
+			}
+		}
+	}
 
-            } else {
-                component.setKeyBinding(keyBinding);
-            }
-        }
+	public void release() {
+		keyPressListeners = null;
+		forValue = null;
+		forItemValue = null;
+		keyBinding = null;
+		action = null;
+		actionListeners = null;
+		immediate = null;
+		value = null;
 
-        if (action != null) {
-            ListenersTools.parseAction(facesContext, component,
-                    ListenersTools.KEY_PRESS_LISTENER_TYPE, action);
-        }
-
-        if (actionListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.KEY_PRESS_LISTENER_TYPE, actionListeners,
-                    true);
-        }
-
-        if (immediate != null) {
-            if (isValueReference(immediate)) {
-                ValueBinding vb = application.createValueBinding(immediate);
-                component.setValueBinding(Properties.IMMEDIATE, vb);
-
-            } else {
-                component.setImmediate(getBool(immediate));
-            }
-        }
-
-        if (value != null) {
-            if (isValueReference(value)) {
-                ValueBinding vb = application.createValueBinding(value);
-                component.setValueBinding(Properties.VALUE, vb);
-
-            } else {
-                component.setValue(value);
-            }
-        }
-    }
-
-    public void release() {
-        keyPressListeners = null;
-        forValue = null;
-        forItemValue = null;
-        keyBinding = null;
-        action = null;
-        actionListeners = null;
-        immediate = null;
-        value = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

@@ -1,69 +1,74 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-
-import org.rcfaces.core.internal.capability.IConvertValueHolder;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.internal.capability.IConvertValueHolder;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.AbstractCommandComponent;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
  */
-public abstract class AbstractConverterCommandComponent extends
-        AbstractCommandComponent implements IConvertValueHolder {
+public abstract class AbstractConverterCommandComponent extends AbstractCommandComponent implements 
+	IConvertValueHolder {
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            AbstractCommandComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] { "converter" }));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"converter"}));
+	}
 
-    public final void setConverter(String converterId) {
 
-        setConverter(null, converterId);
+	public final void setConverter(String converterId) {
 
-    }
 
-    public final void setConverter(FacesContext facesContext, String converterId) {
+			 setConverter(null, converterId);
+		
+	}
 
-        if (facesContext == null) {
-            facesContext = FacesContext.getCurrentInstance();
-        }
-        Converter converter = facesContext.getApplication().createConverter(
-                converterId);
-        this.setConverter(converter);
+	public final void setConverter(FacesContext facesContext, String converterId) {
 
-    }
 
-    public final void setConverter(Converter converter) {
+			if (facesContext==null) {
+				facesContext=FacesContext.getCurrentInstance();
+			}
+			Converter converter = facesContext.getApplication().createConverter(converterId);
+            this.setConverter(converter);
+		
+	}
 
-        engine.setProperty("converter", converter);
+	public final void setConverter(Converter converter) {
 
-    }
 
-    public final Converter getConverter() {
+        	engine.setProperty("converter", converter);
+		
+	}
 
-        return (Converter) engine.getProperty("converter", null);
+	public final Converter getConverter() {
 
-    }
 
-    public final Converter getConverter(FacesContext facesContext) {
+        	return (Converter)engine.getProperty("converter", null);
+		
+	}
 
-        return (Converter) engine.getProperty("converter", facesContext);
+	public final Converter getConverter(FacesContext facesContext) {
 
-    }
 
-    public final Object getLocalValue() {
+        	return (Converter)engine.getProperty("converter", facesContext);
+		
+	}
 
-        return engine.getLocalValue(Properties.VALUE);
+	public final Object getLocalValue() {
 
-    }
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+		return engine.getLocalValue(Properties.VALUE);
+		
+	}
+
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

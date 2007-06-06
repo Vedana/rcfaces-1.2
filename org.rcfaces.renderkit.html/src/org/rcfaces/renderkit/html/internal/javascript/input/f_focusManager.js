@@ -47,7 +47,7 @@ var __prototype={
 			this._initFocusId =  ch;
 		}
 		
-		if (f_core.IsGecko()) {
+		if (false && f_core.IsGecko()) {
 			var focusManager=this;
 			this._onFocus=function(event) {
 			
@@ -96,7 +96,7 @@ var __prototype={
 		}
 	},
 	f_finalize: function() {
-		if (f_core.IsGecko()) {
+		if (this._onFocus) {
 			f_core.RemoveEventListener(document, "focus", this._onFocus, document);
 			this._onFocus=undefined;
 
@@ -104,8 +104,8 @@ var __prototype={
 			this._onBlur=undefined;
 		}
 
-		this._initFocusId=undefined;
-		this._focusId=undefined;
+		// this._initFocusId=undefined; // String
+		// this._focusId=undefined; // String
 
 		this.f_super(arguments);
 	},
@@ -123,27 +123,39 @@ var __prototype={
 	 * @return String
 	 */
 	f_getFocusId: function() {
-		if (f_core.IsInternetExplorer()) {
-			var activeElement=document.activeElement;
-			if (activeElement) {
-				return activeElement.id;
-			}
-			return null;
-		}
+		var activeElement;
 		
-		return this._focusId;
+		if (f_core.IsInternetExplorer()) {
+			activeElement=document.activeElement;
+
+		} else if (f_core.IsGecko()) {
+			activeElement=window.getSelection().focusNode;
+		}
+
+		if (activeElement) {
+			return activeElement.id;
+		}
+		return null;
 	},
 	/**
 	 * @method public
 	 * @return HTMLElement
 	 */
 	f_getFocusComponent: function() {
-		var focusId=this.f_getFocusId();
-		if (!focusId) {
-			return null;
-		}
+		var activeElement;
 		
-		return f_core.GetElementByClientId(focusId, document);
+		if (f_core.IsInternetExplorer()) {
+			activeElement=document.activeElement;
+
+		} else if (f_core.IsGecko()) {
+			activeElement=window.getSelection().focusNode;
+		}
+
+		if (activeElement) {
+			return f_core.GetWindow(activeElement)._classLoader._init(activeElement, true);
+		}
+		 
+		return null;
 	},
 	
 	/**

@@ -19,9 +19,7 @@ var __prototype={
 			this._validatorParams=f_core.ParseParameters(validatorParams);
 		}
 		
-		if (f_class.IsClassDefined("f_messageContext")) {
-			f_core.AddCheckListener(this, this);	
-		}
+		f_core.AddCheckListener(this, this);	
 	},
 	/*
 	f_finalize: function() {

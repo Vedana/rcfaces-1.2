@@ -300,15 +300,19 @@ public class RcfacesContextImpl extends RcfacesContext implements
                     .getInitParameter(CAMELIA_CONFIG_FILES_PARAMETER);
 
             if (configFilenames != null) {
-                LOG.debug("Value for parameter '"
-                        + CAMELIA_CONFIG_FILES_PARAMETER + "' detected : '"
-                        + configFilenames + "'.");
+                // LOG.debug("Value for parameter '"+
+                // CAMELIA_CONFIG_FILES_PARAMETER + "' detected : '"+
+                // configFilenames + "'.");
 
                 StringTokenizer st = new StringTokenizer(configFilenames,
                         ",;\t \r\n");
 
                 for (; st.hasMoreTokens();) {
                     String filename = st.nextToken();
+
+                    LOG.debug("An item of value of parameter '"
+                            + CAMELIA_CONFIG_FILES_PARAMETER + "' detected : '"
+                            + filename + "'.");
 
                     URL url = contextClassLoader.getResource(filename);
 
@@ -327,6 +331,9 @@ public class RcfacesContextImpl extends RcfacesContext implements
                                 + "' does not exist.");
                         continue;
                     }
+
+                    LOG.debug("Configuration file '" + filename
+                            + "' registred.");
 
                     urls.add(url);
                 }

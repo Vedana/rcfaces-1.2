@@ -207,6 +207,10 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
 
             } else if (file instanceof IHierarchicalRepository.IModule) {
                 modified = verifyModuleModifications((IHierarchicalRepository.IModule) file);
+
+            } else {
+                super.verifyModifications();
+                return;
             }
 
             if (modified == false) {

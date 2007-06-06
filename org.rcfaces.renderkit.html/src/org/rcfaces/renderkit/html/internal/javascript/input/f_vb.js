@@ -189,10 +189,10 @@ var __static = {
 		var exp = "[0-9";
 		var sup = "";
 		if (validator.f_getBoolParameter("num.signed", false)) {
-			sup = validator.f_getParameter("num.negSign");
+			sup = validator.f_getParameter("num.negSign", "-");
 			exp += f_vb._BuildEscaped(sup);
 		}
-		if (validator.f_getIntParameter("num.decimal", 0) != 0) {
+		if (validator.f_getIntParameter("num.decimal", -1) !== 0) {
 			sup = validator.f_getParameter("num.decSign");
 			exp += f_vb._BuildEscaped(sup);
 		}
@@ -687,7 +687,7 @@ var __static = {
 		var set = "["+f_vb._BuildEscaped(sep)+"]";
 		var s = sep.charAt(0);
 		var	sTmp = inVal;
-		var h,m,l,r;
+		var h,m,l,r,sec;
 	
 		// Deal with empty string and required attribute
 		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
@@ -695,11 +695,13 @@ var __static = {
 		}
 	
 		// Get the day date
-		h = m = null;
+		h = m = sec=null;
 	
 		// Check if digits only
 		if (r = sTmp.match(/^\d*$/)) {
 			switch (l = sTmp.length) {
+				case 6: 
+					sec = sTmp.substr(4,2);					
 				case 4: 
 					m = sTmp.substr(2,2);
 				case 2: 
@@ -714,12 +716,12 @@ var __static = {
 			}
 		// Otherwise we have separators
 		} else {
-			var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?$";
+			var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?"+set+"(\\d{1,2})?$";
 			r = sTmp.match(new RegExp(exp));
 			if (r == null) {
 				sTmp = null;
 			} else {
-				h = r[1]; m = r[2];
+				h = r[1]; m = r[2]; sec=r[3];
 			}
 		}
 		// Check valid string
@@ -745,12 +747,19 @@ var __static = {
 		m = (m)? parseInt(m, 10):0;
 		if (m > 59) {
 			validator.f_setObject(null);
-			validator.f_setLastError("VALIDATION HEURE","Heure invalide");
+			validator.f_setLastError("VALIDATION HEURE","Minute invalide");
+			return null;
+		}
+		// Compute minute
+		sec = (sec)? parseInt(sec, 10):0;
+		if (sec > 59) {
+			validator.f_setObject(null);
+			validator.f_setLastError("VALIDATION HEURE","Seconde invalide");
 			return null;
 		}
 	
 		// Valid hour
-		sTmp = ((h<10)? "0":"")+h+s+((m<10)? "0":"")+m;
+		sTmp = ((h<10)? "0":"")+h+s+((m<10)? "0":"")+m+s+((sec<10)? "0":"")+sec;
 		validator.f_setObject(sTmp);
 		return sTmp;
 	},
@@ -812,9 +821,9 @@ var __static = {
 	
 		var sTmp = inVal;
 		var signed = validator.f_getBoolParameter("num.signed");
-		var decimal = validator.f_getIntParameter("num.cutdecimal", -1);
+		var decimal = validator.f_getIntParameter("num.cutDecimal", -1);
 		var dec = validator.f_getParameter("num.decSign");
-		var neg = validator.f_getParameter("num.negSign");
+		var neg = validator.f_getParameter("num.negSign","-");
 		var sep = validator.f_getParameter("num.sepSign");
 		
 		if (sep) {
@@ -854,6 +863,25 @@ var __static = {
 		} else if (decimal==0) {
 			d="";
 			dp="";
+		}
+		if (ip.length>1) {
+			// Retire les 0 au debut !
+			r=ip.match(new RegExp("^(0+)(\\d*)$"));
+			
+			if (r) {
+				ip=(r[2])?r[2]:"0";				
+			}
+		}
+		// Retire les 0 à la fin !
+		for(;dp.length>1;) {
+			if (dp.charAt(dp.length-1)!="0") {
+				break;
+			}
+			
+			dp=dp.substring(0, dp.length-1);
+		}
+		if (d && !dp.length) {
+			dp="0";
 		}
 		
 		// Rebuild string
@@ -899,9 +927,9 @@ var __static = {
 	 */
 	Formatter_num: function(validator, inVal) {
 		var sTmp = inVal;
-		var decimal = validator.f_getIntParameter("num.decimal", 0);
+		var decimal = validator.f_getIntParameter("num.decimal", -1);
 		var dec = validator.f_getParameter("num.decSign");
-		var neg = validator.f_getParameter("num.negSign");
+		var neg = validator.f_getParameter("num.negSign", "-");
 		var sep = validator.f_getParameter("num.sepSign");
 		
 		if (sep) {
@@ -924,7 +952,7 @@ var __static = {
 	
 		for(;ip.length>1 && ip.charAt(0)=="0";ip=ip.substring(1));
 	
-		if (!decimal) {
+		if (decimal===0) { // Attention au false ou -1
 			d="";
 			dp="";
 			
@@ -1140,7 +1168,7 @@ var __static = {
 	
 		f_getAsObject: function(validator, text) {
 			var dec = validator.f_getParameter("num.decSign");
-			var neg = validator.f_getParameter("num.negSign");
+			var neg = validator.f_getParameter("num.negSign", "-");
 			var sep = validator.f_getParameter("num.sepSign");
 
 			if (sep) {
@@ -1204,7 +1232,7 @@ var __static = {
 			
 			var ret="";
 			if (num<0) {
-				var sign=validator.f_getParameter("num.negSign");
+				var sign=validator.f_getParameter("num.negSign", "-");
 				if (sign) {
 					ret+=sign;
 				}
@@ -1212,8 +1240,13 @@ var __static = {
 				num=-num;
 			}
 			
-			var dec=validator.f_getIntParameter("num.decimal", 0);
-			var fixed=num.toFixed(dec);
+			var dec=validator.f_getIntParameter("num.decimal", -1);
+			var fixed;
+			if (dec>=0) {
+				fixed=num.toFixed(dec);
+			} else {
+				fixed=String(num);
+			}
 			
 			var sign=validator.f_getParameter("num.decSign");
 			if (sign) {

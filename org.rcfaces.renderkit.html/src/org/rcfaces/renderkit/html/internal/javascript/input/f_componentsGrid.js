@@ -658,9 +658,8 @@ var __prototype = {
 		var rowIdx=this._rowsPool.length;
 		
 		var idx=0;
-		row._index=arguments[idx++];
-		row.id=rowId;
-		
+		row.id=arguments[idx++];
+
 		if (this._selectable) {
 			row.onmousedown=f_grid.RowMouseDown;
 			row.onmouseup=f_core.CancelJsEventHandler;
@@ -671,6 +670,13 @@ var __prototype = {
 		
 		var properties=arguments[idx++];
 		
+		var rowValue=properties._value;
+		if (rowValue) {
+			row._index=rowValue;
+		} else {
+			row._index=row.id;
+		}
+				
 		var className=null;
 		
 		if (properties) {

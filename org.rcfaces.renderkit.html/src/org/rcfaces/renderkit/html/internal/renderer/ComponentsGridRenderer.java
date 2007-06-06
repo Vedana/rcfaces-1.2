@@ -71,7 +71,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     private static final String DEFAULT_ROW_CLASSNAMES[] = { "f_grid_row_even",
             "f_grid_row_odd" };
 
-    private static final boolean NOT_SUPPORTED_SERVER_SORT = true;
+    private static final boolean NOT_SUPPORTED_SERVER_SORT = false;
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMPONENTS_GRID;

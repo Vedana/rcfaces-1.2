@@ -86,7 +86,7 @@ var __prototype = {
 			|| typeof(value)=="boolean" 
 			|| (value instanceof Date)
 			|| (f_class.IsClassDefined("f_time") && (value instanceof f_time))
-			|| value===null || value===undefined, "Invalid value '"+value+"'.");
+			|| value===null || value===undefined, "fa_serializable.f_setProperty: Invalid value '"+value+"'.");
 		
 		var properties=this._properties;
 		if (!properties) {

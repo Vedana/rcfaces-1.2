@@ -51,16 +51,9 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
 
-        writer.startElement(IHtmlWriter.TABLE);
+        writer.startElement(IHtmlWriter.UL);
 
-        int cellPadding = toolFolderComponent.getToolBar().getItemPadding(
-                facesContext);
-        if (cellPadding < 0) {
-            cellPadding = 0;
-        }
-        writer.writeCellPadding(cellPadding);
-
-        writer.writeCellSpacing(0);
+        // writer.writeCellSpacing(0);
 
         writeHtmlAttributes(writer);
         writeJavaScriptAttributes(writer);
@@ -71,10 +64,6 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         if (verticalAlignment != null) {
             writer.writeVAlign(verticalAlignment);
         }
-
-        writer.startElement(IHtmlWriter.TBODY);
-
-        writer.startElement(IHtmlWriter.TR);
     }
 
     public boolean getRendersChildren() {
@@ -90,27 +79,26 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
 
     protected void encodeEndToolFolder(IHtmlWriter writer,
             ToolFolderComponent component) throws WriterException {
-        writer.endElement(IHtmlWriter.TR);
-
-        writer.endElement(IHtmlWriter.TBODY);
-
-        writer.endElement(IHtmlWriter.TABLE);
+        writer.endElement(IHtmlWriter.UL);
     }
 
     public void encodeChildren(FacesContext facesContext, UIComponent component)
             throws IOException {
+
+        ToolFolderComponent toolFolderComponent = (ToolFolderComponent) component;
 
         List children = component.getChildren();
 
         for (Iterator it = children.iterator(); it.hasNext();) {
             UIComponent child = (UIComponent) it.next();
 
-            encodeToolItem(facesContext, child);
+            encodeToolItem(facesContext, toolFolderComponent, child);
         }
     }
 
     protected void encodeToolItem(FacesContext facesContext,
-            UIComponent component) throws WriterException {
+            ToolFolderComponent toolFolderComponent, UIComponent component)
+            throws WriterException {
 
         Renderer renderer = getRenderer(facesContext, component);
 
@@ -125,13 +113,21 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
-        htmlWriter.startElement(IHtmlWriter.TD);
+        htmlWriter.startElement(IHtmlWriter.LI);
+
+        if (toolFolderComponent.getToolBar().isItemPaddingSetted()) {
+            int cellPadding = toolFolderComponent.getToolBar().getItemPadding(
+                    facesContext);
+            if (cellPadding >= 0) {
+                htmlWriter.writeStyle().writePadding(cellPadding + "px");
+            }
+        }
 
         htmlWriter.endComponent();
 
         ComponentTools.encodeRecursive(facesContext, component);
 
-        htmlWriter.endElement(IHtmlWriter.TD);
+        htmlWriter.endElement(IHtmlWriter.LI);
     }
 
 }

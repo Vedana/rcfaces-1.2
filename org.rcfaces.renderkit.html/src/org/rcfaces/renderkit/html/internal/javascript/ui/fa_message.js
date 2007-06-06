@@ -13,17 +13,15 @@
 var __prototype = {
 	fa_message: function() {
 
-		if (f_class.IsClassDefined("f_messageContext")) {
-			var messageContext=f_messageContext.Get(this);
-			
-			var messages=messageContext.f_listMessages(this);
-			
-			messageContext.f_addMessageListener(this);
-			
-			f_core.Debug(fa_message, "fa_message: message detected for component id='"+this.id+"' = "+messages);
-			if (messages.length) {
-				this.f_performMessageChanges(messageContext);
-			}
+		var messageContext=f_messageContext.Get(this);
+		
+		var messages=messageContext.f_listMessages(this);
+		
+		messageContext.f_addMessageListener(this);
+		
+		f_core.Debug(fa_message, "fa_message: message detected for component id='"+this.id+"' = "+messages);
+		if (messages.length) {
+			this.f_performMessageChanges(messageContext);
 		}
 	},
 	
