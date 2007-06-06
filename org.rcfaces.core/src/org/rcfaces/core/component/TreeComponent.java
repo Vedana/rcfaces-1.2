@@ -1,42 +1,41 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.component.capability.IExpansionValuesCapability;
-import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.internal.converter.CardinalityConverter;
-import org.rcfaces.core.component.capability.IExpandableCapability;
-import org.rcfaces.core.component.capability.ISelectionValuesCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.internal.tools.ExpansionTools;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import javax.faces.component.UISelectItem;
-import org.rcfaces.core.internal.tools.CheckTools;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.SelectionTools;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.component.UISelectItem;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IExpandableCapability;
+import org.rcfaces.core.component.capability.IExpansionValuesCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISelectionValuesCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.CardinalityConverter;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.ExpansionTools;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.internal.util.ComponentIterators;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The tree Component shows informations in an arborescent view.

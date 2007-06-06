@@ -1288,7 +1288,7 @@ var f_core = {
 		
 		// Appel de la validation ?
 		if (f_env.GetCheckValidation()) {
-			f_core._CallFormCheckListeners(form);
+			f_core._CallFormCheckListeners(form, true);
 		}
 	},
 	/**
@@ -1877,7 +1877,7 @@ var f_core = {
 	 * @param HTMLFormElement form
 	 * @return boolean
 	 */
-	_CallFormCheckListeners: function(form) {
+	_CallFormCheckListeners: function(form, afterReset) {
 		var checkListeners=form._checkListeners;
 		if (!checkListeners || !checkListeners.length) {
 		
@@ -1889,35 +1889,63 @@ var f_core = {
 		var cfs=undefined;
 		var ces=undefined;
 		
-		for(var i=0;i<checkListeners.length;i++) {
-			var checkListener=checkListeners[i];
+		var messageContext=f_messageContext.Get(form);
+		
+		for(var i=0;i<checkListeners.length;) {
+			var component= checkListeners[i++];
+			var checkListener=checkListeners[i++];
 			
-			var checkPre=checkListener.f_performCheckPre;
-			if (checkPre && typeof(checkPre)=="function") {
-				if (!cfp) {
-					cfp=new Array;
+			if (checkListener) {
+				var checkPre=checkListener.f_performCheckPre;
+				if (checkPre && typeof(checkPre)=="function") {
+					if (!cfp) {
+						cfp=new Array;
+					}
+					cfp.push(checkListener);
 				}
-				cfp.push(checkListener);
+							
+				var checkEvent=checkListener.f_performCheckValue;
+				if (checkEvent && typeof(checkEvent)=="function") {
+					if (!ces) {
+						ces=new Array;
+					}
+					ces.push(checkListener);
+				}
+				
+				var checkPost=checkListener.f_performCheckPost;
+				if (checkPost && typeof(checkPost)=="function") {
+					if (!cfs) {
+						cfs=new Array;
+					}
+					cfs.push(checkListener);
+				}
+				continue;
 			}
-						
-			var checkEvent=checkListener.f_performCheckValue;
-			if (checkEvent && typeof(checkEvent)=="function") {
-				if (!ces) {
-					ces=new Array;
-				}
-				ces.push(checkListener);
+
+			if (!ces) {
+				ces=new Array;
 			}
 			
-			var checkPost=checkListener.f_performCheckPost;
-			if (checkPost && typeof(checkPost)=="function") {
-				if (!cfs) {
-					cfs=new Array;
+			ces.push({
+				_component: component,
+				
+				f_performCheckValue: function(event) {
+					var detail=event.f_getDetail();
+					if (!detail) {
+						detail=0;
+					}
+					if (afterReset) {
+						detail|=f_event.RESET_DETAIL;
+					}
+					
+					return this._component.f_fireEvent(f_event.VALIDATION, null, form, event.f_getValue(), null, detail);
 				}
-				cfs.push(checkListener);
-			}
+			});			
 		}
 
 		f_core.Debug(f_core, "_CallFormCheckListeners: PreCheck="+(cfp?cfp.length:0)+" Check="+(ces?ces.length:0)+" PostCheck="+(cfs?cfs.length:0)+".");
+		
+		var event=new f_event(form, f_event.VALIDATION, null, form, true);
 		
 		var ret=true;
 		try {
@@ -1926,7 +1954,7 @@ var f_core = {
 					var checkPre=cfp[i];
 					
 					try {
-						checkPre.f_performCheckPre(form);
+						checkPre.f_performCheckPre(event);
 						
 					} catch (x) {
 						f_core.Error(f_core, "_CallFormCheckListeners: PreCheck value throws an exception : "+checkPre, x);
@@ -1935,12 +1963,15 @@ var f_core = {
 			}
 			
 			if (ces) {
-				for(var i=0;i<ces.length && ret;i++) {
+				for(var i=0;i<ces.length;i++) {
 					var checkEvent=ces[i];
 					
 					try {
-						if (checkEvent.f_performCheckValue(form)===false) {
+						if (checkEvent.f_performCheckValue(event)===false) {
 							ret=false;
+				
+							f_classLoader.Destroy(event);
+							event=new f_event(form, f_event.VALIDATION, null, form, ret);
 						}
 						
 					} catch (x) {
@@ -1949,18 +1980,22 @@ var f_core = {
 				}
 			}
 						
-		} finally {		
-			if (cfs) {
-				for(var i=0;i<cfs.length;i++) {
-					var checkPost=cfs[i];
-					
-					try {
-						checkPost.f_performCheckPost(ret, form);
-
-					} catch (x) {
-						f_core.Error(f_core, "_CallFormCheckListeners: Post check value throws an exception : "+checkPost, x);
+		} finally {
+			try {
+				if (cfs) {
+					for(var i=0;i<cfs.length;i++) {
+						var checkPost=cfs[i];
+						
+						try {
+							checkPost.f_performCheckPost(event);
+	
+						} catch (x) {
+							f_core.Error(f_core, "_CallFormCheckListeners: Post check value throws an exception : "+checkPost, x);
+						}
 					}
 				}
+			} finally {
+				f_classLoader.Destroy(event);					
 			}
 		}
 				
@@ -1993,10 +2028,13 @@ var f_core = {
 		return ret;
 	},
 	/**
-	 * @method public static hidden
+	 * @method hidden static hidden
+	 * @param HTMLElement component 
+	 * @param optional Object listener
+	 * @return void
 	 */
 	AddCheckListener: function(component, listener) {
-		f_core.Assert(typeof(listener)=="object", "f_core.AddCheckListener: Listener must be an object ! ("+listener+")");
+		f_core.Assert(listener===undefined || typeof(listener)=="object", "f_core.AddCheckListener: Listener must be an object ! ("+listener+")");
 		f_core.Assert(component.nodeType, "f_core.AddCheckListener: Invalid component parameter ("+component+")");
 
 		var form=this.GetParentForm(component);
@@ -2008,10 +2046,20 @@ var f_core = {
 			form._checkListeners=checkListeners;
 		}
 		
+		checkListeners.push(component);
 		checkListeners.push(listener);
 	},
 	/**
-	 * @method public static hidden
+	 * @method hidden static hidden
+	 * @param HTMLElement component 
+	 * @param Object listener
+	 * @return void
+	 */
+	RemoveCheckListener: function(component, listener) {
+		
+	},
+	/**
+	 * @method hidden static hidden
 	 */
 	AddResetListener: function(component) {
 		f_core.Assert(typeof(component)=="object", "f_core.AddResetListener: Listener is invalid !");
@@ -3130,7 +3178,7 @@ var f_core = {
 	/**
 	 * @method public static 
 	 * @param HTMLElement component
-	 * @param hidden boolean asyncMode
+	 * @param boolean asyncMode
 	 * @return boolean <code>true</code> is success !
 	 */
 	SetFocus: function(component, asyncMode) {

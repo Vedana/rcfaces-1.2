@@ -1,17 +1,16 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IBackgroundImageCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IForCapability;
+import java.util.Set;
+
+import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * An englobing tag that changes the style class surronuding a component when a particular message is emitted for a component.

@@ -30,11 +30,15 @@ var __static = {
 	
 	/**
 	 * @method public static
-	 * @param optional HTMLElement component A component.
+	 * @param optional HTMLElement component A component or an event.
 	 * @return f_messageContext
 	 */
 	Get: function(component) {
 		f_core.Assert(!arguments.length || typeof(component)=="object", "f_messageContext: Invalid component parameter ! ("+component+")");
+
+		if (component instanceof f_event) {
+			component=component.f_getComponent();
+		}
 
 		if (!component) {
 			var root=f_messageContext._Root;
@@ -179,7 +183,7 @@ var __prototype = {
 	 * @param HTMLElement form
 	 * @return void
 	 */
-	f_performCheckPre: function(form) {
+	f_performCheckPre: function(event) {
 		this._clearMessages(false);
 	},
 
@@ -189,14 +193,14 @@ var __prototype = {
 	 * @param HTMLElement form
 	 * @return boolean 
 	 */
-	f_performCheckPost: function(result, form) {
+	f_performCheckPost: function(event) {
 		// Methode appelée lors du check de la form !
 		
 		this._fireMessageEvent();
 		
-		if (!result) {
+		if (event.f_getDetail()===false) {
 			// C'est déjà bloqué !
-			return result;
+			return false;
 		}
 		
 		var messages=this._messages;

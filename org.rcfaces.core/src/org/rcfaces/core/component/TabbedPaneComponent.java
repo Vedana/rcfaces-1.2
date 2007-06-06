@@ -1,18 +1,17 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.rcfaces.core.internal.tools.TabbedPaneTools;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.ICloseEventCapability;
-import org.rcfaces.core.component.TabComponent;
-import org.rcfaces.core.component.CardBoxComponent;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+
 import org.rcfaces.core.component.capability.IClosableCapability;
+import org.rcfaces.core.component.capability.ICloseEventCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.iterator.ITabIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.TabbedPaneTools;
 
 /**
  * <p>The tabbedPane Component provides a way to show more information on a single page. It can download the data asynchronously via AJAX.</p>

@@ -32,6 +32,7 @@ import org.rcfaces.core.component.capability.IServiceEventCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.listener.BlurActionListener;
 import org.rcfaces.core.internal.listener.BlurScriptListener;
@@ -69,6 +70,8 @@ import org.rcfaces.core.internal.listener.SuggestionScriptListener;
 import org.rcfaces.core.internal.listener.UnsupportedListenerTypeException;
 import org.rcfaces.core.internal.listener.UserEventActionListener;
 import org.rcfaces.core.internal.listener.UserEventScriptListener;
+import org.rcfaces.core.internal.listener.ValidationActionListener;
+import org.rcfaces.core.internal.listener.ValidationScriptListener;
 import org.rcfaces.core.internal.util.ForwardMethodBinding;
 
 /**
@@ -470,6 +473,28 @@ public class ListenersTools {
 
             sortEventCapability.addResetListener(new ResetActionListener(
                     expression));
+        }
+    };
+
+    public static final IListenerType VALIDATION_LISTENER_TYPE = new AbstractListenerType() {
+        private static final String REVISION = "$Revision$";
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IValidationEventCapability validationEventCapability = (IValidationEventCapability) component;
+
+            validationEventCapability
+                    .addValidationListener(new ValidationScriptListener(
+                            scriptType, command));
+        }
+
+        public void addActionListener(UIComponent component,
+                Application application, String expression) {
+            IValidationEventCapability validationEventCapability = (IValidationEventCapability) component;
+
+            validationEventCapability
+                    .addValidationListener(new ValidationActionListener(
+                            expression));
         }
     };
 

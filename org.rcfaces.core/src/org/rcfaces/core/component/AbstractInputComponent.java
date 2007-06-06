@@ -1,52 +1,51 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
-import org.rcfaces.core.component.capability.IValueLockedCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import java.lang.Object;
-import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.component.capability.IFontCapability;
-import java.util.Collections;
 import java.util.Arrays;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IKeyEventCapability;
-import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
+import java.util.Collections;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
-import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.internal.component.CameliaOutputComponent;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import java.util.Map;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IHelpCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.MarginTools;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -71,12 +70,13 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	ITabIndexCapability,
 	ILookAndFeelCapability,
 	IPositionCapability,
+	IValidationEventCapability,
 	IMarginCapability,
 	ITextAlignmentCapability,
 	IImmediateCapability,
 	IUserEventCapability,
-	IHiddenModeCapability,
 	IWAIRoleCapability,
+	IHiddenModeCapability,
 	IPropertyChangeEventCapability,
 	IAccessKeyCapability,
 	IServerDataManager,
@@ -84,7 +84,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","keyPressListener","marginRight","fontSize","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","keyDownListener","fontName","focusListener","waiRole","keyUpListener","disabled","mouseOverListener","toolTipText","accessKey","userEventListener","marginBottom","helpURL","fontItalic","fontBold","textAlignment","immediate","y","visible","marginLeft","lookId","marginTop","tabIndex","valueLocked","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","keyPressListener","marginRight","fontSize","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","keyDownListener","fontName","focusListener","validationListener","waiRole","keyUpListener","disabled","mouseOverListener","toolTipText","accessKey","userEventListener","marginBottom","helpURL","fontItalic","fontBold","textAlignment","immediate","y","visible","marginLeft","lookId","marginTop","tabIndex","valueLocked","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -921,6 +921,18 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		engine.setProperty(Properties.Y, y);
 	}
 
+	public final void addValidationListener(org.rcfaces.core.event.IValidationListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeValidationListener(org.rcfaces.core.event.IValidationListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listValidationListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IValidationListener.class);
+	}
+
 	public java.lang.String getMarginBottom() {
 		return getMarginBottom(null);
 	}
@@ -1048,29 +1060,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
 	}
 
-	public int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "hiddenMode" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isHiddenModeSetted() {
-		return engine.isPropertySetted(Properties.HIDDEN_MODE);
-	}
-
-	public void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
 	public java.lang.String getWaiRole() {
 		return getWaiRole(null);
 	}
@@ -1092,6 +1081,29 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	public void setWaiRole(java.lang.String waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	public int getHiddenMode() {
+		return getHiddenMode(null);
+	}
+
+	/**
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
+	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "hiddenMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHiddenModeSetted() {
+		return engine.isPropertySetted(Properties.HIDDEN_MODE);
+	}
+
+	public void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
 	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {

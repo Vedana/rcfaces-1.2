@@ -1,25 +1,26 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import java.util.HashMap;
-import javax.faces.el.ValueBinding;
-import java.util.Date;
-import java.util.Collections;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IAutoTabCapability;
-import java.util.Set;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.AbstractCalendarComponent;
-import org.rcfaces.core.internal.manager.IValidationParameters;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import java.util.Map;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IAutoTabCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.internal.manager.IValidationParameters;
 
 /**
  * <p>The dateEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a date.</p>

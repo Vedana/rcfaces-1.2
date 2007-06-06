@@ -321,7 +321,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
                 FacesListener listeners[] = (FacesListener[]) entry.getValue();
 
                 EventsRenderer.encodeAttributeEventListeners(renderContext, sa,
-                        listenerType, listeners);
+                        listenerType, listeners, true);
             }
 
             if (sa.length() > 0) {

@@ -29,7 +29,7 @@ var __prototype={
 		this.f_super(arguments);
 	},
 	*/
-	f_performCheckValue: function() {		
+	f_performCheckValue: function(event) {		
 	},
 	/**
 	 * @method protected
@@ -133,10 +133,9 @@ var __prototype={
 			summary=resourceBundle.f_get(errorMessage.toUpperCase().replace(/\./g, "_")+"_SUMMARY");
 		}
 
-		var message=new f_messageObject(severity, summary, detail);
-		
 		var messageContext=f_messageContext.Get(this);
-		messageContext.f_addMessageObject(this, message);
+
+		messageContext.f_addMessageObject(this, severity, summary, detail);
 	},
 	
 	f_update: function() {

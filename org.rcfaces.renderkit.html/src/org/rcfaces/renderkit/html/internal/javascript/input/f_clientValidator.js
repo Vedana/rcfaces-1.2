@@ -575,7 +575,7 @@ var __prototype = {
 		this._onCheckError=undefined;  // function 
 		this._onCheckErrorArguments=undefined; // object[]
 	},
-	f_performCheckPre: function() {		
+	f_performCheckPre: function(event) {		
 		// On applique pour générer les erreurs !
 		var value=this.f_getInputValue(true);
 		
@@ -583,7 +583,7 @@ var __prototype = {
 		
 		f_core.Debug(f_clientValidator, "f_performCheckPre: Precheck of component '"+this._component.id+"' returns "+this._checked+" value='"+value+"'.");
 	},
-	f_performCheckValue: function() {
+	f_performCheckValue: function(event) {
 		if (this._checked) {
 			return true;
 		}

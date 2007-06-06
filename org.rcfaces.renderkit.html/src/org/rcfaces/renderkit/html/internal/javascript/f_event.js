@@ -257,6 +257,13 @@ var __static = {
 	CHECK:		"check",
 
 	/**
+	 * Validation event name.
+	 *
+	 * @field public static final String
+	 */
+	VALIDATION:	"validation",
+
+	/**
 	 * Close event name.
 	 *
 	 * @field public static final String
@@ -400,6 +407,11 @@ var __static = {
 	 * @field public static final number
 	 */
 	ACTIVATE_DETAIL: 0x100,
+
+	/**
+	 * @field public static final number
+	 */
+	RESET_DETAIL: 0x200,
 
 	/**
 	 * @method public static

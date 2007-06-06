@@ -188,7 +188,7 @@ var __prototype={
 
 		this.f_super(arguments);
 	},
-	f_performCheckValue: function() {		
+	f_performCheckValue: function(event) {		
 		var messageContext=f_messageContext.Get(this);
 		if (!messageContext) {
 			return;

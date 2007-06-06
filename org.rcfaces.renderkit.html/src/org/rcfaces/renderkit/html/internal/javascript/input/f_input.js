@@ -300,7 +300,7 @@ var __prototype = {
 		
 		this.f_getInput().value=value;
 	},
-	f_fireEvent: function(type, evt, item, value) {
+	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
 		if (type==f_event.CHANGE) {			
 			if (this.f_isReadOnly() || this.f_isDisabled()) {
 				return false;
@@ -311,7 +311,7 @@ var __prototype = {
 			}
 		}	
 		
-		return this.f_super(arguments, type, evt, item, value);
+		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
 	},
 	/**
 	 * @method public

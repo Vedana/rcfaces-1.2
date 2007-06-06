@@ -1,25 +1,23 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IWidthCapability;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.convert.Converter;
+
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.IInputTypeCapability;
-import org.rcfaces.core.component.capability.ITextPositionCapability;
-import org.rcfaces.core.internal.converter.InputTypeConverter;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextPositionCapability;
+import org.rcfaces.core.component.capability.IWidthCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.component.ToolFolderComponent;
-import org.rcfaces.core.component.UIImageItemComponent;
 
 /**
  * <b>EXPERIMENTAL</b>

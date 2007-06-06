@@ -131,6 +131,9 @@ public class CameliaComponentHandler extends ComponentHandler {
                 ListenersTools.LOAD_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("errorListener", new ListenerAttributeMetaData(
                 ListenersTools.ERROR_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("validationListener",
+                new ListenerAttributeMetaData(
+                        ListenersTools.VALIDATION_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("menuListener", new ListenerAttributeMetaData(
                 ListenersTools.MENU_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("mouseOutListener",

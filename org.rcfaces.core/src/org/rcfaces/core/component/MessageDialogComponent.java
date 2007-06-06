@@ -1,29 +1,30 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+
 import org.rcfaces.core.component.capability.IDialogPriorityCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 public class MessageDialogComponent extends CameliaInputComponent implements 
 	IImageCapability,
@@ -33,6 +34,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	IVisibilityCapability,
 	IDialogPriorityCapability,
 	IImmediateCapability,
+	IValidationEventCapability,
 	ISizeCapability,
 	IHiddenModeCapability,
 	ILookAndFeelCapability,
@@ -44,7 +46,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","imageURL","width","defaultValue","title","waiRole","hiddenMode","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","imageURL","width","defaultValue","validationListener","title","waiRole","hiddenMode","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId"}));
 	}
 
 	public MessageDialogComponent() {
@@ -231,6 +233,18 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 
 	public void setDialogPriority(int dialogPriority) {
 		engine.setProperty(Properties.DIALOG_PRIORITY, dialogPriority);
+	}
+
+	public final void addValidationListener(org.rcfaces.core.event.IValidationListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeValidationListener(org.rcfaces.core.event.IValidationListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listValidationListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IValidationListener.class);
 	}
 
 	public java.lang.String getWidth() {

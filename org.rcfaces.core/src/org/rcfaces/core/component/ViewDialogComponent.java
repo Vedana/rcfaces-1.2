@@ -1,27 +1,27 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+
 import org.rcfaces.core.component.capability.IDialogPriorityCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.internal.component.CameliaOutputComponent;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.CameliaOutputComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 public class ViewDialogComponent extends CameliaOutputComponent implements 
 	IImageCapability,

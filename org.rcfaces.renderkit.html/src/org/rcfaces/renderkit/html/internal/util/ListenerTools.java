@@ -12,6 +12,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.IClientValidationCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
@@ -27,6 +28,7 @@ import org.rcfaces.core.component.capability.IResetEventCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -121,6 +123,10 @@ public final class ListenerTools {
             return JavaScriptClasses.EVENT_LOAD_CST;
         }
 
+        public String getClientValidationEventName() {
+            return JavaScriptClasses.EVENT_CLIENT_VALIDATION_CST;
+        }
+
     };
 
     /**
@@ -204,6 +210,10 @@ public final class ListenerTools {
 
         public String getLoadEventName() {
             return JavaScriptClasses.EVENT_LOAD_ATTRIBUTE;
+        }
+
+        public String getClientValidationEventName() {
+            return JavaScriptClasses.EVENT_CLIENT_VALIDATION_ATTRIBUTE;
         }
 
     };
@@ -454,6 +464,20 @@ public final class ListenerTools {
             }
         }
 
+        if (component instanceof IClientValidationCapability) {
+            IValidationEventCapability clientValidationListenerCapability = (IValidationEventCapability) component;
+
+            FacesListener fls[] = clientValidationListenerCapability
+                    .listValidationListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getClientValidationEventName(), fls);
+            }
+        }
+
         if (map == null) {
             return Collections.EMPTY_MAP;
         }
@@ -467,6 +491,8 @@ public final class ListenerTools {
      */
     public interface INameSpace {
         String getBlurEventName();
+
+        String getClientValidationEventName();
 
         String getCheckEventName();
 

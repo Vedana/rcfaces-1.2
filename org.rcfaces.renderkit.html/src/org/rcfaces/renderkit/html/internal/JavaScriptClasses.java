@@ -216,7 +216,7 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_CLOSE_CST = "f_event.CLOSE";
 
-    public static final String EVENT_MENU = "menu";
+    // public static final String EVENT_MENU = "menu";
 
     public static final String EVENT_MENU_CST = "f_event.MENU";
 
@@ -224,13 +224,15 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_USER_CST = "f_event.USER";
 
-    public static final String EVENT_INIT = "init";
+    // public static final String EVENT_INIT = "init";
 
     public static final String EVENT_INIT_CST = "f_event.INIT";
 
     public static final String EVENT_LOAD = "load";
 
     public static final String EVENT_LOAD_CST = "f_event.LOAD";
+
+    public static final String EVENT_CLIENT_VALIDATION_CST = "f_event.VALIDATION";
 
     public static final String EVENT_BLUR_ATTRIBUTE = "blur";
 
@@ -272,4 +274,5 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_LOAD_ATTRIBUTE = "load";
 
+    public static final String EVENT_CLIENT_VALIDATION_ATTRIBUTE = "validation";
 }

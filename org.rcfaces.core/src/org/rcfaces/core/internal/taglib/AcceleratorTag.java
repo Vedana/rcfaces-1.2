@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AcceleratorComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.AcceleratorComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
 
 public class AcceleratorTag extends CameliaTag implements Tag {
 
@@ -18,6 +19,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(AcceleratorTag.class);
 
 	private String keyPressListeners;
+	private String validationListeners;
 	private String forValue;
 	private String forItemValue;
 	private String keyBinding;
@@ -35,6 +37,14 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 
 	public final void setKeyPressListener(String keyPressListeners) {
 		this.keyPressListeners = keyPressListeners;
+	}
+
+	public final String getValidationListener() {
+		return validationListeners;
+	}
+
+	public final void setValidationListener(String validationListeners) {
+		this.validationListeners = validationListeners;
 	}
 
 	public final String getFor() {
@@ -121,6 +131,10 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
 		}
 
+		if (validationListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
+		}
+
 		if (forValue != null) {
 			if (isValueReference(forValue)) {
 				ValueBinding vb = application.createValueBinding(forValue);
@@ -182,6 +196,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 
 	public void release() {
 		keyPressListeners = null;
+		validationListeners = null;
 		forValue = null;
 		forItemValue = null;
 		keyBinding = null;

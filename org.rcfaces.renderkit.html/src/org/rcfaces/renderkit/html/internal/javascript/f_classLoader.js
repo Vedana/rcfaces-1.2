@@ -446,7 +446,7 @@ f_classLoader.prototype = {
 		
 		var lazys=root.getElementsByTagName("v:init");
 		
-		f_core.Debug("f_classLoader", lazys.length+" lazy object(s) found !"+
+		f_core.Debug(f_classLoader, lazys.length+" lazy object(s) found !"+
 			((this._lazyIndex)?"(Current index="+this._lazyIndex+")":""));
 		
 		if (!lazys.length) {
@@ -495,12 +495,12 @@ f_classLoader.prototype = {
 						evaluatedFunction=eval(fct)
 	
 					} catch (x) {
-						f_core.Error("f_classLoader", "f_initializeObjects: Failed to evaluate function '"+fct+"'.", x);					
+						f_core.Error(f_classLoader, "f_initializeObjects: Failed to evaluate function '"+fct+"'.", x);					
 						continue;
 					}
 
 					if (typeof(evaluatedFunction)!="function") {
-						f_core.Error("f_classLoader", "f_initializeObjects: Invalid type of function '"+fct+"': "+evaluatedFunction);
+						f_core.Error(f_classLoader, "f_initializeObjects: Invalid type of function '"+fct+"': "+evaluatedFunction);
 						continue;
 					}
 					
@@ -526,7 +526,7 @@ f_classLoader.prototype = {
 				
 				var clz=f_core.GetAttribute(prev, "v:class");
 				if (!clz) {
-					f_core.Warn("f_classLoader", "f_initializeObjects: Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
+					f_core.Warn(f_classLoader, "f_initializeObjects: Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
 					continue;
 				}
 	
@@ -550,7 +550,7 @@ f_classLoader.prototype = {
 				path=p.tagName+((p.id)?("#"+p.id):"")+path;
 			}
 	
-			f_core.Error("f_classLoader", "f_initializeObjects: Unknown lazy component path='"+path+"'.");
+			f_core.Error(f_classLoader, "f_initializeObjects: Unknown lazy component path='"+path+"'.");
 		}
 		
 		for(var i=0;i<components.length;) {
@@ -563,7 +563,7 @@ f_classLoader.prototype = {
 					o = obj.call(this, node);
 				
 				} catch (x) {
-					f_core.Error("f_classLoader", "f_initializeObjects: Failed to initialize object by function '"+obj+"'.", x);
+					f_core.Error(f_classLoader, "f_initializeObjects: Failed to initialize object by function '"+obj+"'.", x);
 					continue;
 				}
 	
@@ -572,7 +572,7 @@ f_classLoader.prototype = {
 					o=this._init(obj);
 					
 				} catch (x) {
-					f_core.Error("f_classLoader", "f_initializeObjects: Failed to initialize object '"+obj.id+"'.", x);
+					f_core.Error(f_classLoader, "f_initializeObjects: Failed to initialize object '"+obj.id+"'.", x);
 					continue;
 				}
 			}
@@ -592,7 +592,7 @@ f_classLoader.prototype = {
 					completeComponent.call(o);
 		
 				} catch (x) {
-					f_core.Error("f_classLoader", "f_initializeObjects: f_completeComponent throws exception for component '"+o.id+"'.", x);
+					f_core.Error(f_classLoader, "f_initializeObjects: f_completeComponent throws exception for component '"+o.id+"'.", x);
 				}
 			}
 		}

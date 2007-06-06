@@ -1,17 +1,17 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.CheckButtonComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
  * <p>The imageCheckButton Component is a <a href="/comps/checkButtonComponent.html">checkButton Component</a> with an image instead of the checkBox.</p>

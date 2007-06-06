@@ -1,12 +1,11 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IRadioValueCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.component.MenuCheckItemComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import org.rcfaces.core.component.capability.IRadioValueCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * A menu item with a radiobutton (see attribute GroupName)

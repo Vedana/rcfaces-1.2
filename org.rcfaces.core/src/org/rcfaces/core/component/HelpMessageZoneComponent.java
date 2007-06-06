@@ -1,15 +1,14 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.internal.component.Properties;
 
 /**
  * <p>The helpMessageZone Component is a placeholder for help messages. The messages are shown when the pointer hover a component and this component has a "helpMessage" property.</p>

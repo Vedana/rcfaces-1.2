@@ -1,25 +1,22 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
 import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.MenuTools;
 
 /**
  * <p>The textAreaEntry Component is based on the standard HTML tag &lt;TEXTAREA&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>

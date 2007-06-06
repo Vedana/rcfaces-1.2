@@ -34,7 +34,8 @@ var __static = {
 			propertyChange: f_event.PROPERTY_CHANGE,
 			suggestion: f_event.SUGGESTION,
 			selection: f_event.SELECTION,
-			user: f_event.USER
+			user: f_event.USER,
+			validation: f_event.VALIDATION
 	},
 	
 	/**
@@ -328,6 +329,9 @@ var __prototype = {
 		case f_event.RESET: 
 			f_core.AddResetListener(this);
 			return;					
+		case f_event.VALIDATION: 
+			f_core.AddCheckListener(this);
+			return;					
 		}
 	},
 	/**
@@ -361,6 +365,9 @@ var __prototype = {
 		switch(type) {
 		case f_event.RESET: 
 			f_core.RemoveResetListener(this);
+			return;					
+		case f_event.VALIDATION: 
+			f_core.RemoveCheckListener(this);
 			return;					
 		}
 	}

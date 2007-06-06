@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.HiddenValueComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.HiddenValueComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
 
 public class HiddenValueTag extends CameliaTag implements Tag {
 
@@ -20,6 +21,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 	private String propertyChangeListeners;
 	private String immediate;
 	private String valueLocked;
+	private String validationListeners;
 	private String value;
 	private String converter;
 	public String getComponentType() {
@@ -48,6 +50,14 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 
 	public final void setValueLocked(String valueLocked) {
 		this.valueLocked = valueLocked;
+	}
+
+	public final String getValidationListener() {
+		return validationListeners;
+	}
+
+	public final void setValidationListener(String validationListeners) {
+		this.validationListeners = validationListeners;
 	}
 
 	public final String getValue() {
@@ -111,6 +121,10 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (validationListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
+		}
+
 		if (value != null) {
 			if (isValueReference(value)) {
 				ValueBinding vb = application.createValueBinding(value);
@@ -136,6 +150,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		immediate = null;
 		valueLocked = null;
+		validationListeners = null;
 		value = null;
 		converter = null;
 

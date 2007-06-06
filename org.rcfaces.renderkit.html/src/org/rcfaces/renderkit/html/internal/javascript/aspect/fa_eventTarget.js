@@ -121,11 +121,14 @@ var __prototype = {
 	 * @return boolean
 	 */
 	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail) {
-		if (!fa_eventTarget._EventId) {
-			fa_eventTarget._EventId=0;
+		var eventId=undefined;
+		if (f_core.IsDebugEnabled(fa_eventTarget)) {
+			if (!fa_eventTarget._EventId) {
+				fa_eventTarget._EventId=0;
+			}
+			eventId=fa_eventTarget._EventId++;
 		}
-		var eventId=fa_eventTarget._EventId++;
-
+		
 		var event;
 		if (type instanceof f_event) {
 			event=type;

@@ -1,14 +1,13 @@
 package org.rcfaces.core.component;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ICalendarModeCapability;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.CalendarModeConverter;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.AbstractCalendarComponent;
 
 /**
  * <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>

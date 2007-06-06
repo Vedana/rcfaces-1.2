@@ -1,32 +1,32 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import java.lang.Object;
-import org.rcfaces.core.component.capability.IServiceEventCapability;
-import java.util.TimeZone;
 import java.util.Arrays;
 import java.util.Collections;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import java.lang.String;
-import java.util.Map;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Locale;
-import org.rcfaces.core.internal.Constants;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.component.capability.IServiceEventCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
  * <p>The service Component is a non-visual component.</p>

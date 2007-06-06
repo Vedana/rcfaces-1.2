@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractInputComponent;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
@@ -47,6 +48,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private String lookId;
 	private String x;
 	private String y;
+	private String validationListeners;
 	private String marginBottom;
 	private String marginLeft;
 	private String marginRight;
@@ -54,8 +56,8 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private String textAlignment;
 	private String immediate;
 	private String userEventListeners;
-	private String hiddenMode;
 	private String waiRole;
+	private String hiddenMode;
 	private String propertyChangeListeners;
 	private String accessKey;
 	private String margins;
@@ -301,6 +303,14 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		this.y = y;
 	}
 
+	public final String getValidationListener() {
+		return validationListeners;
+	}
+
+	public final void setValidationListener(String validationListeners) {
+		this.validationListeners = validationListeners;
+	}
+
 	public final String getMarginBottom() {
 		return marginBottom;
 	}
@@ -357,20 +367,20 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		this.userEventListeners = userEventListeners;
 	}
 
-	public final String getHiddenMode() {
-		return hiddenMode;
-	}
-
-	public final void setHiddenMode(String hiddenMode) {
-		this.hiddenMode = hiddenMode;
-	}
-
 	public final String getWaiRole() {
 		return waiRole;
 	}
 
 	public final void setWaiRole(String waiRole) {
 		this.waiRole = waiRole;
+	}
+
+	public final String getHiddenMode() {
+		return hiddenMode;
+	}
+
+	public final void setHiddenMode(String hiddenMode) {
+		this.hiddenMode = hiddenMode;
 	}
 
 	public final String getPropertyChangeListener() {
@@ -442,8 +452,8 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			LOG.debug("  marginTop='"+marginTop+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  immediate='"+immediate+"'");
-			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
@@ -706,6 +716,10 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (validationListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
+		}
+
 		if (marginBottom != null) {
 			if (isValueReference(marginBottom)) {
 				ValueBinding vb = application.createValueBinding(marginBottom);
@@ -770,16 +784,6 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
-		if (hiddenMode != null) {
-			if (isValueReference(hiddenMode)) {
-				ValueBinding vb = application.createValueBinding(hiddenMode);
-				component.setValueBinding(Properties.HIDDEN_MODE, vb);
-
-			} else {
-				component.setHiddenMode(hiddenMode);
-			}
-		}
-
 		if (waiRole != null) {
 			if (isValueReference(waiRole)) {
 				ValueBinding vb = application.createValueBinding(waiRole);
@@ -787,6 +791,16 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setWaiRole(waiRole);
+			}
+		}
+
+		if (hiddenMode != null) {
+			if (isValueReference(hiddenMode)) {
+				ValueBinding vb = application.createValueBinding(hiddenMode);
+				component.setValueBinding(Properties.HIDDEN_MODE, vb);
+
+			} else {
+				component.setHiddenMode(hiddenMode);
 			}
 		}
 
@@ -863,6 +877,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		lookId = null;
 		x = null;
 		y = null;
+		validationListeners = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;
@@ -870,8 +885,8 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		textAlignment = null;
 		immediate = null;
 		userEventListeners = null;
-		hiddenMode = null;
 		waiRole = null;
+		hiddenMode = null;
 		propertyChangeListeners = null;
 		accessKey = null;
 		margins = null;

@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.MessageDialogComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.MessageDialogComponent;
-import javax.faces.application.Application;
 
 public class MessageDialogTag extends CameliaTag implements Tag {
 
@@ -24,6 +25,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 	private String visible;
 	private String dialogPriority;
 	private String immediate;
+	private String validationListeners;
 	private String width;
 	private String height;
 	private String hiddenMode;
@@ -92,6 +94,14 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 
 	public final void setImmediate(String immediate) {
 		this.immediate = immediate;
+	}
+
+	public final String getValidationListener() {
+		return validationListeners;
+	}
+
+	public final void setValidationListener(String validationListeners) {
+		this.validationListeners = validationListeners;
 	}
 
 	public final String getWidth() {
@@ -277,6 +287,10 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (validationListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
+		}
+
 		if (width != null) {
 			if (isValueReference(width)) {
 				ValueBinding vb = application.createValueBinding(width);
@@ -380,6 +394,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		visible = null;
 		dialogPriority = null;
 		immediate = null;
+		validationListeners = null;
 		width = null;
 		height = null;
 		hiddenMode = null;

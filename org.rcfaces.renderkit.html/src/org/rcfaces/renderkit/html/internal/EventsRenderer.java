@@ -7,6 +7,7 @@ package org.rcfaces.renderkit.html.internal;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -130,7 +131,8 @@ public class EventsRenderer {
 
     public static void encodeAttributeEventListeners(
             IRenderContext renderContext, StringAppender sb,
-            String listenerType, FacesListener[] facesListeners) {
+            String listenerType, FacesListener[] facesListeners,
+            boolean submitSupport) {
 
         int cnt = 0;
 
@@ -171,6 +173,12 @@ public class EventsRenderer {
             String command = scriptListener.getCommand();
 
             if (DEFAULT_SUBMIT.equals(command)) {
+                if (submitSupport == false) {
+                    throw new FacesException("'" + DEFAULT_SUBMIT
+                            + "' keyword is not supported byte listener type '"
+                            + listenerType + "'.");
+                }
+
                 command = DEFAULT_SUBMIT_JAVA_SCRIPT;
                 clientSubmit = true;
                 needSubmit = false;

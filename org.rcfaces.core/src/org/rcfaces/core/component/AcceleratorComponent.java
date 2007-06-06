@@ -1,14 +1,15 @@
 package org.rcfaces.core.component;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IKeyPressEventCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.internal.component.CameliaCommandComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IKeyPressEventCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IImmediateCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IForCapability;
 
 /**
  * <p>The accelerator Component is a non-visual component.</p>
@@ -23,13 +24,14 @@ import org.rcfaces.core.component.capability.IForCapability;
 public class AcceleratorComponent extends CameliaCommandComponent implements 
 	IKeyPressEventCapability,
 	IImmediateCapability,
+	IValidationEventCapability,
 	IForCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.accelerator";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"forItemValue","keyBinding","immediate","keyPressListener","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"forItemValue","keyBinding","validationListener","immediate","keyPressListener","for"}));
 	}
 
 	public AcceleratorComponent() {
@@ -51,6 +53,18 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 
 	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
+	}
+
+	public final void addValidationListener(org.rcfaces.core.event.IValidationListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeValidationListener(org.rcfaces.core.event.IValidationListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listValidationListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IValidationListener.class);
 	}
 
 	public java.lang.String getFor() {

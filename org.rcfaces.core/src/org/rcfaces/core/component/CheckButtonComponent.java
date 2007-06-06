@@ -1,19 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ISelectedCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import java.util.HashSet;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
-import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Set;
+
+import javax.faces.convert.Converter;
+
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectedCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 
 /**
  * <p>The checkButton Component is equivalent to the &lt;INPUT TYPE="checkbox"&gt; HTML tag.</p>

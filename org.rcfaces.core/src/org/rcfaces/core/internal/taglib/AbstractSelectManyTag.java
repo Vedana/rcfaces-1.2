@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AbstractSelectManyComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.AbstractSelectManyComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
 
 public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 
@@ -47,6 +48,7 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 	private String lookId;
 	private String x;
 	private String y;
+	private String validationListeners;
 	private String marginBottom;
 	private String marginLeft;
 	private String marginRight;
@@ -298,6 +300,14 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 
 	public final void setY(String y) {
 		this.y = y;
+	}
+
+	public final String getValidationListener() {
+		return validationListeners;
+	}
+
+	public final void setValidationListener(String validationListeners) {
+		this.validationListeners = validationListeners;
 	}
 
 	public final String getMarginBottom() {
@@ -697,6 +707,10 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (validationListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
+		}
+
 		if (marginBottom != null) {
 			if (isValueReference(marginBottom)) {
 				ValueBinding vb = application.createValueBinding(marginBottom);
@@ -844,6 +858,7 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 		lookId = null;
 		x = null;
 		y = null;
+		validationListeners = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;

@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class ScopeComponent extends CameliaBaseComponent implements 
 	IVariableScopeCapability {
