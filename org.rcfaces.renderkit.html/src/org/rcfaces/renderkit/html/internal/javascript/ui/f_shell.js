@@ -125,7 +125,8 @@ var __static = {
 	    f_core.Assert(typeof(functionToExecute) == "function", "f_shell.ExecuteOnDocComplete bad parameter "+functionToExecute);
 		if (f_shell._DocComplete) {
 		    f_core.Debug(f_shell, "ExecuteOnDocComplete: executing");
-			functionToExecute();
+		    // Add timeout to empty the stack and allow IE to draw an iframe from an IMG !!!
+			window.setTimeout(functionToExecute,0);
 		} else if (!f_shell._OnDocComplete) {
 		    f_core.Debug(f_shell, "ExecuteOnDocComplete: delaying");
 			f_shell._OnDocComplete = functionToExecute;
@@ -345,6 +346,7 @@ var __static = {
 	 *  </p>
 	 *
 	 * @method protected static
+	 * @return f_shell
 	 */
 	GetInstance: function() {
      	f_core.Debug(f_shell, "GetInstance: entering");
@@ -352,6 +354,25 @@ var __static = {
 			return f_shell._ObjIFrame._iframe._modalShell;
 		}
 		return undefined;
+	},
+
+	/**
+	 *  <p>get the current instance from the parent iframe 
+	 *  </p>
+	 *
+	 * @method protected static
+	 * @param optionnal HTMLDocumentElement doc
+	 * @return f_shell
+	 */
+	GetParentShell: function(win) {
+     	f_core.Assert(!win || win.document, "f_shell.GetParentShell: bad parameter type "+win);
+     	f_core.Debug(f_shell, "GetParentShell: entering");
+     	
+		var iframe = win.frameElement;
+		if (iframe) {
+			return iframe._modalShell;
+		}
+		return null;
 	},
 
 	/**
