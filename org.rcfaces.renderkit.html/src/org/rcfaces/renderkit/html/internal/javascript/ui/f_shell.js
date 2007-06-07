@@ -360,8 +360,8 @@ var __static = {
 	 *  <p>get the current instance from the parent iframe 
 	 *  </p>
 	 *
-	 * @method protected static
-	 * @param optionnal HTMLDocumentElement doc
+	 * @method public static
+	 * @param optionnal Window win
 	 * @return f_shell
 	 */
 	GetParentShell: function(win) {
