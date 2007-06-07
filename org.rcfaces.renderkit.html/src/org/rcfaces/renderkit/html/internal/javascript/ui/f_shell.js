@@ -361,7 +361,7 @@ var __static = {
 	 *  </p>
 	 *
 	 * @method public static
-	 * @param optionnal Window win
+	 * @param optional Window win
 	 * @return f_shell
 	 */
 	GetParentShell: function(win) {
