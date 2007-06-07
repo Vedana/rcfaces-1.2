@@ -47,28 +47,28 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 		setId(componentId);
 	}
 
-	public final ITabIterator listTabs() {
+	public ITabIterator listTabs() {
 
 
 				return TabbedPaneTools.listTabs(this);				
 			
 	}
 
-	public final TabComponent getSelectedTab() {
+	public TabComponent getSelectedTab() {
 
 
 				return (TabComponent)getSelectedCard();
 			
 	}
 
-	public final TabComponent getSelectedTab(FacesContext facesContext) {
+	public TabComponent getSelectedTab(FacesContext facesContext) {
 
 
 				return (TabComponent)getSelectedCard(facesContext);
 			
 	}
 
-	public final void select(TabComponent tab) {
+	public void select(TabComponent tab) {
 
 
 				super.select(tab);

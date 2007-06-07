@@ -112,133 +112,133 @@ public class DataGridComponent extends AbstractGridComponent implements
 		setId(componentId);
 	}
 
-	public final void setSortedChildren(UIComponent[] components) {
+	public void setSortedChildren(UIComponent[] components) {
 
 
 				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, components);
 			
 	}
 
-	public final UIComponent[] getSortedChildren() {
+	public UIComponent[] getSortedChildren() {
 
 
 				return SortTools.getSortedChildren(null, this, engine, DataColumnComponent.class);
 			
 	}
 
-	public final UIComponent[] getOrderedChildren() {
+	public UIComponent[] getOrderedChildren() {
 
 
 				return OrderTools.getOrderedChildren(null, this, engine, DataColumnComponent.class);
 			
 	}
 
-	public final void setOrderedChildren(UIComponent[] components) {
+	public void setOrderedChildren(UIComponent[] components) {
 
 
 				OrderTools.setOrderedChildren(null, this, engine, DataColumnComponent.class, components);
 			
 	}
 
-	public final IColumnIterator listColumns() {
+	public IColumnIterator listColumns() {
 
 
 			return GridTools.listColumns(this, org.rcfaces.core.component.DataColumnComponent.class);
 			
 	}
 
-	public final IDataColumnIterator listDataColumns() {
+	public IDataColumnIterator listDataColumns() {
 
 
 			return GridTools.listDataColumns(this);
 			
 	}
 
-	public final void setSelectionCardinality(String cardinality) {
+	public void setSelectionCardinality(String cardinality) {
 
 
 			setSelectionCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
 		
 	}
 
-	public final void setCheckCardinality(String cardinality) {
+	public void setCheckCardinality(String cardinality) {
 
 
 			setCheckCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
 		
 	}
 
-	public final int getSelectedValuesCount() {
+	public int getSelectedValuesCount() {
 
 
 				return SelectionTools.getCount(getSelectedValues());
 			
 	}
 
-	public final Object getFirstSelectedValue() {
+	public Object getFirstSelectedValue() {
 
 
 				return SelectionTools.getFirst(getSelectedValues(), null);
 			
 	}
 
-	public final Object[] listSelectedValues() {
+	public Object[] listSelectedValues() {
 
 
 				return SelectionTools.listValues(getSelectedValues(), getValue());
 			
 	}
 
-	public final int getCheckedValuesCount() {
+	public int getCheckedValuesCount() {
 
 
 				return CheckTools.getCount(getCheckedValues());
 			
 	}
 
-	public final Object getFirstCheckedValue() {
+	public Object getFirstCheckedValue() {
 
 
 				return CheckTools.getFirst(getCheckedValues(), null);
 			
 	}
 
-	public final Object[] listCheckedValues() {
+	public Object[] listCheckedValues() {
 
 
 				return CheckTools.listValues(getCheckedValues(), getValue());
 			
 	}
 
-	public final DataColumnComponent[] getSortedColumns() {
+	public DataColumnComponent[] getSortedColumns() {
 
 
 				return (DataColumnComponent[])getSortedChildren();
 			
 	}
 
-	public final DataColumnComponent getFirstSortedColumn() {
+	public DataColumnComponent getFirstSortedColumn() {
 
 
 				return (DataColumnComponent)SortTools.getFirstSortedChild(null, this, engine, DataColumnComponent.class );
 			
 	}
 
-	public final void setSortedColumn(DataColumnComponent dataColumn) {
+	public void setSortedColumn(DataColumnComponent dataColumn) {
 
 
 				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, new DataColumnComponent[] { dataColumn });
 			
 	}
 
-	public final void setSortedColumns(DataColumnComponent[] dataColumns) {
+	public void setSortedColumns(DataColumnComponent[] dataColumns) {
 
 
 				setSortedChildren(dataColumns);
 			
 	}
 
-	public final ISortedComponent[] listSortedComponents(FacesContext context) {
+	public ISortedComponent[] listSortedComponents(FacesContext context) {
 
 
 				return GridTools.listSortedComponents(context, this);
@@ -248,7 +248,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	/**
 
 	 */
-	public final void select(Object rowValue) {
+	public void select(Object rowValue) {
 
 
 				GridTools.select(null, this, rowValue);
@@ -259,7 +259,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Selects the item at the given zero-relative index in the receiver. If the item at the index was already selected, it remains selected. Indices that are out of range are ignored.
 	 * @param index the index of the item to select
 	 */
-	public final void select(int index) {
+	public void select(int index) {
 
 
 				GridTools.select(null, this, index);
@@ -271,7 +271,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * If the item at a given index is not selected, it is selected. If the item at a given index was already selected, it remains selected. Indices that are out of range and duplicate indices are ignored. If the receiver is single-select and multiple indices are specified, then all indices are ignored.
 	 * @param indices the array of indices for the items to select
 	 */
-	public final void select(int[] indices) {
+	public void select(int[] indices) {
 
 
 				GridTools.select(null, this, indices);
@@ -284,7 +284,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * @param start the start of the range
 	 * @param end the end of the range
 	 */
-	public final void select(int start, int end) {
+	public void select(int start, int end) {
 
 
 				GridTools.select(null, this, start, end);
@@ -295,14 +295,14 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Selects all of the items in the receiver.
 	 * If the receiver is single-select, do nothing.
 	 */
-	public final void selectAll() {
+	public void selectAll() {
 
 
 				GridTools.selectAll(null, this);
 			
 	}
 
-	public final void deselect(Object rowValue) {
+	public void deselect(Object rowValue) {
 
 
 				GridTools.deselect(null, this, rowValue);
@@ -313,7 +313,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Deselects the item at the given zero-relative index in the receiver. If the item at the index was already deselected, it remains deselected. Indices that are out of range are ignored.
 	 * @param index the index of the item to deselect
 	 */
-	public final void deselect(int index) {
+	public void deselect(int index) {
 
 
 				GridTools.deselect(null, this, index);
@@ -324,7 +324,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * Deselects the items at the given zero-relative indices in the receiver. If the item at the given zero-relative index in the receiver is selected, it is deselected. If the item at the index was not selected, it remains deselected. Indices that are out of range and duplicate indices are ignored.
 	 * @param indices the array of indices for the items to deselect
 	 */
-	public final void deselect(int[] indices) {
+	public void deselect(int[] indices) {
 
 
 				GridTools.deselect(null, this, indices);
@@ -336,7 +336,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 	 * @param start the start index of the items to deselect
 	 * @param end the end index of the items to deselect
 	 */
-	public final void deselect(int start, int end) {
+	public void deselect(int start, int end) {
 
 
 				GridTools.deselect(null, this, start, end);
@@ -346,14 +346,14 @@ public class DataGridComponent extends AbstractGridComponent implements
 	/**
 	 * Deselects all selected items in the receiver.
 	 */
-	public final void deselectAll() {
+	public void deselectAll() {
 
 
 				GridTools.deselectAll(null, this);
 			
 	}
 
-	public final Object getCursorValue(FacesContext facesContext) {
+	public Object getCursorValue(FacesContext facesContext) {
 
 
 				Object cursorValue=engine.getValue(Properties.CURSOR_VALUE, facesContext);
@@ -365,7 +365,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 			
 	}
 
-	public final Object getSelectedValues(FacesContext facesContext) {
+	public Object getSelectedValues(FacesContext facesContext) {
 
 
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
@@ -393,7 +393,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 			
 	}
 
-	public final Object getCheckedValues(FacesContext facesContext) {
+	public Object getCheckedValues(FacesContext facesContext) {
 
 
 				if (engine.isPropertySetted(Properties.CHECKED_VALUES)) {
@@ -724,21 +724,21 @@ public class DataGridComponent extends AbstractGridComponent implements
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
-	public final IMenuComponent getMenu(String menuId) {
+	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
 		
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuIterator listMenus() {
+	public IMenuIterator listMenus() {
 
 
 		return MenuTools.listMenus(this);
@@ -871,7 +871,7 @@ public class DataGridComponent extends AbstractGridComponent implements
 		return engine.getBoolProperty(Properties.PAGED, false, facesContext);
 	}
 
-	public final boolean isPagedSetted() {
+	public boolean isPagedSetted() {
 
 
 			return engine.isPropertySetted(Properties.PAGED);

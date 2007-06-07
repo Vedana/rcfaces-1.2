@@ -3,17 +3,11 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import javax.faces.event.FacesListener;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
-import org.rcfaces.renderkit.html.internal.EventsRenderer;
-import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
 /**
  * 

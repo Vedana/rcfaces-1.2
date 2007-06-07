@@ -49,14 +49,14 @@ public class TabComponent extends CardComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
 	}
 
-	public final TabbedPaneComponent getTabbedPane() {
+	public TabbedPaneComponent getTabbedPane() {
 
 
 				return (TabbedPaneComponent)getCardBox();
@@ -339,7 +339,7 @@ public class TabComponent extends CardComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);
@@ -369,21 +369,21 @@ public class TabComponent extends CardComponent implements
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
-	public final IMenuComponent getMenu(String menuId) {
+	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
 		
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuIterator listMenus() {
+	public IMenuIterator listMenus() {
 
 
 		return MenuTools.listMenus(this);

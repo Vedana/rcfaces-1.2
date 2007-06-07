@@ -62,7 +62,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 	}
 
 
-	public final void setClientData(String name, ValueBinding value) {
+	public void setClientData(String name, ValueBinding value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
@@ -71,7 +71,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final void setServerData(String name, ValueBinding value) {
+	public void setServerData(String name, ValueBinding value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
@@ -80,21 +80,21 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final void setHiddenMode(String hiddenMode) {
+	public void setHiddenMode(String hiddenMode) {
 
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
 	}
 
-	public final void setMargins(String margins) {
+	public void setMargins(String margins) {
 
 
 				MarginTools.setMargins(this, margins);
 			
 	}
 
-	public final String getClientData(String name, FacesContext facesContext) {
+	public String getClientData(String name, FacesContext facesContext) {
 
 
 		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
@@ -106,7 +106,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final String[] listClientDataKeys(FacesContext facesContext) {
+	public String[] listClientDataKeys(FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
@@ -118,7 +118,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Map getClientDataMap(FacesContext facesContext) {
+	public Map getClientDataMap(FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
@@ -130,7 +130,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Object getServerData(String name, FacesContext facesContext) {
+	public Object getServerData(String name, FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -142,7 +142,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final String[] listServerDataKeys(FacesContext facesContext) {
+	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -154,7 +154,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Map getServerDataMap(FacesContext facesContext) {
+	public Map getServerDataMap(FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
@@ -184,14 +184,14 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Map getClientDataMap() {
+	public Map getClientDataMap() {
 
 
 		return getClientDataMap(null);
 		
 	}
 
-	public final int getClientDataCount() {
+	public int getClientDataCount() {
 
 
 		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
@@ -203,21 +203,21 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final String getClientData(String name) {
+	public String getClientData(String name) {
 
 
 		 return getClientData(name, null);
 		
 	}
 
-	public final String[] listClientDataKeys() {
+	public String[] listClientDataKeys() {
 
 
 			return listClientDataKeys(null);
 		
 	}
 
-	public final String removeClientData(String name) {
+	public String removeClientData(String name) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
@@ -229,7 +229,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final String setClientData(String name, String value) {
+	public String setClientData(String name, String value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
@@ -238,7 +238,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Object getServerData(String name) {
+	public Object getServerData(String name) {
 
 
 		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -250,7 +250,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Object removeServerData(String name) {
+	public Object removeServerData(String name) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -262,14 +262,14 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Map getServerDataMap() {
+	public Map getServerDataMap() {
 
 
 		return getServerDataMap(null);
 		
 	}
 
-	public final int getServerDataCount() {
+	public int getServerDataCount() {
 
 
 		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -281,7 +281,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final Object setServerData(String name, Object value) {
+	public Object setServerData(String name, Object value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
@@ -290,7 +290,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public final String[] listServerDataKeys() {
+	public String[] listServerDataKeys() {
 
 
 			return listServerDataKeys(null);
@@ -678,7 +678,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
-	public final Boolean getVisibleState() {
+	public Boolean getVisibleState() {
 
 
 			return getVisibleState(null);

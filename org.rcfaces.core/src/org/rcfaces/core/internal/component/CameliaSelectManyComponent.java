@@ -20,8 +20,11 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.event.IValidationListener;
+import org.rcfaces.core.event.ValidationEvent;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
@@ -249,6 +252,18 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
         } else  {
 	        CameliaComponents.processDecodes(context, this, renderer);
 	    }
+		
+  		if (this instanceof IValidationEventCapability) {
+            boolean immediate=false;
+            if (this instanceof IImmediateCapability) {
+                immediate=((IImmediateCapability)this).isImmediate();
+            }
+ 			if (immediate) {
+				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+					this.broadcast(new ValidationEvent(this));
+				}
+			}
+		}
        
         if (varScope!=null) {
             varScope.popVar(context);
@@ -271,7 +286,20 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
         }
 
 		super.processValidators(context);
-       
+		
+ 		if (this instanceof IValidationEventCapability) {
+            boolean immediate=false;
+            if (this instanceof IImmediateCapability) {
+                immediate=((IImmediateCapability)this).isImmediate();
+            }
+ 			
+			if (immediate==false) {
+				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+					this.broadcast(new ValidationEvent(this));
+				}
+			}
+		}
+		       
         if (varScope!=null) {
             varScope.popVar(context);
         }
@@ -405,14 +433,14 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 		super.queueEvent(e);
     }	
 	
-	public final void setConverter(String converterId) {
+	public void setConverter(String converterId) {
 
 
 			 setConverter(null, converterId);
 		
 	}
 
-	public final void setConverter(FacesContext facesContext, String converterId) {
+	public void setConverter(FacesContext facesContext, String converterId) {
 
 
 			if (facesContext==null) {

@@ -46,14 +46,14 @@ public class ImageButtonComponent extends ButtonComponent implements
 		setId(componentId);
 	}
 
-	protected final Converter getTextPositionConverter() {
+	protected Converter getTextPositionConverter() {
 
 
 				return TextPositionConverter.SINGLETON;
 			
 	}
 
-	public final void setTextPosition(String textPosition) {
+	public void setTextPosition(String textPosition) {
 
 
 			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());
@@ -267,14 +267,14 @@ public class ImageButtonComponent extends ButtonComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);
 		
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);

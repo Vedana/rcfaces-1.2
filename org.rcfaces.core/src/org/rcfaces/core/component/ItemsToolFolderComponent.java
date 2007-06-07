@@ -60,49 +60,49 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 		setId(componentId);
 	}
 
-	public final void setItemHiddenMode(String hiddenMode) {
+	public void setItemHiddenMode(String hiddenMode) {
 
 
 			setItemHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
 	}
 
-	protected final Converter getTextPositionConverter() {
+	protected Converter getTextPositionConverter() {
 
 
 				return TextPositionConverter.SINGLETON;
 			
 	}
 
-	public final void setTextPosition(String textPosition) {
+	public void setTextPosition(String textPosition) {
 
 
 			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());
 		
 	}
 
-	public final ToolBarComponent getToolBar() {
+	public ToolBarComponent getToolBar() {
 
 
 		return (ToolBarComponent)getParent();
 		
 	}
 
-	public final IMenuComponent getMenu(String menuId) {
+	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
 		
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuIterator listMenus() {
+	public IMenuIterator listMenus() {
 
 
 		return MenuTools.listMenus(this);
@@ -228,21 +228,21 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 		return valueBinding.getType(facesContext);
 	}
 
-	public final int getCheckedValuesCount() {
+	public int getCheckedValuesCount() {
 
 
 			return CheckTools.getCount(getCheckedValues());
 		
 	}
 
-	public final Object[] listCheckedValues() {
+	public Object[] listCheckedValues() {
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
 		
 	}
 
-	public final Object getFirstCheckedValue() {
+	public Object getFirstCheckedValue() {
 
 
 			return CheckTools.getFirst(getCheckedValues(), getValue());

@@ -232,7 +232,7 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_LOAD_CST = "f_event.LOAD";
 
-    public static final String EVENT_CLIENT_VALIDATION_CST = "f_event.VALIDATION";
+    public static final String EVENT_VALIDATION_CST = "f_event.VALIDATION";
 
     public static final String EVENT_BLUR_ATTRIBUTE = "blur";
 
@@ -274,5 +274,5 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_LOAD_ATTRIBUTE = "load";
 
-    public static final String EVENT_CLIENT_VALIDATION_ATTRIBUTE = "validation";
+    public static final String EVENT_VALIDATION_ATTRIBUTE = "validation";
 }

@@ -2982,9 +2982,12 @@ var __prototype = {
 	 * @method public
 	 * @param Object col Column to sort
 	 * @param optional boolean ascending Sort ascending.
+	 * @param optional boolean append Append the sort.
+	 * @param optional Object col2 Column 2
+	 * @param optional boolean ascending2 Sort ascending2.
 	 * @return void
 	 */
-	f_setColumnSort: function(col, ascending, append) {
+	f_setColumnSort: function(col, ascending, append, col2, ascending2) {
 		var args=[false];
 		
 		if (ascending===undefined) {
@@ -3034,7 +3037,7 @@ var __prototype = {
 	
 			// f_core.Debug(f_grid, "f_setColumnSort: Already known ???");
 			
-			if (col._ascendingOrder==ascending) {
+			if (col._ascendingOrder==ascending && append) {
 				// Et dans le même sens !
 				return;
 			}				
@@ -3042,8 +3045,24 @@ var __prototype = {
 
 		f_core.Debug(f_grid, "f_setColumnSort: Change order '"+ascending+"'");
 		
-		col._ascendingOrder=ascending;
-		this._updateTitleStyle(col);
+		if (col._ascendingOrder!=ascending) {
+			col._ascendingOrder=ascending;
+			this._updateTitleStyle(col);
+		}
+							
+		if (!append) {
+			for(var i=3;i<arguments.length;) {
+				col=arguments[i++];
+				ascending=arguments[i++];
+				
+				if (!f_core.AddElement(currentSorts, col)) {
+					continue;	
+				}
+				
+				col._ascendingOrder=!!ascending;
+				this._updateTitleStyle(col);
+			}
+		}
 		
 		this._sortTable();
 	},
@@ -3689,7 +3708,7 @@ var __prototype = {
 		}
 		
 		this._title.scrollLeft=this._scrollBody.scrollLeft;
-	},	
+	},
 	
 	/** 
 	 * @method protected abstract

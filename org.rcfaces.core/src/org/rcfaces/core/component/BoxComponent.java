@@ -63,7 +63,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 		setId(componentId);
 	}
 
-	public final void setAsyncRenderMode(String asyncRenderMode) {
+	public void setAsyncRenderMode(String asyncRenderMode) {
 
 
 			setAsyncRenderMode(((Integer)AsyncRenderModeConverter.SINGLETON.getAsObject(null, this, asyncRenderMode)).intValue());
@@ -256,21 +256,21 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
-	public final IMenuComponent getMenu(String menuId) {
+	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
 		
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuIterator listMenus() {
+	public IMenuIterator listMenus() {
 
 
 		return MenuTools.listMenus(this);

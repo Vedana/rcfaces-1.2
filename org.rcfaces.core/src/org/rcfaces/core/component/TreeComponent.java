@@ -91,77 +91,77 @@ public class TreeComponent extends AbstractInputComponent implements
 		setId(componentId);
 	}
 
-	public final void setSelectionCardinality(String cardinality) {
+	public void setSelectionCardinality(String cardinality) {
 
 
 			setSelectionCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
 		
 	}
 
-	public final void setCheckCardinality(String cardinality) {
+	public void setCheckCardinality(String cardinality) {
 
 
 			setCheckCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
 		
 	}
 
-	public final void removeAllTreeNodes() {
+	public void removeAllTreeNodes() {
 
 
 			ComponentIterators.removeAll(this, UISelectItem.class);
 			
 	}
 
-	public final void collapseAll() {
+	public void collapseAll() {
 
 
 				collapseAll(null);
 			
 	}
 
-	public final void collapseAll(FacesContext context) {
+	public void collapseAll(FacesContext context) {
 
 
 				TreeTools.collapseAll(context, this);
 			
 	}
 
-	public final void expandAll() {
+	public void expandAll() {
 
 
 				expandAll(null);
 			
 	}
 
-	public final void expandAll(FacesContext context) {
+	public void expandAll(FacesContext context) {
 
 
 				TreeTools.expandAll(context, this);
 			
 	}
 
-	public final void setExpanded(FacesContext context, Object value, boolean expanded) {
+	public void setExpanded(FacesContext context, Object value, boolean expanded) {
 
 
 				TreeTools.setExpanded(context, this, value, expanded);
 			
 	}
 
-	public final void setExpanded(Object value, boolean expanded) {
+	public void setExpanded(Object value, boolean expanded) {
 
 
 				setExpanded(null, value, expanded);
 			
 	}
 
-	public final boolean isExpanded(FacesContext context, Object value) {
+	public boolean isExpanded(FacesContext context, Object value) {
 
 
 				return TreeTools.isExpanded(context, this, value);
 			
 	}
 
-	public final Object getCursorValue(FacesContext facesContext) {
+	public Object getCursorValue(FacesContext facesContext) {
 
 
 				Object cursorValue=engine.getValue(Properties.CURSOR_VALUE, facesContext);
@@ -176,7 +176,7 @@ public class TreeComponent extends AbstractInputComponent implements
 			
 	}
 
-	public final Object getSelectedValues(FacesContext facesContext) {
+	public Object getSelectedValues(FacesContext facesContext) {
 
 
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
@@ -187,7 +187,7 @@ public class TreeComponent extends AbstractInputComponent implements
 			
 	}
 
-	public final Object getCheckedValues(FacesContext facesContext) {
+	public Object getCheckedValues(FacesContext facesContext) {
 
 
 				if (engine.isPropertySetted(Properties.CHECKED_VALUES)) {
@@ -202,7 +202,7 @@ public class TreeComponent extends AbstractInputComponent implements
 			
 	}
 
-	public final Object getExpandedValues(FacesContext facesContext) {
+	public Object getExpandedValues(FacesContext facesContext) {
 
 
 				if (engine.isPropertySetted(Properties.EXPANDED_VALUES)) {
@@ -321,21 +321,21 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public final IMenuComponent getMenu(String menuId) {
+	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
 		
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuIterator listMenus() {
+	public IMenuIterator listMenus() {
 
 
 		return MenuTools.listMenus(this);
@@ -453,21 +453,21 @@ public class TreeComponent extends AbstractInputComponent implements
 		return valueBinding.getType(facesContext);
 	}
 
-	public final int getCheckedValuesCount() {
+	public int getCheckedValuesCount() {
 
 
 			return CheckTools.getCount(getCheckedValues());
 		
 	}
 
-	public final Object[] listCheckedValues() {
+	public Object[] listCheckedValues() {
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
 		
 	}
 
-	public final Object getFirstCheckedValue() {
+	public Object getFirstCheckedValue() {
 
 
 			return CheckTools.getFirst(getCheckedValues(), getValue());
@@ -562,21 +562,21 @@ public class TreeComponent extends AbstractInputComponent implements
 		return valueBinding.getType(facesContext);
 	}
 
-	public final Object getFirstSelectedValue() {
+	public Object getFirstSelectedValue() {
 
 
 			return SelectionTools.getFirst(getSelectedValues(), getValue());
 		
 	}
 
-	public final int getSelectedValuesCount() {
+	public int getSelectedValuesCount() {
 
 
 			return SelectionTools.getCount(getSelectedValues());
 		
 	}
 
-	public final Object[] listSelectedValues() {
+	public Object[] listSelectedValues() {
 
 
 			return SelectionTools.listValues(getSelectedValues(), getValue());
@@ -659,14 +659,14 @@ public class TreeComponent extends AbstractInputComponent implements
 		return valueBinding.getType(facesContext);
 	}
 
-	public final int getExpandedValuesCount() {
+	public int getExpandedValuesCount() {
 
 
 			return ExpansionTools.getCount(getExpandedValues());
 		
 	}
 
-	public final Object[] listExpandedValues() {
+	public Object[] listExpandedValues() {
 
 
 			return ExpansionTools.listValues(getExpandedValues(), getValue());

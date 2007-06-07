@@ -66,7 +66,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
@@ -326,7 +326,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);

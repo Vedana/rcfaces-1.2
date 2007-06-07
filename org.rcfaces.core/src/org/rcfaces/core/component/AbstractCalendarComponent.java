@@ -44,7 +44,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	}
 
 
-	public final Date getDate() {
+	public Date getDate() {
 
 
 				Object submittedValue=getSubmittedExternalValue();
@@ -78,21 +78,21 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 			
 	}
 
-	public final void setDate(Date date) {
+	public void setDate(Date date) {
 
 
 				setValue(date);
 			
 	}
 
-	public final void setTwoDigitYearStart(String date) {
+	public void setTwoDigitYearStart(String date) {
 
 
 			engine.setProperty(Properties.TWO_DIGIT_YEAR_START, date);
 		
 	}
 
-	public final Date getTwoDigitYearStart(FacesContext facesContext) {
+	public Date getTwoDigitYearStart(FacesContext facesContext) {
 
 
 			Object value=engine.getProperty(Properties.TWO_DIGIT_YEAR_START, facesContext);
@@ -104,21 +104,21 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		
 	}
 
-	public final void setClientDatesStrategy(String strategy) {
+	public void setClientDatesStrategy(String strategy) {
 
 
 			setClientDatesStrategy(((Integer)ClientDatesStrategyConverter.SINGLETON.getAsObject(null, this, strategy)).intValue());
 		
 	}
 
-	public final void setMinDate(String date) {
+	public void setMinDate(String date) {
 
 
 			engine.setProperty(Properties.MIN_DATE, date);
 		
 	}
 
-	public final Date getMinDate(FacesContext facesContext) {
+	public Date getMinDate(FacesContext facesContext) {
 
 
 			Object value=engine.getProperty(Properties.MIN_DATE, facesContext);
@@ -130,14 +130,14 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		
 	}
 
-	public final void setMaxDate(String date) {
+	public void setMaxDate(String date) {
 
 
 			engine.setProperty(Properties.MAX_DATE, date);
 		
 	}
 
-	public final Date getMaxDate(FacesContext facesContext) {
+	public Date getMaxDate(FacesContext facesContext) {
 
 
 			Object value=engine.getProperty(Properties.MAX_DATE, facesContext);
@@ -149,35 +149,35 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 		
 	}
 
-	public final void setLiteralLocale(String locale) {
+	public void setLiteralLocale(String locale) {
 
 
 		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
-	public final void setComponentLocale(String locale) {
+	public void setComponentLocale(String locale) {
 
 
 		setComponentLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
-	public final void setLiteralTimeZone(String timeZone) {
+	public void setLiteralTimeZone(String timeZone) {
 
 
 		setLiteralTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
 		
 	}
 
-	public final void setComponentTimeZone(String timeZone) {
+	public void setComponentTimeZone(String timeZone) {
 
 
 		setComponentTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
 		
 	}
 
-	public final void setDisabledWeekDays(String disabledWeekDays) {
+	public void setDisabledWeekDays(String disabledWeekDays) {
 
 
 		setDisabledWeekDays(((Integer)WeekDaysConverter.SINGLETON.getAsObject(null, this, disabledWeekDays)).intValue());

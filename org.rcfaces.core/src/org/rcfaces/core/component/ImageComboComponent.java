@@ -54,7 +54,7 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 			
 	}
 
-	public final void setTextPosition(String textPosition) {
+	public void setTextPosition(String textPosition) {
 
 
 			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());
@@ -291,14 +291,14 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);
 		
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);

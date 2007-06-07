@@ -43,7 +43,7 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		setId(componentId);
 	}
 
-	public final void setHiddenMode(String hiddenMode) {
+	public void setHiddenMode(String hiddenMode) {
 
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
@@ -107,7 +107,7 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
-	public final Boolean getVisibleState() {
+	public Boolean getVisibleState() {
 
 
 			return getVisibleState(null);

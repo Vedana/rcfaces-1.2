@@ -62,35 +62,35 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		setId(componentId);
 	}
 
-	public final boolean isClientSideValidationParameter(String name) {
+	public boolean isClientSideValidationParameter(String name) {
 
 
 		return isClientSideValidationParameter(name, null);
 		
 	}
 
-	public final Map getValidationParametersMap() {
+	public Map getValidationParametersMap() {
 
 
 		return getValidationParametersMap(null);
 		
 	}
 
-	public final String setValidationParameter(String name, String value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
 		return (String)setValidationParameterData(name, value, client);
 		
 	}
 
-	public final String getValidationParameter(String name) {
+	public String getValidationParameter(String name) {
 
 
 		 return getValidationParameter(name, null);
 		
 	}
 
-	public final String removeValidationParameter(String name) {
+	public String removeValidationParameter(String name) {
 
 
 		FacesContext facesContext=getFacesContext();
@@ -109,28 +109,28 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setValidationParameter(String name, ValueBinding value, boolean client) {
+	public void setValidationParameter(String name, ValueBinding value, boolean client) {
 
 
 		setValidationParameterData(name, value, client);
 		
 	}
 
-	public final Map getClientValidationParametersMap() {
+	public Map getClientValidationParametersMap() {
 
 
 		return getClientValidationParametersMap(null);
 		
 	}
 
-	public final int getValidationParametersCount() {
+	public int getValidationParametersCount() {
 
 		 
 		 return getValidationParametersCount(null);
 		
 	}
 
-	public final void setValue(Object value) {
+	public void setValue(Object value) {
 
 
 				if (value instanceof String) {
@@ -141,14 +141,14 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 			
 	}
 
-	public final void setNumberFormatType(String formatType) {
+	public void setNumberFormatType(String formatType) {
 
 
 			setNumberFormatType(((Integer)NumberFormatTypeConverter.SINGLETON.getAsObject(null, this, formatType)).intValue());
 			
 	}
 
-	public final Number getNumber() {
+	public Number getNumber() {
 
 
 				Object submittedValue=getSubmittedExternalValue();
@@ -160,28 +160,28 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 			
 	}
 
-	public final void setNumber(double number) {
+	public void setNumber(double number) {
 
 
 				setValue(new Double(number));
 			
 	}
 
-	public final void setNumber(long number) {
+	public void setNumber(long number) {
 
 
 				setValue(new Long(number));
 			
 	}
 
-	public final void setNumber(String number) {
+	public void setNumber(String number) {
 
 
 				setValue(number);
 			
 	}
 
-	public final void setMinimum(String number) {
+	public void setMinimum(String number) {
 
 
 			Number numberObject=(Number)LiteralNumberConverter.SINGLETON.getAsObject(null, this, number);
@@ -189,7 +189,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setDefaultNumber(String number) {
+	public void setDefaultNumber(String number) {
 
 
 			Number numberObject=(Number)LiteralNumberConverter.SINGLETON.getAsObject(null, this, number);
@@ -197,7 +197,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setMaximum(String number) {
+	public void setMaximum(String number) {
 
 
 			Number numberObject=(Number)LiteralNumberConverter.SINGLETON.getAsObject(null, this, number);
@@ -205,21 +205,21 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setLiteralLocale(String locale) {
+	public void setLiteralLocale(String locale) {
 
 
 		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
-	public final void setComponentLocale(String locale) {
+	public void setComponentLocale(String locale) {
 
 
 		setComponentLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
-	public final String getValidationParameter(String name, FacesContext facesContext) {
+	public String getValidationParameter(String name, FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -235,7 +235,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final int getValidationParametersCount(FacesContext facesContext) {
+	public int getValidationParametersCount(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -250,7 +250,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final Map getValidationParametersMap(FacesContext facesContext) {
+	public Map getValidationParametersMap(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -266,7 +266,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final Map getClientValidationParametersMap(FacesContext facesContext) {
+	public Map getClientValidationParametersMap(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -320,7 +320,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	private final Object setValidationParameterData(String name, Object value, boolean client) {
+	private Object setValidationParameterData(String name, Object value, boolean client) {
 
 
 		FacesContext facesContext=getFacesContext();
@@ -340,7 +340,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
+	public boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
 
 
 		if (facesContext==null) {

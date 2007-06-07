@@ -46,7 +46,7 @@ public class ImageCheckButtonComponent extends CheckButtonComponent implements
 		setId(componentId);
 	}
 
-	protected final Converter getTextPositionConverter() {
+	protected Converter getTextPositionConverter() {
 
 
 				return TextPositionConverter.SINGLETON;
@@ -237,14 +237,14 @@ public class ImageCheckButtonComponent extends CheckButtonComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);
 		
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);

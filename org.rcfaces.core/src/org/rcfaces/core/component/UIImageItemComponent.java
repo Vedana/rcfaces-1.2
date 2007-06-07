@@ -40,7 +40,7 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
@@ -58,14 +58,14 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		
 	}
 
-	public final void setToolTip(String text) {
+	public void setToolTip(String text) {
 
 
 			setItemDescription(text);
 			
 	}
 
-	public final String getToolTip() {
+	public String getToolTip() {
 
 
 			return getItemDescription();
@@ -95,7 +95,7 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
-	public final Boolean getVisibleState() {
+	public Boolean getVisibleState() {
 
 
 			return getVisibleState(null);
@@ -217,7 +217,7 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);

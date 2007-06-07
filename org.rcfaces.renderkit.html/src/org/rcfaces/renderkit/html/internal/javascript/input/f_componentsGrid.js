@@ -403,7 +403,11 @@ var __prototype = {
 			var rowIdx=this._rowsPool.length;
 			
 			row._index=f_core.GetAttribute(row, "v:index");
-			row.id=this.id+":row"+i;
+			if (!row.id) {
+				row.id=this.id+fa_namingContainer.GetSeparator()+"row"+i;
+			}
+
+			row._namingContainer=true;
 
 			row._className=rowClasses[i % rowClasses.length];
 			
@@ -667,6 +671,8 @@ var __prototype = {
 			row.ondblclick=f_grid.RowMouseDblClick;
 			row.onfocus=f_grid.GotFocus;
 		}
+
+		row._namingContainer=true;
 		
 		var properties=arguments[idx++];
 		
@@ -774,6 +780,22 @@ var __prototype = {
 		this.fa_updateElementStyle(row);
 		
 		return row;
+	},
+	/**
+	 * @method public
+	 * @param String rowValue 
+	 * @param String... childId
+	 * @return HTMLElement
+	 */
+	f_findComponentInRow: function(rowValue, childId) {		
+		f_core.Assert(rowValue, "f_componentsGrid.f_findComponentInRow: Invalid rowValue parameter ("+rowValue+")");
+		f_core.Assert(typeof(childId)=="string", "f_componentsGrid.f_findComponentInRow: Invalid childId parameter ("+childId+")");
+		
+		var args=f_core.PushArguments(null, arguments, 1);
+
+		var row=this.f_getRowByValue(rowValue, true);
+		
+		return fa_namingContainer.FindComponents(row, args);
 	}
 }
  

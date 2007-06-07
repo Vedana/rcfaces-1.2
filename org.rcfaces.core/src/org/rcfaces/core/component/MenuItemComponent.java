@@ -37,14 +37,14 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 		setId(componentId);
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuItemIterator listMenuItems() {
+	public IMenuItemIterator listMenuItems() {
 
 
 		return MenuTools.listMenuItems(this);

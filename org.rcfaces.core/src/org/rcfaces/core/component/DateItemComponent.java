@@ -47,7 +47,7 @@ public class DateItemComponent extends AbstractItemComponent implements
 		setId(componentId);
 	}
 
-	public final Date getDate() {
+	public Date getDate() {
 
 
 				Object value=getItemValue();
@@ -75,56 +75,56 @@ public class DateItemComponent extends AbstractItemComponent implements
 			
 	}
 
-	public final void setDate(Date date) {
+	public void setDate(Date date) {
 
 
 				setItemValue(date);
 			
 	}
 
-	public final void setDate(String date) {
+	public void setDate(String date) {
 
 
 				setItemValue(date);
 			
 	}
 
-	public final void setText(String text) {
+	public void setText(String text) {
 
 
 			setItemLabel(text);
 			
 	}
 
-	public final String getText() {
+	public String getText() {
 
 
 			return getItemLabel();
 			
 	}
 
-	public final void setToolTip(String text) {
+	public void setToolTip(String text) {
 
 
 			setItemDescription(text);
 			
 	}
 
-	public final String getToolTip() {
+	public String getToolTip() {
 
 
 			return getItemDescription();
 			
 	}
 
-	public final void setLiteralLocale(String locale) {
+	public void setLiteralLocale(String locale) {
 
 
 		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
-	public final void setLiteralTimeZone(String timeZone) {
+	public void setLiteralTimeZone(String timeZone) {
 
 
 		setLiteralTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));

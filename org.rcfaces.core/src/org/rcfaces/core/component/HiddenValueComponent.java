@@ -58,7 +58,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		setId(componentId);
 	}
 
-	public final void setClientData(String name, ValueBinding value) {
+	public void setClientData(String name, ValueBinding value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
@@ -67,7 +67,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final void setServerData(String name, ValueBinding value) {
+	public void setServerData(String name, ValueBinding value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
@@ -76,7 +76,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final String getClientData(String name, FacesContext facesContext) {
+	public String getClientData(String name, FacesContext facesContext) {
 
 
 		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
@@ -88,7 +88,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final Object getServerData(String name, FacesContext facesContext) {
+	public Object getServerData(String name, FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -100,7 +100,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final Map getClientDataMap(FacesContext facesContext) {
+	public Map getClientDataMap(FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
@@ -112,7 +112,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final Map getServerDataMap(FacesContext facesContext) {
+	public Map getServerDataMap(FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
@@ -131,7 +131,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final String[] listClientDataKeys(FacesContext facesContext) {
+	public String[] listClientDataKeys(FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
@@ -143,7 +143,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final String[] listServerDataKeys(FacesContext facesContext) {
+	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -155,14 +155,14 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final Map getClientDataMap() {
+	public Map getClientDataMap() {
 
 
 		return getClientDataMap(null);
 		
 	}
 
-	public final int getClientDataCount() {
+	public int getClientDataCount() {
 
 
 		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
@@ -174,21 +174,21 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final String getClientData(String name) {
+	public String getClientData(String name) {
 
 
 		 return getClientData(name, null);
 		
 	}
 
-	public final String[] listClientDataKeys() {
+	public String[] listClientDataKeys() {
 
 
 			return listClientDataKeys(null);
 		
 	}
 
-	public final String removeClientData(String name) {
+	public String removeClientData(String name) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
@@ -200,7 +200,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final String setClientData(String name, String value) {
+	public String setClientData(String name, String value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
@@ -209,7 +209,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final Object getServerData(String name) {
+	public Object getServerData(String name) {
 
 
 		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -221,7 +221,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final Object removeServerData(String name) {
+	public Object removeServerData(String name) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -233,14 +233,14 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final Map getServerDataMap() {
+	public Map getServerDataMap() {
 
 
 		return getServerDataMap(null);
 		
 	}
 
-	public final int getServerDataCount() {
+	public int getServerDataCount() {
 
 
 		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
@@ -252,7 +252,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final Object setServerData(String name, Object value) {
+	public Object setServerData(String name, Object value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
@@ -261,7 +261,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public final String[] listServerDataKeys() {
+	public String[] listServerDataKeys() {
 
 
 			return listServerDataKeys(null);

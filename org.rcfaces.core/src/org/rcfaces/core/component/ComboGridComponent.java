@@ -60,77 +60,77 @@ public class ComboGridComponent extends AbstractGridComponent implements
 		setId(componentId);
 	}
 
-	public final void setSortedChildren(UIComponent[] components) {
+	public void setSortedChildren(UIComponent[] components) {
 
 
 				SortTools.setSortedChildren(null, this, engine, ComboColumnComponent.class, components);
 			
 	}
 
-	public final UIComponent[] getSortedChildren() {
+	public UIComponent[] getSortedChildren() {
 
 
 				return SortTools.getSortedChildren(null, this, engine, ComboColumnComponent.class);
 			
 	}
 
-	public final UIComponent[] getOrderedChildren() {
+	public UIComponent[] getOrderedChildren() {
 
 
 				return OrderTools.getOrderedChildren(null, this, engine, ComboColumnComponent.class);
 			
 	}
 
-	public final void setOrderedChildren(UIComponent[] components) {
+	public void setOrderedChildren(UIComponent[] components) {
 
 
 				OrderTools.setOrderedChildren(null, this, engine, ComboColumnComponent.class, components);
 			
 	}
 
-	public final IColumnIterator listColumns() {
+	public IColumnIterator listColumns() {
 
 
 			return GridTools.listColumns(this, ComboColumnComponent.class);
 			
 	}
 
-	public final ComboColumnComponent[] getSortedColumns() {
+	public ComboColumnComponent[] getSortedColumns() {
 
 
 				return (ComboColumnComponent[])getSortedChildren();
 			
 	}
 
-	public final ComboColumnComponent getFirstSortedColumn() {
+	public ComboColumnComponent getFirstSortedColumn() {
 
 
 				return (ComboColumnComponent)SortTools.getFirstSortedChild(null, this, engine, ComboColumnComponent.class );
 			
 	}
 
-	public final void setSortedColumn(ComboColumnComponent comboColumn) {
+	public void setSortedColumn(ComboColumnComponent comboColumn) {
 
 
 				SortTools.setSortedChildren(null, this, engine, ComboColumnComponent.class, new ComboColumnComponent[] { comboColumn });
 			
 	}
 
-	public final void setSortedColumns(ComboColumnComponent[] componentsColumns) {
+	public void setSortedColumns(ComboColumnComponent[] componentsColumns) {
 
 
 				setSortedChildren(componentsColumns);
 			
 	}
 
-	public final ISortedComponent[] listSortedComponents() {
+	public ISortedComponent[] listSortedComponents() {
 
 
 				return listSortedComponents(null);
 			
 	}
 
-	public final ISortedComponent[] listSortedComponents(FacesContext context) {
+	public ISortedComponent[] listSortedComponents(FacesContext context) {
 
 
 				return GridTools.listSortedComponents(context, this);
@@ -436,7 +436,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 		return engine.getBoolProperty(Properties.PAGED, false, facesContext);
 	}
 
-	public final boolean isPagedSetted() {
+	public boolean isPagedSetted() {
 
 
 			return engine.isPropertySetted(Properties.PAGED);

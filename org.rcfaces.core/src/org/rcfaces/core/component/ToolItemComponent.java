@@ -49,28 +49,28 @@ public class ToolItemComponent extends UIImageItemComponent implements
 		setId(componentId);
 	}
 
-	public final void setInputType(String inputType) {
+	public void setInputType(String inputType) {
 
 
 			setInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
 		
 	}
 
-	public final ToolFolderComponent getToolFolder() {
+	public ToolFolderComponent getToolFolder() {
 
 
 		return (ToolFolderComponent)getParent();
 		
 	}
 
-	protected final Converter getTextPositionConverter() {
+	protected Converter getTextPositionConverter() {
 
 
 				return TextPositionConverter.SINGLETON;
 			
 	}
 
-	public final void setTextPosition(String textPosition) {
+	public void setTextPosition(String textPosition) {
 
 
 			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());

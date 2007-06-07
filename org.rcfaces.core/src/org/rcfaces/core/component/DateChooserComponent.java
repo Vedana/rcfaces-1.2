@@ -53,14 +53,14 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 		setId(componentId);
 	}
 
-	public final void setHomeDate(String date) {
+	public void setHomeDate(String date) {
 
 
 			engine.setProperty(Properties.HOME_DATE, date);
 		
 	}
 
-	public final Date getHomeDate(FacesContext facesContext) {
+	public Date getHomeDate(FacesContext facesContext) {
 
 
 			Object value=engine.getProperty(Properties.HOME_DATE, facesContext);
@@ -72,14 +72,14 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	protected final Converter getTextPositionConverter() {
+	protected Converter getTextPositionConverter() {
 
 
 				return TextPositionConverter.SINGLETON;
 			
 	}
 
-	public final void setTextPosition(String textPosition) {
+	public void setTextPosition(String textPosition) {
 
 
 			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());
@@ -316,14 +316,14 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);
 		
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);

@@ -65,21 +65,21 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 			
 	}
 
-	public final void setTextPosition(String textPosition) {
+	public void setTextPosition(String textPosition) {
 
 
 			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());
 		
 	}
 
-	public final RadioButtonComponent getSelectedFromSameGroup() {
+	public RadioButtonComponent getSelectedFromSameGroup() {
 
 
 			return RadioButtonTools.getSelectedRadioButtonFromSameGroup(this);
 			
 	}
 
-	public final IRadioButtonIterator listSameGroup() {
+	public IRadioButtonIterator listSameGroup() {
 
 
 			return RadioButtonTools.listRadioButtonSameGroup(this);

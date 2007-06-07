@@ -52,7 +52,7 @@ public class MessageComponent extends AbstractMessageComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
@@ -335,7 +335,7 @@ public class MessageComponent extends AbstractMessageComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);

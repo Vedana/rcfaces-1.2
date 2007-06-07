@@ -39,7 +39,7 @@ public class ToolFolderComponent extends AbstractBasicComponent implements
 		setId(componentId);
 	}
 
-	public final ToolBarComponent getToolBar() {
+	public ToolBarComponent getToolBar() {
 
 
 		return (ToolBarComponent)getParent();
@@ -58,21 +58,21 @@ public class ToolFolderComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public final IMenuComponent getMenu(String menuId) {
+	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
 		
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuIterator listMenus() {
+	public IMenuIterator listMenus() {
 
 
 		return MenuTools.listMenus(this);

@@ -44,7 +44,7 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 		setId(componentId);
 	}
 
-	public final void setMode(String calendarMode) {
+	public void setMode(String calendarMode) {
 
 
 			setMode(((Integer)CalendarModeConverter.SINGLETON.getAsObject(null, this, calendarMode)).intValue());

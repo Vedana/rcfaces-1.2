@@ -59,14 +59,14 @@ public class RulerComponent extends CameliaBaseComponent implements
 		setId(componentId);
 	}
 
-	public final void setMargins(String margins) {
+	public void setMargins(String margins) {
 
 
 				MarginTools.setMargins(this, margins);
 			
 	}
 
-	public final void setHiddenMode(String hiddenMode) {
+	public void setHiddenMode(String hiddenMode) {
 
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
@@ -291,7 +291,7 @@ public class RulerComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
-	public final Boolean getVisibleState() {
+	public Boolean getVisibleState() {
 
 
 			return getVisibleState(null);

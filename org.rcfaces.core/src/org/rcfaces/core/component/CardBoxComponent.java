@@ -50,35 +50,35 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		setId(componentId);
 	}
 
-	public final ICardIterator listCards() {
+	public ICardIterator listCards() {
 
 
 		return CardBoxTools.listCards(this);
 		
 	}
 
-	public final CardComponent getSelectedCard() {
+	public CardComponent getSelectedCard() {
 
 
 		return CardBoxTools.getSelectedCard(this);
 		
 	}
 
-	public final CardComponent getSelectedCard(FacesContext facesContext) {
+	public CardComponent getSelectedCard(FacesContext facesContext) {
 
 
 		return CardBoxTools.getSelectedCard(this);
 		
 	}
 
-	public final void select(CardComponent card) {
+	public void select(CardComponent card) {
 
 
 			CardBoxTools.selectCard(this, card);
 			
 	}
 
-	public final void setAsyncRenderMode(String asyncRenderMode) {
+	public void setAsyncRenderMode(String asyncRenderMode) {
 
 
 			setAsyncRenderMode(((Integer)AsyncRenderModeConverter.SINGLETON.getAsObject(null, this, asyncRenderMode)).intValue());

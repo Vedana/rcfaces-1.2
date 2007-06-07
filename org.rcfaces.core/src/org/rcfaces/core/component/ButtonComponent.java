@@ -47,14 +47,14 @@ public class ButtonComponent extends AbstractCommandComponent implements
 		setId(componentId);
 	}
 
-	public final Object getValue() {
+	public Object getValue() {
 
 
 				return getValue(null);
 			
 	}
 
-	public final Object getValue(FacesContext context) {
+	public Object getValue(FacesContext context) {
 
 
 				return engine.getValue(Properties.VALUE, context);

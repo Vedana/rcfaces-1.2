@@ -36,7 +36,7 @@ public class SelectImageItemComponent extends CameliaItemComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
@@ -66,7 +66,7 @@ public class SelectImageItemComponent extends CameliaItemComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);

@@ -21,8 +21,11 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.event.IValidationListener;
+import org.rcfaces.core.event.ValidationEvent;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
@@ -256,6 +259,18 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
         } else  {
 	        CameliaComponents.processDecodes(context, this, renderer);
 	    }
+		
+  		if (this instanceof IValidationEventCapability) {
+            boolean immediate=false;
+            if (this instanceof IImmediateCapability) {
+                immediate=((IImmediateCapability)this).isImmediate();
+            }
+ 			if (immediate) {
+				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+					this.broadcast(new ValidationEvent(this));
+				}
+			}
+		}
        
         if (varScope!=null) {
             varScope.popVar(context);
@@ -278,7 +293,20 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
         }
 
 		super.processValidators(context);
-       
+		
+ 		if (this instanceof IValidationEventCapability) {
+            boolean immediate=false;
+            if (this instanceof IImmediateCapability) {
+                immediate=((IImmediateCapability)this).isImmediate();
+            }
+ 			
+			if (immediate==false) {
+				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+					this.broadcast(new ValidationEvent(this));
+				}
+			}
+		}
+		       
         if (varScope!=null) {
             varScope.popVar(context);
         }
@@ -412,35 +440,35 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 		super.queueEvent(e);
     }	
 	
-	public final boolean isRowAvailable() {
+	public boolean isRowAvailable() {
 
 
 			return isRowAvailable(null);
 		
 	}
 
-	public final boolean isRowAvailable(FacesContext facesContext) {
+	public boolean isRowAvailable(FacesContext facesContext) {
 
 
 			return getDataModel(facesContext).isRowAvailable();
 		
 	}
 
-	public final int getRowCount() {
+	public int getRowCount() {
 
 
 				 return getDataModel(null).getRowCount();
 			
 	}
 
-	public final Object getRowData() {
+	public Object getRowData() {
 
 
 				 return getDataModel(null).getRowData();
 			
 	}
 
-	public final DataModel getDataModel(FacesContext facesContext) {
+	public DataModel getDataModel(FacesContext facesContext) {
 
 
 				if (dataModel!=null) {
@@ -454,28 +482,28 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 			
 	}
 
-	public final DataModel getDataModelValue() {
+	public DataModel getDataModelValue() {
 
 
 				return getDataModel(null);
 			
 	}
 
-	public final Object getValue() {
+	public Object getValue() {
 
 
 				return getValue(null);
 			
 	}
 
-	public final Object getValue(FacesContext context) {
+	public Object getValue(FacesContext context) {
 
 
 				return engine.getValue(Properties.VALUE, context);
 			
 	}
 
-	public final void setValue(Object value) {
+	public void setValue(Object value) {
 
 
 				dataModel=null;

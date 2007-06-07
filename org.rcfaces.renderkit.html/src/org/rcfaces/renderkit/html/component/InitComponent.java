@@ -37,21 +37,21 @@ public class InitComponent extends CameliaBaseComponent implements
 		setId(componentId);
 	}
 
-	public final String getPageScriptType() {
+	public String getPageScriptType() {
 
 
 			return IHtmlRenderContext.JAVASCRIPT_TYPE;
 			
 	}
 
-	public final void setLiteralLocale(String locale) {
+	public void setLiteralLocale(String locale) {
 
 
 		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
-	public final void setLiteralTimeZone(String timeZone) {
+	public void setLiteralTimeZone(String timeZone) {
 
 
 		setLiteralTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));

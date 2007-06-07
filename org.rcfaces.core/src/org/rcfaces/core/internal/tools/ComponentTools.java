@@ -408,6 +408,10 @@ public final class ComponentTools {
                 continue;
             }
 
+            if (listener instanceof IScriptListener) {
+                continue;
+            }
+
             facesEvent.processListener(listener);
         }
     }
@@ -601,5 +605,20 @@ public final class ComponentTools {
             UIComponent[] children, String ordered_children) {
         // TODO Auto-generated method stub
 
+    }
+
+    public static boolean hasValidationServerListeners(
+            FacesListener facesListeners[]) {
+        for (int i = 0; i < facesListeners.length; i++) {
+            FacesListener facesListener = facesListeners[i];
+
+            if (facesListener instanceof IScriptListener) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

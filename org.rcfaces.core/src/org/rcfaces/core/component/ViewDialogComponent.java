@@ -52,14 +52,14 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
 	}
 
-	public final void setHiddenMode(String hiddenMode) {
+	public void setHiddenMode(String hiddenMode) {
 
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
@@ -100,7 +100,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);
@@ -199,7 +199,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
-	public final Boolean getVisibleState() {
+	public Boolean getVisibleState() {
 
 
 			return getVisibleState(null);

@@ -49,14 +49,14 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 		setId(componentId);
 	}
 
-	public final void setSuggestionConverter(String converterId) {
+	public void setSuggestionConverter(String converterId) {
 
 			
 			setSuggestionConverter(converterId, null);
 		
 	}
 
-	public final void setSuggestionConverter(String converterId, FacesContext facesContext) {
+	public void setSuggestionConverter(String converterId, FacesContext facesContext) {
 
 
 			Converter converter=ComponentTools.createConverter(facesContext, converterId);

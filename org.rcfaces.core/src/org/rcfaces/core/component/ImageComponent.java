@@ -51,7 +51,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 				Object value=getLocalValue();
@@ -86,7 +86,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 		setValue(imageURL);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);

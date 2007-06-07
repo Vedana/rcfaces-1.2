@@ -61,21 +61,21 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 			
 	}
 
-	public final boolean isSelected() {
+	public boolean isSelected() {
 
 
 			return SELECTED_STATE.equals(getSelectedState());
 			
 	}
 
-	public final boolean isUndeterminated() {
+	public boolean isUndeterminated() {
 
 
 			return UNDETERMINATED_STATE.equals(getSelectedState());
 			
 	}
 
-	public final void setTextPosition(String textPosition) {
+	public void setTextPosition(String textPosition) {
 
 
 			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());

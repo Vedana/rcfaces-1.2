@@ -54,7 +54,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 		setId(componentId);
 	}
 
-	public final IMenuItemIterator listMenuItems() {
+	public IMenuItemIterator listMenuItems() {
 
 
 		return MenuTools.listMenuItems(this);
@@ -157,21 +157,21 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 		return valueBinding.getType(facesContext);
 	}
 
-	public final int getCheckedValuesCount() {
+	public int getCheckedValuesCount() {
 
 
 			return CheckTools.getCount(getCheckedValues());
 		
 	}
 
-	public final Object[] listCheckedValues() {
+	public Object[] listCheckedValues() {
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
 		
 	}
 
-	public final Object getFirstCheckedValue() {
+	public Object getFirstCheckedValue() {
 
 
 			return CheckTools.getFirst(getCheckedValues(), getValue());

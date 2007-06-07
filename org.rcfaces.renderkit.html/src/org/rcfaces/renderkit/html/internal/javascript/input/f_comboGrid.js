@@ -589,13 +589,8 @@ var __prototype = {
 		
 		input.value=this._inputValue;
 		
-		var selection=this._inputSelection;
-		if (selection) {
-			this._inputSelection=undefined;
-			
-			f_core.SelectText(input, selection);
-		}
-		
+		// Il faut tout selectionner car sous IE le focus se repositionne au début		
+		input.select();		
 	},
 	_onBlur: function(event) {
 		f_core.Debug(f_comboGrid, "_onBlur: formattedValue='"+this._formattedValue+"' (inputValue='"+this._inputValue+"')");

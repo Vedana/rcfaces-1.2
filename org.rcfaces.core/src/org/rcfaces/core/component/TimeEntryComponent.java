@@ -80,35 +80,35 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		setId(componentId);
 	}
 
-	public final boolean isClientSideValidationParameter(String name) {
+	public boolean isClientSideValidationParameter(String name) {
 
 
 		return isClientSideValidationParameter(name, null);
 		
 	}
 
-	public final Map getValidationParametersMap() {
+	public Map getValidationParametersMap() {
 
 
 		return getValidationParametersMap(null);
 		
 	}
 
-	public final String setValidationParameter(String name, String value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
 		return (String)setValidationParameterData(name, value, client);
 		
 	}
 
-	public final String getValidationParameter(String name) {
+	public String getValidationParameter(String name) {
 
 
 		 return getValidationParameter(name, null);
 		
 	}
 
-	public final String removeValidationParameter(String name) {
+	public String removeValidationParameter(String name) {
 
 
 		FacesContext facesContext=getFacesContext();
@@ -127,28 +127,28 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setValidationParameter(String name, ValueBinding value, boolean client) {
+	public void setValidationParameter(String name, ValueBinding value, boolean client) {
 
 
 		setValidationParameterData(name, value, client);
 		
 	}
 
-	public final Map getClientValidationParametersMap() {
+	public Map getClientValidationParametersMap() {
 
 
 		return getClientValidationParametersMap(null);
 		
 	}
 
-	public final int getValidationParametersCount() {
+	public int getValidationParametersCount() {
 
 		 
 		 return getValidationParametersCount(null);
 		
 	}
 
-	public final Time getTime() {
+	public Time getTime() {
 
 
 				Object submittedValue=getSubmittedExternalValue();
@@ -181,14 +181,14 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 			
 	}
 
-	public final void setTime(Time time) {
+	public void setTime(Time time) {
 
 
 				setValue(time);
 			
 	}
 
-	public final void setTime(String time) {
+	public void setTime(String time) {
 
 
 			Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
@@ -196,7 +196,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setMinTime(String time) {
+	public void setMinTime(String time) {
 
 
 			Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
@@ -204,7 +204,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setDefaultTime(String time) {
+	public void setDefaultTime(String time) {
 
 
 			Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
@@ -212,7 +212,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setMaxTime(String time) {
+	public void setMaxTime(String time) {
 
 
 			Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
@@ -220,35 +220,35 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setLiteralLocale(String locale) {
+	public void setLiteralLocale(String locale) {
 
 
 		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
-	public final void setComponentLocale(String locale) {
+	public void setComponentLocale(String locale) {
 
 
 		setComponentLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
 		
 	}
 
-	public final void setLiteralTimeZone(String timeZone) {
+	public void setLiteralTimeZone(String timeZone) {
 
 
 		setLiteralTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
 		
 	}
 
-	public final void setComponentTimeZone(String timeZone) {
+	public void setComponentTimeZone(String timeZone) {
 
 
 		setComponentTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
 		
 	}
 
-	public final String getValidationParameter(String name, FacesContext facesContext) {
+	public String getValidationParameter(String name, FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -264,7 +264,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final int getValidationParametersCount(FacesContext facesContext) {
+	public int getValidationParametersCount(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -279,7 +279,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final Map getValidationParametersMap(FacesContext facesContext) {
+	public Map getValidationParametersMap(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -295,7 +295,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final Map getClientValidationParametersMap(FacesContext facesContext) {
+	public Map getClientValidationParametersMap(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -349,7 +349,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	private final Object setValidationParameterData(String name, Object value, boolean client) {
+	private Object setValidationParameterData(String name, Object value, boolean client) {
 
 
 		FacesContext facesContext=getFacesContext();
@@ -369,7 +369,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
+	public boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
 
 
 		if (facesContext==null) {

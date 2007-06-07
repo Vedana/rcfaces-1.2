@@ -77,7 +77,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		setId(componentId);
 	}
 
-	public final void setAsyncRenderMode(String asyncRenderMode) {
+	public void setAsyncRenderMode(String asyncRenderMode) {
 
 
 			setAsyncRenderMode(((Integer)AsyncRenderModeConverter.SINGLETON.getAsObject(null, this, asyncRenderMode)).intValue());

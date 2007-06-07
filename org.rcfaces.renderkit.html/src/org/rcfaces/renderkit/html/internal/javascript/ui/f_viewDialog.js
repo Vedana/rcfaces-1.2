@@ -58,9 +58,9 @@ var __prototype = {
 	 * @method public
 	 *
 	f_finalize: function() {
-		this.f_super(arguments);
-		
 		_viewURL=undefined // string
+
+		this.f_super(arguments);		
 	},
 	*/
 
@@ -68,7 +68,7 @@ var __prototype = {
 	 *  <p>Return the viewURL URL.</p>
 	 *
 	 * @method public 
-	 * @return string viewURL
+	 * @return String viewURL
 	 */
 	f_getViewURL: function() {
 		return this._viewURL;
@@ -78,11 +78,12 @@ var __prototype = {
 	 *  <p>Sets the viewURL URL.</p>
 	 *
 	 * @method public 
-	 * @param string viewURL
+	 * @param String viewURL
 	 * @return void
 	 */
 	f_setViewURL: function(viewURL) {
     	f_core.Assert((typeof(viewURL)=="string"), "f_shell.f_setViewURL: Invalid parameter '"+viewURL+"'.");
+    	
 		this._viewURL = f_env.ResolveContentUrl(window, viewURL);
 	},
 	
@@ -119,47 +120,43 @@ var __prototype = {
 
 	/**
 	 * @method public
-	 * @param optionnal string viewURL : the url to be shown in the iframe
+	 * @param optionnal String viewURL the url to be shown in the iframe
 	 * @return void
 	 */
 	f_openURL: function(viewURL) {
+		f_core.Assert(arguments.length==0 || viewURL || typeof(viewURL)=="string", "f_viewDialog.f_openURL: first parameter is optionnal but must be a string");		
      	f_core.Debug(f_viewDialog, "f_openURL: entering ("+viewURL+")");
-		f_core.Assert(arguments.length==0 || viewURL || typeof(viewURL)=="string", "f_viewDialog.f_openURL: first parameter is optionnal but must be a string");
-		
+
 		if (viewURL) {
 			this.f_setViewURL(viewURL);
 		}
 
 		this.f_openDialog(null, this.f_getViewURL());
-		
-
 	},
 
 	/**
 	 * @method public
-	 * @param boolean aSuivre : true if we're to draw the next Dialog
+	 * @param boolean showNext <code>true</code> if we're to draw the next Dialog
 	 * @return void
 	 */
-	f_close: function(aSuivre) {
+	f_close: function(showNext) {
      	f_core.Debug(f_viewDialog, "f_close: entering ("+aSuivre+")");
 
-		if (aSuivre) {
+		if (showNext) {
 			f_dialog.ShowNextDialogStored();
 			return;
 		}
+		
 		//delete the iFrame
 		this.f_delModIFrame();
-
 	},
 
 	/**
 	 * @method public
 	 * @return String
 	 */
-	_toString: function() {
-		var ts = this.f_super(arguments);
-		ts = ts + "\n[f_viewDialog viewURL='"+this._viewURL+"']";
-		return ts;
+	toString: function() {
+		return "[f_viewDialog shell="+this.f_super(arguments)+" viewURL='"+this._viewURL+"']";
 	}
 }
 

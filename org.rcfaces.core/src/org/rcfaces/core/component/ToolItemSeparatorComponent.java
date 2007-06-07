@@ -25,7 +25,7 @@ public class ToolItemSeparatorComponent extends AbstractSeparatorComponent {
 		setId(componentId);
 	}
 
-	public final ToolFolderComponent getToolFolder() {
+	public ToolFolderComponent getToolFolder() {
 
 
 		return (ToolFolderComponent)getParent();

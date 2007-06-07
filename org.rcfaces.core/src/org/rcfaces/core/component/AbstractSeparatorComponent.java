@@ -37,7 +37,7 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 		
 	}
 
-	public final void setHiddenMode(String hiddenMode) {
+	public void setHiddenMode(String hiddenMode) {
 
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
@@ -67,7 +67,7 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
-	public final Boolean getVisibleState() {
+	public Boolean getVisibleState() {
 
 
 			return getVisibleState(null);

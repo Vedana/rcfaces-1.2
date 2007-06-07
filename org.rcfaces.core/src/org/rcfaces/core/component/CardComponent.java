@@ -38,7 +38,7 @@ public class CardComponent extends AbstractOutputComponent implements
 		setId(componentId);
 	}
 
-	public final CardBoxComponent getCardBox() {
+	public CardBoxComponent getCardBox() {
 
 
 				return CardBoxTools.getCardBox(this);

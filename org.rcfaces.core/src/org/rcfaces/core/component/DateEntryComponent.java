@@ -61,35 +61,35 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		setId(componentId);
 	}
 
-	public final boolean isClientSideValidationParameter(String name) {
+	public boolean isClientSideValidationParameter(String name) {
 
 
 		return isClientSideValidationParameter(name, null);
 		
 	}
 
-	public final Map getValidationParametersMap() {
+	public Map getValidationParametersMap() {
 
 
 		return getValidationParametersMap(null);
 		
 	}
 
-	public final String setValidationParameter(String name, String value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
 		return (String)setValidationParameterData(name, value, client);
 		
 	}
 
-	public final String getValidationParameter(String name) {
+	public String getValidationParameter(String name) {
 
 
 		 return getValidationParameter(name, null);
 		
 	}
 
-	public final String removeValidationParameter(String name) {
+	public String removeValidationParameter(String name) {
 
 
 		FacesContext facesContext=getFacesContext();
@@ -108,35 +108,35 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public final void setValidationParameter(String name, ValueBinding value, boolean client) {
+	public void setValidationParameter(String name, ValueBinding value, boolean client) {
 
 
 		setValidationParameterData(name, value, client);
 		
 	}
 
-	public final Map getClientValidationParametersMap() {
+	public Map getClientValidationParametersMap() {
 
 
 		return getClientValidationParametersMap(null);
 		
 	}
 
-	public final int getValidationParametersCount() {
+	public int getValidationParametersCount() {
 
 		 
 		 return getValidationParametersCount(null);
 		
 	}
 
-	public final void setDefaultDate(String date) {
+	public void setDefaultDate(String date) {
 
 
 			engine.setProperty(Properties.DEFAULT_DATE, date);
 		
 	}
 
-	public final Date getDefaultDate(FacesContext facesContext) {
+	public Date getDefaultDate(FacesContext facesContext) {
 
 
 			Object value=engine.getProperty(Properties.DEFAULT_DATE, facesContext);
@@ -148,7 +148,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public final String getValidationParameter(String name, FacesContext facesContext) {
+	public String getValidationParameter(String name, FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -164,7 +164,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public final int getValidationParametersCount(FacesContext facesContext) {
+	public int getValidationParametersCount(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -179,7 +179,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public final Map getValidationParametersMap(FacesContext facesContext) {
+	public Map getValidationParametersMap(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -195,7 +195,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public final Map getClientValidationParametersMap(FacesContext facesContext) {
+	public Map getClientValidationParametersMap(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -249,7 +249,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	private final Object setValidationParameterData(String name, Object value, boolean client) {
+	private Object setValidationParameterData(String name, Object value, boolean client) {
 
 
 		FacesContext facesContext=getFacesContext();
@@ -269,7 +269,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public final boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
+	public boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
 
 
 		if (facesContext==null) {

@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -531,14 +532,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         htmlWriter.writeClass(rowClassName);
 
-        String rowId = htmlWriter.getHtmlComponentRenderContext()
-                .getHtmlRenderContext().getComponentClientId(
-                        htmlWriter.getComponentRenderContext().getComponent());
-        if (rowId != null) {
-            htmlWriter.writeId(rowId);
-        }
-
-        htmlWriter.writeAttribute("v:nc", true);
+        htmlWriter.writeId(computeRowId(htmlWriter));
 
         if (selected && writeSelected) {
             htmlWriter.writeAttribute("v:selected", true);
@@ -634,10 +628,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             String rowClassName, boolean selected, boolean writeSelected,
             String defaultCellStyleClass, int rowIndex) throws WriterException {
 
-        String rowId = jsWriter.getHtmlRenderContext().getComponentClientId(
-                gridRenderContext.getComponentsGridComponent());
-
-        jsWriter.writeMethodCall("f_addRow2").writeString(rowId);
+        jsWriter.writeMethodCall("f_addRow2").writeString(
+                computeRowId(jsWriter));
 
         IObjectLiteralWriter oWriter = jsWriter.write(',').writeObjectLiteral(
                 true);
@@ -745,6 +737,31 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         bufWriter.reset();
 
         jsWriter.writeln(");");
+    }
+
+    private String computeRowId(IComponentWriter jsWriter) {
+        IComponentRenderContext componentRenderContext = jsWriter
+                .getComponentRenderContext();
+        IRenderContext renderContext = componentRenderContext
+                .getRenderContext();
+
+        String rowId = renderContext
+                .getComponentClientId(componentRenderContext.getComponent());
+
+        String namingSeparator = renderContext.getProcessContext()
+                .getNamingSeparator();
+        if (namingSeparator == null) {
+            return rowId;
+        }
+
+        int idx = rowId.lastIndexOf(NamingContainer.SEPARATOR_CHAR);
+        if (idx >= 0) {
+            rowId = rowId.substring(0, idx) + namingSeparator
+                    + rowId.substring(idx + 1);
+        }
+
+        return rowId;
+
     }
 
     public void encodeEnd(IComponentWriter writer) throws WriterException {

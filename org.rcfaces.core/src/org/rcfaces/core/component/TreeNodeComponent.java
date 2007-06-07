@@ -39,42 +39,42 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 		setId(componentId);
 	}
 
-	public final void setInputType(String inputType) {
+	public void setInputType(String inputType) {
 
 
 			setInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
 		
 	}
 
-	public final void setExpanded(boolean expanded) {
+	public void setExpanded(boolean expanded) {
 
 
 				setExpanded(null, expanded);
 			
 	}
 
-	public final void setExpanded(FacesContext context, boolean expanded) {
+	public void setExpanded(FacesContext context, boolean expanded) {
 
 
 				getTree().setExpanded(context, getItemValue(), expanded);
 			
 	}
 
-	public final boolean isExpanded() {
+	public boolean isExpanded() {
 
 
 				return isExpanded(null);
 			
 	}
 
-	public final boolean isExpanded(FacesContext context) {
+	public boolean isExpanded(FacesContext context) {
 
 
 				return getTree().isExpanded(context, getItemValue());
 			
 	}
 
-	public final TreeComponent getTree() {
+	public TreeComponent getTree() {
 
 
 			return TreeTools.getTree(this);

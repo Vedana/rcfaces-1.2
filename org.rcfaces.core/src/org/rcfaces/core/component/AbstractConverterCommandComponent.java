@@ -22,14 +22,14 @@ public abstract class AbstractConverterCommandComponent extends AbstractCommandC
 	}
 
 
-	public final void setConverter(String converterId) {
+	public void setConverter(String converterId) {
 
 
 			 setConverter(null, converterId);
 		
 	}
 
-	public final void setConverter(FacesContext facesContext, String converterId) {
+	public void setConverter(FacesContext facesContext, String converterId) {
 
 
 			if (facesContext==null) {
@@ -40,28 +40,28 @@ public abstract class AbstractConverterCommandComponent extends AbstractCommandC
 		
 	}
 
-	public final void setConverter(Converter converter) {
+	public void setConverter(Converter converter) {
 
 
         	engine.setProperty("converter", converter);
 		
 	}
 
-	public final Converter getConverter() {
+	public Converter getConverter() {
 
 
         	return (Converter)engine.getProperty("converter", null);
 		
 	}
 
-	public final Converter getConverter(FacesContext facesContext) {
+	public Converter getConverter(FacesContext facesContext) {
 
 
         	return (Converter)engine.getProperty("converter", facesContext);
 		
 	}
 
-	public final Object getLocalValue() {
+	public Object getLocalValue() {
 
 
 		return engine.getLocalValue(Properties.VALUE);

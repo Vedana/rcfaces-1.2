@@ -39,14 +39,14 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 		setId(componentId);
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
 	}
 
-	public final IToolFolderIterator listToolFolders() {
+	public IToolFolderIterator listToolFolders() {
 
 
 		return ToolBarTools.listToolFolders(this);

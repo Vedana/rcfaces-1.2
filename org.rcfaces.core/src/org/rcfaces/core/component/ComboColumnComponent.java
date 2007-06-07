@@ -82,56 +82,56 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 		setId(componentId);
 	}
 
-	public final Converter getConverter() {
+	public Converter getConverter() {
 
 
         	return (Converter)engine.getProperty("converter", null);
 		
 	}
 
-	public final Object getValue() {
+	public Object getValue() {
 
 
 				return getValue(null);
 			
 	}
 
-	public final void setValue(Object value) {
+	public void setValue(Object value) {
 
 
 				engine.setValue(Properties.VALUE, value);
 			
 	}
 
-	public final Object getLocalValue() {
+	public Object getLocalValue() {
 
 
 				return engine.getLocalValue(Properties.VALUE);
 			
 	}
 
-	public final void setConverter(Converter converter) {
+	public void setConverter(Converter converter) {
 
 
         	engine.setProperty("converter", converter);
 		
 	}
 
-	public final IContentAccessors getImageAccessors(FacesContext facesContext) {
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
 	}
 
-	public final void setConverter(String converterId) {
+	public void setConverter(String converterId) {
 
 
 			 setConverter(null, converterId);
 		
 	}
 
-	public final void setConverter(FacesContext facesContext, String converterId) {
+	public void setConverter(FacesContext facesContext, String converterId) {
 
 
 			if (facesContext==null) {
@@ -153,21 +153,21 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 		
 	}
 
-	public final Object getValue(FacesContext context) {
+	public Object getValue(FacesContext context) {
 
 
 				return engine.getValue(Properties.VALUE, context);
 			
 	}
 
-	public final void setHiddenMode(String hiddenMode) {
+	public void setHiddenMode(String hiddenMode) {
 
 
 			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
 	}
 
-	public final void setAscending(String order) {
+	public void setAscending(String order) {
 
 
 			setAscending(((Boolean)OrderConverter.SINGLETON.getAsObject(null, this, order)).booleanValue());
@@ -197,7 +197,7 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 		engine.setProperty(Properties.VISIBLE, visible);
 	}
 
-	public final Boolean getVisibleState() {
+	public Boolean getVisibleState() {
 
 
 			return getVisibleState(null);
@@ -561,7 +561,7 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 		engine.setProperty(Properties.IMAGE_URL, imageURL);
 	}
 
-	public final IContentAccessors getImageAccessors() {
+	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);

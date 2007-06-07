@@ -31,7 +31,7 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 	}
 
 
-	public final IMenuItemIterator listMenuItems() {
+	public IMenuItemIterator listMenuItems() {
 
 
 		return MenuTools.listMenuItems(this);
@@ -99,21 +99,21 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 		return valueBinding.getType(facesContext);
 	}
 
-	public final int getCheckedValuesCount() {
+	public int getCheckedValuesCount() {
 
 
 			return CheckTools.getCount(getCheckedValues());
 		
 	}
 
-	public final Object[] listCheckedValues() {
+	public Object[] listCheckedValues() {
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
 		
 	}
 
-	public final Object getFirstCheckedValue() {
+	public Object getFirstCheckedValue() {
 
 
 			return CheckTools.getFirst(getCheckedValues(), getValue());

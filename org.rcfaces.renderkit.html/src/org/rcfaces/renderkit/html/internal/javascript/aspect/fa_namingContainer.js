@@ -15,7 +15,7 @@ var __static = {
 	/** 
 	 * @field private static String
 	 */
-	PageSeparator:		":",
+	_PageSeparator:		":",
 
 	/** 
 	 * @field private static final String
@@ -53,7 +53,7 @@ var __static = {
 		var pageId=id;
 		var separator=fa_namingContainer._SEPARATOR_CHAR;
 		if (id.charAt(0)!=separator) {
-			var pageSeparator=fa_namingContainer.PageSeparator;
+			var pageSeparator=fa_namingContainer._PageSeparator;
 			if (separator!=pageSeparator) {
 				pageId=id.replace(fa_namingContainer._SEPARATOR_CHAR_REGEXP, pageSeparator);
 			}
@@ -120,7 +120,7 @@ var __static = {
 		}
 		
 		var separator=fa_namingContainer._SEPARATOR_CHAR;
-		var pageSeparator=fa_namingContainer.PageSeparator;
+		var pageSeparator=fa_namingContainer._PageSeparator;
 		
         if (id.charAt(0)==separator) {
         	// Ca commence par un ':'  l'ID est donc en absolue
@@ -195,6 +195,10 @@ var __static = {
 			return true;
 		}
 		
+		if (component._namingContainer) {
+			return true;
+		}
+		
 		return f_core.GetAttribute(component, fa_namingContainer._NAMING_CONTAINER_ATTRIBUTE)!=null;
 	},
 	
@@ -215,14 +219,14 @@ var __static = {
 			return;
 		}
 		
-		fa_namingContainer.PageSeparator=separator;
+		fa_namingContainer._PageSeparator=separator;
 	},
 	/**
 	 * @method hidden static final
 	 * @return String
 	 */
 	GetSeparator: function() {
-		return fa_namingContainer.PageSeparator;
+		return fa_namingContainer._PageSeparator;
 	},
 	
 	/**
@@ -246,7 +250,7 @@ var __static = {
 			return null;
 		}
 	
-		var pageSeparator=fa_namingContainer.PageSeparator;
+		var pageSeparator=fa_namingContainer._PageSeparator;
 
 		var pageId=id;
 /*	

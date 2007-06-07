@@ -74,49 +74,49 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		setId(componentId);
 	}
 
-	public final void setSortedChildren(UIComponent[] components) {
+	public void setSortedChildren(UIComponent[] components) {
 
 
 				SortTools.setSortedChildren(null, this, engine, ComponentsColumnComponent.class, components);
 			
 	}
 
-	public final UIComponent[] getSortedChildren() {
+	public UIComponent[] getSortedChildren() {
 
 
 				return SortTools.getSortedChildren(null, this, engine, ComponentsColumnComponent.class);
 			
 	}
 
-	public final UIComponent[] getOrderedChildren() {
+	public UIComponent[] getOrderedChildren() {
 
 
 				return OrderTools.getOrderedChildren(null, this, engine, ComponentsColumnComponent.class);
 			
 	}
 
-	public final void setOrderedChildren(UIComponent[] components) {
+	public void setOrderedChildren(UIComponent[] components) {
 
 
 				OrderTools.setOrderedChildren(null, this, engine, ComponentsColumnComponent.class, components);
 			
 	}
 
-	public final IColumnIterator listColumns() {
+	public IColumnIterator listColumns() {
 
 
 			return GridTools.listColumns(this, ComponentsColumnComponent.class);
 			
 	}
 
-	public final void setRowValueConverter(String converterId) {
+	public void setRowValueConverter(String converterId) {
 
 			
 			setRowValueConverter(converterId, null);
 		
 	}
 
-	public final void setRowValueConverter(String converterId, FacesContext facesContext) {
+	public void setRowValueConverter(String converterId, FacesContext facesContext) {
 
 
 			Converter converter=ComponentTools.createConverter(facesContext, converterId);
@@ -125,28 +125,28 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		
 	}
 
-	public final void setSelectionCardinality(String cardinality) {
+	public void setSelectionCardinality(String cardinality) {
 
 
 			setSelectionCardinality(((Integer)CardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
 		
 	}
 
-	public final int getSelectedValuesCount() {
+	public int getSelectedValuesCount() {
 
 
 				return SelectionTools.getCount(getSelectedValues());
 			
 	}
 
-	public final Object getFirstSelectedValue() {
+	public Object getFirstSelectedValue() {
 
 
 				return SelectionTools.getFirst(getSelectedValues(), null);
 			
 	}
 
-	public final Object getSelectedValues(FacesContext facesContext) {
+	public Object getSelectedValues(FacesContext facesContext) {
 
 
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
@@ -173,49 +173,49 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 			
 	}
 
-	public final Object[] listSelectedValues() {
+	public Object[] listSelectedValues() {
 
 
 				return SelectionTools.listValues(getSelectedValues(), getValue());
 			
 	}
 
-	public final ComponentsColumnComponent[] getSortedColumns() {
+	public ComponentsColumnComponent[] getSortedColumns() {
 
 
 				return (ComponentsColumnComponent[])getSortedChildren();
 			
 	}
 
-	public final ComponentsColumnComponent getFirstSortedColumn() {
+	public ComponentsColumnComponent getFirstSortedColumn() {
 
 
 				return (ComponentsColumnComponent)SortTools.getFirstSortedChild(null, this, engine, ComponentsColumnComponent.class );
 			
 	}
 
-	public final void setSortedColumn(ComponentsColumnComponent componentsColumn) {
+	public void setSortedColumn(ComponentsColumnComponent componentsColumn) {
 
 
 				SortTools.setSortedChildren(null, this, engine, ComponentsColumnComponent.class, new ComponentsColumnComponent[] { componentsColumn });
 			
 	}
 
-	public final void setSortedColumns(ComponentsColumnComponent[] componentsColumns) {
+	public void setSortedColumns(ComponentsColumnComponent[] componentsColumns) {
 
 
 				setSortedChildren(componentsColumns);
 			
 	}
 
-	public final ISortedComponent[] listSortedComponents() {
+	public ISortedComponent[] listSortedComponents() {
 
 
 				return listSortedComponents(null);
 			
 	}
 
-	public final ISortedComponent[] listSortedComponents(FacesContext context) {
+	public ISortedComponent[] listSortedComponents(FacesContext context) {
 
 
 				return GridTools.listSortedComponents(context, this);
@@ -225,7 +225,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	/**
 
 	 */
-	public final void select(Object rowValue) {
+	public void select(Object rowValue) {
 
 
 				GridTools.select(null, this, rowValue);
@@ -236,7 +236,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Selects the item at the given zero-relative index in the receiver. If the item at the index was already selected, it remains selected. Indices that are out of range are ignored.
 	 * @param index the index of the item to select
 	 */
-	public final void select(int index) {
+	public void select(int index) {
 
 
 				GridTools.select(null, this, index);
@@ -248,7 +248,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * If the item at a given index is not selected, it is selected. If the item at a given index was already selected, it remains selected. Indices that are out of range and duplicate indices are ignored. If the receiver is single-select and multiple indices are specified, then all indices are ignored.
 	 * @param indices the array of indices for the items to select
 	 */
-	public final void select(int[] indices) {
+	public void select(int[] indices) {
 
 
 				GridTools.select(null, this, indices);
@@ -261,7 +261,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * @param start the start of the range
 	 * @param end the end of the range
 	 */
-	public final void select(int start, int end) {
+	public void select(int start, int end) {
 
 
 				GridTools.select(null, this, start, end);
@@ -272,14 +272,14 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Selects all of the items in the receiver.
 	 * If the receiver is single-select, do nothing.
 	 */
-	public final void selectAll() {
+	public void selectAll() {
 
 
 				GridTools.selectAll(null, this);
 			
 	}
 
-	public final void deselect(Object rowValue) {
+	public void deselect(Object rowValue) {
 
 
 				GridTools.deselect(null, this, rowValue);
@@ -290,7 +290,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Deselects the item at the given zero-relative index in the receiver. If the item at the index was already deselected, it remains deselected. Indices that are out of range are ignored.
 	 * @param index the index of the item to deselect
 	 */
-	public final void deselect(int index) {
+	public void deselect(int index) {
 
 
 				GridTools.deselect(null, this, index);
@@ -301,7 +301,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * Deselects the items at the given zero-relative indices in the receiver. If the item at the given zero-relative index in the receiver is selected, it is deselected. If the item at the index was not selected, it remains deselected. Indices that are out of range and duplicate indices are ignored.
 	 * @param indices the array of indices for the items to deselect
 	 */
-	public final void deselect(int[] indices) {
+	public void deselect(int[] indices) {
 
 
 				GridTools.deselect(null, this, indices);
@@ -313,7 +313,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * @param start the start index of the items to deselect
 	 * @param end the end index of the items to deselect
 	 */
-	public final void deselect(int start, int end) {
+	public void deselect(int start, int end) {
 
 
 				GridTools.deselect(null, this, start, end);
@@ -323,7 +323,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	/**
 	 * Deselects all selected items in the receiver.
 	 */
-	public final void deselectAll() {
+	public void deselectAll() {
 
 
 				GridTools.deselectAll(null, this);
@@ -499,21 +499,21 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.ROW_STYLE_CLASS, rowStyleClass);
 	}
 
-	public final IMenuComponent getMenu(String menuId) {
+	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
 		
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuIterator listMenus() {
+	public IMenuIterator listMenus() {
 
 
 		return MenuTools.listMenus(this);
@@ -600,7 +600,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		return engine.getBoolProperty(Properties.PAGED, false, facesContext);
 	}
 
-	public final boolean isPagedSetted() {
+	public boolean isPagedSetted() {
 
 
 			return engine.isPropertySetted(Properties.PAGED);

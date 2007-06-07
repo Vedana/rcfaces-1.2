@@ -74,35 +74,35 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		setId(componentId);
 	}
 
-	public final boolean isClientSideValidationParameter(String name) {
+	public boolean isClientSideValidationParameter(String name) {
 
 
 		return isClientSideValidationParameter(name, null);
 		
 	}
 
-	public final Map getValidationParametersMap() {
+	public Map getValidationParametersMap() {
 
 
 		return getValidationParametersMap(null);
 		
 	}
 
-	public final String setValidationParameter(String name, String value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
 		return (String)setValidationParameterData(name, value, client);
 		
 	}
 
-	public final String getValidationParameter(String name) {
+	public String getValidationParameter(String name) {
 
 
 		 return getValidationParameter(name, null);
 		
 	}
 
-	public final String removeValidationParameter(String name) {
+	public String removeValidationParameter(String name) {
 
 
 		FacesContext facesContext=getFacesContext();
@@ -121,28 +121,28 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final void setValidationParameter(String name, ValueBinding value, boolean client) {
+	public void setValidationParameter(String name, ValueBinding value, boolean client) {
 
 
 		setValidationParameterData(name, value, client);
 		
 	}
 
-	public final Map getClientValidationParametersMap() {
+	public Map getClientValidationParametersMap() {
 
 
 		return getClientValidationParametersMap(null);
 		
 	}
 
-	public final int getValidationParametersCount() {
+	public int getValidationParametersCount() {
 
 		 
 		 return getValidationParametersCount(null);
 		
 	}
 
-	public final String getValidationParameter(String name, FacesContext facesContext) {
+	public String getValidationParameter(String name, FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -158,7 +158,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final int getValidationParametersCount(FacesContext facesContext) {
+	public int getValidationParametersCount(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -173,7 +173,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final Map getValidationParametersMap(FacesContext facesContext) {
+	public Map getValidationParametersMap(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -189,7 +189,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final Map getClientValidationParametersMap(FacesContext facesContext) {
+	public Map getClientValidationParametersMap(FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -243,7 +243,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	private final Object setValidationParameterData(String name, Object value, boolean client) {
+	private Object setValidationParameterData(String name, Object value, boolean client) {
 
 
 		FacesContext facesContext=getFacesContext();
@@ -263,7 +263,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public final boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
+	public boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
 
 
 		if (facesContext==null) {
@@ -409,21 +409,21 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getFacesListeners(javax.faces.event.ValueChangeListener.class);
 	}
 
-	public final IMenuComponent getMenu(String menuId) {
+	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
 		
 	}
 
-	public final IMenuComponent getMenu() {
+	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
 		
 	}
 
-	public final IMenuIterator listMenus() {
+	public IMenuIterator listMenus() {
 
 
 		return MenuTools.listMenus(this);

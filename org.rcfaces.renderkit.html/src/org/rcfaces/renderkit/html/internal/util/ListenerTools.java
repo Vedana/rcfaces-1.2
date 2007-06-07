@@ -123,8 +123,8 @@ public final class ListenerTools {
             return JavaScriptClasses.EVENT_LOAD_CST;
         }
 
-        public String getClientValidationEventName() {
-            return JavaScriptClasses.EVENT_CLIENT_VALIDATION_CST;
+        public String getValidationEventName() {
+            return JavaScriptClasses.EVENT_VALIDATION_CST;
         }
 
     };
@@ -212,8 +212,8 @@ public final class ListenerTools {
             return JavaScriptClasses.EVENT_LOAD_ATTRIBUTE;
         }
 
-        public String getClientValidationEventName() {
-            return JavaScriptClasses.EVENT_CLIENT_VALIDATION_ATTRIBUTE;
+        public String getValidationEventName() {
+            return JavaScriptClasses.EVENT_VALIDATION_ATTRIBUTE;
         }
 
     };
@@ -474,7 +474,7 @@ public final class ListenerTools {
                     map = new HashMap(4);
                 }
 
-                map.put(nameSpace.getClientValidationEventName(), fls);
+                map.put(nameSpace.getValidationEventName(), fls);
             }
         }
 
@@ -492,7 +492,7 @@ public final class ListenerTools {
     public interface INameSpace {
         String getBlurEventName();
 
-        String getClientValidationEventName();
+        String getValidationEventName();
 
         String getCheckEventName();
 

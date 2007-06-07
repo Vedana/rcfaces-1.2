@@ -320,8 +320,14 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
                 String listenerType = (String) entry.getKey();
                 FacesListener listeners[] = (FacesListener[]) entry.getValue();
 
+                boolean submitSupport = true;
+                if (ListenerTools.ATTRIBUTE_NAME_SPACE.getValidationEventName()
+                        .equals(listenerType)) {
+                    submitSupport = false;
+                }
+
                 EventsRenderer.encodeAttributeEventListeners(renderContext, sa,
-                        listenerType, listeners, true);
+                        listenerType, listeners, submitSupport);
             }
 
             if (sa.length() > 0) {

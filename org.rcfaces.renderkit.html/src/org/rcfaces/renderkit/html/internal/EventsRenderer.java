@@ -153,6 +153,9 @@ public class EventsRenderer {
                     break;
                 }
 
+                if (submitSupport == false) {
+                    continue;
+                }
                 // Il faut générer un submit en javascript !
                 needSubmit = true;
                 continue;
