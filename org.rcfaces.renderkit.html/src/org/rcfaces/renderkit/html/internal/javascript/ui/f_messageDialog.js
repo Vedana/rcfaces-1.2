@@ -325,9 +325,11 @@ var __prototype = {
 		var table = docBase.createElement("table");
 		var baseMem = table;
 
+		table.className = cssClassBase+"_dialog";
+		
 		var styleClass = this._styleClass;
 		if (styleClass) {
-			baseMem.className += " "+styleClass;
+			table.className += " "+styleClass;
 		}
 
 		baseMem._buttons=new Array();
@@ -335,8 +337,6 @@ var __prototype = {
 		// Memorisation de la call-back et de l'instance de f_messageDialog
 		baseMem._messageBox=this;
 
-		table.className = cssClassBase+"_dialog";
-		
 		//set size and pos
 		table.style.top=0;
 		table.style.left=0;
