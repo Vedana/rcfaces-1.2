@@ -126,6 +126,9 @@ var __prototype = {
 		}
 		// Create a blocking Div
 		this.f_drawModIFrame();
+		
+		//draw the image
+		this.f_constructIframe();
 
 	},
 
