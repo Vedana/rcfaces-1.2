@@ -368,6 +368,9 @@ var __static = {
      	f_core.Assert(!win || win.document, "f_shell.GetParentShell: bad parameter type "+win);
      	f_core.Debug(f_shell, "GetParentShell: entering");
      	
+     	if (!win) {
+     		win = window;
+     	}
 		var iframe = win.frameElement;
 		if (iframe) {
 			return iframe._modalShell;
