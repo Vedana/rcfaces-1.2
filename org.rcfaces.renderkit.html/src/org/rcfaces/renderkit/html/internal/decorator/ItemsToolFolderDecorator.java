@@ -710,7 +710,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     }
 
     /**
-     * Ideal placeholder for adding stuff at generation time
+     * Ideal placeholder for modifying stuff at generation time
+     * have a look at preEncodeItem and postEncodeItem
      * 
      * @param renderer
      * @param component
@@ -721,6 +722,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     protected void encodeItem(Renderer renderer, UIComponent component,
             UIComponent itemComponent, String itemId) throws WriterException {
 
+    	preEncodeItem(renderer, component, itemComponent, itemId);
+    	
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
@@ -757,9 +760,37 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
 
         htmlWriter.endElement(IHtmlWriter.LI);
+
+        postEncodeItem(renderer, component, itemComponent, itemId);
     }
 
-    private int getDefaultTextPosition(SelectItem selectItem) {
+    /**
+     * called before the encodeItem
+     * @param renderer 
+     * @param component 
+     * @param itemComponent
+     * @param itemId
+     */
+    protected void preEncodeItem(Renderer renderer, UIComponent component, UIComponent itemComponent, String itemId)
+    	throws WriterException {
+		// called before the encodeItem
+		
+	}
+
+    /**
+     * called after theencodeItem
+     * @param renderer
+     * @param component
+     * @param itemComponent
+     * @param itemId
+     */
+	protected void postEncodeItem(Renderer renderer, UIComponent component, UIComponent itemComponent, String itemId)
+	 throws WriterException {
+		// called after theencodeItem
+		
+	}
+
+	private int getDefaultTextPosition(SelectItem selectItem) {
         UIComponent component = getComponent();
 
         if (component instanceof ITextPositionCapability) {
