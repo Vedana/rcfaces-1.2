@@ -137,6 +137,7 @@ var __static = {
     /**
      *
      * @method public static
+	 * @return void
      */
      DocumentComplete: function() {
      	f_core.Debug(f_shell, "DocumentComplete: entering");
@@ -152,6 +153,7 @@ var __static = {
      /**
      * Class Constructor (called in the head ...
      * @method public static
+	 * @return void
      */
     Initializer: function() {
     	f_shell._IE6 = f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6); 
@@ -160,6 +162,7 @@ var __static = {
      /**
      * Class Destructor (called in the head ...
      * @method public static
+	 * @return void
      */
     Finalizer: function() {
     	var objIframe=f_shell._ObjIFrame;
@@ -174,6 +177,7 @@ var __static = {
     	// f_shell._DocComplete = undefined; // boolean
     	f_shell._OnDocComplete = null; // function
 	 },
+	 
      /**
      * @method public static
      * @return Object size (width, height)
@@ -190,6 +194,7 @@ var __static = {
      * <p>For IE 6 only : Hide selects that get over the Div</p>
      *
      * @method protected static
+	 * @return void
      */
     HideSelect: function() {
 		if (!f_shell._IE6) {
@@ -211,6 +216,7 @@ var __static = {
      * <p>For IE 6 only : Show selects that get over the Div</p>
      *
      * @method protected static
+	 * @return void
      */
     ShowSelect: function() {
 		if (!f_shell._IE6) {
@@ -233,6 +239,7 @@ var __static = {
 	 *  </p>
 	 *
 	 * @method protected static
+	 * @return void
 	 */
 	DelModIFrame: function() {
      	f_core.Debug(f_shell, "DelModIFrame: entering");
@@ -271,6 +278,7 @@ var __static = {
 	 *  </p>
 	 *
 	 * @method private static
+	 * @return void
 	 */
 	_OnIframeLoad: function() {
      	f_core.Debug(f_shell, "_OnIframeLoad: entering with this="+this);
@@ -310,6 +318,7 @@ var __static = {
      * <p>Resize Callback called on the div</p>
      *
      * @method protected static
+     * @return void
      */
 	_OnResize: function(evt) {
 		var shell=this._shell;
@@ -332,6 +341,7 @@ var __static = {
 	 *  </p>
 	 *
 	 * @method protected static
+	 * @return HTMLIframeElement iframe
 	 */
 	GetIframe: function() {
      	f_core.Debug(f_shell, "GetIframe: entering");
@@ -383,6 +393,7 @@ var __static = {
 	 *  </p>
 	 *
 	 * @method protected static
+	 * @return void
 	 */
 	CleanInstance: function() {
      	f_core.Debug(f_shell, "ClearInstance: entering");
@@ -540,6 +551,12 @@ var __prototype = {
 	},
 
 
+	/**
+	 * <p>Destruct a <code>f_shell</code>.</p>
+	 *
+	 * @method public
+	 * @return void
+	 */
 	f_finalize: function() {
 		
 		// this._cssClassBase=undefined; // string
@@ -1150,6 +1167,11 @@ var __prototype = {
 		f_core.RemoveEventListener(document, "focus", f_shell._OnFocus);
 	},
 	
+	/**
+	 * @method protected
+	 * @param boolean firstTime
+	 * @return void
+	 */
 	f_setFocus: function(firstTime) {
 		f_core.Debug(f_shell, "f_setFocus: entering with firstTime = "+firstTime);
 		if (!f_shell.IsDocComplete()) {
