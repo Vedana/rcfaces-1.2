@@ -37,11 +37,11 @@ var __prototype = {
 	 * @return String
 	 */
 	f_getClientData: function(name) {
-		f_core.Assert(typeof(name)=="string", "Name of clientData must be a string !");
+		f_core.Assert(typeof(name)=="string", "fa_clientData.f_getClientData: Name of clientData must be a string !");
 
 		var clientDatas=this._clientDatas;
 		if (clientDatas===undefined) {
-			clientDatas=fa_clientData.InitializeDataAttribute(this);
+			clientDatas=f_core.ParseDataAttribute(this);
 		}
 		
 		return clientDatas[name];
@@ -104,14 +104,14 @@ var __prototype = {
 		
 		for (var i=0;i<arguments.length;) {
 			var name=arguments[i++];
-			f_core.Assert(typeof(name)=="string", "Name of clientData must be a string !");
+			f_core.Assert(typeof(name)=="string", "fa_clientData.f_setClientData: Name of clientData must be a string !");
 
 			var value;
 			
 			if (i<arguments.length) {
 				value=arguments[i++];
 				
-				f_core.Assert(typeof(value)=="string" || !value, "Value of clientData must be a string or null !");
+				f_core.Assert(typeof(value)=="string" || !value, "fa_clientData.f_setClientData: Value of clientData must be a string or null !");
 			}
 			
 			if (!data[name] && !modifiedData[name] && !newData[name]) {
