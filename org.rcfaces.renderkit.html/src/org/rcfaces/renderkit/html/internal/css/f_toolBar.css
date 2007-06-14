@@ -19,22 +19,34 @@
 	padding: 0;	
 }
 
-.f_toolBar_item,
-.f_toolBar_itemSeparator {
+.f_toolFolder,
+.f_itemsToolFolder {
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;	
+	float: left;
+	display: block;
+}
+
+.f_toolFolder_item,
+.f_toolFolder_itemSeparator {
 	list-style-image: none;
 	list-style-position: outside;
 	list-style-type: none;
 	float: left;
+	display: block;
 	margin: 0;
 	padding: 2px;
 }
 
-.f_toolBar_itemSeparator {
+.f_toolFolder_itemSeparator {
 	position: relative;
 	vertical-align: middle;
 }
 
-.f_toolBar_autoSeparator {
+.f_toolFolder_autoSeparator {
 	background: transparent url('toolBar/separator.gif') center top repeat-y;
 	width: 4px;
 }

@@ -1320,5 +1320,12 @@
 				<required-style name="f_textEditor.css" />
 			</class>
 		</file>
+		<file name="input/f_textEditorImageButton.js">
+			<class name="f_textEditorImageButton">
+				<required-class name="f_imageButton" /> 
+				
+				<required-style name="f_textEditorImageButton.css" />
+			</class>
+		</file>
 	</module>
 </repository>

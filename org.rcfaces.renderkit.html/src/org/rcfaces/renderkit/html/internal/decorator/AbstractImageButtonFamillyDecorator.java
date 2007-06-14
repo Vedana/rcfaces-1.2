@@ -10,6 +10,7 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
@@ -95,6 +96,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     protected Integer tabIndex = null;
 
+    protected String alternateText;
+
     public AbstractImageButtonFamillyDecorator(
             IImageButtonFamilly imageButtonFamilly) {
         this.imageButtonFamilly = imageButtonFamilly;
@@ -141,6 +144,11 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             if (imageButtonFamilly instanceof IAccessKeyCapability) {
                 accessKey = ((IAccessKeyCapability) imageButtonFamilly)
                         .getAccessKey();
+            }
+
+            if (imageButtonFamilly instanceof IAlternateTextCapability) {
+                alternateText = ((IAlternateTextCapability) imageButtonFamilly)
+                        .getAlternateText();
             }
 
             if (imageButtonFamilly instanceof ITabIndexCapability) {
@@ -586,9 +594,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     protected void writeImage() throws WriterException {
 
-    	if (imageSrc == null) {
-    		return;
-    	}
+        if (imageSrc == null) {
+            return;
+        }
         String inputElement = getInputElement();
         writer.startElement(inputElement);
         writeInputAttributes(writer);
@@ -601,6 +609,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);
 
+            if (alternateText != null) {
+                writer.writeAlt(alternateText);
+            }
+
             writeImageAttributes();
 
         } else {
@@ -611,6 +623,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writer.writeClass(getImageClassName(htmlBorderWriter));
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);
+
+            if (alternateText != null) {
+                writer.writeAlt(alternateText);
+            }
             writer.endElement(IHtmlWriter.IMG);
         }
 
