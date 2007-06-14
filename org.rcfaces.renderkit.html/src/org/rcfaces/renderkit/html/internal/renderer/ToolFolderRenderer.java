@@ -15,10 +15,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ToolFolderComponent;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
-import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -84,36 +84,46 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
 
     public void encodeChildren(FacesContext facesContext, UIComponent component)
             throws IOException {
-
-        ToolFolderComponent toolFolderComponent = (ToolFolderComponent) component;
-
-        List children = component.getChildren();
-
-        for (Iterator it = children.iterator(); it.hasNext();) {
-            UIComponent child = (UIComponent) it.next();
-
-            encodeToolItem(facesContext, toolFolderComponent, child);
-        }
-    }
-
-    protected void encodeToolItem(FacesContext facesContext,
-            ToolFolderComponent toolFolderComponent, UIComponent component)
-            throws WriterException {
-
-        Renderer renderer = getRenderer(facesContext, component);
-
-        if (renderer == null) {
-            LOG.error("Can not get renderer for component '" + component
-                    + "' id=" + component.getId());
-            return;
-        }
-
-        IRenderContext renderContext = getRenderContext(facesContext);
+        IHtmlRenderContext renderContext = getHtmlRenderContext(facesContext);
 
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
+        List children = getChildren(htmlWriter);
+
+        for (Iterator it = children.iterator(); it.hasNext();) {
+            UIComponent child = (UIComponent) it.next();
+
+            encodeToolItem(htmlWriter, child);
+        }
+
+        htmlWriter.endComponent();
+    }
+
+    protected List getChildren(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponent()
+                .getChildren();
+    }
+
+    protected void encodeToolItem(IHtmlWriter htmlWriter, UIComponent child)
+            throws WriterException {
+
+        FacesContext facesContext = htmlWriter.getHtmlComponentRenderContext()
+                .getFacesContext();
+
+        Renderer renderer = getRenderer(facesContext, child);
+
+        if (renderer == null) {
+            LOG.error("Can not get renderer for component '" + child + "' id="
+                    + child.getId());
+            return;
+        }
+
         htmlWriter.startElement(IHtmlWriter.LI);
+        htmlWriter.writeClass("f_toolFolder_item");
+
+        ToolFolderComponent toolFolderComponent = (ToolFolderComponent) htmlWriter
+                .getHtmlComponentRenderContext().getComponent();
 
         if (toolFolderComponent.getToolBar().isItemPaddingSetted()) {
             int cellPadding = toolFolderComponent.getToolBar().getItemPadding(
@@ -125,7 +135,7 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
 
         htmlWriter.endComponent();
 
-        ComponentTools.encodeRecursive(facesContext, component);
+        ComponentTools.encodeRecursive(facesContext, child);
 
         htmlWriter.endElement(IHtmlWriter.LI);
     }

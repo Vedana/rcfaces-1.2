@@ -52,7 +52,7 @@ public class ToolBarRenderer extends AbstractCssRenderer {
         ToolBarComponent toolBarComponent = (ToolBarComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement(IHtmlWriter.UL);
+        htmlWriter.startElement(IHtmlWriter.DIV);
         // htmlWriter.writeCellPadding(0);
         // htmlWriter.writeCellSpacing(0);
 
@@ -74,7 +74,7 @@ public class ToolBarRenderer extends AbstractCssRenderer {
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.endElement(IHtmlWriter.UL);
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
         super.encodeEnd(writer);
     }
@@ -117,11 +117,12 @@ public class ToolBarRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
-        htmlWriter.startElement(IHtmlWriter.LI);
+      //  htmlWriter.startElement(IHtmlWriter.LI);
+//        htmlWriter.writeClass("f_toolBar_item");
 
         ComponentTools.encodeRecursive(facesContext, component);
 
-        htmlWriter.endElement(IHtmlWriter.LI);
+//        htmlWriter.endElement(IHtmlWriter.LI);
     }
 
     protected String getJavaScriptClassName() {
