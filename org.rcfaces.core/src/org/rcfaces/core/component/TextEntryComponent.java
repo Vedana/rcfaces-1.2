@@ -1,33 +1,36 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAutoTabCapability;
-import org.rcfaces.core.component.capability.IClientValidationCapability;
-import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import java.lang.Object;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import java.util.Collections;
+import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IClientValidationCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import javax.faces.context.FacesContext;
+import java.util.Map;
+import java.util.HashMap;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
+import java.util.HashSet;
 import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The textEntry Component is based on the standard HTML tag &lt;INPUT TYPE="text"&gt;.</p>
@@ -53,6 +56,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	IMenuCapability,
 	IFocusStyleClassCapability,
 	ISeverityStyleClassCapability,
+	IAlternateTextCapability,
 	IClientValidationCapability,
 	ISelectionEventCapability,
 	IValidationParameters {
@@ -61,7 +65,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","clientValidator","errorStyleClass","autoCompletion","fatalStyleClass","required","maxTextLength","valueChangeListener","columnNumber","warnStyleClass","textDirection","styleClass","text","infoStyleClass","readOnly","focusStyleClass","autoTab","emptyMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","clientValidator","errorStyleClass","autoCompletion","fatalStyleClass","required","maxTextLength","valueChangeListener","columnNumber","warnStyleClass","textDirection","alternateText","styleClass","text","infoStyleClass","readOnly","focusStyleClass","autoTab","emptyMessage"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -543,6 +547,29 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 	public void setWarnStyleClass(java.lang.String warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
 	}
 
 	public java.lang.String getClientValidator() {

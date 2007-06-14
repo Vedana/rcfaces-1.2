@@ -1,19 +1,21 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.convert.Converter;
-
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISelected3StatesCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import org.rcfaces.core.component.capability.ISelected3StatesCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The checkButton3States Component is a <a href="/comps/checkButtonComponent.html">CheckButton</a> with 3 states : Check, unchecked and undefined. It is often used to show the state of a group of checkButtons</p>
@@ -35,13 +37,14 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 	IHorizontalTextPositionCapability,
 	ISelectionEventCapability,
 	IReadOnlyCapability,
+	IAlternateTextCapability,
 	ISelected3StatesCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.checkButton3States";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","text","selectedState","readOnly","textPosition","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","alternateText","text","selectedState","readOnly","textPosition","textDirection"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="selectedState";
 
@@ -184,6 +187,29 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 
 	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
+	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
 	}
 
 	public java.lang.String getSelectedState() {

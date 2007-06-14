@@ -3,7 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.io.CharArrayWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
@@ -35,7 +33,6 @@ import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -183,6 +180,16 @@ public class ComboGridRenderer extends DataGridRenderer {
             htmlWriter.writeAttribute("v:headerVisible", false);
         }
 
+        int popupWidth = gridRenderContext.getGridWidth();
+        if (popupWidth > 0) {
+            htmlWriter.writeAttribute("v:popupWidth", popupWidth);
+        }
+
+        int popupHeight = gridRenderContext.getGridHeight();
+        if (popupHeight > 0) {
+            htmlWriter.writeAttribute("v:popupHeight", popupHeight);
+        }
+
         String formattedValue = null;
 
         Object selectedValue = comboGridComponent
@@ -274,37 +281,6 @@ public class ComboGridRenderer extends DataGridRenderer {
         htmlWriter.enableJavaScript();
 
         htmlWriter.endComponent();
-
-        if (false) {
-            CharArrayWriter buffer = new CharArrayWriter(1024);
-
-            htmlWriter.getComponentRenderContext().setAttribute(
-                    GRID_HTML_CONTENT, Boolean.TRUE);
-
-            ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
-            try {
-                ResponseWriter newResponseWriter = oldResponseWriter
-                        .cloneWithWriter(buffer);
-
-                facesContext.setResponseWriter(newResponseWriter);
-
-                IHtmlWriter newHtmlWriter = (IHtmlWriter) ((HtmlRenderContext) htmlWriter
-                        .getHtmlComponentRenderContext().getRenderContext())
-                        .createWriter(comboGridComponent, newResponseWriter);
-
-                super.encodeGrid(newHtmlWriter);
-
-                newHtmlWriter.endComponent();
-
-            } finally {
-                facesContext.setResponseWriter(oldResponseWriter);
-            }
-
-            System.out.println("Buffer=" + buffer);
-
-            htmlWriter.getComponentRenderContext().setAttribute(
-                    GRID_HTML_CONTENT, buffer.toString());
-        }
     }
 
     private String formatValue(FacesContext facesContext,

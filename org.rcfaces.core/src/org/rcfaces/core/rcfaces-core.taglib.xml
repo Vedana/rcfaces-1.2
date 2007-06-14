@@ -261,6 +261,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>textEditorImageButton</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.textEditorImageButton</component-type>
+			<renderer-type>org.rcfaces.core.textEditorImageButton</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.ButtonHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>imageRadioButton</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.imageRadioButton</component-type>
@@ -564,6 +572,14 @@
 		<component>
 			<component-type>org.rcfaces.core.toolFolder</component-type>
 			<renderer-type>org.rcfaces.core.toolFolder</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>textEditorToolFolder</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.textEditorToolFolder</component-type>
+			<renderer-type>org.rcfaces.core.textEditorToolFolder</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>

@@ -1,18 +1,19 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.HashSet;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
 
 /**
  * <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
@@ -31,6 +32,7 @@ import org.rcfaces.core.internal.tools.ImageAccessorTools;
 public class ImageComponent extends AbstractOutputComponent implements 
 	IImageCapability,
 	IImageSizeCapability,
+	IAlternateTextCapability,
 	IFilterCapability,
 	IImageAccessorsCapability {
 
@@ -38,7 +40,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","imageURL","filterProperties","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alternateText","imageHeight","imageURL","filterProperties","imageWidth"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="imageURL";
 
@@ -137,6 +139,29 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	public void setImageWidth(int imageWidth) {
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
+	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
 	}
 
 	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {

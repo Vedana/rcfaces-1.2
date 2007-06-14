@@ -1,24 +1,27 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-
+import java.lang.String;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.CardComponent;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IFontCapability;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.TabbedPaneComponent;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 /**
  * An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> and holding the components.

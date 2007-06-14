@@ -139,6 +139,10 @@
 		<component-class>org.rcfaces.core.component.ImagePagerButtonComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.textEditorImageButton</component-type>
+		<component-class>org.rcfaces.core.component.TextEditorImageButtonComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.imageRadioButton</component-type>
 		<component-class>org.rcfaces.core.component.ImageRadioButtonComponent</component-class>
 	</component>
@@ -293,6 +297,10 @@
 	<component>
 		<component-type>org.rcfaces.core.toolFolder</component-type>
 		<component-class>org.rcfaces.core.component.ToolFolderComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.textEditorToolFolder</component-type>
+		<component-class>org.rcfaces.core.component.TextEditorToolFolderComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.itemsToolFolder</component-type>

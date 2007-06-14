@@ -1,12 +1,12 @@
 package org.rcfaces.renderkit.html.component;
 
+import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.internal.component.Properties;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Specifies includes and required javascript classes.

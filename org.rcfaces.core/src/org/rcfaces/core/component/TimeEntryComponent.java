@@ -1,38 +1,40 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IAutoTabCapability;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.LiteralTimeConverter;
+import org.rcfaces.core.internal.component.Properties;
+import java.lang.Object;
+import java.util.TimeZone;
+import org.rcfaces.core.lang.Time;
+import java.util.Collections;
+import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import java.util.HashMap;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import javax.faces.FacesException;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.HashSet;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import java.util.Locale;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
 import org.rcfaces.core.lang.IAdaptable;
-import org.rcfaces.core.lang.Time;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The timeEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a time.</p>
@@ -61,13 +63,14 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	IComponentLocaleCapability,
 	IComponentTimeZoneCapability,
 	ISeverityStyleClassCapability,
+	IAlternateTextCapability,
 	IValidationParameters {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.timeEntry";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","minTime","time","warnStyleClass","defaultTime","hourStep","styleClass","infoStyleClass","componentTimeZone","secondStep","millisStep","minuteStep","errorStyleClass","fatalStyleClass","autoCompletion","componentLocale","required","timeFormat","valueChangeListener","literalTimeZone","literalLocale","readOnly","focusStyleClass","autoTab","maxTime"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","minTime","time","warnStyleClass","defaultTime","hourStep","styleClass","alternateText","infoStyleClass","componentTimeZone","secondStep","millisStep","minuteStep","errorStyleClass","fatalStyleClass","autoCompletion","componentLocale","required","timeFormat","valueChangeListener","literalTimeZone","literalLocale","readOnly","focusStyleClass","autoTab","maxTime"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="time";
 
@@ -659,6 +662,29 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 	public void setWarnStyleClass(java.lang.String warnStyleClass) {
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
+	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
 	}
 
 	/**

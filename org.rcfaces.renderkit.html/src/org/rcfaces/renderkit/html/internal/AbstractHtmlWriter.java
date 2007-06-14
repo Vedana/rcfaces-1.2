@@ -521,6 +521,12 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    public IHtmlWriter writeDir(String direction) throws WriterException {
+        writeAttribute("dir", direction);
+
+        return this;
+    }
+
     public IHtmlWriter writeCharset(String charset) throws WriterException {
         writeAttribute("charset", charset);
 

@@ -116,6 +116,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         if (accessKey != null) {
             htmlWriter.writeAttribute("accessKey", accessKey);
         }
+        writeAlternateText(htmlWriter, button);
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
     }

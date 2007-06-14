@@ -159,6 +159,11 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.textEditorImageButton</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextEditorImageButtonRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imageRadioButton</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageRadioButtonRenderer</renderer-class>
 		</renderer>
@@ -326,6 +331,11 @@
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.toolFolder</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ToolFolderRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.textEditorToolFolder</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextEditorToolFolderRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>

@@ -96,6 +96,8 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
 
     IHtmlWriter writeAlt(String altText) throws WriterException;
 
+    IHtmlWriter writeDir(String direction) throws WriterException;
+
     // IHtmlWriter writeAttributeNS(String ns, String name, String value)throws
     // WriterException;
 

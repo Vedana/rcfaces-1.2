@@ -1,19 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.AbstractItemComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-
-import org.rcfaces.core.component.capability.IStatesImageCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 /**
  * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.

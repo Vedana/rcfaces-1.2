@@ -218,6 +218,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeValidatorAttributes(htmlWriter);
         writeValueAttributes(htmlWriter);
         writeTextDirection(htmlWriter, textEntryComponent);
+        writeAlternateText(htmlWriter, textEntryComponent);
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
     }

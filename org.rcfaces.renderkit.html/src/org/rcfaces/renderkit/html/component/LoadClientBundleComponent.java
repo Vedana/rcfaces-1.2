@@ -1,11 +1,11 @@
 package org.rcfaces.renderkit.html.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Loads a property bundle on the client side.

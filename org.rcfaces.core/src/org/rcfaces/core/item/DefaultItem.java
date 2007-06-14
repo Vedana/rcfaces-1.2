@@ -14,6 +14,7 @@ import javax.faces.model.SelectItemGroup;
 
 import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
@@ -83,6 +84,8 @@ class DefaultItem extends SelectItemGroup {
     private String menuPopupId;
 
     private String width;
+
+    private String alternateText;
 
     public DefaultItem() {
     }
@@ -169,6 +172,11 @@ class DefaultItem extends SelectItemGroup {
 
         if (selectItem instanceof IWidthItem) {
             setWidth(((IWidthItem) selectItem).getWidth());
+        }
+
+        if (selectItem instanceof IAlternateTextItem) {
+            setAlternateText(((IAlternateTextItem) selectItem)
+                    .getAlternateText());
         }
     }
 
@@ -299,6 +307,12 @@ class DefaultItem extends SelectItemGroup {
         if (selectItemComponent instanceof IWidthCapability) {
             setWidth(((IWidthCapability) selectItemComponent).getWidth());
         }
+
+        if (selectItemComponent instanceof IAlternateTextCapability) {
+            setAlternateText(((IAlternateTextCapability) selectItemComponent)
+                    .getAlternateText());
+        }
+
     }
 
     public String getImageURL() {
@@ -509,6 +523,14 @@ class DefaultItem extends SelectItemGroup {
 
     public final void setWidth(String width) {
         this.width = width;
+    }
+
+    public final String getAlternateText() {
+        return alternateText;
+    }
+
+    public final void setAlternateText(String alternateText) {
+        this.alternateText = alternateText;
     }
 
 }

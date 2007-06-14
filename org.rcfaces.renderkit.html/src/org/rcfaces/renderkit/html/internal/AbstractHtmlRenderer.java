@@ -21,6 +21,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
@@ -545,6 +546,16 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return writer;
     }
 
+    protected void writeAlternateText(IHtmlWriter htmlWriter,
+            IAlternateTextCapability alternateTextCapability)
+            throws WriterException {
+
+        String alternateText = alternateTextCapability.getAlternateText();
+        if (alternateText != null) {
+            htmlWriter.writeAlt(alternateText);
+        }
+    }
+
     public static final IHtmlWriter writeTextDirection(IHtmlWriter htmlWriter,
             ITextDirectionCapability textDirectionCapability)
             throws WriterException {
@@ -553,7 +564,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         if (textDirection != ITextDirectionCapability.DEFAULT_TEXT_DIRECTION) {
             switch (textDirection) {
             case ITextDirectionCapability.RIGHT_LEFT_TEXT_DIRECTION:
-                htmlWriter.writeAttribute("dir", RIGHT_TO_LEFT);
+                htmlWriter.writeDir(RIGHT_TO_LEFT);
             }
         }
 

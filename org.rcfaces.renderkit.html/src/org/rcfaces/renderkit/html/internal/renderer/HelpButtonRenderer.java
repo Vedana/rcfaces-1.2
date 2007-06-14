@@ -68,20 +68,21 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
                 throws WriterException {
             HelpButtonComponent helpButtonComponent = (HelpButtonComponent) imageButtonFamilly;
 
-            String ac = ((IForCapability) imageButtonFamilly).getFor();
+            String forId = ((IForCapability) imageButtonFamilly).getFor();
 
-            if (ac != null) {
+            if (forId != null) {
                 IComponentRenderContext componentRenderContext = writer
                         .getComponentRenderContext();
 
                 IRenderContext renderContext = componentRenderContext
                         .getRenderContext();
 
-                String forId = renderContext.computeBrotherComponentClientId(
-                        helpButtonComponent, ac);
+                String forClientId = renderContext
+                        .computeBrotherComponentClientId(helpButtonComponent,
+                                forId);
 
-                if (forId != null) {
-                    writer.writeAttribute("v:for", forId);
+                if (forClientId != null) {
+                    writer.writeAttribute("v:for", forClientId);
                 }
             }
         }
@@ -103,6 +104,5 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
                 writer.writeAttribute("height", height);
             }
         }
-
     }
 }

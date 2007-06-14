@@ -17,12 +17,11 @@ import org.rcfaces.core.internal.renderkit.AbstractComponentRenderContext;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractHtmlComponentlRenderContext extends
-        AbstractComponentRenderContext implements IHtmlComponentRenderContext,
-        IReleasable {
+        AbstractComponentRenderContext implements IHtmlComponentRenderContext {
 
     private static final String REVISION = "$Revision$";
 
-    private int clientDataCount = 0;
+    private static final String CLIENT_DATA_COUNT_PROPERTY_NAME = "org.rcfaces.renderkit.html.CLIENT_DATA_COUNT";
 
     protected AbstractHtmlComponentlRenderContext(FacesContext facesContext,
             UIComponent component, String componentClientId) {
@@ -35,24 +34,31 @@ public abstract class AbstractHtmlComponentlRenderContext extends
             return false;
         }
 
+        int clientDataCount = 0;
+        if (clientDataCount < 0) {
+            Integer cdc = (Integer) getAttribute(CLIENT_DATA_COUNT_PROPERTY_NAME);
+            if (cdc != null) {
+                clientDataCount = cdc.intValue();
+            }
+        }
+
         int count = ((IClientDataCapability) component).getClientDataCount();
         if (count <= clientDataCount) {
             return false;
         }
 
-        if (clear) {
-            clientDataCount = count;
+        if (clear == false) {
+            return true;
         }
 
+        clientDataCount = count;
+
+        setAttribute(CLIENT_DATA_COUNT_PROPERTY_NAME, new Integer(
+                clientDataCount));
         return true;
     }
 
     public IHtmlRenderContext getHtmlRenderContext() {
         return (IHtmlRenderContext) getRenderContext();
     }
-
-    public void release() {
-        clientDataCount = 0;
-    }
-
 }

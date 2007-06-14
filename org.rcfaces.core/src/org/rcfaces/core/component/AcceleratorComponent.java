@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.rcfaces.core.component.capability.IForCapability;
-import org.rcfaces.core.component.capability.IImmediateCapability;
-import org.rcfaces.core.component.capability.IKeyPressEventCapability;
-import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.internal.component.CameliaCommandComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IKeyPressEventCapability;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IForCapability;
 
 /**
  * <p>The accelerator Component is a non-visual component.</p>

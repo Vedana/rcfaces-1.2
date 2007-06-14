@@ -1,22 +1,26 @@
 package org.rcfaces.core.component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 public class TextEditorComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
@@ -28,13 +32,14 @@ public class TextEditorComponent extends AbstractInputComponent implements
 	IMenuCapability,
 	IFocusStyleClassCapability,
 	ISeverityStyleClassCapability,
-	ISelectionEventCapability {
+	ISelectionEventCapability,
+	IAlternateTextCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.textEditor";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","valueMimeType","valueChangeListener","warnStyleClass","textDirection","styleClass","text","infoStyleClass","readOnly","focusStyleClass","emptyMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","valueMimeType","valueChangeListener","warnStyleClass","textDirection","alternateText","styleClass","text","infoStyleClass","readOnly","focusStyleClass","emptyMessage"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -301,6 +306,29 @@ public class TextEditorComponent extends AbstractInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listSelectionListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
 	}
 
 	public String getValueMimeType() {
