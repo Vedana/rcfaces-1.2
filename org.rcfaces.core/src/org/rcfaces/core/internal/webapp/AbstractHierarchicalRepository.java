@@ -231,20 +231,31 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
     public final IHierarchicalFile declareFile(String name, String directory,
             IModule module, IHierarchicalFile depends[], Object container,
             IContentProvider contentProvider) {
-        String contentLocation = getContentLocation(name, directory);
+        final String contentLocation = getContentLocation(name, directory);
 
         URL url = null;
         if (container instanceof ClassLoader) {
-            url = ((ClassLoader) container).getResource(contentLocation);
+            String cl = contentLocation;
+            if (cl.startsWith("/")) {
+                cl = cl.substring(1);
+            }
+
+            url = ((ClassLoader) container).getResource(cl);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Get resource '" + cl + "' from classloader => "
+                        + url);
+            }
         }
 
         if (url == null && (container instanceof ServletContext)) {
-            if (contentLocation.startsWith("/") == false) {
-                contentLocation = "/" + contentLocation;
+            String cl = contentLocation;
+            if (cl.startsWith("/") == false) {
+                cl = "/" + cl;
             }
 
             try {
-                url = ((ServletContext) container).getResource(contentLocation);
+                url = ((ServletContext) container).getResource(cl);
 
             } catch (MalformedURLException e) {
                 IllegalArgumentException ex = new IllegalArgumentException(
@@ -253,6 +264,11 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
                 ex.initCause(e);
 
                 throw ex;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Get resource '" + cl + "' from classloader => "
+                        + url);
             }
         }
 
