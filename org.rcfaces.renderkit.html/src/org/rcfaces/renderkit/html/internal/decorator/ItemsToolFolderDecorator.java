@@ -61,6 +61,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.item.IAccessKeyItem;
+import org.rcfaces.core.item.IAlternateTextItem;
 import org.rcfaces.core.item.IBorderTypeItem;
 import org.rcfaces.core.item.ICheckSelectItem;
 import org.rcfaces.core.item.IClientDataItem;
@@ -78,6 +79,8 @@ import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
+
+import com.sun.rsasign.al;
 
 /**
  * 
@@ -385,9 +388,9 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         htmlWriter.startElement(IHtmlWriter.LI);
 
-        StringAppender sa = new StringAppender("f_toolBar_itemSeparator", 32);
+        StringAppender sa = new StringAppender("f_toolFolder_itemSeparator", 32);
         if (separatorImageURL == null) {
-            sa.append(" f_toolBar_autoSeparator");
+            sa.append(" f_toolFolder_autoSeparator");
         }
         htmlWriter.writeClass(sa.toString());
 
@@ -404,7 +407,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     null);
             if (imageURL != null) {
                 htmlWriter.startElement(IHtmlWriter.IMG);
-                htmlWriter.writeClass("f_toolBar_imgSeparator");
+                htmlWriter.writeClass("f_toolFolder_imgSeparator");
 
                 int imageWidth = toolBar.getSeparatorImageWidth(facesContext);
                 if (imageWidth > 0) {
@@ -418,9 +421,18 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
                 htmlWriter.writeSrc(imageURL);
 
-                String tooltip = getSeparatorImageAlt(selectItem);
-                if (tooltip != null) {
-                    htmlWriter.writeAlt(tooltip);
+                String alternateText = null;
+                if (selectItem instanceof IAlternateTextItem) {
+                    alternateText = ((IAlternateTextItem) selectItem)
+                            .getAlternateText();
+                }
+
+                if (alternateText == null) {
+                    alternateText = getSeparatorAlternateText(selectItem);
+                }
+
+                if (alternateText != null) {
+                    htmlWriter.writeAlt(alternateText);
                 }
 
                 htmlWriter.endElement(IHtmlWriter.IMG);
@@ -430,7 +442,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         htmlWriter.endElement(IHtmlWriter.LI);
     }
 
-    protected String getSeparatorImageAlt(SelectItem selectItem) {
+    protected String getSeparatorAlternateText(SelectItem selectItem) {
         return null;
     }
 
@@ -710,8 +722,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     }
 
     /**
-     * Ideal placeholder for modifying stuff at generation time
-     * have a look at preEncodeItem and postEncodeItem
+     * Ideal placeholder for modifying stuff at generation time have a look at
+     * preEncodeItem and postEncodeItem
      * 
      * @param renderer
      * @param component
@@ -722,13 +734,13 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     protected void encodeItem(Renderer renderer, UIComponent component,
             UIComponent itemComponent, String itemId) throws WriterException {
 
-    	preEncodeItem(renderer, component, itemComponent, itemId);
-    	
+        preEncodeItem(renderer, component, itemComponent, itemId);
+
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
         htmlWriter.startElement(IHtmlWriter.LI);
-        htmlWriter.writeClass("f_toolBar_item");
+        htmlWriter.writeClass("f_toolFolder_item");
 
         if (itemPaddingSetted && itemPadding >= 0) {
             htmlWriter.writeStyle().writePadding(itemPadding + "px");
@@ -766,31 +778,33 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
     /**
      * called before the encodeItem
-     * @param renderer 
-     * @param component 
-     * @param itemComponent
-     * @param itemId
-     */
-    protected void preEncodeItem(Renderer renderer, UIComponent component, UIComponent itemComponent, String itemId)
-    	throws WriterException {
-		// called before the encodeItem
-		
-	}
-
-    /**
-     * called after theencodeItem
+     * 
      * @param renderer
      * @param component
      * @param itemComponent
      * @param itemId
      */
-	protected void postEncodeItem(Renderer renderer, UIComponent component, UIComponent itemComponent, String itemId)
-	 throws WriterException {
-		// called after theencodeItem
-		
-	}
+    protected void preEncodeItem(Renderer renderer, UIComponent component,
+            UIComponent itemComponent, String itemId) throws WriterException {
+        // called before the encodeItem
 
-	private int getDefaultTextPosition(SelectItem selectItem) {
+    }
+
+    /**
+     * called after theencodeItem
+     * 
+     * @param renderer
+     * @param component
+     * @param itemComponent
+     * @param itemId
+     */
+    protected void postEncodeItem(Renderer renderer, UIComponent component,
+            UIComponent itemComponent, String itemId) throws WriterException {
+        // called after theencodeItem
+
+    }
+
+    private int getDefaultTextPosition(SelectItem selectItem) {
         UIComponent component = getComponent();
 
         if (component instanceof ITextPositionCapability) {
