@@ -70,6 +70,13 @@ public class ImageContentAccessorHandlerImpl extends
         contentAccessorAvailable = ContentStorageServlet
                 .getContentStorageBaseURI(facesContext.getExternalContext()
                         .getApplicationMap()) != null;
+
+        if (contentAccessorAvailable == false) {
+            LOG.info("ImageContentAccessorImpl is not available");
+
+        } else {
+            LOG.debug("ImageContentAccessorImpl available");
+        }
     }
 
     public void configureRules(Digester digester) {

@@ -6,6 +6,8 @@ package org.rcfaces.core.internal.images;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.ImageContentInformation;
 import org.rcfaces.core.internal.RcfacesContext;
@@ -28,6 +30,9 @@ import org.rcfaces.core.provider.AbstractProvider;
 public abstract class ImageContentAccessorHandler extends AbstractProvider
         implements IContentAccessorHandler {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(ImageContentAccessorHandler.class);
 
     public abstract IImageOperation getImageOperation(String operationId);
 
@@ -64,6 +69,11 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
         }
 
         if (isProviderEnabled() == false) {
+            if (LOG.isDebugEnabled()) {
+                LOG
+                        .debug("Provider is disabled, return an unsupported content accessor flag");
+            }
+
             return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
         }
 
@@ -107,8 +117,14 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
                             IContentAccessor.UNDEFINED_PATH_TYPE));
         }
 
-        return formatImageURL(facesContext, modifiedContentAccessor,
-                imageInformation);
+        IContentAccessor formattedContentAccessor = formatImageURL(
+                facesContext, modifiedContentAccessor, imageInformation);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("formattedContentAccessor=" + formattedContentAccessor);
+        }
+
+        return formattedContentAccessor;
     }
 
     public abstract boolean isProviderEnabled();
