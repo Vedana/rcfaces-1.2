@@ -32,6 +32,7 @@ import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -1186,7 +1187,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         Set set;
 
         if (selected == null) {
-            set = new HashSet(8);
+            set = new OrderedSet(8);
 
         } else {
             set = ValuesTools.convertSelection(selected);
@@ -1195,7 +1196,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
             set.clear();
 
-        } else if (set.size() > 0 && deselectedRows != null
+        } else if (set.isEmpty() == false && deselectedRows != null
                 && deselectedRows.length() > 0) {
             List deselect = HtmlValuesTools.parseValues(facesContext,
                     columnComponent, true, false, deselectedRows);

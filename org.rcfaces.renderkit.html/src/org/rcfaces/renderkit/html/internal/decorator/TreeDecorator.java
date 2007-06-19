@@ -3,13 +3,9 @@
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
@@ -20,6 +16,7 @@ import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.TreeNodeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -508,7 +505,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 // Set values = ValuesTools.valueToSet(v, true);
 
                 // On recommence à ZERO !
-                Set values = new HashSet();
+                Set values = new OrderedSet();
 
                 if (HtmlValuesTools.updateValues(facesContext, tree, false,
                         values, selectedValues, deselectedValues)) {
@@ -540,7 +537,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 // Set values = ValuesTools.valueToSet(v, true);
 
                 // On recommence à ZERO !
-                Set values = new HashSet();
+                Set values = new OrderedSet();
 
                 HtmlValuesTools.updateValues(facesContext, tree, true, values,
                         selectedValues, deselectedValues);
@@ -580,18 +577,20 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         return converter;
     }
 
+    /*
     private Set convertSelection(Object selection) {
         if (selection instanceof Object[]) {
-            return new HashSet(Arrays.asList((Object[]) selection));
+            return new OrderedSet(Arrays.asList((Object[]) selection));
         }
 
         if (selection instanceof Collection) {
-            return new HashSet((Collection) selection);
+            return new OrderedSet((Collection) selection);
         }
 
         throw new FacesException(
                 "Bad type of value for attribute selectedValues/checkedValues !");
     }
+    */
 
     protected SelectItem convertToSelectItem(Object value) {
         if (value instanceof ITreeNode) {

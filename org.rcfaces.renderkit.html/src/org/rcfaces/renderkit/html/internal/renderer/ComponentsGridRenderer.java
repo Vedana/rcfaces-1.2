@@ -33,6 +33,7 @@ import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ISelectionValuesCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -832,7 +833,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         Set set;
 
         if (selected == null) {
-            set = new HashSet(8);
+            set = new OrderedSet(8);
 
         } else {
             set = ValuesTools.convertSelection(selected);
