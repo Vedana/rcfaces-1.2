@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -257,10 +258,26 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             InputStream in = servletContext
                     .getResourceAsStream(repositoryLocation);
             if (in == null) {
-                in = getClass().getClassLoader().getResourceAsStream(
-                        repositoryLocation);
+                ClassLoader cl = getClass().getClassLoader();
 
-                repositoryContainer = getClass().getClassLoader();
+                Enumeration en = cl.getResources(repositoryLocation);
+                if (en.hasMoreElements()) {
+                    URL url = (URL) en.nextElement();
+
+                    in = url.openStream();
+
+                    if (in != null) {
+                        repositoryContainer = getClass().getClassLoader();
+
+                        if (en.hasMoreElements()) {
+                            LOG
+                                    .error("CAUTION: Same resource into differents locations ... ("
+                                            + repositoryLocation + ")");
+                        }
+                    } else {
+                        LOG.error("Can not load url '" + url + "'.");
+                    }
+                }
             }
 
             if (in == null) {
