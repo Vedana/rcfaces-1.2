@@ -117,12 +117,12 @@ public class ToolBarRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
-      //  htmlWriter.startElement(IHtmlWriter.LI);
-//        htmlWriter.writeClass("f_toolBar_item");
+        // htmlWriter.startElement(IHtmlWriter.LI);
+        // htmlWriter.writeClass("f_toolBar_item");
 
         ComponentTools.encodeRecursive(facesContext, component);
 
-//        htmlWriter.endElement(IHtmlWriter.LI);
+        // htmlWriter.endElement(IHtmlWriter.LI);
     }
 
     protected String getJavaScriptClassName() {
