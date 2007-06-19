@@ -3,8 +3,16 @@
  */
 package org.rcfaces.core.internal;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -122,6 +130,8 @@ public class Constants {
     public static final Locale REPOSITORY_DEFAULT_LOCALE = Locale.ENGLISH;
 
     public static final boolean VERIFY_VARIABLE_SYNTAX = false;
+
+    private static final boolean VERIFY_IMPLEMENTATION = true;
 
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
@@ -248,6 +258,12 @@ public class Constants {
         Package clazzPackage = clazz.getPackage();
         if (clazzPackage != null) {
             try {
+                String implementationTitle = clazzPackage
+                        .getImplementationTitle();
+                if (implementationTitle != null) {
+                    verifyImplementationTitle(implementationTitle);
+                }
+
                 String version = clazzPackage.getImplementationVersion();
                 if (version != null) {
                     LOG.info(versionName + " version: " + version);
@@ -268,6 +284,73 @@ public class Constants {
                 + ")");
 
         return version;
+    }
+
+    private static void verifyImplementationTitle(String implementationTitle) {
+        if (Constants.VERIFY_IMPLEMENTATION == false) {
+            return;
+        }
+
+        LOG.debug("Check for implementation title '" + implementationTitle
+                + "' uniqueness.");
+
+        try {
+            Enumeration enumeration = Constants.class.getClassLoader()
+                    .getResources("META-INF/MANIFEST.MF");
+
+            Set resources = new HashSet(2);
+
+            for (; enumeration.hasMoreElements();) {
+                URL url = (URL) enumeration.nextElement();
+
+                InputStream inputStream = url.openStream();
+                if (inputStream == null) {
+                    LOG.debug("No input stream for url '" + url + "'.");
+                    continue;
+                }
+
+                try {
+                    Manifest manifest = new Manifest(inputStream);
+
+                    String jarImplementationTitle = (String) manifest
+                            .getMainAttributes().get(
+                                    Attributes.Name.IMPLEMENTATION_TITLE);
+
+                    if (implementationTitle.equals(jarImplementationTitle) == false) {
+                        continue;
+                    }
+
+                    resources.add(url);
+
+                    LOG.debug("Implementation title detected '"
+                            + implementationTitle + "' => " + url);
+
+                } catch (IOException ex) {
+                    LOG.error("Can not load manifest '" + url + "'", ex);
+
+                } finally {
+                    try {
+                        inputStream.close();
+
+                    } catch (IOException ex) {
+                        LOG.error(ex);
+                    }
+                }
+            }
+
+            LOG.debug("Count of implementation title '" + implementationTitle
+                    + "' = " + resources.size());
+
+            if (resources.size() > 1) {
+                throw new IllegalStateException(
+                        "More than one definition of implementation title '"
+                                + implementationTitle + "' !");
+            }
+
+        } catch (IOException e) {
+            LOG.error("Can not search manifest for implementation title '"
+                    + implementationTitle + "'.", e);
+        }
     }
 
     public static final String getBuildId(String version) {
