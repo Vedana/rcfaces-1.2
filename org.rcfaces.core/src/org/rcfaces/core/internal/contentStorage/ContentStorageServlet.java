@@ -63,9 +63,14 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                 getServletContext(), DEFAULT_CONTENT_STORAGE_BASE_URL,
                 getClass());
         if (contentStorageBaseURL == null) {
+            LOG
+                    .info("Base of content storage is invalid, ignore content service.");
             return;
         }
-        LOG.info("Base of content storage is '" + contentStorageBaseURL + "'.");
+
+        LOG
+                .debug("Base of content storage is '" + contentStorageBaseURL
+                        + "'.");
 
         getServletContext().setAttribute(CONTENT_STORAGE_URL_PROPERTY,
                 contentStorageBaseURL);
@@ -121,11 +126,23 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                 .load(contentKey);
 
         if (resolvedContent == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("doGet: contentKey '" + contentKey + "' => "
+                        + resolvedContent);
+            }
+
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         boolean processAtRequest = resolvedContent.isProcessAtRequest();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("doGet: contentKey '" + contentKey + "' => '"
+                    + resolvedContent + "' process at request '"
+                    + processAtRequest + "'.");
+        }
+
         if (processAtRequest == false) {
             sendContent(request, response, resolvedContent);
             return;
