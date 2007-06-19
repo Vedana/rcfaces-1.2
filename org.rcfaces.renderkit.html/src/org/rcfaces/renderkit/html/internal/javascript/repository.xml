@@ -692,6 +692,7 @@
 				<required-class name="fa_commands" />
 				<required-class name="fa_filterProperties"/>
 				<required-class name="fa_selectionProvider"/>
+				<required-class name="fa_required"/>
 				<required-class id="filter" name="f_httpRequest" />
 				<required-class id="filter" name="f_waiting" />
 
