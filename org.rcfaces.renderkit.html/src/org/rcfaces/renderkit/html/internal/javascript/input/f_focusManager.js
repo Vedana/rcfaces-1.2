@@ -152,7 +152,7 @@ var __prototype={
 		}
 
 		if (activeElement) {
-			return f_core.GetWindow(activeElement)._classLoader._init(activeElement, true);
+			return this.f_getClassLoader().f_init(activeElement, true);
 		}
 		 
 		return null;

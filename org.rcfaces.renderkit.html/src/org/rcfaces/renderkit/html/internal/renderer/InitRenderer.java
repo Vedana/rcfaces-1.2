@@ -623,11 +623,14 @@ public class InitRenderer extends AbstractHtmlRenderer {
             writeCookieTest(jsWriter, disabledCookiesPageURL);
         }
 
+        String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
+                .convertSymbol("f_classLoader", "_cameliaClassLoader");
+
         jsWriter.write("for(var cl,v=window;v && !cl;v=v.opener)try{ cl=v.");
-        jsWriter.writeSymbol("_classLoader");
+        jsWriter.write(cameliaClassLoader);
         jsWriter.writeln("}catch(x){}");
         jsWriter.write("if (!cl && top) cl=top.");
-        jsWriter.writeSymbol("_classLoader");
+        jsWriter.write(cameliaClassLoader);
         jsWriter.writeln(";");
         jsWriter.write("if (cl) cl.");
         jsWriter.writeSymbol("_newWindow");

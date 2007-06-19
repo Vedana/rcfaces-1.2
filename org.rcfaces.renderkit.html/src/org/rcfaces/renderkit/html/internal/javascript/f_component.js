@@ -353,7 +353,7 @@ var __prototype = {
 	f_setVisible: function(visible) {
 		f_core.Assert(typeof(visible)=="boolean", "Visible parameter must be a boolean ! ("+visible+")");
 
-		visible=(visible)?true:false;
+		visible=!!visible;
 
 		if (visible==this.f_getVisible()) {
 			return;
@@ -363,7 +363,7 @@ var __prototype = {
 		
 		this.f_updateVisibility(visible);
 
-		this._kclass._classLoader.fireVisibleEvent(this);
+		this.f_getClass().f_getClassLoader().fireVisibleEvent(this);
 
 		this.f_setProperty(f_prop.VISIBLE, visible);		
 	},

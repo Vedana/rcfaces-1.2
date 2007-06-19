@@ -35,7 +35,7 @@ function f_aspect(aspectName, staticMembers, members) {
 	this._name=aspectName;
 	this._members=members;
 	this._staticMembers=staticMembers;
-	this._classLoader=window._classLoader;
+	this._classLoader=f_classLoader.Get();
 
 	var parents;
 	if (arguments.length>3) {

@@ -30,7 +30,7 @@ var __prototype = {
 		
 		f_core.Info("f_bundle", "Bundle '"+name+"' declares classes: "+names);
 	
-		var classLoader=window._classLoader;
+		var classLoader=f_classLoader.Get();
 		f_core.Assert(classLoader, "Bundle '"+name+"' can not get window classloader !");
 		
 		this._classLoader=classLoader;

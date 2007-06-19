@@ -14,17 +14,19 @@ var __prototype = {
 		this.f_super(arguments);
 		
 		this._type=f_core.GetAttribute(this, "v:type");
-		this._for=f_core.GetAttribute(this, "v:for");
+		
+		var forComponent=f_core.GetAttribute(this, "v:for");
 		this._hideIfDisabled=f_core.GetBooleanAttribute(this, "v:hideIfDisabled", false);
 		
 		// this.f_setDisabled(true); // D'office !  on attend la synchro !
 		// C'est fait sur le serveur !
 
-		if (this._for) {
-			fa_pagedComponent.RegisterPager(this._for, this);
+		if (forComponent) {
+			this._for=forComponent;
+			fa_pagedComponent.RegisterPager(forComponent, this);
 			
 		} else  {
-			f_core.Error(f_imagePagerButton, "'for' attribute is not defined !");
+			f_core.Error(f_imagePagerButton, "f_imagePagerButton: 'for' attribute is not defined !");
 		}
 	},
 	f_finalize: function() {
@@ -75,7 +77,7 @@ var __prototype = {
 			
 		}
 		
-		f_core.Debug(f_imagePagerButton, "Update image: id="+this.id+" type="+type+" disabled="+disabled+" first="+first+" rows="+rows+" rowCount="+rowCount);
+		f_core.Debug(f_imagePagerButton, "fa_pagedComponentInitialized: Update image: id="+this.id+" type="+type+" disabled="+disabled+" first="+first+" rows="+rows+" rowCount="+rowCount);
 		
 		this.f_setDisabled(disabled);	
 	},

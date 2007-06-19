@@ -237,8 +237,10 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
             return;
         }
 
-        writeSymbol("_classLoader").write('.').writeSymbol("f_requiresBundle")
-                .write("(document");
+        String cameliaClassLoader = convertSymbol("f_classLoader",
+                "_cameliaClassLoader");
+
+        writeCall(cameliaClassLoader, "f_requiresBundle").write("document");
 
         IRepository.IFile filesToRequire[] = javascriptRenderContext
                 .popRequiredFiles();

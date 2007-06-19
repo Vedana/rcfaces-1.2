@@ -112,17 +112,20 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
 
         writer.setComponentVarName(componentVarName);
 
+        String cameliaClassLoader = writer.getJavaScriptRenderContext()
+                .convertSymbol("f_classLoader", "_cameliaClassLoader");
+
         if (declare[0]) {
             writer.write("var ").write(componentVarName);
 
-            writer.write('=').writeCall("_classLoader", "_init");
+            writer.write('=').writeCall(cameliaClassLoader, "f_init");
             writer.writeString(componentId);
             writer.writeln(");");
 
             return writer;
         }
 
-        writer.writeCall("_classLoader", "_init");
+        writer.writeCall(cameliaClassLoader, "f_init");
         writer.write(componentVarName).writeln(");");
 
         return writer;
@@ -140,7 +143,11 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
 
         javascriptRenderContext.popUnitializedComponentsClientId();
 
-        writer.writeCall("_classLoader", "f_initializeObjects").writeln(");");
+        String cameliaClassLoader = writer.getJavaScriptRenderContext()
+                .convertSymbol("f_classLoader", "_cameliaClassLoader");
+
+        writer.writeCall(cameliaClassLoader, "f_initializeObjects").writeln(
+                ");");
     }
 
     public void initializeJavaScriptComponent(IJavaScriptWriter writer)

@@ -139,7 +139,8 @@ var __static = {
 			node._alignment=alignment;
 		}
 		
-		return f_waiting._classLoader._init(node);
+		// Attention notre waiting peut etre dans une popup, auquel cas la window n'est pas la même
+		return f_waiting.f_getClassLoader().f_init(node);
 	},
 	/**
 	 * @method hidden static

@@ -839,13 +839,14 @@ var f_core = {
 				f_core.InitializeForm(f);
 			}
 			
-			// Les objets non encore initializés		
-			window._classLoader.f_initializeObjects();
+			// Les objets non encore initializés
+			var classLoader=f_classLoader.Get();	
+			classLoader.f_initializeObjects();
 	
 			f_core.Profile(null, "f_core.onInit.objects");
 
 			// Initialize packages here
-			window._classLoader._onDocumentComplete();
+			classLoader.f_onDocumentComplete();
 	
 		} finally {
 			f_core.Profile(true, "f_core.onInit");
@@ -953,7 +954,8 @@ var f_core = {
 				}
 		
 				// Terminate packages here
-				win._classLoader._onExit();
+				var classLoader=f_classLoader.Get();
+				classLoader._onExit();
 				
 				f_core.Finalizer();
 				
@@ -1338,6 +1340,7 @@ var f_core = {
 				}
 			}
 	
+			var classLoader=f_classLoader.Get();
 			if (!form._initialized) {
 				//f_core.Assert(form._initialized, "f_core._OnSubmit: Not initialized form '"+form.id+"'.");
 	
@@ -1348,7 +1351,7 @@ var f_core = {
 				}
 				
 				// On essaye d'initialiser les objets qui ne sont pas encore initializés
-				window._classLoader.f_initializeObjects();
+				classLoader.f_initializeObjects();
 				
 				// XXX Il faut peut etre attendre QUE TOUTS LES OBJETS soient initialisés ?
 				
@@ -1386,7 +1389,6 @@ var f_core = {
 				}
 			}
 
-			var classLoader=win._classLoader;
 			if (classLoader) {
 				classLoader.f_serialize(form);
 				
@@ -1442,8 +1444,8 @@ var f_core = {
 				//return false;
 			}
 
-			var document=form.ownerDocument;
-			var win=f_core.GetWindow(document);
+			var doc=form.ownerDocument;
+			var win=f_core.GetWindow(doc);
 			
 			if (win.f_event.GetEventLocked((event)?event.f_getJsEvent():null, true)) {
 				return false;
@@ -1588,12 +1590,12 @@ var f_core = {
 	
 			// IE Progress bar bug only
 			if (f_core.IsInternetExplorer()) {
-				switch (document.readyState) {
+				switch (doc.readyState) {
 				case "loading":
 					var msg=f_env.Get("F_SUBMIT_PROGRESS_MESSAGE");
 					if (msg) {
 						win.defaultStatus = msg;
-						document.body.style.cursor = "wait";
+						doc.body.style.cursor = "wait";
 					}
 					break;
 				
@@ -2214,7 +2216,7 @@ var f_core = {
 			return elt;
 		}
 		if (elt.nodeType==f_core.ELEMENT_NODE && f_core.GetAttribute(elt, "v:class")==claz) {
-			return f_core.GetWindow(elt)._classLoader._init(elt);
+			return f_classLoader.Get().f_init(elt);
 		}
 		return null;
 	},
@@ -2360,10 +2362,12 @@ var f_core = {
 		
 		if (!obj) {
 			// Objet pas trouvé, on passe l'ID à la methode _init !
-			obj=id;
+			obj=f_classLoader.Get().f_init(id, true);
+			
+		} else {		
+			obj = f_classLoader.Get().f_init(obj, true);
 		}
 		
-		obj = f_core.GetWindow(doc)._classLoader._init(obj, true);
 		if (!obj) {
 			return found;
 		}
@@ -3876,7 +3880,7 @@ var f_core = {
 		f_core.Assert(typeof(effectName)=="string", "f_core.CreateEffectByName: The name of the effect is not a string !");
 		f_core.Assert(body && body.nodeType!==undefined, "f_core.CreateEffectByName: Body parameter is not a HTMLElement");
 	
-		var effectClass=window._classLoader.f_getClass("f_effect");
+		var effectClass=f_classLoader.Get().f_getClass("f_effect");
 		if (!effectClass) {
 			f_core.Error(f_core, "CreateEffectByName: Effect class has not been loaded. (name="+effectName+")");
 			return null;

@@ -20,7 +20,7 @@ var __static = {
 	 */
 	_OnLoad: function(textEditor) {
 		try {
-			f_textEditor.f_getClassLoader()._init(textEditor);
+			f_textEditor.f_getClassLoader().f_init(textEditor);
 			
 			textEditor._onLoad();
 			
@@ -97,6 +97,11 @@ var __prototype = {
 			return contentDocument.body.innerHTML;
 		}		
 	},
+	/**
+	 * @method public
+	 * @param String text
+	 * @return void
+	 */
 	f_setText: function(text) {
 		var contentDocument=this._contentDocument;
 		if (!contentDocument) {
@@ -112,15 +117,37 @@ var __prototype = {
 			contentDocument.body.innerHTML=text;				
 		}
 	},
+	/**
+	 * @method public
+	 * @param optional number range
+	 * @return void
+	 */
 	f_toggleBold: function(range) {
 		this._execCommand("Bold", range);
 	},
+	/**
+	 * @method public
+	 * @param optional number range
+	 * @return void
+	 */
 	f_toggleItalic: function(range) {
 		this._execCommand("Italic", range);
 	},
+	/**
+	 * @method public
+	 * @param optional number range
+	 * @return void
+	 */
 	f_toggleUnderline: function(range) {
 		this._execCommand("Underline", range);
 	},
+	/**
+	 * @method private
+	 * @param String command
+	 * @param optional number range
+	 * @param optional param
+	 * @return void
+	 */
 	_execCommand: function(command, range, param) {
 		var contentDocument=this._contentDocument;
 		if (!contentDocument) {
@@ -198,9 +225,9 @@ var __prototype = {
 	 */
 	f_computeStyle: function(position) {
 		var style= {
-			bold: this._queryCommandState("Bold"),
-			italic: this._queryCommandState("Italic"),
-			underline: this._queryCommandState("Underline")
+			bold: this._queryCommandState("Bold", position),
+			italic: this._queryCommandState("Italic", position),
+			underline: this._queryCommandState("Underline", position)
 		}
 		
 		return style;

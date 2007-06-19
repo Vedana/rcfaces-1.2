@@ -279,7 +279,7 @@ f_classLoader.prototype = {
 		
 		this._parent=undefined;
 		
-		this._window._classLoader=undefined;
+		this._window._cameliaClassLoader=undefined;
 		this._window._changeContext=undefined;
 	
 		//this._documentCompleted=undefined; // boolean
@@ -290,7 +290,11 @@ f_classLoader.prototype = {
 		this._window=undefined;
 	},
 	
-	_onDocumentComplete: function() {
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_onDocumentComplete: function() {
 		f_core.Assert(!this._documentCompleted, "Document has been already completed !");
 		this._documentCompleted=true;
 		
@@ -569,7 +573,7 @@ f_classLoader.prototype = {
 	
 			} else {
 				try {
-					o=this._init(obj);
+					o=this.f_init(obj);
 					
 				} catch (x) {
 					f_core.Error(f_classLoader, "f_initializeObjects: Failed to initialize object '"+obj.id+"'.", x);
@@ -597,24 +601,23 @@ f_classLoader.prototype = {
 			}
 		}
 	},
-	
 	/**
-	 * @method private
-	 * @param Object obj
+	 * @method hidden
+	 * @param Object obj Object or String
 	 * @param boolean ignoreNotFound
 	 * @return Object
 	 */
-	_init: function(obj, ignoreNotFound) {
-		f_core.Assert(obj, "f_classLoader._init: Obj parameter is invalid ("+obj+")");
+	f_init: function(obj, ignoreNotFound) {
+		f_core.Assert(obj && (obj.nodeType || typeof(obj)=="string"), "f_classLoader.f_init: Invalid obj parameter ("+obj+")");
 		
 		if (typeof(obj)=="string") {
 			var id=obj;
 			
-			var document=this._window.document;
+			var doc=this._window.document;
 	
-			var obj=document.getElementById(id);
+			var obj=doc.getElementById(id);
 			if (!obj) {
-				var names=document.getElementsByName(id);
+				var names=doc.getElementsByName(id);
 				if (!names || !names.length) {
 					if (ignoreNotFound) {
 						return null;
@@ -633,8 +636,10 @@ f_classLoader.prototype = {
 						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') is not a RCFaces Component !");
 					}
 				}
-							
+
 				if (obj.id!=id) {
+					// On l'a trouvé par le NAME, on essaye de changer l'ID !					
+					
 					// ATTENTION - Sous IE le changement de la propriété ID est Read-only !
 					try {
 						obj.id=id;
@@ -653,7 +658,7 @@ f_classLoader.prototype = {
 		if (!claz) {
 			// La classe n'est pas définie ... c'est peut etre une form !
 	
-			f_core.Debug("f_classLoader", "_init: Class is not defined for component '"+obj.id+"'.");
+			f_core.Debug(f_classLoader, "_init: Class is not defined for component '"+obj.id+"'.");
 			return obj;
 		}
 	
@@ -1109,8 +1114,20 @@ f_classLoader.SerializeInputs=function(parameters, component) {
 	}
 }
 
+/**
+ * @method hidden static
+ * @param optional Window win
+ * @return f_classLoader
+ */
+f_classLoader.Get=function(win) {
+	if (!win) {
+		win=window;
+	}
+	return win._cameliaClassLoader;
+}
+
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
 }
 
-window._classLoader=new f_classLoader(window);
+window._cameliaClassLoader=new f_classLoader(window);

@@ -557,7 +557,7 @@ var __static = {
 		
 		cls.prototype=methods;
 		cls._name=name;
-		cls._classLoader=window._classLoader;
+		cls._classLoader=f_classLoader.Get();
 		cls._nativeClass=true;
 
 		if (!staticMembers) {
@@ -638,7 +638,7 @@ var __prototype = {
 			return;
 		}
 	
-		this._classLoader=window._classLoader;
+		this._classLoader=f_classLoader.Get();
 
 		if (!staticMembers) {
 			staticMembers=new Object;

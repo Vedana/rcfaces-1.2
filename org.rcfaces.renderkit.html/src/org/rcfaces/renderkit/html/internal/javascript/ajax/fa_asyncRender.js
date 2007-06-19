@@ -76,7 +76,7 @@ var __prototype = {
 				if (waiting) {
 					waiting.f_hide();
 				}
-				f_core.Info(fa_asyncRender, "Bad status: "+request.f_getStatus());
+				f_core.Info(fa_asyncRender, "f_prepare.onError: Bad status: "+request.f_getStatus());
 				
 				component.f_performAsyncErrorEvent(request, f_error.HTTP_ERROR, text);
 	 		},
