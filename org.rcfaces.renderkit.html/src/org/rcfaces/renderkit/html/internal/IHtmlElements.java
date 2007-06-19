@@ -42,6 +42,8 @@ public interface IHtmlElements {
 
     String OPTION = "option";
 
+    String P = "p";
+
     String SCRIPT = "script";
 
     String SELECT = "select";
