@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.tools.ValuesTools;
 
 /**
@@ -92,7 +93,7 @@ public class HtmlValuesTools extends ValuesTools {
             return OBJECT_EMPTY_ARRAY;
         }
 
-        Set set = new HashSet(l.size());
+        Set set = new OrderedSet(l.size());
 
         set.addAll(Arrays.asList(convertValuesToString(l.toArray(), component,
                 facesContext)));

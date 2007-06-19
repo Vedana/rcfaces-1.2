@@ -29,6 +29,7 @@ import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
 import org.rcfaces.core.internal.capability.ISubmittedExternalValue;
+import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.util.Convertor;
 
 /**
@@ -46,7 +47,7 @@ public class ValuesTools {
     public static final Set valueToSet(Object value, boolean copy) {
         if (value == null) {
             if (copy) {
-                return new HashSet();
+                return new OrderedSet();
             }
             return Collections.EMPTY_SET;
         }
@@ -55,17 +56,17 @@ public class ValuesTools {
             Object array[] = (Object[]) value;
             if (array.length < 1) {
                 if (copy) {
-                    return new HashSet();
+                    return new OrderedSet();
                 }
                 return Collections.EMPTY_SET;
             }
 
-            return new HashSet(Arrays.asList(array));
+            return new OrderedSet(Arrays.asList(array));
         }
 
         if (value instanceof Set) {
             if (copy) {
-                return new HashSet((Set) value);
+                return new OrderedSet((Set) value);
             }
             return (Set) value;
         }
@@ -76,11 +77,11 @@ public class ValuesTools {
                 return Collections.EMPTY_SET;
             }
 
-            return new HashSet(col);
+            return new OrderedSet(col);
         }
 
         if (copy) {
-            Set set = new HashSet();
+            Set set = new OrderedSet();
             set.add(value);
 
             return set;
@@ -549,15 +550,15 @@ public class ValuesTools {
 
     public static Set convertSelection(Object selection) {
         if (selection instanceof Object[]) {
-            return new HashSet(Arrays.asList((Object[]) selection));
+            return new OrderedSet(Arrays.asList((Object[]) selection));
         }
 
         if (selection instanceof Collection) {
-            return new HashSet((Collection) selection);
+            return new OrderedSet((Collection) selection);
         }
 
         if (selection == null) {
-            return new HashSet();
+            return new OrderedSet();
         }
 
         throw new FacesException(
