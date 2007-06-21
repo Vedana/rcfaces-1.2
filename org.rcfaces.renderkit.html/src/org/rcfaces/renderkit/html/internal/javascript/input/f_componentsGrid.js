@@ -508,9 +508,9 @@ var __prototype = {
 		this._table.appendChild(body);	
 	},
 	
-	/**
+	/*
 	 * @method protected
-	 */
+	 *
 	f_initializeTableLayout0: function() {
 		var table = f_core.GetChildByCssClass(this, "f_grid_table");
 		f_core.Assert(table, "f_componentsGrid.f_initializeTableLayout: Can not find table 'f_grid_table'");
@@ -552,10 +552,10 @@ var __prototype = {
 			}
 		}		
 	},
-	
-	/**
+	*/
+	/*
 	 * @method hidden
-	 */
+	 *
 	f_updateColumnsLayout0: function(columns) {
 		var heads;
 		var cols;
@@ -571,7 +571,7 @@ var __prototype = {
 			cols=this._table.getElementsByTagName("col");			
 		}
 				
-		/* on part du f_grid_disabled
+		/ * on part du f_grid_disabled
 		if (this.f_isDisabled()) {
 			var className="f_grid_tcell f_grid_tcell_disabled";
 		
@@ -579,7 +579,7 @@ var __prototype = {
 				heads[i].className=className;
 			}
 		}
-		*/
+		* /
 
 		var resourceBundle=f_resourceBundle.Get(f_grid);
 		var headCursorTitle=resourceBundle.f_get("COLUMN_RESIZE");
@@ -629,7 +629,7 @@ var __prototype = {
 			}			
 		}
 	},
-	
+	*/
 	/**
 	 * @method hidden
 	 * @param String rowId

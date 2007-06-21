@@ -1144,9 +1144,9 @@ var __prototype = {
 
 		this.f_performPagedComponentInitialized();
 	},
-	/**
+	/*
 	 *  @method protected
-	 */
+	 *
 	f_initializeTableLayout0: function() {
 		this._sb=f_core.GetBooleanAttribute(this, "v:sb", false);
 				
@@ -1207,10 +1207,10 @@ var __prototype = {
 		this._table=table;
 		table._dataGrid=this;
 	},
-	
-	/**
+	*/
+	/*
 	 * @method hidden
-	 */
+	 
 	f_updateColumnsLayout0: function(columns) {
 		var titleGrid=this._title;
 		var tableGrid=this._table;
@@ -1324,6 +1324,7 @@ var __prototype = {
 			}
 		}
 	},
+	*/
 	/**
 	 * Specify the image of a cell.
 	 * 
