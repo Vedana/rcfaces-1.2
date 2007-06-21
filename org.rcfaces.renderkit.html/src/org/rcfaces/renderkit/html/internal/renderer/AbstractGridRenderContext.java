@@ -34,6 +34,7 @@ import org.rcfaces.core.component.capability.IResizableCapability;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
@@ -181,6 +182,8 @@ public abstract class AbstractGridRenderContext {
 
     private boolean headerVisible = true;
 
+    private Object showValue;
+
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -193,6 +196,10 @@ public abstract class AbstractGridRenderContext {
 
         if (gridComponent instanceof ISizeCapability) {
             computeGridSize((ISizeCapability) gridComponent);
+        }
+
+        if (gridComponent instanceof IShowValueCapability) {
+            showValue = ((IShowValueCapability) gridComponent).getShowValue();
         }
 
         initialize(checkTitleImages);
@@ -937,4 +944,9 @@ public abstract class AbstractGridRenderContext {
     public boolean isHeaderVisible() {
         return headerVisible;
     }
+
+    public final Object getShowValue() {
+        return showValue;
+    }
+
 }

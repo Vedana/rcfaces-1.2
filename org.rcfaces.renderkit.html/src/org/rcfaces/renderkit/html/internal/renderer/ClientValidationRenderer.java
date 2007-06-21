@@ -21,40 +21,38 @@ public class ClientValidationRenderer extends AbstractJavaScriptRenderer {
             .getLog(ClientValidationRenderer.class);
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
-/*
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
-
-        // FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        ClientValidationComponent clientValidationComponent = (ClientValidationComponent) componentRenderContext
-                .getComponent();
-
-        FacesListener fls[] = clientValidationComponent
-                .listValidationListeners();
-
-        StringAppender sa = new StringAppender(128);
-
-        EventsRenderer.encodeAttributeEventListeners(writer
-                .getComponentRenderContext().getRenderContext(), sa,
-                "clientValidation", fls, false);
-
-        if (sa.length() < 1) {
-            return;
-        }
-
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
-
-        htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-
-        setAlreadyLazyComponent(htmlWriter);
-
-        super.encodeEnd(htmlWriter);
-        */
+        /*
+         * IComponentRenderContext componentRenderContext = writer
+         * .getComponentRenderContext();
+         *  // FacesContext facesContext =
+         * componentRenderContext.getFacesContext();
+         * 
+         * ClientValidationComponent clientValidationComponent =
+         * (ClientValidationComponent) componentRenderContext .getComponent();
+         * 
+         * FacesListener fls[] = clientValidationComponent
+         * .listValidationListeners();
+         * 
+         * StringAppender sa = new StringAppender(128);
+         * 
+         * EventsRenderer.encodeAttributeEventListeners(writer
+         * .getComponentRenderContext().getRenderContext(), sa,
+         * "clientValidation", fls, false);
+         * 
+         * if (sa.length() < 1) { return; }
+         * 
+         * IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+         * 
+         * htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+         * writeHtmlAttributes(htmlWriter);
+         * writeJavaScriptAttributes(htmlWriter);
+         * 
+         * htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+         * 
+         * setAlreadyLazyComponent(htmlWriter);
+         * 
+         * super.encodeEnd(htmlWriter);
+         */
     }
 
     protected String getJavaScriptClassName() {

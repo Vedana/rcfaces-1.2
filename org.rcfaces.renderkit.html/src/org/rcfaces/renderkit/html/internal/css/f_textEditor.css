@@ -15,3 +15,16 @@
 	border: 1px solid black;
 	overflow:auto;
 }
+
+.f_textEditorToolFolder .f_toolFolder_item,
+.f_textEditorToolFolder .f_toolFolder_itemSeparator {
+	height: 23px;
+}
+
+.f_textEditorToolFolder * {
+	vertical-align: middle;
+}
+
+.f_textEditorToolFolder SELECT {
+	font-size: 12px;
+}

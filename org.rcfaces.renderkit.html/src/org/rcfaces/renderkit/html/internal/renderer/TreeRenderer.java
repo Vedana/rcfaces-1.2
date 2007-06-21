@@ -144,8 +144,9 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
                         cursorValueObject));
 
             }
-
         }
+
+        treeComponent.setShowValue(null);
     }
 
     protected void encodeAfterDecorator(IHtmlWriter htmlWriter,

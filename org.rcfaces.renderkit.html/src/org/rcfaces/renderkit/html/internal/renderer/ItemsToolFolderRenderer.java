@@ -46,7 +46,7 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         }
         // writer.writeCellPadding(cellPadding);
 
-       // writer.writeCellSpacing(0);
+        // writer.writeCellSpacing(0);
 
         writeHtmlAttributes(writer);
         writeJavaScriptAttributes(writer);
@@ -72,8 +72,7 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
          * writer.endElement(IHtmlWriter.A");
          */
 
-       // writer.startElement(IHtmlWriter.TBODY);
-
+        // writer.startElement(IHtmlWriter.TBODY);
         // writer.startElement(IHtmlWriter.TR);
     }
 

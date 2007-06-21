@@ -4,16 +4,25 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ISeparatorComponent;
+import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.internal.component.IToolBarImageAccessors;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -89,15 +98,21 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
-        List children = getChildren(htmlWriter);
+        List childrenList = htmlWriter.getComponentRenderContext()
+                .getComponent().getChildren();
+        List originalChildrenList = new ArrayList(childrenList);
 
-        for (Iterator it = children.iterator(); it.hasNext();) {
+        List computedChildrenList = getChildren(htmlWriter);
+
+        for (Iterator it = computedChildrenList.iterator(); it.hasNext();) {
             UIComponent child = (UIComponent) it.next();
 
             encodeToolItem(htmlWriter, child);
         }
 
         htmlWriter.endComponent();
+
+        childrenList.retainAll(originalChildrenList);
     }
 
     protected List getChildren(IHtmlWriter htmlWriter) {
@@ -107,6 +122,17 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
 
     protected void encodeToolItem(IHtmlWriter htmlWriter, UIComponent child)
             throws WriterException {
+
+        ToolFolderComponent toolFolderComponent = (ToolFolderComponent) htmlWriter
+                .getHtmlComponentRenderContext().getComponent();
+
+        ToolBarComponent toolBarComponent = toolFolderComponent.getToolBar();
+
+        if (child instanceof ISeparatorComponent) {
+            encodeToolItemSeparator(htmlWriter, toolBarComponent,
+                    (ISeparatorComponent) child);
+            return;
+        }
 
         FacesContext facesContext = htmlWriter.getHtmlComponentRenderContext()
                 .getFacesContext();
@@ -122,22 +148,117 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.LI);
         htmlWriter.writeClass("f_toolFolder_item");
 
-        ToolFolderComponent toolFolderComponent = (ToolFolderComponent) htmlWriter
-                .getHtmlComponentRenderContext().getComponent();
-
-        if (toolFolderComponent.getToolBar().isItemPaddingSetted()) {
-            int cellPadding = toolFolderComponent.getToolBar().getItemPadding(
-                    facesContext);
+        if (toolBarComponent.isItemPaddingSetted()) {
+            int cellPadding = toolBarComponent.getItemPadding(facesContext);
             if (cellPadding >= 0) {
                 htmlWriter.writeStyle().writePadding(cellPadding + "px");
             }
         }
 
-        htmlWriter.endComponent();
+        if (child instanceof IBorderTypeCapability) {
+            IBorderTypeCapability borderTypeCapability = (IBorderTypeCapability) child;
 
+            if (borderTypeCapability.getBorderType() == null) {
+                String borderType = null;
+                if (toolFolderComponent.isBorderTypeSetted()) {
+                    borderType = toolFolderComponent
+                            .getBorderType(facesContext);
+
+                } else if (toolBarComponent.isBorderTypeSetted()) {
+                    borderType = toolBarComponent.getBorderType(facesContext);
+                }
+
+                if (borderType != null) {
+                    borderTypeCapability.setBorderType(borderType);
+                }
+            }
+        }
+
+        htmlWriter.endComponent();
         ComponentTools.encodeRecursive(facesContext, child);
 
         htmlWriter.endElement(IHtmlWriter.LI);
     }
 
+    private void encodeToolItemSeparator(IHtmlWriter htmlWriter,
+            ToolBarComponent toolBarComponent,
+            ISeparatorComponent separatorComponent) throws WriterException {
+
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        IToolBarImageAccessors toolBarImageAccessors = (IToolBarImageAccessors) toolBarComponent
+                .getImageAccessors(facesContext);
+
+        IContentAccessor separatorImageURL = toolBarImageAccessors
+                .getSeparatorImageAccessor();
+
+        htmlWriter.startElement(IHtmlWriter.LI);
+
+        StringAppender sa = new StringAppender("f_toolFolder_itemSeparator", 32);
+        if (separatorImageURL == null) {
+            sa.append(" f_toolFolder_autoSeparator");
+        }
+        htmlWriter.writeClass(sa.toString());
+
+        if (toolBarComponent.isItemPaddingSetted()) {
+            int cellPadding = toolBarComponent.getItemPadding(facesContext);
+            if (cellPadding >= 0) {
+                htmlWriter.writeStyle().writePadding(cellPadding + "px");
+            }
+        }
+
+        htmlWriter.writeAttribute("v:separator", true);
+
+        if (separatorImageURL != null) {
+
+            String imageURL = separatorImageURL.resolveURL(facesContext, null,
+                    null);
+            if (imageURL != null) {
+                htmlWriter.startElement(IHtmlWriter.IMG);
+                htmlWriter.writeClass("f_toolFolder_imgSeparator");
+
+                int imageWidth = toolBarComponent
+                        .getSeparatorImageWidth(facesContext);
+                if (imageWidth > 0) {
+                    htmlWriter.writeWidth(imageWidth);
+                }
+
+                int imageHeight = toolBarComponent
+                        .getSeparatorImageHeight(facesContext);
+                if (imageHeight > 0) {
+                    htmlWriter.writeHeight(imageHeight);
+                }
+
+                htmlWriter.writeSrc(imageURL);
+
+                String alternateText = null;
+                if (separatorComponent instanceof IAlternateTextCapability) {
+                    alternateText = ((IAlternateTextCapability) separatorComponent)
+                            .getAlternateText();
+                }
+
+                if (alternateText == null) {
+                    alternateText = toolBarComponent
+                            .getSeparatorAlternateText(facesContext);
+                }
+
+                if (alternateText != null) {
+                    htmlWriter.writeAlt(alternateText);
+                }
+
+                htmlWriter.endElement(IHtmlWriter.IMG);
+            }
+        }
+
+        htmlWriter.endElement(IHtmlWriter.LI);
+    }
+
+    protected String getSeparatorAlternateText(SelectItem selectItem) {
+        return null;
+    }
+
+    protected int getToolItemSeparatorWidth(SelectItem selectItem) {
+        return ToolBarRenderer.DEFAULT_TOOL_ITEM_SEPARATOR_WIDTH;
+    }
 }

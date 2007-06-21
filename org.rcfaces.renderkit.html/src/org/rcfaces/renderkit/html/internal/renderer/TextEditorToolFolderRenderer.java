@@ -18,7 +18,10 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComboComponent;
 import org.rcfaces.core.component.TextEditorImageButtonComponent;
 import org.rcfaces.core.component.TextEditorToolFolderComponent;
+import org.rcfaces.core.component.ToolFolderComponent;
 import org.rcfaces.core.component.ToolItemSeparatorComponent;
+import org.rcfaces.core.component.capability.ITextEditorButtonType;
+import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
 /**
@@ -30,10 +33,31 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
 
     private static final String REVISION = "$Revision$";
 
+    public static final String SEPARATOR = "separator";
+
     private static final Log LOG = LogFactory
             .getLog(TextEditorToolFolderRenderer.class);
 
-    private static final String DEFAULT_ITEM_TYPES = "undo, redo, separator, font, fontSize, bold, italic, underline, strike, separator, right, center, left, separator, orderedlist, unorderedlist, outdent, indent";
+    private static final String DEFAULT_ITEM_TYPES = ITextEditorButtonType.CUT
+            + ", " + ITextEditorButtonType.COPY + ", "
+            + ITextEditorButtonType.PASTE + ", " + SEPARATOR + ","
+            + ITextEditorButtonType.UNDO + ", " + ITextEditorButtonType.REDO
+            + ", " + SEPARATOR + "," + "font, fontSize, " + SEPARATOR + ", "
+            + ITextEditorButtonType.BOLD + ", " + ITextEditorButtonType.ITALIC
+            + ", " + ITextEditorButtonType.UNDERLINE + ", "
+            + ITextEditorButtonType.STRIKE + ", " + SEPARATOR + ", "
+            + ITextEditorButtonType.JUSTIFY_LEFT + ", "
+            + ITextEditorButtonType.JUSTIFY_CENTER + ", "
+            + ITextEditorButtonType.JUSTIFY_RIGHT + ", "
+            + ITextEditorButtonType.JUSTIFY_FULL + ", " + SEPARATOR + ", "
+            + ITextEditorButtonType.ORDEREDLIST + ", "
+            + ITextEditorButtonType.UNORDEREDLIST + ", "
+            + ITextEditorButtonType.OUTDENT + ", "
+            + ITextEditorButtonType.INDENT + ", " + SEPARATOR + ", "
+            + ITextEditorButtonType.INCREASE_FONT_SIZE + ", "
+            + ITextEditorButtonType.DECREASE_FONT_SIZE + ", "
+            + ITextEditorButtonType.SUPER_SCRIPT + ", "
+            + ITextEditorButtonType.SUB_SCRIPT;
 
     private static final SelectItem[] FONT_SIZE_SELECT_ITEMS = new SelectItem[] {
             new SelectItem("8", "8"), new SelectItem("9", "9"),
@@ -44,26 +68,56 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
             new SelectItem("36", "36"), new SelectItem("48", "48") };
 
     private static final SelectItem[] FONT_SELECT_ITEMS = new SelectItem[] {
-            new SelectItem("Arial", "Arial"),
-            new SelectItem("Tahoma", "Tahoma") };
+            new SelectItem("arial,helvetica,sans-serif", "Arial"),
+            new SelectItem("arial black,avant garde", "Arial Black"),
+            new SelectItem("andale mono,times", "Andale Mono"),
+            new SelectItem("book antiqua,palatino", "Book Antiqua"),
+            new SelectItem("comic sans ms,sand", "Comic Sans MS"),
+            new SelectItem("courier new,courier", "Courier New"),
+            new SelectItem("georgia,palatino", "Georgia"),
+            new SelectItem("helvetica", "Helvetica"),
+            new SelectItem("impact,chicago", "Impact"),
+            new SelectItem("symbol", "Symbol"),
+            new SelectItem("tahoma,arial,helvetica,sans-serif", "Tahoma"),
+            new SelectItem("terminal,monaco", "Terminal"),
+            new SelectItem("times new roman,times", "Times New Roman"),
+            new SelectItem("trebuchet ms,geneva", "Trebuchet MS"),
+            new SelectItem("verdana,geneva", "Verdana"),
+            new SelectItem("webdings", "Webdings"),
+            new SelectItem("wingdings,zapf dingbats", "Wingdings") };
+
+    private static final String DEFAULT_TEXT_EDITOR_TOOL_FOLDER_STYLE_CLASS = "f_textEditorToolFolder";
 
     private static final Map TOOL_ITEMS_RENDERER = new HashMap(32);
     static {
-        TOOL_ITEMS_RENDERER.put("bold",
-                new TextEditorButtonItemRenderer("bold"));
-        TOOL_ITEMS_RENDERER.put("italic", new TextEditorButtonItemRenderer(
-                "italic"));
-        TOOL_ITEMS_RENDERER.put("underline", new TextEditorButtonItemRenderer(
-                "underline"));
-        TOOL_ITEMS_RENDERER.put("strike", new TextEditorButtonItemRenderer(
-                "strike"));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.BOLD,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.BOLD));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.ITALIC,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.ITALIC));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.UNDERLINE,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.UNDERLINE));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.STRIKE,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.STRIKE));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.SUB_SCRIPT,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.SUB_SCRIPT));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.SUPER_SCRIPT,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.SUPER_SCRIPT));
 
-        TOOL_ITEMS_RENDERER.put("left", new TextEditorButtonItemRenderer(
-                "left", "alignment"));
-        TOOL_ITEMS_RENDERER.put("right", new TextEditorButtonItemRenderer(
-                "right", "alignment"));
-        TOOL_ITEMS_RENDERER.put("center", new TextEditorButtonItemRenderer(
-                "center", "alignment"));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.JUSTIFY_LEFT,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.JUSTIFY_LEFT, "alignment"));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.JUSTIFY_RIGHT,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.JUSTIFY_RIGHT, "alignment"));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.JUSTIFY_CENTER,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.JUSTIFY_CENTER, "alignment"));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.JUSTIFY_FULL,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.JUSTIFY_FULL, "alignment"));
 
         TOOL_ITEMS_RENDERER.put("separator", new IToolFolderItemRenderer() {
             private static final String REVISION = "$Revision$";
@@ -73,20 +127,38 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
             }
         });
 
-        TOOL_ITEMS_RENDERER.put("outdent", new TextEditorButtonItemRenderer(
-                "outdent"));
-        TOOL_ITEMS_RENDERER.put("indent", new TextEditorButtonItemRenderer(
-                "indent"));
+        TOOL_ITEMS_RENDERER
+                .put(ITextEditorButtonType.OUTDENT,
+                        new TextEditorButtonItemRenderer(
+                                ITextEditorButtonType.OUTDENT));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.INDENT,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.INDENT));
 
-        TOOL_ITEMS_RENDERER.put("undo",
-                new TextEditorButtonItemRenderer("undo"));
-        TOOL_ITEMS_RENDERER.put("redo",
-                new TextEditorButtonItemRenderer("redo"));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.UNDO,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.UNDO));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.REDO,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.REDO));
 
-        TOOL_ITEMS_RENDERER.put("unorderedlist",
-                new TextEditorButtonItemRenderer("unorderedlist"));
-        TOOL_ITEMS_RENDERER.put("orderedlist",
-                new TextEditorButtonItemRenderer("orderedlist"));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.CUT,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.CUT));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.COPY,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.COPY));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.PASTE,
+                new TextEditorButtonItemRenderer(ITextEditorButtonType.PASTE));
+
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.UNORDEREDLIST,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.UNORDEREDLIST));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.ORDEREDLIST,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.ORDEREDLIST));
+
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.DECREASE_FONT_SIZE,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.DECREASE_FONT_SIZE));
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.INCREASE_FONT_SIZE,
+                new TextEditorButtonItemRenderer(
+                        ITextEditorButtonType.INCREASE_FONT_SIZE));
 
         TOOL_ITEMS_RENDERER.put("font", new TextEditorComboItemRenderer("font",
                 FONT_SELECT_ITEMS) {
@@ -143,13 +215,30 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
                 renderer.appendChildren(htmlWriter, children);
             }
         }
-        children.addAll(super.getChildren(htmlWriter));
 
-        return children;
+        List l = super.getChildren(htmlWriter);
+        l.addAll(children);
+
+        return l;
     }
 
     protected String getDefaultItemTypes(IHtmlWriter htmlWriter) {
         return DEFAULT_ITEM_TYPES;
+    }
+
+    protected void encodeBeginToolFolder(IHtmlWriter writer,
+            ToolFolderComponent toolFolderComponent) throws WriterException {
+
+        if (toolFolderComponent.isStyleClassSetted() == false) {
+            toolFolderComponent
+                    .setStyleClass(getDefaultTextEditorToolFolderStyleClass(writer));
+        }
+
+        super.encodeBeginToolFolder(writer, toolFolderComponent);
+    }
+
+    protected String getDefaultTextEditorToolFolderStyleClass(IHtmlWriter writer) {
+        return DEFAULT_TEXT_EDITOR_TOOL_FOLDER_STYLE_CLASS;
     }
 
     /**
@@ -194,7 +283,7 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
             TextEditorToolFolderComponent toolFolderComponent = (TextEditorToolFolderComponent) htmlWriter
                     .getComponentRenderContext().getComponent();
 
-            String forId = toolFolderComponent.getId();
+            String forId = toolFolderComponent.getFor();
 
             String forClientId = htmlWriter.getHtmlComponentRenderContext()
                     .getHtmlRenderContext().computeBrotherComponentClientId(

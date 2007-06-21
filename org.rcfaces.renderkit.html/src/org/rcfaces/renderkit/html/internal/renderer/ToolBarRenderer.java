@@ -35,6 +35,8 @@ public class ToolBarRenderer extends AbstractCssRenderer {
 
     private static final Log LOG = LogFactory.getLog(ToolBarRenderer.class);
 
+    public static final int DEFAULT_TOOL_ITEM_SEPARATOR_WIDTH = 2;
+
     public boolean getRendersChildren() {
         return true;
     }
@@ -73,6 +75,10 @@ public class ToolBarRenderer extends AbstractCssRenderer {
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        //htmlWriter.startElement(IHtmlWriter.P);
+        //htmlWriter.write("&nbsp;");
+        //htmlWriter.endElement(IHtmlWriter.P);
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 

@@ -5,7 +5,6 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,7 @@ import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.ISelectionValuesCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
@@ -1040,14 +1040,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
 
         if (dg instanceof ICursorProvider) {
-
             Object cursorValue = ((ICursorProvider) dg).getCursorValue();
             String clientCursorValue = null;
 
-            if (cursorValue instanceof String) {
-                clientCursorValue = (String) cursorValue;
-
-            } else if (cursorValue != null) {
+            if (cursorValue != null) {
                 UIColumn rowValueColumn = ((DataGridRenderContext) tableContext)
                         .getRowValueColumn();
 
@@ -1061,6 +1057,31 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             if (clientCursorValue != null) {
                 htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
+            }
+
+        }
+
+        if (dg instanceof IShowValueCapability) {
+            Object showValue = ((IShowValueCapability) dg).getShowValue();
+            String clientShowValue = null;
+
+            if (showValue != null) {
+                UIColumn rowValueColumn = ((DataGridRenderContext) tableContext)
+                        .getRowValueColumn();
+
+                if (rowValueColumn != null) {
+                    clientShowValue = ValuesTools.convertValueToString(
+                            showValue, rowValueColumn, htmlWriter
+                                    .getComponentRenderContext()
+                                    .getFacesContext());
+
+                } else {
+                    clientShowValue = String.valueOf(showValue);
+                }
+            }
+
+            if (clientShowValue != null) {
+                htmlWriter.writeAttribute("v:showValue", clientShowValue);
             }
 
         }

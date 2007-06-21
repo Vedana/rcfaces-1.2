@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +31,7 @@ import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ISelectionValuesCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -114,6 +114,24 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
                 ((ComponentsGridRenderContext) tableContext)
                         .setInteractiveShow(true);
+            }
+        }
+
+        if (dg instanceof IShowValueCapability) {
+            Object showValue = ((IShowValueCapability) dg).getShowValue();
+            String clientShowValue = null;
+
+            if (showValue != null) {
+                Converter converter = ((ComponentsGridRenderContext) tableContext)
+                        .getRowValueConverter();
+
+                clientShowValue = ValuesTools.convertValueToString(showValue,
+                        converter, (UIComponent) dg, htmlWriter
+                                .getComponentRenderContext().getFacesContext());
+            }
+
+            if (clientShowValue != null) {
+                htmlWriter.writeAttribute("v:showValue", clientShowValue);
             }
         }
     }

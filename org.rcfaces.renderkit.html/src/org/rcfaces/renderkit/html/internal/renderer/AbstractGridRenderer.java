@@ -31,6 +31,7 @@ import org.rcfaces.core.component.capability.IPreferenceCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -358,6 +359,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         int tableWidth = 0;
+        boolean mainComponentScrollable = true;
         if (gridRenderContext.hasScrollBars()) {
             int w = gridRenderContext.getGridWidth();
 
@@ -371,24 +373,32 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 tableWidth = encodeFixedHeader(htmlWriter, gridRenderContext,
                         gridWidth);
                 htmlWriter.endElement(IHtmlWriter.DIV);
-            }
 
-            htmlWriter.startElement(IHtmlWriter.DIV);
-            htmlWriter.writeClass(getDataBodyScrollClassName(htmlWriter));
+                // Finalement le BODY aussi n'a pas de DIV !
 
-            ICssWriter cssWriter = htmlWriter.writeStyle(32);
+                htmlWriter.startElement(IHtmlWriter.DIV);
+                htmlWriter.writeClass(getDataBodyScrollClassName(htmlWriter));
 
-            if (gridHeight > 0) {
-                int gh = gridHeight;
-                if (headerVisible) {
-                    gh -= getTitleHeight();
+                ICssWriter cssWriter = htmlWriter.writeStyle(32);
+
+                if (gridHeight > 0) {
+                    int gh = gridHeight;
+                    if (headerVisible) {
+                        gh -= getTitleHeight();
+                    }
+
+                    cssWriter.writeHeight(gh + "px");
+                }
+                if (w > 0) {
+                    cssWriter.writeWidth(w + "px");
                 }
 
-                cssWriter.writeHeight(gh + "px");
+                mainComponentScrollable = false;
             }
-            if (w > 0) {
-                cssWriter.writeWidth(w + "px");
-            }
+        }
+
+        if (mainComponentScrollable) {
+            htmlWriter.writeStyle().writeOverflow(ICssWriter.AUTO);
         }
 
         htmlWriter.startElement(IHtmlWriter.TABLE);
@@ -916,7 +926,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             htmlWriter.endElement(IHtmlWriter.TABLE);
 
-            if (gridRenderContext.hasScrollBars()) {
+            if (gridRenderContext.hasScrollBars()
+                    && gridRenderContext.isHeaderVisible()) {
                 htmlWriter.endElement(IHtmlWriter.DIV);
             }
         }
@@ -1531,6 +1542,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 preference.savePreference(facesContext,
                         (UIComponent) preferenceCapability);
             }
+        }
+
+        if (gridComponent instanceof IShowValueCapability) {
+            ((IShowValueCapability) gridComponent).setShowValue(null);
         }
     }
 

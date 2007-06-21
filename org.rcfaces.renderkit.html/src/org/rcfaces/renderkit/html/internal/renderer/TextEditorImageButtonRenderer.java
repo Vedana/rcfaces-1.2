@@ -11,6 +11,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TextEditorImageButtonComponent;
+import org.rcfaces.core.component.capability.ITextEditorButtonType;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
@@ -36,26 +37,54 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
 
     private static final Map IMAGE_URL_BY_TYPE = new HashMap(24);
     static {
-        IMAGE_URL_BY_TYPE.put("bold", "textEditor/bold.gif");
-        IMAGE_URL_BY_TYPE.put("italic", "textEditor/italic.gif");
-        IMAGE_URL_BY_TYPE.put("underline", "textEditor/underline.gif");
-        IMAGE_URL_BY_TYPE.put("strike", "textEditor/strike.gif");
+        IMAGE_URL_BY_TYPE
+                .put(ITextEditorButtonType.BOLD, "textEditor/bold.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.ITALIC,
+                "textEditor/italic.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.UNDERLINE,
+                "textEditor/underline.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.STRIKE,
+                "textEditor/strike.gif");
 
-        IMAGE_URL_BY_TYPE.put("subscript", "textEditor/subScript.gif");
-        IMAGE_URL_BY_TYPE.put("superscript", "textEditor/superScript.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.SUB_SCRIPT,
+                "textEditor/subScript.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.SUPER_SCRIPT,
+                "textEditor/superScript.gif");
 
-        IMAGE_URL_BY_TYPE.put("left", "textEditor/left.gif");
-        IMAGE_URL_BY_TYPE.put("right", "textEditor/right.gif");
-        IMAGE_URL_BY_TYPE.put("center", "textEditor/center.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.JUSTIFY_LEFT,
+                "textEditor/left.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.JUSTIFY_RIGHT,
+                "textEditor/right.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.JUSTIFY_CENTER,
+                "textEditor/center.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.JUSTIFY_FULL,
+                "textEditor/justify.gif");
 
-        IMAGE_URL_BY_TYPE.put("undo", "textEditor/undo.gif");
-        IMAGE_URL_BY_TYPE.put("redo", "textEditor/redo.gif");
+        IMAGE_URL_BY_TYPE
+                .put(ITextEditorButtonType.UNDO, "textEditor/undo.gif");
+        IMAGE_URL_BY_TYPE
+                .put(ITextEditorButtonType.REDO, "textEditor/redo.gif");
 
-        IMAGE_URL_BY_TYPE.put("indent", "textEditor/indent.gif");
-        IMAGE_URL_BY_TYPE.put("outdent", "textEditor/outdent.gif");
+        IMAGE_URL_BY_TYPE
+                .put(ITextEditorButtonType.COPY, "textEditor/copy.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.CUT, "textEditor/cut.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.PASTE,
+                "textEditor/paste.gif");
 
-        IMAGE_URL_BY_TYPE.put("orderedlist", "textEditor/orderedList.gif");
-        IMAGE_URL_BY_TYPE.put("unorderedlist", "textEditor/unorderedList.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.INDENT,
+                "textEditor/indent.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.OUTDENT,
+                "textEditor/outdent.gif");
+
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.ORDEREDLIST,
+                "textEditor/orderedList.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.UNORDEREDLIST,
+                "textEditor/unorderedList.gif");
+
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.DECREASE_FONT_SIZE,
+                "textEditor/decreasefontsize.gif");
+        IMAGE_URL_BY_TYPE.put(ITextEditorButtonType.INCREASE_FONT_SIZE,
+                "textEditor/increasefontsize.gif");
     }
 
     protected String getJavaScriptClassName() {
@@ -66,13 +95,13 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        // IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
         TextEditorImageButtonComponent textEditorImageButtonComponent = (TextEditorImageButtonComponent) componentRenderContext
                 .getComponent();
 
-        textEditorImageButtonComponent.setDisabled(true);
+        // textEditorImageButtonComponent.setReadOnly(true);
 
         String type = textEditorImageButtonComponent.getType(facesContext);
         if (type == null) {
@@ -112,8 +141,11 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
             return null;
         }
 
-        return htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetContentAccessor(imageURL, IContentType.IMAGE);
+        IContentAccessor contentAccessor = htmlRenderContext
+                .getHtmlProcessContext().getStyleSheetContentAccessor(imageURL,
+                        IContentType.IMAGE);
+
+        return contentAccessor;
     }
 
     protected IComponentDecorator createComponentDecorator(
@@ -189,6 +221,10 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
         protected int getTextEditorImageWidth(IHtmlWriter htmlWriter) {
             return TextEditorImageButtonRenderer.this
                     .getTextEditorImageWidth(htmlWriter);
+        }
+
+        protected boolean useImageFilterIfNecessery() {
+            return true;
         }
     }
 }

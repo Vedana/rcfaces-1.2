@@ -17,6 +17,7 @@
 	list-style-type: none;
 	margin: 0;
 	padding: 0;	
+	overflow: hidden;
 }
 
 .f_toolFolder,
@@ -36,7 +37,6 @@
 	list-style-position: outside;
 	list-style-type: none;
 	float: left;
-	display: block;
 	margin: 0;
 	padding: 2px;
 }
