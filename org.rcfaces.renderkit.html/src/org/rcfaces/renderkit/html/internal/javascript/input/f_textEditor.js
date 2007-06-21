@@ -16,6 +16,16 @@ var __static = {
 	_TEXT_STYLES: ["font-weight", "font-size", "font-family", "font-style", "text-decoration", "color", "background-color"],
 	
 	/**
+	 * @field private static final number
+	 */
+	_BUTTONS_UPDATE_TIMER: 1000,
+	
+	/**
+	 * @field private static Array[]
+	 */
+	_TextEditors: undefined,
+	
+	/**
 	 * @method hidden static
 	 */
 	_OnLoad: function(textEditor) {
@@ -27,6 +37,108 @@ var __static = {
 		} catch (x) {			
 			f_core.Error(f_textEditor, "_OnLoad: load exception on textEditor "+textEditor.id, x);
 		}
+	},
+	/**
+	 * @method hidden static
+	 * @param String textEditorId
+	 * @param f_textEditorButton button
+	 * @return void
+	 */
+	RegisterTextEditorButton: function(textEditorId, button) {
+		f_core.Debug(f_textEditor, "RegisterTextEditorButton: register button '"+button.id+"' for editor '"+textEditorId+"'.");
+		
+		var textEditors=f_textEditor._TextEditors;
+		if (!textEditors) {
+			textEditors=new Object;
+			f_textEditor._TextEditors=textEditors;
+		}
+		
+		var buttons=textEditors[textEditorId];
+		if (!buttons) {
+			buttons=new Array;
+			textEditors[textEditorId]=buttons;
+		}
+		
+		buttons.push(button);
+	},
+	/**
+	 * @method public static
+	 * @return void
+	 */
+	Finalizer: function() {
+		f_textEditor._TextEditors=undefined;
+	},
+	
+	/**
+	 * @method hidden static
+	 * @param String textEditorId
+	 * @param f_textEditorButton button
+	 * @return void
+	 */
+	PerformCommand: function(textEditorId, button, parameter) {
+		f_core.Assert(typeof(textEditorId)=="string", "f_textEditor.PerformCommand: Invalid textEditorId parameter ("+textEditorId+")");
+		f_core.Assert(button && button.f_getType, "f_textEditor.PerformCommand: Invalid button parameter ("+button+")");
+		
+		var textEditors=f_textEditor._TextEditors;
+		if (!textEditors) {
+			f_core.Debug(f_textEditor, "PerformCommand: No registred text editors.");
+			return;
+		}
+
+		var buttons=textEditors[textEditorId];
+		if (!buttons) {
+			f_core.Debug(f_textEditor, "PerformCommand: No buttons for textEditor '"+textEditorId+"'.");
+			return;
+		}
+		
+		var textEditor=buttons._textEditor;
+		if (textEditor===undefined) {
+			textEditor=f_core.GetElementByClientId(textEditorId);
+			buttons._textEditor=textEditor;
+		}
+		
+		if (!textEditor) {
+			f_core.Error(f_textEditor, "PerformCommand: Can not find textEditor '"+textEditorId+"'.");
+			return;
+		}
+		
+		textEditor._performButtonCommand(button.f_getType(), parameter);
+	},
+	_OnFocus: function(evt) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		var win;
+		if (!this.nodeType) {
+			// Le this est la window !
+			win=f_core.GetWindow(evt.srcElement);
+			
+		} else {
+			win=f_core.GetWindow(this);
+		}
+		
+		var textEditor=win.frameElement;
+		
+		return textEditor._onFocus(evt);
+	},
+	_OnBlur: function(evt) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		var win;
+		if (!this.nodeType) {
+			// Le this est la window !
+			win=f_core.GetWindow(evt.srcElement);
+			
+		} else {
+			win=f_core.GetWindow(this);
+		}
+		
+		var textEditor=win.frameElement;
+		
+		return textEditor._onBlur(evt);
 	}
 }
 
@@ -37,9 +149,26 @@ var __prototype = {
 	f_finalize: function() {
 		this.onload=null; // function
 		
-		this._contentDocument=undefined; // Document
+		var contentDocument=this._contentDocument;
+		if (contentDocument) {
+			this._contentDocument=undefined;
+			
+			contentDocument.designMode="off";
+
+			f_core.RemoveEventListener(contentDocument, "focus", f_textEditor._OnFocus);
+			f_core.RemoveEventListener(contentDocument, "blur", f_textEditor._OnBlur);			
+		}
+
+		var timerId=this._timerId;
+		if (timerId) {
+			this._timerId=undefined;
+			
+			window.clearInterval(timerId);
+		}
+		
 		this._contentWindow=undefined; // Window
 //		this._mimeType=undefined; // String
+		// this._focused=undefined; // boolean
 		
 		// this._autoTab=undefined;  // boolean
 		// this._requiredInstalled=undefined; // boolean
@@ -69,7 +198,47 @@ var __prototype = {
 			this.f_setText(text);
 		}
 		
+		f_core.AddEventListener(contentDocument, "focus", f_textEditor._OnFocus);
+		f_core.AddEventListener(contentDocument, "blur", f_textEditor._OnBlur);
+		
 		contentDocument.designMode="on";
+		
+		this.f_updateButtons();
+	},
+	_onFocus: function(jsEvent) {
+		f_core.Debug(f_textEditor, "_onFocus: Get focus");
+		
+		if (this._focused) {
+			return;
+		}
+		this._focused=true;
+		
+		var self=this;
+		this._timerId=window.setInterval(function() {
+			try {
+				self.f_updateButtons();
+
+			} catch (x) {
+				f_core.Debug(f_textEditor, "_onFocus.timer: Exception into updateButtons method.", x);				
+			}
+			
+		}, f_textEditor._BUTTONS_UPDATE_TIMER);
+		
+	},
+	_onBlur: function(jsEvent) {
+		f_core.Debug(f_textEditor, "_onFocus: Lost focus");		
+		
+		if (!this._focused) {
+			return;
+		}
+		this._focused=undefined;
+		
+		var timerId=this._timerId;
+		if (timerId) {
+			this._timerId=undefined;
+			
+			window.clearInterval(timerId);
+		}
 	},
 	f_update: function() {
 		
@@ -161,15 +330,41 @@ var __prototype = {
 			f_core.SelectText(contentDocument.body, range[0], range[1]);			
 		}
 		
+		command=command.charAt(0).toUpperCase()+command.substring(1);
+		
 		contentDocument.execCommand(command, false, param);
 	},
-	_queryCommand: function(command, param) {
+	_queryCommandState: function(command, param) {
 		var contentDocument=this._contentDocument;
 		if (!contentDocument) {
 			return null;
 		}
 		
-		return contentDocument.queryCommand(command, false, param);
+	//	command=command.charAt(0).toUpperCase()+command.substring(1);
+	
+//		f_core.Debug(f_textEditor, "_queryCommandState: Query command: '"+command+"' parameter='"+param+"'.");
+		
+		var ret=contentDocument.queryCommandState(command, false, param);
+
+//		f_core.Debug(f_textEditor, "_queryCommandState: Query command: '"+command+"' => "+ret);
+		
+		return ret;
+	},
+	_queryCommandEnabled: function(command) {
+		var contentDocument=this._contentDocument;
+		if (!contentDocument) {
+			return null;
+		}
+		
+	//	command=command.charAt(0).toUpperCase()+command.substring(1);
+	
+//		f_core.Debug(f_textEditor, "_queryCommandEnabled: Query command: '"+command+"'.");
+		
+		var ret= contentDocument.queryCommandEnabled(command);
+
+//		f_core.Debug(f_textEditor, "_queryCommandEnabled: Query command: '"+command+"' => "+ret);
+		
+		return ret;
 	},
 	/**
 	 * @method public
@@ -231,6 +426,97 @@ var __prototype = {
 		}
 		
 		return style;
+	},
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_updateButtons: function() {
+		var textEditors=f_textEditor._TextEditors;
+		if (!textEditors) {
+			f_core.Debug(f_textEditor, "f_updateButtons: No registred text editors.");
+			return;
+		}
+
+		var buttons=textEditors[this.id];
+		if (!buttons) {
+			f_core.Debug(f_textEditor, "f_updateButtons: No buttons for textEditor '"+this.id+"'.");
+			return;
+		}
+		
+		for(var i=0;i<buttons.length;i++) {
+			var type=buttons[i].f_getType();
+			
+			switch(type) {
+			case "bold":
+			case "italic":
+			case "underline":
+			case "subscript":
+			case "superscript":
+			case "justifyleft":
+			case "justifycenter":
+			case "justifyright":
+			case "justifyfull":
+			case "strikethrough":
+				buttons[i].f_setSelected(this._queryCommandState(type));
+				break;
+				
+			case "undo":
+			case "redo":
+			case "indent":
+			case "outdent":
+			case "copy":
+			case "cut":
+			case "paste":
+			case "decreasefontsize":
+			case "increasefontsize":
+			case "insertorderedlist":
+			case "insertunorderedlist":
+				buttons[i].f_setDisabled(!this._queryCommandEnabled(type));
+				break;
+			}
+		}
+	},
+	_performButtonCommand: function(buttonType, param) {
+		f_core.Assert(typeof(buttonType)=="string", "f_textEditor._performButtonCommand: Invalid buttonType parameter ("+buttonType+")");
+		
+		var update=false;
+		
+		switch(buttonType) {
+		case "bold":
+		case "italic":
+		case "underline":
+		case "subscript":
+		case "superscript":
+		case "justifyleft":
+		case "justifycenter":
+		case "justifyright":
+		case "justifyfull":
+		case "strikethrough":
+		case "undo":
+		case "redo":
+		case "indent":
+		case "outdent":
+		case "copy":
+		case "cut":
+		case "paste":
+		case "decreasefontsize":
+		case "increasefontsize":
+		case "insertorderedlist":
+		case "insertunorderedlist":
+			update=true;
+			this._execCommand(buttonType);
+			break;		
+		}
+		
+		if (update) {
+			this.f_updateButtons();
+		}
+		
+		var contentWindow=this._contentWindow;
+		if (contentWindow) {
+			contentWindow.focus();
+		}
 	}
 }
 
