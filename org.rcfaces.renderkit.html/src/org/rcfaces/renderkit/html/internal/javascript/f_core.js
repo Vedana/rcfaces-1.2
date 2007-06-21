@@ -2874,8 +2874,8 @@ var f_core = {
 		}
 		
 		if (f_core.IsInternetExplorer()) {
-			var width=doc.documentElement.offsetWidth;
-			var height=doc.documentElement.offsetHeight;
+			var width=doc.body.scrollWidth;
+			var height=doc.body.scrollHeight;
 		
 			return {
 				width: width,
@@ -2884,9 +2884,12 @@ var f_core = {
 		}
 				
 		// Firefox
+		var width=doc.documentElement.scrollWidth;
+		var height=doc.documentElement.scrollHeight;
+		
 		return {
-			width: doc.body.offsetWidth,
-			height: doc.body.offsetHeight
+			width: width,
+			height: height
 		};
 	},
 	/**
