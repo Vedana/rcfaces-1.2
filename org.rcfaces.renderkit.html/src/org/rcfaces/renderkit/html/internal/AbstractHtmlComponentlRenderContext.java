@@ -8,7 +8,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.internal.IReleasable;
 import org.rcfaces.core.internal.renderkit.AbstractComponentRenderContext;
 
 /**
