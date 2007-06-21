@@ -1324,6 +1324,7 @@
 		<file name="input/f_textEditorImageButton.js">
 			<class name="f_textEditorImageButton">
 				<required-class name="f_imageButton" /> 
+				<required-class name="fa_selected" /> 
 				
 				<required-style name="f_textEditorImageButton.css" />
 			</class>
