@@ -456,6 +456,8 @@ var __prototype = {
 		this._preloadedLevelDepth=f_core.GetNumberAttribute(this, "v:preloadedLevelDepth");
 		
 		this._initCursorValue=f_core.GetAttribute(this, "v:cursorValue");
+
+		this._showValue=f_core.GetAttribute(this, "v:showValue");
 		
 		var styleSheetBase=f_env.GetStyleSheetBase();
 
@@ -511,6 +513,7 @@ var __prototype = {
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);
 	},
 	f_finalize: function() {
+//		this._showValue=undefined; // String
 //		this._preloadedLevelDepth=undefined;  // number
 //		this._userExpandable=undefined; // boolean
 //		this._images=undefined;  // boolean 
@@ -704,7 +707,7 @@ var __prototype = {
 		f_core.VerifyProperties(li);			
 	},
 	f_update: function() {
-		this.fa_initializeScrollBars();
+		this.f_updateScrollPosition();
 
 		var nodes=this._nodes;
 		if (nodes) {
@@ -717,6 +720,19 @@ var __prototype = {
 			this.f_getClass().f_getClassLoader().addVisibleComponentListener(this);
 		}		
 	},	
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_updateScrollPosition: function() {
+		var showValue=this._showValue;
+		if (showValue) {
+			this.f_showNode(showValue);			
+			return;
+		}
+		
+		this.fa_initializeScrollBars();
+	},
 	f_setDomEvent: function(type, target) {
 		switch(type) {
 		case f_event.SELECTION:
@@ -762,6 +778,8 @@ var __prototype = {
 			// Appel si un onglet etait en Ajax et il charge la liste !
 			this.f_setFirst(this._first, this._currentCursor);			
 		}
+		
+		this.f_updateScrollPosition();		
 	},
 	/**
 	 * @method private

@@ -1033,6 +1033,8 @@ var __prototype = {
 		this._resizable=f_core.GetBooleanAttribute(this, "v:resizable");
 		
 		this._initCursorValue=f_core.GetAttribute(this, "v:cursorValue");
+		
+		this._showValue=f_core.GetAttribute(this, "v:showValue");
 
 		this._headerVisible=f_core.GetBooleanAttribute(this, "v:headerVisible", true);
 	
@@ -1134,6 +1136,7 @@ var __prototype = {
 		}
 	*/	
 
+//		this._showValue=undefined; // String
 //		this._headerVisible=undefined; // boolean
 //		this._sb=undefined; // boolean
 //		this._cellStyleClass=undefined; // String
@@ -1384,7 +1387,7 @@ var __prototype = {
 
 			this._table.appendChild(this._tbody);
 
-			this.fa_initializeScrollBars();
+			this.f_updateScrollPosition();
 		}
 		
 		this.f_super(arguments);
@@ -1445,8 +1448,7 @@ var __prototype = {
 			}
 		}
 		
-
-		this.fa_initializeScrollBars();
+		this.f_updateScrollPosition();
 
 		if (this._interactiveShow) {
 			this.f_setFirst(this._first, this._cursor);			
@@ -3419,13 +3421,19 @@ var __prototype = {
 		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_grid.fa_showElement: Invalid element parameter ! ("+row+")");
 
 		var scrollBody=this._scrollBody;
+		f_core.Debug(f_grid, "fa_showElement: row.y="+row.offsetTop+" row.h="+row.offsetHeight+" scrollBody.y="+scrollBody.scrollTop+" scrollBody.h="+scrollBody.clientHeight);
+
 		if (row.offsetTop-scrollBody.scrollTop<0) {
 			scrollBody.scrollTop=row.offsetTop;
+			
+			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "+row.offsetTop);
 			return;
 		}
 			
 		if (row.offsetTop+row.offsetHeight-scrollBody.scrollTop>scrollBody.clientHeight) {
 			scrollBody.scrollTop=row.offsetTop+row.offsetHeight-scrollBody.clientHeight;
+			
+			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "+(row.offsetTop+row.offsetHeight-scrollBody.clientHeight));
 		}		
 	},
 	
@@ -3708,6 +3716,34 @@ var __prototype = {
 		}
 		
 		this._title.scrollLeft=this._scrollBody.scrollLeft;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_updateScrollPosition: function() {
+		var showValue=this._showValue;
+		if (showValue) {
+			this.f_showRow(showValue);			
+			return;
+		}
+		
+		this.fa_initializeScrollBars();
+	},
+	
+	/**
+	 * Show a row.
+	 *
+	 * @method public
+	 * @param any rowValue Value associated to the row
+	 * @return void
+	 */
+	f_showRow: function(rowValue) {
+		var row=this.f_getRowByValue(rowValue, true);
+		
+		f_core.Debug(f_grid, "f_showRow: show row '"+rowValue+"' => "+row);
+		
+		this.fa_showElement(row);
 	},
 	
 	/** 
