@@ -578,19 +578,15 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     }
 
     /*
-    private Set convertSelection(Object selection) {
-        if (selection instanceof Object[]) {
-            return new OrderedSet(Arrays.asList((Object[]) selection));
-        }
-
-        if (selection instanceof Collection) {
-            return new OrderedSet((Collection) selection);
-        }
-
-        throw new FacesException(
-                "Bad type of value for attribute selectedValues/checkedValues !");
-    }
-    */
+     * private Set convertSelection(Object selection) { if (selection instanceof
+     * Object[]) { return new OrderedSet(Arrays.asList((Object[]) selection)); }
+     * 
+     * if (selection instanceof Collection) { return new OrderedSet((Collection)
+     * selection); }
+     * 
+     * throw new FacesException( "Bad type of value for attribute
+     * selectedValues/checkedValues !"); }
+     */
 
     protected SelectItem convertToSelectItem(Object value) {
         if (value instanceof ITreeNode) {
