@@ -570,7 +570,7 @@ var f_core = {
 	_InitLibrary: function(window) {
 		var initDate=window._f_core_initLibraryDate;
 		
-		f_core.Info("f_core", "InitLibrary: "+initDate);
+		f_core.Info(f_core, "_InitLibrary: start date="+initDate);
 		
 		var profilerCB=window.f_profilerCB;
 		if (!profilerCB) {
@@ -589,13 +589,13 @@ var f_core = {
 		}
 		
 		if (profilerCB) {
-			f_core.Info("f_core", "Enable profiler mode");
+			f_core.Info(f_core, "_InitLibrary: Enable profiler mode");
 			
 			f_core.Profile(null, "f_core.initializing", initDate);
 		}
 			
-		if (window.cameliaVersion) {
-			f_core.Info("f_core", "Camelia version: "+cameliaVersion);
+		if (window.rcfacesBuildId) {
+			f_core.Info(f_core, "_InitLibrary: RCFaces buildId: "+rcfacesBuildId);
 		}
 	
 		f_core.AddEventListener(window, "load", f_core._OnInit);
@@ -3669,6 +3669,7 @@ var f_core = {
 	 */
 	GetJsEvent: function(component) {
 		if (!f_core.IsInternetExplorer()) {
+			f_core.Debug(f_core, "GetJsEvent: Can not get event from component ! (no IE browser)");
 			return null;
 		}
 		
@@ -4728,6 +4729,18 @@ var f_core = {
 		}
 
 		return clientData;
+	},
+	/**
+	 * @method public static
+	 */
+	ShowVersion: function() {
+		alert("RCFaces buildId="+window.rcfacesBuildId);
+	},
+	/**
+	 * @method public static
+	 */
+	ReportError: function(tokenId) {
+
 	},
 	/**
 	 * @method public static

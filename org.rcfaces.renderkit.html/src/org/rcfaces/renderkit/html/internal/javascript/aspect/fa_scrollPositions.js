@@ -51,7 +51,7 @@ var __prototype = {
 		}
 		
 		if (f_core.IsDebugEnabled(fa_scrollPositions)) {
-			f_core.Debug(fa_scrollPositions, "Set scrollposition x="+posx+" y="+posy+" for component '"+this.id+"' body='"+body.id+"/"+body.tagName+"'.");
+			f_core.Debug(fa_scrollPositions, "fa_initializeScrollBars: Set scrollposition x="+posx+" y="+posy+" for component '"+this.id+"' body='"+body.id+"/"+body.tagName+"'.");
 		}
 	},
 

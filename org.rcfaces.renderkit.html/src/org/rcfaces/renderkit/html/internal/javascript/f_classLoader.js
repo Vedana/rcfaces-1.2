@@ -295,11 +295,11 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_onDocumentComplete: function() {
-		f_core.Assert(!this._documentCompleted, "Document has been already completed !");
+		f_core.Assert(!this._documentCompleted, "f_classLoader.f_onDocumentComplete: Document has been already completed !");
 		this._documentCompleted=true;
 		
 		var classes=this._classes;
-		f_core.Debug("f_classLoader", "Calling static DocumentComplete methods ...");
+		f_core.Debug(f_classLoader, "f_onDocumentComplete: Calling static DocumentComplete methods ...");
 		
 		var nb=0;
 		for(var i in classes) {
@@ -315,22 +315,22 @@ f_classLoader.prototype = {
 				continue;
 			}
 			
-			f_core.Assert(typeof(fct)=="function", "Type of DocumentComplete callback is not a function ! ("+fct+")");
+			f_core.Assert(typeof(fct)=="function", "f_classLoader.f_onDocumentComplete: Type of DocumentComplete callback is not a function ! ("+fct+")");
 			
 			nb++;
 			try {
 				fct.call(claz);
 	
 			} catch (x) {			
-				f_core.Error("f_classLoader", "Exception during DocumentComplete for class "+claz._name, x);
+				f_core.Error(f_classLoader, "f_onDocumentComplete: Exception during DocumentComplete for class "+claz._name, x);
 			}
 		}
-		f_core.Debug("f_classLoader", nb+" static DocumentComplete method(s) called.");
+		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" static DocumentComplete method(s) called.");
 	
 		nb=0;
 	
 		var componentPool = this._componentPool;
-		f_core.Debug("f_classLoader", "Calling f_documentComplete methods ... ("+componentPool.length+" objects)");
+		f_core.Debug(f_classLoader, "f_onDocumentComplete: Calling f_documentComplete methods ... ("+componentPool.length+" objects)");
 		for (var i=0; i<componentPool.length; i++) {
 			var obj = componentPool[i];
 			if (!obj) {
@@ -342,21 +342,22 @@ f_classLoader.prototype = {
 				continue;
 			}
 				
-			f_core.Assert(typeof(fct)=="function", "Type of f_documentComplete callback is not a function ! ("+fct+")");
+			f_core.Assert(typeof(fct)=="function", "f_classLoader.f_onDocumentComplete: Type of f_documentComplete callback is not a function ! ("+fct+")");
 			
+			nb++;
 			try {
 				fct.call(obj);
 				
 			} catch (x) {
-				f_core.Error("f_classLoader", "Exception during documentComplete event for component "+obj.id+"/"+obj.tagName, x);
+				f_core.Error(f_classLoader, "f_onDocumentComplete: Exception during documentComplete event for component "+obj.id+"/"+obj.tagName, x);
 			}
 		}	
 	
-		f_core.Debug("f_classLoader", nb+" f_documentComplete method(s) called.");
+		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" f_documentComplete method(s) called.");
 	},
 	
 	_newInstance: function(object, systemClass) {
-		f_core.Assert(typeof(object)=="object", "Object parameter must be an object ! ("+typeof(object)+")");
+		f_core.Assert(typeof(object)=="object", "f_classLoader._newInstance: Object parameter must be an object ! ("+typeof(object)+")");
 	
 		if (this._exiting && !systemClass) {
 			throw "This classloader is exiting ... [newInstance: "+((object._kclass)?("className="+object._kclass._name):"")+",tagName="+object.tagName+"]";
@@ -365,18 +366,18 @@ f_classLoader.prototype = {
 		var pool;
 		if (systemClass) {
 			pool=this._systemComponentPool;
-			f_core.Debug("f_classLoader", "Add SYSTEM component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.");
+			f_core.Debug(f_classLoader, "_newInstance: Add SYSTEM component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.");
 	
 		} else if (object.tagName) {
 			pool=this._componentPool;
-			f_core.Debug("f_classLoader", "Add component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.");
+			f_core.Debug(f_classLoader, "_newInstance: Add component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.");
 			
 		} else {
 			pool=this._objectPool;
-	//		f_core.Debug("f_classLoader", "Add object of class '"+object._kclass._name+"' into object pool.");
+	//		f_core.Debug(f_classLoader, "_newInstance: Add object of class '"+object._kclass._name+"' into object pool.");
 		}	
 		
-		f_core.Assert(pool, "Pool must be defined !");
+		f_core.Assert(pool, "f_classLoader._newInstance: Pool must be defined !");
 		pool.push(object);
 	},
 	
@@ -389,7 +390,7 @@ f_classLoader.prototype = {
 			throw "This classloader is exiting ... [requiresBundle]";
 		}
 	
-		f_core.Assert(doc && doc.nodeType==f_core.DOCUMENT_NODE, "Document parameter is not a valid document node !");
+		f_core.Assert(doc && doc.nodeType==f_core.DOCUMENT_NODE, "f_classLoader.f_requiresBundle: Document parameter is not a valid document node !");
 	
 		var parentClassloader=this._parent;
 		
@@ -402,7 +403,7 @@ f_classLoader.prototype = {
 					continue;
 				}
 				
-				f_core.Debug("f_classLoader", "Parent classloader can not find bundle '"+bundleName+"'.");
+				f_core.Debug(f_classLoader, "f_requiresBundle: Parent classloader can not find bundle '"+bundleName+"'.");
 			}
 		
 			this._loadBundle(doc, bundleName);
@@ -418,14 +419,14 @@ f_classLoader.prototype = {
 	
 		var bundles=this._bundles;
 		if (bundles[bundleName]) {
-			f_core.Debug("f_classLoader", "Bundle already loaded '"+bundleName+"'.");
+			f_core.Debug(f_classLoader, "_loadBundle: Bundle already loaded '"+bundleName+"'.");
 	
 			return true;
 		}
 		
 		var url=f_env.ComputeJavaScriptURI(bundleName);
 	
-		f_core.Info("f_classLoader", "Load '"+bundleName+"' located at url '"+url+"'.");
+		f_core.Info(f_classLoader, "_loadBundle: Load '"+bundleName+"' located at url '"+url+"'.");
 	
 		doc.write("<SCRIPT type=\"text/javascript\" charset=\"UTF-8\" src=\""+url+"\"></SCRIPT>");
 		
