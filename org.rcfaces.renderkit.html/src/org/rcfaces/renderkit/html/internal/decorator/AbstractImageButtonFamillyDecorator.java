@@ -173,6 +173,13 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 selected = isSelected((ISelectedCapability) imageButtonFamilly);
             }
 
+            IContentAccessor imageAccessor = getImageAccessor(writer);
+            // On le met ici, car le getImageAccessor peut changer la taille des
+            // boutons ...
+            IContentAccessor disabledImageAccessor = getDisabledImageAccessor(writer);
+            IContentAccessor selectedImageAccessor = getSelectedImageAccessor(writer);
+            IContentAccessor hoverImageAccessor = getHoverImageAccessor(writer);
+
             imageWidth = imageButtonFamilly.getImageWidth(facesContext);
             imageHeight = imageButtonFamilly.getImageHeight(facesContext);
 
@@ -243,11 +250,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             }
 
             boolean initJavascript = initializeJavaScript();
-
-            IContentAccessor imageAccessor = getImageAccessor(writer);
-            IContentAccessor disabledImageAccessor = getDisabledImageAccessor(writer);
-            IContentAccessor selectedImageAccessor = getSelectedImageAccessor(writer);
-            IContentAccessor hoverImageAccessor = getHoverImageAccessor(writer);
 
             if (imageAccessor != null) {
                 imageSrc = imageAccessor.resolveURL(facesContext, null, null);

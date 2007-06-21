@@ -79,8 +79,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
-
-import com.sun.rsasign.al;
+import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
 
 /**
  * 
@@ -98,8 +97,6 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     private static final String ENABLED_ITEMS = "enabledItems";
 
     private static final int DEFAULT_INPUT_TYPE = IInputTypeCapability.AS_PUSH_BUTTON;
-
-    private static final int DEFAULT_ITEM_SEPARATOR_WIDTH = 2;
 
     private static final String COMPONENT_ID_TO_VALUE_PROPERTY = "org.rcfaces.html.ITEMS_CID";
 
@@ -126,7 +123,18 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) component;
 
-        borderType = itemsToolFolderComponent.getBorderType();
+        ToolBarComponent toolBarComponent = itemsToolFolderComponent
+                .getToolBar();
+
+        if (itemsToolFolderComponent.isBorderTypeSetted()) {
+            borderType = itemsToolFolderComponent.getBorderType();
+
+        } else if (toolBarComponent.isBorderTypeSetted()) {
+            borderType = toolBarComponent.getBorderType();
+
+        } else {
+            borderType = null;
+        }
 
         showDropDownMark = ((IShowDropDownMarkCapability) component)
                 .isShowDropDownMark();
@@ -399,7 +407,6 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         allocateItemSeparator();
 
         if (separatorImageURL != null) {
-
             FacesContext facesContext = getComponentRenderContext()
                     .getFacesContext();
 
@@ -428,7 +435,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                 }
 
                 if (alternateText == null) {
-                    alternateText = getSeparatorAlternateText(selectItem);
+                    alternateText = toolBar
+                            .getSeparatorAlternateText(facesContext);
                 }
 
                 if (alternateText != null) {
@@ -442,12 +450,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         htmlWriter.endElement(IHtmlWriter.LI);
     }
 
-    protected String getSeparatorAlternateText(SelectItem selectItem) {
-        return null;
-    }
-
     protected int getToolItemSeparatorWidth(SelectItem selectItem) {
-        return DEFAULT_ITEM_SEPARATOR_WIDTH;
+        return ToolBarRenderer.DEFAULT_TOOL_ITEM_SEPARATOR_WIDTH;
     }
 
     private void encodeToolItemBegin(UIComponent component,
