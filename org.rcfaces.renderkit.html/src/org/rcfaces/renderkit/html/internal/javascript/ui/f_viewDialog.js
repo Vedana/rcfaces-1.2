@@ -148,6 +148,7 @@ var __prototype = {
 		}
 		
 		//delete the iFrame
+		this.f_deleteIframe();
 		this.f_delModIFrame();
 	},
 
