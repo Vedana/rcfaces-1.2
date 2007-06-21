@@ -1,252 +1,266 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.RadioButtonComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.RadioButtonComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
 
 public class RadioButtonTag extends AbstractInputTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(RadioButtonTag.class);
 
-	private static final Log LOG=LogFactory.getLog(RadioButtonTag.class);
+    private String text;
 
-	private String text;
-	private String textDirection;
-	private String textPosition;
-	private String selectionListeners;
-	private String readOnly;
-	private String alternateText;
-	private String selected;
-	private String radioValue;
-	private String groupName;
-	private String required;
-	public String getComponentType() {
-		return RadioButtonComponent.COMPONENT_TYPE;
-	}
+    private String textDirection;
 
-	public final String getText() {
-		return text;
-	}
+    private String textPosition;
 
-	public final void setText(String text) {
-		this.text = text;
-	}
+    private String selectionListeners;
 
-	public final String getTextDirection() {
-		return textDirection;
-	}
+    private String readOnly;
 
-	public final void setTextDirection(String textDirection) {
-		this.textDirection = textDirection;
-	}
+    private String alternateText;
 
-	public final String getTextPosition() {
-		return textPosition;
-	}
+    private String selected;
 
-	public final void setTextPosition(String textPosition) {
-		this.textPosition = textPosition;
-	}
+    private String radioValue;
 
-	public final String getSelectionListener() {
-		return selectionListeners;
-	}
+    private String groupName;
 
-	public final void setSelectionListener(String selectionListeners) {
-		this.selectionListeners = selectionListeners;
-	}
+    private String required;
 
-	public final String getReadOnly() {
-		return readOnly;
-	}
+    public String getComponentType() {
+        return RadioButtonComponent.COMPONENT_TYPE;
+    }
 
-	public final void setReadOnly(String readOnly) {
-		this.readOnly = readOnly;
-	}
+    public final String getText() {
+        return text;
+    }
 
-	public final String getAlternateText() {
-		return alternateText;
-	}
+    public final void setText(String text) {
+        this.text = text;
+    }
 
-	public final void setAlternateText(String alternateText) {
-		this.alternateText = alternateText;
-	}
+    public final String getTextDirection() {
+        return textDirection;
+    }
 
-	public final String getSelected() {
-		return selected;
-	}
+    public final void setTextDirection(String textDirection) {
+        this.textDirection = textDirection;
+    }
 
-	public final void setSelected(String selected) {
-		this.selected = selected;
-	}
+    public final String getTextPosition() {
+        return textPosition;
+    }
 
-	public final String getRadioValue() {
-		return radioValue;
-	}
+    public final void setTextPosition(String textPosition) {
+        this.textPosition = textPosition;
+    }
 
-	public final void setRadioValue(String radioValue) {
-		this.radioValue = radioValue;
-	}
+    public final String getSelectionListener() {
+        return selectionListeners;
+    }
 
-	public final String getGroupName() {
-		return groupName;
-	}
+    public final void setSelectionListener(String selectionListeners) {
+        this.selectionListeners = selectionListeners;
+    }
 
-	public final void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
+    public final String getReadOnly() {
+        return readOnly;
+    }
 
-	public final String getRequired() {
-		return required;
-	}
+    public final void setReadOnly(String readOnly) {
+        this.readOnly = readOnly;
+    }
 
-	public final void setRequired(String required) {
-		this.required = required;
-	}
+    public final String getAlternateText() {
+        return alternateText;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (RadioButtonComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  text='"+text+"'");
-			LOG.debug("  textDirection='"+textDirection+"'");
-			LOG.debug("  textPosition='"+textPosition+"'");
-			LOG.debug("  readOnly='"+readOnly+"'");
-			LOG.debug("  alternateText='"+alternateText+"'");
-			LOG.debug("  selected='"+selected+"'");
-			LOG.debug("  radioValue='"+radioValue+"'");
-			LOG.debug("  groupName='"+groupName+"'");
-			LOG.debug("  required='"+required+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setAlternateText(String alternateText) {
+        this.alternateText = alternateText;
+    }
 
-		if ((uiComponent instanceof RadioButtonComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'RadioButtonComponent'.");
-		}
+    public final String getSelected() {
+        return selected;
+    }
 
-		RadioButtonComponent component = (RadioButtonComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final void setSelected(String selected) {
+        this.selected = selected;
+    }
 
-		if (text != null) {
-			if (isValueReference(text)) {
-				ValueBinding vb = application.createValueBinding(text);
-				component.setValueBinding(Properties.TEXT, vb);
+    public final String getRadioValue() {
+        return radioValue;
+    }
 
-			} else {
-				component.setText(text);
-			}
-		}
+    public final void setRadioValue(String radioValue) {
+        this.radioValue = radioValue;
+    }
 
-		if (textDirection != null) {
-			if (isValueReference(textDirection)) {
-				ValueBinding vb = application.createValueBinding(textDirection);
-				component.setValueBinding(Properties.TEXT_DIRECTION, vb);
+    public final String getGroupName() {
+        return groupName;
+    }
 
-			} else {
-				component.setTextDirection(getInt(textDirection));
-			}
-		}
+    public final void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
-		if (textPosition != null) {
-			if (isValueReference(textPosition)) {
-				ValueBinding vb = application.createValueBinding(textPosition);
-				component.setValueBinding(Properties.TEXT_POSITION, vb);
+    public final String getRequired() {
+        return required;
+    }
 
-			} else {
-				component.setTextPosition(textPosition);
-			}
-		}
+    public final void setRequired(String required) {
+        this.required = required;
+    }
 
-		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (RadioButtonComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  text='" + text + "'");
+            LOG.debug("  textDirection='" + textDirection + "'");
+            LOG.debug("  textPosition='" + textPosition + "'");
+            LOG.debug("  readOnly='" + readOnly + "'");
+            LOG.debug("  alternateText='" + alternateText + "'");
+            LOG.debug("  selected='" + selected + "'");
+            LOG.debug("  radioValue='" + radioValue + "'");
+            LOG.debug("  groupName='" + groupName + "'");
+            LOG.debug("  required='" + required + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (readOnly != null) {
-			if (isValueReference(readOnly)) {
-				ValueBinding vb = application.createValueBinding(readOnly);
-				component.setValueBinding(Properties.READ_ONLY, vb);
+        if ((uiComponent instanceof RadioButtonComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'RadioButtonComponent'.");
+        }
 
-			} else {
-				component.setReadOnly(getBool(readOnly));
-			}
-		}
+        RadioButtonComponent component = (RadioButtonComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (alternateText != null) {
-			if (isValueReference(alternateText)) {
-				ValueBinding vb = application.createValueBinding(alternateText);
-				component.setValueBinding(Properties.ALTERNATE_TEXT, vb);
+        if (text != null) {
+            if (isValueReference(text)) {
+                ValueBinding vb = application.createValueBinding(text);
+                component.setValueBinding(Properties.TEXT, vb);
 
-			} else {
-				component.setAlternateText(alternateText);
-			}
-		}
+            } else {
+                component.setText(text);
+            }
+        }
 
-		if (selected != null) {
-			if (isValueReference(selected)) {
-				ValueBinding vb = application.createValueBinding(selected);
-				component.setValueBinding(Properties.SELECTED, vb);
+        if (textDirection != null) {
+            if (isValueReference(textDirection)) {
+                ValueBinding vb = application.createValueBinding(textDirection);
+                component.setValueBinding(Properties.TEXT_DIRECTION, vb);
 
-			} else {
-				component.setSelected(getBool(selected));
-			}
-		}
+            } else {
+                component.setTextDirection(getInt(textDirection));
+            }
+        }
 
-		if (radioValue != null) {
-			if (isValueReference(radioValue)) {
-				ValueBinding vb = application.createValueBinding(radioValue);
-				component.setValueBinding(Properties.RADIO_VALUE, vb);
+        if (textPosition != null) {
+            if (isValueReference(textPosition)) {
+                ValueBinding vb = application.createValueBinding(textPosition);
+                component.setValueBinding(Properties.TEXT_POSITION, vb);
 
-			} else {
-				component.setRadioValue(radioValue);
-			}
-		}
+            } else {
+                component.setTextPosition(textPosition);
+            }
+        }
 
-		if (groupName != null) {
-			if (isValueReference(groupName)) {
-				ValueBinding vb = application.createValueBinding(groupName);
-				component.setValueBinding(Properties.GROUP_NAME, vb);
+        if (selectionListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+        }
 
-			} else {
-				component.setGroupName(groupName);
-			}
-		}
+        if (readOnly != null) {
+            if (isValueReference(readOnly)) {
+                ValueBinding vb = application.createValueBinding(readOnly);
+                component.setValueBinding(Properties.READ_ONLY, vb);
 
-		if (required != null) {
-			if (isValueReference(required)) {
-				ValueBinding vb = application.createValueBinding(required);
-				component.setValueBinding(Properties.REQUIRED, vb);
+            } else {
+                component.setReadOnly(getBool(readOnly));
+            }
+        }
 
-			} else {
-				component.setRequired(getBool(required));
-			}
-		}
-	}
+        if (alternateText != null) {
+            if (isValueReference(alternateText)) {
+                ValueBinding vb = application.createValueBinding(alternateText);
+                component.setValueBinding(Properties.ALTERNATE_TEXT, vb);
 
-	public void release() {
-		text = null;
-		textDirection = null;
-		textPosition = null;
-		selectionListeners = null;
-		readOnly = null;
-		alternateText = null;
-		selected = null;
-		radioValue = null;
-		groupName = null;
-		required = null;
+            } else {
+                component.setAlternateText(alternateText);
+            }
+        }
 
-		super.release();
-	}
+        if (selected != null) {
+            if (isValueReference(selected)) {
+                ValueBinding vb = application.createValueBinding(selected);
+                component.setValueBinding(Properties.SELECTED, vb);
+
+            } else {
+                component.setSelected(getBool(selected));
+            }
+        }
+
+        if (radioValue != null) {
+            if (isValueReference(radioValue)) {
+                ValueBinding vb = application.createValueBinding(radioValue);
+                component.setValueBinding(Properties.RADIO_VALUE, vb);
+
+            } else {
+                component.setRadioValue(radioValue);
+            }
+        }
+
+        if (groupName != null) {
+            if (isValueReference(groupName)) {
+                ValueBinding vb = application.createValueBinding(groupName);
+                component.setValueBinding(Properties.GROUP_NAME, vb);
+
+            } else {
+                component.setGroupName(groupName);
+            }
+        }
+
+        if (required != null) {
+            if (isValueReference(required)) {
+                ValueBinding vb = application.createValueBinding(required);
+                component.setValueBinding(Properties.REQUIRED, vb);
+
+            } else {
+                component.setRequired(getBool(required));
+            }
+        }
+    }
+
+    public void release() {
+        text = null;
+        textDirection = null;
+        textPosition = null;
+        selectionListeners = null;
+        readOnly = null;
+        alternateText = null;
+        selected = null;
+        radioValue = null;
+        groupName = null;
+        required = null;
+
+        super.release();
+    }
 
 }

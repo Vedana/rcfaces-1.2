@@ -11,8 +11,8 @@ import org.rcfaces.core.event.ValidationEvent;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ValidationScriptListener extends AbstractScriptListener
-        implements IValidationListener {
+public class ValidationScriptListener extends AbstractScriptListener implements
+        IValidationListener {
     private static final String REVISION = "$Revision$";
 
     public ValidationScriptListener(String scriptType, String command) {

@@ -4763,6 +4763,10 @@ A space-separated list of CSS style class(es) to be applied when the row is rend
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>showValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>horizontalScrollPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -5746,6 +5750,10 @@ A string value specifying the position of the horizontal scroolbar.
 <description><![CDATA[
 A string value specifying the position of the vertical scroolbar (Browser dependant).
 ]]></description>
+		</attribute>
+		<attribute>
+			<name>showValue</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>rowCountVar</name>
@@ -27607,6 +27615,14 @@ A string that represent the vertical alignement of the data in the component.
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>borderType</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string that indicates the type of border the component should show.
+		Check for availability for a particular component.
+]]></description>
+		</attribute>
+		<attribute>
 			<name>separatorImageURL</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -27619,6 +27635,10 @@ A string that represent the vertical alignement of the data in the component.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>separatorAlternateText</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>controlImageURL</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -27628,6 +27648,10 @@ A string that represent the vertical alignement of the data in the component.
 		</attribute>
 		<attribute>
 			<name>controlImageHeight</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>controlAlternateText</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -27885,6 +27909,14 @@ A string that represent the vertical alignement of the data in the component.
 		</li></ul>
 ]]></description>
 		</attribute>
+		<attribute>
+			<name>borderType</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string that indicates the type of border the component should show.
+		Check for availability for a particular component.
+]]></description>
+		</attribute>
 	</tag>
 	<tag>
 		<name>textEditorToolFolder</name>
@@ -28127,6 +28159,14 @@ A string that represent the vertical alignement of the data in the component.
 		</li><li>
 		bottom
 		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>borderType</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string that indicates the type of border the component should show.
+		Check for availability for a particular component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -28574,14 +28614,6 @@ Executed when the component is double-clicked.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>borderType</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string that indicates the type of border the component should show.
-		Check for availability for a particular component.
-]]></description>
-		</attribute>
-		<attribute>
 			<name>textPosition</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -28595,6 +28627,14 @@ A string value specifying the position of the text in the component :
 		</li><li>
 		bottom
 		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>borderType</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string that indicates the type of border the component should show.
+		Check for availability for a particular component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -28942,6 +28982,10 @@ A string value specifying the management of invisible state on the client.
 		ignore : if not visible, the data is sent to the client but no page estate is reserved
 		</li></ul>
 ]]></description>
+		</attribute>
+		<attribute>
+			<name>alternateText</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	<tag>

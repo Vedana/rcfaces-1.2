@@ -1,232 +1,277 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.ComponentsListComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ComponentsListComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class ComponentsListTag extends AbstractDataTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(ComponentsListTag.class);
 
-	private static final Log LOG=LogFactory.getLog(ComponentsListTag.class);
+    private String border;
 
-	private String border;
-	private String borderType;
-	private String horizontalScrollPosition;
-	private String verticalScrollPosition;
-	private String rowCountVar;
-	private String rowIndexVar;
-	private String columnNumber;
-	private String rowStyleClass;
-	private String columnStyleClass;
-	public String getComponentType() {
-		return ComponentsListComponent.COMPONENT_TYPE;
-	}
+    private String borderType;
 
-	public final String getBorder() {
-		return border;
-	}
+    private String horizontalScrollPosition;
 
-	public final void setBorder(String border) {
-		this.border = border;
-	}
+    private String verticalScrollPosition;
 
-	public final String getBorderType() {
-		return borderType;
-	}
+    private String showValue;
 
-	public final void setBorderType(String borderType) {
-		this.borderType = borderType;
-	}
+    private String rowCountVar;
 
-	public final String getHorizontalScrollPosition() {
-		return horizontalScrollPosition;
-	}
+    private String rowIndexVar;
 
-	public final void setHorizontalScrollPosition(String horizontalScrollPosition) {
-		this.horizontalScrollPosition = horizontalScrollPosition;
-	}
+    private String columnNumber;
 
-	public final String getVerticalScrollPosition() {
-		return verticalScrollPosition;
-	}
+    private String rowStyleClass;
 
-	public final void setVerticalScrollPosition(String verticalScrollPosition) {
-		this.verticalScrollPosition = verticalScrollPosition;
-	}
+    private String columnStyleClass;
 
-	public final String getRowCountVar() {
-		return rowCountVar;
-	}
+    public String getComponentType() {
+        return ComponentsListComponent.COMPONENT_TYPE;
+    }
 
-	public final void setRowCountVar(String rowCountVar) {
-		this.rowCountVar = rowCountVar;
-	}
+    public final String getBorder() {
+        return border;
+    }
 
-	public final String getRowIndexVar() {
-		return rowIndexVar;
-	}
+    public final void setBorder(String border) {
+        this.border = border;
+    }
 
-	public final void setRowIndexVar(String rowIndexVar) {
-		this.rowIndexVar = rowIndexVar;
-	}
+    public final String getBorderType() {
+        return borderType;
+    }
 
-	public final String getColumnNumber() {
-		return columnNumber;
-	}
+    public final void setBorderType(String borderType) {
+        this.borderType = borderType;
+    }
 
-	public final void setColumnNumber(String columnNumber) {
-		this.columnNumber = columnNumber;
-	}
+    public final String getHorizontalScrollPosition() {
+        return horizontalScrollPosition;
+    }
 
-	public final String getRowStyleClass() {
-		return rowStyleClass;
-	}
+    public final void setHorizontalScrollPosition(
+            String horizontalScrollPosition) {
+        this.horizontalScrollPosition = horizontalScrollPosition;
+    }
 
-	public final void setRowStyleClass(String rowStyleClass) {
-		this.rowStyleClass = rowStyleClass;
-	}
+    public final String getVerticalScrollPosition() {
+        return verticalScrollPosition;
+    }
 
-	public final String getColumnStyleClass() {
-		return columnStyleClass;
-	}
+    public final void setVerticalScrollPosition(String verticalScrollPosition) {
+        this.verticalScrollPosition = verticalScrollPosition;
+    }
 
-	public final void setColumnStyleClass(String columnStyleClass) {
-		this.columnStyleClass = columnStyleClass;
-	}
+    public final String getShowValue() {
+        return showValue;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (ComponentsListComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  border='"+border+"'");
-			LOG.debug("  borderType='"+borderType+"'");
-			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
-			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
-			LOG.debug("  rowCountVar='"+rowCountVar+"'");
-			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
-			LOG.debug("  columnNumber='"+columnNumber+"'");
-			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
-			LOG.debug("  columnStyleClass='"+columnStyleClass+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setShowValue(String showValue) {
+        this.showValue = showValue;
+    }
 
-		if ((uiComponent instanceof ComponentsListComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComponentsListComponent'.");
-		}
+    public final String getRowCountVar() {
+        return rowCountVar;
+    }
 
-		ComponentsListComponent component = (ComponentsListComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final void setRowCountVar(String rowCountVar) {
+        this.rowCountVar = rowCountVar;
+    }
 
-		if (border != null) {
-			if (isValueReference(border)) {
-				ValueBinding vb = application.createValueBinding(border);
-				component.setValueBinding(Properties.BORDER, vb);
+    public final String getRowIndexVar() {
+        return rowIndexVar;
+    }
 
-			} else {
-				component.setBorder(getBool(border));
-			}
-		}
+    public final void setRowIndexVar(String rowIndexVar) {
+        this.rowIndexVar = rowIndexVar;
+    }
 
-		if (borderType != null) {
-			if (isValueReference(borderType)) {
-				ValueBinding vb = application.createValueBinding(borderType);
-				component.setValueBinding(Properties.BORDER_TYPE, vb);
+    public final String getColumnNumber() {
+        return columnNumber;
+    }
 
-			} else {
-				component.setBorderType(borderType);
-			}
-		}
+    public final void setColumnNumber(String columnNumber) {
+        this.columnNumber = columnNumber;
+    }
 
-		if (horizontalScrollPosition != null) {
-			if (isValueReference(horizontalScrollPosition)) {
-				ValueBinding vb = application.createValueBinding(horizontalScrollPosition);
-				component.setValueBinding(Properties.HORIZONTAL_SCROLL_POSITION, vb);
+    public final String getRowStyleClass() {
+        return rowStyleClass;
+    }
 
-			} else {
-				component.setHorizontalScrollPosition(getInt(horizontalScrollPosition));
-			}
-		}
+    public final void setRowStyleClass(String rowStyleClass) {
+        this.rowStyleClass = rowStyleClass;
+    }
 
-		if (verticalScrollPosition != null) {
-			if (isValueReference(verticalScrollPosition)) {
-				ValueBinding vb = application.createValueBinding(verticalScrollPosition);
-				component.setValueBinding(Properties.VERTICAL_SCROLL_POSITION, vb);
+    public final String getColumnStyleClass() {
+        return columnStyleClass;
+    }
 
-			} else {
-				component.setVerticalScrollPosition(getInt(verticalScrollPosition));
-			}
-		}
+    public final void setColumnStyleClass(String columnStyleClass) {
+        this.columnStyleClass = columnStyleClass;
+    }
 
-		if (rowCountVar != null) {
-			if (isValueReference(rowCountVar)) {
-				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
-			}
-				component.setRowCountVar(rowCountVar);
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (ComponentsListComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  border='" + border + "'");
+            LOG.debug("  borderType='" + borderType + "'");
+            LOG.debug("  horizontalScrollPosition='" + horizontalScrollPosition
+                    + "'");
+            LOG.debug("  verticalScrollPosition='" + verticalScrollPosition
+                    + "'");
+            LOG.debug("  showValue='" + showValue + "'");
+            LOG.debug("  rowCountVar='" + rowCountVar + "'");
+            LOG.debug("  rowIndexVar='" + rowIndexVar + "'");
+            LOG.debug("  columnNumber='" + columnNumber + "'");
+            LOG.debug("  rowStyleClass='" + rowStyleClass + "'");
+            LOG.debug("  columnStyleClass='" + columnStyleClass + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (rowIndexVar != null) {
-			if (isValueReference(rowIndexVar)) {
-				throw new javax.faces.FacesException("Attribute 'rowIndexVar' does not accept binding !");
-			}
-				component.setRowIndexVar(rowIndexVar);
-		}
+        if ((uiComponent instanceof ComponentsListComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'ComponentsListComponent'.");
+        }
 
-		if (columnNumber != null) {
-			if (isValueReference(columnNumber)) {
-				ValueBinding vb = application.createValueBinding(columnNumber);
-				component.setValueBinding(Properties.COLUMN_NUMBER, vb);
+        ComponentsListComponent component = (ComponentsListComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-			} else {
-				component.setColumnNumber(getInt(columnNumber));
-			}
-		}
+        if (border != null) {
+            if (isValueReference(border)) {
+                ValueBinding vb = application.createValueBinding(border);
+                component.setValueBinding(Properties.BORDER, vb);
 
-		if (rowStyleClass != null) {
-			if (isValueReference(rowStyleClass)) {
-				ValueBinding vb = application.createValueBinding(rowStyleClass);
-				component.setValueBinding(Properties.ROW_STYLE_CLASS, vb);
+            } else {
+                component.setBorder(getBool(border));
+            }
+        }
 
-			} else {
-				component.setRowStyleClass(rowStyleClass);
-			}
-		}
+        if (borderType != null) {
+            if (isValueReference(borderType)) {
+                ValueBinding vb = application.createValueBinding(borderType);
+                component.setValueBinding(Properties.BORDER_TYPE, vb);
 
-		if (columnStyleClass != null) {
-			if (isValueReference(columnStyleClass)) {
-				ValueBinding vb = application.createValueBinding(columnStyleClass);
-				component.setValueBinding(Properties.COLUMN_STYLE_CLASS, vb);
+            } else {
+                component.setBorderType(borderType);
+            }
+        }
 
-			} else {
-				component.setColumnStyleClass(columnStyleClass);
-			}
-		}
-	}
+        if (horizontalScrollPosition != null) {
+            if (isValueReference(horizontalScrollPosition)) {
+                ValueBinding vb = application
+                        .createValueBinding(horizontalScrollPosition);
+                component.setValueBinding(
+                        Properties.HORIZONTAL_SCROLL_POSITION, vb);
 
-	public void release() {
-		border = null;
-		borderType = null;
-		horizontalScrollPosition = null;
-		verticalScrollPosition = null;
-		rowCountVar = null;
-		rowIndexVar = null;
-		columnNumber = null;
-		rowStyleClass = null;
-		columnStyleClass = null;
+            } else {
+                component
+                        .setHorizontalScrollPosition(getInt(horizontalScrollPosition));
+            }
+        }
 
-		super.release();
-	}
+        if (verticalScrollPosition != null) {
+            if (isValueReference(verticalScrollPosition)) {
+                ValueBinding vb = application
+                        .createValueBinding(verticalScrollPosition);
+                component.setValueBinding(Properties.VERTICAL_SCROLL_POSITION,
+                        vb);
+
+            } else {
+                component
+                        .setVerticalScrollPosition(getInt(verticalScrollPosition));
+            }
+        }
+
+        if (showValue != null) {
+            if (isValueReference(showValue)) {
+                ValueBinding vb = application.createValueBinding(showValue);
+                component.setValueBinding(Properties.SHOW_VALUE, vb);
+
+            } else {
+                component.setShowValue(showValue);
+            }
+        }
+
+        if (rowCountVar != null) {
+            if (isValueReference(rowCountVar)) {
+                throw new javax.faces.FacesException(
+                        "Attribute 'rowCountVar' does not accept binding !");
+            }
+            component.setRowCountVar(rowCountVar);
+        }
+
+        if (rowIndexVar != null) {
+            if (isValueReference(rowIndexVar)) {
+                throw new javax.faces.FacesException(
+                        "Attribute 'rowIndexVar' does not accept binding !");
+            }
+            component.setRowIndexVar(rowIndexVar);
+        }
+
+        if (columnNumber != null) {
+            if (isValueReference(columnNumber)) {
+                ValueBinding vb = application.createValueBinding(columnNumber);
+                component.setValueBinding(Properties.COLUMN_NUMBER, vb);
+
+            } else {
+                component.setColumnNumber(getInt(columnNumber));
+            }
+        }
+
+        if (rowStyleClass != null) {
+            if (isValueReference(rowStyleClass)) {
+                ValueBinding vb = application.createValueBinding(rowStyleClass);
+                component.setValueBinding(Properties.ROW_STYLE_CLASS, vb);
+
+            } else {
+                component.setRowStyleClass(rowStyleClass);
+            }
+        }
+
+        if (columnStyleClass != null) {
+            if (isValueReference(columnStyleClass)) {
+                ValueBinding vb = application
+                        .createValueBinding(columnStyleClass);
+                component.setValueBinding(Properties.COLUMN_STYLE_CLASS, vb);
+
+            } else {
+                component.setColumnStyleClass(columnStyleClass);
+            }
+        }
+    }
+
+    public void release() {
+        border = null;
+        borderType = null;
+        horizontalScrollPosition = null;
+        verticalScrollPosition = null;
+        showValue = null;
+        rowCountVar = null;
+        rowIndexVar = null;
+        columnNumber = null;
+        rowStyleClass = null;
+        columnStyleClass = null;
+
+        super.release();
+    }
 
 }

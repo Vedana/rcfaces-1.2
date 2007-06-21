@@ -1,252 +1,345 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.ToolBarComponent;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
 
 public class ToolBarTag extends AbstractBasicTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(ToolBarTag.class);
 
-	private static final Log LOG=LogFactory.getLog(ToolBarTag.class);
+    private String initListeners;
 
-	private String initListeners;
-	private String verticalAlignment;
-	private String separatorImageURL;
-	private String separatorImageWidth;
-	private String separatorImageHeight;
-	private String controlImageURL;
-	private String controlImageWidth;
-	private String controlImageHeight;
-	private String itemPadding;
-	private String locked;
-	public String getComponentType() {
-		return ToolBarComponent.COMPONENT_TYPE;
-	}
+    private String verticalAlignment;
 
-	public final String getInitListener() {
-		return initListeners;
-	}
+    private String borderType;
 
-	public final void setInitListener(String initListeners) {
-		this.initListeners = initListeners;
-	}
+    private String separatorImageURL;
 
-	public final String getVerticalAlignment() {
-		return verticalAlignment;
-	}
+    private String separatorImageWidth;
 
-	public final void setVerticalAlignment(String verticalAlignment) {
-		this.verticalAlignment = verticalAlignment;
-	}
+    private String separatorImageHeight;
 
-	public final String getSeparatorImageURL() {
-		return separatorImageURL;
-	}
+    private String separatorAlternateText;
 
-	public final void setSeparatorImageURL(String separatorImageURL) {
-		this.separatorImageURL = separatorImageURL;
-	}
+    private String controlImageURL;
 
-	public final String getSeparatorImageWidth() {
-		return separatorImageWidth;
-	}
+    private String controlImageWidth;
 
-	public final void setSeparatorImageWidth(String separatorImageWidth) {
-		this.separatorImageWidth = separatorImageWidth;
-	}
+    private String controlImageHeight;
 
-	public final String getSeparatorImageHeight() {
-		return separatorImageHeight;
-	}
+    private String controlAlternateText;
 
-	public final void setSeparatorImageHeight(String separatorImageHeight) {
-		this.separatorImageHeight = separatorImageHeight;
-	}
+    private String itemPadding;
 
-	public final String getControlImageURL() {
-		return controlImageURL;
-	}
+    private String locked;
 
-	public final void setControlImageURL(String controlImageURL) {
-		this.controlImageURL = controlImageURL;
-	}
+    public String getComponentType() {
+        return ToolBarComponent.COMPONENT_TYPE;
+    }
 
-	public final String getControlImageWidth() {
-		return controlImageWidth;
-	}
+    public final String getInitListener() {
+        return initListeners;
+    }
 
-	public final void setControlImageWidth(String controlImageWidth) {
-		this.controlImageWidth = controlImageWidth;
-	}
+    public final void setInitListener(String initListeners) {
+        this.initListeners = initListeners;
+    }
 
-	public final String getControlImageHeight() {
-		return controlImageHeight;
-	}
+    public final String getVerticalAlignment() {
+        return verticalAlignment;
+    }
 
-	public final void setControlImageHeight(String controlImageHeight) {
-		this.controlImageHeight = controlImageHeight;
-	}
+    public final void setVerticalAlignment(String verticalAlignment) {
+        this.verticalAlignment = verticalAlignment;
+    }
 
-	public final String getItemPadding() {
-		return itemPadding;
-	}
+    public final String getBorderType() {
+        return borderType;
+    }
 
-	public final void setItemPadding(String itemPadding) {
-		this.itemPadding = itemPadding;
-	}
+    public final void setBorderType(String borderType) {
+        this.borderType = borderType;
+    }
 
-	public final String getLocked() {
-		return locked;
-	}
+    public final String getSeparatorImageURL() {
+        return separatorImageURL;
+    }
 
-	public final void setLocked(String locked) {
-		this.locked = locked;
-	}
+    public final void setSeparatorImageURL(String separatorImageURL) {
+        this.separatorImageURL = separatorImageURL;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (ToolBarComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
-			LOG.debug("  separatorImageURL='"+separatorImageURL+"'");
-			LOG.debug("  separatorImageWidth='"+separatorImageWidth+"'");
-			LOG.debug("  separatorImageHeight='"+separatorImageHeight+"'");
-			LOG.debug("  controlImageURL='"+controlImageURL+"'");
-			LOG.debug("  controlImageWidth='"+controlImageWidth+"'");
-			LOG.debug("  controlImageHeight='"+controlImageHeight+"'");
-			LOG.debug("  itemPadding='"+itemPadding+"'");
-			LOG.debug("  locked='"+locked+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getSeparatorImageWidth() {
+        return separatorImageWidth;
+    }
 
-		if ((uiComponent instanceof ToolBarComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'ToolBarComponent'.");
-		}
+    public final void setSeparatorImageWidth(String separatorImageWidth) {
+        this.separatorImageWidth = separatorImageWidth;
+    }
 
-		ToolBarComponent component = (ToolBarComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getSeparatorImageHeight() {
+        return separatorImageHeight;
+    }
 
-		if (initListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
-		}
+    public final void setSeparatorImageHeight(String separatorImageHeight) {
+        this.separatorImageHeight = separatorImageHeight;
+    }
 
-		if (verticalAlignment != null) {
-			if (isValueReference(verticalAlignment)) {
-				ValueBinding vb = application.createValueBinding(verticalAlignment);
-				component.setValueBinding(Properties.VERTICAL_ALIGNMENT, vb);
+    public final String getSeparatorAlternateText() {
+        return separatorAlternateText;
+    }
 
-			} else {
-				component.setVerticalAlignment(verticalAlignment);
-			}
-		}
+    public final void setSeparatorAlternateText(String separatorAlternateText) {
+        this.separatorAlternateText = separatorAlternateText;
+    }
 
-		if (separatorImageURL != null) {
-			if (isValueReference(separatorImageURL)) {
-				ValueBinding vb = application.createValueBinding(separatorImageURL);
-				component.setValueBinding(Properties.SEPARATOR_IMAGE_URL, vb);
+    public final String getControlImageURL() {
+        return controlImageURL;
+    }
 
-			} else {
-				component.setSeparatorImageURL(separatorImageURL);
-			}
-		}
+    public final void setControlImageURL(String controlImageURL) {
+        this.controlImageURL = controlImageURL;
+    }
 
-		if (separatorImageWidth != null) {
-			if (isValueReference(separatorImageWidth)) {
-				ValueBinding vb = application.createValueBinding(separatorImageWidth);
-				component.setValueBinding(Properties.SEPARATOR_IMAGE_WIDTH, vb);
+    public final String getControlImageWidth() {
+        return controlImageWidth;
+    }
 
-			} else {
-				component.setSeparatorImageWidth(getInt(separatorImageWidth));
-			}
-		}
+    public final void setControlImageWidth(String controlImageWidth) {
+        this.controlImageWidth = controlImageWidth;
+    }
 
-		if (separatorImageHeight != null) {
-			if (isValueReference(separatorImageHeight)) {
-				ValueBinding vb = application.createValueBinding(separatorImageHeight);
-				component.setValueBinding(Properties.SEPARATOR_IMAGE_HEIGHT, vb);
+    public final String getControlImageHeight() {
+        return controlImageHeight;
+    }
 
-			} else {
-				component.setSeparatorImageHeight(getInt(separatorImageHeight));
-			}
-		}
+    public final void setControlImageHeight(String controlImageHeight) {
+        this.controlImageHeight = controlImageHeight;
+    }
 
-		if (controlImageURL != null) {
-			if (isValueReference(controlImageURL)) {
-				ValueBinding vb = application.createValueBinding(controlImageURL);
-				component.setValueBinding(Properties.CONTROL_IMAGE_URL, vb);
+    public final String getControlAlternateText() {
+        return controlAlternateText;
+    }
 
-			} else {
-				component.setControlImageURL(controlImageURL);
-			}
-		}
+    public final void setControlAlternateText(String controlAlternateText) {
+        this.controlAlternateText = controlAlternateText;
+    }
 
-		if (controlImageWidth != null) {
-			if (isValueReference(controlImageWidth)) {
-				ValueBinding vb = application.createValueBinding(controlImageWidth);
-				component.setValueBinding(Properties.CONTROL_IMAGE_WIDTH, vb);
+    public final String getItemPadding() {
+        return itemPadding;
+    }
 
-			} else {
-				component.setControlImageWidth(getInt(controlImageWidth));
-			}
-		}
+    public final void setItemPadding(String itemPadding) {
+        this.itemPadding = itemPadding;
+    }
 
-		if (controlImageHeight != null) {
-			if (isValueReference(controlImageHeight)) {
-				ValueBinding vb = application.createValueBinding(controlImageHeight);
-				component.setValueBinding(Properties.CONTROL_IMAGE_HEIGHT, vb);
+    public final String getLocked() {
+        return locked;
+    }
 
-			} else {
-				component.setControlImageHeight(getInt(controlImageHeight));
-			}
-		}
+    public final void setLocked(String locked) {
+        this.locked = locked;
+    }
 
-		if (itemPadding != null) {
-			if (isValueReference(itemPadding)) {
-				ValueBinding vb = application.createValueBinding(itemPadding);
-				component.setValueBinding(Properties.ITEM_PADDING, vb);
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (ToolBarComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  verticalAlignment='" + verticalAlignment + "'");
+            LOG.debug("  borderType='" + borderType + "'");
+            LOG.debug("  separatorImageURL='" + separatorImageURL + "'");
+            LOG.debug("  separatorImageWidth='" + separatorImageWidth + "'");
+            LOG.debug("  separatorImageHeight='" + separatorImageHeight + "'");
+            LOG.debug("  separatorAlternateText='" + separatorAlternateText
+                    + "'");
+            LOG.debug("  controlImageURL='" + controlImageURL + "'");
+            LOG.debug("  controlImageWidth='" + controlImageWidth + "'");
+            LOG.debug("  controlImageHeight='" + controlImageHeight + "'");
+            LOG.debug("  controlAlternateText='" + controlAlternateText + "'");
+            LOG.debug("  itemPadding='" + itemPadding + "'");
+            LOG.debug("  locked='" + locked + "'");
+        }
+        super.setProperties(uiComponent);
 
-			} else {
-				component.setItemPadding(getInt(itemPadding));
-			}
-		}
+        if ((uiComponent instanceof ToolBarComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'ToolBarComponent'.");
+        }
 
-		if (locked != null) {
-			if (isValueReference(locked)) {
-				ValueBinding vb = application.createValueBinding(locked);
-				component.setValueBinding(Properties.LOCKED, vb);
+        ToolBarComponent component = (ToolBarComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-			} else {
-				component.setLocked(getBool(locked));
-			}
-		}
-	}
+        if (initListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.INIT_LISTENER_TYPE, initListeners);
+        }
 
-	public void release() {
-		initListeners = null;
-		verticalAlignment = null;
-		separatorImageURL = null;
-		separatorImageWidth = null;
-		separatorImageHeight = null;
-		controlImageURL = null;
-		controlImageWidth = null;
-		controlImageHeight = null;
-		itemPadding = null;
-		locked = null;
+        if (verticalAlignment != null) {
+            if (isValueReference(verticalAlignment)) {
+                ValueBinding vb = application
+                        .createValueBinding(verticalAlignment);
+                component.setValueBinding(Properties.VERTICAL_ALIGNMENT, vb);
 
-		super.release();
-	}
+            } else {
+                component.setVerticalAlignment(verticalAlignment);
+            }
+        }
+
+        if (borderType != null) {
+            if (isValueReference(borderType)) {
+                ValueBinding vb = application.createValueBinding(borderType);
+                component.setValueBinding(Properties.BORDER_TYPE, vb);
+
+            } else {
+                component.setBorderType(borderType);
+            }
+        }
+
+        if (separatorImageURL != null) {
+            if (isValueReference(separatorImageURL)) {
+                ValueBinding vb = application
+                        .createValueBinding(separatorImageURL);
+                component.setValueBinding(Properties.SEPARATOR_IMAGE_URL, vb);
+
+            } else {
+                component.setSeparatorImageURL(separatorImageURL);
+            }
+        }
+
+        if (separatorImageWidth != null) {
+            if (isValueReference(separatorImageWidth)) {
+                ValueBinding vb = application
+                        .createValueBinding(separatorImageWidth);
+                component.setValueBinding(Properties.SEPARATOR_IMAGE_WIDTH, vb);
+
+            } else {
+                component.setSeparatorImageWidth(getInt(separatorImageWidth));
+            }
+        }
+
+        if (separatorImageHeight != null) {
+            if (isValueReference(separatorImageHeight)) {
+                ValueBinding vb = application
+                        .createValueBinding(separatorImageHeight);
+                component
+                        .setValueBinding(Properties.SEPARATOR_IMAGE_HEIGHT, vb);
+
+            } else {
+                component.setSeparatorImageHeight(getInt(separatorImageHeight));
+            }
+        }
+
+        if (separatorAlternateText != null) {
+            if (isValueReference(separatorAlternateText)) {
+                ValueBinding vb = application
+                        .createValueBinding(separatorAlternateText);
+                component.setValueBinding(Properties.SEPARATOR_ALTERNATE_TEXT,
+                        vb);
+
+            } else {
+                component.setSeparatorAlternateText(separatorAlternateText);
+            }
+        }
+
+        if (controlImageURL != null) {
+            if (isValueReference(controlImageURL)) {
+                ValueBinding vb = application
+                        .createValueBinding(controlImageURL);
+                component.setValueBinding(Properties.CONTROL_IMAGE_URL, vb);
+
+            } else {
+                component.setControlImageURL(controlImageURL);
+            }
+        }
+
+        if (controlImageWidth != null) {
+            if (isValueReference(controlImageWidth)) {
+                ValueBinding vb = application
+                        .createValueBinding(controlImageWidth);
+                component.setValueBinding(Properties.CONTROL_IMAGE_WIDTH, vb);
+
+            } else {
+                component.setControlImageWidth(getInt(controlImageWidth));
+            }
+        }
+
+        if (controlImageHeight != null) {
+            if (isValueReference(controlImageHeight)) {
+                ValueBinding vb = application
+                        .createValueBinding(controlImageHeight);
+                component.setValueBinding(Properties.CONTROL_IMAGE_HEIGHT, vb);
+
+            } else {
+                component.setControlImageHeight(getInt(controlImageHeight));
+            }
+        }
+
+        if (controlAlternateText != null) {
+            if (isValueReference(controlAlternateText)) {
+                ValueBinding vb = application
+                        .createValueBinding(controlAlternateText);
+                component
+                        .setValueBinding(Properties.CONTROL_ALTERNATE_TEXT, vb);
+
+            } else {
+                component.setControlAlternateText(controlAlternateText);
+            }
+        }
+
+        if (itemPadding != null) {
+            if (isValueReference(itemPadding)) {
+                ValueBinding vb = application.createValueBinding(itemPadding);
+                component.setValueBinding(Properties.ITEM_PADDING, vb);
+
+            } else {
+                component.setItemPadding(getInt(itemPadding));
+            }
+        }
+
+        if (locked != null) {
+            if (isValueReference(locked)) {
+                ValueBinding vb = application.createValueBinding(locked);
+                component.setValueBinding(Properties.LOCKED, vb);
+
+            } else {
+                component.setLocked(getBool(locked));
+            }
+        }
+    }
+
+    public void release() {
+        initListeners = null;
+        verticalAlignment = null;
+        borderType = null;
+        separatorImageURL = null;
+        separatorImageWidth = null;
+        separatorImageHeight = null;
+        separatorAlternateText = null;
+        controlImageURL = null;
+        controlImageWidth = null;
+        controlImageHeight = null;
+        controlAlternateText = null;
+        itemPadding = null;
+        locked = null;
+
+        super.release();
+    }
 
 }

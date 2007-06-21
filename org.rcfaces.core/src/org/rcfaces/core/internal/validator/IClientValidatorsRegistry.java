@@ -18,7 +18,8 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
  */
 public interface IClientValidatorsRegistry {
     IClientValidatorDescriptor getClientValidatorById(
-            FacesContext facesContext, String clientValidatorId, Locale locale, TimeZone timeZone);
+            FacesContext facesContext, String clientValidatorId, Locale locale,
+            TimeZone timeZone);
 
     String convertFromValidatorToExpression(IRenderContext renderContext,
             Validator validator);

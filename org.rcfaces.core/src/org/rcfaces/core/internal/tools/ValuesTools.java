@@ -315,7 +315,7 @@ public class ValuesTools {
         return convertValueToString(value, converter, component, facesContext);
     }
 
-    private static String convertValueToString(Object value,
+    public static String convertValueToString(Object value,
             Converter converter, UIComponent component,
             FacesContext facesContext) {
 

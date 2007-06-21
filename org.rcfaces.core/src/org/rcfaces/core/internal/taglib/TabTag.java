@@ -1,322 +1,339 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.TabComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TabComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class TabTag extends CardTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(TabTag.class);
 
-	private static final Log LOG=LogFactory.getLog(TabTag.class);
+    private String text;
 
-	private String text;
-	private String textDirection;
-	private String fontBold;
-	private String fontItalic;
-	private String fontName;
-	private String fontSize;
-	private String fontUnderline;
-	private String disabled;
-	private String disabledImageURL;
-	private String hoverImageURL;
-	private String selectedImageURL;
-	private String imageURL;
-	private String accessKey;
-	public String getComponentType() {
-		return TabComponent.COMPONENT_TYPE;
-	}
+    private String textDirection;
 
-	public final String getText() {
-		return text;
-	}
+    private String fontBold;
 
-	public final void setText(String text) {
-		this.text = text;
-	}
+    private String fontItalic;
 
-	public final String getTextDirection() {
-		return textDirection;
-	}
+    private String fontName;
 
-	public final void setTextDirection(String textDirection) {
-		this.textDirection = textDirection;
-	}
+    private String fontSize;
 
-	public final String getFontBold() {
-		return fontBold;
-	}
+    private String fontUnderline;
 
-	public final void setFontBold(String fontBold) {
-		this.fontBold = fontBold;
-	}
+    private String disabled;
 
-	public final String getFontItalic() {
-		return fontItalic;
-	}
+    private String disabledImageURL;
 
-	public final void setFontItalic(String fontItalic) {
-		this.fontItalic = fontItalic;
-	}
+    private String hoverImageURL;
 
-	public final String getFontName() {
-		return fontName;
-	}
+    private String selectedImageURL;
 
-	public final void setFontName(String fontName) {
-		this.fontName = fontName;
-	}
+    private String imageURL;
 
-	public final String getFontSize() {
-		return fontSize;
-	}
+    private String accessKey;
 
-	public final void setFontSize(String fontSize) {
-		this.fontSize = fontSize;
-	}
+    public String getComponentType() {
+        return TabComponent.COMPONENT_TYPE;
+    }
 
-	public final String getFontUnderline() {
-		return fontUnderline;
-	}
+    public final String getText() {
+        return text;
+    }
 
-	public final void setFontUnderline(String fontUnderline) {
-		this.fontUnderline = fontUnderline;
-	}
+    public final void setText(String text) {
+        this.text = text;
+    }
 
-	public final String getDisabled() {
-		return disabled;
-	}
+    public final String getTextDirection() {
+        return textDirection;
+    }
 
-	public final void setDisabled(String disabled) {
-		this.disabled = disabled;
-	}
+    public final void setTextDirection(String textDirection) {
+        this.textDirection = textDirection;
+    }
 
-	public final String getDisabledImageURL() {
-		return disabledImageURL;
-	}
+    public final String getFontBold() {
+        return fontBold;
+    }
 
-	public final void setDisabledImageURL(String disabledImageURL) {
-		this.disabledImageURL = disabledImageURL;
-	}
+    public final void setFontBold(String fontBold) {
+        this.fontBold = fontBold;
+    }
 
-	public final String getHoverImageURL() {
-		return hoverImageURL;
-	}
+    public final String getFontItalic() {
+        return fontItalic;
+    }
 
-	public final void setHoverImageURL(String hoverImageURL) {
-		this.hoverImageURL = hoverImageURL;
-	}
+    public final void setFontItalic(String fontItalic) {
+        this.fontItalic = fontItalic;
+    }
 
-	public final String getSelectedImageURL() {
-		return selectedImageURL;
-	}
+    public final String getFontName() {
+        return fontName;
+    }
 
-	public final void setSelectedImageURL(String selectedImageURL) {
-		this.selectedImageURL = selectedImageURL;
-	}
+    public final void setFontName(String fontName) {
+        this.fontName = fontName;
+    }
 
-	public final String getImageURL() {
-		return imageURL;
-	}
+    public final String getFontSize() {
+        return fontSize;
+    }
 
-	public final void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
-	}
+    public final void setFontSize(String fontSize) {
+        this.fontSize = fontSize;
+    }
 
-	public final String getAccessKey() {
-		return accessKey;
-	}
+    public final String getFontUnderline() {
+        return fontUnderline;
+    }
 
-	public final void setAccessKey(String accessKey) {
-		this.accessKey = accessKey;
-	}
+    public final void setFontUnderline(String fontUnderline) {
+        this.fontUnderline = fontUnderline;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (TabComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  text='"+text+"'");
-			LOG.debug("  textDirection='"+textDirection+"'");
-			LOG.debug("  fontBold='"+fontBold+"'");
-			LOG.debug("  fontItalic='"+fontItalic+"'");
-			LOG.debug("  fontName='"+fontName+"'");
-			LOG.debug("  fontSize='"+fontSize+"'");
-			LOG.debug("  fontUnderline='"+fontUnderline+"'");
-			LOG.debug("  disabled='"+disabled+"'");
-			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
-			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
-			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
-			LOG.debug("  imageURL='"+imageURL+"'");
-			LOG.debug("  accessKey='"+accessKey+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getDisabled() {
+        return disabled;
+    }
 
-		if ((uiComponent instanceof TabComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'TabComponent'.");
-		}
+    public final void setDisabled(String disabled) {
+        this.disabled = disabled;
+    }
 
-		TabComponent component = (TabComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getDisabledImageURL() {
+        return disabledImageURL;
+    }
 
-		if (text != null) {
-			if (isValueReference(text)) {
-				ValueBinding vb = application.createValueBinding(text);
-				component.setValueBinding(Properties.TEXT, vb);
+    public final void setDisabledImageURL(String disabledImageURL) {
+        this.disabledImageURL = disabledImageURL;
+    }
 
-			} else {
-				component.setText(text);
-			}
-		}
+    public final String getHoverImageURL() {
+        return hoverImageURL;
+    }
 
-		if (textDirection != null) {
-			if (isValueReference(textDirection)) {
-				ValueBinding vb = application.createValueBinding(textDirection);
-				component.setValueBinding(Properties.TEXT_DIRECTION, vb);
+    public final void setHoverImageURL(String hoverImageURL) {
+        this.hoverImageURL = hoverImageURL;
+    }
 
-			} else {
-				component.setTextDirection(getInt(textDirection));
-			}
-		}
+    public final String getSelectedImageURL() {
+        return selectedImageURL;
+    }
 
-		if (fontBold != null) {
-			if (isValueReference(fontBold)) {
-				ValueBinding vb = application.createValueBinding(fontBold);
-				component.setValueBinding(Properties.FONT_BOLD, vb);
+    public final void setSelectedImageURL(String selectedImageURL) {
+        this.selectedImageURL = selectedImageURL;
+    }
 
-			} else {
-				component.setFontBold(getBoolean(fontBold));
-			}
-		}
+    public final String getImageURL() {
+        return imageURL;
+    }
 
-		if (fontItalic != null) {
-			if (isValueReference(fontItalic)) {
-				ValueBinding vb = application.createValueBinding(fontItalic);
-				component.setValueBinding(Properties.FONT_ITALIC, vb);
+    public final void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
-			} else {
-				component.setFontItalic(getBoolean(fontItalic));
-			}
-		}
+    public final String getAccessKey() {
+        return accessKey;
+    }
 
-		if (fontName != null) {
-			if (isValueReference(fontName)) {
-				ValueBinding vb = application.createValueBinding(fontName);
-				component.setValueBinding(Properties.FONT_NAME, vb);
+    public final void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
 
-			} else {
-				component.setFontName(fontName);
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (TabComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  text='" + text + "'");
+            LOG.debug("  textDirection='" + textDirection + "'");
+            LOG.debug("  fontBold='" + fontBold + "'");
+            LOG.debug("  fontItalic='" + fontItalic + "'");
+            LOG.debug("  fontName='" + fontName + "'");
+            LOG.debug("  fontSize='" + fontSize + "'");
+            LOG.debug("  fontUnderline='" + fontUnderline + "'");
+            LOG.debug("  disabled='" + disabled + "'");
+            LOG.debug("  disabledImageURL='" + disabledImageURL + "'");
+            LOG.debug("  hoverImageURL='" + hoverImageURL + "'");
+            LOG.debug("  selectedImageURL='" + selectedImageURL + "'");
+            LOG.debug("  imageURL='" + imageURL + "'");
+            LOG.debug("  accessKey='" + accessKey + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (fontSize != null) {
-			if (isValueReference(fontSize)) {
-				ValueBinding vb = application.createValueBinding(fontSize);
-				component.setValueBinding(Properties.FONT_SIZE, vb);
+        if ((uiComponent instanceof TabComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'TabComponent'.");
+        }
 
-			} else {
-				component.setFontSize(fontSize);
-			}
-		}
+        TabComponent component = (TabComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (fontUnderline != null) {
-			if (isValueReference(fontUnderline)) {
-				ValueBinding vb = application.createValueBinding(fontUnderline);
-				component.setValueBinding(Properties.FONT_UNDERLINE, vb);
+        if (text != null) {
+            if (isValueReference(text)) {
+                ValueBinding vb = application.createValueBinding(text);
+                component.setValueBinding(Properties.TEXT, vb);
 
-			} else {
-				component.setFontUnderline(getBoolean(fontUnderline));
-			}
-		}
+            } else {
+                component.setText(text);
+            }
+        }
 
-		if (disabled != null) {
-			if (isValueReference(disabled)) {
-				ValueBinding vb = application.createValueBinding(disabled);
-				component.setValueBinding(Properties.DISABLED, vb);
+        if (textDirection != null) {
+            if (isValueReference(textDirection)) {
+                ValueBinding vb = application.createValueBinding(textDirection);
+                component.setValueBinding(Properties.TEXT_DIRECTION, vb);
 
-			} else {
-				component.setDisabled(getBool(disabled));
-			}
-		}
+            } else {
+                component.setTextDirection(getInt(textDirection));
+            }
+        }
 
-		if (disabledImageURL != null) {
-			if (isValueReference(disabledImageURL)) {
-				ValueBinding vb = application.createValueBinding(disabledImageURL);
-				component.setValueBinding(Properties.DISABLED_IMAGE_URL, vb);
+        if (fontBold != null) {
+            if (isValueReference(fontBold)) {
+                ValueBinding vb = application.createValueBinding(fontBold);
+                component.setValueBinding(Properties.FONT_BOLD, vb);
 
-			} else {
-				component.setDisabledImageURL(disabledImageURL);
-			}
-		}
+            } else {
+                component.setFontBold(getBoolean(fontBold));
+            }
+        }
 
-		if (hoverImageURL != null) {
-			if (isValueReference(hoverImageURL)) {
-				ValueBinding vb = application.createValueBinding(hoverImageURL);
-				component.setValueBinding(Properties.HOVER_IMAGE_URL, vb);
+        if (fontItalic != null) {
+            if (isValueReference(fontItalic)) {
+                ValueBinding vb = application.createValueBinding(fontItalic);
+                component.setValueBinding(Properties.FONT_ITALIC, vb);
 
-			} else {
-				component.setHoverImageURL(hoverImageURL);
-			}
-		}
+            } else {
+                component.setFontItalic(getBoolean(fontItalic));
+            }
+        }
 
-		if (selectedImageURL != null) {
-			if (isValueReference(selectedImageURL)) {
-				ValueBinding vb = application.createValueBinding(selectedImageURL);
-				component.setValueBinding(Properties.SELECTED_IMAGE_URL, vb);
+        if (fontName != null) {
+            if (isValueReference(fontName)) {
+                ValueBinding vb = application.createValueBinding(fontName);
+                component.setValueBinding(Properties.FONT_NAME, vb);
 
-			} else {
-				component.setSelectedImageURL(selectedImageURL);
-			}
-		}
+            } else {
+                component.setFontName(fontName);
+            }
+        }
 
-		if (imageURL != null) {
-			if (isValueReference(imageURL)) {
-				ValueBinding vb = application.createValueBinding(imageURL);
-				component.setValueBinding(Properties.IMAGE_URL, vb);
+        if (fontSize != null) {
+            if (isValueReference(fontSize)) {
+                ValueBinding vb = application.createValueBinding(fontSize);
+                component.setValueBinding(Properties.FONT_SIZE, vb);
 
-			} else {
-				component.setImageURL(imageURL);
-			}
-		}
+            } else {
+                component.setFontSize(fontSize);
+            }
+        }
 
-		if (accessKey != null) {
-			if (isValueReference(accessKey)) {
-				ValueBinding vb = application.createValueBinding(accessKey);
-				component.setValueBinding(Properties.ACCESS_KEY, vb);
+        if (fontUnderline != null) {
+            if (isValueReference(fontUnderline)) {
+                ValueBinding vb = application.createValueBinding(fontUnderline);
+                component.setValueBinding(Properties.FONT_UNDERLINE, vb);
 
-			} else {
-				component.setAccessKey(accessKey);
-			}
-		}
-	}
+            } else {
+                component.setFontUnderline(getBoolean(fontUnderline));
+            }
+        }
 
-	public void release() {
-		text = null;
-		textDirection = null;
-		fontBold = null;
-		fontItalic = null;
-		fontName = null;
-		fontSize = null;
-		fontUnderline = null;
-		disabled = null;
-		disabledImageURL = null;
-		hoverImageURL = null;
-		selectedImageURL = null;
-		imageURL = null;
-		accessKey = null;
+        if (disabled != null) {
+            if (isValueReference(disabled)) {
+                ValueBinding vb = application.createValueBinding(disabled);
+                component.setValueBinding(Properties.DISABLED, vb);
 
-		super.release();
-	}
+            } else {
+                component.setDisabled(getBool(disabled));
+            }
+        }
+
+        if (disabledImageURL != null) {
+            if (isValueReference(disabledImageURL)) {
+                ValueBinding vb = application
+                        .createValueBinding(disabledImageURL);
+                component.setValueBinding(Properties.DISABLED_IMAGE_URL, vb);
+
+            } else {
+                component.setDisabledImageURL(disabledImageURL);
+            }
+        }
+
+        if (hoverImageURL != null) {
+            if (isValueReference(hoverImageURL)) {
+                ValueBinding vb = application.createValueBinding(hoverImageURL);
+                component.setValueBinding(Properties.HOVER_IMAGE_URL, vb);
+
+            } else {
+                component.setHoverImageURL(hoverImageURL);
+            }
+        }
+
+        if (selectedImageURL != null) {
+            if (isValueReference(selectedImageURL)) {
+                ValueBinding vb = application
+                        .createValueBinding(selectedImageURL);
+                component.setValueBinding(Properties.SELECTED_IMAGE_URL, vb);
+
+            } else {
+                component.setSelectedImageURL(selectedImageURL);
+            }
+        }
+
+        if (imageURL != null) {
+            if (isValueReference(imageURL)) {
+                ValueBinding vb = application.createValueBinding(imageURL);
+                component.setValueBinding(Properties.IMAGE_URL, vb);
+
+            } else {
+                component.setImageURL(imageURL);
+            }
+        }
+
+        if (accessKey != null) {
+            if (isValueReference(accessKey)) {
+                ValueBinding vb = application.createValueBinding(accessKey);
+                component.setValueBinding(Properties.ACCESS_KEY, vb);
+
+            } else {
+                component.setAccessKey(accessKey);
+            }
+        }
+    }
+
+    public void release() {
+        text = null;
+        textDirection = null;
+        fontBold = null;
+        fontItalic = null;
+        fontName = null;
+        fontSize = null;
+        fontUnderline = null;
+        disabled = null;
+        disabledImageURL = null;
+        hoverImageURL = null;
+        selectedImageURL = null;
+        imageURL = null;
+        accessKey = null;
+
+        super.release();
+    }
 
 }

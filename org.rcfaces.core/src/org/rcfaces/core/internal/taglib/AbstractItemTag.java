@@ -1,147 +1,154 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.component.AbstractItemComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AbstractItemComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public abstract class AbstractItemTag extends CameliaTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(AbstractItemTag.class);
 
-	private static final Log LOG=LogFactory.getLog(AbstractItemTag.class);
+    private String disabled;
 
-	private String disabled;
-	private String itemValue;
-	private String itemLabel;
-	private String itemDescription;
-	private String itemDisabled;
-	public final String getDisabled() {
-		return disabled;
-	}
+    private String itemValue;
 
-	public final void setDisabled(String disabled) {
-		this.disabled = disabled;
-	}
+    private String itemLabel;
 
-	public final String getItemValue() {
-		return itemValue;
-	}
+    private String itemDescription;
 
-	public final void setItemValue(String itemValue) {
-		this.itemValue = itemValue;
-	}
+    private String itemDisabled;
 
-	public final String getItemLabel() {
-		return itemLabel;
-	}
+    public final String getDisabled() {
+        return disabled;
+    }
 
-	public final void setItemLabel(String itemLabel) {
-		this.itemLabel = itemLabel;
-	}
+    public final void setDisabled(String disabled) {
+        this.disabled = disabled;
+    }
 
-	public final String getItemDescription() {
-		return itemDescription;
-	}
+    public final String getItemValue() {
+        return itemValue;
+    }
 
-	public final void setItemDescription(String itemDescription) {
-		this.itemDescription = itemDescription;
-	}
+    public final void setItemValue(String itemValue) {
+        this.itemValue = itemValue;
+    }
 
-	public final String getItemDisabled() {
-		return itemDisabled;
-	}
+    public final String getItemLabel() {
+        return itemLabel;
+    }
 
-	public final void setItemDisabled(String itemDisabled) {
-		this.itemDisabled = itemDisabled;
-	}
+    public final void setItemLabel(String itemLabel) {
+        this.itemLabel = itemLabel;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("  disabled='"+disabled+"'");
-			LOG.debug("  itemValue='"+itemValue+"'");
-			LOG.debug("  itemLabel='"+itemLabel+"'");
-			LOG.debug("  itemDescription='"+itemDescription+"'");
-			LOG.debug("  itemDisabled='"+itemDisabled+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getItemDescription() {
+        return itemDescription;
+    }
 
-		if ((uiComponent instanceof AbstractItemComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractItemComponent'.");
-		}
+    public final void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
 
-		AbstractItemComponent component = (AbstractItemComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getItemDisabled() {
+        return itemDisabled;
+    }
 
-		if (disabled != null) {
-			if (isValueReference(disabled)) {
-				ValueBinding vb = application.createValueBinding(disabled);
-				component.setValueBinding(Properties.DISABLED, vb);
+    public final void setItemDisabled(String itemDisabled) {
+        this.itemDisabled = itemDisabled;
+    }
 
-			} else {
-				component.setDisabled(getBool(disabled));
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("  disabled='" + disabled + "'");
+            LOG.debug("  itemValue='" + itemValue + "'");
+            LOG.debug("  itemLabel='" + itemLabel + "'");
+            LOG.debug("  itemDescription='" + itemDescription + "'");
+            LOG.debug("  itemDisabled='" + itemDisabled + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (itemValue != null) {
-			if (isValueReference(itemValue)) {
-				ValueBinding vb = application.createValueBinding(itemValue);
-				component.setValueBinding(Properties.ITEM_VALUE, vb);
+        if ((uiComponent instanceof AbstractItemComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'AbstractItemComponent'.");
+        }
 
-			} else {
-				component.setItemValue(itemValue);
-			}
-		}
+        AbstractItemComponent component = (AbstractItemComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (itemLabel != null) {
-			if (isValueReference(itemLabel)) {
-				ValueBinding vb = application.createValueBinding(itemLabel);
-				component.setValueBinding(Properties.ITEM_LABEL, vb);
+        if (disabled != null) {
+            if (isValueReference(disabled)) {
+                ValueBinding vb = application.createValueBinding(disabled);
+                component.setValueBinding(Properties.DISABLED, vb);
 
-			} else {
-				component.setItemLabel(itemLabel);
-			}
-		}
+            } else {
+                component.setDisabled(getBool(disabled));
+            }
+        }
 
-		if (itemDescription != null) {
-			if (isValueReference(itemDescription)) {
-				ValueBinding vb = application.createValueBinding(itemDescription);
-				component.setValueBinding(Properties.ITEM_DESCRIPTION, vb);
+        if (itemValue != null) {
+            if (isValueReference(itemValue)) {
+                ValueBinding vb = application.createValueBinding(itemValue);
+                component.setValueBinding(Properties.ITEM_VALUE, vb);
 
-			} else {
-				component.setItemDescription(itemDescription);
-			}
-		}
+            } else {
+                component.setItemValue(itemValue);
+            }
+        }
 
-		if (itemDisabled != null) {
-			if (isValueReference(itemDisabled)) {
-				ValueBinding vb = application.createValueBinding(itemDisabled);
-				component.setValueBinding(Properties.ITEM_DISABLED, vb);
+        if (itemLabel != null) {
+            if (isValueReference(itemLabel)) {
+                ValueBinding vb = application.createValueBinding(itemLabel);
+                component.setValueBinding(Properties.ITEM_LABEL, vb);
 
-			} else {
-				component.setItemDisabled(getBool(itemDisabled));
-			}
-		}
-	}
+            } else {
+                component.setItemLabel(itemLabel);
+            }
+        }
 
-	public void release() {
-		disabled = null;
-		itemValue = null;
-		itemLabel = null;
-		itemDescription = null;
-		itemDisabled = null;
+        if (itemDescription != null) {
+            if (isValueReference(itemDescription)) {
+                ValueBinding vb = application
+                        .createValueBinding(itemDescription);
+                component.setValueBinding(Properties.ITEM_DESCRIPTION, vb);
 
-		super.release();
-	}
+            } else {
+                component.setItemDescription(itemDescription);
+            }
+        }
+
+        if (itemDisabled != null) {
+            if (isValueReference(itemDisabled)) {
+                ValueBinding vb = application.createValueBinding(itemDisabled);
+                component.setValueBinding(Properties.ITEM_DISABLED, vb);
+
+            } else {
+                component.setItemDisabled(getBool(itemDisabled));
+            }
+        }
+    }
+
+    public void release() {
+        disabled = null;
+        itemValue = null;
+        itemLabel = null;
+        itemDescription = null;
+        itemDisabled = null;
+
+        super.release();
+    }
 
 }

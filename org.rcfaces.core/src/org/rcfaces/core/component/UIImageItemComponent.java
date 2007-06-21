@@ -1,236 +1,248 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.AbstractItemComponent;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+
 import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 
 /**
- * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
+ * A select item (member of a selectable list) that shows an image. Ricer than a
+ * selectImageItem.
  */
-public class UIImageItemComponent extends AbstractItemComponent implements 
-	IVisibilityCapability,
-	IToolTipCapability,
-	IStatesImageCapability,
-	IImageAccessorsCapability {
+public class UIImageItemComponent extends AbstractItemComponent implements
+        IVisibilityCapability, IToolTipCapability, IStatesImageCapability,
+        IImageAccessorsCapability {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.UIImageItem";
+    public static final String COMPONENT_TYPE = "org.rcfaces.core.UIImageItem";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hoverImageURL","imageURL","disabledImageURL","selectedImageURL","toolTipText","visible","rendered"}));
-	}
+    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
+            AbstractItemComponent.CAMELIA_ATTRIBUTES);
+    static {
+        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] { "hoverImageURL",
+                "imageURL", "disabledImageURL", "selectedImageURL",
+                "toolTipText", "visible", "rendered" }));
+    }
 
-	public UIImageItemComponent() {
-		setRendererType(null);
-	}
+    public UIImageItemComponent() {
+        setRendererType(null);
+    }
 
-	public UIImageItemComponent(String componentId) {
-		this();
-		setId(componentId);
-	}
+    public UIImageItemComponent(String componentId) {
+        this();
+        setId(componentId);
+    }
 
-	public IContentAccessors getImageAccessors(FacesContext facesContext) {
+    public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
+        return ImageAccessorTools.createImageAccessors(facesContext, this,
+                engine);
 
-			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
-		
-	}
+    }
 
-	public Boolean getVisibleState(FacesContext facesContext) {
+    public Boolean getVisibleState(FacesContext facesContext) {
 
+        if (engine.isPropertySetted(Properties.VISIBLE) == false) {
+            return null;
+        }
 
-			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
-				return null;
-			}
-			
-			return Boolean.valueOf(isVisible(facesContext));
-		
-	}
+        return Boolean.valueOf(isVisible(facesContext));
 
-	public void setToolTip(String text) {
+    }
 
+    public void setToolTip(String text) {
 
-			setItemDescription(text);
-			
-	}
+        setItemDescription(text);
 
-	public String getToolTip() {
+    }
 
+    public String getToolTip() {
 
-			return getItemDescription();
-			
-	}
+        return getItemDescription();
 
-	public boolean isVisible() {
-		return isVisible(null);
-	}
+    }
 
-	/**
-	 * See {@link #isVisible() isVisible()} for more details
-	 */
-	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
-	}
+    public boolean isVisible() {
+        return isVisible(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "visible" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isVisibleSetted() {
-		return engine.isPropertySetted(Properties.VISIBLE);
-	}
+    /**
+     * See {@link #isVisible() isVisible()} for more details
+     */
+    public boolean isVisible(javax.faces.context.FacesContext facesContext) {
+        return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
+    }
 
-	public void setVisible(boolean visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "visible" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isVisibleSetted() {
+        return engine.isPropertySetted(Properties.VISIBLE);
+    }
 
-	public Boolean getVisibleState() {
+    public void setVisible(boolean visible) {
+        engine.setProperty(Properties.VISIBLE, visible);
+    }
 
+    public Boolean getVisibleState() {
 
-			return getVisibleState(null);
-		
-	}
+        return getVisibleState(null);
 
-	public java.lang.String getToolTipText() {
-		return getToolTipText(null);
-	}
+    }
 
-	/**
-	 * See {@link #getToolTipText() getToolTipText()} for more details
-	 */
-	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
-	}
+    public java.lang.String getToolTipText() {
+        return getToolTipText(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "toolTipText" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isToolTipTextSetted() {
-		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
-	}
+    /**
+     * See {@link #getToolTipText() getToolTipText()} for more details
+     */
+    public java.lang.String getToolTipText(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
+    }
 
-	public void setToolTipText(java.lang.String toolTipText) {
-		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "toolTipText" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isToolTipTextSetted() {
+        return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
+    }
 
-	public java.lang.String getDisabledImageURL() {
-		return getDisabledImageURL(null);
-	}
+    public void setToolTipText(java.lang.String toolTipText) {
+        engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
+    }
 
-	/**
-	 * See {@link #getDisabledImageURL() getDisabledImageURL()} for more details
-	 */
-	public java.lang.String getDisabledImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DISABLED_IMAGE_URL, facesContext);
-	}
+    public java.lang.String getDisabledImageURL() {
+        return getDisabledImageURL(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "disabledImageURL" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isDisabledImageURLSetted() {
-		return engine.isPropertySetted(Properties.DISABLED_IMAGE_URL);
-	}
+    /**
+     * See {@link #getDisabledImageURL() getDisabledImageURL()} for more details
+     */
+    public java.lang.String getDisabledImageURL(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.DISABLED_IMAGE_URL,
+                facesContext);
+    }
 
-	public void setDisabledImageURL(java.lang.String disabledImageURL) {
-		engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "disabledImageURL" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isDisabledImageURLSetted() {
+        return engine.isPropertySetted(Properties.DISABLED_IMAGE_URL);
+    }
 
-	public java.lang.String getHoverImageURL() {
-		return getHoverImageURL(null);
-	}
+    public void setDisabledImageURL(java.lang.String disabledImageURL) {
+        engine.setProperty(Properties.DISABLED_IMAGE_URL, disabledImageURL);
+    }
 
-	/**
-	 * See {@link #getHoverImageURL() getHoverImageURL()} for more details
-	 */
-	public java.lang.String getHoverImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HOVER_IMAGE_URL, facesContext);
-	}
+    public java.lang.String getHoverImageURL() {
+        return getHoverImageURL(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "hoverImageURL" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isHoverImageURLSetted() {
-		return engine.isPropertySetted(Properties.HOVER_IMAGE_URL);
-	}
+    /**
+     * See {@link #getHoverImageURL() getHoverImageURL()} for more details
+     */
+    public java.lang.String getHoverImageURL(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.HOVER_IMAGE_URL,
+                facesContext);
+    }
 
-	public void setHoverImageURL(java.lang.String hoverImageURL) {
-		engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "hoverImageURL" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isHoverImageURLSetted() {
+        return engine.isPropertySetted(Properties.HOVER_IMAGE_URL);
+    }
 
-	public java.lang.String getSelectedImageURL() {
-		return getSelectedImageURL(null);
-	}
+    public void setHoverImageURL(java.lang.String hoverImageURL) {
+        engine.setProperty(Properties.HOVER_IMAGE_URL, hoverImageURL);
+    }
 
-	/**
-	 * See {@link #getSelectedImageURL() getSelectedImageURL()} for more details
-	 */
-	public java.lang.String getSelectedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SELECTED_IMAGE_URL, facesContext);
-	}
+    public java.lang.String getSelectedImageURL() {
+        return getSelectedImageURL(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "selectedImageURL" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectedImageURLSetted() {
-		return engine.isPropertySetted(Properties.SELECTED_IMAGE_URL);
-	}
+    /**
+     * See {@link #getSelectedImageURL() getSelectedImageURL()} for more details
+     */
+    public java.lang.String getSelectedImageURL(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.SELECTED_IMAGE_URL,
+                facesContext);
+    }
 
-	public void setSelectedImageURL(java.lang.String selectedImageURL) {
-		engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "selectedImageURL" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isSelectedImageURLSetted() {
+        return engine.isPropertySetted(Properties.SELECTED_IMAGE_URL);
+    }
 
-	public java.lang.String getImageURL() {
-		return getImageURL(null);
-	}
+    public void setSelectedImageURL(java.lang.String selectedImageURL) {
+        engine.setProperty(Properties.SELECTED_IMAGE_URL, selectedImageURL);
+    }
 
-	/**
-	 * See {@link #getImageURL() getImageURL()} for more details
-	 */
-	public java.lang.String getImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
-	}
+    public java.lang.String getImageURL() {
+        return getImageURL(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "imageURL" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isImageURLSetted() {
-		return engine.isPropertySetted(Properties.IMAGE_URL);
-	}
+    /**
+     * See {@link #getImageURL() getImageURL()} for more details
+     */
+    public java.lang.String getImageURL(
+            javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.IMAGE_URL, facesContext);
+    }
 
-	public void setImageURL(java.lang.String imageURL) {
-		engine.setProperty(Properties.IMAGE_URL, imageURL);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "imageURL" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public final boolean isImageURLSetted() {
+        return engine.isPropertySetted(Properties.IMAGE_URL);
+    }
 
-	public IContentAccessors getImageAccessors() {
+    public void setImageURL(java.lang.String imageURL) {
+        engine.setProperty(Properties.IMAGE_URL, imageURL);
+    }
 
+    public IContentAccessors getImageAccessors() {
 
-			return getImageAccessors(null);
-		
-	}
+        return getImageAccessors(null);
 
-	protected Set getCameliaFields() {
-		return CAMELIA_ATTRIBUTES;
-	}
+    }
 
-	public void setValueBinding(String name, ValueBinding binding) {
-		if (Properties.TOOL_TIP_TEXT.equals(name)) {
-			name=Properties.ITEM_DESCRIPTION;
-		}
-		super.setValueBinding(name, binding);
-	}
+    protected Set getCameliaFields() {
+        return CAMELIA_ATTRIBUTES;
+    }
+
+    public void setValueBinding(String name, ValueBinding binding) {
+        if (Properties.TOOL_TIP_TEXT.equals(name)) {
+            name = Properties.ITEM_DESCRIPTION;
+        }
+        super.setValueBinding(name, binding);
+    }
 }

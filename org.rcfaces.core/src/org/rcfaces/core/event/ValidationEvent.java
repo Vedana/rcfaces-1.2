@@ -35,8 +35,7 @@ public class ValidationEvent extends CameliaEvent {
      * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
      */
     public void processListener(FacesListener listener) {
-        ((IValidationListener) listener)
-                .processValidationEvent(this);
+        ((IValidationListener) listener).processValidationEvent(this);
     }
 
 }

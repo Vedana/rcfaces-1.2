@@ -1,331 +1,379 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.BoxComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.BoxComponent;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
 
 public class BoxTag extends AbstractBasicTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(BoxTag.class);
 
-	private static final Log LOG=LogFactory.getLog(BoxTag.class);
+    private String backgroundImageHorizontalPosition;
 
-	private String backgroundImageHorizontalPosition;
-	private String backgroundImageHorizontalRepeat;
-	private String backgroundImageURL;
-	private String backgroundImageVerticalPosition;
-	private String backgroundImageVerticalRepeat;
-	private String border;
-	private String mouseOutListeners;
-	private String mouseOverListeners;
-	private String initListeners;
-	private String loadListeners;
-	private String asyncRenderMode;
-	private String scopeValue;
-	private String scopeVar;
-	private String horizontalScroll;
-	private String verticalScroll;
-	public String getComponentType() {
-		return BoxComponent.COMPONENT_TYPE;
-	}
+    private String backgroundImageHorizontalRepeat;
 
-	public final String getBackgroundImageHorizontalPosition() {
-		return backgroundImageHorizontalPosition;
-	}
+    private String backgroundImageURL;
 
-	public final void setBackgroundImageHorizontalPosition(String backgroundImageHorizontalPosition) {
-		this.backgroundImageHorizontalPosition = backgroundImageHorizontalPosition;
-	}
+    private String backgroundImageVerticalPosition;
 
-	public final String getBackgroundImageHorizontalRepeat() {
-		return backgroundImageHorizontalRepeat;
-	}
+    private String backgroundImageVerticalRepeat;
 
-	public final void setBackgroundImageHorizontalRepeat(String backgroundImageHorizontalRepeat) {
-		this.backgroundImageHorizontalRepeat = backgroundImageHorizontalRepeat;
-	}
+    private String border;
 
-	public final String getBackgroundImageURL() {
-		return backgroundImageURL;
-	}
+    private String mouseOutListeners;
 
-	public final void setBackgroundImageURL(String backgroundImageURL) {
-		this.backgroundImageURL = backgroundImageURL;
-	}
+    private String mouseOverListeners;
 
-	public final String getBackgroundImageVerticalPosition() {
-		return backgroundImageVerticalPosition;
-	}
+    private String initListeners;
 
-	public final void setBackgroundImageVerticalPosition(String backgroundImageVerticalPosition) {
-		this.backgroundImageVerticalPosition = backgroundImageVerticalPosition;
-	}
+    private String loadListeners;
 
-	public final String getBackgroundImageVerticalRepeat() {
-		return backgroundImageVerticalRepeat;
-	}
+    private String asyncRenderMode;
 
-	public final void setBackgroundImageVerticalRepeat(String backgroundImageVerticalRepeat) {
-		this.backgroundImageVerticalRepeat = backgroundImageVerticalRepeat;
-	}
+    private String scopeValue;
 
-	public final String getBorder() {
-		return border;
-	}
+    private String scopeVar;
 
-	public final void setBorder(String border) {
-		this.border = border;
-	}
+    private String horizontalScroll;
 
-	public final String getMouseOutListener() {
-		return mouseOutListeners;
-	}
+    private String verticalScroll;
 
-	public final void setMouseOutListener(String mouseOutListeners) {
-		this.mouseOutListeners = mouseOutListeners;
-	}
+    public String getComponentType() {
+        return BoxComponent.COMPONENT_TYPE;
+    }
 
-	public final String getMouseOverListener() {
-		return mouseOverListeners;
-	}
+    public final String getBackgroundImageHorizontalPosition() {
+        return backgroundImageHorizontalPosition;
+    }
 
-	public final void setMouseOverListener(String mouseOverListeners) {
-		this.mouseOverListeners = mouseOverListeners;
-	}
+    public final void setBackgroundImageHorizontalPosition(
+            String backgroundImageHorizontalPosition) {
+        this.backgroundImageHorizontalPosition = backgroundImageHorizontalPosition;
+    }
 
-	public final String getInitListener() {
-		return initListeners;
-	}
+    public final String getBackgroundImageHorizontalRepeat() {
+        return backgroundImageHorizontalRepeat;
+    }
 
-	public final void setInitListener(String initListeners) {
-		this.initListeners = initListeners;
-	}
+    public final void setBackgroundImageHorizontalRepeat(
+            String backgroundImageHorizontalRepeat) {
+        this.backgroundImageHorizontalRepeat = backgroundImageHorizontalRepeat;
+    }
 
-	public final String getLoadListener() {
-		return loadListeners;
-	}
+    public final String getBackgroundImageURL() {
+        return backgroundImageURL;
+    }
 
-	public final void setLoadListener(String loadListeners) {
-		this.loadListeners = loadListeners;
-	}
+    public final void setBackgroundImageURL(String backgroundImageURL) {
+        this.backgroundImageURL = backgroundImageURL;
+    }
 
-	public final String getAsyncRenderMode() {
-		return asyncRenderMode;
-	}
+    public final String getBackgroundImageVerticalPosition() {
+        return backgroundImageVerticalPosition;
+    }
 
-	public final void setAsyncRenderMode(String asyncRenderMode) {
-		this.asyncRenderMode = asyncRenderMode;
-	}
+    public final void setBackgroundImageVerticalPosition(
+            String backgroundImageVerticalPosition) {
+        this.backgroundImageVerticalPosition = backgroundImageVerticalPosition;
+    }
 
-	public final String getScopeValue() {
-		return scopeValue;
-	}
+    public final String getBackgroundImageVerticalRepeat() {
+        return backgroundImageVerticalRepeat;
+    }
 
-	public final void setScopeValue(String scopeValue) {
-		this.scopeValue = scopeValue;
-	}
+    public final void setBackgroundImageVerticalRepeat(
+            String backgroundImageVerticalRepeat) {
+        this.backgroundImageVerticalRepeat = backgroundImageVerticalRepeat;
+    }
 
-	public final String getScopeVar() {
-		return scopeVar;
-	}
+    public final String getBorder() {
+        return border;
+    }
 
-	public final void setScopeVar(String scopeVar) {
-		this.scopeVar = scopeVar;
-	}
+    public final void setBorder(String border) {
+        this.border = border;
+    }
 
-	public final String getHorizontalScroll() {
-		return horizontalScroll;
-	}
+    public final String getMouseOutListener() {
+        return mouseOutListeners;
+    }
 
-	public final void setHorizontalScroll(String horizontalScroll) {
-		this.horizontalScroll = horizontalScroll;
-	}
+    public final void setMouseOutListener(String mouseOutListeners) {
+        this.mouseOutListeners = mouseOutListeners;
+    }
 
-	public final String getVerticalScroll() {
-		return verticalScroll;
-	}
+    public final String getMouseOverListener() {
+        return mouseOverListeners;
+    }
 
-	public final void setVerticalScroll(String verticalScroll) {
-		this.verticalScroll = verticalScroll;
-	}
+    public final void setMouseOverListener(String mouseOverListeners) {
+        this.mouseOverListeners = mouseOverListeners;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (BoxComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  backgroundImageHorizontalPosition='"+backgroundImageHorizontalPosition+"'");
-			LOG.debug("  backgroundImageHorizontalRepeat='"+backgroundImageHorizontalRepeat+"'");
-			LOG.debug("  backgroundImageURL='"+backgroundImageURL+"'");
-			LOG.debug("  backgroundImageVerticalPosition='"+backgroundImageVerticalPosition+"'");
-			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
-			LOG.debug("  border='"+border+"'");
-			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
-			LOG.debug("  scopeValue='"+scopeValue+"'");
-			LOG.debug("  scopeVar='"+scopeVar+"'");
-			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
-			LOG.debug("  verticalScroll='"+verticalScroll+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getInitListener() {
+        return initListeners;
+    }
 
-		if ((uiComponent instanceof BoxComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'BoxComponent'.");
-		}
+    public final void setInitListener(String initListeners) {
+        this.initListeners = initListeners;
+    }
 
-		BoxComponent component = (BoxComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getLoadListener() {
+        return loadListeners;
+    }
 
-		if (backgroundImageHorizontalPosition != null) {
-			if (isValueReference(backgroundImageHorizontalPosition)) {
-				ValueBinding vb = application.createValueBinding(backgroundImageHorizontalPosition);
-				component.setValueBinding(Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, vb);
+    public final void setLoadListener(String loadListeners) {
+        this.loadListeners = loadListeners;
+    }
 
-			} else {
-				component.setBackgroundImageHorizontalPosition(backgroundImageHorizontalPosition);
-			}
-		}
+    public final String getAsyncRenderMode() {
+        return asyncRenderMode;
+    }
 
-		if (backgroundImageHorizontalRepeat != null) {
-			if (isValueReference(backgroundImageHorizontalRepeat)) {
-				ValueBinding vb = application.createValueBinding(backgroundImageHorizontalRepeat);
-				component.setValueBinding(Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, vb);
+    public final void setAsyncRenderMode(String asyncRenderMode) {
+        this.asyncRenderMode = asyncRenderMode;
+    }
 
-			} else {
-				component.setBackgroundImageHorizontalRepeat(getBool(backgroundImageHorizontalRepeat));
-			}
-		}
+    public final String getScopeValue() {
+        return scopeValue;
+    }
 
-		if (backgroundImageURL != null) {
-			if (isValueReference(backgroundImageURL)) {
-				ValueBinding vb = application.createValueBinding(backgroundImageURL);
-				component.setValueBinding(Properties.BACKGROUND_IMAGE_URL, vb);
+    public final void setScopeValue(String scopeValue) {
+        this.scopeValue = scopeValue;
+    }
 
-			} else {
-				component.setBackgroundImageURL(backgroundImageURL);
-			}
-		}
+    public final String getScopeVar() {
+        return scopeVar;
+    }
 
-		if (backgroundImageVerticalPosition != null) {
-			if (isValueReference(backgroundImageVerticalPosition)) {
-				ValueBinding vb = application.createValueBinding(backgroundImageVerticalPosition);
-				component.setValueBinding(Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, vb);
+    public final void setScopeVar(String scopeVar) {
+        this.scopeVar = scopeVar;
+    }
 
-			} else {
-				component.setBackgroundImageVerticalPosition(backgroundImageVerticalPosition);
-			}
-		}
+    public final String getHorizontalScroll() {
+        return horizontalScroll;
+    }
 
-		if (backgroundImageVerticalRepeat != null) {
-			if (isValueReference(backgroundImageVerticalRepeat)) {
-				ValueBinding vb = application.createValueBinding(backgroundImageVerticalRepeat);
-				component.setValueBinding(Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, vb);
+    public final void setHorizontalScroll(String horizontalScroll) {
+        this.horizontalScroll = horizontalScroll;
+    }
 
-			} else {
-				component.setBackgroundImageVerticalRepeat(getBool(backgroundImageVerticalRepeat));
-			}
-		}
+    public final String getVerticalScroll() {
+        return verticalScroll;
+    }
 
-		if (border != null) {
-			if (isValueReference(border)) {
-				ValueBinding vb = application.createValueBinding(border);
-				component.setValueBinding(Properties.BORDER, vb);
+    public final void setVerticalScroll(String verticalScroll) {
+        this.verticalScroll = verticalScroll;
+    }
 
-			} else {
-				component.setBorder(getBool(border));
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (BoxComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  backgroundImageHorizontalPosition='"
+                    + backgroundImageHorizontalPosition + "'");
+            LOG.debug("  backgroundImageHorizontalRepeat='"
+                    + backgroundImageHorizontalRepeat + "'");
+            LOG.debug("  backgroundImageURL='" + backgroundImageURL + "'");
+            LOG.debug("  backgroundImageVerticalPosition='"
+                    + backgroundImageVerticalPosition + "'");
+            LOG.debug("  backgroundImageVerticalRepeat='"
+                    + backgroundImageVerticalRepeat + "'");
+            LOG.debug("  border='" + border + "'");
+            LOG.debug("  asyncRenderMode='" + asyncRenderMode + "'");
+            LOG.debug("  scopeValue='" + scopeValue + "'");
+            LOG.debug("  scopeVar='" + scopeVar + "'");
+            LOG.debug("  horizontalScroll='" + horizontalScroll + "'");
+            LOG.debug("  verticalScroll='" + verticalScroll + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (mouseOutListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
-		}
+        if ((uiComponent instanceof BoxComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'BoxComponent'.");
+        }
 
-		if (mouseOverListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
-		}
+        BoxComponent component = (BoxComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (initListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
-		}
+        if (backgroundImageHorizontalPosition != null) {
+            if (isValueReference(backgroundImageHorizontalPosition)) {
+                ValueBinding vb = application
+                        .createValueBinding(backgroundImageHorizontalPosition);
+                component.setValueBinding(
+                        Properties.BACKGROUND_IMAGE_HORIZONTAL_POSITION, vb);
 
-		if (loadListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
-		}
+            } else {
+                component
+                        .setBackgroundImageHorizontalPosition(backgroundImageHorizontalPosition);
+            }
+        }
 
-		if (asyncRenderMode != null) {
-			if (isValueReference(asyncRenderMode)) {
-				ValueBinding vb = application.createValueBinding(asyncRenderMode);
-				component.setValueBinding(Properties.ASYNC_RENDER_MODE, vb);
+        if (backgroundImageHorizontalRepeat != null) {
+            if (isValueReference(backgroundImageHorizontalRepeat)) {
+                ValueBinding vb = application
+                        .createValueBinding(backgroundImageHorizontalRepeat);
+                component.setValueBinding(
+                        Properties.BACKGROUND_IMAGE_HORIZONTAL_REPEAT, vb);
 
-			} else {
-				component.setAsyncRenderMode(asyncRenderMode);
-			}
-		}
+            } else {
+                component
+                        .setBackgroundImageHorizontalRepeat(getBool(backgroundImageHorizontalRepeat));
+            }
+        }
 
-		if (scopeValue != null) {
-				ValueBinding vb = application.createValueBinding(scopeValue);
-				component.setValueBinding(Properties.SCOPE_VALUE, vb);
-		}
+        if (backgroundImageURL != null) {
+            if (isValueReference(backgroundImageURL)) {
+                ValueBinding vb = application
+                        .createValueBinding(backgroundImageURL);
+                component.setValueBinding(Properties.BACKGROUND_IMAGE_URL, vb);
 
-		if (scopeVar != null) {
-			if (isValueReference(scopeVar)) {
-				ValueBinding vb = application.createValueBinding(scopeVar);
-				component.setValueBinding(Properties.SCOPE_VAR, vb);
+            } else {
+                component.setBackgroundImageURL(backgroundImageURL);
+            }
+        }
 
-			} else {
-				component.setScopeVar(scopeVar);
-			}
-		}
+        if (backgroundImageVerticalPosition != null) {
+            if (isValueReference(backgroundImageVerticalPosition)) {
+                ValueBinding vb = application
+                        .createValueBinding(backgroundImageVerticalPosition);
+                component.setValueBinding(
+                        Properties.BACKGROUND_IMAGE_VERTICAL_POSITION, vb);
 
-		if (horizontalScroll != null) {
-			if (isValueReference(horizontalScroll)) {
-				ValueBinding vb = application.createValueBinding(horizontalScroll);
-				component.setValueBinding(Properties.HORIZONTAL_SCROLL, vb);
+            } else {
+                component
+                        .setBackgroundImageVerticalPosition(backgroundImageVerticalPosition);
+            }
+        }
 
-			} else {
-				component.setHorizontalScroll(getBool(horizontalScroll));
-			}
-		}
+        if (backgroundImageVerticalRepeat != null) {
+            if (isValueReference(backgroundImageVerticalRepeat)) {
+                ValueBinding vb = application
+                        .createValueBinding(backgroundImageVerticalRepeat);
+                component.setValueBinding(
+                        Properties.BACKGROUND_IMAGE_VERTICAL_REPEAT, vb);
 
-		if (verticalScroll != null) {
-			if (isValueReference(verticalScroll)) {
-				ValueBinding vb = application.createValueBinding(verticalScroll);
-				component.setValueBinding(Properties.VERTICAL_SCROLL, vb);
+            } else {
+                component
+                        .setBackgroundImageVerticalRepeat(getBool(backgroundImageVerticalRepeat));
+            }
+        }
 
-			} else {
-				component.setVerticalScroll(getBool(verticalScroll));
-			}
-		}
-	}
+        if (border != null) {
+            if (isValueReference(border)) {
+                ValueBinding vb = application.createValueBinding(border);
+                component.setValueBinding(Properties.BORDER, vb);
 
-	public void release() {
-		backgroundImageHorizontalPosition = null;
-		backgroundImageHorizontalRepeat = null;
-		backgroundImageURL = null;
-		backgroundImageVerticalPosition = null;
-		backgroundImageVerticalRepeat = null;
-		border = null;
-		mouseOutListeners = null;
-		mouseOverListeners = null;
-		initListeners = null;
-		loadListeners = null;
-		asyncRenderMode = null;
-		scopeValue = null;
-		scopeVar = null;
-		horizontalScroll = null;
-		verticalScroll = null;
+            } else {
+                component.setBorder(getBool(border));
+            }
+        }
 
-		super.release();
-	}
+        if (mouseOutListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+        }
+
+        if (mouseOverListeners != null) {
+            ListenersTools
+                    .parseListener(facesContext, component,
+                            ListenersTools.MOUSE_OVER_LISTENER_TYPE,
+                            mouseOverListeners);
+        }
+
+        if (initListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.INIT_LISTENER_TYPE, initListeners);
+        }
+
+        if (loadListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+        }
+
+        if (asyncRenderMode != null) {
+            if (isValueReference(asyncRenderMode)) {
+                ValueBinding vb = application
+                        .createValueBinding(asyncRenderMode);
+                component.setValueBinding(Properties.ASYNC_RENDER_MODE, vb);
+
+            } else {
+                component.setAsyncRenderMode(asyncRenderMode);
+            }
+        }
+
+        if (scopeValue != null) {
+            ValueBinding vb = application.createValueBinding(scopeValue);
+            component.setValueBinding(Properties.SCOPE_VALUE, vb);
+        }
+
+        if (scopeVar != null) {
+            if (isValueReference(scopeVar)) {
+                ValueBinding vb = application.createValueBinding(scopeVar);
+                component.setValueBinding(Properties.SCOPE_VAR, vb);
+
+            } else {
+                component.setScopeVar(scopeVar);
+            }
+        }
+
+        if (horizontalScroll != null) {
+            if (isValueReference(horizontalScroll)) {
+                ValueBinding vb = application
+                        .createValueBinding(horizontalScroll);
+                component.setValueBinding(Properties.HORIZONTAL_SCROLL, vb);
+
+            } else {
+                component.setHorizontalScroll(getBool(horizontalScroll));
+            }
+        }
+
+        if (verticalScroll != null) {
+            if (isValueReference(verticalScroll)) {
+                ValueBinding vb = application
+                        .createValueBinding(verticalScroll);
+                component.setValueBinding(Properties.VERTICAL_SCROLL, vb);
+
+            } else {
+                component.setVerticalScroll(getBool(verticalScroll));
+            }
+        }
+    }
+
+    public void release() {
+        backgroundImageHorizontalPosition = null;
+        backgroundImageHorizontalRepeat = null;
+        backgroundImageURL = null;
+        backgroundImageVerticalPosition = null;
+        backgroundImageVerticalRepeat = null;
+        border = null;
+        mouseOutListeners = null;
+        mouseOverListeners = null;
+        initListeners = null;
+        loadListeners = null;
+        asyncRenderMode = null;
+        scopeValue = null;
+        scopeVar = null;
+        horizontalScroll = null;
+        verticalScroll = null;
+
+        super.release();
+    }
 
 }

@@ -1,113 +1,119 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.ToolFolderComponent;
-import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import javax.faces.component.NamingContainer;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
-public class TextEditorToolFolderComponent extends ToolFolderComponent implements 
-	NamingContainer {
+import javax.faces.component.NamingContainer;
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.textEditorToolFolder";
+import org.rcfaces.core.internal.component.Properties;
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ToolFolderComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontSizes","fontNames","itemTypes","for"}));
-	}
+public class TextEditorToolFolderComponent extends ToolFolderComponent
+        implements NamingContainer {
 
-	public TextEditorToolFolderComponent() {
-		setRendererType(COMPONENT_TYPE);
-	}
+    public static final String COMPONENT_TYPE = "org.rcfaces.core.textEditorToolFolder";
 
-	public TextEditorToolFolderComponent(String componentId) {
-		this();
-		setId(componentId);
-	}
+    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
+            ToolFolderComponent.CAMELIA_ATTRIBUTES);
+    static {
+        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] { "fontSizes",
+                "fontNames", "itemTypes", "for" }));
+    }
 
-	public String getItemTypes() {
-		return getItemTypes(null);
-	}
+    public TextEditorToolFolderComponent() {
+        setRendererType(COMPONENT_TYPE);
+    }
 
-	public String getItemTypes(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_TYPES, facesContext);
-	}
+    public TextEditorToolFolderComponent(String componentId) {
+        this();
+        setId(componentId);
+    }
 
-	public void setItemTypes(String itemTypes) {
-		engine.setProperty(Properties.ITEM_TYPES, itemTypes);
-	}
+    public String getItemTypes() {
+        return getItemTypes(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "itemTypes" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isItemTypesSetted() {
-		return engine.isPropertySetted(Properties.ITEM_TYPES);
-	}
+    public String getItemTypes(javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.ITEM_TYPES, facesContext);
+    }
 
-	public String getFontSizes() {
-		return getFontSizes(null);
-	}
+    public void setItemTypes(String itemTypes) {
+        engine.setProperty(Properties.ITEM_TYPES, itemTypes);
+    }
 
-	public String getFontSizes(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_SIZES, facesContext);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "itemTypes" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public boolean isItemTypesSetted() {
+        return engine.isPropertySetted(Properties.ITEM_TYPES);
+    }
 
-	public void setFontSizes(String fontSizes) {
-		engine.setProperty(Properties.FONT_SIZES, fontSizes);
-	}
+    public String getFontSizes() {
+        return getFontSizes(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "fontSizes" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isFontSizesSetted() {
-		return engine.isPropertySetted(Properties.FONT_SIZES);
-	}
+    public String getFontSizes(javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FONT_SIZES, facesContext);
+    }
 
-	public String getFontNames() {
-		return getFontNames(null);
-	}
+    public void setFontSizes(String fontSizes) {
+        engine.setProperty(Properties.FONT_SIZES, fontSizes);
+    }
 
-	public String getFontNames(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_NAMES, facesContext);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "fontSizes" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public boolean isFontSizesSetted() {
+        return engine.isPropertySetted(Properties.FONT_SIZES);
+    }
 
-	public void setFontNames(String fontNames) {
-		engine.setProperty(Properties.FONT_NAMES, fontNames);
-	}
+    public String getFontNames() {
+        return getFontNames(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "fontNames" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isFontNamesSetted() {
-		return engine.isPropertySetted(Properties.FONT_NAMES);
-	}
+    public String getFontNames(javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FONT_NAMES, facesContext);
+    }
 
-	public String getFor() {
-		return getFor(null);
-	}
+    public void setFontNames(String fontNames) {
+        engine.setProperty(Properties.FONT_NAMES, fontNames);
+    }
 
-	public String getFor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOR, facesContext);
-	}
+    /**
+     * Returns <code>true</code> if the attribute "fontNames" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public boolean isFontNamesSetted() {
+        return engine.isPropertySetted(Properties.FONT_NAMES);
+    }
 
-	public void setFor(String forVal) {
-		engine.setProperty(Properties.FOR, forVal);
-	}
+    public String getFor() {
+        return getFor(null);
+    }
 
-	/**
-	 * Returns <code>true</code> if the attribute "for" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isForSetted() {
-		return engine.isPropertySetted(Properties.FOR);
-	}
+    public String getFor(javax.faces.context.FacesContext facesContext) {
+        return engine.getStringProperty(Properties.FOR, facesContext);
+    }
 
-	protected Set getCameliaFields() {
-		return CAMELIA_ATTRIBUTES;
-	}
+    public void setFor(String forVal) {
+        engine.setProperty(Properties.FOR, forVal);
+    }
+
+    /**
+     * Returns <code>true</code> if the attribute "for" is set.
+     * 
+     * @return <code>true</code> if the attribute is set.
+     */
+    public boolean isForSetted() {
+        return engine.isPropertySetted(Properties.FOR);
+    }
+
+    protected Set getCameliaFields() {
+        return CAMELIA_ATTRIBUTES;
+    }
 }
