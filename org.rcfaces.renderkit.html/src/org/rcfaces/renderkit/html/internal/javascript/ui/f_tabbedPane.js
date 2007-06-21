@@ -286,7 +286,7 @@ var __prototype = {
 			var ccard=f_core.GetElementByClientId(tab._id, this.ownerDocument);
 			f_core.Assert(ccard, "f_tabbedPane.f_updateCards: Can not find card component of tab '"+tab._id+"'.");
 
-			f_core.Debug(f_tabbedPane, "Update tab#"+i+" tab="+tab+" ccard="+ccard);
+			f_core.Debug(f_tabbedPane, "f_updateCards: Update tab#"+i+" tab="+tab+" ccard="+ccard);
 			tab._ccard=ccard;
 			ccard._vcard=tab;			
 			ccard.f_declareTab(this, tab._value, tab._text, tab._accessKey, tab._disabled, tab._imageURL, tab._disabledImageURL, tab._selectedImageURL, tab._hoverImageURL);	
@@ -406,7 +406,7 @@ var __prototype = {
 			}
 			*/
 			
-			f_core.Debug(f_tabbedPane, "Set mask position "+mleft+" to "+mright);
+			f_core.Debug(f_tabbedPane, "_resize: Set mask position "+mleft+" to "+mright);
 			
 			mask.style.left=(mleft)+"px";
 			mask.style.width=(mright-mleft)+"px";
@@ -462,9 +462,25 @@ var __prototype = {
 	 */
 	f_selectCard: function(tab, setFocus) {
 		var _tab=tab._vcard;
-		f_core.Assert(_tab, "L'objet n'est pas un onglet ! ("+tab+")");
+		f_core.Assert(_tab, "f_tabbedPane.f_selectCard: L'objet n'est pas un onglet ! ("+tab+")");
 		
 		return this._selectTab(_tab, setFocus, null);
+	},
+	/**
+	 * Select a tab by its value.
+	 * 
+	 * @method public
+	 * @param String value
+	 * @param optional boolean setFocus
+	 * @return boolean <code>true</code> if success.
+	 */
+	f_setValue: function(value, setFocus) {
+		var tab=this.f_getCardByValue(setFocus);
+		if (!tab) {
+			return false;
+		}
+			
+		return this._selectTab(tab, false, null);			
 	},
 	/**
 	 * @method private
@@ -536,6 +552,7 @@ var __prototype = {
 	},
 	/**
 	 * @method private
+	 * @return void
 	 */
 	_tabMouseOut: function(tab, evt) {
 		if (this._overTab!=tab) {
@@ -547,6 +564,8 @@ var __prototype = {
 	},
 	/**
 	 * @method protected
+	 * @param f_tab tab
+	 * @return void
 	 */
 	f_updateCardStyle: function(tab) {
 		var rightTTitleImage;
@@ -848,13 +867,15 @@ var __prototype = {
 	},
 	/**
 	 * @method protected
+	 * @param f_tab tab
+	 * @return void
 	 */
 	f_destroyCard: function(tab) {
-		f_core.Assert(tab._cardBox, "Invalid tab object ("+tab+")");
+		f_core.Assert(tab._cardBox, "f_tabbedPane.f_destroyCard: Invalid tab object ("+tab+")");
 		
 		var ccard=tab._ccard;
 		
-		f_core.Debug(f_tabbedPane, "Destroy tab: "+tab+"  component="+ccard);
+		f_core.Debug(f_tabbedPane, "f_destroyCard: Destroy tab: "+tab+"  component="+ccard);
 		
 		tab._next=undefined; // f_tab
 		tab._prev=undefined; // f_tab
@@ -916,7 +937,7 @@ var __prototype = {
 	 */
 	f_setTabImageURL: function(_tab, imageURL) {
 		var tab=_tab._vcard;
-		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+_tab+")");
+		f_core.Assert(tab, "f_tabbedPane.f_setTabImageURL: L'objet n'est pas un onglet ! ("+_tab+")");
 		tab._imageURL=imageURL;
 
 		if (!this.fa_componentUpdated) {
@@ -930,7 +951,7 @@ var __prototype = {
 	 */
 	f_setTabDisabledImageURL: function(_tab, imageURL) {
 		var tab=_tab._vcard;
-		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab +")");
+		f_core.Assert(tab, "f_tabbedPane.f_setTabDisabledImageURL: L'objet n'est pas un onglet ! ("+ _tab +")");
 		tab._disabledImageURL=imageURL;
 
 		if (!this.fa_componentUpdated) {
@@ -944,7 +965,7 @@ var __prototype = {
 	 */
 	f_setTabHoverImageURL: function(_tab, imageURL) {
 		var tab=_tab._vcard;
-		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
+		f_core.Assert(tab, "f_tabbedPane.f_setTabHoverImageURL: L'objet n'est pas un onglet ! ("+ _tab+")");
 		tab._hoverImageURL=imageURL;
 
 		if (!this.fa_componentUpdated) {
@@ -958,7 +979,7 @@ var __prototype = {
 	 */
 	f_setTabSelectedImageURL: function(_tab, imageURL) {
 		var tab=_tab._vcard;
-		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
+		f_core.Assert(tab, "f_tabbedPane.f_setTabSelectedImageURL: L'objet n'est pas un onglet ! ("+ _tab+")");
 		tab._selectedImageURL=imageURL;
 
 		if (!this.fa_componentUpdated) {
@@ -972,7 +993,7 @@ var __prototype = {
 	 */
 	f_setTabText: function(_tab, text) {
 		var tab=_tab._vcard;
-		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
+		f_core.Assert(tab, "f_tabbedPane.f_setTabText: L'objet n'est pas un onglet ! ("+ _tab+")");
 		// @TODO !
 	},
 	/**
@@ -980,7 +1001,7 @@ var __prototype = {
 	 */
 	f_setTabDisabled: function(_tab, disabled) {
 		var tab=_tab._vcard;
-		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
+		f_core.Assert(tab, "f_tabbedPane.f_setTabDisabled: L'objet n'est pas un onglet ! ("+ _tab+")");
 		
 		tab._disabled=disabled;
 		tab._textLink.disabled=disabled;
@@ -1030,7 +1051,7 @@ var __prototype = {
 	 */
 	f_setCardFocus: function(_tab, evt) {
 		var tab=_tab._vcard;
-		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
+		f_core.Assert(tab, "f_tabbedPane.f_setCardFocus: L'objet n'est pas un onglet ! ("+ _tab+")");
 		
 		f_core.SetFocus(tab._textLink);
 	},
@@ -1039,7 +1060,7 @@ var __prototype = {
 	 */
 	f_performTabAccessKey: function(_tab, evt) {
 		var tab=_tab._vcard;
-		f_core.Assert(tab, "L'objet n'est pas un onglet ! ("+ _tab+")");
+		f_core.Assert(tab, "f_tabbedPane.f_setCardFocus: L'objet n'est pas un onglet ! ("+ _tab+")");
 	
 		this._selectTab(tab, true, evt);
 	},
@@ -1064,7 +1085,7 @@ var __prototype = {
 			component.focus();
 			
 		} catch (x) {
-			f_core.Error(f_tabbedPane, "Error while setting focus to '"+component.id+"'.", x);
+			f_core.Error(f_tabbedPane, "f_setFocus: Error while setting focus to '"+component.id+"'.", x);
 		}
 	}
 }

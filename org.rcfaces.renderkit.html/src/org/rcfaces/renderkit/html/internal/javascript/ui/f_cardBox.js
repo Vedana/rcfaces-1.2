@@ -45,7 +45,7 @@ var __prototype={
 			var ccard=f_core.GetElementByClientId(card._id);
 			f_core.Assert(ccard, "f_cardBox.f_updateCards: Can not find card component of card '"+card._id+"'.");
 
-			f_core.Debug(f_cardBox, "Update card#"+i+" card="+card+" ccard="+ccard);
+			f_core.Debug(f_cardBox, "f_updateCards: Update card#"+i+" card="+card+" ccard="+ccard);
 			card._ccard=ccard;
 			ccard._vcard=card;			
 			ccard.f_declareCard(this, card._value);	
@@ -137,16 +137,92 @@ var __prototype={
 			var id=cardComponent;
 			cardComponent=f_core.GetElementByClientId(id);
 	
-			f_core.Assert(cardComponent, "Can not find card '"+id+"'.");
+			f_core.Assert(cardComponent, "f_cardBox.f_selectCard: Can not find card '"+id+"'.");
 		}
 
 		var card=cardComponent._vcard;
-		f_core.Assert(card && card._cardBox==this , "Invalid card object ("+card+")");
 		
 		if (!card) {
 			return false;
 		}
 		
+		return this._selectCard(card);
+	},
+	
+	/**
+	 * @method public
+	 * @return f_card
+	 */
+	f_getSelectedCard: function() {
+		var sc=this._selectedCard;
+		if (!sc) {
+			return null;
+		}
+		
+		return sc._ccard;
+	},
+	/**
+	 * Returns the value of the selected card.
+	 * 
+	 * @method public
+	 * @return String
+	 */
+	f_getValue: function() {
+		var selectedCard=this.f_getSelectedCard();
+		
+		if (!selectedCard) {
+			return null;
+		}
+		
+		return selectedCard.f_getValue();
+	},
+	/**
+	 * Select a card by its value.
+	 * 
+	 * @method public
+	 * @param String value
+	 * @return boolean <code>true</code> if success.
+	 */
+	f_setValue: function(value) {
+		var card=this.f_getCardByValue(value);
+		if (!card) {
+			return false;
+		}
+			
+		return this._selectCard(card);			
+	},
+	/**
+	 * Search a card by its value.
+	 * 
+	 * @method public
+	 * @param String value
+	 * @return f_card
+	 */
+	f_getCardByValue: function(value) {
+		var cards=this._cards;
+		if (!cards) {
+			return null;
+		}
+		
+		for(var i=0;i<cards.length;i++) {
+			var card=cards[i];
+						
+			if (card._value!=value) {
+				continue;
+			}
+			
+			return card;
+		}	
+		
+		return null;
+	},
+	/**
+	 * @method private
+	 * @return boolean
+	 */
+	_selectCard: function(card) {		
+		f_core.Assert(card && card._cardBox==this , "f_cardBox._selectCard: Invalid card object ("+card+")");
+
 		if (this._selectedCard==card) {
 			return false;
 		}
@@ -168,19 +244,6 @@ var __prototype={
 		this.f_setProperty(f_prop.SELECTED, card._id);
 		
 		return true;
-	},
-	
-	/**
-	 * @method public
-	 * @return f_card
-	 */
-	f_getSelectedCard: function() {
-		var sc=this._selectedCard;
-		if (!sc) {
-			return null;
-		}
-		
-		return sc._ccard;
 	},
 	f_setDomEvent: function(type, target) {
 		switch(type) {
