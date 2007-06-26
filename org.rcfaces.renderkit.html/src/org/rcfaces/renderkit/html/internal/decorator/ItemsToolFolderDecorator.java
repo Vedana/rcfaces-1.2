@@ -46,12 +46,14 @@ import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.internal.component.IToolBarImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -73,6 +75,7 @@ import org.rcfaces.core.item.ILookAndFeelItem;
 import org.rcfaces.core.item.ITextPositionItem;
 import org.rcfaces.core.item.IToolItem;
 import org.rcfaces.core.item.IVisibleItem;
+import org.rcfaces.core.item.IWidthItem;
 import org.rcfaces.core.item.SeparatorSelectItem;
 import org.rcfaces.core.item.ToolItem;
 import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
@@ -705,6 +708,22 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             }
             if (height > 0) {
                 isc.setImageHeight(height);
+            }
+        }
+
+        if (itemComponent instanceof ISizeCapability) {
+            ISizeCapability isc = (ISizeCapability) itemComponent;
+
+            String width = "";
+
+            if (selectItem instanceof IWidthItem) {
+            	IWidthItem iwi = (IWidthItem) selectItem;
+
+                width = iwi.getWidth();
+            }
+
+            if (width != null && width.length() > 0) {
+                isc.setWidth(width);
             }
         }
 
