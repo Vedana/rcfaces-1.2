@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static={	
+var __statics={	
 
 	/**
 	 * @field protected static final String
@@ -88,7 +88,7 @@ var __static={
 	}
 }
 
-var __prototype={
+var __members={
 
 	fa_compositeEntry: function() {
 		var inputs=this.getElementsByTagName("input");
@@ -410,4 +410,4 @@ var __prototype={
 	}
 }
  
-new f_aspect("fa_compositeEntry", __static, __prototype, fa_disabled, fa_readOnly);
+new f_aspect("fa_compositeEntry", __statics, __members, fa_disabled, fa_readOnly);

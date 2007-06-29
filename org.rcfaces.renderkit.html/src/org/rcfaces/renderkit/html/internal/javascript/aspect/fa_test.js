@@ -1,4 +1,4 @@
-var __prototype = {
+var __members = {
 	fa_test: { 
 		after: function() {
 			alert("AFTER cons !");
@@ -20,4 +20,4 @@ var __prototype = {
 var __abstract = [
 ]
 
-var fa_disabled=new f_aspect("fa_test", null, __prototype, __abstract);
+var fa_disabled=new f_aspect("fa_test", null, __members, __abstract);

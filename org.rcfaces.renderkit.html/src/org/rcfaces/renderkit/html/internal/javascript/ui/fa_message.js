@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 	fa_message: function() {
 
 		var messageContext=f_messageContext.Get(this);
@@ -151,4 +151,6 @@ var __prototype = {
 	f_performMessageChanges: f_class.ABSTRACT	
 }
 
-new f_aspect("fa_message", null, __prototype);
+new f_aspect("fa_message", {
+	members: __members
+});

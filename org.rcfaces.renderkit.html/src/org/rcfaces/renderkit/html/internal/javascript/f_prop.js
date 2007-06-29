@@ -10,7 +10,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 
 	/**
 	 * @field hidden static final
@@ -318,5 +318,7 @@ var __static = {
 	ALL_VALUE:				"\x07all"
 }
 
-new f_class("f_prop", null, __static);
+new f_class("f_prop", {
+	statics: __statics
+});
 

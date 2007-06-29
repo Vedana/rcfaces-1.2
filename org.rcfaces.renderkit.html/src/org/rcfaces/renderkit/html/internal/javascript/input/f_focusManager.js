@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static={
+var __statics={
 
 	/**
 	 * @field private static
@@ -33,7 +33,7 @@ var __static={
 	}
 }
 
-var __prototype={
+var __members={
 
 	f_focusManager: function() {
 		this.f_super(arguments);
@@ -217,4 +217,4 @@ var __prototype={
 	}
 }
  
-new f_class("f_focusManager", null, __static, __prototype, f_object, fa_serializable);
+new f_class("f_focusManager", null, __statics, __members, f_object, fa_serializable);

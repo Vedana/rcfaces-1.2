@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 	
 	/*
 	f_finalize: function() {
@@ -99,4 +99,4 @@ var __prototype = {
 	fa_updateMessages: f_class.ABSTRACT
 }
 
-new f_aspect("fa_messageText", null, __prototype, fa_message);
+new f_aspect("fa_messageText", null, __members, fa_message);

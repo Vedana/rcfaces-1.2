@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	/** 
 	 * @field private static String
 	 * @this Object
@@ -20,7 +20,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 
 	f_itemsToolFolder: function() {
 		this.f_super(arguments);
@@ -315,5 +315,5 @@ var __prototype = {
 	*/
 }
  
-new f_class("f_itemsToolFolder", null, __static, __prototype, f_component,
+new f_class("f_itemsToolFolder", null, __statics, __members, f_component,
 	fa_readOnly, fa_disabled, fa_items, fa_subMenu);

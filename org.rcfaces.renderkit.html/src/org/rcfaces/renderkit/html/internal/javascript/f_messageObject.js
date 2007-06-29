@@ -11,7 +11,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * <p>Message severity level indicating an informational message
      * rather than an error.</p>
@@ -69,7 +69,7 @@ var __static = {
     }
 }
 
-var __prototype = {
+var __members = {
 	
 	/**
 	 * @field private number
@@ -196,4 +196,7 @@ var __prototype = {
 	}
 }
 
-new f_class("f_messageObject", null, __static, __prototype);
+new f_class("f_messageObject", {
+	statics: __statics,
+	members: __members
+});

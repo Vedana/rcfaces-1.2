@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype={
+var __members={
 
 	f_dateEntry: function() {
 		this.f_super(arguments);
@@ -305,4 +305,4 @@ var __prototype={
 	}
 }
  
-new f_class("f_dateEntry", null, null, __prototype, f_compositeNumEntry, fa_calendarPopup);
+new f_class("f_dateEntry", null, null, __members, f_compositeNumEntry, fa_calendarPopup);

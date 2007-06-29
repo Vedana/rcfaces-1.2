@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	/** 
 	 * @field private static final String 
 	 */
@@ -233,7 +233,7 @@ var __static = {
 	
 }
 
-var __prototype = {
+var __members = {
 		
 	/**
 	 * @field private String
@@ -579,4 +579,4 @@ var __prototype = {
 	fa_valueSelected: f_class.ABSTRACT
 }
 
-new f_aspect("fa_dataGridPopup", __static, __prototype, fa_filterProperties);
+new f_aspect("fa_dataGridPopup", __statics, __members, fa_filterProperties);

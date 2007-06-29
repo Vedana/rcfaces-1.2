@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 /*
 	f_finalize: function() {
 		// this._readOnly=undefined; //boolean
@@ -61,5 +61,5 @@ var __prototype = {
 	fa_updateReadOnly: f_class.ABSTRACT
 }
 
-new f_aspect("fa_readOnly", null, __prototype);
+new f_aspect("fa_readOnly", null, __members);
 	

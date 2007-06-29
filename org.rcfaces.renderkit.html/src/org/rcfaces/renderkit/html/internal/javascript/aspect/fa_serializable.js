@@ -9,8 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
-
+var __members = {
 
 	f_finalize: function() {
 		this._properties = undefined;  // Map<string, Object>
@@ -152,4 +151,6 @@ var __prototype = {
 	f_serialize: f_class.OPTIONAL_ABSTRACT
 }
 
-new f_aspect("fa_serializable", null, __prototype);
+new f_aspect("fa_serializable", {
+	members: __members
+});

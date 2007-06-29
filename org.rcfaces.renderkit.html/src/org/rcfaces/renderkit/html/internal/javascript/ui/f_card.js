@@ -9,7 +9,7 @@
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
-var __prototype = {
+var __members = {
 	f_card: function() {
 		this.f_super(arguments);
 
@@ -74,4 +74,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_card", null, null, __prototype, f_component, fa_asyncRender);
+new f_class("f_card", null, null, __members, f_component, fa_asyncRender);

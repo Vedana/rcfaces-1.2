@@ -160,7 +160,7 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
         JavaScriptRenderContext.initializeJavaScript(jsWriter, repository);
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
-                .convertSymbol("f_classLoader", "_cameliaClassLoader");
+                .convertSymbol("f_classLoader", "_rcfacesClassLoader");
 
         jsWriter.writeCall(cameliaClassLoader, "f_requiresBundle");
         jsWriter.write("document");

@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 
 	/**
 	 * @method public static
@@ -20,7 +20,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_performTick: function(component, cur, next) {
 
 		this.f_super(arguments, component, cur, next);
@@ -33,5 +33,5 @@ var __prototype = {
 	}
 }
 
-new f_class("f_slideUpTransEffect", null, __static, __prototype, f_slideUpEffect);
+new f_class("f_slideUpTransEffect", null, __statics, __members, f_slideUpEffect);
 

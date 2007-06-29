@@ -12,7 +12,7 @@
  */
 
 
-var __static = {
+var __statics = {
 	/**
 	 * bits per input character. 8 - ASCII; 16 - Unicode
 	 *
@@ -281,7 +281,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	/**
 	 * hex output format. 0 - lowercase; 1 - uppercase
 	 * 
@@ -413,4 +413,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_md5", null, __static, __prototype, f_object);
+new f_class("f_md5", {
+	extend: f_object, 
+	statics: __statics,
+	members: __members
+});

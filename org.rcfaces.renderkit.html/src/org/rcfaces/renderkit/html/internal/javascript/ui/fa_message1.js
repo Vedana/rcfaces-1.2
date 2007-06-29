@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 /*
 	fa_message1: function() {
 	}
@@ -176,4 +176,7 @@ var __prototype = {
 	}
 }
 
-new f_aspect("fa_message1", null, __prototype, fa_messageText);
+new f_aspect("fa_message1", {
+	extend: [ fa_messageText ],
+	members: __members
+});

@@ -8,7 +8,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	
 	/**
 	 * @field private static final number
@@ -111,7 +111,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_getStorageType: function() {
 		return f_clientStorage.USER_DATA_STORAGE_TYPE;
 	},
@@ -153,4 +153,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_userDataClientStorage", null, null, __prototype, f_clientStorage);
+new f_class("f_userDataClientStorage", {
+	depend: f_clientStorage,
+	statics: __statics,
+	members: __members
+});

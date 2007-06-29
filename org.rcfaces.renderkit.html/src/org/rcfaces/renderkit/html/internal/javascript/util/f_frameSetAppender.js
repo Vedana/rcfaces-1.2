@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static={
+var __statics={
 	/**
 	 * @method public static
 	 * @return void
@@ -63,7 +63,7 @@ var __static={
 		f_frameSetAppender._callback=callback;
 	}
 }
-var __prototype = {
+var __members = {
 	f_frameSetAppender: function(callback) {
 		this.f_super(arguments);
 
@@ -88,4 +88,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_frameSetAppender", null, __static, __prototype, f_object);
+new f_class("f_frameSetAppender", {
+	extend: f_object,
+	statics: __statics,
+	members: __members
+});

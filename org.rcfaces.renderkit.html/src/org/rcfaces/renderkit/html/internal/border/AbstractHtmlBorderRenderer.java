@@ -3,6 +3,7 @@
  */
 package org.rcfaces.renderkit.html.internal.border;
 
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.AbstractBorderRenderer;
@@ -69,15 +70,18 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected boolean noTable = false;
 
-    public void initialize(IHtmlWriter writer, String width, String height,
-            int horizontalSpan, int verticalSpan, boolean disabled,
-            boolean selected) throws WriterException {
+    protected String componentClassName;
+
+    public void initialize(IHtmlWriter writer, String componentClassName,
+            String width, String height, int horizontalSpan, int verticalSpan,
+            boolean disabled, boolean selected) throws WriterException {
         this.width = width;
         this.height = height;
         this.horizontalSpan = horizontalSpan;
         this.verticalSpan = verticalSpan;
         this.selected = selected;
         this.disabled = disabled;
+        this.componentClassName = componentClassName;
     }
 
     public IHtmlWriter startRow(IHtmlWriter writer) throws WriterException {
@@ -415,10 +419,30 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         writer.startElement(IHtmlWriter.TD);
 
-        String className = getClassName();
-        if (className != null) {
-            writer.writeClass(className + classSuffix);
+        StringAppender className = new StringAppender(128);
+
+        String borderClassName = getClassName();
+        if (borderClassName != null) {
+            className.append(borderClassName);
+            if (classSuffix != null) {
+                className.append(classSuffix);
+            }
         }
+
+        if (componentClassName != null) {
+            if (className.length() > 0) {
+                className.append(' ');
+            }
+            className.append(componentClassName);
+            if (classSuffix != null) {
+                className.append(classSuffix);
+            }
+        }
+
+        if (className.length() > 0) {
+            writer.writeClass(className.toString());
+        }
+
         if (halign != null) {
             writer.writeAlign(halign);
         }

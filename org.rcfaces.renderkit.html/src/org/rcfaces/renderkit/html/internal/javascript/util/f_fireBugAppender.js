@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static={
+var __statics={
 	
 	/**
 	 * @method private static
@@ -57,7 +57,7 @@ var __static={
 	}
 	
 }
-var __prototype = {
+var __members = {
 	f_fireBugAppender: function() {
 		this.f_super(arguments);
 		
@@ -118,4 +118,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_fireBugAppender", null, __static, __prototype, f_object);
+new f_class("f_fireBugAppender", null, __statics, __members, f_object);

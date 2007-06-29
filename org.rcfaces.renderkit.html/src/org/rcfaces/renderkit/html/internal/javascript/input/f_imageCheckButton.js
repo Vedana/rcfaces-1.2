@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	
 	/**
 	 * @method protected
@@ -34,4 +34,8 @@ var __prototype = {
 		return this.f_super(arguments);
 	}
 }
-new f_class("f_imageCheckButton", null, null, __prototype, f_imageButton, fa_selected);
+new f_class("f_imageCheckButton", {
+	extend: f_imageButton, 
+	aspects: [fa_selected],
+	members: __members
+});

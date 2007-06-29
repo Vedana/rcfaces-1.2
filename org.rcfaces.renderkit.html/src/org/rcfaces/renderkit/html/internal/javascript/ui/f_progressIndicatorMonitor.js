@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __prototype={
+var __members={
 	f_progressIndicatorMonitor: function(progressIndicator) {
 		this.f_super(arguments);
 		
@@ -67,4 +67,7 @@ var __prototype={
 	}
 }
  
-new f_class("f_progressIndicatorMonitor", null, null, __prototype, f_progressMonitor);
+new f_class("f_progressIndicatorMonitor", {
+	extend: f_progressMonitor,
+	members: __members
+});

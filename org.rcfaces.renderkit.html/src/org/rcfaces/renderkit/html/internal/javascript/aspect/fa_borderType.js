@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	
 	/** 
 	 * @field hidden static final String 
@@ -38,7 +38,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 
 	f_finalize: function() {
 		// this._borderType=undefined; // string
@@ -155,5 +155,8 @@ var __prototype = {
 	fa_borderFinalizer: f_class.ABSTRACT
 }
 
-new f_aspect("fa_borderType", __static, __prototype);
+new f_aspect("fa_borderType", {
+	statics: __statics,
+	members: __members
+});
 	

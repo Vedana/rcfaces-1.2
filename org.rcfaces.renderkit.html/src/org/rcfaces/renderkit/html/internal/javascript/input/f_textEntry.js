@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 	f_textEntry: function() {
 		this.f_super(arguments);
 		
@@ -169,4 +169,7 @@ var __prototype = {
 	}
 }
 
-new f_class("f_textEntry", null, null, __prototype, f_textArea);
+new f_class("f_textEntry", {
+	extend: f_textArea,
+	members: __members
+});

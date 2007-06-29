@@ -10,14 +10,14 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
 	_TEXT_MENU_ID: "#text"
 }
 
-var __prototype = {
+var __members = {
 	f_textArea: function() {
 		this.f_super(arguments);
 		
@@ -260,5 +260,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_textArea", null, __static, __prototype, f_input, fa_required, fa_selectionProvider, fa_subMenu);
-
+new f_class("f_textArea", {
+	extend: f_input,
+	aspects: [ fa_required, fa_selectionProvider, fa_subMenu ],
+	members: __members,
+	statics: __statics
+});

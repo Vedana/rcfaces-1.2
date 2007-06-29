@@ -9,13 +9,12 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final String
 	 */
 	_DEFAULT_ALIGNMENT: "left",
-
 
 	/**
 	 * @field private static final String[]
@@ -1016,7 +1015,7 @@ var __static = {
 	}
 }
  
-var __prototype = {
+var __members = {
 	
 	f_grid: function() {
 		this.f_super(arguments);
@@ -2003,7 +2002,7 @@ var __prototype = {
 	f_getRowByValue: function(value, throwError) {
 		f_core.Assert(value!==undefined && value!==null, "f_grid.f_getRowByValue: Invalid value '"+value+"'.");
 
-		if (value._dataGrid) {
+		if (value._dataGrid===this) {
 			return value;
 		}
 		
@@ -2425,7 +2424,7 @@ var __prototype = {
 		if (!this._cursor) {
 			return;
 		}
-		
+				
 		var menu=this.f_getSubMenuById(f_grid._ROW_MENU_ID);
 		if (menu) {
 			menu.f_open(evt, {
@@ -3736,14 +3735,20 @@ var __prototype = {
 	 *
 	 * @method public
 	 * @param any rowValue Value associated to the row
-	 * @return void
+	 * @return boolean Return <code>true</code> if the row associated to the rowValue is found.
 	 */
 	f_showRow: function(rowValue) {
 		var row=this.f_getRowByValue(rowValue, true);
 		
 		f_core.Debug(f_grid, "f_showRow: show row '"+rowValue+"' => "+row);
 		
+		if (row===null) {
+			return false;
+		}
+		
 		this.fa_showElement(row);
+		
+		return true;
 	},
 	
 	/** 
@@ -3757,4 +3762,9 @@ var __prototype = {
 	f_sortClientSide: f_class.ABSTRACT
 }
  
-new f_class("f_grid", null, __static, __prototype, f_component, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager, fa_scrollPositions);
+new f_class("f_grid", {
+	extend: f_component,
+	aspects: [fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager, fa_scrollPositions],
+	statics: __statics,
+	members: __members
+});

@@ -8,7 +8,7 @@
  * @aspect fa_spinner
  */
 
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final number
@@ -187,7 +187,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	fa_spinner: function() {			
 		var disabledSuffix=(this.f_isDisabled())?"_disabled":"";
 		
@@ -508,4 +508,7 @@ var __prototype = {
 	}
 }
 
-new f_aspect("fa_spinner", __static, __prototype);
+new f_aspect("fa_spinner", {
+	statics: __statics,
+	members: __members
+});

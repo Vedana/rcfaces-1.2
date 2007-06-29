@@ -7,7 +7,7 @@
  *
  * @class f_spinner extends f_textEntry, fa_spinner
  */
-var __prototype = {
+var __members = {
 	/*
 	f_spinner: function() {
 		this.f_super(arguments);
@@ -96,4 +96,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_spinner", null, null, __prototype, f_textEntry, fa_spinner);
+new f_class("f_spinner", {
+	extend: f_textEntry,
+	aspects: [ fa_spinner ],
+	members:__members
+});

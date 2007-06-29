@@ -10,7 +10,7 @@
  * @version $REVISION: $
  */
  
-var __static = {
+var __statics = {
 	
 	/**
 	 * @field private static final String
@@ -438,7 +438,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	
 	f_tree: function() {
 		this.f_super(arguments);
@@ -2742,4 +2742,9 @@ var __prototype = {
 	}	
 }
 
-new f_class("f_tree", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions);
+new f_class("f_tree", {
+	extend: f_component,
+	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions ],
+	members: __members,
+	statics: __statics
+});

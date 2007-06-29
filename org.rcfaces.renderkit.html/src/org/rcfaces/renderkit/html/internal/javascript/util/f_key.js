@@ -7,7 +7,7 @@
  * @class f_key extends Object
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 
 	/** @field public static final number */
 	VK_CANCEL         : 0x03,
@@ -678,4 +678,4 @@ var __static = {
 	}
 }
 
-new f_class("f_key", null, __static);
+new f_class("f_key", null, __statics);

@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	/**
 	 * @field private number
@@ -157,5 +157,5 @@ var __prototype = {
 	
 }
 
-new f_aspect("fa_scrollPositions", null, __prototype);
+new f_aspect("fa_scrollPositions", null, __members);
 	

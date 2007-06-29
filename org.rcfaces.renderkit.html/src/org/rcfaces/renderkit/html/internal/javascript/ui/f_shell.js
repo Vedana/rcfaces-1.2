@@ -9,7 +9,7 @@
  * @author Fred Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	
 	/**
 	 * Style constant for resize area trim
@@ -483,7 +483,7 @@ var __static = {
      }
 }
 
-var __prototype = {
+var __members = {
 
 	/**
 	 * @field private number
@@ -1223,4 +1223,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_shell", null, __static, __prototype, f_object, fa_eventTarget);
+new f_class("f_shell", null, __statics, __members, f_object, fa_eventTarget);

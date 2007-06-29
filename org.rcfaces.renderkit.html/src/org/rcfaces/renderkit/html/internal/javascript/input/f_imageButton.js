@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */ 
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final String
@@ -17,7 +17,7 @@ var __static = {
 	_EMPTY_IMAGE_URL: "/imageButton/blank.gif"
 }
  
-var __prototype = {
+var __members = {
 
 	f_imageButton: function() {
 		this.f_super(arguments);
@@ -555,4 +555,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_imageButton", null, __static, __prototype, f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate);
+new f_class("f_imageButton", {
+	extend: f_component, 
+	aspects: [ fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate ],
+	statics: __statics,
+	members: __members
+});

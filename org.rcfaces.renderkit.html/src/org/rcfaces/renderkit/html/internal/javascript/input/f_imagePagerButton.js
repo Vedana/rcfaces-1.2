@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	f_imagePagerButton: function() {
 		this.f_super(arguments);
 		
@@ -154,4 +154,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_imagePagerButton", null, null, __prototype, f_imageButton, fa_pager);
+new f_class("f_imagePagerButton", {
+	extend: f_imageButton,
+	aspects: [ fa_pager ],
+	members: __members
+});

@@ -7,7 +7,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	/**
 	 * @method public
@@ -33,4 +33,7 @@ var __prototype = {
 	}
 }
 
-new f_class("f_styledText", null, null, __prototype, f_text);
+new f_class("f_styledText", {
+	extend: f_text,
+	members: __members
+});

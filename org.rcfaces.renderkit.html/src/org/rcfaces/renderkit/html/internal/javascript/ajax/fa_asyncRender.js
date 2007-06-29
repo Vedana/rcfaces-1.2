@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	fa_asyncRender: function() {
 		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
 	},
@@ -186,4 +186,4 @@ var __prototype = {
 	
 }
 
-new f_aspect("fa_asyncRender", null, __prototype);
+new f_aspect("fa_asyncRender", null, __members);

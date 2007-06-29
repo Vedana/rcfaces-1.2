@@ -7,7 +7,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	/**
 	 * @field private Object
@@ -193,4 +193,6 @@ var __prototype = {
 	}
 }
 
-new f_class("f_hashtable", null, null, __prototype);
+new f_class("f_hashtable", {
+	members: __members
+});

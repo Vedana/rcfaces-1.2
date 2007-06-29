@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 	f_menuBarBase: function() {
 		this.f_super(arguments);
 		
@@ -32,4 +32,8 @@ var __prototype = {
 	*/
 }
 
-new f_class("f_menuBarBase", null, null, __prototype, f_component, fa_menuCore);
+new f_class("f_menuBarBase", {
+	extend: f_component,
+	aspects: [ fa_menuCore ],
+	members: __members
+});

@@ -8,7 +8,7 @@
  * @class public f_hiddenValue extends f_eventTarget, HTMLElement, fa_serializable, fa_clientData, fa_value
  */
  
- var __prototype = {
+ var __members = {
 	/**
 	 * Returns the value.
 	 *
@@ -39,4 +39,4 @@
 	}
 }
 
-new f_class("f_hiddenValue", null, null, __prototype, f_eventTarget, fa_serializable, fa_clientData);
+new f_class("f_hiddenValue", null, null, __members, f_eventTarget, fa_serializable, fa_clientData);

@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __prototype = {
+var __members = {
 
 	f_hyperLink: function() {
 		this.f_super(arguments);
@@ -49,4 +49,4 @@ var __prototype = {
 		this.f_setProperty(f_prop.TEXT,text);
 	}
 }
-new f_class("f_hyperLink", null, null, __prototype, f_input, fa_immediate);
+new f_class("f_hyperLink", null, null, __members, f_input, fa_immediate);

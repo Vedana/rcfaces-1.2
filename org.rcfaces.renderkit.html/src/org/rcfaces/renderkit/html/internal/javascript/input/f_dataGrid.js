@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	
 	/**
 	 * @method private static
@@ -198,7 +198,7 @@ var __static = {
 	}
 }
  
-var __prototype = {
+var __members = {
 	
 	/**
 	 * @method 
@@ -1617,5 +1617,11 @@ var __prototype = {
 		this._table.appendChild(body);	
 	}
 }
- 
-new f_class("f_dataGrid", null, __static, __prototype, f_grid, fa_readOnly, fa_checkManager);
+
+new f_class("f_dataGrid", {
+	extend: f_grid,
+	aspects: [fa_readOnly, fa_checkManager],
+	statics: __statics,
+	members: __members
+});
+

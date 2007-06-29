@@ -8,7 +8,7 @@
  * @class hidden f_clientValidator extends f_object
  */
  
-var __static = {
+var __statics = {
 
 	/**
 	 * @field hidden static final number
@@ -508,7 +508,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	
 	f_clientValidator: function(component, parameters) {
 		f_core.Assert(component.nodeType, "f_clientValidator(): Invalid component parameter ("+component+")");
@@ -1348,4 +1348,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_clientValidator", null, __static, __prototype, f_object);
+new f_class("f_clientValidator", null, __statics, __members, f_object);

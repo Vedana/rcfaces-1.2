@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	
 	/**
 	 * @method public abstract
@@ -19,5 +19,5 @@ var __prototype = {
 	
 }
 
-new f_aspect("fa_pager", null, __prototype);
+new f_aspect("fa_pager", null, __members);
 	

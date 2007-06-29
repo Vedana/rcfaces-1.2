@@ -4135,19 +4135,21 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
 			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value holding the name of a request-scope attribute under which the model data for the
           row selected by the current value of the "rowIndex" property (i.e.
           also the current value of the "rowData" property) will be exposed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rows</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4158,12 +4160,10 @@ A number identifying the row to be displayed at the top of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>rows</name>
+			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4650,12 +4650,19 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>rows</name>
+			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -4673,19 +4680,12 @@ A string value specifying the margins for the component (compliant to CSS margin
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>value</name>
+			<name>rows</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5126,19 +5126,21 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-		</attribute>
-		<attribute>
 			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A string value holding the name of a request-scope attribute under which the model data for the
           row selected by the current value of the "rowIndex" property (i.e.
           also the current value of the "rowData" property) will be exposed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rows</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5149,12 +5151,10 @@ A number identifying the row to be displayed at the top of the component.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>rows</name>
+			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5684,12 +5684,19 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>rows</name>
+			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the current value of the component.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -5707,19 +5714,12 @@ A string value specifying the margins for the component (compliant to CSS margin
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>value</name>
+			<name>rows</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -15538,6 +15538,73 @@ A string value specifying the choosen look of the component.
 		</attribute>
 	</tag>
 	<tag>
+		<name>submitWait</name>
+		<tag-class>org.rcfaces.core.internal.taglib.SubmitWaitTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>imageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An url string pointing to the image used by the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the text (literal or binding) to be shown.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>waiRole</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
 		<name>message</name>
 		<tag-class>org.rcfaces.core.internal.taglib.MessageTag</tag-class>
 		<body-content>JSP</body-content>
@@ -15763,6 +15830,14 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
+			<name>showDetail</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
+]]></description>
+		</attribute>
+		<attribute>
 			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
@@ -15774,14 +15849,6 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A component's id that express the link between the two components.
-]]></description>
-		</attribute>
-		<attribute>
-			<name>showDetail</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16606,10 +16673,11 @@ Executed when the component is intialized.
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>globalOnly</name>
+			<name>showSummary</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating if the component specific messages should be shown or not.
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
 ]]></description>
 		</attribute>
 		<attribute>
@@ -16620,11 +16688,10 @@ A string value specifying the margins for the component (compliant to CSS margin
 ]]></description>
 		</attribute>
 		<attribute>
-			<name>showSummary</name>
+			<name>globalOnly</name>
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
+A boolean value indicating if the component specific messages should be shown or not.
 ]]></description>
 		</attribute>
 		<attribute>
@@ -28186,6 +28253,434 @@ A string that indicates the type of border the component should show.
 			<rtexprvalue>true</rtexprvalue>
 <description><![CDATA[
 A component's id that express the link between the two components.
+]]></description>
+		</attribute>
+	</tag>
+	<tag>
+		<name>textEditorCombo</name>
+		<tag-class>org.rcfaces.core.internal.taglib.TextEditorComboTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>binding</name>
+<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>converter</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+The converter id to use. as specified in faces-config.xml.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the width of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>visible</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>mouseOutListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the pointer leaves the area of the component.
+		A string that represent a javascript expression to evaluate.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>mouseOverListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the pointer hover the component's area.
+		A string that represent a javascript expression to evaluate.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>disabled</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value that represents the disabled state of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>unlockedClientAttributeNames</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value holding a comma separated list of the client modifiable properties.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>blurListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the focus quits the component.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>focusListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component gets the focus.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>errorListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>keyPressListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component detects a key pressed event.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>keyDownListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component detects a key down event.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>keyUpListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component detects a key up event.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>backgroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A color value (as specified by CSS) for the background.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>foregroundColor</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A color value (as specified by CSS) for the text.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fontBold</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating the <i>bold</i> property for the specified font.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fontItalic</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating the <i>italic</i> property for the specified font.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fontName</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value indicating the name of the font used for this component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fontSize</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string indicating the size to use for the selected font. (or any other CSS accepted value for font size).
+		<br/>
+		values [xx-small|x-small|small|medium|large|x-large|xx-large|smaller|larger|<i>length</i> for example 10px|<i>%</i>]
+]]></description>
+		</attribute>
+		<attribute>
+			<name>fontUnderline</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating the <i>underline</i> property for the specified font.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>initListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component is intialized.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>helpMessage</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the message to be shown by a <a href="/comps/helpMessageZoneComponent.html">helpMessageZone Component</a>.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>helpURL</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An URL that points to a help page for the component. it is used for example by a <a href="/comps/helpButtonComponent.html">helpButton Component</a>.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>toolTipText</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>valueLocked</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>tabIndex</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+An int value specifying the position of this element in the tabbing order
+          for the current document.  This value must be
+          an integer between 0 and 32767.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>lookId</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the choosen look of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>x</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the x position of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>y</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value (as specified by CSS) for the x position of the component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>validationListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>marginBottom</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margin size for the component's bottom (compliant to CSS margin-bottom).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>marginLeft</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margin size for the component's left (compliant to CSS margin-left).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>marginRight</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margin size for the component's right (compliant to CSS margin-right).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>marginTop</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margin size for the component's top (compliant to CSS margin-top).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>textAlignment</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the alignement for the text in the component :
+		<ul><li>
+		left
+		</li><li>
+		right
+		</li><li>
+		center
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>immediate</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating that this component's value must be
+          converted and validated immediately (that is, during
+          Apply Request Values phase), rather than waiting
+          until Process Validations phase.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>userEventListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component is called.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>waiRole</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>hiddenMode</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the management of invisible state on the client.
+		Authorized values are :
+		<ul><li>
+		server : if not visible, nothing is sent to the client
+		</li><li>
+		phantom : if not visible, the data is sent to the client and the page estate is reserved for a futur eventual display of the component
+		</li><li>
+		ignore : if not visible, the data is sent to the client but no page estate is reserved
+		</li></ul>
+]]></description>
+		</attribute>
+		<attribute>
+			<name>propertyChangeListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when a component's property is changed (by javascript).
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>accessKey</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string that indicates the alphanumeric key used to execute an action from the keyboard (in conjunction with a alteration key ex : Alt).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+		</attribute>
+		<attribute>
+			<name>selectionListener</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+Executed when the component is selected.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>required</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A boolean value indicating that the user is required to provide a submitted
+          value for this input component.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>filterProperties</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A binded object that hold the filters to use on the server side. This property is often set via javascript code.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>for</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A component's id that express the link between the two components.
+]]></description>
+		</attribute>
+		<attribute>
+			<name>type</name>
+			<rtexprvalue>true</rtexprvalue>
+<description><![CDATA[
+A string value specifying the type of data (Java) to convert to or from.
 ]]></description>
 		</attribute>
 	</tag>

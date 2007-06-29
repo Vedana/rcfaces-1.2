@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	
 	/**
 	 * @field public static final number
@@ -93,7 +93,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 
 	/**
 	 * @method hidden
@@ -788,4 +788,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_component", null, __static, __prototype, f_eventTarget, fa_serializable, fa_clientData);
+new f_class("f_component", {
+	extend: f_eventTarget,
+	aspects: [fa_serializable, fa_clientData],
+	statics: __statics,
+	members: __members
+});

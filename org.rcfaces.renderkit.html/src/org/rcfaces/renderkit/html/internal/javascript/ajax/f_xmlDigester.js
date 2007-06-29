@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
@@ -201,7 +201,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_xmlDigester: function() {
 		this.f_super(arguments);
 
@@ -654,4 +654,4 @@ var __prototype = {
 		}
 	}
 }
-new f_class("f_xmlDigester", null, __static, __prototype, f_object);
+new f_class("f_xmlDigester", null, __statics, __members, f_object);

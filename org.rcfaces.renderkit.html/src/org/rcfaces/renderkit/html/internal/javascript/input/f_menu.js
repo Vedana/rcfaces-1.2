@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	f_menu: function(parentComponent, selectionProvider, redirectEvents, id, menuId, itemImageWidth, itemImageHeight, removeAllWhenShown) {
 		f_core.Assert(!this.ownerDocument, "f_menu object can not be a tag !");
 		
@@ -296,5 +296,8 @@ var __prototype = {
 }
 
 
-new f_class("f_menu", null, null, __prototype, f_menuBase);
+new f_class("f_menu", {
+	extend: f_menuBase,
+	members: __members
+});
  

@@ -8,7 +8,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @method hidden static
 	 */
@@ -54,7 +54,7 @@ var __static = {
 		}
 	}
 }
-var __prototype = {
+var __members = {
 	/**
 	 * @field private function
 	 */
@@ -382,4 +382,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_message", null, __static, __prototype, f_component, fa_message1);
+new f_class("f_message", {
+	extend: f_component, 
+	aspects: [ fa_message1 ],
+	statics: __statics,
+	members: __members
+});

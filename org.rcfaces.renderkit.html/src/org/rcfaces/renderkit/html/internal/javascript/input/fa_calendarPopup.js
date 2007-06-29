@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static={
+var __statics={
 	/** 
 	 * @field private static final String 
 	 */
@@ -353,7 +353,7 @@ var __static={
 	}
 }
 
-var __prototype={
+var __members={
 
 	fa_calendarPopup: function() {
 		var calendar=f_calendarObject.CreateCalendarFromComponent(this,
@@ -488,4 +488,4 @@ var __prototype={
 	}
 }
  
-new f_aspect("fa_calendarPopup", __static, __prototype, fa_itemsWrapper, fa_selectionProvider);
+new f_aspect("fa_calendarPopup", __statics, __members, fa_itemsWrapper, fa_selectionProvider);

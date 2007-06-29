@@ -8,7 +8,7 @@
  * @class public f_styledMessage extends f_component, fa_message1
  */
 
-var __prototype = {
+var __members = {
 	f_styledMessage: function() {		
 		this.f_super(arguments);
 
@@ -47,4 +47,4 @@ var __prototype = {
 	}
 }
  
-new f_class("f_styledMessage", null, __static, __prototype, f_component, fa_message1);
+new f_class("f_styledMessage", null, __statics, __members, f_component, fa_message1);

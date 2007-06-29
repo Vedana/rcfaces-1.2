@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final number
 	 */
@@ -336,4 +336,6 @@ var __static = {
 }
 
 
-new f_class("f_dateFormat", null, __static);
+new f_class("f_dateFormat", {
+	statics: __statics
+});

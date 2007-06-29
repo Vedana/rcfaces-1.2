@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	f_button: function() {
 		this.f_super(arguments);
@@ -18,5 +18,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_button", null, null, __prototype, f_input, fa_immediate);
+new f_class("f_button", {
+	extend: f_input,
+	aspects: [ fa_immediate ],
+	members: __members
+});
 

@@ -62,7 +62,7 @@ f_classLoader.prototype._newWindow=function(clparent, changeContext) {
 	}
 
 	var cl=new f_classLoader(win, clparent);
-	win._cameliaClassLoader=cl;
+	win._rcfacesClassLoader=cl;
 	
 	cl.f_requiresBundle(win.document, clparent._mainBundleName);
 }

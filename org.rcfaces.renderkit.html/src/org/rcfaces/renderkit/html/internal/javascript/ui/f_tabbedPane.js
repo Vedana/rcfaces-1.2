@@ -10,7 +10,7 @@
  * @version $REVISION: $
  */
 
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final String
@@ -246,7 +246,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 
 	f_tabbedPane: function() {
 		this.f_super(arguments);
@@ -1090,4 +1090,4 @@ var __prototype = {
 	}
 }
  
-new f_class("f_tabbedPane", null, __static, __prototype, f_cardBox);
+new f_class("f_tabbedPane", null, __statics, __members, f_cardBox);

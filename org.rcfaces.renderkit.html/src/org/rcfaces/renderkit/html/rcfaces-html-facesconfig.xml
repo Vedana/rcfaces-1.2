@@ -194,6 +194,11 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.submitWait</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.SubmitWaitRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.message</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.MessageRenderer</renderer-class>
 		</renderer>
@@ -336,6 +341,11 @@
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.textEditorToolFolder</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextEditorToolFolderRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.textEditorCombo</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.TextEditorComboRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>

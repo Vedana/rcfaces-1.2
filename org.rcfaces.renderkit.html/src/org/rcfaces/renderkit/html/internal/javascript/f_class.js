@@ -18,7 +18,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	
 	/**
 	 * @field hidden static final String
@@ -621,16 +621,70 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
+	
+	/**
+	 * @field hidden boolean
+	 */
+	_systemClass: undefined,
+	
 	f_class: function(className, lookId, staticMembers, members, parentClass) {
 		// Constructeur vide: on ne fait rien !
 		if (!arguments.length) {
 			return;
 		}
-		if (arguments[0] instanceof f_classLoader) {
+		if (className instanceof f_classLoader) {
 			this._newMultiWindow(arguments);		
 			return;
 		}
+
+		var aspects;
+		
+		if (lookId && typeof(lookId)=="object") {
+			var atts=lookId;
+			
+			lookId=atts.lookId;
+			staticMembers=atts.statics;
+			members=atts.members;
+			parentClass=atts.extend;
+			this._systemClass=!!atts.systemClass;
+			
+			aspects=atts.aspects;
+			
+			f_core.Assert(lookId===undefined || typeof(lookId)=="string", "f_class: Invalid lookId attribute ("+lookId+") for class '"+className+"'.");
+			f_core.Assert(staticMembers===undefined || (typeof(staticMembers)=="object" && staticMembers), "f_class: Invalid staticMembers attribute ("+staticMembers+") for class '"+className+"'.");
+			f_core.Assert(members===undefined || (typeof(members)=="object" && members), "f_class: Invalid members attribute ("+members+") for class '"+className+"'.");
+			f_core.Assert(parentClass===undefined || (typeof(parentClass)=="object" && parentClass) || (typeof(parentClass)=="function"), "f_class: Invalid parentClass attribute ("+parentClass+") for class '"+className+"'.");
+			f_core.Assert(aspects===undefined || (aspects instanceof Array), "f_class: Invalid aspects attribute ("+aspects+") for class '"+className+"'.");
+			
+			if (f_core.IsDebugEnabled(f_class)) {
+				var keywords="|lookId|members|statics|extend|systemClass|aspects|";
+				for(var name in atts) {
+					f_core.Assert(keywords.indexOf("|"+name+"|")>=0, "f_class: Unknown keyword '"+name+"' in definition of class '"+className+"'.");
+				}
+				
+				if (aspects) {
+					for(var i=0;i<aspects.length;i++) {
+						var aspect=aspects[i];
+						
+						f_core.Assert(aspect instanceof f_aspect, "f_class: Aspect #"+i+" ("+aspect+") for className '"+className+"' lookId='"+lookId+"' is not defined !");
+					}
+				}
+			}
+			
+		} else if (arguments.length>5) {
+			// Aspects
+			aspects=f_core.PushArguments(null, arguments, 5);
+			
+			if (f_core.IsDebugEnabled("f_class")) {
+				for(var i=0;i<aspects.length;i++) {
+					var aspect=aspects[i];
+					
+					f_core.Assert(aspect instanceof f_aspect, "f_class: Not an aspect ("+aspect+") for className '"+className+"' lookId='"+lookId+"' ?");
+				}
+			}
+		}
+		
 		
 		if (!parentClass && className!="f_object") {
 			f_class._DeclarePrototypeClass(className, staticMembers, members);
@@ -638,7 +692,7 @@ var __prototype = {
 			return;
 		}
 	
-		this._classLoader=f_classLoader.Get();
+		this._classLoader=(parentClass)?parentClass._classLoader:f_classLoader.Get();
 
 		if (!staticMembers) {
 			staticMembers=new Object;
@@ -658,21 +712,11 @@ var __prototype = {
 		this._members = members;
 		this._parent = parentClass;
 
-		var aspects=new Array
-		this._aspects=aspects;
-		
-		if (arguments.length>5) {
-			// Aspects
-			f_core.PushArguments(aspects, arguments, 5);
-			
-			if (f_core.IsDebugEnabled("f_class")) {
-				for(var i=0;i<aspects.length;i++) {
-					var aspect=aspects[i];
-					
-					f_core.Assert(aspect instanceof f_aspect, "f_class: Not an aspect ("+aspect+") for className '"+className+"' lookId='"+lookId+"' ?");
-				}
-			}
+
+		if (!aspects) {
+			aspects=new Array
 		}
+		this._aspects=aspects;
 				
 		this._classLoader.f_declareClass(this);
 	},
@@ -721,17 +765,7 @@ var __prototype = {
 	f_newInstance: function(args) {
 		var obj = new Object;
 		
-		return f_class.Init(obj, this, arguments);
-	},
-	
-	/**
-	 * @method hidden final
-	 * @return Object
-	 */
-	f_newSystemInstance: function() {
-		var obj = new Object;
-		
-		return f_class.Init(obj, this, arguments, true);
+		return f_class.Init(obj, this, arguments, this._systemClass);
 	},
 	
 	/**
@@ -766,5 +800,5 @@ var __prototype = {
 }
 
 
-__static._DeclarePrototypeClass("f_class", __static, __prototype);
+__statics._DeclarePrototypeClass("f_class", __statics, __members);
 

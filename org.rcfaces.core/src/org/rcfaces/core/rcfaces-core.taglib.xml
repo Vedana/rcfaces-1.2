@@ -317,6 +317,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>submitWait</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.submitWait</component-type>
+			<renderer-type>org.rcfaces.core.submitWait</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>message</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.message</component-type>
@@ -580,6 +588,14 @@
 		<component>
 			<component-type>org.rcfaces.core.textEditorToolFolder</component-type>
 			<renderer-type>org.rcfaces.core.textEditorToolFolder</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>textEditorCombo</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.textEditorCombo</component-type>
+			<renderer-type>org.rcfaces.core.textEditorCombo</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>

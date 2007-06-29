@@ -31,7 +31,8 @@
 }
 
 .f_imagePagerButton_disabled,
-.f_imagePagerButton_disabled INPUT {
+.f_imagePagerButton_disabled INPUT,
+.f_imagePagerButton_disabled A {
 	-moz-user-focus: ignore;
 	cursor: default;
 }

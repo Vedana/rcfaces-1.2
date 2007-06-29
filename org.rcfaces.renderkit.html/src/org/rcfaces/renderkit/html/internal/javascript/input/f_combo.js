@@ -10,15 +10,28 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final number
 	 */
-	_MIN_WIDTH: 128
+	_MIN_WIDTH: 128,
+	
+	/**
+	 * @method private static final
+	 * @param Event evt
+	 * @return boolean
+	 */
+	_OnChange: function(evt) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		return this.f_fireEvent(f_event.SELECTION, evt, null, this.f_getValue(), this);
+	}
 }
 
-var __prototype = {
+var __members = {
 
 	/*
 	f_combo: function() {
@@ -219,7 +232,7 @@ var __prototype = {
 	f_setDomEvent: function(type, target) {
 		switch(type) {
 		case f_event.SELECTION: 
-			this.onchange = this.f_onSelect;
+			this.onchange = f_combo._OnChange;
 			return;
 		}
 		this.f_super(arguments, type, target);
@@ -396,7 +409,7 @@ var __prototype = {
 						eval(ret);
 						
 					} catch (x) {
-						f_core.Error(f_combo, "Can not eval response '"+ret+"'.", x);
+						f_core.Error(f_combo, "_callServer.onLoad: Can not eval response '"+ret+"'.", x);
 					}
 
 				} finally {
@@ -568,4 +581,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_combo", null, __static, __prototype, f_input, fa_required, fa_filterProperties, fa_commands, fa_selectionProvider);
+new f_class("f_combo", null, __statics, __members, f_input, fa_required, fa_filterProperties, fa_commands, fa_selectionProvider);

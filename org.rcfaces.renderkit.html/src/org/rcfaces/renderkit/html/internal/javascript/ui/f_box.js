@@ -8,14 +8,14 @@
  * @class public f_box extends f_component, fa_asyncRender, fa_subMenu
  */
  
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
 	_BODY_MENU_ID: "#body"
 }
 
-var __prototype = {
+var __members = {
 /*
 	f_finalize: function() {
 		this._defaultMenuId=undefined; // string
@@ -83,4 +83,4 @@ var __prototype = {
 	}
 }
  
-new f_class("f_box", null, __static, __prototype, f_component, fa_asyncRender, fa_subMenu);
+new f_class("f_box", null, __statics, __members, f_component, fa_asyncRender, fa_subMenu);

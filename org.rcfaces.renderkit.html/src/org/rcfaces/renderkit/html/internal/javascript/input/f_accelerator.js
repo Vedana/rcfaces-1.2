@@ -8,7 +8,7 @@
  * @class public f_accelerator extends f_object, fa_immediate, fa_eventTarget
  */
 
-var __static={
+var __statics={
 
 	/**
 	 * @field private static final
@@ -53,7 +53,7 @@ var __static={
 	}
 }
 
-var __prototype={
+var __members={
 
 	f_accelerator: function() {
 		this.f_super(arguments);
@@ -164,4 +164,4 @@ var __prototype={
 	}
 }
  
-new f_class("f_accelerator", null, __static, __prototype, f_object, fa_immediate, fa_eventTarget);
+new f_class("f_accelerator", null, __statics, __members, f_object, fa_immediate, fa_eventTarget);

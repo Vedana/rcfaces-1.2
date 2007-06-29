@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	/** 
 	 * @field private static
 	 */
@@ -82,7 +82,7 @@ var __static = {
 	}
 }
  
-var __prototype = {
+var __members = {
 	fa_pagedComponent: function() {
 		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
 		
@@ -208,6 +208,6 @@ var __prototype = {
 	f_setFirst: f_class.ABSTRACT
 }
 
-new f_aspect("fa_pagedComponent", __static, __prototype, fa_filterProperties);
+new f_aspect("fa_pagedComponent", __statics, __members, fa_filterProperties);
 
 

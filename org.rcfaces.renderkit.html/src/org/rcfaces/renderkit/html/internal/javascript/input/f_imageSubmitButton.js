@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	/**
 	 * @method protected
 	 * @param f_event event
@@ -29,4 +29,7 @@ var __prototype = {
 	}
 }
 
-new f_class("f_imageSubmitButton", null, null, __prototype, f_imageButton);
+new f_class("f_imageSubmitButton", {
+	extend: f_imageButton,
+	members: __members
+});

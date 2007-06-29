@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @method private static
 	 */
@@ -41,7 +41,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_finalize: function() {
 		var timerId=this._timerId;
 		if (timerId) {
@@ -73,5 +73,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_timerEffect", null, __static, __prototype, f_effect);
+new f_class("f_timerEffect", {
+	extend: f_effect,
+	statics: __statics,
+	members: __members
+});
 

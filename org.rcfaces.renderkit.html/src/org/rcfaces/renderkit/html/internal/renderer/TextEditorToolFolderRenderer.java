@@ -15,13 +15,14 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.ComboComponent;
+import org.rcfaces.core.component.TextEditorComboComponent;
 import org.rcfaces.core.component.TextEditorImageButtonComponent;
 import org.rcfaces.core.component.TextEditorToolFolderComponent;
 import org.rcfaces.core.component.ToolFolderComponent;
 import org.rcfaces.core.component.ToolItemSeparatorComponent;
 import org.rcfaces.core.component.capability.ITextEditorButtonType;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
 /**
@@ -42,7 +43,8 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
             + ", " + ITextEditorButtonType.COPY + ", "
             + ITextEditorButtonType.PASTE + ", " + SEPARATOR + ","
             + ITextEditorButtonType.UNDO + ", " + ITextEditorButtonType.REDO
-            + ", " + SEPARATOR + "," + "font, fontSize, " + SEPARATOR + ", "
+            + ", " + SEPARATOR + "," + ITextEditorButtonType.FONT_NAME + ", "
+            + ITextEditorButtonType.FONT_SIZE + ", " + SEPARATOR + ", "
             + ITextEditorButtonType.BOLD + ", " + ITextEditorButtonType.ITALIC
             + ", " + ITextEditorButtonType.UNDERLINE + ", "
             + ITextEditorButtonType.STRIKE + ", " + SEPARATOR + ", "
@@ -60,31 +62,46 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
             + ITextEditorButtonType.SUB_SCRIPT;
 
     private static final SelectItem[] FONT_SIZE_SELECT_ITEMS = new SelectItem[] {
-            new SelectItem("8", "8"), new SelectItem("9", "9"),
-            new SelectItem("10", "10"), new SelectItem("11", "11"),
-            new SelectItem("12", "12"), new SelectItem("14", "14"),
-            new SelectItem("16", "16"), new SelectItem("18", "18"),
-            new SelectItem("20", "20"), new SelectItem("24", "24"),
-            new SelectItem("36", "36"), new SelectItem("48", "48") };
+            new SelectItem("", ""), new SelectItem("1", "8"),
+            /* new SelectItem("9pt", "9"), */
+            new SelectItem("2", "10"), /* new SelectItem("11pt", "11"), */
+            new SelectItem("3", "12"), new SelectItem("4", "14"),
+            /* new SelectItem("16pt", "16"), */new SelectItem("5", "18"),
+            /* new SelectItem("20pt", "20"), */new SelectItem("6", "24"),
+            new SelectItem("7", "36"), /* new SelectItem("48pt", "48") */};
 
     private static final SelectItem[] FONT_SELECT_ITEMS = new SelectItem[] {
-            new SelectItem("arial,helvetica,sans-serif", "Arial"),
-            new SelectItem("arial black,avant garde", "Arial Black"),
-            new SelectItem("andale mono,times", "Andale Mono"),
-            new SelectItem("book antiqua,palatino", "Book Antiqua"),
-            new SelectItem("comic sans ms,sand", "Comic Sans MS"),
-            new SelectItem("courier new,courier", "Courier New"),
-            new SelectItem("georgia,palatino", "Georgia"),
-            new SelectItem("helvetica", "Helvetica"),
-            new SelectItem("impact,chicago", "Impact"),
-            new SelectItem("symbol", "Symbol"),
-            new SelectItem("tahoma,arial,helvetica,sans-serif", "Tahoma"),
-            new SelectItem("terminal,monaco", "Terminal"),
-            new SelectItem("times new roman,times", "Times New Roman"),
-            new SelectItem("trebuchet ms,geneva", "Trebuchet MS"),
-            new SelectItem("verdana,geneva", "Verdana"),
-            new SelectItem("webdings", "Webdings"),
-            new SelectItem("wingdings,zapf dingbats", "Wingdings") };
+            new SelectItem("", "Par défaut"),
+            new FontNameItem("arial,helvetica,sans-serif", "Arial",
+                    "f_textEditor_arial"),
+            new FontNameItem("arial black,avant garde", "Arial Black",
+                    "f_textEditor_arialB"),
+            new FontNameItem("andale mono,times", "Andale Mono",
+                    "f_textEditor_andaleM"),
+            new FontNameItem("book antiqua,palatino", "Book Antiqua",
+                    "f_textEditor_bookA"),
+            new FontNameItem("comic sans ms,sand", "Comic Sans MS",
+                    "f_textEditor_comisSMS"),
+            new FontNameItem("courier new,courier", "Courier New",
+                    "f_textEditor_courierN"),
+            new FontNameItem("georgia,palatino", "Georgia",
+                    "f_textEditor_georgia"),
+            new FontNameItem("helvetica", "Helvetica", "f_textEditor_helvetica"),
+            new FontNameItem("impact,chicago", "Impact", "f_textEditor_impact"),
+            new FontNameItem("symbol", "Symbol", "f_textEditor_fsymbol"),
+            new FontNameItem("tahoma,arial,helvetica,sans-serif", "Tahoma",
+                    "f_textEditor_tahoma"),
+            new FontNameItem("terminal,monaco", "Terminal",
+                    "f_textEditor_fterminal"),
+            new FontNameItem("times new roman,times", "Times New Roman",
+                    "f_textEditor_timesNR"),
+            new FontNameItem("trebuchet ms,geneva", "Trebuchet MS",
+                    "f_textEditor_trebuchetMS"),
+            new FontNameItem("verdana,geneva", "Verdana",
+                    "f_textEditor_verdana"),
+            new FontNameItem("webdings", "Webdings", "f_textEditor_webdings"),
+            new FontNameItem("wingdings,zapf dingbats", "Wingdings",
+                    "f_textEditor_wingdings") };
 
     private static final String DEFAULT_TEXT_EDITOR_TOOL_FOLDER_STYLE_CLASS = "f_textEditorToolFolder";
 
@@ -119,7 +136,7 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
                 new TextEditorButtonItemRenderer(
                         ITextEditorButtonType.JUSTIFY_FULL, "alignment"));
 
-        TOOL_ITEMS_RENDERER.put("separator", new IToolFolderItemRenderer() {
+        TOOL_ITEMS_RENDERER.put(SEPARATOR, new IToolFolderItemRenderer() {
             private static final String REVISION = "$Revision$";
 
             public void appendChildren(IHtmlWriter htmlWriter, List children) {
@@ -160,30 +177,39 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
                 new TextEditorButtonItemRenderer(
                         ITextEditorButtonType.INCREASE_FONT_SIZE));
 
-        TOOL_ITEMS_RENDERER.put("font", new TextEditorComboItemRenderer("font",
-                FONT_SELECT_ITEMS) {
+        TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.FONT_NAME,
+                new TextEditorComboItemRenderer(
+                        ITextEditorButtonType.FONT_NAME, FONT_SELECT_ITEMS) {
+                    private static final String REVISION = "$Revision$";
 
-            protected String listItems(IHtmlWriter htmlWriter) {
-                TextEditorToolFolderComponent toolFolderComponent = (TextEditorToolFolderComponent) htmlWriter
-                        .getComponentRenderContext().getComponent();
+                    protected String listItems(IHtmlWriter htmlWriter) {
+                        TextEditorToolFolderComponent toolFolderComponent = (TextEditorToolFolderComponent) htmlWriter
+                                .getComponentRenderContext().getComponent();
 
-                return toolFolderComponent.getFontNames(htmlWriter
-                        .getComponentRenderContext().getFacesContext());
-            }
+                        return toolFolderComponent.getFontNames(htmlWriter
+                                .getComponentRenderContext().getFacesContext());
+                    }
 
-        });
+                });
 
-        TOOL_ITEMS_RENDERER.put("fontsize", new TextEditorComboItemRenderer(
-                "fontSize", FONT_SIZE_SELECT_ITEMS) {
+        TOOL_ITEMS_RENDERER
+                .put(ITextEditorButtonType.FONT_SIZE,
+                        new TextEditorComboItemRenderer(
+                                ITextEditorButtonType.FONT_SIZE,
+                                FONT_SIZE_SELECT_ITEMS) {
+                            private static final String REVISION = "$Revision$";
 
-            protected String listItems(IHtmlWriter htmlWriter) {
-                TextEditorToolFolderComponent toolFolderComponent = (TextEditorToolFolderComponent) htmlWriter
-                        .getComponentRenderContext().getComponent();
+                            protected String listItems(IHtmlWriter htmlWriter) {
+                                TextEditorToolFolderComponent toolFolderComponent = (TextEditorToolFolderComponent) htmlWriter
+                                        .getComponentRenderContext()
+                                        .getComponent();
 
-                return toolFolderComponent.getFontSizes(htmlWriter
-                        .getComponentRenderContext().getFacesContext());
-            }
-        });
+                                return toolFolderComponent
+                                        .getFontSizes(htmlWriter
+                                                .getComponentRenderContext()
+                                                .getFacesContext());
+                            }
+                        });
     }
 
     protected List getChildren(IHtmlWriter htmlWriter) {
@@ -324,7 +350,9 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
 
         public void appendChildren(IHtmlWriter htmlWriter, List children) {
 
-            ComboComponent combo = new ComboComponent(type);
+            TextEditorComboComponent combo = new TextEditorComboComponent(type);
+
+            combo.setType(type);
 
             UISelectItems selectItemsComponent = new UISelectItems();
 
@@ -355,17 +383,40 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
             TextEditorToolFolderComponent toolFolderComponent = (TextEditorToolFolderComponent) htmlWriter
                     .getComponentRenderContext().getComponent();
 
-            String forId = toolFolderComponent.getId();
+            String forId = toolFolderComponent.getFor();
 
             String forClientId = htmlWriter.getHtmlComponentRenderContext()
                     .getHtmlRenderContext().computeBrotherComponentClientId(
                             toolFolderComponent, forId);
 
-            // button.setFor(forClientId);
+            combo.setFor(forClientId);
 
             combo.getChildren().add(selectItemsComponent);
 
             children.add(combo);
         }
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static class FontNameItem extends SelectItem implements
+            IStyleClassItem {
+
+        private final String styleClass;
+
+        public FontNameItem(String fontNameValue, String fontNameLabel,
+                String styleClass) {
+            super(fontNameValue, fontNameLabel);
+
+            this.styleClass = styleClass;
+        }
+
+        public String getStyleClass() {
+            return styleClass;
+        }
+
     }
 }

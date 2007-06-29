@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	
 	/**
 	 * @field public static final number
@@ -32,4 +32,4 @@ var __static = {
 	ONEMANY_CARDINALITY: 4
 }
 
-new f_aspect("fa_cardinality", __static);
+new f_aspect("fa_cardinality", __statics);

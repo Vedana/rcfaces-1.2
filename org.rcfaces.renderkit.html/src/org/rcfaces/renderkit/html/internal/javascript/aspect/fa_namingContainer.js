@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	
 	/** 
 	 * @field private static String
@@ -280,4 +280,4 @@ var __static = {
 	}
 }
 
-new f_aspect("fa_namingContainer", __static);	
+new f_aspect("fa_namingContainer", __statics);	

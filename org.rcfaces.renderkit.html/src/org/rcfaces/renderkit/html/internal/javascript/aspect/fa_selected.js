@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 /*
 	f_finalize: function() {
 		// this._selected=undefined; // boolean
@@ -67,5 +67,7 @@ var __prototype = {
 	f_setProperty: f_class.ABSTRACT
 }
 
-new f_aspect("fa_selected", null, __prototype);
+new f_aspect("fa_selected", {
+	members: __members
+});
 	

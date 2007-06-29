@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	
 	/** 
 	 * @field private static final number
@@ -213,7 +213,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	fa_menuCore: function() {
 
 		this._uiMenuItems=new Object;
@@ -1294,14 +1294,13 @@ var __prototype = {
 			this.f_removeAllItems(menuItem);
 		}
 		
-		var menuActionList=menuItem._menuActionList;
-		if (menuActionList) {
+		if (menuItem.f_isActionListEmpty && !menuItem.f_isActionListEmpty(f_event.MENU)) {		
 			f_core.Debug(fa_menuCore, "_preparePopup: Call menu callbacks for menuItem '"+menuItem+"'.");
 			
 			// Appel les callbacks !
-			var evt=new f_event(this, f_event.MENU, null, menuItem, null, this);
+			var evt=new f_event(this, f_event.MENU, null, menuItem, null, this.fa_getSelectionProvider());
 			try {
-				if (menuActionList.f_callActions(evt)===false) {
+				if (menuItem.f_fireEvent(evt)===false) {
 					// Refuse l'affichage !
 
 					f_core.Debug(fa_menuCore, "_preparePopup: One callback refuse to open the menu.");
@@ -1311,7 +1310,7 @@ var __prototype = {
 			} finally {
 				f_classLoader.Destroy(evt);
 			}
-		}
+		}	
 		
 		return this.f_hasVisibleItemChildren(menuItem);
 	},
@@ -1637,4 +1636,4 @@ var __prototype = {
 	
 }
 
-new f_aspect("fa_menuCore", __static, __prototype, fa_groupName, fa_items);
+new f_aspect("fa_menuCore", __statics, __members, fa_groupName, fa_items);

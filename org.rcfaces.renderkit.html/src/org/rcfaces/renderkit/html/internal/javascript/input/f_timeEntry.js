@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype={
+var __members={
 
 	f_timeEntry: function() {
 		this.f_super(arguments);
@@ -272,4 +272,7 @@ var __prototype={
 	}
 }
  
-new f_class("f_timeEntry", null, null, __prototype, f_compositeNumEntry);
+new f_class("f_timeEntry", {
+	extend: f_compositeNumEntry,
+	members: __members
+});

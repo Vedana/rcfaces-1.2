@@ -10,7 +10,7 @@
  * @version $REVISION: $
  */
 
-var __prototype = {
+var __members = {
 	f_finalize: function() {		
 		this._mask=undefined;  // HTMLElement
 		// this._text=undefined;  // String
@@ -184,4 +184,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_tab", null, null, __prototype, f_card);
+new f_class("f_tab", null, null, __members, f_card);

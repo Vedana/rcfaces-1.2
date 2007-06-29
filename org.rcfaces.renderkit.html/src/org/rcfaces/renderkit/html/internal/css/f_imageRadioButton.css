@@ -30,7 +30,8 @@
 }
 
 .f_imageRadioButton_disabled,
-.f_imageRadioButton_disabled INPUT {
+.f_imageRadioButton_disabled INPUT,
+.f_imageRadioButton_disabled A {
 	-moz-user-focus: ignore;
 	cursor: default;
 }

@@ -14,9 +14,9 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  */
 public interface IHtmlBorderRenderer {
 
-    void initialize(IHtmlWriter writer, String width, String height,
-            int horizontalSpan, int verticalSpan, boolean disabled,
-            boolean selected) throws WriterException;
+    void initialize(IHtmlWriter writer, String componentClassName,
+            String width, String height, int horizontalSpan, int verticalSpan,
+            boolean disabled, boolean selected) throws WriterException;
 
     IHtmlWriter startComposite(IHtmlWriter writer) throws WriterException;
 

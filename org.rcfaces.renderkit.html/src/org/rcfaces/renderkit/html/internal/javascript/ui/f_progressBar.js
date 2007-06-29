@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 	f_progressBar: function() {
 		this.f_super(arguments);
 
@@ -191,4 +191,7 @@ var __prototype = {
 	}
 }
  
-new f_class("f_progressBar", null, null, __prototype, f_component);
+new f_class("f_progressBar", {
+	extend: f_component,
+	members: __members
+});

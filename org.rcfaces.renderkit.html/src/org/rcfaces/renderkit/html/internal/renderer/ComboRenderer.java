@@ -45,13 +45,19 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
     protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
 
-        UIComponent combo = htmlWriter.getComponentRenderContext()
-                .getComponent();
-
         htmlWriter.startElement(IHtmlWriter.SELECT);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+
+        writeComboAttributes(htmlWriter);
+    }
+
+    protected void writeComboAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
+
+        UIComponent combo = htmlWriter.getComponentRenderContext()
+                .getComponent();
 
         if (combo instanceof ITextDirectionCapability) {
             writeTextDirection(htmlWriter, (ITextDirectionCapability) combo);

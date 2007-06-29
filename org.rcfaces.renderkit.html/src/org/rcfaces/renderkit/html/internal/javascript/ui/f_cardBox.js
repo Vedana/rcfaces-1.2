@@ -9,7 +9,7 @@
  * @version $REVISION: $
  */
 
-var __prototype={
+var __members={
 
 	f_cardBox: function() {
 		this.f_super(arguments);
@@ -263,4 +263,4 @@ var __prototype={
 	}
 }
  
-new f_class("f_cardBox", null, null, __prototype, f_component);
+new f_class("f_cardBox", null, null, __members, f_component);

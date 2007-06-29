@@ -53,7 +53,6 @@ import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.internal.component.IToolBarImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -717,7 +716,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             String width = "";
 
             if (selectItem instanceof IWidthItem) {
-            	IWidthItem iwi = (IWidthItem) selectItem;
+                IWidthItem iwi = (IWidthItem) selectItem;
 
                 width = iwi.getWidth();
             }

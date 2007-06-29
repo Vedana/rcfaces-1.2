@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	/**
 	 * Style constant indicating that calls to <code>subTask</code>
 	 * should not have any effect.
@@ -30,7 +30,7 @@ var __static = {
 	PREPEND_MAIN_LABEL_TO_SUBTASK: 4
 }
  
-var __prototype = {
+var __members = {
 	f_subProgressMonitor: function(wrappedMonitor, ticks, style) {
 		this.f_super(arguments);
 
@@ -183,4 +183,4 @@ var __prototype = {
 	}
 }
  
-new f_class("f_subProgressMonitor", null, __static, __prototype, f_progressMonitor);
+new f_class("f_subProgressMonitor", null, __statics, __members, f_progressMonitor);

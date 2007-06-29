@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	/**
 	 * @method hidden static
 	 * @param String text1
@@ -21,7 +21,7 @@ var __static = {
 	}
 }
  
-var __prototype = {
+var __members = {
 	
 	f_componentsGrid: function() {
 		this.f_super(arguments);
@@ -799,4 +799,4 @@ var __prototype = {
 	}
 }
  
-new f_class("f_componentsGrid", null, __static, __prototype, f_grid);
+new f_class("f_componentsGrid", null, __statics, __members, f_grid);

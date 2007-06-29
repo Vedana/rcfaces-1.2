@@ -9,7 +9,7 @@
  * @author Joel Merlin & Olivier Oeuillot
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	/**
 	 * @method public
@@ -54,4 +54,6 @@ var __prototype = {
 	}
 }
 
-new f_class("f_object", null, null, __prototype);
+new f_class("f_object",  {
+	members: __members
+});

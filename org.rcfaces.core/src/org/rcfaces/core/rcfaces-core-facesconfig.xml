@@ -167,6 +167,10 @@
 		<component-class>org.rcfaces.core.component.ViewDialogComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.submitWait</component-type>
+		<component-class>org.rcfaces.core.component.SubmitWaitComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.message</component-type>
 		<component-class>org.rcfaces.core.component.MessageComponent</component-class>
 	</component>
@@ -301,6 +305,10 @@
 	<component>
 		<component-type>org.rcfaces.core.textEditorToolFolder</component-type>
 		<component-class>org.rcfaces.core.component.TextEditorToolFolderComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.textEditorCombo</component-type>
+		<component-class>org.rcfaces.core.component.TextEditorComboComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.itemsToolFolder</component-type>

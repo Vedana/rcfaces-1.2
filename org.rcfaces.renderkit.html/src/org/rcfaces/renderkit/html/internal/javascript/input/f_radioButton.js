@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	f_radioButton: function() {
 		this.f_super(arguments);
@@ -165,4 +165,8 @@ var __prototype = {
 	fa_getRadioScope: fa_groupName.GlobalScope
 }
 
-new f_class("f_radioButton", null, null, __prototype, f_checkButton, fa_groupName, fa_required);
+new f_class("f_radioButton", {
+	extend: f_checkButton,
+	aspects: [ fa_groupName, fa_required],
+	members: __members
+});

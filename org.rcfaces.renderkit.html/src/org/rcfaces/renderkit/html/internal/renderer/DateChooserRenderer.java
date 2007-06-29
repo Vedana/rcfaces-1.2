@@ -102,6 +102,10 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
             super(imageButtonFamilly);
         }
 
+        protected String getMainStyleClassName() {
+            return DateChooserRenderer.this.getMainStyleClassName();
+        }
+
         protected void writeAttributes(String classSuffix)
                 throws WriterException {
             writeHtmlAttributes(writer);

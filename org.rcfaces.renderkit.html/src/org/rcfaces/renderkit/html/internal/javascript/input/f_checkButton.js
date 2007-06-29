@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	/**
 	 * @method hidden
@@ -141,4 +141,7 @@ var __prototype = {
 	}
 }
 
-new f_class("f_checkButton", null, null, __prototype, f_button);
+new f_class("f_checkButton", {
+	extend: f_button,
+	members: __members
+});

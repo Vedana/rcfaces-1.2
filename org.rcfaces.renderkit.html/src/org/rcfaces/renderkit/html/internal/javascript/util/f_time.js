@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	/**
 	 * @method hidden static
 	 * @param f_time time
@@ -78,7 +78,7 @@ var __static = {
 /**
  * @method public
  */
-var __prototype = {
+var __members = {
  
 	f_time: function(hours, minutes, seconds, millis) {
 		if (arguments.length==1) {
@@ -179,4 +179,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_time", null, __static, __prototype);
+new f_class("f_time", null, __statics, __members);

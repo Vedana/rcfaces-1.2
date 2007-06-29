@@ -238,7 +238,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         }
 
         String cameliaClassLoader = convertSymbol("f_classLoader",
-                "_cameliaClassLoader");
+                "_rcfacesClassLoader");
 
         writeCall(cameliaClassLoader, "f_requiresBundle").write("document");
 

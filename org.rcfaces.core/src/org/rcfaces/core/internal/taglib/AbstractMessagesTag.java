@@ -65,11 +65,11 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
     private String initListeners;
 
-    private String globalOnly;
+    private String showSummary;
 
     private String margins;
 
-    private String showSummary;
+    private String globalOnly;
 
     private String showDetail;
 
@@ -265,12 +265,12 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
         this.initListeners = initListeners;
     }
 
-    public final String getGlobalOnly() {
-        return globalOnly;
+    public final String getShowSummary() {
+        return showSummary;
     }
 
-    public final void setGlobalOnly(String globalOnly) {
-        this.globalOnly = globalOnly;
+    public final void setShowSummary(String showSummary) {
+        this.showSummary = showSummary;
     }
 
     public final String getMargins() {
@@ -281,12 +281,12 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
         this.margins = margins;
     }
 
-    public final String getShowSummary() {
-        return showSummary;
+    public final String getGlobalOnly() {
+        return globalOnly;
     }
 
-    public final void setShowSummary(String showSummary) {
-        this.showSummary = showSummary;
+    public final void setGlobalOnly(String globalOnly) {
+        this.globalOnly = globalOnly;
     }
 
     public final String getShowDetail() {
@@ -317,9 +317,9 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
             LOG.debug("  styleClass='" + styleClass + "'");
             LOG.debug("  hiddenMode='" + hiddenMode + "'");
             LOG.debug("  waiRole='" + waiRole + "'");
-            LOG.debug("  globalOnly='" + globalOnly + "'");
-            LOG.debug("  margins='" + margins + "'");
             LOG.debug("  showSummary='" + showSummary + "'");
+            LOG.debug("  margins='" + margins + "'");
+            LOG.debug("  globalOnly='" + globalOnly + "'");
             LOG.debug("  showDetail='" + showDetail + "'");
         }
         super.setProperties(uiComponent);
@@ -554,13 +554,13 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
                     ListenersTools.INIT_LISTENER_TYPE, initListeners);
         }
 
-        if (globalOnly != null) {
-            if (isValueReference(globalOnly)) {
-                ValueBinding vb = application.createValueBinding(globalOnly);
-                component.setValueBinding(Properties.GLOBAL_ONLY, vb);
+        if (showSummary != null) {
+            if (isValueReference(showSummary)) {
+                ValueBinding vb = application.createValueBinding(showSummary);
+                component.setValueBinding(Properties.SHOW_SUMMARY, vb);
 
             } else {
-                component.setGlobalOnly(getBool(globalOnly));
+                component.setShowSummary(getBool(showSummary));
             }
         }
 
@@ -572,13 +572,13 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
             component.setMargins(margins);
         }
 
-        if (showSummary != null) {
-            if (isValueReference(showSummary)) {
-                ValueBinding vb = application.createValueBinding(showSummary);
-                component.setValueBinding(Properties.SHOW_SUMMARY, vb);
+        if (globalOnly != null) {
+            if (isValueReference(globalOnly)) {
+                ValueBinding vb = application.createValueBinding(globalOnly);
+                component.setValueBinding(Properties.GLOBAL_ONLY, vb);
 
             } else {
-                component.setShowSummary(getBool(showSummary));
+                component.setGlobalOnly(getBool(globalOnly));
             }
         }
 
@@ -618,9 +618,9 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
         waiRole = null;
         propertyChangeListeners = null;
         initListeners = null;
-        globalOnly = null;
-        margins = null;
         showSummary = null;
+        margins = null;
+        globalOnly = null;
         showDetail = null;
 
         super.release();

@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static={
+var __statics={
 	Initializer: function() {	
  		// this est la classe !
 		this.f_newInstance();
@@ -160,7 +160,7 @@ var __static={
 		return f_core.CancelJsEvent(evt);	
 	}
 }
-var __prototype = {
+var __members = {
 	f_consoleAppender: function() {
 		this.f_super(arguments);
 		
@@ -216,9 +216,9 @@ var __prototype = {
 		this._console=undefined;
 		this._list=undefined;
 		this._body=undefined;
-		this._documentCompleted=undefined;
+		this._documentCompleted=undefined; // boolean  - mais on le laisse -
 		this._pipe=undefined;
-		this._cnt=undefined;
+//		this._cnt=undefined; // number
 		this._buttons=undefined;
 
 		var documentComplete=this._performDocumentComplete;
@@ -735,4 +735,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_consoleAppender", null, __static, __prototype, f_object);
+new f_class("f_consoleAppender", {
+	extend: f_object,
+	statics: __statics,
+	members: __members
+});

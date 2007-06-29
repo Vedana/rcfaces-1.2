@@ -8,7 +8,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  */
 
-var __static = {
+var __statics = {
 	/**
 	 * @field private static 
 	 */
@@ -60,7 +60,7 @@ var __static = {
 	},
 	
 	/**
-	 * @method static final hidden
+	 * @method static final public
 	 * @param String name Name of resourceBundle. (can be a f_class !)
 	 * @param Object values
 	 * @return void
@@ -127,7 +127,7 @@ var __static = {
 }
 
 
-var __prototype = {	
+var __members = {	
 	f_resourceBundle: function(name) {
 		this._name=name;
 	},
@@ -244,4 +244,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_resourceBundle", null, __static, __prototype);
+new f_class("f_resourceBundle", null, __statics, __members);

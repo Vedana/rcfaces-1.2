@@ -9,7 +9,7 @@
  * @author Joel Merlin & Olivier Oeuillot
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final
@@ -106,7 +106,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	
 	f_eventTarget: function() {
 		// this.f_super(arguments); // On appelle pas le super à cause d'un problème de profondeur de pile IE
@@ -373,4 +373,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_eventTarget", null, __static, __prototype, f_object, fa_eventTarget);
+new f_class("f_eventTarget", {
+	extend: f_object,
+	aspects: [fa_eventTarget],
+	statics: __statics,
+	members: __members
+});

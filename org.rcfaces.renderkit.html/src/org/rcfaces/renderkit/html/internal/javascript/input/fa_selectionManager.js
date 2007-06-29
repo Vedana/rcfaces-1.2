@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 
 	/** 
 	 * @field hidden static final number 
@@ -109,7 +109,7 @@ var __static = {
 		object._selectionFullState=(selectionFullState)?(new Array):null;
 	}	
 }
-var __prototype = {
+var __members = {
 	fa_selectionManager: function() {
 		if (this._selectionCardinality===undefined) {
 			var v_selectionCardinality=f_core.GetNumberAttribute(this, "v:selectionCardinality", undefined);
@@ -708,4 +708,4 @@ var __prototype = {
 	fa_setElementSelected: f_class.ABSTRACT
 }
 
-new f_aspect("fa_selectionManager", __static, __prototype, fa_itemsManager, fa_selectionProvider);
+new f_aspect("fa_selectionManager", __statics, __members, fa_itemsManager, fa_selectionProvider);

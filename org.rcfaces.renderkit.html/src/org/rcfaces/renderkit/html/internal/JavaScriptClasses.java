@@ -140,6 +140,8 @@ public final class JavaScriptClasses {
 
     public static final String TEXT_EDITOR = "f_textEditor";
 
+    public static final String TEXT_EDITOR_COMBO = "f_textEditorCombo";
+
     public static final String TEXT_EDITOR_IMAGE_BUTTON = "f_textEditorImageButton";
 
     public static final String TIME_ENTRY = "f_timeEntry";

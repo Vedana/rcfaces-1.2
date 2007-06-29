@@ -30,7 +30,8 @@
 }
 
 .f_imageCheckButton_disabled,
-.f_imageCheckButton_disabled INPUT {
+.f_imageCheckButton_disabled INPUT,
+.f_imageCheckButton_disabled A {
 	-moz-user-focus: ignore;
 	cursor: default;
 }

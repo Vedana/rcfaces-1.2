@@ -8,7 +8,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	/**
 	 * @field public static final number
 	 */
@@ -166,7 +166,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	/**
 	 * @method public abstract
 	 * @return number
@@ -200,4 +200,8 @@ var __prototype = {
 }
 
 
-new f_class("f_clientStorage", null, __static, __prototype);
+new f_class("f_clientStorage", {
+	extend: f_object,
+	statics: __statics,
+	members: __members
+});

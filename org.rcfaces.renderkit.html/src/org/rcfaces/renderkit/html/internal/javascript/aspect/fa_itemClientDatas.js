@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	/**
 	 * @method public
@@ -81,4 +81,4 @@ var __prototype = {
 	}
 }
 
-new f_aspect("fa_itemClientDatas", null, __prototype);
+new f_aspect("fa_itemClientDatas", null, __members);

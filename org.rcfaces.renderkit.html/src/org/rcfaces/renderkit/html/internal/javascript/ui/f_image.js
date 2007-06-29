@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __prototype = {
+var __members = {
 
 	/**
 	 * @field private static final String
@@ -199,4 +199,8 @@ var __prototype = {
 	}
 }
  
-new f_class("f_image", null, null, __prototype, f_component, fa_filterProperties, fa_commands);
+new f_class("f_image", {
+	extend: f_component, 
+	aspects: [ fa_filterProperties, fa_commands ],
+	members: __members
+});

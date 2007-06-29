@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __prototype = {
+var __members = {
 	f_messageFieldSet: function() {
 		this.f_super(arguments);
 		
@@ -52,4 +52,4 @@ var __prototype = {
 		this.f_setText(text);
 	}
 }
-new f_class("f_messageFieldSet", null, null, __prototype, f_fieldSet, fa_message1);
+new f_class("f_messageFieldSet", null, null, __members, f_fieldSet, fa_message1);

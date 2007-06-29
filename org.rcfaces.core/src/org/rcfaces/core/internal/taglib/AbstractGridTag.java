@@ -79,13 +79,13 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
     private String initListeners;
 
-    private String margins;
-
     private String var;
+
+    private String rows;
 
     private String first;
 
-    private String rows;
+    private String margins;
 
     private String value;
 
@@ -338,20 +338,20 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
         this.initListeners = initListeners;
     }
 
-    public final String getMargins() {
-        return margins;
-    }
-
-    public final void setMargins(String margins) {
-        this.margins = margins;
-    }
-
     public final String getVar() {
         return var;
     }
 
     public final void setVar(String var) {
         this.var = var;
+    }
+
+    public final String getRows() {
+        return rows;
+    }
+
+    public final void setRows(String rows) {
+        this.rows = rows;
     }
 
     public final String getFirst() {
@@ -362,12 +362,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
         this.first = first;
     }
 
-    public final String getRows() {
-        return rows;
+    public final String getMargins() {
+        return margins;
     }
 
-    public final void setRows(String rows) {
-        this.rows = rows;
+    public final void setMargins(String margins) {
+        this.margins = margins;
     }
 
     public final String getValue() {
@@ -400,10 +400,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
             LOG.debug("  styleClass='" + styleClass + "'");
             LOG.debug("  hiddenMode='" + hiddenMode + "'");
             LOG.debug("  waiRole='" + waiRole + "'");
-            LOG.debug("  margins='" + margins + "'");
             LOG.debug("  var='" + var + "'");
-            LOG.debug("  first='" + first + "'");
             LOG.debug("  rows='" + rows + "'");
+            LOG.debug("  first='" + first + "'");
+            LOG.debug("  margins='" + margins + "'");
         }
         super.setProperties(uiComponent);
 
@@ -680,14 +680,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
                     ListenersTools.INIT_LISTENER_TYPE, initListeners);
         }
 
-        if (margins != null) {
-            if (isValueReference(margins)) {
-                throw new javax.faces.FacesException(
-                        "Attribute 'margins' does not accept binding !");
-            }
-            component.setMargins(margins);
-        }
-
         if (var != null) {
             if (isValueReference(var)) {
                 ValueBinding vb = application.createValueBinding(var);
@@ -695,6 +687,16 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
             } else {
                 component.setVar(var);
+            }
+        }
+
+        if (rows != null) {
+            if (isValueReference(rows)) {
+                ValueBinding vb = application.createValueBinding(rows);
+                component.setValueBinding(Properties.ROWS, vb);
+
+            } else {
+                component.setRows(getInt(rows));
             }
         }
 
@@ -708,14 +710,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
             }
         }
 
-        if (rows != null) {
-            if (isValueReference(rows)) {
-                ValueBinding vb = application.createValueBinding(rows);
-                component.setValueBinding(Properties.ROWS, vb);
-
-            } else {
-                component.setRows(getInt(rows));
+        if (margins != null) {
+            if (isValueReference(margins)) {
+                throw new javax.faces.FacesException(
+                        "Attribute 'margins' does not accept binding !");
             }
+            component.setMargins(margins);
         }
 
         if (value != null) {
@@ -761,10 +761,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
         waiRole = null;
         propertyChangeListeners = null;
         initListeners = null;
-        margins = null;
         var = null;
-        first = null;
         rows = null;
+        first = null;
+        margins = null;
         value = null;
 
         super.release();

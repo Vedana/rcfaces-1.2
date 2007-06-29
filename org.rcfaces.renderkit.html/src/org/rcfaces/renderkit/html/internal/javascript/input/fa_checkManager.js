@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 	fa_checkManager: function() {
 		var v_checkCardinality=f_core.GetAttribute(this, "v:checkCardinality");
 		if (!v_checkCardinality) {
@@ -325,4 +325,4 @@ var __prototype = {
 	
 }
 
-new f_aspect("fa_checkManager", null, __prototype, fa_itemsManager);
+new f_aspect("fa_checkManager", null, __members, fa_itemsManager);

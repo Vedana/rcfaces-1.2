@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __prototype = {
+var __members = {
 	fa_filterProperties: function() {
 		// Au mieux on prend l'ancien !
 		this._filtred=f_core.GetBooleanAttribute(this, "v:filtred", this._filtred); 		
@@ -123,5 +123,5 @@ var __prototype = {
 			
 }
 
-new f_aspect("fa_filterProperties", null, __prototype);
+new f_aspect("fa_filterProperties", null, __members);
 

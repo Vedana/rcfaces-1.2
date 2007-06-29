@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static={	
+var __statics={	
 
 	/**
 	 * @field protected static final String
@@ -18,7 +18,7 @@ var __static={
 	
 }
 
-var __prototype={
+var __members={
 
 	fa_initializeInput: function(input) {
 		input._min=f_core.GetNumberAttribute(input, "v:min");
@@ -374,4 +374,4 @@ var __prototype={
 	
 }
  
-new f_aspect("fa_compositeNumEntry", __static, __prototype, fa_compositeEntry);
+new f_aspect("fa_compositeNumEntry", __statics, __members, fa_compositeEntry);

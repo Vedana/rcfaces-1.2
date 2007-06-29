@@ -8,7 +8,7 @@
  * @class f_httpRequest extends f_object
  * @author Joel Merlin + Olivier Oeuillot
  */
-var __static = {
+var __statics = {
 
 	/**
 	 * @field public static final String
@@ -66,7 +66,7 @@ var __static = {
 	 CAMELIA_RESPONSE_HEADER: "X-Camelia-Service"
 } 
 
-var __prototype = {
+var __members = {
 
 	f_httpRequest: function(component, url, acceptType, noLog) {
 		this._component=component;
@@ -802,5 +802,5 @@ var __prototype = {
 	}
 }
 
-new f_class("f_httpRequest", null, __static, __prototype);
+new f_class("f_httpRequest", null, __statics, __members);
 

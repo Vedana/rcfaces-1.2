@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final number
 	 */
@@ -32,7 +32,7 @@ var __static = {
 	_SUGGESTION_MENU_ID: "#suggestion"
 }
 
-var __prototype = {
+var __members = {
 	f_suggestTextEntry: function() {
 		this.f_super(arguments);
 		
@@ -871,4 +871,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_suggestTextEntry", null, __static, __prototype, f_textEntry, fa_filterProperties, fa_commands);
+new f_class("f_suggestTextEntry", null, __statics, __members, f_textEntry, fa_filterProperties, fa_commands);

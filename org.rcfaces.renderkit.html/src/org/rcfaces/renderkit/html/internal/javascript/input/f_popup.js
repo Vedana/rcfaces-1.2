@@ -8,7 +8,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @field hidden static final number
 	 */
@@ -404,8 +404,8 @@ var __static = {
 		
 		clb.exit.call(component, evt);		
 		
-		// On Poursuit l'evenement ?
-		evt.cancelBubble=true; // A VERIFIER: On accepte l'evenement, mais on le passe surtout pas au parent !
+		// On Poursuit l'evenement ? finalement OUI, car c'est comme ca sur le bureau Windows !
+	//	evt.cancelBubble=true; // A VERIFIER: On accepte l'evenement, mais on le passe surtout pas au parent !
 		return false;
 	},
 	/**
@@ -970,4 +970,6 @@ var __static = {
 	}
 }
 
-new f_class("f_popup", null, __static);
+new f_class("f_popup", {
+	statics: __statics
+});

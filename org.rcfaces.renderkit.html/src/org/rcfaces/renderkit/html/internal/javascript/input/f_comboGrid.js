@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final number
@@ -123,7 +123,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	
 	/**
 	 * @field private boolean
@@ -612,4 +612,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_comboGrid", null, __static, __prototype, f_textEntry, fa_dataGridPopup);
+new f_class("f_comboGrid", null, __statics, __members, f_textEntry, fa_dataGridPopup);

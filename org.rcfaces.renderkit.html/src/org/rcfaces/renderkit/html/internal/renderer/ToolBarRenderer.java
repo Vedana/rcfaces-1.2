@@ -76,11 +76,13 @@ public class ToolBarRenderer extends AbstractCssRenderer {
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        //htmlWriter.startElement(IHtmlWriter.P);
-        //htmlWriter.write("&nbsp;");
-        //htmlWriter.endElement(IHtmlWriter.P);
+        // htmlWriter.startElement(IHtmlWriter.P);
+        // htmlWriter.write("&nbsp;");
+        // htmlWriter.endElement(IHtmlWriter.P);
 
         htmlWriter.endElement(IHtmlWriter.DIV);
+
+        htmlWriter.enableJavaScript(); // Pour masquer les separateurs
 
         super.encodeEnd(writer);
     }

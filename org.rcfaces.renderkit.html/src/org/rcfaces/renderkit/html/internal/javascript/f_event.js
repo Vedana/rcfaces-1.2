@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype= {
+var __members= {
 	/**
 	 * @method public
 	 * @param f_object component
@@ -194,7 +194,7 @@ var __prototype= {
 	}
 }
  
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
@@ -412,6 +412,12 @@ var __static = {
 	 * @field public static final number
 	 */
 	RESET_DETAIL: 0x200,
+	
+	/**
+	 * @field hidden boolean
+	 * @see f_class#_systemClass
+	 */
+	_systemClass: true,
 
 	/**
 	 * @method public static
@@ -684,4 +690,7 @@ var __static = {
 		return f_event._EvtLock;
 	}
 }
-new f_class("f_event", null, __static, __prototype);
+new f_class("f_event", {
+	statics: __statics,
+	members: __members
+});

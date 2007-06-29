@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
@@ -21,7 +21,7 @@ var __static = {
 	_CHANGED_PROPERTY: "changed"
 }
 
-var __prototype = {
+var __members = {
 /*
 	f_finalize: function() {
 		this._clientDatas=undefined;  // Map<string, string>
@@ -162,4 +162,4 @@ var __prototype = {
 	}
 }
 
-new f_aspect("fa_clientData", __static, __prototype);
+new f_aspect("fa_clientData", __statics, __members);

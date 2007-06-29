@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static={
+var __statics={
 	/** 
 	 * @field private static final number
 	 */
@@ -25,7 +25,7 @@ var __static={
 		this.f_newInstance();
 	}
 }
-var __prototype = {
+var __members = {
 	f_serverAppender: function() {
 		this.f_super(arguments);
 		
@@ -158,4 +158,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_serverAppender", null, __static, __prototype, f_object);
+new f_class("f_serverAppender", null, __statics, __members, f_object);

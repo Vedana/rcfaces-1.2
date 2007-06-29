@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 
 	/**
 	 * @method private static
@@ -188,7 +188,7 @@ var __static = {
 	}
 }
  
-var __prototype = {
+var __members = {
 	/*
 	f_menuBar: function() {
 		this.f_super(arguments);
@@ -869,5 +869,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_menuBar", null, __static, __prototype, f_menuBarBase,
-	fa_readOnly, fa_disabled, fa_immediate);
+new f_class("f_menuBar", {
+	extend: f_menuBarBase,
+	aspects: [ fa_readOnly, fa_disabled, fa_immediate ],
+	statics: __statics,
+	members: __members
+});

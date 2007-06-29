@@ -10,7 +10,7 @@
  */
 
 
-var __static= {
+var __statics= {
 	/**
 	 * @method private static 
 	 * @return void
@@ -85,7 +85,7 @@ var __static= {
 	}
 }
 
-var __prototype= {
+var __members= {
 	f_actionList: function(component,type) {
 		f_core.Assert(typeof(type)=="string", "Type of actionList is invalid '"+type+"'.");
 		
@@ -318,4 +318,7 @@ var __prototype= {
 	}
 }
 
-new f_class("f_actionList", null, __static, __prototype);
+new f_class("f_actionList", {
+	statics: __statics, 
+	members: __members
+});

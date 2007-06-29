@@ -11,7 +11,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 	f_bundle: function(name)  {
 		this._name=name;
 	
@@ -60,6 +60,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_bundle", null, null, __prototype);
+new f_class("f_bundle", {
+	members: __members
+});
 
 

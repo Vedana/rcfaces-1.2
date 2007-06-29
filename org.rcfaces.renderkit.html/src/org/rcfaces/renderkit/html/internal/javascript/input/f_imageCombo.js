@@ -9,14 +9,14 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
 	_MENU_ID: "#popup"
 }
 
-var __prototype = {
+var __members = {
 
 	f_imageCombo: function() {
 		this.f_super(arguments);
@@ -91,4 +91,9 @@ var __prototype = {
 	}
 }		
 
-new f_class("f_imageCombo", null, __static, __prototype, f_imageButton, fa_subMenu, fa_itemsWrapper);
+new f_class("f_imageCombo", {
+	extend: f_imageButton, 
+	aspects: [ fa_subMenu, fa_itemsWrapper ],
+	statics: __statics,
+	members: __members
+});

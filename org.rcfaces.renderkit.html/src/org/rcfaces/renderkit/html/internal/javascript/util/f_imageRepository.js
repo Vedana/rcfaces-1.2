@@ -11,7 +11,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final number
@@ -201,4 +201,6 @@ var __static = {
 	}
 }
 
-new f_class("f_imageRepository", null, __static);
+new f_class("f_imageRepository", {
+	statics: __statics
+});

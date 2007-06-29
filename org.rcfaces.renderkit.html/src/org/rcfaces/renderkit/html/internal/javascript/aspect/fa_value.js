@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 /*
 	f_finalize: function() {
 		// this._value=undefined; // string
@@ -65,4 +65,4 @@ var __prototype = {
 	f_setProperty: f_class.ABSTRACT
 }
 
-new f_aspect("fa_value", null, __prototype);
+new f_aspect("fa_value", null, __members);

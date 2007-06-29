@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 /*
 	f_finalize:  function() {
 		this._imageURL=undefined; // string
@@ -229,4 +229,4 @@ var __prototype = {
 	
 }
 
-new f_aspect("fa_images", null, __prototype);	
+new f_aspect("fa_images", null, __members);	

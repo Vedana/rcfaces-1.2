@@ -9,19 +9,21 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	f_textEditorImageButton: function() {
 		this.f_super(arguments);
 		
 		this._type=f_core.GetAttribute(this, "v:type");
 		this._for=f_core.GetAttribute(this, "v:for");
 	},
+	/*
 	f_finalize: function() {
 		// this._for=undefined; // string
 		// this._type=undefined; // string
 		
 		this.f_super(arguments);
 	},
+	*/
 	f_update: function() {
 		this.f_super(arguments);
 		
@@ -49,4 +51,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_textEditorImageButton", null, null, __prototype, f_imageButton, fa_selected);
+new f_class("f_textEditorImageButton", {
+	extend: f_imageButton,
+	aspects: [ fa_selected ],
+	members: __members 
+});

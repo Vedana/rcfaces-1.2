@@ -11,7 +11,7 @@
  */
 
 
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final
@@ -121,7 +121,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	/** 
 	 * @method private
 	 * @return f_messageContext
@@ -503,5 +503,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_messageContext", null, __static, __prototype);
+new f_class("f_messageContext", {
+	statics: __statics,
+	members: __members
+});
 

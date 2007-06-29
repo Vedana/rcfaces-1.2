@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 
 	/**
 	 * @method private static
@@ -43,7 +43,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_expandBar: function() {
 		this.f_super(arguments);
 		
@@ -440,4 +440,9 @@ var __prototype = {
 		return this.f_super(arguments);		
 	}
 }
-new f_class("f_expandBar", null, __static, __prototype, f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName);
+new f_class("f_expandBar", {
+	extend: f_component,
+	aspects: [ fa_disabled, fa_readOnly, fa_collapsed, fa_groupName ],
+	statics: __statics,
+	members: __members
+});

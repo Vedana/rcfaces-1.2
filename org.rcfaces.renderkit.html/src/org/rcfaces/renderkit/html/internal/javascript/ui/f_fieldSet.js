@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __prototype = {
+var __members = {
 	f_fieldSet: function() {
 		this.f_super(arguments);
 		
@@ -76,4 +76,7 @@ var __prototype = {
 		this.f_setProperty(f_prop.TEXT, text);
 	}
 }
-new f_class("f_fieldSet", null, null, __prototype, f_component);
+new f_class("f_fieldSet", {
+	extend: f_component,
+	members: __members
+});

@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
@@ -21,7 +21,7 @@ var __static = {
 	_HOVER: "/helpButton/helpButtonHover.gif"
 }
 
-var __prototype = {
+var __members = {
 	f_helpButton: function() {
 		this.f_super(arguments);
 
@@ -56,4 +56,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_helpButton", null, __static, __prototype, f_imageButton);
+new f_class("f_helpButton", null, __statics, __members, f_imageButton);

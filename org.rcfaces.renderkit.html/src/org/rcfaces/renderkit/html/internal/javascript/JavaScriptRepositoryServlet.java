@@ -65,8 +65,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final Log LOG = LogFactory
             .getLog(JavaScriptRepositoryServlet.class);
 
-    private static final String CLEAR_VARIABLES[] = { "__static",
-            "__prototype", "__resources" };
+    private static final String CLEAR_VARIABLES[] = { "__statics", "__members",
+            "__resources" };
 
     private static final String MAIN_REPOSITORY_DIRECTORY_LOCATION = JavaScriptRepository.class
             .getPackage().getName().replace('.', '/');

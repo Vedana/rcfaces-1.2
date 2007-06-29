@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 /*
 	f_finalize: function() {
 		// this._required=undefined; //boolean
@@ -62,4 +62,4 @@ var __prototype = {
 	fa_updateRequired: f_class.ABSTRACT
 }
 
-new f_aspect("fa_required", null, __prototype);
+new f_aspect("fa_required", null, __members);

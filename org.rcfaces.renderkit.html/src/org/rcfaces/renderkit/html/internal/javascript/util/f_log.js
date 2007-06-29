@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final number
@@ -135,7 +135,7 @@ var __static = {
 			}
 		}
 		
-		log=f_log.f_newSystemInstance(logName, level);
+		log=f_log.f_newInstance(logName, level);
 		
 		logs[logName]=log;
 		
@@ -208,7 +208,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_log: function(name, level) {
 		this.f_super(arguments);
 	
@@ -351,4 +351,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_log", null, __static, __prototype, f_object);
+new f_class("f_log", { 
+	extend: f_object,
+	systemClass: true,
+	statics: __statics, 
+	members: __members
+});

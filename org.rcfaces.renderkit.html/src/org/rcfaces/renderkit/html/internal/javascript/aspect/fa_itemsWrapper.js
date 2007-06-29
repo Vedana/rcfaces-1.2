@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	f_finalize: function() {
 		this._itemsWrapper=undefined; // fa_items
 	},
@@ -239,4 +239,4 @@ var __prototype = {
 	fa_getItemsWrapper: f_class.ABSTRACT
 }
 
-new f_aspect("fa_itemsWrapper", null, __prototype);
+new f_aspect("fa_itemsWrapper", null, __members);

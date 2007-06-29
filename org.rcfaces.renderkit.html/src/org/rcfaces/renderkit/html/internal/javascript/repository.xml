@@ -1284,11 +1284,18 @@
 		</file>
 	</module>
 
+	<module id="json">
+		<file name="util/f_json.js">
+			<class name="f_json" />
+		</file>
+	</module>
+
 	<module id="dialog">
 		 <file name="ui/f_shell.js">
 			<class name="f_shell">
 				<required-class name="f_core" />
 				<required-class name="f_object" />
+				<required-class name="fa_eventTarget" />
 			</class>
 		 </file>
 		 <file name="ui/f_waitingShell.js">
@@ -1317,6 +1324,8 @@
 		<file name="input/f_textEditor.js">
 			<class name="f_textEditor">
 				<required-class name="f_component" /> 
+				<required-class name="fa_readOnly" />
+				<required-class name="fa_disabled" />
 				
 				<required-style name="f_textEditor.css" />
 			</class>
@@ -1325,8 +1334,17 @@
 			<class name="f_textEditorImageButton">
 				<required-class name="f_imageButton" /> 
 				<required-class name="fa_selected" /> 
+				<required-class name="f_textEditor" /> 
 				
-				<required-style name="f_textEditorImageButton.css" />
+			<!--	<required-style name="f_textEditorImageButton.css" /> -->
+			</class>
+		</file>
+		<file name="input/f_textEditorCombo.js">
+			<class name="f_textEditorCombo">
+				<required-class name="f_combo" /> 
+				<required-class name="f_textEditor" /> 
+				
+			<!--	<required-style name="f_textEditorCombo.css" /> -->
 			</class>
 		</file>
 	</module>

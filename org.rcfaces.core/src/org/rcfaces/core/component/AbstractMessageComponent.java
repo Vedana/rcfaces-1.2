@@ -55,11 +55,11 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent
     static {
         CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] { "width",
                 "marginRight", "hiddenMode", "helpMessage", "foregroundColor",
-                "styleClass", "height", "initListener", "margins",
+                "styleClass", "height", "margins", "initListener",
                 "propertyChangeListener", "mouseOutListener", "for", "waiRole",
-                "toolTipText", "mouseOverListener", "showDetail",
-                "userEventListener", "marginBottom", "helpURL", "showSummary",
-                "y", "visible", "lookId", "marginLeft", "marginTop",
+                "toolTipText", "mouseOverListener", "userEventListener",
+                "showDetail", "marginBottom", "helpURL", "showSummary", "y",
+                "visible", "lookId", "marginLeft", "marginTop",
                 "errorListener", "backgroundColor", "x" }));
     }
 

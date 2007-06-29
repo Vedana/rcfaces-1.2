@@ -57,6 +57,11 @@ var f_core = {
 	 * @field private static final number
 	 */
 	_FOCUS_TIMEOUT_DELAY: 50,
+		
+	/**
+	 * @field private static final String
+	 */
+	_REPORT_ERROR_URL: "/frameSetAppender/reportError.html",
 	
 	/**
 	 * @field hidden static final number
@@ -570,6 +575,8 @@ var f_core = {
 	_InitLibrary: function(window) {
 		var initDate=window._f_core_initLibraryDate;
 		
+		f_core.DebugMode=window.rcfacesDebugMode;
+		
 		f_core.Info(f_core, "_InitLibrary: start date="+initDate);
 		
 		var profilerCB=window.f_profilerCB;
@@ -955,12 +962,12 @@ var f_core = {
 		
 				// Terminate packages here
 				var classLoader=f_classLoader.Get();
-				classLoader._onExit();
+				classLoader.f_onExit();
 				
 				f_core.Finalizer();
 				
-				if (win._f_closeWindow) {		
-					win._f_closeWindow=undefined;
+				if (win._rcfacesCloseWindow) {		
+					win._rcfacesCloseWindow=undefined;
 					win.close();
 				}
 				
@@ -1305,10 +1312,6 @@ var f_core = {
 	
 			// f_core.Assert(evt, "f_core._OnSubmit: Event is not known ?");
 			// evt peut être null !
-	
-			if (!window._submitting && f_env.GetCancelExternalSubmit()) {
-				return f_core.CancelJsEvent(evt);
-			}
 		
 			var win;
 			var form;
@@ -1328,9 +1331,15 @@ var f_core = {
 				form=this;	
 				win=f_core.GetWindow(form);
 			}
+
+
+			f_core.Assert(win, "f_core._OnSubmit: Can not identify window !");
+	
+			if (!win._rcfacesSubmitting && f_env.GetCancelExternalSubmit()) {
+				return f_core.CancelJsEvent(evt);
+			}
 			
 			f_core.Assert(form && form.tagName.toLowerCase()=="form", "f_core._OnSubmit: Can not identify form ! ("+form+")");
-			f_core.Assert(win, "f_core._OnSubmit: Can not identify window !");
 	
 			f_core.Info(f_core, "_OnSubmit: Catch submit event from form '"+form.id+"'.");
 	
@@ -1394,6 +1403,10 @@ var f_core = {
 				
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
 			}
+			
+			if (!win._rcfacesSubmitting) {
+				f_core._PostSubmit(form);
+			}
 				
 			return true;
 		} finally {
@@ -1456,14 +1469,15 @@ var f_core = {
 	
 			// Call onsubmit hook
 			try {
-				win._submitting=true;
+				win._rcfacesSubmitting=true;
 				
 				var ret = f_core._OnSubmit.call(form);
 				if (!ret) {
 					return ret;
 				}
+				
 			} finally {
-				win._submitting=undefined;
+				win._rcfacesSubmitting=undefined;
 			}
 
 			f_core.Profile(null, "f_core._submit.called");
@@ -1545,7 +1559,7 @@ var f_core = {
 				f_core.Profile(null, "f_core._submit.postSubmit");
 		
 				if (closeWindow) {
-					win._f_closeWindow=true;
+					win._rcfacesCloseWindow=true;
 					return true;
 				}
 				
@@ -1553,21 +1567,7 @@ var f_core = {
 					unlockEvents=true;
 
 				} else {
-					var postSubmitListeners=f_core._PostSubmitListeners;
-					if (postSubmitListeners) {
-						for(var i=0;i<postSubmitListeners.length;i++) {
-							var postSubmitListener=postSubmitListeners[i];
-							
-							try {
-								postSubmitListener.call(f_core, form);
-								
-							} catch (x) {
-								f_core.Error(f_core, "_Submit: PostSubmitListener ("+pos+") threw an exception.", x);
-							}
-						}
-	
-						f_core.Profile(null, "f_core._submit.postSubmitListeners("+postSubmitListeners.length+")");
-					}
+					f_core._PostSubmit(form);
 				}
 				
 			} catch (ex) {
@@ -1587,24 +1587,6 @@ var f_core = {
 					win.f_event.ExitEventLock(f_event.SUBMIT_LOCK);
 				}
 			}
-	
-			// IE Progress bar bug only
-			if (f_core.IsInternetExplorer()) {
-				switch (doc.readyState) {
-				case "loading":
-					var msg=f_env.Get("F_SUBMIT_PROGRESS_MESSAGE");
-					if (msg) {
-						win.defaultStatus = msg;
-						doc.body.style.cursor = "wait";
-					}
-					break;
-				
-				// Target is another window
-				case "complete":
-				default: 
-					break;
-				}
-			}
 
 			return true;
 			
@@ -1613,6 +1595,39 @@ var f_core = {
 		}
 	},
 	/**
+	 * @method private static
+	 * @return void
+	 */
+	_PostSubmit: function(form) {
+		var postSubmitListeners=f_core._PostSubmitListeners;
+		if (postSubmitListeners) {
+			for(var i=0;i<postSubmitListeners.length;i++) {
+				var postSubmitListener=postSubmitListeners[i];
+				
+				try {
+					postSubmitListener.call(f_core, form);
+					
+				} catch (x) {
+					f_core.Error(f_core, "_Submit: PostSubmitListener ("+pos+") threw an exception.", x);
+				}
+			}
+	
+			f_core.Profile(null, "f_core._submit.postSubmitListeners("+postSubmitListeners.length+")");
+		}
+	
+		// IE Progress bar bug only
+		if (f_core.IsInternetExplorer()) {
+			if (document.readyState=="loading") {
+				var msg=f_env.Get("F_SUBMIT_PROGRESS_MESSAGE");
+				if (msg) {
+					window.defaultStatus = msg;
+					document.body.style.cursor = "wait";
+				}
+			}
+		}
+	},
+	/**
+	 * 
 	 * @method hidden static
 	 * @param function listener
 	 * @return void
@@ -2394,6 +2409,13 @@ var f_core = {
 		try {
 			var value=element.getAttribute(attributeName);
 			if (value!==undefined && value!==null) {
+				// Transforme les &quote; =>  "
+				// et pour finir transforme les &amp; => &
+
+				if (value.length>4 && value.indexOf('&')>=0) {
+					value=value.replace(/&quote;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, "&");
+				}
+
 				return value;
 			}
 			
@@ -4740,7 +4762,12 @@ var f_core = {
 	 * @method public static
 	 */
 	ReportError: function(tokenId) {
-
+		if (!tokenId) {
+			return;
+		}
+		var url=f_env.GetStyleSheetBase()+f_core._REPORT_ERROR_URL+"?tokenId="+encodeURIComponent(tokenId);
+				
+		window.open(url, "rcfacesReport"+new Date().getTime());
 	},
 	/**
 	 * @method public static

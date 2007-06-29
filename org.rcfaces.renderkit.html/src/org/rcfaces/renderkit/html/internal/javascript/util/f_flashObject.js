@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static String
@@ -171,6 +171,8 @@ var __static = {
 	}
 }
 
-new f_class("f_flashObject", null, __static);
+new f_class("f_flashObject", {
+	statics: __statics
+});
 
 

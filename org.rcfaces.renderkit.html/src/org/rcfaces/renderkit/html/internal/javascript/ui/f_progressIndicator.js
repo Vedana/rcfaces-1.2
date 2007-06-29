@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */ 
  
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final number
 	 */
@@ -22,7 +22,7 @@ var __static = {
 	PROGRESS_MAX: 1000
 }
 
-var __prototype = {
+var __members = {
 	f_progressIndicator: function() {
 		this.f_super(arguments);
 
@@ -191,4 +191,8 @@ var __prototype = {
 	}
 }
  
-new f_class("f_progressIndicator", null, __static, __prototype, f_component);
+new f_class("f_progressIndicator", {
+	extend: f_component,
+	statics: __statics,
+	members: __members
+});

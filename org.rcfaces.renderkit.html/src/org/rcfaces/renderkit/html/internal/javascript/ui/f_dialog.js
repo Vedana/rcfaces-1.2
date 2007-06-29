@@ -9,7 +9,7 @@
  * @author Fred Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
     /**
      * @field private static Object
      */
@@ -226,7 +226,7 @@ var __static = {
 
 }
 
-var __prototype = {
+var __members = {
 
 	/**
 	 * @field private String
@@ -316,4 +316,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_dialog", null, __static, __prototype, f_shell);
+new f_class("f_dialog", null, __statics, __members, f_shell);

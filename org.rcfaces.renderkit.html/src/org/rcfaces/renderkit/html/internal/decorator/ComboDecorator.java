@@ -22,6 +22,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.item.IClientDataItem;
+import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -118,6 +119,14 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
             if (hasChildren) {
                 htmlWriter.startElement(IHtmlWriter.OPTGROUP);
 
+                if (selectItem instanceof IStyleClassItem) {
+                    String styleClass = ((IStyleClassItem) selectItem)
+                            .getStyleClass();
+                    if (styleClass != null) {
+                        htmlWriter.writeClass(styleClass);
+                    }
+                }
+
                 if (text != null) {
                     htmlWriter.writeLabel(text);
                 }
@@ -126,6 +135,14 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
             }
 
             htmlWriter.startElement(IHtmlWriter.OPTION);
+
+            if (selectItem instanceof IStyleClassItem) {
+                String styleClass = ((IStyleClassItem) selectItem)
+                        .getStyleClass();
+                if (styleClass != null) {
+                    htmlWriter.writeClass(styleClass);
+                }
+            }
 
             htmlWriter.writeValue(value);
 

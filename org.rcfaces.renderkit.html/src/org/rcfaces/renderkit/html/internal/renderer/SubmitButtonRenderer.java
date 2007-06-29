@@ -16,6 +16,13 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 public class SubmitButtonRenderer extends ButtonRenderer {
     private static final String REVISION = "$Revision$";
 
+    /*
+     * protected void encodeComponent(IHtmlWriter htmlWriter) throws
+     * WriterException { super.encodeComponent(htmlWriter);
+     * 
+     * htmlWriter.enableJavaScript(); }
+     */
+
     protected String getInputType(UIComponent component) {
         return IHtmlWriter.SUBMIT_INPUT_TYPE;
     }

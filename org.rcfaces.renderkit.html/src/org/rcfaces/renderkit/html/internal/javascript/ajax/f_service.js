@@ -7,7 +7,7 @@
  *
  * @class public f_service extends f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands
  */
-var __static= {
+var __statics= {
 	/**
 	 * @field private static final String
 	 */
@@ -65,7 +65,7 @@ var __static= {
 	
 }
 
-var __prototype={
+var __members={
 
 	f_service: function() {
 		this.f_super(arguments);
@@ -486,4 +486,4 @@ var __prototype={
 	}
 }
  
-new f_class("f_service", null, __static, __prototype, f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands);
+new f_class("f_service", null, __statics, __members, f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands);

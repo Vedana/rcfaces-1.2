@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 
 
 	/**
@@ -92,6 +92,12 @@ var __static = {
 	 * @field public static final number
 	 */
 	APPLICATION_ERROR: 0x0000000,
+	
+	/**
+	 * @field hidden boolean
+	 * @see f_class#_systemClass
+	 */
+	_systemClass: true,
 
 	/**
 	 * @method hidden static
@@ -132,4 +138,6 @@ var __static = {
 	}
 }
 
-new f_class("f_error", null, __static);
+new f_class("f_error", {
+	statics: __statics
+});

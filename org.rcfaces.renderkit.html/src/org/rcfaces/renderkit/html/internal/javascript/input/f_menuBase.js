@@ -10,4 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-new f_class("f_menuBase", null, null, null, f_eventTarget, fa_menuCore);
+new f_class("f_menuBase", {
+	extend: f_eventTarget, 
+	aspects: [ fa_menuCore ]
+});

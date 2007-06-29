@@ -6,7 +6,7 @@
  * @class public f_messages extends f_component, fa_messageText
  */
  
-var __static = {
+var __statics = {
 	/**
 	 * @method private static
 	 */
@@ -31,7 +31,7 @@ var __static = {
 		return true;
 	}
 }
-var __prototype = {
+var __members = {
 /*
 	f_messages: function() {
 		this.f_super(arguments);
@@ -147,4 +147,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_messages", null, __static, __prototype, f_component, fa_messageText);
+new f_class("f_messages", null, __statics, __members, f_component, fa_messageText);

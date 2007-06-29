@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @method hidden static
 	 */
@@ -25,7 +25,7 @@ var __static = {
 		fa_groupName._Groups=undefined;
 	}
 }
-var __prototype = {
+var __members = {
 	f_finalize: function() {
 		var scope=this.fa_getRadioScope();
 		if (scope) {
@@ -128,4 +128,4 @@ var __prototype = {
 	fa_getRadioScope: f_class.ABSTRACT
 }
 
-new f_aspect("fa_groupName", __static, __prototype);
+new f_aspect("fa_groupName", __statics, __members);

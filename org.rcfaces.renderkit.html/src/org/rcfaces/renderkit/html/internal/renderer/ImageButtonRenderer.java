@@ -105,6 +105,10 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             super(imageButtonFamilly);
         }
 
+        protected String getMainStyleClassName() {
+            return ImageButtonRenderer.this.getMainStyleClassName();
+        }
+
         protected void writeAttributes(String classSuffix)
                 throws WriterException {
 

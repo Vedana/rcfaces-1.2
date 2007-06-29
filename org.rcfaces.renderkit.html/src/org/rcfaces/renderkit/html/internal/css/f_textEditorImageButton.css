@@ -30,7 +30,8 @@
 }
 
 .f_textEditorImageButton_disabled,
-.f_textEditorImageButton_disabled INPUT {
+.f_textEditorImageButton_disabled INPUT,
+.f_textEditorImageButton_disabled A {
 	-moz-user-focus: ignore;
 	cursor: default;
 }

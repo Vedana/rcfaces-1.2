@@ -10,4 +10,6 @@
  * @version $Revision$ $Date$
  */
  
-new f_class("f_ruler", null, null, null, f_component);
+new f_class("f_ruler", {
+	extend: f_component
+});

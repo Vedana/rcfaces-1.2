@@ -8,7 +8,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
@@ -20,7 +20,7 @@ var __static = {
 	_STORAGE_MAX_SIZE: 4096
 }
 
-var __prototype = {
+var __members = {
 	f_getStorageType: function() {
 		return f_clientStorage.COOKIE_STORAGE_TYPE;
 	},
@@ -48,4 +48,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_cookieClientStorage", null, __static, __prototype, f_clientStorage);
+new f_class("f_cookieClientStorage", {
+	extend: f_clientStorage,
+	statics: __statics,
+	members: __members
+});

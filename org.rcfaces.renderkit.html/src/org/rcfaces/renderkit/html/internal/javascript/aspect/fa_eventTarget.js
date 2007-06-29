@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	/**
 	 * Last event identifier (for debug)
 	 * 
@@ -29,7 +29,7 @@ var __static = {
 	 }
 }
 
-var __prototype = {
+var __members = {
 	
 	f_finalize: function() {
 		var actionLists=this._actionLists;
@@ -112,7 +112,7 @@ var __prototype = {
 	/**
 	 * 
 	 * @method public
-	 * @param String type
+	 * @param String type Type of event or an f_event object
 	 * @param optional Event jsEvt
 	 * @param optional Object item
 	 * @param optional any value
@@ -373,4 +373,4 @@ var __prototype = {
 	f_clearDomEvent: f_class.OPTIONAL_ABSTRACT
 }
 
-new f_aspect("fa_eventTarget", __static, __prototype);
+new f_aspect("fa_eventTarget", __statics, __members);

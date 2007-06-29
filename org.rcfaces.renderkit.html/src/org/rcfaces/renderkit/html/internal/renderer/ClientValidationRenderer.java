@@ -23,8 +23,7 @@ public class ClientValidationRenderer extends AbstractJavaScriptRenderer {
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         /*
          * IComponentRenderContext componentRenderContext = writer
-         * .getComponentRenderContext();
-         *  // FacesContext facesContext =
+         * .getComponentRenderContext(); // FacesContext facesContext =
          * componentRenderContext.getFacesContext();
          * 
          * ClientValidationComponent clientValidationComponent =

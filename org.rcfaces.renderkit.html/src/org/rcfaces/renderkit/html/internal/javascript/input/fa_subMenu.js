@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	f_finalize: function() {
 		this._subMenus=undefined; // Map<String,f_menu>
 		// this._subMenuCount=undefined; // number
@@ -126,4 +126,6 @@ var __prototype = {
 	 */
 	fa_componentCaptureMenuEvent: f_class.ABSTRACT
 }
-new f_aspect("fa_subMenu", null, __prototype);
+new f_aspect("fa_subMenu", {
+	members: __members
+});

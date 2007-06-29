@@ -9,7 +9,7 @@
  * @author Joel Merlin
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 
 	/**
 	 * @field private static final String
@@ -199,4 +199,6 @@ var __static = {
 	}
 }
 
-new f_class("f_help", null, __static);
+new f_class("f_help", {
+	statics: __statics
+});

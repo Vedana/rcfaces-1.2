@@ -9,15 +9,35 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-function f_aspect(aspectName, staticMembers, members) {
+function f_aspect(aspectName, staticMembers, members, extend) {
 	// Constructeur vide: on ne fait rien !
 	if (!arguments.length) {
 		return;
 	}
 
-	if (arguments[0] instanceof f_classLoader) {
+	if (aspectName instanceof f_classLoader) {
 		this._newMultiWindow(arguments);		
 		return;
+	}
+
+	var parents;
+	
+	if (staticMembers && (staticMembers.statics || staticMembers.members || staticMembers.extend)) {
+		var atts=staticMembers;
+		
+		staticMembers=atts.statics;
+		members=atts.members;
+		parents=atts.extend;
+		
+		if (f_core.IsDebugEnabled("f_aspect")) {
+			var keywords="|members|statics|extend|systemClass|";				
+			for(var name in atts) {
+				f_core.Assert(keywords.indexOf("|"+name+"|")>=0, "f_aspect: Unknown keyword '"+name+"' in definition of aspect '"+aspectName+"'.");
+			}
+		}		
+		
+	} else if (arguments.length>3) {
+		parents=f_core.PushArguments(null, arguments, 3);
 	}
 
 	if (!staticMembers) {
@@ -37,17 +57,15 @@ function f_aspect(aspectName, staticMembers, members) {
 	this._staticMembers=staticMembers;
 	this._classLoader=f_classLoader.Get();
 
-	var parents;
-	if (arguments.length>3) {
-		parents=f_core.PushArguments(null, arguments, 3);
 		
-		if (f_core.IsDebugEnabled("f_aspect")) {
+	if (f_core.IsDebugEnabled("f_aspect")) {
+		if (parents) {
 			for(var i=0;i<parents.length;i++) {
 				var parent=parents[i];
 				f_core.Assert(parent instanceof f_aspect, "Parent of aspect must be an aspect. (parent="+parent+").");
 			}
-		}		
-	}
+		}
+	}		
 	this._parents=parents;
 	
 	this._classLoader.f_declareAspect(this);

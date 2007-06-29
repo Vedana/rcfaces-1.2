@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 
 	/**
 	 * @method protected abstract
@@ -47,4 +47,4 @@ var __prototype = {
 	fa_updateElementStyle: f_class.ABSTRACT
 }
 
-new f_aspect("fa_itemsManager", null, __prototype, fa_cardinality);
+new f_aspect("fa_itemsManager", null, __members, fa_cardinality);

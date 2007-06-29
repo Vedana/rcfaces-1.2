@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 /*
 	f_finalize: function() {
@@ -117,4 +117,8 @@ var __prototype = {
 	fa_getRadioScope: fa_groupName.GlobalScope
 }
 
-new f_class("f_imageRadioButton", null, null, __prototype, f_imageCheckButton, fa_groupName, fa_required);
+new f_class("f_imageRadioButton", {
+	extend: f_imageCheckButton, 
+	aspects: [ fa_groupName, fa_required ],
+	members: __members
+});

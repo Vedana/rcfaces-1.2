@@ -169,7 +169,11 @@ f_classLoader.prototype = {
 		}
 	},
 	
-	_onExit: function() {
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_onExit: function() {
 		// Cleanup objects
 	
 		f_core.Profile(false, "f_classLoader.onExit");
@@ -180,28 +184,28 @@ f_classLoader.prototype = {
 	
 		// Vide le pool des objets AVANT !
 		var pool=this._componentPool;
-		f_core.Assert(pool, "f_classLoader._onExit: Invalid Objects componentPool !");
+		f_core.Assert(pool, "f_classLoader.f_onExit: Invalid Objects componentPool !");
 		this._componentPool=undefined;
 	
-		f_core.Debug("f_classLoader", "Clean "+pool.length+" components store into component pool !");
+		f_core.Debug("f_classLoader", "f_onExit: Clean "+pool.length+" components store into component pool !");
 		f_class.Clean(pool);
 		
 		f_core.Profile(null, "f_classLoader.onExit.clean(components)");
 		
 		// Vide le pool des composants
 		pool=this._objectPool;
-		f_core.Assert(pool, "f_classLoader._onExit: Invalid Objects pool !");
+		f_core.Assert(pool, "f_classLoader.f_onExit: Invalid Objects pool !");
 		this._objectPool=undefined;
 	
-		f_core.Debug("f_classLoader","Clean "+pool.length+" objects store into component pool !");
+		f_core.Debug("f_classLoader","f_onExit: Clean "+pool.length+" objects store into component pool !");
 		f_class.Clean(pool);
 	
 		// Vide le pool SYSTEM des composants
 		pool=this._systemComponentPool;
-		f_core.Assert(pool, "f_classLoader._onExit: Invalid Objects pool !");
+		f_core.Assert(pool, "f_classLoader.f_onExit: Invalid Objects pool !");
 		this._systemComponentPool=undefined;
 	
-		f_core.Debug("f_classLoader","Clean "+pool.length+" system objects store into component pool !");
+		f_core.Debug("f_classLoader", "f_onExit: Clean "+pool.length+" system objects store into component pool !");
 		f_class.Clean(pool);
 	
 		f_core.Profile(null, "f_classLoader.onExit.clean(objects)");
@@ -212,7 +216,7 @@ f_classLoader.prototype = {
 		// Il semble que la destruction des classes ne soient pas 
 		// obligatoire (fuite mémoire)
 		var classes=this._classes;
-		f_core.Assert(classes, "f_classLoader._onExit: Invalid Classes pool !");
+		f_core.Assert(classes, "f_classLoader.f_onExit: Invalid Classes pool !");
 		this._classes=undefined;
 	
 		for (var claz in classes) {
@@ -232,20 +236,20 @@ f_classLoader.prototype = {
 				continue;
 			}
 		
-			f_core.Assert(typeof(staticFinalizer)=="function", "Type of Finalizer callback of class '"+cls._name+"' is not a function  ! ("+staticFinalizer+")");
+			f_core.Assert(typeof(staticFinalizer)=="function", "f_classLoader.f_onExit: Type of Finalizer callback of class '"+cls._name+"' is not a function  ! ("+staticFinalizer+")");
 			
 			try {
 				staticFinalizer.call(cls);
 				
 			} catch (x) {
-				f_core.Error("f_classLoader", "Call of method Finalizer of class '"+cls._name+"' throws exception.", x);
+				f_core.Error("f_classLoader", "f_onExit: Call of method Finalizer of class '"+cls._name+"' throws exception.", x);
 			}
 		}
 			
 		f_core.Profile(null, "f_classLoader.onExit.clean(classes)");
 			
 		var aspects=this._aspects;
-		f_core.Assert(aspects, "f_classLoader._onExit: Invalid Aspects pool !");
+		f_core.Assert(aspects, "f_classLoader.f_onExit: Invalid Aspects pool !");
 		this._aspects=undefined;
 		
 		for (var name in aspects) {
@@ -265,21 +269,28 @@ f_classLoader.prototype = {
 				continue;
 			}
 	
-			f_core.Assert(typeof(staticFinalizer)=="function", "Type of Finalizer callback of aspect '"+aspect._name+"' is not a function ! ("+staticFinalizer+")");
+			f_core.Assert(typeof(staticFinalizer)=="function", "f_classLoader.f_onExit: Type of Finalizer callback of aspect '"+aspect._name+"' is not a function ! ("+staticFinalizer+")");
 			
 			try {
 				staticFinalizer.call(aspect);
 				
 			} catch (x) {
-				f_core.Error("f_classLoader", "Call of method Finalizer of aspect '"+aspect._name+"' throws exception.", x);
+				f_core.Error("f_classLoader", "f_onExit: Call of method Finalizer of aspect '"+aspect._name+"' throws exception.", x);
 			}
-		}	
+		}		
+
+		for (var claz in classes) {
+			window[claz._name]=undefined;
+		}
+		for (var name in aspects) {
+			window[name]=undefined;
+		}
 		
 		f_core.Profile(true, "f_classLoader.onExit");
 		
 		this._parent=undefined;
 		
-		this._window._cameliaClassLoader=undefined;
+		this._window._rcfacesClassLoader=undefined;
 		this._window._changeContext=undefined;
 	
 		//this._documentCompleted=undefined; // boolean
@@ -1124,11 +1135,11 @@ f_classLoader.Get=function(win) {
 	if (!win) {
 		win=window;
 	}
-	return win._cameliaClassLoader;
+	return win._rcfacesClassLoader;
 }
 
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
 }
 
-window._cameliaClassLoader=new f_classLoader(window);
+window._rcfacesClassLoader=new f_classLoader(window);

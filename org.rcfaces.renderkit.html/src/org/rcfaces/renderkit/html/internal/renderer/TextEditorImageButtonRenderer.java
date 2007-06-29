@@ -101,7 +101,7 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
         TextEditorImageButtonComponent textEditorImageButtonComponent = (TextEditorImageButtonComponent) componentRenderContext
                 .getComponent();
 
-        // textEditorImageButtonComponent.setReadOnly(true);
+        textEditorImageButtonComponent.setDisabled(true);
 
         String type = textEditorImageButtonComponent.getType(facesContext);
         if (type == null) {

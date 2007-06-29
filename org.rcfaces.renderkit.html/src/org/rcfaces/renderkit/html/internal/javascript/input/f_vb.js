@@ -12,7 +12,7 @@
 =============================================================================*/
 
 
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
@@ -1264,5 +1264,5 @@ var __static = {
 	}
 }
 
-new f_class("f_vb", null, __static);
+new f_class("f_vb", null, __statics);
 

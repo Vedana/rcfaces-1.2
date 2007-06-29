@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/**
 	 * @field private static
 	 */
@@ -72,7 +72,7 @@ var __static = {
 		f_effect._EffectClasses=undefined;
 	}
 }
-var __prototype = {
+var __members = {
 	f_effect: function(component, callback) {
 		this.f_super(arguments);
 
@@ -100,5 +100,8 @@ var __prototype = {
 		return this._component;
 	}
 }
-new f_class("f_effect", null, __static, __prototype, f_object);
-
+new f_class("f_effect", {
+	extend: f_object, 
+	statics: __statics,
+	members: __members
+});

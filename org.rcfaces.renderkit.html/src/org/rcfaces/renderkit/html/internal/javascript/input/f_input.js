@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 
 	f_input: function() {
 		this.f_super(arguments);
@@ -415,4 +415,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_input", null, null, __prototype, f_component, fa_message, fa_focusStyleClass);
+new f_class("f_input", {
+	extend: f_component, 
+	aspects: [ fa_message, fa_focusStyleClass ],
+	members: __members
+});

@@ -8,7 +8,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	
 	/**
 	 * @method private static
@@ -235,7 +235,7 @@ var __static = {
 	}
 }
  
-var __prototype = {
+var __members = {
 
 	f_pager: function() {
 		this.f_super(arguments);
@@ -733,4 +733,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_pager", null, __static, __prototype, f_component, fa_pager);
+new f_class("f_pager", {
+	extend: f_component,
+	aspects: [ fa_pager ],
+	statics: __statics,
+	members: __members
+});

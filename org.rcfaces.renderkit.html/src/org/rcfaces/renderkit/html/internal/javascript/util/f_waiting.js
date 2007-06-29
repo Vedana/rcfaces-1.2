@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	
 	/**
 	 * @field private static final number
@@ -329,7 +329,7 @@ var __static = {
 	 }
 } 
 
-var __prototype = {
+var __members = {
 
 	/*
 	f_waiting: function() {
@@ -469,4 +469,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_waiting", null, __static, __prototype, f_object);
+new f_class("f_waiting", {
+	extend: f_object,
+	statics: __statics,
+	members: __members
+});

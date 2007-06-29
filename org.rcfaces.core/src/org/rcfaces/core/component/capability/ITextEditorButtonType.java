@@ -17,6 +17,10 @@ public interface ITextEditorButtonType {
 
     String DECREASE_FONT_SIZE = "decreasefontsize";
 
+    String FONT_NAME = "fontname";
+
+    String FONT_SIZE = "fontsize";
+
     String INCREASE_FONT_SIZE = "increasefontsize";
 
     String INDENT = "indent";

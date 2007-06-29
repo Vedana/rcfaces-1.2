@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype = {
+var __members = {
 	
 	/**
 	 * Returns selected objects.
@@ -30,5 +30,7 @@ var __prototype = {
 	f_setSelection: f_class.ABSTRACT
 }
 
-new f_aspect("fa_selectionProvider", null, __prototype);
+new f_aspect("fa_selectionProvider", {
+	members: __members
+});
 	

@@ -9,7 +9,7 @@
  * @author Fred Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
      /**
      * @method public static
      * @return void
@@ -20,7 +20,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 
 	/**
 	 * <p>Construct a new <code>f_waitingShell</code> with the specified
@@ -152,4 +152,4 @@ var __prototype = {
 	}
 }
 
-new f_class("f_waitingShell", null, __static, __prototype, f_shell);
+new f_class("f_waitingShell", null, __statics, __members, f_shell);

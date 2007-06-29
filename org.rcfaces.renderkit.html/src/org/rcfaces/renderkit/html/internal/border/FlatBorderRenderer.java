@@ -17,11 +17,11 @@ public class FlatBorderRenderer extends AbstractHtmlBorderRenderer {
 
     private static final String FLAT_BORDER_CLASS = "fb_flat";
 
-    public void initialize(IHtmlWriter writer, String width, String height,
-            int horizontalSpan, int verticalSpan, boolean disabled,
-            boolean selected) throws WriterException {
-        super.initialize(writer, width, height, horizontalSpan, verticalSpan,
-                disabled, selected);
+    public void initialize(IHtmlWriter writer, String componentClassName,
+            String width, String height, int horizontalSpan, int verticalSpan,
+            boolean disabled, boolean selected) throws WriterException {
+        super.initialize(writer, componentClassName, width, height,
+                horizontalSpan, verticalSpan, disabled, selected);
 
         writer.writeAttribute("v:flatMode", true);
     }

@@ -8,7 +8,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __prototype={
+var __members={
 
 	f_dateChooser: function() {
 		this.f_super(arguments);
@@ -59,4 +59,4 @@ var __prototype={
 	}
 }
  
-new f_class("f_dateChooser", null, __static, __prototype, f_imageButton, fa_calendarPopup);
+new f_class("f_dateChooser", null, __statics, __members, f_imageButton, fa_calendarPopup);

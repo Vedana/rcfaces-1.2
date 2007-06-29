@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 	/**
 	 * @field private static final String 
 	 */
@@ -69,6 +69,12 @@ var __static = {
 	 * @field private static boolean
 	 */
 	_ClientValidationDisabled: undefined,
+		
+	/**
+	 * @field hidden boolean
+	 * @see f_class#_systemClass
+	 */
+	_systemClass: true,
 	
 	/*
 	Initializer: function() {
@@ -408,4 +414,6 @@ var __static = {
 	}
 }
 
-new f_class("f_env", null, __static);
+new f_class("f_env", {
+	statics: __statics
+});

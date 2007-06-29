@@ -10,4 +10,6 @@
  * @version $Revision$ $Date$
  */
  
-new f_class("f_lineBreak", null, null, null, f_component);
+new f_class("f_lineBreak", {
+	extend: f_component
+});

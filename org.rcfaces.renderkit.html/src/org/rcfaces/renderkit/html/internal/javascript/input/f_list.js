@@ -9,7 +9,7 @@
  * @version $Revision$ $Date$
  */
  
-var __prototype = {
+var __members = {
 
 	/**
 	 * Return an array of values or indexes or an empty array.
@@ -106,4 +106,7 @@ var __prototype = {
 	}
 }
 
-new f_class("f_list", null, null, __prototype, f_combo);
+new f_class("f_list", {
+	extend: f_combo,
+	members: __members
+});

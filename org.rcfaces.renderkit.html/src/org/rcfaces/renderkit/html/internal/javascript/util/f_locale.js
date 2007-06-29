@@ -10,7 +10,7 @@
  */
 
 
-var __static = {
+var __statics = {
 
 	/**
 	 * Short form.
@@ -71,7 +71,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_locale: function() {
 		var resourceBundle=f_resourceBundle.Get(f_locale);
 	
@@ -239,5 +239,5 @@ var __prototype = {
 	}
 }
 
-new f_class("f_locale", null, __static, __prototype);
+new f_class("f_locale", null, __statics, __members);
 

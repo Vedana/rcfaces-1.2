@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 
 	/** 
 	 * @field public static final number
@@ -47,7 +47,7 @@ var __static = {
 	AS_SEPARATOR: 64
 }
 
-var __prototype = {
+var __members = {
 
 	fa_items: function() {
 		this._items=new Array;
@@ -755,4 +755,4 @@ var __prototype = {
 	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT
 }
 
-new f_aspect("fa_items", __static, __prototype, fa_itemClientDatas);
+new f_aspect("fa_items", __statics, __members, fa_itemClientDatas);

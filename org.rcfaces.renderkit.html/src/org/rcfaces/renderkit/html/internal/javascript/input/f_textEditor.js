@@ -5,20 +5,76 @@
 /**
  * f_textEditor class
  *
- * @class f_textEditor extends f_component
+ * @class f_textEditor extends f_component, fa_disabled, fa_readOnly
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
+	
+	/**
+	 * @field public static final String
+	 */
+	TEXT_HTML_MIME_TYPE: "text/html",
+	
+	/**
+	 * @field public static final String
+	 */
+	TEXT_PLAIN_MIME_TYPE: "text/plain",
+
 	/**
 	 * @field private static final String[]
 	 */
 	_TEXT_STYLES: ["font-weight", "font-size", "font-family", "font-style", "text-decoration", "color", "background-color"],
 	
 	/**
+	 * @field private static final Map<string, number>
+	 */
+	_BUTTON_STATE: {
+		bold: 0x001,
+		italic: 0x002,
+		underline: 0x004,
+		subscript: 0x008,
+		superscript: 0x010,
+		justifyleft: 0x020,
+		justifycenter: 0x040,
+		justifyright: 0x080,
+		justifyfull: 0x100,
+		strikethrough: 0x200
+	},
+	
+	/**
+	 * @field private static final Map<string, number>
+	 */
+	_BUTTON_ENABLED: {
+		undo: 0x0001,
+		redo: 0x0002,
+		indent: 0x0004,
+		outdent: 0x008,
+		copy: 0x010,
+		cut: 0x020,
+		paste: 0x040,
+		decreasefontsize: 0x080,
+		increasefontsize: 0x100,
+		insertorderedlist: 0x200,
+		insertunorderedlist: 0x400
+	},
+	
+	
+	/**
+	 * @field private static final Map<string, number>
+	 */
+	_PLAIN_TEXT_ENABLED: {
+		undo: true,
+		redo: true,
+		copy: true,
+		cut: true,
+		paste: true
+	},
+	
+	/**
 	 * @field private static final number
 	 */
-	_BUTTONS_UPDATE_TIMER: 1000,
+	_BUTTONS_UPDATE_TIMER: 500,
 	
 	/**
 	 * @field private static Array[]
@@ -38,6 +94,7 @@ var __static = {
 			f_core.Error(f_textEditor, "_OnLoad: load exception on textEditor "+textEditor.id, x);
 		}
 	},
+
 	/**
 	 * @method hidden static
 	 * @param String textEditorId
@@ -142,21 +199,29 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_textEditor: function() {
 		this.f_super(arguments);
+		
+		var mimeType=f_core.GetAttribute(this, "v:mimeType");
+		if (!mimeType) {
+			mimeType=f_textEditor.TEXT_HTML_MIME_TYPE;
+		}
+		
+		this._mimeType=mimeType;		
+		
+		f_core.Assert(mimeType==f_textEditor.TEXT_HTML_MIME_TYPE || 
+						mimeType==f_textEditor.TEXT_PLAIN_MIME_TYPE, "f_textEditor: Unsupported text editor mime type ("+this._mimeType+")");
 	},
 	f_finalize: function() {
-		this.onload=null; // function
+//		this._editorStates=undefined; // number
+//		this._editorEnabled=undefined; // number
+
+		this.onload=null; // Positionné par le HTML !
 		
 		var contentDocument=this._contentDocument;
 		if (contentDocument) {
 			this._contentDocument=undefined;
-			
-			contentDocument.designMode="off";
-
-			f_core.RemoveEventListener(contentDocument, "focus", f_textEditor._OnFocus);
-			f_core.RemoveEventListener(contentDocument, "blur", f_textEditor._OnBlur);			
 		}
 
 		var timerId=this._timerId;
@@ -173,10 +238,13 @@ var __prototype = {
 		// this._autoTab=undefined;  // boolean
 		// this._requiredInstalled=undefined; // boolean
 		
+		this._onUnLoad();
+		
 		this.f_super(arguments);
 	},
 	_onLoad: function() {
 		f_core.Debug(f_textEditor, "_onLoad: Initialize textEditor");
+		this.onload=null;
 		
 		var contentWindow=this.contentWindow;
 		this._contentWindow=contentWindow;
@@ -191,8 +259,6 @@ var __prototype = {
 		
 		this._contentDocument=contentDocument;
 		
-		this._mimeType=f_core.GetAttribute(this, "v:mimeType");
-		
 		var text=f_core.GetAttribute(this, "v:text");
 		if (text) {
 			this.f_setText(text);
@@ -203,7 +269,55 @@ var __prototype = {
 		
 		contentDocument.designMode="on";
 		
-		this.f_updateButtons();
+		this.f_updateButtons(true);
+		
+		var self=this;
+		this._unloadFrame=function() {
+			try {
+				self._onUnLoad();
+				
+			} catch (x) {			
+				// Le Log peut etre en vrac ....
+				//f_core.Error(f_textEditor, "_OnUnLoad: load exception on textEditor "+textEditor.id, x);
+			}
+		}		
+		
+		f_core.AddEventListener(contentWindow, "unload", this._unloadFrame);
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_onUnLoad: function() {
+		var unloadFrame=this._unloadFrame;
+		this._unloadFrame=undefined; // function
+		
+		if (!window.f_textEditor) {
+			return;
+		}
+
+// On Log pas, les classes sont en vrac ...
+//		f_core.Debug(f_textEditor, "_onUnLoad: Unload textEditor");
+		
+		var contentWindow=this._contentWindow;
+		if (contentWindow) {
+			this._contentWindow=undefined;
+			
+			if (unloadFrame) {
+				f_core.RemoveEventListener(contentWindow, "unload", unloadFrame);	
+			}
+		}
+		
+		var contentDocument=this._contentDocument;
+		if (!contentDocument) {
+			return;
+		}
+		this._contentDocument=undefined;
+		
+		contentDocument.designMode="off";
+
+		f_core.RemoveEventListener(contentDocument, "focus", f_textEditor._OnFocus);
+		f_core.RemoveEventListener(contentDocument, "blur", f_textEditor._OnBlur);					
 	},
 	_onFocus: function(jsEvent) {
 		f_core.Debug(f_textEditor, "_onFocus: Get focus");
@@ -214,24 +328,20 @@ var __prototype = {
 		this._focused=true;
 		
 		var self=this;
-		this._timerId=window.setInterval(function() {
-			try {
-				self.f_updateButtons();
-
-			} catch (x) {
-				f_core.Debug(f_textEditor, "_onFocus.timer: Exception into updateButtons method.", x);				
-			}
-			
-		}, f_textEditor._BUTTONS_UPDATE_TIMER);
-		
+		if (!this._timerId) {
+			this._timerId=window.setInterval(function() {
+				try {
+					self.f_updateButtons();
+	
+				} catch (x) {
+					f_core.Debug(f_textEditor, "_onFocus.timer: Exception into updateButtons method.", x);				
+				}
+				
+			}, f_textEditor._BUTTONS_UPDATE_TIMER);
+		}		
 	},
 	_onBlur: function(jsEvent) {
 		f_core.Debug(f_textEditor, "_onFocus: Lost focus");		
-		
-		if (!this._focused) {
-			return;
-		}
-		this._focused=undefined;
 		
 		var timerId=this._timerId;
 		if (timerId) {
@@ -239,6 +349,11 @@ var __prototype = {
 			
 			window.clearInterval(timerId);
 		}
+		
+		if (!this._focused) {
+			return;
+		}
+		this._focused=undefined;
 	},
 	f_update: function() {
 		
@@ -259,7 +374,7 @@ var __prototype = {
 		}
 		
 		switch(this._mimeType) {
-		case "text/plain":
+		case f_textEditor.TEXT_PLAIN_MIME_TYPE:
 			return f_core.GetTextNode(contentDocument.body);
 			
 		default:
@@ -278,7 +393,7 @@ var __prototype = {
 		}
 
 		switch(this._mimeType) {
-		case "text/plain":
+		case f_textEditor.TEXT_PLAIN_MIME_TYPE:
 			f_core.SetTextNode(contentDocument.body, text);
 			return;
 			
@@ -339,7 +454,12 @@ var __prototype = {
 		if (!contentDocument) {
 			return null;
 		}
-		
+	
+		switch(this._mimeType) {
+		case f_textEditor.TEXT_PLAIN_MIME_TYPE:
+			return;
+		}
+				
 	//	command=command.charAt(0).toUpperCase()+command.substring(1);
 	
 //		f_core.Debug(f_textEditor, "_queryCommandState: Query command: '"+command+"' parameter='"+param+"'.");
@@ -356,6 +476,15 @@ var __prototype = {
 			return null;
 		}
 		
+			
+		switch(this._mimeType) {
+		case f_textEditor.TEXT_PLAIN_MIME_TYPE:
+			if (!f_textEditor._PLAIN_TEXT_ENABLED[command]) {
+				return null;
+			}
+		}
+		
+		
 	//	command=command.charAt(0).toUpperCase()+command.substring(1);
 	
 //		f_core.Debug(f_textEditor, "_queryCommandEnabled: Query command: '"+command+"'.");
@@ -363,6 +492,22 @@ var __prototype = {
 		var ret= contentDocument.queryCommandEnabled(command);
 
 //		f_core.Debug(f_textEditor, "_queryCommandEnabled: Query command: '"+command+"' => "+ret);
+		
+		return ret;
+	},
+	_queryCommandValue: function(command) {
+		var contentDocument=this._contentDocument;
+		if (!contentDocument) {
+			return null;
+		}
+		
+	//	command=command.charAt(0).toUpperCase()+command.substring(1);
+	
+//		f_core.Debug(f_textEditor, "_queryCommandValue: Query command: '"+command+"'.");
+		
+		var ret=contentDocument.queryCommandValue(command);
+
+	//	f_core.Debug(f_textEditor, "_queryCommandValue: Query command: '"+command+"' => "+ret);
 		
 		return ret;
 	},
@@ -431,7 +576,11 @@ var __prototype = {
 	 * @method hidden
 	 * @return void
 	 */
-	f_updateButtons: function() {
+	f_updateButtons: function(forceEnabled) {
+		if (this.f_isDisabled()) {
+			return;
+		}
+		
 		var textEditors=f_textEditor._TextEditors;
 		if (!textEditors) {
 			f_core.Debug(f_textEditor, "f_updateButtons: No registred text editors.");
@@ -444,72 +593,102 @@ var __prototype = {
 			return;
 		}
 		
+		var oldEditorStates=this._editorStates;
+		var oldEditorEnabled=this._editorEnabled;
+		
+		var editorStates=0;
+		var editorEnabled=0;
+		
 		for(var i=0;i<buttons.length;i++) {
-			var type=buttons[i].f_getType();
+			var button=buttons[i];
+			var type=button.f_getType();
 			
-			switch(type) {
-			case "bold":
-			case "italic":
-			case "underline":
-			case "subscript":
-			case "superscript":
-			case "justifyleft":
-			case "justifycenter":
-			case "justifyright":
-			case "justifyfull":
-			case "strikethrough":
-				buttons[i].f_setSelected(this._queryCommandState(type));
-				break;
+			var mask=f_textEditor._BUTTON_STATE[type];
+			if (mask) {
+				var state=this._queryCommandState(type);
 				
-			case "undo":
-			case "redo":
-			case "indent":
-			case "outdent":
-			case "copy":
-			case "cut":
-			case "paste":
-			case "decreasefontsize":
-			case "increasefontsize":
-			case "insertorderedlist":
-			case "insertunorderedlist":
-				buttons[i].f_setDisabled(!this._queryCommandEnabled(type));
+				editorStates|=(state)?mask:0;
+				
+				if (state ^ ((oldEditorStates & mask)>0)) {
+					// Different !
+					
+					f_core.Debug(f_textEditor, "f_updateButtons: State changed for type '"+type+"' => "+state);
+					button.f_setSelected(state);
+				}
+				
+				if (forceEnabled) {
+					button.f_setDisabled(false);
+				}
+				
+				continue;
+			}
+	
+				
+			var mask=f_textEditor._BUTTON_ENABLED[type];
+			if (mask) {
+				var state=this._queryCommandEnabled(type);
+				
+				editorEnabled|=(state)?mask:0;
+				
+				if (forceEnabled || (state ^ ((oldEditorEnabled & mask)>0))) {
+					// Different !
+					
+					f_core.Debug(f_textEditor, "f_updateButtons: Enabled changed for type '"+type+"' => "+state);
+
+					button.f_setDisabled(!state);
+				}
+				
+				continue;
+			}
+			
+			switch(type) {				
+			case "fontname":
+			case "fontsize":
+				var state=this._queryCommandEnabled(type);
+				if (state) {
+					button.f_setValue(this._queryCommandValue(type));
+					
+					if (forceEnabled) {
+						button.f_setDisabled(false);
+					}
+				}
 				break;
+/*				
+			case "fontsize":
+				var value=this._queryCommandValue(type);
+				if (value) {
+					button.f_setValue("");
+					return;
+				}
+				button.f_setValue(f_textEditor._FONT_SIZES[value]);
+				return;
+				*/
 			}
 		}
+
+		this._editorStates=editorStates;
+		this._editorEnabled=editorEnabled;
+		
+		f_core.Debug(f_textEditor, "f_updateButtons: Final state="+editorStates+" enabled="+editorEnabled);
 	},
-	_performButtonCommand: function(buttonType, param) {
-		f_core.Assert(typeof(buttonType)=="string", "f_textEditor._performButtonCommand: Invalid buttonType parameter ("+buttonType+")");
+	_performButtonCommand: function(type, param) {
+		f_core.Assert(typeof(type)=="string", "f_textEditor._performButtonCommand: Invalid type parameter ("+type+")");
 		
-		var update=false;
-		
-		switch(buttonType) {
-		case "bold":
-		case "italic":
-		case "underline":
-		case "subscript":
-		case "superscript":
-		case "justifyleft":
-		case "justifycenter":
-		case "justifyright":
-		case "justifyfull":
-		case "strikethrough":
-		case "undo":
-		case "redo":
-		case "indent":
-		case "outdent":
-		case "copy":
-		case "cut":
-		case "paste":
-		case "decreasefontsize":
-		case "increasefontsize":
-		case "insertorderedlist":
-		case "insertunorderedlist":
-			update=true;
-			this._execCommand(buttonType);
-			break;		
+		f_core.Debug(f_textEditor, "_performButtonCommand: type='"+type+"' param='"+param+"'.");
+
+		var mask=f_textEditor._BUTTON_STATE[type] || f_textEditor._BUTTON_ENABLED[type];
+		if (!mask) {
+			switch(type) {
+			case "fontname":
+			case "fontsize":
+				mask=true;
+				break;		
+			}
 		}
-		
-		if (update) {
+
+		if (mask) {
+			this._execCommand(type, null, param);
+
 			this.f_updateButtons();
 		}
 		
@@ -520,4 +699,9 @@ var __prototype = {
 	}
 }
 
-new f_class("f_textEditor", null, __static, __prototype, f_component);
+new f_class("f_textEditor", {
+	extend: f_component,
+	aspects: [ fa_disabled, fa_readOnly ],
+	statics: __statics,
+	members: __members 
+});

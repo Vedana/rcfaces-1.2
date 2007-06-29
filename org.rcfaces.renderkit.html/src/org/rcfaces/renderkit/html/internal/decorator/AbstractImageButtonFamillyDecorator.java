@@ -226,9 +226,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                 writer.startElement(mainComponent);
 
-                htmlBorderWriter.initialize(writer, width, height,
-                        tableHorizontalSpan, tableVerticalSpan, disabled,
-                        selected);
+                htmlBorderWriter.initialize(writer, getMainStyleClassName(),
+                        width, height, tableHorizontalSpan, tableVerticalSpan,
+                        disabled, selected);
             }
 
             if (borderType != null) {
@@ -398,6 +398,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         }
 
         super.encodeContainerEnd(writer, renderer);
+    }
+
+    protected String getMainStyleClassName() {
+        return null;
     }
 
     private void writeInputAttributes(IHtmlWriter writer)

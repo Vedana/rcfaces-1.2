@@ -386,7 +386,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
             } else {
                 writeScriptTag(htmlWriter, cameliaScriptURI, jsBaseURI,
-                        disabledCookiesPageURL);
+                        disabledCookiesPageURL, htmlProcessContext
+                                .getDebugMode());
             }
         }
 
@@ -583,13 +584,20 @@ public class InitRenderer extends AbstractHtmlRenderer {
     }
 
     private void writeScriptTag(IHtmlWriter writer, String uri,
-            String jsBaseURI, String disabledCookiesPageURL)
+            String jsBaseURI, String disabledCookiesPageURL, boolean debugMode)
             throws WriterException {
 
         if (disabledCookiesPageURL != null) {
             IJavaScriptWriter jsWriter = openScriptTag(writer);
             writeCookieTest(jsWriter, disabledCookiesPageURL);
             jsWriter.end();
+        }
+
+        if (debugMode) {
+            IJavaScriptWriter jsWriter = openScriptTag(writer);
+            jsWriter.write("window.rcfacesDebugMode=true;");
+            jsWriter.end();
+
         }
 
         includeScript(writer, jsBaseURI + "/" + uri,
@@ -624,7 +632,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
-                .convertSymbol("f_classLoader", "_cameliaClassLoader");
+                .convertSymbol("f_classLoader", "_rcfacesClassLoader");
 
         jsWriter.write("for(var cl,v=window;v && !cl;v=v.opener)try{ cl=v.");
         jsWriter.write(cameliaClassLoader);

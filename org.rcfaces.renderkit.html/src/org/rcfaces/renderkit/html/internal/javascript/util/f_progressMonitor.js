@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
  
-var __static = {
+var __statics = {
 	/** 
 	 * Constant indicating an unknown amount of work.
 	 * @field public static final number
@@ -18,7 +18,7 @@ var __static = {
 	UNKNOWN: -1
 }
  
-var __prototype = {
+var __members = {
 
 	/*
 	f_finalize: function() {
@@ -130,4 +130,4 @@ var __prototype = {
 
 }
  
-new f_class("f_progressMonitor", null, __static, __prototype, f_object);
+new f_class("f_progressMonitor", null, __statics, __members, f_object);

@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static = {
+var __statics = {
 
 	/**
 	 * @method public static
@@ -230,5 +230,5 @@ var __static = {
 	}
 }
 
-new f_class("f_xml", null, __static);
+new f_class("f_xml", null, __statics);
 

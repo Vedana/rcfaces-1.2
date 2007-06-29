@@ -27,14 +27,14 @@ public class NoneBorderRenderer extends AbstractHtmlBorderRenderer {
         return NONE_BORDER_CLASS;
     }
 
-    public void initialize(IHtmlWriter writer, String width, String height,
-            int horizontalSpan, int verticalSpan, boolean disabled,
-            boolean selected) throws WriterException {
+    public void initialize(IHtmlWriter writer, String componentClassName,
+            String width, String height, int horizontalSpan, int verticalSpan,
+            boolean disabled, boolean selected) throws WriterException {
         if (horizontalSpan < 2 && verticalSpan < 2) {
             this.noTable = true;
         }
 
-        super.initialize(writer, width, height, horizontalSpan, verticalSpan,
-                disabled, selected);
+        super.initialize(writer, componentClassName, width, height,
+                horizontalSpan, verticalSpan, disabled, selected);
     }
 }

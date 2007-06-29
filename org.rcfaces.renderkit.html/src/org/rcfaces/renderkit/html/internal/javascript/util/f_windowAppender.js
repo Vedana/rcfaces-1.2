@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __static={
+var __statics={
 	/**
 	 * @method public static
 	 * @return void
@@ -61,7 +61,7 @@ var __static={
 		f_windowAppender._callback=callback;
 	}
 }
-var __prototype = {
+var __members = {
 	f_windowAppender: function(callback) {
 		this.f_super(arguments);
 
@@ -87,4 +87,8 @@ var __prototype = {
 	}
 }
 
-new f_class("f_windowAppender", null, __static, __prototype, f_object);
+new f_class("f_windowAppender", {
+	extend: f_object,
+	statics: __statics,
+	members: __members
+});

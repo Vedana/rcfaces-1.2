@@ -9,7 +9,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __static = {
+var __statics = {
 	/** 
 	 * @field private static final number
 	 */
@@ -29,7 +29,7 @@ var __static = {
 	}
 }
 
-var __prototype = {
+var __members = {
 	f_slideUpEffect: function(component, callback) {
 		this.f_super(arguments, component, callback);
 		
@@ -86,5 +86,5 @@ var __prototype = {
 	}
 }
 
-new f_class("f_slideUpEffect", null, __static, __prototype, f_timerEffect);
+new f_class("f_slideUpEffect", null, __statics, __members, f_timerEffect);
 

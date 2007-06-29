@@ -10,7 +10,7 @@
  * @version $Revision$ $Date$
  */
 
-var __prototype = {
+var __members = {
 
 	/**
 	 * @method protected
@@ -30,4 +30,7 @@ var __prototype = {
 	}
 }
 
-new f_class("f_imageResetButton", null, null, __prototype, f_imageButton);
+new f_class("f_imageResetButton", {
+	extend: f_imageButton,
+	members: __members
+});
