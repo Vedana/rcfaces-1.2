@@ -98,6 +98,11 @@
 				<required-class name="f_messageObject" />
 			</class>
 		</file>
+		<file name="util/f_locale.js" contentProvider="org.rcfaces.renderkit.html.internal.javascript.LocaleContentProvider">
+			<class name="f_locale">
+				<required-class name="f_object" />
+			</class>
+		</file>
 	</module>
 
 <!-- Pas besoin ! Car on envoie tous les inputs hidden de la form !
@@ -214,15 +219,6 @@
 			</class>
 		</file>
 		
-	</module>
-
-<!-- Les Locale par défaut  -->
-	<module id="locale">
-		<file name="util/f_locale.js" contentProvider="org.rcfaces.renderkit.html.internal.javascript.LocaleContentProvider">
-			<class name="f_locale">
-				<required-class name="f_object" />
-			</class>
-		</file>
 	</module>
 	
 <!-- Components -->
