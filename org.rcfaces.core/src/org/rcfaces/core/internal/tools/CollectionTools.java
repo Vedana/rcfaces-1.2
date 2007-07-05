@@ -258,11 +258,19 @@ public class CollectionTools {
             IValuesAccessor valuesAccessor) {
         Class type = valuesAccessor.getComponentValuesType(null, component);
         if (type == null) {
-            return new ArrayIndexesModel();
+            Object values = new ArrayIndexesModel();
+
+            valuesAccessor.setComponentValues(component, values);
+
+            return values;
         }
 
         if (type.isArray()) {
-            return Array.newInstance(type.getComponentType(), 0);
+            Object values = Array.newInstance(type.getComponentType(), 0);
+
+            valuesAccessor.setComponentValues(component, values);
+
+            return values;
         }
 
         Class implementationType = (Class) IMPLEMENTATION_TYPES.get(type);
@@ -270,13 +278,18 @@ public class CollectionTools {
             type = implementationType;
         }
 
+        Object values;
         try {
-            return type.newInstance();
+            values = type.newInstance();
 
         } catch (Throwable th) {
             throw new FacesException("Can not instanciate values for type '"
                     + type + "'", th);
         }
+
+        valuesAccessor.setComponentValues(component, values);
+
+        return values;
     }
 
     public static void select(UIComponent component,

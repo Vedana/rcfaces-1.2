@@ -108,6 +108,11 @@ public class SelectionTools extends CollectionTools {
     }
 
     public static void select(FacesContext facesContext, UIComponent component,
+            int indexes[]) {
+        select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, indexes);
+    }
+
+    public static void select(FacesContext facesContext, UIComponent component,
             int start, int end) {
         select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, start, end);
     }
@@ -125,6 +130,11 @@ public class SelectionTools extends CollectionTools {
     public static void deselect(FacesContext facesContext,
             UIComponent component, int index) {
         deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, index);
+    }
+
+    public static void deselect(FacesContext facesContext,
+            UIComponent component, int indexes[]) {
+        deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, indexes);
     }
 
     public static void deselect(FacesContext facesContext,

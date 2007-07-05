@@ -110,6 +110,11 @@ public class CheckTools extends CollectionTools {
     }
 
     public static void check(FacesContext facesContext, UIComponent component,
+            int indexes[]) {
+        select(component, CHECK_PROVIDER_VALUES_ACCESSOR, indexes);
+    }
+
+    public static void check(FacesContext facesContext, UIComponent component,
             int start, int end) {
         select(component, CHECK_PROVIDER_VALUES_ACCESSOR, start, end);
     }
@@ -126,6 +131,11 @@ public class CheckTools extends CollectionTools {
     public static void uncheck(FacesContext facesContext,
             UIComponent component, int index) {
         deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, index);
+    }
+
+    public static void uncheck(FacesContext facesContext,
+            UIComponent component, int indexes[]) {
+        deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, indexes);
     }
 
     public static void uncheck(FacesContext facesContext,

@@ -126,6 +126,11 @@ public class AdditionalInformationTools extends CollectionTools {
     }
 
     public static void show(FacesContext facesContext, UIComponent component,
+            int indexes[]) {
+        select(component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR, indexes);
+    }
+
+    public static void show(FacesContext facesContext, UIComponent component,
             int start, int end) {
         select(component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR, start, end);
     }
@@ -142,6 +147,11 @@ public class AdditionalInformationTools extends CollectionTools {
     public static void hide(FacesContext facesContext, UIComponent component,
             int index) {
         deselect(component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR, index);
+    }
+
+    public static void hide(FacesContext facesContext, UIComponent component,
+            int indexes[]) {
+        deselect(component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR, indexes);
     }
 
     public static void hide(FacesContext facesContext, UIComponent component,
