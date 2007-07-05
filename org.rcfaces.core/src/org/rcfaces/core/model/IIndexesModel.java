@@ -39,13 +39,13 @@ public interface IIndexesModel {
      */
     boolean containsIndex(int index);
 
-    void addIndex(int index);
+    boolean addIndex(int index);
 
-    void removeIndex(int index);
-
-    void commitChanges();
+    boolean removeIndex(int index);
 
     Object[] listSelectedObjects(Object toArray[], Object value);
 
     Object getFirstSelectedObject(Object cachedValue);
+
+    IIndexesModel copy();
 }

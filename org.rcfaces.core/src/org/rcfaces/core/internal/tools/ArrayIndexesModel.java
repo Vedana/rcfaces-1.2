@@ -12,13 +12,15 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.model.AbstractIndexesModel;
+import org.rcfaces.core.model.ICommitableObject;
+import org.rcfaces.core.model.IIndexesModel;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class ArrayIndexesModel extends AbstractIndexesModel implements
-        Serializable {
+        Serializable, ICommitableObject {
     private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 7393822820762985697L;
@@ -36,6 +38,8 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
     private int count = 0;
 
     private boolean garbaged = true;
+
+    private boolean commited;
 
     public ArrayIndexesModel() {
     }
@@ -127,6 +131,9 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
      * @see org.rcfaces.core.model.ISelectionModel#clearSelections()
      */
     public void clearIndexes() {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
         count = 0;
         lastPos = 0;
         garbaged = true;
@@ -165,7 +172,11 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
      * 
      * @see org.rcfaces.core.model.ISelectionModel#addSelection(int)
      */
-    public void addIndex(int index) {
+    public boolean addIndex(int index) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
+
         if (index < 0) {
             throw new IllegalArgumentException("Invalid index (" + index
                     + " < 0)");
@@ -175,7 +186,7 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
             int n = selectionIndexes[i];
 
             if (index == n) {
-                return;
+                return false;
             }
         }
 
@@ -183,7 +194,7 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
             selectionIndexes[lastPos++] = index;
             count++;
             garbaged = false;
-            return;
+            return true;
         }
 
         garbage();
@@ -192,7 +203,7 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
             selectionIndexes[lastPos++] = index;
             count++;
             garbaged = false;
-            return;
+            return true;
         }
 
         // On agrandi
@@ -210,6 +221,8 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
         selectionIndexes[lastPos++] = index;
         count++;
         garbaged = false;
+
+        return true;
     }
 
     /*
@@ -217,13 +230,17 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
      * 
      * @see org.rcfaces.core.model.ISelectionModel#removeSelection(int)
      */
-    public void removeIndex(int index) {
+    public boolean removeIndex(int index) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
+
         if (index < 0) {
             throw new IllegalArgumentException("Invalid index (" + index
                     + " < 0)");
         }
         if (count == 0) {
-            return;
+            return false;
         }
 
         for (int i = 0; i < lastPos; i++) {
@@ -234,16 +251,10 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
             selectionIndexes[i] = -1;
             count--;
             garbaged = false;
-            return;
+            return true;
         }
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.model.IIndexesModel#commitChanges()
-     */
-    public void commitChanges() {
+        return false;
     }
 
     /*
@@ -256,6 +267,10 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
     }
 
     public void setIndexes(int[] indexes, boolean copy) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
+
         if (indexes == null || indexes.length < 1) {
             selectionIndexes = EMPTY_SELECTION;
             lastPos = 0;
@@ -293,4 +308,21 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
     public int countIndexes() {
         return count;
     }
+
+    public IIndexesModel copy() {
+        garbage();
+
+        return new ArrayIndexesModel(selectionIndexes);
+    }
+
+    public void commit() {
+        garbage();
+
+        commited = true;
+    }
+
+    public boolean isCommited() {
+        return commited;
+    }
+
 }

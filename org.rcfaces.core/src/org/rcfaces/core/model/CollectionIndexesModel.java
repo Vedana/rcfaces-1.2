@@ -14,7 +14,7 @@ import java.util.List;
  * @version $Revision$ $Date$
  */
 public class CollectionIndexesModel extends AbstractIndexesModel implements
-        Serializable {
+        Serializable, ICommitableObject {
     private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -3821092264981658279L;
@@ -24,6 +24,8 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
     protected static final int UNKNOWN_INDEX = -1;
 
     protected final Collection collection;
+
+    protected boolean commited;
 
     public CollectionIndexesModel(Collection collection) {
         this.collection = collection;
@@ -88,6 +90,10 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
      * @see org.rcfaces.core.model.IIndexesModel#clearIndexes()
      */
     public final void clearIndexes() {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
+
         collection.clear();
     }
 
@@ -121,8 +127,12 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
      * 
      * @see org.rcfaces.core.model.IIndexesModel#addIndex(int)
      */
-    public void addIndex(int index) {
-        collection.add(getKey(index));
+    public boolean addIndex(int index) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
+
+        return collection.add(getKey(index));
     }
 
     /*
@@ -130,16 +140,12 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
      * 
      * @see org.rcfaces.core.model.IIndexesModel#removeIndex(int)
      */
-    public final void removeIndex(int index) {
-        collection.remove(getKey(index));
-    }
+    public final boolean removeIndex(int index) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.model.IIndexesModel#commitChanges()
-     */
-    public void commitChanges() {
+        return collection.remove(getKey(index));
     }
 
     /*
@@ -148,6 +154,10 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
      * @see org.rcfaces.core.model.IIndexesModel#setIndexes(int[])
      */
     public void setIndexes(int[] indexes) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
+
         clearIndexes();
 
         if (indexes == null || indexes.length < 1) {
@@ -187,5 +197,17 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
         }
 
         return count;
+    }
+
+    public void commit() {
+        this.commited = true;
+    }
+
+    public boolean isCommited() {
+        return commited;
+    }
+
+    public IIndexesModel copy() {
+        return new CollectionIndexesModel(collection);
     }
 }

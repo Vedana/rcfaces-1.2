@@ -32,11 +32,22 @@ public class MapIndexesModel extends CollectionIndexesModel {
         this.defaultValue = defaultValue;
     }
 
-    public void addIndex(int index) {
+    public boolean addIndex(int index) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
+
         map.put(getKey(index), getSelectedValue(index));
+
+        return true;
     }
 
     protected Object getSelectedValue(int index) {
         return defaultValue;
     }
+
+    public IIndexesModel copy() {
+        return new MapIndexesModel(map, defaultValue);
+    }
+
 }
