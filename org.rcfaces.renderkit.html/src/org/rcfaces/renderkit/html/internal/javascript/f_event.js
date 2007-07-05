@@ -651,6 +651,30 @@ var __statics = {
 		}
 		*/
 		
+		if (f_core.IsDebugEnabled(f_event)) {
+			if (jsEvent) {
+				s+="\nJSEVENT informations: type="+jsEvent.type;
+				
+				if (jsEvent.target) {
+					s+="\ntarget=["+sEvent.target.nodeType+"]"+jsEvent.target.tagName+"#"+jsEvent.target.id+"."+jsEvent.target.className
+				}				
+				if (jsEvent.currentTarget) {
+					s+="\ncurrentTarget=["+sEvent.currentTarget.nodeType+"]"+jsEvent.currentTarget.tagName+"#"+jsEvent.currentTarget.id+"."+jsEvent.currentTarget.className
+				}
+				if (jsEvent.fromElement) {
+					s+="\nfromElement=["+sEvent.fromElement.nodeType+"]"+jsEvent.fromElement.tagName+"#"+jsEvent.fromElement.id+"."+jsEvent.fromElement.className;
+				}
+				if (jsEvent.srcElement) {
+					s+="\nsrcElement=["+sEvent.srcElement.nodeType+"]"+jsEvent.srcElement.tagName+"#"+jsEvent.srcElement.id+"."+jsEvent.srcElement.className;
+				}
+				if (jsEvent.toElement) {
+					s+="\ntoElement=["+sEvent.toElement.nodeType+"]"+jsEvent.toElement.tagName+"#"+jsEvent.toElement.id+"."+jsEvent.toElement.className;
+				}
+			}
+		
+			f_core.Debug(f_event, "Popup event ALERT:\n"+s);
+		}
+		
 		alert(s);
 
 		return true;
