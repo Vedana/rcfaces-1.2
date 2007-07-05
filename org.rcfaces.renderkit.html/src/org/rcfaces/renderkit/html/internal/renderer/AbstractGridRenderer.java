@@ -1636,9 +1636,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected void setCheckedIndexes(FacesContext facesContext,
             ICheckComponent checkComponent, int[] indexes, int uindexes[],
-            boolean all) {
+            boolean uncheckAll) {
 
-        if (all) {
+        if (uncheckAll) {
             checkComponent.uncheckAll();
 
         } else if (uindexes.length > 0) {
