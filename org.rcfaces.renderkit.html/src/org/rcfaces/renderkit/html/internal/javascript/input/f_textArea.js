@@ -14,7 +14,40 @@ var __statics = {
 	/**
 	 * @field private static final String
 	 */
-	_TEXT_MENU_ID: "#text"
+	_TEXT_MENU_ID: "#text",
+	
+	/**
+	 * @method private static
+	 * @param f_event event
+	 * @return boolean
+	 */
+	_VerifyMaxTextLength: function(event) {
+		var textArea=event.f_getComponent();
+		
+		var maxTextLength=textArea.f_getMaxTextLength();
+		if (!maxTextLength || maxTextLength<1) {
+			return;
+		}
+		
+		var value=textArea.f_getValue();
+		if (!value) {
+			return;
+		}
+		
+		if (value.length<=maxTextLength) {
+			return;
+		}
+	
+		var message=f_resourceBundle.Get(f_textArea).f_formatParams("MAX_TEXT_LENGTH", [maxTextLength]);
+		if (!message) {	
+			message=f_locale.Get().f_formatMessageParams("javax_faces_validator_LengthValidator_MAXIMUM", [maxTextLength], "Value is greater than allowable maximum of ''{0}''");
+		}
+		
+		var messageContext=f_messageContext.Get(event);	
+		messageContext.f_addMessage(textArea, f_messageObject.SEVERITY_ERROR, message, null);
+		
+		return false;
+	}
 }
 
 var __members = {
@@ -27,12 +60,18 @@ var __members = {
 			this.f_insertEventListenerFirst(f_event.FOCUS, this._messageFocusEvent);
 			this.f_insertEventListenerFirst(f_event.BLUR, this._messageBlurEvent);
 		}
+		
+		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
+		if (this._maxTextLength>0) {
+			this.f_addEventListener(f_event.VALIDATION, f_textArea._VerifyMaxTextLength);
+		}
 
 		// On peut pas le mêtre dans le f_setDomEvent, la profondeur de la pile ne le permet pas !
 		this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_performSelectionEvent);
 	},
 	/*
 	f_finalize: function() {
+		// this._maxTextLength=undefined; // number
 		// this._emptyMessage=undefined; // string
 		// this._showEmptyMessage=undefined; // string
 		// this._requiredInstalled=undefined; // boolean
@@ -52,6 +91,13 @@ var __members = {
 		}
 		
 		this.f_super(arguments);
+	},
+	/**
+	 * @method public
+	 * @return number
+	 */
+	f_getMaxTextLength: function() {
+		return this._maxTextLength;
 	},
 	/**
 	 * @method protected
