@@ -5,35 +5,124 @@ import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.BoxComponent;
+import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
-public class BoxTag extends AbstractBasicTag implements Tag {
+public class AdditionalInformationTag extends CameliaTag implements Tag {
 
 
-	private static final Log LOG=LogFactory.getLog(BoxTag.class);
+	private static final Log LOG=LogFactory.getLog(AdditionalInformationTag.class);
 
+	private String propertyChangeListeners;
+	private String userEventListeners;
+	private String errorListeners;
+	private String waiRole;
+	private String marginBottom;
+	private String marginLeft;
+	private String marginRight;
+	private String marginTop;
+	private String backgroundColor;
+	private String foregroundColor;
 	private String backgroundImageHorizontalPosition;
 	private String backgroundImageHorizontalRepeat;
 	private String backgroundImageURL;
 	private String backgroundImageVerticalPosition;
 	private String backgroundImageVerticalRepeat;
-	private String border;
+	private String lookId;
+	private String styleClass;
 	private String mouseOutListeners;
 	private String mouseOverListeners;
 	private String initListeners;
 	private String loadListeners;
-	private String asyncRenderMode;
 	private String scopeValue;
 	private String scopeVar;
-	private String horizontalScroll;
-	private String verticalScroll;
+	private String margins;
 	public String getComponentType() {
-		return BoxComponent.COMPONENT_TYPE;
+		return AdditionalInformationComponent.COMPONENT_TYPE;
+	}
+
+	public final String getPropertyChangeListener() {
+		return propertyChangeListeners;
+	}
+
+	public final void setPropertyChangeListener(String propertyChangeListeners) {
+		this.propertyChangeListeners = propertyChangeListeners;
+	}
+
+	public final String getUserEventListener() {
+		return userEventListeners;
+	}
+
+	public final void setUserEventListener(String userEventListeners) {
+		this.userEventListeners = userEventListeners;
+	}
+
+	public final String getErrorListener() {
+		return errorListeners;
+	}
+
+	public final void setErrorListener(String errorListeners) {
+		this.errorListeners = errorListeners;
+	}
+
+	public final String getWaiRole() {
+		return waiRole;
+	}
+
+	public final void setWaiRole(String waiRole) {
+		this.waiRole = waiRole;
+	}
+
+	public final String getMarginBottom() {
+		return marginBottom;
+	}
+
+	public final void setMarginBottom(String marginBottom) {
+		this.marginBottom = marginBottom;
+	}
+
+	public final String getMarginLeft() {
+		return marginLeft;
+	}
+
+	public final void setMarginLeft(String marginLeft) {
+		this.marginLeft = marginLeft;
+	}
+
+	public final String getMarginRight() {
+		return marginRight;
+	}
+
+	public final void setMarginRight(String marginRight) {
+		this.marginRight = marginRight;
+	}
+
+	public final String getMarginTop() {
+		return marginTop;
+	}
+
+	public final void setMarginTop(String marginTop) {
+		this.marginTop = marginTop;
+	}
+
+	public final String getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	public final void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
+
+	public final String getForegroundColor() {
+		return foregroundColor;
+	}
+
+	public final void setForegroundColor(String foregroundColor) {
+		this.foregroundColor = foregroundColor;
 	}
 
 	public final String getBackgroundImageHorizontalPosition() {
@@ -76,12 +165,20 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.backgroundImageVerticalRepeat = backgroundImageVerticalRepeat;
 	}
 
-	public final String getBorder() {
-		return border;
+	public final String getLookId() {
+		return lookId;
 	}
 
-	public final void setBorder(String border) {
-		this.border = border;
+	public final void setLookId(String lookId) {
+		this.lookId = lookId;
+	}
+
+	public final String getStyleClass() {
+		return styleClass;
+	}
+
+	public final void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
 	}
 
 	public final String getMouseOutListener() {
@@ -116,14 +213,6 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.loadListeners = loadListeners;
 	}
 
-	public final String getAsyncRenderMode() {
-		return asyncRenderMode;
-	}
-
-	public final void setAsyncRenderMode(String asyncRenderMode) {
-		this.asyncRenderMode = asyncRenderMode;
-	}
-
 	public final String getScopeValue() {
 		return scopeValue;
 	}
@@ -140,51 +229,131 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
-	public final String getHorizontalScroll() {
-		return horizontalScroll;
+	public final String getMargins() {
+		return margins;
 	}
 
-	public final void setHorizontalScroll(String horizontalScroll) {
-		this.horizontalScroll = horizontalScroll;
-	}
-
-	public final String getVerticalScroll() {
-		return verticalScroll;
-	}
-
-	public final void setVerticalScroll(String verticalScroll) {
-		this.verticalScroll = verticalScroll;
+	public final void setMargins(String margins) {
+		this.margins = margins;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			if (BoxComponent.COMPONENT_TYPE==getComponentType()) {
+			if (AdditionalInformationComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  marginBottom='"+marginBottom+"'");
+			LOG.debug("  marginLeft='"+marginLeft+"'");
+			LOG.debug("  marginRight='"+marginRight+"'");
+			LOG.debug("  marginTop='"+marginTop+"'");
+			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  backgroundImageHorizontalPosition='"+backgroundImageHorizontalPosition+"'");
 			LOG.debug("  backgroundImageHorizontalRepeat='"+backgroundImageHorizontalRepeat+"'");
 			LOG.debug("  backgroundImageURL='"+backgroundImageURL+"'");
 			LOG.debug("  backgroundImageVerticalPosition='"+backgroundImageVerticalPosition+"'");
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
-			LOG.debug("  border='"+border+"'");
-			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
-			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
-			LOG.debug("  verticalScroll='"+verticalScroll+"'");
+			LOG.debug("  margins='"+margins+"'");
 		}
 		super.setProperties(uiComponent);
 
-		if ((uiComponent instanceof BoxComponent)==false) {
+		if ((uiComponent instanceof AdditionalInformationComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'BoxComponent'.");
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'AdditionalInformationComponent'.");
 		}
 
-		BoxComponent component = (BoxComponent) uiComponent;
+		AdditionalInformationComponent component = (AdditionalInformationComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
+
+		if (propertyChangeListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+		}
+
+		if (userEventListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
+		}
+
+		if (errorListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
+		}
+
+		if (waiRole != null) {
+			if (isValueReference(waiRole)) {
+				ValueBinding vb = application.createValueBinding(waiRole);
+				component.setValueBinding(Properties.WAI_ROLE, vb);
+
+			} else {
+				component.setWaiRole(waiRole);
+			}
+		}
+
+		if (marginBottom != null) {
+			if (isValueReference(marginBottom)) {
+				ValueBinding vb = application.createValueBinding(marginBottom);
+				component.setValueBinding(Properties.MARGIN_BOTTOM, vb);
+
+			} else {
+				component.setMarginBottom(marginBottom);
+			}
+		}
+
+		if (marginLeft != null) {
+			if (isValueReference(marginLeft)) {
+				ValueBinding vb = application.createValueBinding(marginLeft);
+				component.setValueBinding(Properties.MARGIN_LEFT, vb);
+
+			} else {
+				component.setMarginLeft(marginLeft);
+			}
+		}
+
+		if (marginRight != null) {
+			if (isValueReference(marginRight)) {
+				ValueBinding vb = application.createValueBinding(marginRight);
+				component.setValueBinding(Properties.MARGIN_RIGHT, vb);
+
+			} else {
+				component.setMarginRight(marginRight);
+			}
+		}
+
+		if (marginTop != null) {
+			if (isValueReference(marginTop)) {
+				ValueBinding vb = application.createValueBinding(marginTop);
+				component.setValueBinding(Properties.MARGIN_TOP, vb);
+
+			} else {
+				component.setMarginTop(marginTop);
+			}
+		}
+
+		if (backgroundColor != null) {
+			if (isValueReference(backgroundColor)) {
+				ValueBinding vb = application.createValueBinding(backgroundColor);
+				component.setValueBinding(Properties.BACKGROUND_COLOR, vb);
+
+			} else {
+				component.setBackgroundColor(backgroundColor);
+			}
+		}
+
+		if (foregroundColor != null) {
+			if (isValueReference(foregroundColor)) {
+				ValueBinding vb = application.createValueBinding(foregroundColor);
+				component.setValueBinding(Properties.FOREGROUND_COLOR, vb);
+
+			} else {
+				component.setForegroundColor(foregroundColor);
+			}
+		}
 
 		if (backgroundImageHorizontalPosition != null) {
 			if (isValueReference(backgroundImageHorizontalPosition)) {
@@ -236,13 +405,23 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
-		if (border != null) {
-			if (isValueReference(border)) {
-				ValueBinding vb = application.createValueBinding(border);
-				component.setValueBinding(Properties.BORDER, vb);
+		if (lookId != null) {
+			if (isValueReference(lookId)) {
+				ValueBinding vb = application.createValueBinding(lookId);
+				component.setValueBinding(Properties.LOOK_ID, vb);
 
 			} else {
-				component.setBorder(getBool(border));
+				component.setLookId(lookId);
+			}
+		}
+
+		if (styleClass != null) {
+			if (isValueReference(styleClass)) {
+				ValueBinding vb = application.createValueBinding(styleClass);
+				component.setValueBinding(Properties.STYLE_CLASS, vb);
+
+			} else {
+				component.setStyleClass(styleClass);
 			}
 		}
 
@@ -262,16 +441,6 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
 
-		if (asyncRenderMode != null) {
-			if (isValueReference(asyncRenderMode)) {
-				ValueBinding vb = application.createValueBinding(asyncRenderMode);
-				component.setValueBinding(Properties.ASYNC_RENDER_MODE, vb);
-
-			} else {
-				component.setAsyncRenderMode(asyncRenderMode);
-			}
-		}
-
 		if (scopeValue != null) {
 				ValueBinding vb = application.createValueBinding(scopeValue);
 				component.setValueBinding(Properties.SCOPE_VALUE, vb);
@@ -287,43 +456,39 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
-		if (horizontalScroll != null) {
-			if (isValueReference(horizontalScroll)) {
-				ValueBinding vb = application.createValueBinding(horizontalScroll);
-				component.setValueBinding(Properties.HORIZONTAL_SCROLL, vb);
-
-			} else {
-				component.setHorizontalScroll(getBool(horizontalScroll));
+		if (margins != null) {
+			if (isValueReference(margins)) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
 			}
-		}
-
-		if (verticalScroll != null) {
-			if (isValueReference(verticalScroll)) {
-				ValueBinding vb = application.createValueBinding(verticalScroll);
-				component.setValueBinding(Properties.VERTICAL_SCROLL, vb);
-
-			} else {
-				component.setVerticalScroll(getBool(verticalScroll));
-			}
+				component.setMargins(margins);
 		}
 	}
 
 	public void release() {
+		propertyChangeListeners = null;
+		userEventListeners = null;
+		errorListeners = null;
+		waiRole = null;
+		marginBottom = null;
+		marginLeft = null;
+		marginRight = null;
+		marginTop = null;
+		backgroundColor = null;
+		foregroundColor = null;
 		backgroundImageHorizontalPosition = null;
 		backgroundImageHorizontalRepeat = null;
 		backgroundImageURL = null;
 		backgroundImageVerticalPosition = null;
 		backgroundImageVerticalRepeat = null;
-		border = null;
+		lookId = null;
+		styleClass = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
 		initListeners = null;
 		loadListeners = null;
-		asyncRenderMode = null;
 		scopeValue = null;
 		scopeVar = null;
-		horizontalScroll = null;
-		verticalScroll = null;
+		margins = null;
 
 		super.release();
 	}

@@ -20,17 +20,21 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.component.capability.IAdditionalValuesCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import org.rcfaces.core.component.capability.ISelectionValuesCapability;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
+import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.capability.ISelectionComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -42,9 +46,7 @@ import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.ValuesTools;
-import org.rcfaces.core.lang.provider.ICheckProvider;
 import org.rcfaces.core.lang.provider.ICursorProvider;
-import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
@@ -336,7 +338,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         if (tableContext.isSelectable()
                 && (tableContext.isClientSelectionFullState() == false || sendFullStates)) {
 
-            Object selectionModel = ((ISelectionValuesCapability) gridComponent)
+            Object selectionModel = ((ISelectedValuesCapability) gridComponent)
                     .getSelectedValues();
 
             if (selectionModel != null) {
@@ -1092,92 +1094,146 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         FacesContext facesContext = context.getFacesContext();
 
-        IGridComponent dataGridComponent = (IGridComponent) component;
+        IGridComponent gridComponent = (IGridComponent) component;
 
-        UIColumn rowValueColumn = getRowValueColumn(dataGridComponent);
+        UIColumn rowValueColumn = getRowValueColumn(gridComponent);
 
-        String selectedRows = componentData.getStringProperty("selectedItems");
-        String deselectedRows = componentData
-                .getStringProperty("deselectedItems");
-        if (selectedRows != null || deselectedRows != null) {
-            if (rowValueColumn != null) {
-                Object selected = ((ISelectionValuesCapability) dataGridComponent)
-                        .getSelectedValues();
+        if (gridComponent instanceof ISelectionComponent) {
+            String selectedRows = componentData
+                    .getStringProperty("selectedItems");
+            String deselectedRows = componentData
+                    .getStringProperty("deselectedItems");
+            if (selectedRows != null || deselectedRows != null) {
+                if (rowValueColumn != null) {
+                    Object selected = ((ISelectedValuesCapability) gridComponent)
+                            .getSelectedValues();
 
-                Set values = updateSelection(facesContext, rowValueColumn,
-                        selected, selectedRows, deselectedRows);
+                    Set values = updateSelection(facesContext, rowValueColumn,
+                            selected, selectedRows, deselectedRows);
 
-                Class cls = ((ISelectionValuesCapability) dataGridComponent)
-                        .getSelectedValuesType(facesContext);
+                    Class cls = ((ISelectedValuesCapability) gridComponent)
+                            .getSelectedValuesType(facesContext);
 
-                if (cls == null && selected != null) {
-                    cls = selected.getClass();
-                }
+                    if (cls == null && selected != null) {
+                        cls = selected.getClass();
+                    }
 
-                selected = ValuesTools.adaptValues(cls, values);
+                    selected = ValuesTools.adaptValues(cls, values);
 
-                ((ISelectionValuesCapability) dataGridComponent)
-                        .setSelectedValues(selected);
+                    ((ISelectedValuesCapability) gridComponent)
+                            .setSelectedValues(selected);
 
-            } else {
-                int indexes[] = parseIndexes(selectedRows);
-                int dindexes[] = null;
-                boolean all = false;
-
-                if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
-                    all = true;
-                    dindexes = EMPTY_INDEXES;
                 } else {
-                    dindexes = parseIndexes(deselectedRows);
-                }
+                    int indexes[] = parseIndexes(selectedRows);
+                    int dindexes[] = null;
+                    boolean all = false;
 
-                if (indexes.length > 0 || all || dindexes.length > 0) {
-                    setSelectedIndexes(facesContext,
-                            (ISelectionProvider) dataGridComponent, indexes,
-                            dindexes, all);
+                    if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
+                        all = true;
+                        dindexes = EMPTY_INDEXES;
+                    } else {
+                        dindexes = parseIndexes(deselectedRows);
+                    }
+
+                    if (indexes.length > 0 || all || dindexes.length > 0) {
+                        setSelectedIndexes(facesContext,
+                                (ISelectionComponent) gridComponent, indexes,
+                                dindexes, all);
+                    }
                 }
             }
         }
 
-        String checkedRows = componentData.getStringProperty("checkedItems");
-        String uncheckedRows = componentData
-                .getStringProperty("uncheckedItems");
-        if (checkedRows != null || uncheckedRows != null) {
-            if (rowValueColumn != null) {
-                Object checked = ((ICheckedValuesCapability) dataGridComponent)
-                        .getCheckedValues();
+        if (gridComponent instanceof ICheckComponent) {
+            String checkedRows = componentData
+                    .getStringProperty("checkedItems");
+            String uncheckedRows = componentData
+                    .getStringProperty("uncheckedItems");
+            if (checkedRows != null || uncheckedRows != null) {
+                if (rowValueColumn != null) {
+                    Object checked = ((ICheckedValuesCapability) gridComponent)
+                            .getCheckedValues();
 
-                Set values = updateSelection(facesContext, rowValueColumn,
-                        checked, checkedRows, uncheckedRows);
+                    Set values = updateSelection(facesContext, rowValueColumn,
+                            checked, checkedRows, uncheckedRows);
 
-                Class cls = ((ICheckedValuesCapability) dataGridComponent)
-                        .getCheckedValuesType(facesContext);
-                if (cls == null && checked != null) {
-                    cls = checked.getClass();
-                }
+                    Class cls = ((ICheckedValuesCapability) gridComponent)
+                            .getCheckedValuesType(facesContext);
+                    if (cls == null && checked != null) {
+                        cls = checked.getClass();
+                    }
 
-                checked = ValuesTools.adaptValues(cls, values);
+                    checked = ValuesTools.adaptValues(cls, values);
 
-                ((ICheckedValuesCapability) dataGridComponent)
-                        .setCheckedValues(checked);
-
-            } else {
-                int cindexes[] = parseIndexes(checkedRows);
-                int uindexes[] = null;
-                boolean all = false;
-
-                if (HtmlTools.ALL_VALUE.equals(uncheckedRows)) {
-                    all = true;
-                    uindexes = EMPTY_INDEXES;
+                    ((ICheckedValuesCapability) gridComponent)
+                            .setCheckedValues(checked);
 
                 } else {
-                    uindexes = parseIndexes(uncheckedRows);
-                }
+                    int cindexes[] = parseIndexes(checkedRows);
+                    int uindexes[] = null;
+                    boolean all = false;
 
-                if (cindexes.length > 0 || uindexes.length > 0 || all) {
-                    setCheckedIndexes(facesContext,
-                            (ICheckProvider) dataGridComponent, cindexes,
-                            uindexes, all);
+                    if (HtmlTools.ALL_VALUE.equals(uncheckedRows)) {
+                        all = true;
+                        uindexes = EMPTY_INDEXES;
+
+                    } else {
+                        uindexes = parseIndexes(uncheckedRows);
+                    }
+
+                    if (cindexes.length > 0 || uindexes.length > 0 || all) {
+                        setCheckedIndexes(facesContext,
+                                (ICheckComponent) gridComponent, cindexes,
+                                uindexes, all);
+                    }
+                }
+            }
+        }
+
+        if (gridComponent instanceof IAdditionalInformationComponent) {
+            String showAdditionalRows = componentData
+                    .getStringProperty("showAdditional");
+            String hideAdditionalRows = componentData
+                    .getStringProperty("hideAdditional");
+            if (showAdditionalRows != null || hideAdditionalRows != null) {
+                if (rowValueColumn != null) {
+                    Object additionalValues = ((IAdditionalValuesCapability) gridComponent)
+                            .getAdditionalValues();
+
+                    Set values = updateSelection(facesContext, rowValueColumn,
+                            additionalValues, showAdditionalRows,
+                            hideAdditionalRows);
+
+                    Class cls = ((IAdditionalValuesCapability) gridComponent)
+                            .getAdditionalValuesType(facesContext);
+                    if (cls == null && additionalValues != null) {
+                        cls = additionalValues.getClass();
+                    }
+
+                    additionalValues = ValuesTools.adaptValues(cls, values);
+
+                    ((IAdditionalValuesCapability) gridComponent)
+                            .setAdditionalValues(additionalValues);
+
+                } else {
+                    int cindexes[] = parseIndexes(showAdditionalRows);
+                    int uindexes[] = null;
+                    boolean all = false;
+
+                    if (HtmlTools.ALL_VALUE.equals(hideAdditionalRows)) {
+                        all = true;
+                        uindexes = EMPTY_INDEXES;
+
+                    } else {
+                        uindexes = parseIndexes(hideAdditionalRows);
+                    }
+
+                    if (cindexes.length > 0 || uindexes.length > 0 || all) {
+                        setAdditionalIndexes(
+                                facesContext,
+                                (IAdditionalInformationComponent) gridComponent,
+                                cindexes, uindexes, all);
+                    }
                 }
             }
         }
@@ -1187,10 +1243,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
             Object cursorValueObject = ValuesTools.convertStringToValue(
                     facesContext, rowValueColumn, cursorValue, false);
 
-            Object oldCursorValueObject = ((ICursorProvider) dataGridComponent)
+            Object oldCursorValueObject = ((ICursorProvider) gridComponent)
                     .getCursorValue();
             if (isEquals(oldCursorValueObject, cursorValueObject) == false) {
-                ((ICursorProvider) dataGridComponent)
+                ((ICursorProvider) gridComponent)
                         .setCursorValue(cursorValueObject);
 
                 component.queueEvent(new PropertyChangeEvent(component,

@@ -11,6 +11,10 @@
 		<component-class>org.rcfaces.core.component.AcceleratorComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.additionalInformation</component-type>
+		<component-class>org.rcfaces.core.component.AdditionalInformationComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.box</component-type>
 		<component-class>org.rcfaces.core.component.BoxComponent</component-class>
 	</component>

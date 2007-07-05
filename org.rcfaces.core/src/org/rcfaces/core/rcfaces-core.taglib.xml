@@ -11,6 +11,13 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>additionalInformation</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.additionalInformation</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>box</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.box</component-type>

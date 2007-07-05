@@ -19,6 +19,7 @@ import javax.faces.el.ValueBinding;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.model.ICommitableObject;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -56,6 +57,17 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
             if (value == undefinedValue) {
                 value = null;
+
+            } else if (value instanceof ICommitableObject) {
+                ICommitableObject commitableObject = (ICommitableObject) value;
+
+                if (commitableObject.isCommited() == false) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Commit object '" + commitableObject + "'.");
+                    }
+
+                    commitableObject.commit();
+                }
             }
 
             setProperty(context, key, value);

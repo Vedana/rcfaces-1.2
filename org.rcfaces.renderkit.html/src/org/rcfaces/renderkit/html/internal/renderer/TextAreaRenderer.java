@@ -37,15 +37,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         writeCssAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
         writeTextDirection(htmlWriter, textAreaComponent);
-
-        int col = textAreaComponent.getColumnNumber(facesContext);
-        if (col > 0) {
-            htmlWriter.writeCols(col);
-        }
-        int row = textAreaComponent.getRowNumber(facesContext);
-        if (row > 0) {
-            htmlWriter.writeRows(row);
-        }
+        writeTextAreaAttributes(htmlWriter);
 
         String txt = textAreaComponent.getText(facesContext);
         if (txt != null) {
@@ -58,6 +50,32 @@ public class TextAreaRenderer extends AbstractInputRenderer {
             // Il nous faut le javascript, car c'est un traitement javascript !
             htmlWriter.enableJavaScript();
         }
+    }
+
+    protected void writeTextAreaAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
+        TextAreaComponent textAreaComponent = (TextAreaComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        int col = textAreaComponent.getColumnNumber(facesContext);
+        if (col > 0) {
+            htmlWriter.writeCols(col);
+        }
+        int row = textAreaComponent.getRowNumber(facesContext);
+        if (row > 0) {
+            htmlWriter.writeRows(row);
+        }
+
+        int maxTextLength = textAreaComponent.getMaxTextLength(facesContext);
+        if (maxTextLength > 0) {
+            htmlWriter.writeAttribute("v:maxTextLength", maxTextLength);
+
+            htmlWriter.enableJavaScript();
+        }
+
     }
 
     protected boolean useHtmlAccessKeyAttribute() {

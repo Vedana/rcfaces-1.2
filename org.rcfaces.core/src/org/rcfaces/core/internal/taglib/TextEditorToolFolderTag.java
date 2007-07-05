@@ -1,140 +1,133 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.TextEditorToolFolderComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.TextEditorToolFolderComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TextEditorToolFolderTag extends ToolFolderTag implements Tag {
 
-    private static final Log LOG = LogFactory
-            .getLog(TextEditorToolFolderTag.class);
 
-    private String itemTypes;
+	private static final Log LOG=LogFactory.getLog(TextEditorToolFolderTag.class);
 
-    private String fontSizes;
+	private String itemTypes;
+	private String fontSizes;
+	private String fontNames;
+	private String forVal;
+	public String getComponentType() {
+		return TextEditorToolFolderComponent.COMPONENT_TYPE;
+	}
 
-    private String fontNames;
+	public final String getItemTypes() {
+		return itemTypes;
+	}
 
-    private String forVal;
+	public final void setItemTypes(String itemTypes) {
+		this.itemTypes = itemTypes;
+	}
 
-    public String getComponentType() {
-        return TextEditorToolFolderComponent.COMPONENT_TYPE;
-    }
+	public final String getFontSizes() {
+		return fontSizes;
+	}
 
-    public final String getItemTypes() {
-        return itemTypes;
-    }
+	public final void setFontSizes(String fontSizes) {
+		this.fontSizes = fontSizes;
+	}
 
-    public final void setItemTypes(String itemTypes) {
-        this.itemTypes = itemTypes;
-    }
+	public final String getFontNames() {
+		return fontNames;
+	}
 
-    public final String getFontSizes() {
-        return fontSizes;
-    }
+	public final void setFontNames(String fontNames) {
+		this.fontNames = fontNames;
+	}
 
-    public final void setFontSizes(String fontSizes) {
-        this.fontSizes = fontSizes;
-    }
+	public final String getFor() {
+		return forVal;
+	}
 
-    public final String getFontNames() {
-        return fontNames;
-    }
+	public final void setFor(String forVal) {
+		this.forVal = forVal;
+	}
 
-    public final void setFontNames(String fontNames) {
-        this.fontNames = fontNames;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (TextEditorToolFolderComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  itemTypes='"+itemTypes+"'");
+			LOG.debug("  fontSizes='"+fontSizes+"'");
+			LOG.debug("  fontNames='"+fontNames+"'");
+			LOG.debug("  forVal='"+forVal+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final String getFor() {
-        return forVal;
-    }
+		if ((uiComponent instanceof TextEditorToolFolderComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'TextEditorToolFolderComponent'.");
+		}
 
-    public final void setFor(String forVal) {
-        this.forVal = forVal;
-    }
+		TextEditorToolFolderComponent component = (TextEditorToolFolderComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (TextEditorToolFolderComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  itemTypes='" + itemTypes + "'");
-            LOG.debug("  fontSizes='" + fontSizes + "'");
-            LOG.debug("  fontNames='" + fontNames + "'");
-            LOG.debug("  forVal='" + forVal + "'");
-        }
-        super.setProperties(uiComponent);
+		if (itemTypes != null) {
+			if (isValueReference(itemTypes)) {
+				ValueBinding vb = application.createValueBinding(itemTypes);
+				component.setValueBinding(Properties.ITEM_TYPES, vb);
 
-        if ((uiComponent instanceof TextEditorToolFolderComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'TextEditorToolFolderComponent'.");
-        }
+			} else {
+				component.setItemTypes(itemTypes);
+			}
+		}
 
-        TextEditorToolFolderComponent component = (TextEditorToolFolderComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+		if (fontSizes != null) {
+			if (isValueReference(fontSizes)) {
+				ValueBinding vb = application.createValueBinding(fontSizes);
+				component.setValueBinding(Properties.FONT_SIZES, vb);
 
-        if (itemTypes != null) {
-            if (isValueReference(itemTypes)) {
-                ValueBinding vb = application.createValueBinding(itemTypes);
-                component.setValueBinding(Properties.ITEM_TYPES, vb);
+			} else {
+				component.setFontSizes(fontSizes);
+			}
+		}
 
-            } else {
-                component.setItemTypes(itemTypes);
-            }
-        }
+		if (fontNames != null) {
+			if (isValueReference(fontNames)) {
+				ValueBinding vb = application.createValueBinding(fontNames);
+				component.setValueBinding(Properties.FONT_NAMES, vb);
 
-        if (fontSizes != null) {
-            if (isValueReference(fontSizes)) {
-                ValueBinding vb = application.createValueBinding(fontSizes);
-                component.setValueBinding(Properties.FONT_SIZES, vb);
+			} else {
+				component.setFontNames(fontNames);
+			}
+		}
 
-            } else {
-                component.setFontSizes(fontSizes);
-            }
-        }
+		if (forVal != null) {
+			if (isValueReference(forVal)) {
+				ValueBinding vb = application.createValueBinding(forVal);
+				component.setValueBinding(Properties.FOR, vb);
 
-        if (fontNames != null) {
-            if (isValueReference(fontNames)) {
-                ValueBinding vb = application.createValueBinding(fontNames);
-                component.setValueBinding(Properties.FONT_NAMES, vb);
+			} else {
+				component.setFor(forVal);
+			}
+		}
+	}
 
-            } else {
-                component.setFontNames(fontNames);
-            }
-        }
+	public void release() {
+		itemTypes = null;
+		fontSizes = null;
+		fontNames = null;
+		forVal = null;
 
-        if (forVal != null) {
-            if (isValueReference(forVal)) {
-                ValueBinding vb = application.createValueBinding(forVal);
-                component.setValueBinding(Properties.FOR, vb);
-
-            } else {
-                component.setFor(forVal);
-            }
-        }
-    }
-
-    public void release() {
-        itemTypes = null;
-        fontSizes = null;
-        fontNames = null;
-        forVal = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

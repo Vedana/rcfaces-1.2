@@ -43,10 +43,13 @@ import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
+import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.capability.ISelectionComponent;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
@@ -61,13 +64,10 @@ import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.ArrayIndexesModel;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.provider.ICheckProvider;
-import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
-import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.preference.IComponentPreference;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -173,7 +173,39 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        if (dataGridComponent.getRows() > 0) {
+        boolean ajax = (dataGridComponent.getRows() > 0);
+
+        if (ajax == false) {
+            // On a des colonnes triables coté serveur ?
+            AbstractGridRenderContext gridRenderContext = getGridRenderContext(writer
+                    .getHtmlComponentRenderContext());
+
+            int columnCount = gridRenderContext.getColumnCount();
+            for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                Object sort = gridRenderContext.getSortCommand(columnIndex);
+                if (sort == null) {
+                    continue;
+                }
+
+                if (sort instanceof IServerActionListener) {
+                    ajax = true;
+                    break;
+                }
+
+                if (gridRenderContext.getSortClientSide(columnIndex) == false) {
+                    ajax = true;
+                    break;
+                }
+                if (sort instanceof String) {
+                    if (((String) sort).trim().equals(SORT_SERVER_COMMAND)) {
+                        ajax = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (ajax) {
             javaScriptRenderContext.appendRequiredClasses(classes,
                     JavaScriptClasses.GRID, "ajax");
         }
@@ -1306,6 +1338,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     private interface IBooleanStateCallback {
         boolean test(AbstractGridRenderContext tableContext, int index);
     }
@@ -1586,7 +1623,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             } catch (NumberFormatException ex) {
                 throw new FacesException("Can not parse index '" + s_index
-                        + ".");
+                        + ".", ex);
             }
         }
 
@@ -1598,67 +1635,51 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     protected void setCheckedIndexes(FacesContext facesContext,
-            ICheckProvider dg, int[] indexes, int uindexes[], boolean all) {
-        Object m = dg.getCheckedValues();
-        if (m != null && (m instanceof IIndexesModel) == false) {
-            throw new FacesException(
-                    "'CheckedValues' attribute must contain an IIndexesModel if you do not specify 'rowValueColumnId' attribute !");
-        }
-
-        IIndexesModel model = (IIndexesModel) m;
-        if (model == null) {
-            model = new ArrayIndexesModel();
-
-            dg.setCheckedValues(model);
-        }
+            ICheckComponent checkComponent, int[] indexes, int uindexes[],
+            boolean all) {
 
         if (all) {
-            model.clearIndexes();
+            checkComponent.uncheckAll();
 
-        } else {
-            for (int i = 0; i < uindexes.length; i++) {
-                model.removeIndex(uindexes[i]);
-            }
+        } else if (uindexes.length > 0) {
+            checkComponent.uncheck(uindexes);
         }
 
-        for (int i = 0; i < indexes.length; i++) {
-            model.addIndex(indexes[i]);
+        if (indexes.length > 0) {
+            checkComponent.check(indexes);
+        }
+    }
+
+    protected void setAdditionalIndexes(FacesContext facesContext,
+            IAdditionalInformationComponent additionalInformationComponent,
+            int[] indexes, int uindexes[], boolean all) {
+
+        if (all) {
+            additionalInformationComponent.hideAllAdditionalInformations();
+
+        } else if (uindexes.length > 0) {
+            additionalInformationComponent.hideAdditionalInformation(uindexes);
         }
 
-        model.commitChanges();
+        if (indexes.length > 0) {
+            additionalInformationComponent.showAdditionalInformation(indexes);
+        }
     }
 
     protected void setSelectedIndexes(FacesContext facesContext,
-            ISelectionProvider dg, int[] indexes, int dindexes[],
-            boolean deselectAll) {
-
-        Object m = dg.getSelectedValues();
-        if (m != null && (m instanceof IIndexesModel) == false) {
-            throw new FacesException(
-                    "'SelectedValues' attribute must contain an IIndexesModel if you do not specify 'rowValueColumnId' attribute !");
-        }
-
-        IIndexesModel model = (IIndexesModel) m;
-        if (model == null) {
-            model = new ArrayIndexesModel();
-
-            dg.setSelectedValues(model);
-        }
+            ISelectionComponent selectionComponent, int[] indexes,
+            int dindexes[], boolean deselectAll) {
 
         if (deselectAll) {
-            model.clearIndexes();
+            selectionComponent.deselectAll();
 
-        } else {
-            for (int i = 0; i < dindexes.length; i++) {
-                model.removeIndex(dindexes[i]);
-            }
+        } else if (dindexes.length > 0) {
+            selectionComponent.deselect(dindexes);
         }
 
-        for (int i = 0; i < indexes.length; i++) {
-            model.addIndex(indexes[i]);
+        if (indexes.length > 0) {
+            selectionComponent.select(indexes);
         }
-
-        model.commitChanges();
     }
 
     protected boolean hasComponenDecoratorSupport() {

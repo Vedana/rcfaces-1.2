@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
-import org.rcfaces.core.component.capability.ISelectionValuesCapability;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.OrderedSet;
@@ -812,7 +812,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 Set values = updateSelection(facesContext, selected,
                         selectedRows, deselectedRows, componentsGridComponent);
 
-                Class cls = ((ISelectionValuesCapability) componentsGridComponent)
+                Class cls = ((ISelectedValuesCapability) componentsGridComponent)
                         .getSelectedValuesType(facesContext);
 
                 if (cls == null && selected != null) {
