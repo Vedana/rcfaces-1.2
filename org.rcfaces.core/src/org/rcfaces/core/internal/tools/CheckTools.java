@@ -3,8 +3,12 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.lang.provider.ICheckProvider;
 
 /**
@@ -37,6 +41,19 @@ public class CheckTools extends CollectionTools {
             return value;
         }
 
+        public Object getComponentValues(UIComponent component) {
+            return ((ICheckedValuesCapability) component).getCheckedValues();
+        }
+
+        public void setComponentValues(UIComponent component, Object values) {
+            ((ICheckedValuesCapability) component).setCheckedValues(values);
+        }
+
+        public Class getComponentValuesType(FacesContext facesContext,
+                UIComponent component) {
+            return ((ICheckedValuesCapability) component)
+                    .getCheckedValuesType(facesContext);
+        }
     };
 
     public static int getCount(Object checkedValues) {
@@ -80,5 +97,44 @@ public class CheckTools extends CollectionTools {
         }
 
         return valuesAccessor.adaptValue(value);
+    }
+
+    public static void check(FacesContext facesContext, UIComponent component,
+            Object rowValue) {
+        select(component, CHECK_PROVIDER_VALUES_ACCESSOR, rowValue);
+    }
+
+    public static void check(FacesContext facesContext, UIComponent component,
+            int index) {
+        select(component, CHECK_PROVIDER_VALUES_ACCESSOR, index);
+    }
+
+    public static void check(FacesContext facesContext, UIComponent component,
+            int start, int end) {
+        select(component, CHECK_PROVIDER_VALUES_ACCESSOR, start, end);
+    }
+
+    public static void checkAll(FacesContext facesContext, UIComponent component) {
+        selectAll(component, CHECK_PROVIDER_VALUES_ACCESSOR);
+    }
+
+    public static void uncheck(FacesContext facesContext,
+            UIComponent component, Object rowValue) {
+        deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, rowValue);
+    }
+
+    public static void uncheck(FacesContext facesContext,
+            UIComponent component, int index) {
+        deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, index);
+    }
+
+    public static void uncheck(FacesContext facesContext,
+            UIComponent component, int start, int end) {
+        deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, start, end);
+    }
+
+    public static void uncheckAll(FacesContext facesContext,
+            UIComponent component) {
+        deselectAll(component, CHECK_PROVIDER_VALUES_ACCESSOR);
     }
 }

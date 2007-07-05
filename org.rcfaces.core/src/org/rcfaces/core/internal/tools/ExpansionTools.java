@@ -3,8 +3,12 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IExpandedValuesCapability;
 import org.rcfaces.core.lang.provider.IExpansionProvider;
 
 /**
@@ -36,6 +40,20 @@ public class ExpansionTools extends CollectionTools {
 
         public Object adaptValue(Object value) {
             return value;
+        }
+
+        public Object getComponentValues(UIComponent component) {
+            return ((IExpandedValuesCapability) component).getExpandedValues();
+        }
+
+        public void setComponentValues(UIComponent component, Object values) {
+            ((IExpandedValuesCapability) component).setExpandedValues(values);
+        }
+
+        public Class getComponentValuesType(FacesContext facesContext,
+                UIComponent component) {
+            return ((IExpandedValuesCapability) component)
+                    .getExpandedValuesType(facesContext);
         }
 
     };

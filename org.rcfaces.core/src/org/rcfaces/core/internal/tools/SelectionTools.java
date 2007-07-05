@@ -3,8 +3,12 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 
 /**
@@ -36,6 +40,20 @@ public class SelectionTools extends CollectionTools {
 
         public Object adaptValue(Object value) {
             return value;
+        }
+
+        public Object getComponentValues(UIComponent component) {
+            return ((ISelectedValuesCapability) component).getSelectedValues();
+        }
+
+        public void setComponentValues(UIComponent component, Object values) {
+            ((ISelectedValuesCapability) component).setSelectedValues(values);
+        }
+
+        public Class getComponentValuesType(FacesContext facesContext,
+                UIComponent component) {
+            return ((ISelectedValuesCapability) component)
+                    .getSelectedValuesType(facesContext);
         }
     };
 
@@ -77,6 +95,46 @@ public class SelectionTools extends CollectionTools {
             return defaultValues;
         }
         return valuesAccessor.adaptValue(value);
+    }
+
+    public static void select(FacesContext facesContext, UIComponent component,
+            Object rowValue) {
+        select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, rowValue);
+    }
+
+    public static void select(FacesContext facesContext, UIComponent component,
+            int index) {
+        select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, index);
+    }
+
+    public static void select(FacesContext facesContext, UIComponent component,
+            int start, int end) {
+        select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, start, end);
+    }
+
+    public static void selectAll(FacesContext facesContext,
+            UIComponent component) {
+        selectAll(component, SELECTION_PROVIDER_VALUES_ACCESSOR);
+    }
+
+    public static void deselect(FacesContext facesContext,
+            UIComponent component, Object rowValue) {
+        deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, rowValue);
+    }
+
+    public static void deselect(FacesContext facesContext,
+            UIComponent component, int index) {
+        deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, index);
+    }
+
+    public static void deselect(FacesContext facesContext,
+            UIComponent component, int start, int end) {
+        deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, start, end);
+    }
+
+    public static void deselectAll(FacesContext facesContext,
+            UIComponent component) {
+        deselectAll(component, SELECTION_PROVIDER_VALUES_ACCESSOR);
     }
 
 }
