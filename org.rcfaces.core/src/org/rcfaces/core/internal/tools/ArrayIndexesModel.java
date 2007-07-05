@@ -29,7 +29,12 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
 
     protected static final int[] EMPTY_SELECTION = new int[0];
 
-    private static final boolean VERIFY_GARBAGE = true;
+    private static final boolean VERIFY_GARBAGE = LOG.isDebugEnabled();
+    static {
+        if (VERIFY_GARBAGE) {
+            LOG.info("Verify GARBAGE enabled");
+        }
+    }
 
     private int selectionIndexes[] = EMPTY_SELECTION;
 
@@ -312,11 +317,19 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
     public IIndexesModel copy() {
         garbage();
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Copy model");
+        }
+
         return new ArrayIndexesModel(selectionIndexes);
     }
 
     public void commit() {
         garbage();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Commit model");
+        }
 
         commited = true;
     }
