@@ -57,10 +57,10 @@ public class NumberTools {
 
     public static DecimalFormatSymbols getDecimalFormatSymbols(Locale locale) {
         if (Constants.CACHED_LOCALE_FORMATS == false) {
-            NumberFormat decimalFormat = DecimalFormat.getInstance(locale);
+            NumberFormat decimalFormat = NumberFormat.getInstance(locale);
 
             if ((decimalFormat instanceof DecimalFormat) == false) {
-                decimalFormat = DecimalFormat.getInstance(Locale.ENGLISH);
+                decimalFormat = NumberFormat.getInstance(Locale.ENGLISH);
             }
 
             return ((DecimalFormat) decimalFormat).getDecimalFormatSymbols();
@@ -75,10 +75,10 @@ public class NumberTools {
                 return symbols;
             }
 
-            NumberFormat decimalFormat = DecimalFormat.getInstance(locale);
+            NumberFormat decimalFormat = NumberFormat.getInstance(locale);
 
             if ((decimalFormat instanceof DecimalFormat) == false) {
-                decimalFormat = DecimalFormat.getInstance(Locale.ENGLISH);
+                decimalFormat = NumberFormat.getInstance(Locale.ENGLISH);
             }
 
             symbols = ((DecimalFormat) decimalFormat).getDecimalFormatSymbols();
