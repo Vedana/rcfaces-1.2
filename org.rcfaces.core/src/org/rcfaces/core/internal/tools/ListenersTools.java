@@ -13,6 +13,7 @@ import javax.faces.webapp.UIComponentTag;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
@@ -34,6 +35,8 @@ import org.rcfaces.core.component.capability.ISuggestionEventCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.listener.AdditionalInformationActionListener;
+import org.rcfaces.core.internal.listener.AdditionalInformationScriptListener;
 import org.rcfaces.core.internal.listener.BlurActionListener;
 import org.rcfaces.core.internal.listener.BlurScriptListener;
 import org.rcfaces.core.internal.listener.ChangeActionListener;
@@ -221,6 +224,28 @@ public class ListenersTools {
 
             selectEventCapability
                     .addSelectionListener(new SelectionActionListener(
+                            expression));
+        }
+    };
+
+    public static final IListenerType ADDITIONAL_INFORMATION_LISTENER_TYPE = new AbstractListenerType() {
+        private static final String REVISION = "$Revision$";
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IAdditionalInformationEventCapability additionalInformationEventCapability = (IAdditionalInformationEventCapability) component;
+
+            additionalInformationEventCapability
+                    .addAdditionalInformationListener(new AdditionalInformationScriptListener(
+                            scriptType, command));
+        }
+
+        public void addActionListener(UIComponent component,
+                Application application, String expression) {
+            IAdditionalInformationEventCapability additionalInformationEventCapability = (IAdditionalInformationEventCapability) component;
+
+            additionalInformationEventCapability
+                    .addAdditionalInformationListener(new AdditionalInformationActionListener(
                             expression));
         }
     };
