@@ -72,8 +72,15 @@ var __statics = {
 }
 
 var __members = {
+	
+	/**
+	 * @field private f_resourceBundle
+	 */
+	 _resourceBundle: undefined,
+	
 	f_locale: function() {
 		var resourceBundle=f_resourceBundle.Get(f_locale);
+		this._resourceBundle=resourceBundle;
 	
 		this._monthShortNames=resourceBundle.f_get("MONTH_SHORT_NAMES");
 		this._monthMedNames=resourceBundle.f_get("MONTH_MED_NAMES");
@@ -89,23 +96,23 @@ var __members = {
 		this._dateFormats=resourceBundle.f_get("DATE_FORMATS");
 	},
 	
-	/*
 	f_finalize: function() {
-		this._monthShortNames=undefined; // string[]
-		this._monthMedNames=undefined; // string[]
-		this._monthLongNames=undefined; // string[]
+		this._resourceBundle=undefined; // f_resourceBundle;
+		
+//		this._monthShortNames=undefined; // string[]
+//		this._monthMedNames=undefined; // string[]
+//		this._monthLongNames=undefined; // string[]
 	
-		this._dayShortNames=undefined; // string[]
-		this._dayMedNames=undefined; // string[]
-		this._dayLongNames=undefined; // string[]
+//		this._dayShortNames=undefined; // string[]
+//		this._dayMedNames=undefined; // string[]
+//		this._dayLongNames=undefined; // string[]
 	
-		this._firstDayOfWeek=undefined; // number
+//		this._firstDayOfWeek=undefined; // number
 	
-		this._dateFormats=undefined; // string[]
+//		this._dateFormats=undefined; // string[]
 	
 		this.f_super(arguments);
 	},
-	*/
 	/**
 	 * @method public 
 	 * @param number n Month number (0 to 11)
@@ -213,6 +220,9 @@ var __members = {
      * Getter for the programmatic name of the entire locale,
      * with the language, country and variant separated by underbars.
      * Language is always lower case, and country is always upper case.
+     * 
+     * @method public
+     * @return String
      */
 	f_getName: function() {
 		return f_env.GetLocaleName();
@@ -220,6 +230,9 @@ var __members = {
   	/**
      * Returns the language code for this locale, which will either be the empty string
      * or a lowercase ISO 639 code.
+     * 
+     * @method public
+     * @return String
      */
 	f_getLanguage: function() {
 		return f_locale._GetLocaleNamePart(0);
@@ -227,17 +240,63 @@ var __members = {
  	/**
      * Returns the country/region code for this locale, which will either be the empty string
      * or an upercase ISO 3166 2-letter code.
+     * 
+     * @method public
+     * @return String
      */
  	f_getCountry: function() {
 		return f_locale._GetLocaleNamePart(1);
 	},
-   /**
+	/**
      * Returns the variant code for this locale.
+     * 
+     * @method public
+     * @return String
      */
 	f_getVariant: function() {
 		return f_locale._GetLocaleNamePart(2);
+	},
+	/**
+	 * Returns a JSF messages associated to a key.
+	 * 
+	 * @method public
+	 * @param String key
+	 * @param optional String defaultValue
+	 * @return String
+	 * @see f_resourceBundle#f_get
+	 */
+	f_getMessage: function(key, defaultValue) {
+		return f_resourceBundle.Get(f_locale).f_get(key, defaultValue);
+	},
+	/**
+	 * Format a JSF messages associated to a key.
+	 * 
+	 * @method public
+	 * @param String key
+	 * @param optional any... params
+	 * @return String
+	 * @see f_resourceBundle#f_format
+	 */
+	f_formatMessage: function(key, params) {
+		return f_resourceBundle.Get(f_locale).f_format(key, params);
+	},
+	/**
+	 * Format a JSF messages associated to a key.
+	 * 
+	 * @method public
+	 * @param String key
+	 * @param optional any[] params
+	 * @param optional String defaultValue
+	 * @return String
+	 * @see f_resourceBundle#f_formatParams
+	 */
+	f_formatMessageParams: function(key, params, defaultValue) {
+		return f_resourceBundle.Get(f_locale).f_formatParams(key, params, defaultValue);
 	}
 }
 
-new f_class("f_locale", null, __statics, __members);
+new f_class("f_locale", {
+	statics: __statics,
+	members: __members
+});
 

@@ -169,7 +169,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param String key Key of property.
-	 * @param optional any params Parameters which will be formatted into the string associated to the key.
+	 * @param optional any... params Parameters which will be formatted into the string associated to the key.
 	 *                 The Nth parameter will replace the '{n}' substring. (First parameter: {0}; Second parameter {1} ...)
 	 * @return Object
 	 */
