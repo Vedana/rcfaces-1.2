@@ -541,7 +541,7 @@ var __statics = {
 		return (object._kclass)?true:false;
 	},
 	/**
-	 * @method private static final
+	 * @method private static final 
 	 */
 	_DeclarePrototypeClass: function(name, staticMembers, methods) {
 		var cls=null;
@@ -798,7 +798,6 @@ var __members = {
 		}
 	}
 }
-
 
 __statics._DeclarePrototypeClass("f_class", __statics, __members);
 
