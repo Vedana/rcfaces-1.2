@@ -347,10 +347,16 @@ var __members = {
 
 		} else if (this._mouseDown) {
 			url = this.f_getSelectedImageURL();
+			if (!url) {
+				url = this.f_getHoverImageURL();
+			}
 			suffix="_pushed";
 			
-		} else if (this.f_isSelected && this.f_isSelected()) {
+		} else if (this.f_hasSelectedState()) {
 			url = this.f_getSelectedImageURL();
+			if (!url) {
+				url = this.f_getHoverImageURL();
+			}
 			suffix="_selected";
 			ignoreFlat=suffix;
 
@@ -377,6 +383,8 @@ var __members = {
 		}
 		
 		var className=this.f_computeStyleClass(suffix);
+		
+		f_core.Debug(f_imageButton, "_updateImage: disabled="+this.f_isDisabled()+" mouseDown="+this._mouseDown+" selected="+(this.f_isSelected?this.f_isSelected():undefined)+" hover="+this._hover+" focus="+this._focus+" => url="+url+" suffix="+suffix+" className="+className);				
 		
 		if (this.className!=className) {
 			this.className=className;
@@ -419,7 +427,13 @@ var __members = {
 			image.src = url;
 		}		
 	},
-
+	/**
+	 * @method protected
+	 * @return boolean
+	 */
+	f_hasSelectedState: function() {
+		return this.f_isSelected && this.f_isSelected();		
+	},
 	/**
 	 * @method protected
 	 */
