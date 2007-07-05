@@ -12,7 +12,7 @@ import org.rcfaces.core.lang.provider.IExpansionProvider;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IExpansionValuesCapability extends IExpansionProvider {
+public interface IExpandedValuesCapability extends IExpansionProvider {
     /*
      * Object getCheckedValues();
      * 
