@@ -145,6 +145,7 @@ var __members = {
 		this._valueFormat=f_core.GetAttribute(this, "v:valueFormat");
 		
 		this._filtred=true;
+		this._showLoadingAlert=false;
 		
 		var button=f_core.GetFirstElementByTagName(this, "img", true);
 		this._button=button;

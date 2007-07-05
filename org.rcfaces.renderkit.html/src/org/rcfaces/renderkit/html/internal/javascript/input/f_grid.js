@@ -1298,9 +1298,11 @@ var __members = {
 	 */
 	f_getEventLocked: function(evt, showAlert) {
 		if (this._loading) {
-			if (showAlert!==false) {
+			if (showAlert!==false && this._showLoadingAlert!==false) {
 				var resourceBundle=f_resourceBundle.Get(f_grid);
 			
+				f_core.Debug(f_grid, "f_getEventLocked: popup error dialog, loading ...");
+				
 				alert(resourceBundle.f_get("EVENT_LOCKED"));
 			}
 			return true;
@@ -3711,6 +3713,9 @@ var __members = {
 		
 		if (scrollBarWidth>0) {
 			var h=this.offsetHeight-this._title.offsetHeight-2;
+			if (h<0) {
+				h=0;
+			}
 			body.style.height=h+"px";
 		}
 		
