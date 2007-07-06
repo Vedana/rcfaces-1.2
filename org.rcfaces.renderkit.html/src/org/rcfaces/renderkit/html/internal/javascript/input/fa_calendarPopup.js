@@ -406,18 +406,23 @@ var __members={
 			var component=this.f_findComponent(forComponent);
 			
 			if (component) {
+				var date;
 				try {
 					var forValueFormat=this._forValueFormat;					
 				
-					var date=fa_calendarPopup._GetDateFromComponent(component, forValueFormat, this._calendar);
-					
-					if (date) {
-						this.f_setSelection(date);
-					}
+					date=fa_calendarPopup._GetDateFromComponent(component, forValueFormat, this._calendar);
 					
 				} catch (x) {
 					f_core.Debug(fa_calendarPopup, "f_openCalendarPopup: Get date of component '"+component.id+"' throws exception.", x);
-					this.f_setSelection(date);
+				}
+				if (date) {
+					try {
+						this.f_setSelection(date);
+					} catch (x) {
+						f_core.Error(fa_calendarPopup, "f_openCalendarPopup: set Selection '"+component.id+"' with date '"+date+"' throws exception.", x);
+					}
+				} else {
+					this.f_setSelection(null);
 				}
 				
 			} else {
