@@ -416,7 +416,8 @@ var __members={
 					}
 					
 				} catch (x) {
-					f_core.Error(fa_calendarPopup, "f_openCalendarPopup: Get date of component '"+component.id+"' throws exception.", x);
+					f_core.Debug(fa_calendarPopup, "f_openCalendarPopup: Get date of component '"+component.id+"' throws exception.", x);
+					this.f_setSelection(date);
 				}
 				
 			} else {
