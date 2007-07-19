@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.model.AbstractConverter;
@@ -19,10 +18,8 @@ import org.rcfaces.core.model.AbstractConverter;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class CardinalityConverter extends AbstractConverter {
+public abstract class CardinalityConverter extends AbstractConverter {
     private static final String REVISION = "$Revision$";
-
-    public static final Converter SINGLETON = new CardinalityConverter();
 
     private static final String OPTIONAL_CARDINALITY_NAME = "optional";
 
@@ -39,9 +36,6 @@ public class CardinalityConverter extends AbstractConverter {
     private static final String ONEMANY_CARDINALITY_NAME = "onemany";
 
     private static final String ONEMANY_CARDINALITY_ABBREV = "+";
-
-    private static final Integer DEFAULT_CARDINALITY = new Integer(
-            ICardinality.DEFAULT_CARDINALITY);
 
     private static Map CARDINALITIES = new HashMap(5);
 
@@ -76,7 +70,7 @@ public class CardinalityConverter extends AbstractConverter {
 
         if (value == null || value.length() < 1
                 || "default".equalsIgnoreCase(value)) {
-            return DEFAULT_CARDINALITY;
+            return getDefaultCardinality();
         }
 
         value = value.toLowerCase();
@@ -105,7 +99,7 @@ public class CardinalityConverter extends AbstractConverter {
             Object value) {
 
         if (value == null) {
-            return (String) CARDINALITIES.get(DEFAULT_CARDINALITY);
+            return (String) CARDINALITIES.get(getDefaultCardinality());
         }
 
         if ((value instanceof Integer) == false) {
@@ -124,4 +118,5 @@ public class CardinalityConverter extends AbstractConverter {
                 + "' is not supported for a cardinality type !");
     }
 
+    protected abstract Object getDefaultCardinality();
 }
