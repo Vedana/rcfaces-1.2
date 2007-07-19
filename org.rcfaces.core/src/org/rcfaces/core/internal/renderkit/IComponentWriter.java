@@ -11,4 +11,6 @@ package org.rcfaces.core.internal.renderkit;
 public interface IComponentWriter {
 
     IComponentRenderContext getComponentRenderContext();
+
+    String getResponseCharacterEncoding();
 }
