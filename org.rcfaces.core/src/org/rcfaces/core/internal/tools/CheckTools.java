@@ -3,12 +3,16 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import java.util.Set;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.capability.ICheckComponent;
+import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import org.rcfaces.core.lang.provider.ICheckProvider;
 
 /**
@@ -37,8 +41,12 @@ public class CheckTools extends CollectionTools {
                     .getCheckedValues());
         }
 
-        public Object adaptValue(Object value) {
+        public Object getAdaptedValues(Object value) {
             return value;
+        }
+
+        public void setAdaptedValues(Object checkProvider, Object checkedValues) {
+            ((ICheckProvider) checkProvider).setCheckedValues(checkedValues);
         }
 
         public Object getComponentValues(UIComponent component) {
@@ -88,63 +96,94 @@ public class CheckTools extends CollectionTools {
         return valuesAccessor.listValues(checkedValues, refValue);
     }
 
-    public static Object adaptValue(Object value, Object defaultValue) {
+    public static Object getAdaptedValues(Object value, boolean useValue) {
+        IValuesAccessor valuesAccessor = getValuesAccessor(value,
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, useValue);
+
+        if (valuesAccessor == null) {
+            return null;
+        }
+
+        return valuesAccessor.getAdaptedValues(value);
+    }
+
+    public static boolean setAdaptedValues(Object value, Object values) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
                 ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, false);
 
         if (valuesAccessor == null) {
-            return defaultValue;
+            return false;
         }
 
-        return valuesAccessor.adaptValue(value);
+        valuesAccessor.setAdaptedValues(value, values);
+        return true;
     }
 
-    public static void check(FacesContext facesContext, UIComponent component,
-            Object rowValue) {
-        select(component, CHECK_PROVIDER_VALUES_ACCESSOR, rowValue);
+    public static void check(FacesContext facesContext,
+            ICheckComponent component, Object rowValue) {
+        select((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR,
+                rowValue);
     }
 
-    public static void check(FacesContext facesContext, UIComponent component,
-            int index) {
-        select(component, CHECK_PROVIDER_VALUES_ACCESSOR, index);
+    public static void check(FacesContext facesContext,
+            ICheckRangeComponent component, int index) {
+        select((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR, index);
     }
 
-    public static void check(FacesContext facesContext, UIComponent component,
-            int indexes[]) {
-        select(component, CHECK_PROVIDER_VALUES_ACCESSOR, indexes);
+    public static void check(FacesContext facesContext,
+            ICheckRangeComponent component, int indexes[]) {
+        select((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR, indexes);
     }
 
-    public static void check(FacesContext facesContext, UIComponent component,
-            int start, int end) {
-        select(component, CHECK_PROVIDER_VALUES_ACCESSOR, start, end);
+    public static void check(FacesContext facesContext,
+            ICheckRangeComponent component, int start, int end) {
+        select((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR, start,
+                end);
     }
 
-    public static void checkAll(FacesContext facesContext, UIComponent component) {
-        selectAll(component, CHECK_PROVIDER_VALUES_ACCESSOR);
-    }
-
-    public static void uncheck(FacesContext facesContext,
-            UIComponent component, Object rowValue) {
-        deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, rowValue);
-    }
-
-    public static void uncheck(FacesContext facesContext,
-            UIComponent component, int index) {
-        deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, index);
+    public static void checkAll(FacesContext facesContext,
+            ICheckComponent component) {
+        selectAll((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR);
     }
 
     public static void uncheck(FacesContext facesContext,
-            UIComponent component, int indexes[]) {
-        deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, indexes);
+            ICheckComponent component, Object rowValue) {
+        deselect((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR,
+                rowValue);
     }
 
     public static void uncheck(FacesContext facesContext,
-            UIComponent component, int start, int end) {
-        deselect(component, CHECK_PROVIDER_VALUES_ACCESSOR, start, end);
+            ICheckComponent component, int index) {
+        deselect((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR, index);
+    }
+
+    public static void uncheck(FacesContext facesContext,
+            ICheckComponent component, int indexes[]) {
+        deselect((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR,
+                indexes);
+    }
+
+    public static void uncheck(FacesContext facesContext,
+            ICheckComponent component, int start, int end) {
+        deselect((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR,
+                start, end);
     }
 
     public static void uncheckAll(FacesContext facesContext,
-            UIComponent component) {
-        deselectAll(component, CHECK_PROVIDER_VALUES_ACCESSOR);
+            ICheckComponent component) {
+        deselectAll((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR);
+    }
+
+    public static void setCheckValues(FacesContext facesContext,
+            ICheckComponent component, Set valuesSet) {
+
+        setValues((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR,
+                valuesSet);
+    }
+
+    public static Set checkValuesToSet(FacesContext facesContext,
+            ICheckComponent component, boolean immutable) {
+        return valuesToSet((UIComponent) component,
+                CHECK_PROVIDER_VALUES_ACCESSOR, immutable);
     }
 }

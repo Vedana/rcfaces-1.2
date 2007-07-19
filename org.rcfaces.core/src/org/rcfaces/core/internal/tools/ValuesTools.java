@@ -7,12 +7,10 @@ package org.rcfaces.core.internal.tools;
 import java.io.Externalizable;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +27,7 @@ import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
 import org.rcfaces.core.internal.capability.ISubmittedExternalValue;
-import org.rcfaces.core.internal.lang.OrderedSet;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.util.Convertor;
 
 /**
@@ -37,58 +35,61 @@ import org.rcfaces.core.internal.util.Convertor;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ValuesTools {
+public class ValuesTools extends CollectionTools {
     private static final String REVISION = "$Revision$";
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
     public static final Object NULL_VALUE = new NullValue();
 
-    public static final Set valueToSet(Object value, boolean copy) {
-        if (value == null) {
-            if (copy) {
-                return new OrderedSet();
+    private static final IValuesAccessor VALUES_PROVIDER_VALUES_ACCESSOR = new IValuesAccessor() {
+        private static final String REVISION = "$Revision$";
+
+        public int getCount(Object checkProvider) {
+            throw new UnsupportedOperationException("Not implemented !");
+        }
+
+        public Object getFirst(Object checkProvider, Object refValues) {
+            throw new UnsupportedOperationException("Not implemented !");
+        }
+
+        public Object getAdaptedValues(Object values) {
+            throw new UnsupportedOperationException("Not supported !");
+        }
+
+        public void setAdaptedValues(Object value, Object values) {
+            throw new UnsupportedOperationException("Not supported !");
+        }
+
+        public Object[] listValues(Object checkProvider, Object refValues) {
+            return convertToObjectArray(((ValueHolder) checkProvider)
+                    .getValue());
+        }
+
+        public Object getComponentValues(UIComponent component) {
+            return ((ValueHolder) component).getValue();
+        }
+
+        public void setComponentValues(UIComponent component, Object values) {
+            ((ValueHolder) component).setValue(values);
+        }
+
+        public Class getComponentValuesType(FacesContext facesContext,
+                UIComponent component) {
+            Object value = getComponentValues(component);
+            if (value != null) {
+                return value.getClass();
             }
-            return Collections.EMPTY_SET;
-        }
 
-        if (value instanceof Object[]) {
-            Object array[] = (Object[]) value;
-            if (array.length < 1) {
-                if (copy) {
-                    return new OrderedSet();
-                }
-                return Collections.EMPTY_SET;
+            ValueBinding valueBinding = component
+                    .getValueBinding(Properties.VALUE);
+            if (valueBinding == null) {
+                return null;
             }
 
-            return new OrderedSet(Arrays.asList(array));
+            return valueBinding.getType(facesContext);
         }
-
-        if (value instanceof Set) {
-            if (copy) {
-                return new OrderedSet((Set) value);
-            }
-            return (Set) value;
-        }
-
-        if (value instanceof Collection) {
-            Collection col = (Collection) value;
-            if (col.isEmpty() && copy == false) {
-                return Collections.EMPTY_SET;
-            }
-
-            return new OrderedSet(col);
-        }
-
-        if (copy) {
-            Set set = new OrderedSet();
-            set.add(value);
-
-            return set;
-        }
-
-        return Collections.singleton(value);
-    }
+    };
 
     public static final List valueToList(Object value) {
         if (value == null) {
@@ -506,65 +507,6 @@ public class ValuesTools {
         return (String) Convertor.convert(value, String.class);
     }
 
-    public static Object adaptValues(Class target, Collection collection) {
-        if (target == null || target.equals(Object.class)
-                || target.equals(Object[].class)) {
-            return collection.toArray();
-        }
-
-        if (target.isArray()) {
-            Object array = Array.newInstance(target.getComponentType(),
-                    collection.size());
-
-            if (array instanceof Object[]) {
-                return collection.toArray((Object[]) array);
-            }
-
-            Object src[] = collection.toArray();
-
-            System.arraycopy(src, 0, array, 0, collection.size());
-
-            return array;
-        }
-
-        if (Set.class.isAssignableFrom(target)) {
-            if (collection instanceof Set) {
-                return collection;
-            }
-            return new HashSet(collection);
-        }
-
-        if (List.class.isAssignableFrom(target)) {
-            if (collection instanceof List) {
-                return collection;
-            }
-            return new ArrayList(collection);
-        }
-
-        if (Collection.class.isAssignableFrom(target)) {
-            return collection;
-        }
-
-        throw new FacesException("Invalid collection type '" + target + "'.");
-    }
-
-    public static Set convertSelection(Object selection) {
-        if (selection instanceof Object[]) {
-            return new OrderedSet(Arrays.asList((Object[]) selection));
-        }
-
-        if (selection instanceof Collection) {
-            return new OrderedSet((Collection) selection);
-        }
-
-        if (selection == null) {
-            return new OrderedSet();
-        }
-
-        throw new FacesException(
-                "Bad type of value for attribute selectedValues/checkedValues !");
-    }
-
     public static Object getValue(UIComponent component) {
         if (component instanceof ISubmittedExternalValue) {
             ISubmittedExternalValue submittedExternalValue = (ISubmittedExternalValue) component;
@@ -610,6 +552,18 @@ public class ValuesTools {
 
         throw new FacesException("Component '" + component.getId()
                 + "' does not support value !");
+    }
+
+    public static void setValues(FacesContext facesContext,
+            UIComponent component, Set values) {
+
+        setValues(component, VALUES_PROVIDER_VALUES_ACCESSOR, values);
+    }
+
+    public static Set valuesToSet(FacesContext facesContext,
+            UIComponent component, boolean immutable) {
+        return valuesToSet(component, VALUES_PROVIDER_VALUES_ACCESSOR,
+                immutable);
     }
 
     /**

@@ -23,7 +23,9 @@ import javax.servlet.jsp.jstl.sql.Result;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComponentsColumnComponent;
+import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.component.DataColumnComponent;
+import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.iterator.IColumnIterator;
@@ -32,8 +34,10 @@ import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.lang.OrderedSet;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.IDataModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -429,4 +433,35 @@ public class GridTools {
         // TODO Auto-generated method stub
         return null;
     }
+
+    public static final IComponentValueType DATA_GRID_VALUE_TYPE = new IComponentValueType() {
+        private static final String REVISION = "$Revision$";
+
+        public Object createNewValue(UIComponent component) {
+            DataGridComponent dataGridComponent = (DataGridComponent) component;
+
+            if (dataGridComponent.isRowValueColumnIdSetted()) {
+                return new OrderedSet();
+            }
+
+            return new ArrayIndexesModel();
+        }
+    };
+
+    public static final IComponentValueType COMBO_GRID_VALUE_TYPE = DATA_GRID_VALUE_TYPE;
+
+    public static final IComponentValueType COMPONENTS_GRID_VALUE_TYPE = new IComponentValueType() {
+        private static final String REVISION = "$Revision$";
+
+        public Object createNewValue(UIComponent component) {
+            ComponentsGridComponent gridComponent = (ComponentsGridComponent) component;
+
+            if (gridComponent.isRowValueSetted()) {
+                return new OrderedSet();
+            }
+
+            return new ArrayIndexesModel();
+        }
+    };
+
 }

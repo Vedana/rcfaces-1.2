@@ -3,12 +3,17 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import java.util.Set;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.rcfaces.core.internal.capability.ISelectionComponent;
+import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
+import org.rcfaces.core.lang.provider.ICheckProvider;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 
 /**
@@ -38,8 +43,14 @@ public class SelectionTools extends CollectionTools {
                     .getSelectedValues());
         }
 
-        public Object adaptValue(Object value) {
+        public Object getAdaptedValues(Object value) {
             return value;
+        }
+
+        public void setAdaptedValues(Object selectionProvider,
+                Object selectedValues) {
+            ((ISelectionProvider) selectionProvider)
+                    .setSelectedValues(selectedValues);
         }
 
         public Object getComponentValues(UIComponent component) {
@@ -87,64 +98,98 @@ public class SelectionTools extends CollectionTools {
         return valuesAccessor.listValues(selectedValues, refValue);
     }
 
-    public static Object adaptValue(Object value, Object defaultValues) {
+    public static Object getAdaptedValues(Object value, boolean useValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
-                ISelectionProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR,
-                false);
+                ICheckProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                useValue);
+
         if (valuesAccessor == null) {
-            return defaultValues;
+            return null;
         }
-        return valuesAccessor.adaptValue(value);
+
+        return valuesAccessor.getAdaptedValues(value);
     }
 
-    public static void select(FacesContext facesContext, UIComponent component,
-            Object rowValue) {
-        select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, rowValue);
+    public static boolean setAdaptedValues(Object value, Object values) {
+        IValuesAccessor valuesAccessor = getValuesAccessor(value,
+                ICheckProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR, false);
+
+        if (valuesAccessor == null) {
+            return false;
+        }
+
+        valuesAccessor.setAdaptedValues(value, values);
+        return true;
     }
 
-    public static void select(FacesContext facesContext, UIComponent component,
-            int index) {
-        select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, index);
+    public static void select(FacesContext facesContext,
+            ISelectionComponent component, Object rowValue) {
+        select((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                rowValue);
     }
 
-    public static void select(FacesContext facesContext, UIComponent component,
-            int indexes[]) {
-        select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, indexes);
+    public static void select(FacesContext facesContext,
+            ISelectionRangeComponent component, int index) {
+        select((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                index);
     }
 
-    public static void select(FacesContext facesContext, UIComponent component,
-            int start, int end) {
-        select(component, SELECTION_PROVIDER_VALUES_ACCESSOR, start, end);
+    public static void select(FacesContext facesContext,
+            ISelectionRangeComponent component, int indexes[]) {
+        select((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                indexes);
+    }
+
+    public static void select(FacesContext facesContext,
+            ISelectionRangeComponent component, int start, int end) {
+        select((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                start, end);
     }
 
     public static void selectAll(FacesContext facesContext,
-            UIComponent component) {
-        selectAll(component, SELECTION_PROVIDER_VALUES_ACCESSOR);
+            ISelectionComponent component) {
+        selectAll((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR);
     }
 
     public static void deselect(FacesContext facesContext,
-            UIComponent component, Object rowValue) {
-        deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, rowValue);
+            ISelectionComponent component, Object rowValue) {
+        deselect((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                rowValue);
     }
 
     public static void deselect(FacesContext facesContext,
-            UIComponent component, int index) {
-        deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, index);
+            ISelectionRangeComponent component, int index) {
+        deselect((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                index);
     }
 
     public static void deselect(FacesContext facesContext,
-            UIComponent component, int indexes[]) {
-        deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, indexes);
+            ISelectionRangeComponent component, int indexes[]) {
+        deselect((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                indexes);
     }
 
     public static void deselect(FacesContext facesContext,
-            UIComponent component, int start, int end) {
-        deselect(component, SELECTION_PROVIDER_VALUES_ACCESSOR, start, end);
+            ISelectionRangeComponent component, int start, int end) {
+        deselect((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                start, end);
     }
 
     public static void deselectAll(FacesContext facesContext,
-            UIComponent component) {
-        deselectAll(component, SELECTION_PROVIDER_VALUES_ACCESSOR);
+            ISelectionComponent component) {
+        deselectAll((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR);
     }
 
+    public static void setSelectionValues(FacesContext facesContext,
+            ISelectionComponent component, Set valuesSet) {
+
+        setValues((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                valuesSet);
+    }
+
+    public static Set selectionValuesToSet(FacesContext facesContext,
+            ISelectionComponent component, boolean immutable) {
+        return valuesToSet((UIComponent) component,
+                SELECTION_PROVIDER_VALUES_ACCESSOR, immutable);
+    }
 }

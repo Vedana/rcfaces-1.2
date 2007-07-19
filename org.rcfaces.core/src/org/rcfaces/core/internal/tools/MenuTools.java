@@ -20,7 +20,9 @@ import org.rcfaces.core.component.MenuItemComponent;
 import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.manager.IContainerManager;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.internal.util.ComponentIterators;
+import org.rcfaces.core.lang.OrderedSet;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -194,4 +196,12 @@ public class MenuTools {
 
         return new MenuListIterator(list);
     }
+
+    public static final IComponentValueType MENU_VALUE_TYPE = new IComponentValueType() {
+        private static final String REVISION = "$Revision$";
+
+        public Object createNewValue(UIComponent component) {
+            return new OrderedSet();
+        }
+    };
 }

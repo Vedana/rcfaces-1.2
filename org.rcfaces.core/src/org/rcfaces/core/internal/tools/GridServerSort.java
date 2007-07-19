@@ -148,7 +148,15 @@ public final class GridServerSort {
         boolean sortOrders[] = new boolean[datas.length];
         for (int i = 0; i < ds.length; i++) {
             ds[i] = datas[i].toArray();
-            comparators[i] = sortMethods[i].getComparator();
+
+            ISortMethod sortMethod = sortMethods[i];
+            if (sortMethod == null) {
+                throw new FacesException("No sort method #" + i + " for grid '"
+                        + ((UIComponent) data).getId() + "' of view '"
+                        + facesContext.getViewRoot().getViewId() + "'");
+            }
+
+            comparators[i] = sortMethod.getComparator();
             sortOrders[i] = sortedComponents[i].isAscending();
         }
 

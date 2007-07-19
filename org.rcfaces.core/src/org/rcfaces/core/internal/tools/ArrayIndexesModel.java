@@ -122,7 +122,7 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
             Set set = new HashSet(count);
             for (int i = 0; i < count; i++) {
                 if (set.add(new Integer(i)) == false) {
-                    System.err.println("YA un GROS probleme !");
+                    LOG.error("Y a un GROS probleme avec le garbage !");
                 }
             }
         }

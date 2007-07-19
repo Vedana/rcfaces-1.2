@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -25,7 +26,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.lang.OrderedSet;
 import org.rcfaces.core.model.ICommitableObject;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
@@ -41,6 +44,13 @@ public class CollectionTools {
     private static final Log LOG = LogFactory.getLog(CheckTools.class);
 
     protected static final Object[] EMPTY_VALUES = new Object[0];
+
+    private static final Object[] EMPTY_STRING_ARRAY = new String[0];
+
+    private static final char STRING_DEFAULT_SEPARATOR = ',';
+
+    private static final String STRING_SEPARATORS = ""
+            + STRING_DEFAULT_SEPARATOR;
 
     private static final boolean SORT_INDICES = true;
 
@@ -68,11 +78,6 @@ public class CollectionTools {
         public Object[] listValues(Object value, Object refValues) {
             return EMPTY_VALUES;
         }
-
-        public Object adaptValue(Object value) {
-            return null;
-        }
-
     };
 
     private static final IValuesAccessor ARRAY_VALUES_ACCESSOR = new AbstractValuesAccessor() {
@@ -93,9 +98,30 @@ public class CollectionTools {
         public Object[] listValues(Object array, Object refValues) {
             return (Object[]) array;
         }
+    };
 
-        public Object adaptValue(Object value) {
-            return value;
+    private static final IValuesAccessor STRING_VALUES_ACCESSOR = new AbstractValuesAccessor() {
+        private static final String REVISION = "$Revision$";
+
+        public int getCount(Object array) {
+            StringTokenizer st = new StringTokenizer((String) array,
+                    STRING_SEPARATORS);
+
+            return st.countTokens();
+        }
+
+        public Object getFirst(Object array, Object refValues) {
+            StringTokenizer st = new StringTokenizer((String) array,
+                    STRING_SEPARATORS);
+            if (st.hasMoreTokens() == false) {
+                return null;
+            }
+
+            return st.nextToken();
+        }
+
+        public Object[] listValues(Object array, Object refValues) {
+            return convertToObjectArray(array);
         }
 
     };
@@ -118,10 +144,6 @@ public class CollectionTools {
         public Object[] listValues(Object collection, Object refValues) {
             return ((Collection) collection).toArray();
         }
-
-        public Object adaptValue(Object value) {
-            return value;
-        }
     };
 
     private static final IValuesAccessor MAP_VALUES_ACCESSOR = new AbstractValuesAccessor() {
@@ -137,10 +159,6 @@ public class CollectionTools {
 
         public Object[] listValues(Object map, Object refValues) {
             return ((Map) map).keySet().toArray();
-        }
-
-        public Object adaptValue(Object value) {
-            return value;
         }
     };
 
@@ -160,16 +178,12 @@ public class CollectionTools {
             return ((IIndexesModel) indexesModel).listSelectedObjects(null,
                     refValues);
         }
-
-        public Object adaptValue(Object value) {
-            return value;
-        }
-
     };
 
     protected static IValuesAccessor getValuesAccessor(Object values,
             Class providerClass, IValuesAccessor providerValuesAccessor,
             boolean useValue) {
+
         if (values == null) {
             if (useValue == false) {
                 return null;
@@ -182,6 +196,13 @@ public class CollectionTools {
                 return null;
             }
             return ARRAY_VALUES_ACCESSOR;
+        }
+
+        if (values instanceof String) {
+            if (useValue == false) {
+                return null;
+            }
+            return STRING_VALUES_ACCESSOR;
         }
 
         if (values instanceof Collection) {
@@ -203,6 +224,10 @@ public class CollectionTools {
                 return null;
             }
             return INDEXES_MODEL_VALUES_ACCESSOR;
+        }
+
+        if (providerClass == null) {
+            return null;
         }
 
         if (values.getClass().isAssignableFrom(providerClass)) {
@@ -238,6 +263,15 @@ public class CollectionTools {
             return null;
         }
 
+        if (values instanceof String) {
+            Set set = valuesToSet(values, true);
+            if (set.isEmpty()) {
+                return EMPTY_STRING_ARRAY;
+            }
+
+            return set.toArray(new String[set.size()]);
+        }
+
         if (values instanceof Object[]) {
             return (Object[]) values;
         }
@@ -258,7 +292,18 @@ public class CollectionTools {
             IValuesAccessor valuesAccessor) {
         Class type = valuesAccessor.getComponentValuesType(null, component);
         if (type == null) {
-            Object values = new ArrayIndexesModel();
+
+            if ((component instanceof IComponentValueTypeCapability) == false) {
+                throw new FacesException(
+                        "Can not identify IComponentValueType for component id='"
+                                + component.getId() + " renderType='"
+                                + component.getRendererType() + "'");
+            }
+
+            IComponentValueType componentValueType = ((IComponentValueTypeCapability) component)
+                    .getComponentValueType();
+
+            Object values = componentValueType.createNewValue(component);
 
             valuesAccessor.setComponentValues(component, values);
 
@@ -382,6 +427,12 @@ public class CollectionTools {
     public static void selectAll(UIComponent component,
             IValuesAccessor valuesAccessor) {
 
+        if ((component instanceof IGridComponent) == false) {
+            throw new UnsupportedOperationException(
+                    "Can not list all values of component '"
+                            + component.getId() + "'.");
+        }
+
         Object values = valuesAccessor.getComponentValues(component);
 
         if (values == null) {
@@ -433,7 +484,7 @@ public class CollectionTools {
                 .singletonList(rowValue));
     }
 
-    private static void select(UIComponent component,
+    private static Object select(UIComponent component,
             IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
 
         if (values.getClass().isArray()) {
@@ -464,7 +515,7 @@ public class CollectionTools {
             }
 
             if (l == null) {
-                return;
+                return values;
             }
 
             Class type = values.getClass().getComponentType();
@@ -479,7 +530,23 @@ public class CollectionTools {
 
             valuesAccessor.setComponentValues(component, newValues);
 
-            return;
+            return newValues;
+        }
+
+        if (values instanceof String) {
+            Set set = valuesToSet(values, false);
+
+            set.addAll(rowDatas);
+
+            String newValues = joinCollection(set, STRING_DEFAULT_SEPARATOR);
+
+            if (newValues.equals(values)) {
+                return values;
+            }
+
+            valuesAccessor.setComponentValues(component, newValues);
+
+            return newValues;
         }
 
         if (values instanceof Collection) {
@@ -488,24 +555,40 @@ public class CollectionTools {
 
             if (collection instanceof Set) {
                 collection.addAll(rowDatas);
-                return;
+                return collection;
             }
 
             for (Iterator it = rowDatas.iterator(); it.hasNext();) {
                 Object rowData = it.next();
 
                 if (collection.contains(rowData)) {
-                    return;
+                    continue;
                 }
 
                 collection.add(rowData);
             }
 
-            return;
+            return collection;
         }
 
         throw new FacesException("Select index is not implemented for values="
                 + values);
+    }
+
+    private static String joinCollection(Collection collection, char separator) {
+        StringAppender sa = new StringAppender(collection.size() * 16);
+
+        for (Iterator it = collection.iterator(); it.hasNext();) {
+            String token = (String) it.next();
+
+            if (sa.length() > 0) {
+                sa.append(separator);
+            }
+
+            sa.append(token);
+        }
+
+        return sa.toString();
     }
 
     private static Collection cloneCollection(UIComponent component,
@@ -527,7 +610,7 @@ public class CollectionTools {
             collection = (Collection) method.invoke(collection, null);
 
         } catch (Throwable th) {
-            LOG.error("Can not copy the collection ! ("
+            LOG.info("Can not copy the collection ! ("
                     + collection.getClass().getName() + ")", th);
         }
 
@@ -580,6 +663,16 @@ public class CollectionTools {
                     (Collection) values);
 
             collection.clear();
+            return;
+        }
+
+        if (values instanceof String) {
+            if ("".equals(values)) {
+                return;
+            }
+
+            valuesAccessor.setComponentValues(component, "");
+
             return;
         }
 
@@ -722,14 +815,14 @@ public class CollectionTools {
         deselect(component, valuesAccessor, values, rowDatas);
     }
 
-    private static void deselect(UIComponent component,
+    private static Object deselect(UIComponent component,
             IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
 
         if (values.getClass().isArray()) {
 
             int length = Array.getLength(values);
             if (length == 0) {
-                return;
+                return values;
             }
 
             for (Iterator it = rowDatas.iterator(); it.hasNext();) {
@@ -752,7 +845,7 @@ public class CollectionTools {
 
             if (Array.getLength(values) == length) {
                 // On a pas touché au tableau !
-                return;
+                return values;
             }
 
             Class type = values.getClass().getComponentType();
@@ -764,7 +857,23 @@ public class CollectionTools {
 
             valuesAccessor.setComponentValues(component, newValues);
 
-            return;
+            return newValues;
+        }
+
+        if (values instanceof String) {
+            Set set = valuesToSet(values, false);
+
+            set.removeAll(rowDatas);
+
+            String newValues = joinCollection(set, STRING_DEFAULT_SEPARATOR);
+
+            if (newValues.equals(values)) {
+                return values;
+            }
+
+            valuesAccessor.setComponentValues(component, newValues);
+
+            return newValues;
         }
 
         if (values instanceof Collection) {
@@ -773,7 +882,7 @@ public class CollectionTools {
 
             if (collection instanceof Set) {
                 collection.removeAll(rowDatas);
-                return;
+                return collection;
             }
 
             for (Iterator it = rowDatas.iterator(); it.hasNext();) {
@@ -782,7 +891,7 @@ public class CollectionTools {
                 collection.remove(rowData);
             }
 
-            return;
+            return collection;
         }
 
         throw new FacesException(
@@ -1072,7 +1181,7 @@ public class CollectionTools {
             return providerValuesAccessor.listValues(provider, null);
         }
 
-        public Object adaptValue(Object value) {
+        public Object getAdaptedValues(Object value) {
             return provider;
         }
 
@@ -1089,6 +1198,10 @@ public class CollectionTools {
             return providerValuesAccessor.getComponentValuesType(null,
                     component);
         }
+
+        public void setAdaptedValues(Object value, Object values) {
+            providerValuesAccessor.setAdaptedValues(value, values);
+        }
     }
 
     /**
@@ -1103,7 +1216,9 @@ public class CollectionTools {
 
         Object[] listValues(Object value, Object refValues);
 
-        Object adaptValue(Object value);
+        Object getAdaptedValues(Object values);
+
+        void setAdaptedValues(Object value, Object values);
 
         Object getComponentValues(UIComponent component);
 
@@ -1134,5 +1249,201 @@ public class CollectionTools {
                 UIComponent component) {
             throw new IllegalStateException("Not implemented !");
         }
+
+        public Object getAdaptedValues(Object value) {
+            return value;
+        }
+
+        public void setAdaptedValues(Object value, Object values) {
+            throw new IllegalStateException("Not supported");
+        }
+    }
+
+    public static Object adaptValues(Class target, Collection collection) {
+        if (target == null || target.equals(Object.class)
+                || target.equals(Object[].class)) {
+            return collection.toArray();
+        }
+
+        if (target.isArray()) {
+            Object array = Array.newInstance(target.getComponentType(),
+                    collection.size());
+
+            if (array instanceof Object[]) {
+                return collection.toArray((Object[]) array);
+            }
+
+            Object src[] = collection.toArray();
+
+            System.arraycopy(src, 0, array, 0, collection.size());
+
+            return array;
+        }
+
+        if (Set.class.isAssignableFrom(target)) {
+            if (collection instanceof Set) {
+                return collection;
+            }
+            return new HashSet(collection);
+        }
+
+        if (List.class.isAssignableFrom(target)) {
+            if (collection instanceof List) {
+                return collection;
+            }
+            return new ArrayList(collection);
+        }
+
+        if (Collection.class.isAssignableFrom(target)) {
+            return collection;
+        }
+
+        throw new FacesException("Invalid collection type '" + target + "'.");
+    }
+
+    public static Set __convertSelection(Object selection) {
+        if (selection instanceof Object[]) {
+            return new OrderedSet(Arrays.asList((Object[]) selection));
+        }
+
+        if (selection instanceof Collection) {
+            return new OrderedSet((Collection) selection);
+        }
+
+        if (selection == null) {
+            return new OrderedSet();
+        }
+
+        throw new FacesException(
+                "Bad type of value for attribute selectedValues/checkedValues !");
+    }
+
+    protected static void setValues(UIComponent component,
+            IValuesAccessor valuesAccessor, Collection values) {
+
+        Object newValues = createNewValues(component, valuesAccessor);
+
+        select(component, valuesAccessor, newValues, values);
+    }
+
+    protected static Set valuesToSet(UIComponent component,
+            IValuesAccessor valuesAccessor, boolean immutable) {
+        Object value = valuesAccessor.getComponentValues(component);
+
+        return valuesToSet(value, immutable);
+    }
+
+    public static Set valuesToSet(Object value, boolean immutable) {
+        if (value == null) {
+            if (immutable == false) {
+                return new OrderedSet();
+            }
+            return Collections.EMPTY_SET;
+        }
+
+        if (value.getClass().isArray()) {
+            int length = Array.getLength(value);
+
+            if (length < 1) {
+                if (immutable == false) {
+                    return new OrderedSet();
+                }
+                return Collections.EMPTY_SET;
+            }
+
+            Set set = new OrderedSet();
+
+            for (int i = 0; i < length; i++) {
+                set.add(Array.get(value, i));
+            }
+
+            if (LOG.isDebugEnabled() && immutable) {
+                return Collections.unmodifiableSet(set);
+            }
+
+            return set;
+        }
+
+        if (value instanceof String) {
+            StringTokenizer st = new StringTokenizer((String) value,
+                    STRING_SEPARATORS);
+            if (st.hasMoreTokens() == false) {
+                if (immutable == false) {
+                    return new OrderedSet();
+                }
+                return Collections.EMPTY_SET;
+            }
+
+            Set set = new OrderedSet(st.countTokens());
+            for (; st.hasMoreTokens();) {
+                String token = st.nextToken().trim();
+                if (token.length() < 1) {
+                    continue;
+                }
+
+                set.add(token);
+            }
+
+            if (LOG.isDebugEnabled() && immutable) {
+                return Collections.unmodifiableSet(set);
+            }
+
+            return set;
+        }
+
+        if (value instanceof Set) {
+            if (immutable == false) {
+                return new OrderedSet((Set) value);
+            }
+
+            if (LOG.isDebugEnabled() && immutable) {
+                return Collections.unmodifiableSet((Set) value);
+            }
+
+            return (Set) value;
+        }
+
+        if (value instanceof Collection) {
+            Collection col = (Collection) value;
+            if (col.isEmpty() && immutable) {
+                return Collections.EMPTY_SET;
+            }
+
+            Set set = new OrderedSet((Collection) value);
+
+            if (LOG.isDebugEnabled() && immutable) {
+                return Collections.unmodifiableSet(set);
+            }
+
+            return set;
+        }
+
+        if (immutable == false) {
+            Set set = new OrderedSet();
+            set.add(value);
+
+            return set;
+        }
+
+        return Collections.singleton(value);
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public interface IComponentValueType {
+        Object createNewValue(UIComponent component);
+    }
+
+    /**
+     * INTERNAL Stuff
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public interface IComponentValueTypeCapability {
+        IComponentValueType getComponentValueType();
     }
 }
