@@ -14,176 +14,187 @@ import javax.faces.application.Application;
 
 public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 
+    private static final Log LOG = LogFactory
+            .getLog(CheckButton3StatesTag.class);
 
-	private static final Log LOG=LogFactory.getLog(CheckButton3StatesTag.class);
+    private String text;
 
-	private String text;
-	private String textDirection;
-	private String textPosition;
-	private String selectionListeners;
-	private String readOnly;
-	private String alternateText;
-	private String selectedState;
-	public String getComponentType() {
-		return CheckButton3StatesComponent.COMPONENT_TYPE;
-	}
+    private String textDirection;
 
-	public final String getText() {
-		return text;
-	}
+    private String textPosition;
 
-	public final void setText(String text) {
-		this.text = text;
-	}
+    private String selectionListeners;
 
-	public final String getTextDirection() {
-		return textDirection;
-	}
+    private String readOnly;
 
-	public final void setTextDirection(String textDirection) {
-		this.textDirection = textDirection;
-	}
+    private String alternateText;
 
-	public final String getTextPosition() {
-		return textPosition;
-	}
+    private String selectedState;
 
-	public final void setTextPosition(String textPosition) {
-		this.textPosition = textPosition;
-	}
+    public String getComponentType() {
+        return CheckButton3StatesComponent.COMPONENT_TYPE;
+    }
 
-	public final String getSelectionListener() {
-		return selectionListeners;
-	}
+    public final String getText() {
+        return text;
+    }
 
-	public final void setSelectionListener(String selectionListeners) {
-		this.selectionListeners = selectionListeners;
-	}
+    public final void setText(String text) {
+        this.text = text;
+    }
 
-	public final String getReadOnly() {
-		return readOnly;
-	}
+    public final String getTextDirection() {
+        return textDirection;
+    }
 
-	public final void setReadOnly(String readOnly) {
-		this.readOnly = readOnly;
-	}
+    public final void setTextDirection(String textDirection) {
+        this.textDirection = textDirection;
+    }
 
-	public final String getAlternateText() {
-		return alternateText;
-	}
+    public final String getTextPosition() {
+        return textPosition;
+    }
 
-	public final void setAlternateText(String alternateText) {
-		this.alternateText = alternateText;
-	}
+    public final void setTextPosition(String textPosition) {
+        this.textPosition = textPosition;
+    }
 
-	public final String getSelectedState() {
-		return selectedState;
-	}
+    public final String getSelectionListener() {
+        return selectionListeners;
+    }
 
-	public final void setSelectedState(String selectedState) {
-		this.selectedState = selectedState;
-	}
+    public final void setSelectionListener(String selectionListeners) {
+        this.selectionListeners = selectionListeners;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (CheckButton3StatesComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  text='"+text+"'");
-			LOG.debug("  textDirection='"+textDirection+"'");
-			LOG.debug("  textPosition='"+textPosition+"'");
-			LOG.debug("  readOnly='"+readOnly+"'");
-			LOG.debug("  alternateText='"+alternateText+"'");
-			LOG.debug("  selectedState='"+selectedState+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getReadOnly() {
+        return readOnly;
+    }
 
-		if ((uiComponent instanceof CheckButton3StatesComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'CheckButton3StatesComponent'.");
-		}
+    public final void setReadOnly(String readOnly) {
+        this.readOnly = readOnly;
+    }
 
-		CheckButton3StatesComponent component = (CheckButton3StatesComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getAlternateText() {
+        return alternateText;
+    }
 
-		if (text != null) {
-			if (isValueReference(text)) {
-				ValueBinding vb = application.createValueBinding(text);
-				component.setValueBinding(Properties.TEXT, vb);
+    public final void setAlternateText(String alternateText) {
+        this.alternateText = alternateText;
+    }
 
-			} else {
-				component.setText(text);
-			}
-		}
+    public final String getSelectedState() {
+        return selectedState;
+    }
 
-		if (textDirection != null) {
-			if (isValueReference(textDirection)) {
-				ValueBinding vb = application.createValueBinding(textDirection);
-				component.setValueBinding(Properties.TEXT_DIRECTION, vb);
+    public final void setSelectedState(String selectedState) {
+        this.selectedState = selectedState;
+    }
 
-			} else {
-				component.setTextDirection(getInt(textDirection));
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (CheckButton3StatesComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  text='" + text + "'");
+            LOG.debug("  textDirection='" + textDirection + "'");
+            LOG.debug("  textPosition='" + textPosition + "'");
+            LOG.debug("  readOnly='" + readOnly + "'");
+            LOG.debug("  alternateText='" + alternateText + "'");
+            LOG.debug("  selectedState='" + selectedState + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (textPosition != null) {
-			if (isValueReference(textPosition)) {
-				ValueBinding vb = application.createValueBinding(textPosition);
-				component.setValueBinding(Properties.TEXT_POSITION, vb);
+        if ((uiComponent instanceof CheckButton3StatesComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'CheckButton3StatesComponent'.");
+        }
 
-			} else {
-				component.setTextPosition(textPosition);
-			}
-		}
+        CheckButton3StatesComponent component = (CheckButton3StatesComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-		}
+        if (text != null) {
+            if (isValueReference(text)) {
+                ValueBinding vb = application.createValueBinding(text);
+                component.setValueBinding(Properties.TEXT, vb);
 
-		if (readOnly != null) {
-			if (isValueReference(readOnly)) {
-				ValueBinding vb = application.createValueBinding(readOnly);
-				component.setValueBinding(Properties.READ_ONLY, vb);
+            } else {
+                component.setText(text);
+            }
+        }
 
-			} else {
-				component.setReadOnly(getBool(readOnly));
-			}
-		}
+        if (textDirection != null) {
+            if (isValueReference(textDirection)) {
+                ValueBinding vb = application.createValueBinding(textDirection);
+                component.setValueBinding(Properties.TEXT_DIRECTION, vb);
 
-		if (alternateText != null) {
-			if (isValueReference(alternateText)) {
-				ValueBinding vb = application.createValueBinding(alternateText);
-				component.setValueBinding(Properties.ALTERNATE_TEXT, vb);
+            } else {
+                component.setTextDirection(getInt(textDirection));
+            }
+        }
 
-			} else {
-				component.setAlternateText(alternateText);
-			}
-		}
+        if (textPosition != null) {
+            if (isValueReference(textPosition)) {
+                ValueBinding vb = application.createValueBinding(textPosition);
+                component.setValueBinding(Properties.TEXT_POSITION, vb);
 
-		if (selectedState != null) {
-			if (isValueReference(selectedState)) {
-				ValueBinding vb = application.createValueBinding(selectedState);
-				component.setValueBinding(Properties.SELECTED_STATE, vb);
+            } else {
+                component.setTextPosition(textPosition);
+            }
+        }
 
-			} else {
-				component.setSelectedState(selectedState);
-			}
-		}
-	}
+        if (selectionListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+        }
 
-	public void release() {
-		text = null;
-		textDirection = null;
-		textPosition = null;
-		selectionListeners = null;
-		readOnly = null;
-		alternateText = null;
-		selectedState = null;
+        if (readOnly != null) {
+            if (isValueReference(readOnly)) {
+                ValueBinding vb = application.createValueBinding(readOnly);
+                component.setValueBinding(Properties.READ_ONLY, vb);
 
-		super.release();
-	}
+            } else {
+                component.setReadOnly(getBool(readOnly));
+            }
+        }
+
+        if (alternateText != null) {
+            if (isValueReference(alternateText)) {
+                ValueBinding vb = application.createValueBinding(alternateText);
+                component.setValueBinding(Properties.ALTERNATE_TEXT, vb);
+
+            } else {
+                component.setAlternateText(alternateText);
+            }
+        }
+
+        if (selectedState != null) {
+            if (isValueReference(selectedState)) {
+                ValueBinding vb = application.createValueBinding(selectedState);
+                component.setValueBinding(Properties.SELECTED_STATE, vb);
+
+            } else {
+                component.setSelectedState(selectedState);
+            }
+        }
+    }
+
+    public void release() {
+        text = null;
+        textDirection = null;
+        textPosition = null;
+        selectionListeners = null;
+        readOnly = null;
+        alternateText = null;
+        selectedState = null;
+
+        super.release();
+    }
 
 }

@@ -12,255 +12,275 @@ import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import javax.faces.application.Application;
 
-public abstract class AbstractCalendarTag extends AbstractInputTag implements Tag {
+public abstract class AbstractCalendarTag extends AbstractInputTag implements
+        Tag {
 
+    private static final Log LOG = LogFactory.getLog(AbstractCalendarTag.class);
 
-	private static final Log LOG=LogFactory.getLog(AbstractCalendarTag.class);
+    private String selectionListeners;
 
-	private String selectionListeners;
-	private String readOnly;
-	private String literalLocale;
-	private String literalTimeZone;
-	private String componentLocale;
-	private String componentTimeZone;
-	private String clientDatesStrategy;
-	private String twoDigitYearStart;
-	private String minDate;
-	private String maxDate;
-	private String disabledWeekDays;
-	public final String getSelectionListener() {
-		return selectionListeners;
-	}
+    private String readOnly;
 
-	public final void setSelectionListener(String selectionListeners) {
-		this.selectionListeners = selectionListeners;
-	}
+    private String literalLocale;
 
-	public final String getReadOnly() {
-		return readOnly;
-	}
+    private String literalTimeZone;
 
-	public final void setReadOnly(String readOnly) {
-		this.readOnly = readOnly;
-	}
+    private String componentLocale;
 
-	public final String getLiteralLocale() {
-		return literalLocale;
-	}
+    private String componentTimeZone;
 
-	public final void setLiteralLocale(String literalLocale) {
-		this.literalLocale = literalLocale;
-	}
+    private String clientDatesStrategy;
 
-	public final String getLiteralTimeZone() {
-		return literalTimeZone;
-	}
+    private String twoDigitYearStart;
 
-	public final void setLiteralTimeZone(String literalTimeZone) {
-		this.literalTimeZone = literalTimeZone;
-	}
+    private String minDate;
 
-	public final String getComponentLocale() {
-		return componentLocale;
-	}
+    private String maxDate;
 
-	public final void setComponentLocale(String componentLocale) {
-		this.componentLocale = componentLocale;
-	}
+    private String disabledWeekDays;
 
-	public final String getComponentTimeZone() {
-		return componentTimeZone;
-	}
+    public final String getSelectionListener() {
+        return selectionListeners;
+    }
 
-	public final void setComponentTimeZone(String componentTimeZone) {
-		this.componentTimeZone = componentTimeZone;
-	}
+    public final void setSelectionListener(String selectionListeners) {
+        this.selectionListeners = selectionListeners;
+    }
 
-	public final String getClientDatesStrategy() {
-		return clientDatesStrategy;
-	}
+    public final String getReadOnly() {
+        return readOnly;
+    }
 
-	public final void setClientDatesStrategy(String clientDatesStrategy) {
-		this.clientDatesStrategy = clientDatesStrategy;
-	}
+    public final void setReadOnly(String readOnly) {
+        this.readOnly = readOnly;
+    }
 
-	public final String getTwoDigitYearStart() {
-		return twoDigitYearStart;
-	}
+    public final String getLiteralLocale() {
+        return literalLocale;
+    }
 
-	public final void setTwoDigitYearStart(String twoDigitYearStart) {
-		this.twoDigitYearStart = twoDigitYearStart;
-	}
+    public final void setLiteralLocale(String literalLocale) {
+        this.literalLocale = literalLocale;
+    }
 
-	public final String getMinDate() {
-		return minDate;
-	}
+    public final String getLiteralTimeZone() {
+        return literalTimeZone;
+    }
 
-	public final void setMinDate(String minDate) {
-		this.minDate = minDate;
-	}
+    public final void setLiteralTimeZone(String literalTimeZone) {
+        this.literalTimeZone = literalTimeZone;
+    }
 
-	public final String getMaxDate() {
-		return maxDate;
-	}
+    public final String getComponentLocale() {
+        return componentLocale;
+    }
 
-	public final void setMaxDate(String maxDate) {
-		this.maxDate = maxDate;
-	}
+    public final void setComponentLocale(String componentLocale) {
+        this.componentLocale = componentLocale;
+    }
 
-	public final String getDisabledWeekDays() {
-		return disabledWeekDays;
-	}
+    public final String getComponentTimeZone() {
+        return componentTimeZone;
+    }
 
-	public final void setDisabledWeekDays(String disabledWeekDays) {
-		this.disabledWeekDays = disabledWeekDays;
-	}
+    public final void setComponentTimeZone(String componentTimeZone) {
+        this.componentTimeZone = componentTimeZone;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("  readOnly='"+readOnly+"'");
-			LOG.debug("  literalLocale='"+literalLocale+"'");
-			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
-			LOG.debug("  componentLocale='"+componentLocale+"'");
-			LOG.debug("  componentTimeZone='"+componentTimeZone+"'");
-			LOG.debug("  clientDatesStrategy='"+clientDatesStrategy+"'");
-			LOG.debug("  twoDigitYearStart='"+twoDigitYearStart+"'");
-			LOG.debug("  minDate='"+minDate+"'");
-			LOG.debug("  maxDate='"+maxDate+"'");
-			LOG.debug("  disabledWeekDays='"+disabledWeekDays+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getClientDatesStrategy() {
+        return clientDatesStrategy;
+    }
 
-		if ((uiComponent instanceof AbstractCalendarComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractCalendarComponent'.");
-		}
+    public final void setClientDatesStrategy(String clientDatesStrategy) {
+        this.clientDatesStrategy = clientDatesStrategy;
+    }
 
-		AbstractCalendarComponent component = (AbstractCalendarComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getTwoDigitYearStart() {
+        return twoDigitYearStart;
+    }
 
-		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-		}
+    public final void setTwoDigitYearStart(String twoDigitYearStart) {
+        this.twoDigitYearStart = twoDigitYearStart;
+    }
 
-		if (readOnly != null) {
-			if (isValueReference(readOnly)) {
-				ValueBinding vb = application.createValueBinding(readOnly);
-				component.setValueBinding(Properties.READ_ONLY, vb);
+    public final String getMinDate() {
+        return minDate;
+    }
 
-			} else {
-				component.setReadOnly(getBool(readOnly));
-			}
-		}
+    public final void setMinDate(String minDate) {
+        this.minDate = minDate;
+    }
 
-		if (literalLocale != null) {
-			if (isValueReference(literalLocale)) {
-				ValueBinding vb = application.createValueBinding(literalLocale);
-				component.setValueBinding(Properties.LITERAL_LOCALE, vb);
+    public final String getMaxDate() {
+        return maxDate;
+    }
 
-			} else {
-				component.setLiteralLocale(literalLocale);
-			}
-		}
+    public final void setMaxDate(String maxDate) {
+        this.maxDate = maxDate;
+    }
 
-		if (literalTimeZone != null) {
-			if (isValueReference(literalTimeZone)) {
-				ValueBinding vb = application.createValueBinding(literalTimeZone);
-				component.setValueBinding(Properties.LITERAL_TIME_ZONE, vb);
+    public final String getDisabledWeekDays() {
+        return disabledWeekDays;
+    }
 
-			} else {
-				component.setLiteralTimeZone(literalTimeZone);
-			}
-		}
+    public final void setDisabledWeekDays(String disabledWeekDays) {
+        this.disabledWeekDays = disabledWeekDays;
+    }
 
-		if (componentLocale != null) {
-			if (isValueReference(componentLocale)) {
-				ValueBinding vb = application.createValueBinding(componentLocale);
-				component.setValueBinding(Properties.COMPONENT_LOCALE, vb);
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("  readOnly='" + readOnly + "'");
+            LOG.debug("  literalLocale='" + literalLocale + "'");
+            LOG.debug("  literalTimeZone='" + literalTimeZone + "'");
+            LOG.debug("  componentLocale='" + componentLocale + "'");
+            LOG.debug("  componentTimeZone='" + componentTimeZone + "'");
+            LOG.debug("  clientDatesStrategy='" + clientDatesStrategy + "'");
+            LOG.debug("  twoDigitYearStart='" + twoDigitYearStart + "'");
+            LOG.debug("  minDate='" + minDate + "'");
+            LOG.debug("  maxDate='" + maxDate + "'");
+            LOG.debug("  disabledWeekDays='" + disabledWeekDays + "'");
+        }
+        super.setProperties(uiComponent);
 
-			} else {
-				component.setComponentLocale(componentLocale);
-			}
-		}
+        if ((uiComponent instanceof AbstractCalendarComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'AbstractCalendarComponent'.");
+        }
 
-		if (componentTimeZone != null) {
-			if (isValueReference(componentTimeZone)) {
-				ValueBinding vb = application.createValueBinding(componentTimeZone);
-				component.setValueBinding(Properties.COMPONENT_TIME_ZONE, vb);
+        AbstractCalendarComponent component = (AbstractCalendarComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-			} else {
-				component.setComponentTimeZone(componentTimeZone);
-			}
-		}
+        if (selectionListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+        }
 
-		if (clientDatesStrategy != null) {
-			if (isValueReference(clientDatesStrategy)) {
-				ValueBinding vb = application.createValueBinding(clientDatesStrategy);
-				component.setValueBinding(Properties.CLIENT_DATES_STRATEGY, vb);
+        if (readOnly != null) {
+            if (isValueReference(readOnly)) {
+                ValueBinding vb = application.createValueBinding(readOnly);
+                component.setValueBinding(Properties.READ_ONLY, vb);
 
-			} else {
-				component.setClientDatesStrategy(clientDatesStrategy);
-			}
-		}
+            } else {
+                component.setReadOnly(getBool(readOnly));
+            }
+        }
 
-		if (twoDigitYearStart != null) {
-			if (isValueReference(twoDigitYearStart)) {
-				ValueBinding vb = application.createValueBinding(twoDigitYearStart);
-				component.setValueBinding(Properties.TWO_DIGIT_YEAR_START, vb);
+        if (literalLocale != null) {
+            if (isValueReference(literalLocale)) {
+                ValueBinding vb = application.createValueBinding(literalLocale);
+                component.setValueBinding(Properties.LITERAL_LOCALE, vb);
 
-			} else {
-				component.setTwoDigitYearStart(twoDigitYearStart);
-			}
-		}
+            } else {
+                component.setLiteralLocale(literalLocale);
+            }
+        }
 
-		if (minDate != null) {
-			if (isValueReference(minDate)) {
-				ValueBinding vb = application.createValueBinding(minDate);
-				component.setValueBinding(Properties.MIN_DATE, vb);
+        if (literalTimeZone != null) {
+            if (isValueReference(literalTimeZone)) {
+                ValueBinding vb = application
+                        .createValueBinding(literalTimeZone);
+                component.setValueBinding(Properties.LITERAL_TIME_ZONE, vb);
 
-			} else {
-				component.setMinDate(minDate);
-			}
-		}
+            } else {
+                component.setLiteralTimeZone(literalTimeZone);
+            }
+        }
 
-		if (maxDate != null) {
-			if (isValueReference(maxDate)) {
-				ValueBinding vb = application.createValueBinding(maxDate);
-				component.setValueBinding(Properties.MAX_DATE, vb);
+        if (componentLocale != null) {
+            if (isValueReference(componentLocale)) {
+                ValueBinding vb = application
+                        .createValueBinding(componentLocale);
+                component.setValueBinding(Properties.COMPONENT_LOCALE, vb);
 
-			} else {
-				component.setMaxDate(maxDate);
-			}
-		}
+            } else {
+                component.setComponentLocale(componentLocale);
+            }
+        }
 
-		if (disabledWeekDays != null) {
-			if (isValueReference(disabledWeekDays)) {
-				ValueBinding vb = application.createValueBinding(disabledWeekDays);
-				component.setValueBinding(Properties.DISABLED_WEEK_DAYS, vb);
+        if (componentTimeZone != null) {
+            if (isValueReference(componentTimeZone)) {
+                ValueBinding vb = application
+                        .createValueBinding(componentTimeZone);
+                component.setValueBinding(Properties.COMPONENT_TIME_ZONE, vb);
 
-			} else {
-				component.setDisabledWeekDays(disabledWeekDays);
-			}
-		}
-	}
+            } else {
+                component.setComponentTimeZone(componentTimeZone);
+            }
+        }
 
-	public void release() {
-		selectionListeners = null;
-		readOnly = null;
-		literalLocale = null;
-		literalTimeZone = null;
-		componentLocale = null;
-		componentTimeZone = null;
-		clientDatesStrategy = null;
-		twoDigitYearStart = null;
-		minDate = null;
-		maxDate = null;
-		disabledWeekDays = null;
+        if (clientDatesStrategy != null) {
+            if (isValueReference(clientDatesStrategy)) {
+                ValueBinding vb = application
+                        .createValueBinding(clientDatesStrategy);
+                component.setValueBinding(Properties.CLIENT_DATES_STRATEGY, vb);
 
-		super.release();
-	}
+            } else {
+                component.setClientDatesStrategy(clientDatesStrategy);
+            }
+        }
+
+        if (twoDigitYearStart != null) {
+            if (isValueReference(twoDigitYearStart)) {
+                ValueBinding vb = application
+                        .createValueBinding(twoDigitYearStart);
+                component.setValueBinding(Properties.TWO_DIGIT_YEAR_START, vb);
+
+            } else {
+                component.setTwoDigitYearStart(twoDigitYearStart);
+            }
+        }
+
+        if (minDate != null) {
+            if (isValueReference(minDate)) {
+                ValueBinding vb = application.createValueBinding(minDate);
+                component.setValueBinding(Properties.MIN_DATE, vb);
+
+            } else {
+                component.setMinDate(minDate);
+            }
+        }
+
+        if (maxDate != null) {
+            if (isValueReference(maxDate)) {
+                ValueBinding vb = application.createValueBinding(maxDate);
+                component.setValueBinding(Properties.MAX_DATE, vb);
+
+            } else {
+                component.setMaxDate(maxDate);
+            }
+        }
+
+        if (disabledWeekDays != null) {
+            if (isValueReference(disabledWeekDays)) {
+                ValueBinding vb = application
+                        .createValueBinding(disabledWeekDays);
+                component.setValueBinding(Properties.DISABLED_WEEK_DAYS, vb);
+
+            } else {
+                component.setDisabledWeekDays(disabledWeekDays);
+            }
+        }
+    }
+
+    public void release() {
+        selectionListeners = null;
+        readOnly = null;
+        literalLocale = null;
+        literalTimeZone = null;
+        componentLocale = null;
+        componentTimeZone = null;
+        clientDatesStrategy = null;
+        twoDigitYearStart = null;
+        minDate = null;
+        maxDate = null;
+        disabledWeekDays = null;
+
+        super.release();
+    }
 
 }

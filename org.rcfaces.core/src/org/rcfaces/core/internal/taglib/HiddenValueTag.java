@@ -14,146 +14,158 @@ import javax.faces.application.Application;
 
 public class HiddenValueTag extends CameliaTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(HiddenValueTag.class);
 
-	private static final Log LOG=LogFactory.getLog(HiddenValueTag.class);
+    private String propertyChangeListeners;
 
-	private String propertyChangeListeners;
-	private String immediate;
-	private String valueLocked;
-	private String validationListeners;
-	private String value;
-	private String converter;
-	public String getComponentType() {
-		return HiddenValueComponent.COMPONENT_TYPE;
-	}
+    private String immediate;
 
-	public final String getPropertyChangeListener() {
-		return propertyChangeListeners;
-	}
+    private String valueLocked;
 
-	public final void setPropertyChangeListener(String propertyChangeListeners) {
-		this.propertyChangeListeners = propertyChangeListeners;
-	}
+    private String validationListeners;
 
-	public final String getImmediate() {
-		return immediate;
-	}
+    private String value;
 
-	public final void setImmediate(String immediate) {
-		this.immediate = immediate;
-	}
+    private String converter;
 
-	public final String getValueLocked() {
-		return valueLocked;
-	}
+    public String getComponentType() {
+        return HiddenValueComponent.COMPONENT_TYPE;
+    }
 
-	public final void setValueLocked(String valueLocked) {
-		this.valueLocked = valueLocked;
-	}
+    public final String getPropertyChangeListener() {
+        return propertyChangeListeners;
+    }
 
-	public final String getValidationListener() {
-		return validationListeners;
-	}
+    public final void setPropertyChangeListener(String propertyChangeListeners) {
+        this.propertyChangeListeners = propertyChangeListeners;
+    }
 
-	public final void setValidationListener(String validationListeners) {
-		this.validationListeners = validationListeners;
-	}
+    public final String getImmediate() {
+        return immediate;
+    }
 
-	public final String getValue() {
-		return value;
-	}
+    public final void setImmediate(String immediate) {
+        this.immediate = immediate;
+    }
 
-	public final void setValue(String value) {
-		this.value = value;
-	}
+    public final String getValueLocked() {
+        return valueLocked;
+    }
 
-	public final String getConverter() {
-		return converter;
-	}
+    public final void setValueLocked(String valueLocked) {
+        this.valueLocked = valueLocked;
+    }
 
-	public final void setConverter(String converter) {
-		this.converter = converter;
-	}
+    public final String getValidationListener() {
+        return validationListeners;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (HiddenValueComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  immediate='"+immediate+"'");
-			LOG.debug("  valueLocked='"+valueLocked+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setValidationListener(String validationListeners) {
+        this.validationListeners = validationListeners;
+    }
 
-		if ((uiComponent instanceof HiddenValueComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'HiddenValueComponent'.");
-		}
+    public final String getValue() {
+        return value;
+    }
 
-		HiddenValueComponent component = (HiddenValueComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final void setValue(String value) {
+        this.value = value;
+    }
 
-		if (propertyChangeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
-		}
+    public final String getConverter() {
+        return converter;
+    }
 
-		if (immediate != null) {
-			if (isValueReference(immediate)) {
-				ValueBinding vb = application.createValueBinding(immediate);
-				component.setValueBinding(Properties.IMMEDIATE, vb);
+    public final void setConverter(String converter) {
+        this.converter = converter;
+    }
 
-			} else {
-				component.setImmediate(getBool(immediate));
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (HiddenValueComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  immediate='" + immediate + "'");
+            LOG.debug("  valueLocked='" + valueLocked + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (valueLocked != null) {
-			if (isValueReference(valueLocked)) {
-				ValueBinding vb = application.createValueBinding(valueLocked);
-				component.setValueBinding(Properties.VALUE_LOCKED, vb);
+        if ((uiComponent instanceof HiddenValueComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'HiddenValueComponent'.");
+        }
 
-			} else {
-				component.setValueLocked(getBool(valueLocked));
-			}
-		}
+        HiddenValueComponent component = (HiddenValueComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (validationListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
-		}
+        if (propertyChangeListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE,
+                    propertyChangeListeners);
+        }
 
-		if (value != null) {
-			if (isValueReference(value)) {
-				ValueBinding vb = application.createValueBinding(value);
-				component.setValueBinding(Properties.VALUE, vb);
+        if (immediate != null) {
+            if (isValueReference(immediate)) {
+                ValueBinding vb = application.createValueBinding(immediate);
+                component.setValueBinding(Properties.IMMEDIATE, vb);
 
-			} else {
-				component.setValue(value);
-			}
-		}
+            } else {
+                component.setImmediate(getBool(immediate));
+            }
+        }
 
-		if (converter != null) {
-			if (isValueReference(converter)) {
-				ValueBinding vb = application.createValueBinding(converter);
-				component.setValueBinding(Properties.CONVERTER, vb);
+        if (valueLocked != null) {
+            if (isValueReference(valueLocked)) {
+                ValueBinding vb = application.createValueBinding(valueLocked);
+                component.setValueBinding(Properties.VALUE_LOCKED, vb);
 
-			} else {
-				component.setConverter(converter);
-			}
-		}
-	}
+            } else {
+                component.setValueLocked(getBool(valueLocked));
+            }
+        }
 
-	public void release() {
-		propertyChangeListeners = null;
-		immediate = null;
-		valueLocked = null;
-		validationListeners = null;
-		value = null;
-		converter = null;
+        if (validationListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.VALIDATION_LISTENER_TYPE,
+                    validationListeners);
+        }
 
-		super.release();
-	}
+        if (value != null) {
+            if (isValueReference(value)) {
+                ValueBinding vb = application.createValueBinding(value);
+                component.setValueBinding(Properties.VALUE, vb);
+
+            } else {
+                component.setValue(value);
+            }
+        }
+
+        if (converter != null) {
+            if (isValueReference(converter)) {
+                ValueBinding vb = application.createValueBinding(converter);
+                component.setValueBinding(Properties.CONVERTER, vb);
+
+            } else {
+                component.setConverter(converter);
+            }
+        }
+    }
+
+    public void release() {
+        propertyChangeListeners = null;
+        immediate = null;
+        valueLocked = null;
+        validationListeners = null;
+        value = null;
+        converter = null;
+
+        super.release();
+    }
 
 }

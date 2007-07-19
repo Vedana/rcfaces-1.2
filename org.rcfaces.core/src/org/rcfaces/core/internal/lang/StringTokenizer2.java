@@ -7,7 +7,8 @@ import java.util.NoSuchElementException;
 
 /**
  * 
- * @author Java Team + Olivier Oeuillot (latest modification by $Author$)
+ * @author Java Team + Olivier Oeuillot (latest modification by $Author:
+ *         oeuillot $)
  * @version $Revision$ $Date$
  */
 public class StringTokenizer2 {

@@ -14,143 +14,155 @@ import javax.faces.application.Application;
 
 public class ButtonTag extends AbstractCommandTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(ButtonTag.class);
 
-	private static final Log LOG=LogFactory.getLog(ButtonTag.class);
+    private String text;
 
-	private String text;
-	private String textDirection;
-	private String selectionListeners;
-	private String readOnly;
-	private String action;
-	private String actionListeners;
-	public String getComponentType() {
-		return ButtonComponent.COMPONENT_TYPE;
-	}
+    private String textDirection;
 
-	public final String getText() {
-		return text;
-	}
+    private String selectionListeners;
 
-	public final void setText(String text) {
-		this.text = text;
-	}
+    private String readOnly;
 
-	public final String getTextDirection() {
-		return textDirection;
-	}
+    private String action;
 
-	public final void setTextDirection(String textDirection) {
-		this.textDirection = textDirection;
-	}
+    private String actionListeners;
 
-	public final String getSelectionListener() {
-		return selectionListeners;
-	}
+    public String getComponentType() {
+        return ButtonComponent.COMPONENT_TYPE;
+    }
 
-	public final void setSelectionListener(String selectionListeners) {
-		this.selectionListeners = selectionListeners;
-	}
+    public final String getText() {
+        return text;
+    }
 
-	public final String getReadOnly() {
-		return readOnly;
-	}
+    public final void setText(String text) {
+        this.text = text;
+    }
 
-	public final void setReadOnly(String readOnly) {
-		this.readOnly = readOnly;
-	}
+    public final String getTextDirection() {
+        return textDirection;
+    }
 
-	public final void setAction(String action) {
-		this.action=action;
-	}
+    public final void setTextDirection(String textDirection) {
+        this.textDirection = textDirection;
+    }
 
-	public final String getAction() {
-		return action;
-	}
+    public final String getSelectionListener() {
+        return selectionListeners;
+    }
 
-	public final void setActionListener(String listeners) {
-		this.actionListeners = listeners;
-	}
+    public final void setSelectionListener(String selectionListeners) {
+        this.selectionListeners = selectionListeners;
+    }
 
-	public final String getActionListener() {
-		return actionListeners;
-	}
+    public final String getReadOnly() {
+        return readOnly;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (ButtonComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  text='"+text+"'");
-			LOG.debug("  textDirection='"+textDirection+"'");
-			LOG.debug("  readOnly='"+readOnly+"'");
-			LOG.debug("  action='"+action+"'");
-			LOG.debug("  actionListeners='"+actionListeners+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setReadOnly(String readOnly) {
+        this.readOnly = readOnly;
+    }
 
-		if ((uiComponent instanceof ButtonComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'ButtonComponent'.");
-		}
+    public final void setAction(String action) {
+        this.action = action;
+    }
 
-		ButtonComponent component = (ButtonComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getAction() {
+        return action;
+    }
 
-		if (text != null) {
-			if (isValueReference(text)) {
-				ValueBinding vb = application.createValueBinding(text);
-				component.setValueBinding(Properties.TEXT, vb);
+    public final void setActionListener(String listeners) {
+        this.actionListeners = listeners;
+    }
 
-			} else {
-				component.setText(text);
-			}
-		}
+    public final String getActionListener() {
+        return actionListeners;
+    }
 
-		if (textDirection != null) {
-			if (isValueReference(textDirection)) {
-				ValueBinding vb = application.createValueBinding(textDirection);
-				component.setValueBinding(Properties.TEXT_DIRECTION, vb);
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (ButtonComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  text='" + text + "'");
+            LOG.debug("  textDirection='" + textDirection + "'");
+            LOG.debug("  readOnly='" + readOnly + "'");
+            LOG.debug("  action='" + action + "'");
+            LOG.debug("  actionListeners='" + actionListeners + "'");
+        }
+        super.setProperties(uiComponent);
 
-			} else {
-				component.setTextDirection(getInt(textDirection));
-			}
-		}
+        if ((uiComponent instanceof ButtonComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'ButtonComponent'.");
+        }
 
-		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-		}
+        ButtonComponent component = (ButtonComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (readOnly != null) {
-			if (isValueReference(readOnly)) {
-				ValueBinding vb = application.createValueBinding(readOnly);
-				component.setValueBinding(Properties.READ_ONLY, vb);
+        if (text != null) {
+            if (isValueReference(text)) {
+                ValueBinding vb = application.createValueBinding(text);
+                component.setValueBinding(Properties.TEXT, vb);
 
-			} else {
-				component.setReadOnly(getBool(readOnly));
-			}
-		}
+            } else {
+                component.setText(text);
+            }
+        }
 
-		if (action != null) {
-			ListenersTools.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
-		}
+        if (textDirection != null) {
+            if (isValueReference(textDirection)) {
+                ValueBinding vb = application.createValueBinding(textDirection);
+                component.setValueBinding(Properties.TEXT_DIRECTION, vb);
 
-		if (actionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
-		}
-	}
+            } else {
+                component.setTextDirection(getInt(textDirection));
+            }
+        }
 
-	public void release() {
-		text = null;
-		textDirection = null;
-		selectionListeners = null;
-		readOnly = null;
-		action = null;
-		actionListeners = null;
+        if (selectionListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+        }
 
-		super.release();
-	}
+        if (readOnly != null) {
+            if (isValueReference(readOnly)) {
+                ValueBinding vb = application.createValueBinding(readOnly);
+                component.setValueBinding(Properties.READ_ONLY, vb);
+
+            } else {
+                component.setReadOnly(getBool(readOnly));
+            }
+        }
+
+        if (action != null) {
+            ListenersTools.parseAction(facesContext, component,
+                    ListenersTools.SELECTION_LISTENER_TYPE, action);
+        }
+
+        if (actionListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.SELECTION_LISTENER_TYPE, actionListeners,
+                    true);
+        }
+    }
+
+    public void release() {
+        text = null;
+        textDirection = null;
+        selectionListeners = null;
+        readOnly = null;
+        action = null;
+        actionListeners = null;
+
+        super.release();
+    }
 
 }

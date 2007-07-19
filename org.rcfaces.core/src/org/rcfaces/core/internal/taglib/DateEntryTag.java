@@ -14,311 +14,340 @@ import javax.faces.application.Application;
 
 public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(DateEntryTag.class);
 
-	private static final Log LOG=LogFactory.getLog(DateEntryTag.class);
+    private String required;
 
-	private String required;
-	private String autoTab;
-	private String valueChangeListeners;
-	private String focusStyleClass;
-	private String errorStyleClass;
-	private String fatalStyleClass;
-	private String infoStyleClass;
-	private String warnStyleClass;
-	private String showCalendarOnFocus;
-	private String autoCompletion;
-	private String dateFormat;
-	private String defaultDate;
-	private String action;
-	private String actionListeners;
-	public String getComponentType() {
-		return DateEntryComponent.COMPONENT_TYPE;
-	}
+    private String autoTab;
 
-	public final String getRequired() {
-		return required;
-	}
+    private String valueChangeListeners;
 
-	public final void setRequired(String required) {
-		this.required = required;
-	}
+    private String focusStyleClass;
 
-	public final String getAutoTab() {
-		return autoTab;
-	}
+    private String errorStyleClass;
 
-	public final void setAutoTab(String autoTab) {
-		this.autoTab = autoTab;
-	}
+    private String fatalStyleClass;
 
-	public final String getValueChangeListener() {
-		return valueChangeListeners;
-	}
+    private String infoStyleClass;
 
-	public final void setValueChangeListener(String valueChangeListeners) {
-		this.valueChangeListeners = valueChangeListeners;
-	}
+    private String warnStyleClass;
 
-	public final String getFocusStyleClass() {
-		return focusStyleClass;
-	}
+    private String showCalendarOnFocus;
 
-	public final void setFocusStyleClass(String focusStyleClass) {
-		this.focusStyleClass = focusStyleClass;
-	}
+    private String autoCompletion;
 
-	public final String getErrorStyleClass() {
-		return errorStyleClass;
-	}
+    private String dateFormat;
 
-	public final void setErrorStyleClass(String errorStyleClass) {
-		this.errorStyleClass = errorStyleClass;
-	}
+    private String defaultDate;
 
-	public final String getFatalStyleClass() {
-		return fatalStyleClass;
-	}
+    private String action;
 
-	public final void setFatalStyleClass(String fatalStyleClass) {
-		this.fatalStyleClass = fatalStyleClass;
-	}
+    private String actionListeners;
 
-	public final String getInfoStyleClass() {
-		return infoStyleClass;
-	}
+    public String getComponentType() {
+        return DateEntryComponent.COMPONENT_TYPE;
+    }
 
-	public final void setInfoStyleClass(String infoStyleClass) {
-		this.infoStyleClass = infoStyleClass;
-	}
+    public final String getRequired() {
+        return required;
+    }
 
-	public final String getWarnStyleClass() {
-		return warnStyleClass;
-	}
+    public final void setRequired(String required) {
+        this.required = required;
+    }
 
-	public final void setWarnStyleClass(String warnStyleClass) {
-		this.warnStyleClass = warnStyleClass;
-	}
+    public final String getAutoTab() {
+        return autoTab;
+    }
 
-	public final String getShowCalendarOnFocus() {
-		return showCalendarOnFocus;
-	}
+    public final void setAutoTab(String autoTab) {
+        this.autoTab = autoTab;
+    }
 
-	public final void setShowCalendarOnFocus(String showCalendarOnFocus) {
-		this.showCalendarOnFocus = showCalendarOnFocus;
-	}
+    public final String getValueChangeListener() {
+        return valueChangeListeners;
+    }
 
-	public final String getAutoCompletion() {
-		return autoCompletion;
-	}
+    public final void setValueChangeListener(String valueChangeListeners) {
+        this.valueChangeListeners = valueChangeListeners;
+    }
 
-	public final void setAutoCompletion(String autoCompletion) {
-		this.autoCompletion = autoCompletion;
-	}
+    public final String getFocusStyleClass() {
+        return focusStyleClass;
+    }
 
-	public final String getDateFormat() {
-		return dateFormat;
-	}
+    public final void setFocusStyleClass(String focusStyleClass) {
+        this.focusStyleClass = focusStyleClass;
+    }
 
-	public final void setDateFormat(String dateFormat) {
-		this.dateFormat = dateFormat;
-	}
+    public final String getErrorStyleClass() {
+        return errorStyleClass;
+    }
 
-	public final String getDefaultDate() {
-		return defaultDate;
-	}
+    public final void setErrorStyleClass(String errorStyleClass) {
+        this.errorStyleClass = errorStyleClass;
+    }
 
-	public final void setDefaultDate(String defaultDate) {
-		this.defaultDate = defaultDate;
-	}
+    public final String getFatalStyleClass() {
+        return fatalStyleClass;
+    }
 
-	public final void setAction(String action) {
-		this.action=action;
-	}
+    public final void setFatalStyleClass(String fatalStyleClass) {
+        this.fatalStyleClass = fatalStyleClass;
+    }
 
-	public final String getAction() {
-		return action;
-	}
+    public final String getInfoStyleClass() {
+        return infoStyleClass;
+    }
 
-	public final void setActionListener(String listeners) {
-		this.actionListeners = listeners;
-	}
+    public final void setInfoStyleClass(String infoStyleClass) {
+        this.infoStyleClass = infoStyleClass;
+    }
 
-	public final String getActionListener() {
-		return actionListeners;
-	}
+    public final String getWarnStyleClass() {
+        return warnStyleClass;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (DateEntryComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  required='"+required+"'");
-			LOG.debug("  autoTab='"+autoTab+"'");
-			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
-			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
-			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
-			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
-			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
-			LOG.debug("  showCalendarOnFocus='"+showCalendarOnFocus+"'");
-			LOG.debug("  autoCompletion='"+autoCompletion+"'");
-			LOG.debug("  dateFormat='"+dateFormat+"'");
-			LOG.debug("  defaultDate='"+defaultDate+"'");
-			LOG.debug("  action='"+action+"'");
-			LOG.debug("  actionListeners='"+actionListeners+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setWarnStyleClass(String warnStyleClass) {
+        this.warnStyleClass = warnStyleClass;
+    }
 
-		if ((uiComponent instanceof DateEntryComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'DateEntryComponent'.");
-		}
+    public final String getShowCalendarOnFocus() {
+        return showCalendarOnFocus;
+    }
 
-		DateEntryComponent component = (DateEntryComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final void setShowCalendarOnFocus(String showCalendarOnFocus) {
+        this.showCalendarOnFocus = showCalendarOnFocus;
+    }
 
-		if (required != null) {
-			if (isValueReference(required)) {
-				ValueBinding vb = application.createValueBinding(required);
-				component.setValueBinding(Properties.REQUIRED, vb);
+    public final String getAutoCompletion() {
+        return autoCompletion;
+    }
 
-			} else {
-				component.setRequired(getBool(required));
-			}
-		}
+    public final void setAutoCompletion(String autoCompletion) {
+        this.autoCompletion = autoCompletion;
+    }
 
-		if (autoTab != null) {
-			if (isValueReference(autoTab)) {
-				ValueBinding vb = application.createValueBinding(autoTab);
-				component.setValueBinding(Properties.AUTO_TAB, vb);
+    public final String getDateFormat() {
+        return dateFormat;
+    }
 
-			} else {
-				component.setAutoTab(getBool(autoTab));
-			}
-		}
+    public final void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
+    }
 
-		if (valueChangeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
-		}
+    public final String getDefaultDate() {
+        return defaultDate;
+    }
 
-		if (focusStyleClass != null) {
-			if (isValueReference(focusStyleClass)) {
-				ValueBinding vb = application.createValueBinding(focusStyleClass);
-				component.setValueBinding(Properties.FOCUS_STYLE_CLASS, vb);
+    public final void setDefaultDate(String defaultDate) {
+        this.defaultDate = defaultDate;
+    }
 
-			} else {
-				component.setFocusStyleClass(focusStyleClass);
-			}
-		}
+    public final void setAction(String action) {
+        this.action = action;
+    }
 
-		if (errorStyleClass != null) {
-			if (isValueReference(errorStyleClass)) {
-				ValueBinding vb = application.createValueBinding(errorStyleClass);
-				component.setValueBinding(Properties.ERROR_STYLE_CLASS, vb);
+    public final String getAction() {
+        return action;
+    }
 
-			} else {
-				component.setErrorStyleClass(errorStyleClass);
-			}
-		}
+    public final void setActionListener(String listeners) {
+        this.actionListeners = listeners;
+    }
 
-		if (fatalStyleClass != null) {
-			if (isValueReference(fatalStyleClass)) {
-				ValueBinding vb = application.createValueBinding(fatalStyleClass);
-				component.setValueBinding(Properties.FATAL_STYLE_CLASS, vb);
+    public final String getActionListener() {
+        return actionListeners;
+    }
 
-			} else {
-				component.setFatalStyleClass(fatalStyleClass);
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (DateEntryComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  required='" + required + "'");
+            LOG.debug("  autoTab='" + autoTab + "'");
+            LOG.debug("  focusStyleClass='" + focusStyleClass + "'");
+            LOG.debug("  errorStyleClass='" + errorStyleClass + "'");
+            LOG.debug("  fatalStyleClass='" + fatalStyleClass + "'");
+            LOG.debug("  infoStyleClass='" + infoStyleClass + "'");
+            LOG.debug("  warnStyleClass='" + warnStyleClass + "'");
+            LOG.debug("  showCalendarOnFocus='" + showCalendarOnFocus + "'");
+            LOG.debug("  autoCompletion='" + autoCompletion + "'");
+            LOG.debug("  dateFormat='" + dateFormat + "'");
+            LOG.debug("  defaultDate='" + defaultDate + "'");
+            LOG.debug("  action='" + action + "'");
+            LOG.debug("  actionListeners='" + actionListeners + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (infoStyleClass != null) {
-			if (isValueReference(infoStyleClass)) {
-				ValueBinding vb = application.createValueBinding(infoStyleClass);
-				component.setValueBinding(Properties.INFO_STYLE_CLASS, vb);
+        if ((uiComponent instanceof DateEntryComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'DateEntryComponent'.");
+        }
 
-			} else {
-				component.setInfoStyleClass(infoStyleClass);
-			}
-		}
+        DateEntryComponent component = (DateEntryComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (warnStyleClass != null) {
-			if (isValueReference(warnStyleClass)) {
-				ValueBinding vb = application.createValueBinding(warnStyleClass);
-				component.setValueBinding(Properties.WARN_STYLE_CLASS, vb);
+        if (required != null) {
+            if (isValueReference(required)) {
+                ValueBinding vb = application.createValueBinding(required);
+                component.setValueBinding(Properties.REQUIRED, vb);
 
-			} else {
-				component.setWarnStyleClass(warnStyleClass);
-			}
-		}
+            } else {
+                component.setRequired(getBool(required));
+            }
+        }
 
-		if (showCalendarOnFocus != null) {
-			if (isValueReference(showCalendarOnFocus)) {
-				ValueBinding vb = application.createValueBinding(showCalendarOnFocus);
-				component.setValueBinding(Properties.SHOW_CALENDAR_ON_FOCUS, vb);
+        if (autoTab != null) {
+            if (isValueReference(autoTab)) {
+                ValueBinding vb = application.createValueBinding(autoTab);
+                component.setValueBinding(Properties.AUTO_TAB, vb);
 
-			} else {
-				component.setShowCalendarOnFocus(getBool(showCalendarOnFocus));
-			}
-		}
+            } else {
+                component.setAutoTab(getBool(autoTab));
+            }
+        }
 
-		if (autoCompletion != null) {
-			if (isValueReference(autoCompletion)) {
-				ValueBinding vb = application.createValueBinding(autoCompletion);
-				component.setValueBinding(Properties.AUTO_COMPLETION, vb);
+        if (valueChangeListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.VALUE_CHANGE_LISTENER_TYPE,
+                    valueChangeListeners);
+        }
 
-			} else {
-				component.setAutoCompletion(getBool(autoCompletion));
-			}
-		}
+        if (focusStyleClass != null) {
+            if (isValueReference(focusStyleClass)) {
+                ValueBinding vb = application
+                        .createValueBinding(focusStyleClass);
+                component.setValueBinding(Properties.FOCUS_STYLE_CLASS, vb);
 
-		if (dateFormat != null) {
-			if (isValueReference(dateFormat)) {
-				ValueBinding vb = application.createValueBinding(dateFormat);
-				component.setValueBinding(Properties.DATE_FORMAT, vb);
+            } else {
+                component.setFocusStyleClass(focusStyleClass);
+            }
+        }
 
-			} else {
-				component.setDateFormat(dateFormat);
-			}
-		}
+        if (errorStyleClass != null) {
+            if (isValueReference(errorStyleClass)) {
+                ValueBinding vb = application
+                        .createValueBinding(errorStyleClass);
+                component.setValueBinding(Properties.ERROR_STYLE_CLASS, vb);
 
-		if (defaultDate != null) {
-			if (isValueReference(defaultDate)) {
-				ValueBinding vb = application.createValueBinding(defaultDate);
-				component.setValueBinding(Properties.DEFAULT_DATE, vb);
+            } else {
+                component.setErrorStyleClass(errorStyleClass);
+            }
+        }
 
-			} else {
-				component.setDefaultDate(defaultDate);
-			}
-		}
+        if (fatalStyleClass != null) {
+            if (isValueReference(fatalStyleClass)) {
+                ValueBinding vb = application
+                        .createValueBinding(fatalStyleClass);
+                component.setValueBinding(Properties.FATAL_STYLE_CLASS, vb);
 
-		if (action != null) {
-			ListenersTools.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
-		}
+            } else {
+                component.setFatalStyleClass(fatalStyleClass);
+            }
+        }
 
-		if (actionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
-		}
-	}
+        if (infoStyleClass != null) {
+            if (isValueReference(infoStyleClass)) {
+                ValueBinding vb = application
+                        .createValueBinding(infoStyleClass);
+                component.setValueBinding(Properties.INFO_STYLE_CLASS, vb);
 
-	public void release() {
-		required = null;
-		autoTab = null;
-		valueChangeListeners = null;
-		focusStyleClass = null;
-		errorStyleClass = null;
-		fatalStyleClass = null;
-		infoStyleClass = null;
-		warnStyleClass = null;
-		showCalendarOnFocus = null;
-		autoCompletion = null;
-		dateFormat = null;
-		defaultDate = null;
-		action = null;
-		actionListeners = null;
+            } else {
+                component.setInfoStyleClass(infoStyleClass);
+            }
+        }
 
-		super.release();
-	}
+        if (warnStyleClass != null) {
+            if (isValueReference(warnStyleClass)) {
+                ValueBinding vb = application
+                        .createValueBinding(warnStyleClass);
+                component.setValueBinding(Properties.WARN_STYLE_CLASS, vb);
+
+            } else {
+                component.setWarnStyleClass(warnStyleClass);
+            }
+        }
+
+        if (showCalendarOnFocus != null) {
+            if (isValueReference(showCalendarOnFocus)) {
+                ValueBinding vb = application
+                        .createValueBinding(showCalendarOnFocus);
+                component
+                        .setValueBinding(Properties.SHOW_CALENDAR_ON_FOCUS, vb);
+
+            } else {
+                component.setShowCalendarOnFocus(getBool(showCalendarOnFocus));
+            }
+        }
+
+        if (autoCompletion != null) {
+            if (isValueReference(autoCompletion)) {
+                ValueBinding vb = application
+                        .createValueBinding(autoCompletion);
+                component.setValueBinding(Properties.AUTO_COMPLETION, vb);
+
+            } else {
+                component.setAutoCompletion(getBool(autoCompletion));
+            }
+        }
+
+        if (dateFormat != null) {
+            if (isValueReference(dateFormat)) {
+                ValueBinding vb = application.createValueBinding(dateFormat);
+                component.setValueBinding(Properties.DATE_FORMAT, vb);
+
+            } else {
+                component.setDateFormat(dateFormat);
+            }
+        }
+
+        if (defaultDate != null) {
+            if (isValueReference(defaultDate)) {
+                ValueBinding vb = application.createValueBinding(defaultDate);
+                component.setValueBinding(Properties.DEFAULT_DATE, vb);
+
+            } else {
+                component.setDefaultDate(defaultDate);
+            }
+        }
+
+        if (action != null) {
+            ListenersTools.parseAction(facesContext, component,
+                    ListenersTools.SELECTION_LISTENER_TYPE, action);
+        }
+
+        if (actionListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.SELECTION_LISTENER_TYPE, actionListeners,
+                    true);
+        }
+    }
+
+    public void release() {
+        required = null;
+        autoTab = null;
+        valueChangeListeners = null;
+        focusStyleClass = null;
+        errorStyleClass = null;
+        fatalStyleClass = null;
+        infoStyleClass = null;
+        warnStyleClass = null;
+        showCalendarOnFocus = null;
+        autoCompletion = null;
+        dateFormat = null;
+        defaultDate = null;
+        action = null;
+        actionListeners = null;
+
+        super.release();
+    }
 
 }

@@ -14,92 +14,98 @@ import javax.faces.application.Application;
 
 public class TabbedPaneTag extends CardBoxTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(TabbedPaneTag.class);
 
-	private static final Log LOG=LogFactory.getLog(TabbedPaneTag.class);
+    private String closeListeners;
 
-	private String closeListeners;
-	private String closable;
-	private String showValue;
-	public String getComponentType() {
-		return TabbedPaneComponent.COMPONENT_TYPE;
-	}
+    private String closable;
 
-	public final String getCloseListener() {
-		return closeListeners;
-	}
+    private String showValue;
 
-	public final void setCloseListener(String closeListeners) {
-		this.closeListeners = closeListeners;
-	}
+    public String getComponentType() {
+        return TabbedPaneComponent.COMPONENT_TYPE;
+    }
 
-	public final String getClosable() {
-		return closable;
-	}
+    public final String getCloseListener() {
+        return closeListeners;
+    }
 
-	public final void setClosable(String closable) {
-		this.closable = closable;
-	}
+    public final void setCloseListener(String closeListeners) {
+        this.closeListeners = closeListeners;
+    }
 
-	public final String getShowValue() {
-		return showValue;
-	}
+    public final String getClosable() {
+        return closable;
+    }
 
-	public final void setShowValue(String showValue) {
-		this.showValue = showValue;
-	}
+    public final void setClosable(String closable) {
+        this.closable = closable;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (TabbedPaneComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  closable='"+closable+"'");
-			LOG.debug("  showValue='"+showValue+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getShowValue() {
+        return showValue;
+    }
 
-		if ((uiComponent instanceof TabbedPaneComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'TabbedPaneComponent'.");
-		}
+    public final void setShowValue(String showValue) {
+        this.showValue = showValue;
+    }
 
-		TabbedPaneComponent component = (TabbedPaneComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (TabbedPaneComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  closable='" + closable + "'");
+            LOG.debug("  showValue='" + showValue + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (closeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.CLOSE_LISTENER_TYPE, closeListeners);
-		}
+        if ((uiComponent instanceof TabbedPaneComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'TabbedPaneComponent'.");
+        }
 
-		if (closable != null) {
-			if (isValueReference(closable)) {
-				ValueBinding vb = application.createValueBinding(closable);
-				component.setValueBinding(Properties.CLOSABLE, vb);
+        TabbedPaneComponent component = (TabbedPaneComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-			} else {
-				component.setClosable(getBool(closable));
-			}
-		}
+        if (closeListeners != null) {
+            ListenersTools.parseListener(facesContext, component,
+                    ListenersTools.CLOSE_LISTENER_TYPE, closeListeners);
+        }
 
-		if (showValue != null) {
-			if (isValueReference(showValue)) {
-				ValueBinding vb = application.createValueBinding(showValue);
-				component.setValueBinding(Properties.SHOW_VALUE, vb);
+        if (closable != null) {
+            if (isValueReference(closable)) {
+                ValueBinding vb = application.createValueBinding(closable);
+                component.setValueBinding(Properties.CLOSABLE, vb);
 
-			} else {
-				component.setShowValue(showValue);
-			}
-		}
-	}
+            } else {
+                component.setClosable(getBool(closable));
+            }
+        }
 
-	public void release() {
-		closeListeners = null;
-		closable = null;
-		showValue = null;
+        if (showValue != null) {
+            if (isValueReference(showValue)) {
+                ValueBinding vb = application.createValueBinding(showValue);
+                component.setValueBinding(Properties.SHOW_VALUE, vb);
 
-		super.release();
-	}
+            } else {
+                component.setShowValue(showValue);
+            }
+        }
+    }
+
+    public void release() {
+        closeListeners = null;
+        closable = null;
+        showValue = null;
+
+        super.release();
+    }
 
 }

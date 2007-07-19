@@ -781,4 +781,30 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     public IStateChildrenList createStateChildrenList() {
         return new BasicStateChildrenList();
     }
+
+    public String toString() {
+        String s = "";
+
+        if (propertiesManager != null) {
+            s += propertiesManager.toString();
+        }
+
+        if (transientAttributes != null
+                && transientAttributes.isEmpty() == false) {
+            if (s.length() > 0) {
+                s += ",";
+            }
+            s += "transient=" + transientAttributes;
+        }
+
+        if (converter != null) {
+            if (s.length() > 0) {
+                s += ",";
+            }
+            s += "converter='" + converter + "'";
+        }
+
+        return s;
+    }
+
 }

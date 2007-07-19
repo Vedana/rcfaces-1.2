@@ -322,4 +322,44 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         return cnt;
     }
 
+    public String toString() {
+        if (properties == null || properties.isEmpty()) {
+            return accessor.toString();
+        }
+
+        Set keys = keySet();
+
+        String s = "{DELTA:";
+
+        boolean first = true;
+        for (Iterator it = keys.iterator(); it.hasNext();) {
+            String key = (String) it.next();
+
+            if (first) {
+                first = false;
+            } else {
+                s += ",";
+            }
+
+            if (properties.containsKey(key)) {
+                s += "(D)";
+            }
+            s += key + "=";
+
+            Object obj = getProperty(key);
+            if (obj instanceof ValueBinding) {
+                s += "'" + ((ValueBinding) obj).getExpressionString() + "'";
+
+            } else if (obj != null) {
+                s += "'" + obj + "'";
+
+            } else {
+                s += obj;
+            }
+        }
+
+        s += "}";
+
+        return s;
+    }
 }

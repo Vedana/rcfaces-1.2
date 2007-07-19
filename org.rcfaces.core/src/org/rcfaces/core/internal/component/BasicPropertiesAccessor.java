@@ -314,4 +314,42 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return properties.size();
     }
 
+    public String toString() {
+        if (properties == null) {
+            return "[EMPTY]";
+        }
+
+        Set keys = keySet();
+
+        String s = "{";
+
+        boolean first = true;
+        for (Iterator it = keys.iterator(); it.hasNext();) {
+            String key = (String) it.next();
+
+            if (first) {
+                first = false;
+            } else {
+                s += ",";
+            }
+            s += key + "=";
+
+            Object obj = getProperty(key);
+            if (obj instanceof ValueBinding) {
+                s += "'" + ((ValueBinding) obj).getExpressionString() + "'";
+
+            } else if (obj != null) {
+                s += "'" + obj + "'";
+
+            } else {
+                s += obj;
+            }
+
+        }
+
+        s += "}";
+
+        return s;
+    }
+
 }

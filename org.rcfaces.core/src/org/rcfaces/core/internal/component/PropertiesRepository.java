@@ -28,10 +28,15 @@ public class PropertiesRepository extends Properties {
         for (int i = 0; i < properties.length; i++) {
             String property = properties[i];
 
-            Object key = computeKey(property);
+            Integer key = (Integer) computeKey(property);
 
-            if (keyToProperty.put(key, property) != null) {
-                throw new IllegalStateException("Dublicate key for property '"
+            for (;;) {
+                if (keyToProperty.put(key, property) == null) {
+                    break;
+                }
+
+                // key = new Integer(key.intValue() + 1);
+                throw new IllegalStateException("Duplicate key for property '"
                         + property + "'.");
             }
             propertyToKey.put(property, key);

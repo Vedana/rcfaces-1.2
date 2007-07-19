@@ -1,196 +1,207 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.UIImageItemComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.UIImageItemComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class UIImageItemTag extends AbstractItemTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(UIImageItemTag.class);
 
-	private static final Log LOG=LogFactory.getLog(UIImageItemTag.class);
+    private String visible;
 
-	private String visible;
-	private String toolTipText;
-	private String disabledImageURL;
-	private String hoverImageURL;
-	private String selectedImageURL;
-	private String imageURL;
-	private String rendered;
-	public String getComponentType() {
-		return UIImageItemComponent.COMPONENT_TYPE;
-	}
+    private String toolTipText;
 
-	public final String getVisible() {
-		return visible;
-	}
+    private String disabledImageURL;
 
-	public final void setVisible(String visible) {
-		this.visible = visible;
-	}
+    private String hoverImageURL;
 
-	public final String getToolTipText() {
-		return toolTipText;
-	}
+    private String selectedImageURL;
 
-	public final void setToolTipText(String toolTipText) {
-		this.toolTipText = toolTipText;
-	}
+    private String imageURL;
 
-	public final String getDisabledImageURL() {
-		return disabledImageURL;
-	}
+    private String rendered;
 
-	public final void setDisabledImageURL(String disabledImageURL) {
-		this.disabledImageURL = disabledImageURL;
-	}
+    public String getComponentType() {
+        return UIImageItemComponent.COMPONENT_TYPE;
+    }
 
-	public final String getHoverImageURL() {
-		return hoverImageURL;
-	}
+    public final String getVisible() {
+        return visible;
+    }
 
-	public final void setHoverImageURL(String hoverImageURL) {
-		this.hoverImageURL = hoverImageURL;
-	}
+    public final void setVisible(String visible) {
+        this.visible = visible;
+    }
 
-	public final String getSelectedImageURL() {
-		return selectedImageURL;
-	}
+    public final String getToolTipText() {
+        return toolTipText;
+    }
 
-	public final void setSelectedImageURL(String selectedImageURL) {
-		this.selectedImageURL = selectedImageURL;
-	}
+    public final void setToolTipText(String toolTipText) {
+        this.toolTipText = toolTipText;
+    }
 
-	public final String getImageURL() {
-		return imageURL;
-	}
+    public final String getDisabledImageURL() {
+        return disabledImageURL;
+    }
 
-	public final void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
-	}
+    public final void setDisabledImageURL(String disabledImageURL) {
+        this.disabledImageURL = disabledImageURL;
+    }
 
-	public final String getRendered() {
-		return rendered;
-	}
+    public final String getHoverImageURL() {
+        return hoverImageURL;
+    }
 
-	public final void setRendered(String rendered) {
-		this.rendered = rendered;
-	}
+    public final void setHoverImageURL(String hoverImageURL) {
+        this.hoverImageURL = hoverImageURL;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (UIImageItemComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  visible='"+visible+"'");
-			LOG.debug("  toolTipText='"+toolTipText+"'");
-			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
-			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
-			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
-			LOG.debug("  imageURL='"+imageURL+"'");
-			LOG.debug("  rendered='"+rendered+"'");
-		}
-		super.setProperties(uiComponent);
+    public final String getSelectedImageURL() {
+        return selectedImageURL;
+    }
 
-		if ((uiComponent instanceof UIImageItemComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'UIImageItemComponent'.");
-		}
+    public final void setSelectedImageURL(String selectedImageURL) {
+        this.selectedImageURL = selectedImageURL;
+    }
 
-		UIImageItemComponent component = (UIImageItemComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+    public final String getImageURL() {
+        return imageURL;
+    }
 
-		if (visible != null) {
-			if (isValueReference(visible)) {
-				ValueBinding vb = application.createValueBinding(visible);
-				component.setValueBinding(Properties.VISIBLE, vb);
+    public final void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
-			} else {
-				component.setVisible(getBool(visible));
-			}
-		}
+    public final String getRendered() {
+        return rendered;
+    }
 
-		if (toolTipText != null) {
-			if (isValueReference(toolTipText)) {
-				ValueBinding vb = application.createValueBinding(toolTipText);
-				component.setValueBinding(Properties.TOOL_TIP_TEXT, vb);
+    public final void setRendered(String rendered) {
+        this.rendered = rendered;
+    }
 
-			} else {
-				component.setToolTipText(toolTipText);
-			}
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (UIImageItemComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  visible='" + visible + "'");
+            LOG.debug("  toolTipText='" + toolTipText + "'");
+            LOG.debug("  disabledImageURL='" + disabledImageURL + "'");
+            LOG.debug("  hoverImageURL='" + hoverImageURL + "'");
+            LOG.debug("  selectedImageURL='" + selectedImageURL + "'");
+            LOG.debug("  imageURL='" + imageURL + "'");
+            LOG.debug("  rendered='" + rendered + "'");
+        }
+        super.setProperties(uiComponent);
 
-		if (disabledImageURL != null) {
-			if (isValueReference(disabledImageURL)) {
-				ValueBinding vb = application.createValueBinding(disabledImageURL);
-				component.setValueBinding(Properties.DISABLED_IMAGE_URL, vb);
+        if ((uiComponent instanceof UIImageItemComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'UIImageItemComponent'.");
+        }
 
-			} else {
-				component.setDisabledImageURL(disabledImageURL);
-			}
-		}
+        UIImageItemComponent component = (UIImageItemComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-		if (hoverImageURL != null) {
-			if (isValueReference(hoverImageURL)) {
-				ValueBinding vb = application.createValueBinding(hoverImageURL);
-				component.setValueBinding(Properties.HOVER_IMAGE_URL, vb);
+        if (visible != null) {
+            if (isValueReference(visible)) {
+                ValueBinding vb = application.createValueBinding(visible);
+                component.setValueBinding(Properties.VISIBLE, vb);
 
-			} else {
-				component.setHoverImageURL(hoverImageURL);
-			}
-		}
+            } else {
+                component.setVisible(getBool(visible));
+            }
+        }
 
-		if (selectedImageURL != null) {
-			if (isValueReference(selectedImageURL)) {
-				ValueBinding vb = application.createValueBinding(selectedImageURL);
-				component.setValueBinding(Properties.SELECTED_IMAGE_URL, vb);
+        if (toolTipText != null) {
+            if (isValueReference(toolTipText)) {
+                ValueBinding vb = application.createValueBinding(toolTipText);
+                component.setValueBinding(Properties.TOOL_TIP_TEXT, vb);
 
-			} else {
-				component.setSelectedImageURL(selectedImageURL);
-			}
-		}
+            } else {
+                component.setToolTipText(toolTipText);
+            }
+        }
 
-		if (imageURL != null) {
-			if (isValueReference(imageURL)) {
-				ValueBinding vb = application.createValueBinding(imageURL);
-				component.setValueBinding(Properties.IMAGE_URL, vb);
+        if (disabledImageURL != null) {
+            if (isValueReference(disabledImageURL)) {
+                ValueBinding vb = application
+                        .createValueBinding(disabledImageURL);
+                component.setValueBinding(Properties.DISABLED_IMAGE_URL, vb);
 
-			} else {
-				component.setImageURL(imageURL);
-			}
-		}
+            } else {
+                component.setDisabledImageURL(disabledImageURL);
+            }
+        }
 
-		if (rendered != null) {
-			if (isValueReference(rendered)) {
-				ValueBinding vb = application.createValueBinding(rendered);
-				component.setValueBinding(Properties.RENDERED, vb);
+        if (hoverImageURL != null) {
+            if (isValueReference(hoverImageURL)) {
+                ValueBinding vb = application.createValueBinding(hoverImageURL);
+                component.setValueBinding(Properties.HOVER_IMAGE_URL, vb);
 
-			} else {
-				component.setRendered(getBool(rendered));
-			}
-		}
-	}
+            } else {
+                component.setHoverImageURL(hoverImageURL);
+            }
+        }
 
-	public void release() {
-		visible = null;
-		toolTipText = null;
-		disabledImageURL = null;
-		hoverImageURL = null;
-		selectedImageURL = null;
-		imageURL = null;
-		rendered = null;
+        if (selectedImageURL != null) {
+            if (isValueReference(selectedImageURL)) {
+                ValueBinding vb = application
+                        .createValueBinding(selectedImageURL);
+                component.setValueBinding(Properties.SELECTED_IMAGE_URL, vb);
 
-		super.release();
-	}
+            } else {
+                component.setSelectedImageURL(selectedImageURL);
+            }
+        }
+
+        if (imageURL != null) {
+            if (isValueReference(imageURL)) {
+                ValueBinding vb = application.createValueBinding(imageURL);
+                component.setValueBinding(Properties.IMAGE_URL, vb);
+
+            } else {
+                component.setImageURL(imageURL);
+            }
+        }
+
+        if (rendered != null) {
+            if (isValueReference(rendered)) {
+                ValueBinding vb = application.createValueBinding(rendered);
+                component.setValueBinding(Properties.RENDERED, vb);
+
+            } else {
+                component.setRendered(getBool(rendered));
+            }
+        }
+    }
+
+    public void release() {
+        visible = null;
+        toolTipText = null;
+        disabledImageURL = null;
+        hoverImageURL = null;
+        selectedImageURL = null;
+        imageURL = null;
+        rendered = null;
+
+        super.release();
+    }
 
 }

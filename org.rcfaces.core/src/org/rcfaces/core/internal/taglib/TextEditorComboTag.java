@@ -1,91 +1,95 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.TextEditorComboComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TextEditorComboComponent;
+import org.rcfaces.core.internal.component.Properties;
 
 public class TextEditorComboTag extends ComboTag implements Tag {
 
+    private static final Log LOG = LogFactory.getLog(TextEditorComboTag.class);
 
-	private static final Log LOG=LogFactory.getLog(TextEditorComboTag.class);
+    private String forValue;
 
-	private String forValue;
-	private String type;
-	public String getComponentType() {
-		return TextEditorComboComponent.COMPONENT_TYPE;
-	}
+    private String type;
 
-	public final String getFor() {
-		return forValue;
-	}
+    public String getComponentType() {
+        return TextEditorComboComponent.COMPONENT_TYPE;
+    }
 
-	public final void setFor(String forValue) {
-		this.forValue = forValue;
-	}
+    public final String getFor() {
+        return forValue;
+    }
 
-	public final String getType() {
-		return type;
-	}
+    public final void setFor(String forValue) {
+        this.forValue = forValue;
+    }
 
-	public final void setType(String type) {
-		this.type = type;
-	}
+    public final String getType() {
+        return type;
+    }
 
-	protected void setProperties(UIComponent uiComponent) {
-		if (LOG.isDebugEnabled()) {
-			if (TextEditorComboComponent.COMPONENT_TYPE==getComponentType()) {
-				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
-			}
-			LOG.debug("  forValue='"+forValue+"'");
-			LOG.debug("  type='"+type+"'");
-		}
-		super.setProperties(uiComponent);
+    public final void setType(String type) {
+        this.type = type;
+    }
 
-		if ((uiComponent instanceof TextEditorComboComponent)==false) {
-			if (uiComponent instanceof UIViewRoot) {
-				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
-			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'TextEditorComboComponent'.");
-		}
+    protected void setProperties(UIComponent uiComponent) {
+        if (LOG.isDebugEnabled()) {
+            if (TextEditorComboComponent.COMPONENT_TYPE == getComponentType()) {
+                LOG.debug("Component id='" + getId() + "' type='"
+                        + getComponentType() + "'.");
+            }
+            LOG.debug("  forValue='" + forValue + "'");
+            LOG.debug("  type='" + type + "'");
+        }
+        super.setProperties(uiComponent);
 
-		TextEditorComboComponent component = (TextEditorComboComponent) uiComponent;
-		FacesContext facesContext = getFacesContext();
-		Application application = facesContext.getApplication();
+        if ((uiComponent instanceof TextEditorComboComponent) == false) {
+            if (uiComponent instanceof UIViewRoot) {
+                throw new IllegalStateException(
+                        "The first component of the page must be a UIViewRoot component !");
+            }
+            throw new IllegalStateException(
+                    "Component specified by tag is not instanceof of 'TextEditorComboComponent'.");
+        }
 
-		if (forValue != null) {
-			if (isValueReference(forValue)) {
-				ValueBinding vb = application.createValueBinding(forValue);
-				component.setValueBinding(Properties.FOR, vb);
+        TextEditorComboComponent component = (TextEditorComboComponent) uiComponent;
+        FacesContext facesContext = getFacesContext();
+        Application application = facesContext.getApplication();
 
-			} else {
-				component.setFor(forValue);
-			}
-		}
+        if (forValue != null) {
+            if (isValueReference(forValue)) {
+                ValueBinding vb = application.createValueBinding(forValue);
+                component.setValueBinding(Properties.FOR, vb);
 
-		if (type != null) {
-			if (isValueReference(type)) {
-				ValueBinding vb = application.createValueBinding(type);
-				component.setValueBinding(Properties.TYPE, vb);
+            } else {
+                component.setFor(forValue);
+            }
+        }
 
-			} else {
-				component.setType(type);
-			}
-		}
-	}
+        if (type != null) {
+            if (isValueReference(type)) {
+                ValueBinding vb = application.createValueBinding(type);
+                component.setValueBinding(Properties.TYPE, vb);
 
-	public void release() {
-		forValue = null;
-		type = null;
+            } else {
+                component.setType(type);
+            }
+        }
+    }
 
-		super.release();
-	}
+    public void release() {
+        forValue = null;
+        type = null;
+
+        super.release();
+    }
 
 }
