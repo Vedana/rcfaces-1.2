@@ -14,6 +14,11 @@ package org.rcfaces.core.component.capability;
 public interface ICheckCardinalityCapability extends ICardinality {
 
     /**
+     * Default cardinality for check feature.
+     */
+    int DEFAULT_CARDINALITY = ICardinality.ZEROMANY_CARDINALITY;
+
+    /**
      * Returns an int value indicating the cardinality (number of check allowed)
      * for this componenent.
      * 

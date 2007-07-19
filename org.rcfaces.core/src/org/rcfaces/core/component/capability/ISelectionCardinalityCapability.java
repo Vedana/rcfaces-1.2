@@ -6,7 +6,7 @@ package org.rcfaces.core.component.capability;
 /**
  * An int value specifying the type of multiple selection authorized:
  * <ul>
- * <li> 1:optionnal|?: none or one selection </li>
+ * <li> 1:optional|?: none or one selection </li>
  * <li> 2:zeromany|*: any number of selections or none </li>
  * <li> 3:one|1: one and only one selection </li>
  * <li> 4:onemany|+: one or more selection </li>
@@ -18,6 +18,11 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface ISelectionCardinalityCapability extends ICardinality {
+
+    /**
+     * Default cardinality for selection feature.
+     */
+    int DEFAULT_CARDINALITY = ICardinality.OPTIONAL_CARDINALITY;
 
     /**
      * Returns an int value specifying the type of multiple selection
